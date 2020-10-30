@@ -48,7 +48,9 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMcrJoinRoom,       callback: this._onNotifySMcrJoinWar },
+                { type: Notify.Type.MsgMcrJoinRoom,     callback: this._onMsgMcrJoinRoom },
+                { type: Notify.Type.MsgMcrDeleteRoom,   callback: this._onMsgMcrDeleteRoom },
+                { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onMsgMcrGetRoomInfo },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }
@@ -114,10 +116,29 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifySMcrJoinWar(e: egret.Event): void {
+        private _onMsgMcrJoinRoom(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0018));
             this.close();
             McrJoinRoomListPanel.show();
+        }
+
+        private _onMsgMcrDeleteRoom(e: egret.Event): void {
+            if (McrModel.Join.getRoomId() == null) {
+                FloatText.show(Lang.getText(Lang.Type.A0019));
+                this.close();
+                McrJoinRoomListPanel.show();
+            }
+        }
+
+        private _onMsgMcrGetRoomInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomInfo.IS;
+            if ((McrModel.Join.getRoomId() === data.roomId) &&
+                (!McrModel.Join.checkCanJoin())
+            ) {
+                FloatText.show(Lang.getText(Lang.Type.A0145));
+                this.close();
+                McrJoinRoomListPanel.show();
+            }
         }
 
         private _resetTimeoutForBtnConfirm(): void {

@@ -710,6 +710,14 @@ namespace TinyWars.Utility.Lang {
             `请输入存档备注以便于区分，可留空`,
             `Please input a comment for the save slot.`,
         ],
+        [Type.A0145]: [
+            `房间已满员`,
+            `The room is full of players.`,
+        ],
+        [Type.A0146]: [
+            `战局数据不合法，请检查后重试`,
+            `The war data is invalid. Please check and retry.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2393,6 +2401,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0423]: [
             `信息`,
             `Info`,
+        ],
+        [Type.B0424]: [
+            `控制者`,
+            `Controller`,
+        ],
+        [Type.B0425]: [
+            `CO`,
+            `CO`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

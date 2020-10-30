@@ -8,18 +8,18 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.MsgMcrCreateRoom,                 callback: _onMsgMcrCreateRoom               },
-            { msgCode: ActionCode.MsgMcrJoinRoom,                   callback: _onMsgMcrJoinRoom                 },
-            { msgCode: ActionCode.MsgMcrDeleteRoom,                 callback: _onMsgMcrDeleteRoom               },
-            { msgCode: ActionCode.MsgMcrExitRoom,                   callback: _onMsgMcrExitRoom                 },
-            { msgCode: ActionCode.MsgMcrSetWarRule,                 callback: _onMsgMcrSetWarRule               },
-            { msgCode: ActionCode.MsgMcrDeletePlayer,               callback: _onMsgMcrDeletePlayer             },
-            { msgCode: ActionCode.MsgMcrSetReady,                   callback: _onMsgMcrSetReady                 },
-            { msgCode: ActionCode.MsgMcrSetSelfSettings,            callback: _onMsgMcrSetSelfSettings          },
-            { msgCode: ActionCode.MsgMcrGetRoomInfo,                callback: _onMsgMcrGetRoomInfo              },
-            { msgCode: ActionCode.MsgMcrGetUnjoinedRoomInfoList,    callback: _onMsgMcrGetUnjoinedRoomInfoList  },
-            { msgCode: ActionCode.MsgMcrGetJoinedRoomInfoList,      callback: _onMsgMcrGetJoinedRoomInfoList    },
-            { msgCode: ActionCode.MsgMcrStartWar,                   callback: _onMsgMcrStartWar                 },
+            { msgCode: ActionCode.MsgMcrCreateRoom,                 callback: _onMsgMcrCreateRoom },
+            { msgCode: ActionCode.MsgMcrJoinRoom,                   callback: _onMsgMcrJoinRoom },
+            { msgCode: ActionCode.MsgMcrDeleteRoom,                 callback: _onMsgMcrDeleteRoom },
+            { msgCode: ActionCode.MsgMcrExitRoom,                   callback: _onMsgMcrExitRoom },
+            { msgCode: ActionCode.MsgMcrSetWarRule,                 callback: _onMsgMcrSetWarRule },
+            { msgCode: ActionCode.MsgMcrDeletePlayer,               callback: _onMsgMcrDeletePlayer },
+            { msgCode: ActionCode.MsgMcrSetReady,                   callback: _onMsgMcrSetReady },
+            { msgCode: ActionCode.MsgMcrSetSelfSettings,            callback: _onMsgMcrSetSelfSettings },
+            { msgCode: ActionCode.MsgMcrGetRoomInfo,                callback: _onMsgMcrGetRoomInfo },
+            { msgCode: ActionCode.MsgMcrGetJoinableRoomInfoList,    callback: _onMsgMcrGetJoinableRoomInfoList },
+            { msgCode: ActionCode.MsgMcrGetJoinedRoomInfoList,      callback: _onMsgMcrGetJoinedRoomInfoList },
+            { msgCode: ActionCode.MsgMcrStartWar,                   callback: _onMsgMcrStartWar },
         ], McrProxy);
     }
 
@@ -57,7 +57,11 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onMsgMcrDeleteRoom(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrDeleteRoom.IS;
         if (!data.errorCode) {
-            McrModel.deleteRoomInfo(data.roomId);
+            const roomId = data.roomId;
+            McrModel.deleteRoomInfo(roomId);
+            if (McrModel.Join.getRoomId() === roomId) {
+                McrModel.Join.clearData();
+            }
             Notify.dispatch(Notify.Type.MsgMcrDeleteRoom, data);
         }
     }
@@ -143,22 +147,26 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.MsgMcrGetRoomInfoFailed, data);
         } else {
-            McrModel.setRoomInfo(data.roomInfo);
+            const roomInfo = data.roomInfo;
+            McrModel.setRoomInfo(roomInfo);
+            if (McrModel.Join.getRoomId() === data.roomId) {
+                McrModel.Join.resetData(roomInfo);
+            }
             Notify.dispatch(Notify.Type.MsgMcrGetRoomInfo, data);
         }
     }
 
-    export function reqMcrGetUnjoinedRoomInfoList(): void {
+    export function reqMcrGetJoinableRoomInfoList(): void {
         NetManager.send({
-            MsgMcrGetUnjoinedRoomInfoList: { c: {
+            MsgMcrGetJoinableRoomInfoList: { c: {
             }, },
         });
     }
-    function _onMsgMcrGetUnjoinedRoomInfoList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrGetUnjoinedRoomInfoList.IS;
+    function _onMsgMcrGetJoinableRoomInfoList(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrGetJoinableRoomInfoList.IS;
         if (!data.errorCode) {
-            McrModel.setUnjoinedRoomInfoList(data.roomInfoList);
-            Notify.dispatch(Notify.Type.MsgMcrGetUnjoinedRoomInfoList, data);
+            McrModel.setJoinableRoomInfoList(data.roomInfoList);
+            Notify.dispatch(Notify.Type.MsgMcrGetJoinableRoomInfoList, data);
         }
     }
 

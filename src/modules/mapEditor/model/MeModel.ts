@@ -9,6 +9,7 @@ namespace TinyWars.MapEditor.MeModel {
     import MapReviewStatus  = Types.MapReviewStatus;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
+    import IMapRawData      = ProtoTypes.Map.IMapRawData;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     const MAP_DICT = new Map<number, IMapEditorData>();
@@ -60,58 +61,48 @@ namespace TinyWars.MapEditor.MeModel {
         return false;
     }
 
-    export namespace Create {
-        let _mapRawData : ProtoTypes.Map.IMapRawData;
-        const _warData  : ISerialWar = {
-            settingsForCommon       : {
-                configVersion       : Utility.ConfigManager.getLatestConfigVersion(),
-                mapId               : null,
-                presetWarRuleId     : null,
-                warRule             : null,
-            },
-            settingsForScw          : {
-                isCheating          : true,
-            },
+    export namespace Sim {
+        let _mapRawData : IMapRawData;
+        let _warData    : ISerialWar;
 
-            selfCoId                : null,
-            selfPlayerIndex         : null,
-            selfUnitAndTileSkinId   : CommonConstants.UnitAndTileMinSkinId,
-        };
-
-        export function getMapRawData(): ProtoTypes.Map.IMapRawData {
+        export function getMapRawData(): IMapRawData {
             return _mapRawData;
         }
-        function setMapRawData(data: ProtoTypes.Map.IMapRawData): void {
+        function setMapRawData(data: IMapRawData): void {
             _mapRawData = data;
         }
 
-        export async function resetDataByMapRawData(mapRawData: ProtoTypes.Map.IMapRawData): Promise<void> {
-            setMapRawData(mapRawData);
-
-            setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
-
-            const warRule = (await getMapRawData()).warRuleList.find(v => v.ruleAvailability.canMcw);
-            await resetDataByPresetWarRuleId(warRule ? warRule.ruleId : null);
-        }
-        export function getData(): ISerialWar {
+        export function getWarData(): ISerialWar {
             return _warData;
         }
+        function setWarData(warData: ISerialWar): void {
+            _warData = warData;
+        }
+
+        export async function resetData(mapRawData: IMapRawData, warData: ISerialWar): Promise<void> {
+            setMapRawData(mapRawData);
+            setWarData(Helpers.deepClone(warData));
+        }
+
+        export function checkIsValidWarData(): boolean {
+            const teamIndexSet = new Set<number>();
+            for (const player of _warData.playerManager.players) {
+                teamIndexSet.add(player.teamIndex);
+            }
+            return teamIndexSet.size > 0;
+        }
+
         export function getWarRule(): ProtoTypes.WarRule.IWarRule {
-            return getData().settingsForCommon.warRule;
+            return getWarData().settingsForCommon.warRule;
         }
 
-        function setConfigVersion(version: string): void {
-            getData().settingsForCommon.configVersion = version;
-        }
+        function resetDataByPresetWarRuleId(ruleId: number | null): void {
+            const settingsForCommon = getWarData().settingsForCommon;
+            const mapRawData        = getMapRawData();
+            const playersCount      = mapRawData.playersCount;
 
-        async function resetDataByPresetWarRuleId(ruleId: number | null): Promise<void> {
-            const mapRawData        = await getMapRawData();
-            const settingsForCommon = getData().settingsForCommon;
             if (ruleId == null) {
-                settingsForCommon.warRule = BwSettingsHelper.createDefaultWarRule(ruleId, mapRawData.playersCount);
-                setPresetWarRuleId(ruleId);
-                setSelfCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
-
+                settingsForCommon.warRule = BwSettingsHelper.createDefaultWarRule(ruleId, playersCount);
             } else {
                 const warRule = mapRawData.warRuleList.find(warRule => warRule.ruleId === ruleId);
                 if (warRule == null) {
@@ -120,66 +111,62 @@ namespace TinyWars.MapEditor.MeModel {
                 }
 
                 settingsForCommon.warRule = Helpers.deepClone(warRule);
-                setPresetWarRuleId(ruleId);
-                setSelfCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
+            }
+
+            setPresetWarRuleId(ruleId);
+            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
+                setCoId(playerIndex, BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, playerIndex));
             }
         }
         export function setPresetWarRuleId(ruleId: number | null | undefined): void {
-            const settingsForCommon             = getData().settingsForCommon;
-            settingsForCommon.warRule.ruleId    = ruleId;
-            settingsForCommon.presetWarRuleId   = ruleId;
+            getWarRule().ruleId                             = ruleId;
+            getWarData().settingsForCommon.presetWarRuleId  = ruleId;
         }
         export function getPresetWarRuleId(): number | undefined {
-            return getData().settingsForCommon.presetWarRuleId;
+            return getWarData().settingsForCommon.presetWarRuleId;
         }
-        export async function tickPresetWarRuleId(): Promise<void> {
+        export function tickPresetWarRuleId(): void {
             const currWarRuleId = getPresetWarRuleId();
-            const warRuleList   = (await getMapRawData()).warRuleList;
+            const warRuleList   = getMapRawData().warRuleList;
             if (currWarRuleId == null) {
-                const warRule = warRuleList.find(v => v.ruleAvailability.canMcw);
-                await resetDataByPresetWarRuleId(warRule ? warRule.ruleId : null);
+                resetDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
             } else {
-                const warRuleIdList: number[] = [];
-                for (let ruleId = currWarRuleId + 1; ruleId < warRuleList.length; ++ ruleId) {
-                    warRuleIdList.push(ruleId);
-                }
-                for (let ruleId = 0; ruleId < currWarRuleId; ++ruleId) {
-                    warRuleIdList.push(ruleId);
-                }
-                for (const ruleId of warRuleIdList) {
-                    if (warRuleList.find(v => v.ruleId === ruleId).ruleAvailability.canMcw) {
-                        await resetDataByPresetWarRuleId(ruleId);
-                        return;
-                    }
-                }
+                resetDataByPresetWarRuleId((currWarRuleId + 1) % warRuleList.length);
             }
         }
 
-        function setSelfPlayerIndex(playerIndex: number): void {
-            getData().selfPlayerIndex = playerIndex;
-        }
-        export async function tickSelfPlayerIndex(): Promise<void> {
-            setSelfPlayerIndex(getSelfPlayerIndex() % BwSettingsHelper.getPlayersCount(getWarRule()) + 1);
-        }
-        export function getSelfPlayerIndex(): number {
-            return getData().selfPlayerIndex;
+        function getPlayer(playerIndex: number): ProtoTypes.WarSerialization.ISerialPlayer {
+            return getWarData().playerManager.players.find(v => v.playerIndex === playerIndex);
         }
 
-        export function setSelfCoId(coId: number): void {
-            getData().selfCoId = coId;
+        export function setCoId(playerIndex: number, coId: number): void {
+            getPlayer(playerIndex).coId = coId;
         }
-        export function getSelfCoId(): number | null {
-            return getData().selfCoId;
+        export function getCoId(playerIndex: number): number {
+            return getPlayer(playerIndex).coId;
         }
 
-        function setSelfUnitAndTileSkinId(skinId: number): void {
-            getData().selfUnitAndTileSkinId = skinId;
+        function setUnitAndTileSkinId(playerIndex: number, skinId: number): void {
+            getPlayer(playerIndex).unitAndTileSkinId = skinId;
         }
-        export function tickSelfUnitAndTileSkinId(): void {
-            setSelfUnitAndTileSkinId(getSelfUnitAndTileSkinId() % CommonConstants.UnitAndTileMaxSkinId + 1);
+        export function tickUnitAndTileSkinId(playerIndex: number): void {
+            const currSkinId        = getUnitAndTileSkinId(playerIndex);
+            const newSkinId         = currSkinId % CommonConstants.UnitAndTileMaxSkinId + 1;
+            const existingPlayer    = getWarData().playerManager.players.find(v => v.unitAndTileSkinId === newSkinId);
+            if (existingPlayer) {
+                setUnitAndTileSkinId(existingPlayer.playerIndex, currSkinId);
+            }
+            setUnitAndTileSkinId(playerIndex, newSkinId);
         }
-        export function getSelfUnitAndTileSkinId(): number {
-            return getData().selfUnitAndTileSkinId;
+        export function getUnitAndTileSkinId(playerIndex: number): number {
+            return getPlayer(playerIndex).unitAndTileSkinId;
+        }
+
+        export function setIsControlledByPlayer(playerIndex: number, isByPlayer: boolean): void {
+            getPlayer(playerIndex).userId = isByPlayer ? User.UserModel.getSelfUserId() : null;
+        }
+        export function getIsControlledByPlayer(playerIndex: number): boolean {
+            return getPlayer(playerIndex).userId != null;
         }
 
         export function setHasFog(hasFog: boolean): void {
@@ -191,12 +178,13 @@ namespace TinyWars.MapEditor.MeModel {
 
         export function tickTeamIndex(playerIndex: number): void {
             BwSettingsHelper.tickTeamIndex(getWarRule(), playerIndex);
+            getPlayer(playerIndex).teamIndex = getTeamIndex(playerIndex);
         }
         export function getTeamIndex(playerIndex: number): number {
             return BwSettingsHelper.getTeamIndex(getWarRule(), playerIndex);
         }
 
-        export function setInitialFund(playerIndex, fund: number): void {
+        export function setInitialFund(playerIndex: number, fund: number): void {
             BwSettingsHelper.setInitialFund(getWarRule(), playerIndex, fund);
         }
         export function getInitialFund(playerIndex: number): number {
@@ -232,9 +220,6 @@ namespace TinyWars.MapEditor.MeModel {
         }
         export function removeAvailableCoId(playerIndex: number, coId: number): void {
             BwSettingsHelper.removeAvailableCoId(getWarRule(), playerIndex, coId);
-        }
-        export function setAvailableCoIdList(playerIndex: number, coIdSet: Set<number>): void {
-            BwSettingsHelper.setAvailableCoIdList(getWarRule(), playerIndex, coIdSet);
         }
 
         export function setLuckLowerLimit(playerIndex: number, limit: number): void {

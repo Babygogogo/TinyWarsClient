@@ -98,7 +98,7 @@ namespace TinyWars.MultiCustomRoom {
             _joinedRoomIdSet.delete(roomId);
         }
 
-        export function setUnjoinedRoomInfoList(infoList: IMcrRoomInfo[]): void {
+        export function setJoinableRoomInfoList(infoList: IMcrRoomInfo[]): void {
             _unjoinedRoomIdSet.clear();
             for (const roomInfo of infoList || []) {
                 _unjoinedRoomIdSet.add(roomInfo.roomId);
@@ -449,14 +449,22 @@ namespace TinyWars.MultiCustomRoom {
                 isReady             : true,
                 unitAndTileSkinId   : null,
             };
-            let _joinWarAvailablePlayerIndexList: number[];
-            let _joinWarAvailableSkinIdList     : number[];
+            const _availablePlayerIndexList : number[] = [];
+            const _availableSkinIdList      : number[] = [];
 
             export function getData(): DataForJoinRoom {
                 return _dataForJoinRoom;
             }
+
+            export function getRoomId(): number {
+                return getData().roomId;
+            }
+            function setRoomId(roomId: number): void {
+                getData().roomId = roomId;
+            }
+
             export async function getRoomInfo(): Promise<IMcrRoomInfo | null> {
-                return await McrModel.getRoomInfo(getData().roomId);
+                return await McrModel.getRoomInfo(getRoomId());
             }
             export async function getMapId(): Promise<number> {
                 const info = await getRoomInfo();
@@ -466,26 +474,44 @@ namespace TinyWars.MultiCustomRoom {
                 return await WarMapModel.getRawData(await getMapId());
             }
             export async function getTeamIndex(): Promise<number> {
-                const data = getData();
-                return BwSettingsHelper.getPlayerRule((await McrModel.getRoomInfo(data.roomId)).settingsForCommon.warRule, data.playerIndex).teamIndex;
+                return BwSettingsHelper.getPlayerRule((await McrModel.getRoomInfo(getRoomId())).settingsForCommon.warRule, getPlayerIndex()).teamIndex;
             }
 
             export async function resetData(roomInfo: IMcrRoomInfo): Promise<void> {
-                getData().roomId                    = roomInfo.roomId;
-                _joinWarAvailablePlayerIndexList    = getAvailablePlayerIndexList(roomInfo);
-                _joinWarAvailableSkinIdList         = getAvailableSkinIdList(roomInfo);
-                const playerIndex                   = _joinWarAvailablePlayerIndexList[0];
+                const availablePlayerIndexList    = generateAvailablePlayerIndexList(roomInfo);
+                const availableSkinIdList         = generateAvailableSkinIdList(roomInfo);
+                const playerIndex                 = availablePlayerIndexList[0];
+                setRoomId(roomInfo.roomId);
+                setAvailablePlayerIndexList(availablePlayerIndexList);
+                setAvailableSkinIdList(availableSkinIdList);
                 setPlayerIndex(playerIndex);
-                setUnitAndTileSkinId(_joinWarAvailableSkinIdList[0]);
-                setCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex));
+                setUnitAndTileSkinId(availableSkinIdList[0]);
                 setIsReady(true);
+                setCoId(playerIndex == null
+                    ? CommonConstants.CoEmptyId
+                    : BwSettingsHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex)
+                );
+            }
+            export function clearData(): void {
+                setCoId(null);
+                setIsReady(true);
+                setPlayerIndex(null);
+                setRoomId(null);
+                setUnitAndTileSkinId(null);
+                setAvailablePlayerIndexList(null);
+                setAvailableSkinIdList(null);
+            }
+
+            export function checkCanJoin(): boolean {
+                const availablePlayerIndexList = getAvailablePlayerIndexList();
+                return (availablePlayerIndexList != null) && (availablePlayerIndexList.length > 0);
             }
 
             function setPlayerIndex(playerIndex: number): void {
                 getData().playerIndex = playerIndex;
             }
             export async function tickPlayerIndex(): Promise<void> {
-                const list = _joinWarAvailablePlayerIndexList;
+                const list = getAvailablePlayerIndexList();
                 if (list.length > 1) {
                     const playerIndex = list[(list.indexOf(getPlayerIndex()) + 1) % list.length];
                     setPlayerIndex(playerIndex);
@@ -493,14 +519,14 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
             export function getPlayerIndex(): number {
-                return _dataForJoinRoom.playerIndex;
+                return getData().playerIndex;
             }
 
             function setUnitAndTileSkinId(skinId: number): void {
                 getData().unitAndTileSkinId = skinId;
             }
             export function tickUnitAndTileSkinId(): void {
-                const list = _joinWarAvailableSkinIdList;
+                const list = getAvailableSkinIdList();
                 setUnitAndTileSkinId(list[(list.indexOf(getUnitAndTileSkinId()) + 1) % list.length]);
             }
             export function getUnitAndTileSkinId(): number {
@@ -508,10 +534,10 @@ namespace TinyWars.MultiCustomRoom {
             }
 
             export function setCoId(coId: number | null): void {
-                _dataForJoinRoom.coId = coId;
+                getData().coId = coId;
             }
             export function getCoId(): number | null {
-                return _dataForJoinRoom.coId;
+                return getData().coId;
             }
 
             export function setIsReady(isReady: boolean): void {
@@ -520,10 +546,30 @@ namespace TinyWars.MultiCustomRoom {
             export function getIsReady(): boolean {
                 return getData().isReady;
             }
+
+            function setAvailablePlayerIndexList(list: number[]): void {
+                _availablePlayerIndexList.length = 0;
+                for (const playerIndex of list || []) {
+                    _availablePlayerIndexList.push(playerIndex);
+                }
+            }
+            export function getAvailablePlayerIndexList(): number[] {
+                return _availablePlayerIndexList;
+            }
+
+            function setAvailableSkinIdList(list: number[]): void {
+                _availableSkinIdList.length = 0;
+                for (const skinId of list || []) {
+                    _availableSkinIdList.push(skinId);
+                }
+            }
+            export function getAvailableSkinIdList(): number[] {
+                return _availableSkinIdList;
+            }
         }
     }
 
-    function getAvailablePlayerIndexList(info: IMcrRoomInfo): number[] {
+    function generateAvailablePlayerIndexList(info: IMcrRoomInfo): number[] {
         const playersCount      = BwSettingsHelper.getPlayersCount(info.settingsForCommon.warRule);
         const playerInfoList    = info.playerDataList;
         const indexes           : number[] = [];
@@ -535,7 +581,7 @@ namespace TinyWars.MultiCustomRoom {
         return indexes;
     }
 
-    function getAvailableSkinIdList(roomInfo: IMcrRoomInfo): number[] {
+    function generateAvailableSkinIdList(roomInfo: IMcrRoomInfo): number[] {
         const idList: number[] = [];
         for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
             if (roomInfo.playerDataList.every(v => v.unitAndTileSkinId !== skinId)) {

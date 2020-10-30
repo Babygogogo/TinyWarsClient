@@ -56,7 +56,7 @@ namespace TinyWars.MultiCustomRoom {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMcrGetUnjoinedRoomInfoList,    callback: this._onNotifySMcrGetUnjoinedWaitingInfos },
+                { type: Notify.Type.MsgMcrGetJoinableRoomInfoList,  callback: this._onMsgMcrGetJoinableRoomInfoList },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -71,7 +71,7 @@ namespace TinyWars.MultiCustomRoom {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            McrProxy.reqMcrGetUnjoinedRoomInfoList();
+            McrProxy.reqMcrGetJoinableRoomInfoList();
         }
 
         protected _onClosed(): void {
@@ -107,7 +107,7 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private async _onNotifySMcrGetUnjoinedWaitingInfos(e: egret.Event): Promise<void> {
+        private async _onMsgMcrGetJoinableRoomInfoList(e: egret.Event): Promise<void> {
             const newData        = this._createDataForListWar(await McrModel.getUnjoinedRoomInfoList());
             this._dataForListWar = newData;
 

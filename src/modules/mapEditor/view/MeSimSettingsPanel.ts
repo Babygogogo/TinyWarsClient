@@ -3,12 +3,12 @@ namespace TinyWars.MapEditor {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
-
-    const CONFIRM_INTERVAL_MS = 5000;
+    import ProtoTypes   = Utility.ProtoTypes;
+    import FlowManager  = Utility.FlowManager;
 
     export class MeSimSettingsPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = true;
+        protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeSimSettingsPanel;
 
@@ -16,8 +16,6 @@ namespace TinyWars.MapEditor {
         private _labelMenuTitle : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
         private _btnConfirm     : GameUi.UiButton;
-
-        private _timeoutIdForBtnConfirm: number;
 
         public static show(): void {
             if (!MeSimSettingsPanel._instance) {
@@ -44,8 +42,8 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.MsgMcrCreateRoom,     callback: this._onNotifySCreateCustomOnlineWar },
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgScrCreateCustomWar,  callback: this._onMsgScrCreateCustomWar },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }
@@ -68,47 +66,42 @@ namespace TinyWars.MapEditor {
 
         protected _onClosed(): void {
             this._tabSettings.clear();
-            this._clearTimeoutForBtnConfirm();
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             this.close();
+            MeWarMenuPanel.show();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const data = McrModel.Create.getData();
-            McrProxy.reqCreateRoom(data);
-
-            this._btnConfirm.enabled = false;
-            this._resetTimeoutForBtnConfirm();
+            if (MeModel.Sim.checkIsValidWarData()) {
+                SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(MeModel.Sim.getWarData());
+            } else {
+                FloatText.show(Lang.getText(Lang.Type.A0146));
+            }
         }
 
-        private _onNotifySCreateCustomOnlineWar(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0015));
-            Utility.FlowManager.gotoLobby();
+        private _onMsgScrCreateCustomWar(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
+            Common.CommonConfirmPanel.show({
+                title   : Lang.getText(Lang.Type.B0088),
+                content : Lang.getText(Lang.Type.A0107),
+                callback: () => {
+                    FlowManager.gotoSingleCustomWar({
+                        slotIndex   : data.slotIndex,
+                        slotComment : data.slotComment,
+                        warData     : data.warData,
+                    });
+                },
+            });
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }
 
-        private _resetTimeoutForBtnConfirm(): void {
-            this._clearTimeoutForBtnConfirm();
-            this._timeoutIdForBtnConfirm = egret.setTimeout(() => {
-                this._btnConfirm.enabled     = true;
-                this._timeoutIdForBtnConfirm = undefined;
-            }, this, CONFIRM_INTERVAL_MS);
-        }
-
-        private _clearTimeoutForBtnConfirm(): void {
-            if (this._timeoutIdForBtnConfirm != null) {
-                egret.clearTimeout(this._timeoutIdForBtnConfirm);
-                this._timeoutIdForBtnConfirm = undefined;
-            }
-        }
-
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0000);
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0325);
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
             this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
         }

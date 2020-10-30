@@ -556,7 +556,9 @@ namespace TinyWars.MapEditor {
 
                     const cb = () => {
                         war.reviseWarRuleList();
-                        SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForSimulation());
+                        MeModel.Sim.resetData(war.serializeForMap(), war.serializeForSimulation());
+                        MeSimSettingsPanel.show();
+                        this.close();
                     };
 
                     if (!war.getIsMapModified()) {

@@ -120,7 +120,7 @@ namespace TinyWars.Utility.Notify {
         MsgMcrGetRoomInfo,
         MsgMcrGetRoomInfoFailed,
         MsgMcrGetJoinedRoomInfoList,
-        MsgMcrGetUnjoinedRoomInfoList,
+        MsgMcrGetJoinableRoomInfoList,
         MsgMcrExitRoom,
         MsgMcrSetWarRule,
         MsgMcrJoinRoom,
