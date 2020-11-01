@@ -442,5 +442,14 @@ namespace TinyWars.ReplayWar {
         private _getAllExecutedActions(): IActionContainer[] {
             return this._executedActions;
         }
+
+        public getRandomNumber(): number | undefined {
+            const generator = this._getRandomNumberGenerator();
+            if (generator == null) {
+                Logger.error(`RwWar.getRandomNumber() empty generator.`);
+                return undefined;
+            }
+            return generator();
+        }
     }
 }

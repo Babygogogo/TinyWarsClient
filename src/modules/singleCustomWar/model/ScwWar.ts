@@ -450,6 +450,19 @@ namespace TinyWars.SingleCustomWar {
             return this._settingsForSinglePlayer;
         }
 
+        public getRandomNumber(): number | undefined {
+            if (this.getIsSinglePlayerCheating()) {
+                return Math.random();
+            } else {
+                const generator = this._getRandomNumberGenerator();
+                if (generator == null) {
+                    Logger.error(`ScwWar.getRandomNumber() empty generator.`);
+                    return undefined;
+                }
+                return generator();
+            }
+        }
+
         public getHumanPlayerIndexes(): number[] {
             return (this.getPlayerManager() as ScwPlayerManager).getHumanPlayerIndexes();
         }
