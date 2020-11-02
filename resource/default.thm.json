@@ -147,6 +147,7 @@
 		"resource/skins/user/UserChangeNicknamePanel.exml",
 		"resource/skins/user/UserOnlineUsersPanel.exml",
 		"resource/skins/user/UserPanel.exml",
+		"resource/skins/user/UserSetPasswordPanel.exml",
 		"resource/skins/utility/LoadingUiPanel.exml",
 		"resource/skins/warMap/WarMapBuildingListPanel.exml"
 	],

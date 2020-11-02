@@ -17,8 +17,8 @@ namespace TinyWars.User {
 
         export function init(): void {
             Notify.addEventListeners([
-                { type: Notify.Type.MsgUserLogout,             callback: _onNotifySLogout, },
-                { type: Notify.Type.NetworkDisconnected, callback: _onNotifyNetworkDisconnected, },
+                { type: Notify.Type.NetworkDisconnected,    callback: _onNotifyNetworkDisconnected, },
+                { type: Notify.Type.MsgUserLogout,          callback: _onMsgUserLogout, },
             ], UserModel);
         }
 
@@ -166,7 +166,7 @@ namespace TinyWars.User {
             setIsLoggedIn(false);
         }
 
-        function _onNotifySLogout(e: egret.Event): void {
+        function _onMsgUserLogout(e: egret.Event): void {
             const data = e.data as NetMessage.MsgUserLogout.IS;
             if (data.reason === Types.LogoutType.SelfRequest) {
                 Utility.FloatText.show(Lang.getText(Lang.Type.A0005));

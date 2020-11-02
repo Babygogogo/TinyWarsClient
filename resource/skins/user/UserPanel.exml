@@ -115,6 +115,8 @@
                 <e:Group id="_groupButtons" y="220" horizontalCenter="0">
                     <GameUi:UiButton id="_btnChangeNickname" label="更改昵称" y="290" x="186" width="200"
                                      skinName="Skins.Component.Button.ButtonSelfAdaption001"></GameUi:UiButton>
+                    <GameUi:UiButton id="_btnChangePassword" label="更改密码" y="290" x="186" width="200"
+                                     skinName="Skins.Component.Button.ButtonSelfAdaption001"></GameUi:UiButton>
                     <GameUi:UiButton id="_btnChangeDiscordId" label="更改Discord ID" y="300" x="196" width="200"
                                      skinName="Skins.Component.Button.ButtonSelfAdaption001"></GameUi:UiButton>
                     <GameUi:UiButton id="_btnShowOnlineUsers" label="在线玩家" y="310" x="206" width="200"

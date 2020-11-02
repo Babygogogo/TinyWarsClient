@@ -65,8 +65,8 @@ namespace TinyWars.Chat {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgChatAddMessage,        callback: this._onNotifySChatAddMessage },
-                { type: Notify.Type.MsgChatGetAllMessages,    callback: this._onNotifySChatGetAllMessages },
+                { type: Notify.Type.MsgChatAddMessage,      callback: this._onMsgChatAddMessage },
+                { type: Notify.Type.MsgChatGetAllMessages,  callback: this._onMsgChatGetAllMessages },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,    callback: this.close },
@@ -132,7 +132,7 @@ namespace TinyWars.Chat {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifySChatAddMessage(e: egret.Event): void {
+        private _onMsgChatAddMessage(e: egret.Event): void {
             const message       = (e.data as NetMessage.MsgChatAddMessage.IS).message;
             const fromUserId    = message.fromUserId;
             if (fromUserId === User.UserModel.getSelfUserId()) {
@@ -167,7 +167,7 @@ namespace TinyWars.Chat {
             this._listChat.bindData(newDataList);
         }
 
-        private _onNotifySChatGetAllMessages(e: egret.Event): void {
+        private _onMsgChatGetAllMessages(e: egret.Event): void {
             this._dataForListChat = this._createDataForListChat();
             this._listChat.bindData(this._dataForListChat);
             this.setSelectedIndex(0);
@@ -375,10 +375,10 @@ namespace TinyWars.Chat {
         private _labelType      : GameUi.UiLabel;
         private _imgRed         : GameUi.UiLabel;
         private _notifyEvents   : Notify.Listener[] = [
-            { type: Notify.Type.MsgChatGetAllMessages,            callback: this._onNotifySChatGetAllMessages },
-            { type: Notify.Type.MsgChatAddMessage,                callback: this._onNotifySChatAddMessage },
-            { type: Notify.Type.MsgChatGetAllReadProgressList,    callback: this._onNotifySChatGetAllReadProgressList },
-            { type: Notify.Type.MsgChatUpdateReadProgress,        callback: this._onNotifySChatUpdateReadProgress },
+            { type: Notify.Type.MsgChatGetAllMessages,            callback: this._onMsgChatGetAllMessages },
+            { type: Notify.Type.MsgChatAddMessage,                callback: this._onMsgChatAddMessage },
+            { type: Notify.Type.MsgChatGetAllReadProgressList,    callback: this._onMsgChatGetAllReadProgressList },
+            { type: Notify.Type.MsgChatUpdateReadProgress,        callback: this._onMsgChatUpdateReadProgress },
         ];
 
         protected childrenCreated(): void {
@@ -404,16 +404,16 @@ namespace TinyWars.Chat {
             data.panel.setSelectedIndex(data.index);
         }
 
-        private _onNotifySChatGetAllMessages(e: egret.Event): void {
+        private _onMsgChatGetAllMessages(e: egret.Event): void {
             this._updateImgRed();
         }
-        private _onNotifySChatAddMessage(e: egret.Event): void {
+        private _onMsgChatAddMessage(e: egret.Event): void {
             this._updateImgRed();
         }
-        private _onNotifySChatGetAllReadProgressList(e: egret.Event): void {
+        private _onMsgChatGetAllReadProgressList(e: egret.Event): void {
             this._updateImgRed();
         }
-        private _onNotifySChatUpdateReadProgress(e: egret.Event): void {
+        private _onMsgChatUpdateReadProgress(e: egret.Event): void {
             this._updateImgRed();
         }
 

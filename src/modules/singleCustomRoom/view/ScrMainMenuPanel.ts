@@ -37,7 +37,7 @@ namespace TinyWars.SingleCustomRoom {
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ];
             this._notifyListeners = [
-                { type: Utility.Notify.Type.MsgUserLogout, callback: this._onNotifySLogout },
+                { type: Utility.Notify.Type.MsgUserLogout, callback: this._onMsgUserLogout },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);
@@ -57,7 +57,7 @@ namespace TinyWars.SingleCustomRoom {
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             FlowManager.gotoLobby();
         }
-        private _onNotifySLogout(e: egret.Event): void {
+        private _onMsgUserLogout(e: egret.Event): void {
             ScrMainMenuPanel.hide();
         }
 

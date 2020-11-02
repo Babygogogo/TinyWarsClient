@@ -41,6 +41,7 @@ namespace TinyWars.User {
 
         private _groupButtons               : eui.Group;
         private _btnChangeNickname          : TinyWars.GameUi.UiButton;
+        private _btnChangePassword          : TinyWars.GameUi.UiButton;
         private _btnChangeDiscordId         : TinyWars.GameUi.UiButton;
         private _btnShowOnlineUsers         : TinyWars.GameUi.UiButton;
         private _btnChangeLanguage          : TinyWars.GameUi.UiButton;
@@ -83,6 +84,7 @@ namespace TinyWars.User {
             ];
             this._uiListeners = [
                 { ui: this._btnChangeNickname,  callback: this._onTouchedBtnChangeNickname },
+                { ui: this._btnChangePassword,  callback: this._onTouchedBtnChangePassword },
                 { ui: this._btnChangeDiscordId, callback: this._onTouchedBtnChangeDiscordId },
                 { ui: this._btnShowOnlineUsers, callback: this._onTouchedBtnShowOnlineUsers },
                 { ui: this._btnChangeLanguage,  callback: this._onTouchedBtnChangeLanguage },
@@ -122,6 +124,9 @@ namespace TinyWars.User {
         }
         private _onTouchedBtnChangeNickname(e: egret.TouchEvent): void {
             UserChangeNicknamePanel.show();
+        }
+        private _onTouchedBtnChangePassword(e: egret.TouchEvent): void {
+            UserSetPasswordPanel.show();
         }
         private _onTouchedBtnChangeDiscordId(e: egret.TouchEvent): void {
             UserChangeDiscordIdPanel.show();
@@ -174,6 +179,7 @@ namespace TinyWars.User {
             const group = this._groupButtons;
             group.removeChildren();
             if (this._userId === UserModel.getSelfUserId()) {
+                group.addChild(this._btnChangePassword);
                 group.addChild(this._btnChangeNickname);
                 group.addChild(this._btnChangeDiscordId);
             } else {
@@ -200,6 +206,7 @@ namespace TinyWars.User {
             this._updateSclHistory();
 
             this._updateBtnChangeNickname();
+            this._updateBtnChangePassword();
             this._updateBtnChangeDiscordId();
             this._updateBtnShowOnlineUsers();
             this._updateBtnChangeLanguage();
@@ -257,6 +264,9 @@ namespace TinyWars.User {
         }
         private _updateBtnChangeNickname(): void {
             this._btnChangeNickname.label = Lang.getText(Lang.Type.B0149);
+        }
+        private _updateBtnChangePassword(): void {
+            this._btnChangePassword.label = Lang.getText(Lang.Type.B0426);
         }
         private _updateBtnChangeDiscordId(): void {
             this._btnChangeDiscordId.label = Lang.getText(Lang.Type.B0150);

@@ -68,7 +68,9 @@ namespace TinyWars.Utility.Notify {
 
         BwSiloExploded,
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        ScrCreateWarSaveSlotChanged,
+        ScrCreateWarPlayerInfoListChanged,
+
         ReplayAutoReplayChanged,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +82,6 @@ namespace TinyWars.Utility.Notify {
         MsgCommonHeartbeat,
         MsgCommonLatestConfigVersion,
         MsgCommonGetServerStatus,
-        MsgReplaySetRating,
 
         MsgUserLogin,
         MsgUserRegister,
@@ -104,6 +105,8 @@ namespace TinyWars.Utility.Notify {
         MsgUserSetDiscordId,
         MsgUserSetDiscordIdFailed,
         MsgUserGetOnlineUsers,
+        MsgUserSetPrivilege,
+        MsgUserSetPassword,
 
         MsgMeGetDataList,
         MsgMeGetData,
@@ -142,6 +145,7 @@ namespace TinyWars.Utility.Notify {
         MsgReplayGetInfoList,
         MsgReplayGetData,
         MsgReplayGetDataFailed,
+        MsgReplaySetRating,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MsgMpwCommonGetMyWarInfoList,
@@ -184,9 +188,6 @@ namespace TinyWars.Utility.Notify {
         MsgMpwActionUnitWait,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        ScrCreateWarSaveSlotChanged,
-        ScrCreateWarPlayerInfoListChanged,
-
         MsgScrCreateWar,
         MsgScrGetSaveInfoList,
         MsgScrContinueWarFailed,

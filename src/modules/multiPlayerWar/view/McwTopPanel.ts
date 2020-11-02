@@ -62,10 +62,10 @@ namespace TinyWars.MultiPlayerWar {
                 { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyMcwCoEnergyChanged },
                 { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyMcwCoUsingSkillChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwActionPlannerStateChanged },
-                { type: Notify.Type.MsgChatGetAllReadProgressList,    callback: this._onNotifyChatGetAllReadProgressList },
-                { type: Notify.Type.MsgChatUpdateReadProgress,        callback: this._onNotifyChatUpdateReadProgress },
-                { type: Notify.Type.MsgChatGetAllMessages,            callback: this._onNotifyChatGetAllMessages },
-                { type: Notify.Type.MsgChatAddMessage,                callback: this._onNotifyChatAddMessage },
+                { type: Notify.Type.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
+                { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
+                { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
+                { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
             ];
             this._uiListeners = [
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
@@ -128,16 +128,16 @@ namespace TinyWars.MultiPlayerWar {
             this._updateBtnCancel();
         }
 
-        private _onNotifyChatGetAllReadProgressList(e: egret.Event): void {
+        private _onMsgChatGetAllReadProgressList(e: egret.Event): void {
             this._updateBtnChat();
         }
-        private _onNotifyChatUpdateReadProgress(e: egret.Event): void {
+        private _onMsgChatUpdateReadProgress(e: egret.Event): void {
             this._updateBtnChat();
         }
-        private _onNotifyChatGetAllMessages(e: egret.Event): void {
+        private _onMsgChatGetAllMessages(e: egret.Event): void {
             this._updateBtnChat();
         }
-        private _onNotifyChatAddMessage(e: egret.Event): void {
+        private _onMsgChatAddMessage(e: egret.Event): void {
             this._updateBtnChat();
         }
 

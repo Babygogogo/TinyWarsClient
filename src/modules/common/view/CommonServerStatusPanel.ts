@@ -44,7 +44,7 @@ namespace TinyWars.Common {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.MsgCommonGetServerStatus, callback: this._onNotifySCommonGetServerStatus },
+                { type: Notify.Type.MsgCommonGetServerStatus, callback: this._onMsgCommonGetServerStatus },
             ];
         }
 
@@ -54,7 +54,7 @@ namespace TinyWars.Common {
             CommonProxy.reqCommonGetServerStatus();
         }
 
-        private _onNotifySCommonGetServerStatus(e: egret.Event): void {
+        private _onMsgCommonGetServerStatus(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgCommonGetServerStatus.IS;
 
             this._labelAccounts.text        = "" + data.totalAccounts;

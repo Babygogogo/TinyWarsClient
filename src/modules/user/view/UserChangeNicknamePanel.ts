@@ -42,9 +42,9 @@ namespace TinyWars.User {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: NotifyType.MsgUserSetNickname,         callback: this._onSUserChangeNickname },
-                { type: NotifyType.MsgUserSetNicknameFailed,   callback: this._onSUserChangeNicknameFailed },
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgUserSetNickname,          callback: this._onMsgUserSetNickname },
+                { type: NotifyType.MsgUserSetNicknameFailed,    callback: this._onMsgUserSetNicknameFailed },
             ];
             this._uiListeners = [
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
@@ -70,11 +70,11 @@ namespace TinyWars.User {
             }
         }
 
-        private _onSUserChangeNickname(e: egret.Event): void {
+        private _onMsgUserSetNickname(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0047));
             this.close();
         }
-        private _onSUserChangeNicknameFailed(e: egret.Event): void {
+        private _onMsgUserSetNicknameFailed(e: egret.Event): void {
             this._isRequesting = false;
         }
 

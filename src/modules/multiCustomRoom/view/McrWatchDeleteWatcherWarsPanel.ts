@@ -171,11 +171,12 @@ namespace TinyWars.MultiCustomRoom {
             const warInfo               = this._dataForListWar[index].info.warInfo;
             const settingsForCommon     = warInfo.settingsForCommon;
             const mapId                 = settingsForCommon.mapId;
+            const settingsForMcw        = warInfo.settingsForMcw;
             const mapRawData            = await WarMapModel.getRawData(mapId);
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
             this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0001));
-            this._labelWarComment.text  = warInfo.settingsForMcw.warComment || "----";
+            this._labelWarComment.text  = (settingsForMcw ? settingsForMcw.warComment : null) || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCount));
 
             this._groupInfo.visible      = true;
@@ -233,11 +234,14 @@ namespace TinyWars.MultiCustomRoom {
             const warInfo       = data.info.warInfo;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
 
-            const warName = warInfo.settingsForMcw.warName;
+            const settingsForMcw    = warInfo.settingsForMcw;
+            const warName           = settingsForMcw ? settingsForMcw.warName : null;
+            const labelName         = this._labelName;
             if (warName) {
-                this._labelName.text = warName;
+                labelName.text = warName;
             } else {
-                WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForCommon.mapId).then(v => this._labelName.text = v);
+                labelName.text = "";
+                WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForCommon.mapId).then(v => labelName.text = v);
             }
         }
 

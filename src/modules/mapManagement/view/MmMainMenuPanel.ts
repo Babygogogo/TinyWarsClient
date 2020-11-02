@@ -41,8 +41,8 @@ namespace TinyWars.MapManagement {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgUserLogout,            callback: this._onNotifySLogout },
-                { type: Notify.Type.MsgMmReloadAllMaps,   callback: this._onNotifySMmReloadAllMaps },
+                { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
+                { type: Notify.Type.MsgMmReloadAllMaps, callback: this._onMsgMmReloadAllMaps },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);
@@ -63,10 +63,10 @@ namespace TinyWars.MapManagement {
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             FlowManager.gotoLobby();
         }
-        private _onNotifySLogout(e: egret.Event): void {
+        private _onMsgUserLogout(e: egret.Event): void {
             MmMainMenuPanel.hide();
         }
-        private _onNotifySMmReloadAllMaps(e: egret.Event): void {
+        private _onMsgMmReloadAllMaps(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0075));
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {

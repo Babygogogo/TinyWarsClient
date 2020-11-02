@@ -46,7 +46,7 @@ namespace TinyWars.Login {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgUserLogin,          callback: this._onNotifySLogin },
+                { type: NotifyType.MsgUserLogin,    callback: this._onMsgUserLogin },
                 { type: NotifyType.MsgUserRegister, callback: this._onMsgUserRegister },
             ];
             this._uiListeners = [
@@ -59,7 +59,7 @@ namespace TinyWars.Login {
             this._updateOnLanguageChanged();
         }
 
-        private _onNotifySLogin(e: egret.Event): void {
+        private _onMsgUserLogin(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0000));
         }
         private _onMsgUserRegister(e: egret.Event): void {

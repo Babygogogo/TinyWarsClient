@@ -42,9 +42,9 @@ namespace TinyWars.User {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: NotifyType.MsgUserSetDiscordId,         callback: this._onSUserChangeDiscordId },
-                { type: NotifyType.MsgUserSetDiscordIdFailed,   callback: this._onSUserChangeDiscordIdFailed },
-                { type: NotifyType.LanguageChanged,              callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgUserSetDiscordId,         callback: this._onMsgUserSetDiscordId },
+                { type: NotifyType.MsgUserSetDiscordIdFailed,   callback: this._onMsgUserSetDiscordIdFailed },
             ];
             this._uiListeners = [
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
@@ -70,11 +70,11 @@ namespace TinyWars.User {
             }
         }
 
-        private _onSUserChangeDiscordId(e: egret.Event): void {
+        private _onMsgUserSetDiscordId(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0049));
             this.close();
         }
-        private _onSUserChangeDiscordIdFailed(e: egret.Event): void {
+        private _onMsgUserSetDiscordIdFailed(e: egret.Event): void {
             this._isRequesting = false;
         }
 

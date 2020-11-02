@@ -10,14 +10,15 @@ namespace TinyWars.User.UserProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.MsgUserLogin,            callback: _onMsgUserLogin,              },
-            { msgCode: NetMessageCodes.MsgUserRegister,         callback: _onMsgUserRegister,           },
-            { msgCode: NetMessageCodes.MsgUserLogout,           callback: _onMsgUserLogout,             },
-            { msgCode: NetMessageCodes.MsgUserGetPublicInfo,    callback: _onMsgUserGetPublicInfo,      },
-            { msgCode: NetMessageCodes.MsgUserSetNickname,      callback: _onMsgUserSetNickname,        },
-            { msgCode: NetMessageCodes.MsgUserSetDiscordId,     callback: _onMsgUserSetDiscordId,       },
-            { msgCode: NetMessageCodes.MsgUserGetOnlineUsers,   callback: _onMsgUserGetOnlineUsers,     },
-            { msgCode: NetMessageCodes.MsgUserSetPrivilege,     callback: _onMsgUserSetPrivilege,       },
+            { msgCode: NetMessageCodes.MsgUserLogin,            callback: _onMsgUserLogin, },
+            { msgCode: NetMessageCodes.MsgUserRegister,         callback: _onMsgUserRegister, },
+            { msgCode: NetMessageCodes.MsgUserLogout,           callback: _onMsgUserLogout, },
+            { msgCode: NetMessageCodes.MsgUserGetPublicInfo,    callback: _onMsgUserGetPublicInfo, },
+            { msgCode: NetMessageCodes.MsgUserSetNickname,      callback: _onMsgUserSetNickname, },
+            { msgCode: NetMessageCodes.MsgUserSetDiscordId,     callback: _onMsgUserSetDiscordId, },
+            { msgCode: NetMessageCodes.MsgUserGetOnlineUsers,   callback: _onMsgUserGetOnlineUsers, },
+            { msgCode: NetMessageCodes.MsgUserSetPrivilege,     callback: _onMsgUserSetPrivilege, },
+            { msgCode: NetMessageCodes.MsgUserSetPassword,      callback: _onMsgUserSetPassword, }
         ]);
     }
 
@@ -136,5 +137,21 @@ namespace TinyWars.User.UserProxy {
     }
     function _onMsgUserSetPrivilege(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgUserSetPrivilege.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.MsgUserSetPrivilege, data);
+        }
+    }
+
+    export function reqUserSetPassword(oldRawPassword: string, newRawPassword: string): void {
+        NetManager.send({ MsgUserSetPassword: { c: {
+            oldPassword : Helpers.Sha1Generator.b64_sha1(oldRawPassword),
+            newPassword : Helpers.Sha1Generator.b64_sha1(newRawPassword),
+        } } });
+    }
+    function _onMsgUserSetPassword(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgUserSetPassword.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.MsgUserSetPassword, data);
+        }
     }
 }

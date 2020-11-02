@@ -14508,6 +14508,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgUserSetPrivilege */
         MsgUserSetPrivilege?: (NetMessage.IMsgUserSetPrivilege|null);
 
+        /** MessageContainer MsgUserSetPassword */
+        MsgUserSetPassword?: (NetMessage.IMsgUserSetPassword|null);
+
         /** MessageContainer MsgMapGetEnabledExtraDataList */
         MsgMapGetEnabledExtraDataList?: (NetMessage.IMsgMapGetEnabledExtraDataList|null);
 
@@ -14802,6 +14805,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserSetPrivilege. */
         public MsgUserSetPrivilege?: (NetMessage.IMsgUserSetPrivilege|null);
+
+        /** MessageContainer MsgUserSetPassword. */
+        public MsgUserSetPassword?: (NetMessage.IMsgUserSetPassword|null);
 
         /** MessageContainer MsgMapGetEnabledExtraDataList. */
         public MsgMapGetEnabledExtraDataList?: (NetMessage.IMsgMapGetEnabledExtraDataList|null);
@@ -18558,6 +18564,291 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgUserSetPrivilege.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgUserSetPassword. */
+    interface IMsgUserSetPassword {
+
+        /** MsgUserSetPassword c */
+        c?: (NetMessage.MsgUserSetPassword.IC|null);
+
+        /** MsgUserSetPassword s */
+        s?: (NetMessage.MsgUserSetPassword.IS|null);
+    }
+
+    /** Represents a MsgUserSetPassword. */
+    class MsgUserSetPassword implements IMsgUserSetPassword {
+
+        /**
+         * Constructs a new MsgUserSetPassword.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgUserSetPassword);
+
+        /** MsgUserSetPassword c. */
+        public c?: (NetMessage.MsgUserSetPassword.IC|null);
+
+        /** MsgUserSetPassword s. */
+        public s?: (NetMessage.MsgUserSetPassword.IS|null);
+
+        /**
+         * Creates a new MsgUserSetPassword instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgUserSetPassword instance
+         */
+        public static create(properties?: NetMessage.IMsgUserSetPassword): NetMessage.MsgUserSetPassword;
+
+        /**
+         * Encodes the specified MsgUserSetPassword message. Does not implicitly {@link NetMessage.MsgUserSetPassword.verify|verify} messages.
+         * @param message MsgUserSetPassword message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgUserSetPassword, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgUserSetPassword message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetPassword.verify|verify} messages.
+         * @param message MsgUserSetPassword message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgUserSetPassword, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgUserSetPassword message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgUserSetPassword
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetPassword;
+
+        /**
+         * Decodes a MsgUserSetPassword message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgUserSetPassword
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetPassword;
+
+        /**
+         * Verifies a MsgUserSetPassword message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgUserSetPassword message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgUserSetPassword
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetPassword;
+
+        /**
+         * Creates a plain object from a MsgUserSetPassword message. Also converts values to other types if specified.
+         * @param message MsgUserSetPassword
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgUserSetPassword, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgUserSetPassword to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgUserSetPassword {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C oldPassword */
+            oldPassword?: (string|null);
+
+            /** C newPassword */
+            newPassword?: (string|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetPassword.IC);
+
+            /** C oldPassword. */
+            public oldPassword: string;
+
+            /** C newPassword. */
+            public newPassword: string;
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetPassword.IC): NetMessage.MsgUserSetPassword.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserSetPassword.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetPassword.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetPassword.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetPassword.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetPassword.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetPassword.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetPassword.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetPassword.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetPassword.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetPassword.IS): NetMessage.MsgUserSetPassword.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserSetPassword.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetPassword.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetPassword.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetPassword.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetPassword.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetPassword.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetPassword.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetPassword.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

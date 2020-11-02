@@ -48,7 +48,7 @@ namespace TinyWars.MapManagement {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMmGetReviewingMaps,    callback: this._onNotifySMmGetReviewingMaps },
+                { type: Notify.Type.MsgMmGetReviewingMaps,  callback: this._onMsgMmGetReviewingMaps },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -98,7 +98,7 @@ namespace TinyWars.MapManagement {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifySMmGetReviewingMaps(e: egret.Event): void {
+        private _onMsgMmGetReviewingMaps(e: egret.Event): void {
             const newData               = this._createDataForListMap(WarMapModel.getMmReviewingMaps());
             this._dataForListMap        = newData;
             this._labelLoading.visible  = false;

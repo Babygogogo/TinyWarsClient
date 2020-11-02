@@ -39,8 +39,8 @@ namespace TinyWars.SinglePlayerLobby {
                 { ui: this._btnBack,    callback: this._onTouchedBtnBack },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.MsgUserLogout,            callback: this._onNotifySLogout },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);
@@ -58,7 +58,7 @@ namespace TinyWars.SinglePlayerLobby {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifySLogout(e: egret.Event): void {
+        private _onMsgUserLogout(e: egret.Event): void {
             SinglePlayerLobbyPanel.hide();
         }
 

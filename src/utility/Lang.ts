@@ -718,6 +718,14 @@ namespace TinyWars.Utility.Lang {
             `战局数据不合法，请检查后重试`,
             `The war data is invalid. Please check and retry.`,
         ],
+        [Type.A0147]: [
+            `新密码与确认密码不相同，请检查后重试`,
+            `The new password is different from the confirm password.`,
+        ],
+        [Type.A0148]: [
+            `已成功修改密码。`,
+            `Your password has been changed successfully.`
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2409,6 +2417,22 @@ namespace TinyWars.Utility.Lang {
         [Type.B0425]: [
             `CO`,
             `CO`,
+        ],
+        [Type.B0426]: [
+            `修改密码`,
+            `Change Password`,
+        ],
+        [Type.B0427]: [
+            `旧密码`,
+            `Old Password`,
+        ],
+        [Type.B0428]: [
+            `新密码`,
+            `New Password`,
+        ],
+        [Type.B0429]: [
+            `确认密码`,
+            `Confirm Password`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
