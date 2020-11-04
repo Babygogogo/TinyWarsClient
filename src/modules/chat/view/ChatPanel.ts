@@ -23,12 +23,15 @@ namespace TinyWars.Chat {
 
         private static _instance: ChatPanel;
 
+        private _groupChannel   : eui.Group;
         private _labelChatTitle : TinyWars.GameUi.UiLabel;
         private _listChat       : TinyWars.GameUi.UiScrollList;
         private _btnBack        : TinyWars.GameUi.UiButton;
         private _btnRefresh     : TinyWars.GameUi.UiButton;
+        private _groupMessage   : eui.Group;
         private _labelNoMessage : TinyWars.GameUi.UiLabel;
         private _listMessage    : TinyWars.GameUi.UiScrollList;
+        private _groupInput     : eui.Group;
         private _inputMessage   : TinyWars.GameUi.UiTextInput;
         private _btnSend        : TinyWars.GameUi.UiButton;
 
@@ -77,6 +80,7 @@ namespace TinyWars.Chat {
             this._listMessage.setItemRenderer(MessageRenderer);
         }
         protected _onOpened(): void {
+            this._showOpenAnimation();
             this._updateComponentsForLanguage();
 
             this._dataForListChat = this._createDataForListChat();
@@ -201,6 +205,26 @@ namespace TinyWars.Chat {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _showOpenAnimation(): void {
+            const groupChannel = this._groupChannel;
+            egret.Tween.removeTweens(groupChannel);
+            egret.Tween.get(groupChannel)
+                .set({ alpha: 0, left: -40 })
+                .to({ alpha: 1, left: 0 }, 200);
+
+            const groupMessage = this._groupMessage;
+            egret.Tween.removeTweens(groupMessage);
+            egret.Tween.get(groupMessage)
+                .set({ alpha: 0, right: -40 })
+                .to({ alpha: 1, right: 0 }, 200);
+
+            const groupInput = this._groupInput;
+            egret.Tween.removeTweens(groupInput);
+            egret.Tween.get(groupInput)
+                .set({ alpha: 0, bottom: -40 })
+                .to({ alpha: 1, bottom: 0 }, 200);
+        }
+
         private _updateComponentsForLanguage(): void {
             this._labelChatTitle.text   = Lang.getText(Lang.Type.B0380);
             this._labelNoMessage.text   = Lang.getText(Lang.Type.B0381);

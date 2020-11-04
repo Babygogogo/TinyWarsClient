@@ -17,6 +17,7 @@ namespace TinyWars.User {
 
         private static _instance: UserPanel;
 
+        private _group                      : eui.Group;
         private _labelTitle                 : TinyWars.GameUi.UiLabel;
         private _btnClose                   : TinyWars.GameUi.UiButton;
 
@@ -96,6 +97,7 @@ namespace TinyWars.User {
             this._sclHistory.setItemRenderer(HistoryRenderer);
         }
         protected _onOpened(): void {
+            this._showOpenAnimation();
             UserProxy.reqUserGetPublicInfo(this._userId);
 
             this._updateView();
@@ -157,6 +159,14 @@ namespace TinyWars.User {
                 ? Types.UnitAndTileTextureVersion.V1
                 : Types.UnitAndTileTextureVersion.V0
             );
+        }
+
+        private _showOpenAnimation(): void {
+            const group = this._group;
+            egret.Tween.removeTweens(group);
+            egret.Tween.get(group)
+                .set({ alpha: 0, y: 40 })
+                .to({ alpha: 1, y: 0 }, 200);
         }
 
         private async _updateView(): Promise<void> {

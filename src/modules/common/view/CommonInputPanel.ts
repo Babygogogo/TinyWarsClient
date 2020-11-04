@@ -18,6 +18,7 @@ namespace TinyWars.Common {
 
         private static _instance: CommonInputPanel;
 
+        private _group          : eui.Group;
         private _labelTitle     : GameUi.UiLabel;
         private _labelTips      : GameUi.UiLabel;
         private _input          : GameUi.UiTextInput;
@@ -60,6 +61,7 @@ namespace TinyWars.Common {
         }
 
         protected _onOpened(): void {
+            this._showOpenAnimation();
             this._updateComponentsForLanguage();
 
             const openData          = this._openData;
@@ -91,6 +93,14 @@ namespace TinyWars.Common {
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
+        }
+
+        private _showOpenAnimation(): void {
+            const group = this._group;
+            egret.Tween.removeTweens(group);
+            egret.Tween.get(group)
+                .set({ alpha: 0, verticalCenter: -40 })
+                .to({ alpha: 1, verticalCenter: 0 }, 200);
         }
 
         private _updateComponentsForLanguage(): void {

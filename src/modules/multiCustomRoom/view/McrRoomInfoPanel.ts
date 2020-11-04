@@ -113,7 +113,13 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnDeleteRoom(e: egret.TouchEvent): void {
             const roomId = this._roomId;
             if (roomId != null) {
-                McrProxy.reqMcrDestroyRoom(roomId);
+                CommonConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0149),
+                    callback: () => {
+                        McrProxy.reqMcrDestroyRoom(roomId);
+                    },
+                });
             }
         }
 
@@ -195,7 +201,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnDeleteRoom.visible = isSelfOwner;
             this._btnModifyRule.visible = isSelfOwner;
             btnStartGame.visible        = isSelfOwner;
-            btnStartGame.setRedVisible(playerDataList.every(v => (v.isReady) && (v.userId != null)));
+            btnStartGame.setRedVisible(await McrModel.checkIsRedForRoom(roomId));
         }
 
         private _updateComponentsForLanguage(): void {

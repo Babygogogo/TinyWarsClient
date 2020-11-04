@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group top="40" bottom="0" width="160" x="0">
+    <e:Group id="_groupChannel" top="40" bottom="0" width="160" left="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel id="_labelChatTitle" text="聊天列表" y="10" bold="true" size="20" textColor="0xffffff"
@@ -38,7 +38,7 @@
         <GameUi:UiButton id="_btnBack" label="" width="50" height="40" bottom="0" left="0"
                          skinName="Skins.Component.Button.ButtonClose002"></GameUi:UiButton>
     </e:Group>
-    <e:Group top="40" bottom="50" right="0" left="160">
+    <e:Group id="_groupMessage" top="40" bottom="50" right="0" width="800">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" locked="true" />
         <GameUi:UiLabel id="_labelNoMessage" text="无信息" bold="true" size="30" textColor="0xFFFFFF" horizontalCenter="0"
@@ -61,7 +61,7 @@
             </e:List>
         </GameUi:UiScrollList>
     </e:Group>
-    <e:Group left="160" bottom="0" right="0" height="50">
+    <e:Group id="_groupInput" bottom="0" right="0" height="50" width="800">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" locked="true" />
         <GameUi:UiTextInput id="_inputMessage" maxChars="200" left="10" right="90" bottom="4">

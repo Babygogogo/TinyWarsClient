@@ -726,6 +726,10 @@ namespace TinyWars.Utility.Lang {
             `已成功修改密码。`,
             `Your password has been changed successfully.`
         ],
+        [Type.A0149]: [
+            `您确定要删除此房间吗？`,
+            `Are you sure to delete this room?.`
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

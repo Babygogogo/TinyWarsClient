@@ -103,7 +103,7 @@ namespace TinyWars.Lobby {
             egret.Tween.removeTweens(group);
             egret.Tween.get(group)
                 .set({ alpha: 0, top: -40 })
-                .to({ alpha: 1, top: 0 }, 400);
+                .to({ alpha: 1, top: 0 }, 200);
         }
 
         private _updateView(): void {
