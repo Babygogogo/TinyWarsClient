@@ -16,6 +16,7 @@ namespace TinyWars.Lobby {
         private _group3: eui.Group;
         private _group4: eui.Group;
 
+        private _group          : eui.Group;
         private _labelTips      : GameUi.UiLabel;
         private _labelMenuTitle : GameUi.UiLabel;
         private _listCommand    : GameUi.UiScrollList;
@@ -55,6 +56,8 @@ namespace TinyWars.Lobby {
         }
 
         protected async _onOpened(): Promise<void> {
+            this._showOpenAnimation();
+
             this._updateComponentsForLanguage();
         }
 
@@ -91,6 +94,20 @@ namespace TinyWars.Lobby {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _showOpenAnimation(): void {
+            const group = this._group;
+            egret.Tween.removeTweens(group);
+            egret.Tween.get(group)
+                .set({ alpha: 0, right: -200 })
+                .to({ alpha: 1, right: 0 }, 400);
+
+            const labelTips = this._labelTips;
+            egret.Tween.removeTweens(labelTips);
+            egret.Tween.get(labelTips)
+                .set({ alpha: 0 })
+                .to({ alpha: 1 }, 400);
+        }
+
         private async _updateComponentsForLanguage(): Promise<void> {
             this._labelTips.text        = Lang.getRichText(Lang.RichType.R0007),
             this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0155);

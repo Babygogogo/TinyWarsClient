@@ -337,6 +337,7 @@
 		"bin-debug/modules/user/view/UserChangeNicknamePanel.js",
 		"bin-debug/modules/user/view/UserOnlineUsersPanel.js",
 		"bin-debug/modules/user/view/UserPanel.js",
+		"bin-debug/modules/user/view/UserSetPasswordPanel.js",
 		"bin-debug/modules/warMap/view/WarMapBuildingListPanel.js",
 		"bin-debug/modules/warMap/view/WarMapTileMapView.js",
 		"bin-debug/modules/warMap/view/WarMapUnitMapView.js",

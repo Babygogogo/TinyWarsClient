@@ -15,6 +15,7 @@ namespace TinyWars.Common {
 
         private static _instance: CommonConfirmPanel;
 
+        private _group          : eui.Group;
         private _labelTitle     : GameUi.UiLabel;
         private _labelContent   : GameUi.UiLabel;
         private _btnCancel      : GameUi.UiButton;
@@ -55,6 +56,8 @@ namespace TinyWars.Common {
         }
 
         protected _onOpened(): void {
+            this._showOpenAnimation();
+
             this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
             this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
             this._labelTitle.text   = this._openData.title;
@@ -75,6 +78,14 @@ namespace TinyWars.Common {
             const openData = this._openData;
             this.close();
             openData.callback();
+        }
+
+        private _showOpenAnimation(): void {
+            const group = this._group;
+            egret.Tween.removeTweens(group);
+            egret.Tween.get(group)
+                .set({ alpha: 0, verticalCenter: -40 })
+                .to({ alpha: 1, verticalCenter: 0 }, 200);
         }
     }
 }

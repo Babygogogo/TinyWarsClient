@@ -67,7 +67,8 @@ namespace TinyWars.SinglePlayerLobby {
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            Utility.FlowManager.gotoLobby();
+            this.close();
+            Lobby.LobbyPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

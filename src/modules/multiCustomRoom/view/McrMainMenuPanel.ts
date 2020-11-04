@@ -58,7 +58,8 @@ namespace TinyWars.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            FlowManager.gotoLobby();
+            this.close();
+            Lobby.LobbyPanel.show();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

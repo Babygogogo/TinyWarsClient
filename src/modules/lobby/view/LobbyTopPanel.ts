@@ -1,7 +1,6 @@
 
 namespace TinyWars.Lobby {
     import UserModel    = User.UserModel;
-    import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
 
     export class LobbyTopPanel extends GameUi.UiPanel {
@@ -10,6 +9,7 @@ namespace TinyWars.Lobby {
 
         private static _instance: LobbyTopPanel;
 
+        private _group          : eui.Group;
         private _labelNickname  : GameUi.UiLabel;
         private _btnMyInfo      : GameUi.UiButton;
         private _btnChat        : GameUi.UiButton;
@@ -51,6 +51,8 @@ namespace TinyWars.Lobby {
         }
 
         protected _onOpened(): void {
+            this._showOpenAnimation();
+
             this._updateView();
         }
 
@@ -94,6 +96,14 @@ namespace TinyWars.Lobby {
             if (!Chat.ChatPanel.getIsOpening()) {
                 Chat.ChatPanel.show({ toUserId: null });
             }
+        }
+
+        private _showOpenAnimation(): void {
+            const group = this._group;
+            egret.Tween.removeTweens(group);
+            egret.Tween.get(group)
+                .set({ alpha: 0, top: -40 })
+                .to({ alpha: 1, top: 0 }, 400);
         }
 
         private _updateView(): void {
