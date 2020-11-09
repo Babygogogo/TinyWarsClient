@@ -174,7 +174,7 @@ namespace TinyWars.MultiPlayerWar {
                     const cursor = field.getCursor();
                     cursor.setGridIndex(gridIndex);
                     cursor.updateView();
-                    war.getView().moveGridToCenter(gridIndex);
+                    war.getView().tweenGridToCentralArea(gridIndex);
                 }
             }
         }

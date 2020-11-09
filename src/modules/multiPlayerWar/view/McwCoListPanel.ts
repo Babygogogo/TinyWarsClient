@@ -12,9 +12,11 @@ namespace TinyWars.MultiPlayerWar {
 
         private _openData   : number;
 
+        private _groupList  : eui.Group;
         private _listCo     : GameUi.UiScrollList;
         private _btnBack    : GameUi.UiButton;
 
+        private _groupInfo                      : eui.Group;
         private _scrCoInfo                      : eui.Scroller;
         private _imgCoPortrait                  : GameUi.UiImage;
         private _labelCommanderInfo             : GameUi.UiLabel;
@@ -92,6 +94,7 @@ namespace TinyWars.MultiPlayerWar {
             this._listScop.setItemRenderer(SkillRenderer);
         }
         protected _onOpened(): void {
+            this._showOpenAnimation();
             this._updateComponentsForLanguage();
 
             this._war           = MpwModel.getWar();
@@ -156,6 +159,20 @@ namespace TinyWars.MultiPlayerWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _showOpenAnimation(): void {
+            const group = this._groupList;
+            egret.Tween.removeTweens(group);
+            egret.Tween.get(group)
+                .set({ alpha: 0, left: -40 })
+                .to({ alpha: 1, left: 0 }, 200);
+
+            const _groupInfo = this._groupInfo;
+            egret.Tween.removeTweens(_groupInfo);
+            egret.Tween.get(_groupInfo)
+                .set({ alpha: 0, right: -40 })
+                .to({ alpha: 1, right: 0 }, 200);
+        }
+
         private _createDataForListCo(): DataForCoRenderer[] {
             const data          : DataForCoRenderer[] = [];
             const war           = this._war;

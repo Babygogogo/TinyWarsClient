@@ -29,6 +29,8 @@ namespace TinyWars.MultiPlayerWar {
         protected _onNotifyBwCursorTapped(e: egret.Event): void {
             const gridIndex = this.getCursor().getGridIndex();
             const nextState = this._getNextStateOnTap(gridIndex);
+            this._getWar().getView().tweenGridToCentralArea(gridIndex);
+
             if ((nextState === this.getState())                                                 &&
                 ((nextState === State.ExecutingAction) || (BwHelpers.checkIsStateRequesting(nextState)))
             ) {

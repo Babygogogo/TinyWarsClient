@@ -19,6 +19,7 @@ namespace TinyWars.Utility.Notify {
         MouseWheel,
         GlobalTouchBegin,
         GlobalTouchMove,
+        ZoomableContentsMoved,
 
         ConfigLoaded,
         TileModelUpdated,

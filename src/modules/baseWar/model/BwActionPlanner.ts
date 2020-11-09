@@ -17,7 +17,10 @@ namespace TinyWars.BaseWar {
         unit        : BwUnit;
         destination : GridIndex;
     }
-    export type OpenDataForBwUnitActionsPanel   = DataForUnitActionRenderer[];
+    export type OpenDataForBwUnitActionsPanel   = {
+        destination : GridIndex;
+        actionList  : DataForUnitActionRenderer[];
+    }
     export type DataForUnitActionRenderer       = {
         actionType      : UnitActionType;
         callback        : () => void;
@@ -112,6 +115,7 @@ namespace TinyWars.BaseWar {
         private _onNotifyBwCursorDragged(e: egret.Event): void {
             const gridIndex = this.getCursor().getGridIndex();
             const nextState = this._getNextStateOnDrag(gridIndex);
+
             if ((nextState === this.getState())                                                 &&
                 ((nextState === State.ExecutingAction) || (BwHelpers.checkIsStateRequesting(nextState)))
             ) {
@@ -1118,14 +1122,21 @@ namespace TinyWars.BaseWar {
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _getDataForUnitActionsPanel(): OpenDataForBwUnitActionsPanel {
-            const actionUnitBeLoaded = this._getActionUnitBeLoaded();
+            const destination           = this.getMovePathDestination();
+            const actionUnitBeLoaded    = this._getActionUnitBeLoaded();
             if (actionUnitBeLoaded.length) {
-                return actionUnitBeLoaded;
+                return {
+                    destination,
+                    actionList: actionUnitBeLoaded
+                };
             }
 
             const actionUnitJoin = this._getActionUnitJoin();
             if (actionUnitJoin.length) {
-                return actionUnitJoin;
+                return {
+                    destination,
+                    actionList: actionUnitJoin
+                };
             }
 
             const dataList = [] as DataForUnitActionRenderer[];
@@ -1146,7 +1157,10 @@ namespace TinyWars.BaseWar {
             dataList.push(...this._getActionUnitWait(dataList.length > 0));
 
             Logger.assert(dataList.length, `BwActionPlanner._getDataForUnitActionsPanel() no actions available?!`);
-            return dataList;
+            return {
+                destination,
+                actionList: dataList,
+            };
         }
 
         protected abstract _getActionUnitBeLoaded(): DataForUnitActionRenderer[];

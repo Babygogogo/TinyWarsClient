@@ -13,6 +13,8 @@ namespace TinyWars.MapEditor {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _onNotifyBwCursorTapped(e: egret.Event): void {
+            const gridIndex = this.getCursor().getGridIndex();
+            this._getWar().getView().tweenGridToCentralArea(gridIndex);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

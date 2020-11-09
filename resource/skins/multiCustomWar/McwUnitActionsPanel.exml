@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group id="_group" width="130" bottom="120" top="40" right="0">
+    <e:Group id="_group" y="40" x="830">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
+                        left="0" right="0" top="0" bottom="0" locked="true" />
         <GameUi:UiScrollList id="_listAction" left="5" right="5" top="5" bottom="5">
             <e:List>
                 <e:itemRendererSkinName>
@@ -18,6 +18,9 @@
                                         textColor="0x00ff00" />
                     </e:Skin>
                 </e:itemRendererSkinName>
+                <e:layout>
+                    <e:VerticalLayout gap="10" />
+                </e:layout>
             </e:List>
         </GameUi:UiScrollList>
     </e:Group>

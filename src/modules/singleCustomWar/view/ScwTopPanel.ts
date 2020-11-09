@@ -156,7 +156,7 @@ namespace TinyWars.SingleCustomWar {
                     const cursor = field.getCursor();
                     cursor.setGridIndex(gridIndex);
                     cursor.updateView();
-                    war.getView().moveGridToCenter(gridIndex);
+                    war.getView().tweenGridToCentralArea(gridIndex);
                 }
             }
         }

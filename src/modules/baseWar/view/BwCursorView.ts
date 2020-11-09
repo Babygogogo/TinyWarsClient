@@ -82,7 +82,6 @@ namespace TinyWars.BaseWar {
                 this._mapSize   = cursor.getMapSize();
                 this.width      = this._mapSize.width * _GRID_WIDTH;
                 this.height     = this._mapSize.height * _GRID_HEIGHT;
-
             }
         }
         public fastInit(cursor: BwCursor): void {

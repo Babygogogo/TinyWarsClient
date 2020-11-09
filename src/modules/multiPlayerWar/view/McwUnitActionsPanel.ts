@@ -47,6 +47,7 @@ namespace TinyWars.MultiPlayerWar {
                 // { type: Notify.Type.GlobalTouchBegin,           callback: this._onNotifyGlobalTouchBegin },
                 // { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
                 // { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
+                { type: Notify.Type.ZoomableContentsMoved,      callback: this._onNotifyZoomableContentsMoved },
                 { type: Notify.Type.UnitAnimationTick,          callback: this._onNotifyUnitAnimationTick },
             ];
 
@@ -57,6 +58,7 @@ namespace TinyWars.MultiPlayerWar {
             this._actionPlanner = this._war.getField().getActionPlanner() as MpwActionPlanner;
 
             this._updateView();
+            this._updatePosition();
         }
         protected _onClosed(): void {
             delete this._war;
@@ -75,6 +77,9 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _onNotifyTileAnimationTick(e: egret.Event): void {
         }
+        private _onNotifyZoomableContentsMoved(e: egret.Event): void {
+            this._updatePosition();
+        }
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             const viewList = this._listAction.getViewList();
             for (let i = 0; i < viewList.numChildren; ++i) {
@@ -90,7 +95,7 @@ namespace TinyWars.MultiPlayerWar {
             const war           = MpwModel.getWar();
             const unitClass     = war.getUnitMap().getUnitClass();
             const dataForList   = [] as DataForUnitActionRenderer[];
-            for (const data of this._openData) {
+            for (const data of this._openData.actionList) {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
                     : new unitClass().init({
@@ -112,6 +117,23 @@ namespace TinyWars.MultiPlayerWar {
             }
 
             this._listAction.bindData(dataForList);
+            this._group.height = Math.min(300, (dataForList.length || 1) * 60);
+        }
+
+        private _updatePosition(): void {
+            const container = MpwModel.getWar().getView().getFieldContainer();
+            const contents  = container.getContents();
+            const gridIndex = this._openData.destination;
+            const gridSize  = Utility.ConfigManager.getGridSize();
+            const stage     = Utility.StageManager.getStage();
+            const group     = this._group;
+            const point     = contents.localToGlobal(
+                (gridIndex.x + 0.5) * gridSize.width,
+                (gridIndex.y + 0.5) * gridSize.height,
+            );
+
+            group.x         = Math.max(0, Math.min(point.x, stage.stageWidth - 130));
+            group.y         = Math.max(40, Math.min(point.y, stage.stageHeight - group.height));
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {

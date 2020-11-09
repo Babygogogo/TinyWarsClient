@@ -87,6 +87,8 @@ namespace TinyWars.MultiPlayerWar {
             this._listWarInfo.setItemRenderer(InfoRenderer);
         }
         protected _onOpened(): void {
+            this._showOpenAnimation();
+
             const war           = MpwModel.getWar();
             this._war           = war;
             this._unitMap       = war.getUnitMap() as MpwUnitMap;
@@ -165,6 +167,20 @@ namespace TinyWars.MultiPlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _showOpenAnimation(): void {
+            const group = this._group;
+            egret.Tween.removeTweens(group);
+            egret.Tween.get(group)
+                .set({ alpha: 0, left: -40 })
+                .to({ alpha: 1, left: 0 }, 200);
+
+            const groupInfo = this._groupInfo;
+            egret.Tween.removeTweens(groupInfo);
+            egret.Tween.get(groupInfo)
+                .set({ alpha: 0, right: -40 })
+                .to({ alpha: 1, right: 0 }, 200);
+        }
+
         private _updateView(): void {
             this._updateComponentsForLanguage();
             this._updateListCommand();
