@@ -92,6 +92,7 @@ namespace TinyWars.BaseWar {
             const field         = this._cursor.getWar().getField();
             this._actionPlanner = field.getActionPlanner();
 
+            Notify.addEventListener(Notify.Type.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
             this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,             this._onTouchBegin,             this);
             this.addEventListener(egret.TouchEvent.TOUCH_CANCEL,            this._onTouchCancel,            this);
             this.addEventListener(egret.TouchEvent.TOUCH_END,               this._onTouchEnd,               this);
@@ -106,6 +107,7 @@ namespace TinyWars.BaseWar {
             this._stopNormalAnimation();
             this._stopTargetAnimation();
 
+            Notify.removeEventListener(Notify.Type.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
             this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,              this._onTouchBegin,             this);
             this.removeEventListener(egret.TouchEvent.TOUCH_CANCEL,             this._onTouchCancel,            this);
             this.removeEventListener(egret.TouchEvent.TOUCH_END,                this._onTouchEnd,               this);
@@ -140,6 +142,22 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyZoomableContentsMoved(e: egret.Event): void {
+            const touchPoints = this._currGlobalTouchPoints;
+            if ((this._touchIdForTouchingCursor != null) && (touchPoints.size === 1)) {
+                const point         = touchPoints.values().next().value as Types.Point;
+                const gridIndex     = this._getGridIndexByGlobalXY(point.x, point.y);
+                const currGridIndex = this._cursor.getGridIndex();
+                if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
+                    this._isTouchMovedOrMultiple = true;
+                    Notify.dispatch(Notify.Type.BwCursorDragged, {
+                        current     : currGridIndex,
+                        draggedTo   : gridIndex,
+                    } as Notify.Data.BwCursorDragged);
+                }
+            }
+        }
+
         private _onTouchBegin(e: egret.TouchEvent): void {
             const touchId   = e.touchPointID;
             if (this._currGlobalTouchPoints.size <= 0) {

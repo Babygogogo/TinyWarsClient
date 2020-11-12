@@ -115,6 +115,7 @@ namespace TinyWars.BaseWar {
         private _onNotifyBwCursorDragged(e: egret.Event): void {
             const gridIndex = this.getCursor().getGridIndex();
             const nextState = this._getNextStateOnDrag(gridIndex);
+            this._getWar().getView().tweenGridToCentralArea((e.data as Notify.Data.BwCursorDragged).draggedTo);
 
             if ((nextState === this.getState())                                                 &&
                 ((nextState === State.ExecutingAction) || (BwHelpers.checkIsStateRequesting(nextState)))
