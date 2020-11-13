@@ -945,7 +945,7 @@ namespace TinyWars.BaseWar {
             const movePath = this.getMovePath();
             return movePath[movePath.length - 1];
         }
-        private _updateMovePathByDestination(destination: GridIndex): void {
+        protected _updateMovePathByDestination(destination: GridIndex): void {
             const { x, y }      = destination;
             const movableArea   = this.getMovableArea();
             const currPath      = this.getMovePath();

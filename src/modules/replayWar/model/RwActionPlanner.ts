@@ -132,14 +132,31 @@ namespace TinyWars.ReplayWar {
                     if ((existingUnit === this.getFocusUnitOnMap()) && (this.getFocusUnitLoaded())) {
                         // Nothing to do.
                     } else {
-                        if ((!existingUnit) || (existingUnit.getPlayerIndex() !== this._getWar().getPlayerInTurn().getPlayerIndex())) {
-                            this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                        // if ((!existingUnit) || (existingUnit.getPlayerIndex() !== this._getWar().getPlayerInTurn().getPlayerIndex())) {
+                        //     this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                        // } else {
+                        //     this._setFocusUnitOnMap(existingUnit);
+                        //     this._clearFocusUnitLoaded();
+                        //     this._resetMovableArea();
+                        //     this._resetAttackableArea();
+                        //     this._resetMovePathAsShortest(gridIndex);
+                        // }
+                        if (existingUnit) {
+                            if (existingUnit.getPlayerIndex() === this._getWar().getPlayerInTurn().getPlayerIndex()) {
+                                this._setFocusUnitOnMap(existingUnit);
+                                this._clearFocusUnitLoaded();
+                                this._resetMovableArea();
+                                this._resetAttackableArea();
+                                this._resetMovePathAsShortest(gridIndex);
+                            } else {
+                                this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                            }
                         } else {
-                            this._setFocusUnitOnMap(existingUnit);
-                            this._clearFocusUnitLoaded();
-                            this._resetMovableArea();
-                            this._resetAttackableArea();
-                            this._resetMovePathAsShortest(gridIndex);
+                            if (this._getTileMap().getTile(gridIndex).getMaxHp() != null) {
+                                this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                            } else {
+                                this._updateMovePathByDestination(gridIndex);
+                            }
                         }
                     }
                 }
@@ -247,7 +264,15 @@ namespace TinyWars.ReplayWar {
             const playerIndexInTurn = this._getWar().getPlayerInTurn().getPlayerIndex();
             if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
                 if (!existingUnit) {
-                    return State.ChoosingAction;
+                    if (!User.UserModel.getSelfSettingsIsSetPathMode()) {
+                        return State.ChoosingAction;
+                    } else {
+                        if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
+                            return State.ChoosingAction;
+                        } else {
+                            return State.MakingMovePath;
+                        }
+                    }
                 } else {
                     if (existingUnit.getPlayerIndex() !== playerIndexInTurn) {
                         if (existingUnit.checkHasWeapon()) {

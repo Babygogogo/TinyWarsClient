@@ -240,6 +240,7 @@ namespace TinyWars.ReplayWar {
                 this._createCommandStopTileAnimation(),
                 this._createCommandUseOriginTexture(),
                 this._createCommandUseNewTexture(),
+                this._createCommandSetPathMode(),
             ].filter(v => !!v);
         }
 
@@ -379,6 +380,35 @@ namespace TinyWars.ReplayWar {
                     }
                 };
             }
+        }
+        private _createCommandSetPathMode(): DataForCommandRenderer {
+            return {
+                name    : Lang.getText(Lang.Type.B0430),
+                callback: () => {
+                    const isEnabled = User.UserModel.getSelfSettingsIsSetPathMode();
+                    Common.CommonConfirmPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : Lang.getFormattedText(
+                            Lang.Type.F0033,
+                            Lang.getText(isEnabled ? Lang.Type.B0431 : Lang.Type.B0432),
+                        ),
+                        callback: () => {
+                            if (!isEnabled) {
+                                User.UserProxy.reqUserSetSettings({
+                                    isSetPathMode   : true,
+                                });
+                            }
+                        },
+                        callbackOnCancel: () => {
+                            if (!isEnabled) {
+                                User.UserProxy.reqUserSetSettings({
+                                    isSetPathMode   : false,
+                                });
+                            }
+                        }
+                    });
+                }
+            };
         }
     }
 

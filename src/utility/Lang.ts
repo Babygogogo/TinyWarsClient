@@ -2438,6 +2438,18 @@ namespace TinyWars.Utility.Lang {
             `确认密码`,
             `Confirm Password`,
         ],
+        [Type.B0430]: [
+            `SetPath模式`,
+            `Set Path Mode`,
+        ],
+        [Type.B0431]: [
+            `已启用`,
+            `Enabled`,
+        ],
+        [Type.B0432]: [
+            `已禁用`,
+            `Disabled`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2816,6 +2828,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0032]: [
             `请把名称长度控制在%d个字符以内。`,
             `Please limit the length of the name to %d characters.`
+        ],
+        [Type.F0033]: [
+            `启用SetPath模式后，在指定部队移动路线时，您需要连续点击两次目标格子才能呼出操作菜单。这会增加操作量，但同时也便于指定移动路线，这在雾战中尤其有用。\n您确定要启用吗？\n（当前状态：%s）`,
+            `While the Set Path mode is enabled, you have to double click (or touch) a tile in order to make the unit action panel appear when you are moving units. This mode can be useful especially in FoW.\nAre you sure to enable it? \n(Current status: %s)`,
         ],
     };
 
