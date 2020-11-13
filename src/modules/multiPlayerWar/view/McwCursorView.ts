@@ -37,6 +37,7 @@ namespace TinyWars.MultiPlayerWar {
                         const target = war.getUnitMap().getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
                         labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${target.getCurrentHp()}\n`
                             + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${(actionPlanner.getFocusUnit()).getCurrentHp()}`;
+                        this._updatePositionForConForDamage();
                     }
 
                 } else if (state === ActionPlannerState.ChoosingAction) {
@@ -58,6 +59,7 @@ namespace TinyWars.MultiPlayerWar {
                         const target        = war.getUnitMap().getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
                         labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${target.getCurrentHp()}\n`
                             + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${(actionPlanner.getFocusUnit()).getCurrentHp()}`;
+                        this._updatePositionForConForDamage();
                     }
 
                 } else if (state === ActionPlannerState.ChoosingDropDestination) {

@@ -90,7 +90,7 @@ namespace TinyWars.SinglePlayerLobby {
                 //     },
                 // },
                 {
-                    name    : Lang.getText(Lang.Type.B0024),
+                    name    : Lang.getText(Lang.Type.B0261),
                     callback: (): void => {
                         this.close();
                         SingleCustomRoom.ScrContinueWarListPanel.show();

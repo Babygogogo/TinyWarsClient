@@ -534,5 +534,11 @@ namespace TinyWars.BaseWar {
         protected _getActionPlanner(): BwActionPlanner {
             return this._actionPlanner;
         }
+
+        protected _updatePositionForConForDamage(): void {
+            this._getConForDamage().y = (this._getCursor().getGridY() <= 0)
+                ? _GRID_HEIGHT
+                : -_DAMAGE_CON_HEIGHT;
+        }
     }
 }
