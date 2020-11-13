@@ -108,6 +108,8 @@ namespace TinyWars.Utility.Notify {
         MsgUserGetOnlineUsers,
         MsgUserSetPrivilege,
         MsgUserSetPassword,
+        MsgUserGetSettings,
+        MsgUserSetSettings,
 
         MsgMeGetDataList,
         MsgMeGetData,

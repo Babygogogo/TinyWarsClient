@@ -1,7 +1,6 @@
 
 namespace TinyWars.Common.CommonModel {
     import Types            = Utility.Types;
-    import LocalStorage     = Utility.LocalStorage;
     import ConfigManager    = Utility.ConfigManager;
     import Notify           = Utility.Notify;
     import Helpers          = Utility.Helpers;
@@ -15,34 +14,27 @@ namespace TinyWars.Common.CommonModel {
         tick    : number;
     }
 
-    let _unitAndTileTextureVersion      = TextureVersion.V0;
     let _unitAndTileTexturePrefix       = `v01_`;
     const _unitImageSourceDict          = new Map<TextureVersion, Map<boolean, Map<boolean, Map<number, Map<UnitType, FrameCfg>>>>>();
     const _tileBaseImageSourceDict      = new Map<TextureVersion, Map<number, Map<TileBaseType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>();
     const _tileObjectImageSourceDict    = new Map<TextureVersion, Map<number, Map<TileObjectType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>();
 
     export function init(): void {
-        setUnitAndTileTextureVersion(LocalStorage.getUnitAndTileTextureVersion());
+        updateOnUnitAndTileTextureVersionChanged();
     }
 
-    export function setUnitAndTileTextureVersion(version: TextureVersion): void {
-        _unitAndTileTextureVersion = version;
+    export function updateOnUnitAndTileTextureVersionChanged(): void {
         updateUnitAndTileTexturePrefix();
-        LocalStorage.setUnitAndTileTextureVersion(version);
 
         tickTileImageSources();
         tickUnitImageSources();
-        Notify.dispatch(Notify.Type.UnitAndTileTextureVersionChanged);
-    }
-    export function getUnitAndTileTextureVersion(): TextureVersion {
-        return _unitAndTileTextureVersion;
     }
 
     export function getUnitAndTileTexturePrefix(): string {
         return _unitAndTileTexturePrefix;
     }
     function updateUnitAndTileTexturePrefix(): void {
-        _unitAndTileTexturePrefix = `v${Helpers.getNumText(getUnitAndTileTextureVersion())}_`;
+        _unitAndTileTexturePrefix = `v${Helpers.getNumText(User.UserModel.getSelfSettingsTextureVersion())}_`;
     }
 
     export function tickTileImageSources(): void {

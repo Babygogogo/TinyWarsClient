@@ -71,13 +71,14 @@ namespace TinyWars.SingleCustomWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
-                { type: Notify.Type.BwCoIdChanged,                  callback: this._onNotifyBwCoIdChanged },
-                { type: Notify.Type.MsgScrContinueWar,              callback: this._onMsgScrContinueWar },
-                { type: Notify.Type.MsgScrSaveWar,                  callback: this._onMsgScrSaveWar },
-                { type: Notify.Type.MsgScrCreateCustomWar,          callback: this._onMsgScrCreateCustomWar },
-                { type: Notify.Type.MsgScrDeleteWar,                callback: this._onMsgScrDeleteWar },
+                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
+                { type: Notify.Type.BwCoIdChanged,                      callback: this._onNotifyBwCoIdChanged },
+                { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: Notify.Type.MsgScrContinueWar,                  callback: this._onMsgScrContinueWar },
+                { type: Notify.Type.MsgScrSaveWar,                      callback: this._onMsgScrSaveWar },
+                { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
+                { type: Notify.Type.MsgScrDeleteWar,                    callback: this._onMsgScrDeleteWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -122,6 +123,10 @@ namespace TinyWars.SingleCustomWar {
 
         private _onNotifyBwCoIdChanged(e: egret.Event): void {
             this.updateListPlayer();
+        }
+
+        private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
+            this._updateView();
         }
 
         private _onMsgScrContinueWar(e: egret.Event): void {
@@ -481,27 +486,29 @@ namespace TinyWars.SingleCustomWar {
             }
         }
         private _createCommandUseOriginTexture(): DataForCommandRenderer | null {
-            if (Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V0) {
+            if (User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0) {
                 return null;
             } else {
                 return {
                     name    : Lang.getText(Lang.Type.B0385),
                     callback: () => {
-                        Common.CommonModel.setUnitAndTileTextureVersion(Types.UnitAndTileTextureVersion.V0);
-                        this._updateView();
+                        User.UserProxy.reqUserSetSettings({
+                            unitAndTileTextureVersion   : Types.UnitAndTileTextureVersion.V0,
+                        });
                     }
                 };
             }
         }
         private _createCommandUseNewTexture(): DataForCommandRenderer | null {
-            if (Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V1) {
+            if (User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V1) {
                 return null;
             } else {
                 return {
                     name    : Lang.getText(Lang.Type.B0386),
                     callback: () => {
-                        Common.CommonModel.setUnitAndTileTextureVersion(Types.UnitAndTileTextureVersion.V1);
-                        this._updateView();
+                        User.UserProxy.reqUserSetSettings({
+                            unitAndTileTextureVersion   : Types.UnitAndTileTextureVersion.V1,
+                        });
                     }
                 };
             }

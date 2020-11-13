@@ -64,7 +64,7 @@ namespace TinyWars.BaseWar {
 
             const imgObject = this.getImgObject();
             const imgBase   = this.getImgBase();
-            const version   = CommonModel.getUnitAndTileTextureVersion();
+            const version   = User.UserModel.getSelfSettingsTextureVersion();
             const tickCount = TimeModel.getTileAnimationTickCount();
 
             const objectType = tileData.objectType;

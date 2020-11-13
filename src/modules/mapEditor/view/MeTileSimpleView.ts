@@ -72,7 +72,7 @@ namespace TinyWars.MapEditor {
         }
 
         protected _updateImages(): void {
-            const version   = CommonModel.getUnitAndTileTextureVersion();
+            const version   = User.UserModel.getSelfSettingsTextureVersion();
             const tickCount = Time.TimeModel.getTileAnimationTickCount();
             const skinId    = this._playerIndex;
 

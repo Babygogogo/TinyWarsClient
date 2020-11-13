@@ -166,7 +166,7 @@ namespace TinyWars.WarMap {
             return tileData == null
                 ? undefined
                 : CommonModel.getCachedTileBaseImageSource({
-                    version : CommonModel.getUnitAndTileTextureVersion(),
+                    version : User.UserModel.getSelfSettingsTextureVersion(),
                     baseType: tileData.baseType,
                     shapeId : tileData.baseShapeId || 0,
                     isDark  : false,
@@ -185,7 +185,7 @@ namespace TinyWars.WarMap {
             return tileData == null
                 ? undefined
                 : CommonModel.getCachedTileObjectImageSource({
-                    version     : CommonModel.getUnitAndTileTextureVersion(),
+                    version     : User.UserModel.getSelfSettingsTextureVersion(),
                     objectType  : tileData.objectType,
                     shapeId     : tileData.objectShapeId || 0,
                     isDark      : false,

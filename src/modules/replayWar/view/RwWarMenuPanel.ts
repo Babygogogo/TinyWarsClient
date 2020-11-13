@@ -74,10 +74,11 @@ namespace TinyWars.ReplayWar {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
-                { type: Notify.Type.MsgScrCreateCustomWar,          callback: this._onMsgScrCreateCustomWar },
-                { type: Notify.Type.MsgReplaySetRating,             callback: this._onMsgReplaySetRating },
+                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyMcwPlannerStateChanged },
+                { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
+                { type: Notify.Type.MsgReplaySetRating,                 callback: this._onMsgReplaySetRating },
             ];
             this._uiListeners = [
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -110,6 +111,10 @@ namespace TinyWars.ReplayWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyMcwPlannerStateChanged(e: egret.Event): void {
             this._updateListPlayer();
+        }
+
+        private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
+            this._updateView();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -348,27 +353,29 @@ namespace TinyWars.ReplayWar {
             }
         }
         private _createCommandUseOriginTexture(): DataForCommandRenderer | null {
-            if (Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V0) {
+            if (User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0) {
                 return null;
             } else {
                 return {
                     name    : Lang.getText(Lang.Type.B0385),
                     callback: () => {
-                        Common.CommonModel.setUnitAndTileTextureVersion(Types.UnitAndTileTextureVersion.V0);
-                        this._updateView();
+                        User.UserProxy.reqUserSetSettings({
+                            unitAndTileTextureVersion   : Types.UnitAndTileTextureVersion.V0,
+                        });
                     }
                 };
             }
         }
         private _createCommandUseNewTexture(): DataForCommandRenderer | null {
-            if (Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V1) {
+            if (User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V1) {
                 return null;
             } else {
                 return {
                     name    : Lang.getText(Lang.Type.B0386),
                     callback: () => {
-                        Common.CommonModel.setUnitAndTileTextureVersion(Types.UnitAndTileTextureVersion.V1);
-                        this._updateView();
+                        User.UserProxy.reqUserSetSettings({
+                            unitAndTileTextureVersion   : Types.UnitAndTileTextureVersion.V1,
+                        });
                     }
                 };
             }

@@ -154,11 +154,11 @@ namespace TinyWars.User {
             Chat.ChatPanel.show({ toUserId: userId });
         }
         private _onTouchedBtnSwitchTexture(e: egret.TouchEvent): void {
-            const model = Common.CommonModel;
-            model.setUnitAndTileTextureVersion(model.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V0
-                ? Types.UnitAndTileTextureVersion.V1
-                : Types.UnitAndTileTextureVersion.V0
-            );
+            User.UserProxy.reqUserSetSettings({
+                unitAndTileTextureVersion   : User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0
+                    ? Types.UnitAndTileTextureVersion.V1
+                    : Types.UnitAndTileTextureVersion.V0,
+            });
         }
 
         private _showOpenAnimation(): void {
@@ -290,7 +290,7 @@ namespace TinyWars.User {
                 : Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.Chinese);
         }
         private _updateBtnSwitchTexture(): void {
-            this._btnSwitchTexture.label = Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V0
+            this._btnSwitchTexture.label = User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0
                 ? Lang.getText(Lang.Type.B0386)
                 : Lang.getText(Lang.Type.B0385);
         }

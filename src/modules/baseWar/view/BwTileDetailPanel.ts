@@ -111,7 +111,7 @@ namespace TinyWars.BaseWar {
         private _updateTileViewAndLabelName(): void {
             const data                  = this._openData;
             const tile                  = data.tile;
-            const version               = CommonModel.getUnitAndTileTextureVersion();
+            const version               = User.UserModel.getSelfSettingsTextureVersion();
             const tickCount             = Time.TimeModel.getTileAnimationTickCount();
             const skinId                = tile.getSkinId();
             this._imgTileBase.source    = CommonModel.getCachedTileBaseImageSource({

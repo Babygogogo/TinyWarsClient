@@ -45,7 +45,7 @@ namespace TinyWars.WarMap {
                 // }
 
                 this._unitImage.source = CommonModel.getCachedUnitImageSource({
-                    version     : CommonModel.getUnitAndTileTextureVersion(),
+                    version     : User.UserModel.getSelfSettingsTextureVersion(),
                     skinId      : data.skinId,
                     unitType    : data.unitType,
                     isMoving    : false,

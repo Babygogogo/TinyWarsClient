@@ -6,12 +6,14 @@ namespace TinyWars.User {
     import ProtoTypes       = Utility.ProtoTypes;
     import NetMessage       = ProtoTypes.NetMessage;
     import IUserPublicInfo  = ProtoTypes.User.IUserPublicInfo;
+    import IUserSettings    = ProtoTypes.User.IUserSettings;
 
     export namespace UserModel {
         let _isLoggedIn                 = false;
         let _selfUserId                 : number;
         let _selfAccount                : string;
         let _selfPassword               : string;
+        let _selfSettings               : IUserSettings;
         const _userPublicInfoDict       = new Map<number, IUserPublicInfo>();
         const _userPublicInfoRequests   = new Map<number, ((info: NetMessage.MsgUserGetPublicInfo.IS | undefined | null) => void)[]>();
 
@@ -160,6 +162,26 @@ namespace TinyWars.User {
         export async function getUserWarStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.IDataForUserWarStatistics> {
             const info = await getUserPublicInfo(userId);
             return (info ? info.userWarStatistics.dataList || [] : []).find(v => (v.warType === warType) && (v.playersCount === playersCount));
+        }
+
+        export function setSelfSettings(userSettings: IUserSettings): void {
+            const oldVersion = getSelfSettingsTextureVersion();
+            _selfSettings = userSettings;
+
+            if (oldVersion !== getSelfSettingsTextureVersion()) {
+                Common.CommonModel.updateOnUnitAndTileTextureVersionChanged();
+                Notify.dispatch(Notify.Type.UnitAndTileTextureVersionChanged);
+            }
+        }
+        export function getSelfSettingsTextureVersion(): Types.UnitAndTileTextureVersion {
+            return _selfSettings
+                ? _selfSettings.unitAndTileTextureVersion || Types.UnitAndTileTextureVersion.V0
+                : Types.UnitAndTileTextureVersion.V0;
+        }
+        export function getSelfSettingsIsSetPathMode(): boolean {
+            return _selfSettings
+                ? !!_selfSettings.isSetPathMode
+                : false;
         }
 
         function _onNotifyNetworkDisconnected(e: egret.Event): void {

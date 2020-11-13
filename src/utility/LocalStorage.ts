@@ -8,7 +8,6 @@ namespace TinyWars.Utility {
     const KEY_REMEMBER_PASSWORD         = KEY_PREFIX + "RememberPassword";
     const KEY_LANGUAGE                  = KEY_PREFIX + "Language";
     const KEY_SHOW_TILE_ANIMATION       = KEY_PREFIX + "ShowTileAnimation";
-    const KEY_UNIT_TILE_IMAGE_VERSION   = KEY_PREFIX + "UnitAndTileImageVersion";
     const KEY_MAP_RAW_DATA_PREFIX       = KEY_PREFIX + "MapRawData_";
     const VALUE_TRUE                    = "1";
     const VALUE_FALSE                   = "0";
@@ -58,16 +57,6 @@ namespace TinyWars.Utility {
         export function getShowTileAnimation(): boolean {
             const data = localStorage.getItem(KEY_SHOW_TILE_ANIMATION);
             return (data == null) || (data === VALUE_TRUE);
-        }
-
-        export function setUnitAndTileTextureVersion(version: Types.UnitAndTileTextureVersion): void {
-            localStorage.setItem(KEY_UNIT_TILE_IMAGE_VERSION, "" + version);
-        }
-        export function getUnitAndTileTextureVersion(): Types.UnitAndTileTextureVersion {
-            const data = parseInt(localStorage.getItem(KEY_UNIT_TILE_IMAGE_VERSION));
-            return ((data === Types.UnitAndTileTextureVersion.V0) || (data === Types.UnitAndTileTextureVersion.V1))
-                ? data
-                : Types.UnitAndTileTextureVersion.V0;
         }
     }
 }

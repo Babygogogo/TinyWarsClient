@@ -2382,6 +2382,114 @@ export declare namespace Map {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a DataForWarEvent. */
+    interface IDataForWarEvent {
+
+        /** DataForWarEvent conditionList */
+        conditionList?: (WarEvent.ICondition[]|null);
+
+        /** DataForWarEvent conditionNodeList */
+        conditionNodeList?: (WarEvent.IConditionNode[]|null);
+
+        /** DataForWarEvent actionList */
+        actionList?: (WarEvent.IAction[]|null);
+
+        /** DataForWarEvent warEventList */
+        warEventList?: (WarEvent.IWarEvent[]|null);
+    }
+
+    /** Represents a DataForWarEvent. */
+    class DataForWarEvent implements IDataForWarEvent {
+
+        /**
+         * Constructs a new DataForWarEvent.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Map.IDataForWarEvent);
+
+        /** DataForWarEvent conditionList. */
+        public conditionList: WarEvent.ICondition[];
+
+        /** DataForWarEvent conditionNodeList. */
+        public conditionNodeList: WarEvent.IConditionNode[];
+
+        /** DataForWarEvent actionList. */
+        public actionList: WarEvent.IAction[];
+
+        /** DataForWarEvent warEventList. */
+        public warEventList: WarEvent.IWarEvent[];
+
+        /**
+         * Creates a new DataForWarEvent instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns DataForWarEvent instance
+         */
+        public static create(properties?: Map.IDataForWarEvent): Map.DataForWarEvent;
+
+        /**
+         * Encodes the specified DataForWarEvent message. Does not implicitly {@link Map.DataForWarEvent.verify|verify} messages.
+         * @param message DataForWarEvent message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Map.IDataForWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified DataForWarEvent message, length delimited. Does not implicitly {@link Map.DataForWarEvent.verify|verify} messages.
+         * @param message DataForWarEvent message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Map.IDataForWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a DataForWarEvent message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns DataForWarEvent
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Map.DataForWarEvent;
+
+        /**
+         * Decodes a DataForWarEvent message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns DataForWarEvent
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Map.DataForWarEvent;
+
+        /**
+         * Verifies a DataForWarEvent message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a DataForWarEvent message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns DataForWarEvent
+         */
+        public static fromObject(object: { [k: string]: any }): Map.DataForWarEvent;
+
+        /**
+         * Creates a plain object from a DataForWarEvent message. Also converts values to other types if specified.
+         * @param message DataForWarEvent
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Map.DataForWarEvent, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this DataForWarEvent to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a MapComplexInfo. */
     interface IMapComplexInfo {
 
@@ -2513,6 +2621,9 @@ export declare namespace Map {
 
         /** MapRawData warRuleList */
         warRuleList?: (WarRule.IWarRule[]|null);
+
+        /** MapRawData warEventData */
+        warEventData?: (Map.IDataForWarEvent|null);
     }
 
     /** Represents a MapRawData. */
@@ -2556,6 +2667,9 @@ export declare namespace Map {
 
         /** MapRawData warRuleList. */
         public warRuleList: WarRule.IWarRule[];
+
+        /** MapRawData warEventData. */
+        public warEventData?: (Map.IDataForWarEvent|null);
 
         /**
          * Creates a new MapRawData instance using the specified properties.
@@ -2845,6 +2959,1347 @@ export declare namespace Map {
 
         /**
          * Converts this MapEditorData to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+}
+
+/** Properties of a WarEvent. */
+export declare interface IWarEvent {
+}
+
+/** Represents a WarEvent. */
+export declare class WarEvent implements IWarEvent {
+
+    /**
+     * Constructs a new WarEvent.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IWarEvent);
+
+    /**
+     * Creates a new WarEvent instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns WarEvent instance
+     */
+    public static create(properties?: IWarEvent): WarEvent;
+
+    /**
+     * Encodes the specified WarEvent message. Does not implicitly {@link WarEvent.verify|verify} messages.
+     * @param message WarEvent message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified WarEvent message, length delimited. Does not implicitly {@link WarEvent.verify|verify} messages.
+     * @param message WarEvent message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a WarEvent message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns WarEvent
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent;
+
+    /**
+     * Decodes a WarEvent message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns WarEvent
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent;
+
+    /**
+     * Verifies a WarEvent message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a WarEvent message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns WarEvent
+     */
+    public static fromObject(object: { [k: string]: any }): WarEvent;
+
+    /**
+     * Creates a plain object from a WarEvent message. Also converts values to other types if specified.
+     * @param message WarEvent
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: WarEvent, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this WarEvent to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+export declare namespace WarEvent {
+
+    /** Properties of a ConditionSubStructure. */
+    interface IConditionSubStructure {
+    }
+
+    /** Represents a ConditionSubStructure. */
+    class ConditionSubStructure implements IConditionSubStructure {
+
+        /**
+         * Constructs a new ConditionSubStructure.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IConditionSubStructure);
+
+        /**
+         * Creates a new ConditionSubStructure instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ConditionSubStructure instance
+         */
+        public static create(properties?: WarEvent.IConditionSubStructure): WarEvent.ConditionSubStructure;
+
+        /**
+         * Encodes the specified ConditionSubStructure message. Does not implicitly {@link WarEvent.ConditionSubStructure.verify|verify} messages.
+         * @param message ConditionSubStructure message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IConditionSubStructure, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified ConditionSubStructure message, length delimited. Does not implicitly {@link WarEvent.ConditionSubStructure.verify|verify} messages.
+         * @param message ConditionSubStructure message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IConditionSubStructure, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a ConditionSubStructure message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns ConditionSubStructure
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.ConditionSubStructure;
+
+        /**
+         * Decodes a ConditionSubStructure message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns ConditionSubStructure
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.ConditionSubStructure;
+
+        /**
+         * Verifies a ConditionSubStructure message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ConditionSubStructure message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ConditionSubStructure
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.ConditionSubStructure;
+
+        /**
+         * Creates a plain object from a ConditionSubStructure message. Also converts values to other types if specified.
+         * @param message ConditionSubStructure
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.ConditionSubStructure, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ConditionSubStructure to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace ConditionSubStructure {
+
+        /** Properties of a ConditionCommonData. */
+        interface IConditionCommonData {
+
+            /** ConditionCommonData conditionId */
+            conditionId?: (number|null);
+
+            /** ConditionCommonData isNot */
+            isNot?: (boolean|null);
+        }
+
+        /** Represents a ConditionCommonData. */
+        class ConditionCommonData implements IConditionCommonData {
+
+            /**
+             * Constructs a new ConditionCommonData.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.ConditionSubStructure.IConditionCommonData);
+
+            /** ConditionCommonData conditionId. */
+            public conditionId: number;
+
+            /** ConditionCommonData isNot. */
+            public isNot: boolean;
+
+            /**
+             * Creates a new ConditionCommonData instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ConditionCommonData instance
+             */
+            public static create(properties?: WarEvent.ConditionSubStructure.IConditionCommonData): WarEvent.ConditionSubStructure.ConditionCommonData;
+
+            /**
+             * Encodes the specified ConditionCommonData message. Does not implicitly {@link WarEvent.ConditionSubStructure.ConditionCommonData.verify|verify} messages.
+             * @param message ConditionCommonData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.ConditionSubStructure.IConditionCommonData, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ConditionCommonData message, length delimited. Does not implicitly {@link WarEvent.ConditionSubStructure.ConditionCommonData.verify|verify} messages.
+             * @param message ConditionCommonData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.ConditionSubStructure.IConditionCommonData, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a ConditionCommonData message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ConditionCommonData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.ConditionSubStructure.ConditionCommonData;
+
+            /**
+             * Decodes a ConditionCommonData message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ConditionCommonData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.ConditionSubStructure.ConditionCommonData;
+
+            /**
+             * Verifies a ConditionCommonData message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ConditionCommonData message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ConditionCommonData
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.ConditionSubStructure.ConditionCommonData;
+
+            /**
+             * Creates a plain object from a ConditionCommonData message. Also converts values to other types if specified.
+             * @param message ConditionCommonData
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.ConditionSubStructure.ConditionCommonData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ConditionCommonData to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a ConditionTurnSwitched. */
+        interface IConditionTurnSwitched {
+
+            /** ConditionTurnSwitched turnIndex */
+            turnIndex?: (number|null);
+
+            /** ConditionTurnSwitched playerIndex */
+            playerIndex?: (number|null);
+        }
+
+        /** Represents a ConditionTurnSwitched. */
+        class ConditionTurnSwitched implements IConditionTurnSwitched {
+
+            /**
+             * Constructs a new ConditionTurnSwitched.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.ConditionSubStructure.IConditionTurnSwitched);
+
+            /** ConditionTurnSwitched turnIndex. */
+            public turnIndex: number;
+
+            /** ConditionTurnSwitched playerIndex. */
+            public playerIndex: number;
+
+            /**
+             * Creates a new ConditionTurnSwitched instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ConditionTurnSwitched instance
+             */
+            public static create(properties?: WarEvent.ConditionSubStructure.IConditionTurnSwitched): WarEvent.ConditionSubStructure.ConditionTurnSwitched;
+
+            /**
+             * Encodes the specified ConditionTurnSwitched message. Does not implicitly {@link WarEvent.ConditionSubStructure.ConditionTurnSwitched.verify|verify} messages.
+             * @param message ConditionTurnSwitched message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.ConditionSubStructure.IConditionTurnSwitched, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ConditionTurnSwitched message, length delimited. Does not implicitly {@link WarEvent.ConditionSubStructure.ConditionTurnSwitched.verify|verify} messages.
+             * @param message ConditionTurnSwitched message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.ConditionSubStructure.IConditionTurnSwitched, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a ConditionTurnSwitched message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ConditionTurnSwitched
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.ConditionSubStructure.ConditionTurnSwitched;
+
+            /**
+             * Decodes a ConditionTurnSwitched message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ConditionTurnSwitched
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.ConditionSubStructure.ConditionTurnSwitched;
+
+            /**
+             * Verifies a ConditionTurnSwitched message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ConditionTurnSwitched message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ConditionTurnSwitched
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.ConditionSubStructure.ConditionTurnSwitched;
+
+            /**
+             * Creates a plain object from a ConditionTurnSwitched message. Also converts values to other types if specified.
+             * @param message ConditionTurnSwitched
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.ConditionSubStructure.ConditionTurnSwitched, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ConditionTurnSwitched to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a ConditionPlayerLost. */
+        interface IConditionPlayerLost {
+
+            /** ConditionPlayerLost playerIndex */
+            playerIndex?: (number|null);
+        }
+
+        /** Represents a ConditionPlayerLost. */
+        class ConditionPlayerLost implements IConditionPlayerLost {
+
+            /**
+             * Constructs a new ConditionPlayerLost.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.ConditionSubStructure.IConditionPlayerLost);
+
+            /** ConditionPlayerLost playerIndex. */
+            public playerIndex: number;
+
+            /**
+             * Creates a new ConditionPlayerLost instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ConditionPlayerLost instance
+             */
+            public static create(properties?: WarEvent.ConditionSubStructure.IConditionPlayerLost): WarEvent.ConditionSubStructure.ConditionPlayerLost;
+
+            /**
+             * Encodes the specified ConditionPlayerLost message. Does not implicitly {@link WarEvent.ConditionSubStructure.ConditionPlayerLost.verify|verify} messages.
+             * @param message ConditionPlayerLost message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.ConditionSubStructure.IConditionPlayerLost, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ConditionPlayerLost message, length delimited. Does not implicitly {@link WarEvent.ConditionSubStructure.ConditionPlayerLost.verify|verify} messages.
+             * @param message ConditionPlayerLost message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.ConditionSubStructure.IConditionPlayerLost, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a ConditionPlayerLost message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ConditionPlayerLost
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.ConditionSubStructure.ConditionPlayerLost;
+
+            /**
+             * Decodes a ConditionPlayerLost message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ConditionPlayerLost
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.ConditionSubStructure.ConditionPlayerLost;
+
+            /**
+             * Verifies a ConditionPlayerLost message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ConditionPlayerLost message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ConditionPlayerLost
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.ConditionSubStructure.ConditionPlayerLost;
+
+            /**
+             * Creates a plain object from a ConditionPlayerLost message. Also converts values to other types if specified.
+             * @param message ConditionPlayerLost
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.ConditionSubStructure.ConditionPlayerLost, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ConditionPlayerLost to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a ConditionEventCalled. */
+        interface IConditionEventCalled {
+
+            /** ConditionEventCalled eventId */
+            eventId?: (number|null);
+
+            /** ConditionEventCalled calledTimesLessThan */
+            calledTimesLessThan?: (number|null);
+
+            /** ConditionEventCalled calledTimesEqualTo */
+            calledTimesEqualTo?: (number|null);
+
+            /** ConditionEventCalled calledTimesGreaterThan */
+            calledTimesGreaterThan?: (number|null);
+        }
+
+        /** Represents a ConditionEventCalled. */
+        class ConditionEventCalled implements IConditionEventCalled {
+
+            /**
+             * Constructs a new ConditionEventCalled.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.ConditionSubStructure.IConditionEventCalled);
+
+            /** ConditionEventCalled eventId. */
+            public eventId: number;
+
+            /** ConditionEventCalled calledTimesLessThan. */
+            public calledTimesLessThan: number;
+
+            /** ConditionEventCalled calledTimesEqualTo. */
+            public calledTimesEqualTo: number;
+
+            /** ConditionEventCalled calledTimesGreaterThan. */
+            public calledTimesGreaterThan: number;
+
+            /**
+             * Creates a new ConditionEventCalled instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ConditionEventCalled instance
+             */
+            public static create(properties?: WarEvent.ConditionSubStructure.IConditionEventCalled): WarEvent.ConditionSubStructure.ConditionEventCalled;
+
+            /**
+             * Encodes the specified ConditionEventCalled message. Does not implicitly {@link WarEvent.ConditionSubStructure.ConditionEventCalled.verify|verify} messages.
+             * @param message ConditionEventCalled message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.ConditionSubStructure.IConditionEventCalled, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ConditionEventCalled message, length delimited. Does not implicitly {@link WarEvent.ConditionSubStructure.ConditionEventCalled.verify|verify} messages.
+             * @param message ConditionEventCalled message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.ConditionSubStructure.IConditionEventCalled, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a ConditionEventCalled message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ConditionEventCalled
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.ConditionSubStructure.ConditionEventCalled;
+
+            /**
+             * Decodes a ConditionEventCalled message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ConditionEventCalled
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.ConditionSubStructure.ConditionEventCalled;
+
+            /**
+             * Verifies a ConditionEventCalled message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ConditionEventCalled message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ConditionEventCalled
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.ConditionSubStructure.ConditionEventCalled;
+
+            /**
+             * Creates a plain object from a ConditionEventCalled message. Also converts values to other types if specified.
+             * @param message ConditionEventCalled
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.ConditionSubStructure.ConditionEventCalled, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ConditionEventCalled to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of an ActionSubStructure. */
+    interface IActionSubStructure {
+    }
+
+    /** Represents an ActionSubStructure. */
+    class ActionSubStructure implements IActionSubStructure {
+
+        /**
+         * Constructs a new ActionSubStructure.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IActionSubStructure);
+
+        /**
+         * Creates a new ActionSubStructure instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ActionSubStructure instance
+         */
+        public static create(properties?: WarEvent.IActionSubStructure): WarEvent.ActionSubStructure;
+
+        /**
+         * Encodes the specified ActionSubStructure message. Does not implicitly {@link WarEvent.ActionSubStructure.verify|verify} messages.
+         * @param message ActionSubStructure message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IActionSubStructure, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified ActionSubStructure message, length delimited. Does not implicitly {@link WarEvent.ActionSubStructure.verify|verify} messages.
+         * @param message ActionSubStructure message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IActionSubStructure, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes an ActionSubStructure message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns ActionSubStructure
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.ActionSubStructure;
+
+        /**
+         * Decodes an ActionSubStructure message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns ActionSubStructure
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.ActionSubStructure;
+
+        /**
+         * Verifies an ActionSubStructure message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates an ActionSubStructure message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ActionSubStructure
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.ActionSubStructure;
+
+        /**
+         * Creates a plain object from an ActionSubStructure message. Also converts values to other types if specified.
+         * @param message ActionSubStructure
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.ActionSubStructure, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ActionSubStructure to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace ActionSubStructure {
+
+        /** Properties of an ActionCommonData. */
+        interface IActionCommonData {
+
+            /** ActionCommonData actionId */
+            actionId?: (number|null);
+        }
+
+        /** Represents an ActionCommonData. */
+        class ActionCommonData implements IActionCommonData {
+
+            /**
+             * Constructs a new ActionCommonData.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.ActionSubStructure.IActionCommonData);
+
+            /** ActionCommonData actionId. */
+            public actionId: number;
+
+            /**
+             * Creates a new ActionCommonData instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ActionCommonData instance
+             */
+            public static create(properties?: WarEvent.ActionSubStructure.IActionCommonData): WarEvent.ActionSubStructure.ActionCommonData;
+
+            /**
+             * Encodes the specified ActionCommonData message. Does not implicitly {@link WarEvent.ActionSubStructure.ActionCommonData.verify|verify} messages.
+             * @param message ActionCommonData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.ActionSubStructure.IActionCommonData, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ActionCommonData message, length delimited. Does not implicitly {@link WarEvent.ActionSubStructure.ActionCommonData.verify|verify} messages.
+             * @param message ActionCommonData message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.ActionSubStructure.IActionCommonData, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ActionCommonData message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ActionCommonData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.ActionSubStructure.ActionCommonData;
+
+            /**
+             * Decodes an ActionCommonData message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ActionCommonData
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.ActionSubStructure.ActionCommonData;
+
+            /**
+             * Verifies an ActionCommonData message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ActionCommonData message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ActionCommonData
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.ActionSubStructure.ActionCommonData;
+
+            /**
+             * Creates a plain object from an ActionCommonData message. Also converts values to other types if specified.
+             * @param message ActionCommonData
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.ActionSubStructure.ActionCommonData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ActionCommonData to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of an ActionCallEvent. */
+        interface IActionCallEvent {
+
+            /** ActionCallEvent eventId */
+            eventId?: (number|null);
+        }
+
+        /** Represents an ActionCallEvent. */
+        class ActionCallEvent implements IActionCallEvent {
+
+            /**
+             * Constructs a new ActionCallEvent.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.ActionSubStructure.IActionCallEvent);
+
+            /** ActionCallEvent eventId. */
+            public eventId: number;
+
+            /**
+             * Creates a new ActionCallEvent instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ActionCallEvent instance
+             */
+            public static create(properties?: WarEvent.ActionSubStructure.IActionCallEvent): WarEvent.ActionSubStructure.ActionCallEvent;
+
+            /**
+             * Encodes the specified ActionCallEvent message. Does not implicitly {@link WarEvent.ActionSubStructure.ActionCallEvent.verify|verify} messages.
+             * @param message ActionCallEvent message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.ActionSubStructure.IActionCallEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ActionCallEvent message, length delimited. Does not implicitly {@link WarEvent.ActionSubStructure.ActionCallEvent.verify|verify} messages.
+             * @param message ActionCallEvent message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.ActionSubStructure.IActionCallEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ActionCallEvent message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ActionCallEvent
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.ActionSubStructure.ActionCallEvent;
+
+            /**
+             * Decodes an ActionCallEvent message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ActionCallEvent
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.ActionSubStructure.ActionCallEvent;
+
+            /**
+             * Verifies an ActionCallEvent message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ActionCallEvent message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ActionCallEvent
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.ActionSubStructure.ActionCallEvent;
+
+            /**
+             * Creates a plain object from an ActionCallEvent message. Also converts values to other types if specified.
+             * @param message ActionCallEvent
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.ActionSubStructure.ActionCallEvent, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ActionCallEvent to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of an ActionAddUnit. */
+        interface IActionAddUnit {
+        }
+
+        /** Represents an ActionAddUnit. */
+        class ActionAddUnit implements IActionAddUnit {
+
+            /**
+             * Constructs a new ActionAddUnit.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.ActionSubStructure.IActionAddUnit);
+
+            /**
+             * Creates a new ActionAddUnit instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ActionAddUnit instance
+             */
+            public static create(properties?: WarEvent.ActionSubStructure.IActionAddUnit): WarEvent.ActionSubStructure.ActionAddUnit;
+
+            /**
+             * Encodes the specified ActionAddUnit message. Does not implicitly {@link WarEvent.ActionSubStructure.ActionAddUnit.verify|verify} messages.
+             * @param message ActionAddUnit message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.ActionSubStructure.IActionAddUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ActionAddUnit message, length delimited. Does not implicitly {@link WarEvent.ActionSubStructure.ActionAddUnit.verify|verify} messages.
+             * @param message ActionAddUnit message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.ActionSubStructure.IActionAddUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ActionAddUnit message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ActionAddUnit
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.ActionSubStructure.ActionAddUnit;
+
+            /**
+             * Decodes an ActionAddUnit message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ActionAddUnit
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.ActionSubStructure.ActionAddUnit;
+
+            /**
+             * Verifies an ActionAddUnit message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ActionAddUnit message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ActionAddUnit
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.ActionSubStructure.ActionAddUnit;
+
+            /**
+             * Creates a plain object from an ActionAddUnit message. Also converts values to other types if specified.
+             * @param message ActionAddUnit
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.ActionSubStructure.ActionAddUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ActionAddUnit to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a Condition. */
+    interface ICondition {
+
+        /** Condition ConditionCommonData */
+        ConditionCommonData?: (WarEvent.ConditionSubStructure.IConditionCommonData|null);
+
+        /** Condition ConditionTurnSwitched */
+        ConditionTurnSwitched?: (WarEvent.ConditionSubStructure.IConditionTurnSwitched|null);
+
+        /** Condition ConditionPlayerLost */
+        ConditionPlayerLost?: (WarEvent.ConditionSubStructure.IConditionPlayerLost|null);
+
+        /** Condition ConditionEventCalled */
+        ConditionEventCalled?: (WarEvent.ConditionSubStructure.IConditionEventCalled|null);
+    }
+
+    /** Represents a Condition. */
+    class Condition implements ICondition {
+
+        /**
+         * Constructs a new Condition.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.ICondition);
+
+        /** Condition ConditionCommonData. */
+        public ConditionCommonData?: (WarEvent.ConditionSubStructure.IConditionCommonData|null);
+
+        /** Condition ConditionTurnSwitched. */
+        public ConditionTurnSwitched?: (WarEvent.ConditionSubStructure.IConditionTurnSwitched|null);
+
+        /** Condition ConditionPlayerLost. */
+        public ConditionPlayerLost?: (WarEvent.ConditionSubStructure.IConditionPlayerLost|null);
+
+        /** Condition ConditionEventCalled. */
+        public ConditionEventCalled?: (WarEvent.ConditionSubStructure.IConditionEventCalled|null);
+
+        /**
+         * Creates a new Condition instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns Condition instance
+         */
+        public static create(properties?: WarEvent.ICondition): WarEvent.Condition;
+
+        /**
+         * Encodes the specified Condition message. Does not implicitly {@link WarEvent.Condition.verify|verify} messages.
+         * @param message Condition message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.ICondition, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified Condition message, length delimited. Does not implicitly {@link WarEvent.Condition.verify|verify} messages.
+         * @param message Condition message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.ICondition, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a Condition message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns Condition
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.Condition;
+
+        /**
+         * Decodes a Condition message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns Condition
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.Condition;
+
+        /**
+         * Verifies a Condition message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a Condition message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns Condition
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.Condition;
+
+        /**
+         * Creates a plain object from a Condition message. Also converts values to other types if specified.
+         * @param message Condition
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.Condition, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this Condition to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a ConditionNode. */
+    interface IConditionNode {
+
+        /** ConditionNode nodeId */
+        nodeId?: (number|null);
+
+        /** ConditionNode isAnd */
+        isAnd?: (boolean|null);
+
+        /** ConditionNode subNodeIdList */
+        subNodeIdList?: (number[]|null);
+
+        /** ConditionNode conditionIdList */
+        conditionIdList?: (number[]|null);
+    }
+
+    /** Represents a ConditionNode. */
+    class ConditionNode implements IConditionNode {
+
+        /**
+         * Constructs a new ConditionNode.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IConditionNode);
+
+        /** ConditionNode nodeId. */
+        public nodeId: number;
+
+        /** ConditionNode isAnd. */
+        public isAnd: boolean;
+
+        /** ConditionNode subNodeIdList. */
+        public subNodeIdList: number[];
+
+        /** ConditionNode conditionIdList. */
+        public conditionIdList: number[];
+
+        /**
+         * Creates a new ConditionNode instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ConditionNode instance
+         */
+        public static create(properties?: WarEvent.IConditionNode): WarEvent.ConditionNode;
+
+        /**
+         * Encodes the specified ConditionNode message. Does not implicitly {@link WarEvent.ConditionNode.verify|verify} messages.
+         * @param message ConditionNode message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IConditionNode, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified ConditionNode message, length delimited. Does not implicitly {@link WarEvent.ConditionNode.verify|verify} messages.
+         * @param message ConditionNode message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IConditionNode, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a ConditionNode message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns ConditionNode
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.ConditionNode;
+
+        /**
+         * Decodes a ConditionNode message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns ConditionNode
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.ConditionNode;
+
+        /**
+         * Verifies a ConditionNode message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ConditionNode message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ConditionNode
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.ConditionNode;
+
+        /**
+         * Creates a plain object from a ConditionNode message. Also converts values to other types if specified.
+         * @param message ConditionNode
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.ConditionNode, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ConditionNode to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of an Action. */
+    interface IAction {
+
+        /** Action ActionCommonData */
+        ActionCommonData?: (WarEvent.ActionSubStructure.IActionCommonData|null);
+
+        /** Action ActionCallEvent */
+        ActionCallEvent?: (WarEvent.ActionSubStructure.IActionCallEvent|null);
+
+        /** Action ActionAddUnit */
+        ActionAddUnit?: (WarEvent.ActionSubStructure.IActionAddUnit|null);
+    }
+
+    /** Represents an Action. */
+    class Action implements IAction {
+
+        /**
+         * Constructs a new Action.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IAction);
+
+        /** Action ActionCommonData. */
+        public ActionCommonData?: (WarEvent.ActionSubStructure.IActionCommonData|null);
+
+        /** Action ActionCallEvent. */
+        public ActionCallEvent?: (WarEvent.ActionSubStructure.IActionCallEvent|null);
+
+        /** Action ActionAddUnit. */
+        public ActionAddUnit?: (WarEvent.ActionSubStructure.IActionAddUnit|null);
+
+        /**
+         * Creates a new Action instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns Action instance
+         */
+        public static create(properties?: WarEvent.IAction): WarEvent.Action;
+
+        /**
+         * Encodes the specified Action message. Does not implicitly {@link WarEvent.Action.verify|verify} messages.
+         * @param message Action message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IAction, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified Action message, length delimited. Does not implicitly {@link WarEvent.Action.verify|verify} messages.
+         * @param message Action message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IAction, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes an Action message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns Action
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.Action;
+
+        /**
+         * Decodes an Action message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns Action
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.Action;
+
+        /**
+         * Verifies an Action message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates an Action message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns Action
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.Action;
+
+        /**
+         * Creates a plain object from an Action message. Also converts values to other types if specified.
+         * @param message Action
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.Action, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this Action to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WarEvent. */
+    interface IWarEvent {
+
+        /** WarEvent eventId */
+        eventId?: (number|null);
+
+        /** WarEvent conditionNodeId */
+        conditionNodeId?: (number|null);
+
+        /** WarEvent actionIdListOnTrue */
+        actionIdListOnTrue?: (number[]|null);
+
+        /** WarEvent actionIdListOnFalse */
+        actionIdListOnFalse?: (number[]|null);
+    }
+
+    /** Represents a WarEvent. */
+    class WarEvent implements IWarEvent {
+
+        /**
+         * Constructs a new WarEvent.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWarEvent);
+
+        /** WarEvent eventId. */
+        public eventId: number;
+
+        /** WarEvent conditionNodeId. */
+        public conditionNodeId: number;
+
+        /** WarEvent actionIdListOnTrue. */
+        public actionIdListOnTrue: number[];
+
+        /** WarEvent actionIdListOnFalse. */
+        public actionIdListOnFalse: number[];
+
+        /**
+         * Creates a new WarEvent instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarEvent instance
+         */
+        public static create(properties?: WarEvent.IWarEvent): WarEvent.WarEvent;
+
+        /**
+         * Encodes the specified WarEvent message. Does not implicitly {@link WarEvent.WarEvent.verify|verify} messages.
+         * @param message WarEvent message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarEvent message, length delimited. Does not implicitly {@link WarEvent.WarEvent.verify|verify} messages.
+         * @param message WarEvent message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarEvent message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarEvent
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WarEvent;
+
+        /**
+         * Decodes a WarEvent message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarEvent
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WarEvent;
+
+        /**
+         * Verifies a WarEvent message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarEvent message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarEvent
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WarEvent;
+
+        /**
+         * Creates a plain object from a WarEvent message. Also converts values to other types if specified.
+         * @param message WarEvent
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WarEvent, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarEvent to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -4335,6 +5790,102 @@ export declare namespace WarSerialization {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a DataForWarEventCalledCount. */
+    interface IDataForWarEventCalledCount {
+
+        /** DataForWarEventCalledCount eventId */
+        eventId?: (number|null);
+
+        /** DataForWarEventCalledCount calledCount */
+        calledCount?: (number|null);
+    }
+
+    /** Represents a DataForWarEventCalledCount. */
+    class DataForWarEventCalledCount implements IDataForWarEventCalledCount {
+
+        /**
+         * Constructs a new DataForWarEventCalledCount.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSerialization.IDataForWarEventCalledCount);
+
+        /** DataForWarEventCalledCount eventId. */
+        public eventId: number;
+
+        /** DataForWarEventCalledCount calledCount. */
+        public calledCount: number;
+
+        /**
+         * Creates a new DataForWarEventCalledCount instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns DataForWarEventCalledCount instance
+         */
+        public static create(properties?: WarSerialization.IDataForWarEventCalledCount): WarSerialization.DataForWarEventCalledCount;
+
+        /**
+         * Encodes the specified DataForWarEventCalledCount message. Does not implicitly {@link WarSerialization.DataForWarEventCalledCount.verify|verify} messages.
+         * @param message DataForWarEventCalledCount message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSerialization.IDataForWarEventCalledCount, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified DataForWarEventCalledCount message, length delimited. Does not implicitly {@link WarSerialization.DataForWarEventCalledCount.verify|verify} messages.
+         * @param message DataForWarEventCalledCount message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSerialization.IDataForWarEventCalledCount, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a DataForWarEventCalledCount message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns DataForWarEventCalledCount
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.DataForWarEventCalledCount;
+
+        /**
+         * Decodes a DataForWarEventCalledCount message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns DataForWarEventCalledCount
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.DataForWarEventCalledCount;
+
+        /**
+         * Verifies a DataForWarEventCalledCount message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a DataForWarEventCalledCount message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns DataForWarEventCalledCount
+         */
+        public static fromObject(object: { [k: string]: any }): WarSerialization.DataForWarEventCalledCount;
+
+        /**
+         * Creates a plain object from a DataForWarEventCalledCount message. Also converts values to other types if specified.
+         * @param message DataForWarEventCalledCount
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSerialization.DataForWarEventCalledCount, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this DataForWarEventCalledCount to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a SerialTile. */
     interface ISerialTile {
 
@@ -5421,6 +6972,96 @@ export declare namespace WarSerialization {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a SerialWarEventData. */
+    interface ISerialWarEventData {
+
+        /** SerialWarEventData calledCountList */
+        calledCountList?: (WarSerialization.IDataForWarEventCalledCount[]|null);
+    }
+
+    /** Represents a SerialWarEventData. */
+    class SerialWarEventData implements ISerialWarEventData {
+
+        /**
+         * Constructs a new SerialWarEventData.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSerialization.ISerialWarEventData);
+
+        /** SerialWarEventData calledCountList. */
+        public calledCountList: WarSerialization.IDataForWarEventCalledCount[];
+
+        /**
+         * Creates a new SerialWarEventData instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns SerialWarEventData instance
+         */
+        public static create(properties?: WarSerialization.ISerialWarEventData): WarSerialization.SerialWarEventData;
+
+        /**
+         * Encodes the specified SerialWarEventData message. Does not implicitly {@link WarSerialization.SerialWarEventData.verify|verify} messages.
+         * @param message SerialWarEventData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSerialization.ISerialWarEventData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified SerialWarEventData message, length delimited. Does not implicitly {@link WarSerialization.SerialWarEventData.verify|verify} messages.
+         * @param message SerialWarEventData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSerialization.ISerialWarEventData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a SerialWarEventData message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns SerialWarEventData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.SerialWarEventData;
+
+        /**
+         * Decodes a SerialWarEventData message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns SerialWarEventData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.SerialWarEventData;
+
+        /**
+         * Verifies a SerialWarEventData message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a SerialWarEventData message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns SerialWarEventData
+         */
+        public static fromObject(object: { [k: string]: any }): WarSerialization.SerialWarEventData;
+
+        /**
+         * Creates a plain object from a SerialWarEventData message. Also converts values to other types if specified.
+         * @param message SerialWarEventData
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSerialization.SerialWarEventData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this SerialWarEventData to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a SerialWar. */
     interface ISerialWar {
 
@@ -5465,6 +7106,9 @@ export declare namespace WarSerialization {
 
         /** SerialWar field */
         field?: (WarSerialization.ISerialField|null);
+
+        /** SerialWar warEventData */
+        warEventData?: (WarSerialization.ISerialWarEventData|null);
     }
 
     /** Represents a SerialWar. */
@@ -5517,6 +7161,9 @@ export declare namespace WarSerialization {
 
         /** SerialWar field. */
         public field?: (WarSerialization.ISerialField|null);
+
+        /** SerialWar warEventData. */
+        public warEventData?: (WarSerialization.ISerialWarEventData|null);
 
         /**
          * Creates a new SerialWar instance using the specified properties.
@@ -13935,6 +15582,102 @@ export declare namespace User {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a UserSettings. */
+    interface IUserSettings {
+
+        /** UserSettings unitAndTileTextureVersion */
+        unitAndTileTextureVersion?: (number|null);
+
+        /** UserSettings isSetPathMode */
+        isSetPathMode?: (boolean|null);
+    }
+
+    /** Represents a UserSettings. */
+    class UserSettings implements IUserSettings {
+
+        /**
+         * Constructs a new UserSettings.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: User.IUserSettings);
+
+        /** UserSettings unitAndTileTextureVersion. */
+        public unitAndTileTextureVersion: number;
+
+        /** UserSettings isSetPathMode. */
+        public isSetPathMode: boolean;
+
+        /**
+         * Creates a new UserSettings instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns UserSettings instance
+         */
+        public static create(properties?: User.IUserSettings): User.UserSettings;
+
+        /**
+         * Encodes the specified UserSettings message. Does not implicitly {@link User.UserSettings.verify|verify} messages.
+         * @param message UserSettings message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: User.IUserSettings, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified UserSettings message, length delimited. Does not implicitly {@link User.UserSettings.verify|verify} messages.
+         * @param message UserSettings message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: User.IUserSettings, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a UserSettings message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns UserSettings
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserSettings;
+
+        /**
+         * Decodes a UserSettings message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns UserSettings
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserSettings;
+
+        /**
+         * Verifies a UserSettings message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a UserSettings message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UserSettings
+         */
+        public static fromObject(object: { [k: string]: any }): User.UserSettings;
+
+        /**
+         * Creates a plain object from a UserSettings message. Also converts values to other types if specified.
+         * @param message UserSettings
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: User.UserSettings, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UserSettings to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a UserComplexInfo. */
     interface IUserComplexInfo {
 
@@ -13946,6 +15689,9 @@ export declare namespace User {
 
         /** UserComplexInfo userWarStatistics */
         userWarStatistics?: (User.IUserWarStatistics|null);
+
+        /** UserComplexInfo userSettings */
+        userSettings?: (User.IUserSettings|null);
     }
 
     /** Represents a UserComplexInfo. */
@@ -13965,6 +15711,9 @@ export declare namespace User {
 
         /** UserComplexInfo userWarStatistics. */
         public userWarStatistics?: (User.IUserWarStatistics|null);
+
+        /** UserComplexInfo userSettings. */
+        public userSettings?: (User.IUserSettings|null);
 
         /**
          * Creates a new UserComplexInfo instance using the specified properties.
@@ -14181,116 +15930,23 @@ export declare namespace User {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a UserPrivateInfo. */
-    interface IUserPrivateInfo {
-
-        /** UserPrivateInfo account */
-        account?: (string|null);
-
-        /** UserPrivateInfo password */
-        password?: (string|null);
-
-        /** UserPrivateInfo lastLoginIp */
-        lastLoginIp?: (string|null);
-    }
-
-    /** Represents a UserPrivateInfo. */
-    class UserPrivateInfo implements IUserPrivateInfo {
-
-        /**
-         * Constructs a new UserPrivateInfo.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: User.IUserPrivateInfo);
-
-        /** UserPrivateInfo account. */
-        public account: string;
-
-        /** UserPrivateInfo password. */
-        public password: string;
-
-        /** UserPrivateInfo lastLoginIp. */
-        public lastLoginIp: string;
-
-        /**
-         * Creates a new UserPrivateInfo instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns UserPrivateInfo instance
-         */
-        public static create(properties?: User.IUserPrivateInfo): User.UserPrivateInfo;
-
-        /**
-         * Encodes the specified UserPrivateInfo message. Does not implicitly {@link User.UserPrivateInfo.verify|verify} messages.
-         * @param message UserPrivateInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: User.IUserPrivateInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified UserPrivateInfo message, length delimited. Does not implicitly {@link User.UserPrivateInfo.verify|verify} messages.
-         * @param message UserPrivateInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: User.IUserPrivateInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a UserPrivateInfo message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns UserPrivateInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserPrivateInfo;
-
-        /**
-         * Decodes a UserPrivateInfo message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns UserPrivateInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserPrivateInfo;
-
-        /**
-         * Verifies a UserPrivateInfo message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a UserPrivateInfo message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns UserPrivateInfo
-         */
-        public static fromObject(object: { [k: string]: any }): User.UserPrivateInfo;
-
-        /**
-         * Creates a plain object from a UserPrivateInfo message. Also converts values to other types if specified.
-         * @param message UserPrivateInfo
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: User.UserPrivateInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this UserPrivateInfo to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
     /** Properties of a UserFullInfo. */
     interface IUserFullInfo {
 
         /** UserFullInfo userPublicInfo */
         userPublicInfo?: (User.IUserPublicInfo|null);
 
-        /** UserFullInfo userPrivateInfo */
-        userPrivateInfo?: (User.IUserPrivateInfo|null);
+        /** UserFullInfo userSettings */
+        userSettings?: (User.IUserSettings|null);
+
+        /** UserFullInfo account */
+        account?: (string|null);
+
+        /** UserFullInfo password */
+        password?: (string|null);
+
+        /** UserFullInfo lastLoginIp */
+        lastLoginIp?: (string|null);
     }
 
     /** Represents a UserFullInfo. */
@@ -14305,8 +15961,17 @@ export declare namespace User {
         /** UserFullInfo userPublicInfo. */
         public userPublicInfo?: (User.IUserPublicInfo|null);
 
-        /** UserFullInfo userPrivateInfo. */
-        public userPrivateInfo?: (User.IUserPrivateInfo|null);
+        /** UserFullInfo userSettings. */
+        public userSettings?: (User.IUserSettings|null);
+
+        /** UserFullInfo account. */
+        public account: string;
+
+        /** UserFullInfo password. */
+        public password: string;
+
+        /** UserFullInfo lastLoginIp. */
+        public lastLoginIp: string;
 
         /**
          * Creates a new UserFullInfo instance using the specified properties.
@@ -14510,6 +16175,12 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserSetPassword */
         MsgUserSetPassword?: (NetMessage.IMsgUserSetPassword|null);
+
+        /** MessageContainer MsgUserGetSettings */
+        MsgUserGetSettings?: (NetMessage.IMsgUserGetSettings|null);
+
+        /** MessageContainer MsgUserSetSettings */
+        MsgUserSetSettings?: (NetMessage.IMsgUserSetSettings|null);
 
         /** MessageContainer MsgMapGetEnabledExtraDataList */
         MsgMapGetEnabledExtraDataList?: (NetMessage.IMsgMapGetEnabledExtraDataList|null);
@@ -14808,6 +16479,12 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserSetPassword. */
         public MsgUserSetPassword?: (NetMessage.IMsgUserSetPassword|null);
+
+        /** MessageContainer MsgUserGetSettings. */
+        public MsgUserGetSettings?: (NetMessage.IMsgUserGetSettings|null);
+
+        /** MessageContainer MsgUserSetSettings. */
+        public MsgUserSetSettings?: (NetMessage.IMsgUserSetSettings|null);
 
         /** MessageContainer MsgMapGetEnabledExtraDataList. */
         public MsgMapGetEnabledExtraDataList?: (NetMessage.IMsgMapGetEnabledExtraDataList|null);
@@ -18849,6 +20526,564 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgUserSetPassword.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgUserGetSettings. */
+    interface IMsgUserGetSettings {
+
+        /** MsgUserGetSettings c */
+        c?: (NetMessage.MsgUserGetSettings.IC|null);
+
+        /** MsgUserGetSettings s */
+        s?: (NetMessage.MsgUserGetSettings.IS|null);
+    }
+
+    /** Represents a MsgUserGetSettings. */
+    class MsgUserGetSettings implements IMsgUserGetSettings {
+
+        /**
+         * Constructs a new MsgUserGetSettings.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgUserGetSettings);
+
+        /** MsgUserGetSettings c. */
+        public c?: (NetMessage.MsgUserGetSettings.IC|null);
+
+        /** MsgUserGetSettings s. */
+        public s?: (NetMessage.MsgUserGetSettings.IS|null);
+
+        /**
+         * Creates a new MsgUserGetSettings instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgUserGetSettings instance
+         */
+        public static create(properties?: NetMessage.IMsgUserGetSettings): NetMessage.MsgUserGetSettings;
+
+        /**
+         * Encodes the specified MsgUserGetSettings message. Does not implicitly {@link NetMessage.MsgUserGetSettings.verify|verify} messages.
+         * @param message MsgUserGetSettings message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgUserGetSettings, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgUserGetSettings message, length delimited. Does not implicitly {@link NetMessage.MsgUserGetSettings.verify|verify} messages.
+         * @param message MsgUserGetSettings message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgUserGetSettings, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgUserGetSettings message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgUserGetSettings
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserGetSettings;
+
+        /**
+         * Decodes a MsgUserGetSettings message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgUserGetSettings
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserGetSettings;
+
+        /**
+         * Verifies a MsgUserGetSettings message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgUserGetSettings message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgUserGetSettings
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserGetSettings;
+
+        /**
+         * Creates a plain object from a MsgUserGetSettings message. Also converts values to other types if specified.
+         * @param message MsgUserGetSettings
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgUserGetSettings, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgUserGetSettings to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgUserGetSettings {
+
+        /** Properties of a C. */
+        interface IC {
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserGetSettings.IC);
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserGetSettings.IC): NetMessage.MsgUserGetSettings.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserGetSettings.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserGetSettings.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserGetSettings.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserGetSettings.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserGetSettings.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserGetSettings.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserGetSettings.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserGetSettings.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S userSettings */
+            userSettings?: (User.IUserSettings|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserGetSettings.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S userSettings. */
+            public userSettings?: (User.IUserSettings|null);
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserGetSettings.IS): NetMessage.MsgUserGetSettings.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserGetSettings.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserGetSettings.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserGetSettings.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserGetSettings.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserGetSettings.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserGetSettings.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserGetSettings.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserGetSettings.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgUserSetSettings. */
+    interface IMsgUserSetSettings {
+
+        /** MsgUserSetSettings c */
+        c?: (NetMessage.MsgUserSetSettings.IC|null);
+
+        /** MsgUserSetSettings s */
+        s?: (NetMessage.MsgUserSetSettings.IS|null);
+    }
+
+    /** Represents a MsgUserSetSettings. */
+    class MsgUserSetSettings implements IMsgUserSetSettings {
+
+        /**
+         * Constructs a new MsgUserSetSettings.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgUserSetSettings);
+
+        /** MsgUserSetSettings c. */
+        public c?: (NetMessage.MsgUserSetSettings.IC|null);
+
+        /** MsgUserSetSettings s. */
+        public s?: (NetMessage.MsgUserSetSettings.IS|null);
+
+        /**
+         * Creates a new MsgUserSetSettings instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgUserSetSettings instance
+         */
+        public static create(properties?: NetMessage.IMsgUserSetSettings): NetMessage.MsgUserSetSettings;
+
+        /**
+         * Encodes the specified MsgUserSetSettings message. Does not implicitly {@link NetMessage.MsgUserSetSettings.verify|verify} messages.
+         * @param message MsgUserSetSettings message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgUserSetSettings, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgUserSetSettings message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetSettings.verify|verify} messages.
+         * @param message MsgUserSetSettings message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgUserSetSettings, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgUserSetSettings message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgUserSetSettings
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetSettings;
+
+        /**
+         * Decodes a MsgUserSetSettings message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgUserSetSettings
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetSettings;
+
+        /**
+         * Verifies a MsgUserSetSettings message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgUserSetSettings message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgUserSetSettings
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetSettings;
+
+        /**
+         * Creates a plain object from a MsgUserSetSettings message. Also converts values to other types if specified.
+         * @param message MsgUserSetSettings
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgUserSetSettings, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgUserSetSettings to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgUserSetSettings {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C userSettings */
+            userSettings?: (User.IUserSettings|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetSettings.IC);
+
+            /** C userSettings. */
+            public userSettings?: (User.IUserSettings|null);
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetSettings.IC): NetMessage.MsgUserSetSettings.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserSetSettings.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetSettings.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetSettings.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetSettings.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetSettings.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetSettings.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetSettings.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetSettings.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgUserSetSettings.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgUserSetSettings.IS): NetMessage.MsgUserSetSettings.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserSetSettings.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgUserSetSettings.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserSetSettings.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgUserSetSettings.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserSetSettings.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserSetSettings.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserSetSettings.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgUserSetSettings.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

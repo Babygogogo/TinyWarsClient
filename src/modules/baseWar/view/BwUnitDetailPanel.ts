@@ -707,7 +707,7 @@ namespace TinyWars.BaseWar {
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
                 this._tileView.source           = Common.CommonModel.getCachedTileObjectImageSource({
-                    version     : Common.CommonModel.getUnitAndTileTextureVersion(),
+                    version     : User.UserModel.getSelfSettingsTextureVersion(),
                     skinId      : CommonConstants.UnitAndTileNeutralSkinId,
                     objectType  : ConfigManager.getTileObjectTypeByTileType(targetTileType),
                     isDark      : false,

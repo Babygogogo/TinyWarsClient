@@ -74,7 +74,7 @@ namespace TinyWars.BaseWar {
         public tickUnitAnimationFrame(): void {
             const unit              = this.getUnit();
             this._imgUnit.source    = CommonModel.getCachedUnitImageSource({
-                version     : CommonModel.getUnitAndTileTextureVersion(),
+                version     : User.UserModel.getSelfSettingsTextureVersion(),
                 isDark      : this._isDark,
                 isMoving    : this._animationType === UnitAnimationType.Move,
                 tickCount   : Time.TimeModel.getUnitAnimationTickCount(),

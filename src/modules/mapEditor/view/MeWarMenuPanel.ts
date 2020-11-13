@@ -72,12 +72,13 @@ namespace TinyWars.MapEditor {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.TileAnimationTick,      callback: this._onNotifyTileAnimationTick },
-                { type: Notify.Type.UnitAnimationTick,      callback: this._onNotifyUnitAnimationTick },
-                { type: Notify.Type.MsgMeSubmitMap,         callback: this._onMsgMeSubmitMap },
-                { type: Notify.Type.MsgMmReviewMap,         callback: this._onMsgMmReviewMap },
-                { type: Notify.Type.MsgScrCreateCustomWar,  callback: this._onMsgScrCreateCustomWar },
+                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.TileAnimationTick,                  callback: this._onNotifyTileAnimationTick },
+                { type: Notify.Type.UnitAnimationTick,                  callback: this._onNotifyUnitAnimationTick },
+                { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: Notify.Type.MsgMeSubmitMap,                     callback: this._onMsgMeSubmitMap },
+                { type: Notify.Type.MsgMmReviewMap,                     callback: this._onMsgMmReviewMap },
+                { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
@@ -157,6 +158,10 @@ namespace TinyWars.MapEditor {
                 const child = viewList.getChildAt(i);
                 (child instanceof UnitRenderer) && (child.updateOnUnitAnimationTick());
             }
+        }
+
+        private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
+            this._updateView();
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
@@ -608,27 +613,29 @@ namespace TinyWars.MapEditor {
             }
         }
         private _createCommandUseOriginTexture(): DataForCommandRenderer | null {
-            if (Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V0) {
+            if (User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0) {
                 return null;
             } else {
                 return {
                     name    : Lang.getText(Lang.Type.B0385),
                     callback: () => {
-                        Common.CommonModel.setUnitAndTileTextureVersion(Types.UnitAndTileTextureVersion.V0);
-                        this._updateView();
+                        User.UserProxy.reqUserSetSettings({
+                            unitAndTileTextureVersion   : Types.UnitAndTileTextureVersion.V0,
+                        });
                     }
                 };
             }
         }
         private _createCommandUseNewTexture(): DataForCommandRenderer | null {
-            if (Common.CommonModel.getUnitAndTileTextureVersion() === Types.UnitAndTileTextureVersion.V1) {
+            if (User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V1) {
                 return null;
             } else {
                 return {
                     name    : Lang.getText(Lang.Type.B0386),
                     callback: () => {
-                        Common.CommonModel.setUnitAndTileTextureVersion(Types.UnitAndTileTextureVersion.V1);
-                        this._updateView();
+                        User.UserProxy.reqUserSetSettings({
+                            unitAndTileTextureVersion   : Types.UnitAndTileTextureVersion.V1,
+                        });
                     }
                 };
             }
