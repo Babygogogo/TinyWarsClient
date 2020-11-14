@@ -521,7 +521,7 @@ namespace TinyWars.MultiPlayerWar {
                             }
                         },
                         callbackOnCancel: () => {
-                            if (!isEnabled) {
+                            if (isEnabled) {
                                 User.UserProxy.reqUserSetSettings({
                                     isSetPathMode   : false,
                                 });

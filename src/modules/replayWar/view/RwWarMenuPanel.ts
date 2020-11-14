@@ -400,7 +400,7 @@ namespace TinyWars.ReplayWar {
                             }
                         },
                         callbackOnCancel: () => {
-                            if (!isEnabled) {
+                            if (isEnabled) {
                                 User.UserProxy.reqUserSetSettings({
                                     isSetPathMode   : false,
                                 });

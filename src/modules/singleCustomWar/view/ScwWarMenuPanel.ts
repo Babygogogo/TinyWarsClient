@@ -533,7 +533,7 @@ namespace TinyWars.SingleCustomWar {
                             }
                         },
                         callbackOnCancel: () => {
-                            if (!isEnabled) {
+                            if (isEnabled) {
                                 User.UserProxy.reqUserSetSettings({
                                     isSetPathMode   : false,
                                 });
