@@ -240,6 +240,8 @@ namespace TinyWars.BaseWar {
                             current : this._cursor.getGridIndex(),
                             tappedOn: this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y),
                         } as Notify.Data.BwCursorTapped);
+                    } else {
+                        Notify.dispatch(Notify.Type.BwCursorDragEnded);
                     }
                     delete this._initialGlobalTouchPoint;
                 }

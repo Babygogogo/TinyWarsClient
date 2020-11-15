@@ -392,6 +392,8 @@ namespace TinyWars.ReplayWar {
                             Lang.Type.F0033,
                             Lang.getText(isEnabled ? Lang.Type.B0431 : Lang.Type.B0432),
                         ),
+                        textForConfirm  : Lang.getText(Lang.Type.B0433),
+                        textForCancel   : Lang.getText(Lang.Type.B0434),
                         callback: () => {
                             if (!isEnabled) {
                                 User.UserProxy.reqUserSetSettings({

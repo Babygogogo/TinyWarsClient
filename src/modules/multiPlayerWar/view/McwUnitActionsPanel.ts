@@ -128,8 +128,8 @@ namespace TinyWars.MultiPlayerWar {
             const stage     = Utility.StageManager.getStage();
             const group     = this._group;
             const point     = contents.localToGlobal(
-                (gridIndex.x + 0.5) * gridSize.width,
-                (gridIndex.y + 0.5) * gridSize.height,
+                (gridIndex.x + 1) * gridSize.width,
+                (gridIndex.y + 1) * gridSize.height,
             );
 
             group.x         = Math.max(0, Math.min(point.x, stage.stageWidth - 130));

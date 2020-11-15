@@ -45,6 +45,7 @@ namespace TinyWars.Utility.Notify {
 
         BwCursorTapped,
         BwCursorDragged,
+        BwCursorDragEnded,
         BwCursorGridIndexChanged,
 
         BwFieldZoomed,

@@ -248,7 +248,18 @@ namespace TinyWars.BaseWar {
                 }
 
             } else if (state === State.ChoosingAction) {
-                con.visible = false;
+                con.visible = true;
+                con.alpha   = ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL;
+
+                const movableArea       = actionPlanner.getMovableArea();
+                const attackableArea    = actionPlanner.getAttackableArea();
+                const { width, height } = this._mapSize;
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        const isMovable = (!!movableArea[x]) && (!!movableArea[x][y]);
+                        this._imgsForAttackableGrids[x][y].visible = (!isMovable) && (!!attackableArea[x]) && (!!attackableArea[x][y]);
+                    }
+                }
 
             } else if (state === State.ChoosingAttackTarget) {
                 con.visible = true;
@@ -339,7 +350,15 @@ namespace TinyWars.BaseWar {
                 }
 
             } else if (state === State.ChoosingAction) {
-                con.visible = false;
+                con.visible = true;
+
+                const movableArea       = actionPlanner.getMovableArea();
+                const { width, height } = this._mapSize;
+                for (let x = 0; x < width; ++x) {
+                    for (let y = 0; y < height; ++y) {
+                        this._imgsForMovableGrids[x][y].visible = (!!movableArea[x]) && (!!movableArea[x][y]);
+                    }
+                }
 
             } else if (state === State.ChoosingAttackTarget) {
                 con.visible = false;

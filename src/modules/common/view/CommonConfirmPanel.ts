@@ -7,6 +7,8 @@ namespace TinyWars.Common {
         content             : string;
         callback            : () => any;
         callbackOnCancel?   : () => any;
+        textForConfirm?     : string;
+        textForCancel?      : string;
     }
 
     export class CommonConfirmPanel extends GameUi.UiPanel {
@@ -58,9 +60,10 @@ namespace TinyWars.Common {
         protected _onOpened(): void {
             this._showOpenAnimation();
 
-            this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
-            this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
-            this._labelTitle.text   = this._openData.title;
+            const openData          = this._openData;
+            this._btnConfirm.label  = openData.textForConfirm || Lang.getText(Lang.Type.B0026);
+            this._btnCancel.label   = openData.textForCancel || Lang.getText(Lang.Type.B0154);
+            this._labelTitle.text   = openData.title;
             this._labelContent.setRichText(this._openData.content);
         }
 

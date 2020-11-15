@@ -273,7 +273,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
             this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);
             User.UserModel.getUserNickname(playerInfo.userId).then(name => {
-                this._labelName.text = name + ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
+                this._labelName.text = `${name} ${ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId)}`;
             });
         }
     }
