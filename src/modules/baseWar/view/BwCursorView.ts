@@ -230,8 +230,9 @@ namespace TinyWars.BaseWar {
             if (currGlobalTouchPoints.has(touchId)) {
                 currGlobalTouchPoints.delete(touchId);
 
+                const hasTouchedCursor = this._touchIdForTouchingCursor != null;
                 if (!currGlobalTouchPoints.has(this._touchIdForTouchingCursor)) {
-                    delete this._touchIdForTouchingCursor;
+                    this._touchIdForTouchingCursor = null;
                 }
                 if (!currGlobalTouchPoints.size) {
                     this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
@@ -241,7 +242,9 @@ namespace TinyWars.BaseWar {
                             tappedOn: this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y),
                         } as Notify.Data.BwCursorTapped);
                     } else {
-                        Notify.dispatch(Notify.Type.BwCursorDragEnded);
+                        if (hasTouchedCursor) {
+                            Notify.dispatch(Notify.Type.BwCursorDragEnded);
+                        }
                     }
                     delete this._initialGlobalTouchPoint;
                 }

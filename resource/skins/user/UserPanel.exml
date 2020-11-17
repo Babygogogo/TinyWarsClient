@@ -7,7 +7,7 @@
                             top="0" bottom="0" scale9Grid="9,9,2,2" />
             <GameUi:UiLabel id="_labelTitle" text="XXX的履历" y="10" horizontalCenter="0" textColor="0xffffff" size="25"
                             locked="true" />
-            <GameUi:UiButton id="_btnClose" label="关闭" y="0" right="0"
+            <GameUi:UiButton id="_btnClose" label="关闭" y="0" right="0" width="160"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
             <e:Scroller left="0" right="0" top="40" bottom="5">
                 <e:Group x="20" y="0">

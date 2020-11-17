@@ -2841,18 +2841,34 @@ namespace TinyWars.Utility.Lang {
             `启用SetPath模式后，在指定部队移动路线时，您需要连续点击两次目标格子才能呼出操作菜单。这会增加操作量，但同时也便于指定移动路线，这在雾战中尤其有用。\n您确定要启用吗？\n（当前状态：%s）`,
             `While the Set Path mode is enabled, you have to double click (or touch) a tile in order to make the unit action panel appear when you are moving units. This mode can be useful especially in FoW.\nAre you sure to enable it? \n(Current status: %s)`,
         ],
+        [Type.F0034]: [
+            `服务器内部错误，请通知作者，错误码: %d`,
+            `Server internal error, code: %d`,
+        ],
     };
 
-    const NET_ERROR_TEXT = {
+    const NET_ERROR_TEXT: { [netErrorCode: number]: string[] } = {
+        [ErrorCode.NoError]: [
+            "",
+            "",
+        ],
+        [ErrorCode.InternalError]: [
+            "服务器内部错误，请通知作者",
+            "Server internal errors.",
+        ],
         [ErrorCode.IllegalRequest]: [
             "非法请求",
             "Illegal request.",
         ],
-        [ErrorCode.Login_InvalidAccountOrPassword]: [
+        [ErrorCode.User0000]: [
+            `登录失败，可能是服务器内部错误。请尝试刷新游戏，并通知作者。`,
+            `Failed to login. Please refresh the game.`,
+        ],
+        [ErrorCode.User0001]: [
             "账号或密码不正确，请检查后重试",
             "Invalid account and/or password.",
         ],
-        [ErrorCode.Login_AlreadyLoggedIn]: [
+        [ErrorCode.User0002]: [
             "您已处于登陆状态，不可再次登陆",
             "You have logged in already.",
         ],
@@ -2880,9 +2896,25 @@ namespace TinyWars.Utility.Lang {
             "该昵称已被使用，请修改后再试",
             "The nickname has been used.",
         ],
-        [ErrorCode.CreateMultiCustomWar_TooManyJoinedWars]: [
+        [ErrorCode.MmMergeMap_SameSrcAndDst]: [
+            "",
+            "",
+        ],
+        [ErrorCode.MmMergeMap_NoSrcStatisticsData]: [
+            "",
+            "",
+        ],
+        [ErrorCode.MmMergeMap_NoDstStatisticsData]: [
+            "",
+            "",
+        ],
+        [ErrorCode.Mcr0000]: [
             "您已参与了许多未开始的战局，请退出部分后重试",
             "You have joined too many wars.",
+        ],
+        [ErrorCode.CreateMultiCustomWar_TooManyCreatedRooms]: [
+            "您已创建了许多未开始的房间，请退出部分后重试",
+            "You have created too many rooms simultaneously.",
         ],
         [ErrorCode.CreateMultiCustomWar_InvalidParams]: [
             "部分设定不符合规则，请检查后重试",
@@ -2912,9 +2944,17 @@ namespace TinyWars.Utility.Lang {
             "您已加入了该房间。",
             "You have already joined the game.",
         ],
-        [ErrorCode.ServerDisconnect_ServerMaintenance]: [
-            `服务器维护中`,
-            `The server is under maintenance.`,
+        [ErrorCode.GetMapDynamicInfo_NoSuchMap]: [
+            "地图不存在，获取dynamic info失败。",
+            "The map doesn't exist thus fail to get its dynamic info.",
+        ],
+        [ErrorCode.GetMapRawData_NoSuchMap]: [
+            "地图不存在，获取raw data失败。",
+            "The map doesn't exist thus fail to get its raw data.",
+        ],
+        [ErrorCode.GetUserPublicInfo_NoSuchUser]: [
+            "用户不存在，获取user public info失败。",
+            "The user doesn't exist thus fail to get its public info.",
         ],
         [ErrorCode.McrContinueWar_NoSuchWar]: [
             `战局不存在`,
@@ -2924,25 +2964,25 @@ namespace TinyWars.Utility.Lang {
             `您未参与该战局，或已经被击败`,
             `You have not joined the game, or you have been defeated.`,
         ],
-        [ErrorCode.McwBeginTurn_InvalidActionId]: [
-            `战局数据不同步，请刷新`,
-            `The local data is out of synchronization. Please refresh.`,
-        ],
         [ErrorCode.McwBeginTurn_NoSuchWar]: [
             `战局不存在`,
             `The game doesn't exist.`,
+        ],
+        [ErrorCode.McwBeginTurn_InvalidActionId]: [
+            `战局数据不同步，请刷新`,
+            `The local data is out of synchronization. Please refresh.`,
         ],
         [ErrorCode.McwBeginTurn_NotInTurn]: [
             `当前无法开始您的回合`,
             `Unable to begin turn.`,
         ],
-        [ErrorCode.McwEndTurn_InvalidActionId]: [
-            `战局数据不同步，请刷新`,
-            `The local data is out of synchronization. Please refresh.`,
-        ],
         [ErrorCode.McwEndTurn_NoSuchWar]: [
             `战局不存在`,
             `The game doesn't exist.`,
+        ],
+        [ErrorCode.McwEndTurn_InvalidActionId]: [
+            `战局数据不同步，请刷新`,
+            `The local data is out of synchronization. Please refresh.`,
         ],
         [ErrorCode.McwEndTurn_NotInTurn]: [
             `当前无法结束您的回合`,
@@ -2951,6 +2991,22 @@ namespace TinyWars.Utility.Lang {
         [ErrorCode.McwEndTurn_NotVotedForDraw]: [
             `您尚未完成关于和局的投票`,
             `You haven't voted for the draw of game.`,
+        ],
+        [ErrorCode.McwWatchRequestWatcher_TargetPlayerLost]: [
+            `该玩家已战败，无法观战`,
+            `The target player has been defeated in the game.`
+        ],
+        [ErrorCode.McwWatchRequestWatcher_AlreadyRequested]: [
+            `已请求观战该玩家`,
+            `You have already requested to watch the player.`,
+        ],
+        [ErrorCode.McwWatchRequestWatcher_AlreadyAccepted]: [
+            `观战请求已被接受`,
+            `The request has already been accepted.`,
+        ],
+        [ErrorCode.ServerDisconnect_ServerMaintenance]: [
+            `服务器维护中`,
+            `The server is under maintenance.`,
         ],
     };
 
@@ -3174,7 +3230,12 @@ namespace TinyWars.Utility.Lang {
     }
 
     export function getNetErrorText(code: ErrorCode): string {
-        return NET_ERROR_TEXT[code][_languageType];
+        const texts = NET_ERROR_TEXT[code];
+        if (texts) {
+            return texts[_languageType];
+        } else {
+            return getFormattedText(Type.F0034, code);
+        }
     }
 
     export function getRichText(richType: RichType): string {
