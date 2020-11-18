@@ -15113,6 +15113,12 @@ export declare namespace User {
 
         /** DataForUserRankScore currentScore */
         currentScore?: (number|null);
+
+        /** DataForUserRankScore currentRank */
+        currentRank?: (number|null);
+
+        /** DataForUserRankScore lastWarEndTime */
+        lastWarEndTime?: (number|null);
     }
 
     /** Represents a DataForUserRankScore. */
@@ -15132,6 +15138,12 @@ export declare namespace User {
 
         /** DataForUserRankScore currentScore. */
         public currentScore: number;
+
+        /** DataForUserRankScore currentRank. */
+        public currentRank: number;
+
+        /** DataForUserRankScore lastWarEndTime. */
+        public lastWarEndTime: number;
 
         /**
          * Creates a new DataForUserRankScore instance using the specified properties.

@@ -233,13 +233,19 @@ namespace TinyWars.User {
             const data                      = await UserModel.getRankScoreData(this._userId, WarType.RmwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            this._labelStdRankScore.text    = `${score} (${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
+            const rank                      = data.currentRank;
+            const rankText                  = `(${rank == null ? Lang.getText(Lang.Type.B0435) : `No.${rank}`})`;
+            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
+            this._labelStdRankScore.text    = `${score} ${rankText} ${rankName}`;
         }
         private async _updateLabelFogRankScore(): Promise<void> {
             const data                      = await UserModel.getRankScoreData(this._userId, WarType.RmwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            this._labelFogRankScore.text    = `${score} (${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
+            const rank                      = data.currentRank;
+            const rankText                  = `(${rank == null ? Lang.getText(Lang.Type.B0435) : `No.${rank}`})`;
+            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
+            this._labelFogRankScore.text    = `${score} ${rankText} ${rankName}`;
         }
         private async _updateSclHistory(): Promise<void> {
             const userId    = this._userId;
