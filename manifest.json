@@ -95,6 +95,7 @@
 		"bin-debug/modules/common/model/CommonProxy.js",
 		"bin-debug/modules/common/view/CommonErrorPanel.js",
 		"bin-debug/modules/common/view/CommonInputPanel.js",
+		"bin-debug/modules/common/view/CommonRankListPanel.js",
 		"bin-debug/modules/common/view/CommonServerStatusPanel.js",
 		"bin-debug/modules/lobby/view/LobbyPanel.js",
 		"bin-debug/modules/lobby/view/LobbyTopPanel.js",

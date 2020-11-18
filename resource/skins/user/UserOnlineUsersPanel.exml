@@ -7,7 +7,8 @@
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel id="_labelTitle" text="在线玩家列表" y="10" size="22" horizontalCenter="0" />
-        <GameUi:UiButton id="_btnClose" label="关闭" skinName="Skins.Component.Button.ButtonSelfAdaption001" right="0" top="0"></GameUi:UiButton>
+        <GameUi:UiButton id="_btnClose" label="关闭" skinName="Skins.Component.Button.ButtonSelfAdaption001" right="0" top="0"
+                         width="160"></GameUi:UiButton>
         <e:Group y="40" horizontalCenter="0">
             <GameUi:UiLabel id="_labelTips" text="双击玩家名称，可以查看其详细信息" y="0" size="16" x="0" />
             <e:Group x="262" y="0">

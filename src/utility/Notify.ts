@@ -84,6 +84,7 @@ namespace TinyWars.Utility.Notify {
         MsgCommonHeartbeat,
         MsgCommonLatestConfigVersion,
         MsgCommonGetServerStatus,
+        MsgCommonGetRankList,
 
         MsgUserLogin,
         MsgUserRegister,

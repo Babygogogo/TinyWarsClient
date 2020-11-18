@@ -10,10 +10,11 @@ namespace TinyWars.Common.CommonProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.MsgCommonHeartbeat,           callback: _onMsgCommonHeartbeat             },
-            { msgCode: ActionCode.MsgCommonError,               callback: _onMsgCommonError,                },
-            { msgCode: ActionCode.MsgCommonLatestConfigVersion, callback: _onMsgCommonLatestConfigVersion   },
-            { msgCode: ActionCode.MsgCommonGetServerStatus,     callback: _onMsgCommonGetServerStatus,      },
+            { msgCode: ActionCode.MsgCommonHeartbeat,           callback: _onMsgCommonHeartbeat },
+            { msgCode: ActionCode.MsgCommonError,               callback: _onMsgCommonError, },
+            { msgCode: ActionCode.MsgCommonLatestConfigVersion, callback: _onMsgCommonLatestConfigVersion },
+            { msgCode: ActionCode.MsgCommonGetServerStatus,     callback: _onMsgCommonGetServerStatus, },
+            { msgCode: ActionCode.MsgCommonGetRankList,         callback: _onMsgCommonGetRankList },
         ], CommonProxy);
     }
 
@@ -50,6 +51,17 @@ namespace TinyWars.Common.CommonProxy {
         const data = e.data as NetMessage.MsgCommonGetServerStatus.IS;
         if (!data.errorCode) {
             Notify.dispatch(NotifyType.MsgCommonGetServerStatus, data);
+        }
+    }
+
+    export function reqGetRankList(): void {
+        NetManager.send({ MsgCommonGetRankList: { c: {} } });
+    }
+    function _onMsgCommonGetRankList(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgCommonGetRankList.IS;
+        if (!data.errorCode) {
+            CommonModel.setRankList(data.rankDataList);
+            Notify.dispatch(Notify.Type.MsgCommonGetRankList, data);
         }
     }
 }

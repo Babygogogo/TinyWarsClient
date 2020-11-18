@@ -44,6 +44,7 @@ namespace TinyWars.User {
         private _btnChangeNickname          : TinyWars.GameUi.UiButton;
         private _btnChangePassword          : TinyWars.GameUi.UiButton;
         private _btnChangeDiscordId         : TinyWars.GameUi.UiButton;
+        private _btnRankList                : GameUi.UiButton;
         private _btnShowOnlineUsers         : TinyWars.GameUi.UiButton;
         private _btnChangeLanguage          : TinyWars.GameUi.UiButton;
         private _btnServerStatus            : TinyWars.GameUi.UiButton;
@@ -87,6 +88,7 @@ namespace TinyWars.User {
                 { ui: this._btnChangeNickname,  callback: this._onTouchedBtnChangeNickname },
                 { ui: this._btnChangePassword,  callback: this._onTouchedBtnChangePassword },
                 { ui: this._btnChangeDiscordId, callback: this._onTouchedBtnChangeDiscordId },
+                { ui: this._btnRankList,        callback: this._onTouchedBtnRankList },
                 { ui: this._btnShowOnlineUsers, callback: this._onTouchedBtnShowOnlineUsers },
                 { ui: this._btnChangeLanguage,  callback: this._onTouchedBtnChangeLanguage },
                 { ui: this._btnServerStatus,    callback: this._onTouchedBtnServerStatus },
@@ -132,6 +134,9 @@ namespace TinyWars.User {
         }
         private _onTouchedBtnChangeDiscordId(e: egret.TouchEvent): void {
             UserChangeDiscordIdPanel.show();
+        }
+        private _onTouchedBtnRankList(e: egret.TouchEvent): void {
+            Common.CommonRankListPanel.show();
         }
         private _onTouchedBtnShowOnlineUsers(e: egret.TouchEvent): void {
             UserOnlineUsersPanel.show();
@@ -195,6 +200,7 @@ namespace TinyWars.User {
             } else {
                 group.addChild(this._btnChat);
             }
+            group.addChild(this._btnRankList);
             group.addChild(this._btnShowOnlineUsers);
             group.addChild(this._btnChangeLanguage);
             group.addChild(this._btnSwitchTexture);
@@ -218,6 +224,7 @@ namespace TinyWars.User {
             this._updateBtnChangeNickname();
             this._updateBtnChangePassword();
             this._updateBtnChangeDiscordId();
+            this._updateBtnRankList();
             this._updateBtnShowOnlineUsers();
             this._updateBtnChangeLanguage();
             this._updateBtnSwitchTexture();
@@ -233,7 +240,7 @@ namespace TinyWars.User {
             const data                      = await UserModel.getRankScoreData(this._userId, WarType.RmwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rank                      = data.currentRank;
+            const rank                      = data ? data.currentRank : null;
             const rankText                  = `(${rank == null ? Lang.getText(Lang.Type.B0435) : `No.${rank}`})`;
             const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
             this._labelStdRankScore.text    = `${score} ${rankText} ${rankName}`;
@@ -242,7 +249,7 @@ namespace TinyWars.User {
             const data                      = await UserModel.getRankScoreData(this._userId, WarType.RmwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rank                      = data.currentRank;
+            const rank                      = data ? data.currentRank : null;
             const rankText                  = `(${rank == null ? Lang.getText(Lang.Type.B0435) : `No.${rank}`})`;
             const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
             this._labelFogRankScore.text    = `${score} ${rankText} ${rankName}`;
@@ -286,6 +293,9 @@ namespace TinyWars.User {
         }
         private _updateBtnChangeDiscordId(): void {
             this._btnChangeDiscordId.label = Lang.getText(Lang.Type.B0150);
+        }
+        private _updateBtnRankList(): void {
+            this._btnRankList.label = Lang.getText(Lang.Type.B0436);
         }
         private _updateBtnShowOnlineUsers(): void {
             this._btnShowOnlineUsers.label = Lang.getText(Lang.Type.B0151);

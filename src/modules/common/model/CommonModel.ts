@@ -1,13 +1,14 @@
 
 namespace TinyWars.Common.CommonModel {
-    import Types            = Utility.Types;
-    import ConfigManager    = Utility.ConfigManager;
-    import Notify           = Utility.Notify;
-    import Helpers          = Utility.Helpers;
-    import UnitType         = Types.UnitType;
-    import TileBaseType     = Types.TileBaseType;
-    import TileObjectType   = Types.TileObjectType;
-    import TextureVersion   = Types.UnitAndTileTextureVersion;
+    import Types                = Utility.Types;
+    import ConfigManager        = Utility.ConfigManager;
+    import Helpers              = Utility.Helpers;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import UnitType             = Types.UnitType;
+    import TileBaseType         = Types.TileBaseType;
+    import TileObjectType       = Types.TileObjectType;
+    import TextureVersion       = Types.UnitAndTileTextureVersion;
+    import IDataForPlayerRank   = ProtoTypes.Structure.IDataForPlayerRank;
 
     type FrameCfg = {
         source  : string;
@@ -18,6 +19,8 @@ namespace TinyWars.Common.CommonModel {
     const _unitImageSourceDict          = new Map<TextureVersion, Map<boolean, Map<boolean, Map<number, Map<UnitType, FrameCfg>>>>>();
     const _tileBaseImageSourceDict      = new Map<TextureVersion, Map<number, Map<TileBaseType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>();
     const _tileObjectImageSourceDict    = new Map<TextureVersion, Map<number, Map<TileObjectType, Map<boolean, Map<number, Map<number, FrameCfg>>>>>>();
+
+    let _rankList: IDataForPlayerRank[];
 
     export function init(): void {
         updateOnUnitAndTileTextureVersionChanged();
@@ -186,5 +189,12 @@ namespace TinyWars.Common.CommonModel {
             cfg.source  = ConfigManager.getTileObjectImageSource(params);
         }
         return cfg.source;
+    }
+
+    export function setRankList(rankList: IDataForPlayerRank[] | null | undefined): void {
+        _rankList = rankList;
+    }
+    export function getRankList(): IDataForPlayerRank[] | null | undefined {
+        return _rankList;
     }
 }

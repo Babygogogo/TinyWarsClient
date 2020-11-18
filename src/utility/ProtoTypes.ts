@@ -13004,6 +13004,108 @@ export declare namespace Structure {
          */
         public toJSON(): { [k: string]: any };
     }
+
+    /** Properties of a DataForPlayerRank. */
+    interface IDataForPlayerRank {
+
+        /** DataForPlayerRank warType */
+        warType?: (number|null);
+
+        /** DataForPlayerRank playersCount */
+        playersCount?: (number|null);
+
+        /** DataForPlayerRank userId */
+        userId?: (number|null);
+    }
+
+    /** Represents a DataForPlayerRank. */
+    class DataForPlayerRank implements IDataForPlayerRank {
+
+        /**
+         * Constructs a new DataForPlayerRank.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Structure.IDataForPlayerRank);
+
+        /** DataForPlayerRank warType. */
+        public warType: number;
+
+        /** DataForPlayerRank playersCount. */
+        public playersCount: number;
+
+        /** DataForPlayerRank userId. */
+        public userId: number;
+
+        /**
+         * Creates a new DataForPlayerRank instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns DataForPlayerRank instance
+         */
+        public static create(properties?: Structure.IDataForPlayerRank): Structure.DataForPlayerRank;
+
+        /**
+         * Encodes the specified DataForPlayerRank message. Does not implicitly {@link Structure.DataForPlayerRank.verify|verify} messages.
+         * @param message DataForPlayerRank message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Structure.IDataForPlayerRank, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified DataForPlayerRank message, length delimited. Does not implicitly {@link Structure.DataForPlayerRank.verify|verify} messages.
+         * @param message DataForPlayerRank message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Structure.IDataForPlayerRank, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a DataForPlayerRank message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns DataForPlayerRank
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.DataForPlayerRank;
+
+        /**
+         * Decodes a DataForPlayerRank message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns DataForPlayerRank
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.DataForPlayerRank;
+
+        /**
+         * Verifies a DataForPlayerRank message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a DataForPlayerRank message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns DataForPlayerRank
+         */
+        public static fromObject(object: { [k: string]: any }): Structure.DataForPlayerRank;
+
+        /**
+         * Creates a plain object from a DataForPlayerRank message. Also converts values to other types if specified.
+         * @param message DataForPlayerRank
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Structure.DataForPlayerRank, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this DataForPlayerRank to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
 }
 
 /** Properties of a MultiCustomRoom. */
@@ -16161,6 +16263,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgCommonGetServerStatus */
         MsgCommonGetServerStatus?: (NetMessage.IMsgCommonGetServerStatus|null);
 
+        /** MessageContainer MsgCommonGetRankList */
+        MsgCommonGetRankList?: (NetMessage.IMsgCommonGetRankList|null);
+
         /** MessageContainer MsgUserRegister */
         MsgUserRegister?: (NetMessage.IMsgUserRegister|null);
 
@@ -16464,6 +16569,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgCommonGetServerStatus. */
         public MsgCommonGetServerStatus?: (NetMessage.IMsgCommonGetServerStatus|null);
+
+        /** MessageContainer MsgCommonGetRankList. */
+        public MsgCommonGetRankList?: (NetMessage.IMsgCommonGetRankList|null);
 
         /** MessageContainer MsgUserRegister. */
         public MsgUserRegister?: (NetMessage.IMsgUserRegister|null);
@@ -17943,6 +18051,285 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgCommonGetServerStatus.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgCommonGetRankList. */
+    interface IMsgCommonGetRankList {
+
+        /** MsgCommonGetRankList c */
+        c?: (NetMessage.MsgCommonGetRankList.IC|null);
+
+        /** MsgCommonGetRankList s */
+        s?: (NetMessage.MsgCommonGetRankList.IS|null);
+    }
+
+    /** Represents a MsgCommonGetRankList. */
+    class MsgCommonGetRankList implements IMsgCommonGetRankList {
+
+        /**
+         * Constructs a new MsgCommonGetRankList.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgCommonGetRankList);
+
+        /** MsgCommonGetRankList c. */
+        public c?: (NetMessage.MsgCommonGetRankList.IC|null);
+
+        /** MsgCommonGetRankList s. */
+        public s?: (NetMessage.MsgCommonGetRankList.IS|null);
+
+        /**
+         * Creates a new MsgCommonGetRankList instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgCommonGetRankList instance
+         */
+        public static create(properties?: NetMessage.IMsgCommonGetRankList): NetMessage.MsgCommonGetRankList;
+
+        /**
+         * Encodes the specified MsgCommonGetRankList message. Does not implicitly {@link NetMessage.MsgCommonGetRankList.verify|verify} messages.
+         * @param message MsgCommonGetRankList message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgCommonGetRankList, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgCommonGetRankList message, length delimited. Does not implicitly {@link NetMessage.MsgCommonGetRankList.verify|verify} messages.
+         * @param message MsgCommonGetRankList message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgCommonGetRankList, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgCommonGetRankList message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgCommonGetRankList
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCommonGetRankList;
+
+        /**
+         * Decodes a MsgCommonGetRankList message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgCommonGetRankList
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCommonGetRankList;
+
+        /**
+         * Verifies a MsgCommonGetRankList message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgCommonGetRankList message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgCommonGetRankList
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgCommonGetRankList;
+
+        /**
+         * Creates a plain object from a MsgCommonGetRankList message. Also converts values to other types if specified.
+         * @param message MsgCommonGetRankList
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgCommonGetRankList, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgCommonGetRankList to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgCommonGetRankList {
+
+        /** Properties of a C. */
+        interface IC {
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgCommonGetRankList.IC);
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgCommonGetRankList.IC): NetMessage.MsgCommonGetRankList.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgCommonGetRankList.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgCommonGetRankList.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgCommonGetRankList.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgCommonGetRankList.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCommonGetRankList.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCommonGetRankList.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCommonGetRankList.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgCommonGetRankList.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S rankDataList */
+            rankDataList?: (Structure.IDataForPlayerRank[]|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgCommonGetRankList.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S rankDataList. */
+            public rankDataList: Structure.IDataForPlayerRank[];
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgCommonGetRankList.IS): NetMessage.MsgCommonGetRankList.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgCommonGetRankList.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgCommonGetRankList.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgCommonGetRankList.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgCommonGetRankList.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgCommonGetRankList.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgCommonGetRankList.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgCommonGetRankList.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgCommonGetRankList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

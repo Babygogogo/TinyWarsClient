@@ -118,6 +118,8 @@
                         </e:layout>
                     </e:Group>
                     <e:Group id="_groupButtons" y="220" horizontalCenter="0">
+                        <GameUi:UiButton id="_btnRankList" label="积分排名" y="300" x="196" width="200"
+                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <GameUi:UiButton id="_btnChangeNickname" label="更改昵称" y="290" x="186" width="200"
                                          skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <GameUi:UiButton id="_btnChangePassword" label="更改密码" y="290" x="186" width="200"

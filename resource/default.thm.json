@@ -14,6 +14,7 @@
 		"resource/skins/common/CommonErrorPanel.exml",
 		"resource/skins/common/CommonHelpPanel.exml",
 		"resource/skins/common/CommonInputPanel.exml",
+		"resource/skins/common/CommonRankListPanel.exml",
 		"resource/skins/common/CommonServerStatusPanel.exml",
 		"resource/skins/component/button/ButtonClose001.exml",
 		"resource/skins/component/button/ButtonHome001.exml",
