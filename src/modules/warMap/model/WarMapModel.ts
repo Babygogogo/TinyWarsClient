@@ -159,6 +159,11 @@ namespace TinyWars.WarMap {
             return totalRaters ? mapExtraData.totalRating / totalRaters : undefined;
         }
 
+        export function updateRawDataDict(dataList: IMapRawData[]): void {
+            for (const data of dataList || []) {
+                setRawData(data.mapId, data);
+            }
+        }
         export function getRawData(mapId: number): Promise<IMapRawData | undefined> {
             if (mapId == null) {
                 return new Promise<IMapRawData>((resolve, reject) => resolve(undefined));

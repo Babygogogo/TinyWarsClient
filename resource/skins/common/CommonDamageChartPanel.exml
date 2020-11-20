@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="semi_transparent" />
-    <e:Group id="_group" top="40" bottom="0" width="640" horizontalCenter="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+    <e:Group id="_groupList" top="40" bottom="0" width="160" left="0">
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.9"
+                        left="0" right="0" top="0" bottom="0" locked="true" />
+        <GameUi:UiLabel id="_labelTitle" text="部队信息" y="10" bold="true" size="20" textColor="0xffffff"
+                        horizontalCenter="0" />
+        <GameUi:UiScrollList id="_listUnit" left="0" right="0" bottom="35" top="35">
+            <e:List requireSelection="true">
+                <e:itemRendererSkinName>
+                    <e:Skin width="160" height="40" currentState="up" states="up,down">
+                        <GameUi:UiLabel id="_labelName" text="地图名称" size="22" verticalCenter="0"
+                                        textColor.down="0x00ff00" horizontalCenter="0" maxTextWidth="150"/>
+                        <e:Image id="_imgChoose" source="transparent" left="0" right="0" top="0" bottom="0"/>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+            </e:List>
+        </GameUi:UiScrollList>
+        <GameUi:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" left="0" right="0"
+                         bottom="0"></GameUi:UiButton>
+    </e:Group>
+    <e:Group id="_groupInfo" top="40" bottom="0" width="800" right="0">
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.9"
                         left="0" right="0" top="0" bottom="0" locked="true" />
         <e:Scroller left="0" right="0" top="8" bottom="8">
             <e:Group>

@@ -11,6 +11,7 @@
 		"resource/skins/common/CommonBlockPanel.exml",
 		"resource/skins/component/button/ButtonSelfAdaption001.exml",
 		"resource/skins/common/CommonConfirmPanel.exml",
+		"resource/skins/common/CommonDamageChartPanel.exml",
 		"resource/skins/common/CommonErrorPanel.exml",
 		"resource/skins/common/CommonHelpPanel.exml",
 		"resource/skins/common/CommonInputPanel.exml",

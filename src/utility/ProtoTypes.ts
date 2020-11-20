@@ -16302,6 +16302,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMapGetEnabledExtraDataList */
         MsgMapGetEnabledExtraDataList?: (NetMessage.IMsgMapGetEnabledExtraDataList|null);
 
+        /** MessageContainer MsgMapGetEnabledRawDataList */
+        MsgMapGetEnabledRawDataList?: (NetMessage.IMsgMapGetEnabledRawDataList|null);
+
         /** MessageContainer MsgMapGetExtraData */
         MsgMapGetExtraData?: (NetMessage.IMsgMapGetExtraData|null);
 
@@ -16608,6 +16611,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMapGetEnabledExtraDataList. */
         public MsgMapGetEnabledExtraDataList?: (NetMessage.IMsgMapGetEnabledExtraDataList|null);
+
+        /** MessageContainer MsgMapGetEnabledRawDataList. */
+        public MsgMapGetEnabledRawDataList?: (NetMessage.IMsgMapGetEnabledRawDataList|null);
 
         /** MessageContainer MsgMapGetExtraData. */
         public MsgMapGetExtraData?: (NetMessage.IMsgMapGetExtraData|null);
@@ -21762,6 +21768,285 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgMapGetEnabledExtraDataList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgMapGetEnabledRawDataList. */
+    interface IMsgMapGetEnabledRawDataList {
+
+        /** MsgMapGetEnabledRawDataList c */
+        c?: (NetMessage.MsgMapGetEnabledRawDataList.IC|null);
+
+        /** MsgMapGetEnabledRawDataList s */
+        s?: (NetMessage.MsgMapGetEnabledRawDataList.IS|null);
+    }
+
+    /** Represents a MsgMapGetEnabledRawDataList. */
+    class MsgMapGetEnabledRawDataList implements IMsgMapGetEnabledRawDataList {
+
+        /**
+         * Constructs a new MsgMapGetEnabledRawDataList.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMapGetEnabledRawDataList);
+
+        /** MsgMapGetEnabledRawDataList c. */
+        public c?: (NetMessage.MsgMapGetEnabledRawDataList.IC|null);
+
+        /** MsgMapGetEnabledRawDataList s. */
+        public s?: (NetMessage.MsgMapGetEnabledRawDataList.IS|null);
+
+        /**
+         * Creates a new MsgMapGetEnabledRawDataList instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMapGetEnabledRawDataList instance
+         */
+        public static create(properties?: NetMessage.IMsgMapGetEnabledRawDataList): NetMessage.MsgMapGetEnabledRawDataList;
+
+        /**
+         * Encodes the specified MsgMapGetEnabledRawDataList message. Does not implicitly {@link NetMessage.MsgMapGetEnabledRawDataList.verify|verify} messages.
+         * @param message MsgMapGetEnabledRawDataList message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMapGetEnabledRawDataList, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMapGetEnabledRawDataList message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetEnabledRawDataList.verify|verify} messages.
+         * @param message MsgMapGetEnabledRawDataList message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMapGetEnabledRawDataList, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMapGetEnabledRawDataList message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMapGetEnabledRawDataList
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetEnabledRawDataList;
+
+        /**
+         * Decodes a MsgMapGetEnabledRawDataList message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMapGetEnabledRawDataList
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetEnabledRawDataList;
+
+        /**
+         * Verifies a MsgMapGetEnabledRawDataList message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMapGetEnabledRawDataList message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMapGetEnabledRawDataList
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetEnabledRawDataList;
+
+        /**
+         * Creates a plain object from a MsgMapGetEnabledRawDataList message. Also converts values to other types if specified.
+         * @param message MsgMapGetEnabledRawDataList
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMapGetEnabledRawDataList, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMapGetEnabledRawDataList to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMapGetEnabledRawDataList {
+
+        /** Properties of a C. */
+        interface IC {
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMapGetEnabledRawDataList.IC);
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgMapGetEnabledRawDataList.IC): NetMessage.MsgMapGetEnabledRawDataList.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMapGetEnabledRawDataList.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMapGetEnabledRawDataList.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetEnabledRawDataList.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMapGetEnabledRawDataList.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetEnabledRawDataList.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetEnabledRawDataList.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetEnabledRawDataList.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMapGetEnabledRawDataList.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S dataList */
+            dataList?: (Map.IMapRawData[]|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMapGetEnabledRawDataList.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S dataList. */
+            public dataList: Map.IMapRawData[];
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMapGetEnabledRawDataList.IS): NetMessage.MsgMapGetEnabledRawDataList.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMapGetEnabledRawDataList.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMapGetEnabledRawDataList.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetEnabledRawDataList.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMapGetEnabledRawDataList.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetEnabledRawDataList.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetEnabledRawDataList.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetEnabledRawDataList.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMapGetEnabledRawDataList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

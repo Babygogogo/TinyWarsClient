@@ -16,9 +16,14 @@ namespace TinyWars.Common {
 
         private static _instance: CommonDamageChartPanel;
 
-        private _group                  : eui.Group;
-        private _conUnitView            : eui.Group;
-        private _labelName              : GameUi.UiLabel;
+        private _groupList          : eui.Group;
+        private _labelTitle         : TinyWars.GameUi.UiLabel;
+        private _listUnit           : TinyWars.GameUi.UiScrollList;
+        private _btnBack            : TinyWars.GameUi.UiButton;
+
+        private _groupInfo          : eui.Group;
+        private _conUnitView        : eui.Group;
+        private _labelName          : GameUi.UiLabel;
 
         private _listInfo           : GameUi.UiScrollList;
         private _listDamageChart    : GameUi.UiScrollList;
@@ -32,8 +37,10 @@ namespace TinyWars.Common {
         private _labelDefenseMain2  : GameUi.UiLabel;
         private _labelDefenseSub2   : GameUi.UiLabel;
 
-        private _dataForList: DataForDamageRenderer[];
-        private _unitView   : WarMap.WarMapUnitView;
+        private _selectedIndex          : number;
+        private _dataForListUnit        : DataForUnitRenderer[];
+        private _dataForListDamageChart : DataForDamageRenderer[];
+        private _unitView               : WarMap.WarMapUnitView;
 
         public static show(): void {
             if (!CommonDamageChartPanel._instance) {
@@ -57,7 +64,7 @@ namespace TinyWars.Common {
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
             this._callbackForTouchMask = () => this.close();
-            this.skinName = `resource/skins/baseWar/CommonDamageChartPanel.exml`;
+            this.skinName = `resource/skins/common/CommonDamageChartPanel.exml`;
         }
 
         protected _onFirstOpened(): void {
@@ -66,19 +73,47 @@ namespace TinyWars.Common {
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
             ];
+            this._uiListeners = [
+                { ui: this._btnBack,    callback: this.close },
+            ];
 
+            this._listUnit.setItemRenderer(UnitRenderer);
             this._listDamageChart.setItemRenderer(DamageRenderer);
             this._listInfo.setItemRenderer(InfoRenderer);
             this._unitView = new WarMap.WarMapUnitView();
             this._conUnitView.addChild(this._unitView);
         }
         protected _onOpened(): void {
-            this._updateView();
+            this._showOpenAnimation();
+
+            const listUnit          = this._listUnit;
+            this._dataForListUnit   = this._createDataForListUnit();
+            listUnit.bindData(this._dataForListUnit);
+            listUnit.scrollVerticalTo(0);
+            this._updateComponentsForLanguage();
+            this.setSelectedIndexAndUpdateView(0);
         }
         protected _onClosed(): void {
+            this._selectedIndex             = null;
+            this._dataForListUnit           = null;
+            this._dataForListDamageChart    = null;
+            this._listUnit.clear();
             this._listDamageChart.clear();
             this._listInfo.clear();
-            this._dataForList = null;
+        }
+
+        public setSelectedIndexAndUpdateView(newIndex: number): void {
+            const oldIndex      = this._selectedIndex;
+            this._selectedIndex = newIndex;
+            if (oldIndex !== newIndex) {
+                (this._listUnit.viewport as eui.List).selectedIndex = newIndex;
+                this._updateUnitViewAndLabelName();
+                this._updateListInfo();
+                this._updateListDamageChart();
+            }
+        }
+        public getSelectedIndex(): number {
+            return this._selectedIndex;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,13 +139,23 @@ namespace TinyWars.Common {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
-            this._updateComponentsForLanguage();
-            this._updateUnitViewAndLabelName();
-            this._updateListDamageChart();
+        private _showOpenAnimation(): void {
+            const groupList = this._groupList;
+            egret.Tween.removeTweens(groupList);
+            egret.Tween.get(groupList)
+                .set({ alpha: 0, left: -40 })
+                .to({ alpha: 1, left: 0 }, 200);
+
+            const _groupInfo = this._groupInfo;
+            egret.Tween.removeTweens(_groupInfo);
+            egret.Tween.get(_groupInfo)
+                .set({ alpha: 0, right: -40 })
+                .to({ alpha: 1, right: 0 }, 200);
         }
 
         private _updateComponentsForLanguage(): void {
+            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+            this._labelTitle.text           = Lang.getText(Lang.Type.B0440);
             this._labelDamageChart.text     = Lang.getText(Lang.Type.B0334);
             this._labelOffenseMain1.text    = Lang.getText(Lang.Type.B0335);
             this._labelOffenseSub1.text     = Lang.getText(Lang.Type.B0336);
@@ -124,207 +169,241 @@ namespace TinyWars.Common {
         }
 
         private _updateUnitViewAndLabelName(): void {
-            const unit              = this._openData.unit;
-            this._labelName.text    = Lang.getUnitName(unit.getType());
-            this._unitView.update({
-                gridIndex       : { x: 0, y: 0},
-                skinId          : unit.getSkinId(),
-                unitType        : unit.getType(),
-                unitActionState : unit.getActionState(),
-            }, Time.TimeModel.getUnitAnimationTickCount());
+            const data = this._dataForListUnit[this._selectedIndex];
+            if (data) {
+                const unitType          = data.unitType;
+                this._labelName.text    = Lang.getUnitName(unitType);
+                this._unitView.update({
+                    gridIndex       : { x: 0, y: 0 },
+                    skinId          : CommonConstants.WarFirstPlayerIndex,
+                    unitType,
+                    unitActionState : Types.UnitActionState.Idle,
+                }, Time.TimeModel.getUnitAnimationTickCount());
+            }
         }
 
         private _updateListInfo(): void {
-            const unit          = this._openData.unit;
-            const configVersion = unit.getConfigVersion();
-            const unitType      = unit.getType();
-            const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+            const dataList  : DataForInfoRenderer[] = [];
+            const data      = this._dataForListUnit[this._selectedIndex];
+            if (data) {
+                const configVersion = data.configVersion;
+                const unitType      = data.unitType;
+                const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+                dataList.push(
+                    this._createInfoHp(cfg),
+                    this._createInfoProductionCost(cfg),
+                    this._createInfoMovement(cfg),
+                    this._createInfoFuel(cfg),
+                    this._createInfoFuelConsumption(cfg),
+                    this._createInfoFuelDestruction(cfg),
+                    this._createInfoAttackRange(cfg),
+                    this._createInfoAttackAfterMove(cfg),
+                    this._createInfoVisionRange(cfg),
+                    this._createInfoPrimaryWeaponAmmo(cfg),
+                    this._createInfoBuildMaterial(cfg),
+                    this._createInfoProduceMaterial(cfg),
+                    this._createInfoFlareAmmo(cfg),
+                    this._createInfoDive(cfg),
+                );
+            }
 
-            const dataList: DataForInfoRenderer[] = [
-                this._createInfoHp(unit, cfg),
-                this._createInfoProductionCost(unit, cfg),
-                this._createInfoMovement(unit, cfg),
-                this._createInfoFuel(unit, cfg),
-                this._createInfoFuelConsumption(unit, cfg),
-                this._createInfoFuelDestruction(unit, cfg),
-                this._createInfoAttackRange(unit, cfg),
-                this._createInfoAttackAfterMove(unit, cfg),
-                this._createInfoVisionRange(unit, cfg),
-                this._createInfoPrimaryWeaponAmmo(unit, cfg),
-                this._createInfoBuildMaterial(unit, cfg),
-                this._createInfoProduceMaterial(unit, cfg),
-                this._createInfoFlareAmmo(unit, cfg),
-                this._createInfoDive(unit, cfg),
-            ].filter(v => !!v);
-
-            this._listInfo.bindData(dataList);
+            this._listInfo.bindData(dataList.filter(v => !!v));
         }
 
-        private _createInfoHp(unit: BaseWar.BwUnit, cfg: IUnitTemplateCfg): DataForInfoRenderer {
+        private _updateListDamageChart(): void {
+            this._dataForListDamageChart = this._createDataForListDamageChart();
+            this._listDamageChart.bindData(this._dataForListDamageChart);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Util functions.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _createInfoHp(cfg: IUnitTemplateCfg): DataForInfoRenderer {
+            const maxHp = cfg.maxHp;
             return {
                 titleText   : Lang.getText(Lang.Type.B0339),
-                valueText   : `${unit.getCurrentHp()} / ${unit.getMaxHp()}`,
+                valueText   : `${maxHp} / ${maxHp}`,
             };
         }
-        private _createInfoProductionCost(unit: BaseWar.BwUnit, cfg: IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoProductionCost(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(Lang.Type.B0341),
                 valueText   : `${cfg.productionCost}`,
             };
         }
-        private _createInfoMovement(unit: BaseWar.BwUnit, cfg: IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoMovement(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(Lang.Type.B0340),
                 valueText   : `${cfg.moveRange} (${Lang.getMoveTypeName(cfg.moveType)})`,
             };
         }
-        private _createInfoFuel(unit: BaseWar.BwUnit, cfg: IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoFuel(cfg: IUnitTemplateCfg): DataForInfoRenderer {
+            const maxFuel = cfg.maxFuel;
             return {
                 titleText   : Lang.getText(Lang.Type.B0342),
-                valueText   : `${unit.getCurrentFuel()} / ${unit.getMaxFuel()}`,
+                valueText   : `${maxFuel} / ${maxFuel}`,
             };
         }
-        private _createInfoFuelConsumption(unit: BaseWar.BwUnit, cfg: IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoFuelConsumption(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(Lang.Type.B0343),
                 valueText   : `${cfg.fuelConsumptionPerTurn}${cfg.diveCfgs == null ? `` : ` (${cfg.diveCfgs[0]})`}`,
             };
         }
-        private _createInfoFuelDestruction(unit: BaseWar.BwUnit, cfg: IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoFuelDestruction(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(Lang.Type.B0344),
-                valueText   : (unit && unit.checkIsDestroyedOnOutOfFuel()) || (cfg.isDestroyedOnOutOfFuel)
+                valueText   : cfg.isDestroyedOnOutOfFuel
                     ? Lang.getText(Lang.Type.B0012)
                     : Lang.getText(Lang.Type.B0013),
             };
         }
-        private _createInfoAttackRange(unit: BaseWar.BwUnit, cfg: IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoAttackRange(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(Lang.Type.B0345),
                 valueText   : cfg.minAttackRange == null ? Lang.getText(Lang.Type.B0001) : `${cfg.minAttackRange} - ${cfg.maxAttackRange}`,
             };
         }
-        private _createInfoAttackAfterMove(unit: BaseWar.BwUnit, cfg: IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoAttackAfterMove(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(Lang.Type.B0346),
                 valueText   : cfg.canAttackAfterMove ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
             };
         }
-        private _createInfoVisionRange(unit: BaseWar.BwUnit, cfg: IUnitTemplateCfg): DataForInfoRenderer {
+        private _createInfoVisionRange(cfg: IUnitTemplateCfg): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(Lang.Type.B0354),
-                valueText   : unit ? `${unit.getCfgVisionRange()}` : `${cfg.visionRange}`,
+                valueText   : `${cfg.visionRange}`,
             };
         }
-        private _createInfoPrimaryWeaponAmmo(
-            unit        : BaseWar.BwUnit,
-            cfg         : IUnitTemplateCfg,
-        ): DataForInfoRenderer | null {
-            const maxValue = unit.getPrimaryWeaponMaxAmmo();
+        private _createInfoPrimaryWeaponAmmo(cfg: IUnitTemplateCfg): DataForInfoRenderer | null {
+            const maxValue = cfg.primaryWeaponMaxAmmo;
             if (maxValue == null) {
                 return null;
             } else {
-                const currValue = unit.getPrimaryWeaponCurrentAmmo();
                 return {
                     titleText   : Lang.getText(Lang.Type.B0350),
-                    valueText   : `${currValue} / ${maxValue}`,
+                    valueText   : `${maxValue} / ${maxValue}`,
                 };
             }
         }
-
-        private _createInfoBuildMaterial(
-            unit        : BaseWar.BwUnit,
-            cfg         : IUnitTemplateCfg,
-        ): DataForInfoRenderer | null {
-            const maxValue = unit.getMaxBuildMaterial();
+        private _createInfoBuildMaterial(cfg: IUnitTemplateCfg): DataForInfoRenderer | null {
+            const maxValue = cfg.maxBuildMaterial;
             if (maxValue == null) {
                 return null;
             } else {
-                const currValue = unit.getCurrentBuildMaterial();
                 return {
                     titleText   : Lang.getText(Lang.Type.B0347),
-                    valueText   : `${currValue} / ${maxValue}`,
+                    valueText   : `${maxValue} / ${maxValue}`,
                 };
             }
         }
-
-        private _createInfoProduceMaterial(
-            unit        : BaseWar.BwUnit,
-            cfg         : IUnitTemplateCfg,
-        ): DataForInfoRenderer | null {
-            const maxValue = unit.getMaxProduceMaterial();
+        private _createInfoProduceMaterial(cfg: IUnitTemplateCfg): DataForInfoRenderer | null {
+            const maxValue = cfg.maxProduceMaterial;
             if (maxValue == null) {
                 return null;
             } else {
-                const currValue = unit.getCurrentProduceMaterial();
                 return {
                     titleText   : Lang.getText(Lang.Type.B0348),
-                    valueText   : `${currValue} / ${maxValue}`,
+                    valueText   : `${maxValue} / ${maxValue}`,
                 };
             }
         }
-
-        private _createInfoFlareAmmo(
-            unit        : BaseWar.BwUnit,
-            cfg         : IUnitTemplateCfg,
-        ): DataForInfoRenderer | null {
-            const maxValue = unit.getFlareMaxAmmo();
+        private _createInfoFlareAmmo(cfg: IUnitTemplateCfg): DataForInfoRenderer | null {
+            const maxValue = cfg.flareMaxAmmo;
             if (maxValue == null) {
                 return null;
             } else {
-                const currValue = unit.getFlareCurrentAmmo();
                 return {
                     titleText   : Lang.getText(Lang.Type.B0349),
-                    valueText   : `${currValue} / ${maxValue}`,
+                    valueText   : `${maxValue} / ${maxValue}`,
                 };
             }
         }
-
-        private _createInfoDive(
-            unit        : BaseWar.BwUnit,
-            cfg         : IUnitTemplateCfg,
-        ): DataForInfoRenderer | null {
-            const isDiver = unit.checkIsDiver();
+        private _createInfoDive(cfg: IUnitTemplateCfg): DataForInfoRenderer | null {
+            const isDiver = !!cfg.diveCfgs;
             return {
                 titleText   : Lang.getText(Lang.Type.B0439),
                 valueText   : isDiver ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
             };
         }
 
-        private _updateListDamageChart(): void {
-            this._dataForList = this._createDataForListDamageChart();
-            this._listDamageChart.bindData(this._dataForList);
-        }
-
         private _createDataForListDamageChart(): DataForDamageRenderer[] {
-            const unit              = this._openData.unit;
-            const configVersion     = unit.getConfigVersion();
-            const attackUnitType    = unit.getType();
-            const playerIndex       = unit.getPlayerIndex();
-
-            const dataList = [] as DataForDamageRenderer[];
-            for (const targetUnitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
-                dataList.push({
-                    configVersion,
-                    attackUnitType,
-                    targetUnitType,
-                    playerIndex,
-                });
-            }
-            for (const targetTileType of ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.Destroyable)) {
-                dataList.push({
-                    configVersion,
-                    attackUnitType,
-                    targetTileType,
-                });
+            const data      = this._dataForListUnit[this._selectedIndex];
+            const dataList  : DataForDamageRenderer[] = [];
+            if (data) {
+                const configVersion     = data.configVersion;
+                const attackUnitType    = data.unitType;
+                const playerIndex       = CommonConstants.WarFirstPlayerIndex;
+                for (const targetUnitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
+                    dataList.push({
+                        configVersion,
+                        attackUnitType,
+                        targetUnitType,
+                        playerIndex,
+                    });
+                }
+                for (const targetTileType of ConfigManager.getTileTypesByCategory(configVersion, Types.TileCategory.Destroyable)) {
+                    dataList.push({
+                        configVersion,
+                        attackUnitType,
+                        targetTileType,
+                    });
+                }
             }
 
             return dataList.sort(sorterForDataForList);
+        }
+
+        private _createDataForListUnit(): DataForUnitRenderer[] {
+            const data          : DataForUnitRenderer[] = [];
+            const configVersion = ConfigManager.getLatestConfigVersion();
+            const unitTypes     = ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All);
+            for (let index = 0; index < unitTypes.length; ++index) {
+                data.push({
+                    configVersion,
+                    index,
+                    unitType: unitTypes[index],
+                    panel   : this,
+                });
+            }
+
+            return data;
         }
     }
 
     function sorterForDataForList(a: DataForDamageRenderer, b: DataForDamageRenderer): number {
         return a.attackUnitType - b.attackUnitType;
+    }
+
+    type DataForUnitRenderer = {
+        configVersion   : string;
+        unitType        : Types.UnitType;
+        index           : number;
+        panel           : CommonDamageChartPanel;
+    }
+
+    class UnitRenderer extends eui.ItemRenderer {
+        private _imgChoose  : eui.Image;
+        private _labelName  : TinyWars.GameUi.UiLabel;
+
+        protected childrenCreated(): void {
+            super.childrenCreated();
+
+            this._imgChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedImgChoose, this);
+        }
+
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            const data              = this.data as DataForUnitRenderer;
+            this._labelName.text    = Lang.getUnitName(data.unitType);
+        }
+
+        private _onTouchedImgChoose(e: egret.TouchEvent): void {
+            const data = this.data as DataForUnitRenderer;
+            data.panel.setSelectedIndexAndUpdateView(data.index);
+        }
     }
 
     type DataForInfoRenderer = {

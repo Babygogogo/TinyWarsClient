@@ -9,6 +9,7 @@ namespace TinyWars.WarMap.WarMapProxy {
     export function init(): void {
         NetManager.addListeners([
             { msgCode: MsgCode.MsgMapGetEnabledExtraDataList,   callback: _onMsgMapGetEnabledExtraDataList },
+            { msgCode: MsgCode.MsgMapGetEnabledRawDataList,     callback: _onMsgMapGetEnabledRawDataList },
             { msgCode: MsgCode.MsgMapGetExtraData,              callback: _onMsgMapGetExtraData },
             { msgCode: MsgCode.MsgMapGetRawData,                callback: _onMsgMapGetRawData },
             { msgCode: MsgCode.MsgMmSetMapAvailability,         callback: _onMsgMmSetMapAvailability },
@@ -29,6 +30,14 @@ namespace TinyWars.WarMap.WarMapProxy {
         if (!data.errorCode) {
             WarMapModel.resetExtraDataDict(data.dataList);
             Notify.dispatch(Notify.Type.MsgMapGetEnabledExtraDataList, data);
+        }
+    }
+
+    function _onMsgMapGetEnabledRawDataList(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMapGetEnabledRawDataList.IS;
+        if (!data.errorCode) {
+            WarMapModel.updateRawDataDict(data.dataList);
+            Notify.dispatch(Notify.Type.MsgMapGetEnabledRawDataList, data);
         }
     }
 

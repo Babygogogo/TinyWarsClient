@@ -34,6 +34,7 @@ namespace TinyWars.User {
         export function clearLoginInfo(): void {
             setIsLoggedIn(false);
             setSelfUserId(undefined);
+            setSelfPassword(undefined);
         }
 
         function setIsLoggedIn(isLoggedIn: boolean): void {

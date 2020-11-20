@@ -93,6 +93,7 @@
 		"bin-debug/modules/chat/model/ChatProxy.js",
 		"bin-debug/modules/chat/view/ChatPanel.js",
 		"bin-debug/modules/common/model/CommonProxy.js",
+		"bin-debug/modules/common/view/CommonDamageChartPanel.js",
 		"bin-debug/modules/common/view/CommonErrorPanel.js",
 		"bin-debug/modules/common/view/CommonInputPanel.js",
 		"bin-debug/modules/common/view/CommonRankListPanel.js",

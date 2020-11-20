@@ -50,6 +50,7 @@ namespace TinyWars.User {
         private _btnServerStatus            : TinyWars.GameUi.UiButton;
         private _btnChat                    : TinyWars.GameUi.UiButton;
         private _btnSwitchTexture           : TinyWars.GameUi.UiButton;
+        private _btnUnitsInfo               : GameUi.UiButton;
 
         private _userId: number;
 
@@ -94,6 +95,7 @@ namespace TinyWars.User {
                 { ui: this._btnServerStatus,    callback: this._onTouchedBtnServerStatus },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
                 { ui: this._btnSwitchTexture,   callback: this._onTouchedBtnSwitchTexture },
+                { ui: this._btnUnitsInfo,       callback: this._onTouchedBtnUnitsInfo },
                 { ui: this._btnClose,           callback: this.close },
             ];
             this._sclHistory.setItemRenderer(HistoryRenderer);
@@ -165,6 +167,9 @@ namespace TinyWars.User {
                     : Types.UnitAndTileTextureVersion.V0,
             });
         }
+        private _onTouchedBtnUnitsInfo(e: egret.TouchEvent): void {
+            Common.CommonDamageChartPanel.show();
+        }
 
         private _showOpenAnimation(): void {
             const group = this._group;
@@ -204,6 +209,7 @@ namespace TinyWars.User {
             group.addChild(this._btnShowOnlineUsers);
             group.addChild(this._btnChangeLanguage);
             group.addChild(this._btnSwitchTexture);
+            group.addChild(this._btnUnitsInfo);
             group.addChild(this._btnServerStatus);
         }
 
@@ -228,6 +234,7 @@ namespace TinyWars.User {
             this._updateBtnShowOnlineUsers();
             this._updateBtnChangeLanguage();
             this._updateBtnSwitchTexture();
+            this._updateBtnUnitsInfo();
             this._updateBtnServerStatus();
             this._updateBtnChat();
         }
@@ -309,6 +316,9 @@ namespace TinyWars.User {
             this._btnSwitchTexture.label = User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0
                 ? Lang.getText(Lang.Type.B0386)
                 : Lang.getText(Lang.Type.B0385);
+        }
+        private _updateBtnUnitsInfo(): void {
+            this._btnUnitsInfo.label = Lang.getText(Lang.Type.B0440);
         }
         private _updateBtnServerStatus(): void {
             this._btnServerStatus.label = Lang.getText(Lang.Type.B0327);

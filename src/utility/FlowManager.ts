@@ -1,8 +1,8 @@
 
 namespace TinyWars.Utility.FlowManager {
     import UserModel    = User.UserModel;
-    import McwProxy     = MultiPlayerWar.MpwProxy;
-    import McwModel     = MultiPlayerWar.MpwModel;
+    import MpwProxy     = MultiPlayerWar.MpwProxy;
+    import MpwModel     = MultiPlayerWar.MpwModel;
     import ScwModel     = SingleCustomWar.ScwModel;
     import RwModel      = ReplayWar.RwModel;
     import MeManager    = MapEditor.MeManager;
@@ -36,8 +36,8 @@ namespace TinyWars.Utility.FlowManager {
         NoSleepManager.init();
         Utility.ConfigManager.init();
         Network.Manager.init();
-        McwProxy.init();
-        McwModel.init();
+        MpwProxy.init();
+        MpwModel.init();
         Time.TimeModel.init();
         User.UserProxy.init();
         User.UserModel.init();
@@ -65,7 +65,7 @@ namespace TinyWars.Utility.FlowManager {
     }
 
     export function gotoLogin(): void {
-        McwModel.unloadWar();
+        MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
         MeManager.unloadWar();
@@ -76,7 +76,7 @@ namespace TinyWars.Utility.FlowManager {
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
 
-        McwModel.unloadWar();
+        MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
         MeManager.unloadWar();
@@ -88,7 +88,7 @@ namespace TinyWars.Utility.FlowManager {
         RwModel.unloadWar();
         ScwModel.unloadWar();
         MeManager.unloadWar();
-        await McwModel.loadWar(data);
+        await MpwModel.loadWar(data);
 
         StageManager.closeAllPanels();
         MultiPlayerWar.McwBackgroundPanel.show();
@@ -98,7 +98,7 @@ namespace TinyWars.Utility.FlowManager {
         MultiPlayerWar.McwUnitBriefPanel.show();
     }
     export async function gotoReplay(warData: Uint8Array, replayId: number): Promise<void> {
-        McwModel.unloadWar();
+        MpwModel.unloadWar();
         ScwModel.unloadWar();
         MeManager.unloadWar();
         await RwModel.loadWar(warData, replayId);
@@ -115,7 +115,7 @@ namespace TinyWars.Utility.FlowManager {
         slotIndex   : number;
         slotComment : string;
     }): Promise<void> {
-        McwModel.unloadWar();
+        MpwModel.unloadWar();
         RwModel.unloadWar();
         MeManager.unloadWar();
         await ScwModel.loadWar({ warData, slotIndex, slotComment });
@@ -128,7 +128,7 @@ namespace TinyWars.Utility.FlowManager {
         SingleCustomWar.ScwUnitBriefPanel.show();
     }
     export async function gotoMapEditor(mapRawData: ProtoTypes.Map.IMapRawData, slotIndex: number, isReview: boolean): Promise<void> {
-        McwModel.unloadWar();
+        MpwModel.unloadWar();
         ScwModel.unloadWar();
         RwModel.unloadWar();
         await MeManager.loadWar(mapRawData, slotIndex, isReview);
@@ -142,7 +142,7 @@ namespace TinyWars.Utility.FlowManager {
     }
 
     export function gotoRmrMyWarListPanel(): void {
-        McwModel.unloadWar();
+        MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
         MeManager.unloadWar();
@@ -151,7 +151,7 @@ namespace TinyWars.Utility.FlowManager {
         RankMatchRoom.RmrMyWarListPanel.show();
     }
     export function gotoMcrMyWarListPanel(): void {
-        McwModel.unloadWar();
+        MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
         MeManager.unloadWar();
@@ -166,7 +166,10 @@ namespace TinyWars.Utility.FlowManager {
     function _onNotifyNetworkConnected(e: egret.Event): void {
         const account   = UserModel.getSelfAccount();
         const password  = UserModel.getSelfPassword();
-        if ((!UserModel.getIsLoggedIn()) && (account != null) && (password != null)) {
+        if ((!UserModel.getIsLoggedIn())    &&
+            (account != null)               &&
+            (password != null)
+        ) {
             User.UserProxy.reqLogin(account, password, true);
         }
     }
@@ -192,9 +195,9 @@ namespace TinyWars.Utility.FlowManager {
         if (_checkCanFirstGoToLobby()) {
             gotoLobby();
         } else {
-            const mcwWar = McwModel.getWar();
+            const mcwWar = MpwModel.getWar();
             if (mcwWar) {
-                McwProxy.reqMcwCommonSyncWar(mcwWar, Types.SyncWarRequestType.ReconnectionRequest);
+                MpwProxy.reqMcwCommonSyncWar(mcwWar, Types.SyncWarRequestType.ReconnectionRequest);
             }
         }
     }

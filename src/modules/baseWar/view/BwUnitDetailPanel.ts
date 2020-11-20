@@ -20,9 +20,10 @@ namespace TinyWars.BaseWar {
 
         private static _instance: BwUnitDetailPanel;
 
-        private _group                  : eui.Group;
-        private _conUnitView            : eui.Group;
-        private _labelName              : GameUi.UiLabel;
+        private _group              : eui.Group;
+        private _conUnitView        : eui.Group;
+        private _labelName          : GameUi.UiLabel;
+        private _btnUnitsInfo       : GameUi.UiButton;
 
         private _listInfo           : GameUi.UiScrollList;
         private _listDamageChart    : GameUi.UiScrollList;
@@ -72,6 +73,9 @@ namespace TinyWars.BaseWar {
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
             ];
+            this._uiListeners = [
+                { ui: this._btnUnitsInfo,   callback: this._onTouchedBtnUnitsInfo },
+            ];
 
             this._listDamageChart.setItemRenderer(DamageRenderer);
             this._listInfo.setItemRenderer(InfoRenderer);
@@ -107,6 +111,11 @@ namespace TinyWars.BaseWar {
             this.close();
         }
 
+        private _onTouchedBtnUnitsInfo(e: egret.TouchEvent): void {
+            this.close();
+            Common.CommonDamageChartPanel.show();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,6 +126,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateComponentsForLanguage(): void {
+            this._btnUnitsInfo.label        = Lang.getText(Lang.Type.B0440);
             this._labelDamageChart.text     = Lang.getText(Lang.Type.B0334);
             this._labelOffenseMain1.text    = Lang.getText(Lang.Type.B0335);
             this._labelOffenseSub1.text     = Lang.getText(Lang.Type.B0336);
