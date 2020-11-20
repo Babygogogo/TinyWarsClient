@@ -279,9 +279,10 @@ namespace TinyWars.ReplayWar {
 
             const data                  = this.data as DataForMapNameRenderer;
             const info                  = data.info;
+            const warType               = info.warType;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelTurnIndex.text   = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
-            this._labelReplayId.text    = `ID: ${info.replayId}`;
+            this._labelReplayId.text    = `ID: ${info.replayId}${warType === Types.WarType.RmwStd || warType === Types.WarType.RmwFog ? ` RANK` : ``}`;
             WarMapModel.getMapNameInCurrentLanguage(info.mapId).then(v => this._labelName.text = v);
         }
 
@@ -320,7 +321,7 @@ namespace TinyWars.ReplayWar {
             this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
             this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);
             User.UserModel.getUserNickname(playerInfo.userId).then(name => {
-                this._labelName.text = name + ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
+                this._labelName.text = `${name} (${ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId)})`;
             });
         }
     }

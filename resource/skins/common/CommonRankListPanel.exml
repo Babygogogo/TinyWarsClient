@@ -9,7 +9,7 @@
                          width="160" locked="true"></GameUi:UiButton>
         <e:Group top="40" bottom="10" horizontalCenter="-240">
             <GameUi:UiLabel id="_labelStd" text="标准模式" y="0" size="18" horizontalCenter="0" />
-            <GameUi:UiLabel id="_labelStdNoData" text="暂无数据" size="22" horizontalCenter="0"  y="40"/>
+            <GameUi:UiLabel id="_labelStdNoData" text="暂无数据" size="22" horizontalCenter="0" y="40" />
             <GameUi:UiScrollList id="_listStd" width="350" x="0" top="30" bottom="0">
                 <e:List requireSelection="true" y="-1">
                     <e:itemRendererSkinName>
@@ -32,7 +32,7 @@
         </e:Group>
         <e:Group top="40" bottom="10" horizontalCenter="240">
             <GameUi:UiLabel id="_labelFog" text="雾战" y="0" size="18" horizontalCenter="0" />
-            <GameUi:UiLabel id="_labelFogNoData" text="暂无数据" size="22" horizontalCenter="0"  y="40"/>
+            <GameUi:UiLabel id="_labelFogNoData" text="暂无数据" size="22" horizontalCenter="0" y="40" />
             <GameUi:UiScrollList id="_listFog" width="350" x="0" top="30" bottom="0">
                 <e:List requireSelection="true" y="-1">
                     <e:itemRendererSkinName>
@@ -47,6 +47,9 @@
                             </e:Group>
                         </e:Skin>
                     </e:itemRendererSkinName>
+                    <e:layout>
+                        <e:TileLayout orientation="rows" horizontalGap="10" verticalGap="10" requestedColumnCount="2" />
+                    </e:layout>
                 </e:List>
             </GameUi:UiScrollList>
         </e:Group>
