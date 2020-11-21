@@ -92,10 +92,10 @@ namespace TinyWars.Utility.Notify {
 
         MsgMapGetRawData,
         MsgMapGetRawDataFailed,
-        MsgMapGetEnabledExtraDataList,
+        MsgMapGetEnabledBriefDataList,
         MsgMapGetEnabledRawDataList,
-        MsgMapGetExtraData,
-        MsgMapGetExtraDataFailed,
+        MsgMapGetBriefData,
+        MsgMapGetBriefDataFailed,
 
         MsgChatGetAllMessages,
         MsgChatAddMessage,

@@ -19,11 +19,12 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrCreateMapListPanel;
 
-        private _listMap   : GameUi.UiScrollList;
-        private _zoomMap   : GameUi.UiZoomableComponent;
-        private _btnSearch : GameUi.UiButton;
-        private _btnBack   : GameUi.UiButton;
-        private _labelNoMap: GameUi.UiLabel;
+        private _listMap        : GameUi.UiScrollList;
+        private _zoomMap        : GameUi.UiZoomableComponent;
+        private _btnSearch      : GameUi.UiButton;
+        private _btnBack        : GameUi.UiButton;
+        private _labelNoMap     : GameUi.UiLabel;
+        private _labelLoading   : GameUi.UiLabel;
 
         private _groupInfo          : eui.Group;
         private _labelMenuTitle     : GameUi.UiLabel;
@@ -146,6 +147,7 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0227);
+            this._labelLoading.text     = Lang.getText(Lang.Type.A0150);
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
             this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
         }
@@ -156,15 +158,15 @@ namespace TinyWars.MultiCustomRoom {
             (mapName)       && (mapName     = mapName.toLowerCase());
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
-            for (const [mapId, extraData] of WarMapModel.getExtraDataDict()) {
-                const rawData       = await WarMapModel.getRawData(mapId);
+            for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
+                const mapExtraData  = mapBriefData.mapExtraData;
                 const realMapName   = await WarMapModel.getMapNameInCurrentLanguage(mapId);
                 const rating        = await WarMapModel.getAverageRating(mapId);
-                if ((!extraData.isEnabled)                                                                              ||
-                    (!extraData.mapComplexInfo.availability.canMcw)                                                     ||
+                if ((!mapExtraData.isEnabled)                                                                           ||
+                    (!mapExtraData.mapComplexInfo.availability.canMcw)                                                  ||
                     ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                                     ||
-                    ((mapDesigner) && (rawData.designerName.toLowerCase().indexOf(mapDesigner) < 0))                    ||
-                    ((playersCount) && (rawData.playersCount !== playersCount))                                         ||
+                    ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))               ||
+                    ((playersCount) && (mapBriefData.playersCount !== playersCount))                                    ||
                     ((playedTimes != null) && (await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId) < playedTimes))  ||
                     ((minRating != null) && ((rating == null) || (rating < minRating)))
                 ) {
@@ -178,8 +180,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
 
-            data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
-            return data;
+            return data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
         private async _showMap(mapId: number): Promise<void> {

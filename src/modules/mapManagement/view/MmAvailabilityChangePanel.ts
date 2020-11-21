@@ -77,7 +77,7 @@ namespace TinyWars.MapManagement {
         protected async _onOpened(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            const availability          = (await WarMapModel.getExtraData(this._mapId)).mapComplexInfo.availability;
+            const availability          = (await WarMapModel.getBriefData(this._mapId)).mapExtraData.mapComplexInfo.availability;
             this._imgMcw.visible        = !!availability.canMcw;
             this._imgScw.visible        = !!availability.canScw;
             this._imgRank.visible       = !!availability.canRank;

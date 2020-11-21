@@ -156,22 +156,21 @@ namespace TinyWars.SingleCustomRoom {
             (mapName)       && (mapName     = mapName.toLowerCase());
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
-            for (const [mapId, extraData] of WarMapModel.getExtraDataDict()) {
-                const rawData       = await WarMapModel.getRawData(mapId);
-                const mapNameList   = rawData.mapNameList;
+            for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
+                const mapNameList   = mapBriefData.mapNameList;
                 const mapName       = mapNameList[Lang.getLanguageType() === Types.LanguageType.Chinese ? 0 : 1] || mapNameList[0];
-                if ((!extraData.mapComplexInfo.availability.canScw)                                                     ||
+                if ((!mapBriefData.mapExtraData.mapComplexInfo.availability.canScw)                                     ||
                     ((mapName) && (mapName.toLowerCase().indexOf(mapName) < 0))                                         ||
-                    ((mapDesigner) && (rawData.designerName.toLowerCase().indexOf(mapDesigner) < 0))                    ||
-                    ((playersCount) && (rawData.playersCount !== playersCount))                                         ||
+                    ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))               ||
+                    ((playersCount) && (mapBriefData.playersCount !== playersCount))                                    ||
                     ((playedTimes != null) && (await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId) < playedTimes))  ||
                     ((minRating != null) && (!(await WarMapModel.getAverageRating(mapId) >= minRating)))
                 ) {
                     continue;
                 } else {
                     data.push({
-                        mapId: mapId,
-                        mapName : mapName,
+                        mapId,
+                        mapName,
                         panel   : this,
                     });
                 }
@@ -183,7 +182,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private async _showMap(mapId: number): Promise<void> {
             const mapRawData                = await WarMapModel.getRawData(mapId);
-            const mapExtraData              = await WarMapModel.getExtraData(mapId);
+            const mapExtraData              = await WarMapModel.getBriefData(mapId);
             const averageRating             = await WarMapModel.getAverageRating(mapId);
             this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);

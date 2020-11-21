@@ -6,102 +6,102 @@ namespace TinyWars.WarMap {
     import Lang                 = Utility.Lang;
     import WarType              = Types.WarType;
     import MsgMapGetRawDataIs   = NetMessage.MsgMapGetRawData.IS;
-    import MsgMapGetExtraDataIs = NetMessage.MsgMapGetExtraData.IS;
+    import MsgMapGetBriefDataIs = NetMessage.MsgMapGetBriefData.IS;
     import NetMessage           = ProtoTypes.NetMessage;
     import IMapRawData          = ProtoTypes.Map.IMapRawData;
-    import IMapExtraData        = ProtoTypes.Map.IMapExtraData;
+    import IMapBriefData        = ProtoTypes.Map.IMapBriefData;
     import IMapEditorData       = ProtoTypes.Map.IMapEditorData;
 
     export namespace WarMapModel {
         const _RAW_DATA_DICT        = new Map<number, IMapRawData>();
-        const _EXTRA_DATA_DICT      = new Map<number, IMapExtraData>();
+        const _BRIEF_DATA_DICT      = new Map<number, IMapBriefData>();
 
         let _reviewingMaps          : IMapEditorData[];
         const _rawDataRequests      = new Map<number, ((info: MsgMapGetRawDataIs | undefined | null) => void)[]>();
-        const _extraDataRequests    = new Map<number, ((info: MsgMapGetExtraDataIs | undefined | null) => void)[]>();
+        const _briefDataRequests    = new Map<number, ((info: MsgMapGetBriefDataIs | undefined | null) => void)[]>();
 
         export function init(): void {
         }
 
-        export function resetExtraDataDict(dataList: IMapExtraData[]): void {
-            _EXTRA_DATA_DICT.clear();
+        export function resetBriefDataDict(dataList: IMapBriefData[]): void {
+            _BRIEF_DATA_DICT.clear();
             for (const data of dataList || []) {
-                _EXTRA_DATA_DICT.set(data.mapId, data);
+                _BRIEF_DATA_DICT.set(data.mapExtraData.mapId, data);
             }
         }
-        export function getExtraDataDict(): typeof _EXTRA_DATA_DICT {
-            return _EXTRA_DATA_DICT;
+        export function getBriefDataDict(): typeof _BRIEF_DATA_DICT {
+            return _BRIEF_DATA_DICT;
         }
 
-        export function setExtraData(data: IMapExtraData): void {
-            _EXTRA_DATA_DICT.set(data.mapId, data);
+        export function setBriefData(data: IMapBriefData): void {
+            _BRIEF_DATA_DICT.set(data.mapExtraData.mapId, data);
         }
-        export function getExtraData(mapId: number): Promise<IMapExtraData | undefined | null> {
+        export function getBriefData(mapId: number): Promise<IMapBriefData | undefined | null> {
             if (mapId == null) {
-                return new Promise<IMapExtraData>(resolve => resolve(undefined));
+                return new Promise<IMapBriefData>(resolve => resolve(undefined));
             }
 
-            const localData = _EXTRA_DATA_DICT.get(mapId);
+            const localData = _BRIEF_DATA_DICT.get(mapId);
             if (localData) {
-                return new Promise<IMapExtraData>(resolve => resolve(localData));
+                return new Promise<IMapBriefData>(resolve => resolve(localData));
             }
 
-            if (_extraDataRequests.has(mapId)) {
-                return new Promise<IMapExtraData>((resolve, reject) => {
-                    _extraDataRequests.get(mapId).push(info => resolve(info.mapExtraData));
+            if (_briefDataRequests.has(mapId)) {
+                return new Promise<IMapBriefData>((resolve, reject) => {
+                    _briefDataRequests.get(mapId).push(info => resolve(info.mapBriefData));
                 });
             }
 
             new Promise((resolve, reject) => {
                 const callbackOnSucceed = (e: egret.Event): void => {
-                    const data = e.data as MsgMapGetExtraDataIs;
+                    const data = e.data as MsgMapGetBriefDataIs;
                     if (data.mapId === mapId) {
-                        Notify.removeEventListener(Notify.Type.MsgMapGetExtraData,        callbackOnSucceed);
-                        Notify.removeEventListener(Notify.Type.MsgMapGetExtraDataFailed,  callbackOnFailed);
+                        Notify.removeEventListener(Notify.Type.MsgMapGetBriefData,        callbackOnSucceed);
+                        Notify.removeEventListener(Notify.Type.MsgMapGetBriefDataFailed,  callbackOnFailed);
 
-                        for (const cb of _extraDataRequests.get(mapId)) {
+                        for (const cb of _briefDataRequests.get(mapId)) {
                             cb(data);
                         }
-                        _extraDataRequests.delete(mapId);
+                        _briefDataRequests.delete(mapId);
 
                         resolve();
                     }
                 };
                 const callbackOnFailed = (e: egret.Event): void => {
-                    const data = e.data as MsgMapGetExtraDataIs;
+                    const data = e.data as MsgMapGetBriefDataIs;
                     if (data.mapId === mapId) {
-                        Notify.removeEventListener(Notify.Type.MsgMapGetExtraData,        callbackOnSucceed);
-                        Notify.removeEventListener(Notify.Type.MsgMapGetExtraDataFailed,  callbackOnFailed);
+                        Notify.removeEventListener(Notify.Type.MsgMapGetBriefData,        callbackOnSucceed);
+                        Notify.removeEventListener(Notify.Type.MsgMapGetBriefDataFailed,  callbackOnFailed);
 
-                        for (const cb of _extraDataRequests.get(mapId)) {
+                        for (const cb of _briefDataRequests.get(mapId)) {
                             cb(data);
                         }
-                        _extraDataRequests.delete(mapId);
+                        _briefDataRequests.delete(mapId);
 
                         resolve();
                     }
                 };
 
-                Notify.addEventListener(Notify.Type.MsgMapGetExtraData,       callbackOnSucceed);
-                Notify.addEventListener(Notify.Type.MsgMapGetExtraDataFailed, callbackOnFailed);
+                Notify.addEventListener(Notify.Type.MsgMapGetBriefData,       callbackOnSucceed);
+                Notify.addEventListener(Notify.Type.MsgMapGetBriefDataFailed, callbackOnFailed);
 
-                WarMapProxy.reqGetMapExtraData(mapId);
+                WarMapProxy.reqGetMapBriefData(mapId);
             });
 
             return new Promise((resolve, reject) => {
-                _extraDataRequests.set(mapId, [info => resolve(info.mapExtraData)]);
+                _briefDataRequests.set(mapId, [info => resolve(info.mapBriefData)]);
             });
         }
-        export function deleteExtraData(mapId: number): void {
-            _EXTRA_DATA_DICT.delete(mapId);
+        export function deleteBriefData(mapId: number): void {
+            _BRIEF_DATA_DICT.delete(mapId);
         }
 
         export async function getMapNameInCurrentLanguage(mapId: number): Promise<string | null> {
-            const rawData = await getRawData(mapId);
-            if (!rawData) {
+            const mapBriefData = await getBriefData(mapId);
+            if (!mapBriefData) {
                 return null;
             } else {
-                const nameList = rawData.mapNameList;
+                const nameList = mapBriefData.mapNameList;
                 if (!nameList) {
                     return undefined;
                 } else {
@@ -134,12 +134,12 @@ namespace TinyWars.WarMap {
             return (ruleForPlayers.playerRuleDataList || []).find(v => v.playerIndex === playerIndex);
         }
         export async function getMultiPlayerTotalPlayedTimes(mapId: number): Promise<number> {
-            const mapExtraData = await getExtraData(mapId);
-            if (!mapExtraData) {
+            const mapBriefData = await getBriefData(mapId);
+            if (!mapBriefData) {
                 return undefined;
             }
 
-            const complexInfo   = mapExtraData.mapComplexInfo;
+            const complexInfo   = mapBriefData.mapExtraData.mapComplexInfo;
             let totalTimes      = 0;
             for (const info of complexInfo ? complexInfo.warStatisticsList || [] : []) {
                 if ((info.warType === WarType.McwFog) ||
@@ -154,7 +154,8 @@ namespace TinyWars.WarMap {
             return totalTimes;
         }
         export async function getAverageRating(mapId: number): Promise<number> {
-            const mapExtraData  = await getExtraData(mapId);
+            const mapBriefData = await getBriefData(mapId);
+            const mapExtraData = mapBriefData ? mapBriefData.mapExtraData : null;
             const totalRaters   = mapExtraData ? mapExtraData.totalRaters : null;
             return totalRaters ? mapExtraData.totalRating / totalRaters : undefined;
         }

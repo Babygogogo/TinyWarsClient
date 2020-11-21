@@ -173,11 +173,10 @@ namespace TinyWars.RankMatchRoom {
             const settingsForCommon     = warInfo.settingsForCommon;
             const mapId                 = settingsForCommon.mapId;
             const mapRawData            = await WarMapModel.getRawData(mapId);
-            const mapExtraData          = await WarMapModel.getExtraData(mapId);
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
             this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0013));
-            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapExtraData));
+            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, (await WarMapModel.getBriefData(mapId)).mapExtraData));
 
             this._groupInfo.visible      = true;
             this._groupInfo.alpha        = 1;

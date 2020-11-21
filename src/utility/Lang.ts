@@ -730,6 +730,10 @@ namespace TinyWars.Utility.Lang {
             `您确定要删除此房间吗？`,
             `Are you sure to delete this room?.`
         ],
+        [Type.A0150]: [
+            `正在加载图片\n请耐心等候`,
+            `Now loading\nPlease wait...`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

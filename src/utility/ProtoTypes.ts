@@ -2856,6 +2856,114 @@ export declare namespace Map {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a MapBriefData. */
+    interface IMapBriefData {
+
+        /** MapBriefData mapExtraData */
+        mapExtraData?: (Map.IMapExtraData|null);
+
+        /** MapBriefData playersCount */
+        playersCount?: (number|null);
+
+        /** MapBriefData designerName */
+        designerName?: (string|null);
+
+        /** MapBriefData mapNameList */
+        mapNameList?: (string[]|null);
+    }
+
+    /** Represents a MapBriefData. */
+    class MapBriefData implements IMapBriefData {
+
+        /**
+         * Constructs a new MapBriefData.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Map.IMapBriefData);
+
+        /** MapBriefData mapExtraData. */
+        public mapExtraData?: (Map.IMapExtraData|null);
+
+        /** MapBriefData playersCount. */
+        public playersCount: number;
+
+        /** MapBriefData designerName. */
+        public designerName: string;
+
+        /** MapBriefData mapNameList. */
+        public mapNameList: string[];
+
+        /**
+         * Creates a new MapBriefData instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MapBriefData instance
+         */
+        public static create(properties?: Map.IMapBriefData): Map.MapBriefData;
+
+        /**
+         * Encodes the specified MapBriefData message. Does not implicitly {@link Map.MapBriefData.verify|verify} messages.
+         * @param message MapBriefData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Map.IMapBriefData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MapBriefData message, length delimited. Does not implicitly {@link Map.MapBriefData.verify|verify} messages.
+         * @param message MapBriefData message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Map.IMapBriefData, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MapBriefData message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MapBriefData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Map.MapBriefData;
+
+        /**
+         * Decodes a MapBriefData message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MapBriefData
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Map.MapBriefData;
+
+        /**
+         * Verifies a MapBriefData message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MapBriefData message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MapBriefData
+         */
+        public static fromObject(object: { [k: string]: any }): Map.MapBriefData;
+
+        /**
+         * Creates a plain object from a MapBriefData message. Also converts values to other types if specified.
+         * @param message MapBriefData
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Map.MapBriefData, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MapBriefData to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a MapEditorData. */
     interface IMapEditorData {
 
@@ -16299,14 +16407,14 @@ export declare namespace NetMessage {
         /** MessageContainer MsgUserSetSettings */
         MsgUserSetSettings?: (NetMessage.IMsgUserSetSettings|null);
 
-        /** MessageContainer MsgMapGetEnabledExtraDataList */
-        MsgMapGetEnabledExtraDataList?: (NetMessage.IMsgMapGetEnabledExtraDataList|null);
+        /** MessageContainer MsgMapGetEnabledBriefDataList */
+        MsgMapGetEnabledBriefDataList?: (NetMessage.IMsgMapGetEnabledBriefDataList|null);
 
         /** MessageContainer MsgMapGetEnabledRawDataList */
         MsgMapGetEnabledRawDataList?: (NetMessage.IMsgMapGetEnabledRawDataList|null);
 
-        /** MessageContainer MsgMapGetExtraData */
-        MsgMapGetExtraData?: (NetMessage.IMsgMapGetExtraData|null);
+        /** MessageContainer MsgMapGetBriefData */
+        MsgMapGetBriefData?: (NetMessage.IMsgMapGetBriefData|null);
 
         /** MessageContainer MsgMapGetRawData */
         MsgMapGetRawData?: (NetMessage.IMsgMapGetRawData|null);
@@ -16609,14 +16717,14 @@ export declare namespace NetMessage {
         /** MessageContainer MsgUserSetSettings. */
         public MsgUserSetSettings?: (NetMessage.IMsgUserSetSettings|null);
 
-        /** MessageContainer MsgMapGetEnabledExtraDataList. */
-        public MsgMapGetEnabledExtraDataList?: (NetMessage.IMsgMapGetEnabledExtraDataList|null);
+        /** MessageContainer MsgMapGetEnabledBriefDataList. */
+        public MsgMapGetEnabledBriefDataList?: (NetMessage.IMsgMapGetEnabledBriefDataList|null);
 
         /** MessageContainer MsgMapGetEnabledRawDataList. */
         public MsgMapGetEnabledRawDataList?: (NetMessage.IMsgMapGetEnabledRawDataList|null);
 
-        /** MessageContainer MsgMapGetExtraData. */
-        public MsgMapGetExtraData?: (NetMessage.IMsgMapGetExtraData|null);
+        /** MessageContainer MsgMapGetBriefData. */
+        public MsgMapGetBriefData?: (NetMessage.IMsgMapGetBriefData|null);
 
         /** MessageContainer MsgMapGetRawData. */
         public MsgMapGetRawData?: (NetMessage.IMsgMapGetRawData|null);
@@ -21498,103 +21606,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgMapGetEnabledExtraDataList. */
-    interface IMsgMapGetEnabledExtraDataList {
+    /** Properties of a MsgMapGetEnabledBriefDataList. */
+    interface IMsgMapGetEnabledBriefDataList {
 
-        /** MsgMapGetEnabledExtraDataList c */
-        c?: (NetMessage.MsgMapGetEnabledExtraDataList.IC|null);
+        /** MsgMapGetEnabledBriefDataList c */
+        c?: (NetMessage.MsgMapGetEnabledBriefDataList.IC|null);
 
-        /** MsgMapGetEnabledExtraDataList s */
-        s?: (NetMessage.MsgMapGetEnabledExtraDataList.IS|null);
+        /** MsgMapGetEnabledBriefDataList s */
+        s?: (NetMessage.MsgMapGetEnabledBriefDataList.IS|null);
     }
 
-    /** Represents a MsgMapGetEnabledExtraDataList. */
-    class MsgMapGetEnabledExtraDataList implements IMsgMapGetEnabledExtraDataList {
+    /** Represents a MsgMapGetEnabledBriefDataList. */
+    class MsgMapGetEnabledBriefDataList implements IMsgMapGetEnabledBriefDataList {
 
         /**
-         * Constructs a new MsgMapGetEnabledExtraDataList.
+         * Constructs a new MsgMapGetEnabledBriefDataList.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgMapGetEnabledExtraDataList);
+        constructor(properties?: NetMessage.IMsgMapGetEnabledBriefDataList);
 
-        /** MsgMapGetEnabledExtraDataList c. */
-        public c?: (NetMessage.MsgMapGetEnabledExtraDataList.IC|null);
+        /** MsgMapGetEnabledBriefDataList c. */
+        public c?: (NetMessage.MsgMapGetEnabledBriefDataList.IC|null);
 
-        /** MsgMapGetEnabledExtraDataList s. */
-        public s?: (NetMessage.MsgMapGetEnabledExtraDataList.IS|null);
+        /** MsgMapGetEnabledBriefDataList s. */
+        public s?: (NetMessage.MsgMapGetEnabledBriefDataList.IS|null);
 
         /**
-         * Creates a new MsgMapGetEnabledExtraDataList instance using the specified properties.
+         * Creates a new MsgMapGetEnabledBriefDataList instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgMapGetEnabledExtraDataList instance
+         * @returns MsgMapGetEnabledBriefDataList instance
          */
-        public static create(properties?: NetMessage.IMsgMapGetEnabledExtraDataList): NetMessage.MsgMapGetEnabledExtraDataList;
+        public static create(properties?: NetMessage.IMsgMapGetEnabledBriefDataList): NetMessage.MsgMapGetEnabledBriefDataList;
 
         /**
-         * Encodes the specified MsgMapGetEnabledExtraDataList message. Does not implicitly {@link NetMessage.MsgMapGetEnabledExtraDataList.verify|verify} messages.
-         * @param message MsgMapGetEnabledExtraDataList message or plain object to encode
+         * Encodes the specified MsgMapGetEnabledBriefDataList message. Does not implicitly {@link NetMessage.MsgMapGetEnabledBriefDataList.verify|verify} messages.
+         * @param message MsgMapGetEnabledBriefDataList message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgMapGetEnabledExtraDataList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgMapGetEnabledBriefDataList, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgMapGetEnabledExtraDataList message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetEnabledExtraDataList.verify|verify} messages.
-         * @param message MsgMapGetEnabledExtraDataList message or plain object to encode
+         * Encodes the specified MsgMapGetEnabledBriefDataList message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetEnabledBriefDataList.verify|verify} messages.
+         * @param message MsgMapGetEnabledBriefDataList message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgMapGetEnabledExtraDataList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgMapGetEnabledBriefDataList, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgMapGetEnabledExtraDataList message from the specified reader or buffer.
+         * Decodes a MsgMapGetEnabledBriefDataList message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgMapGetEnabledExtraDataList
+         * @returns MsgMapGetEnabledBriefDataList
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetEnabledExtraDataList;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetEnabledBriefDataList;
 
         /**
-         * Decodes a MsgMapGetEnabledExtraDataList message from the specified reader or buffer, length delimited.
+         * Decodes a MsgMapGetEnabledBriefDataList message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgMapGetEnabledExtraDataList
+         * @returns MsgMapGetEnabledBriefDataList
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetEnabledExtraDataList;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetEnabledBriefDataList;
 
         /**
-         * Verifies a MsgMapGetEnabledExtraDataList message.
+         * Verifies a MsgMapGetEnabledBriefDataList message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgMapGetEnabledExtraDataList message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgMapGetEnabledBriefDataList message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgMapGetEnabledExtraDataList
+         * @returns MsgMapGetEnabledBriefDataList
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetEnabledExtraDataList;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetEnabledBriefDataList;
 
         /**
-         * Creates a plain object from a MsgMapGetEnabledExtraDataList message. Also converts values to other types if specified.
-         * @param message MsgMapGetEnabledExtraDataList
+         * Creates a plain object from a MsgMapGetEnabledBriefDataList message. Also converts values to other types if specified.
+         * @param message MsgMapGetEnabledBriefDataList
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgMapGetEnabledExtraDataList, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgMapGetEnabledBriefDataList, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgMapGetEnabledExtraDataList to JSON.
+         * Converts this MsgMapGetEnabledBriefDataList to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgMapGetEnabledExtraDataList {
+    namespace MsgMapGetEnabledBriefDataList {
 
         /** Properties of a C. */
         interface IC {
@@ -21607,30 +21715,30 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMapGetEnabledExtraDataList.IC);
+            constructor(properties?: NetMessage.MsgMapGetEnabledBriefDataList.IC);
 
             /**
              * Creates a new C instance using the specified properties.
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgMapGetEnabledExtraDataList.IC): NetMessage.MsgMapGetEnabledExtraDataList.C;
+            public static create(properties?: NetMessage.MsgMapGetEnabledBriefDataList.IC): NetMessage.MsgMapGetEnabledBriefDataList.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMapGetEnabledExtraDataList.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMapGetEnabledBriefDataList.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMapGetEnabledExtraDataList.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMapGetEnabledBriefDataList.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetEnabledExtraDataList.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetEnabledBriefDataList.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMapGetEnabledExtraDataList.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMapGetEnabledBriefDataList.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -21640,7 +21748,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetEnabledExtraDataList.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetEnabledBriefDataList.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -21649,7 +21757,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetEnabledExtraDataList.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetEnabledBriefDataList.C;
 
             /**
              * Verifies a C message.
@@ -21663,7 +21771,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetEnabledExtraDataList.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetEnabledBriefDataList.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -21671,7 +21779,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMapGetEnabledExtraDataList.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMapGetEnabledBriefDataList.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -21687,7 +21795,7 @@ export declare namespace NetMessage {
             errorCode?: (number|null);
 
             /** S dataList */
-            dataList?: (Map.IMapExtraData[]|null);
+            dataList?: (Map.IMapBriefData[]|null);
         }
 
         /** Represents a S. */
@@ -21697,36 +21805,36 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMapGetEnabledExtraDataList.IS);
+            constructor(properties?: NetMessage.MsgMapGetEnabledBriefDataList.IS);
 
             /** S errorCode. */
             public errorCode: number;
 
             /** S dataList. */
-            public dataList: Map.IMapExtraData[];
+            public dataList: Map.IMapBriefData[];
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgMapGetEnabledExtraDataList.IS): NetMessage.MsgMapGetEnabledExtraDataList.S;
+            public static create(properties?: NetMessage.MsgMapGetEnabledBriefDataList.IS): NetMessage.MsgMapGetEnabledBriefDataList.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMapGetEnabledExtraDataList.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMapGetEnabledBriefDataList.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMapGetEnabledExtraDataList.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMapGetEnabledBriefDataList.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetEnabledExtraDataList.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetEnabledBriefDataList.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMapGetEnabledExtraDataList.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMapGetEnabledBriefDataList.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -21736,7 +21844,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetEnabledExtraDataList.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetEnabledBriefDataList.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -21745,7 +21853,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetEnabledExtraDataList.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetEnabledBriefDataList.S;
 
             /**
              * Verifies a S message.
@@ -21759,7 +21867,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetEnabledExtraDataList.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetEnabledBriefDataList.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -21767,7 +21875,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMapGetEnabledExtraDataList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMapGetEnabledBriefDataList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -22056,103 +22164,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgMapGetExtraData. */
-    interface IMsgMapGetExtraData {
+    /** Properties of a MsgMapGetBriefData. */
+    interface IMsgMapGetBriefData {
 
-        /** MsgMapGetExtraData c */
-        c?: (NetMessage.MsgMapGetExtraData.IC|null);
+        /** MsgMapGetBriefData c */
+        c?: (NetMessage.MsgMapGetBriefData.IC|null);
 
-        /** MsgMapGetExtraData s */
-        s?: (NetMessage.MsgMapGetExtraData.IS|null);
+        /** MsgMapGetBriefData s */
+        s?: (NetMessage.MsgMapGetBriefData.IS|null);
     }
 
-    /** Represents a MsgMapGetExtraData. */
-    class MsgMapGetExtraData implements IMsgMapGetExtraData {
+    /** Represents a MsgMapGetBriefData. */
+    class MsgMapGetBriefData implements IMsgMapGetBriefData {
 
         /**
-         * Constructs a new MsgMapGetExtraData.
+         * Constructs a new MsgMapGetBriefData.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgMapGetExtraData);
+        constructor(properties?: NetMessage.IMsgMapGetBriefData);
 
-        /** MsgMapGetExtraData c. */
-        public c?: (NetMessage.MsgMapGetExtraData.IC|null);
+        /** MsgMapGetBriefData c. */
+        public c?: (NetMessage.MsgMapGetBriefData.IC|null);
 
-        /** MsgMapGetExtraData s. */
-        public s?: (NetMessage.MsgMapGetExtraData.IS|null);
+        /** MsgMapGetBriefData s. */
+        public s?: (NetMessage.MsgMapGetBriefData.IS|null);
 
         /**
-         * Creates a new MsgMapGetExtraData instance using the specified properties.
+         * Creates a new MsgMapGetBriefData instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgMapGetExtraData instance
+         * @returns MsgMapGetBriefData instance
          */
-        public static create(properties?: NetMessage.IMsgMapGetExtraData): NetMessage.MsgMapGetExtraData;
+        public static create(properties?: NetMessage.IMsgMapGetBriefData): NetMessage.MsgMapGetBriefData;
 
         /**
-         * Encodes the specified MsgMapGetExtraData message. Does not implicitly {@link NetMessage.MsgMapGetExtraData.verify|verify} messages.
-         * @param message MsgMapGetExtraData message or plain object to encode
+         * Encodes the specified MsgMapGetBriefData message. Does not implicitly {@link NetMessage.MsgMapGetBriefData.verify|verify} messages.
+         * @param message MsgMapGetBriefData message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgMapGetExtraData, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgMapGetBriefData, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgMapGetExtraData message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetExtraData.verify|verify} messages.
-         * @param message MsgMapGetExtraData message or plain object to encode
+         * Encodes the specified MsgMapGetBriefData message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetBriefData.verify|verify} messages.
+         * @param message MsgMapGetBriefData message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgMapGetExtraData, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgMapGetBriefData, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgMapGetExtraData message from the specified reader or buffer.
+         * Decodes a MsgMapGetBriefData message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgMapGetExtraData
+         * @returns MsgMapGetBriefData
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetExtraData;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetBriefData;
 
         /**
-         * Decodes a MsgMapGetExtraData message from the specified reader or buffer, length delimited.
+         * Decodes a MsgMapGetBriefData message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgMapGetExtraData
+         * @returns MsgMapGetBriefData
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetExtraData;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetBriefData;
 
         /**
-         * Verifies a MsgMapGetExtraData message.
+         * Verifies a MsgMapGetBriefData message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgMapGetExtraData message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgMapGetBriefData message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgMapGetExtraData
+         * @returns MsgMapGetBriefData
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetExtraData;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetBriefData;
 
         /**
-         * Creates a plain object from a MsgMapGetExtraData message. Also converts values to other types if specified.
-         * @param message MsgMapGetExtraData
+         * Creates a plain object from a MsgMapGetBriefData message. Also converts values to other types if specified.
+         * @param message MsgMapGetBriefData
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgMapGetExtraData, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgMapGetBriefData, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgMapGetExtraData to JSON.
+         * Converts this MsgMapGetBriefData to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgMapGetExtraData {
+    namespace MsgMapGetBriefData {
 
         /** Properties of a C. */
         interface IC {
@@ -22168,7 +22276,7 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMapGetExtraData.IC);
+            constructor(properties?: NetMessage.MsgMapGetBriefData.IC);
 
             /** C mapId. */
             public mapId: number;
@@ -22178,23 +22286,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgMapGetExtraData.IC): NetMessage.MsgMapGetExtraData.C;
+            public static create(properties?: NetMessage.MsgMapGetBriefData.IC): NetMessage.MsgMapGetBriefData.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMapGetExtraData.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMapGetBriefData.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMapGetExtraData.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMapGetBriefData.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetExtraData.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetBriefData.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMapGetExtraData.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMapGetBriefData.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -22204,7 +22312,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetExtraData.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetBriefData.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -22213,7 +22321,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetExtraData.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetBriefData.C;
 
             /**
              * Verifies a C message.
@@ -22227,7 +22335,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetExtraData.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetBriefData.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -22235,7 +22343,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMapGetExtraData.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMapGetBriefData.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -22253,8 +22361,8 @@ export declare namespace NetMessage {
             /** S mapId */
             mapId?: (number|null);
 
-            /** S mapExtraData */
-            mapExtraData?: (Map.IMapExtraData|null);
+            /** S mapBriefData */
+            mapBriefData?: (Map.IMapBriefData|null);
         }
 
         /** Represents a S. */
@@ -22264,7 +22372,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMapGetExtraData.IS);
+            constructor(properties?: NetMessage.MsgMapGetBriefData.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -22272,31 +22380,31 @@ export declare namespace NetMessage {
             /** S mapId. */
             public mapId: number;
 
-            /** S mapExtraData. */
-            public mapExtraData?: (Map.IMapExtraData|null);
+            /** S mapBriefData. */
+            public mapBriefData?: (Map.IMapBriefData|null);
 
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgMapGetExtraData.IS): NetMessage.MsgMapGetExtraData.S;
+            public static create(properties?: NetMessage.MsgMapGetBriefData.IS): NetMessage.MsgMapGetBriefData.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMapGetExtraData.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMapGetBriefData.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMapGetExtraData.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMapGetBriefData.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetExtraData.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMapGetBriefData.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMapGetExtraData.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMapGetBriefData.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -22306,7 +22414,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetExtraData.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMapGetBriefData.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -22315,7 +22423,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetExtraData.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMapGetBriefData.S;
 
             /**
              * Verifies a S message.
@@ -22329,7 +22437,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetExtraData.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMapGetBriefData.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -22337,7 +22445,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMapGetExtraData.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMapGetBriefData.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

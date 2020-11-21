@@ -72,7 +72,7 @@ namespace TinyWars.MapEditor {
 
         private async _createDataForListMap(): Promise<DataForTileBaseRenderer[]> {
             const dataList: DataForTileBaseRenderer[] = [];
-            for (const [mapFileName] of WarMap.WarMapModel.getExtraDataDict()) {
+            for (const [mapFileName] of WarMap.WarMapModel.getBriefDataDict()) {
                 dataList.push({
                     mapId: mapFileName,
                     mapName     : await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapFileName),

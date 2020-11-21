@@ -51,8 +51,8 @@ namespace TinyWars.SingleCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for creating wars.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function getCreateWarMapExtraData(): Promise<ProtoTypes.Map.IMapExtraData> {
-            return WarMapModel.getExtraData(getCreateWarData().settingsForCommon.mapId);
+        export function getCreateWarMapBriefData(): Promise<ProtoTypes.Map.IMapBriefData> {
+            return WarMapModel.getBriefData(getCreateWarData().settingsForCommon.mapId);
         }
         export function getCreateWarMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
             return WarMapModel.getRawData(getCreateWarData().settingsForCommon.mapId);

@@ -160,14 +160,12 @@ namespace TinyWars.MapManagement {
             (mapNameForFilter)  && (mapNameForFilter = mapNameForFilter.toLowerCase());
             (mapDesigner)       && (mapDesigner = mapDesigner.toLowerCase());
 
-            for (const [mapId, extraData] of WarMapModel.getExtraDataDict()) {
-                const mapRawData    = await WarMapModel.getRawData(mapId);
-                const mapName       = Lang.getNameInCurrentLanguage(mapRawData.mapNameList);
-
-                if ((!extraData.isEnabled)                                                                                  ||
+            for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
+                const mapName = Lang.getNameInCurrentLanguage(mapBriefData.mapNameList);
+                if ((!mapBriefData.mapExtraData.isEnabled)                                                                  ||
                     ((mapNameForFilter) && (mapName.toLowerCase().indexOf(mapNameForFilter) < 0))                           ||
-                    ((mapDesigner) && (mapRawData.designerName.toLowerCase().indexOf(mapDesigner) < 0))                     ||
-                    ((playersCount) && (mapRawData.playersCount !== playersCount))                                          ||
+                    ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))                   ||
+                    ((playersCount) && (mapBriefData.playersCount !== playersCount))                                        ||
                     ((playedTimes != null) && ((await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)) < playedTimes))    ||
                     ((minRating != null) && ((await WarMapModel.getAverageRating(mapId)) < minRating))
                 ) {

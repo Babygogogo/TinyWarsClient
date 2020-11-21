@@ -8,9 +8,9 @@ namespace TinyWars.WarMap.WarMapProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: MsgCode.MsgMapGetEnabledExtraDataList,   callback: _onMsgMapGetEnabledExtraDataList },
+            { msgCode: MsgCode.MsgMapGetEnabledBriefDataList,   callback: _onMsgMapGetEnabledBriefDataList },
             { msgCode: MsgCode.MsgMapGetEnabledRawDataList,     callback: _onMsgMapGetEnabledRawDataList },
-            { msgCode: MsgCode.MsgMapGetExtraData,              callback: _onMsgMapGetExtraData },
+            { msgCode: MsgCode.MsgMapGetBriefData,              callback: _onMsgMapGetBriefData },
             { msgCode: MsgCode.MsgMapGetRawData,                callback: _onMsgMapGetRawData },
             { msgCode: MsgCode.MsgMmSetMapAvailability,         callback: _onMsgMmSetMapAvailability },
             { msgCode: MsgCode.MsgMmDeleteMap,                  callback: _onMsgMmDeleteMap },
@@ -19,17 +19,11 @@ namespace TinyWars.WarMap.WarMapProxy {
         ], WarMapProxy);
     }
 
-    export function reqMapGetEnabledExtraDataList(): void {
-        NetManager.send({
-            MsgMapGetEnabledExtraDataList: { c: {
-            }, }
-        });
-    }
-    function _onMsgMapGetEnabledExtraDataList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMapGetEnabledExtraDataList.IS;
+    function _onMsgMapGetEnabledBriefDataList(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMapGetEnabledBriefDataList.IS;
         if (!data.errorCode) {
-            WarMapModel.resetExtraDataDict(data.dataList);
-            Notify.dispatch(Notify.Type.MsgMapGetEnabledExtraDataList, data);
+            WarMapModel.resetBriefDataDict(data.dataList);
+            Notify.dispatch(Notify.Type.MsgMapGetEnabledBriefDataList, data);
         }
     }
 
@@ -41,20 +35,20 @@ namespace TinyWars.WarMap.WarMapProxy {
         }
     }
 
-    export function reqGetMapExtraData(mapId: number): void {
+    export function reqGetMapBriefData(mapId: number): void {
         NetManager.send({
-            MsgMapGetExtraData: { c: {
+            MsgMapGetBriefData: { c: {
                 mapId,
             }, },
         });
     }
-    function _onMsgMapGetExtraData(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMapGetExtraData.IS;
+    function _onMsgMapGetBriefData(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMapGetBriefData.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgMapGetExtraDataFailed, data);
+            Notify.dispatch(Notify.Type.MsgMapGetBriefDataFailed, data);
         } else {
-            WarMapModel.setExtraData(data.mapExtraData);
-            Notify.dispatch(Notify.Type.MsgMapGetExtraData, data);
+            WarMapModel.setBriefData(data.mapBriefData);
+            Notify.dispatch(Notify.Type.MsgMapGetBriefData, data);
         }
     }
 
@@ -100,7 +94,7 @@ namespace TinyWars.WarMap.WarMapProxy {
     function _onMsgMmDeleteMap(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMmDeleteMap.IS;
         if (!data.errorCode) {
-            WarMapModel.deleteExtraData(data.mapId);
+            WarMapModel.deleteBriefData(data.mapId);
             Notify.dispatch(Notify.Type.MsgMmDeleteMap, data);
         }
     }
