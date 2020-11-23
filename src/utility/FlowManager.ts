@@ -56,6 +56,7 @@ namespace TinyWars.Utility.FlowManager {
         Chat.ChatProxy.init();
         Common.CommonProxy.init();
         Common.CommonModel.init();
+        Broadcast.BroadcastProxy.init();
 
         _removeLoadingDom();
         gotoLogin();
@@ -72,6 +73,7 @@ namespace TinyWars.Utility.FlowManager {
         StageManager.closeAllPanels();
         Login.LoginBackgroundPanel.show();
         Login.LoginPanel.show();
+        Broadcast.BroadcastPanel.show();
     }
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
@@ -83,6 +85,7 @@ namespace TinyWars.Utility.FlowManager {
         StageManager.closeAllPanels();
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
+        Broadcast.BroadcastPanel.show();
     }
     export async function gotoMultiCustomWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
         RwModel.unloadWar();
@@ -96,6 +99,7 @@ namespace TinyWars.Utility.FlowManager {
         MultiPlayerWar.McwWarPanel.show();
         MultiPlayerWar.McwTileBriefPanel.show();
         MultiPlayerWar.McwUnitBriefPanel.show();
+        Broadcast.BroadcastPanel.show();
     }
     export async function gotoReplay(warData: Uint8Array, replayId: number): Promise<void> {
         MpwModel.unloadWar();
@@ -109,6 +113,7 @@ namespace TinyWars.Utility.FlowManager {
         ReplayWar.RwWarPanel.show();
         ReplayWar.RwTileBriefPanel.show();
         ReplayWar.RwUnitBriefPanel.show();
+        Broadcast.BroadcastPanel.show();
     }
     export async function gotoSingleCustomWar({ warData, slotIndex, slotComment }: {
         warData     : ProtoTypes.WarSerialization.ISerialWar;
@@ -126,6 +131,7 @@ namespace TinyWars.Utility.FlowManager {
         SingleCustomWar.ScwWarPanel.show();
         SingleCustomWar.ScwTileBriefPanel.show();
         SingleCustomWar.ScwUnitBriefPanel.show();
+        Broadcast.BroadcastPanel.show();
     }
     export async function gotoMapEditor(mapRawData: ProtoTypes.Map.IMapRawData, slotIndex: number, isReview: boolean): Promise<void> {
         MpwModel.unloadWar();
@@ -139,6 +145,7 @@ namespace TinyWars.Utility.FlowManager {
         MapEditor.MeWarPanel.show();
         MapEditor.MeTileBriefPanel.show();
         MapEditor.MeUnitBriefPanel.show();
+        Broadcast.BroadcastPanel.show();
     }
 
     export function gotoRmrMyWarListPanel(): void {
@@ -149,6 +156,7 @@ namespace TinyWars.Utility.FlowManager {
         StageManager.closeAllPanels();
         Lobby.LobbyTopPanel.show();
         RankMatchRoom.RmrMyWarListPanel.show();
+        Broadcast.BroadcastPanel.show();
     }
     export function gotoMcrMyWarListPanel(): void {
         MpwModel.unloadWar();
@@ -158,6 +166,7 @@ namespace TinyWars.Utility.FlowManager {
         StageManager.closeAllPanels();
         Lobby.LobbyTopPanel.show();
         MultiCustomRoom.McrMyWarListPanel.show();
+        Broadcast.BroadcastPanel.show();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

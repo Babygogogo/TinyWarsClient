@@ -65,6 +65,7 @@ namespace TinyWars.Broadcast.BroadcastProxy {
     function _onMsgBroadcastGetMessageList(e: egret.Event): void {
         const data = e.data as NetMessage.MsgBroadcastGetMessageList.IS;
         if (!data.errorCode) {
+            BroadcastModel.setAllMessageList(data.messageList);
             Notify.dispatch(Notify.Type.MsgBroadcastGetMessageList, data);
         }
     }

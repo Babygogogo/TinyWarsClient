@@ -5,7 +5,7 @@ namespace TinyWars.Broadcast {
     import Lang         = Utility.Lang;
     import StageManager = Utility.StageManager;
 
-    const _FLOW_SPEED = 50;
+    const _FLOW_SPEED = 80;
 
     export class BroadcastPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify0;
@@ -41,6 +41,7 @@ namespace TinyWars.Broadcast {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.TimeTick,                   callback: this._onNotifyTimeTick },
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgBroadcastGetMessageList, callback: this._onMsgBroadcastGetMessageList },
             ];
 
@@ -60,6 +61,10 @@ namespace TinyWars.Broadcast {
             ) {
                 this._resetComponentsForLamp(messageList);
             }
+        }
+
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._resetView();
         }
 
         private _onMsgBroadcastGetMessageList(e: egret.Event): void {

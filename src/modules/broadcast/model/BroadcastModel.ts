@@ -14,8 +14,8 @@ namespace TinyWars.Broadcast.BroadcastModel {
     export function getOngoingMessageList(): IBroadcastMessage[] {
         const currTime = Time.TimeModel.getServerTimestamp();
         return _messageList.filter(v => {
-            return (v.startTime >= currTime)
-                && (v.endTime <= currTime);
+            return (v.startTime <= currTime)
+                && (v.endTime >= currTime);
         });
     }
 }
