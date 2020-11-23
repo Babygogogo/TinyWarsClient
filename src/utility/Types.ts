@@ -204,7 +204,9 @@ namespace TinyWars.Utility.Types {
     ////////////////////////////////////////////////////////////////////////////////
     export const enum LayerType {
         Top,
-        Notify,
+        Notify2,    // FloatText
+        Notify1,    // CommonAlertPanel, ...
+        Notify0,    // CommonBroadcastPanel
         Hud3,
         Hud2,
         Hud1,

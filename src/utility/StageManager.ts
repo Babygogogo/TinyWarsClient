@@ -34,7 +34,9 @@ namespace TinyWars.Utility {
             _addLayer(LayerType.Hud1);
             _addLayer(LayerType.Hud2);
             _addLayer(LayerType.Hud3);
-            _addLayer(LayerType.Notify);
+            _addLayer(LayerType.Notify0);
+            _addLayer(LayerType.Notify1);
+            _addLayer(LayerType.Notify2);
             _addLayer(LayerType.Top);
         }
 

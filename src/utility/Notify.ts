@@ -32,6 +32,8 @@ namespace TinyWars.Utility.Notify {
         RmrMyRoomAdded,
         RmrMyRoomDeleted,
 
+        BroadcastOngoingMessagesChanged,
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         RwNextActionIdChanged,
         BwTurnIndexChanged,
@@ -85,6 +87,11 @@ namespace TinyWars.Utility.Notify {
         MsgCommonLatestConfigVersion,
         MsgCommonGetServerStatus,
         MsgCommonGetRankList,
+
+        MsgBroadcastGetMessageList,
+        MsgBroadcastAddMessage,
+        MsgBroadcastDeleteMessage,
+        MsgBroadcastDoBroadcast,
 
         MsgUserLogin,
         MsgUserRegister,

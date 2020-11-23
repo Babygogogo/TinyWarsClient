@@ -101,4 +101,8 @@ MsgRmrGetRoomPublicInfo = 263,
 MsgRmrDeleteRoom = 264,
 MsgRmrSetBannedCoIdList = 265,
 MsgRmrSetSelfSettings = 266,
+MsgBroadcastGetMessageList = 280,
+MsgBroadcastAddMessage = 281,
+MsgBroadcastDeleteMessage = 282,
+MsgBroadcastDoBroadcast = 283,
 }}

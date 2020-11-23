@@ -12,7 +12,7 @@ namespace TinyWars.Common {
     }
 
     export class CommonConfirmPanel extends GameUi.UiPanel {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
+        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CommonConfirmPanel;

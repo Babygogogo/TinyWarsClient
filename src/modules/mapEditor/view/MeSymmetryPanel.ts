@@ -7,7 +7,7 @@ namespace TinyWars.MapEditor {
 
     export class MeSymmetryPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
-        protected readonly _IS_EXCLUSIVE = true;
+        protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeSymmetryPanel;
 
