@@ -244,7 +244,7 @@ namespace TinyWars.MultiPlayerWar {
                     player,
                 });
             });
-            this._listPlayer.bindData(data);
+            this._listPlayer.bindData(data.sort((p1, p2) => p1.player.getPlayerIndex() - p2.player.getPlayerIndex()));
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -616,6 +616,7 @@ namespace TinyWars.MultiPlayerWar {
             const player        = data.player;
             const isInfoKnown   = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()));
             return [
+                this._createDataColor(war, player, isInfoKnown),
                 this._createDataFund(war, player, isInfoKnown),
                 this._createDataBuildings(war, player, isInfoKnown),
                 this._createDataCoName(war, player, isInfoKnown),
@@ -632,6 +633,17 @@ namespace TinyWars.MultiPlayerWar {
                 this._createDataLuckLowerLimit(war, player, isInfoKnown),
                 this._createDataLuckUpperLimit(war, player, isInfoKnown),
             ];
+        }
+        private _createDataColor(
+            war         : MpwWar,
+            player      : MpwPlayer,
+            isInfoKnown : boolean,
+        ): DataForInfoRenderer {
+            return {
+                titleText   : Lang.getText(Lang.Type.B0397),
+                infoText    : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()),
+                infoColor   : 0xFFFFFF,
+            };
         }
         private _createDataFund(
             war         : MpwWar,

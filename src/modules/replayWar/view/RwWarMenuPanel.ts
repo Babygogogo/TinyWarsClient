@@ -205,7 +205,7 @@ namespace TinyWars.ReplayWar {
                     player,
                 });
             });
-            this._listPlayer.bindData(data);
+            this._listPlayer.bindData(data.sort((p1, p2) => p1.player.getPlayerIndex() - p2.player.getPlayerIndex()));
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -485,6 +485,7 @@ namespace TinyWars.ReplayWar {
             const player        = data.player;
             const playerIndex   = player.getPlayerIndex();
             return [
+                this._createDataColor(war, playerIndex, player),
                 this._createDataFund(war, playerIndex, player),
                 this._createDataBuildings(war, playerIndex, player),
                 this._createDataCoName(war, playerIndex, player),
@@ -500,6 +501,17 @@ namespace TinyWars.ReplayWar {
                 this._createDataLuckLowerLimit(war, playerIndex, player),
                 this._createDataLuckUpperLimit(war, playerIndex, player),
             ];
+        }
+        private _createDataColor(
+            war         : RwWar,
+            playerIndex : number,
+            player      : RwPlayer,
+        ): DataForInfoRenderer {
+            return {
+                titleText   : Lang.getText(Lang.Type.B0397),
+                infoText    : Lang.getUnitAndTileSkinName(player.getUnitAndTileSkinId()),
+                infoColor   : 0xFFFFFF,
+            };
         }
         private _createDataFund(
             war         : RwWar,
