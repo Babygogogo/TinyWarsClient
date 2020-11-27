@@ -264,6 +264,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return [
+                this._createCommandOpenDamageChartPanel(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandSyncWar(),
             ].filter(c => !!c);
@@ -294,12 +295,12 @@ namespace TinyWars.MultiPlayerWar {
             };
         }
 
-        private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | undefined {
+        private _createCommandOpenDamageChartPanel(): DataForCommandRenderer | undefined {
             return {
-                name    : Lang.getText(Lang.Type.B0140),
+                name    : Lang.getText(Lang.Type.B0440),
                 callback: () => {
-                    McwCoListPanel.show(this._war.getPlayerIndexLoggedIn() - 1);
-                    McwWarMenuPanel.hide();
+                    Common.CommonDamageChartPanel.show();
+                    this.close();
                 },
             };
         }

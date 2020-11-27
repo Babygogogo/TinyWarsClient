@@ -239,6 +239,7 @@
 		"bin-debug/modules/rankMatchRoom/view/RmrMainMenuPanel.js",
 		"bin-debug/modules/rankMatchRoom/view/RmrMyRoomListPanel.js",
 		"bin-debug/modules/rankMatchRoom/view/RmrMyWarListPanel.js",
+		"bin-debug/modules/rankMatchRoom/view/RmrPreviewMapListPanel.js",
 		"bin-debug/modules/rankMatchRoom/view/RmrRoomAdvancedSettingsPage.js",
 		"bin-debug/modules/rankMatchRoom/view/RmrRoomAvailableCoPanel.js",
 		"bin-debug/modules/rankMatchRoom/view/RmrRoomBasicSettingsPage.js",

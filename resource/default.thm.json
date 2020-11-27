@@ -108,6 +108,7 @@
 		"resource/skins/rankMatchRoom/RmrMainMenuPanel.exml",
 		"resource/skins/rankMatchRoom/RmrMyRoomListPanel.exml",
 		"resource/skins/rankMatchRoom/RmrMyWarListPanel.exml",
+		"resource/skins/rankMatchRoom/RmrPreviewMapListPanel.exml",
 		"resource/skins/rankMatchRoom/RmrRoomAdvancedSettingsPage.exml",
 		"resource/skins/rankMatchRoom/RmrRoomAvailableCoPanel.exml",
 		"resource/skins/rankMatchRoom/RmrRoomBasicSettingsPage.exml",

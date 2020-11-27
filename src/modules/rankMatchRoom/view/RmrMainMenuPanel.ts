@@ -122,6 +122,26 @@ namespace TinyWars.RankMatchRoom {
                         return MultiPlayerWar.MpwModel.checkIsRedForMyRmwWars();
                     },
                 },
+                {
+                    name    : Lang.getText(Lang.Type.B0441),
+                    callback: () => {
+                        this.close();
+                        RmrPreviewMapListPanel.show(false);
+                    },
+                    redChecker  : async () => {
+                        return false;
+                    },
+                },
+                {
+                    name    : Lang.getText(Lang.Type.B0442),
+                    callback: () => {
+                        this.close();
+                        RmrPreviewMapListPanel.show(true);
+                    },
+                    redChecker  : async () => {
+                        return false;
+                    },
+                },
                 // {
                 //     name    : Lang.getText(Lang.Type.B0206),
                 //     callback: () => {
