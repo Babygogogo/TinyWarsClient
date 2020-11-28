@@ -487,6 +487,7 @@ namespace TinyWars.Utility.Types {
         Private         = 1,
         WarAndTeam      = 2,
         PublicChannel   = 3,
+        McrRoom         = 4,
     }
 
     export const enum UnitAndTileTextureVersion {

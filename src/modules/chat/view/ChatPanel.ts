@@ -14,7 +14,8 @@ namespace TinyWars.Chat {
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     type OpenDataForChatPanel = {
-        toUserId?: number;
+        toUserId?   : number;
+        toMcrRoomId?: number;
     }
 
     export class ChatPanel extends GameUi.UiPanel {
@@ -79,11 +80,11 @@ namespace TinyWars.Chat {
             this._listChat.setItemRenderer(ChatPageRenderer);
             this._listMessage.setItemRenderer(MessageRenderer);
         }
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._showOpenAnimation();
             this._updateComponentsForLanguage();
 
-            this._dataForListChat = this._createDataForListChat();
+            this._dataForListChat = await this._createDataForListChat();
             this._listChat.bindData(this._dataForListChat);
             this.setSelectedIndex(this._getDefaultSelectedIndex());
 
@@ -136,7 +137,7 @@ namespace TinyWars.Chat {
             this._updateComponentsForLanguage();
         }
 
-        private _onMsgChatAddMessage(e: egret.Event): void {
+        private async _onMsgChatAddMessage(e: egret.Event): Promise<void> {
             const message       = (e.data as NetMessage.MsgChatAddMessage.IS).message;
             const fromUserId    = message.fromUserId;
             if (fromUserId === User.UserModel.getSelfUserId()) {
@@ -162,7 +163,7 @@ namespace TinyWars.Chat {
                 }
             }
 
-            const newDataList   = this._createDataForListChat();
+            const newDataList   = await this._createDataForListChat();
             this._selectedIndex = newDataList.findIndex(v => {
                 return (v.toCategory == pageData.toCategory)
                     && (v.toTarget == pageData.toTarget);
@@ -171,8 +172,8 @@ namespace TinyWars.Chat {
             this._listChat.bindData(newDataList);
         }
 
-        private _onMsgChatGetAllMessages(e: egret.Event): void {
-            this._dataForListChat = this._createDataForListChat();
+        private async _onMsgChatGetAllMessages(e: egret.Event): Promise<void> {
+            this._dataForListChat = await this._createDataForListChat();
             this._listChat.bindData(this._dataForListChat);
             this.setSelectedIndex(0);
         }
@@ -239,7 +240,7 @@ namespace TinyWars.Chat {
             this._listMessage.scrollVerticalTo(100);
         }
 
-        private _createDataForListChat(): DataForChatPageRenderer[] {
+        private async _createDataForListChat(): Promise<DataForChatPageRenderer[]> {
             const dataDict      = new Map<number, DataForChatPageRenderer>();
             const timestampList : { index: number, timestamp: number }[] = [];
             let indexForSort    = 0;
@@ -263,6 +264,18 @@ namespace TinyWars.Chat {
                 timestampList.push(getLatestTimestamp(indexForSort, msgList));
                 ++indexForSort;
             }
+            for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.McrRoom)) {
+                if (await MultiCustomRoom.McrModel.getRoomInfo(toRoomId)) {
+                    dataDict.set(indexForSort, {
+                        index       : indexForSort,
+                        panel       : this,
+                        toCategory  : ChatCategory.McrRoom,
+                        toTarget    : toRoomId,
+                    });
+                    timestampList.push(getLatestTimestamp(indexForSort, msgList));
+                    ++indexForSort;
+                }
+            }
             for (const [toUserId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.Private)) {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
@@ -279,7 +292,7 @@ namespace TinyWars.Chat {
             const player        = playerManager ? playerManager.getPlayerByUserId(User.UserModel.getSelfUserId()) : null;
             if ((player) && (player.getIsAlive())) {
                 const toWarAndTeam1 = war.getWarId() * CommonConstants.ChatTeamDivider;
-                if (!checkHasDataForWarAndTeam(dataDict, toWarAndTeam1)) {
+                if (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.WarAndTeam, toTarget: toWarAndTeam1 })) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
@@ -290,7 +303,7 @@ namespace TinyWars.Chat {
                     ++indexForSort;
                 }
                 const toWarAndTeam2 = toWarAndTeam1 + player.getTeamIndex();
-                if (!checkHasDataForWarAndTeam(dataDict, toWarAndTeam2)) {
+                if (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.WarAndTeam, toTarget: toWarAndTeam2 })) {
                     dataDict.set(indexForSort, {
                         index       : indexForSort,
                         panel       : this,
@@ -304,12 +317,24 @@ namespace TinyWars.Chat {
 
             const openData = this._openData;
             const toUserId = openData.toUserId;
-            if ((toUserId != null) && (!checkHasDataForUser(dataDict, toUserId))) {
+            if ((toUserId != null) && (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.Private, toTarget: toUserId }))) {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
                     panel       : this,
                     toCategory  : ChatCategory.Private,
                     toTarget    : toUserId,
+                });
+                timestampList.push(getLatestTimestamp(indexForSort, null));
+                ++indexForSort;
+            }
+
+            const toMcrRoomId = openData.toMcrRoomId;
+            if ((toMcrRoomId != null) && (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.McrRoom, toTarget: toMcrRoomId }))) {
+                dataDict.set(indexForSort, {
+                    index       : indexForSort,
+                    panel       : this,
+                    toCategory  : ChatCategory.McrRoom,
+                    toTarget    : toMcrRoomId,
                 });
                 timestampList.push(getLatestTimestamp(indexForSort, null));
                 ++indexForSort;
@@ -347,15 +372,27 @@ namespace TinyWars.Chat {
         }
 
         private _getDefaultSelectedIndex(): number {
-            const openData  = this._openData;
+            const openData          = this._openData;
+            const dataForListChat   = this._dataForListChat || [];
+
             const toUserId  = openData.toUserId;
             if (toUserId != null) {
-                for (const data of this._dataForListChat || []) {
-                    if (data.toTarget === toUserId) {
+                for (const data of dataForListChat) {
+                    if ((data.toCategory === ChatCategory.Private) && (data.toTarget === toUserId)) {
                         return data.index;
                     }
                 }
             }
+
+            const toMcrRoomId = openData.toMcrRoomId;
+            if (toMcrRoomId != null) {
+                for (const data of dataForListChat) {
+                    if ((data.toCategory === ChatCategory.McrRoom) && (data.toTarget === toMcrRoomId)) {
+                        return data.index;
+                    }
+                }
+            }
+
             return 0;
         }
     }
@@ -370,17 +407,13 @@ namespace TinyWars.Chat {
             timestamp,
         };
     }
-    function checkHasDataForWarAndTeam(dict: Map<number, DataForChatPageRenderer>, toWarAndTeam: number): boolean {
+    function checkHasDataForChatCategoryAndTarget({ dict, toTarget, toCategory }: {
+        dict        : Map<number, DataForChatPageRenderer>;
+        toTarget    : number;
+        toCategory  : ChatCategory
+    }): boolean {
         for (const [, data] of dict) {
-            if ((data.toCategory === ChatCategory.WarAndTeam) && (data.toTarget === toWarAndTeam)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    function checkHasDataForUser(dict: Map<number, DataForChatPageRenderer>, toUserId: number): boolean {
-        for (const [, data] of dict) {
-            if ((data.toCategory === ChatCategory.Private) && (data.toTarget === toUserId)) {
+            if ((data.toCategory === toCategory) && (data.toTarget === toTarget)) {
                 return true;
             }
         }
@@ -454,19 +487,35 @@ namespace TinyWars.Chat {
             const data          = this.data as DataForChatPageRenderer;
             const toCategory    = data.toCategory;
             const toTarget      = data.toTarget;
+            const labelType     = this._labelType;
+            const labelName     = this._labelName;
+
             if (toCategory === ChatCategory.PublicChannel) {
-                this._labelType.text    = Lang.getText(Lang.Type.B0376);
-                this._labelName.text    = Lang.getChatChannelName(toTarget);
+                labelType.text  = Lang.getText(Lang.Type.B0376);
+                labelName.text  = Lang.getChatChannelName(toTarget);
 
             } else if (toCategory === ChatCategory.WarAndTeam) {
-                const divider           = CommonConstants.ChatTeamDivider;
-                const teamIndex         = toTarget % divider;
-                this._labelType.text    = Lang.getText(Lang.Type.B0377);
-                this._labelName.text    = `ID:${Math.floor(toTarget / divider)} ${teamIndex === 0 ? Lang.getText(Lang.Type.B0379) : Lang.getPlayerTeamName(teamIndex)}`;
+                const divider       = CommonConstants.ChatTeamDivider;
+                const teamIndex     = toTarget % divider;
+                labelType.text      = Lang.getText(Lang.Type.B0377);
+                labelName.text      = `ID:${Math.floor(toTarget / divider)} ${teamIndex === 0 ? Lang.getText(Lang.Type.B0379) : Lang.getPlayerTeamName(teamIndex)}`;
 
             } else if (toCategory === ChatCategory.Private) {
-                this._labelType.text = Lang.getText(Lang.Type.B0378);
-                User.UserModel.getUserNickname(toTarget).then(name => this._labelName.text = name);
+                labelType.text = Lang.getText(Lang.Type.B0378);
+                labelName.text = null;
+                User.UserModel.getUserNickname(toTarget).then(name => labelName.text = name);
+
+            } else if (toCategory === ChatCategory.McrRoom) {
+                labelType.text = `${Lang.getText(Lang.Type.B0443)} #${toTarget}`;
+                labelName.text = null;
+                MultiCustomRoom.McrModel.getRoomInfo(toTarget).then(async (v) => {
+                    const warName = v ? v.settingsForMcw.warName : null;
+                    if (warName) {
+                        labelName.text = warName;
+                    } else {
+                        labelName.text = await WarMap.WarMapModel.getMapNameInCurrentLanguage(v.settingsForCommon.mapId);
+                    }
+                });
 
             } else {
                 Logger.error(`ChatPanel.ChatPageRenderer._updateLabels() invalid data!`);

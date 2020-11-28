@@ -57,6 +57,12 @@ namespace TinyWars.Chat.ChatModel {
                     }
                 }
 
+            } else if (msgToCategory === ChatCategory.McrRoom) {
+                addMessage(ChatCategory.McrRoom, msg, msgToTarget);
+                if ((!isSentBySelf) && (showFloatText) && (!ChatPanel.getIsOpening())) {
+                    User.UserModel.getUserNickname(fromUserId).then(name => FloatText.show(`<font color=0x00FF00>${name}</font>: ${msgContent}`));
+                }
+
             } else {
                 Logger.warn(`ChatModel.updateOnAddMessage() invalid msg!`, msg);
             }

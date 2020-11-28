@@ -147,11 +147,17 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.MsgMcrGetRoomInfoFailed, data);
         } else {
-            const roomInfo = data.roomInfo;
-            McrModel.setRoomInfo(roomInfo);
-            if (McrModel.Join.getRoomId() === data.roomId) {
-                McrModel.Join.resetData(roomInfo);
+            const roomInfo  = data.roomInfo;
+            const roomId    = data.roomId;
+            if (roomInfo) {
+                McrModel.setRoomInfo(roomInfo);
+                if (McrModel.Join.getRoomId() === roomId) {
+                    McrModel.Join.resetData(roomInfo);
+                }
+            } else {
+                McrModel.deleteRoomInfo(roomId);
             }
+
             Notify.dispatch(Notify.Type.MsgMcrGetRoomInfo, data);
         }
     }

@@ -33,13 +33,13 @@
         </GameUi:UiTab>
         <GameUi:UiLabel id="_labelMenuTitle" text="房间信息" bold="true" size="26" top="14" textColor="0xffffff"
                         horizontalCenter="380" />
-        <e:Group right="0" bottom="0">
+        <e:Group id="_groupButton" right="0" bottom="0">
             <GameUi:UiButton id="_btnStartGame" label="开战" skinName="Skins.Component.Button.ButtonSelfAdaption001"
                              width="200" x="30" y="30" />
+            <GameUi:UiButton id="_btnChat" label="聊天" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                             width="200" x="10" y="10" />
             <GameUi:UiButton id="_btnDeleteRoom" label="删除房间" skinName="Skins.Component.Button.ButtonSelfAdaption001"
                              width="200" x="20" y="20" />
-            <GameUi:UiButton id="_btnModifyRule" label="修改规则" skinName="Skins.Component.Button.ButtonSelfAdaption001"
-                             width="200" x="10" y="10" />
             <GameUi:UiButton id="_btnExitRoom" label="退出房间" skinName="Skins.Component.Button.ButtonSelfAdaption001"
                              width="200" x="0" y="0" />
             <GameUi:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001"

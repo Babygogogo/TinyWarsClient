@@ -15,9 +15,11 @@ namespace TinyWars.MultiCustomRoom {
 
         private _tabSettings    : TinyWars.GameUi.UiTab;
         private _labelMenuTitle : TinyWars.GameUi.UiLabel;
+
+        private _groupButton    : eui.Group;
         private _btnStartGame   : TinyWars.GameUi.UiButton;
         private _btnDeleteRoom  : TinyWars.GameUi.UiButton;
-        private _btnModifyRule  : TinyWars.GameUi.UiButton;
+        private _btnChat        : TinyWars.GameUi.UiButton;
         private _btnExitRoom    : TinyWars.GameUi.UiButton;
         private _btnBack        : TinyWars.GameUi.UiButton;
 
@@ -48,7 +50,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnStartGame,   callback: this._onTouchedBtnStartGame },
                 { ui: this._btnDeleteRoom,  callback: this._onTouchedBtnDeleteRoom },
-                { ui: this._btnModifyRule,  callback: this._onTouchedBtnModifyRule },
+                { ui: this._btnChat,        callback: this._onTouchedBtnChat },
                 { ui: this._btnExitRoom,    callback: this._onTouchedBtnExitRoom },
             ];
             this._notifyListeners = [
@@ -64,7 +66,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnBack.setTextColor(0x00FF00);
             this._btnStartGame.setTextColor(0x00FF00);
             this._btnDeleteRoom.setTextColor(0xFF0000);
-            this._btnModifyRule.setTextColor(0x00FF00);
+            this._btnChat.setTextColor(0x00FF00);
             this._btnExitRoom.setTextColor(0xFF0000);
         }
 
@@ -88,7 +90,7 @@ namespace TinyWars.MultiCustomRoom {
             ]);
 
             this._updateComponentsForLanguage();
-            this._updateComponentsForRoomInfo();
+            this._updateGroupButton();
         }
 
         protected _onClosed(): void {
@@ -123,9 +125,10 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _onTouchedBtnModifyRule(e: egret.TouchEvent): void {
-            // TODO: open McrModifyRulePanel
-            FloatText.show("TODO");
+        private _onTouchedBtnChat(e: egret.TouchEvent): void {
+            Chat.ChatPanel.show({
+                toMcrRoomId: this._roomId,
+            });
         }
 
         private async _onTouchedBtnExitRoom(e: egret.TouchEvent): Promise<void> {
@@ -148,7 +151,7 @@ namespace TinyWars.MultiCustomRoom {
             if (roomId === this._roomId) {
                 const selfUserId = User.UserModel.getSelfUserId();
                 if ((await McrModel.getRoomInfo(roomId)).playerDataList.some(v => v.userId === selfUserId)) {
-                    this._updateComponentsForRoomInfo();
+                    this._updateGroupButton();
                 }
             }
         }
@@ -191,17 +194,22 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private async _updateComponentsForRoomInfo(): Promise<void> {
+        private async _updateGroupButton(): Promise<void> {
             const roomId                = this._roomId;
             const roomInfo              = await McrModel.getRoomInfo(roomId);
             const playerDataList        = roomInfo.playerDataList;
             const ownerInfo             = playerDataList.find(v => v.playerIndex === roomInfo.ownerPlayerIndex);
             const isSelfOwner           = (!!ownerInfo) && (ownerInfo.userId === User.UserModel.getSelfUserId());
             const btnStartGame          = this._btnStartGame;
-            this._btnDeleteRoom.visible = isSelfOwner;
-            this._btnModifyRule.visible = isSelfOwner;
-            btnStartGame.visible        = isSelfOwner;
             btnStartGame.setRedVisible(await McrModel.checkIsRedForRoom(roomId));
+
+            const groupButton = this._groupButton;
+            groupButton.removeChildren();
+            (isSelfOwner) && (groupButton.addChild(btnStartGame));
+            groupButton.addChild(this._btnChat);
+            (isSelfOwner) && (groupButton.addChild(this._btnDeleteRoom));
+            groupButton.addChild(this._btnExitRoom);
+            groupButton.addChild(this._btnBack);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -210,7 +218,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnStartGame.label    = Lang.getText(Lang.Type.B0401);
             this._btnDeleteRoom.label   = Lang.getText(Lang.Type.B0400);
             this._btnExitRoom.label     = Lang.getText(Lang.Type.B0022);
-            this._btnModifyRule.label   = Lang.getText(Lang.Type.B0399);
+            this._btnChat.label         = Lang.getText(Lang.Type.B0383);
         }
     }
 
