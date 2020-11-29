@@ -25,6 +25,9 @@
                         </e:Skin>
                     </GameUi:skinName>
                 </GameUi:UiTextInput>
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
             </e:Group>
             <e:Group x="411" y="0">
                 <GameUi:UiLabel id="_labelDesignerTitle" text="作者：" textColor="0xFFFFFF" y="3" size="20"
@@ -41,6 +44,9 @@
                         </e:Skin>
                     </GameUi:skinName>
                 </GameUi:UiTextInput>
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
             </e:Group>
             <e:layout>
                 <e:HorizontalLayout gap="40" />
@@ -62,6 +68,9 @@
                         </e:Skin>
                     </GameUi:skinName>
                 </GameUi:UiTextInput>
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
             </e:Group>
             <e:Group x="0" y="44">
                 <GameUi:UiLabel id="_labelPlayedTimesTitle" text="游玩次数：" textColor="0xFFFFFF" y="3" size="20"
@@ -78,6 +87,9 @@
                         </e:Skin>
                     </GameUi:skinName>
                 </GameUi:UiTextInput>
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
             </e:Group>
             <e:Group x="40" y="88">
                 <GameUi:UiLabel id="_labelMinRatingTitle" text="评分：" textColor="0xFFFFFF" y="3" size="20"
@@ -94,6 +106,9 @@
                         </e:Skin>
                     </GameUi:skinName>
                 </GameUi:UiTextInput>
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
             </e:Group>
             <e:layout>
                 <e:HorizontalLayout gap="40" />
