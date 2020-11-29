@@ -1,82 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="semi_transparent" />
-    <e:Group width="430" height="320" horizontalCenter="0" verticalCenter="0">
+    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="semi_transparent" locked="true" />
+    <e:Group width="800" height="320" horizontalCenter="0" verticalCenter="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelName" text="查找地图" textColor="0xffffff" y="13" horizontalCenter="0" size="20" />
-        <GameUi:UiButton id="_btnClose" label="关闭" skinName="Skins.Component.Button.ButtonSelfAdaption001" right="0" top="0"></GameUi:UiButton>
-        <GameUi:UiLabel id="_labelMapNameTitle" text="名称：" textColor="0xFFFFFF" y="50" size="20" right="310"
-                        maxTextWidth="100" />
-        <GameUi:UiTextInput id="_inputMapName" width="220" x="120" y="47" anchorOffsetX="0" anchorOffsetY="0"
-                            maxChars="20">
-            <GameUi:skinName>
-                <e:Skin width="100" height="30">
-                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
-                    <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff" />
-                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
-                             textColor="0x808080" />
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiTextInput>
-        <GameUi:UiLabel id="_labelDesignerTitle" text="作者：" textColor="0xFFFFFF" y="94" size="20" right="310"
-                        maxTextWidth="100" />
-        <GameUi:UiTextInput id="_inputDesigner" width="220" x="120" y="91" anchorOffsetX="0" anchorOffsetY="0"
-                            maxChars="20">
-            <GameUi:skinName>
-                <e:Skin width="100" height="30">
-                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
-                    <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff" />
-                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
-                             textColor="0x808080" />
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiTextInput>
-        <GameUi:UiLabel id="_labelPlayersCountTitle" text="玩家数量：" textColor="0xFFFFFF" y="138" size="20" right="310"
-                        maxTextWidth="100" />
-        <GameUi:UiTextInput id="_inputPlayersCount" width="220" x="120" y="135" anchorOffsetX="0" anchorOffsetY="0"
-                            restrict="2-4" maxChars="1">
-            <GameUi:skinName>
-                <e:Skin width="100" height="30">
-                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
-                    <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff" />
-                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
-                             textColor="0x808080" />
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiTextInput>
-        <GameUi:UiLabel id="_labelPlayedTimesTitle" text="游玩次数：" textColor="0xFFFFFF" y="182" size="20" right="310"
-                        maxTextWidth="100" />
-        <GameUi:UiTextInput id="_inputPlayedTimes" width="220" x="120" y="179" anchorOffsetX="0" anchorOffsetY="0"
-                            restrict="0-9" maxChars="9">
-            <GameUi:skinName>
-                <e:Skin width="100" height="30">
-                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
-                    <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff" />
-                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
-                             textColor="0x808080" />
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiTextInput>
-        <GameUi:UiLabel id="_labelMinRatingTitle" text="评分：" textColor="0xFFFFFF" y="226" size="20" right="310"
-                        maxTextWidth="100" />
-        <GameUi:UiTextInput id="_inputMinRating" width="220" x="120" y="223" anchorOffsetX="0" anchorOffsetY="0"
-                            restrict="0-9." maxChars="4">
-            <GameUi:skinName>
-                <e:Skin width="100" height="30">
-                    <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
-                    <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30" textColor="0xffffff" />
-                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
-                             textColor="0x808080" />
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiTextInput>
-        <GameUi:UiLabel id="_labelDesc" text="注:\n任意条件均可留空,等同于不限查找结果" textColor="0xFFFFFF" size="15" lineSpacing="3"
-                        width="66" x="352" y="95" wordWrap="true" />
-        <GameUi:UiButton id="_btnReset" label="全部显示" bottom="14" horizontalCenter="-90"
-                         skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"></GameUi:UiButton>
-        <GameUi:UiButton id="_btnSearch" label="按条件查找" bottom="14" horizontalCenter="90"
-                         skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"></GameUi:UiButton>
+                        left="0" right="0" top="0" bottom="0" locked="true" />
+        <GameUi:UiLabel id="_labelName" text="查找地图" textColor="0xffffff" y="10" horizontalCenter="0" size="20"
+                        locked="true" />
+        <GameUi:UiButton id="_btnClose" label="关闭" skinName="Skins.Component.Button.ButtonSelfAdaption001" right="0" top="0"
+                         locked="true"></GameUi:UiButton>
+        <e:Group y="40" horizontalCenter="0">
+            <e:Group x="0" y="0">
+                <GameUi:UiLabel id="_labelMapNameTitle" text="名称：" textColor="0xFFFFFF" y="3" size="20"
+                                maxTextWidth="100" x="0" />
+                <GameUi:UiTextInput id="_inputMapName" width="220" x="60" y="0" anchorOffsetX="0" anchorOffsetY="0"
+                                    maxChars="20">
+                    <GameUi:skinName>
+                        <e:Skin width="100" height="30">
+                            <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                            <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30"
+                                            textColor="0xffffff" />
+                            <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                     height="30" textColor="0x808080" />
+                        </e:Skin>
+                    </GameUi:skinName>
+                </GameUi:UiTextInput>
+            </e:Group>
+            <e:Group x="411" y="0">
+                <GameUi:UiLabel id="_labelDesignerTitle" text="作者：" textColor="0xFFFFFF" y="3" size="20"
+                                maxTextWidth="100" x="0" />
+                <GameUi:UiTextInput id="_inputDesigner" width="220" x="60" y="0" anchorOffsetX="0" anchorOffsetY="0"
+                                    maxChars="20">
+                    <GameUi:skinName>
+                        <e:Skin width="100" height="30">
+                            <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                            <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30"
+                                            textColor="0xffffff" />
+                            <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                     height="30" textColor="0x808080" />
+                        </e:Skin>
+                    </GameUi:skinName>
+                </GameUi:UiTextInput>
+            </e:Group>
+            <e:layout>
+                <e:HorizontalLayout gap="40" />
+            </e:layout>
+        </e:Group>
+        <e:Group y="80" horizontalCenter="0">
+            <e:Group x="0" y="0">
+                <GameUi:UiLabel id="_labelPlayersCountTitle" text="玩家数量：" textColor="0xFFFFFF" y="3" size="20"
+                                maxTextWidth="100" x="0" />
+                <GameUi:UiTextInput id="_inputPlayersCount" width="60" x="100" y="0" anchorOffsetX="0" anchorOffsetY="0"
+                                    restrict="2-4" maxChars="1">
+                    <GameUi:skinName>
+                        <e:Skin width="100" height="30">
+                            <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                            <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30"
+                                            textColor="0xffffff" />
+                            <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                     height="30" textColor="0x808080" />
+                        </e:Skin>
+                    </GameUi:skinName>
+                </GameUi:UiTextInput>
+            </e:Group>
+            <e:Group x="0" y="44">
+                <GameUi:UiLabel id="_labelPlayedTimesTitle" text="游玩次数：" textColor="0xFFFFFF" y="3" size="20"
+                                maxTextWidth="100" x="0" />
+                <GameUi:UiTextInput id="_inputPlayedTimes" width="60" x="100" y="0" anchorOffsetX="0" anchorOffsetY="0"
+                                    restrict="0-9" maxChars="9">
+                    <GameUi:skinName>
+                        <e:Skin width="100" height="30">
+                            <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                            <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30"
+                                            textColor="0xffffff" />
+                            <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                     height="30" textColor="0x808080" />
+                        </e:Skin>
+                    </GameUi:skinName>
+                </GameUi:UiTextInput>
+            </e:Group>
+            <e:Group x="40" y="88">
+                <GameUi:UiLabel id="_labelMinRatingTitle" text="评分：" textColor="0xFFFFFF" y="3" size="20"
+                                maxTextWidth="100" x="0" />
+                <GameUi:UiTextInput id="_inputMinRating" width="60" x="60" y="0" anchorOffsetX="0" anchorOffsetY="0"
+                                    restrict="0-9." maxChars="4">
+                    <GameUi:skinName>
+                        <e:Skin width="100" height="30">
+                            <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                            <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30"
+                                            textColor="0xffffff" />
+                            <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                     height="30" textColor="0x808080" />
+                        </e:Skin>
+                    </GameUi:skinName>
+                </GameUi:UiTextInput>
+            </e:Group>
+            <e:layout>
+                <e:HorizontalLayout gap="40" />
+            </e:layout>
+        </e:Group>
+        <e:Scroller left="5" right="5" top="124" bottom="70">
+            <e:Group>
+                <e:Group id="_groupTagFog" y="178" x="229">
+                    <GameUi:UiButton id="_btnTagFog" label="Fog Of War"
+                                     skinName="Skins.Component.Button.ButtonSelfAdaption001" right="0" top="0"
+                                     width="120" />
+                    <GameUi:UiLabel id="_labelTagFog" text="是" textColor="0xFFFFFF" size="20" x="32" verticalCenter="0" />
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="middle" />
+                    </e:layout>
+                </e:Group>
+                <e:layout>
+                    <e:TileLayout orientation="rows" requestedColumnCount="2" columnAlign="justifyUsingGap" />
+                </e:layout>
+            </e:Group>
+        </e:Scroller>
+        <GameUi:UiLabel id="_labelDesc" text="注:任意条件均可留空,等同于不限查找结果" textColor="0xFFFFFF" size="15" lineSpacing="3"
+                        wordWrap="true" bottom="44" textAlign="center" left="10" right="10" />
+        <e:Group horizontalCenter="0" bottom="10">
+            <GameUi:UiButton id="_btnReset" label="全部显示" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                             width="120" x="0" y="0" />
+            <GameUi:UiButton id="_btnSearch" label="按条件查找" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                             width="120" x="180" y="0" />
+            <e:layout>
+                <e:HorizontalLayout gap="100" />
+            </e:layout>
+        </e:Group>
     </e:Group>
 </e:Skin>

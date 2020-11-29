@@ -16,6 +16,7 @@ namespace TinyWars.WarMap.WarMapProxy {
             { msgCode: MsgCode.MsgMmDeleteMap,                  callback: _onMsgMmDeleteMap },
             { msgCode: MsgCode.MsgMmGetReviewingMaps,           callback: _onMsgMmGetReviewingMaps },
             { msgCode: MsgCode.MsgMmReviewMap,                  callback: _onMsgMmReviewMap },
+            { msgCode: MsgCode.MsgMmSetMapTag,                  callback: _onMsgMmSetMapTag },
         ], WarMapProxy);
     }
 
@@ -137,6 +138,19 @@ namespace TinyWars.WarMap.WarMapProxy {
         const data = e.data as NetMessage.MsgMmReviewMap.IS;
         if (!data.errorCode) {
             Notify.dispatch(Notify.Type.MsgMmReviewMap, data);
+        }
+    }
+
+    export function reqMmSetMapTag(mapId: number, mapTag: ProtoTypes.Map.IDataForMapTag | null | undefined): void {
+        NetManager.send({ MsgMmSetMapTag: { c: {
+            mapId,
+            mapTag,
+        } } });
+    }
+    function _onMsgMmSetMapTag(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMmSetMapTag.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.MsgMmSetMapTag, data);
         }
     }
 }

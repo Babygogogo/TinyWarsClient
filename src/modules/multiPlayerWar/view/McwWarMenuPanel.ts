@@ -677,11 +677,9 @@ namespace TinyWars.MultiPlayerWar {
             const coId  = player.getCoId();
             const cfg   = coId == null ? null : Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getLatestConfigVersion(), coId);
             return {
-                titleText               : `CO`,
-                infoText                : !cfg
-                    ? `(${Lang.getText(Lang.Type.B0001)})`
-                    : `${cfg.name}(T${cfg.tier})`,
-                infoColor               : 0xFFFFFF,
+                titleText   : `CO`,
+                infoText    : !cfg ? `(${Lang.getText(Lang.Type.B0001)})` : `${cfg.name}`,
+                infoColor   : 0xFFFFFF,
             };
         }
         private _createDataEnergy(
@@ -734,8 +732,6 @@ namespace TinyWars.MultiPlayerWar {
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getSettingsIncomeMultiplier(playerIndex);
-            const maxValue      = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
-            const minValue      = CommonConstants.WarRuleIncomeMultiplierMinLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0179),
                 infoText                : `${currValue}%`,
@@ -749,8 +745,6 @@ namespace TinyWars.MultiPlayerWar {
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getSettingsInitialEnergyPercentage(playerIndex);
-            const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
-            const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
@@ -764,8 +758,6 @@ namespace TinyWars.MultiPlayerWar {
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getSettingsEnergyGrowthMultiplier(playerIndex);
-            const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
-            const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0181),
                 infoText                : `${currValue}%`,
@@ -779,8 +771,6 @@ namespace TinyWars.MultiPlayerWar {
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getSettingsMoveRangeModifier(playerIndex);
-            const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
-            const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0182),
                 infoText                : `${currValue}`,
@@ -794,8 +784,6 @@ namespace TinyWars.MultiPlayerWar {
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getSettingsAttackPowerModifier(playerIndex);
-            const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
-            const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0183),
                 infoText                : `${currValue}%`,
@@ -809,8 +797,6 @@ namespace TinyWars.MultiPlayerWar {
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getSettingsVisionRangeModifier(playerIndex);
-            const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
-            const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0184),
                 infoText                : `${currValue}`,
@@ -824,8 +810,6 @@ namespace TinyWars.MultiPlayerWar {
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getSettingsLuckLowerLimit(playerIndex);
-            const minValue      = CommonConstants.WarRuleLuckMinLimit;
-            const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0189),
                 infoText                : `${currValue}%`,
@@ -839,8 +823,6 @@ namespace TinyWars.MultiPlayerWar {
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getSettingsLuckUpperLimit(playerIndex);
-            const minValue      = CommonConstants.WarRuleLuckMinLimit;
-            const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0190),
                 infoText                : `${currValue}%`,

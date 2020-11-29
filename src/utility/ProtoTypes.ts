@@ -2382,6 +2382,96 @@ export declare namespace Map {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a DataForMapTag. */
+    interface IDataForMapTag {
+
+        /** DataForMapTag fog */
+        fog?: (boolean|null);
+    }
+
+    /** Represents a DataForMapTag. */
+    class DataForMapTag implements IDataForMapTag {
+
+        /**
+         * Constructs a new DataForMapTag.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Map.IDataForMapTag);
+
+        /** DataForMapTag fog. */
+        public fog: boolean;
+
+        /**
+         * Creates a new DataForMapTag instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns DataForMapTag instance
+         */
+        public static create(properties?: Map.IDataForMapTag): Map.DataForMapTag;
+
+        /**
+         * Encodes the specified DataForMapTag message. Does not implicitly {@link Map.DataForMapTag.verify|verify} messages.
+         * @param message DataForMapTag message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Map.IDataForMapTag, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified DataForMapTag message, length delimited. Does not implicitly {@link Map.DataForMapTag.verify|verify} messages.
+         * @param message DataForMapTag message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Map.IDataForMapTag, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a DataForMapTag message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns DataForMapTag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Map.DataForMapTag;
+
+        /**
+         * Decodes a DataForMapTag message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns DataForMapTag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Map.DataForMapTag;
+
+        /**
+         * Verifies a DataForMapTag message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a DataForMapTag message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns DataForMapTag
+         */
+        public static fromObject(object: { [k: string]: any }): Map.DataForMapTag;
+
+        /**
+         * Creates a plain object from a DataForMapTag message. Also converts values to other types if specified.
+         * @param message DataForMapTag
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Map.DataForMapTag, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this DataForMapTag to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a DataForWarEvent. */
     interface IDataForWarEvent {
 
@@ -2624,6 +2714,9 @@ export declare namespace Map {
 
         /** MapRawData warEventData */
         warEventData?: (Map.IDataForWarEvent|null);
+
+        /** MapRawData mapTag */
+        mapTag?: (Map.IDataForMapTag|null);
     }
 
     /** Represents a MapRawData. */
@@ -2670,6 +2763,9 @@ export declare namespace Map {
 
         /** MapRawData warEventData. */
         public warEventData?: (Map.IDataForWarEvent|null);
+
+        /** MapRawData mapTag. */
+        public mapTag?: (Map.IDataForMapTag|null);
 
         /**
          * Creates a new MapRawData instance using the specified properties.
@@ -2870,6 +2966,9 @@ export declare namespace Map {
 
         /** MapBriefData mapNameList */
         mapNameList?: (string[]|null);
+
+        /** MapBriefData mapTag */
+        mapTag?: (Map.IDataForMapTag|null);
     }
 
     /** Represents a MapBriefData. */
@@ -2892,6 +2991,9 @@ export declare namespace Map {
 
         /** MapBriefData mapNameList. */
         public mapNameList: string[];
+
+        /** MapBriefData mapTag. */
+        public mapTag?: (Map.IDataForMapTag|null);
 
         /**
          * Creates a new MapBriefData instance using the specified properties.
@@ -16749,6 +16851,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMmReviewWarRule */
         MsgMmReviewWarRule?: (NetMessage.IMsgMmReviewWarRule|null);
 
+        /** MessageContainer MsgMmSetMapTag */
+        MsgMmSetMapTag?: (NetMessage.IMsgMmSetMapTag|null);
+
         /** MessageContainer MsgReplaySetRating */
         MsgReplaySetRating?: (NetMessage.IMsgReplaySetRating|null);
 
@@ -17070,6 +17175,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMmReviewWarRule. */
         public MsgMmReviewWarRule?: (NetMessage.IMsgMmReviewWarRule|null);
+
+        /** MessageContainer MsgMmSetMapTag. */
+        public MsgMmSetMapTag?: (NetMessage.IMsgMmSetMapTag|null);
 
         /** MessageContainer MsgReplaySetRating. */
         public MsgReplaySetRating?: (NetMessage.IMsgReplaySetRating|null);
@@ -28782,6 +28890,291 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgMmReviewWarRule.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgMmSetMapTag. */
+    interface IMsgMmSetMapTag {
+
+        /** MsgMmSetMapTag c */
+        c?: (NetMessage.MsgMmSetMapTag.IC|null);
+
+        /** MsgMmSetMapTag s */
+        s?: (NetMessage.MsgMmSetMapTag.IS|null);
+    }
+
+    /** Represents a MsgMmSetMapTag. */
+    class MsgMmSetMapTag implements IMsgMmSetMapTag {
+
+        /**
+         * Constructs a new MsgMmSetMapTag.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMmSetMapTag);
+
+        /** MsgMmSetMapTag c. */
+        public c?: (NetMessage.MsgMmSetMapTag.IC|null);
+
+        /** MsgMmSetMapTag s. */
+        public s?: (NetMessage.MsgMmSetMapTag.IS|null);
+
+        /**
+         * Creates a new MsgMmSetMapTag instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMmSetMapTag instance
+         */
+        public static create(properties?: NetMessage.IMsgMmSetMapTag): NetMessage.MsgMmSetMapTag;
+
+        /**
+         * Encodes the specified MsgMmSetMapTag message. Does not implicitly {@link NetMessage.MsgMmSetMapTag.verify|verify} messages.
+         * @param message MsgMmSetMapTag message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMmSetMapTag, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMmSetMapTag message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapTag.verify|verify} messages.
+         * @param message MsgMmSetMapTag message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMmSetMapTag, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMmSetMapTag message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMmSetMapTag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapTag;
+
+        /**
+         * Decodes a MsgMmSetMapTag message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMmSetMapTag
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapTag;
+
+        /**
+         * Verifies a MsgMmSetMapTag message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMmSetMapTag message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMmSetMapTag
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapTag;
+
+        /**
+         * Creates a plain object from a MsgMmSetMapTag message. Also converts values to other types if specified.
+         * @param message MsgMmSetMapTag
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMmSetMapTag, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMmSetMapTag to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMmSetMapTag {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C mapId */
+            mapId?: (number|null);
+
+            /** C mapTag */
+            mapTag?: (Map.IDataForMapTag|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMmSetMapTag.IC);
+
+            /** C mapId. */
+            public mapId: number;
+
+            /** C mapTag. */
+            public mapTag?: (Map.IDataForMapTag|null);
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgMmSetMapTag.IC): NetMessage.MsgMmSetMapTag.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMmSetMapTag.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMmSetMapTag.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapTag.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMmSetMapTag.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapTag.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapTag.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapTag.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMmSetMapTag.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMmSetMapTag.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMmSetMapTag.IS): NetMessage.MsgMmSetMapTag.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMmSetMapTag.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMmSetMapTag.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapTag.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMmSetMapTag.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapTag.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapTag.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapTag.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMmSetMapTag.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

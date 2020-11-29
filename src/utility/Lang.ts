@@ -734,6 +734,10 @@ namespace TinyWars.Utility.Lang {
             `正在加载图片\n请耐心等候`,
             `Now loading\nPlease wait...`,
         ],
+        [Type.A0151]: [
+            `已成功修改地图标签`,
+            `The map tag has been updated successfully.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2497,6 +2501,18 @@ namespace TinyWars.Utility.Lang {
         [Type.B0443]: [
             `多人房间`,
             `MP Room`,
+        ],
+        [Type.B0444]: [
+            `设置标签`,
+            `Set Tags`,
+        ],
+        [Type.B0445]: [
+            `地图标签`,
+            `Map Tags`,
+        ],
+        [Type.B0446]: [
+            `忽略`,
+            `Ignored`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <GameUi:UiImage source="bg_002_png" left="0" right="0" top="0" bottom="0" />
+    <e:Group left="0" top="40" bottom="0" right="200">
+        <GameUi:UiZoomableComponent id="_zoomMap" left="20" right="20" top="20" bottom="20" />
+        <e:Group id="_groupInfo" x="8" y="10" touchThrough="true" touchEnabled="false" touchChildren="false">
+            <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1" />
+            <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="25" stroke="2" size="20" scaleX="1" scaleY="1" />
+            <GameUi:UiLabel id="_labelPlayersCount" text="玩家数: 未知" y="50" stroke="2" size="20" scaleX="1" scaleY="1" />
+            <GameUi:UiLabel id="_labelRating" text="评分: 未知" y="75" stroke="2" size="20" scaleX="1" scaleY="1" />
+            <GameUi:UiLabel id="_labelPlayedTimes" text="全服游戏次数: 未知" y="100" stroke="2" size="20" scaleX="1" scaleY="1" />
+        </e:Group>
+    </e:Group>
+    <e:Group top="40" bottom="0" width="200" right="0">
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                        left="0" right="0" top="0" bottom="0" />
+        <GameUi:UiLabel id="_labelMenuTitle" text="选择地图" y="14" bold="true" size="25" textColor="0xffffff"
+                        horizontalCenter="0" />
+        <GameUi:UiLabel id="_labelNoMap" text="没有符合条件的地图" bold="true" size="20" textColor="0xFFFFFF"
+                        horizontalCenter="0" width="160" textAlign="center" verticalCenter="0" />
+        <GameUi:UiScrollList id="_listMap" left="0" right="0" bottom="70" top="50">
+            <e:List>
+                <e:itemRendererSkinName>
+                    <e:Skin width="200" height="40" currentState="up" states="up,down">
+                        <e:Group x="10" verticalCenter="0">
+                            <GameUi:UiLabel id="_labelId" text="ID: 0" size="12" textColor.down="0x00ff00" x="0" maxTextWidth="150" y="2"/>
+                            <GameUi:UiLabel id="_labelName" text="地图名称" size="16" textColor.down="0x00ff00" x="0" maxTextWidth="150" y="0"/>
+                            <e:layout>
+                                <e:VerticalLayout gap="2"/>
+                            </e:layout>
+                        </e:Group>
+                        <GameUi:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0"
+                                         visible.down="false">
+                            <GameUi:skinName>
+                                <e:Skin states="up,down,disabled">
+                                    <e:Image source="transparent" left="0" right="0" top="0" bottom="0" />
+                                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="22"
+                                             bold="true" textColor="0x000000" />
+                                </e:Skin>
+                            </GameUi:skinName>
+                        </GameUi:UiButton>
+                        <GameUi:UiButton id="_btnNext" label="&gt;&gt;" verticalCenter="0" visible.up="false" right="10">
+                            <e:skinName>
+                                <e:Skin states="up,down,disabled">
+                                    <e:Image width="100%" height="100%" />
+                                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="22"
+                                             bold="true" textColor="0x00ff00" />
+                                </e:Skin>
+                            </e:skinName>
+                        </GameUi:UiButton>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+            </e:List>
+        </GameUi:UiScrollList>
+        <e:Group bottom="0" x="0">
+            <GameUi:UiButton id="_btnSearch" label="查找" y="0" x="71" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                             width="200"></GameUi:UiButton>
+            <GameUi:UiButton id="_btnBack" label="&lt;&lt;返回大厅" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                             x="0" y="440" width="200" />
+            <e:layout>
+                <e:VerticalLayout/>
+            </e:layout>
+        </e:Group>
+    </e:Group>
+</e:Skin>

@@ -86,6 +86,13 @@ namespace TinyWars.MapManagement {
         private async _createDataForListCommand(): Promise<DataForCommandRenderer[]> {
             const dataList: DataForCommandRenderer[] = [
                 {
+                    name    : Lang.getText(Lang.Type.B0295),
+                    callback: (): void => {
+                        this.close();
+                        MmReviewListPanel.show();
+                    },
+                },
+                {
                     name    : Lang.getText(Lang.Type.B0193),
                     callback: (): void => {
                         this.close();
@@ -93,10 +100,10 @@ namespace TinyWars.MapManagement {
                     },
                 },
                 {
-                    name    : Lang.getText(Lang.Type.B0295),
+                    name    : Lang.getText(Lang.Type.B0444),
                     callback: (): void => {
                         this.close();
-                        MmReviewListPanel.show();
+                        MmTagListPanel.show();
                     },
                 },
             ];

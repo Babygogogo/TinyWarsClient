@@ -8,6 +8,7 @@ namespace TinyWars.MapEditor {
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import IWarRule         = ProtoTypes.WarRule.IWarRule;
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
+    import IDataForMapTag   = ProtoTypes.Map.IDataForMapTag;
 
     export class MeWar extends BaseWar.BwWar {
         private _drawer             : MeDrawer;
@@ -19,6 +20,7 @@ namespace TinyWars.MapEditor {
         private _isReviewingMap     = false;
         private _warRuleList        : IWarRule[] = [];
         private _isMapModified      = false;
+        private _mapTag             : IDataForMapTag;
 
         public async init(data: ISerialWar): Promise<MeWar> {
             if (!this._baseInit(data)) {
@@ -100,6 +102,7 @@ namespace TinyWars.MapEditor {
             this.setMapDesignerName(mapRawData.designerName);
             this.setMapNameList(mapRawData.mapNameList);
             this.setWarRuleList(mapRawData.warRuleList || [warData.settingsForCommon.warRule]);
+            this.setMapTag(mapRawData.mapTag);
         }
 
         public startRunning(): BaseWar.BwWar {
@@ -202,6 +205,7 @@ namespace TinyWars.MapEditor {
                 tileDataList    : tileMap.serialize().tiles,
                 unitDataList    : unitMap.serialize().units,
                 warRuleList     : this.getWarRuleList(),
+                mapTag          : this.getMapTag(),
             };
         }
 
@@ -309,6 +313,13 @@ namespace TinyWars.MapEditor {
                     --ruleList[index].ruleId;
                 }
             }
+        }
+
+        public getMapTag(): IDataForMapTag {
+            return this._mapTag;
+        }
+        public setMapTag(mapTag: IDataForMapTag): void {
+            this._mapTag = mapTag;
         }
     }
 }

@@ -59,7 +59,7 @@ namespace TinyWars.Utility.ConfigManager {
     ////////////////////////////////////////////////////////////////////////////////
     export const COMMON_CONSTANTS           = {
         MapEditorSlotMaxCountForNormal          : 3,
-        MapEditorSlotMaxCountForCommittee       : 10,
+        MapEditorSlotMaxCountForCommittee       : 100,
         ScwSaveSlotMaxCount                     : 10,
         ScwSaveSlotCommentMaxLength             : 15,
 

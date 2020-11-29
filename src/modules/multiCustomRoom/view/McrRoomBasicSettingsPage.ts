@@ -380,8 +380,7 @@ namespace TinyWars.MultiCustomRoom {
                     group.visible   = true;
                     const coId      = playerData ? playerData.coId : null;
                     if (coId != null) {
-                        const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
-                        this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
+                        this._labelCoName.text = ConfigManager.getCoNameAndTierText(ConfigManager.getLatestConfigVersion(), coId);
                     }
                 }
             }

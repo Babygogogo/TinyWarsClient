@@ -130,6 +130,7 @@ namespace TinyWars.Utility.Notify {
         MsgMmDeleteMap,
         MsgMmGetReviewingMaps,
         MsgMmReviewMap,
+        MsgMmSetMapTag,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MsgMcrCreateRoom,

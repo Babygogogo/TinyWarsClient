@@ -122,7 +122,6 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            MmAvailabilityChangePanel.show(this._mapRawData.mapId);
             this.close();
         }
 

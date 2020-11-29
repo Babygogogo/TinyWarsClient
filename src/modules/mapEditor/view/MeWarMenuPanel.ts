@@ -403,6 +403,7 @@ namespace TinyWars.MapEditor {
                 this._createCommandSubmitMap(),
                 this._createCommandLoadMap(),
                 this._createCommandWarRule(),
+                this._createCommandMapTag(),
                 this._createCommandReviewAccept(),
                 this._createCommandReviewReject(),
                 this._createCommandOpenAdvancedMenu(),
@@ -495,6 +496,15 @@ namespace TinyWars.MapEditor {
                             FloatText.show(Lang.getText(Lang.Type.A0100));
                         }
                     }
+                },
+            }
+        }
+
+        private _createCommandMapTag(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0445),
+                callback: () => {
+                    MeMapTagPanel.show();
                 },
             }
         }

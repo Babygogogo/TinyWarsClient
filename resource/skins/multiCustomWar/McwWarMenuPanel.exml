@@ -104,7 +104,7 @@
                                         <GameUi:UiLabel id="_labelForce" text="红方 A队" size="16" textColor="0xFFFFFF"
                                                         y="25" horizontalCenter="0" />
                                         <GameUi:UiLabel id="_labelLost" text="已战败" size="18" textColor="0xFFFFFF"
-                                                        horizontalCenter="0" verticalCenter="10" />
+                                                        horizontalCenter="0" y="60" />
                                         <GameUi:UiScrollList id="_listInfo" y="42" horizontalCenter="0">
                                             <e:List>
                                                 <e:itemRendererSkinName>
