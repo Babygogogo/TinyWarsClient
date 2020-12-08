@@ -5,6 +5,7 @@ namespace TinyWars.MultiCustomRoom {
     import ConfigManager    = Utility.ConfigManager;
     import Lang             = Utility.Lang;
     import ProtoTypes       = Utility.ProtoTypes;
+    import FloatText        = Utility.FloatText;
     import WarMapModel      = WarMap.WarMapModel;
     import BwHelpers        = BaseWar.BwHelpers;
 
@@ -57,6 +58,7 @@ namespace TinyWars.MultiCustomRoom {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMcrGetJoinableRoomInfoList,  callback: this._onMsgMcrGetJoinableRoomInfoList },
+                { type: Notify.Type.MsgMcrJoinRoom,                 callback: this._onMsgMcrJoinRoom },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -119,6 +121,12 @@ namespace TinyWars.MultiCustomRoom {
                 this._listWar.clear();
             }
             this.setSelectedIndex(0);
+        }
+
+        private _onMsgMcrJoinRoom(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMcrJoinRoom.IS;
+            this.close();
+            McrRoomInfoPanel.show(data.roomId);
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -250,15 +258,19 @@ namespace TinyWars.MultiCustomRoom {
             data.panel.setSelectedIndex(data.index);
         }
 
-        private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            const data = this.data as DataForWarRenderer;
-            if (data.roomInfo.settingsForMcw.warPassword) {
-                McrJoinPasswordPanel.show(data.roomInfo);
+        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
+            const data      = this.data as DataForWarRenderer;
+            const roomInfo  = data.roomInfo;
+            if (roomInfo.settingsForMcw.warPassword) {
+                McrJoinPasswordPanel.show(roomInfo);
             } else {
-                McrJoinRoomListPanel.hide();
-
-                await McrModel.Join.resetData(data.roomInfo);
-                McrJoinSettingsPanel.show();
+                const joinData = McrModel.Join.getFastJoinData(roomInfo);
+                if (joinData) {
+                    McrProxy.reqMcrJoinRoom(joinData);
+                } else {
+                    FloatText.show(Lang.getText(Lang.Type.A0145));
+                    McrProxy.reqMcrGetJoinableRoomInfoList();
+                }
             }
         }
     }

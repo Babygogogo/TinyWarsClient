@@ -3914,96 +3914,6 @@ export declare namespace WarEvent {
             public toJSON(): { [k: string]: any };
         }
 
-        /** Properties of an ActionCallEvent. */
-        interface IActionCallEvent {
-
-            /** ActionCallEvent eventId */
-            eventId?: (number|null);
-        }
-
-        /** Represents an ActionCallEvent. */
-        class ActionCallEvent implements IActionCallEvent {
-
-            /**
-             * Constructs a new ActionCallEvent.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: WarEvent.ActionSubStructure.IActionCallEvent);
-
-            /** ActionCallEvent eventId. */
-            public eventId: number;
-
-            /**
-             * Creates a new ActionCallEvent instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns ActionCallEvent instance
-             */
-            public static create(properties?: WarEvent.ActionSubStructure.IActionCallEvent): WarEvent.ActionSubStructure.ActionCallEvent;
-
-            /**
-             * Encodes the specified ActionCallEvent message. Does not implicitly {@link WarEvent.ActionSubStructure.ActionCallEvent.verify|verify} messages.
-             * @param message ActionCallEvent message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: WarEvent.ActionSubStructure.IActionCallEvent, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified ActionCallEvent message, length delimited. Does not implicitly {@link WarEvent.ActionSubStructure.ActionCallEvent.verify|verify} messages.
-             * @param message ActionCallEvent message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: WarEvent.ActionSubStructure.IActionCallEvent, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes an ActionCallEvent message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns ActionCallEvent
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.ActionSubStructure.ActionCallEvent;
-
-            /**
-             * Decodes an ActionCallEvent message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns ActionCallEvent
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.ActionSubStructure.ActionCallEvent;
-
-            /**
-             * Verifies an ActionCallEvent message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates an ActionCallEvent message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns ActionCallEvent
-             */
-            public static fromObject(object: { [k: string]: any }): WarEvent.ActionSubStructure.ActionCallEvent;
-
-            /**
-             * Creates a plain object from an ActionCallEvent message. Also converts values to other types if specified.
-             * @param message ActionCallEvent
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: WarEvent.ActionSubStructure.ActionCallEvent, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this ActionCallEvent to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
         /** Properties of an ActionAddUnit. */
         interface IActionAddUnit {
         }
@@ -4311,9 +4221,6 @@ export declare namespace WarEvent {
         /** Action ActionCommonData */
         ActionCommonData?: (WarEvent.ActionSubStructure.IActionCommonData|null);
 
-        /** Action ActionCallEvent */
-        ActionCallEvent?: (WarEvent.ActionSubStructure.IActionCallEvent|null);
-
         /** Action ActionAddUnit */
         ActionAddUnit?: (WarEvent.ActionSubStructure.IActionAddUnit|null);
     }
@@ -4329,9 +4236,6 @@ export declare namespace WarEvent {
 
         /** Action ActionCommonData. */
         public ActionCommonData?: (WarEvent.ActionSubStructure.IActionCommonData|null);
-
-        /** Action ActionCallEvent. */
-        public ActionCallEvent?: (WarEvent.ActionSubStructure.IActionCallEvent|null);
 
         /** Action ActionAddUnit. */
         public ActionAddUnit?: (WarEvent.ActionSubStructure.IActionAddUnit|null);
@@ -31729,6 +31633,9 @@ export declare namespace NetMessage {
 
             /** S errorCode */
             errorCode?: (number|null);
+
+            /** S roomId */
+            roomId?: (number|null);
         }
 
         /** Represents a S. */
@@ -31742,6 +31649,9 @@ export declare namespace NetMessage {
 
             /** S errorCode. */
             public errorCode: number;
+
+            /** S roomId. */
+            public roomId: number;
 
             /**
              * Creates a new S instance using the specified properties.

@@ -1,7 +1,6 @@
 
 namespace TinyWars.MultiCustomRoom {
     import Lang                 = Utility.Lang;
-    import Types                = Utility.Types;
     import Notify               = Utility.Notify;
     import FloatText            = Utility.FloatText;
     import ProtoTypes           = Utility.ProtoTypes;

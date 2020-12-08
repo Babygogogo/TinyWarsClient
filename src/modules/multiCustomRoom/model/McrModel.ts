@@ -455,6 +455,21 @@ namespace TinyWars.MultiCustomRoom {
             export function getData(): DataForJoinRoom {
                 return _dataForJoinRoom;
             }
+            export function getFastJoinData(roomInfo: IMcrRoomInfo): DataForJoinRoom | null {
+                const playerIndex       = generateAvailablePlayerIndexList(roomInfo)[0];
+                const unitAndTileSkinId = generateAvailableSkinIdList(roomInfo)[0];
+                if ((playerIndex == null) || (unitAndTileSkinId == null)) {
+                    return null;
+                } else {
+                    return {
+                        roomId          : roomInfo.roomId,
+                        isReady         : false,
+                        coId            : BwSettingsHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex),
+                        playerIndex,
+                        unitAndTileSkinId,
+                    };
+                }
+            }
 
             export function getRoomId(): number {
                 return getData().roomId;
@@ -477,7 +492,7 @@ namespace TinyWars.MultiCustomRoom {
                 return BwSettingsHelper.getPlayerRule((await McrModel.getRoomInfo(getRoomId())).settingsForCommon.warRule, getPlayerIndex()).teamIndex;
             }
 
-            export async function resetData(roomInfo: IMcrRoomInfo): Promise<void> {
+            export function resetData(roomInfo: IMcrRoomInfo): void {
                 const availablePlayerIndexList    = generateAvailablePlayerIndexList(roomInfo);
                 const availableSkinIdList         = generateAvailableSkinIdList(roomInfo);
                 const playerIndex                 = availablePlayerIndexList[0];

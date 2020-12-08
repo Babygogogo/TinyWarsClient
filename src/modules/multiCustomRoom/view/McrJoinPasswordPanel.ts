@@ -56,14 +56,19 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
-            if (this._inputWarPassword.text !== this._openData.settingsForMcw.warPassword) {
+            const roomInfo = this._openData;
+            if (this._inputWarPassword.text !== roomInfo.settingsForMcw.warPassword) {
                 FloatText.show(Lang.getText(Lang.Type.A0017));
             } else {
-                McrJoinPasswordPanel.hide();
-                McrJoinRoomListPanel.hide();
+                this.close();
 
-                await McrModel.Join.resetData(this._openData);
-                McrJoinSettingsPanel.show();
+                const joinData = McrModel.Join.getFastJoinData(roomInfo);
+                if (joinData) {
+                    McrProxy.reqMcrJoinRoom(joinData);
+                } else {
+                    FloatText.show(Lang.getText(Lang.Type.A0145));
+                    McrProxy.reqMcrGetJoinableRoomInfoList();
+                }
             }
         }
 
