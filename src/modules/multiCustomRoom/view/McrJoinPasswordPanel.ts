@@ -3,6 +3,7 @@ namespace TinyWars.MultiCustomRoom {
     import ProtoTypes   = Utility.ProtoTypes;
     import Lang         = Utility.Lang;
     import FloatText    = Utility.FloatText;
+    import Notify       = Utility.Notify;
     import WarMapModel  = WarMap.WarMapModel;
 
     export class McrJoinPasswordPanel extends GameUi.UiPanel {
@@ -11,10 +12,13 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrJoinPasswordPanel;
 
-        private _inputWarPassword   : GameUi.UiLabel;
-        private _labelWarName       : GameUi.UiLabel;
-        private _btnConfirm         : GameUi.UiButton;
-        private _btnCancel          : GameUi.UiButton;
+        private _labelTitle         : TinyWars.GameUi.UiLabel;
+        private _labelRoomTitle     : TinyWars.GameUi.UiLabel;
+        private _labelPasswordTitle : TinyWars.GameUi.UiLabel;
+        private _labelWarName       : TinyWars.GameUi.UiLabel;
+        private _inputWarPassword   : TinyWars.GameUi.UiTextInput;
+        private _btnCancel          : TinyWars.GameUi.UiButton;
+        private _btnConfirm         : TinyWars.GameUi.UiButton;
 
         private _openData: ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
 
@@ -45,10 +49,18 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnCancel,        callback: this._onTouchedBtnCancel },
                 { ui: this._btnConfirm,       callback: this._onTouchedBtnConfirm },
             ];
+            this._notifyListeners = [
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            ];
         }
 
         protected _onOpened(): void {
-            this._updateView();
+            this._updateComponentsForLanguage();
+            this._inputWarPassword.text = "";
+        }
+
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
@@ -72,16 +84,22 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _updateView(): void {
-            const info                  = this._openData;
-            this._inputWarPassword.text = "";
-
-            const warName = info.settingsForMcw.warName;
+        private _updateComponentsForLanguage(): void {
+            const info          = this._openData;
+            const warName       = info.settingsForMcw.warName;
+            const labelWarName  = this._labelWarName;
             if (warName) {
-                this._labelWarName.text = warName;
+                labelWarName.text = warName;
             } else {
-                WarMapModel.getMapNameInCurrentLanguage(info.settingsForCommon.mapId).then(v => this._labelWarName.text = v);
+                labelWarName.text = "";
+                WarMapModel.getMapNameInCurrentLanguage(info.settingsForCommon.mapId).then(v => labelWarName.text = v);
             }
+
+            this._labelTitle.text           = Lang.getText(Lang.Type.B0449);
+            this._labelRoomTitle.text       = `${Lang.getText(Lang.Type.B0405)}:`;
+            this._labelPasswordTitle.text   = `${Lang.getText(Lang.Type.B0171)}:`;
+            this._btnCancel.label           = Lang.getText(Lang.Type.B0154);
+            this._btnConfirm.label          = Lang.getText(Lang.Type.B0026);
         }
     }
 }

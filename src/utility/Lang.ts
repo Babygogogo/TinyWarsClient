@@ -2347,8 +2347,8 @@ namespace TinyWars.Utility.Lang {
             `Ranking Match`,
         ],
         [Type.B0405]: [
-            `War Room`,
-            `War Room`,
+            `房间`,
+            `Room`,
         ],
         [Type.B0406]: [
             `规则可用性`,
@@ -2513,6 +2513,18 @@ namespace TinyWars.Utility.Lang {
         [Type.B0446]: [
             `忽略`,
             `Ignored`,
+        ],
+        [Type.B0447]: [
+            `查找地图`,
+            `Search Maps`,
+        ],
+        [Type.B0448]: [
+            `需要密码`,
+            `Password required`,
+        ],
+        [Type.B0449]: [
+            `输入密码`,
+            `Input Password`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -281,7 +281,7 @@ namespace TinyWars.MapEditor {
             this._btnAvailabilityMcw.label      = Lang.getText(Lang.Type.B0137);
             this._btnAvailabilityScw.label      = Lang.getText(Lang.Type.B0138);
             this._btnAvailabilityRank.label     = Lang.getText(Lang.Type.B0404);
-            this._btnAvailabilityWr.label       = Lang.getText(Lang.Type.B0405);
+            this._btnAvailabilityWr.label       = Lang.getText(Lang.Type.B0257);
             this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
             this._btnDelete.label               = Lang.getText(Lang.Type.B0220);
             this._btnAddRule.label              = Lang.getText(Lang.Type.B0320);

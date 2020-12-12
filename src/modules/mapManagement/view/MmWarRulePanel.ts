@@ -150,7 +150,7 @@ namespace TinyWars.MapManagement {
             this._btnAvailabilityMcw.label      = Lang.getText(Lang.Type.B0137);
             this._btnAvailabilityScw.label      = Lang.getText(Lang.Type.B0138);
             this._btnAvailabilityRank.label     = Lang.getText(Lang.Type.B0404);
-            this._btnAvailabilityWr.label       = Lang.getText(Lang.Type.B0405);
+            this._btnAvailabilityWr.label       = Lang.getText(Lang.Type.B0257);
             this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
             this._btnModifyRuleName.label       = Lang.getText(Lang.Type.B0315);
             this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);

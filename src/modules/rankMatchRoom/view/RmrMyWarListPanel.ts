@@ -209,14 +209,20 @@ namespace TinyWars.RankMatchRoom {
     class WarRenderer extends eui.ItemRenderer {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
+        private _btnFight       : GameUi.UiButton;
         private _labelName      : GameUi.UiLabel;
         private _labelInTurn    : GameUi.UiLabel;
 
         protected childrenCreated(): void {
             super.childrenCreated();
 
+            const btnNext   = this._btnNext;
+            const btnFight  = this._btnFight;
+            btnNext.label   = Lang.getText(Lang.Type.B0423);
+            btnFight.label  = Lang.getText(Lang.Type.B0422);
+            btnNext.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnNext, this);
+            btnFight.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnFight, this);
             this._btnChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnChoose, this);
-            this._btnNext.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnNext, this);
         }
 
         protected dataChanged(): void {
@@ -241,7 +247,10 @@ namespace TinyWars.RankMatchRoom {
             RmrMyWarListPanel.hide();
             RmrWarInfoPanel.show(data.warInfo);
         }
-
+        private _onTouchedBtnFight(e: egret.Event): void {
+            const data = this.data as DataForWarRenderer;
+            MultiPlayerWar.MpwProxy.reqMcwCommonContinueWar(data.warInfo.warId);
+        }
         private _checkIsInTurn(info: IMpwWarInfo): boolean {
             const playerData = info.playerInfoList.find(v => v.playerIndex === info.playerIndexInTurn);
             return (playerData != null) && (playerData.userId === User.UserModel.getSelfUserId());

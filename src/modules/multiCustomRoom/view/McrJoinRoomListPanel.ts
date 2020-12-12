@@ -32,7 +32,6 @@ namespace TinyWars.MultiCustomRoom {
         private _listPlayer         : GameUi.UiScrollList;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
-        private _dataForListPlayer  : DataForPlayerRenderer[] = [];
         private _selectedWarIndex   : number;
 
         public static show(): void {
@@ -243,7 +242,7 @@ namespace TinyWars.MultiCustomRoom {
             const warInfo               = data.roomInfo;
             const settingsForMcw        = warInfo.settingsForMcw;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelPassword.visible = !!settingsForMcw.warPassword;
+            this._labelPassword.text    = settingsForMcw.warPassword ? Lang.getText(Lang.Type.B0448) : ``;
 
             const warName = settingsForMcw.warName;
             if (warName) {
@@ -285,7 +284,6 @@ namespace TinyWars.MultiCustomRoom {
     class PlayerRenderer extends eui.ItemRenderer {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
-        private _labelTeam : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
@@ -293,13 +291,15 @@ namespace TinyWars.MultiCustomRoom {
             const data              = this.data as DataForPlayerRenderer;
             const playerData        = data.playerData;
             const userId            = playerData ? playerData.userId : null;
-            this._labelIndex.text   = Lang.getPlayerForceName(data.playerIndex);
-            this._labelTeam.text    = Lang.getPlayerTeamName(data.teamIndex);
+            this._labelIndex.text   = `${Lang.getPlayerForceName(data.playerIndex)}(${Lang.getPlayerTeamName(data.teamIndex)})`;
+
+            const labelName = this._labelName;
             if (userId == null) {
-                this._labelName.text = "????";
+                labelName.text = "????";
             } else {
+                labelName.text = "";
                 User.UserModel.getUserNickname(userId).then(name => {
-                    this._labelName.text = `${name} ${ConfigManager.getCoNameAndTierText(data.configVersion, playerData.coId)}`;
+                    labelName.text = `${name} (${ConfigManager.getCoNameAndTierText(data.configVersion, playerData.coId)})`;
                 });
             }
         }

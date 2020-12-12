@@ -3,7 +3,7 @@ namespace TinyWars.RankMatchRoom {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import ProtoTypes   = Utility.ProtoTypes;
-    import McwProxy     = MultiPlayerWar.MpwProxy;
+    import MpwProxy     = MultiPlayerWar.MpwProxy;
     import IMpwWarInfo  = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
 
     export class RmrWarInfoPanel extends GameUi.UiPanel {
@@ -42,10 +42,10 @@ namespace TinyWars.RankMatchRoom {
         protected _onFirstOpened(): void {
             this._uiListeners = [
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
-                { ui: this._btnContinueWar,   callback: this._onTouchedBtnStartGame },
+                { ui: this._btnContinueWar, callback: this._onTouchedBtnContinueWar },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
@@ -87,10 +87,10 @@ namespace TinyWars.RankMatchRoom {
             RmrMyWarListPanel.show();
         }
 
-        private _onTouchedBtnStartGame(e: egret.TouchEvent): void {
+        private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
             const warInfo = this._warInfo;
             if (warInfo) {
-                McwProxy.reqMcwCommonContinueWar(warInfo.warId);
+                MpwProxy.reqMcwCommonContinueWar(warInfo.warId);
             }
         }
 

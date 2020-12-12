@@ -109,7 +109,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelName.text                = Lang.getText(Lang.Type.B0234);
+            this._labelName.text                = Lang.getText(Lang.Type.B0447);
             this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}:`;
             this._labelDesignerTitle.text       = `${Lang.getText(Lang.Type.B0251)}:`;
             this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}:`;
