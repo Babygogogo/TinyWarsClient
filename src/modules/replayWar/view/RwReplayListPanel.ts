@@ -73,7 +73,7 @@ namespace TinyWars.ReplayWar {
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
         protected _onOpened(): void {
-            RwProxy.reqReplayInfos();
+            RwProxy.reqReplayInfos(null);
 
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
@@ -178,17 +178,18 @@ namespace TinyWars.ReplayWar {
                 this._groupInfo.visible = true;
                 this._groupInfo.alpha   = 1;
 
-                const info                      = data.info;
-                const mapId                     = info.mapId;
-                const totalRaters               = info.totalRaters;
+                const replayBriefInfo           = data.info.replayBriefInfo;
+                const mapId                     = replayBriefInfo.mapId;
+                const totalRaters               = replayBriefInfo.totalRaters;
+                const myRating                  = data.info.myRating;
                 this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
                 this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, (await WarMapModel.getRawData(mapId)).designerName);
-                this._labelHasFog.text          = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(info.hasFog ? Lang.Type.B0012 : Lang.Type.B0001));
-                this._labelTurnIndex.text       = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
-                this._labelGlobalRating.text    = totalRaters ? Helpers.formatString("%.2f(%d)", info.totalRating / totalRaters, totalRaters) : `--`;
-                this._labelMyRating.text        = info.myRating == null ? `--` : `${info.myRating}`;
-                this._labelNextActionId.text    = `${Lang.getText(Lang.Type.B0090)}: ${info.executedActionsCount}`;
-                this._listPlayer.bindData(this._createDataForListPlayer(info));
+                this._labelHasFog.text          = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(replayBriefInfo.hasFog ? Lang.Type.B0012 : Lang.Type.B0001));
+                this._labelTurnIndex.text       = `${Lang.getText(Lang.Type.B0091)}: ${replayBriefInfo.turnIndex + 1}`;
+                this._labelGlobalRating.text    = totalRaters ? Helpers.formatString("%.2f(%d)", replayBriefInfo.totalRating / totalRaters, totalRaters) : `--`;
+                this._labelMyRating.text        = myRating == null ? `--` : `${myRating}`;
+                this._labelNextActionId.text    = `${Lang.getText(Lang.Type.B0090)}: ${replayBriefInfo.executedActionsCount}`;
+                this._listPlayer.bindData(this._createDataForListPlayer(replayBriefInfo));
 
                 egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
             }
@@ -202,7 +203,7 @@ namespace TinyWars.ReplayWar {
             } else {
                 this._zoomMap.visible = true;
 
-                const mapRawData    = await WarMapModel.getRawData(data.info.mapId);
+                const mapRawData    = await WarMapModel.getRawData(data.info.replayBriefInfo.mapId);
                 const tileMapView   = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
                 tileMapView.updateWithTileDataList(mapRawData.tileDataList);
@@ -239,9 +240,9 @@ namespace TinyWars.ReplayWar {
             return data;
         }
 
-        private _createDataForListPlayer(info: ProtoTypes.Replay.IReplayInfo): DataForPlayerRenderer[] {
-            const configVersion     = info.configVersion;
-            const playerInfoList    = info.playerInfoList;
+        private _createDataForListPlayer(replayBriefInfo: ProtoTypes.Replay.IReplayBriefInfo): DataForPlayerRenderer[] {
+            const configVersion     = replayBriefInfo.configVersion;
+            const playerInfoList    = replayBriefInfo.playerInfoList;
             const dataList          : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playerInfoList.length; ++playerIndex) {
                 dataList.push({
@@ -278,7 +279,7 @@ namespace TinyWars.ReplayWar {
             super.dataChanged();
 
             const data                  = this.data as DataForMapNameRenderer;
-            const info                  = data.info;
+            const info                  = data.info.replayBriefInfo;
             const warType               = info.warType;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelTurnIndex.text   = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
@@ -298,7 +299,7 @@ namespace TinyWars.ReplayWar {
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0040),
                 });
-                RwProxy.reqReplayGetData(data.info.replayId);
+                RwProxy.reqReplayGetData(data.info.replayBriefInfo.replayId);
             }
         }
     }
@@ -311,15 +312,13 @@ namespace TinyWars.ReplayWar {
     class PlayerRenderer extends eui.ItemRenderer {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
-        private _labelTeam : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
             const data              = this.data as DataForPlayerRenderer;
             const playerInfo        = data.playerInfo;
-            this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
-            this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);
+            this._labelIndex.text   = `${Lang.getPlayerForceName(playerInfo.playerIndex)}(${Lang.getPlayerTeamName(playerInfo.teamIndex)})`;
             User.UserModel.getUserNickname(playerInfo.userId).then(name => {
                 this._labelName.text = `${name} (${ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId)})`;
             });

@@ -71,7 +71,7 @@ namespace TinyWars.ReplayWar {
         }
 
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
-            RwProxy.reqReplayInfos();
+            RwProxy.reqReplayInfos(null);
             this.close();
         }
 

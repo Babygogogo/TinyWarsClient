@@ -14943,44 +14943,134 @@ export declare class Replay implements IReplay {
 
 export declare namespace Replay {
 
+    /** Properties of a ReplayFilter. */
+    interface IReplayFilter {
+
+        /** ReplayFilter replayId */
+        replayId?: (number|null);
+
+        /** ReplayFilter mapName */
+        mapName?: (string|null);
+
+        /** ReplayFilter minMyRating */
+        minMyRating?: (number|null);
+
+        /** ReplayFilter minGlobalRating */
+        minGlobalRating?: (number|null);
+
+        /** ReplayFilter userNickname */
+        userNickname?: (string|null);
+
+        /** ReplayFilter coName */
+        coName?: (string|null);
+    }
+
+    /** Represents a ReplayFilter. */
+    class ReplayFilter implements IReplayFilter {
+
+        /**
+         * Constructs a new ReplayFilter.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Replay.IReplayFilter);
+
+        /** ReplayFilter replayId. */
+        public replayId: number;
+
+        /** ReplayFilter mapName. */
+        public mapName: string;
+
+        /** ReplayFilter minMyRating. */
+        public minMyRating: number;
+
+        /** ReplayFilter minGlobalRating. */
+        public minGlobalRating: number;
+
+        /** ReplayFilter userNickname. */
+        public userNickname: string;
+
+        /** ReplayFilter coName. */
+        public coName: string;
+
+        /**
+         * Creates a new ReplayFilter instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ReplayFilter instance
+         */
+        public static create(properties?: Replay.IReplayFilter): Replay.ReplayFilter;
+
+        /**
+         * Encodes the specified ReplayFilter message. Does not implicitly {@link Replay.ReplayFilter.verify|verify} messages.
+         * @param message ReplayFilter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Replay.IReplayFilter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified ReplayFilter message, length delimited. Does not implicitly {@link Replay.ReplayFilter.verify|verify} messages.
+         * @param message ReplayFilter message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Replay.IReplayFilter, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a ReplayFilter message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns ReplayFilter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Replay.ReplayFilter;
+
+        /**
+         * Decodes a ReplayFilter message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns ReplayFilter
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Replay.ReplayFilter;
+
+        /**
+         * Verifies a ReplayFilter message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ReplayFilter message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ReplayFilter
+         */
+        public static fromObject(object: { [k: string]: any }): Replay.ReplayFilter;
+
+        /**
+         * Creates a plain object from a ReplayFilter message. Also converts values to other types if specified.
+         * @param message ReplayFilter
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Replay.ReplayFilter, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ReplayFilter to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a ReplayInfo. */
     interface IReplayInfo {
 
-        /** ReplayInfo replayId */
-        replayId?: (number|null);
-
-        /** ReplayInfo configVersion */
-        configVersion?: (string|null);
-
-        /** ReplayInfo warType */
-        warType?: (number|null);
-
-        /** ReplayInfo mapId */
-        mapId?: (number|null);
-
-        /** ReplayInfo hasFog */
-        hasFog?: (boolean|null);
-
-        /** ReplayInfo turnIndex */
-        turnIndex?: (number|null);
-
-        /** ReplayInfo executedActionsCount */
-        executedActionsCount?: (number|null);
-
-        /** ReplayInfo warEndTime */
-        warEndTime?: (number|null);
-
-        /** ReplayInfo totalRating */
-        totalRating?: (number|null);
-
-        /** ReplayInfo totalRaters */
-        totalRaters?: (number|null);
+        /** ReplayInfo replayBriefInfo */
+        replayBriefInfo?: (Replay.IReplayBriefInfo|null);
 
         /** ReplayInfo myRating */
         myRating?: (number|null);
-
-        /** ReplayInfo playerInfoList */
-        playerInfoList?: (Structure.IWarPlayerInfo[]|null);
     }
 
     /** Represents a ReplayInfo. */
@@ -14992,41 +15082,11 @@ export declare namespace Replay {
          */
         constructor(properties?: Replay.IReplayInfo);
 
-        /** ReplayInfo replayId. */
-        public replayId: number;
-
-        /** ReplayInfo configVersion. */
-        public configVersion: string;
-
-        /** ReplayInfo warType. */
-        public warType: number;
-
-        /** ReplayInfo mapId. */
-        public mapId: number;
-
-        /** ReplayInfo hasFog. */
-        public hasFog: boolean;
-
-        /** ReplayInfo turnIndex. */
-        public turnIndex: number;
-
-        /** ReplayInfo executedActionsCount. */
-        public executedActionsCount: number;
-
-        /** ReplayInfo warEndTime. */
-        public warEndTime: number;
-
-        /** ReplayInfo totalRating. */
-        public totalRating: number;
-
-        /** ReplayInfo totalRaters. */
-        public totalRaters: number;
+        /** ReplayInfo replayBriefInfo. */
+        public replayBriefInfo?: (Replay.IReplayBriefInfo|null);
 
         /** ReplayInfo myRating. */
         public myRating: number;
-
-        /** ReplayInfo playerInfoList. */
-        public playerInfoList: Structure.IWarPlayerInfo[];
 
         /**
          * Creates a new ReplayInfo instance using the specified properties.
@@ -15094,6 +15154,156 @@ export declare namespace Replay {
 
         /**
          * Converts this ReplayInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a ReplayBriefInfo. */
+    interface IReplayBriefInfo {
+
+        /** ReplayBriefInfo replayId */
+        replayId?: (number|null);
+
+        /** ReplayBriefInfo configVersion */
+        configVersion?: (string|null);
+
+        /** ReplayBriefInfo warType */
+        warType?: (number|null);
+
+        /** ReplayBriefInfo mapId */
+        mapId?: (number|null);
+
+        /** ReplayBriefInfo hasFog */
+        hasFog?: (boolean|null);
+
+        /** ReplayBriefInfo turnIndex */
+        turnIndex?: (number|null);
+
+        /** ReplayBriefInfo executedActionsCount */
+        executedActionsCount?: (number|null);
+
+        /** ReplayBriefInfo warEndTime */
+        warEndTime?: (number|null);
+
+        /** ReplayBriefInfo totalRating */
+        totalRating?: (number|null);
+
+        /** ReplayBriefInfo totalRaters */
+        totalRaters?: (number|null);
+
+        /** ReplayBriefInfo playerInfoList */
+        playerInfoList?: (Structure.IWarPlayerInfo[]|null);
+    }
+
+    /** Represents a ReplayBriefInfo. */
+    class ReplayBriefInfo implements IReplayBriefInfo {
+
+        /**
+         * Constructs a new ReplayBriefInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Replay.IReplayBriefInfo);
+
+        /** ReplayBriefInfo replayId. */
+        public replayId: number;
+
+        /** ReplayBriefInfo configVersion. */
+        public configVersion: string;
+
+        /** ReplayBriefInfo warType. */
+        public warType: number;
+
+        /** ReplayBriefInfo mapId. */
+        public mapId: number;
+
+        /** ReplayBriefInfo hasFog. */
+        public hasFog: boolean;
+
+        /** ReplayBriefInfo turnIndex. */
+        public turnIndex: number;
+
+        /** ReplayBriefInfo executedActionsCount. */
+        public executedActionsCount: number;
+
+        /** ReplayBriefInfo warEndTime. */
+        public warEndTime: number;
+
+        /** ReplayBriefInfo totalRating. */
+        public totalRating: number;
+
+        /** ReplayBriefInfo totalRaters. */
+        public totalRaters: number;
+
+        /** ReplayBriefInfo playerInfoList. */
+        public playerInfoList: Structure.IWarPlayerInfo[];
+
+        /**
+         * Creates a new ReplayBriefInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ReplayBriefInfo instance
+         */
+        public static create(properties?: Replay.IReplayBriefInfo): Replay.ReplayBriefInfo;
+
+        /**
+         * Encodes the specified ReplayBriefInfo message. Does not implicitly {@link Replay.ReplayBriefInfo.verify|verify} messages.
+         * @param message ReplayBriefInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Replay.IReplayBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified ReplayBriefInfo message, length delimited. Does not implicitly {@link Replay.ReplayBriefInfo.verify|verify} messages.
+         * @param message ReplayBriefInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Replay.IReplayBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a ReplayBriefInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns ReplayBriefInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Replay.ReplayBriefInfo;
+
+        /**
+         * Decodes a ReplayBriefInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns ReplayBriefInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Replay.ReplayBriefInfo;
+
+        /**
+         * Verifies a ReplayBriefInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ReplayBriefInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ReplayBriefInfo
+         */
+        public static fromObject(object: { [k: string]: any }): Replay.ReplayBriefInfo;
+
+        /**
+         * Creates a plain object from a ReplayBriefInfo message. Also converts values to other types if specified.
+         * @param message ReplayBriefInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Replay.ReplayBriefInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ReplayBriefInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -29474,23 +29684,8 @@ export declare namespace NetMessage {
         /** Properties of a C. */
         interface IC {
 
-            /** C replayId */
-            replayId?: (number|null);
-
-            /** C mapName */
-            mapName?: (string|null);
-
-            /** C minMyRating */
-            minMyRating?: (number|null);
-
-            /** C minGlobalRating */
-            minGlobalRating?: (number|null);
-
-            /** C userNickname */
-            userNickname?: (string|null);
-
-            /** C coName */
-            coName?: (string|null);
+            /** C replayFilter */
+            replayFilter?: (Replay.IReplayFilter|null);
         }
 
         /** Represents a C. */
@@ -29502,23 +29697,8 @@ export declare namespace NetMessage {
              */
             constructor(properties?: NetMessage.MsgReplayGetInfoList.IC);
 
-            /** C replayId. */
-            public replayId: number;
-
-            /** C mapName. */
-            public mapName: string;
-
-            /** C minMyRating. */
-            public minMyRating: number;
-
-            /** C minGlobalRating. */
-            public minGlobalRating: number;
-
-            /** C userNickname. */
-            public userNickname: string;
-
-            /** C coName. */
-            public coName: string;
+            /** C replayFilter. */
+            public replayFilter?: (Replay.IReplayFilter|null);
 
             /**
              * Creates a new C instance using the specified properties.

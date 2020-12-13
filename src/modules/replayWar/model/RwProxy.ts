@@ -8,15 +8,17 @@ namespace TinyWars.ReplayWar.RwProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.MsgReplayGetInfoList,    callback: _onMsgReplayGetInfoList   },
-            { msgCode: NetMessageCodes.MsgReplayGetData,        callback: _onMsgReplayGetData       },
-            { msgCode: NetMessageCodes.MsgReplaySetRating,      callback: _onMsgReplaySetRating     },
+            { msgCode: NetMessageCodes.MsgReplayGetInfoList,    callback: _onMsgReplayGetInfoList },
+            { msgCode: NetMessageCodes.MsgReplayGetData,        callback: _onMsgReplayGetData },
+            { msgCode: NetMessageCodes.MsgReplaySetRating,      callback: _onMsgReplaySetRating },
         ], RwProxy);
     }
 
-    export function reqReplayInfos(params?: NetMessage.MsgReplayGetInfoList.IC): void {
+    export function reqReplayInfos(replayFilter: ProtoTypes.Replay.IReplayFilter | null): void {
         NetManager.send({
-            MsgReplayGetInfoList: { c: params || {}, }
+            MsgReplayGetInfoList: { c: {
+                replayFilter,
+            }, },
         });
     }
     function _onMsgReplayGetInfoList(e: egret.Event): void {
