@@ -1,94 +1,70 @@
 
 namespace TinyWars.SingleCustomWar {
+    import Logger               = Utility.Logger;
     import Types                = Utility.Types;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import BwHelpers            = BaseWar.BwHelpers;
-    import SerializedBwTile     = Types.SerializedTile;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import ConfigManager        = Utility.ConfigManager;
+    import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     export class ScwTile extends BaseWar.BwTile {
         protected _getViewClass(): new () => BaseWar.BwTileView {
             return ScwTileView;
         }
 
-        public serialize(): Types.SerializedTile | null {
-            const data: Types.SerializedTile = {
-                gridX         : this.getGridX(),
-                gridY         : this.getGridY(),
-                baseViewId    : this.getBaseViewId(),
-                objectViewId  : this.getObjectViewId(),
-            };
-
-            const currentHp = this.getCurrentHp();
-            (currentHp !== this.getMaxHp()) && (data.currentHp = currentHp);
-
-            const buildPoint = this.getCurrentBuildPoint();
-            (buildPoint !== this.getMaxBuildPoint()) && (data.currentBuildPoint = buildPoint);
-
-            const capturePoint = this.getCurrentCapturePoint();
-            (capturePoint !== this.getMaxCapturePoint()) && (data.currentCapturePoint = capturePoint);
-
-            return BwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
-                ? data
-                : null;
-        }
-
-        public serializeForSimulation(): SerializedBwTile | null {
-            const userId = User.UserModel.getSelfUserId();
-            if (VisibilityHelpers.checkIsTileVisibleToUser(this.getWar(), this.getGridIndex(), userId)) {
-                return this.serialize();
-            } else {
-                if (this.getType() === Types.TileType.Headquarters) {
-                    const data: SerializedBwTile = {
-                        gridX       : this.getGridX(),
-                        gridY       : this.getGridY(),
-                        baseViewId  : this.getBaseViewId(),
-                        objectViewId: this.getObjectViewId(),
-                    };
-                    return BwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
-                        ? data
-                        : null;
-
-                } else {
-                    if (this.getPlayerIndex() !== 0) {
-                        const data: SerializedBwTile = {
-                            gridX       : this.getGridX(),
-                            gridY       : this.getGridY(),
-                            baseViewId  : this.getBaseViewId(),
-                            objectViewId: this.getNeutralObjectViewId(),
-                        };
-                        return BwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
-                            ? data
-                            : null;
-
-                    } else {
-                        const currentHp = this.getCurrentHp();
-                        const data      : SerializedBwTile = {
-                            gridX       : this.getGridX(),
-                            gridY       : this.getGridY(),
-                            baseViewId  : this.getBaseViewId(),
-                            objectViewId: this.getObjectViewId(),
-                            currentHp   : currentHp == this.getMaxHp() ? undefined : currentHp,
-                        };
-                        return BwHelpers.checkShouldSerializeTile(data, this.getInitialBaseViewId(), this.getInitialObjectViewId())
-                            ? data
-                            : null;
-                    }
+        public serializeForSimulation(): ISerialTile | null {
+            const war = this.getWar();
+            if (VisibilityHelpers.checkIsTileVisibleToTeams(war, this.getGridIndex(), war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
+                const data = this.serialize();
+                if (data == null) {
+                    Logger.error(`ScwTile.serializeForSimulation() empty data.`);
+                    return undefined;
                 }
-            }
-        }
+                return data;
 
-        ////////////////////////////////////////////////////////////////////////////////
-        // Functions for fog.
-        ////////////////////////////////////////////////////////////////////////////////
-        public setFogEnabled(): void {
-            if (!this.getIsFogEnabled()) {
-                this._setIsFogEnabled(true);
-            }
-        }
+            } else {
+                const gridIndex = this.getGridIndex();
+                if (gridIndex == null) {
+                    Logger.error(`ScwTile.serializeForSimulation() empty gridIndex.`);
+                    return undefined;
+                }
 
-        public setFogDisabled(data?: Types.SerializedTile): void {
-            if (this.getIsFogEnabled()) {
-                this._setIsFogEnabled(false);
+                const baseType = this.getBaseType();
+                if (baseType == null) {
+                    Logger.error(`ScwTile.serializeForSimulation() empty baseType.`);
+                    return undefined;
+                }
+
+                const objectType = this.getObjectType();
+                if (objectType == null) {
+                    Logger.error(`ScwTile.serializeForSimulation() empty objectType.`);
+                    return undefined;
+                }
+
+                const playerIndex = this.getPlayerIndex();
+                if (playerIndex == null) {
+                    Logger.error(`ScwTile.serializeForSimulation() empty playerIndex.`);
+                    return undefined;
+                }
+
+                const data: ISerialTile = {
+                    gridIndex,
+                    baseType,
+                    objectType,
+                    playerIndex : objectType === Types.TileObjectType.Headquarters ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                };
+
+                const currentHp = this.getCurrentHp();
+                (currentHp !== this.getMaxHp()) && (data.currentHp = currentHp);
+
+                const baseShapeId = this.getBaseShapeId();
+                (baseShapeId !== 0) && (data.baseShapeId = baseShapeId);
+
+                const objectShapeId = this.getObjectShapeId();
+                (objectShapeId !== 0) && (data.objectShapeId = objectShapeId);
+
+                return data;
             }
         }
     }

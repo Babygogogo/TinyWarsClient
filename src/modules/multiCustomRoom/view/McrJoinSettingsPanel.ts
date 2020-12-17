@@ -1,10 +1,10 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Lang         = Utility.Lang;
-    import Notify       = Utility.Notify;
-    import FloatText    = Utility.FloatText;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import ConfirmPanel = Common.ConfirmPanel;
+    import Lang                 = Utility.Lang;
+    import Notify               = Utility.Notify;
+    import FloatText            = Utility.FloatText;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import CommonConfirmPanel   = Common.CommonConfirmPanel;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -47,7 +47,9 @@ namespace TinyWars.MultiCustomRoom {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SMcrJoinWar,        callback: this._onNotifySMcrJoinWar },
+                { type: Notify.Type.MsgMcrJoinRoom,     callback: this._onMsgMcrJoinRoom },
+                { type: Notify.Type.MsgMcrDeleteRoom,   callback: this._onMsgMcrDeleteRoom },
+                { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onMsgMcrGetRoomInfo },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }
@@ -75,13 +77,13 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             McrJoinSettingsPanel.hide();
-            McrJoinMapListPanel.show();
+            McrJoinRoomListPanel.show();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const data      = McrModel.getJoinWarData();
+        private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
+            const data      = McrModel.Join.getData();
             const callback1 = () => {
-                McrProxy.reqJoin(data);
+                McrProxy.reqMcrJoinRoom(data);
 
                 this._btnConfirm.enabled = false;
                 this._resetTimeoutForBtnConfirm();
@@ -90,7 +92,7 @@ namespace TinyWars.MultiCustomRoom {
                 if (data.coId != null) {
                     callback1();
                 } else {
-                    ConfirmPanel.show({
+                    CommonConfirmPanel.show({
                         title   : Lang.getText(Lang.Type.B0088),
                         content : `${Lang.getText(Lang.Type.A0050)}\n${Lang.getText(Lang.Type.A0052)}`,
                         callback: callback1,
@@ -98,10 +100,10 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
 
-            if (McrModel.getJoinWarWarRuleIndex() != null) {
+            if ((await McrModel.Join.getRoomInfo()).settingsForCommon.presetWarRuleId != null) {
                 callback2();
             } else {
-                ConfirmPanel.show({
+                CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0102),
                     callback: callback2,
@@ -113,10 +115,29 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifySMcrJoinWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_McrJoinWar;
-            FloatText.show(Lang.getText(data.isStarted ? Lang.Type.A0019 : Lang.Type.A0018));
-            Utility.FlowManager.gotoLobby();
+        private _onMsgMcrJoinRoom(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0018));
+            this.close();
+            McrJoinRoomListPanel.show();
+        }
+
+        private _onMsgMcrDeleteRoom(e: egret.Event): void {
+            if (McrModel.Join.getRoomId() == null) {
+                FloatText.show(Lang.getText(Lang.Type.A0019));
+                this.close();
+                McrJoinRoomListPanel.show();
+            }
+        }
+
+        private _onMsgMcrGetRoomInfo(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomInfo.IS;
+            if ((McrModel.Join.getRoomId() === data.roomId) &&
+                (!McrModel.Join.checkCanJoin())
+            ) {
+                FloatText.show(Lang.getText(Lang.Type.A0145));
+                this.close();
+                McrJoinRoomListPanel.show();
+            }
         }
 
         private _resetTimeoutForBtnConfirm(): void {

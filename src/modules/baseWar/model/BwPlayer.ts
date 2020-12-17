@@ -2,52 +2,278 @@
 namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
     import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import GridIndex        = Types.GridIndex;
+    import Logger           = Utility.Logger;
     import GridIndexHelpers = Utility.GridIndexHelpers;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import GridIndex        = Types.GridIndex;
+    import ISerialPlayer    = ProtoTypes.WarSerialization.ISerialPlayer;
 
     export abstract class BwPlayer {
+        private _playerIndex            : number;
+        private _teamIndex              : number;
         private _fund                   : number;
         private _hasVotedForDraw        : boolean;
         private _isAlive                : boolean;
-        private _playerIndex            : number;
-        private _teamIndex              : number;
+        private _restTimeToBoot         : number;
+        private _userId                 : number;
+        private _unitAndTileSkinId      : number;
+        private _coId                   : number;
+        private _coCurrentEnergy        : number;
+        private _coUsingSkillType       : Types.CoSkillType;
+        private _coIsDestroyedInTurn    : boolean;
         private _watchOngoingSrcUserIds : Set<number>;
         private _watchRequestSrcUserIds : Set<number>;
-        private _userId?                : number;
-        private _nickname?              : string | null;
 
-        private _coId               : number | null | undefined;
-        private _coUnitId           : number | null | undefined;
-        private _coCurrentEnergy    : number;
-        private _coUsingSkillType   : Types.CoSkillType;
-        private _coIsDestroyedInTurn: boolean;
+        private _war                    : BwWar;
 
-        private _war                : BwWar;
+        public init(data: ISerialPlayer): BwPlayer | undefined {
+            const fund = data.fund;
+            if (fund == null) {
+                Logger.error(`BwPlayer.init() empty fund.`);
+                return undefined;
+            }
 
-        public init(data: Types.SerializedPlayer): BwPlayer {
-            this.setFund(data.fund!);
-            this.setHasVotedForDraw(data.hasVotedForDraw!);
-            this.setIsAlive(data.isAlive!);
-            this._setPlayerIndex(data.playerIndex!);
-            this._setTeamIndex(data.teamIndex!);
+            const hasVotedForDraw = data.hasVotedForDraw;
+            if (hasVotedForDraw == null) {
+                Logger.error(`BwPlayer.init() empty hasVotedForDraw.`);
+                return undefined;
+            }
+
+            const isAlive = data.isAlive;
+            if (isAlive == null) {
+                Logger.error(`BwPlayer.init() empty isAlive.`);
+                return undefined;
+            }
+
+            const playerIndex = data.playerIndex;
+            if (playerIndex == null) {
+                Logger.error(`BwPlayer.init() empty playerIndex.`);
+                return undefined;
+            }
+
+            const teamIndex = data.teamIndex;
+            if (teamIndex == null) {
+                Logger.error(`BwPlayer.init() empty teamIndex.`);
+                return undefined;
+            }
+
+            const restTimeToBoot = data.restTimeToBoot;
+            if (restTimeToBoot == null) {
+                Logger.error(`BwPlayer.init() empty restTimeToBoot.`);
+                return undefined;
+            }
+
+            const coUsingSkillType = data.coUsingSkillType;
+            if (coUsingSkillType == null) {
+                Logger.error(`BwPlayer.init() empty coUsingSkillType.`);
+                return undefined;
+            }
+
+            const coIsDestroyedInTurn = data.coIsDestroyedInTurn;
+            if (coIsDestroyedInTurn == null) {
+                Logger.error(`BwPlayer.init() empty coIsDestroyedInTurn.`);
+                return undefined;
+            }
+
+            const unitAndTileSkinId = data.unitAndTileSkinId;
+            if ((unitAndTileSkinId == null)                         ||
+                ((unitAndTileSkinId === 0) && (playerIndex !== 0))  ||
+                ((unitAndTileSkinId !== 0) && (playerIndex === 0))
+            ) {
+                Logger.error(`BwPlayer.init() invalid unitAndTileSkinId.`);
+                return undefined;
+            }
+
+            const coId = data.coId;
+            if (coId == null) {
+                Logger.error(`BwPlayer.init() empty coId.`);
+                return undefined;
+            }
+
+            this.setFund(fund);
+            this.setHasVotedForDraw(hasVotedForDraw);
+            this.setIsAlive(isAlive);
+            this._setPlayerIndex(playerIndex);
+            this._setTeamIndex(teamIndex);
+            this.setRestTimeToBoot(restTimeToBoot);
+            this.setCoUsingSkillType(coUsingSkillType);
+            this.setCoIsDestroyedInTurn(coIsDestroyedInTurn);
+            this.setUserId(data.userId);
+            this._setUnitAndTileSkinId(unitAndTileSkinId);
+            this.setCoId(coId);
+            this.setCoCurrentEnergy(data.coCurrentEnergy);
             this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdList || []);
             this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdList || []);
-            this.setUserId(data.userId);
-            this._setNickname(data.nickname || Lang.getText(Lang.Type.B0111));
-            this._setCoId(data.coId);
-            this.setCoUnitId(data.coUnitId);
-            this.setCoCurrentEnergy(data.coCurrentEnergy);
-            this.setCoUsingSkillType(data.coUsingSkillType);
-            this.setCoIsDestroyedInTurn(data.coIsDestroyedInTurn);
 
             return this;
         }
 
         public startRunning(war: BwWar): void {
-            this._war = war;
+            this._setWar(war);
         }
 
+        public serialize(): ISerialPlayer | undefined {
+            const fund = this.getFund();
+            if (fund == null) {
+                Logger.error(`BwPlayer.serialize() empty fund.`);
+                return undefined;
+            }
+
+            const hasVotedForDraw = this.getHasVotedForDraw();
+            if (hasVotedForDraw == null) {
+                Logger.error(`BwPlayer.serialize() empty hasVotedForDraw.`);
+                return undefined;
+            }
+
+            const isAlive = this.getIsAlive();
+            if (isAlive == null) {
+                Logger.error(`BwPlayer.serialize() empty isAlive.`);
+                return undefined;
+            }
+
+            const playerIndex = this.getPlayerIndex();
+            if (playerIndex == null) {
+                Logger.error(`BwPlayer.serialize() empty playerIndex.`);
+                return undefined;
+            }
+
+            const teamIndex = this.getTeamIndex();
+            if (teamIndex == null) {
+                Logger.error(`BwPlayer.serialize() empty teamIndex.`);
+                return undefined;
+            }
+
+            const restTimeToBoot = this.getRestTimeToBoot();
+            if (restTimeToBoot == null) {
+                Logger.error(`BwPlayer.serialize() empty restTimeToBoo.`);
+                return undefined;
+            }
+
+            const coUsingSkillType = this.getCoUsingSkillType();
+            if (coUsingSkillType == null) {
+                Logger.error(`BwPlayer.serialize() empty coUsingSkillType.`);
+                return undefined;
+            }
+
+            const coIsDestroyedInTurn = this.getCoIsDestroyedInTurn();
+            if (coIsDestroyedInTurn == null) {
+                Logger.error(`BwPlayer.serialize() empty coIsDestroyedInTurn.`);
+                return undefined;
+            }
+
+            const unitAndTileSkinId = this.getUnitAndTileSkinId();
+            if (unitAndTileSkinId == null) {
+                Logger.error(`BwPlayer.serialize() empty unitAndTileSkinId.`);
+                return undefined;
+            }
+
+            const coId = this.getCoId();
+            if (coId == null) {
+                Logger.error(`BwPlayer.serialize() empty coId.`);
+                return undefined;
+            }
+
+            return {
+                playerIndex,
+                teamIndex,
+                fund,
+                hasVotedForDraw,
+                isAlive,
+                restTimeToBoot,
+                coUsingSkillType,
+                coIsDestroyedInTurn,
+                unitAndTileSkinId,
+                userId                      : this.getUserId(),
+                coId,
+                coCurrentEnergy             : this.getCoCurrentEnergy(),
+                watchRequestSrcUserIdList   : [...(this.getWatchRequestSrcUserIds() || [])],
+                watchOngoingSrcUserIdList   : [...(this.getWatchOngoingSrcUserIds() || [])],
+            };
+        }
+        public serializeForSimulation(): ISerialPlayer {
+            const fund = this.getFund();
+            if (fund == null) {
+                Logger.error(`BwPlayer.serializeForSimulation() empty fund.`);
+                return undefined;
+            }
+
+            const hasVotedForDraw = this.getHasVotedForDraw();
+            if (hasVotedForDraw == null) {
+                Logger.error(`BwPlayer.serializeForSimulation() empty hasVotedForDraw.`);
+                return undefined;
+            }
+
+            const isAlive = this.getIsAlive();
+            if (isAlive == null) {
+                Logger.error(`BwPlayer.serializeForSimulation() empty isAlive.`);
+                return undefined;
+            }
+
+            const playerIndex = this.getPlayerIndex();
+            if (playerIndex == null) {
+                Logger.error(`BwPlayer.serializeForSimulation() empty playerIndex.`);
+                return undefined;
+            }
+
+            const teamIndex = this.getTeamIndex();
+            if (teamIndex == null) {
+                Logger.error(`BwPlayer.serializeForSimulation() empty teamIndex.`);
+                return undefined;
+            }
+
+            const restTimeToBoot = this.getRestTimeToBoot();
+            if (restTimeToBoot == null) {
+                Logger.error(`BwPlayer.serializeForSimulation() empty restTimeToBoo.`);
+                return undefined;
+            }
+
+            const coUsingSkillType = this.getCoUsingSkillType();
+            if (coUsingSkillType == null) {
+                Logger.error(`BwPlayer.serializeForSimulation() empty coUsingSkillType.`);
+                return undefined;
+            }
+
+            const coIsDestroyedInTurn = this.getCoIsDestroyedInTurn();
+            if (coIsDestroyedInTurn == null) {
+                Logger.error(`BwPlayer.serializeForSimulation() empty coIsDestroyedInTurn.`);
+                return undefined;
+            }
+
+            const unitAndTileSkinId = this.getUnitAndTileSkinId();
+            if (unitAndTileSkinId == null) {
+                Logger.error(`BwPlayer.serializeForSimulation() empty unitAndTileSkinId.`);
+                return undefined;
+            }
+
+            const coId = this.getCoId();
+            if (coId == null) {
+                Logger.error(`BwPlayer.serializeForSimulation() empty coId.`);
+                return undefined;
+            }
+
+            const war               = this._getWar();
+            const shouldShowFund    = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(this.getTeamIndex()));
+            return {
+                playerIndex,
+                teamIndex,
+                fund                        : shouldShowFund ? fund : 0,
+                hasVotedForDraw,
+                isAlive,
+                restTimeToBoot,
+                coUsingSkillType,
+                coIsDestroyedInTurn,
+                unitAndTileSkinId,
+                userId                      : playerIndex > 0 ? User.UserModel.getSelfUserId() : null,
+                coId,
+                coCurrentEnergy             : this.getCoCurrentEnergy(),
+                watchRequestSrcUserIdList   : [],
+                watchOngoingSrcUserIdList   : []
+            };
+        }
+
+        private _setWar(war: BwWar): void {
+            this._war = war;
+        }
         protected _getWar(): BwWar {
             return this._war;
         }
@@ -82,12 +308,22 @@ namespace TinyWars.BaseWar {
         public getPlayerIndex(): number {
             return this._playerIndex;
         }
+        public checkIsNeutral(): boolean {
+            return this.getPlayerIndex() === 0;
+        }
 
         private _setTeamIndex(index: number): void {
             this._teamIndex = index;
         }
         public getTeamIndex(): number {
             return this._teamIndex;
+        }
+
+        public setRestTimeToBoot(seconds: number): void {
+            this._restTimeToBoot = seconds;
+        }
+        public getRestTimeToBoot(): number {
+            return this._restTimeToBoot;
         }
 
         private _setWatchOngoingSrcUserIds(list: number[]): void {
@@ -129,25 +365,28 @@ namespace TinyWars.BaseWar {
             return this._userId;
         }
 
-        private _setNickname(nickname: string): void {
-            this._nickname = nickname;
+        private _setUnitAndTileSkinId(unitAndTileSkinId: number): void {
+            this._unitAndTileSkinId = unitAndTileSkinId;
         }
-        public getNickname(): string {
-            return this._nickname;
+        public getUnitAndTileSkinId(): number | undefined {
+            return this._unitAndTileSkinId;
         }
 
-        private _setCoId(coId: number | null | undefined): void {
-            this._coId = coId;
+        public async getNickname(): Promise<string> {
+            const userId = this.getUserId();
+            return (userId == null)
+                ?  `A.I.`
+                : await User.UserModel.getUserNickname(userId) || `??`;
+        }
+
+        public setCoId(coId: number | null | undefined): void {
+            if (this._coId != coId) {
+                this._coId = coId;
+                Notify.dispatch(Notify.Type.BwCoIdChanged);
+            }
         }
         public getCoId(): number | null | undefined {
             return this._coId;
-        }
-
-        public setCoUnitId(coUnitId: number | null | undefined): void {
-            this._coUnitId = coUnitId;
-        }
-        public getCoUnitId(): number | null | undefined {
-            return this._coUnitId;
         }
 
         public setCoCurrentEnergy(energy: number): void {
@@ -200,23 +439,37 @@ namespace TinyWars.BaseWar {
                 return radius;
             }
         }
-        public getCoGridIndexOnMap(): GridIndex | null {
-            const unitId = this.getCoUnitId();
-            if (unitId == null) {
-                return null;
-            } else {
-                const unit = this._war.getUnitMap().getUnitById(unitId);
-                return (!unit) || (unit.getLoaderUnitId() != null)
-                    ? null
-                    : unit.getGridIndex();
+        public getCoGridIndexListOnMap(): GridIndex[] | undefined {
+            const war = this._getWar();
+            if (war == null) {
+                Logger.error(`BwPlayer.getCoGridIndexListOnMap() empty war.`);
+                return undefined;
             }
+
+            const playerIndex = this.getPlayerIndex();
+            if (playerIndex == null) {
+                Logger.error(`BwPlayer.getCoGridIndexListOnMap() empty playerIndex.`);
+                return undefined;
+            }
+
+            const unitMap = war.getUnitMap();
+            if (unitMap == null) {
+                Logger.error(`BwPlayer.getCoGridIndexListOnMap() empty unitMap.`);
+                return undefined;
+            }
+
+            return unitMap.getCoGridIndexListOnMap(playerIndex);
         }
 
-        public checkIsInCoZone(targetGridIndex: GridIndex, coGridIndexOnMap = this.getCoGridIndexOnMap()): boolean {
+        public checkIsInCoZone(targetGridIndex: GridIndex, coGridIndexOnMap: GridIndex[]): boolean {
             const radius = this.getCoZoneRadius();
-            return (coGridIndexOnMap == null) || (radius == null)
-                ? false
-                : GridIndexHelpers.getDistance(targetGridIndex, coGridIndexOnMap) <= radius;
+            if (radius == null) {
+                Logger.error(`BwPlayer.checkIsInCoZone() empty radius.`);
+                return false;
+            }
+
+            const distance = GridIndexHelpers.getMinDistance(targetGridIndex, coGridIndexOnMap);
+            return (distance != null) && (distance <= radius);
         }
 
         public getCoUsingSkillType(): Types.CoSkillType {
@@ -253,7 +506,7 @@ namespace TinyWars.BaseWar {
             } else {
                 const version = this._war.getConfigVersion();
                 for (const skillId of currentSkills) {
-                    if (ConfigManager.getCoSkillCfg(version, skillId).showZone) {
+                    if (Utility.ConfigManager.getCoSkillCfg(version, skillId).showZone) {
                         return true;
                     }
                 }
@@ -268,11 +521,21 @@ namespace TinyWars.BaseWar {
             this._coIsDestroyedInTurn = isDestroyed;
         }
 
-        private _getCoBasicCfg(): Types.CoBasicCfg | null {
+        public getCoMaxLoadCount(): number | undefined {
+            const cfg = this._getCoBasicCfg();
+            if (cfg == null) {
+                Logger.error(`BwPlayer.getCoMaxLoadCount() empty cfg.`);
+                return undefined;
+            }
+
+            return cfg.maxLoadCount;
+        }
+
+        private _getCoBasicCfg(): ProtoTypes.Config.ICoBasicCfg | null {
             const coId = this.getCoId();
             return coId == null
                 ? null
-                : ConfigManager.getCoBasicCfg(this._war.getConfigVersion(), coId);
+                : Utility.ConfigManager.getCoBasicCfg(this._war.getConfigVersion(), coId);
         }
     }
 }

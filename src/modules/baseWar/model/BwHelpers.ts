@@ -1,16 +1,27 @@
 
 namespace TinyWars.BaseWar.BwHelpers {
-    import Types                = Utility.Types;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import Logger               = Utility.Logger;
-    import Helpers              = Utility.Helpers;
-    import GridIndex            = Types.GridIndex;
-    import MovableArea          = Types.MovableArea;
-    import AttackableArea       = Types.AttackableArea;
-    import MapSize              = Types.MapSize;
-    import MovePathNode         = Types.MovePathNode;
-    import UnitType             = Types.UnitType;
+    import Types                    = Utility.Types;
+    import GridIndexHelpers         = Utility.GridIndexHelpers;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import Logger                   = Utility.Logger;
+    import Helpers                  = Utility.Helpers;
+    import ConfigManager            = Utility.ConfigManager;
+    import GridIndex                = Types.GridIndex;
+    import MovableArea              = Types.MovableArea;
+    import AttackableArea           = Types.AttackableArea;
+    import MapSize                  = Types.MapSize;
+    import MovePathNode             = Types.MovePathNode;
+    import UnitType                 = Types.UnitType;
+    import TileType                 = Types.TileType;
+    import Visibility               = Types.Visibility;
+    import CoSkillAreaType          = Types.CoSkillAreaType;
+    import WarSerialization         = ProtoTypes.WarSerialization;
+    import ISerialUnit              = WarSerialization.ISerialUnit;
+    import ISerialTile              = WarSerialization.ISerialTile;
+    import ISerialWar               = WarSerialization.ISerialWar;
+    import IGridIndex               = ProtoTypes.Structure.IGridIndex;
+    import IRuleForPlayers          = ProtoTypes.WarRule.IRuleForPlayers;
+    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
@@ -219,11 +230,33 @@ namespace TinyWars.BaseWar.BwHelpers {
         const { x, y } = gridIndex;
         return (!!area[x]) && (!!area[x][y]);
     }
+    export function checkIsGridIndexInsideCoSkillArea(
+        gridIndex               : GridIndex,
+        coSkillAreaType         : CoSkillAreaType,
+        coGridIndexListOnMap    : GridIndex[],
+        coZoneRadius            : number,
+    ): boolean | undefined {
+        if (coSkillAreaType === CoSkillAreaType.Halo) {
+            return true;
+        } else if (coSkillAreaType === CoSkillAreaType.OnMap) {
+            return coGridIndexListOnMap.length > 0;
+        } else if (coSkillAreaType === CoSkillAreaType.Zone) {
+            const distance = GridIndexHelpers.getMinDistance(gridIndex, coGridIndexListOnMap);
+            return (distance != null) && (distance <= coZoneRadius);
+        } else {
+            Logger.error(`BwHelpers.checkIsGridIndexInsideSkillArea() invalid areaType: ${coSkillAreaType}`);
+            return undefined;
+        }
+    }
 
-    export function getUnitProductionCost(war: BwWar, unitType: UnitType): number | undefined {
-        // TODO: take skills into account.
-        const cfg = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType);
-        return cfg ? cfg.productionCost : undefined;
+    export function convertGridIndex(raw: IGridIndex | undefined | null): GridIndex | undefined {
+        return ((!raw) || (raw.x == null) || (raw.y == null))
+            ? undefined
+            : raw as GridIndex;
+    }
+
+    export function getNormalizedHp(hp: number): number {
+        return Math.ceil(hp / CommonConstants.UnitHpNormalizer);
     }
 
     export function checkIsStateRequesting(state: Types.ActionPlannerState): boolean {
@@ -234,7 +267,8 @@ namespace TinyWars.BaseWar.BwHelpers {
             || (state === Types.ActionPlannerState.RequestingPlayerSurrender)
             || (state === Types.ActionPlannerState.RequestingPlayerVoteForDraw)
             || (state === Types.ActionPlannerState.RequestingPlayerProduceUnit)
-            || (state === Types.ActionPlannerState.RequestingUnitAttack)
+            || (state === Types.ActionPlannerState.RequestingUnitAttackUnit)
+            || (state === Types.ActionPlannerState.RequestingUnitAttackTile)
             || (state === Types.ActionPlannerState.RequestingUnitBeLoaded)
             || (state === Types.ActionPlannerState.RequestingUnitBuildTile)
             || (state === Types.ActionPlannerState.RequestingUnitCaptureTile)
@@ -252,7 +286,148 @@ namespace TinyWars.BaseWar.BwHelpers {
             || (state === Types.ActionPlannerState.RequestingUnitWait);
     }
 
-    export function exeInstantSkill(war: BwWar, player: BwPlayer, gridIndex: GridIndex, skillId: number, extraData: ProtoTypes.IWarUseCoSkillExtraData): void {
+    /**
+     * The unit is dangling after moving!
+     * You must call unitMap.addUnitOnMap() or unitMap.addUnitLoaded() after calling this function.
+     */
+    export function moveUnit(
+        params: {
+            war             : BwWar;
+            pathNodes       : GridIndex[];
+            launchUnitId    : number | null | undefined;
+            fuelConsumption : number;
+        }
+    ): void {
+        const { war, pathNodes, launchUnitId, fuelConsumption } = params;
+        const unitMap = war.getUnitMap();
+        if (unitMap == null) {
+            Logger.error(`BwHelpers.moveUnit() empty unitMap.`);
+            return undefined;
+        }
+
+        const tileMap = war.getTileMap();
+        if (tileMap == null) {
+            Logger.error(`BwHelpers.getTileMap() empty tileMap.`);
+            return undefined;
+        }
+
+        const fogMap = war.getFogMap();
+        if (fogMap == null) {
+            Logger.error(`BwHelpers.getFogMap() empty fogMap.`);
+            return undefined;
+        }
+
+        const beginningGridIndex    = pathNodes[0];
+        const focusUnit             = unitMap.getUnit(beginningGridIndex, launchUnitId);
+        if (focusUnit == null) {
+            Logger.error(`BwHelpers.moveUnit() empty focusUnit.`);
+            return undefined;
+        }
+
+        const currentFuel = focusUnit.getCurrentFuel();
+        if (currentFuel == null) {
+            Logger.error(`BwHelpers.moveUnit() empty currentFuel.`);
+            return undefined;
+        }
+
+        const tile = tileMap.getTile(beginningGridIndex);
+        if (tile == null) {
+            Logger.error(`BwHelpers.moveUnit() empty tile.`);
+            return undefined;
+        }
+
+        fogMap.updateMapFromPathsByUnitAndPath(focusUnit, pathNodes);
+        focusUnit.setCurrentFuel(currentFuel - fuelConsumption);
+        if (launchUnitId == null) {
+            unitMap.removeUnitOnMap(beginningGridIndex, false);
+        } else {
+            unitMap.removeUnitLoaded(launchUnitId);
+        }
+
+        if (pathNodes.length > 1) {
+            const endingGridIndex = pathNodes[pathNodes.length - 1];
+            focusUnit.setIsCapturingTile(false);
+            focusUnit.setIsBuildingTile(false);
+            focusUnit.setLoaderUnitId(undefined);
+            focusUnit.setGridIndex(endingGridIndex);
+            for (const unit of unitMap.getUnitsLoadedByLoader(focusUnit, true)) {
+                unit.setGridIndex(endingGridIndex);
+            }
+
+            if (launchUnitId == null) {
+                tile.updateOnUnitLeave();
+            }
+        }
+    }
+
+    export function updateTilesAndUnitsBeforeExecutingAction(
+        war         : BwWar,
+        extraData   : {
+            actingTiles?    : ISerialTile[],
+            actingUnits?    : ISerialUnit[],
+            discoveredTiles?: ISerialTile[],
+            discoveredUnits?: ISerialUnit[],
+        } | undefined | null,
+    ): void {
+        if (extraData) {
+            addUnitsBeforeExecutingAction(war, extraData.actingUnits, false);
+            addUnitsBeforeExecutingAction(war, extraData.discoveredUnits, false);
+            updateTilesBeforeExecutingAction(war, extraData.actingTiles);
+            updateTilesBeforeExecutingAction(war, extraData.discoveredTiles);
+        }
+    }
+    function addUnitsBeforeExecutingAction(
+        war             : BwWar,
+        unitsData       : ISerialUnit[] | undefined | null,
+        isViewVisible   : boolean
+    ): void {
+        if ((unitsData) && (unitsData.length)) {
+            const unitMap       = war.getUnitMap();
+            const configVersion = war.getConfigVersion();
+            const unitClass     = unitMap.getUnitClass();
+
+            for (const unitData of unitsData) {
+                if (!unitMap.getUnitById(unitData.unitId)) {
+                    const unit      = new unitClass().init(unitData, configVersion);
+                    const isOnMap   = unit.getLoaderUnitId() == null;
+                    if (isOnMap) {
+                        unitMap.setUnitOnMap(unit);
+                    } else {
+                        unitMap.setUnitLoaded(unit);
+                    }
+                    unit.startRunning(war);
+                    unit.startRunningView();
+                    unit.setViewVisible(isViewVisible);
+                }
+            }
+        }
+    }
+    function updateTilesBeforeExecutingAction(war: BwWar, tilesData: ISerialTile[] | undefined | null): void {
+        if ((tilesData) && (tilesData.length)) {
+            const tileMap   = war.getTileMap();
+            for (const tileData of tilesData) {
+                const gridIndex = BwHelpers.convertGridIndex(tileData.gridIndex);
+                if (gridIndex == null) {
+                    Logger.error(`BwHelpers.updateTilesBeforeExecutingAction() empty gridIndex.`);
+                    return undefined;
+                }
+
+                const tile = tileMap.getTile(gridIndex);
+                if (tile.getHasFog()) {
+                    tile.setHasFog(false);
+                    tile.deserialize(tileData, tile.getConfigVersion());
+                }
+            }
+        }
+    }
+
+    export function exeInstantSkill(
+        war         : BwWar,
+        player      : BwPlayer,
+        gridIndex   : GridIndex,
+        skillId     : number,
+        extraData   : ProtoTypes.Structure.IDataForUseCoSkill
+    ): void {
         const configVersion = war.getConfigVersion();
         const skillCfg      = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
         const playerIndex   = player.getPlayerIndex();
@@ -262,7 +437,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (skillCfg.selfHpGain) {
             const cfg       = skillCfg.selfHpGain;
             const category  = cfg[1];
-            const modifier  = cfg[2] * ConfigManager.UNIT_HP_NORMALIZER;
+            const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
@@ -285,7 +460,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if (skillCfg.enemyHpGain) {
             const cfg       = skillCfg.enemyHpGain;
             const category  = cfg[1];
-            const modifier  = cfg[2] * ConfigManager.UNIT_HP_NORMALIZER;
+            const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
             unitMap.forEachUnit(unit => {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), category))
@@ -520,7 +695,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             if (!center) {
                 Logger.error("BwHelpers.exeInstantSkill() no center for indiscriminateAreaDamage!");
             } else {
-                const hpDamage = skillCfg.indiscriminateAreaDamage[2] * ConfigManager.UNIT_HP_NORMALIZER;
+                const hpDamage = skillCfg.indiscriminateAreaDamage[2] * CommonConstants.UnitHpNormalizer;
                 for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center as GridIndex, 0, skillCfg.indiscriminateAreaDamage[1], unitMap.getMapSize())) {
                     const unit = unitMap.getUnitOnMap(gridIndex);
                     if (unit) {
@@ -553,6 +728,34 @@ namespace TinyWars.BaseWar.BwHelpers {
                 }
             });
         }
+    }
+
+    export function getAdjacentPlasmas(tileMap: BwTileMap, origin: GridIndex): GridIndex[] {
+        const plasmas           = [origin];
+        const mapSize           = tileMap.getMapSize();
+        const mapHeight         = mapSize.height;
+        const searchedIndexes   = new Set<number>([getIndexOfGridIndex(mapHeight, origin)]);
+
+        let i = 0;
+        while (i < plasmas.length) {
+            for (const adjacentGridIndex of GridIndexHelpers.getAdjacentGrids(plasmas[i], mapSize)) {
+                if (tileMap.getTile(adjacentGridIndex).getType() === TileType.Plasma) {
+                    const searchIndex = getIndexOfGridIndex(mapHeight, adjacentGridIndex);
+                    if (!searchedIndexes.has(searchIndex)) {
+                        searchedIndexes.add(searchIndex);
+                        plasmas.push(adjacentGridIndex);
+                    }
+                }
+            }
+            ++i;
+        }
+
+        plasmas.shift();
+        return plasmas;
+    }
+
+    function getIndexOfGridIndex(mapHeight: number, gridIndex: GridIndex): number {
+        return gridIndex.x * mapHeight + gridIndex.y;
     }
 
     export function getIdleBuildingGridIndex(war: BwWar): Types.GridIndex | null {
@@ -599,37 +802,103 @@ namespace TinyWars.BaseWar.BwHelpers {
         return null;
     }
 
-    export async function getMapSizeAndMaxPlayerIndex(data: Types.SerializedWar): Promise<Types.MapSizeAndMaxPlayerIndex | null> {
-        const mapFileName = data.mapFileName;
-        if (mapFileName) {
-            const mapExtraData = await WarMap.WarMapModel.getExtraData(mapFileName);
-            return !mapExtraData
-                ? null
-                : {
-                    mapWidth        : mapExtraData.mapWidth,
-                    mapHeight       : mapExtraData.mapHeight,
-                    maxPlayerIndex  : mapExtraData.playersCount,
-                };
-        } else {
-            const tiles             = data.field.tileMap.tiles;
-            const maxPlayerIndex    = data.players.length - 1;
-            if ((!tiles) || (!tiles.length) || (!maxPlayerIndex)) {
-                return null;
-            } else {
-                let mapWidth   = 0;
-                let mapHeight  = 0;
-                for (const tile of tiles) {
-                    mapWidth   = Math.max(mapWidth, (tile.gridX || 0) + 1);
-                    mapHeight  = Math.max(mapHeight, (tile.gridY || 0) + 1);
-                }
-                return ((mapWidth > 0) && (mapHeight > 0))
-                    ? { mapWidth, mapHeight, maxPlayerIndex }
-                    : null;
+    export async function getMapSizeAndMaxPlayerIndex(data: ISerialWar): Promise<Types.MapSizeAndMaxPlayerIndex | null> {
+        const settingsForCommon = data.settingsForCommon;
+        const mapId             = settingsForCommon ? settingsForCommon.mapId : null;
+        if (mapId != null) {
+            const mapRawData = await WarMap.WarMapModel.getRawData(mapId);
+            if (mapRawData == null) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty mapRawData.`);
+                return undefined;
             }
+
+            const mapWidth = mapRawData.mapWidth;
+            if (mapWidth == null) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty mapWidth.`);
+                return undefined;
+            }
+
+            const mapHeight = mapRawData.mapHeight;
+            if (mapHeight == null) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty mapHeight.`);
+                return undefined;
+            }
+
+            const maxPlayerIndex = mapRawData.playersCount;
+            if (maxPlayerIndex == null) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty maxPlayerIndex.`);
+                return undefined;
+            }
+
+            return {
+                mapWidth,
+                mapHeight,
+                maxPlayerIndex,
+            };
+
+        } else {
+            const fieldData     = data.field;
+            const tileMapData   = fieldData ? fieldData.tileMap : null;
+            const tiles         = tileMapData ? tileMapData.tiles : null;
+            if (tiles == null) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty tiles.`);
+                return undefined;
+            }
+
+            const playerManagerData             = data.playerManager;
+            const playersData                   = playerManagerData ? playerManagerData.players : null;
+            const playersCountIncludingNeutral  = playersData ? playersData.length : null;
+            if (playersCountIncludingNeutral == null) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty playersCountIncludingNeutral.`);
+                return undefined;
+            }
+
+            const maxPlayerIndex = playersCountIncludingNeutral - 1;
+            if (maxPlayerIndex <= 1) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() invalid maxPlayerIndex: ${maxPlayerIndex}`);
+                return undefined;
+            }
+
+            let mapWidth   = 0;
+            let mapHeight  = 0;
+            for (const tile of tiles) {
+                const gridIndex = convertGridIndex(tile.gridIndex);
+                if (gridIndex == null) {
+                    Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty gridIndex.`);
+                    return undefined;
+                }
+
+                mapWidth   = Math.max(mapWidth, gridIndex.x + 1);
+                mapHeight  = Math.max(mapHeight, gridIndex.y + 1);
+            }
+
+            if (mapWidth <= 0) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() mapWidth <= 0: ${mapWidth}`);
+                return undefined;
+            }
+            if (mapHeight <= 0) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() mapHeight <= 0: ${mapHeight}`);
+                return undefined;
+            }
+
+            return {
+                mapWidth,
+                mapHeight,
+                maxPlayerIndex,
+            };
         }
     }
 
-    export function encodeFogMapForPaths(map: number[][], mapSize: MapSize): string | undefined {
+    export function getTeamIndexByRuleForPlayers(ruleForPlayers: IRuleForPlayers, playerIndex: number): number | null | undefined {
+        for (const playerRule of ruleForPlayers.playerRuleDataList || []) {
+            if (playerRule.playerIndex === playerIndex) {
+                return playerRule.teamIndex;
+            }
+        }
+        return undefined;
+    }
+
+    export function getVisibilityListWithMapFromPath(map: Visibility[][], mapSize: MapSize): Visibility[] | undefined {
         const { width, height } = mapSize;
         const data              = new Array(width * height);
         let needSerialize       = false;
@@ -637,24 +906,12 @@ namespace TinyWars.BaseWar.BwHelpers {
         for (let x = 0; x < width; ++x) {
             for (let y = 0; y < height; ++y) {
                 data[x + y * width] = map[x][y];
-                (!needSerialize) && (map[x][y] > 0) && (needSerialize = true);
+                if ((!needSerialize) && (map[x][y] !== Visibility.OutsideVision)) {
+                    needSerialize = true;
+                }
             }
         }
 
-        return needSerialize ? data.join(``) : undefined;
-    }
-
-    export function checkShouldSerializeTile(
-        tileData            : Types.SerializedTile,
-        initialBaseViewId   : number | null,
-        initialObjectViewId : number | null,
-    ): boolean {
-        return (tileData.currentBuildPoint      != null)
-            || (tileData.currentCapturePoint    != null)
-            || (tileData.currentHp              != null)
-            || (tileData.baseViewId             != initialBaseViewId)
-            || (tileData.objectViewId           != initialObjectViewId)
-            || (initialBaseViewId               == null)
-            || (initialObjectViewId             == null);
+        return needSerialize ? data : undefined;
     }
 }

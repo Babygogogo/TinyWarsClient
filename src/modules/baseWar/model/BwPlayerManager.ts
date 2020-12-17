@@ -1,26 +1,94 @@
 
 namespace TinyWars.BaseWar {
-    import Types    = Utility.Types;
+    import ConfigManager        = Utility.ConfigManager;
+    import Logger               = Utility.Logger;
+    import WarSerialization     = Utility.ProtoTypes.WarSerialization;
+    import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;
+    import ISerialPlayer        = WarSerialization.ISerialPlayer;
 
     export abstract class BwPlayerManager {
         private _players        = new Map<number, BwPlayer>();
         private _war            : BwWar;
 
         protected abstract _getPlayerClass(): new () => BwPlayer;
+        public abstract getAliveWatcherTeamIndexesForSelf(): Set<number>;
 
-        public init(dataList: Types.SerializedPlayer[]): BwPlayerManager {
-            this._players.clear();
-            for (const data of dataList) {
-                this._players.set(data.playerIndex!, (new (this._getPlayerClass())).init(data));
+        public init(data: ISerialPlayerManager): BwPlayerManager | undefined {
+            const playersMap = this._getPlayersMap();
+            playersMap.clear();
+
+            const playerList = data.players;
+            if ((!playerList) || (!playerList.length)) {
+                Logger.error(`BwPlayerManager.init() empty players! data: ${JSON.stringify(data)}`);
+                return undefined;
+            }
+
+            for (const d of playerList) {
+                const playerIndex = d.playerIndex;
+                if (playerIndex == null) {
+                    Logger.error(`BwPlayerManager.init() empty playerIndex.`);
+                    return undefined;
+                }
+
+                const player = (new (this._getPlayerClass())()).init(d);
+                if (player == null) {
+                    Logger.error(`BwPlayerManager.init() empty player.`);
+                    return undefined;
+                }
+
+                playersMap.set(playerIndex, player);
+            }
+
+            return this;
+        }
+        public fastInit(data: ISerialPlayerManager): BwPlayerManager {
+            for (const d of data.players) {
+                this.getPlayer(d.playerIndex).init(d);
             }
             return this;
         }
 
         public startRunning(war: BwWar): void {
-            this._war = war;
+            this._setWar(war);
             for (const [, player] of this._players) {
                 player.startRunning(war);
             }
+        }
+
+        public serialize(): ISerialPlayerManager | undefined {
+            const players: ISerialPlayer[] = [];
+            for (const [, player] of this._getPlayersMap()) {
+                const serialPlayer = player.serialize();
+                if (serialPlayer == null) {
+                    Logger.error(`BwPlayerManager.serialize() empty serialPlayer.`);
+                    return undefined;
+                }
+
+                players.push(serialPlayer);
+            }
+
+            return { players };
+        }
+        public serializeForSimulation(): ISerialPlayerManager | undefined {
+            const players: ISerialPlayer[] = [];
+            for (const [, player] of this._getPlayersMap()) {
+                const serialPlayer = player.serializeForSimulation();
+                if (serialPlayer == null) {
+                    Logger.error(`BwPlayerManager.serializeForSimulation() empty serialPlayer.`);
+                    return undefined;
+                }
+
+                players.push(serialPlayer);
+            }
+
+            return { players };
+        }
+
+        private _setWar(war: BwWar): void {
+            this._war = war;
+        }
+        protected _getWar(): BwWar {
+            return this._war;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -29,7 +97,7 @@ namespace TinyWars.BaseWar {
         public getPlayer(playerIndex: number): BwPlayer | undefined {
             return this._players.get(playerIndex);
         }
-        public getAllPlayers(): Map<number, BwPlayer> {
+        protected _getPlayersMap(): Map<number, BwPlayer> {
             return this._players;
         }
 
@@ -43,7 +111,7 @@ namespace TinyWars.BaseWar {
         }
 
         public getPlayerInTurn(): BwPlayer {
-            return this.getPlayer(this._war.getTurnManager().getPlayerIndexInTurn());
+            return this.getPlayer(this._getWar().getTurnManager().getPlayerIndexInTurn());
         }
 
         public getTeamIndex(playerIndex: number): number {
@@ -113,11 +181,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public getWatcherTeamIndexes(watcherUserId: number): Set<number> {
+        public getAliveWatcherTeamIndexes(watcherUserId: number): Set<number> {
             const indexes = new Set<number>();
             this.forEachPlayer(false, player => {
                 if (player.getIsAlive()) {
-                    if ((player.getUserId() === watcherUserId) ||
+                    if ((player.getUserId() === watcherUserId)                  ||
                         (player.getWatchOngoingSrcUserIds().has(watcherUserId))
                     ) {
                         indexes.add(player.getTeamIndex());

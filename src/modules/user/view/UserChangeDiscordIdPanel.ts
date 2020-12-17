@@ -42,17 +42,17 @@ namespace TinyWars.User {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: NotifyType.SUserChangeDiscordId,         callback: this._onSUserChangeDiscordId },
-                { type: NotifyType.SUserChangeDiscordIdFailed,   callback: this._onSUserChangeDiscordIdFailed },
-                { type: NotifyType.LanguageChanged,              callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgUserSetDiscordId,         callback: this._onMsgUserSetDiscordId },
+                { type: NotifyType.MsgUserSetDiscordIdFailed,   callback: this._onMsgUserSetDiscordIdFailed },
             ];
             this._uiListeners = [
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
         }
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._isRequesting          = false;
-            this._inputDiscordId.text   = UserModel.getSelfDiscordId();
+            this._inputDiscordId.text   = await UserModel.getSelfDiscordId();
             this._updateComponentsForLanguage();
         }
 
@@ -65,16 +65,16 @@ namespace TinyWars.User {
                     FloatText.show(Lang.getText(Lang.Type.A0048));
                 } else {
                     this._isRequesting = true;
-                    UserProxy.reqChangeDiscordId(discordId);
+                    UserProxy.reqSetDiscordId(discordId);
                 }
             }
         }
 
-        private _onSUserChangeDiscordId(e: egret.Event): void {
+        private _onMsgUserSetDiscordId(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0049));
             this.close();
         }
-        private _onSUserChangeDiscordIdFailed(e: egret.Event): void {
+        private _onMsgUserSetDiscordIdFailed(e: egret.Event): void {
             this._isRequesting = false;
         }
 

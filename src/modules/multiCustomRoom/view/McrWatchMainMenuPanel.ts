@@ -39,8 +39,8 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SLogout,            callback: this._onNotifySLogout },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);
@@ -62,7 +62,7 @@ namespace TinyWars.MultiCustomRoom {
             McrMainMenuPanel.show();
         }
 
-        private _onNotifySLogout(e: egret.Event): void {
+        private _onMsgUserLogout(e: egret.Event): void {
             McrWatchMainMenuPanel.hide();
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -94,7 +94,7 @@ namespace TinyWars.MultiCustomRoom {
                         McrWatchHandleRequestWarsPanel.show();
                     },
                     redChecker  : () => {
-                        const watchInfos = McrModel.getWatchRequestedWarInfos();
+                        const watchInfos = MultiPlayerWar.MpwModel.getWatchRequestedWarInfos();
                         return (!!watchInfos) && (watchInfos.length > 0);
                     },
                 },

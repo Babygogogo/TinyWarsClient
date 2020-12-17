@@ -4,8 +4,9 @@ namespace TinyWars.GameUi {
     import Types   = Utility.Types;
 
     export class UiButton extends eui.Button {
-        private _imgExtra: eui.Image;
-        private _imgRed  : eui.Image;
+        private _imgExtra       : eui.Image;
+        private _imgDisplay     : UiImage;
+        private _imgRed         : eui.Image;
 
         public constructor() {
             super();
@@ -25,17 +26,29 @@ namespace TinyWars.GameUi {
             }
         }
 
-        public checkExtraVisible(): boolean {
+        public getImgExtraVisible(): boolean {
             return this._imgExtra ? this._imgExtra.visible : false;
         }
-        public setExtraVisible(visible: boolean): void {
+        public setImgExtraVisible(visible: boolean): void {
             if (this._imgExtra) {
                 this._imgExtra.visible = visible;
             }
         }
-        public setExtraSource(source: string): void {
+        public setImgExtraSource(source: string): void {
             if (this._imgExtra) {
                 this._imgExtra.source = source;
+            }
+        }
+
+        public setImgDisplaySource(source: string): void {
+            const img = this._imgDisplay;
+            (img) && (img.source = source);
+        }
+
+        public setTextColor(color: number): void {
+            const label = this.labelDisplay;
+            if (label instanceof UiLabel) {
+                label.textColor = color;
             }
         }
 
@@ -43,7 +56,7 @@ namespace TinyWars.GameUi {
             this.removeEventListener(egret.Event.COMPLETE, this._onCompleted, this);
 
             this.setRedVisible(false);
-            this.setExtraVisible(false);
+            this.setImgExtraVisible(false);
         }
         private _onTouchBegin(e: egret.TouchEvent): void {
             Helpers.changeColor(this, Types.ColorType.White, 50);

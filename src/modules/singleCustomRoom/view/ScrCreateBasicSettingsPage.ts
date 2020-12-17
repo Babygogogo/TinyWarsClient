@@ -1,11 +1,9 @@
 
 namespace TinyWars.SingleCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
-    import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
     import WarMapModel      = WarMap.WarMapModel;
-    import HelpPanel        = Common.HelpPanel;
 
     export class ScrCreateBasicSettingsPage extends GameUi.UiTabPage {
         private _labelMapNameTitle      : GameUi.UiLabel;
@@ -27,7 +25,7 @@ namespace TinyWars.SingleCustomRoom {
         private _labelPlayerListTips    : GameUi.UiLabel;
         private _listPlayer             : GameUi.UiScrollList;
 
-        private _mapExtraData: ProtoTypes.IMapExtraData;
+        private _mapRawData : ProtoTypes.Map.IMapRawData;
 
         public constructor() {
             super();
@@ -52,7 +50,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         protected async _onOpened(): Promise<void> {
-            this._mapExtraData = await ScrModel.getCreateWarMapExtraData();
+            this._mapRawData = await ScrModel.getCreateWarMapRawData();
 
             this._updateComponentsForLanguage();
             this._updateLabelMapName();
@@ -92,7 +90,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            Common.CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
                 content: Lang.getRichText(Lang.RichType.R0002),
             });
@@ -111,12 +109,12 @@ namespace TinyWars.SingleCustomRoom {
             this._btnChangeSaveSlot.label       = `${Lang.getText(Lang.Type.B0230)}`;
         }
 
-        private _updateLabelMapName(): void {
-            WarMapModel.getMapNameInLanguage(this._mapExtraData.mapFileName).then(v => this._labelMapName.text = v);
+        private async _updateLabelMapName(): Promise<void> {
+            WarMapModel.getMapNameInCurrentLanguage(this._mapRawData.mapId).then(v => this._labelMapName.text = v);
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapExtraData.playersCount;
+            this._labelPlayersCount.text = "" + this._mapRawData.playersCount;
         }
 
         private _updateLabelSaveSlot(): void {
@@ -132,7 +130,7 @@ namespace TinyWars.SingleCustomRoom {
         }
     }
 
-    type DataForPlayerRenderer = ProtoTypes.IWarPlayerInfo;
+    type DataForPlayerRenderer = ProtoTypes.Structure.IWarPlayerInfo;
 
     class PlayerRenderer extends eui.ItemRenderer {
         private _labelPlayerIndex   : GameUi.UiLabel;
@@ -182,7 +180,7 @@ namespace TinyWars.SingleCustomRoom {
             if (coId == null) {
                 this._labelCoName.text = `(${Lang.getText(Lang.Type.B0001)} CO)`;
             } else {
-                const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getNewestConfigVersion(), coId);
+                const cfg               = Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getLatestConfigVersion(), coId);
                 this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
             }
         }

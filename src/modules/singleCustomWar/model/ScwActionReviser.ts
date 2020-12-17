@@ -1,25 +1,30 @@
 
 namespace TinyWars.SingleCustomWar.ScwActionReviser {
-    import Types                = Utility.Types;
-    import Logger               = Utility.Logger;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import Helpers              = Utility.Helpers;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import DamageCalculator     = Utility.DamageCalculator;
-    import BwHelpers            = BaseWar.BwHelpers;
-    import BwWar                = BaseWar.BwWar;
-    import BwUnit               = BaseWar.BwUnit;
-    import BwTile               = BaseWar.BwTile;
-    import BwUnitMap            = BaseWar.BwUnitMap;
-    import BwPlayer             = BaseWar.BwPlayer;
-    import TurnPhaseCode        = Types.TurnPhaseCode;
-    import RawWarAction         = Types.RawWarActionContainer;
-    import WarAction            = Types.WarActionContainer;
-    import GridIndex            = Types.GridIndex;
-    import UnitActionState      = Types.UnitActionState;
-    import DropDestination      = Types.DropDestination;
-    import UnitAttributes       = Types.UnitAttributes;
+    import Types                    = Utility.Types;
+    import Logger                   = Utility.Logger;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import GridIndexHelpers         = Utility.GridIndexHelpers;
+    import Helpers                  = Utility.Helpers;
+    import VisibilityHelpers        = Utility.VisibilityHelpers;
+    import DamageCalculator         = Utility.DamageCalculator;
+    import ConfigManager            = Utility.ConfigManager;
+    import BwWar                    = BaseWar.BwWar;
+    import BwUnit                   = BaseWar.BwUnit;
+    import BwTile                   = BaseWar.BwTile;
+    import BwUnitMap                = BaseWar.BwUnitMap;
+    import BwPlayer                 = BaseWar.BwPlayer;
+    import TurnPhaseCode            = Types.TurnPhaseCode;
+    import RawWarAction             = Types.RawWarActionContainer;
+    import GridIndex                = Types.GridIndex;
+    import UnitActionState          = Types.UnitActionState;
+    import DropDestination          = Types.DropDestination;
+    import UnitAttributes           = Types.UnitAttributes;
+    import WarAction                = ProtoTypes.WarAction.IActionContainer;
+    import Structure                = ProtoTypes.Structure;
+    import IWarUseCoSkillExtraData  = Structure.IDataForUseCoSkill;
+    import IGridIndex               = Structure.IGridIndex;
+    import IDataForModifyUnit       = Structure.IDataForModifyUnit;
+    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     type DamageMaps = {
         hpMap   : number[][];
@@ -31,12 +36,13 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         sameTeamMap : boolean[][];
     }
 
-    export function revise(war: BwWar, container: RawWarAction): WarAction {
+    export function revise(war: ScwWar, container: RawWarAction): WarAction {
         if      (container.PlayerBeginTurn)     { return revisePlayerBeginTurn(war, container); }
         else if (container.PlayerDeleteUnit)    { return revisePlayerDeleteUnit(war, container); }
         else if (container.PlayerEndTurn)       { return revisePlayerEndTurn(war, container); }
         else if (container.PlayerProduceUnit)   { return revisePlayerProduceUnit(war, container); }
-        else if (container.UnitAttack)          { return reviseUnitAttack(war, container); }
+        else if (container.UnitAttackUnit)      { return reviseUnitAttackUnit(war, container); }
+        else if (container.UnitAttackTile)      { return reviseUnitAttackTile(war, container); }
         else if (container.UnitBeLoaded)        { return reviseUnitBeLoaded(war, container); }
         else if (container.UnitBuildTile)       { return reviseUnitBuildTile(war, container); }
         else if (container.UnitCaptureTile)     { return reviseUnitCaptureTile(war, container); }
@@ -55,338 +61,16 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     }
 
     function revisePlayerBeginTurn(war: BwWar, container: RawWarAction): WarAction {    // DONE
-        const turnManager   = war.getTurnManager();
-        const currPhaseCode = turnManager.getPhaseCode();
+        const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.WaitBeginTurn,
             `ScwActionReviser.revisePlayerBeginTurn() invalid turn phase code: ${currPhaseCode}`
         );
 
-        // init
-        const playerIndexInTurn         = turnManager.getPlayerIndexInTurn();
-        const turnIndex                 = turnManager.getTurnIndex();
-        const tileMap                   = war.getTileMap();
-        const unitMap                   = war.getUnitMap();
-        const unitAttributesMap         = new Map<BwUnit, UnitAttributes>();
-        const action                    : WarAction = {
-            actionId                : war.getNextActionId(),
-            WarActionPlayerBeginTurn: {},
-        };
-        unitMap.forEachUnit(unit => {
-            if (unit.getPlayerIndex() === playerIndexInTurn) {
-                unitAttributesMap.set(unit, unit.getAttributes());
-            }
-        });
-
-        // PhaseGetFund
-        let totalIncome = 0;
-        if (playerIndexInTurn !== 0) {
-            totalIncome += turnIndex === 0 ? war.getSettingsInitialFund() : 0;
-            tileMap.forEachTile(tile => totalIncome += tile.getIncomeForPlayer(playerIndexInTurn));
+        return {
+            actionId                : war.getExecutedActionsCount(),
+            ActionPlayerBeginTurn   : {},
         }
-
-        // PhaseConsumeFuel
-        if (playerIndexInTurn !== 0) {
-            if (turnIndex > 0) {
-                unitMap.forEachUnitOnMap(unit => {
-                    if (unit.getPlayerIndex() === playerIndexInTurn) {
-                        const attributes    = unitAttributesMap.get(unit);
-                        attributes.fuel     = Math.max(0, attributes.fuel - unit.getFuelConsumptionPerTurn());
-                    }
-                });
-            }
-        }
-
-        // PhaseRepairUnitByTile
-        const playerInTurn  = war.getPlayer(playerIndexInTurn);
-        let newFund         = playerInTurn.getFund() + totalIncome;
-        if (playerIndexInTurn !== 0) {
-            const allUnitsOnMap: BwUnit[] = [];
-            unitMap.forEachUnitOnMap(unit => {
-                (unit.getPlayerIndex() === playerIndexInTurn) && (allUnitsOnMap.push(unit));
-            });
-
-            const repairDataByTile  : ProtoTypes.IWarUnitRepairData[] = [];
-            for (const unit of allUnitsOnMap.sort(sorterForRepairUnits)) {
-                const gridIndex     = unit.getGridIndex();
-                const attributes    = unitAttributesMap.get(unit);
-                const repairData    = tileMap.getTile(gridIndex).getRepairHpAndCostForUnit(unit, newFund, attributes);
-                if (repairData) {
-                    const maxPrimaryAmmo    = unit.getPrimaryWeaponMaxAmmo();
-                    const maxFlareAmmo      = unit.getFlareMaxAmmo();
-                    const data              : ProtoTypes.IWarUnitRepairData = {
-                        gridIndex,
-                        unitId                  : unit.getUnitId(),
-                        deltaHp                 : repairData.hp > 0 ? repairData.hp : undefined,
-                        deltaFuel               : unit.getMaxFuel() - attributes.fuel,
-                        deltaPrimaryWeaponAmmo  : maxPrimaryAmmo ? maxPrimaryAmmo - attributes.primaryAmmo! : null,
-                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - attributes.flareAmmo! : null,
-                    };
-                    repairDataByTile.push(data);
-                    newFund -= repairData.cost;
-                    updateAttributesByRepairData(attributes, data);
-                }
-            }
-
-            if (repairDataByTile.length) {
-                action.WarActionPlayerBeginTurn.repairDataByTile = repairDataByTile;
-            }
-        }
-
-        // PhaseDestroyUnitsOutOfFuel
-        const destroyedUnits = new Set<BwUnit>();
-        if (playerIndexInTurn !== 0) {
-            unitMap.forEachUnitOnMap(unit => {
-                if ((unit.getPlayerIndex() === playerIndexInTurn)   &&
-                    (unit.checkIsDestroyedOnOutOfFuel())            &&
-                    (unitAttributesMap.get(unit).fuel <= 0)
-                ) {
-                    destroyedUnits.add(unit);
-                    for (const u of unitMap.getUnitsLoadedByLoader(unit, true)) {
-                        destroyedUnits.add(u);
-                    }
-                }
-            });
-        }
-
-        // PhaseRepairUnitByUnit
-        const mapSize = unitMap.getMapSize();
-        if (playerIndexInTurn !== 0) {
-            const allUnitsLoaded: BwUnit[] = [];
-            unitMap.forEachUnitLoaded(unit => {
-                if ((unit.getPlayerIndex() === playerIndexInTurn) && (!destroyedUnits.has(unit))) {
-                    allUnitsLoaded.push(unit);
-                }
-            });
-
-            const repairDataByUnit: ProtoTypes.IWarUnitRepairData[] = [];
-            for (const unit of allUnitsLoaded.sort(sorterForRepairUnits)) {
-                const loader        = unit.getLoaderUnit();
-                const attributes    = unitAttributesMap.get(unit);
-                const repairData    = loader.getRepairHpAndCostForLoadedUnit(unit, newFund, attributes);
-                if (repairData) {
-                    const maxPrimaryAmmo    = unit.getPrimaryWeaponMaxAmmo();
-                    const maxFlareAmmo      = unit.getFlareMaxAmmo();
-                    const data              : ProtoTypes.IWarUnitRepairData = {
-                        gridIndex               : unit.getGridIndex(),
-                        unitId                  : unit.getUnitId(),
-                        deltaHp                 : repairData.hp > 0 ? repairData.hp : undefined,
-                        deltaFuel               : unit.getMaxFuel() - attributes.fuel,
-                        deltaPrimaryWeaponAmmo  : maxPrimaryAmmo ? maxPrimaryAmmo - attributes.primaryAmmo! : null,
-                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - attributes.flareAmmo! : null,
-                    };
-                    repairDataByUnit.push(data);
-                    newFund -= repairData.cost;
-                    updateAttributesByRepairData(attributes, data);
-
-                } else if (loader.checkCanSupplyLoadedUnit()) {
-                    const maxPrimaryAmmo    = unit.getPrimaryWeaponMaxAmmo();
-                    const maxFlareAmmo      = unit.getFlareMaxAmmo();
-                    const data              : ProtoTypes.IWarUnitRepairData = {
-                        gridIndex               : unit.getGridIndex(),
-                        unitId                  : unit.getUnitId(),
-                        deltaHp                 : null,
-                        deltaFuel               : unit.getMaxFuel() - attributes.fuel,
-                        deltaPrimaryWeaponAmmo  : maxPrimaryAmmo ? maxPrimaryAmmo - attributes.primaryAmmo! : null,
-                        deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - attributes.flareAmmo! : null,
-                    };
-                    repairDataByUnit.push(data);
-                    updateAttributesByRepairData(attributes, data);
-                }
-            }
-
-            unitMap.forEachUnitOnMap(supplier => {
-                if ((supplier.checkIsAdjacentUnitSupplier())            &&
-                    (!destroyedUnits.has(supplier))                     &&
-                    (supplier.getPlayerIndex() === playerIndexInTurn)
-                ) {
-                    for (const gridIndex of GridIndexHelpers.getAdjacentGrids(supplier.getGridIndex(), mapSize)) {
-                        const unit          = unitMap.getUnitOnMap(gridIndex);
-                        const unitId        = unit ? unit.getUnitId() : null;
-                        const attributes    = unitAttributesMap.get(unit);
-                        if ((unitId != null)                                        &&
-                            (!destroyedUnits.has(unit))                             &&
-                            (supplier.checkCanSupplyAdjacentUnit(unit, attributes))
-                        ) {
-                            const maxPrimaryAmmo    = unit.getPrimaryWeaponMaxAmmo();
-                            const maxFlareAmmo      = unit.getFlareMaxAmmo();
-                            const data              : ProtoTypes.IWarUnitRepairData = {
-                                gridIndex,
-                                unitId,
-                                deltaHp                 : null,
-                                deltaFuel               : unit.getMaxFuel() - attributes.fuel,
-                                deltaPrimaryWeaponAmmo  : maxPrimaryAmmo ? maxPrimaryAmmo - attributes.primaryAmmo! : null,
-                                deltaFlareAmmo          : maxFlareAmmo ? maxFlareAmmo - attributes.flareAmmo! : null,
-                            };
-                            repairDataByUnit.push(data);
-                            updateAttributesByRepairData(attributes, data);
-                        }
-                    }
-                }
-            });
-
-            if (repairDataByUnit.length > 0) {
-                action.WarActionPlayerBeginTurn.repairDataByUnit = repairDataByUnit;
-            }
-        }
-
-        // PhaseRecoverUnitByCo
-        const coGridIndex = playerInTurn.getCoGridIndexOnMap();
-        if ((playerIndexInTurn !== 0)                               &&
-            (coGridIndex)                                           &&
-            (!destroyedUnits.has(unitMap.getUnitOnMap(coGridIndex)))
-        ) {
-            const configVersion     = war.getConfigVersion();
-            const unitHpNormalizer  = ConfigManager.UNIT_HP_NORMALIZER;
-            const coZoneRadius      = playerInTurn.getCoZoneBaseRadius();
-            const recoverDataList   : ProtoTypes.IWarUnitRepairData[] = [];
-
-            for (const skillId of playerInTurn.getCoCurrentSkills() || []) {
-                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
-
-                if (skillCfg.selfHpRecovery) {
-                    const recoverCfg    = skillCfg.selfHpRecovery;
-                    const targetUnits   : BwUnit[] = [];
-                    unitMap.forEachUnit(unit => {
-                        if ((unit.getPlayerIndex() === playerIndexInTurn)                                           &&
-                            (!destroyedUnits.has(unit))                                                             &&
-                            (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), recoverCfg[1]))
-                        ) {
-                            if ((recoverCfg[0] === Types.CoSkillAreaType.OnMap)                                                                                     ||
-                                ((recoverCfg[0] === Types.CoSkillAreaType.Zone) && (GridIndexHelpers.getDistance(unit.getGridIndex(), coGridIndex) <= coZoneRadius))
-                            ) {
-                                targetUnits.push(unit);
-                            }
-                        }
-                    });
-
-                    const recoverAmount = recoverCfg[2];
-                    for (const unit of targetUnits.sort(sorterForRepairUnits)) {
-                        const attributes            = unitAttributesMap.get(unit);
-                        const currentHp             = attributes.hp;
-                        const normalizedMaxHp       = unit.getNormalizedMaxHp();
-                        const productionCost        = unit.getProductionFinalCost();
-                        const normalizedCurrentHp   = Helpers.getNormalizedHp(currentHp);
-                        const normalizedRepairHp    = Math.min(
-                            normalizedMaxHp - normalizedCurrentHp,
-                            recoverAmount,
-                            Math.floor(newFund * normalizedMaxHp / productionCost)
-                        );
-
-                        const repairAmount = (normalizedRepairHp + normalizedCurrentHp) * unitHpNormalizer - currentHp;
-                        if (repairAmount > 0) {
-                            const recoverData: ProtoTypes.IWarUnitRepairData = {
-                                gridIndex               : unit.getGridIndex(),
-                                unitId                  : unit.getUnitId(),
-                                deltaHp                 : repairAmount,
-                                deltaFuel               : null,
-                                deltaFlareAmmo          : null,
-                                deltaPrimaryWeaponAmmo  : null,
-                            };
-                            recoverDataList.push(recoverData);
-                            newFund -= Math.floor(normalizedRepairHp * productionCost / normalizedMaxHp);
-                            updateAttributesByRepairData(attributes, recoverData);
-                        }
-                    }
-                }
-
-                if (skillCfg.selfFuelRecovery) {
-                    const recoverCfg = skillCfg.selfFuelRecovery;
-                    unitMap.forEachUnit(unit => {
-                        if ((unit.getPlayerIndex() === playerIndexInTurn)                                           &&
-                            (!destroyedUnits.has(unit))                                                             &&
-                            (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), recoverCfg[1]))
-                        ) {
-                            if ((recoverCfg[0] === Types.CoSkillAreaType.OnMap)                                                                                   ||
-                                ((recoverCfg[0] === Types.CoSkillAreaType.Zone) && (GridIndexHelpers.getDistance(unit.getGridIndex(), coGridIndex) <= coZoneRadius))
-                            ) {
-                                const maxFuel       = unit.getMaxFuel();
-                                const attributes    = unitAttributesMap.get(unit);
-                                const recoverData   : ProtoTypes.IWarUnitRepairData = {
-                                    gridIndex               : unit.getGridIndex(),
-                                    unitId                  : unit.getUnitId(),
-                                    deltaHp                 : null,
-                                    deltaFuel               : Math.min(Math.floor(maxFuel * recoverCfg[2] / 100), maxFuel - attributes.fuel),
-                                    deltaFlareAmmo          : null,
-                                    deltaPrimaryWeaponAmmo  : null,
-                                };
-                                recoverDataList.push(recoverData);
-                                updateAttributesByRepairData(attributes, recoverData);
-                            }
-                        }
-                    });
-                }
-
-                if (skillCfg.selfPrimaryAmmoRecovery) {
-                    const recoverCfg = skillCfg.selfPrimaryAmmoRecovery;
-                    unitMap.forEachUnit(unit => {
-                        if ((unit.getPlayerIndex() === playerIndexInTurn)                                           &&
-                            (!destroyedUnits.has(unit))                                                             &&
-                            (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getType(), recoverCfg[1]))
-                        ) {
-                            if ((recoverCfg[0] === Types.CoSkillAreaType.OnMap)                                                                                   ||
-                                ((recoverCfg[0] === Types.CoSkillAreaType.Zone) && (GridIndexHelpers.getDistance(unit.getGridIndex(), coGridIndex) <= coZoneRadius))
-                            ) {
-                                const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
-                                if (maxAmmo) {
-                                    const attributes    = unit.getAttributes();
-                                    const recoverData   : ProtoTypes.IWarUnitRepairData = {
-                                        gridIndex               : unit.getGridIndex(),
-                                        unitId                  : unit.getUnitId(),
-                                        deltaHp                 : null,
-                                        deltaFuel               : null,
-                                        deltaFlareAmmo          : null,
-                                        deltaPrimaryWeaponAmmo  : Math.min(Math.floor(maxAmmo * recoverCfg[2] / 100), maxAmmo - attributes.primaryAmmo!),
-                                    };
-                                    recoverDataList.push(recoverData);
-                                    updateAttributesByRepairData(attributes, recoverData);
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-
-            if (recoverDataList.length) {
-                const dict = new Map<number, ProtoTypes.IWarUnitRepairData>();
-                for (const data of recoverDataList) {
-                    const unitId = data.unitId!;
-                    if (!dict.has(unitId)) {
-                        dict.set(unitId, Helpers.deepClone(data));
-                    } else {
-                        const currData      = dict.get(unitId)!;
-                        currData.deltaHp    = currData.deltaHp == null
-                            ? data.deltaHp
-                            : currData.deltaHp + (data.deltaHp || 0);
-                        currData.deltaFuel = currData.deltaFuel == null
-                            ? data.deltaFuel
-                            : currData.deltaFuel + (data.deltaFuel || 0);
-                        currData.deltaFlareAmmo = currData.deltaFlareAmmo == null
-                            ? data.deltaFlareAmmo
-                            : currData.deltaFlareAmmo + (data.deltaFlareAmmo || 0);
-                        currData.deltaPrimaryWeaponAmmo = currData.deltaPrimaryWeaponAmmo == null
-                            ? data.deltaPrimaryWeaponAmmo
-                            : currData.deltaPrimaryWeaponAmmo + (data.deltaPrimaryWeaponAmmo || 0);
-                    }
-                }
-
-                const arr: ProtoTypes.IWarUnitRepairData[] = [];
-                for (const [, data] of dict) {
-                    arr.push(data);
-                }
-                action.WarActionPlayerBeginTurn!.recoverDataByCo = arr;
-            }
-        }
-
-        // PhaseActivateMapWeapon
-        // Nothing to do for now.
-
-        // PhaseMain
-        const unitsCount                                = unitAttributesMap.size;
-        action.WarActionPlayerBeginTurn.remainingFund   = newFund;
-        action.WarActionPlayerBeginTurn.isDefeated      = (playerIndexInTurn !== 0) && (unitsCount > 0) && (unitsCount === destroyedUnits.size);
-        action.actionId                                 = container.actionId;
-        return action;
     }
 
     function revisePlayerDeleteUnit(war: BwWar, container: RawWarAction): WarAction {   // DONE
@@ -397,8 +81,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         );
 
         return {
-            actionId                    : war.getNextActionId(),
-            WarActionPlayerDeleteUnit   : {
+            actionId                    : war.getExecutedActionsCount(),
+            ActionPlayerDeleteUnit   : {
                 gridIndex: container.PlayerDeleteUnit.gridIndex,
             },
         }
@@ -412,8 +96,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         );
 
         return {
-            actionId                : war.getNextActionId(),
-            WarActionPlayerEndTurn  : {}
+            actionId                : war.getExecutedActionsCount(),
+            ActionPlayerEndTurn  : {}
         };
     }
 
@@ -430,56 +114,60 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const gridIndex     = action.gridIndex;
         const unitHp        = action.unitHp;
         const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
-        const cfgCost       = ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType).productionCost;
+        const cfgCost       = Utility.ConfigManager.getUnitTemplateCfg(war.getConfigVersion(), unitType).productionCost;
 
         return {
-            actionId                    : war.getNextActionId(),
-            WarActionPlayerProduceUnit  : {
-                cost: cfgCost == null
-                    ? null
-                    : Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * Helpers.getNormalizedHp(unitHp) / ConfigManager.UNIT_HP_NORMALIZER),
-                unitData    : {
-                    unitId      : war.getUnitMap().getNextUnitId(),
-                    viewId      : ConfigManager.getUnitViewId(unitType, playerIndex)!,
-                    gridX       : gridIndex.x,
-                    gridY       : gridIndex.y,
-                    currentHp   : unitHp,
-                    state       : ((skillCfg) && (skillCfg[6] === 1)) ? Types.UnitActionState.Idle : Types.UnitActionState.Acted,
-                },
+            actionId                    : war.getExecutedActionsCount(),
+            ActionPlayerProduceUnit  : {
+                gridIndex,
+                unitHp,
+                unitType,
             },
         };
     }
 
-    function reviseUnitAttack(war: BwWar, container: RawWarAction): WarAction { // DONE
+    function reviseUnitAttackUnit(war: ScwWar, container: RawWarAction): WarAction { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitAttack() invalid turn phase code: ${currPhaseCode}`
+            `ScwActionReviser.reviseUnitAttackUnit() invalid turn phase code: ${currPhaseCode}`
         );
 
-        const action                        = container.UnitAttack;
+        const action                        = container.UnitAttackUnit;
         const rawPath                       = action.path;
         const launchUnitId                  = action.launchUnitId;
         const targetGridIndex               = action.targetGridIndex;
         const revisedPath                   = getRevisedPath(war, rawPath, launchUnitId);
-        const unitMap                       = war.getUnitMap();
-        const attacker                      = unitMap.getUnit(revisedPath.nodes[0], launchUnitId);
-        const attackTarget                  = unitMap.getUnitOnMap(targetGridIndex) || war.getTileMap().getTile(targetGridIndex);
-        const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, rawPath, launchUnitId, targetGridIndex);
-        const lostPlayerIndex               = getLostPlayerIndex(war, attacker, attackTarget, attackDamage, counterDamage);
         return {
-            actionId            : war.getNextActionId(),
-            WarActionUnitAttack : {
+            actionId            : war.getExecutedActionsCount(),
+            ActionUnitAttackUnit : {
                 path    : revisedPath,
                 launchUnitId,
                 targetGridIndex,
-                attackDamage,
-                counterDamage,
-                lostPlayerIndex,
             },
         };
+    }
 
-        return null;
+    function reviseUnitAttackTile(war: ScwWar, container: RawWarAction): WarAction { // DONE
+        const currPhaseCode = war.getTurnManager().getPhaseCode();
+        Logger.assert(
+            currPhaseCode === TurnPhaseCode.Main,
+            `ScwActionReviser.reviseUnitAttackTile() invalid turn phase code: ${currPhaseCode}`
+        );
+
+        const action                        = container.UnitAttackTile;
+        const rawPath                       = action.path;
+        const launchUnitId                  = action.launchUnitId;
+        const targetGridIndex               = action.targetGridIndex;
+        const revisedPath                   = getRevisedPath(war, rawPath, launchUnitId);
+        return {
+            actionId            : war.getExecutedActionsCount(),
+            ActionUnitAttackTile : {
+                path    : revisedPath,
+                launchUnitId,
+                targetGridIndex,
+            },
+        };
     }
 
     function reviseUnitBeLoaded(war: BwWar, rawAction: RawWarAction): WarAction {   // DONE
@@ -492,8 +180,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitBeLoaded;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId                : war.getNextActionId(),
-            WarActionUnitBeLoaded   : {
+            actionId                : war.getExecutedActionsCount(),
+            ActionUnitBeLoaded   : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
@@ -510,8 +198,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitBuildTile;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId                : war.getNextActionId(),
-            WarActionUnitBuildTile  : {
+            actionId                : war.getExecutedActionsCount(),
+            ActionUnitBuildTile  : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
@@ -528,8 +216,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitCaptureTile;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId                : war.getNextActionId(),
-            WarActionUnitCaptureTile: {
+            actionId                : war.getExecutedActionsCount(),
+            ActionUnitCaptureTile: {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
@@ -546,8 +234,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitDive;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getNextActionId(),
-            WarActionUnitDive   : {
+            actionId            : war.getExecutedActionsCount(),
+            ActionUnitDive   : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
@@ -567,8 +255,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const revisedDropDestinations   = getRevisedDropDestinations(war, action, revisedPath);
         const isDropBlocked             =  (!revisedPath.isBlocked) && (revisedDropDestinations.length < action.dropDestinations!.length);
         return {
-            actionId            : war.getNextActionId(),
-            WarActionUnitDrop   : {
+            actionId            : war.getExecutedActionsCount(),
+            ActionUnitDropUnit  : {
                 path            : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
                 dropDestinations: revisedDropDestinations,
@@ -587,8 +275,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitJoin;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getNextActionId(),
-            WarActionUnitJoin   : {
+            actionId            : war.getExecutedActionsCount(),
+            ActionUnitJoinUnit  : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
@@ -605,8 +293,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitLaunchFlare;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId                : war.getNextActionId(),
-            WarActionUnitLaunchFlare: {
+            actionId                : war.getExecutedActionsCount(),
+            ActionUnitLaunchFlare: {
                 path            : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
                 targetGridIndex : action.targetGridIndex,
@@ -624,8 +312,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitLaunchSilo;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId                : war.getNextActionId(),
-            WarActionUnitLaunchSilo : {
+            actionId                : war.getExecutedActionsCount(),
+            ActionUnitLaunchSilo : {
                 path            : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
                 targetGridIndex : action.targetGridIndex,
@@ -643,8 +331,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitLoadCo;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getNextActionId(),
-            WarActionUnitLoadCo : {
+            actionId            : war.getExecutedActionsCount(),
+            ActionUnitLoadCo : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
@@ -661,8 +349,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitProduceUnit;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId                    : war.getNextActionId(),
-            WarActionUnitProduceUnit    : {
+            actionId                    : war.getExecutedActionsCount(),
+            ActionUnitProduceUnit    : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
@@ -679,8 +367,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitSupply;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getNextActionId(),
-            WarActionUnitSupply : {
+            actionId                : war.getExecutedActionsCount(),
+            ActionUnitSupplyUnit    : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
@@ -697,15 +385,15 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitSurface;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getNextActionId(),
-            WarActionUnitSurface: {
+            actionId            : war.getExecutedActionsCount(),
+            ActionUnitSurface: {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
         };
     }
 
-    function reviseUnitUseCoSkill(war: BwWar, rawAction: RawWarAction): WarAction { // DONE
+    function reviseUnitUseCoSkill(war: ScwWar, rawAction: RawWarAction): WarAction { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -721,12 +409,14 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
             : getUseCoSkillExtraDataList(war, war.getPlayerInTurn(), skillType, revisedPath, launchUnitId);
 
         return {
-            actionId                : war.getNextActionId(),
-            WarActionUnitUseCoSkill : {
-                path    : revisedPath,
+            actionId                : war.getExecutedActionsCount(),
+            ActionUnitUseCoSkill    : {
+                path        : revisedPath,
                 launchUnitId,
                 skillType,
-                extraDataList,
+                extraData   : {
+                    skillDataList: extraDataList
+                },
             },
         };
     }
@@ -741,8 +431,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitWait;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getNextActionId(),
-            WarActionUnitWait   : {
+            actionId            : war.getExecutedActionsCount(),
+            ActionUnitWait      : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
@@ -760,20 +450,20 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         }
     }
 
-    function updateAttributesByRepairData(attributes: UnitAttributes, repairData: ProtoTypes.IWarUnitRepairData): void {
+    function updateAttributesByRepairData(attributes: UnitAttributes, repairData: IDataForModifyUnit): void {
         attributes.hp   += (repairData.deltaHp || 0);
         attributes.fuel += (repairData.deltaFuel || 0);
         (attributes.primaryAmmo != null) && (attributes.primaryAmmo += (repairData.deltaPrimaryWeaponAmmo || 0));
         (attributes.flareAmmo != null) && (attributes.flareAmmo += (repairData.deltaFlareAmmo || 0));
     }
 
-    function convertGridIndex(raw: ProtoTypes.IGridIndex | undefined | null): GridIndex | undefined {
+    function convertGridIndex(raw: IGridIndex | undefined | null): GridIndex | undefined {
         return ((!raw) || (raw.x == null) || (raw.y == null))
             ? undefined
             : raw as GridIndex;
     }
 
-    function getRevisedPath(war: BwWar, rawPath: ProtoTypes.IGridIndex[] | undefined | null, launchUnitId: number | null | undefined): Types.MovePath | undefined {
+    function getRevisedPath(war: BwWar, rawPath: IGridIndex[] | undefined | null, launchUnitId: number | null | undefined): Types.MovePath | undefined {
         const beginningGridIndex = convertGridIndex(rawPath ? rawPath[0] : undefined);
         if ((!rawPath) || (!beginningGridIndex)) {
             return undefined;
@@ -867,7 +557,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         }
     }
 
-    function getRevisedDropDestinations(war: BwWar, action: ProtoTypes.IC_McwUnitDrop, revisedPath: Types.MovePath): DropDestination[] {
+    function getRevisedDropDestinations(war: BwWar, action: ProtoTypes.NetMessage.MsgMpwActionUnitDropUnit.IC, revisedPath: Types.MovePath): DropDestination[] {
         const destinations: DropDestination[] = [];
         if (!revisedPath.isBlocked) {
             const unitMap       = war.getUnitMap();
@@ -884,13 +574,19 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         return destinations;
     }
 
-    function getUseCoSkillExtraDataList(war: BwWar, player: BwPlayer, skillType: Types.CoSkillType, movePath: Types.MovePath, launchUnitId: number | null | undefined): ProtoTypes.IWarUseCoSkillExtraData[] {
+    function getUseCoSkillExtraDataList(
+        war             : ScwWar,
+        player          : BwPlayer,
+        skillType       : Types.CoSkillType,
+        movePath        : Types.MovePath,
+        launchUnitId    : number | null | undefined
+    ): IWarUseCoSkillExtraData[] {
         const configVersion = war.getConfigVersion();
-        const skillCfgs     : Types.CoSkillCfg[] = [];
+        const skillCfgs     : ProtoTypes.Config.ICoSkillCfg[] = [];
 
         let needValueMaps   = false;
         for (const skillId of player.getCoSkills(skillType) || []) {
-            const skillCfg  = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
+            const skillCfg  = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!;
             skillCfgs.push(skillCfg);
             if (skillCfg.indiscriminateAreaDamage) {
                 needValueMaps = true;
@@ -899,9 +595,9 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
 
         const valueMaps = needValueMaps ? getValueMap(war.getUnitMap(), player.getTeamIndex(), movePath, launchUnitId) : null;
         const mapSize   = war.getUnitMap().getMapSize();
-        const dataList  : ProtoTypes.IWarUseCoSkillExtraData[] = [];
+        const dataList  : IWarUseCoSkillExtraData[] = [];
         for (const skillCfg of skillCfgs) {
-            const data: ProtoTypes.IWarUseCoSkillExtraData = {};
+            const data: IWarUseCoSkillExtraData = {};
 
             if (skillCfg.indiscriminateAreaDamage) {
                 const cfg       = skillCfg.indiscriminateAreaDamage;
@@ -923,7 +619,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         return dataList;
     }
 
-    function getIndiscriminateAreaDamageCenter(war: BwWar, valueMaps: ValueMaps, indiscriminateCfg: number[]): GridIndex | null {
+    function getIndiscriminateAreaDamageCenter(war: ScwWar, valueMaps: ValueMaps, indiscriminateCfg: number[]): GridIndex | null {
         const targetType    = indiscriminateCfg[0];
         const radius        = indiscriminateCfg[1];
         const hpDamage      = indiscriminateCfg[2];
@@ -934,7 +630,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
             return getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
 
         } else if (targetType === 3) {  // random: HP or fund
-            return war.getRandomNumberGenerator()() < 0.5
+            return war.getRandomNumber() < 0.5
                 ? getIndiscriminateAreaDamageCenterForType1(valueMaps, radius, hpDamage)
                 : getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
 
@@ -1018,7 +714,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
             for (let y = 0; y < height; ++y) {
                 if (srcHpMap[x][y] > 0) {
                     const realHpDamage      = Math.min(hpDamage, srcHpMap[x][y] - 1);
-                    const realFundDamage    = Math.floor(srcFundMap[x][y] * realHpDamage / ConfigManager.UNIT_HP_NORMALIZER);
+                    const realFundDamage    = Math.floor(srcFundMap[x][y] * realHpDamage / CommonConstants.UnitHpNormalizer);
                     const isSameTeam        = srcSameTeamMap[x][y];
                     hpMap[x][y]             = isSameTeam ? -realHpDamage * 2 : realHpDamage;
                     fundMap[x][y]           = isSameTeam ? -realFundDamage * 2 : realFundDamage;

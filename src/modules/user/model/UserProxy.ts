@@ -4,76 +4,179 @@ namespace TinyWars.User.UserProxy {
     import NetMessageCodes  = Network.Codes;
     import ProtoTypes       = Utility.ProtoTypes;
     import Notify           = Utility.Notify;
+    import Helpers          = Utility.Helpers;
+    import NotifyType       = Notify.Type;
+    import NetMessage       = ProtoTypes.NetMessage;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: NetMessageCodes.S_GetUserPublicInfo,     callback: _onSGetUserPublicInfo, },
-            { msgCode: NetMessageCodes.S_UserChangeNickname,    callback: _onSUserChangeNickname, },
-            { msgCode: NetMessageCodes.S_UserChangeDiscordId,   callback: _onSUserChangeDiscordId, },
-            { msgCode: NetMessageCodes.S_UserGetOnlineUsers,    callback: _onSUserGetOnlineUsers, },
+            { msgCode: NetMessageCodes.MsgUserLogin,            callback: _onMsgUserLogin, },
+            { msgCode: NetMessageCodes.MsgUserRegister,         callback: _onMsgUserRegister, },
+            { msgCode: NetMessageCodes.MsgUserLogout,           callback: _onMsgUserLogout, },
+            { msgCode: NetMessageCodes.MsgUserGetPublicInfo,    callback: _onMsgUserGetPublicInfo, },
+            { msgCode: NetMessageCodes.MsgUserSetNickname,      callback: _onMsgUserSetNickname, },
+            { msgCode: NetMessageCodes.MsgUserSetDiscordId,     callback: _onMsgUserSetDiscordId, },
+            { msgCode: NetMessageCodes.MsgUserGetOnlineUsers,   callback: _onMsgUserGetOnlineUsers, },
+            { msgCode: NetMessageCodes.MsgUserSetPrivilege,     callback: _onMsgUserSetPrivilege, },
+            { msgCode: NetMessageCodes.MsgUserSetPassword,      callback: _onMsgUserSetPassword, },
+            { msgCode: NetMessageCodes.MsgUserGetSettings,      callback: _onMsgUserGetSettings, },
+            { msgCode: NetMessageCodes.MsgUserSetSettings,      callback: _onMsgUserSetSettings, },
         ]);
     }
 
-    export function reqGetUserPublicInfo(userId: number): void {
+    export function reqLogin(account: string, rawPassword: string, isAutoRelogin: boolean): void {
         NetManager.send({
-            C_GetUserPublicInfo: {
-                userId,
-            },
+            MsgUserLogin: { c: {
+                account,
+                password    : Helpers.Sha1Generator.b64_sha1(rawPassword),
+                isAutoRelogin,
+            } },
         });
     }
-    function _onSGetUserPublicInfo(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_GetUserPublicInfo;
-        if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SGetUserPublicInfoFailed, data);
-        } else {
-            UserModel.setUserPublicInfo(data);
-            Notify.dispatch(Notify.Type.SGetUserPublicInfo, data);
+    function _onMsgUserLogin(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserLogin.IS;
+        if (!data.errorCode) {
+            User.UserModel.updateOnLogin(data);
+            Notify.dispatch(NotifyType.MsgUserLogin, data);
         }
     }
 
-    export function reqChangeNickname(nickname: string): void {
+    export function reqUserRegister(account: string, rawPassword: string, nickname: string): void {
         NetManager.send({
-            C_UserChangeNickname: {
+            MsgUserRegister: { c: {
+                account,
+                password: Helpers.Sha1Generator.b64_sha1(rawPassword),
                 nickname,
-            },
+            } },
         });
     }
-    function _onSUserChangeNickname(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_UserChangeNickname;
-        if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SUserChangeNicknameFailed, data);
-        } else {
-            UserModel.setSelfNickname(data.nickname);
-            Notify.dispatch(Notify.Type.SUserChangeNickname, data);
+    function _onMsgUserRegister(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserRegister.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(NotifyType.MsgUserRegister, data);
         }
     }
 
-    export function reqChangeDiscordId(discordId: string): void {
+    export function reqLogout(): void {
         NetManager.send({
-            C_UserChangeDiscordId: {
-                discordId,
-            },
+            MsgUserLogout: { c: {
+            } },
         });
     }
-    function _onSUserChangeDiscordId(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_UserChangeDiscordId;
+    function _onMsgUserLogout(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserLogout.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(NotifyType.MsgUserLogout, data);
+        }
+    }
+
+    export function reqUserGetPublicInfo(userId: number): void {
+        NetManager.send({
+            MsgUserGetPublicInfo: { c: {
+                userId,
+            } },
+        });
+    }
+    function _onMsgUserGetPublicInfo(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SUserChangeDiscordIdFailed, data);
+            Notify.dispatch(Notify.Type.MsgUserGetPublicInfoFailed, data);
         } else {
-            UserModel.setSelfDiscordId(data.discordId);
-            Notify.dispatch(Notify.Type.SUserChangeDiscordId, data);
+            UserModel.setUserPublicInfo(data.userPublicInfo);
+            Notify.dispatch(Notify.Type.MsgUserGetPublicInfo, data);
+        }
+    }
+
+    export function reqSetNickname(nickname: string): void {
+        NetManager.send({
+            MsgUserSetNickname: { c: {
+                nickname,
+            }, },
+        });
+    }
+    function _onMsgUserSetNickname(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserSetNickname.IS;
+        if (data.errorCode) {
+            Notify.dispatch(Notify.Type.MsgUserSetNicknameFailed, data);
+        } else {
+            Notify.dispatch(Notify.Type.MsgUserSetNickname, data);
+        }
+    }
+
+    export function reqSetDiscordId(discordId: string): void {
+        NetManager.send({
+            MsgUserSetDiscordId: { c: {
+                discordId,
+            }, },
+        });
+    }
+    function _onMsgUserSetDiscordId(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserSetDiscordId.IS;
+        if (data.errorCode) {
+            Notify.dispatch(Notify.Type.MsgUserSetDiscordIdFailed, data);
+        } else {
+            Notify.dispatch(Notify.Type.MsgUserSetDiscordId, data);
         }
     }
 
     export function reqUserGetOnlineUsers(): void {
         NetManager.send({
-            C_UserGetOnlineUsers: {},
+            MsgUserGetOnlineUsers: { c: {} },
         });
     }
-    function _onSUserGetOnlineUsers(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_UserGetOnlineUsers;
+    function _onMsgUserGetOnlineUsers(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgUserGetOnlineUsers.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SUserGetOnlineUsers, data);
+            Notify.dispatch(Notify.Type.MsgUserGetOnlineUsers, data);
+        }
+    }
+
+    export function reqUserSetPrivilege(userId: number, userPrivilege: ProtoTypes.User.IUserPrivilege): void {
+        NetManager.send({ MsgUserSetPrivilege: { c: {
+            userId,
+            userPrivilege,
+        } } });
+    }
+    function _onMsgUserSetPrivilege(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgUserSetPrivilege.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.MsgUserSetPrivilege, data);
+        }
+    }
+
+    export function reqUserSetPassword(oldRawPassword: string, newRawPassword: string): void {
+        NetManager.send({ MsgUserSetPassword: { c: {
+            oldPassword : Helpers.Sha1Generator.b64_sha1(oldRawPassword),
+            newPassword : Helpers.Sha1Generator.b64_sha1(newRawPassword),
+        } } });
+    }
+    function _onMsgUserSetPassword(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgUserSetPassword.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.MsgUserSetPassword, data);
+        }
+    }
+
+    export function reqUserGetSettings(): void {
+        NetManager.send({ MsgUserGetSettings: { c: {} } });
+    }
+    function _onMsgUserGetSettings(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgUserGetSettings.IS;
+        if (!data.errorCode) {
+            UserModel.setSelfSettings(data.userSettings);
+            Notify.dispatch(Notify.Type.MsgUserGetSettings, data);
+        }
+    }
+
+    export function reqUserSetSettings(userSettings: ProtoTypes.User.IUserSettings): void {
+        NetManager.send({ MsgUserSetSettings: { c: {
+            userSettings,
+        } } });
+    }
+    function _onMsgUserSetSettings(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgUserSetSettings.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.MsgUserSetSettings, data);
         }
     }
 }

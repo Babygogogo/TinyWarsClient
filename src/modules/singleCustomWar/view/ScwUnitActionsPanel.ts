@@ -47,6 +47,7 @@ namespace TinyWars.SingleCustomWar {
                 // { type: Notify.Type.GlobalTouchBegin,           callback: this._onNotifyGlobalTouchBegin },
                 // { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
                 // { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
+                { type: Notify.Type.ZoomableContentsMoved,      callback: this._onNotifyZoomableContentsMoved },
                 { type: Notify.Type.UnitAnimationTick,          callback: this._onNotifyUnitAnimationTick },
             ];
 
@@ -57,6 +58,7 @@ namespace TinyWars.SingleCustomWar {
             this._actionPlanner = this._war.getField().getActionPlanner() as ScwActionPlanner;
 
             this._updateView();
+            this._updatePosition();
         }
         protected _onClosed(): void {
             delete this._war;
@@ -75,6 +77,9 @@ namespace TinyWars.SingleCustomWar {
         }
         private _onNotifyTileAnimationTick(e: egret.Event): void {
         }
+        private _onNotifyZoomableContentsMoved(e: egret.Event): void {
+            this._updatePosition();
+        }
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             const viewList = this._listAction.getViewList();
             for (let i = 0; i < viewList.numChildren; ++i) {
@@ -88,17 +93,20 @@ namespace TinyWars.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             const war           = ScwModel.getWar();
+            const unitMap       = war.getUnitMap();
             const dataForList   = [] as DataForUnitActionRenderer[];
-            for (const data of this._openData) {
+            for (const data of this._openData.actionList) {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
-                    : new ScwUnit().init({
-                        gridX   : -1,
-                        gridY   : -1,
-                        unitId  : -1,
-                        viewId  : ConfigManager.getUnitViewId(data.produceUnitType, war.getPlayerIndexInTurn()),
+                    : (new (unitMap.getUnitClass())).init({
+                        gridIndex   : { x: -1, y: -1 },
+                        unitId      : -1,
+                        unitType    : data.produceUnitType,
+                        playerIndex : war.getPlayerIndexInTurn(),
                     }, war.getConfigVersion());
-
+                if (unitForProduce) {
+                    unitForProduce.startRunning(war);
+                }
                 dataForList.push({
                     actionType      : data.actionType,
                     callback        : data.callback,
@@ -108,6 +116,23 @@ namespace TinyWars.SingleCustomWar {
             }
 
             this._listAction.bindData(dataForList);
+            this._group.height = Math.min(300, (dataForList.length || 1) * 60);
+        }
+
+        private _updatePosition(): void {
+            const container = ScwModel.getWar().getView().getFieldContainer();
+            const contents  = container.getContents();
+            const gridIndex = this._openData.destination;
+            const gridSize  = Utility.ConfigManager.getGridSize();
+            const stage     = Utility.StageManager.getStage();
+            const group     = this._group;
+            const point     = contents.localToGlobal(
+                (gridIndex.x + 1) * gridSize.width,
+                (gridIndex.y + 1) * gridSize.height,
+            );
+
+            group.x         = Math.max(0, Math.min(point.x, stage.stageWidth - 130));
+            group.y         = Math.max(40, Math.min(point.y, stage.stageHeight - group.height));
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {

@@ -5,7 +5,6 @@ namespace TinyWars.SingleCustomRoom {
     import FloatText    = Utility.FloatText;
     import ProtoTypes   = Utility.ProtoTypes;
     import Types        = Utility.Types;
-    import ConfirmPanel = Common.ConfirmPanel;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -48,7 +47,7 @@ namespace TinyWars.SingleCustomRoom {
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SScrCreateWar,      callback: this._onNotifySScrCreateWar },
+                { type: Notify.Type.MsgScrCreateWar,    callback: this._onMsgScrCreateWar },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }
@@ -92,10 +91,10 @@ namespace TinyWars.SingleCustomRoom {
                     this._resetTimeoutForBtnConfirm();
                 }
 
-                if (ScrModel.checkIsSaveSlotEmpty(data.saveSlotIndex)) {
+                if (ScrModel.checkIsSaveSlotEmpty(data.slotIndex)) {
                     func();
                 } else {
-                    ConfirmPanel.show({
+                    Common.CommonConfirmPanel.show({
                         title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0070),
                         callback: func,
@@ -104,9 +103,13 @@ namespace TinyWars.SingleCustomRoom {
             }
         }
 
-        private _onNotifySScrCreateWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.IS_ScrCreateWar;
-            Utility.FlowManager.gotoSingleCustomWar(data.warData as Types.SerializedWar);
+        private _onMsgScrCreateWar(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateWar.IS;
+            Utility.FlowManager.gotoSingleCustomWar({
+                slotComment : null,
+                slotIndex   : data.slotIndex,
+                warData     : data.warData,
+            });
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

@@ -24,7 +24,7 @@ namespace TinyWars.Utility.FloatText {
             timeoutIdForLock = egret.setTimeout(onTimerComplete, FloatText, LOCK_TIME_MS);
 
             const floatText = new UiFloatText(dataList.splice(0, 1)[0]);
-            StageManager.getLayer(Types.LayerType.Notify).addChild(floatText);
+            StageManager.getLayer(Types.LayerType.Notify2).addChild(floatText);
             floatText.y      = START_Y;
             floatText.scaleX = 0.5;
             floatText.scaleY = 0.5;
@@ -49,10 +49,11 @@ namespace TinyWars.Utility.FloatText {
         public constructor(text: string) {
             super();
 
-            const label = new GameUi.UiLabel(text);
+            const label     = new GameUi.UiLabel();
             label.textColor = 0xFFFFFF;
             label.stroke    = 2;
             label.size      = 20;
+            label.setRichText(text);
             this.addChild(label);
 
             this.horizontalCenter = 0;

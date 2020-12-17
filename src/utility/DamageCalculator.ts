@@ -2,10 +2,17 @@
 namespace TinyWars.Utility.DamageCalculator {
     import BwUnit       = BaseWar.BwUnit;
     import BwWar        = BaseWar.BwWar;
+    import SpwWar       = SinglePlayerWar.SpwWar;
     import BwTile       = BaseWar.BwTile;
+    import BwHelpers    = BaseWar.BwHelpers;
     import GridIndex    = Types.GridIndex;
 
-    function checkIsInAttackRange(attackerGridIndex: GridIndex, targetGridIndex: GridIndex, minRange: number | null | undefined, maxRange: number | null | undefined): boolean {
+    function checkIsInAttackRange(
+        attackerGridIndex   : GridIndex,
+        targetGridIndex     : GridIndex,
+        minRange            : number | null | undefined,
+        maxRange            : number | null | undefined
+    ): boolean {
         if ((minRange == null) || (maxRange == null)) {
             return false;
         } else {
@@ -14,50 +21,144 @@ namespace TinyWars.Utility.DamageCalculator {
         }
     }
 
-    function getLuckValue(war: BwWar, playerIndex: number): number {
-        // TODO: take skill into account.
-        const lowerLimit    = war.getSettingsLuckLowerLimit();
-        const upperLimit    = war.getSettingsLuckUpperLimit();
-        return Math.floor(war.getRandomNumberGenerator()() * (upperLimit - lowerLimit + 1)) + lowerLimit;
+    function getLuckValue(war: BwWar, playerIndex: number): number | undefined {
+        if (!(war instanceof SpwWar)) {
+            Logger.error(`DamageCalculator.getLuckValue() war is not SpwWar!`);
+            return undefined;
+        }
+
+        const randomNumber = war.getRandomNumber();
+        if (randomNumber == null) {
+            Logger.error(`DamageCalculator.getLuckValue() empty randomNumber.`);
+            return undefined;
+        }
+
+        const lowerLimit = war.getSettingsLuckLowerLimit(playerIndex);
+        if (lowerLimit == null) {
+            Logger.error(`DamageCalculator.getLuckValue() empty lowerLimit.`);
+            return undefined;
+        }
+
+        const upperLimit = war.getSettingsLuckUpperLimit(playerIndex);
+        if (upperLimit == null) {
+            Logger.error(`DamageCalculator.getLuckValue() empty upperLimit.`);
+            return undefined;
+        }
+
+        return Math.floor(randomNumber * (upperLimit - lowerLimit + 1)) + lowerLimit;
     }
 
-    function getAttackBonusMultiplier(war: BwWar, attacker: BwUnit, attackerGridIndex: GridIndex, target: BwUnit | BwTile, targetGridIndex: GridIndex): number {
-        const playerIndex   = attacker.getPlayerIndex();
-        let bonus           = war.getSettingsAttackPowerModifier()
-            + attacker.getPromotionAttackBonus()
-            + attacker.getAttackModifierByCo(attackerGridIndex);
+    function getAttackBonusMultiplier(
+        war                 : BwWar,
+        attacker            : BwUnit,
+        attackerGridIndex   : GridIndex,
+        target              : BwUnit | BwTile,
+        targetGridIndex     : GridIndex
+    ): number | undefined {
+        const amountFromPromotion = attacker.getPromotionAttackBonus();
+        if (amountFromPromotion == null) {
+            Logger.error(`DamageCalculator.getAttackBonusMultiplier() empty amountFromPromotion.`);
+            return undefined;
+        }
 
-        war.getTileMap().forEachTile(tile => {
+        const amountFromCo = attacker.getAttackModifierByCo(attackerGridIndex);
+        if (amountFromCo == null) {
+            Logger.error(`DamageCalculator.getAttackBonusMultiplier() empty amountFromCo.`);
+            return undefined;
+        }
+
+        const tileMap = war.getTileMap();
+        if (tileMap == null) {
+            Logger.error(`DamageCalculator.getAttackBonusMultiplier() empty tileMap.`);
+            return undefined;
+        }
+
+        const playerIndex = attacker.getPlayerIndex();
+        if (playerIndex == null) {
+            Logger.error(`DamageCalculator.getAttackBonusMultiplier() empty playerIndex.`);
+            return undefined;
+        }
+
+        const settingsModifier = war.getSettingsAttackPowerModifier(playerIndex);
+        if (settingsModifier == null) {
+            Logger.error(`DamageCalculator.getAttackBonusMultiplier() empty settingsModifier.`);
+            return undefined;
+        }
+
+        let amountFromGlobalTiles   = 0;
+        tileMap.forEachTile(tile => {
             if (tile.getPlayerIndex() === playerIndex) {
-                bonus += tile.getGlobalAttackBonus();
+                amountFromGlobalTiles += tile.getGlobalAttackBonus() || 0;
             }
         });
 
-        return Math.max(1 + bonus / 100, 0);
+        const totalAmount = settingsModifier
+            + amountFromPromotion
+            + amountFromCo
+            + amountFromGlobalTiles;
+        return Math.max(1 + totalAmount / 100, 0);
     }
 
-    function getDefenseBonusMultiplier(war: BwWar, attacker: BwUnit, attackerGridIndex: GridIndex, target: BwUnit | BwTile, targetGridIndex: GridIndex): number {
+    function getDefenseBonusMultiplier(
+        war                 : BwWar,
+        attacker            : BwUnit,
+        attackerGridIndex   : GridIndex,
+        target              : BwUnit | BwTile,
+        targetGridIndex     : GridIndex
+    ): number | undefined {
         if (target instanceof BwTile) {
             return 1;
         } else {
-            const tileMap   = war.getTileMap();
-            let bonus       = tileMap.getTile(targetGridIndex).getDefenseAmountForUnit(target)
-                + target.getPromotionDefenseBonus()
-                + target.getDefenseModifierByCo(targetGridIndex);
+            const tileMap = war.getTileMap();
+            if (tileMap == null) {
+                Logger.error(`DamageCalculator.getDefenseBonusMultiplier() empty tileMap.`);
+                return undefined;
+            }
 
+            const tile = tileMap.getTile(targetGridIndex);
+            if (!tile) {
+                Logger.error(`DamageCalculator.getDefenseBonusMultiplier() the target is not on a tile?! targetGridIndex: ${targetGridIndex}`);
+                return undefined;
+            }
+
+            const amountFromTile = tile.getDefenseAmountForUnit(target);
+            if (amountFromTile == null) {
+                Logger.error(`DamageCalculator.getDefenseBonusMultiplier() empty amountFromTile.`);
+                return undefined;
+            }
+
+            const amountFromPromotion = target.getPromotionDefenseBonus();
+            if (amountFromPromotion == null) {
+                Logger.error(`DamageCalculator.getDefenseBonusMultiplier() empty amountFromPromotion.`);
+                return undefined;
+            }
+
+            const amountFromCo = target.getDefenseModifierByCo(targetGridIndex);
+            if (amountFromCo == null) {
+                Logger.error(`DamageCalculator.getDefenseBonusMultiplier() empty amountFromCo.`);
+                return undefined;
+            }
+
+            let amountFromGlobalTiles = 0;
             tileMap.forEachTile(tile => {
                 if (tile.getPlayerIndex() === target.getPlayerIndex()) {
-                    bonus   += tile.getGlobalDefenseBonus();
+                    amountFromGlobalTiles += tile.getGlobalDefenseBonus() || 0;
                 }
-            })
+            });
 
-            return bonus >= 0
-                ? 1 / (1 + bonus / 100)
-                : 1 - bonus / 100;
+            const totalAmount = amountFromTile + amountFromPromotion + amountFromCo + amountFromGlobalTiles;
+            return totalAmount >= 0
+                ? 1 / (1 + totalAmount / 100)
+                : 1 - totalAmount / 100;
         }
     }
 
-    function checkCanAttack(attacker: BwUnit, attackerMovePath: GridIndex[] | undefined, target: BwUnit | BwTile, targetMovePath: GridIndex[] | undefined): boolean {
+    function checkCanAttack(
+        attacker            : BwUnit,
+        attackerMovePath    : GridIndex[] | undefined,
+        target              : BwUnit | BwTile,
+        targetMovePath      : GridIndex[] | undefined
+    ): boolean {
         if ((!attacker) || (!target) || (attacker.getTeamIndex() === target.getTeamIndex())) {
             return false;
         }
@@ -65,9 +166,11 @@ namespace TinyWars.Utility.DamageCalculator {
         const armorType         = target.getArmorType();
         const attackerGridIndex = attackerMovePath ? attackerMovePath[attackerMovePath.length - 1] : attacker.getGridIndex();
         const targetGridIndex   = targetMovePath   ? targetMovePath[targetMovePath.length - 1]     : target.getGridIndex();
-        if ((armorType == null)                                                                                                     ||
-            ((!attacker.checkCanAttackAfterMove()) && (attackerMovePath) && (attackerMovePath.length > 1))                          ||
-            (!checkIsInAttackRange(attackerGridIndex, targetGridIndex, attacker.getMinAttackRange(), attacker.getFinalMaxAttackRange())) ||
+        if ((!attackerGridIndex)                                                                                                            ||
+            (!targetGridIndex)                                                                                                              ||
+            (armorType == null)                                                                                                             ||
+            ((!attacker.checkCanAttackAfterMove()) && (attackerMovePath) && (attackerMovePath.length > 1))                                  ||
+            (!checkIsInAttackRange(attackerGridIndex, targetGridIndex, attacker.getMinAttackRange(), attacker.getFinalMaxAttackRange()))    ||
             ((target instanceof BwUnit) && (target.getIsDiving()) && (!attacker.checkCanAttackDivingUnits()))
         ) {
             return false;
@@ -76,48 +179,124 @@ namespace TinyWars.Utility.DamageCalculator {
         return attacker.getBaseDamage(armorType) != null;
     }
 
-    function getAttackDamage(war: BwWar, attacker: BwUnit, attackerGridIndex: GridIndex, attackerHp: number, target: BwTile | BwUnit, targetGridIndex: GridIndex, isWithLuck: boolean): number | undefined {
-        const baseAttackDamage = attacker.getBaseDamage(target.getArmorType()!);
+    function getAttackDamage(
+        war                 : BwWar,
+        attacker            : BwUnit,
+        attackerGridIndex   : GridIndex,
+        attackerHp          : number,
+        target              : BwTile | BwUnit,
+        targetGridIndex     : GridIndex,
+        isWithLuck          : boolean
+    ): number | undefined {
+        const targetArmorType = target.getArmorType();
+        if (targetArmorType == null) {
+            Logger.error(`DamageCalculator.getAttackDamage() empty targetArmorType.`)
+            return undefined;
+        }
+
+        const baseAttackDamage = attacker.getBaseDamage(targetArmorType);
         if (baseAttackDamage == null) {
             return undefined;
-        } else {
-            if (attackerHp <= 0) {
-                return 0;
-            } else {
-                const luckValue = ((isWithLuck) && (target.checkIsArmorAffectByLuck()))
-                    ? getLuckValue(war, attacker.getPlayerIndex())
-                    : 0
-                return Math.max(0, Math.floor(
-                    (baseAttackDamage * getAttackBonusMultiplier(war, attacker, attackerGridIndex, target, targetGridIndex) + luckValue)    *
-                    (Helpers.getNormalizedHp(attackerHp) / 10)                                                                              *
-                    (getDefenseBonusMultiplier(war, attacker, attackerGridIndex, target, targetGridIndex))
-                ));
-            }
         }
+
+        const playerIndex = attacker.getPlayerIndex();
+        if (playerIndex == null) {
+            Logger.error(`DamageCalculator.getAttackDamage() the attacker has no playerIndex!`);
+            return undefined;
+        }
+
+        if (attackerHp <= 0) {
+            return 0;
+        }
+
+        const attackBonusMultiplier = getAttackBonusMultiplier(war, attacker, attackerGridIndex, target, targetGridIndex);
+        if (attackBonusMultiplier == null) {
+            Logger.error(`DamageCalculator.getAttackDamage() empty attackBonusMultiplier.`);
+            return undefined;
+        }
+
+        const defenseBonusMultiplier = getDefenseBonusMultiplier(war, attacker, attackerGridIndex, target, targetGridIndex);
+        if (defenseBonusMultiplier == null) {
+            Logger.error(`DamageCalculator.getAttackDamage() empty defenseBonusMultiplier.`);
+            return undefined;
+        }
+
+        const luckValue = ((isWithLuck) && (target.checkIsArmorAffectByLuck()))
+            ? getLuckValue(war, playerIndex)
+            : 0;
+        if (luckValue == null) {
+            Logger.error(`DamageCalculator.getAttackDamage() empty luckValue.`);
+            return undefined;
+        }
+
+        return Math.max(0, Math.floor(0.000001 +
+            (baseAttackDamage * attackBonusMultiplier + luckValue)  *
+            (BwHelpers.getNormalizedHp(attackerHp) / 10)            *
+            defenseBonusMultiplier
+        ));
     }
 
-    function getBattleDamage(war: BwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex, isWithLuck: boolean): (number | undefined)[] {
-        const unitMap   = war.getUnitMap();
-        const attacker  = unitMap.getUnit(attackerMovePath[0], launchUnitId)!;
-        const target    = unitMap.getUnitOnMap(targetGridIndex) || war.getTileMap().getTile(targetGridIndex);
+    function getBattleDamage(
+        war                 : BwWar,
+        attackerMovePath    : GridIndex[],
+        launchUnitId        : number | undefined | null,
+        targetGridIndex     : GridIndex,
+        isWithLuck          : boolean
+    ): (number | undefined)[] {
+        const unitMap = war.getUnitMap();
+        if (unitMap == null) {
+            Logger.error(`DamageCalculator.getBattleDamage() empty unitMap.`);
+            return [];
+        }
+
+        const tileMap = war.getTileMap();
+        if (tileMap == null) {
+            Logger.error(`DamageCalculator.getBattleDamage() empty tileMap.`);
+            return [];
+        }
+
+        const attacker = unitMap.getUnit(attackerMovePath[0], launchUnitId);
+        if (!attacker) {
+            Logger.error(`DamageCalculator.getBattleDamage() failed to get the attacker.`);
+            return [];
+        }
+
+        const attackerHp = attacker.getCurrentHp();
+        if (attackerHp == null) {
+            Logger.error(`DamageCalculator.getBattleDamage() failed the attacker hp is empty!`);
+            return [];
+        }
+
+        const target = unitMap.getUnitOnMap(targetGridIndex) || tileMap.getTile(targetGridIndex);
+        if (!target) {
+            Logger.error(`DamageCalculator.getBattleDamage() failed to get the target.`);
+            return [];
+        }
+
+        const targetHp = target.getCurrentHp();
+        if (targetHp == null) {
+            return [];
+        }
+
         if (!checkCanAttack(attacker, attackerMovePath, target, undefined)) {
-            return [undefined, undefined];
+            return [];
         } else {
             const attackerGridIndex = attackerMovePath[attackerMovePath.length - 1];
-            const attackDamage      = getAttackDamage(war, attacker, attackerGridIndex, attacker.getCurrentHp(), target, targetGridIndex, isWithLuck);
+            const attackDamage      = getAttackDamage(war, attacker, attackerGridIndex, attackerHp, target, targetGridIndex, isWithLuck);
             if ((attackDamage == null) || (attackDamage < 0)) {
                 Logger.error(`DamageCalculator.getBattleDamage() ???`);
-                return [undefined, undefined];
+                return [];
             } else {
-                if ((target instanceof BwTile)                                             ||
+                if ((target instanceof BwTile)                                              ||
                     (GridIndexHelpers.getDistance(attackerGridIndex, targetGridIndex) > 1)  ||
-                    (!checkCanAttack(target, undefined, attacker, attackerMovePath))
+                    (!checkCanAttack(target, undefined, attacker, attackerMovePath))        ||
+                    (attackDamage >= targetHp)
                 ) {
                     return [attackDamage, undefined];
                 } else {
                     return [
                         attackDamage,
-                        getAttackDamage(war, target, targetGridIndex, target.getCurrentHp() - attackDamage, attacker, attackerGridIndex, isWithLuck)
+                        getAttackDamage(war, target, targetGridIndex, targetHp - attackDamage, attacker, attackerGridIndex, isWithLuck)
                     ];
                 }
             }
@@ -128,7 +307,7 @@ namespace TinyWars.Utility.DamageCalculator {
         return getBattleDamage(war, attackerMovePath, launchUnitId, targetGridIndex, false);
     }
 
-    export function getFinalBattleDamage(war: BwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex): (number | undefined)[] {
+    export function getFinalBattleDamage(war: SpwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex): (number | undefined)[] {
         return getBattleDamage(war, attackerMovePath, launchUnitId, targetGridIndex, true);
     }
 }

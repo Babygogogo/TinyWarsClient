@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="semi_transparent" locked="true" />
+    <e:Group horizontalCenter="0" verticalCenter="0">
+        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0" source="panel_bg_001"
+                        scale9Grid="27,2,1,1" locked="true" />
+        <GameUi:UiLabel id="_labelTitle" text="标题" y="10" size="24" horizontalCenter="0" textColor="0x000000"
+                        locked="true" />
+        <e:Group top="40" bottom="60">
+            <e:Scroller id="_scrContent" y="33" x="0" maxHeight="200" minHeight="40">
+                <e:Group>
+                    <GameUi:UiLabel id="_labelContent" text="内容" size="18" top="5" textAlign="center"
+                                    textColor="0x000000" width="400" x="0" verticalAlign="middle" wordWrap="true" />
+                </e:Group>
+            </e:Scroller>
+            <e:layout>
+                <e:VerticalLayout paddingLeft="10" paddingRight="10" />
+            </e:layout>
+        </e:Group>
+        <GameUi:UiButton id="_btnClose" label="" horizontalCenter="0" bottom="10"
+                         skinName="Skins.Component.Button.ButtonConfirm001" locked="true"></GameUi:UiButton>
+    </e:Group>
+</e:Skin>

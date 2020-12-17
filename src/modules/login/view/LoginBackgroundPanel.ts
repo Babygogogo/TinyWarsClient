@@ -11,7 +11,8 @@ namespace TinyWars.Login {
         private static _instance: LoginBackgroundPanel;
 
         private _labelVersion       : GameUi.UiLabel;
-        private _btnChangeLanguage  : GameUi.UiButton;
+        private _btnLanguage01      : GameUi.UiButton;
+        private _btnLanguage02      : GameUi.UiButton;
         private _groupUnits         : eui.Group;
 
         public static show(): void {
@@ -36,37 +37,34 @@ namespace TinyWars.Login {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
+                { type: Notify.Type.MsgCommonLatestConfigVersion,   callback: this._onMsgCommonLatestConfigVersion },
             ];
             this._uiListeners = [
-                { ui: this._btnChangeLanguage, callback: this._onTouchedBtnChangeLanguage },
+                { ui: this._btnLanguage01, callback: this._onTouchedBtnLanguage01 },
+                { ui: this._btnLanguage02, callback: this._onTouchedBtnLanguage02 },
             ];
+
+            this._btnLanguage01.setImgDisplaySource("login_button_language_003");
+            this._btnLanguage01.setImgExtraSource("login_button_language_001");
         }
 
         protected _onOpened(): void {
-            Network.Manager.addListeners([
-                { msgCode: Network.Codes.S_NewestConfigVersion, callback: this._onSNewestConfigVersion },
-            ], this);
+            this._labelVersion.text = `v.${window.CLIENT_VERSION}`;
+            this._updateBtnLanguages();
 
-            this._labelVersion.text = `TinyWars v.${window.CLIENT_VERSION}`;
-            this._updateBtnChangeLanguage();
-
-            if (ConfigManager.getNewestConfigVersion()) {
-                this._initGroupUnits();
+            if (Utility.ConfigManager.getLatestConfigVersion()) {
+                // this._initGroupUnits();
             }
         }
 
         protected _onClosed(): void {
-            Network.Manager.addListeners([
-                { msgCode: Network.Codes.S_NewestConfigVersion, callback: this._onSNewestConfigVersion },
-            ], this);
-
             this._clearGroupUnits();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateBtnChangeLanguage();
+            this._updateBtnLanguages();
         }
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             const group = this._groupUnits;
@@ -75,65 +73,74 @@ namespace TinyWars.Login {
                 ((group.getChildAt(i) as eui.Component).getChildAt(0) as WarMap.WarMapUnitView).updateOnAnimationTick(tick);
             }
         }
-        private _onSNewestConfigVersion(e: egret.Event): void {
-            this._initGroupUnits();
+        private _onMsgCommonLatestConfigVersion(e: egret.Event): void {
+            // this._initGroupUnits();
         }
-        private _onTouchedBtnChangeLanguage(e: egret.TouchEvent): void {
-            Lang.setLanguageType(Lang.getLanguageType() === Types.LanguageType.Chinese
-                ? Types.LanguageType.English
-                : Types.LanguageType.Chinese
+        private _onTouchedBtnLanguage01(e: egret.TouchEvent): void {
+            if (Lang.getLanguageType() !== Types.LanguageType.Chinese) {
+                Lang.setLanguageType(Types.LanguageType.Chinese);
+                Notify.dispatch(Notify.Type.LanguageChanged);
+            }
+        }
+        private _onTouchedBtnLanguage02(e: egret.TouchEvent): void {
+            if (Lang.getLanguageType() !== Types.LanguageType.English) {
+                Lang.setLanguageType(Types.LanguageType.English);
+                Notify.dispatch(Notify.Type.LanguageChanged);
+            }
+        }
+
+        private _updateBtnLanguages(): void {
+            const languageType = Lang.getLanguageType();
+            this._btnLanguage01.setImgDisplaySource(languageType === Types.LanguageType.Chinese
+                ? "login_button_language_001"
+                : "login_button_language_003"
             );
-            Notify.dispatch(Notify.Type.LanguageChanged);
+            this._btnLanguage02.setImgDisplaySource(languageType === Types.LanguageType.English
+                ? "login_button_language_002"
+                : "login_button_language_004"
+            );
         }
 
-        private _updateBtnChangeLanguage(): void {
-            if (Lang.getLanguageType() === Types.LanguageType.Chinese) {
-                this._btnChangeLanguage.label = Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.English);
-            } else {
-                this._btnChangeLanguage.label = Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.Chinese);
-            }
-        }
+        // private _initGroupUnits(): void {
+        //     this._clearGroupUnits();
 
-        private _initGroupUnits(): void {
-            this._clearGroupUnits();
+        //     const group     = this._groupUnits;
+        //     const gridWidth = Utility.ConfigManager.getGridSize().width;
+        //     const count     = Math.ceil(group.width / gridWidth);
+        //     for (let i = 0; i < count; ++i) {
+        //         group.addChild(_createRandomUnitView());
+        //     }
 
-            const group     = this._groupUnits;
-            const gridWidth = ConfigManager.getGridSize().width;
-            const count     = Math.ceil(group.width / gridWidth);
-            for (let i = 0; i < count; ++i) {
-                group.addChild(_createRandomUnitView());
-            }
-
-            group.x = 0;
-            egret.Tween.get(group, { loop: true })
-                .to({ x: -gridWidth / 4 }, 500)
-                .call(() => {
-                    group.x = 0;
-                    group.removeChildAt(0);
-                    group.addChild(_createRandomUnitView());
-                });
-        }
+        //     group.x = 0;
+        //     egret.Tween.get(group, { loop: true })
+        //         .to({ x: -gridWidth / 4 }, 500)
+        //         .call(() => {
+        //             group.x = 0;
+        //             group.removeChildAt(0);
+        //             group.addChild(_createRandomUnitView());
+        //         });
+        // }
         private _clearGroupUnits(): void {
             this._groupUnits.removeChildren();
             egret.Tween.removeTweens(this._groupUnits);
         }
     }
 
-    function _createRandomUnitView(): eui.Component {
-        const view = new WarMap.WarMapUnitView();
-        view.update({
-            configVersion: ConfigManager.getNewestConfigVersion(),
+    // function _createRandomUnitView(): eui.Component {
+    //     const view = new WarMap.WarMapUnitView();
+    //     view.update({
+    //         configVersion: Utility.ConfigManager.getNewestConfigVersion(),
 
-            gridX: 0,
-            gridY: 0,
+    //         gridX: 0,
+    //         gridY: 0,
 
-            viewId: ConfigManager.getUnitViewId(Math.floor(Math.random() * 26), Math.floor(Math.random() * 4) + 1),
-        });
+    //         viewId: Utility.ConfigManager.getUnitViewId(Math.floor(Math.random() * 26), Math.floor(Math.random() * 4) + 1),
+    //     });
 
-        const container     = new eui.Component();
-        container.width     = ConfigManager.getGridSize().width;
-        container.height    = ConfigManager.getGridSize().height;
-        container.addChild(view);
-        return container;
-    }
+    //     const container     = new eui.Component();
+    //     container.width     = Utility.ConfigManager.getGridSize().width;
+    //     container.height    = Utility.ConfigManager.getGridSize().height;
+    //     container.addChild(view);
+    //     return container;
+    // }
 }

@@ -1,16 +1,21 @@
 
 namespace TinyWars.WarMap {
-    import UiImage     = GameUi.UiImage;
-    import Notify      = Utility.Notify;
-    import TimeModel   = Time.TimeModel;
+    import Notify           = Utility.Notify;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ConfigManager    = Utility.ConfigManager;
+    import UiImage          = GameUi.UiImage;
+    import TimeModel        = Time.TimeModel;
+    import CommonModel      = Common.CommonModel;
+    import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
     export class WarMapTileMapView extends egret.DisplayObjectContainer {
         private _isInitialized: boolean;
 
-        private _colCount   : number;
-        private _rowCount   : number;
+        // private _colCount   : number;
+        // private _rowCount   : number;
         private _baseLayer  : TileBaseLayer;
         private _objectLayer: TileObjectLayer;
 
@@ -18,8 +23,8 @@ namespace TinyWars.WarMap {
             egret.assert(!this._isInitialized, "WarMapTileMapView.init() already initialized!");
             this._isInitialized = true;
 
-            this._colCount = colCount;
-            this._rowCount = rowCount;
+            // this._colCount = colCount;
+            // this._rowCount = rowCount;
 
             this._baseLayer = new TileBaseLayer();
             this._baseLayer.init(colCount, rowCount);
@@ -36,56 +41,57 @@ namespace TinyWars.WarMap {
             // this._initTest();
         }
 
-        public updateWithBaseViewIdArray(ids: number[]): void {
-            this._baseLayer.updateWithViewIdArray(ids);
+        public updateWithTileDataList(dataList: ISerialTile[]): void {
+            this._baseLayer.updateWithTileDataList(dataList);
+            this._objectLayer.updateWithTileDataList(dataList);
         }
-        public updateWithBaseViewIdMatrix(ids: number[][]): void {
-            this._baseLayer.updateWithViewIdMatrix(ids);
-        }
+        // public updateWithBaseViewIdMatrix(ids: number[][]): void {
+        //     this._baseLayer.updateWithViewIdMatrix(ids);
+        // }
 
-        public updateWithObjectViewIdArray(ids: number[]): void {
-            this._objectLayer.updateWithViewIdArray(ids);
-        }
-        public updateWithObjectViewIdMatrix(ids: number[][]): void {
-            this._objectLayer.updateWithViewIdMatrix(ids);
-        }
+        // public updateWithObjectViewIdArray(ids: number[]): void {
+        //     this._objectLayer.updateWithViewIdArray(ids);
+        // }
+        // public updateWithObjectViewIdMatrix(ids: number[][]): void {
+        //     this._objectLayer.updateWithViewIdMatrix(ids);
+        // }
 
-        public updateWithBaseViewId(id: number, x: number, y: number): void {
-            this._baseLayer.updateWithViewId(id, x, y);
-        }
+        // public updateWithBaseViewId(id: number, x: number, y: number): void {
+        //     this._baseLayer.updateWithViewId(id, x, y);
+        // }
 
-        public updateWithObjectViewId(id: number, x: number, y: number): void {
-            this._objectLayer.updateWithViewId(id, x, y);
-        }
+        // public updateWithObjectViewId(id: number, x: number, y: number): void {
+        //     this._objectLayer.updateWithViewId(id, x, y);
+        // }
 
         private _onNotifyTileAnimationTick(e: egret.Event): void {
             this._baseLayer.updateViewOnTick();
             this._objectLayer.updateViewOnTick();
         }
 
-        private _initTest(): void {
-            const ids1: number[][] = new Array(this._colCount);
-            const ids2: number[][] = new Array(this._colCount);
-            for (let x = 0; x < this._colCount; ++x) {
-                ids1[x] = new Array(this._rowCount);
-                ids2[x] = new Array(this._rowCount);
-                for (let y = 0; y < this._rowCount; ++y) {
-                    ids1[x][y] = Math.floor(Math.random() * 100);
-                    ids2[x][y] = Math.floor(Math.random() * 109);
-                }
-            }
-            this.updateWithBaseViewIdMatrix(ids1);
-            this.updateWithObjectViewIdMatrix(ids2);
-        }
+        // private _initTest(): void {
+        //     const ids1: number[][] = new Array(this._colCount);
+        //     const ids2: number[][] = new Array(this._colCount);
+        //     for (let x = 0; x < this._colCount; ++x) {
+        //         ids1[x] = new Array(this._rowCount);
+        //         ids2[x] = new Array(this._rowCount);
+        //         for (let y = 0; y < this._rowCount; ++y) {
+        //             ids1[x][y] = Math.floor(Math.random() * 100);
+        //             ids2[x][y] = Math.floor(Math.random() * 109);
+        //         }
+        //     }
+        //     this.updateWithBaseViewIdMatrix(ids1);
+        //     this.updateWithObjectViewIdMatrix(ids2);
+        // }
     }
 
     abstract class TileLayerBase extends eui.Component {
         private _isInitialized: boolean;
 
-        protected _ids     : number[][];
-        protected _images  : UiImage[][];
-        protected _colCount: number;
-        protected _rowCount: number;
+        protected _tileDataMap  : ISerialTile[][];
+        protected _images       : UiImage[][];
+        protected _colCount     : number;
+        protected _rowCount     : number;
 
         public init(colCount: number, rowCount: number): void {
             egret.assert(!this._isInitialized, "TileLayerBase.init() already initialized!");
@@ -96,11 +102,11 @@ namespace TinyWars.WarMap {
             this.width     = _GRID_WIDTH  * colCount;
             this.height    = _GRID_HEIGHT * rowCount;
 
-            this._ids      = new Array(colCount);
-            this._images   = new Array(colCount);
+            this._tileDataMap   = new Array(colCount);
+            this._images        = new Array(colCount);
             for (let x = 0; x < colCount; ++x) {
-                this._ids[x]    = new Array(rowCount);
-                this._images[x] = new Array(rowCount);
+                this._tileDataMap[x]    = new Array(rowCount);
+                this._images[x]         = new Array(rowCount);
             }
 
             for (let y = 0; y < rowCount; ++y) {
@@ -115,38 +121,34 @@ namespace TinyWars.WarMap {
             }
         }
 
-        public updateWithViewIdArray(ids: number[]): void {
+        public updateWithTileDataList(tileDataList: ISerialTile[]): void {
             const tickCount = TimeModel.getTileAnimationTickCount();
-            const cols      = this._colCount;
-            const rows      = this._rowCount;
-            for (let x = 0; x < cols; ++x) {
-                for (let y = 0; y < rows; ++y) {
-                    const id = ids[x + y * cols];
-                    this._ids[x][y]           = id;
-                    this._images[x][y].source = this._getImageSource(id, tickCount);
-                }
+            for (const tileData of tileDataList) {
+                const { x, y }              = tileData.gridIndex;
+                this._tileDataMap[x][y]     = tileData;
+                this._images[x][y].source   = this._getImageSource(tileData, tickCount);
             }
         }
 
-        public updateWithViewIdMatrix(ids: number[][]): void {
-            const tickCount = TimeModel.getTileAnimationTickCount();
-            for (let x = 0; x < this._colCount; ++x) {
-                for (let y = 0; y < this._rowCount; ++y) {
-                    const id = ids[x][y];
-                    this._ids[x][y]           = id;
-                    this._images[x][y].source = this._getImageSource(id, tickCount);
-                }
-            }
-        }
+        // public updateWithViewIdMatrix(ids: number[][]): void {
+        //     const tickCount = TimeModel.getTileAnimationTickCount();
+        //     for (let x = 0; x < this._colCount; ++x) {
+        //         for (let y = 0; y < this._rowCount; ++y) {
+        //             const id = ids[x][y];
+        //             this._ids[x][y]           = id;
+        //             this._images[x][y].source = this._getImageSource(id, tickCount);
+        //         }
+        //     }
+        // }
 
-        public updateWithViewId(id: number, x: number, y: number): void {
-            this._ids[x][y]           = id;
-            this._images[x][y].source = this._getImageSource(id, TimeModel.getTileAnimationTickCount());
-        }
+        // public updateWithViewId(id: number, x: number, y: number): void {
+        //     this._ids[x][y]           = id;
+        //     this._images[x][y].source = this._getImageSource(id, TimeModel.getTileAnimationTickCount());
+        // }
 
         public updateViewOnTick(): void {
             const images = this._images;
-            const ids    = this._ids;
+            const ids    = this._tileDataMap;
             const tickCount = Time.TimeModel.getTileAnimationTickCount();
             for (let x = 0; x < this._colCount; ++x) {
                 for (let y = 0; y < this._rowCount; ++y) {
@@ -155,15 +157,22 @@ namespace TinyWars.WarMap {
             }
         }
 
-        protected abstract _getImageSource(id: number, tickCount: number): string;
+        protected abstract _getImageSource(tileData: ISerialTile, tickCount: number): string;
         protected abstract _getImageY(gridY: number): number;
     }
 
     class TileBaseLayer extends TileLayerBase {
-        protected _getImageSource(id: number, tickCount: number): string {
-            return id == null
+        protected _getImageSource(tileData: ISerialTile, tickCount: number): string {
+            return tileData == null
                 ? undefined
-                : ConfigManager.getTileBaseImageSource(id, tickCount, false);
+                : CommonModel.getCachedTileBaseImageSource({
+                    version : User.UserModel.getSelfSettingsTextureVersion(),
+                    baseType: tileData.baseType,
+                    shapeId : tileData.baseShapeId || 0,
+                    isDark  : false,
+                    skinId  : CommonConstants.UnitAndTileNeutralSkinId,
+                    tickCount,
+                });
         }
 
         protected _getImageY(gridY: number): number {
@@ -172,10 +181,17 @@ namespace TinyWars.WarMap {
     }
 
     class TileObjectLayer extends TileLayerBase {
-        protected _getImageSource(id: number, tickCount: number): string {
-            return id == null
-            ? undefined
-            : ConfigManager.getTileObjectImageSource(id, tickCount, false);
+        protected _getImageSource(tileData: ISerialTile, tickCount: number): string {
+            return tileData == null
+                ? undefined
+                : CommonModel.getCachedTileObjectImageSource({
+                    version     : User.UserModel.getSelfSettingsTextureVersion(),
+                    objectType  : tileData.objectType,
+                    shapeId     : tileData.objectShapeId || 0,
+                    isDark      : false,
+                    skinId      : tileData.playerIndex,
+                    tickCount,
+                });
         }
 
         protected _getImageY(gridY: number): number {

@@ -1,10 +1,9 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Types      = Utility.Types;
-    import Lang       = Utility.Lang;
-    import FloatText  = Utility.FloatText;
-    import Notify     = Utility.Notify;
-    import ProtoTypes = Utility.ProtoTypes;
+    import Types        = Utility.Types;
+    import Lang         = Utility.Lang;
+    import Notify       = Utility.Notify;
+    import ProtoTypes   = Utility.ProtoTypes;
 
     export class McrCreateSearchMapPanel extends GameUi.UiPanel {
         protected _IS_EXCLUSIVE = false;
@@ -28,6 +27,12 @@ namespace TinyWars.MultiCustomRoom {
         private _inputPlayedTimes       : GameUi.UiTextInput;
         private _inputMinRating         : GameUi.UiTextInput;
 
+        private _groupTagFog    : eui.Group;
+        private _btnTagFog      : GameUi.UiButton;
+        private _labelTagFog    : GameUi.UiLabel;
+
+        private _mapTag         : ProtoTypes.Map.IDataForMapTag = {};
+
         public static show(): void {
             if (!McrCreateSearchMapPanel._instance) {
                 McrCreateSearchMapPanel._instance = new McrCreateSearchMapPanel();
@@ -50,9 +55,10 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onFirstOpened(): void {
             this._uiListeners = [
-                { ui: this._btnClose,  callback: this._onTouchedBtnClose },
-                { ui: this._btnReset,  callback: this._onTouchedBtnReset },
-                { ui: this._btnSearch, callback: this._onTouchedBtnSearch },
+                { ui: this._btnClose,   callback: this._onTouchedBtnClose },
+                { ui: this._btnReset,   callback: this._onTouchedBtnReset },
+                { ui: this._btnSearch,  callback: this._onTouchedBtnSearch },
+                { ui: this._btnTagFog,  callback: this._onTouchedBtnTagFog },
             ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
@@ -61,8 +67,6 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onOpened(): void {
             this._updateComponentsForLanguage();
-            this._btnReset.enabled  = true;
-            this._btnSearch.enabled = true;
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
@@ -81,9 +85,23 @@ namespace TinyWars.MultiCustomRoom {
                 playersCount: Number(this._inputPlayersCount.text) || null,
                 playedTimes : Number(this._inputPlayedTimes.text) || null,
                 minRating   : Number(this._inputMinRating.text) || null,
+                mapTag      : this._mapTag,
             });
 
             McrCreateSearchMapPanel.hide();
+        }
+
+        private _onTouchedBtnTagFog(e: egret.TouchEvent): void {
+            const mapTag = this._mapTag;
+            const hasFog = mapTag.fog;
+            if (hasFog == true) {
+                mapTag.fog = false;
+            } else if (hasFog == false) {
+                mapTag.fog = null;
+            } else {
+                mapTag.fog = true;
+            }
+            this._updateLabelTagFog();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -91,7 +109,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelName.text                = Lang.getText(Lang.Type.B0234);
+            this._labelName.text                = Lang.getText(Lang.Type.B0447);
             this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}:`;
             this._labelDesignerTitle.text       = `${Lang.getText(Lang.Type.B0251)}:`;
             this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}:`;
@@ -101,6 +119,20 @@ namespace TinyWars.MultiCustomRoom {
             this._btnClose.label                = Lang.getText(Lang.Type.B0146);
             this._btnReset.label                = Lang.getText(Lang.Type.B0233);
             this._btnSearch.label               = Lang.getText(Lang.Type.B0228);
+            this._btnTagFog.label               = Lang.getText(Lang.Type.B0438);
+            this._updateLabelTagFog();
+        }
+
+        private _updateLabelTagFog(): void {
+            const hasFog    = this._mapTag.fog;
+            const label     = this._labelTagFog;
+            if (hasFog == true) {
+                label.text = Lang.getText(Lang.Type.B0012);
+            } else if (hasFog == false) {
+                label.text = Lang.getText(Lang.Type.B0013);
+            } else {
+                label.text = Lang.getText(Lang.Type.B0446);
+            }
         }
     }
 }

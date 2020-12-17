@@ -3,10 +3,15 @@ namespace TinyWars.Network {
 export const enum NetErrorCode {
     NoError = 0,
 
+    InternalError,
+
     IllegalRequest,
 
-    Login_InvalidAccountOrPassword,
-    Login_AlreadyLoggedIn,
+    User0000 = 10000,               // 玩家登录-socket已有user id
+    User0001,                       // 玩家登录-账号或密码错误
+    User0002,                       // 玩家登录-已处于已登录的状态
+    User0003,                       // 服务端内部错误
+    User0004,                       // 服务端内部错误
 
     Register_InvalidAccount,
     Register_UsedAccount,
@@ -19,7 +24,8 @@ export const enum NetErrorCode {
     MmMergeMap_NoSrcStatisticsData,
     MmMergeMap_NoDstStatisticsData,
 
-    CreateMultiCustomWar_TooManyJoinedWars,
+    Mcr0000 = 20000,                // 自定义多人房间-已加入太多房间
+    CreateMultiCustomWar_TooManyCreatedRooms,
     CreateMultiCustomWar_InvalidParams,
 
     ExitMultiCustomWar_WarInfoNotExist,

@@ -1,14 +1,17 @@
 
 namespace TinyWars.BaseWar {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
-    import FloatText    = Utility.FloatText;
-    import UnitType     = Types.UnitType;
-    import TileType     = Types.TileType;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import Types            = Utility.Types;
+    import FloatText        = Utility.FloatText;
+    import ConfigManager    = Utility.ConfigManager;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import UnitType         = Types.UnitType;
+    import TileType         = Types.TileType;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export type OpenDataForBwUnitDetailPanel = {
-        unit: BwUnit | MapEditor.MeUnit;
+        unit: BwUnit;
     }
 
     export class BwUnitDetailPanel extends GameUi.UiPanel {
@@ -17,9 +20,10 @@ namespace TinyWars.BaseWar {
 
         private static _instance: BwUnitDetailPanel;
 
-        private _group                  : eui.Group;
-        private _conUnitView            : eui.Group;
-        private _labelName              : GameUi.UiLabel;
+        private _group              : eui.Group;
+        private _conUnitView        : eui.Group;
+        private _labelName          : GameUi.UiLabel;
+        private _btnUnitsInfo       : GameUi.UiButton;
 
         private _listInfo           : GameUi.UiScrollList;
         private _listDamageChart    : GameUi.UiScrollList;
@@ -69,6 +73,9 @@ namespace TinyWars.BaseWar {
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
             ];
+            this._uiListeners = [
+                { ui: this._btnUnitsInfo,   callback: this._onTouchedBtnUnitsInfo },
+            ];
 
             this._listDamageChart.setItemRenderer(DamageRenderer);
             this._listInfo.setItemRenderer(InfoRenderer);
@@ -104,6 +111,11 @@ namespace TinyWars.BaseWar {
             this.close();
         }
 
+        private _onTouchedBtnUnitsInfo(e: egret.TouchEvent): void {
+            this.close();
+            Common.CommonDamageChartPanel.show();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +126,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateComponentsForLanguage(): void {
+            this._btnUnitsInfo.label        = Lang.getText(Lang.Type.B0440);
             this._labelDamageChart.text     = Lang.getText(Lang.Type.B0334);
             this._labelOffenseMain1.text    = Lang.getText(Lang.Type.B0335);
             this._labelOffenseSub1.text     = Lang.getText(Lang.Type.B0336);
@@ -130,10 +143,10 @@ namespace TinyWars.BaseWar {
             const unit              = this._openData.unit;
             this._labelName.text    = Lang.getUnitName(unit.getType());
             this._unitView.update({
-                configVersion   : unit.getConfigVersion(),
-                viewId          : unit.getViewId(),
-                gridX           : 0,
-                gridY           : 0,
+                gridIndex       : { x: 0, y: 0},
+                skinId          : unit.getSkinId(),
+                unitType        : unit.getType(),
+                unitActionState : unit.getActionState(),
             }, Time.TimeModel.getUnitAnimationTickCount());
         }
 
@@ -164,7 +177,7 @@ namespace TinyWars.BaseWar {
                 {
                     // Fuel consumption
                     titleText               : Lang.getText(Lang.Type.B0343),
-                    valueText               : `${cfg.fuelConsumptionPerTurn}${cfg.fuelConsumptionInDiving == null ? `` : ` (${cfg.fuelConsumptionInDiving})`}`,
+                    valueText               : `${cfg.fuelConsumptionPerTurn}${cfg.diveCfgs == null ? `` : ` (${cfg.diveCfgs[0]})`}`,
                     callbackOnTouchedTitle  : null,
                 },
                 {
@@ -200,12 +213,13 @@ namespace TinyWars.BaseWar {
                 this._createInfoFlareAmmo(unit, cfg, isCheating),
                 this._createInfoActionState(unit, cfg, isCheating),
                 this._createInfoDiving(unit, cfg, isCheating),
+                this._createInfoCo(unit, cfg, isCheating),
             ].filter(v => !!v);
 
             this._listInfo.bindData(dataList);
         }
 
-        private _createInfoHp(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer {
+        private _createInfoHp(unit: BwUnit, cfg: ProtoTypes.Config.IUnitTemplateCfg, isCheating: boolean): DataForInfoRenderer {
             const currValue = unit.getCurrentHp();
             const maxValue  = unit.getMaxHp();
             const minValue  = 1;
@@ -215,7 +229,7 @@ namespace TinyWars.BaseWar {
                 callbackOnTouchedTitle  : !isCheating
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0339),
                             currentValue    : "" + currValue,
                             maxChars        : 3,
@@ -237,7 +251,11 @@ namespace TinyWars.BaseWar {
             };
         }
 
-        private _createInfoFuel(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer {
+        private _createInfoFuel(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer {
             const currValue = unit.getCurrentFuel();
             const maxValue  = unit.getMaxFuel();
             const minValue  = 0;
@@ -247,7 +265,7 @@ namespace TinyWars.BaseWar {
                 callbackOnTouchedTitle  : !isCheating
                     ? null
                     : () => {
-                        Common.InputPanel.show({
+                        Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0342),
                             currentValue    : "" + currValue,
                             maxChars        : 2,
@@ -269,7 +287,11 @@ namespace TinyWars.BaseWar {
             };
         }
 
-        private _createInfoPromotion(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoPromotion(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             const maxValue = unit.getMaxPromotion();
             if (maxValue == null) {
                 return null;
@@ -282,7 +304,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0370),
                                 currentValue    : "" + currValue,
                                 maxChars        : 1,
@@ -305,7 +327,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoPrimaryWeaponAmmo(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoPrimaryWeaponAmmo(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             const maxValue = unit.getPrimaryWeaponMaxAmmo();
             if (maxValue == null) {
                 return null;
@@ -318,7 +344,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0350),
                                 currentValue    : "" + currValue,
                                 maxChars        : 2,
@@ -341,7 +367,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoBuildMaterial(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoBuildMaterial(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             const maxValue = unit.getMaxBuildMaterial();
             if (maxValue == null) {
                 return null;
@@ -354,7 +384,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0347),
                                 currentValue    : "" + currValue,
                                 maxChars        : 2,
@@ -377,7 +407,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoProduceMaterial(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoProduceMaterial(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             const maxValue = unit.getMaxProduceMaterial();
             if (maxValue == null) {
                 return null;
@@ -390,7 +424,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0348),
                                 currentValue    : "" + currValue,
                                 maxChars        : 2,
@@ -413,7 +447,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoFlareAmmo(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoFlareAmmo(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             const maxValue = unit.getFlareMaxAmmo();
             if (maxValue == null) {
                 return null;
@@ -426,7 +464,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0349),
                                 currentValue    : "" + currValue,
                                 maxChars        : 2,
@@ -449,7 +487,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoActionState(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoActionState(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             if (!isCheating) {
                 return null;
             } else {
@@ -458,7 +500,7 @@ namespace TinyWars.BaseWar {
                     titleText               : Lang.getText(Lang.Type.B0367),
                     valueText               : Lang.getUnitActionStateText(state),
                     callbackOnTouchedTitle  : () => {
-                        Common.ConfirmPanel.show({
+                        Common.CommonConfirmPanel.show({
                             title       : Lang.getText(Lang.Type.B0349),
                             content     : Lang.getText(Lang.Type.A0113),
                             callback    : () => {
@@ -472,7 +514,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoDiving(unit: BwUnit | MapEditor.MeUnit, cfg: Types.UnitTemplateCfg, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoDiving(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
             if (!unit.checkIsDiver()) {
                 return null;
             } else {
@@ -483,7 +529,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.ConfirmPanel.show({
+                            Common.CommonConfirmPanel.show({
                                 title       : Lang.getText(Lang.Type.B0371),
                                 content     : Lang.getText(Lang.Type.A0114),
                                 callback    : () => {
@@ -495,6 +541,34 @@ namespace TinyWars.BaseWar {
                     },
                 };
             }
+        }
+
+        private _createInfoCo(
+            unit        : BwUnit,
+            cfg         : ProtoTypes.Config.IUnitTemplateCfg,
+            isCheating  : boolean
+        ): DataForInfoRenderer | null {
+            const hasLoadedCo = unit.getHasLoadedCo();
+            return {
+                titleText               : Lang.getText(Lang.Type.B0421),
+                valueText               : hasLoadedCo ? Lang.getText(Lang.Type.B0012) : Lang.getText(Lang.Type.B0013),
+                callbackOnTouchedTitle  : !isCheating
+                    ? null
+                    : () => {
+                        unit.setHasLoadedCo(!hasLoadedCo);
+                        unit.updateView();
+                        this._updateListInfo();
+
+                        const war       = unit.getWar();
+                        const player    = unit.getPlayer();
+                        war.getTileMap().getView().updateCoZone();
+                        if (war.getUnitMap().checkIsCoLoadedByAnyUnit(player.getPlayerIndex())) {
+                            player.setCoCurrentEnergy(player.getCoCurrentEnergy() || 0);
+                        } else {
+                            player.setCoCurrentEnergy(null);
+                        }
+                    },
+            };
         }
 
         private _updateListDamageChart(): void {
@@ -553,7 +627,7 @@ namespace TinyWars.BaseWar {
             const data              = this.data as DataForInfoRenderer;
             this._labelValue.text   = data.valueText;
             this._btnTitle.label    = data.titleText;
-            (this._btnTitle.labelDisplay as GameUi.UiLabel).textColor = data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF;
+            this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
@@ -612,10 +686,10 @@ namespace TinyWars.BaseWar {
                 this._unitView.visible = true;
                 this._tileView.visible = false;
                 this._unitView.update({
-                    configVersion,
-                    gridX           : 0,
-                    gridY           : 0,
-                    viewId          : ConfigManager.getUnitViewId(targetUnitType, data.playerIndex),
+                    gridIndex       : { x: 0, y: 0 },
+                    unitType        : targetUnitType,
+                    skinId          : data.playerIndex,
+                    unitActionState : Types.UnitActionState.Idle,
                 }, Time.TimeModel.getUnitAnimationTickCount());
 
                 const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);
@@ -642,8 +716,14 @@ namespace TinyWars.BaseWar {
                 const targetArmorType           = targetCfg.armorType;
                 const primaryAttackDamage       = attackCfg[targetArmorType][Types.WeaponType.Primary].damage;
                 const secondaryAttackDamage     = attackCfg[targetArmorType][Types.WeaponType.Secondary].damage;
-                const viewId                    = ConfigManager.getTileObjectViewId(ConfigManager.getTileObjectTypeByTileType(targetTileType), 0);
-                this._tileView.source           = ConfigManager.getTileObjectImageSource(viewId, 0, false);
+                this._tileView.source           = Common.CommonModel.getCachedTileObjectImageSource({
+                    version     : User.UserModel.getSelfSettingsTextureVersion(),
+                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                    objectType  : ConfigManager.getTileObjectTypeByTileType(targetTileType),
+                    isDark      : false,
+                    shapeId     : 0,
+                    tickCount   : Time.TimeModel.getTileAnimationTickCount(),
+                });
                 this._labelPrimaryAttack.text   = primaryAttackDamage == null ? `--` : `${primaryAttackDamage}`;
                 this._labelSecondaryAttack.text = secondaryAttackDamage == null ? `--` : `${secondaryAttackDamage}`;
                 this._labelPrimaryDefend.text   = `--`;

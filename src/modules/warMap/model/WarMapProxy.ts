@@ -3,167 +3,154 @@ namespace TinyWars.WarMap.WarMapProxy {
     import NetManager   = Network.Manager;
     import MsgCode      = Network.Codes;
     import ProtoTypes   = Utility.ProtoTypes;
-    import Types        = Utility.Types;
     import Notify       = Utility.Notify;
+    import NetMessage   = ProtoTypes.NetMessage;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: MsgCode.S_MapGetEnabledExtraDataList,    callback: _onSMapGetEnabledExtraDataList },
-            { msgCode: MsgCode.S_MapGetExtraData,               callback: _onSMapGetExtraData },
-            { msgCode: MsgCode.S_MapGetRawData,                 callback: _onSMapGetRawData },
-            { msgCode: MsgCode.S_MmChangeAvailability,          callback: _onSMmChangeAvailability },
-            { msgCode: MsgCode.S_MmReloadAllMaps,               callback: _onSMmReloadAllMaps },
-            { msgCode: MsgCode.S_MmMergeMap,                    callback: _onSMmMergeMap },
-            { msgCode: MsgCode.S_MmDeleteMap,                   callback: _onSMmDeleteMap },
-            { msgCode: MsgCode.S_MmGetReviewingMaps,            callback: _onSMmGetReviewingMaps },
-            { msgCode: MsgCode.S_MmReviewMap,                   callback: _onSMmReviewMap },
+            { msgCode: MsgCode.MsgMapGetEnabledBriefDataList,   callback: _onMsgMapGetEnabledBriefDataList },
+            { msgCode: MsgCode.MsgMapGetEnabledRawDataList,     callback: _onMsgMapGetEnabledRawDataList },
+            { msgCode: MsgCode.MsgMapGetBriefData,              callback: _onMsgMapGetBriefData },
+            { msgCode: MsgCode.MsgMapGetRawData,                callback: _onMsgMapGetRawData },
+            { msgCode: MsgCode.MsgMmSetMapAvailability,         callback: _onMsgMmSetMapAvailability },
+            { msgCode: MsgCode.MsgMmDeleteMap,                  callback: _onMsgMmDeleteMap },
+            { msgCode: MsgCode.MsgMmGetReviewingMaps,           callback: _onMsgMmGetReviewingMaps },
+            { msgCode: MsgCode.MsgMmReviewMap,                  callback: _onMsgMmReviewMap },
+            { msgCode: MsgCode.MsgMmSetMapTag,                  callback: _onMsgMmSetMapTag },
         ], WarMapProxy);
     }
 
-    export function reqGetMapEnabledExtraDataList(): void {
-        NetManager.send({
-            C_MapGetEnabledExtraDataList: {
-            },
-        });
-    }
-    function _onSMapGetEnabledExtraDataList(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MapGetEnabledExtraDataList;
+    function _onMsgMapGetEnabledBriefDataList(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMapGetEnabledBriefDataList.IS;
         if (!data.errorCode) {
-            WarMapModel.resetExtraDataDict(data.dataList);
-            Notify.dispatch(Notify.Type.SMapGetEnabledExtraDataList, data);
+            WarMapModel.resetBriefDataDict(data.dataList);
+            Notify.dispatch(Notify.Type.MsgMapGetEnabledBriefDataList, data);
         }
     }
 
-    export function reqGetMapExtraData(mapFileName: string): void {
+    function _onMsgMapGetEnabledRawDataList(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMapGetEnabledRawDataList.IS;
+        if (!data.errorCode) {
+            WarMapModel.updateRawDataDict(data.dataList);
+            Notify.dispatch(Notify.Type.MsgMapGetEnabledRawDataList, data);
+        }
+    }
+
+    export function reqGetMapBriefData(mapId: number): void {
         NetManager.send({
-            C_MapGetExtraData: {
-                mapFileName,
-            },
+            MsgMapGetBriefData: { c: {
+                mapId,
+            }, },
         });
     }
-    function _onSMapGetExtraData(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MapGetExtraData;
+    function _onMsgMapGetBriefData(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMapGetBriefData.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SMapGetExtraDataFailed, data);
+            Notify.dispatch(Notify.Type.MsgMapGetBriefDataFailed, data);
         } else {
-            WarMapModel.setExtraData(data.mapExtraData);
-            Notify.dispatch(Notify.Type.SMapGetExtraData, data);
+            WarMapModel.setBriefData(data.mapBriefData);
+            Notify.dispatch(Notify.Type.MsgMapGetBriefData, data);
         }
     }
 
-    export function reqGetMapRawData(mapFileName: string): void {
+    export function reqGetMapRawData(mapId: number): void {
         NetManager.send({
-            C_MapGetRawData: {
-                mapFileName,
-            },
+            MsgMapGetRawData: { c: {
+                mapId,
+            }, },
         });
     }
-    function _onSMapGetRawData(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MapGetRawData;
+    function _onMsgMapGetRawData(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMapGetRawData.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SMapGetRawDataFailed, data);
+            Notify.dispatch(Notify.Type.MsgMapGetRawDataFailed, data);
         } else {
-            WarMapModel.setMapRawData(data.mapFileName, data.mapRawData);
-            Notify.dispatch(Notify.Type.SMapGetRawData, data);
+            WarMapModel.setRawData(data.mapId, data.mapRawData);
+            Notify.dispatch(Notify.Type.MsgMapGetRawData, data);
         }
     }
 
-    export function reqMmChangeAvailability(mapFileName: string, availability: Types.MapAvailability): void {
+    export function reqMmSetMapAvailability(mapId: number, availability: ProtoTypes.Map.IDataForMapAvailability): void {
         NetManager.send({
-            C_MmChangeAvailability: {
-                mapFileName,
-                canMcw  : availability.canMcw,
-                canWr   : availability.canWr,
-                canScw  : availability.canScw,
-            },
+            MsgMmSetMapAvailability: { c: {
+                mapId,
+                availability,
+            }, },
         });
     }
-    function _onSMmChangeAvailability(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MmChangeAvailability;
+    function _onMsgMmSetMapAvailability(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMmSetMapAvailability.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMmChangeAvailability);
+            Notify.dispatch(Notify.Type.MsgMmSetMapAvailability);
         }
     }
 
-    export function reqReloadAllMaps(): void {
+    export function reqMmDeleteMap(mapId: number): void {
         NetManager.send({
-            C_MmReloadAllMaps: {},
+            MsgMmDeleteMap: { c: {
+                mapId,
+            }, }
         });
     }
-    function _onSMmReloadAllMaps(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MmReloadAllMaps;
+    function _onMsgMmDeleteMap(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMmDeleteMap.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMmReloadAllMaps);
-        }
-    }
-
-    export function reqMergeMap(srcMapFileName: string, dstMapFileName: string): void {
-        NetManager.send({
-            C_MmMergeMap: {
-                srcMapFileName,
-                dstMapFileName,
-            },
-        });
-    }
-    function _onSMmMergeMap(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MmMergeMap;
-        if (!data.errorCode) {
-            WarMapModel.setMapRawData(data.dstMapFileName, data.dstMapRawData);
-            WarMapModel.setExtraData(data.dstMapExtraData);
-            WarMapModel.deleteExtraData(data.srcMapFileName);
-            Notify.dispatch(Notify.Type.SMmMergeMap, data);
-        }
-    }
-
-    export function reqMmDeleteMap(mapFileName: string): void {
-        NetManager.send({
-            C_MmDeleteMap: {
-                mapFileName,
-            },
-        });
-    }
-    function _onSMmDeleteMap(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MmDeleteMap;
-        if (!data.errorCode) {
-            WarMapModel.deleteExtraData(data.mapFileName);
-            Notify.dispatch(Notify.Type.SMmDeleteMap, data);
+            WarMapModel.deleteBriefData(data.mapId);
+            Notify.dispatch(Notify.Type.MsgMmDeleteMap, data);
         }
     }
 
     export function reqMmGetReviewingMaps(): void {
         NetManager.send({
-            C_MmGetReviewingMaps: {},
+            MsgMmGetReviewingMaps: { c: {} },
         });
     }
-    function _onSMmGetReviewingMaps(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MmGetReviewingMaps;
+    function _onMsgMmGetReviewingMaps(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMmGetReviewingMaps.IS;
         if (!data.errorCode) {
             WarMapModel.setMmReviewingMaps(data.maps);
-            Notify.dispatch(Notify.Type.SMmGetReviewingMaps, data);
+            Notify.dispatch(Notify.Type.MsgMmGetReviewingMaps, data);
         }
     }
 
-    export function reqReviewMap(
-        designerUserId  : number,
-        slotIndex       : number,
-        modifiedTime    : number,
-        isAccept        : boolean,
-        reviewComment   : string | null
-    ) : void {
+    export function reqMmReviewMap(
+        { designerUserId, slotIndex, modifiedTime, isAccept, reviewComment, availability }: {
+            designerUserId  : number;
+            slotIndex       : number;
+            modifiedTime    : number;
+            isAccept        : boolean;
+            reviewComment   : string | null;
+            availability    : ProtoTypes.Map.IDataForMapAvailability;
+        }
+    ): void {
         NetManager.send({
-            C_MmReviewMap: {
+            MsgMmReviewMap: { c: {
                 designerUserId,
                 slotIndex,
                 modifiedTime,
                 isAccept,
                 reviewComment,
-            },
+                availability,
+            }, },
         });
     }
-    function _onSMmReviewMap(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_MmReviewMap;
+    function _onMsgMmReviewMap(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMmReviewMap.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SMmReviewMap, data);
+            Notify.dispatch(Notify.Type.MsgMmReviewMap, data);
+        }
+    }
+
+    export function reqMmSetMapTag(mapId: number, mapTag: ProtoTypes.Map.IDataForMapTag | null | undefined): void {
+        NetManager.send({ MsgMmSetMapTag: { c: {
+            mapId,
+            mapTag,
+        } } });
+    }
+    function _onMsgMmSetMapTag(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMmSetMapTag.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.MsgMmSetMapTag, data);
         }
     }
 }

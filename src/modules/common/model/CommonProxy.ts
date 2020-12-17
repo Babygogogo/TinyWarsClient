@@ -1,40 +1,67 @@
 
 namespace TinyWars.Common.CommonProxy {
-    import Notify     = Utility.Notify;
-    import NotifyType = Utility.Notify.Type;
-    import ProtoTypes = Utility.ProtoTypes;
-    import NetManager = Network.Manager;
-    import ActionCode = Network.Codes;
+    import Notify           = Utility.Notify;
+    import NotifyType       = Utility.Notify.Type;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ConfigManager    = Utility.ConfigManager;
+    import NetMessage       = ProtoTypes.NetMessage;
+    import NetManager       = Network.Manager;
+    import ActionCode       = Network.Codes;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.S_CommonGetServerStatus,          callback: _onSCommonGetServerStatus,    },
-            { msgCode: ActionCode.S_CommonRateMultiPlayerReplay,    callback: _onSCommonRateMultiPlayerReplay },
+            { msgCode: ActionCode.MsgCommonHeartbeat,           callback: _onMsgCommonHeartbeat },
+            { msgCode: ActionCode.MsgCommonError,               callback: _onMsgCommonError, },
+            { msgCode: ActionCode.MsgCommonLatestConfigVersion, callback: _onMsgCommonLatestConfigVersion },
+            { msgCode: ActionCode.MsgCommonGetServerStatus,     callback: _onMsgCommonGetServerStatus, },
+            { msgCode: ActionCode.MsgCommonGetRankList,         callback: _onMsgCommonGetRankList },
         ], CommonProxy);
     }
 
-    export function reqCommonGetServerStatus(): void {
-        NetManager.send({ C_CommonGetServerStatus: {}, });
+    export function reqCommonHeartbeat(counter: number): void {
+        NetManager.send({
+            MsgCommonHeartbeat: { c: {
+                counter,
+            } },
+        });
     }
-    function _onSCommonGetServerStatus(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_CommonGetServerStatus;
+    function _onMsgCommonHeartbeat(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgCommonHeartbeat.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.SCommonGetServerStatus, data);
+            Notify.dispatch(NotifyType.MsgCommonHeartbeat, data);
         }
     }
 
-    export function reqCommonRateMultiPlayerReplay(replayId: number, rating: number): void {
-        NetManager.send({
-            C_CommonRateMultiPlayerReplay: {
-                replayId,
-                rating,
-            },
-        });
+    function _onMsgCommonError(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgCommonError.IS;
     }
-    function _onSCommonRateMultiPlayerReplay(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_CommonRateMultiPlayerReplay;
+
+    function _onMsgCommonLatestConfigVersion(e: egret.Event): void {
+        const data      = e.data as ProtoTypes.NetMessage.MsgCommonLatestConfigVersion.IS;
+        const version   = data.version;
+        ConfigManager.setLatestConfigVersion(version);
+        ConfigManager.loadConfig(version);
+        Notify.dispatch(Notify.Type.MsgCommonLatestConfigVersion, data);
+    }
+
+    export function reqCommonGetServerStatus(): void {
+        NetManager.send({ MsgCommonGetServerStatus: { c: {} }, });
+    }
+    function _onMsgCommonGetServerStatus(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgCommonGetServerStatus.IS;
         if (!data.errorCode) {
-            Notify.dispatch(NotifyType.SCommonRateMultiPlayerReplay, data);
+            Notify.dispatch(NotifyType.MsgCommonGetServerStatus, data);
+        }
+    }
+
+    export function reqGetRankList(): void {
+        NetManager.send({ MsgCommonGetRankList: { c: {} } });
+    }
+    function _onMsgCommonGetRankList(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgCommonGetRankList.IS;
+        if (!data.errorCode) {
+            CommonModel.setRankList(data.rankDataList);
+            Notify.dispatch(Notify.Type.MsgCommonGetRankList, data);
         }
     }
 }

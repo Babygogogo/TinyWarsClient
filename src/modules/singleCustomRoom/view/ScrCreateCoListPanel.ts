@@ -2,7 +2,7 @@
 namespace TinyWars.SingleCustomRoom {
     import Types        = Utility.Types;
     import Lang         = Utility.Lang;
-    import HelpPanel    = Common.HelpPanel;
+    import ProtoTypes   = Utility.ProtoTypes;
 
     type OpenData = {
         dataIndex   : number;
@@ -115,7 +115,7 @@ namespace TinyWars.SingleCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnHelp(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            Common.CommonHelpPanel.show({
                 title   : Lang.getText(Lang.Type.B0147),
                 content : Lang.getRichText(Lang.RichType.R0004),
             });
@@ -151,7 +151,7 @@ namespace TinyWars.SingleCustomRoom {
             const dataIndexForCreateWarPlayerList   = this._openData.dataIndex;
             const data                              : DataForCoRenderer[] = [];
             let index                               = 0;
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getNewestConfigVersion())) {
+            for (const cfg of Utility.ConfigManager.getAvailableCoList(Utility.ConfigManager.getLatestConfigVersion())) {
                 data.push({
                     dataIndexForCreateWarPlayerList,
                     coBasicCfg  : cfg,
@@ -261,10 +261,10 @@ namespace TinyWars.SingleCustomRoom {
     }
 
     type DataForCoRenderer = {
-        dataIndexForCreateWarPlayerList   : number;
-        coBasicCfg  : Types.CoBasicCfg;
-        index       : number;
-        panel       : ScrCreateCoListPanel;
+        dataIndexForCreateWarPlayerList : number;
+        coBasicCfg                      : ProtoTypes.Config.ICoBasicCfg;
+        index                           : number;
+        panel                           : ScrCreateCoListPanel;
     }
 
     class CoRenderer extends eui.ItemRenderer {
@@ -317,7 +317,7 @@ namespace TinyWars.SingleCustomRoom {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getNewestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
         }
     }
 }

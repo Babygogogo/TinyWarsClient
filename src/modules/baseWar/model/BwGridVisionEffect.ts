@@ -25,6 +25,10 @@ namespace TinyWars.BaseWar {
 
             return this;
         }
+        public fastInit(): BwGridVisionEffect {
+            this.getView().fastInit(this);
+            return this;
+        }
         protected abstract _getViewClass(): new () => BwGridVisionEffectView;
 
         public startRunning(war: BwWar): void {

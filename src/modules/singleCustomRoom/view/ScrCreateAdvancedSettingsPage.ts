@@ -1,52 +1,21 @@
 
 namespace TinyWars.SingleCustomRoom {
-    import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import FloatText        = Utility.FloatText;
-    import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
-    import ConfirmPanel     = Common.ConfirmPanel;
-    import HelpPanel        = Common.HelpPanel;
     import WarMapModel      = WarMap.WarMapModel;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     export class ScrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
         private _labelMapNameTitle      : GameUi.UiLabel;
         private _labelMapName           : GameUi.UiLabel;
         private _labelPlayersCountTitle : GameUi.UiLabel;
         private _labelPlayersCount      : GameUi.UiLabel;
-        private _labelTips              : GameUi.UiLabel;
+        private _labelPlayerList        : GameUi.UiLabel;
+        private _listPlayer             : GameUi.UiScrollList;
 
-        private _groupInitialFund                   : eui.Group;
-        private _labelInitialFund                   : TinyWars.GameUi.UiLabel;
-        private _btnModifyInitialFund               : TinyWars.GameUi.UiButton;
-        private _groupIncomeMultiplier              : eui.Group;
-        private _labelIncomeMultiplier              : TinyWars.GameUi.UiLabel;
-        private _btnModifyIncomeMultiplier          : TinyWars.GameUi.UiButton;
-        private _groupInitialEnergy                 : eui.Group;
-        private _labelInitialEnergy                 : TinyWars.GameUi.UiLabel;
-        private _btnModifyInitialEnergy             : TinyWars.GameUi.UiButton;
-        private _groupEnergyGrowthMultiplier        : eui.Group;
-        private _labelEnergyGrowthMultiplier        : TinyWars.GameUi.UiLabel;
-        private _btnModifyEnergyGrowthMultiplier    : TinyWars.GameUi.UiButton;
-        private _groupLuckLowerLimit                : eui.Group;
-        private _labelLuckLowerLimit                : TinyWars.GameUi.UiLabel;
-        private _btnModifyLuckLowerLimit            : TinyWars.GameUi.UiButton;
-        private _groupLuckUpperLimit                : eui.Group;
-        private _labelLuckUpperLimit                : TinyWars.GameUi.UiLabel;
-        private _btnModifyLuckUpperLimit            : TinyWars.GameUi.UiButton;
-        private _groupMoveRange                     : eui.Group;
-        private _labelMoveRange                     : TinyWars.GameUi.UiLabel;
-        private _btnModifyMoveRange                 : TinyWars.GameUi.UiButton;
-        private _groupAttackPower                   : eui.Group;
-        private _labelAttackPower                   : TinyWars.GameUi.UiLabel;
-        private _btnModifyAttackPower               : TinyWars.GameUi.UiButton;
-        private _groupVisionRange                   : eui.Group;
-        private _labelVisionRange                   : TinyWars.GameUi.UiLabel;
-        private _btnModifyVisionRange               : TinyWars.GameUi.UiButton;
-
-        protected _mapExtraData: ProtoTypes.IMapExtraData;
+        protected _mapRawData   : ProtoTypes.Map.IMapRawData;
 
         public constructor() {
             super();
@@ -55,37 +24,20 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
-                { ui: this._btnModifyAttackPower,               callback: this._onTouchedBtnModifyAttackPower },
-                { ui: this._btnModifyEnergyGrowthMultiplier,    callback: this._onTouchedBtnModifyEnergyGrowthMultiplier },
-                { ui: this._btnModifyIncomeMultiplier,          callback: this._onTouchedBtnModifyIncomeMultiplier },
-                { ui: this._btnModifyInitialEnergy,             callback: this._onTouchedBtnModifyInitialEnergy },
-                { ui: this._btnModifyInitialFund,               callback: this._onTouchedBtnModifyInitialFund },
-                { ui: this._btnModifyLuckLowerLimit,            callback: this._onTouchedBtnModifyLuckLowerLimit },
-                { ui: this._btnModifyLuckUpperLimit,            callback: this._onTouchedBtnModifyLuckUpperLimit },
-                { ui: this._btnModifyMoveRange,                 callback: this._onTouchedBtnModifyMoveRange },
-                { ui: this._btnModifyVisionRange,               callback: this._onTouchedBtnModifyVisionRange },
-            ];
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ];
+
+            this._listPlayer.setItemRenderer(PlayerRenderer);
         }
 
         protected async _onOpened(): Promise<void> {
-            this._mapExtraData = await ScrModel.getCreateWarMapExtraData();
+            this._mapRawData = await ScrModel.getCreateWarMapRawData();
 
             this._updateComponentsForLanguage();
             this._updateLabelMapName();
             this._updateLabelPlayersCount();
-            this._updateLabelInitialFund();
-            this._updateLabelIncomeMultiplier();
-            this._updateLabelInitialEnergy();
-            this._updateLabelEnergyGrowthMultiplier();
-            this._updateLabelLuckLowerLimit();
-            this._updateLabelLuckUpperLimit();
-            this._updateLabelMoveRange();
-            this._updateLabelAttackPower();
-            this._updateLabelVisionRange();
+            this._updateListPlayer();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -95,264 +47,400 @@ namespace TinyWars.SingleCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnModifyInitialFund(e: egret.TouchEvent): void {
-            const maxValue = CommonConstants.WarRuleInitialFundMaxLimit;
-            const minValue = CommonConstants.WarRuleInitialFundMinLimit;
-            Common.InputPanel.show({
-                title           : Lang.getText(Lang.Type.B0178),
-                currentValue    : "" + ScrModel.getCreateWarInitialFund(),
-                maxChars        : 7,
-                charRestrict    : null,
-                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = Number(panel.getInputText());
-                    if (isNaN(value)) {
-                        FloatText.show(Lang.getText(Lang.Type.A0098));
-                    } else {
-                        ScrModel.setCreateWarInitialFund(Math.min(maxValue, Math.max(minValue, value)));
-                        this._updateLabelInitialFund();
-                    }
-                },
-            });
-        }
-
-        private _onTouchedBtnModifyIncomeMultiplier(e: egret.TouchEvent): void {
-            const maxValue = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
-            const minValue = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-            Common.InputPanel.show({
-                title           : Lang.getText(Lang.Type.B0179),
-                currentValue    : "" + ScrModel.getCreateWarIncomeMultiplier(),
-                maxChars        : 5,
-                charRestrict    : null,
-                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = Number(panel.getInputText());
-                    if (isNaN(value)) {
-                        FloatText.show(Lang.getText(Lang.Type.A0098));
-                    } else {
-                        ScrModel.setCreateWarIncomeMultiplier(Math.min(maxValue, Math.max(minValue, value)));
-                        this._updateLabelIncomeMultiplier();
-                    }
-                },
-            });
-        }
-
-        private _onTouchedBtnModifyInitialEnergy(e: egret.TouchEvent): void {
-            const maxValue = CommonConstants.WarRuleInitialEnergyMaxLimit;
-            const minValue = CommonConstants.WarRuleInitialEnergyMinLimit;
-            Common.InputPanel.show({
-                title           : Lang.getText(Lang.Type.B0180),
-                currentValue    : "" + ScrModel.getCreateWarInitialEnergy(),
-                maxChars        : 5,
-                charRestrict    : null,
-                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = Number(panel.getInputText());
-                    if (isNaN(value)) {
-                        FloatText.show(Lang.getText(Lang.Type.A0098));
-                    } else {
-                        ScrModel.setCreateWarInitialEnergy(Math.min(maxValue, Math.max(minValue, value)));
-                        this._updateLabelInitialEnergy();
-                    }
-                },
-            });
-        }
-
-        private _onTouchedBtnModifyEnergyGrowthMultiplier(e: egret.TouchEvent): void {
-            const maxValue = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
-            const minValue = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
-            Common.InputPanel.show({
-                title           : Lang.getText(Lang.Type.B0181),
-                currentValue    : "" + ScrModel.getCreateWarEnergyGrowthMultiplier(),
-                maxChars        : 5,
-                charRestrict    : null,
-                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = Number(panel.getInputText());
-                    if (isNaN(value)) {
-                        FloatText.show(Lang.getText(Lang.Type.A0098));
-                    } else {
-                        ScrModel.setCreateWarEnergyGrowthMultiplier(Math.min(maxValue, Math.max(minValue, value)));
-                        this._updateLabelEnergyGrowthMultiplier();
-                    }
-                },
-            });
-        }
-
-        private _onTouchedBtnModifyLuckLowerLimit(e: egret.TouchEvent): void {
-            const maxValue = CommonConstants.WarRuleLuckMaxLimit;
-            const minValue = CommonConstants.WarRuleLuckMinLimit;
-            Common.InputPanel.show({
-                title           : Lang.getText(Lang.Type.B0189),
-                currentValue    : "" + ScrModel.getCreateWarLuckLowerLimit(),
-                maxChars        : 5,
-                charRestrict    : null,
-                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = Number(panel.getInputText());
-                    if (isNaN(value)) {
-                        FloatText.show(Lang.getText(Lang.Type.A0098));
-                    } else {
-                        ScrModel.setCreateWarLuckLowerLimit(Math.min(maxValue, Math.max(minValue, value)));
-                        this._updateLabelLuckLowerLimit();
-                    }
-                },
-            });
-        }
-
-        private _onTouchedBtnModifyLuckUpperLimit(e: egret.TouchEvent): void {
-            const maxValue = CommonConstants.WarRuleLuckMaxLimit;
-            const minValue = CommonConstants.WarRuleLuckMinLimit;
-            Common.InputPanel.show({
-                title           : Lang.getText(Lang.Type.B0189),
-                currentValue    : "" + ScrModel.getCreateWarLuckUpperLimit(),
-                maxChars        : 5,
-                charRestrict    : null,
-                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = Number(panel.getInputText());
-                    if (isNaN(value)) {
-                        FloatText.show(Lang.getText(Lang.Type.A0098));
-                    } else {
-                        ScrModel.setCreateWarLuckUpperLimit(Math.min(maxValue, Math.max(minValue, value)));
-                        this._updateLabelLuckUpperLimit();
-                    }
-                },
-            });
-        }
-
-        private _onTouchedBtnModifyMoveRange(e: egret.TouchEvent): void {
-            const maxValue = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
-            const minValue = CommonConstants.WarRuleMoveRangeModifierMinLimit;
-            Common.InputPanel.show({
-                title           : Lang.getText(Lang.Type.B0182),
-                currentValue    : "" + ScrModel.getCreateWarMoveRangeModifier(),
-                maxChars        : 5,
-                charRestrict    : null,
-                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = Number(panel.getInputText());
-                    if (isNaN(value)) {
-                        FloatText.show(Lang.getText(Lang.Type.A0098));
-                    } else {
-                        ScrModel.setCreateWarMoveRangeModifier(Math.min(maxValue, Math.max(minValue, value)));
-                        this._updateLabelMoveRange();
-                    }
-                },
-            });
-        }
-
-        private _onTouchedBtnModifyAttackPower(e: egret.TouchEvent): void {
-            const maxValue = CommonConstants.WarRuleOffenseBonusMaxLimit;
-            const minValue = CommonConstants.WarRuleOffenseBonusMinLimit;
-            Common.InputPanel.show({
-                title           : Lang.getText(Lang.Type.B0183),
-                currentValue    : "" + ScrModel.getCreateWarAttackPowerModifier(),
-                maxChars        : 5,
-                charRestrict    : null,
-                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = Number(panel.getInputText());
-                    if (isNaN(value)) {
-                        FloatText.show(Lang.getText(Lang.Type.A0098));
-                    } else {
-                        ScrModel.setCreateWarAttackPowerModifier(Math.min(maxValue, Math.max(minValue, value)));
-                        this._updateLabelAttackPower();
-                    }
-                },
-            });
-        }
-
-        private _onTouchedBtnModifyVisionRange(e: egret.TouchEvent): void {
-            const maxValue = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
-            const minValue = CommonConstants.WarRuleVisionRangeModifierMinLimit;
-            Common.InputPanel.show({
-                title           : Lang.getText(Lang.Type.B0184),
-                currentValue    : "" + ScrModel.getCreateWarVisionRangeModifier(),
-                maxChars        : 5,
-                charRestrict    : null,
-                tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                callback        : panel => {
-                    const value = Number(panel.getInputText());
-                    if (isNaN(value)) {
-                        FloatText.show(Lang.getText(Lang.Type.A0098));
-                    } else {
-                        ScrModel.setCreateWarVisionRangeModifier(Math.min(maxValue, Math.max(minValue, value)));
-                        this._updateLabelVisionRange();
-                    }
-                },
-            });
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMapNameTitle.text                = `${Lang.getText(Lang.Type.B0225)}:`;
-            this._labelPlayersCountTitle.text           = `${Lang.getText(Lang.Type.B0229)}:`;
-            this._labelTips.text                        = Lang.getText(Lang.Type.A0065);
-            this._btnModifyInitialFund.label            = Lang.getText(Lang.Type.B0178);
-            this._btnModifyIncomeMultiplier.label       = Lang.getText(Lang.Type.B0179);
-            this._btnModifyInitialEnergy.label          = Lang.getText(Lang.Type.B0180);
-            this._btnModifyEnergyGrowthMultiplier.label = Lang.getText(Lang.Type.B0181);
-            this._btnModifyMoveRange.label              = Lang.getText(Lang.Type.B0182);
-            this._btnModifyAttackPower.label            = Lang.getText(Lang.Type.B0183);
-            this._btnModifyVisionRange.label            = Lang.getText(Lang.Type.B0184);
-            this._btnModifyLuckLowerLimit.label         = Lang.getText(Lang.Type.B0189);
-            this._btnModifyLuckUpperLimit.label         = Lang.getText(Lang.Type.B0190);
-        }
-
-        private _updateLabelInitialFund(): void {
-            this._labelInitialFund.text = "" + ScrModel.getCreateWarInitialFund();
-        }
-
-        private _updateLabelIncomeMultiplier(): void {
-            this._labelIncomeMultiplier.text = `${ScrModel.getCreateWarIncomeMultiplier()}%`;
-        }
-
-        private _updateLabelInitialEnergy(): void {
-            this._labelInitialEnergy.text = `${ScrModel.getCreateWarInitialEnergy()}%`;
-        }
-
-        private _updateLabelEnergyGrowthMultiplier(): void {
-            this._labelEnergyGrowthMultiplier.text = `${ScrModel.getCreateWarEnergyGrowthMultiplier()}%`;
-        }
-
-        private _updateLabelLuckLowerLimit(): void {
-            this._labelLuckLowerLimit.text = "" + ScrModel.getCreateWarLuckLowerLimit();
-        }
-
-        private _updateLabelLuckUpperLimit(): void {
-            this._labelLuckUpperLimit.text = "" + ScrModel.getCreateWarLuckUpperLimit();
+            this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}:`;
+            this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}:`;
+            this._labelPlayerList.text          = Lang.getText(Lang.Type.B0395);
         }
 
         private _updateLabelMapName(): void {
-            WarMapModel.getMapNameInLanguage(this._mapExtraData.mapFileName).then(v => this._labelMapName.text = v);
+            WarMapModel.getMapNameInCurrentLanguage(this._mapRawData.mapId).then(v => this._labelMapName.text = v);
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapExtraData.playersCount;
+            this._labelPlayersCount.text = "" + this._mapRawData.playersCount;
         }
 
-        private _updateLabelMoveRange(): void {
-            const modifier = ScrModel.getCreateWarMoveRangeModifier();
-            if (modifier <= 0) {
-                this._labelMoveRange.text = "" + modifier;
-            } else {
-                this._labelMoveRange.text = "+" + modifier;
+        private _updateListPlayer(): void {
+            const playersCount  = this._mapRawData.playersCount;
+            const dataList      : DataForPlayerRenderer[] = [];
+            for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
+                dataList.push({ playerIndex });
             }
+            this._listPlayer.bindData(dataList);
+        }
+    }
+
+    type DataForPlayerRenderer = {
+        playerIndex : number;
+    }
+
+    class PlayerRenderer extends eui.ItemRenderer {
+        private _listInfo   : GameUi.UiScrollList;
+
+        protected childrenCreated(): void {
+            super.childrenCreated();
+
+            this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        private _updateLabelAttackPower(): void {
-            const modifier              = ScrModel.getCreateWarAttackPowerModifier();
-            this._labelAttackPower.text = modifier <= 0 ? `${modifier}%` : `+${modifier}%`;
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            this._updateView();
         }
 
-        private _updateLabelVisionRange(): void {
-            const modifier              = ScrModel.getCreateWarVisionRangeModifier();
-            this._labelVisionRange.text = modifier <= 0
-                ? "" + modifier
-                : "+" + modifier;
+        private _updateView(): void {
+            this._listInfo.visible  = true;
+            this._listInfo.bindData(this._createDataForListInfo());
+        }
+
+        private _createDataForListInfo(): DataForInfoRenderer[] {
+            const data          = this.data as DataForPlayerRenderer;
+            const playerIndex   = data.playerIndex;
+            return [
+                this._createDataTeamIndex(playerIndex),
+                this._createDataInitialFund(playerIndex),
+                this._createDataIncomeMultiplier(playerIndex),
+                this._createDataInitialEnergyPercentage(playerIndex),
+                this._createDataEnergyGrowthMultiplier(playerIndex),
+                this._createDataMoveRangeModifier(playerIndex),
+                this._createDataAttackPowerModifier(playerIndex),
+                this._createDataVisionRangeModifier(playerIndex),
+                this._createDataLuckLowerLimit(playerIndex),
+                this._createDataLuckUpperLimit(playerIndex),
+            ];
+        }
+        private _createDataTeamIndex(playerIndex: number): DataForInfoRenderer {
+            return {
+                titleText               : Lang.getText(Lang.Type.B0019),
+                infoText                : Lang.getPlayerTeamName(ScrModel.getCreateWarTeamIndex(playerIndex)),
+                infoColor               : 0xFFFFFF,
+                callbackOnTouchedTitle  : () => {
+                    ScrModel.tickCreateWarTeamIndex(playerIndex);
+                    this._updateView();
+                },
+            };
+        }
+        private _createDataInitialFund(playerIndex: number): DataForInfoRenderer {
+            const currValue = ScrModel.getCreateWarInitialFund(playerIndex);
+            return {
+                titleText               : Lang.getText(Lang.Type.B0178),
+                infoText                : `${currValue}`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
+                callbackOnTouchedTitle  : () => {
+                    const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
+                    const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
+                    Common.CommonInputPanel.show({
+                        title           : Lang.getText(Lang.Type.B0178),
+                        currentValue    : "" + currValue,
+                        maxChars        : 7,
+                        charRestrict    : "0-9\\-",
+                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            const text  = panel.getInputText();
+                            const value = text ? Number(text) : NaN;
+                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                            } else {
+                                ScrModel.setCreateWarInitialFund(playerIndex, value);
+                                this._updateView();
+                            }
+                        },
+                    });
+                },
+            };
+        }
+        private _createDataIncomeMultiplier(playerIndex: number): DataForInfoRenderer {
+            const currValue = ScrModel.getCreateWarIncomeMultiplier(playerIndex);
+            const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
+            const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0179),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
+                callbackOnTouchedTitle  : () => {
+                    Common.CommonInputPanel.show({
+                        title           : Lang.getText(Lang.Type.B0179),
+                        currentValue    : "" + currValue,
+                        maxChars        : 5,
+                        charRestrict    : "0-9",
+                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            const text  = panel.getInputText();
+                            const value = text ? Number(text) : NaN;
+                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                            } else {
+                                ScrModel.setCreateWarIncomeMultiplier(playerIndex, value);
+                                this._updateView();
+                            }
+                        },
+                    });
+                },
+            };
+        }
+        private _createDataInitialEnergyPercentage(playerIndex: number): DataForInfoRenderer {
+            const currValue     = ScrModel.getCreateWarInitialEnergyPercentage(playerIndex);
+            const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
+            const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0180),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
+                callbackOnTouchedTitle  : () => {
+                    Common.CommonInputPanel.show({
+                        title           : Lang.getText(Lang.Type.B0180),
+                        currentValue    : "" + currValue,
+                        maxChars        : 3,
+                        charRestrict    : "0-9",
+                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            const text  = panel.getInputText();
+                            const value = text ? Number(text) : NaN;
+                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                            } else {
+                                ScrModel.setCreateWarInitialEnergyPercentage(playerIndex, value);
+                                this._updateView();
+                            }
+                        },
+                    });
+                },
+            };
+        }
+        private _createDataEnergyGrowthMultiplier(playerIndex: number): DataForInfoRenderer {
+            const currValue     = ScrModel.getCreateWarEnergyGrowthMultiplier(playerIndex);
+            const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
+            const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0181),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
+                callbackOnTouchedTitle  : () => {
+                    Common.CommonInputPanel.show({
+                        title           : Lang.getText(Lang.Type.B0181),
+                        currentValue    : "" + currValue,
+                        maxChars        : 5,
+                        charRestrict    : "0-9",
+                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            const text  = panel.getInputText();
+                            const value = text ? Number(text) : NaN;
+                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                            } else {
+                                ScrModel.setCreateWarEnergyGrowthMultiplier(playerIndex, value);
+                                this._updateView();
+                            }
+                        },
+                    });
+                },
+            };
+        }
+        private _createDataMoveRangeModifier(playerIndex: number): DataForInfoRenderer {
+            const currValue     = ScrModel.getCreateWarMoveRangeModifier(playerIndex);
+            const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
+            const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0182),
+                infoText                : `${currValue}`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
+                callbackOnTouchedTitle  : () => {
+                    Common.CommonInputPanel.show({
+                        title           : Lang.getText(Lang.Type.B0182),
+                        currentValue    : "" + currValue,
+                        maxChars        : 3,
+                        charRestrict    : "0-9\\-",
+                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            const text  = panel.getInputText();
+                            const value = text ? Number(text) : NaN;
+                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                            } else {
+                                ScrModel.setCreateWarMoveRangeModifier(playerIndex, value);
+                                this._updateView();
+                            }
+                        },
+                    });
+                },
+            };
+        }
+        private _createDataAttackPowerModifier(playerIndex: number): DataForInfoRenderer {
+            const currValue     = ScrModel.getCreateWarAttackPowerModifier(playerIndex);
+            const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
+            const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0183),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
+                callbackOnTouchedTitle  : () => {
+                    Common.CommonInputPanel.show({
+                        title           : Lang.getText(Lang.Type.B0183),
+                        currentValue    : "" + currValue,
+                        maxChars        : 5,
+                        charRestrict    : "0-9\\-",
+                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            const text  = panel.getInputText();
+                            const value = text ? Number(text) : NaN;
+                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                            } else {
+                                ScrModel.setCreateWarAttackPowerModifier(playerIndex, value);
+                                this._updateView();
+                            }
+                        },
+                    });
+                },
+            };
+        }
+        private _createDataVisionRangeModifier(playerIndex: number): DataForInfoRenderer {
+            const currValue     = ScrModel.getCreateWarVisionRangeModifier(playerIndex);
+            const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
+            const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0184),
+                infoText                : `${currValue}`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
+                callbackOnTouchedTitle  : () => {
+                    Common.CommonInputPanel.show({
+                        title           : Lang.getText(Lang.Type.B0184),
+                        currentValue    : "" + currValue,
+                        maxChars        : 3,
+                        charRestrict    : "0-9\\-",
+                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            const text  = panel.getInputText();
+                            const value = text ? Number(text) : NaN;
+                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                            } else {
+                                ScrModel.setCreateWarVisionRangeModifier(playerIndex, value);
+                                this._updateView();
+                            }
+                        },
+                    });
+                },
+            };
+        }
+        private _createDataLuckLowerLimit(playerIndex: number): DataForInfoRenderer {
+            const currValue     = ScrModel.getCreateWarLuckLowerLimit(playerIndex);
+            const minValue      = CommonConstants.WarRuleLuckMinLimit;
+            const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0189),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
+                callbackOnTouchedTitle  : () => {
+                    Common.CommonInputPanel.show({
+                        title           : Lang.getText(Lang.Type.B0189),
+                        currentValue    : "" + currValue,
+                        maxChars        : 4,
+                        charRestrict    : "0-9\\-",
+                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                        callback        : panel => {
+                            const text  = panel.getInputText();
+                            const value = text ? Number(text) : NaN;
+                            if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                            } else {
+                                const upperLimit = ScrModel.getCreateWarLuckUpperLimit(playerIndex);
+                                if (value <= upperLimit) {
+                                    ScrModel.setCreateWarLuckLowerLimit(playerIndex, value);
+                                } else {
+                                    ScrModel.setCreateWarLuckUpperLimit(playerIndex, value);
+                                    ScrModel.setCreateWarLuckLowerLimit(playerIndex, upperLimit);
+                                }
+                                this._updateView();
+                            }
+                        },
+                    });
+                },
+            };
+        }
+        private _createDataLuckUpperLimit(playerIndex: number): DataForInfoRenderer {
+            const currValue     = ScrModel.getCreateWarLuckUpperLimit(playerIndex);
+            const minValue      = CommonConstants.WarRuleLuckMinLimit;
+            const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
+            return {
+                titleText               : Lang.getText(Lang.Type.B0190),
+                infoText                : `${currValue}%`,
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
+                callbackOnTouchedTitle  : () => {
+                        Common.CommonInputPanel.show({
+                            title           : Lang.getText(Lang.Type.B0190),
+                            currentValue    : "" + currValue,
+                            maxChars        : 4,
+                            charRestrict    : "0-9\\-",
+                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
+                            callback        : panel => {
+                                const text  = panel.getInputText();
+                                const value = text ? Number(text) : NaN;
+                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
+                                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                                } else {
+                                    const lowerLimit = ScrModel.getCreateWarLuckLowerLimit(playerIndex);
+                                    if (value >= lowerLimit) {
+                                        ScrModel.setCreateWarLuckUpperLimit(playerIndex, value);
+                                    } else {
+                                        ScrModel.setCreateWarLuckLowerLimit(playerIndex, value);
+                                        ScrModel.setCreateWarLuckUpperLimit(playerIndex, lowerLimit);
+                                    }
+                                    this._updateView();
+                                }
+                            },
+                        });
+                    },
+            };
+        }
+    }
+
+    type DataForInfoRenderer = {
+        titleText               : string;
+        infoText                : string;
+        infoColor               : number;
+        callbackOnTouchedTitle  : (() => void) | null;
+    }
+
+    class InfoRenderer extends eui.ItemRenderer {
+        private _btnTitle   : GameUi.UiButton;
+        private _labelValue : GameUi.UiLabel;
+
+        protected childrenCreated(): void {
+            super.childrenCreated();
+
+            this._btnTitle.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnTitle, this);
+        }
+
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            const data                  = this.data as DataForInfoRenderer;
+            this._labelValue.text       = data.infoText;
+            this._labelValue.textColor  = data.infoColor;
+            this._btnTitle.label        = data.titleText;
+            this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
+        }
+
+        private _onTouchedBtnTitle(e: egret.TouchEvent): void {
+            const data      = this.data as DataForInfoRenderer;
+            const callback  = data ? data.callbackOnTouchedTitle : null;
+            (callback) && (callback());
+        }
+    }
+
+    function getTextColor(value: number, defaultValue: number): number {
+        if (value > defaultValue) {
+            return 0x00FF00;
+        } else if (value < defaultValue) {
+            return 0xFF0000;
+        } else {
+            return 0xFFFFFF;
         }
     }
 }

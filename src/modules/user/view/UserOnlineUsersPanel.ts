@@ -2,7 +2,6 @@
 namespace TinyWars.User {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
-    import Types        = Utility.Types;
     import ProtoTypes   = Utility.ProtoTypes;
 
     export class UserOnlineUsersPanel extends GameUi.UiPanel {
@@ -21,7 +20,7 @@ namespace TinyWars.User {
         private _labelLoading   : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
 
-        private _msg        : ProtoTypes.IS_UserGetOnlineUsers;
+        private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUsers.IS;
         private _dataForList: DataForUserRenderer[];
 
         public static show(): void {
@@ -50,7 +49,7 @@ namespace TinyWars.User {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SUserGetOnlineUsers,    callback: this._onNotifySUserGetOnlineUsers },
+                { type: Notify.Type.MsgUserGetOnlineUsers,    callback: this._onNotifySUserGetOnlineUsers },
             ];
             this._uiListeners = [
                 { ui: this._btnClose, callback: this.close },

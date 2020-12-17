@@ -7,7 +7,7 @@ namespace TinyWars.BaseWar {
     import GridIndex            = Types.GridIndex;
     import ActionPlannerState   = Types.ActionPlannerState;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
     const _PULSE_IN_DURATION                    = 150;
     const _PULSE_OUT_DURATION                   = 150;
     const _PULSE_INTERVAL_DURATION              = 300;
@@ -82,27 +82,32 @@ namespace TinyWars.BaseWar {
                 this._mapSize   = cursor.getMapSize();
                 this.width      = this._mapSize.width * _GRID_WIDTH;
                 this.height     = this._mapSize.height * _GRID_HEIGHT;
-
-                this._startNormalAnimation();
-                this._startTargetAnimation();
             }
+        }
+        public fastInit(cursor: BwCursor): void {
+            this._cursor = cursor;
         }
 
         public startRunningView(): void {
             const field         = this._cursor.getWar().getField();
             this._actionPlanner = field.getActionPlanner();
 
+            Notify.addEventListener(Notify.Type.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
             this.addEventListener(egret.TouchEvent.TOUCH_BEGIN,             this._onTouchBegin,             this);
             this.addEventListener(egret.TouchEvent.TOUCH_CANCEL,            this._onTouchCancel,            this);
             this.addEventListener(egret.TouchEvent.TOUCH_END,               this._onTouchEnd,               this);
             this.addEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE,   this._onTouchReleaseOutside,    this);
 
             this.updateView();
+
+            this._startNormalAnimation();
+            this._startTargetAnimation();
         }
         public stopRunningView(): void {
-            // this._stopNormalAnimation();
-            // this._stopTargetAnimation();
+            this._stopNormalAnimation();
+            this._stopTargetAnimation();
 
+            Notify.removeEventListener(Notify.Type.ZoomableContentsMoved, this._onNotifyZoomableContentsMoved, this);
             this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,              this._onTouchBegin,             this);
             this.removeEventListener(egret.TouchEvent.TOUCH_CANCEL,             this._onTouchCancel,            this);
             this.removeEventListener(egret.TouchEvent.TOUCH_END,                this._onTouchEnd,               this);
@@ -110,9 +115,10 @@ namespace TinyWars.BaseWar {
             this.removeEventListener(egret.TouchEvent.TOUCH_MOVE,               this._onTouchMove,              this);
             this._currGlobalTouchPoints.clear();
             this._prevGlobalTouchPoints.clear();
-            delete this._initialGlobalTouchPoint;
-            delete this._isTouchMovedOrMultiple;
-            delete this._touchIdForTouchingCursor;
+            this._initialGlobalTouchPoint   = null;
+            this._isTouchMovedOrMultiple    = null;
+            this._touchIdForTouchingCursor  = null;
+            this._cursor                    = null;
         }
 
         public updateView(): void {
@@ -136,6 +142,22 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyZoomableContentsMoved(e: egret.Event): void {
+            const touchPoints = this._currGlobalTouchPoints;
+            if ((this._touchIdForTouchingCursor != null) && (touchPoints.size === 1)) {
+                const point         = touchPoints.values().next().value as Types.Point;
+                const gridIndex     = this._getGridIndexByGlobalXY(point.x, point.y);
+                const currGridIndex = this._cursor.getGridIndex();
+                if (!GridIndexHelpers.checkIsEqual(gridIndex, currGridIndex)) {
+                    this._isTouchMovedOrMultiple = true;
+                    Notify.dispatch(Notify.Type.BwCursorDragged, {
+                        current     : currGridIndex,
+                        draggedTo   : gridIndex,
+                    } as Notify.Data.BwCursorDragged);
+                }
+            }
+        }
+
         private _onTouchBegin(e: egret.TouchEvent): void {
             const touchId   = e.touchPointID;
             if (this._currGlobalTouchPoints.size <= 0) {
@@ -208,8 +230,9 @@ namespace TinyWars.BaseWar {
             if (currGlobalTouchPoints.has(touchId)) {
                 currGlobalTouchPoints.delete(touchId);
 
+                const hasTouchedCursor = this._touchIdForTouchingCursor != null;
                 if (!currGlobalTouchPoints.has(this._touchIdForTouchingCursor)) {
-                    delete this._touchIdForTouchingCursor;
+                    this._touchIdForTouchingCursor = null;
                 }
                 if (!currGlobalTouchPoints.size) {
                     this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._onTouchMove, this);
@@ -218,6 +241,10 @@ namespace TinyWars.BaseWar {
                             current : this._cursor.getGridIndex(),
                             tappedOn: this._getGridIndexByGlobalXY(this._initialGlobalTouchPoint.x, this._initialGlobalTouchPoint.y),
                         } as Notify.Data.BwCursorTapped);
+                    } else {
+                        if (hasTouchedCursor) {
+                            Notify.dispatch(Notify.Type.BwCursorDragEnded);
+                        }
                     }
                     delete this._initialGlobalTouchPoint;
                 }
@@ -430,21 +457,25 @@ namespace TinyWars.BaseWar {
             this._stopNormalAnimation();
 
             egret.Tween.get(this._imgUpperLeftCorner, { loop: true })
+                .set({ x: _UPPER_LEFT_CORNER_OUTER_X, y: _UPPER_LEFT_CORNER_OUTER_Y })
                 .to({ x: _UPPER_LEFT_CORNER_INNER_X, y: _UPPER_LEFT_CORNER_INNER_Y }, _PULSE_IN_DURATION)
                 .to({ x: _UPPER_LEFT_CORNER_OUTER_X, y: _UPPER_LEFT_CORNER_OUTER_Y }, _PULSE_OUT_DURATION)
                 .wait(_PULSE_INTERVAL_DURATION);
 
             egret.Tween.get(this._imgUpperRightCorner, { loop: true })
+                .set({ x: _UPPER_RIGHT_CORNER_OUTER_X, y: _UPPER_RIGHT_CORNER_OUTER_Y })
                 .to({ x: _UPPER_RIGHT_CORNER_INNER_X, y: _UPPER_RIGHT_CORNER_INNER_Y }, _PULSE_IN_DURATION)
                 .to({ x: _UPPER_RIGHT_CORNER_OUTER_X, y: _UPPER_RIGHT_CORNER_OUTER_Y }, _PULSE_OUT_DURATION)
                 .wait(_PULSE_INTERVAL_DURATION);
 
             egret.Tween.get(this._imgLowerLeftCorner, { loop: true })
+                .set({ x: _LOWER_LEFT_CORNER_OUTER_X, y: _LOWER_LEFT_CORNER_OUTER_Y })
                 .to({ x: _LOWER_LEFT_CORNER_INNER_X, y: _LOWER_LEFT_CORNER_INNER_Y }, _PULSE_IN_DURATION)
                 .to({ x: _LOWER_LEFT_CORNER_OUTER_X, y: _LOWER_LEFT_CORNER_OUTER_Y }, _PULSE_OUT_DURATION)
                 .wait(_PULSE_INTERVAL_DURATION);
 
             egret.Tween.get(this._imgLowerRightCorner, { loop: true })
+                .set({ x: _LOWER_RIGHT_CORNER_OUTER_X, y: _LOWER_RIGHT_CORNER_OUTER_Y })
                 .to({ x: _LOWER_RIGHT_CORNER_INNER_X, y: _LOWER_RIGHT_CORNER_INNER_Y }, _PULSE_IN_DURATION)
                 .to({ x: _LOWER_RIGHT_CORNER_OUTER_X, y: _LOWER_RIGHT_CORNER_OUTER_Y }, _PULSE_OUT_DURATION)
                 .wait(_PULSE_INTERVAL_DURATION);
@@ -469,6 +500,7 @@ namespace TinyWars.BaseWar {
                 });
         }
         private _stopTargetAnimation(): void {
+            this._frameIndexForImgTarget = 0;
             egret.Tween.removeTweens(this._imgTarget);
         }
 
@@ -506,6 +538,12 @@ namespace TinyWars.BaseWar {
         }
         protected _getActionPlanner(): BwActionPlanner {
             return this._actionPlanner;
+        }
+
+        protected _updatePositionForConForDamage(): void {
+            this._getConForDamage().y = (this._getCursor().getGridY() <= 0)
+                ? _GRID_HEIGHT
+                : -_DAMAGE_CON_HEIGHT;
         }
     }
 }

@@ -1,16 +1,18 @@
 
 namespace TinyWars.BaseWar {
+    import CommonModel  = Common.CommonModel;
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import Types        = Utility.Types;
     import FloatText    = Utility.FloatText;
+    import ProtoTypes   = Utility.ProtoTypes;
     import UnitType     = Types.UnitType;
 
     export type OpenDataForBwTileDetailPanel = {
         tile    : BwTile | MapEditor.MeTile;
     }
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
     export class BwTileDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -109,9 +111,25 @@ namespace TinyWars.BaseWar {
         private _updateTileViewAndLabelName(): void {
             const data                  = this._openData;
             const tile                  = data.tile;
+            const version               = User.UserModel.getSelfSettingsTextureVersion();
             const tickCount             = Time.TimeModel.getTileAnimationTickCount();
-            this._imgTileBase.source    = ConfigManager.getTileBaseImageSource(tile.getBaseViewId(), tickCount, false);
-            this._imgTileObject.source  = ConfigManager.getTileObjectImageSource(tile.getObjectViewId(), tickCount, false);
+            const skinId                = tile.getSkinId();
+            this._imgTileBase.source    = CommonModel.getCachedTileBaseImageSource({
+                version,
+                skinId,
+                baseType    : tile.getBaseType(),
+                isDark      : false,
+                shapeId     : tile.getBaseShapeId(),
+                tickCount,
+            });
+            this._imgTileObject.source  = CommonModel.getCachedTileObjectImageSource({
+                version,
+                skinId,
+                objectType  : tile.getObjectType(),
+                isDark      : false,
+                shapeId     : tile.getObjectShapeId(),
+                tickCount,
+            });
             this._labelName.text        = Lang.getTileName(tile.getType());
         }
 
@@ -120,7 +138,7 @@ namespace TinyWars.BaseWar {
             const tile                  = data.tile;
             const configVersion         = tile.getConfigVersion();
             const tileType              = tile.getType();
-            const cfg                   = ConfigManager.getTileTemplateCfgByType(configVersion, tileType);
+            const cfg                   = Utility.ConfigManager.getTileTemplateCfgByType(configVersion, tileType);
             const defenseBonus          = cfg.defenseAmount;
             const income                = cfg.incomePerTurn;
             const visionRange           = cfg.visionRange;
@@ -198,7 +216,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0339),
                                 currentValue    : "" + currValue,
                                 maxChars        : 3,
@@ -211,7 +229,7 @@ namespace TinyWars.BaseWar {
                                         FloatText.show(Lang.getText(Lang.Type.A0098));
                                     } else {
                                         tile.setCurrentHp(value);
-                                        tile.updateView();
+                                        tile.flushDataToView();
                                         this._updateListInfo();
                                     }
                                 },
@@ -234,7 +252,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0361),
                                 currentValue    : "" + currValue,
                                 maxChars        : 3,
@@ -247,7 +265,7 @@ namespace TinyWars.BaseWar {
                                         FloatText.show(Lang.getText(Lang.Type.A0098));
                                     } else {
                                         tile.setCurrentCapturePoint(value);
-                                        tile.updateView();
+                                        tile.flushDataToView();
                                         this._updateListInfo();
                                     }
                                 },
@@ -270,7 +288,7 @@ namespace TinyWars.BaseWar {
                     callbackOnTouchedTitle  : !isCheating
                         ? null
                         : () => {
-                            Common.InputPanel.show({
+                            Common.CommonInputPanel.show({
                                 title           : Lang.getText(Lang.Type.B0362),
                                 currentValue    : "" + currValue,
                                 maxChars        : 3,
@@ -283,7 +301,7 @@ namespace TinyWars.BaseWar {
                                         FloatText.show(Lang.getText(Lang.Type.A0098));
                                     } else {
                                         tile.setCurrentBuildPoint(value);
-                                        tile.updateView();
+                                        tile.flushDataToView();
                                         this._updateListInfo();
                                     }
                                 },
@@ -302,11 +320,11 @@ namespace TinyWars.BaseWar {
             const openData          = this._openData;
             const tile              = openData.tile;
             const configVersion     = tile.getConfigVersion();
-            const tileCfg           = ConfigManager.getTileTemplateCfgByType(configVersion, tile.getType());
+            const tileCfg           = Utility.ConfigManager.getTileTemplateCfgByType(configVersion, tile.getType());
             const playerIndex       = tile.getPlayerIndex() || 1;
 
             const dataList = [] as DataForMoveRangeRenderer[];
-            for (const unitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
+            for (const unitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
                 dataList.push({
                     configVersion,
                     unitType,
@@ -343,7 +361,7 @@ namespace TinyWars.BaseWar {
             const data              = this.data as DataForInfoRenderer;
             this._btnTitle.label    = data.titleText;
             this._labelValue.text   = data.valueText;
-            (this._btnTitle.labelDisplay as GameUi.UiLabel).textColor = data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF;
+            this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
@@ -356,7 +374,7 @@ namespace TinyWars.BaseWar {
     type DataForMoveRangeRenderer = {
         configVersion   : string;
         unitType        : UnitType;
-        tileCfg         : Types.TileTemplateCfg;
+        tileCfg         : ProtoTypes.Config.ITileTemplateCfg;
         playerIndex     : number;
     }
 
@@ -392,14 +410,14 @@ namespace TinyWars.BaseWar {
             const data                  = this.data as DataForMoveRangeRenderer;
             const configVersion         = data.configVersion;
             const unitType              = data.unitType;
-            const moveCostCfg           = ConfigManager.getMoveCostCfgByTileType(configVersion, data.tileCfg.type);
-            const moveCost              = moveCostCfg[ConfigManager.getUnitTemplateCfg(configVersion, unitType).moveType].cost;
+            const moveCostCfg           = Utility.ConfigManager.getMoveCostCfgByTileType(configVersion, data.tileCfg.type);
+            const moveCost              = moveCostCfg[Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitType).moveType].cost;
             this._labelMoveCost.text    = moveCost != null ? `${moveCost}` : `--`;
             this._unitView.update({
-                configVersion,
-                gridX           : 0,
-                gridY           : 0,
-                viewId          : ConfigManager.getUnitViewId(unitType, data.playerIndex),
+                gridIndex       : { x: 0, y: 0 },
+                skinId          : data.playerIndex,
+                unitType        : data.unitType,
+                unitActionState : Types.UnitActionState.Idle,
             }, Time.TimeModel.getUnitAnimationTickCount());
         }
     }

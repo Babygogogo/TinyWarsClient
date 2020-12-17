@@ -70,6 +70,17 @@ namespace TinyWars.Utility.Lang {
         B0380, B0381, B0382, B0383, B0384, B0385, B0386, B0387, B0388, B0389,
         B0390, B0391, B0392, B0393, B0394, B0395, B0396, B0397, B0398, B0399,
 
+        B0400, B0401, B0402, B0403, B0404, B0405, B0406, B0407, B0408, B0409,
+        B0410, B0411, B0412, B0413, B0414, B0415, B0416, B0417, B0418, B0419,
+        B0420, B0421, B0422, B0423, B0424, B0425, B0426, B0427, B0428, B0429,
+        B0430, B0431, B0432, B0433, B0434, B0435, B0436, B0437, B0438, B0439,
+        B0440, B0441, B0442, B0443, B0444, B0445, B0446, B0447, B0448, B0449,
+        B0450, B0451, B0452, B0453, B0454, B0455, B0456, B0457, B0458, B0459,
+        B0460, B0461, B0462, B0463, B0464, B0465, B0466, B0467, B0468, B0469,
+        B0470, B0471, B0472, B0473, B0474, B0475, B0476, B0477, B0478, B0479,
+        B0480, B0481, B0482, B0483, B0484, B0485, B0486, B0487, B0488, B0489,
+        B0490, B0491, B0492, B0493, B0494, B0495, B0496, B0497, B0498, B0499,
+
         B1000, B1001, B1002, B1003, B1004, B1005, B1006, B1007, B1008, B1009,
         B1010, B1011, B1012, B1013, B1014, B1015, B1016, B1017, B1018, B1019,
         B1020, B1021, B1022, B1023, B1024, B1025, B1026, B1027, B1028, B1029,
@@ -171,12 +182,12 @@ namespace TinyWars.Utility.Lang {
             "Invalid password.",
         ],
         [Type.A0018]: [
-            "已成功加入房间。战局尚未开始，请继续耐心等候他人加入。",
+            "已成功加入房间。",
             "Joined successfully.",
         ],
         [Type.A0019]: [
-            "已成功加入房间。战局正式开始，请从“继续战斗”入口进入。",
-            "Joined successfully.",
+            "该房间已被销毁。",
+            "The room has been destroyed.",
         ],
         [Type.A0020]: [
             `服务器维护中，请稍后登陆`,
@@ -578,13 +589,162 @@ namespace TinyWars.Utility.Lang {
             `您确定要切换该部队的下潜状态吗？`,
             `Are you sure to switch the unit's diving state?`,
         ],
+        [Type.A0115]: [
+            `请联系babygogogo以解决问题`,
+            `Please refer to babygogogo.`,
+        ],
+        [Type.A0116]: [
+            `战局已开始，并已进入您的回合。要现在就进入战局吗？`,
+            `The war has started and it's your turn now. Do you want to play it now?`,
+        ],
+        [Type.A0117]: [
+            `注：清空后，所有地形都会被设置为平原，所有部队都会被删除！`,
+            `Caution: All tiles will be set as plain and all units will be deleted!`,
+        ],
+        [Type.A0118]: [
+            `设计者名称不合法`,
+            `Invalid MapDesigner.`,
+        ],
+        [Type.A0119]: [
+            `地图名称不合法`,
+            `Invalid MapName.`,
+        ],
+        [Type.A0120]: [
+            `地图英文名称不合法`,
+            `Invalid English MapName.`,
+        ],
+        [Type.A0121]: [
+            `请确保至少有两名玩家，且没有跳过势力颜色`,
+            `Invalid forces.`,
+        ],
+        [Type.A0122]: [
+            `部队数据不合法`,
+            `Invalid units.`,
+        ],
+        [Type.A0123]: [
+            `地形数据不合法`,
+            `Invalid tiles.`,
+        ],
+        [Type.A0124]: [
+            `预设规则未设置或不合法`,
+            `Preset rules are not set or invalid.`,
+        ],
+        [Type.A0125]: [
+            `要现在就进入战局吗？`,
+            `Do you want to play it now?`,
+        ],
+        [Type.A0126]: [
+            `您确定要退出此房间吗？`,
+            `Are you sure to exit the room?`,
+        ],
+        [Type.A0127]: [
+            `您已被请出此房间。`,
+            `You have been removed from the room.`,
+        ],
+        [Type.A0128]: [
+            `请先取消您的准备状态`,
+            `Please cancel the "ready" state first.`,
+        ],
+        [Type.A0129]: [
+            `您确定要使用自定义规则吗？`,
+            `Are you sure to use a custom rule?`,
+        ],
+        [Type.A0130]: [
+            `您必须保留"无CO"选项。`,
+            `The 'No CO' option must be available.`,
+        ],
+        [Type.A0131]: [
+            `请尽量同时提供中英文名，以英文逗号分隔`,
+            `Please write down a Chinese Name and an English name if possible. Use a , as a separator.`,
+        ],
+        [Type.A0132]: [
+            `请设定您愿意同时进行的排位赛的数量上限（设置为0等同于您不参加排位赛；明战和雾战需要分别设定）。`,
+            `Please set the maximum number of qualifying matches you are willing to play at the same time. Setting it to 0 is equivalent to not participating in qualifying matches.` +
+            `\nNote: You need to set the numbers with fog on/off separately.`,
+        ],
+        [Type.A0133]: [
+            `正在等待对战各方禁用CO。`,
+            `Waiting for the COs to be banned from all sides.`,
+        ],
+        [Type.A0134]: [
+            `正在等待对战各方选择CO和势力颜色并进入准备状态。`,
+            `Waiting for all the players to be ready for the game.`,
+        ],
+        [Type.A0135]: [
+            `您尚未禁用任何CO。`,
+            `You have not banned any COs.`,
+        ],
+        [Type.A0136]: [
+            `您已选择不禁用任何CO。`,
+            `You have chosen not to ban any COs.`,
+        ],
+        [Type.A0137]: [
+            `进入准备状态后，您将无法再次修改CO和势力颜色设定。确定要继续吗？`,
+            `You can't change your CO and color settings after being ready. Are you sure to continue?`,
+        ],
+        [Type.A0138]: [
+            `确定要禁用这些CO吗？`,
+            `Are you sure to ban these COs?`,
+        ],
+        [Type.A0139]: [
+            `确定要不禁用任何CO吗？`,
+            `Are you sure to ban no CO?`,
+        ],
+        [Type.A0140]: [
+            `确定要删除当前存档吗？（注：其他存档不受影响；您可以继续游玩当前游戏并存档）`,
+            `Are you sure to clear the current save slot?`,
+        ],
+        [Type.A0141]: [
+            `已成功删除存档。`,
+            `The save slot has been cleared.`,
+        ],
+        [Type.A0142]: [
+            `此地图已被修改，需要先保存吗？`,
+            `The map has been modified. Do you want to save the map?`,
+        ],
+        [Type.A0143]: [
+            `此地图已被修改，确定不保存直接退出吗？`,
+            `The map has been modified. Are you sure to exit anyway?`,
+        ],
+        [Type.A0144]: [
+            `请输入存档备注以便于区分，可留空`,
+            `Please input a comment for the save slot.`,
+        ],
+        [Type.A0145]: [
+            `房间已满员`,
+            `The room is full of players.`,
+        ],
+        [Type.A0146]: [
+            `战局数据不合法，请检查后重试`,
+            `The war data is invalid. Please check and retry.`,
+        ],
+        [Type.A0147]: [
+            `新密码与确认密码不相同，请检查后重试`,
+            `The new password is different from the confirm password.`,
+        ],
+        [Type.A0148]: [
+            `已成功修改密码。`,
+            `Your password has been changed successfully.`
+        ],
+        [Type.A0149]: [
+            `您确定要删除此房间吗？`,
+            `Are you sure to delete this room?.`
+        ],
+        [Type.A0150]: [
+            `正在加载图片\n请耐心等候`,
+            `Now loading\nPlease wait...`,
+        ],
+        [Type.A0151]: [
+            `已成功修改地图标签`,
+            `The map tag has been updated successfully.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B0000]: [
             "创建房间",
-            "Create Game",
+            "Create Room",
         ],
         [Type.B0001]: [
             "无",
@@ -599,19 +759,19 @@ namespace TinyWars.Utility.Lang {
             "Advanced Settings",
         ],
         [Type.B0004]: [
-            "红方",
+            "红",
             "Red",
         ],
         [Type.B0005]: [
-            "蓝方",
+            "蓝",
             "Blue",
         ],
         [Type.B0006]: [
-            "黄方",
+            "黄",
             "Yellow",
         ],
         [Type.B0007]: [
-            "黑方",
+            "黑",
             "Black",
         ],
         [Type.B0008]: [
@@ -676,7 +836,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0023]: [
             "加入房间",
-            "Join Game"
+            "Join Room"
         ],
         [Type.B0024]: [
             "继续战斗",
@@ -1375,20 +1535,20 @@ namespace TinyWars.Utility.Lang {
             `Login Times`,
         ],
         [Type.B0198]: [
-            `排位战绩`,
-            `Ranking Matches`,
+            `明战排位积分`,
+            `Std Rank Score`,
         ],
         [Type.B0199]: [
-            `积分`,
-            `Score`,
+            `雾战排位积分`,
+            `FoW Rank Score`,
         ],
         [Type.B0200]: [
             `多人自由对战`,
-            `MP Free Games`,
+            `MP Custom Games`,
         ],
         [Type.B0201]: [
-            `2人局`,
-            `2P`,
+            `历史战绩`,
+            `History`,
         ],
         [Type.B0202]: [
             `3人局`,
@@ -2106,6 +2266,266 @@ namespace TinyWars.Utility.Lang {
             `公共(中文)`,
             `Public(CN)`,
         ],
+        [Type.B0385]: [
+            `使用原版贴图`,
+            `Origin Texture`,
+        ],
+        [Type.B0386]: [
+            `使用新版贴图`,
+            `New Texture`,
+        ],
+        [Type.B0387]: [
+            `常规`,
+            `Regular`,
+        ],
+        [Type.B0388]: [
+            `增量`,
+            `Incremental`,
+        ],
+        [Type.B0389]: [
+            `初始时间`,
+            `Initial Time`,
+        ],
+        [Type.B0390]: [
+            `增量时间`,
+            `Incremental Time`,
+        ],
+        [Type.B0391]: [
+            `清空`,
+            `Clear`,
+        ],
+        [Type.B0392]: [
+            `游戏已开始`,
+            `Game Started`,
+        ],
+        [Type.B0393]: [
+            `玩家昵称`,
+            `User Nickname`,
+        ],
+        [Type.B0394]: [
+            `CO名称`,
+            `CO Name`,
+        ],
+        [Type.B0395]: [
+            `玩家列表`,
+            `Players List`,
+        ],
+        [Type.B0396]: [
+            `超时告负`,
+            `Boot`,
+        ],
+        [Type.B0397]: [
+            `势力颜色`,
+            `Color`,
+        ],
+        [Type.B0398]: [
+            `房间信息`,
+            `Room Info`,
+        ],
+        [Type.B0399]: [
+            `修改规则`,
+            `Modify Rules`,
+        ],
+        [Type.B0400]: [
+            `删除房间`,
+            `Delete Room`,
+        ],
+        [Type.B0401]: [
+            `开战`,
+            `Start Game`,
+        ],
+        [Type.B0402]: [
+            `准备就绪`,
+            `Ready`,
+        ],
+        [Type.B0403]: [
+            `可用CO数量`,
+            `Available COs Num`,
+        ],
+        [Type.B0404]: [
+            `排位赛`,
+            `Ranking Match`,
+        ],
+        [Type.B0405]: [
+            `房间`,
+            `Room`,
+        ],
+        [Type.B0406]: [
+            `规则可用性`,
+            `Rule Availability`,
+        ],
+        [Type.B0407]: [
+            `玩家规则列表`,
+            `Player Rule List`,
+        ],
+        [Type.B0408]: [
+            `排位赛(雾战)`,
+            `Ranking Match FoW`,
+        ],
+        [Type.B0409]: [
+            `单人自由对战`,
+            `SP Custom Games`,
+        ],
+        [Type.B0410]: [
+            `我的房间`,
+            `My Rooms`,
+        ],
+        [Type.B0411]: [
+            `踢出`,
+            `Kick Off`,
+        ],
+        [Type.B0412]: [
+            `数量`,
+            `Number`,
+        ],
+        [Type.B0413]: [
+            `设定战局数量`,
+            `Set Games Num`,
+        ],
+        [Type.B0414]: [
+            `房间状态`,
+            `Room Status`,
+        ],
+        [Type.B0415]: [
+            `排位明战`,
+            `Rank Std`,
+        ],
+        [Type.B0416]: [
+            `排位雾战`,
+            `Rank FoW`,
+        ],
+        [Type.B0417]: [
+            `自由明战`,
+            `Custom Std`,
+        ],
+        [Type.B0418]: [
+            `自由雾战`,
+            `Custom FoW`,
+        ],
+        [Type.B0419]: [
+            `地图编辑器`,
+            `Map Editor`,
+        ],
+        [Type.B0420]: [
+            `删除存档`,
+            `Delete War`,
+        ],
+        [Type.B0421]: [
+            `已搭载CO`,
+            `CO on board`,
+        ],
+        [Type.B0422]: [
+            `战斗`,
+            `Fight`,
+        ],
+        [Type.B0423]: [
+            `信息`,
+            `Info`,
+        ],
+        [Type.B0424]: [
+            `控制者`,
+            `Controller`,
+        ],
+        [Type.B0425]: [
+            `CO`,
+            `CO`,
+        ],
+        [Type.B0426]: [
+            `修改密码`,
+            `Change Password`,
+        ],
+        [Type.B0427]: [
+            `旧密码`,
+            `Old Password`,
+        ],
+        [Type.B0428]: [
+            `新密码`,
+            `New Password`,
+        ],
+        [Type.B0429]: [
+            `确认密码`,
+            `Confirm Password`,
+        ],
+        [Type.B0430]: [
+            `SetPath模式`,
+            `Set Path Mode`,
+        ],
+        [Type.B0431]: [
+            `已启用`,
+            `Enabled`,
+        ],
+        [Type.B0432]: [
+            `已禁用`,
+            `Disabled`,
+        ],
+        [Type.B0433]: [
+            `启用`,
+            `Enable`,
+        ],
+        [Type.B0434]: [
+            `禁用`,
+            `Disable`,
+        ],
+        [Type.B0435]: [
+            `未上榜`,
+            `No Rank`,
+        ],
+        [Type.B0436]: [
+            `排位积分排名`,
+            `Rank List`,
+        ],
+        [Type.B0437]: [
+            `标准`,
+            `Standard`,
+        ],
+        [Type.B0438]: [
+            `雾战`,
+            `Fog of War`,
+        ],
+        [Type.B0439]: [
+            `能否下潜`,
+            `Can Dive`,
+        ],
+        [Type.B0440]: [
+            `部队属性表`,
+            `Units Info`,
+        ],
+        [Type.B0441]: [
+            `标准图池`,
+            `Standard Maps`,
+        ],
+        [Type.B0442]: [
+            `雾战图池`,
+            `Fog Maps`,
+        ],
+        [Type.B0443]: [
+            `多人房间`,
+            `MP Room`,
+        ],
+        [Type.B0444]: [
+            `设置标签`,
+            `Set Tags`,
+        ],
+        [Type.B0445]: [
+            `地图标签`,
+            `Map Tags`,
+        ],
+        [Type.B0446]: [
+            `忽略`,
+            `Ignored`,
+        ],
+        [Type.B0447]: [
+            `查找地图`,
+            `Search Maps`,
+        ],
+        [Type.B0448]: [
+            `需要密码`,
+            `Password required`,
+        ],
+        [Type.B0449]: [
+            `输入密码`,
+            `Input Password`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2457,18 +2877,66 @@ namespace TinyWars.Utility.Lang {
             `要和玩家"%s"私聊吗？`,
             `Do you want to make a private chat with %s?`,
         ],
+        [Type.F0026]: [
+            `数据加载中，请%s秒后重试`,
+            `Now loading, please wait %ds and retry.`,
+        ],
+        [Type.F0027]: [
+            `"%s"上的一局多人对战已经正式开始！`,
+            `A game on "%s" has started!`
+        ],
+        [Type.F0028]: [
+            `玩家[%s]因超时而告负！`,
+            `Player [%s] has ran out of time!`,
+        ],
+        [Type.F0029]: [
+            `您确定要踢掉玩家"%s"吗？`,
+            `Are you sure to kick off the player '%s'?`,
+        ],
+        [Type.F0030]: [
+            `%s (p%d) 回合结束。`,
+            `%s (p%d) has ended the turn!!`,
+        ],
+        [Type.F0031]: [
+            `您最多只能禁用%d名CO。`,
+            `You can only ban up to %d COs.`,
+        ],
+        [Type.F0032]: [
+            `请把名称长度控制在%d个字符以内。`,
+            `Please limit the length of the name to %d characters.`
+        ],
+        [Type.F0033]: [
+            `启用SetPath模式后，在指定部队移动路线时，您需要连续点击两次目标格子才能呼出操作菜单。这会增加操作量，但同时也便于指定移动路线，这在雾战中尤其有用。\n您确定要启用吗？\n（当前状态：%s）`,
+            `While the Set Path mode is enabled, you have to double click (or touch) a tile in order to make the unit action panel appear when you are moving units. This mode can be useful especially in FoW.\nAre you sure to enable it? \n(Current status: %s)`,
+        ],
+        [Type.F0034]: [
+            `服务器内部错误，请通知作者，错误码: %d`,
+            `Server internal error, code: %d`,
+        ],
     };
 
-    const NET_ERROR_TEXT = {
+    const NET_ERROR_TEXT: { [netErrorCode: number]: string[] } = {
+        [ErrorCode.NoError]: [
+            "",
+            "",
+        ],
+        [ErrorCode.InternalError]: [
+            "服务器内部错误，请通知作者",
+            "Server internal errors.",
+        ],
         [ErrorCode.IllegalRequest]: [
             "非法请求",
             "Illegal request.",
         ],
-        [ErrorCode.Login_InvalidAccountOrPassword]: [
+        [ErrorCode.User0000]: [
+            `登录失败，可能是服务器内部错误。请尝试刷新游戏，并通知作者。`,
+            `Failed to login. Please refresh the game.`,
+        ],
+        [ErrorCode.User0001]: [
             "账号或密码不正确，请检查后重试",
             "Invalid account and/or password.",
         ],
-        [ErrorCode.Login_AlreadyLoggedIn]: [
+        [ErrorCode.User0002]: [
             "您已处于登陆状态，不可再次登陆",
             "You have logged in already.",
         ],
@@ -2496,9 +2964,25 @@ namespace TinyWars.Utility.Lang {
             "该昵称已被使用，请修改后再试",
             "The nickname has been used.",
         ],
-        [ErrorCode.CreateMultiCustomWar_TooManyJoinedWars]: [
+        [ErrorCode.MmMergeMap_SameSrcAndDst]: [
+            "",
+            "",
+        ],
+        [ErrorCode.MmMergeMap_NoSrcStatisticsData]: [
+            "",
+            "",
+        ],
+        [ErrorCode.MmMergeMap_NoDstStatisticsData]: [
+            "",
+            "",
+        ],
+        [ErrorCode.Mcr0000]: [
             "您已参与了许多未开始的战局，请退出部分后重试",
             "You have joined too many wars.",
+        ],
+        [ErrorCode.CreateMultiCustomWar_TooManyCreatedRooms]: [
+            "您已创建了许多未开始的房间，请退出部分后重试",
+            "You have created too many rooms simultaneously.",
         ],
         [ErrorCode.CreateMultiCustomWar_InvalidParams]: [
             "部分设定不符合规则，请检查后重试",
@@ -2528,9 +3012,17 @@ namespace TinyWars.Utility.Lang {
             "您已加入了该房间。",
             "You have already joined the game.",
         ],
-        [ErrorCode.ServerDisconnect_ServerMaintenance]: [
-            `服务器维护中`,
-            `The server is under maintenance.`,
+        [ErrorCode.GetMapDynamicInfo_NoSuchMap]: [
+            "地图不存在，获取dynamic info失败。",
+            "The map doesn't exist thus fail to get its dynamic info.",
+        ],
+        [ErrorCode.GetMapRawData_NoSuchMap]: [
+            "地图不存在，获取raw data失败。",
+            "The map doesn't exist thus fail to get its raw data.",
+        ],
+        [ErrorCode.GetUserPublicInfo_NoSuchUser]: [
+            "用户不存在，获取user public info失败。",
+            "The user doesn't exist thus fail to get its public info.",
         ],
         [ErrorCode.McrContinueWar_NoSuchWar]: [
             `战局不存在`,
@@ -2540,25 +3032,25 @@ namespace TinyWars.Utility.Lang {
             `您未参与该战局，或已经被击败`,
             `You have not joined the game, or you have been defeated.`,
         ],
-        [ErrorCode.McwBeginTurn_InvalidActionId]: [
-            `战局数据不同步，请刷新`,
-            `The local data is out of synchronization. Please refresh.`,
-        ],
         [ErrorCode.McwBeginTurn_NoSuchWar]: [
             `战局不存在`,
             `The game doesn't exist.`,
+        ],
+        [ErrorCode.McwBeginTurn_InvalidActionId]: [
+            `战局数据不同步，请刷新`,
+            `The local data is out of synchronization. Please refresh.`,
         ],
         [ErrorCode.McwBeginTurn_NotInTurn]: [
             `当前无法开始您的回合`,
             `Unable to begin turn.`,
         ],
-        [ErrorCode.McwEndTurn_InvalidActionId]: [
-            `战局数据不同步，请刷新`,
-            `The local data is out of synchronization. Please refresh.`,
-        ],
         [ErrorCode.McwEndTurn_NoSuchWar]: [
             `战局不存在`,
             `The game doesn't exist.`,
+        ],
+        [ErrorCode.McwEndTurn_InvalidActionId]: [
+            `战局数据不同步，请刷新`,
+            `The local data is out of synchronization. Please refresh.`,
         ],
         [ErrorCode.McwEndTurn_NotInTurn]: [
             `当前无法结束您的回合`,
@@ -2568,55 +3060,58 @@ namespace TinyWars.Utility.Lang {
             `您尚未完成关于和局的投票`,
             `You haven't voted for the draw of game.`,
         ],
+        [ErrorCode.McwWatchRequestWatcher_TargetPlayerLost]: [
+            `该玩家已战败，无法观战`,
+            `The target player has been defeated in the game.`
+        ],
+        [ErrorCode.McwWatchRequestWatcher_AlreadyRequested]: [
+            `已请求观战该玩家`,
+            `You have already requested to watch the player.`,
+        ],
+        [ErrorCode.McwWatchRequestWatcher_AlreadyAccepted]: [
+            `观战请求已被接受`,
+            `The request has already been accepted.`,
+        ],
+        [ErrorCode.ServerDisconnect_ServerMaintenance]: [
+            `服务器维护中`,
+            `The server is under maintenance.`,
+        ],
     };
 
     const RICH_DATA = {
         [RichType.R0000]: [
             [
-                `本选项影响您在回合中的行动顺序。`,
+                `本选项影响您在回合中的行动顺序，以及您所属的队伍（由地图规则设定）`,
                 ``,
-                `本游戏固定了每回合中的行动顺序为：`,
-                `1 红方`,
-                `2 蓝方`,
-                `3 黄方`,
-                `4 黑方`,
-                `其中，2人局不存在黄方和黑方，3人局不存在黑方。`,
-                `每个玩家只能选择其中一项，不能重复。`,
+                `战局中，属于同一队伍的玩家共享视野，部队能够相互穿越，不能相互攻击/装载/用后勤车补给。`,
+                `此外，可以使用队友的建筑来维修/补给自己的部队（消耗自己的金钱），但不能占领队友的建筑。`,
                 ``,
-                `默认为当前可用选项中最靠前的一项。`,
+                `预览地图时，各个势力的颜色与行动顺序的对应关系如下（您可以在创建/加入房间时选择您想要的颜色）：`,
+                `红=1，蓝=2，黄=3，黑=4`,
+                ``,
+                `默认为当前可用选项中的第一项。`,
             ].join("\n"),
 
             [
-                `This option determines your turn order. `,
+                `This option determines your turn order and your team. `,
                 ``,
-                `The turn order this game is listed as below. `,
-                `1st: Red`,
-                `2nd: Blue`,
-                `3rd: Yellow`,
-                `4th: Black`,
-                `Yellow and Black is not available for games with 2 players, while Black is not available for ones with 3 players. `,
+                `In the game players in the same team share the vision. Their troops will not block and attack each other. It is not possible to supply your allies' troops with Rigs or load into allies' transports. `,
+                `You may use allies' properties to repair (use your own funds) and supply your troops and you cannot capture allies' properties`,
                 ``,
-                `By default you will be given the first choice among available ones`,
+                `When previewing the map, the colors of the forces correspond to the order of action as follows (you can choose the color you want when creating/adding rooms)`,
+                `Red = 1, Blue = 2, Yellow = 3, Black = 4`,
+                ``,
+                `By default you will be given the first choice among the available ones.`,
             ].join("\n"),
         ],
 
         [RichType.R0001]: [
             [
-                `本选项规定您所属的队伍。`,
-                ``,
-                `战局中，属于同一队伍的玩家共享视野，部队能够相互穿越，不能相互攻击/装载/用后勤车补给。`,
-                `此外，可以使用队友的建筑来维修/补给自己的部队（消耗自己的金钱），但不能占领队友的建筑。`,
-                ``,
-                `默认为当前未被其他玩家选用的队伍中最靠前的一项。`,
+                `本选项影响您部队和建筑的外观（颜色）。`,
             ].join("\n"),
 
-             [
-                `You can choose your team with this option. `,
-                ``,
-                `In the game players in the same team share the vision. Their troops will not block and attack each other. It is not possible to supply your allies' troops with Rigs or load into allies' transports. `,
-                `You may use allies' properties to repair (use your own funds) and supply your troops and you cannot capture allies' properties`,
-                ``,
-                `By default you got the 1st team with no other members. `,
+            [
+                `This option determines the color of your troops and properties.`,
             ].join("\n"),
         ],
 
@@ -2644,21 +3139,33 @@ namespace TinyWars.Utility.Lang {
             [
                 `本选项影响所有玩家的每回合的时限。`,
                 ``,
-                `如果某个玩家的回合时间超出了本限制，则服务器将自动为该玩家执行投降操作。`,
-                `当战局满员，或某个玩家结束回合后，则服务器自动开始下个玩家回合的倒计时（无论该玩家是否在线）。`,
-                `因此，请仅在已约好对手的情况下才选择“15分”，以免造成不必要的败绩。`,
+                `如果某个玩家的回合时间超出了限制，则服务器将自动为该玩家执行投降操作。`,
+                `当战局正式开始，或某个玩家结束回合后，则服务器自动开始下个玩家回合的倒计时（无论该玩家是否在线）。`,
+                `当前有“常规”和“增量”两种计时模式可选。`,
                 ``,
-                `默认为“3天”。`,
+                `常规计时：每回合的可用时间是固定不变的。`,
+                ``,
+                `增量计时：玩家每回合可用的时间将受到前面回合所消耗的时间的影响。此模式有两个参数，分别为“初始时间”和“增量时间”。`,
+                `第一回合，玩家拥有的时间就是“初始时间”。`,
+                `第二及后续所有回合，玩家拥有的时间=上一个回合的剩余时间+（上回合结束时的剩余部队数*增量时间）。`,
+                ``,
+                `默认为“常规计时-3天”。`,
             ].join("\n"),
 
             [
                 `This option determines the boot timer, aka time available for each turn. `,
                 ``,
-                `If a player hit the boot timer, the player will resign automatically. `,
-                `When the game is full, or a player ends his turn, the timer of the next player will start to countdown, no matter that player is online or not. `,
-                `Therefore, please choose "15min" only when you have made an agreement with your opponent to avoid unnecessary boots. `,
+                `If a player hits the boot timer, the player will resign automatically. `,
+                `When the game starts, or a player ends his turn, the timer of the first (or the next) player will start to countdown, no matter that player is online or not. `,
+                `Currently, there are two timing modes available: regular and incremental.`,
                 ``,
-                `By default this option is selected as "3 days". `,
+                `Regular timing: the available time for each round is fixed.`,
+                ``,
+                `Incremental timing: The time available for each round will be affected by the time consumed in the previous round. This mode has two parameters, namely "Initial Time" and "Incremental Time".`,
+                `For the first round, the time the player has is "Initial Time".`,
+                `For the second round and all subsequent rounds, the time the player has equals the remaining time of the previous round plus (the number of troops remaining in the previous round multiplies the "increment time").`,
+                ``,
+                `By default this option is selected as "regular timer with 3 days per round". `,
             ].join("\n"),
         ],
 
@@ -2791,7 +3298,12 @@ namespace TinyWars.Utility.Lang {
     }
 
     export function getNetErrorText(code: ErrorCode): string {
-        return NET_ERROR_TEXT[code][_languageType];
+        const texts = NET_ERROR_TEXT[code];
+        if (texts) {
+            return texts[_languageType];
+        } else {
+            return getFormattedText(Type.F0034, code);
+        }
     }
 
     export function getRichText(richType: RichType): string {
@@ -2799,14 +3311,7 @@ namespace TinyWars.Utility.Lang {
     }
 
     export function getPlayerForceName(playerIndex: number): string {
-        switch (playerIndex) {
-            case 0  : return getText(Type.B0030);
-            case 1  : return getText(Type.B0004);
-            case 2  : return getText(Type.B0005);
-            case 3  : return getText(Type.B0006);
-            case 4  : return getText(Type.B0007);
-            default : return undefined;
-        }
+        return `P${playerIndex}`;
     }
 
     export function getPlayerTeamName(teamIndex: number): string {
@@ -2973,11 +3478,16 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getSinglePlayerWarTypeName(type: Types.SinglePlayerWarType): string {
+    export function getWarTypeName(type: Types.WarType): string {
         switch (type) {
-            case Types.SinglePlayerWarType.Custom   : return getText(Type.B0254);
-            case Types.SinglePlayerWarType.WarRoom  : return getText(Type.B0257);
-            default                                 : return null;
+            case Types.WarType.McwStd   : return getText(Type.B0417);
+            case Types.WarType.McwFog   : return getText(Type.B0418);
+            case Types.WarType.Me       : return getText(Type.B0419);
+            case Types.WarType.RmwStd   : return getText(Type.B0415);
+            case Types.WarType.RmwFog   : return getText(Type.B0416);
+            case Types.WarType.Scw      : return getText(Type.B0254);
+            case Types.WarType.Wrw      : return getText(Type.B0257);
+            default                     : return null;
         }
     }
 
@@ -2988,6 +3498,18 @@ namespace TinyWars.Utility.Lang {
             case Types.MapReviewStatus.Rejected     : return getText(Type.B0275);
             case Types.MapReviewStatus.Accepted     : return getText(Type.B0276);
             default                                 : return null;
+        }
+    }
+
+    export function getMapInvalidationDesc(type: Types.CustomMapInvalidationType): string {
+        switch (type) {
+            case Types.CustomMapInvalidationType.InvalidMapDesigner     : return Lang.getText(Lang.Type.A0118);
+            case Types.CustomMapInvalidationType.InvalidMapName         : return Lang.getText(Lang.Type.A0119);
+            case Types.CustomMapInvalidationType.InvalidPlayersCount    : return Lang.getText(Lang.Type.A0121);
+            case Types.CustomMapInvalidationType.InvalidTiles           : return Lang.getText(Lang.Type.A0123);
+            case Types.CustomMapInvalidationType.InvalidUnits           : return Lang.getText(Lang.Type.A0122);
+            case Types.CustomMapInvalidationType.InvalidWarRuleList     : return Lang.getText(Lang.Type.A0124);
+            default                                                     : return "";
         }
     }
 
@@ -3018,5 +3540,69 @@ namespace TinyWars.Utility.Lang {
             case Types.ChatChannel.PublicCn : return getText(Type.B0384);
             default                         : return null;
         }
+    }
+
+    export function getUnitAndTileSkinName(skinId: number): string {
+        switch (skinId) {
+            case 0  : return "";
+            case 1  : return getText(Type.B0004);
+            case 2  : return getText(Type.B0005);
+            case 3  : return getText(Type.B0006);
+            case 4  : return getText(Type.B0007);
+            default : return null;
+        }
+    }
+
+    export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined {
+        if (warRule.ruleId == null) {
+            return getText(Type.B0321);
+        } else {
+            const list = warRule.ruleNameList;
+            return getLanguageType() === LanguageType.Chinese
+                ? list[0]
+                : list[1] || list[0];
+        }
+    }
+
+    export function getNameInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {
+        if (!nameList) {
+            return undefined;
+        } else {
+            return getLanguageType() === LanguageType.Chinese
+                ? nameList[0]
+                : nameList[1] || nameList[0];
+        }
+    }
+
+    export function getBootTimerTypeName(type: Types.BootTimerType): string {
+        switch (type) {
+            case Types.BootTimerType.Regular    : return getText(Type.B0387);
+            case Types.BootTimerType.Incremental: return getText(Type.B0388);
+            default                             : return null;
+        }
+    }
+    export function getBootTimerDesc(params: number[]): string {
+        params          = params || [];
+        const timerType = params[0] as Types.BootTimerType;
+        if (timerType === Types.BootTimerType.Regular) {
+            return `${getText(Type.B0387)} ${Helpers.getTimeDurationText2(params[1])}`;
+        } else if (timerType === Types.BootTimerType.Incremental) {
+            return `${getText(Type.B0388)} ${Helpers.getTimeDurationText2(params[1])} + ${Helpers.getTimeDurationText2(params[2])}`;
+        } else {
+            return null;
+        }
+    }
+    export async function getGameStartDesc(data: ProtoTypes.NetMessage.MsgMpwCommonBroadcastGameStart.IS): Promise<string> {
+        const playerList: string[] = [];
+        let playerIndex = 1;
+        for (const playerInfo of data.playerInfoList) {
+            playerList.push(`P${playerIndex}: ${await User.UserModel.getUserNickname(playerInfo.userId)}`);
+            ++playerIndex;
+        }
+        return [
+            getFormattedText(Type.F0027, await WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId)),
+            ...playerList,
+            getText(Type.A0125)
+        ].join("\n");
     }
 }

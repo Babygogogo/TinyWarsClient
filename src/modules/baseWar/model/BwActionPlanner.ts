@@ -1,6 +1,5 @@
 
 namespace TinyWars.BaseWar {
-    import WarMapModel          = WarMap.WarMapModel;
     import Types                = Utility.Types;
     import Notify               = Utility.Notify;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
@@ -18,7 +17,10 @@ namespace TinyWars.BaseWar {
         unit        : BwUnit;
         destination : GridIndex;
     }
-    export type OpenDataForBwUnitActionsPanel   = DataForUnitActionRenderer[];
+    export type OpenDataForBwUnitActionsPanel   = {
+        destination : GridIndex;
+        actionList  : DataForUnitActionRenderer[];
+    }
     export type DataForUnitActionRenderer       = {
         actionType      : UnitActionType;
         callback        : () => void;
@@ -54,6 +56,7 @@ namespace TinyWars.BaseWar {
         private _notifyListeners: Notify.Listener[] = [
             { type: Notify.Type.BwCursorTapped,    callback: this._onNotifyBwCursorTapped },
             { type: Notify.Type.BwCursorDragged,   callback: this._onNotifyBwCursorDragged },
+            { type: Notify.Type.BwCursorDragEnded, callback: this._onNotifyBwCursorDragEnded },
         ];
 
         public async init(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwActionPlanner> {
@@ -61,6 +64,11 @@ namespace TinyWars.BaseWar {
 
             this._view = this._view || new (this._getViewClass())();
             this._view.init(this);
+
+            return this;
+        }
+        public async fastInit(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwActionPlanner> {
+            this.getView().fastInit(this);
 
             return this;
         }
@@ -103,11 +111,99 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected abstract _onNotifyBwCursorTapped(e: egret.Event): void;
+        private _onNotifyBwCursorTapped(e: egret.Event): void {
+            const gridIndex = this.getCursor().getGridIndex();
+            const nextState = this._getNextStateOnTap(gridIndex);
+            this._getWar().getView().tweenGridToCentralArea(gridIndex);
+
+            if ((nextState === this.getState())                                                 &&
+                ((nextState === State.ExecutingAction) || (BwHelpers.checkIsStateRequesting(nextState)))
+            ) {
+                // Do noting.
+            } else {
+                if (nextState === State.Idle) {
+                    this.setStateIdle();
+
+                } else if (nextState === State.MakingMovePath) {
+                    this._setStateMakingMovePathOnTap(gridIndex);
+
+                } else if (nextState === State.ChoosingAction) {
+                    this._setStateChoosingActionOnTap(gridIndex);
+
+                } else if (nextState === State.ChoosingAttackTarget) {
+                    this._setStateChoosingAttackTargetOnTap(gridIndex);
+
+                } else if (nextState === State.ChoosingDropDestination) {
+                    this._setStateChoosingDropDestinationOnTap(gridIndex);
+
+                } else if (nextState === State.ChoosingFlareDestination) {
+                    this._setStateChoosingFlareDestinationOnTap(gridIndex);
+
+                } else if (nextState === State.ChoosingSiloDestination) {
+                    this._setStateChoosingSiloDestinationOnTap(gridIndex);
+
+                } else if (nextState === State.ChoosingProductionTarget) {
+                    this._setStateChoosingProductionTargetOnTap(gridIndex);
+
+                } else if (nextState === State.PreviewingAttackableArea) {
+                    this._setStatePreviewingAttackableAreaOnTap(gridIndex);
+
+                } else if (nextState === State.PreviewingMovableArea) {
+                    this._setStatePreviewingMovableAreaOnTap(gridIndex);
+
+                } else if (nextState === State.RequestingUnitAttackUnit) {
+                    this._setStateRequestingUnitAttackUnit(gridIndex);
+
+                } else if (nextState === State.RequestingUnitAttackTile) {
+                    this._setStateRequestingUnitAttackTile(gridIndex);
+
+                } else if (nextState === State.RequestingUnitBeLoaded) {
+                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 1, nextState: ${nextState}`);
+
+                } else if (nextState === State.RequestingUnitBuildTile) {
+                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 2, nextState: ${nextState}`);
+
+                } else if (nextState === State.RequestingUnitCaptureTile) {
+                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 3, nextState: ${nextState}`);
+
+                } else if (nextState === State.RequestingUnitDive) {
+                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 4, nextState: ${nextState}`);
+
+                } else if (nextState === State.RequestingUnitDrop) {
+                    this._setStateRequestingUnitDropOnTap(gridIndex);
+
+                } else if (nextState === State.RequestingUnitJoin) {
+                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 5, nextState: ${nextState}`);
+
+                } else if (nextState === State.RequestingUnitLaunchFlare) {
+                    this._setStateRequestingUnitLaunchFlare(gridIndex);
+
+                } else if (nextState === State.RequestingUnitLaunchSilo) {
+                    this._setStateRequestingUnitLaunchSilo(gridIndex);
+
+                } else if (nextState === State.RequestingUnitProduceUnit) {
+                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 6, nextState: ${nextState}`);
+
+                } else if (nextState === State.RequestingUnitSupply) {
+                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 7, nextState: ${nextState}`);
+
+                } else if (nextState === State.RequestingUnitSurface) {
+                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 8, nextState: ${nextState}`);
+
+                } else if (nextState === State.RequestingUnitWait) {
+                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 9, nextState: ${nextState}`);
+
+                } else {
+                    Logger.error(`McwActionPlanner._onNotifyMcwCursorTapped() error 10, nextState: ${nextState}`);
+                }
+            }
+        }
 
         private _onNotifyBwCursorDragged(e: egret.Event): void {
             const gridIndex = this.getCursor().getGridIndex();
             const nextState = this._getNextStateOnDrag(gridIndex);
+            this._getWar().getView().tweenGridToCentralArea((e.data as Notify.Data.BwCursorDragged).draggedTo);
+
             if ((nextState === this.getState())                                                 &&
                 ((nextState === State.ExecutingAction) || (BwHelpers.checkIsStateRequesting(nextState)))
             ) {
@@ -145,6 +241,22 @@ namespace TinyWars.BaseWar {
 
                 } else {
                     Logger.error(`BwActionPlanner._onNotifyBwCursorTapped() invalid nextState!`, nextState);
+                }
+            }
+        }
+
+        private _onNotifyBwCursorDragEnded(e: egret.Event): void {
+            const gridIndex = this.getCursor().getGridIndex();
+            const nextState = this._getNextStateOnDragEnded(gridIndex);
+
+            if (nextState === this.getState()) {
+                // Do noting.
+            } else {
+                if (nextState === State.ChoosingAction) {
+                    this._setStateChoosingActionOnDragEnded(gridIndex);
+
+                } else {
+                    Logger.error(`McwActionPlanner._onNotifyBwCursorDragEnded() error 10, nextState: ${nextState}`);
                 }
             }
         }
@@ -191,7 +303,123 @@ namespace TinyWars.BaseWar {
             this._updateView();
         }
 
-        protected abstract _setStateMakingMovePathOnTap(gridIndex: GridIndex): void;
+        protected _setStateMakingMovePathOnTap(gridIndex: GridIndex): void {
+            const currState = this.getState();
+            const unitMap   = this._getUnitMap();
+
+            if (currState === State.Idle) {
+                this._setFocusUnitOnMap(unitMap.getUnitOnMap(gridIndex));
+                this._resetMovableArea();
+                this._resetAttackableArea();
+                this._resetMovePathAsShortest(gridIndex);
+
+            } else if (currState === State.ExecutingAction) {
+                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 1, currState: ${currState}`);
+
+            } else if (currState === State.MakingMovePath) {
+                if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
+                    // Nothing to do.
+                } else {
+                    const existingUnit = this._getUnitMap().getUnitOnMap(gridIndex);
+                    if ((existingUnit === this.getFocusUnitOnMap()) && (this.getFocusUnitLoaded())) {
+                        // Nothing to do.
+                    } else {
+                        // if ((!existingUnit) || (existingUnit.getPlayerIndex() !== this._getPlayerIndexLoggedIn())) {
+                        //     this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                        // } else {
+                        //     this._setFocusUnitOnMap(existingUnit);
+                        //     this._clearFocusUnitLoaded();
+                        //     this._resetMovableArea();
+                        //     this._resetAttackableArea();
+                        //     this._resetMovePathAsShortest(gridIndex);
+                        // }
+                        if (existingUnit) {
+                            if (this._checkCanControlUnit(existingUnit)) {
+                                this._setFocusUnitOnMap(existingUnit);
+                                this._clearFocusUnitLoaded();
+                                this._resetMovableArea();
+                                this._resetAttackableArea();
+                                this._resetMovePathAsShortest(gridIndex);
+                            } else {
+                                this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                            }
+                        } else {
+                            if (this._getTileMap().getTile(gridIndex).getMaxHp() != null) {
+                                this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                            } else {
+                                this._updateMovePathByDestination(gridIndex);
+                            }
+                        }
+                    }
+                }
+
+            } else if (currState === State.ChoosingAction) {
+                if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
+                    // Nothing to do.
+                } else {
+                    const existingUnit = this._getUnitMap().getUnitOnMap(gridIndex);
+                    if ((existingUnit === this.getFocusUnitOnMap()) && (this.getFocusUnitLoaded())) {
+                        // Nothing to do.
+                    } else {
+                        if (existingUnit) {
+                            if (this._checkCanControlUnit(existingUnit)) {
+                                this._setFocusUnitOnMap(existingUnit);
+                                this._clearFocusUnitLoaded();
+                                this._resetMovableArea();
+                                this._resetAttackableArea();
+                                this._resetMovePathAsShortest(gridIndex);
+                            } else {
+                                this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                            }
+                        } else {
+                            if (this._getTileMap().getTile(gridIndex).getMaxHp() != null) {
+                                this._resetMovePathAsShortest(this.getAttackableArea()[gridIndex.x][gridIndex.y].movePathDestination);
+                            } else {
+                                this._updateMovePathByDestination(gridIndex);
+                            }
+                        }
+                    }
+                }
+
+            } else if (currState === State.ChoosingAttackTarget) {
+                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 2, currState: ${currState}`);
+
+            } else if (currState === State.ChoosingDropDestination) {
+                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 3, currState: ${currState}`);
+
+            } else if (currState === State.ChoosingFlareDestination) {
+                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 4, currState: ${currState}`);
+
+            } else if (currState === State.ChoosingSiloDestination) {
+                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 5, currState: ${currState}`);
+
+            } else if (currState === State.ChoosingProductionTarget) {
+                this._setFocusUnitOnMap(this._getUnitMap().getUnitOnMap(gridIndex));
+                this._resetMovableArea();
+                this._resetAttackableArea();
+                this._resetMovePathAsShortest(gridIndex);
+
+            } else if (currState === State.PreviewingAttackableArea) {
+                this._setFocusUnitOnMap(this._getUnitMap().getUnitOnMap(gridIndex));
+                this._resetMovableArea();
+                this._resetAttackableArea();
+                this._resetMovePathAsShortest(gridIndex);
+                this._clearDataForPreviewingAttackableArea();
+
+            } else if (currState === State.PreviewingMovableArea) {
+                this._setFocusUnitOnMap(this._getUnitMap().getUnitOnMap(gridIndex));
+                this._resetMovableArea();
+                this._resetAttackableArea();
+                this._resetMovePathAsShortest(gridIndex);
+                this._clearDataForPreviewingMovableArea();
+
+            } else {
+                Logger.error(`McwActionPlanner._setStateMakingMovePathOnTap() error 6, currState: ${currState}`);
+            }
+
+            this._setState(State.MakingMovePath);
+            this._updateView();
+        }
 
         private _setStateMakingMovePathOnDrag(gridIndex: GridIndex): void {
             const currState = this.getState();
@@ -225,7 +453,27 @@ namespace TinyWars.BaseWar {
                 }
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 3, currState: ${currState}`);
+                const focusUnit = this.getFocusUnit();
+                if (focusUnit.checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
+                    // Do nothing.
+                } else {
+                    const movableArea = this.getMovableArea();
+                    if (BwHelpers.checkAreaHasGrid(movableArea, gridIndex)) {
+                        this._updateMovePathByDestination(gridIndex);
+                    } else {
+                        const attackableArea = this.getAttackableArea();
+                        if (!BwHelpers.checkAreaHasGrid(attackableArea, gridIndex)) {
+                            // Do nothing.
+                        } else {
+                            const newPath = BwHelpers.createShortestMovePath(movableArea, attackableArea[gridIndex.x][gridIndex.y].movePathDestination);
+                            if (focusUnit.checkCanAttackTargetAfterMovePath(newPath, gridIndex)) {
+                                this._setMovePath(newPath);
+                            } else {
+                                // Do nothing.
+                            }
+                        }
+                    }
+                }
 
             } else if (currState === State.ChoosingAttackTarget) {
                 Logger.error(`BwActionPlanner._setStateMakingMovePathOnDrag() error 4, currState: ${currState}`);
@@ -297,7 +545,22 @@ namespace TinyWars.BaseWar {
                 }
 
             } else if (currState === State.ChoosingAction) {
-                Logger.error(`BwActionPlanner._setStateChoosingActionOnTap() error 4, currState: ${currState}`);
+                if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+                    this._updateMovePathByDestination(gridIndex);
+                } else {
+                    if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
+                        // Nothing to do.
+                    } else {
+                        if (this.getFocusUnitLoaded()) {
+                            this._clearFocusUnitLoaded();
+                            this._resetMovableArea();
+                            this._resetAttackableArea();
+                            this._resetMovePathAsShortest(this.getFocusUnitOnMap().getGridIndex());
+                        } else {
+                            // Nothing to do.
+                        }
+                    }
+                }
 
             } else if (currState === State.ChoosingAttackTarget) {
                 // Nothing to do.
@@ -770,6 +1033,29 @@ namespace TinyWars.BaseWar {
             // Nothing to do.
         }
 
+        private _setStateChoosingActionOnDragEnded(gridIndex: GridIndex): void {
+            const currState = this.getState();
+            if (currState === State.MakingMovePath) {
+                if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+                    this._updateMovePathByDestination(gridIndex);
+                } else {
+                    Logger.error(`BwActionPlanner._setStateChoosingActionOnDragEnded() error 1, currState: ${currState}`);
+                }
+
+            } else {
+                Logger.error(`BwActionPlanner._setStateChoosingActionOnDragEnded() error 2, currState: ${currState}`);
+            }
+
+            this._setState(State.ChoosingAction);
+            this._updateView();
+        }
+
+        protected abstract _setStateRequestingUnitAttackUnit(gridIndex: GridIndex): void;
+        protected abstract _setStateRequestingUnitAttackTile(gridIndex: GridIndex): void;
+        protected abstract _setStateRequestingUnitDropOnTap(gridIndex: GridIndex): void;
+        protected abstract _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void;
+        protected abstract _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void;
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -777,6 +1063,8 @@ namespace TinyWars.BaseWar {
             return this._view;
         }
         protected abstract _updateView(): void;
+
+        protected abstract _checkCanControlUnit(unit: BwUnit): boolean;
 
         private _setMapSize(size: Types.MapSize): void {
             this._mapSize = size;
@@ -936,7 +1224,7 @@ namespace TinyWars.BaseWar {
             const movePath = this.getMovePath();
             return movePath[movePath.length - 1];
         }
-        private _updateMovePathByDestination(destination: GridIndex): void {
+        protected _updateMovePathByDestination(destination: GridIndex): void {
             const { x, y }      = destination;
             const movableArea   = this.getMovableArea();
             const currPath      = this.getMovePath();
@@ -1085,12 +1373,164 @@ namespace TinyWars.BaseWar {
             }
         }
         protected abstract _getNextStateOnTapWhenIdle(gridIndex: GridIndex): State;
-        protected abstract _getNextStateOnTapWhenMakingMovePath(gridIndex: GridIndex): State;
+        private _getNextStateOnTapWhenMakingMovePath(gridIndex: GridIndex): State {
+            const existingUnit = this._getUnitMap().getUnitOnMap(gridIndex);
+            if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+                if (!existingUnit) {
+                    if (!User.UserModel.getSelfSettingsIsSetPathMode()) {
+                        return State.ChoosingAction;
+                    } else {
+                        if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
+                            return State.ChoosingAction;
+                        } else {
+                            return State.MakingMovePath;
+                        }
+                    }
+                } else {
+                    if (!this._checkCanControlUnit(existingUnit)) {
+                        if (existingUnit.checkHasWeapon()) {
+                            return State.PreviewingAttackableArea;
+                        } else {
+                            return State.PreviewingMovableArea;
+                        }
+                    } else {
+                        const focusUnit = this.getFocusUnit();
+                        if ((focusUnit === this.getFocusUnitLoaded()) && (GridIndexHelpers.checkIsEqual(gridIndex, focusUnit.getGridIndex()))) {
+                            return State.MakingMovePath;
+                        } else {
+                            if ((focusUnit === existingUnit) || (focusUnit.checkCanJoinUnit(existingUnit)) || (existingUnit.checkCanLoadUnit(focusUnit))) {
+                                return State.ChoosingAction;
+                            } else {
+                                if (existingUnit.getActionState() === UnitState.Idle) {
+                                    return State.MakingMovePath;
+                                } else {
+                                    if (existingUnit.checkHasWeapon()) {
+                                        return State.PreviewingAttackableArea;
+                                    } else {
+                                        return State.PreviewingMovableArea;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (this._checkCanFocusUnitOnMapAttackTarget(gridIndex)) {
+                    if (!GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
+                        return State.MakingMovePath;
+                    } else {
+                        if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
+                            if (existingUnit) {
+                                return State.RequestingUnitAttackUnit;
+                            } else {
+                                return State.RequestingUnitAttackTile;
+                            }
+                        } else {
+                            return State.MakingMovePath;
+                        }
+                    }
+                } else {
+                    if (this.getFocusUnitLoaded()) {
+                        return State.ChoosingAction;
+                    } else {
+                        if (!existingUnit) {
+                            return State.Idle;
+                        } else {
+                            if ((this._checkCanControlUnit(existingUnit)) && (existingUnit.getActionState() === UnitState.Idle)) {
+                                return State.MakingMovePath;
+                            } else {
+                                if (existingUnit.checkHasWeapon()) {
+                                    return State.PreviewingAttackableArea;
+                                } else {
+                                    return State.PreviewingMovableArea;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         private _getNextStateOnTapWhenChoosingAction(gridIndex: GridIndex): State {
             if (this.getChosenUnitsForDrop().length) {
                 return State.ChoosingDropDestination;
             } else {
-                return State.MakingMovePath;
+                // return State.MakingMovePath;
+                const existingUnit      = this._getUnitMap().getUnitOnMap(gridIndex);
+                const selfPlayerIndex   = this._getWar().getPlayerIndexInTurn();
+                if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+                    if (!existingUnit) {
+                        if (!User.UserModel.getSelfSettingsIsSetPathMode()) {
+                            return State.ChoosingAction;
+                        } else {
+                            if (GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
+                                return State.ChoosingAction;
+                            } else {
+                                return State.MakingMovePath;
+                            }
+                        }
+                    } else {
+                        if (existingUnit.getPlayerIndex() !== selfPlayerIndex) {
+                            if (existingUnit.checkHasWeapon()) {
+                                return State.PreviewingAttackableArea;
+                            } else {
+                                return State.PreviewingMovableArea;
+                            }
+                        } else {
+                            const focusUnit = this.getFocusUnit();
+                            if ((focusUnit === this.getFocusUnitLoaded()) && (GridIndexHelpers.checkIsEqual(gridIndex, focusUnit.getGridIndex()))) {
+                                return State.MakingMovePath;
+                            } else {
+                                if ((focusUnit === existingUnit) || (focusUnit.checkCanJoinUnit(existingUnit)) || (existingUnit.checkCanLoadUnit(focusUnit))) {
+                                    return State.ChoosingAction;
+                                } else {
+                                    if (existingUnit.getActionState() === UnitState.Idle) {
+                                        return State.MakingMovePath;
+                                    } else {
+                                        if (existingUnit.checkHasWeapon()) {
+                                            return State.PreviewingAttackableArea;
+                                        } else {
+                                            return State.PreviewingMovableArea;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                 } else {
+                    if (this._checkCanFocusUnitOnMapAttackTarget(gridIndex)) {
+                        if (!GridIndexHelpers.checkIsEqual(gridIndex, this.getCursor().getPreviousGridIndex())) {
+                            return State.MakingMovePath;
+                        } else {
+                            if (this.getFocusUnit().checkCanAttackTargetAfterMovePath(this.getMovePath(), gridIndex)) {
+                                if (existingUnit) {
+                                    return State.RequestingUnitAttackUnit;
+                                } else {
+                                    return State.RequestingUnitAttackTile;
+                                }
+                            } else {
+                                return State.MakingMovePath;
+                            }
+                        }
+                    } else {
+                        if (this.getFocusUnitLoaded()) {
+                            return State.ChoosingAction;
+                        } else {
+                            if (!existingUnit) {
+                                return State.Idle;
+                            } else {
+                                if ((existingUnit.getPlayerIndex() === selfPlayerIndex) && (existingUnit.getActionState() === UnitState.Idle)) {
+                                    return State.MakingMovePath;
+                                } else {
+                                    if (existingUnit.checkHasWeapon()) {
+                                        return State.PreviewingAttackableArea;
+                                    } else {
+                                        return State.PreviewingMovableArea;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         protected abstract _getNextStateOnTapWhenChoosingAttackTarget(gridIndex: GridIndex): State;
@@ -1105,8 +1545,52 @@ namespace TinyWars.BaseWar {
             const currState = this.getState();
             if (currState === State.ChoosingProductionTarget) {
                 return State.Idle;
+            } else if (currState === State.ChoosingAction) {
+                if (this.getChosenUnitsForDrop().length) {
+                    return State.ChoosingAction;
+                } else {
+                    return State.MakingMovePath;
+                }
             } else {
                 return currState;
+            }
+        }
+
+        private _getNextStateOnDragEnded(gridIndex: GridIndex): State {
+            const currState = this.getState();
+            if (currState === State.MakingMovePath) {
+                return this._getNextStateOnDragEndedWhenMakingMovePath(gridIndex);
+            } else {
+                return currState;
+            }
+        }
+        private _getNextStateOnDragEndedWhenMakingMovePath(gridIndex: GridIndex): State {
+            if (BwHelpers.checkAreaHasGrid(this.getMovableArea(), gridIndex)) {
+                const existingUnit = this._getUnitMap().getUnitOnMap(gridIndex);
+                if (!existingUnit) {
+                    if (!User.UserModel.getSelfSettingsIsSetPathMode()) {
+                        return State.ChoosingAction;
+                    } else {
+                        return State.MakingMovePath;
+                    }
+                } else {
+                    if (!this._checkCanControlUnit(existingUnit)) {
+                        return State.MakingMovePath;
+                    } else {
+                        const focusUnit = this.getFocusUnit();
+                        if ((focusUnit === this.getFocusUnitLoaded()) && (GridIndexHelpers.checkIsEqual(gridIndex, focusUnit.getGridIndex()))) {
+                            return State.MakingMovePath;
+                        } else {
+                            if ((focusUnit === existingUnit) || (focusUnit.checkCanJoinUnit(existingUnit)) || (existingUnit.checkCanLoadUnit(focusUnit))) {
+                                return State.ChoosingAction;
+                            } else {
+                                return State.MakingMovePath;
+                            }
+                        }
+                    }
+                }
+            } else {
+                return State.MakingMovePath;
             }
         }
 
@@ -1114,14 +1598,21 @@ namespace TinyWars.BaseWar {
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         protected _getDataForUnitActionsPanel(): OpenDataForBwUnitActionsPanel {
-            const actionUnitBeLoaded = this._getActionUnitBeLoaded();
+            const destination           = this.getMovePathDestination();
+            const actionUnitBeLoaded    = this._getActionUnitBeLoaded();
             if (actionUnitBeLoaded.length) {
-                return actionUnitBeLoaded;
+                return {
+                    destination,
+                    actionList: actionUnitBeLoaded
+                };
             }
 
             const actionUnitJoin = this._getActionUnitJoin();
             if (actionUnitJoin.length) {
-                return actionUnitJoin;
+                return {
+                    destination,
+                    actionList: actionUnitJoin
+                };
             }
 
             const dataList = [] as DataForUnitActionRenderer[];
@@ -1142,7 +1633,10 @@ namespace TinyWars.BaseWar {
             dataList.push(...this._getActionUnitWait(dataList.length > 0));
 
             Logger.assert(dataList.length, `BwActionPlanner._getDataForUnitActionsPanel() no actions available?!`);
-            return dataList;
+            return {
+                destination,
+                actionList: dataList,
+            };
         }
 
         protected abstract _getActionUnitBeLoaded(): DataForUnitActionRenderer[];

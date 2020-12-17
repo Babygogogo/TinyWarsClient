@@ -1,66 +1,55 @@
 
 namespace TinyWars.SingleCustomWar {
-    import DestructionHelpers   = Utility.DestructionHelpers;
-    import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import Types                = Utility.Types;
-    import Lang                 = Utility.Lang;
-    import FloatText            = Utility.FloatText;
+    import DestructionHelpers       = Utility.DestructionHelpers;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import Lang                     = Utility.Lang;
+    import FloatText                = Utility.FloatText;
+    import ConfigManager            = Utility.ConfigManager;
+    import BwTurnManagerHelper      = BaseWar.BwTurnManagerHelper;
+    import IActionPlayerBeginTurn   = ProtoTypes.WarAction.IActionPlayerBeginTurn;
+    import IActionPlayerEndTurn     = ProtoTypes.WarAction.IActionPlayerEndTurn;
+    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     export class ScwTurnManager extends BaseWar.BwTurnManager {
-        public serialize(): Types.SerializedTurn {
-            return {
-                turnIndex       : this.getTurnIndex(),
-                playerIndex     : this.getPlayerIndexInTurn(),
-                turnPhaseCode   : this.getPhaseCode(),
-                enterTurnTime   : this.getEnterTurnTime(),
-            };
+        protected _runPhaseGetFund(data: IActionPlayerBeginTurn): void {
+            BwTurnManagerHelper.runPhaseGetFundWithoutExtraData(this);
         }
-
-        public serializeForSimulation(): Types.SerializedTurn {
-            return {
-                turnIndex       : this.getTurnIndex(),
-                playerIndex     : this.getPlayerIndexInTurn(),
-                turnPhaseCode   : this.getPhaseCode(),
-                enterTurnTime   : this.getEnterTurnTime(),
-            };
+        protected _runPhaseRepairUnitByTile(data: IActionPlayerBeginTurn): void {
+            BwTurnManagerHelper.runPhaseRepairUnitByTileWithoutExtraData(this);
         }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // The functions for running turn.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _runPhaseMain(data: ProtoTypes.IWarActionPlayerBeginTurn): void {
+        protected _runPhaseRepairUnitByUnit(data: IActionPlayerBeginTurn): void {
+            BwTurnManagerHelper.runPhaseRepairUnitByUnitWithoutExtraData(this);
+        }
+        protected _runPhaseRecoverUnitByCo(data: IActionPlayerBeginTurn): void {
+            BwTurnManagerHelper.runPhaseRecoverUnitByCoWithoutExtraData(this);
+        }
+        protected _runPhaseMain(data: ProtoTypes.WarAction.IActionPlayerBeginTurn): void {
             const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this._getWar() as ScwWar;
-            if (data.isDefeated) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0014, war.getPlayer(playerIndex).getNickname()));
+            const war           = this.getWar();
+            const unitMap       = war.getUnitMap();
+            if ((playerIndex !== CommonConstants.WarNeutralPlayerIndex) &&
+                (this._getHasUnitOnBeginningTurn())                     &&
+                (!unitMap.checkHasUnit(playerIndex))
+            ) {
+                war.getPlayer(playerIndex).getNickname().then(name => {
+                    FloatText.show(Lang.getFormattedText(Lang.Type.F0014, name));
+                });
                 DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
-                ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(war);
+                ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             } else {
-                war.getUnitMap().forEachUnitOnMap(unit => (unit.getPlayerIndex() === playerIndex) && (unit.updateView()));
+                unitMap.forEachUnitOnMap(unit => (unit.getPlayerIndex() === playerIndex) && (unit.updateView()));
             }
         }
-        protected _runPhaseResetVisionForCurrentPlayer(): void {
-            const war           = this._getWar();
-            const playerInTurn  = war.getPlayerInTurn();
-            war.getFogMap().resetMapFromPathsForPlayer(playerInTurn.getPlayerIndex());
 
-            // if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(playerInTurn.getTeamIndex())) {
-                this._resetFogForWatcher();
-            // }
+        protected _runPhaseTickTurnAndPlayerIndex(data: IActionPlayerEndTurn): void {
+            BwTurnManagerHelper.runPhaseTickTurnAndPlayerIndexWithoutExtraData(this);
+        }
+        protected _runPhaseResetVisionForCurrentPlayer(): void {
+            const war = this.getWar();
+            war.getFogMap().resetMapFromPathsForPlayer(war.getPlayerIndexInTurn());
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            const war = this._getWar();
-            // if (war.getWatcherTeamIndexes(User.UserModel.getSelfUserId()).has(war.getPlayerInTurn().getTeamIndex())) {
-                this._resetFogForWatcher();
-            // }
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // The other functions.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _resetFogForWatcher(): void {
-            ScwHelpers.updateTilesAndUnitsOnVisibilityChanged(this._getWar() as ScwWar);
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(this.getWar());
         }
     }
 }

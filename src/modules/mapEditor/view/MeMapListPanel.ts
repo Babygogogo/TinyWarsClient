@@ -1,12 +1,10 @@
 
 namespace TinyWars.MapEditor {
-    import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
-    import FloatText    = Utility.FloatText;
-    import Helpers      = Utility.Helpers;
-    import Lang         = Utility.Lang;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import WarMapModel  = WarMap.WarMapModel;
+    import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
+    import Lang             = Utility.Lang;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
 
     export class MeMapListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -46,7 +44,7 @@ namespace TinyWars.MapEditor {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SMeGetDataList,     callback: this._onNotifySMeGetDataList },
+                { type: Notify.Type.MsgMeGetDataList,     callback: this._onNotifySMeGetDataList },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -61,7 +59,7 @@ namespace TinyWars.MapEditor {
             this._updateComponentsForLanguage();
             this._labelLoading.visible = true;
 
-            MeProxy.reqGetDataList();
+            MeProxy.reqMeGetMapDataList();
         }
 
         protected _onClosed(): void {
@@ -114,7 +112,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            Utility.FlowManager.gotoLobby();
+            Lobby.LobbyPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +125,7 @@ namespace TinyWars.MapEditor {
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
         }
 
-        private _createDataForListMap(dict: Map<number, Types.MeMapData>): DataForMapRenderer[] {
+        private _createDataForListMap(dict: Map<number, IMapEditorData>): DataForMapRenderer[] {
             const dataList: DataForMapRenderer[] = [];
 
             let index = 0;
@@ -154,13 +152,12 @@ namespace TinyWars.MapEditor {
 
                 const tileMapView = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapData.mapWidth, mapData.mapHeight);
-                tileMapView.updateWithBaseViewIdArray(mapData.tileBases);
-                tileMapView.updateWithObjectViewIdArray(mapData.tileObjects);
+                tileMapView.updateWithTileDataList(mapData.tileDataList);
 
                 const unitMapView = new WarMap.WarMapUnitMapView();
                 unitMapView.initWithMapRawData(mapData);
 
-                const gridSize = ConfigManager.getGridSize();
+                const gridSize = Utility.ConfigManager.getGridSize();
                 this._zoomMap.removeAllContents();
                 this._zoomMap.setContentWidth(mapData.mapWidth * gridSize.width);
                 this._zoomMap.setContentHeight(mapData.mapHeight * gridSize.height);
@@ -173,7 +170,7 @@ namespace TinyWars.MapEditor {
 
     type DataForMapRenderer = {
         index   : number;
-        mapData : Types.MeMapData;
+        mapData : IMapEditorData;
         panel   : MeMapListPanel;
     }
 
@@ -200,7 +197,7 @@ namespace TinyWars.MapEditor {
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelStatus.text      = Lang.getMapReviewStatusText(status);
             this._labelStatus.textColor = getReviewStatusTextColor(status);
-            this._labelName.text        = (mapRawData ? mapRawData.mapName : null) || `(${Lang.getText(Lang.Type.B0277)})`;
+            this._labelName.text        = Lang.getNameInCurrentLanguage(mapRawData ? mapRawData.mapNameList : null) || `(${Lang.getText(Lang.Type.B0277)})`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
@@ -214,23 +211,23 @@ namespace TinyWars.MapEditor {
             const reviewStatus  = mapData.reviewStatus;
 
             if (reviewStatus === Types.MapReviewStatus.Rejected) {
-                Common.AlertPanel.show({
+                Common.CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0305),
                     content : mapData.reviewComment || Lang.getText(Lang.Type.B0001),
                     callback: () => {
-                        Utility.FlowManager.gotoMapEditor(mapData.mapRawData as Types.MapRawData, mapData.slotIndex, false);
+                        Utility.FlowManager.gotoMapEditor(mapData.mapRawData, mapData.slotIndex, false);
                     },
                 });
             } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
-                Common.AlertPanel.show({
+                Common.CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0326),
                     content : mapData.reviewComment || Lang.getText(Lang.Type.B0001),
                     callback: () => {
-                        Utility.FlowManager.gotoMapEditor(mapData.mapRawData as Types.MapRawData, mapData.slotIndex, false);
+                        Utility.FlowManager.gotoMapEditor(mapData.mapRawData, mapData.slotIndex, false);
                     },
                 });
             } else {
-                Utility.FlowManager.gotoMapEditor(mapData.mapRawData as Types.MapRawData, mapData.slotIndex, false);
+                Utility.FlowManager.gotoMapEditor(mapData.mapRawData, mapData.slotIndex, false);
             }
         }
     }

@@ -1,14 +1,13 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
-    import FloatText    = Utility.FloatText;
-    import FlowManager  = Utility.FlowManager;
-    import Helpers      = Utility.Helpers;
-    import Lang         = Utility.Lang;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import BlockPanel   = Common.BlockPanel;
-    import WarMapModel  = WarMap.WarMapModel;
+    import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
+    import FlowManager      = Utility.FlowManager;
+    import Helpers          = Utility.Helpers;
+    import Lang             = Utility.Lang;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ConfigManager    = Utility.ConfigManager;
+    import WarMapModel      = WarMap.WarMapModel;
 
     export class McrWatchOngoingWarsPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -56,9 +55,9 @@ namespace TinyWars.MultiCustomRoom {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SMcwWatchGetOngoingWarInfos,    callback: this._onNotifySMcwWatchGetOngoingWarInfos },
-                { type: Notify.Type.SMcwWatchContinueWar,           callback: this._onNotifySMcwWatchContinueWar },
-                { type: Notify.Type.SMcwWatchContinueWarFailed,     callback: this._onNotifySMcwWatchContinueWarFailed },
+                { type: Notify.Type.MsgMpwWatchGetOngoingWarInfos,    callback: this._onNotifySMcwWatchGetOngoingWarInfos },
+                { type: Notify.Type.MsgMpwWatchContinueWar,           callback: this._onNotifySMcwWatchContinueWar },
+                { type: Notify.Type.MsgMpwWatchContinueWarFailed,     callback: this._onNotifySMcwWatchContinueWarFailed },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -73,7 +72,7 @@ namespace TinyWars.MultiCustomRoom {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            McrProxy.reqWatchGetOngoingWarInfos();
+            MultiPlayerWar.MpwProxy.reqWatchGetOngoingWarInfos();
         }
 
         protected _onClosed(): void {
@@ -114,7 +113,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcwWatchGetOngoingWarInfos(e: egret.Event): void {
-            const newData        = this._createDataForListWar(McrModel.getWatchOngoingWarInfos());
+            const newData        = this._createDataForListWar(MultiPlayerWar.MpwModel.getWatchOngoingWarInfos());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -128,12 +127,12 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onNotifySMcwWatchContinueWar(e: egret.Event): void {
-            FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.IS_McrContinueWar).war as Types.SerializedWar);
+            FlowManager.gotoMultiCustomWar((e.data as ProtoTypes.NetMessage.MsgMpwWatchContinueWar.IS).war);
         }
 
         private _onNotifySMcwWatchContinueWarFailed(e: egret.Event): void {
-            BlockPanel.hide();
-            McrProxy.reqWatchGetOngoingWarInfos();
+            Common.CommonBlockPanel.hide();
+            MultiPlayerWar.MpwProxy.reqWatchGetOngoingWarInfos();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
@@ -144,7 +143,7 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _createDataForListWar(infos: ProtoTypes.IMcwWatchInfo[]): DataForWarRenderer[] {
+        private _createDataForListWar(infos: ProtoTypes.MultiPlayerWar.IMpwWatchInfo[]): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
             if (infos) {
                 for (let i = 0; i < infos.length; ++i) {
@@ -159,53 +158,30 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _createDataForListPlayer(warInfo: ProtoTypes.IMcwOngoingDetail, mapPlayersCount: number): DataForPlayerRenderer[] {
-            const configVersion = warInfo.configVersion;
-            const dataList      : DataForPlayerRenderer[] = [
-                {
-                    playerIndex     : 1,
-                    playerName      : warInfo.p1UserNickname,
-                    teamIndex       : warInfo.p1TeamIndex,
-                    coId            : warInfo.p1CoId,
-                    configVersion,
-                },
-                {
-                    playerIndex     : 2,
-                    playerName      : warInfo.p2UserNickname,
-                    teamIndex       : warInfo.p2TeamIndex,
-                    coId            : warInfo.p2CoId,
-                    configVersion,
-                },
-            ];
-            if (mapPlayersCount >= 3) {
+        private _createDataForListPlayer(warInfo: ProtoTypes.MultiPlayerWar.IMpwWarInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
+            const configVersion     = warInfo.settingsForCommon.configVersion;
+            const playerInfoList    = warInfo.playerInfoList;
+            const dataList          : DataForPlayerRenderer[] = [];
+            for (let playerIndex = 1; playerIndex <= mapPlayersCount; ++playerIndex) {
                 dataList.push({
-                    playerIndex     : 3,
-                    playerName      : warInfo.p3UserNickname,
-                    teamIndex       : warInfo.p3TeamIndex,
-                    coId            : warInfo.p3CoId,
                     configVersion,
-                });
-            }
-            if (mapPlayersCount >= 4) {
-                dataList.push({
-                    playerIndex     : 4,
-                    playerName      : warInfo.p4UserNickname,
-                    teamIndex       : warInfo.p4TeamIndex,
-                    coId            : warInfo.p4CoId,
-                    configVersion,
-                });
+                    playerInfo  : playerInfoList.find(v => v.playerIndex === playerIndex),
+                })
             }
 
             return dataList;
         }
 
         private async _showMap(index: number): Promise<void> {
-            const warInfo               = this._dataForListWar[index].info.mcwDetail;
-            const mapRawData            = await WarMapModel.getMapRawData(warInfo.mapFileName);
-            this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(warInfo.mapFileName));
-            this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.mapDesigner);
-            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(warInfo.hasFog ? Lang.Type.B0012 : Lang.Type.B0001));
-            this._labelWarComment.text  = warInfo.warComment || "----";
+            const warInfo               = this._dataForListWar[index].info.warInfo;
+            const settingsForCommon     = warInfo.settingsForCommon;
+            const mapId                 = settingsForCommon.mapId;
+            const settingsForMcw        = warInfo.settingsForMcw;
+            const mapRawData            = await WarMapModel.getRawData(mapId);
+            this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+            this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
+            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0001));
+            this._labelWarComment.text  = (settingsForMcw ? settingsForMcw.warComment : null) || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCount));
 
             this._groupInfo.visible      = true;
@@ -215,8 +191,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const tileMapView = new WarMap.WarMapTileMapView();
             tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-            tileMapView.updateWithBaseViewIdArray(mapRawData.tileBases);
-            tileMapView.updateWithObjectViewIdArray(mapRawData.tileObjects);
+            tileMapView.updateWithTileDataList(mapRawData.tileDataList);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithMapRawData(mapRawData);
@@ -240,7 +215,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForWarRenderer = {
-        info    : ProtoTypes.IMcwWatchInfo;
+        info    : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
         index   : number;
         panel   : McrWatchOngoingWarsPanel;
     }
@@ -261,12 +236,17 @@ namespace TinyWars.MultiCustomRoom {
             super.dataChanged();
 
             const data              = this.data as DataForWarRenderer;
-            const warInfo           = data.info.mcwDetail;
+            const warInfo           = data.info.warInfo;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            if (warInfo.warName) {
-                this._labelName.text = warInfo.warName;
+
+            const settingsForMcw    = warInfo.settingsForMcw;
+            const warName           = settingsForMcw ? settingsForMcw.warName : null;
+            const labelName         = this._labelName;
+            if (warName) {
+                labelName.text = warName;
             } else {
-                WarMapModel.getMapNameInLanguage(warInfo.mapFileName).then(v => this._labelName.text = v);
+                labelName.text = "";
+                WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForCommon.mapId).then(v => labelName.text = v);
             }
         }
 
@@ -276,15 +256,12 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            McrProxy.reqWatchContinueWar((this.data as DataForWarRenderer).info.mcwDetail.id);
+            MultiPlayerWar.MpwProxy.reqWatchContinueWar((this.data as DataForWarRenderer).info.warInfo.warId);
         }
     }
 
     type DataForPlayerRenderer = {
-        playerIndex     : number;
-        playerName      : string;
-        teamIndex       : number;
-        coId            : number | null;
+        playerInfo      : ProtoTypes.Structure.IWarPlayerInfo;
         configVersion   : string;
     }
 
@@ -296,14 +273,13 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForPlayerRenderer;
-            this._labelIndex.text = Helpers.getColorTextForPlayerIndex(data.playerIndex);
-            this._labelTeam.text  = data.teamIndex != null ? Helpers.getTeamText(data.teamIndex) : "??";
-
-            const coConfig = data.coId == null ? null : ConfigManager.getCoBasicCfg(data.configVersion, data.coId);
-            this._labelName.text  = data.playerName + (coConfig
-                ? `(${coConfig.name}(T${coConfig.tier}))`
-                : `(${Lang.getText(Lang.Type.B0211)} CO)`);
+            const data              = this.data as DataForPlayerRenderer;
+            const playerInfo        = data.playerInfo;
+            this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
+            this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);
+            User.UserModel.getUserNickname(playerInfo.userId).then(name => {
+                this._labelName.text = name + ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
+            });
         }
     }
 }

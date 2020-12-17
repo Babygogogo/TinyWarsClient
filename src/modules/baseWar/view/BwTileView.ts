@@ -1,40 +1,107 @@
 
 namespace TinyWars.BaseWar {
-    import TimeModel    = Time.TimeModel;
+    import CommonModel      = Common.CommonModel;
+    import TimeModel        = Time.TimeModel;
+    import Types            = Utility.Types;
+    import Logger           = Utility.Logger;
+    import ConfigManager    = Utility.ConfigManager;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import TileObjectType   = Types.TileObjectType;
+    import TileBaseType     = Types.TileBaseType;
+    import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
 
+    export type DataForTileView = {
+        tileData    : ISerialTile;
+        hasFog      : boolean;
+        skinId      : number;
+    }
+
     export abstract class BwTileView {
-        private _tile       : BwTile;
         private _imgBase    = new GameUi.UiImage();
         private _imgObject  = new GameUi.UiImage();
-        private _hasFog     = false;
+
+        private _data       : DataForTileView;
 
         public constructor() {
             this._imgBase.anchorOffsetY     = GRID_HEIGHT;
             this._imgObject.anchorOffsetY   = GRID_HEIGHT * 2;
         }
 
-        public init(tile: BwTile): BwTileView {
-            this._tile = tile;
-
-            return this;
+        public setData(data: DataForTileView): void {
+            this._data = data;
         }
-
-        public startRunningView(): void {
-            this.updateView();
+        public getData(): DataForTileView {
+            return this._data;
         }
 
         public updateView(): void {
-            this.setHasFog(this._tile.getIsFogEnabled());
-        }
+            const data = this.getData();
+            if (data == null) {
+                Logger.error(`BwTileView.updateView() empty tileData.`);
+                return undefined;
+            }
 
-        public setHasFog(hasFog: boolean): void {
-            this._hasFog = hasFog;
-            this._updateImages();
-        }
-        protected _getHasFog(): boolean {
-            return this._hasFog;
+            const skinId = data.skinId;
+            if (skinId == null) {
+                Logger.error(`BwTileView.updateView() empty skinId.`);
+                return undefined;
+            }
+
+            const hasFog = data.hasFog;
+            if (hasFog == null) {
+                Logger.error(`BwTileView.updateView() empty hasFog.`);
+                return undefined;
+            }
+
+            const tileData = data.tileData;
+            if (tileData == null) {
+                Logger.error(`BwTileView.updateView() empty tileData.`);
+                return undefined;
+            }
+
+            const imgObject = this.getImgObject();
+            const imgBase   = this.getImgBase();
+            const version   = User.UserModel.getSelfSettingsTextureVersion();
+            const tickCount = TimeModel.getTileAnimationTickCount();
+
+            const objectType = tileData.objectType;
+            if (objectType == null) {
+                Logger.error(`BwTileView.updateView() empty objectType.`);
+                imgObject.visible = false;
+            } else if (objectType === TileObjectType.Empty) {
+                imgObject.visible = false;
+            } else {
+                imgObject.visible   = true;
+                imgObject.source    = CommonModel.getCachedTileObjectImageSource({
+                    version,
+                    skinId      : ((hasFog) && (objectType !== TileObjectType.Headquarters)) ? CommonConstants.UnitAndTileNeutralSkinId : skinId,
+                    shapeId     : tileData.objectShapeId || 0,
+                    objectType,
+                    isDark      : hasFog,
+                    tickCount,
+                });
+            }
+
+            const baseType = tileData.baseType;
+            if (baseType == null) {
+                Logger.error(`BwTileView.updateView() empty baseType.`);
+                imgBase.visible = false;
+            } else if (baseType === TileBaseType.Empty) {
+                imgBase.visible = false;
+            } else {
+                imgBase.visible = true;
+                imgBase.source  = CommonModel.getCachedTileBaseImageSource({
+                    version,
+                    skinId      : CommonConstants.UnitAndTileNeutralSkinId,
+                    shapeId     : tileData.baseShapeId || 0,
+                    baseType,
+                    isDark      : hasFog,
+                    tickCount,
+                });
+            }
         }
 
         public getImgObject(): GameUi.UiImage {
@@ -42,35 +109,6 @@ namespace TinyWars.BaseWar {
         };
         public getImgBase(): GameUi.UiImage {
             return this._imgBase;
-        }
-
-        protected _getTile(): BwTile {
-            return this._tile;
-        }
-
-        public updateOnAnimationTick(): void {
-            this._updateImages();
-        }
-
-        protected _updateImages(): void {
-            const tile      = this._tile;
-            const tickCount = TimeModel.getTileAnimationTickCount();
-
-            const objectId = tile.getObjectViewId();
-            if (objectId == null) {
-                this._imgObject.visible = false;
-            } else {
-                this._imgObject.visible = true;
-                this._imgObject.source  = ConfigManager.getTileObjectImageSource(objectId, tickCount, this._hasFog);
-            }
-
-            const baseId = tile.getBaseViewId();
-            if (baseId == null) {
-                this._imgBase.visible = false;
-            } else {
-                this._imgBase.visible = true;
-                this._imgBase.source  = ConfigManager.getTileBaseImageSource(baseId, tickCount, this._hasFog);
-            }
         }
     }
 }

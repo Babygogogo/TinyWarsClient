@@ -12,8 +12,9 @@ namespace TinyWars.SingleCustomWar {
 
         private _openData   : number;
 
-        private _listCo     : GameUi.UiScrollList;
-        private _btnBack    : GameUi.UiButton;
+        private _labelCommanderInfo : GameUi.UiLabel;
+        private _listCo             : GameUi.UiScrollList;
+        private _btnBack            : GameUi.UiButton;
 
         private _scrCoInfo                      : eui.Scroller;
         private _imgCoPortrait                  : GameUi.UiImage;
@@ -72,12 +73,15 @@ namespace TinyWars.SingleCustomWar {
             super();
 
             this._setAutoAdjustHeightEnabled();
-            this.skinName = "resource/skins/multiCustomWar/McwCoListPanel.exml";
+            this._setTouchMaskEnabled();
+            this._callbackForTouchMask = () => this.close();
+            this.skinName = "resource/skins/singleCustomWar/ScwCoListPanel.exml";
         }
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyScwPlannerStateChanged },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyScwPlannerStateChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -88,6 +92,8 @@ namespace TinyWars.SingleCustomWar {
             this._listScop.setItemRenderer(SkillRenderer);
         }
         protected _onOpened(): void {
+            this._updateComponentsForLanguage();
+
             this._war           = ScwModel.getWar();
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
@@ -130,6 +136,10 @@ namespace TinyWars.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private _onNotifyScwPlannerStateChanged(e: egret.Event): void {
             const war = this._war;
             if (war.checkIsHumanInTurn()) {
@@ -140,8 +150,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            ScwCoListPanel.hide();
-            ScwWarMenuPanel.show();
+            this.close();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -189,7 +198,7 @@ namespace TinyWars.SingleCustomWar {
 
                 const player    = data.player;
                 const coId      = player.getCoId();
-                const cfg       = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
+                const cfg       = coId != null ? Utility.ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
                 if (!cfg) {
                     this._imgCoPortrait.source          = "";
                     this._labelName.text                = "--";
@@ -281,6 +290,11 @@ namespace TinyWars.SingleCustomWar {
                 this._labelHelp.setRichText(Lang.getRichText(Lang.RichType.R0004));
             }
         }
+
+        private _updateComponentsForLanguage(): void {
+            this._labelCommanderInfo.text   = Lang.getText(Lang.Type.B0240);
+            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+        }
     }
 
     type DataForCoRenderer = {
@@ -311,7 +325,7 @@ namespace TinyWars.SingleCustomWar {
                 this._labelName.text    = Lang.getText(Lang.Type.B0143);
             } else {
                 const coId              = player.getCoId();
-                const cfg               = coId != null ? ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
+                const cfg               = coId != null ? Utility.ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
                 this._labelName.text    = cfg ? cfg.name : `(${Lang.getText(Lang.Type.B0001)}CO)`;
             }
         }
@@ -336,7 +350,7 @@ namespace TinyWars.SingleCustomWar {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getNewestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
         }
     }
 }

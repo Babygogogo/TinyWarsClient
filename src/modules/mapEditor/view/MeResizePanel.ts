@@ -76,7 +76,7 @@ namespace TinyWars.MapEditor {
             this.close();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
             const width         = this._newWidth;
             const height        = this._newHeight;
             const gridsCount    = width * height;
@@ -86,9 +86,13 @@ namespace TinyWars.MapEditor {
                 const war       = MeManager.getWar();
                 const currSize  = war.getTileMap().getMapSize();
                 if ((width !== currSize.width) || (height !== currSize.height)) {
-                    war.stopRunning()
-                        .init(MeUtility.resizeMap(war.getField().serialize(), width, height), war.getSlotIndex(), war.getConfigVersion(), war.getIsReview())
-                        .startRunning()
+                    war.stopRunning();
+                    await war.initWithMapEditorData({
+                        mapRawData  : MeUtility.resizeMap(war.serializeForMap(), width, height),
+                        slotIndex   : war.getMapSlotIndex(),
+                    });
+                    war.setIsMapModified(true);
+                    war.startRunning()
                         .startRunningView();
                 }
 
@@ -128,7 +132,7 @@ namespace TinyWars.MapEditor {
             this._labelCurrSizeTitle.text   = Lang.getText(Lang.Type.B0291);
             this._labelNewSizeTitle.text    = Lang.getText(Lang.Type.B0292);
             this._labelTips1.text           = Lang.getText(Lang.Type.A0086);
-            this._labelTips2.text           = Lang.getFormattedText(Lang.Type.F0023, ConfigManager.MAP_CONSTANTS.MaxGridsCount);
+            this._labelTips2.text           = Lang.getFormattedText(Lang.Type.F0023, Utility.ConfigManager.MAP_CONSTANTS.MaxGridsCount);
         }
     }
 }

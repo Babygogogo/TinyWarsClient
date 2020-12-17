@@ -4,20 +4,23 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import Helpers          = Utility.Helpers;
     import DamageCalculator = Utility.DamageCalculator;
+    import ConfigManager    = Utility.ConfigManager;
     import BwHelpers        = BaseWar.BwHelpers;
-    import BwUnit           = BaseWar.BwUnit;
     import WarAction        = Types.RawWarActionContainer;
+    import WeaponType       = Types.WeaponType;
     import GridIndex        = Types.GridIndex;
     import MovableArea      = Types.MovableArea;
     import MovePathNode     = Types.MovePathNode;
     import TileType         = Types.TileType;
     import UnitType         = Types.UnitType;
     import UnitActionState  = Types.UnitActionState;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     type AttackInfo = {
         baseDamage      : number;
         normalizedHp    : number;
         fuel            : number;
+        luckValue       : number;
     }
     type ScoreAndAction = {
         score   : number;
@@ -69,6 +72,242 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             [UnitType.Cruiser]      : 300,
             [UnitType.Lander]       : null,
             [UnitType.Gunboat]      : 0,
+        },
+    };
+    const _DAMAGE_SCORE_SCALERS: { [attackerType: number]: { [defenderType: number]: number } } = {
+        [UnitType.Infantry]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Mech]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Bike]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Recon]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Flare]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.AntiAir]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Tank]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.MediumTank]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.WarTank]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Artillery]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.AntiTank]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Rockets]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Missiles]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Rig]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Fighter]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Bomber]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Duster]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.BattleCopter]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.TransportCopter]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Seaplane]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Battleship]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Carrier]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Submarine]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Cruiser]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Lander]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
+        },
+        [UnitType.Gunboat]: {
+            [UnitType.Infantry]:    1,      [UnitType.Mech]:            1,      [UnitType.Bike]:            1,      [UnitType.Recon]:       1,
+            [UnitType.Flare]:       1,      [UnitType.AntiAir]:         1,      [UnitType.Tank]:            1,      [UnitType.MediumTank]:  1,
+            [UnitType.WarTank]:     1,      [UnitType.Artillery]:       1,      [UnitType.AntiTank]:        1,      [UnitType.Rockets]:     1,
+            [UnitType.Missiles]:    1,      [UnitType.Rig]:             1,      [UnitType.Fighter]:         1,      [UnitType.Bomber]:      1,
+            [UnitType.Duster]:      1,      [UnitType.BattleCopter]:    1,      [UnitType.TransportCopter]: 1,      [UnitType.Seaplane]:    1,
+            [UnitType.Battleship]:  1,      [UnitType.Carrier]:         1,      [UnitType.Submarine]:       1,      [UnitType.Cruiser]:     1,
+            [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
         },
     };
 
@@ -156,10 +395,6 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         }
     }
 
-    function _checkIsCoUnit(unit: BwUnit): boolean {    // DONE
-        return _playerManager.getPlayer(unit.getPlayerIndex()).getCoUnitId() === unit.getUnitId();
-    }
-
     function _getBetterScoreAndAction(data1: ScoreAndAction | null, data2: ScoreAndAction | null): ScoreAndAction | null {  // DONE
         if (!data1) {
             return data2;
@@ -175,7 +410,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         if (!length) {
             return null;
         } else {
-            return arr.splice(Math.floor(_war.getRandomNumberGenerator()() * length), 1)[0];
+            return arr.splice(Math.floor(_war.getRandomNumber() * length), 1)[0];
         }
     }
 
@@ -247,7 +482,8 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     function _getAttackBonusForAllPlayers(): Map<number, number> {  // DONE
         const bonuses = new Map<number, number>();
         _playerManager.forEachPlayer(false, player => {
-            bonuses.set(player.getPlayerIndex(), _war.getSettingsAttackPowerModifier());
+            const playerIndex = player.getPlayerIndex();
+            bonuses.set(playerIndex, _war.getSettingsAttackPowerModifier(playerIndex));
         });
 
         _tileMap.forEachTile(tile => {
@@ -274,15 +510,21 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     }
 
     function _getAttackInfo(attacker: ScwUnit, target: ScwUnit): AttackInfo {   // DONE
-        const gridIndex = attacker.getGridIndex();
+        const gridIndex             = attacker.getGridIndex();
+        const attackerPlayerIndex   = attacker.getPlayerIndex();
+        const luckValue             = (_war.getSettingsLuckLowerLimit(attackerPlayerIndex) + _war.getSettingsLuckUpperLimit(attackerPlayerIndex)) / 2;
+        const targetArmorType       = target.getArmorType();
+        const baseDamageWithAmmo    =  attacker.getCfgBaseDamage(targetArmorType, attacker.checkHasPrimaryWeapon() ? WeaponType.Primary : WeaponType.Secondary);
+
         if (attacker.getLoaderUnitId() == null) {
             const tile          = _tileMap.getTile(gridIndex);
             const repairInfo    = tile.getRepairHpAndCostForUnit(attacker);
             if (repairInfo) {
                 return {
-                    baseDamage  : attacker.getCfgBaseDamage(target.getArmorType()),
-                    normalizedHp: Math.floor((attacker.getCurrentHp() + repairInfo.hp) / ConfigManager.UNIT_HP_NORMALIZER),
+                    baseDamage  : baseDamageWithAmmo,
+                    normalizedHp: Math.floor((attacker.getCurrentHp() + repairInfo.hp) / CommonConstants.UnitHpNormalizer),
                     fuel        : attacker.getMaxFuel(),
+                    luckValue,
                 };
             } else {
                 if ((tile.checkCanSupplyUnit(attacker))                                     ||
@@ -292,15 +534,17 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                     }))
                 ) {
                     return {
-                        baseDamage  : attacker.getCfgBaseDamage(target.getArmorType()),
+                        baseDamage  : baseDamageWithAmmo,
                         normalizedHp: attacker.getNormalizedCurrentHp(),
                         fuel        : attacker.getMaxFuel(),
+                        luckValue,
                     };
                 } else {
                     return {
-                        baseDamage  : attacker.getBaseDamage(target.getArmorType()),
+                        baseDamage  : attacker.getBaseDamage(targetArmorType),
                         normalizedHp: attacker.getNormalizedCurrentHp(),
                         fuel        : attacker.getCurrentFuel(),
+                        luckValue,
                     };
                 }
             }
@@ -315,27 +559,31 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                     baseDamage  : null,
                     normalizedHp: attacker.getNormalizedCurrentHp(),
                     fuel        : attacker.getCurrentFuel(),
+                    luckValue,
                 };
             } else {
                 const repairInfo = loader.getRepairHpAndCostForLoadedUnit(attacker);
                 if (repairInfo) {
                     return {
-                        baseDamage  : attacker.getCfgBaseDamage(target.getArmorType()),
-                        normalizedHp: Math.floor((attacker.getCurrentHp() + repairInfo.hp) / ConfigManager.UNIT_HP_NORMALIZER),
+                        baseDamage  : baseDamageWithAmmo,
+                        normalizedHp: Math.floor((attacker.getCurrentHp() + repairInfo.hp) / CommonConstants.UnitHpNormalizer),
                         fuel        : attacker.getMaxFuel(),
+                        luckValue,
                     };
                 } else {
                     if (loader.checkCanSupplyLoadedUnit()) {
                         return {
-                            baseDamage  : attacker.getCfgBaseDamage(target.getArmorType()),
+                            baseDamage  : baseDamageWithAmmo,
                             normalizedHp: attacker.getNormalizedCurrentHp(),
                             fuel        : attacker.getMaxFuel(),
+                            luckValue,
                         };
                     } else {
                         return {
-                            baseDamage  : attacker.getBaseDamage(target.getArmorType()),
+                            baseDamage  : attacker.getBaseDamage(targetArmorType),
                             normalizedHp: attacker.getNormalizedCurrentHp(),
                             fuel        : attacker.getCurrentFuel(),
+                            luckValue,
                         }
                     }
                 }
@@ -356,7 +604,6 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const attackBonuses     = _getAttackBonusForAllPlayers();
         const defenseBonus      = _getDefenseBonusForTargetUnit(targetUnit);
         const targetTeamIndex   = targetUnit.getTeamIndex();
-        const luckValue         = (_war.getSettingsLuckLowerLimit() + _war.getSettingsLuckUpperLimit()) / 2;
         _unitMap.forEachUnit(async (attacker: ScwUnit) => {
             await _checkAndCallLater();
 
@@ -370,7 +617,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                 return;
             }
 
-            const { baseDamage, normalizedHp, fuel } = _getAttackInfo(attacker, targetUnit);
+            const { baseDamage, normalizedHp, fuel, luckValue } = _getAttackInfo(attacker, targetUnit);
             if (baseDamage == null) {
                 return;
             }
@@ -413,7 +660,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                                 (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
                                 * normalizedHp
                                 * _getDefenseMultiplierWithBonus(defenseBonus + _tileMap.getTile({ x, y }).getDefenseAmountForUnit(targetUnit))
-                                / ConfigManager.UNIT_HP_NORMALIZER
+                                / CommonConstants.UnitHpNormalizer
                             );
                             if (!map[x][y]) {
                                 map[x][y] = {
@@ -490,7 +737,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
                 (unit.getActionState() === UnitActionState.Idle)            &&
-                (unit.checkCanCapture())
+                (unit.checkIsCapturer())
             ) {
                 units.push(unit);
             }
@@ -506,7 +753,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
         _unitMap.forEachUnitOnMap((unit: ScwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)                                                   &&
-                (unit.getActionState() === UnitActionState.Idle)                                                            &&
+                (unit.getActionState() === UnitActionState.Idle)                                                &&
                 (unit.getMinAttackRange())                                                                      &&
                 (ConfigManager.checkIsUnitTypeInCategory(_configVersion, unit.getType(), Types.UnitCategory.Air))
             ) {
@@ -574,7 +821,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const maxDamage     = Math.min(data ? data.max : 0, hp);
         const totalDamage   = Math.min(data ? data.total : 0, hp);
         return - ((maxDamage + (maxDamage >= hp ? 30 : 0)) )
-            * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio) * (_checkIsCoUnit(unit) ? 2 : 1); // ADJUSTABLE
+            * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1); // ADJUSTABLE
     }
 
     async function _getScoreForPosition(unit: ScwUnit, gridIndex: GridIndex, damageMap: DamageMapData[][], scoreMapForDistance: number[][] | null): Promise<number> {  // DONE
@@ -692,12 +939,15 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             return Math.min(attackDamage, targetTile.getCurrentHp());                                   // ADJUSTABLE
         }
 
+        const attackerType  = unit.getType();
         const targetUnit    = _unitMap.getUnitOnMap(targetGridIndex);
         const targetHp      = targetUnit.getCurrentHp();
+        const targetType    = targetUnit.getType();
         attackDamage        = Math.min(attackDamage, targetHp);
         let score           = (attackDamage + (attackDamage >= targetHp ? 20 : 0))
             * targetUnit.getProductionFinalCost() / 3000 * Math.max(1, _unitValueRatio)
-            * (_checkIsCoUnit(targetUnit) ? 2 : 1);                                                     // ADJUSTABLE
+            * (targetUnit.getHasLoadedCo() ? 2 : 1)
+            * (_DAMAGE_SCORE_SCALERS[attackerType][targetType] || 1);                                   // ADJUSTABLE
 
         if (targetUnit.getIsCapturingTile()) {
             score += targetTile.getCurrentCapturePoint() > targetUnit.getCaptureAmount() ? 20 : 200;    // ADJUSTABLE
@@ -715,7 +965,8 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             counterDamage       = Math.min(counterDamage, attackerHp);
             score               += - (counterDamage + (counterDamage >= attackerHp ? 20 : 0))
                 * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio)
-                * (_checkIsCoUnit(unit) ? 2 : 1);                                                       // ADJUSTABLE
+                * (unit.getHasLoadedCo() ? 2 : 1)
+                * (_DAMAGE_SCORE_SCALERS[targetType][attackerType] || 1);                               // ADJUSTABLE
         }
 
         return score;
@@ -782,10 +1033,10 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const playerIndexInTurn = _turnManager.getPlayerIndexInTurn();
         const targetUnit        = new ScwUnit();
         targetUnit.init({
-            viewId  : ConfigManager.getUnitViewId(unitType, playerIndexInTurn),
-            unitId  : 0,
-            gridX   : gridIndex.x,
-            gridY   : gridIndex.y,
+            unitId      : 0,
+            unitType,
+            gridIndex,
+            playerIndex : playerIndexInTurn,
         }, _configVersion);
         targetUnit.startRunning(_war);
 
@@ -885,16 +1136,23 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance(gridIndex, minRange, maxRange, _mapSize)) {
             const damages = DamageCalculator.getEstimatedBattleDamage(_war, pathNodes, launchUnitId, targetGridIndex);
             if (damages[0] != null) {
+                const isAttackUnit = _unitMap.getUnitOnMap(targetGridIndex) != null;
                 data = _getBetterScoreAndAction(
                     data,
-                {
-                    score   : await _getScoreForActionUnitAttack(unit, gridIndex, targetGridIndex, pathNodes, damages[0], damages[1]),
-                    action  : { UnitAttack: {
-                        path    : pathNodes,
-                        targetGridIndex,
-                        launchUnitId,
-                    } },
-                }
+                    {
+                        score   : await _getScoreForActionUnitAttack(unit, gridIndex, targetGridIndex, pathNodes, damages[0], damages[1]),
+                        action  : isAttackUnit
+                            ? { UnitAttackUnit: {
+                                path    : pathNodes,
+                                targetGridIndex,
+                                launchUnitId,
+                            } }
+                            : { UnitAttackTile: {
+                                path    : pathNodes,
+                                targetGridIndex,
+                                launchUnitId,
+                            }, },
+                    }
                 );
             }
         }
@@ -1080,8 +1338,6 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     async function _getMaxScoreAndActionPlayerProduceUnitWithGridIndex(gridIndex: GridIndex, idleFactoriesCount: number): Promise<ScoreAndAction | null> {  // DONE
         await _checkAndCallLater();
 
-        // TODO: take the unit production skills into account.
-
         let maxScore        : number;
         let targetUnitType  : number;
         for (const t in _PRODUCTION_CANDIDATES[_tileMap.getTile(gridIndex).getType()]) {
@@ -1100,7 +1356,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
                 score   : maxScore,
                 action  : { PlayerProduceUnit: {
                     unitType    : targetUnitType,
-                    unitHp      : ConfigManager.UNIT_MAX_HP,
+                    unitHp      : CommonConstants.UnitMaxHp,
                     gridIndex,
                 } },
             }
@@ -1171,7 +1427,13 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
 
         let scoreAndAction : ScoreAndAction;
         for (const unit of await _getCandidateUnitsForPhase1()) {
-            scoreAndAction = _getBetterScoreAndAction(scoreAndAction, await _getActionForMaxScoreWithCandidateUnit(unit));
+            const candidate = await _getActionForMaxScoreWithCandidateUnit(unit);
+            const action    = candidate ? candidate.action : null;
+            if ((action)                                            &&
+                ((action.UnitAttackUnit) || (action.UnitAttackTile))
+            ) {
+                scoreAndAction = _getBetterScoreAndAction(scoreAndAction, candidate);
+            }
         }
         if (scoreAndAction) {
             return scoreAndAction.action;
@@ -1304,7 +1566,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         (!action) && (action = await _getActionForPhase7());
         (!action) && (action = await _getActionForPhase8());
         (!action) && (action = await _getActionForPhase9());
-        action.actionId = _war.getNextActionId();
+        action.actionId = _war.getExecutedActionsCount();
 
         _clearVariables();
 

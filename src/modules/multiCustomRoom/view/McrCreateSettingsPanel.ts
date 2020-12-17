@@ -3,7 +3,6 @@ namespace TinyWars.MultiCustomRoom {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
-    import ConfirmPanel = Common.ConfirmPanel;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -45,7 +44,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SMcrCreateWar,      callback: this._onNotifySCreateCustomOnlineWar },
+                { type: Notify.Type.MsgMcrCreateRoom,     callback: this._onNotifySCreateCustomOnlineWar },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ];
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
@@ -78,23 +77,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const data      = McrModel.getCreateWarData();
-            const callback  = () => {
-                McrProxy.reqCreate(data);
+            const data = McrModel.Create.getData();
+            McrProxy.reqCreateRoom(data);
 
-                this._btnConfirm.enabled = false;
-                this._resetTimeoutForBtnConfirm();
-            }
-
-            if (data.coId != null) {
-                callback();
-            } else {
-                ConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
-                    content : `${Lang.getText(Lang.Type.A0050)}\n${Lang.getText(Lang.Type.A0051)}`,
-                    callback,
-                });
-            }
+            this._btnConfirm.enabled = false;
+            this._resetTimeoutForBtnConfirm();
         }
 
         private _onNotifySCreateCustomOnlineWar(e: egret.Event): void {
@@ -122,7 +109,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0155);
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0000);
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
             this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
         }

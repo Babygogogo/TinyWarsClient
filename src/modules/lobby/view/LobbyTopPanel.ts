@@ -1,18 +1,16 @@
 
 namespace TinyWars.Lobby {
     import UserModel    = User.UserModel;
-    import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
 
     export class LobbyTopPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = true;
+        protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: LobbyTopPanel;
 
+        private _group          : eui.Group;
         private _labelNickname  : GameUi.UiLabel;
-        private _labelRankScore : GameUi.UiLabel;
-        private _labelRankName  : GameUi.UiLabel;
         private _btnMyInfo      : GameUi.UiButton;
         private _btnChat        : GameUi.UiButton;
 
@@ -37,10 +35,14 @@ namespace TinyWars.Lobby {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.SLogin,                 callback: this._onNotifySLogin },
-                { type: Notify.Type.SLogout,                callback: this._onNotifySLogout },
-                { type: Notify.Type.SUserChangeNickname,    callback: this._onNotifySUserChangeNickname },
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgUserLogin,                   callback: this._onMsgUserLogin },
+                { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
+                { type: Notify.Type.MsgUserSetNickname,             callback: this._onMsgUserSetNickname },
+                { type: Notify.Type.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
+                { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
+                { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
+                { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessages },
             ];
             this._uiListeners = [
                 { ui: this._btnMyInfo,  callback: this._onTouchedBtnMyInfo },
@@ -49,23 +51,37 @@ namespace TinyWars.Lobby {
         }
 
         protected _onOpened(): void {
+            this._showOpenAnimation();
+
             this._updateView();
         }
 
-        private _onNotifySLogin(e: egret.Event): void {
+        private _onMsgUserLogin(e: egret.Event): void {
             this._updateView();
         }
 
-        private _onNotifySLogout(e: egret.Event): void {
+        private _onMsgUserLogout(e: egret.Event): void {
             LobbyTopPanel.hide();
         }
 
-        private _onNotifySUserChangeNickname(e: egret.Event): void {
+        private _onMsgUserSetNickname(e: egret.Event): void {
             this._updateLabelNickname();
         }
 
+        private _onMsgChatGetAllReadProgressList(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+        private _onMsgChatUpdateReadProgress(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+        private _onMsgChatGetAllMessages(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+        private _onMsgChatAddMessages(e: egret.Event): void {
+            this._updateBtnChat();
+        }
+
         private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateComponentsForLanguage();
         }
 
         private _onTouchedBtnMyInfo(e: egret.Event): void {
@@ -82,21 +98,25 @@ namespace TinyWars.Lobby {
             }
         }
 
+        private _showOpenAnimation(): void {
+            const group = this._group;
+            egret.Tween.removeTweens(group);
+            egret.Tween.get(group)
+                .set({ alpha: 0, top: -40 })
+                .to({ alpha: 1, top: 0 }, 200);
+        }
+
         private _updateView(): void {
-            this._updateComponentsForLanguage();
             this._updateLabelNickname();
+            this._updateBtnChat();
         }
 
-        private _updateComponentsForLanguage(): void {
-            const score                 = UserModel.getSelfRankScore();
-            this._labelRankScore.text   = `${Lang.getText(Lang.Type.B0060)}: ${score}`;
-            this._labelRankName.text    = ConfigManager.getRankName(ConfigManager.getNewestConfigVersion(), score);
-            this._btnMyInfo.label       = Lang.getText(Lang.Type.B0169);
-            this._btnChat.label         = Lang.getText(Lang.Type.B0383);
+        private async _updateLabelNickname(): Promise<void> {
+            this._labelNickname.text    = await UserModel.getSelfNickname();
         }
 
-        private _updateLabelNickname(): void {
-            this._labelNickname.text    = UserModel.getSelfNickname();
+        private _updateBtnChat(): void {
+            this._btnChat.setRedVisible(Chat.ChatModel.checkHasUnreadMessage());
         }
     }
 }

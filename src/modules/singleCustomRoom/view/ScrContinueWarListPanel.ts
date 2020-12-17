@@ -49,9 +49,9 @@ namespace TinyWars.SingleCustomRoom {
 
         protected _onFirstOpened(): void {
             this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.SScrContinueWarFailed,  callback: this._onNotifySScrContinueWarFailed },
-                { type: Notify.Type.SScrContinueWar,        callback: this._onNotifySScrContinueWar },
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgScrContinueWarFailed,    callback: this._onMsgScrContinueWarFailed },
+                { type: Notify.Type.MsgScrContinueWar,          callback: this._onMsgScrContinueWar },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -103,14 +103,17 @@ namespace TinyWars.SingleCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifySScrContinueWarFailed(e: egret.Event): void {
-            Common.BlockPanel.hide();
+        private _onMsgScrContinueWarFailed(e: egret.Event): void {
+            Common.CommonBlockPanel.hide();
         }
 
-        private _onNotifySScrContinueWar(e: egret.Event): void {
-            const data      = e.data as ProtoTypes.IS_ScrContinueWar;
-            const warData   = ProtoManager.decodeAsSerializedWar(data.encodedWar);
-            Utility.FlowManager.gotoSingleCustomWar(warData);
+        private _onMsgScrContinueWar(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgScrContinueWar.IS;
+            Utility.FlowManager.gotoSingleCustomWar({
+                slotIndex   : data.slotIndex,
+                slotComment : ProtoManager.decodeAsScrSaveSlotInfo(data.encodedSlot).slotComment,
+                warData     : ProtoManager.decodeAsSerialWar(data.encodedWar),
+            });
         }
 
         private _onTouchTapBtnBack(): void {
@@ -158,20 +161,19 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private async _showMap(index: number): Promise<void> {
-            const slotInfo      = this._dataForListWar[index].slotInfo;
-            const mapFileName   = slotInfo.mapFileName;
-            const zoomMap       = this._zoomMap;
-            const groupInfo     = this._groupInfo;
+            const slotInfo  = this._dataForListWar[index].slotInfo;
+            const mapId     = slotInfo.mapId;
+            const zoomMap   = this._zoomMap;
+            const groupInfo = this._groupInfo;
             zoomMap.removeAllContents();
 
-            if (!mapFileName) {
+            if (!mapId) {
                 this._labelNoPreview.text   = Lang.getText(Lang.Type.B0324);
                 groupInfo.visible           = false;
             } else {
-                const mapRawData            = await WarMapModel.getMapRawData(mapFileName);
-                const mapExtraData          = await WarMapModel.getExtraData(mapFileName);
-                this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInLanguage(mapFileName));
-                this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapExtraData.mapDesigner);
+                const mapRawData            = await WarMapModel.getRawData(mapId);
+                this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
                 this._labelNoPreview.text   = "";
 
                 groupInfo.visible   = true;
@@ -181,13 +183,12 @@ namespace TinyWars.SingleCustomRoom {
 
                 const tileMapView = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-                tileMapView.updateWithBaseViewIdArray(mapRawData.tileBases);
-                tileMapView.updateWithObjectViewIdArray(mapRawData.tileObjects);
+                tileMapView.updateWithTileDataList(mapRawData.tileDataList);
 
                 const unitMapView = new WarMap.WarMapUnitMapView();
                 unitMapView.initWithMapRawData(mapRawData);
 
-                const gridSize = ConfigManager.getGridSize();
+                const gridSize = Utility.ConfigManager.getGridSize();
                 zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
                 zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
                 zoomMap.addContent(tileMapView);
@@ -199,7 +200,7 @@ namespace TinyWars.SingleCustomRoom {
 
     type DataForWarRenderer = {
         index       : number;
-        slotInfo    : ProtoTypes.ISaveSlotInfo;
+        slotInfo    : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo;
         panel       : ScrContinueWarListPanel;
     }
 
@@ -224,13 +225,20 @@ namespace TinyWars.SingleCustomRoom {
             const slotInfo              = data.slotInfo;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelSlotIndex.text   = "" + slotInfo.slotIndex;
-            this._labelWarType.text     = Lang.getSinglePlayerWarTypeName(slotInfo.warType);
+            this._labelWarType.text     = Lang.getWarTypeName(slotInfo.warType);
 
-            const mapFileName = slotInfo.mapFileName;
-            if (!mapFileName) {
-                this._labelName.text = `(${Lang.getText(Lang.Type.B0321)})`;
+            const comment   = slotInfo.slotComment;
+            const labelName = this._labelName;
+            if (comment) {
+                labelName.text = comment;
             } else {
-                WarMapModel.getMapNameInLanguage(mapFileName).then(v => this._labelName.text = v);
+                const mapId = slotInfo.mapId;
+                if (mapId == null) {
+                    labelName.text = `(${Lang.getText(Lang.Type.B0321)})`;
+                } else {
+                    labelName.text = ``;
+                    WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v);
+                }
             }
         }
 
@@ -241,7 +249,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _onTouchTapBtnNext(): void {
             ScrProxy.reqContinueWar((this.data as DataForWarRenderer).slotInfo.slotIndex);
-            Common.BlockPanel.show({
+            Common.CommonBlockPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0021),
             });

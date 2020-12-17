@@ -4,85 +4,107 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
     import ActionCode   = Network.Codes;
     import ProtoTypes   = Utility.ProtoTypes;
     import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.S_ScrCreateWar,           callback: _onSScrCreateWar, },
-            { msgCode: ActionCode.S_ScrGetSaveSlotInfoList, callback: _onSScrGetSaveSlotInfoList, },
-            { msgCode: ActionCode.S_ScrContinueWar,         callback: _onSScrContinueWar, },
-            { msgCode: ActionCode.S_ScrSaveWar,             callback: _onSScrSaveWar, },
-            { msgCode: ActionCode.S_ScrCreateCustomWar,     callback: _onSScrCreateCustomWar },
+            { msgCode: ActionCode.MsgScrCreateWar,              callback: _onMsgScrCreateWar,           },
+            { msgCode: ActionCode.MsgScrGetSaveSlotInfoList,    callback: _onMsgScrGetSaveSlotInfoList, },
+            { msgCode: ActionCode.MsgScrContinueWar,            callback: _onMsgScrContinueWar,         },
+            { msgCode: ActionCode.MsgScrSaveWar,                callback: _onMsgScrSaveWar,             },
+            { msgCode: ActionCode.MsgScrCreateCustomWar,        callback: _onMsgScrCreateCustomWar      },
+            { msgCode: ActionCode.MsgScrDeleteWar,              callback: _onMsgScrDeleteWar            },
         ], ScrProxy);
     }
 
     export function reqScrCreateWar(param: DataForCreateWar): void {
         NetManager.send({
-            C_ScrCreateWar: param,
+            MsgScrCreateWar: { c: param },
         });
     }
-    function _onSScrCreateWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ScrCreateWar;
+    function _onMsgScrCreateWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgScrCreateWar.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SScrCreateWar, data);
+            Notify.dispatch(Notify.Type.MsgScrCreateWar, data);
         }
     }
 
     export function reqScrGetSaveSlotInfoList(): void {
         NetManager.send({
-            C_ScrGetSaveSlotInfoList: {},
+            MsgScrGetSaveSlotInfoList: { c: {} },
         });
     }
-    function _onSScrGetSaveSlotInfoList(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ScrGetSaveSlotInfoList;
+    function _onMsgScrGetSaveSlotInfoList(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgScrGetSaveSlotInfoList.IS;
         if (!data.errorCode) {
             ScrModel.setSaveSlotInfoList(data.infoList);
-            Notify.dispatch(Notify.Type.SScrGetSaveInfoList, data);
+            Notify.dispatch(Notify.Type.MsgScrGetSaveInfoList, data);
         }
     }
 
     export function reqContinueWar(slotIndex: number): void {
         NetManager.send({
-            C_ScrContinueWar: {
+            MsgScrContinueWar: { c: {
                 slotIndex,
-            },
+            }, },
         });
     }
-    function _onSScrContinueWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ScrContinueWar;
+    function _onMsgScrContinueWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgScrContinueWar.IS;
         if (data.errorCode) {
-            Notify.dispatch(Notify.Type.SScrContinueWarFailed, data);
+            Notify.dispatch(Notify.Type.MsgScrContinueWarFailed, data);
         } else {
-            Notify.dispatch(Notify.Type.SScrContinueWar, data);
+            Notify.dispatch(Notify.Type.MsgScrContinueWar, data);
         }
     }
 
     export function reqSaveWar(war: SingleCustomWar.ScwWar): void {
         NetManager.send({
-            C_ScrSaveWar: {
+            MsgScrSaveWar: { c: {
                 slotIndex   : war.getSaveSlotIndex(),
+                slotComment : war.getSaveSlotComment(),
                 warData     : war.serialize(),
-            },
+            }, },
         });
     }
-    function _onSScrSaveWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ScrSaveWar;
+    function _onMsgScrSaveWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgScrSaveWar.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SScrSaveWar, data);
+            Notify.dispatch(Notify.Type.MsgScrSaveWar, data);
         }
     }
 
-    export function reqScrCreateCustomWar(warData: Types.SerializedWar): void {
+    export function reqScrCreateCustomWar({ slotIndex, slotComment, warData }: {
+        slotIndex   : number;
+        slotComment : string | null | undefined;
+        warData     : ProtoTypes.WarSerialization.ISerialWar;
+    }): void {
         NetManager.send({
-            C_ScrCreateCustomWar: {
+            MsgScrCreateCustomWar: { c: {
+                slotIndex,
+                slotComment,
                 warData,
-            },
+            }, },
         });
     }
-    function _onSScrCreateCustomWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.IS_ScrCreateCustomWar;
+    function _onMsgScrCreateCustomWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.SScrCreateCustomWar, data);
+            Notify.dispatch(Notify.Type.MsgScrCreateCustomWar, data);
+        }
+    }
+
+    export function reqScrDeleteWar(slotIndex: number): void {
+        NetManager.send({
+            MsgScrDeleteWar: { c: {
+                slotIndex,
+            } },
+        })
+    }
+    function _onMsgScrDeleteWar(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgScrDeleteWar.IS;
+        if (!data.errorCode) {
+            ScrModel.deleteSaveSlot(data.slotIndex);
+            Notify.dispatch(Notify.Type.MsgScrDeleteWar, data);
         }
     }
 }

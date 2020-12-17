@@ -22,7 +22,7 @@ namespace TinyWars.SingleCustomWar {
                     con.visible = false;
 
                 } else if (state === ActionPlannerState.MakingMovePath) {
-                    const war                           = cursor.getWar();
+                    const war                           = cursor.getWar() as ScwWar;
                     const focusUnitLoaded               = actionPlanner.getFocusUnitLoaded();
                     const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
                         war,
@@ -37,13 +37,14 @@ namespace TinyWars.SingleCustomWar {
                         const target = war.getUnitMap().getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
                         labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${target.getCurrentHp()}\n`
                             + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${(actionPlanner.getFocusUnit()).getCurrentHp()}`;
+                        this._updatePositionForConForDamage();
                     }
 
                 } else if (state === ActionPlannerState.ChoosingAction) {
                     con.visible = false;
 
                 } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                    const war                           = cursor.getWar();
+                    const war                           = cursor.getWar() as ScwWar;
                     const focusUnitLoaded               = actionPlanner.getFocusUnitLoaded();
                     const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
                         war,
@@ -58,6 +59,7 @@ namespace TinyWars.SingleCustomWar {
                         const target        = war.getUnitMap().getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
                         labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${target.getCurrentHp()}\n`
                             + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${(actionPlanner.getFocusUnit()).getCurrentHp()}`;
+                        this._updatePositionForConForDamage();
                     }
 
                 } else if (state === ActionPlannerState.ChoosingDropDestination) {

@@ -3,8 +3,6 @@ namespace TinyWars.MultiCustomRoom {
     import ProtoTypes   = Utility.ProtoTypes;
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
-    import Helpers      = Utility.Helpers;
-    import Types        = Utility.Types;
 
     export class McrWatchHandleRequestDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -21,10 +19,10 @@ namespace TinyWars.MultiCustomRoom {
         private _btnConfirm             : GameUi.UiButton;
         private _btnCancel              : GameUi.UiButton;
 
-        private _openData           : ProtoTypes.IMcwWatchInfo;
+        private _openData           : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
         private _dataForListPlayer  : DataForRequesterRenderer[];
 
-        public static show(warInfo: ProtoTypes.IMcwWatchInfo): void {
+        public static show(warInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo): void {
             if (!McrWatchHandleRequestDetailPanel._instance) {
                 McrWatchHandleRequestDetailPanel._instance = new McrWatchHandleRequestDetailPanel();
             }
@@ -91,7 +89,7 @@ namespace TinyWars.MultiCustomRoom {
                     declineUserIds.push(data.userId);
                 }
             }
-            McrProxy.reqWatchHandleRequest(this._openData.mcwDetail.id, acceptUserIds, declineUserIds);
+            MultiPlayerWar.MpwProxy.reqWatchHandleRequest(this._openData.warInfo.warId, acceptUserIds, declineUserIds);
             this.close();
         }
 
@@ -114,17 +112,17 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _generateDataForListPlayer(): DataForRequesterRenderer[] {
-            const openData  = this._openData;
-            const warInfo   = openData.mcwDetail;
-            const dataList  : DataForRequesterRenderer[] = [];
+            const openData          = this._openData;
+            const warInfo           = openData.warInfo;
+            const playerInfoList    = warInfo.playerInfoList;
+            const dataList          : DataForRequesterRenderer[] = [];
             for (const info of this._openData.requesterInfos) {
                 const userId = info.userId;
                 dataList.push({
                     panel           : this,
-                    nickname        : info.nickname,
                     userId,
                     isWatchingOthers: !!info.isRequestingOthers || !!info.isWatchingOthers,
-                    isOpponent      : (warInfo.p1UserId === userId) || (warInfo.p2UserId === userId) || (warInfo.p3UserId === userId) || (warInfo.p4UserId === userId),
+                    isOpponent      : playerInfoList.some(v => v.userId === userId),
                     isAccept        : false,
                 });
             }
@@ -135,7 +133,6 @@ namespace TinyWars.MultiCustomRoom {
 
     type DataForRequesterRenderer = {
         panel           : McrWatchHandleRequestDetailPanel;
-        nickname        : string;
         userId          : number;
         isWatchingOthers: boolean;
         isOpponent      : boolean;
@@ -153,11 +150,11 @@ namespace TinyWars.MultiCustomRoom {
             super.dataChanged();
 
             const data                          = this.data as DataForRequesterRenderer;
-            this._labelName.text                = data.nickname;
             this._labelIsOpponent.text          = data.isOpponent ? Lang.getText(Lang.Type.B0012) : "";
             this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(Lang.Type.B0012) : "";
             this._imgAccept.visible             = data.isAccept;
             this._imgDecline.visible            = !data.isAccept;
+            User.UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name);
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {

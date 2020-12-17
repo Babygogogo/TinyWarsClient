@@ -1,7 +1,10 @@
 
 namespace TinyWars.MapEditor {
-    import Notify   = Utility.Notify;
-    import Lang     = Utility.Lang;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import ConfigManager    = Utility.ConfigManager;
+    import Types            = Utility.Types;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     const MAX_RECENT_COUNT = 10;
 
@@ -63,12 +66,16 @@ namespace TinyWars.MapEditor {
             this._listRecent.clear();
         }
 
-        public updateOnChooseUnit(unitViewId: number): void {
+        public updateOnChooseUnit(data: DataForDrawUnit): void {
             const dataList      = this._dataListForRecent;
-            const filteredList  = dataList.filter(v => v.unitViewId !== unitViewId);
+            const filteredList  = dataList.filter(v => {
+                const oldData = v.dataForDrawUnit;
+                return (oldData.playerIndex != data.playerIndex)
+                    || (oldData.unitType != data.unitType);
+            });
             dataList.length     = 0;
             dataList[0]         = {
-                unitViewId,
+                dataForDrawUnit: data,
                 panel   : this,
             };
             for (const v of filteredList) {
@@ -105,22 +112,25 @@ namespace TinyWars.MapEditor {
         }
 
         private _createDataForListUnit(): DataForCategoryRenderer[] {
-            const mapping = new Map<number, number[]>();
-            ConfigManager.forEachUnitTypeAndPlayerIndex((value, unitViewId) => {
-                const playerIndex = value.playerIndex;
-                if (unitViewId !== 0) {
-                    if (mapping.has(playerIndex)) {
-                        mapping.get(playerIndex).push(unitViewId);
-                    } else {
-                        mapping.set(playerIndex, [unitViewId]);
+            const mapping = new Map<number, DataForDrawUnit[]>();
+            for (const unitType of ConfigManager.getUnitTypesByCategory(ConfigManager.getLatestConfigVersion(), Types.UnitCategory.All)) {
+                for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+                    if (!mapping.has(playerIndex)) {
+                        mapping.set(playerIndex, []);
                     }
+
+                    mapping.get(playerIndex).push({
+                        playerIndex,
+                        unitType,
+                    });
                 }
-            });
+            }
+
             const dataList: DataForCategoryRenderer[] = [];
-            for (const [, unitViewIdList] of mapping) {
+            for (const [, dataListForDrawUnit] of mapping) {
                 dataList.push({
-                    unitViewIdList,
-                    panel   : this,
+                    dataListForDrawUnit,
+                    panel               : this,
                 });
             }
 
@@ -140,8 +150,8 @@ namespace TinyWars.MapEditor {
     }
 
     type DataForCategoryRenderer = {
-        unitViewIdList  : number[];
-        panel           : MeChooseUnitPanel;
+        dataListForDrawUnit : DataForDrawUnit[];
+        panel               : MeChooseUnitPanel;
     }
 
     class CategoryRenderer extends eui.ItemRenderer {
@@ -158,13 +168,13 @@ namespace TinyWars.MapEditor {
             super.dataChanged();
 
             const data              = this.data as DataForCategoryRenderer;
-            const unitViewIdList    = data.unitViewIdList;
+            const unitViewIdList    = data.dataListForDrawUnit;
             const dataListForUnit   : DataForUnitRenderer[] = [];
             const panel             = data.panel;
             for (const unitViewId of unitViewIdList) {
                 dataListForUnit.push({
                     panel,
-                    unitViewId,
+                    dataForDrawUnit: unitViewId,
                 });
             }
             this._listUnit.bindData(dataListForUnit);
@@ -180,8 +190,8 @@ namespace TinyWars.MapEditor {
     }
 
     type DataForUnitRenderer = {
-        unitViewId  : number;
-        panel       : MeChooseUnitPanel;
+        dataForDrawUnit : DataForDrawUnit;
+        panel           : MeChooseUnitPanel;
     }
 
     class UnitRenderer extends eui.ItemRenderer {
@@ -205,23 +215,30 @@ namespace TinyWars.MapEditor {
 
         protected dataChanged(): void {
             const data              = this.data as DataForUnitRenderer;
-            this._labelName.text    = Lang.getUnitName(ConfigManager.getUnitTypeAndPlayerIndex(data.unitViewId).unitType);
-            this._unitView.init(new MeUnit().init({
-                gridX   : 0,
-                gridY   : 0,
-                viewId  : data.unitViewId,
-                unitId  : 0,
-            }, MeManager.getWar().getConfigVersion()));
-            this._unitView.startRunningView();
+            const dataForDrawUnit   = data.dataForDrawUnit;
+            const unitType          = dataForDrawUnit.unitType;
+            const war               = MeManager.getWar();
+            this._labelName.text    = Lang.getUnitName(unitType);
+
+            const unitView  = this._unitView;
+            const unit      = new MeUnit().init({
+                gridIndex   : { x: 0, y: 0 },
+                unitId      : 0,
+                unitType,
+                playerIndex : dataForDrawUnit.playerIndex,
+            }, war.getConfigVersion());
+            unit.startRunning(war);
+            unitView.init(unit);
+            unitView.startRunningView();
         }
 
         public onItemTapEvent(): void {
-            const data          = this.data as DataForUnitRenderer;
-            const panel         = data.panel;
-            const unitViewId    = data.unitViewId;
-            panel.updateOnChooseUnit(unitViewId);
+            const data              = this.data as DataForUnitRenderer;
+            const panel             = data.panel;
+            const dataForDrawUnit   = data.dataForDrawUnit;
+            panel.updateOnChooseUnit(dataForDrawUnit);
             panel.close();
-            MeManager.getWar().getDrawer().setModeDrawUnit(unitViewId);
+            MeManager.getWar().getDrawer().setModeDrawUnit(dataForDrawUnit);
         }
     }
 }

@@ -3,7 +3,14 @@ namespace TinyWars.BaseWar {
     import Types                    = Utility.Types;
     import Helpers                  = Utility.Helpers;
     import GridIndexHelpers         = Utility.GridIndexHelpers;
+    import Logger                   = Utility.Logger;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import VisibilityHelpers        = Utility.VisibilityHelpers;
     import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
+    import GridIndex                = Types.GridIndex;
+    import WarSerialization         = ProtoTypes.WarSerialization;
+    import ISerialUnitMap           = WarSerialization.ISerialUnitMap;
+    import ISerialUnit              = WarSerialization.ISerialUnit;
 
     export abstract class BwUnitMap {
         private _war            : BwWar;
@@ -16,107 +23,65 @@ namespace TinyWars.BaseWar {
         private _view   : BwUnitMapView;
 
         protected abstract _getViewClass(): new () => BwUnitMapView;
-        protected abstract _getBwUnitClass(): new () => BwUnit;
+        public abstract getUnitClass(): new () => BwUnit;
 
-        public async init(
-            data                    : Types.SerializedUnitMap | null | undefined,
+        public init(
+            data                    : ISerialUnitMap,
             configVersion           : string,
-            mapFileName             : string | null | undefined,
             mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
-        ): Promise<BwUnitMap> {
-            this._configVersion = configVersion;
-            if (data) {
-                await this._initWithSerializedData(configVersion, mapSizeAndMaxPlayerIndex, data);
-            } else {
-                await this._initWithoutSerializedData(configVersion, mapSizeAndMaxPlayerIndex, mapFileName);
+        ): BwUnitMap | undefined {
+            const nextUnitId = data.nextUnitId;
+            if (nextUnitId == null) {
+                Logger.error(`BwUnitMap.init() empty nextUnitId.`);
+                return undefined;
             }
 
-            this._view = this._view || new (this._getViewClass())();
-            this._view.init(this);
-
-            return this;
-        }
-        private async _initWithSerializedData(
-            configVersion           : string,
-            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
-            data                    : Types.SerializedUnitMap
-        ): Promise<BwUnitMap> {
-            const { mapWidth, mapHeight }   = mapSizeAndMaxPlayerIndex;
-            const unitDataList              = data.units;
-            const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
-            const loadedUnits               = new Map<number, BwUnit>();
-            if (unitDataList) {
-                for (const unitData of unitDataList) {
-                    const unit = new (this._getBwUnitClass())().init(unitData, configVersion);
-                    if (unit.getLoaderUnitId() == null) {
-                        map[unit.getGridX()][unit.getGridY()] = unit;
-                    } else {
-                        loadedUnits.set(unit.getUnitId(), unit);
-                    }
-                }
-            }
-
-            this._map           = map;
-            this._loadedUnits   = loadedUnits;
-            this._setMapSize(mapWidth, mapHeight);
-            this.setNextUnitId(data.nextUnitId!);
-
-            return this;
-        }
-        private async _initWithoutSerializedData(
-            configVersion           : string,
-            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
-            mapFileName             : string
-        ): Promise<BwUnitMap> {
-            const mapRawData                = await WarMap.WarMapModel.getMapRawData(mapFileName);
             const { mapWidth, mapHeight }   = mapSizeAndMaxPlayerIndex;
             const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
             const loadedUnits               = new Map<number, BwUnit>();
-
-            const unitViewIds = mapRawData.units;
-            if (unitViewIds) {
-                let nextUnitId = 0;
-                for (let x = 0; x < mapWidth; ++x) {
-                    for (let y = 0; y < mapHeight; ++y) {
-                        const viewId = unitViewIds[x + y * mapWidth];
-                        if (viewId !== 0) {
-                            map[x][y] = new (this._getBwUnitClass())().init({
-                                gridX   : x,
-                                gridY   : y,
-                                viewId  : viewId,
-                                unitId  : nextUnitId,
-                            }, configVersion);
-                            ++nextUnitId;
-                        }
-                    }
+            for (const unitData of data.units || []) {
+                const unit = new (this.getUnitClass())().init(unitData, configVersion);
+                if (!unit) {
+                    Logger.error(`BwUnitMap.init() failed to create a unit! unitData: ${JSON.stringify(unitData)}`);
+                    return undefined;
                 }
-                this.setNextUnitId(nextUnitId);
 
-            } else {
-                const unitDataList = mapRawData.unitDataList;
-                if (unitDataList) {
-                    let nextUnitId = 0;
-                    for (const unitData of unitDataList) {
-                        const unit  = new (this._getBwUnitClass())().init(unitData as Types.SerializedUnit, configVersion);
-                        nextUnitId  = Math.max(nextUnitId, unitData.unitId! + 1);
-                        if (unit.getLoaderUnitId() == null) {
-                            map[unit.getGridX()][unit.getGridY()] = unit;
-                        } else {
-                            loadedUnits.set(unit.getUnitId(), unit);
-                        }
-                    }
-                    this.setNextUnitId(nextUnitId);
+                const gridIndex = unit.getGridIndex();
+                if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, { width: mapWidth, height: mapHeight }))) {
+                    Logger.error(`BwUnitMap.init() invalid gridIndex: ${JSON.stringify(gridIndex)}`);
+                    return undefined;
+                }
 
+                if (unit.getLoaderUnitId() == null) {
+                    map[gridIndex.x][gridIndex.y] = unit;
                 } else {
-                    this.setNextUnitId(0);
+                    const unitId = unit.getUnitId();
+                    if (unitId == null) {
+                        Logger.error(`BwUnitMap.init() empty unitId! unitData: ${JSON.stringify(unitData)}`);
+                        return;
+                    }
+                    loadedUnits.set(unitId, unit);
                 }
             }
 
-            this._map           = map;
-            this._loadedUnits   = loadedUnits;
+            this._setConfigVersion(configVersion);
+            this._setMap(map);
+            this._setLoadedUnits(loadedUnits);
             this._setMapSize(mapWidth, mapHeight);
+            this.setNextUnitId(nextUnitId);
+
+            const view = this.getView() || new (this._getViewClass())();
+            view.init(this);
+            this._setView(view);
 
             return this;
+        }
+        public async fastInit(
+            data                    : ISerialUnitMap | null | undefined,
+            configVersion           : string,
+            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
+        ): Promise<BwUnitMap> {
+            return this.init(data, configVersion, mapSizeAndMaxPlayerIndex);
         }
 
         public startRunning(war: BwWar): void {
@@ -134,9 +99,68 @@ namespace TinyWars.BaseWar {
             this.getView().stopRunningView();
         }
 
+        public serialize(): ISerialUnitMap | undefined {
+            const nextUnitId = this.getNextUnitId();
+            if (nextUnitId == null) {
+                Logger.error(`BwUnitMap.serialize() empty nextUnitId.`);
+                return undefined;
+            }
+
+            const units: ISerialUnit[] = [];
+            for (const unit of this._getAllUnits()) {
+                const serializedUnit = unit.serialize();
+                if (!serializedUnit) {
+                    Logger.error(`BwUnitMap.serialize() empty serializedUnit.`);
+                    return undefined;
+                }
+
+                units.push(serializedUnit);
+            }
+
+            return {
+                units,
+                nextUnitId,
+            };
+        }
+        public serializeForSimulation(): ISerialUnitMap | undefined {
+            const nextUnitId = this.getNextUnitId();
+            if (nextUnitId == null) {
+                Logger.error(`BwUnitMap.serializeForSimulation() empty nextUnitId.`);
+                return undefined;
+            }
+
+            const war           = this.getWar();
+            const units         : ISerialUnit[] = [];
+            const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            for (const unit of VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+                units.push(unit.serializeForSimulation());
+
+                if (teamIndexes.has(unit.getTeamIndex())) {
+                    for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
+                        units.push(loadedUnit.serializeForSimulation());
+                    }
+                }
+            }
+
+            return {
+                units,
+                nextUnitId,
+            };
+        }
+
+        private _setMap(map: (BwUnit | undefined)[][]): void {
+            this._map = map;
+        }
+        private _getMap(): (BwUnit | undefined)[][] | undefined {
+            return this._map;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _setView(view: BwUnitMapView): void {
+            this._view = view;
+        }
         public getView(): BwUnitMapView {
             return this._view;
         }
@@ -148,6 +172,9 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
+        private _setConfigVersion(configVersion: string): void {
+            this._configVersion = configVersion;
+        }
         public getConfigVersion(): string {
             return this._configVersion;
         }
@@ -202,10 +229,67 @@ namespace TinyWars.BaseWar {
         public getUnitOnMap(gridIndex: Types.GridIndex): BwUnit | undefined {
             return this._map[gridIndex.x][gridIndex.y];
         }
+        public getVisibleUnitOnMap(gridIndex: GridIndex): BwUnit | undefined | null {
+            const unit = this.getUnitOnMap(gridIndex);
+            if (unit == null) {
+                return null;
+            }
+
+            const war = this._war;
+            if (war == null) {
+                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty war.`);
+                return undefined;
+            }
+
+            const unitType = unit.getType();
+            if (unitType == null) {
+                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty unitType.`);
+                return undefined;
+            }
+
+            const isDiving = unit.getIsDiving();
+            if (isDiving == null) {
+                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty isDiving.`);
+                return undefined;
+            }
+
+            const playerInTurn = war.getPlayerInTurn();
+            if (playerInTurn == null) {
+                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty playerInTurn.`);
+                return undefined;
+            }
+
+            const observerTeamIndex = playerInTurn.getTeamIndex();
+            if (observerTeamIndex == null) {
+                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty observerTeamIndex.`);
+                return undefined;
+            }
+
+            const unitPlayerIndex = unit.getPlayerIndex();
+            if (unitPlayerIndex == null) {
+                Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty unitPlayerIndex.`);
+                return undefined;
+            }
+
+            return (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                war,
+                unitType,
+                isDiving,
+                observerTeamIndex,
+                gridIndex,
+                unitPlayerIndex,
+            }))
+            ? unit
+            : null;
+        }
+
         public getUnitLoadedById(unitId: number): BwUnit | undefined {
             return this._loadedUnits.get(unitId);
         }
-        public getUnitsLoaded(): Map<number, BwUnit> {
+        private _setLoadedUnits(units: Map<number, BwUnit>): void {
+            this._loadedUnits = units;
+        }
+        public getLoadedUnits(): Map<number, BwUnit> {
             return this._loadedUnits;
         }
         public getUnitsLoadedByLoader(loader: BwUnit, isRecursive: boolean): BwUnit[] {
@@ -219,6 +303,17 @@ namespace TinyWars.BaseWar {
             return units;
         }
 
+        private _getAllUnitsOnMap(): BwUnit[] {
+            const units: BwUnit[] = [];
+            this.forEachUnitOnMap(unit => units.push(unit));
+            return units;
+        }
+        protected _getAllUnits(): BwUnit[] {
+            const units = this._getAllUnitsOnMap();
+            this.forEachUnitLoaded(unit => units.push(unit));
+            return units;
+        }
+
         public swapUnit(gridIndex1: Types.GridIndex, gridIndex2: Types.GridIndex): void {
             if (!GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2)) {
                 const {x: x1, y: y1}    = gridIndex1;
@@ -228,21 +323,51 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public setUnitLoaded(gridIndex: Types.GridIndex): void {
-            const { x, y }  = gridIndex;
-            const unit      = this._map[x][y]!;
-            this._map[x][y] = undefined;
-            this._loadedUnits.set(unit.getUnitId(), unit);
+        public setUnitLoaded(unit: BwUnit): void {
+            const loadedUnits = this.getLoadedUnits();
+            if (loadedUnits == null) {
+                Logger.error(`BwUnitMap.setUnitLoaded() the map is not initialized.`);
+                return;
+            }
+
+            const unitId = unit.getUnitId();
+            if (unitId == null) {
+                Logger.error(`BwUnitMap.setUnitLoaded() the unit has no unitId.`);
+                return;
+            }
+
+            if (loadedUnits.has(unitId)) {
+                Logger.error(`BwUnitMap.setUnitLoaded() the unit is already loaded?!?.`);
+                return;
+            }
+
+            loadedUnits.set(unitId, unit);
+            this.getView().addUnit(unit.getView(), true);
         }
         public setUnitUnloaded(unitId: number, gridIndex: Types.GridIndex): void {
             this._map[gridIndex.x][gridIndex.y] = this._loadedUnits.get(unitId);
             this._loadedUnits.delete(unitId);
         }
 
-        public addUnitOnMap(unit: BwUnit): void {
-            const x = unit.getGridX();
-            const y = unit.getGridY();
-            this._map[x][y] = unit;
+        public setUnitOnMap(unit: BwUnit): void {
+            const mapSize   = this.getMapSize();
+            const map       = this._getMap();
+            if ((!mapSize) || (!map)) {
+                Logger.error(`BwUnitMap.setUnitOnMap() the map is not initialized.`);
+                return;
+            }
+
+            const gridIndex = unit.getGridIndex();
+            if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+                Logger.error(`BwUnitMap.setUnitOnMap() the unit is outside map! gridIndex: ${JSON.stringify(gridIndex)}`);
+                return;
+            }
+            if (this.getUnitOnMap(gridIndex)) {
+                Logger.error(`BwUnitMap.setUnitOnMap() another unit exists in the same grid! gridIndex: ${JSON.stringify(gridIndex)}`);
+                return;
+            }
+
+            map[gridIndex.x][gridIndex.y] = unit;
             this.getView().addUnit(unit.getView(), true);
         }
         public removeUnitOnMap(gridIndex: Types.GridIndex, removeView: boolean): void {
@@ -251,10 +376,6 @@ namespace TinyWars.BaseWar {
             (removeView) && (this.getView().removeUnit(unit.getView()));
         }
 
-        public addUnitLoaded(unit: BwUnit): void {
-            this._loadedUnits.set(unit.getUnitId(), unit);
-            this.getView().addUnit(unit.getView(), true);
-        }
         public removeUnitLoaded(unitId: number): void {
             const unit = this._loadedUnits.get(unitId);
             this._loadedUnits.delete(unitId);
@@ -304,6 +425,87 @@ namespace TinyWars.BaseWar {
                 }
             }
             return false;
+        }
+
+        public checkIsCoLoadedByAnyUnit(playerIndex: number): boolean | undefined {
+            return (this.checkIsCoLoadedByAnyUnitOnMap(playerIndex))
+                || (this.checkIsCoLoadedByAnyUnitLoaded(playerIndex))
+        }
+        public checkIsCoLoadedByAnyUnitLoaded(playerIndex: number): boolean | undefined {
+            const units = this.getLoadedUnits();
+            if (units == null) {
+                Logger.error(`BwUnitMap.checkIsCoLoadedByAnyUnitLoaded() empty units.`);
+                return undefined;
+            }
+
+            for (const [_, unit] of units) {
+                if ((unit.getPlayerIndex() === playerIndex) && (unit.getHasLoadedCo())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public checkIsCoLoadedByAnyUnitOnMap(playerIndex: number): boolean | undefined {
+            const map = this._getMap();
+            if (map == null) {
+                Logger.error(`BwUnitMap.checkIsCoLoadedByAnyUnitOnMap() empty map.`);
+                return undefined;
+            }
+
+            return map.some(v => v.some(u => (u != null) && (u.getPlayerIndex() === playerIndex) && (u.getHasLoadedCo())));
+        }
+
+        public getCoGridIndexListOnMap(playerIndex: number): GridIndex[] | undefined {
+            const map = this._getMap();
+            if (map == null) {
+                Logger.error(`BwUnitMap.getCoGridIndexListOnMap() empty map.`);
+                return undefined;
+            }
+
+            const list: GridIndex[] = [];
+            for (const column of map) {
+                for (const unit of column) {
+                    if ((unit) && (unit.getHasLoadedCo()) && (unit.getPlayerIndex() === playerIndex)) {
+                        const gridIndex = unit.getGridIndex();
+                        if (gridIndex == null) {
+                            Logger.error(`BwUnitMap.getCoGridIndexListOnMap() empty gridIndex.`);
+                            return undefined;
+                        }
+                        list.push(gridIndex);
+                    }
+                }
+            }
+
+            return list;
+        }
+
+        public getAllCoUnits(playerIndex: number): BwUnit[] | undefined {
+            const loadedUnits = this.getLoadedUnits();
+            if (loadedUnits == null) {
+                Logger.error(`BwUnitMap.getCoUnitsCount() empty loadedUnits.`);
+                return undefined;
+            }
+
+            const map = this._getMap();
+            if (map == null) {
+                Logger.error(`BwUnitMap.checkIsCoLoadedByAnyUnitOnMap() empty map.`);
+                return undefined;
+            }
+
+            const coUnits: BwUnit[] = [];
+            for (const [_, unit] of loadedUnits) {
+                if ((unit.getPlayerIndex() === playerIndex) && (unit.getHasLoadedCo())) {
+                    coUnits.push(unit);
+                }
+            }
+            for (const column of map) {
+                for (const unit of column) {
+                    if ((unit) && (unit.getPlayerIndex() == playerIndex) && (unit.getHasLoadedCo())) {
+                        coUnits.push(unit);
+                    }
+                }
+            }
+            return coUnits;
         }
     }
 }

@@ -1,10 +1,9 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Helpers      = Utility.Helpers;
-    import Types        = Utility.Types;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import ConfigManager    = Utility.ConfigManager;
 
     export class McrWatchMakeRequestDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -19,10 +18,10 @@ namespace TinyWars.MultiCustomRoom {
         private _btnConfirm     : GameUi.UiButton;
         private _btnCancel      : GameUi.UiButton;
 
-        private _openData           : ProtoTypes.IMcwWatchInfo;
+        private _openData           : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
         private _dataForListPlayer  : DataForPlayerRenderer[];
 
-        public static show(warInfo: ProtoTypes.IMcwWatchInfo): void {
+        public static show(warInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo): void {
             if (!McrWatchMakeRequestDetailPanel._instance) {
                 McrWatchMakeRequestDetailPanel._instance = new McrWatchMakeRequestDetailPanel();
             }
@@ -67,7 +66,7 @@ namespace TinyWars.MultiCustomRoom {
 
         public setPlayerSelected(playerIndex: number, selected: boolean): void {
             const dataList      = this._dataForListPlayer;
-            const index         = dataList.findIndex(value => value.playerIndex === playerIndex);
+            const index         = dataList.findIndex(value => value.playerInfo.playerIndex === playerIndex);
             const data          = dataList[index];
             data.isRequesting   = selected;
             this._listPlayer.updateSingleData(index, data);
@@ -84,11 +83,11 @@ namespace TinyWars.MultiCustomRoom {
             const userIds: number[] = [];
             for (const data of this._dataForListPlayer) {
                 if (data.isRequesting) {
-                    userIds.push(data.userId);
+                    userIds.push(data.playerInfo.userId);
                 }
             }
             if (userIds.length > 0) {
-                McrProxy.reqWatchMakeRequest(this._openData.mcwDetail.id, userIds);
+                MultiPlayerWar.MpwProxy.reqWatchMakeRequest(this._openData.warInfo.warId, userIds);
             }
             this.close();
         }
@@ -111,63 +110,22 @@ namespace TinyWars.MultiCustomRoom {
 
         private _generateDataForListPlayer(): DataForPlayerRenderer[] {
             const openData          = this._openData;
-            const warDetail         = openData.mcwDetail;
+            const warInfo           = openData.warInfo;
+            const configVersion     = warInfo.settingsForCommon.configVersion;
             const ongoingDstUserIds = openData.ongoingDstUserIds || [];
             const requestDstUserIds = openData.requestDstUserIds || [];
-            const dataList          : DataForPlayerRenderer[] = [];
+            const playerInfoList    = warInfo.playerInfoList;
 
-            dataList.push({
-                panel           : this,
-                configVersion   : warDetail.configVersion,
-                playerIndex     : 1,
-                teamIndex       : warDetail.p1TeamIndex,
-                nickname        : warDetail.p1UserNickname,
-                coId            : warDetail.p1CoId,
-                isAlive         : warDetail.p1IsAlive,
-                userId          : warDetail.p1UserId,
-                isRequested     : requestDstUserIds.indexOf(warDetail.p1UserId) >= 0,
-                isWatching      : ongoingDstUserIds.indexOf(warDetail.p1UserId) >= 0,
-                isRequesting    : false,
-            }, {
-                panel           : this,
-                configVersion   : warDetail.configVersion,
-                playerIndex     : 2,
-                teamIndex       : warDetail.p2TeamIndex,
-                nickname        : warDetail.p2UserNickname,
-                coId            : warDetail.p2CoId,
-                isAlive         : warDetail.p2IsAlive,
-                userId          : warDetail.p2UserId,
-                isRequested     : requestDstUserIds.indexOf(warDetail.p2UserId) >= 0,
-                isWatching      : ongoingDstUserIds.indexOf(warDetail.p2UserId) >= 0,
-                isRequesting    : false,
-            });
-            if (warDetail.p3UserId != null) {
+            const dataList: DataForPlayerRenderer[] = [];
+            for (let playerIndex = 1; playerIndex <= playerInfoList.length; ++playerIndex) {
+                const playerInfo    = playerInfoList.find(v => v.playerIndex === playerIndex);
+                const userId        = playerInfo.userId;
                 dataList.push({
                     panel           : this,
-                    configVersion   : warDetail.configVersion,
-                    playerIndex     : 3,
-                    teamIndex       : warDetail.p3TeamIndex,
-                    nickname        : warDetail.p3UserNickname,
-                    coId            : warDetail.p3CoId,
-                    isAlive         : warDetail.p3IsAlive,
-                    userId          : warDetail.p3UserId,
-                    isRequested     : requestDstUserIds.indexOf(warDetail.p3UserId) >= 0,
-                    isWatching      : ongoingDstUserIds.indexOf(warDetail.p3UserId) >= 0,
-                    isRequesting    : false,
-                });
-            }
-            if (warDetail.p4UserId != null) {
-                dataList.push({
-                    panel           : this,
-                    configVersion   : warDetail.configVersion,
-                    playerIndex     : 4,
-                    teamIndex       : warDetail.p4TeamIndex,
-                    nickname        : warDetail.p4UserNickname,
-                    coId            : warDetail.p4CoId,
-                    isAlive         : warDetail.p4IsAlive,
-                    userId          : warDetail.p4UserId,
-                    isRequested     : requestDstUserIds.indexOf(warDetail.p4UserId) >= 0,
-                    isWatching      : ongoingDstUserIds.indexOf(warDetail.p4UserId) >= 0,
+                    configVersion,
+                    playerInfo,
+                    isRequested     : requestDstUserIds.indexOf(userId) >= 0,
+                    isWatching      : ongoingDstUserIds.indexOf(userId) >= 0,
                     isRequesting    : false,
                 });
             }
@@ -179,12 +137,7 @@ namespace TinyWars.MultiCustomRoom {
     type DataForPlayerRenderer = {
         panel           : McrWatchMakeRequestDetailPanel;
         configVersion   : string;
-        playerIndex     : number;
-        teamIndex       : number;
-        nickname        : string;
-        coId            : number | null;
-        isAlive         : boolean;
-        userId          : number;
+        playerInfo      : ProtoTypes.Structure.IWarPlayerInfo;
         isRequested     : boolean;
         isWatching      : boolean;
         isRequesting    : boolean;
@@ -202,17 +155,19 @@ namespace TinyWars.MultiCustomRoom {
             super.dataChanged();
 
             const data              = this.data as DataForPlayerRenderer;
-            const coConfig          = data.coId == null ? null : ConfigManager.getCoBasicCfg(data.configVersion, data.coId);
-            this._labelIndex.text   = Lang.getPlayerForceName(data.playerIndex);
-            this._labelTeam.text    = Lang.getPlayerTeamName(data.teamIndex);
-            this._labelName.text    = data.nickname + (coConfig ? `(${coConfig.name}(T${coConfig.tier}))` : `(${Lang.getText(Lang.Type.B0211)} CO)`);
-            if (!data.isAlive) {
+            const playerInfo        = data.playerInfo;
+            this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
+            this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);
+            User.UserModel.getUserNickname(playerInfo.userId).then(name => {
+                this._labelName.text = name + ConfigManager.getCoNameAndTierText(data.configVersion, playerInfo.coId);
+            });
+            if (!playerInfo.isAlive) {
                 this._imgAccept.visible     = false;
                 this._imgDecline.visible    = false;
                 this._labelState.visible    = true;
                 this._labelState.text       = `(${Lang.getText(Lang.Type.B0056)})`;
             } else {
-                if (data.userId === User.UserModel.getSelfUserId()) {
+                if (playerInfo.userId === User.UserModel.getSelfUserId()) {
                     this._imgAccept.visible     = false;
                     this._imgDecline.visible    = false;
                     this._labelState.visible    = true;
@@ -242,7 +197,7 @@ namespace TinyWars.MultiCustomRoom {
         public onItemTapEvent(e: eui.ItemTapEvent): void {
             if ((this._imgAccept.visible) || (this._imgDecline.visible)) {
                 const data = this.data as DataForPlayerRenderer;
-                data.panel.setPlayerSelected(data.playerIndex, !data.isRequesting);
+                data.panel.setPlayerSelected(data.playerInfo.playerIndex, !data.isRequesting);
             }
         }
     }

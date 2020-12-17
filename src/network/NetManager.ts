@@ -14,8 +14,9 @@ namespace TinyWars.Network {
         ////////////////////////////////////////////////////////////////////////////////
         const PROTOCOL  = window.location.protocol.indexOf("http:") === 0 ? "ws" : "wss";
         const HOST_NAME = window.location.hostname;
-        const PORT      = 3000;
+        const PORT      = 3001;
         const FULL_URL  = `${PROTOCOL}://${HOST_NAME}:${PORT}`;
+        // const FULL_URL  = "wss://www.tinywars.online:3001";
 
         ////////////////////////////////////////////////////////////////////////////////
         // Type definitions.
@@ -27,11 +28,20 @@ namespace TinyWars.Network {
         }
 
         class NetMessageDispatcherCls extends egret.EventDispatcher {
-            public dispatchWithContainer(container: ProtoTypes.IMessageContainer): void {
+            public dispatchWithContainer(container: ProtoTypes.NetMessage.IMessageContainer): void {
                 const name      = Helpers.getMessageName(container);
-                const action    = container[name];
-                if (action.errorCode) {
-                    FloatText.show(Utility.Lang.getNetErrorText(action.errorCode));
+                const action    = container[name].s;
+                if (action == null) {
+                    Logger.error(`NetManager.NetMessageDispatcherCls.dispatchWithContainer() empty action.`);
+                    return undefined;
+                }
+
+                if (container.MsgMpwCommonHandleBoot) {
+                    // Don't show the error text.
+                } else {
+                    if (action.errorCode) {
+                        FloatText.show(Utility.Lang.getNetErrorText(action.errorCode));
+                    }
                 }
                 this.dispatchEventWith(name, false, action);
             }
@@ -72,7 +82,7 @@ namespace TinyWars.Network {
             }
         }
 
-        export function send(container: ProtoTypes.IMessageContainer): void {
+        export function send(container: ProtoTypes.NetMessage.IMessageContainer): void {
             if ((!_socket) || (!_socket.connected)) {
                 FloatText.show(Lang.getText(Lang.Type.A0014));
             } else {
@@ -139,7 +149,7 @@ namespace TinyWars.Network {
             const name      = Helpers.getMessageName(container);
             Logger.log("%cNetManager receive: ", "background:#FFD777", name, ", length: ", data.length, "\n", container[name]);
 
-            if (container.S_ServerDisconnect) {
+            if (container.MsgCommonServerDisconnect) {
                 setCanAutoReconnect(false);
             }
 

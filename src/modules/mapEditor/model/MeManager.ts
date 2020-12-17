@@ -1,22 +1,7 @@
 
 namespace TinyWars.MapEditor.MeManager {
-    import Types                = Utility.Types;
-    import Logger               = Utility.Logger;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import Helpers              = Utility.Helpers;
-    import DestructionHelpers   = Utility.DestructionHelpers;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
-    import Lang                 = Utility.Lang;
-    import FloatText            = Utility.FloatText;
-    import ProtoManager         = Utility.ProtoManager;
-    import WarActionCodes       = Utility.WarActionCodes;
-    import Notify               = Utility.Notify;
-    import WarActionContainer   = ProtoTypes.IWarActionContainer;
-    import BwHelpers            = BaseWar.BwHelpers;
-    import GridIndex            = Types.GridIndex;
-    import UnitState            = Types.UnitActionState;
-    import MovePath             = Types.MovePath;
-    import TileType             = Types.TileType;
+    import Logger       = Utility.Logger;
+    import ProtoTypes   = Utility.ProtoTypes;
 
     let _war: MeWar;
 
@@ -26,14 +11,23 @@ namespace TinyWars.MapEditor.MeManager {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function loadWar(mapRawData: Types.MapRawData | null, slotIndex: number, isReview: boolean): MeWar {
+    export async function loadWar(mapRawData: ProtoTypes.Map.IMapRawData | null, slotIndex: number, isReview: boolean): Promise<MeWar> {
         if (_war) {
             Logger.warn(`MeManager.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
-        mapRawData = mapRawData || MeUtility.createDefaultMapRawData(slotIndex);
-        _war = new MeWar().init(mapRawData, slotIndex, ConfigManager.getNewestConfigVersion(), isReview).startRunning().startRunningView();
+        mapRawData = mapRawData || await MeUtility.createDefaultMapRawData(slotIndex);
+        _war = new MeWar();
+        await _war.initWithMapEditorData({
+            mapRawData,
+            slotIndex
+        });
+        _war.setIsMapModified(false);
+        _war.setIsReviewingMap(isReview);
+        _war.startRunning()
+            .startRunningView();
+
         return _war;
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage source="bg_png" left="0" right="0" top="0" bottom="0" />
+    <GameUi:UiImage source="bg_002_png" left="0" right="0" top="0" bottom="0" />
     <e:Group left="0" top="40" bottom="0" right="200">
         <GameUi:UiZoomableComponent id="_zoomMap" left="20" right="20" top="20" bottom="20" />
         <e:Group id="_groupInfo" y="10" touchThrough="true" touchEnabled="false" touchChildren="false" left="8"
@@ -36,7 +36,7 @@
                         horizontalCenter="0" />
         <GameUi:UiLabel id="_labelNoWar" text="暂无房间" bold="true" size="26" x="47" verticalCenter="0"
                         textColor="0xffffff" />
-        <GameUi:UiScrollList id="_listWar" left="0" right="0" bottom="50" top="50">
+        <GameUi:UiScrollList id="_listWar" left="0" right="0" bottom="40" top="50">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="200" height="45" currentState="up" states="up,down">
@@ -64,14 +64,7 @@
                 </e:itemRendererSkinName>
             </e:List>
         </GameUi:UiScrollList>
-        <GameUi:UiButton id="_btnBack" label="返回" horizontalCenter="0" bottom="10">
-            <e:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" />
-                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
-                             textColor="0xffffff" />
-                </e:Skin>
-            </e:skinName>
-        </GameUi:UiButton>
+        <GameUi:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" bottom="0" left="0"
+                         right="0"></GameUi:UiButton>
     </e:Group>
 </e:Skin>

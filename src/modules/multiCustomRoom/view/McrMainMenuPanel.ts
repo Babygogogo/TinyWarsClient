@@ -39,8 +39,8 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SLogout,            callback: this._onNotifySLogout },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);
@@ -58,14 +58,15 @@ namespace TinyWars.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            FlowManager.gotoLobby();
+            this.close();
+            Lobby.LobbyPanel.show();
         }
 
-        private _onNotifySLogout(e: egret.Event): void {
-            McrMainMenuPanel.hide();
-        }
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateView();
+        }
+        private _onMsgUserLogout(e: egret.Event): void {
+            this.close();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -82,58 +83,53 @@ namespace TinyWars.MultiCustomRoom {
                 {
                     name    : Lang.getText(Lang.Type.B0000),
                     callback: (): void => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrCreateMapListPanel.show({});
+                        this.close();
+                        McrCreateMapListPanel.show({});
                     },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0023),
                     callback: (): void => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrJoinMapListPanel.show();
+                        this.close();
+                        McrJoinRoomListPanel.show();
                     },
                 },
                 {
-                    name    : Lang.getText(Lang.Type.B0022),
+                    name    : Lang.getText(Lang.Type.B0410),
                     callback: (): void => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrExitMapListPanel.show();
+                        this.close();
+                        McrMyRoomListPanel.show();
+                    },
+                    redChecker: async () => {
+                        return await McrModel.checkIsRed();
                     },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0024),
                     callback: () => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrContinueWarListPanel.show();
+                        this.close();
+                        McrMyWarListPanel.show();
                     },
-                    redChecker  : () => {
-                        const warInfos  = McrModel.getJoinedOngoingInfos();
-                        const userId    = User.UserModel.getSelfUserId();
-                        return (!!warInfos) && (warInfos.some(info => {
-                            const playerIndex = info.playerIndexInTurn!;
-                            return ((playerIndex === 1) && (info.p1UserId === userId))
-                                || ((playerIndex === 2) && (info.p2UserId === userId))
-                                || ((playerIndex === 3) && (info.p3UserId === userId))
-                                || ((playerIndex === 4) && (info.p4UserId === userId));
-                        }));
+                    redChecker  : async () => {
+                        return MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars();
                     },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0206),
                     callback: () => {
-                        McrMainMenuPanel.hide();
+                        this.close();
                         McrWatchMainMenuPanel.show();
                     },
-                    redChecker  : () => {
-                        const watchInfos = McrModel.getWatchRequestedWarInfos();
+                    redChecker  : async () => {
+                        const watchInfos = MultiPlayerWar.MpwModel.getWatchRequestedWarInfos();
                         return (!!watchInfos) && (watchInfos.length > 0);
                     },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0092),
                     callback: () => {
-                        McrMainMenuPanel.hide();
-                        MultiCustomRoom.McrReplayListPanel.show();
+                        this.close();
+                        ReplayWar.RwReplayListPanel.show();
                     },
                 },
             ];
@@ -143,19 +139,19 @@ namespace TinyWars.MultiCustomRoom {
     type DataForCommandRenderer = {
         name        : string;
         callback    : () => void;
-        redChecker? : () => boolean;
+        redChecker? : () => Promise<boolean>;
     }
 
     class CommandRenderer extends eui.ItemRenderer {
         private _labelCommand   : GameUi.UiLabel;
         private _imgRed         : GameUi.UiImage;
 
-        protected dataChanged(): void {
+        protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
             const data              = this.data as DataForCommandRenderer;
             this._labelCommand.text = data.name;
-            this._imgRed.visible    = (!!data.redChecker) && (data.redChecker());
+            this._imgRed.visible    = (!!data.redChecker) && (await data.redChecker());
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {

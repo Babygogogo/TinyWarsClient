@@ -1,8 +1,11 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import Types        = Utility.Types;
-    import Lang         = Utility.Lang;
-    import HelpPanel    = Common.HelpPanel;
+    import Types            = Utility.Types;
+    import Lang             = Utility.Lang;
+    import ConfigManager    = Utility.ConfigManager;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import CommonHelpPanel  = Common.CommonHelpPanel;
 
     export class McrJoinCoListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -110,7 +113,7 @@ namespace TinyWars.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnHelp(e: egret.TouchEvent): void {
-            HelpPanel.show({
+            CommonHelpPanel.show({
                 title   : Lang.getText(Lang.Type.B0147),
                 content : Lang.getRichText(Lang.RichType.R0004),
             });
@@ -130,8 +133,8 @@ namespace TinyWars.MultiCustomRoom {
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
         }
 
-        private _initListCo(): void {
-            this._dataForListCo = this._createDataForListCo();
+        private async _initListCo(): Promise<void> {
+            this._dataForListCo = await this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
@@ -140,14 +143,15 @@ namespace TinyWars.MultiCustomRoom {
             }));
         }
 
-        private _createDataForListCo(): DataForCoRenderer[] {
-            const data              : DataForCoRenderer[] = [];
-            const bannedCoIdList    = McrModel.getJoinWarRoomInfo().bannedCoIdList || [];
-
-            let index = 0;
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getNewestConfigVersion())) {
-                if (bannedCoIdList.indexOf(cfg.coId) < 0) {
-                    data.push({
+        private async _createDataForListCo(): Promise<DataForCoRenderer[]> {
+            const dataList      : DataForCoRenderer[] = [];
+            const playerIndex   = McrModel.Join.getPlayerIndex();
+            const configVersion = ConfigManager.getLatestConfigVersion();
+            let index           = 0;
+            for (const coId of BwSettingsHelper.getPlayerRule((await McrModel.Join.getRoomInfo()).settingsForCommon.warRule, playerIndex).availableCoIdList) {
+                const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
+                if ((cfg) && (cfg.isEnabled)) {
+                    dataList.push({
                         coBasicCfg  : cfg,
                         index,
                         panel       : this,
@@ -155,12 +159,7 @@ namespace TinyWars.MultiCustomRoom {
                     ++index;
                 }
             }
-            data.push({
-                coBasicCfg  : null,
-                index,
-                panel       : this,
-            });
-            return data;
+            return dataList;
         }
 
         private _showCoInfo(data: DataForCoRenderer): void {
@@ -255,7 +254,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForCoRenderer = {
-        coBasicCfg  : Types.CoBasicCfg;
+        coBasicCfg  : ProtoTypes.Config.ICoBasicCfg;
         index       : number;
         panel       : McrJoinCoListPanel;
     }
@@ -290,7 +289,7 @@ namespace TinyWars.MultiCustomRoom {
             McrJoinCoListPanel.hide();
 
             const cfg = (this.data as DataForCoRenderer).coBasicCfg;
-            McrModel.setJoinWarCoId(cfg ? cfg.coId : null);
+            McrModel.Join.setCoId(cfg ? cfg.coId : null);
             McrJoinSettingsPanel.show();
         }
     }
@@ -309,7 +308,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getNewestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
         }
     }
 }

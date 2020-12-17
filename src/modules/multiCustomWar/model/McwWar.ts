@@ -1,102 +1,223 @@
 
 namespace TinyWars.MultiCustomWar {
-    import Types    = Utility.Types;
-    import Logger   = Utility.Logger;
+    import Logger           = Utility.Logger;
+    import Types            = Utility.Types;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import BwHelpers        = BaseWar.BwHelpers;
+    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
+    import ISettingsForMcw  = ProtoTypes.WarSettings.ISettingsForMcw;
 
-    export class McwWar extends BaseWar.BwWar {
-        private _isEnded = false;
+    export class McwWar extends MultiPlayerWar.MpwWar {
+        private _settingsForMcw?: ISettingsForMcw;
 
-        public async init(data: Types.SerializedWar): Promise<McwWar> {
-            this._baseInit(data);
+        public async init(data: ISerialWar): Promise<McwWar> {
+            if (!this._baseInit(data)) {
+                Logger.error(`McwWar.init() failed this._baseInit().`);
+                return undefined;
+            }
 
-            this._initPlayerManager(data.players);
-            await this._initField(
-                data.field,
-                data.configVersion,
-                data.mapFileName,
-                await BaseWar.BwHelpers.getMapSizeAndMaxPlayerIndex(data)
-            );
-            this._initTurnManager(data.turn);
+            const settingsForMcw = data.settingsForMcw;
+            if (!settingsForMcw) {
+                Logger.error(`McwWar.init() invalid settingsForMcw! ${JSON.stringify(data)}`);
+                return undefined;
+            }
 
-            this.setNextActionId(data.nextActionId);
+            const mapSizeAndMaxPlayerIndex = await BwHelpers.getMapSizeAndMaxPlayerIndex(data);
+            if (!mapSizeAndMaxPlayerIndex) {
+                Logger.error(`McwWar.init() invalid war data! ${JSON.stringify(data)}`);
+                return undefined;
+            }
+
+            const settingsForCommon = data.settingsForCommon;
+            if (!settingsForCommon) {
+                Logger.error(`McwWar.init() empty settingsForCommon! ${JSON.stringify(data)}`);
+                return undefined;
+            }
+
+            const configVersion = settingsForCommon.configVersion;
+            if (configVersion == null) {
+                Logger.error(`McwWar.init() empty configVersion.`);
+                return undefined;
+            }
+
+            const dataForPlayerManager = data.playerManager;
+            if (dataForPlayerManager == null) {
+                Logger.error(`McwWar.init() empty dataForPlayerManager.`);
+                return undefined;
+            }
+
+            const dataForTurnManager = data.turnManager;
+            if (dataForTurnManager == null) {
+                Logger.error(`McwWar.init() empty dataForTurnManager.`);
+                return undefined;
+            }
+
+            const dataForField = data.field;
+            if (dataForField == null) {
+                Logger.error(`McwWar.init() empty dataForField.`);
+                return undefined;
+            }
+
+            const playerManager = (this.getPlayerManager() || new (this._getPlayerManagerClass())()).init(dataForPlayerManager);
+            if (playerManager == null) {
+                Logger.error(`McwWar.init() empty playerManager.`);
+                return undefined;
+            }
+
+            const turnManager = (this.getTurnManager() || new (this._getTurnManagerClass())()).init(dataForTurnManager);
+            if (turnManager == null) {
+                Logger.error(`McwWar.init() empty turnManager.`);
+                return undefined;
+            }
+
+            const field = await (this.getField() || new (this._getFieldClass())()).init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
+            if (field == null) {
+                Logger.error(`McwWar.init() empty field.`);
+                return undefined;
+            }
+
+            this._setSettingsForMcw(settingsForMcw);
+            this._setPlayerManager(playerManager);
+            this._setTurnManager(turnManager);
+            this._setField(field);
 
             this._initView();
 
             return this;
         }
 
-        protected _getViewClass(): new () => McwWarView {
-            return McwWarView;
-        }
-        protected _getFieldClass(): new () => McwField {
-            return McwField;
-        }
-        protected _getPlayerManagerClass(): new () => McwPlayerManager {
-            return McwPlayerManager;
-        }
-        protected _getTurnManagerClass(): new () => McwTurnManager {
-            return McwTurnManager;
-        }
+        public serializeForSimulation(): ISerialWar | undefined {
+            const warId = this.getWarId();
+            if (warId == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty warId.`);
+                return undefined;
+            }
 
-        public serializeForSimulation(): Types.SerializedWar {
-            const playerDataList    = (this.getPlayerManager() as McwPlayerManager).serializeForSimulation();
-            const fieldData         = (this.getField() as McwField).serializeForSimulation();
-            // const unitMapData       = fieldData ? fieldData.unitMap : null;
-            // const unitDataList      = unitMapData ? unitMapData.units || []: [];
-            // for (const playerData of playerDataList || []) {
-            //     const unitId = playerData.coUnitId;
-            //     if ((unitId != null) && (unitDataList.every(u => u.unitId !== unitId))) {
-            //         playerData.coUnitId = null;
-            //     }
-            // }
+            const settingsForCommon = this.getSettingsForCommon();
+            if (settingsForCommon == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty settingsForMcw.`);
+                return undefined;
+            }
+
+            const executedActionsCount = this.getExecutedActionsCount();
+            if (executedActionsCount == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty executedActionsCount.`);
+                return undefined;
+            }
+
+            const playerManager = this.getPlayerManager();
+            if (playerManager == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty playerManager.`);
+                return undefined;
+            }
+
+            const turnManager = this.getTurnManager();
+            if (turnManager == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty turnManager.`);
+                return undefined;
+            }
+
+            const field = this.getField();
+            if (field == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty field.`);
+                return undefined;
+            }
+
+            const serialPlayerManager = playerManager.serializeForSimulation();
+            if (serialPlayerManager == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty serialPlayerManager.`);
+                return undefined;
+            }
+
+            const serialTurnManager = turnManager.serializeForSimulation();
+            if (serialTurnManager == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty serialTurnManager.`);
+                return undefined;
+            }
+
+            const serialField = field.serializeForSimulation();
+            if (serialField == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty serialField.`);
+                return undefined;
+            }
 
             return {
-                warId                   : this.getWarId(),
-                warName                 : this.getWarName(),
-                warPassword             : this.getWarPassword(),
-                warComment              : this.getWarComment(),
-                configVersion           : this.getConfigVersion(),
-                executedActions         : [],
-                nextActionId            : this.getNextActionId(),
-                remainingVotesForDraw   : this.getRemainingVotesForDraw(),
-                warRuleIndex            : this.getWarRuleIndex(),
-                timeLimit               : this.getSettingsTimeLimit(),
-                hasFogByDefault         : this.getSettingsHasFog(),
-                incomeModifier          : this.getSettingsIncomeModifier(),
-                energyGrowthModifier    : this.getSettingsEnergyGrowthMultiplier(),
-                attackPowerModifier     : this.getSettingsAttackPowerModifier(),
-                moveRangeModifier       : this.getSettingsMoveRangeModifier(),
-                visionRangeModifier     : this.getSettingsVisionRangeModifier(),
-                initialFund             : this.getSettingsInitialFund(),
-                initialEnergy           : this.getSettingsInitialEnergy(),
-                bannedCoIdList          : this.getSettingsBannedCoIdList(),
-                luckLowerLimit          : this.getSettingsLuckLowerLimit(),
-                luckUpperLimit          : this.getSettingsLuckUpperLimit(),
-                singlePlayerWarType     : Types.SinglePlayerWarType.Custom,
-                isSinglePlayerCheating  : true,
-                mapFileName             : this.getMapFileName(),
-                players                 : playerDataList,
-                field                   : fieldData,
-                turn                    : (this.getTurnManager() as McwTurnManager).serializeForSimulation(),
-                seedRandomState         : null,
+                settingsForCommon,
+                settingsForMcw              : null,
+                settingsForRmw              : null,
+                settingsForScw              : { isCheating: true },
+                settingsForWrw              : null,
+
+                warId,
+                seedRandomInitialState      : null,
+                seedRandomCurrentState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),
+                executedActions             : [],
+                executedActionsCount,
+                remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                playerManager               : serialPlayerManager,
+                turnManager                 : serialTurnManager,
+                field                       : serialField,
             };
+        }
+
+        public getWarType(): Types.WarType {
+            return this.getSettingsHasFogByDefault()
+                ? Types.WarType.McwFog
+                : Types.WarType.McwStd;
+        }
+
+        private _setSettingsForMcw(settings: ISettingsForMcw): void {
+            this._settingsForMcw = settings;
+        }
+        public getSettingsForMcw(): ISettingsForMcw | null | undefined {
+            return this._settingsForMcw;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public setIsEnded(ended: boolean): void {
-            this._isEnded = ended;
+        public getWarName(): string {
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.getWarName() empty settingsForMcw.`);
+                return undefined;
+            }
+
+            return settingsForMcw.warName;
         }
-        public getIsEnded(): boolean {
-            return this._isEnded;
+        public getWarPassword(): string {
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.getWarPassword() empty settingsForMcw.`);
+                return undefined;
+            }
+
+            return settingsForMcw.warPassword;
+        }
+        public getWarComment(): string {
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.getWarComment() empty settingsForMcw.`);
+                return undefined;
+            }
+
+            return settingsForMcw.warComment;
         }
 
-        public getPlayerIndexLoggedIn(): number | undefined {
-            return (this.getPlayerManager() as McwPlayerManager).getPlayerIndexLoggedIn();
-        }
-        public getPlayerLoggedIn(): McwPlayer {
-            return (this.getPlayerManager() as McwPlayerManager).getPlayerLoggedIn();
+        public getSettingsBootTimerParams(): number[] {
+            const settingsForMcw = this.getSettingsForMcw();
+            if (settingsForMcw == null) {
+                Logger.error(`McwWar.getSettingsBootTimerParams() empty settingsForMcw.`);
+                return undefined;
+            }
+
+            return settingsForMcw.bootTimerParams;
         }
     }
 }

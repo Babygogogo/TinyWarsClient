@@ -1,8 +1,11 @@
 
 namespace TinyWars.BaseWar {
-    import Notify           = Utility.Notify;
-    import Helpers          = Utility.Helpers;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
+    import Notify               = Utility.Notify;
+    import Helpers              = Utility.Helpers;
+    import ConfigManager        = Utility.ConfigManager;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
 
@@ -11,10 +14,9 @@ namespace TinyWars.BaseWar {
         private _baseLayer          = new egret.DisplayObjectContainer();
         private _objectLayer        = new egret.DisplayObjectContainer();
         private _coZoneContainer    = new egret.DisplayObjectContainer();
-        private _coZoneImages       = new Map<number, GameUi.UiImage[][]>();
+        private _coZoneImageDict    = new Map<number, GameUi.UiImage[][]>();
 
-        private _tileMap                : BwTileMap;
-        private _isCoZoneInitialized    = false;
+        private _tileMap            : BwTileMap;
 
         private _notifyListeners = [
             { type: Notify.Type.TileAnimationTick, callback: this._onNotifyTileAnimationTick },
@@ -52,90 +54,145 @@ namespace TinyWars.BaseWar {
                 this._objectLayer.addChild(imgObject);
             });
         }
+        public fastInit(tileMap: BwTileMap): void {
+            this._tileMap = tileMap;
+        }
 
         public startRunningView(): void {
             Notify.addEventListeners(this._notifyListeners, this);
 
             this._initCoZoneContainer();
-            const coZoneContainer = this._coZoneContainer;
-            egret.Tween.removeTweens(coZoneContainer);
-            coZoneContainer.alpha = 0;
-            egret.Tween.get(coZoneContainer, { loop: true })
-                .to({ alpha: 0.75 }, 1000)
-                .to({ alpha: 0 }, 1000);
+            this._startCoZoneAnimation();
 
             this.updateCoZone();
         }
         public stopRunningView(): void {
             Notify.removeEventListeners(this._notifyListeners, this);
 
-            egret.Tween.removeTweens(this._coZoneContainer);
+            this._stopCoZoneAnimation();
         }
 
-        protected _getTileMap(): BwTileMap {
-            return this._tileMap;
+        public setBaseLayerVisible(visible: boolean): void {
+            this._baseLayer.visible = visible;
         }
-        protected _getCoZoneImages(): Map<number, GameUi.UiImage[][]> {
-            return this._coZoneImages;
+        public getBaseLayerVisible(): boolean {
+            return this._baseLayer.visible;
+        }
+
+        public setObjectLayerVisible(visible: boolean): void {
+            this._objectLayer.visible = visible;
+        }
+        public getObjectLayerVisible(): boolean {
+            return this._objectLayer.visible;
         }
 
         private _initCoZoneContainer(): void {
-            if (!this._isCoZoneInitialized) {
-                this._isCoZoneInitialized = true;
+            const container                                 = this._coZoneContainer;
+            const imageDict                                 = this._coZoneImageDict;
+            const tileMap                                   = this._tileMap;
+            const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
+            const playerManager                             = tileMap.getWar().getPlayerManager();
+            const playersCount                              = playerManager.getTotalPlayersCount(false);
 
-                const container = this._coZoneContainer;
-                container.removeChildren();
+            for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
+                if (!imageDict.has(playerIndex)) {
+                    imageDict.set(playerIndex, []);
+                }
 
-                const images = this._coZoneImages;
-                images.clear();
-
-                const tileMap                                   = this._tileMap;
-                const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
-                const playersCount                              = tileMap.getWar().getPlayerManager().getTotalPlayersCount(false);
-                for (let i = 1; i <= playersCount; ++i) {
-                    const layer     = new egret.DisplayObjectContainer();
-                    const imgSource = `c08_t03_s${Helpers.getNumText(i)}_f01`;
-                    const matrix: GameUi.UiImage[][] = [];
-                    for (let x = 0; x < mapWidth; ++x) {
+                const imgSource = `c08_t03_s${Helpers.getNumText(playerManager.getPlayer(playerIndex).getUnitAndTileSkinId())}_f01`;
+                const matrix    = imageDict.get(playerIndex);
+                for (let x = 0; x < mapWidth; ++x) {
+                    if (matrix[x] == null) {
                         matrix[x] = [];
-                        for (let y = 0; y < mapHeight; ++y) {
+                    }
+
+                    const column = matrix[x];
+                    for (let y = 0; y < mapHeight; ++y) {
+                        if (column[y] == null) {
                             const img   = new GameUi.UiImage(imgSource);
                             img.x       = GRID_WIDTH * x;
                             img.y       = GRID_HEIGHT * y;
-                            layer.addChild(img);
-                            matrix[x].push(img);
+                            column[y]   = img;
+                            container.addChild(img);
                         }
+                        column[y].source = imgSource;
                     }
 
-                    images.set(i, matrix);
-                    container.addChild(layer);
+                    for (let y = mapHeight; y < column.length; ++y) {
+                        const img = column[y];
+                        (img) && (img.parent) && (img.parent.removeChild(img));
+                    }
+                    column.length = mapHeight;
                 }
+
+                for (let x = mapWidth; x < matrix.length; ++x) {
+                    for (const img of matrix[x] || []) {
+                        (img) && (img.parent) && (img.parent.removeChild(img));
+                    }
+                }
+                matrix.length = mapWidth;
+            }
+
+            for (let playerIndex = playersCount + 1; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+                for (const column of imageDict.get(playerIndex) || []) {
+                    for (const img of column || []) {
+                        (img) && (img.parent) && (img.parent.removeChild(img));
+                    }
+                }
+                imageDict.delete(playerIndex);
             }
         }
         public updateCoZone(): void {
             const tileMap                                   = this._tileMap;
             const war                                       = tileMap.getWar();
             const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
-            const playersCount                              = war.getPlayerManager().getTotalPlayersCount(false);
+            const playerManager                             = war.getPlayerManager();
+            const playersCount                              = playerManager.getTotalPlayersCount(false);
+            const watcherTeamIndexes                        = playerManager.getAliveWatcherTeamIndexesForSelf();
+            const unitMap                                   = war.getUnitMap();
 
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
-                const matrix        = this._coZoneImages.get(playerIndex);
                 const player        = war.getPlayer(playerIndex);
-                const gridIndex     = player.getCoGridIndexOnMap();
                 const radius        = player.getCoZoneRadius();
-                const canShow       = (!!gridIndex) && (radius != null) && (player.checkHasZoneSkillForCurrentSkills());
+                const gridIndexList = ((radius == null) || (!player.checkHasZoneSkillForCurrentSkills()))
+                    ? []
+                    : player.getCoGridIndexListOnMap().filter(gridIndex => {
+                        const unit = unitMap.getUnitOnMap(gridIndex);
+                        return (!!unit)
+                            && (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                                war,
+                                gridIndex,
+                                unitType: unit.getType(),
+                                isDiving: unit.getIsDiving(),
+                                unitPlayerIndex: playerIndex,
+                                observerTeamIndexes: watcherTeamIndexes
+                            }));
+                    });
 
+                const matrix = this._coZoneImageDict.get(playerIndex);
                 for (let x = 0; x < mapWidth; ++x) {
                     for (let y = 0; y < mapHeight; ++y) {
-                        matrix[x][y].visible = (canShow) && (radius >= GridIndexHelpers.getDistance({ x, y }, gridIndex));
+                        matrix[x][y].visible = (gridIndexList.length > 0) && (radius >= GridIndexHelpers.getMinDistance({ x, y }, gridIndexList));
                     }
                 }
             }
         }
+        private _startCoZoneAnimation(): void {
+            this._stopCoZoneAnimation();
+
+            const coZoneContainer = this._coZoneContainer;
+            coZoneContainer.alpha = 0;
+            egret.Tween.get(coZoneContainer, { loop: true })
+                .to({ alpha: 0.75 }, 1000)
+                .to({ alpha: 0 }, 1000);
+        }
+        private _stopCoZoneAnimation(): void {
+            egret.Tween.removeTweens(this._coZoneContainer);
+        }
 
         private _onNotifyTileAnimationTick(e: egret.Event): void {
             for (const view of this._tileViews) {
-                view.updateOnAnimationTick();
+                view.updateView();
             }
         }
     }

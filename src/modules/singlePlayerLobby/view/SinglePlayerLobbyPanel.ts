@@ -39,8 +39,8 @@ namespace TinyWars.SinglePlayerLobby {
                 { ui: this._btnBack,    callback: this._onTouchedBtnBack },
             ];
             this._notifyListeners = [
-                { type: Notify.Type.SLogout,            callback: this._onNotifySLogout },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
             ];
 
             this._listCommand.setItemRenderer(CommandRenderer);
@@ -58,7 +58,7 @@ namespace TinyWars.SinglePlayerLobby {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifySLogout(e: egret.Event): void {
+        private _onMsgUserLogout(e: egret.Event): void {
             SinglePlayerLobbyPanel.hide();
         }
 
@@ -67,7 +67,8 @@ namespace TinyWars.SinglePlayerLobby {
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            Utility.FlowManager.gotoLobby();
+            this.close();
+            Lobby.LobbyPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -80,15 +81,16 @@ namespace TinyWars.SinglePlayerLobby {
 
         private _createDataForListCommand(): DataForCommandRenderer[] {
             return [
+                // TODO enable creating new wars.
+                // {
+                //     name    : Lang.getText(Lang.Type.B0254),
+                //     callback: (): void => {
+                //         this.close();
+                //         SingleCustomRoom.ScrCreateMapListPanel.show();
+                //     },
+                // },
                 {
-                    name    : Lang.getText(Lang.Type.B0254),
-                    callback: (): void => {
-                        this.close();
-                        SingleCustomRoom.ScrCreateMapListPanel.show();
-                    },
-                },
-                {
-                    name    : Lang.getText(Lang.Type.B0024),
+                    name    : Lang.getText(Lang.Type.B0261),
                     callback: (): void => {
                         this.close();
                         SingleCustomRoom.ScrContinueWarListPanel.show();

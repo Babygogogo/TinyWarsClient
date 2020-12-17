@@ -4,7 +4,9 @@ namespace TinyWars.SingleCustomWar {
     import Lang                 = Utility.Lang;
     import StageManager         = Utility.StageManager;
     import Types                = Utility.Types;
+    import ConfigManager        = Utility.ConfigManager;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     const _IMAGE_SOURCE_HP      = `c04_t10_s00_f00`;
     const _IMAGE_SOURCE_FUEL    = `c04_t10_s01_f00`;
@@ -129,7 +131,7 @@ namespace TinyWars.SingleCustomWar {
             this._updateView();
         }
         private _onNotifyTileAnimationTick(e: egret.Event): void {
-            this._tileView.updateOnAnimationTick();
+            this._tileView.updateView();
         }
 
         private _onTouchedThis(e: egret.TouchEvent): void {
@@ -146,12 +148,18 @@ namespace TinyWars.SingleCustomWar {
             } else {
                 this.visible = true;
 
-                const gridIndex = this._cursor.getGridIndex();
-                const tile      = this._getScwTileForShow(gridIndex);
-                this._tileView.init(tile).startRunningView();
+                const gridIndex             = this._cursor.getGridIndex();
+                const tileView              = this._tileView;
+                const tile                  = this._war.getTileMap().getTile(gridIndex);
                 this._labelDefense.text     = `${Math.floor(tile.getDefenseAmount() / 10)}`;
                 this._labelName.text        = Lang.getTileName(tile.getType());
                 this._labelGridIndex.text   = `x${gridIndex.x} y${gridIndex.y}`;
+                tileView.setData({
+                    tileData    : tile.serialize(),
+                    hasFog      : tile.getHasFog(),
+                    skinId      : tile.getSkinId(),
+                });
+                tileView.updateView();
 
                 if (tile.getCurrentHp() != null) {
                     this._imgState.visible      = true;
@@ -194,28 +202,28 @@ namespace TinyWars.SingleCustomWar {
             }
         }
 
-        private _getScwTileForShow(gridIndex: Types.GridIndex): ScwTile {
-            const war       = this._war;
-            const rawTile   = this._tileMap.getTile(gridIndex) as ScwTile;
-            if (VisibilityHelpers.checkIsTileVisibleToTeams(war, gridIndex, (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw())) {
-                return rawTile;
-            } else {
-                const tile      = new ScwTile();
-                const currentHp = rawTile.getCurrentHp();
-                tile.init({
-                    gridX       : gridIndex.x,
-                    gridY       : gridIndex.y,
-                    objectViewId: rawTile.getType() === Types.TileType.Headquarters ? rawTile.getObjectViewId() : rawTile.getNeutralObjectViewId(),
-                    baseViewId  : rawTile.getBaseViewId(),
-                }, war.getConfigVersion());
+        // private _getScwTileForShow(gridIndex: Types.GridIndex): ScwTile {
+        //     const war       = this._war;
+        //     const rawTile   = this._tileMap.getTile(gridIndex) as ScwTile;
+        //     if (VisibilityHelpers.checkIsTileVisibleToTeams(war, gridIndex, (war.getPlayerManager() as ScwPlayerManager).getWatcherTeamIndexesForScw())) {
+        //         return rawTile;
+        //     } else {
+        //         const tile      = new ScwTile();
+        //         const currentHp = rawTile.getCurrentHp();
+        //         tile.init({
+        //             gridX       : gridIndex.x,
+        //             gridY       : gridIndex.y,
+        //             objectViewId: rawTile.getType() === Types.TileType.Headquarters ? rawTile.getObjectViewId() : rawTile.getNeutralObjectViewId(),
+        //             baseViewId  : rawTile.getBaseViewId(),
+        //         }, war.getConfigVersion());
 
-                tile.startRunning(war);
-                tile.setCurrentBuildPoint(tile.getMaxBuildPoint());
-                tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
-                tile.setCurrentHp(currentHp);
+        //         tile.startRunning(war);
+        //         tile.setCurrentBuildPoint(tile.getMaxBuildPoint());
+        //         tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
+        //         tile.setCurrentHp(currentHp);
 
-                return tile;
-            }
-        }
+        //         return tile;
+        //     }
+        // }
     }
 }

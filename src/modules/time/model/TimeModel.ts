@@ -22,9 +22,9 @@ namespace TinyWars.Time.TimeModel {
 
     export function init(): void {
         Notify.addEventListeners([
-            { type: Notify.Type.NetworkConnected,    callback: _onNotifyNetworkConnected,    thisObject: TimeModel },
-            { type: Notify.Type.NetworkDisconnected, callback: _onNotifyNetworkDisconnected, thisObject: TimeModel },
-            { type: Notify.Type.SHeartbeat,          callback: _onSHeartbeat,                thisObject: TimeModel },
+            { type: Notify.Type.NetworkConnected,       callback: _onNotifyNetworkConnected,    thisObject: TimeModel },
+            { type: Notify.Type.NetworkDisconnected,    callback: _onNotifyNetworkDisconnected, thisObject: TimeModel },
+            { type: Notify.Type.MsgCommonHeartbeat,     callback: _onMsgCommonHeartbeat,        thisObject: TimeModel },
         ]);
 
         egret.setInterval(() => {
@@ -43,6 +43,7 @@ namespace TinyWars.Time.TimeModel {
 
         egret.setInterval(() => {
             ++_unitAnimationTickCount;
+            Common.CommonModel.tickUnitImageSources();
             Notify.dispatch(Notify.Type.UnitAnimationTick);
         }, TimeModel, UNIT_ANIMATION_INTERVAL_MS);
     }
@@ -56,6 +57,7 @@ namespace TinyWars.Time.TimeModel {
 
         _intervalIdForTileAnimation = egret.setInterval(() => {
             ++_tileAnimationTickCount;
+            Common.CommonModel.tickTileImageSources();
             Notify.dispatch(Notify.Type.TileAnimationTick);
         }, TimeModel, TILE_ANIMATION_INTERVAL_MS);
     }
@@ -93,14 +95,15 @@ namespace TinyWars.Time.TimeModel {
         (_heartbeatIntervalId != null) && (egret.clearInterval(_heartbeatIntervalId));
     }
 
-    function _onSHeartbeat(e: egret.Event): void {
-        const data = e.data as Utility.ProtoTypes.IS_Heartbeat;
+    function _onMsgCommonHeartbeat(e: egret.Event): void {
+        const data = e.data as Utility.ProtoTypes.NetMessage.MsgCommonHeartbeat.IS;
         if (data.counter === _heartbeatCounter) {
             _isHeartbeatAnswered = true;
             ++_heartbeatCounter;
 
-            if ((!_serverTimestamp) || (Math.abs(data.timestamp - _serverTimestamp) > 3)) {
-                _serverTimestamp = data.timestamp;
+            const timestamp = data.timestamp;
+            if ((!_serverTimestamp) || (Math.abs(timestamp - _serverTimestamp) > 3)) {
+                _serverTimestamp = timestamp;
             }
         }
     }
@@ -114,6 +117,6 @@ namespace TinyWars.Time.TimeModel {
                 NetManager.init();
             }
         }
-        TimeProxy.reqHeartbeat(_heartbeatCounter);
+        Common.CommonProxy.reqCommonHeartbeat(_heartbeatCounter);
     }
 }

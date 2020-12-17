@@ -1,11 +1,13 @@
 
 namespace TinyWars.MapEditor {
-    import Lang     = Utility.Lang;
-    import Notify   = Utility.Notify;
-    import Types    = Utility.Types;
+    import Lang             = Utility.Lang;
+    import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import InvalidationType = Types.CustomMapInvalidationType;
 
     export class MeConfirmSaveMapPanel extends GameUi.UiPanel {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
+        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: MeConfirmSaveMapPanel;
@@ -20,7 +22,7 @@ namespace TinyWars.MapEditor {
         private _btnConfirm         : GameUi.UiButton;
 
         private _slotIndex  : number;
-        private _mapRawData : Types.MapRawData;
+        private _mapRawData : ProtoTypes.Map.IMapRawData;
         private _needReview : boolean;
 
         public static show(): void {
@@ -61,14 +63,14 @@ namespace TinyWars.MapEditor {
             this._updateImgNeedReview();
 
             const war = MeManager.getWar();
-            war.getUnitMap().reviseAllUnitIds();
+            (war.getUnitMap() as MeUnitMap).reviseAllUnitIds();
 
-            const mapRawData                = war.getField().serialize();
-            const isValidMap                = MeUtility.checkIsValidMap(mapRawData);
+            const mapRawData                = war.serializeForMap();
+            const invalidationType          = MeUtility.getMapInvalidationType(mapRawData);
             this._mapRawData                = mapRawData;
-            this._slotIndex                 = war.getSlotIndex();
-            this._labelReviewDesc.visible   = !isValidMap;
-            this._groupNeedReview.visible   = isValidMap;
+            this._slotIndex                 = war.getMapSlotIndex();
+            this._groupNeedReview.visible   = invalidationType === InvalidationType.Valid;
+            this._labelReviewDesc.text      = Lang.getMapInvalidationDesc(invalidationType);
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
@@ -78,14 +80,14 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             const needReview = this._needReview;
             if ((!needReview) || (!MeModel.checkHasReviewingMap())) {
-                MeProxy.reqSaveMap(this._slotIndex, this._mapRawData, needReview);
+                MeProxy.reqMeSubmitMap(this._slotIndex, this._mapRawData, needReview);
                 this.close();
             } else {
-                Common.ConfirmPanel.show({
+                Common.CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0084),
                     callback: () => {
-                        MeProxy.reqSaveMap(this._slotIndex, this._mapRawData, needReview);
+                        MeProxy.reqMeSubmitMap(this._slotIndex, this._mapRawData, needReview);
                         this.close();
                     },
                 });

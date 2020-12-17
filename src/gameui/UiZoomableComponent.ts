@@ -120,18 +120,48 @@ namespace TinyWars.GameUi {
         }
 
         public setContentX(x: number, needRevise: boolean): void {
-            this._contents.x = x;
-            (needRevise) && (this._reviseContentX());
+            const contents  = this.getContents();
+            const newX      = needRevise ? this.getRevisedContentX(x) : x;
+            if (newX !== contents.x) {
+                contents.x = newX;
+                Notify.dispatch(Notify.Type.ZoomableContentsMoved);
+            }
+        }
+        private set _contentX(x: number) {
+            this.setContentX(x, false);
+        }
+        private get _contentX(): number {
+            return this.getContentX();
         }
         public getContentX(): number {
             return this._contents.x;
         }
         public setContentY(y: number, needRevise: boolean): void {
-            this._contents.y = y;
-            (needRevise) && (this._reviseContentY());
+            const contents  = this.getContents();
+            const newY      = needRevise ? this.getRevisedContentY(y) : y;
+            if (newY !== contents.y) {
+                contents.y = newY;
+                Notify.dispatch(Notify.Type.ZoomableContentsMoved);
+            }
+        }
+        private set _contentY(y: number) {
+            this.setContentY(y, false);
+        }
+        private get _contentY(): number {
+            return this.getContentY();
         }
         public getContentY(): number {
             return this._contents.y;
+        }
+        public tweenContentToPoint(contentX: number, contentY: number, needRevise: boolean): void {
+            if (needRevise) {
+                contentX = this.getRevisedContentX(contentX);
+                contentY = this.getRevisedContentY(contentY);
+            }
+
+            egret.Tween.removeTweens(this);
+            egret.Tween.get(this)
+                .to({ _contentX: contentX, _contentY: contentY }, 200);
         }
 
         public setContentScale(scale: number, needRevise: boolean): void {
@@ -360,17 +390,23 @@ namespace TinyWars.GameUi {
             }
         }
 
+        public getRevisedContentX(contentX: number): number {
+            return Math.min(
+                Math.max(contentX, this._getMinContentX()),
+                this._getMaxContentX()
+            );
+        }
+        public getRevisedContentY(contentY: number): number {
+            return Math.min(
+                Math.max(contentY, this._getMinContentY()),
+                this._getMaxContentY()
+            );
+        }
         private _reviseContentX(): void {
-            let x = this.getContentX();
-            x = Math.max(x, this._getMinContentX());
-            x = Math.min(x, this._getMaxContentX());
-            this.setContentX(x, false);
+            this.setContentX(this.getRevisedContentX(this.getContentX()), false);
         }
         private _reviseContentY(): void {
-            let y = this.getContentY();
-            y = Math.max(y, this._getMinContentY());
-            y = Math.min(y, this._getMaxContentY());
-            this.setContentY(y, false);
+            this.setContentY(this.getRevisedContentY(this.getContentY()), false);
         }
         private _reviseContentScaleAndPosition(): void {
             let scale = this.getContentScale();

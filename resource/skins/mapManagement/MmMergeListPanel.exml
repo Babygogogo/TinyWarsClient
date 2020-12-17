@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage source="bg_png" left="0" right="0" top="0" bottom="0" />
+    <GameUi:UiImage source="bg_002_png" left="0" right="0" top="0" bottom="0" />
     <e:Group left="0" top="40" bottom="0" right="200">
         <GameUi:UiZoomableComponent id="_zoomMap" left="20" right="20" top="20" bottom="20" />
         <e:Group id="_groupInfo" x="8" y="10" touchThrough="true" touchEnabled="false" touchChildren="false">
