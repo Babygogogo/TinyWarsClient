@@ -37,7 +37,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     }
 
     export function revise(war: ScwWar, container: RawWarAction): WarAction {
-        if      (container.PlayerBeginTurn)     { return revisePlayerBeginTurn(war, container); }
+        if      (container.SystemBeginTurn)     { return revisePlayerBeginTurn(war, container); }
         else if (container.PlayerDeleteUnit)    { return revisePlayerDeleteUnit(war, container); }
         else if (container.PlayerEndTurn)       { return revisePlayerEndTurn(war, container); }
         else if (container.PlayerProduceUnit)   { return revisePlayerProduceUnit(war, container); }

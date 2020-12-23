@@ -8,7 +8,7 @@ namespace TinyWars.BaseWar {
     import TurnPhaseCode            = Types.TurnPhaseCode;
     import ISerialTurnManager       = ProtoTypes.WarSerialization.ISerialTurnManager;
     import WarAction                = ProtoTypes.WarAction;
-    import IActionPlayerBeginTurn   = WarAction.IActionPlayerBeginTurn;
+    import IActionSystemBeginTurn   = WarAction.IActionSystemBeginTurn;
     import IActionPlayerEndTurn     = WarAction.IActionPlayerEndTurn;
 
     export abstract class BwTurnManager {
@@ -20,11 +20,11 @@ namespace TinyWars.BaseWar {
         private _war                    : BwWar;
         private _hasUnitOnBeginningTurn = false;
 
-        protected abstract _runPhaseGetFund(data: IActionPlayerBeginTurn): void;
-        protected abstract _runPhaseRepairUnitByTile(data: IActionPlayerBeginTurn): void;
-        protected abstract _runPhaseRepairUnitByUnit(data: IActionPlayerBeginTurn): void;
-        protected abstract _runPhaseRecoverUnitByCo(data: IActionPlayerBeginTurn): void;
-        protected abstract _runPhaseMain(data: IActionPlayerBeginTurn): void;
+        protected abstract _runPhaseGetFund(data: IActionSystemBeginTurn): void;
+        protected abstract _runPhaseRepairUnitByTile(data: IActionSystemBeginTurn): void;
+        protected abstract _runPhaseRepairUnitByUnit(data: IActionSystemBeginTurn): void;
+        protected abstract _runPhaseRecoverUnitByCo(data: IActionSystemBeginTurn): void;
+        protected abstract _runPhaseMain(data: IActionSystemBeginTurn): void;
         protected abstract _runPhaseResetVisionForCurrentPlayer(): void;
         protected abstract _runPhaseTickTurnAndPlayerIndex(data: IActionPlayerEndTurn): void;
         protected abstract _runPhaseResetVisionForNextPlayer(): void;
@@ -67,7 +67,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public endPhaseWaitBeginTurn(action: IActionPlayerBeginTurn | null | undefined): void {
+        public endPhaseWaitBeginTurn(action: IActionSystemBeginTurn | null | undefined): void {
             if (this.getPhaseCode() !== TurnPhaseCode.WaitBeginTurn) {
                 Logger.error(`BwTurnManager.endPhaseWaitBeginTurn() invalid current phase code: ${this.getPhaseCode()}`);
                 return;
@@ -146,7 +146,7 @@ namespace TinyWars.BaseWar {
                 });
             }
         }
-        private _runPhaseDestroyUnitsOutOfFuel(data: IActionPlayerBeginTurn): void {
+        private _runPhaseDestroyUnitsOutOfFuel(data: IActionSystemBeginTurn): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== 0) {
                 const war = this.getWar();
@@ -187,7 +187,7 @@ namespace TinyWars.BaseWar {
                 });
             }
         }
-        private _runPhaseActivateMapWeapon(data: IActionPlayerBeginTurn): void {
+        private _runPhaseActivateMapWeapon(data: IActionSystemBeginTurn): void {
         }
 
         private _runPhaseResetUnitState(): void {

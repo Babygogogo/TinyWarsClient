@@ -9,7 +9,7 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
             war,
             {
                 actionId        : war.getExecutedActionsCount(),
-                PlayerBeginTurn : {},
+                SystemBeginTurn : {},
             }
         ));
     }

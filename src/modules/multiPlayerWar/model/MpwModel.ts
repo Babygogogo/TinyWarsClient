@@ -88,7 +88,6 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
             ? (await new MultiCustomWar.McwWar().init(data)).startRunning().startRunningView() as MpwWar
             : (await new RankMatchWar.RmwWar().init(data)).startRunning().startRunningView() as MpwWar;
         _setWar(war);
-        _checkAndRequestBeginTurn(war);
 
         return war;
     }
@@ -167,7 +166,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                             if (cachedActionsCount) {
                                 MpwActionExecutor.checkAndRunFirstCachedAction(war, _cachedActions);
                             } else {
-                                _checkAndRequestBeginTurn(war);
+                                // Nothing to do.
                             }
                         }
                     }
@@ -211,15 +210,6 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                 _cachedActions.push(container);
                 MpwActionExecutor.checkAndRunFirstCachedAction(war, _cachedActions);
             }
-        }
-    }
-
-    function _checkAndRequestBeginTurn(war: MpwWar): void {
-        const turnManager = war.getTurnManager();
-        if ((turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn)      &&
-            (war.getPlayerIndexLoggedIn() ===  turnManager.getPlayerIndexInTurn())
-        ) {
-            (war.getActionPlanner() as MpwActionPlanner).setStateRequestingPlayerBeginTurn();
         }
     }
 }

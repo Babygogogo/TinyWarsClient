@@ -1,38 +1,26 @@
 
 namespace TinyWars.MultiPlayerWar {
-    import DestructionHelpers       = Utility.DestructionHelpers;
     import ProtoTypes               = Utility.ProtoTypes;
-    import Lang                     = Utility.Lang;
-    import FloatText                = Utility.FloatText;
     import BwTurnManagerHelper      = BaseWar.BwTurnManagerHelper;
-    import IActionPlayerBeginTurn   = ProtoTypes.WarAction.IActionPlayerBeginTurn;
+    import IActionSystemBeginTurn   = ProtoTypes.WarAction.IActionSystemBeginTurn;
     import IActionPlayerEndTurn     = ProtoTypes.WarAction.IActionPlayerEndTurn;
 
     export class MpwTurnManager extends BaseWar.BwTurnManager {
-        protected _runPhaseGetFund(data: IActionPlayerBeginTurn): void {
+        protected _runPhaseGetFund(data: IActionSystemBeginTurn): void {
             BwTurnManagerHelper.runPhaseGetFundWithExtraData(this, data);
         }
-        protected _runPhaseRepairUnitByTile(data: IActionPlayerBeginTurn): void {
+        protected _runPhaseRepairUnitByTile(data: IActionSystemBeginTurn): void {
             BwTurnManagerHelper.runPhaseRepairUnitByTileWithExtraData(this, data);
         }
-        protected _runPhaseRepairUnitByUnit(data: IActionPlayerBeginTurn): void {
+        protected _runPhaseRepairUnitByUnit(data: IActionSystemBeginTurn): void {
             BwTurnManagerHelper.runPhaseRepairUnitByUnitWithExtraData(this, data);
         }
-        protected _runPhaseRecoverUnitByCo(data: IActionPlayerBeginTurn): void {
+        protected _runPhaseRecoverUnitByCo(data: IActionSystemBeginTurn): void {
             BwTurnManagerHelper.runPhaseRecoverUnitByCoWithExtraData(this, data);
         }
-        protected _runPhaseMain(data: IActionPlayerBeginTurn): void {
-            const playerIndex   = this.getPlayerIndexInTurn();
-            const war           = this.getWar();
-            if (data.extraData.isDefeated) {
-                war.getPlayer(playerIndex).getNickname().then(name => {
-                    FloatText.show(Lang.getFormattedText(Lang.Type.F0014, name));
-                });
-                DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
-                MpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
-            } else {
-                war.getUnitMap().forEachUnitOnMap(unit => (unit.getPlayerIndex() === playerIndex) && (unit.updateView()));
-            }
+        protected _runPhaseMain(data: IActionSystemBeginTurn): void {
+            const playerIndex = this.getPlayerIndexInTurn();
+            this.getWar().getUnitMap().forEachUnitOnMap(unit => (unit.getPlayerIndex() === playerIndex) && (unit.updateView()));
         }
 
         protected _runPhaseTickTurnAndPlayerIndex(data: IActionPlayerEndTurn): void {

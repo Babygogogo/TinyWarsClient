@@ -23,7 +23,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     const _EXECUTORS = new Map<WarActionCodes, (war: RwWar, data: IActionContainer) => Promise<void>>([
-        [WarActionCodes.ActionPlayerBeginTurn,      _exePlayerBeginTurn],
+        [WarActionCodes.ActionSystemBeginTurn,      _exeSystemBeginTurn],
         [WarActionCodes.ActionPlayerDeleteUnit,     _exePlayerDeleteUnit],
         [WarActionCodes.ActionPlayerEndTurn,        _exePlayerEndTurn],
         [WarActionCodes.ActionPlayerProduceUnit,    _exePlayerProduceUnit],
@@ -47,7 +47,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         [WarActionCodes.ActionUnitWait,             _exeUnitWait],
     ]);
     const _FAST_EXECUTORS = new Map<WarActionCodes, (war: RwWar, data: IActionContainer) => Promise<void>>([
-        [WarActionCodes.ActionPlayerBeginTurn,      _fastExePlayerBeginTurn],
+        [WarActionCodes.ActionSystemBeginTurn,      _fastExeSystemBeginTurn],
         [WarActionCodes.ActionPlayerDeleteUnit,     _fastExePlayerDeleteUnit],
         [WarActionCodes.ActionPlayerEndTurn,        _fastExePlayerEndTurn],
         [WarActionCodes.ActionPlayerProduceUnit,    _fastExePlayerProduceUnit],
@@ -131,12 +131,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The 'true' executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _exePlayerBeginTurn(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeSystemBeginTurn(war: RwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${await war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0094)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
-        war.getTurnManager().endPhaseWaitBeginTurn(data.ActionPlayerBeginTurn);
+        war.getTurnManager().endPhaseWaitBeginTurn(data.ActionSystemBeginTurn);
 
         actionPlanner.setStateIdle();
     }
@@ -1231,8 +1231,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The fast executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _fastExePlayerBeginTurn(war: RwWar, data: IActionContainer): Promise<void> {
-        war.getTurnManager().endPhaseWaitBeginTurn(data.ActionPlayerBeginTurn);
+    async function _fastExeSystemBeginTurn(war: RwWar, data: IActionContainer): Promise<void> {
+        war.getTurnManager().endPhaseWaitBeginTurn(data.ActionSystemBeginTurn);
     }
 
     async function _fastExePlayerDeleteUnit(war: RwWar, data: IActionContainer): Promise<void> {

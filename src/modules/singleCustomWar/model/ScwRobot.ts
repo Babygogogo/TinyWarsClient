@@ -1400,7 +1400,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         await _checkAndCallLater();
 
         if (_turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) {
-            return { PlayerBeginTurn: { } };
+            return { SystemBeginTurn: { } };
         } else {
             return null;
         }

@@ -5,7 +5,7 @@ namespace TinyWars.Utility.Types {
     ////////////////////////////////////////////////////////////////////////////////
     export type RawWarActionContainer = {
         actionId?           : number;
-        PlayerBeginTurn?    : RawWarActionPlayerBeginTurn;
+        SystemBeginTurn?    : RawWarActionSystemBeginTurn;
         PlayerDeleteUnit?   : RawWarActionPlayerDeleteUnit;
         PlayerEndTurn?      : RawWarActionPlayerEndTurn;
         PlayerProduceUnit?  : RawWarActionPlayerProduceUnit;
@@ -26,7 +26,7 @@ namespace TinyWars.Utility.Types {
         UnitUseCoSkill?     : RawWarActionUnitUseCoSkill;
         UnitWait?           : RawWarActionUnitWait;
     }
-    export type RawWarActionPlayerBeginTurn = {
+    export type RawWarActionSystemBeginTurn = {
     }
     export type RawWarActionPlayerDeleteUnit = {
         gridIndex: GridIndex;
@@ -316,6 +316,12 @@ namespace TinyWars.Utility.Types {
 
     export const enum UnitActionState {
         Idle,   /* 0 */         Acted,  /* 1 */
+    }
+
+    export const enum PlayerAliveState {
+        Alive   = 0,
+        Dying   = 1,
+        Dead    = 2,
     }
 
     export const enum UnitAnimationType {

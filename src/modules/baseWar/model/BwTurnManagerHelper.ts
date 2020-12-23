@@ -8,11 +8,11 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
     import ConfigManager            = Utility.ConfigManager;
     import GridIndex                = Types.GridIndex;
     import WarAction                = ProtoTypes.WarAction;
-    import IActionPlayerBeginTurn   = WarAction.IActionPlayerBeginTurn;
+    import IActionSystemBeginTurn   = WarAction.IActionSystemBeginTurn;
     import IActionPlayerEndTurn     = WarAction.IActionPlayerEndTurn;
     import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
-    export function runPhaseGetFundWithExtraData(turnManager: BwTurnManager, data: IActionPlayerBeginTurn): void {
+    export function runPhaseGetFundWithExtraData(turnManager: BwTurnManager, data: IActionSystemBeginTurn): void {
         const war = turnManager.getWar();
         if (war == null) {
             Logger.error(`BwTurnManagerHelper.runPhaseGetFundWithExtraData() empty war.`);
@@ -114,7 +114,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
         }
     }
 
-    export function runPhaseRepairUnitByTileWithExtraData(turnManager: BwTurnManager, data: IActionPlayerBeginTurn): void {
+    export function runPhaseRepairUnitByTileWithExtraData(turnManager: BwTurnManager, data: IActionSystemBeginTurn): void {
         const extraData = data.extraData;
         if (extraData == null) {
             Logger.error(`BwTurnManagerHelper.runPhaseRepairUnitByTileWithExtraData() empty extraData.`);
@@ -233,7 +233,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
         }
     }
 
-    export function runPhaseRepairUnitByUnitWithExtraData(turnManager: BwTurnManager, data: IActionPlayerBeginTurn): void {
+    export function runPhaseRepairUnitByUnitWithExtraData(turnManager: BwTurnManager, data: IActionSystemBeginTurn): void {
         const war               = turnManager.getWar();
         const unitMap           = war.getUnitMap();
         const gridVisionEffect  = war.getGridVisionEffect();
@@ -411,7 +411,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
         }
     }
 
-    export function runPhaseRecoverUnitByCoWithExtraData(turnManager: BwTurnManager, data: IActionPlayerBeginTurn): void {
+    export function runPhaseRecoverUnitByCoWithExtraData(turnManager: BwTurnManager, data: IActionSystemBeginTurn): void {
         const war               = turnManager.getWar();
         const unitMap           = war.getUnitMap();
         const gridVisionEffect  = war.getGridVisionEffect();

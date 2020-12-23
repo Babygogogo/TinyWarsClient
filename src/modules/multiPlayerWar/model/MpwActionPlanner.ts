@@ -215,13 +215,6 @@ namespace TinyWars.MultiPlayerWar {
             this._updateView();
         }
 
-        public setStateRequestingPlayerBeginTurn(): void {
-            MpwProxy.reqMcwPlayerBeginTurn(this._getWar());
-
-            this._setState(State.RequestingPlayerBeginTurn);
-            this._updateView();
-        }
-
         public setStateRequestingPlayerEndTurn(): void {
             MpwProxy.reqMcwPlayerEndTurn(this._getWar());
 

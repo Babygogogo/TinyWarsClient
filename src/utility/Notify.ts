@@ -178,7 +178,7 @@ namespace TinyWars.Utility.Notify {
         MsgMpwWatchContinueWar,
         MsgMpwWatchContinueWarFailed,
 
-        MsgMpwActionPlayerBeginTurn,
+        MsgMpwActionSystemBeginTurn,
         MsgMpwActionPlayerDeleteUnit,
         MsgMpwActionPlayerEndTurn,
         MsgMpwActionPlayerProduceUnit,

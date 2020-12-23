@@ -28,7 +28,8 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
             { msgCode: Codes.MsgMpwWatchDeleteWatcher,          callback: _onMsgMpwWatchDeleteWatcher           },
             { msgCode: Codes.MsgMpwWatchContinueWar,            callback: _onMsgMpwWatchContinueWar             },
 
-            { msgCode: Codes.MsgMpwActionPlayerBeginTurn,       callback: _onMsgMpwActionPlayerBeginTurn        },
+            { msgCode: Codes.MsgMpwActionSystemBeginTurn,       callback: _onMsgMpwActionSystemBeginTurn        },
+
             { msgCode: Codes.MsgMpwActionPlayerDeleteUnit,      callback: _onMsgMpwActionPlayerDeleteUnit       },
             { msgCode: Codes.MsgMpwActionPlayerEndTurn,         callback: _onMsgMpwActionPlayerEndTurn          },
             { msgCode: Codes.MsgMpwActionPlayerProduceUnit,     callback: _onMsgMpwActionPlayerProduceUnit      },
@@ -243,19 +244,11 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         }
     }
 
-    export function reqMcwPlayerBeginTurn(war: BwWar): void {
-        NetManager.send({
-            MsgMpwActionPlayerBeginTurn: { c: {
-                warId   : war.getWarId(),
-                actionId: war.getExecutedActionsCount(),
-            }, }
-        });
-    }
-    function _onMsgMpwActionPlayerBeginTurn(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionPlayerBeginTurn.IS;
+    function _onMsgMpwActionSystemBeginTurn(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwActionSystemBeginTurn.IS;
         if (!data.errorCode) {
             MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionPlayerBeginTurn, data);
+            Notify.dispatch(Notify.Type.MsgMpwActionSystemBeginTurn, data);
         }
     }
 

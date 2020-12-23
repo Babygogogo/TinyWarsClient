@@ -23,7 +23,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
     import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     const _EXECUTORS = new Map<WarActionCodes, (war: ScwWar, data: IActionContainer) => Promise<void>>([
-        [WarActionCodes.ActionPlayerBeginTurn,      _exePlayerBeginTurn],
+        [WarActionCodes.ActionSystemBeginTurn,      _exeSystemBeginTurn],
         [WarActionCodes.ActionPlayerDeleteUnit,     _exePlayerDeleteUnit],
         [WarActionCodes.ActionPlayerEndTurn,        _exePlayerEndTurn],
         [WarActionCodes.ActionPlayerProduceUnit,    _exePlayerProduceUnit],
@@ -54,7 +54,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The 'true' executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _exePlayerBeginTurn(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeSystemBeginTurn(war: ScwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -69,7 +69,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             ));
         }
 
-        await war.getTurnManager().endPhaseWaitBeginTurn(data.ActionPlayerBeginTurn);
+        await war.getTurnManager().endPhaseWaitBeginTurn(data.ActionSystemBeginTurn);
         actionPlanner.setStateIdle();
     }
 
