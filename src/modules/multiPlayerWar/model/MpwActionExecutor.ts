@@ -191,7 +191,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
 
         const action = data.ActionPlayerSurrender;
         const player = war.getPlayerInTurn();
-        DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
+        player.setAliveState(Types.PlayerAliveState.Dying);
         FloatText.show(Lang.getFormattedText(action.isBoot ? Lang.Type.F0028: Lang.Type.F0008, await player.getNickname()));
 
         MpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
@@ -461,12 +461,9 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
             actionPlanner.setStateIdle();
 
         } else {
-            const destination           = pathNodes[pathNodes.length - 1];
-            const tile                  = war.getTileMap().getTile(destination);
-            const restCapturePoint      = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount();
-            const previousPlayerIndex   = tile.getPlayerIndex();
-            const lostPlayerIndex       = ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) ? previousPlayerIndex : undefined;
-
+            const destination       = pathNodes[pathNodes.length - 1];
+            const tile              = war.getTileMap().getTile(destination);
+            const restCapturePoint  = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount();
             if (restCapturePoint > 0) {
                 focusUnit.setIsCapturingTile(true);
                 tile.setCurrentCapturePoint(restCapturePoint);
@@ -474,27 +471,18 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
                 const tileObjectType = tile.getObjectType();
                 focusUnit.setIsCapturingTile(false);
                 tile.setCurrentCapturePoint(tile.getMaxCapturePoint());
-                tile.resetByTypeAndPlayerIndex(
-                    { baseType: tile.getBaseType(), objectType: tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType, playerIndex: focusUnit.getPlayerIndex() },
-                );
+                tile.resetByTypeAndPlayerIndex({
+                    baseType    : tile.getBaseType(),
+                    objectType  : tileObjectType === Types.TileObjectType.Headquarters ? Types.TileObjectType.City : tileObjectType,
+                    playerIndex : focusUnit.getPlayerIndex()
+                });
             }
 
-            if (lostPlayerIndex == null) {
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
-                focusUnit.updateView();
-                tile.flushDataToView();
-                MpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
-                actionPlanner.setStateIdle();
-
-            } else {
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
-                focusUnit.updateView();
-                tile.flushDataToView();
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0016, await war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
-                DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
-                MpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
-                actionPlanner.setStateIdle();
-            }
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
+            focusUnit.updateView();
+            tile.flushDataToView();
+            MpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
         }
     }
 

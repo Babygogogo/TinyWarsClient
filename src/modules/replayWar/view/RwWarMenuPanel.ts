@@ -469,7 +469,7 @@ namespace TinyWars.ReplayWar {
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
                 + `  ${player === war.getPlayerInTurn() ? Lang.getText(Lang.Type.B0086) : ""}`;
 
-            if (!player.getIsAlive()) {
+            if (player.getAliveState() !== Types.PlayerAliveState.Alive) {
                 this._labelLost.visible = true;
                 this._listInfo.visible  = false;
             } else {

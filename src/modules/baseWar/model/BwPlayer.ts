@@ -13,7 +13,7 @@ namespace TinyWars.BaseWar {
         private _teamIndex              : number;
         private _fund                   : number;
         private _hasVotedForDraw        : boolean;
-        private _isAlive                : boolean;
+        private _aliveState             : Types.PlayerAliveState;
         private _restTimeToBoot         : number;
         private _userId                 : number;
         private _unitAndTileSkinId      : number;
@@ -39,9 +39,9 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const isAlive = data.isAlive;
-            if (isAlive == null) {
-                Logger.error(`BwPlayer.init() empty isAlive.`);
+            const aliveState = data.aliveState;
+            if (aliveState == null) {
+                Logger.error(`BwPlayer.init() empty aliveState.`);
                 return undefined;
             }
 
@@ -92,7 +92,7 @@ namespace TinyWars.BaseWar {
 
             this.setFund(fund);
             this.setHasVotedForDraw(hasVotedForDraw);
-            this.setIsAlive(isAlive);
+            this.setAliveState(aliveState);
             this._setPlayerIndex(playerIndex);
             this._setTeamIndex(teamIndex);
             this.setRestTimeToBoot(restTimeToBoot);
@@ -125,9 +125,9 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const isAlive = this.getIsAlive();
-            if (isAlive == null) {
-                Logger.error(`BwPlayer.serialize() empty isAlive.`);
+            const aliveState = this.getAliveState();
+            if (aliveState == null) {
+                Logger.error(`BwPlayer.serialize() empty aliveState.`);
                 return undefined;
             }
 
@@ -178,7 +178,7 @@ namespace TinyWars.BaseWar {
                 teamIndex,
                 fund,
                 hasVotedForDraw,
-                isAlive,
+                aliveState,
                 restTimeToBoot,
                 coUsingSkillType,
                 coIsDestroyedInTurn,
@@ -203,9 +203,9 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const isAlive = this.getIsAlive();
-            if (isAlive == null) {
-                Logger.error(`BwPlayer.serializeForSimulation() empty isAlive.`);
+            const aliveState = this.getAliveState();
+            if (aliveState == null) {
+                Logger.error(`BwPlayer.serializeForSimulation() empty aliveState.`);
                 return undefined;
             }
 
@@ -258,7 +258,7 @@ namespace TinyWars.BaseWar {
                 teamIndex,
                 fund                        : shouldShowFund ? fund : 0,
                 hasVotedForDraw,
-                isAlive,
+                aliveState,
                 restTimeToBoot,
                 coUsingSkillType,
                 coIsDestroyedInTurn,
@@ -295,11 +295,11 @@ namespace TinyWars.BaseWar {
             return this._hasVotedForDraw;
         }
 
-        public setIsAlive(alive: boolean): void {
-            this._isAlive = alive;
+        public setAliveState(alive: Types.PlayerAliveState): void {
+            this._aliveState = alive;
         }
-        public getIsAlive(): boolean {
-            return this._isAlive;
+        public getAliveState(): Types.PlayerAliveState {
+            return this._aliveState;
         }
 
         private _setPlayerIndex(index: number): void {
@@ -352,7 +352,7 @@ namespace TinyWars.BaseWar {
             this.getWatchRequestSrcUserIds().delete(userId);
         }
         public checkCanAddWatchRequestSrcUserId(userId: number): boolean {
-            return (this.getIsAlive())
+            return (this.getAliveState() === Types.PlayerAliveState.Alive)
                 && (this.getUserId() !== userId)
                 && (!this.getWatchRequestSrcUserIds().has(userId))
                 && (!this.getWatchOngoingSrcUserIds().has(userId));

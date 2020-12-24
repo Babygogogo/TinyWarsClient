@@ -644,7 +644,7 @@ namespace TinyWars.SingleCustomWar {
                 + `  ${isPlayerInTurn ? Lang.getText(Lang.Type.B0086) : ""}`;
             this._btnName.setTextColor(war.getIsSinglePlayerCheating() ? 0x00FF00 : 0xFFFFFF);
 
-            if (!player.getIsAlive()) {
+            if (player.getAliveState() !== Types.PlayerAliveState.Alive) {
                 this._labelLost.visible = true;
                 this._listInfo.visible  = false;
             } else {

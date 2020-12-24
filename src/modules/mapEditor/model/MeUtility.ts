@@ -115,7 +115,7 @@ namespace TinyWars.MapEditor.MeUtility {
             players.push({
                 fund                        : 0,
                 hasVotedForDraw             : false,
-                isAlive                     : true,
+                aliveState                  : Types.PlayerAliveState.Alive,
                 playerIndex,
                 teamIndex                   : playerIndex,
                 userId                      : null,

@@ -1,10 +1,12 @@
 
 namespace TinyWars.BaseWar {
+    import Types                = Utility.Types;
     import ConfigManager        = Utility.ConfigManager;
     import Logger               = Utility.Logger;
     import WarSerialization     = Utility.ProtoTypes.WarSerialization;
     import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     export abstract class BwPlayerManager {
         private _players        = new Map<number, BwPlayer>();
@@ -144,8 +146,9 @@ namespace TinyWars.BaseWar {
         public getAlivePlayersCount(includeNeutral: boolean): number {
             let count = 0;
             for (const [playerIndex, player] of this._players) {
-                if ((player.getIsAlive())                   &&
-                    ((includeNeutral) || (playerIndex !== 0))) {
+                if ((player.getAliveState() === Types.PlayerAliveState.Alive)                   &&
+                    ((includeNeutral) || (playerIndex !== CommonConstants.WarNeutralPlayerIndex))
+                ) {
                     ++count;
                 }
             }
@@ -159,8 +162,8 @@ namespace TinyWars.BaseWar {
         public getAliveTeamIndexes(includeNeutral: boolean, ignoredPlayerIndex?: number): Set<number> {
             const indexes = new Set<number>();
             for (const [playerIndex, player] of this._players) {
-                if ((player.getIsAlive())                   &&
-                    (playerIndex !== ignoredPlayerIndex)    &&
+                if ((player.getAliveState() === Types.PlayerAliveState.Alive)   &&
+                    (playerIndex !== ignoredPlayerIndex)                        &&
                     ((includeNeutral) || (playerIndex !== 0))
                 ) {
                     indexes.add(player.getTeamIndex());
@@ -184,7 +187,7 @@ namespace TinyWars.BaseWar {
         public getAliveWatcherTeamIndexes(watcherUserId: number): Set<number> {
             const indexes = new Set<number>();
             this.forEachPlayer(false, player => {
-                if (player.getIsAlive()) {
+                if (player.getAliveState() === Types.PlayerAliveState.Alive) {
                     if ((player.getUserId() === watcherUserId)                  ||
                         (player.getWatchOngoingSrcUserIds().has(watcherUserId))
                     ) {
@@ -196,7 +199,9 @@ namespace TinyWars.BaseWar {
         }
         public checkHasAliveWatcherTeam(watcherUserId: number): boolean {
             for (const [playerIndex, player] of this._players) {
-                if ((playerIndex !== 0) && (player.getIsAlive())) {
+                if ((playerIndex !== 0)                                     &&
+                    (player.getAliveState() === Types.PlayerAliveState.Alive)
+                ) {
                     if ((player.getUserId() === watcherUserId) || (player.getWatchOngoingSrcUserIds().has(watcherUserId))) {
                         return true;
                     }

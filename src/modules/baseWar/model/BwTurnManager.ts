@@ -289,7 +289,7 @@ namespace TinyWars.BaseWar {
                     nextTurnIndex   += 1;
                 }
 
-                if (playerManager.getPlayer(nextPlayerIndex)!.getIsAlive()) {
+                if (playerManager.getPlayer(nextPlayerIndex)!.getAliveState() === Types.PlayerAliveState.Alive) {
                     return { turnIndex: nextTurnIndex, playerIndex: nextPlayerIndex };
                 } else {
                     ++nextPlayerIndex;

@@ -137,7 +137,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateExecutingAction();
         FloatText.show(Lang.getFormattedText(data.ActionPlayerSurrender.isBoot ? Lang.Type.F0028 : Lang.Type.F0008, await player.getNickname()));
 
-        DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
+        player.setAliveState(Types.PlayerAliveState.Dying);
 
         ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
@@ -335,15 +335,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
                 DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, true);
             }
 
-            const lostPlayerIndex = ((isTargetDestroyed) && (!unitMap.checkHasUnit(targetPlayerIndex)))
-                ? (targetPlayerIndex)
-                : (((isAttackerDestroyed) && (!unitMap.checkHasUnit(attackerPlayerIndex)))
-                    ? (attackerPlayerIndex)
-                    : (undefined)
-                );
-            if (lostPlayerIndex) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0015, await war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
-                DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
+            if ((isTargetDestroyed) && (!unitMap.checkHasUnit(targetPlayerIndex))) {
+                targetPlayer.setAliveState(Types.PlayerAliveState.Dying);
+            }
+            if ((isAttackerDestroyed) && (!unitMap.checkHasUnit(attackerPlayerIndex))) {
+                attackerPlayer.setAliveState(Types.PlayerAliveState.Dying);
             }
 
             ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
@@ -517,11 +513,12 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             actionPlanner.setStateIdle();
 
         } else {
-            const destination           = pathNodes[pathNodes.length - 1];
-            const tile                  = war.getTileMap().getTile(destination);
-            const restCapturePoint      = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount();
-            const previousPlayerIndex   = tile.getPlayerIndex();
-            const lostPlayerIndex       = ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) ? previousPlayerIndex : undefined;
+            const destination       = pathNodes[pathNodes.length - 1];
+            const tile              = war.getTileMap().getTile(destination);
+            const restCapturePoint  = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount();
+            if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
+                tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
+            }
 
             if (restCapturePoint > 0) {
                 focusUnit.setIsCapturingTile(true);
@@ -537,22 +534,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
                 });
             }
 
-            if (lostPlayerIndex == null) {
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
-                focusUnit.updateView();
-                tile.flushDataToView();
-                ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
-                actionPlanner.setStateIdle();
-
-            } else {
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
-                focusUnit.updateView();
-                tile.flushDataToView();
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0016, await war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
-                DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
-                ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
-                actionPlanner.setStateIdle();
-            }
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
+            focusUnit.updateView();
+            tile.flushDataToView();
+            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
         }
     }
 

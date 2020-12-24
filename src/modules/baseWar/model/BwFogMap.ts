@@ -105,7 +105,9 @@ namespace TinyWars.BaseWar {
 
             for (const [playerIndex, map] of this._getAllMapsFromPath()) {
                 const player = war.getPlayer(playerIndex)!;
-                if ((player.getIsAlive()) && (targetTeamIndexes.has(player.getTeamIndex()))) {
+                if ((player.getAliveState() === Types.PlayerAliveState.Alive) &&
+                    (targetTeamIndexes.has(player.getTeamIndex()))
+                ) {
                     const visibilityList = BwHelpers.getVisibilityListWithMapFromPath(map, mapSize);
                     if (visibilityList != null) {
                         mapsFromPath.push({

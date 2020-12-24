@@ -1,5 +1,7 @@
 
 namespace TinyWars.MultiPlayerWar {
+    import Types = Utility.Types;
+
     export abstract class MpwWar extends BaseWar.BwWar {
         private _isEnded = false;
 
@@ -42,7 +44,7 @@ namespace TinyWars.MultiPlayerWar {
                 return false;
             } else {
                 const player = this.getPlayerInTurn();
-                return (player.getIsAlive())
+                return (player.getAliveState() === Types.PlayerAliveState.Alive)
                     && (!player.checkIsNeutral())
                     && (Time.TimeModel.getServerTimestamp() > this.getEnterTurnTime() + player.getRestTimeToBoot());
             }

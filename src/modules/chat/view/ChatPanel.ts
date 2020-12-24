@@ -290,7 +290,7 @@ namespace TinyWars.Chat {
             const war           = MultiPlayerWar.MpwModel.getWar();
             const playerManager = war ? war.getPlayerManager() : null;
             const player        = playerManager ? playerManager.getPlayerByUserId(User.UserModel.getSelfUserId()) : null;
-            if ((player) && (player.getIsAlive())) {
+            if ((player) && (player.getAliveState() === Types.PlayerAliveState.Alive)) {
                 const toWarAndTeam1 = war.getWarId() * CommonConstants.ChatTeamDivider;
                 if (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.WarAndTeam, toTarget: toWarAndTeam1 })) {
                     dataDict.set(indexForSort, {
