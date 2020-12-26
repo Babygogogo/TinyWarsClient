@@ -4,29 +4,40 @@ namespace TinyWars.Utility.Types {
     // Raw war action types.
     ////////////////////////////////////////////////////////////////////////////////
     export type RawWarActionContainer = {
-        actionId?           : number;
-        SystemBeginTurn?    : RawWarActionSystemBeginTurn;
-        PlayerDeleteUnit?   : RawWarActionPlayerDeleteUnit;
-        PlayerEndTurn?      : RawWarActionPlayerEndTurn;
-        PlayerProduceUnit?  : RawWarActionPlayerProduceUnit;
-        UnitAttackUnit?     : RawWarActionUnitAttackUnit;
-        UnitAttackTile?     : RawWarActionUnitAttackTile;
-        UnitBeLoaded?       : RawWarActionUnitBeLoaded;
-        UnitBuildTile?      : RawWarActionUnitBuildTile;
-        UnitCaptureTile?    : RawWarActionUnitCaptureTile;
-        UnitDive?           : RawWarActionUnitDive;
-        UnitDrop?           : RawWarActionUnitDrop;
-        UnitJoin?           : RawWarActionUnitJoin;
-        UnitLaunchFlare?    : RawWarActionUnitLaunchFlare;
-        UnitLaunchSilo?     : RawWarActionUnitLaunchSilo;
-        UnitLoadCo?         : RawWarActionUnitLoadCo;
-        UnitProduceUnit?    : RawWarActionUnitProduceUnit;
-        UnitSupply?         : RawWarActionUnitSupply;
-        UnitSurface?        : RawWarActionUnitSurface;
-        UnitUseCoSkill?     : RawWarActionUnitUseCoSkill;
-        UnitWait?           : RawWarActionUnitWait;
+        actionId?                   : number;
+        SystemBeginTurn?            : RawWarActionSystemBeginTurn;
+        SystemCallWarEvent?         : RawWarActionSystemCallWarEvent;
+        SystemDestroyPlayerForce?   : RawWarActionSystemDestroyPlayerForce;
+        SystemEndWar?               : RawWarActionSystemEndWar;
+        PlayerDeleteUnit?           : RawWarActionPlayerDeleteUnit;
+        PlayerEndTurn?              : RawWarActionPlayerEndTurn;
+        PlayerProduceUnit?          : RawWarActionPlayerProduceUnit;
+        UnitAttackUnit?             : RawWarActionUnitAttackUnit;
+        UnitAttackTile?             : RawWarActionUnitAttackTile;
+        UnitBeLoaded?               : RawWarActionUnitBeLoaded;
+        UnitBuildTile?              : RawWarActionUnitBuildTile;
+        UnitCaptureTile?            : RawWarActionUnitCaptureTile;
+        UnitDive?                   : RawWarActionUnitDive;
+        UnitDrop?                   : RawWarActionUnitDrop;
+        UnitJoin?                   : RawWarActionUnitJoin;
+        UnitLaunchFlare?            : RawWarActionUnitLaunchFlare;
+        UnitLaunchSilo?             : RawWarActionUnitLaunchSilo;
+        UnitLoadCo?                 : RawWarActionUnitLoadCo;
+        UnitProduceUnit?            : RawWarActionUnitProduceUnit;
+        UnitSupply?                 : RawWarActionUnitSupply;
+        UnitSurface?                : RawWarActionUnitSurface;
+        UnitUseCoSkill?             : RawWarActionUnitUseCoSkill;
+        UnitWait?                   : RawWarActionUnitWait;
     }
     export type RawWarActionSystemBeginTurn = {
+    }
+    export type RawWarActionSystemCallWarEvent = {
+        eventId : number;
+    }
+    export type RawWarActionSystemDestroyPlayerForce = {
+        targetPlayerIndex   : number;
+    }
+    export type RawWarActionSystemEndWar = {
     }
     export type RawWarActionPlayerDeleteUnit = {
         gridIndex: GridIndex;

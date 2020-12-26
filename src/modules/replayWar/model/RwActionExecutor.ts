@@ -23,65 +23,70 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     const _EXECUTORS = new Map<WarActionCodes, (war: RwWar, data: IActionContainer) => Promise<void>>([
-        [WarActionCodes.ActionSystemBeginTurn,      _exeSystemBeginTurn],
-        [WarActionCodes.ActionPlayerDeleteUnit,     _exePlayerDeleteUnit],
-        [WarActionCodes.ActionPlayerEndTurn,        _exePlayerEndTurn],
-        [WarActionCodes.ActionPlayerProduceUnit,    _exePlayerProduceUnit],
-        [WarActionCodes.ActionPlayerSurrender,      _exePlayerSurrender],
-        [WarActionCodes.ActionPlayerVoteForDraw,    _exePlayerVoteForDraw],
-        [WarActionCodes.ActionUnitAttackUnit,       _exeUnitAttackUnit],
-        [WarActionCodes.ActionUnitAttackTile,       _exeUnitAttackTile],
-        [WarActionCodes.ActionUnitBeLoaded,         _exeUnitBeLoaded],
-        [WarActionCodes.ActionUnitBuildTile,        _exeUnitBuildTile],
-        [WarActionCodes.ActionUnitCaptureTile,      _exeUnitCaptureTile],
-        [WarActionCodes.ActionUnitDive,             _exeUnitDive],
-        [WarActionCodes.ActionUnitDropUnit,         _exeUnitDropUnit],
-        [WarActionCodes.ActionUnitJoinUnit,         _exeUnitJoinUnit],
-        [WarActionCodes.ActionUnitLaunchFlare,      _exeUnitLaunchFlare],
-        [WarActionCodes.ActionUnitLaunchSilo,       _exeUnitLaunchSilo],
-        [WarActionCodes.ActionUnitLoadCo,           _exeUnitLoadCo],
-        [WarActionCodes.ActionUnitProduceUnit,      _exeUnitProduceUnit],
-        [WarActionCodes.ActionUnitSupplyUnit,       _exeUnitSupplyUnit],
-        [WarActionCodes.ActionUnitSurface,          _exeUnitSurface],
-        [WarActionCodes.ActionUnitUseCoSkill,       _exeUnitUseCoSkill],
-        [WarActionCodes.ActionUnitWait,             _exeUnitWait],
+        [WarActionCodes.ActionSystemBeginTurn,          _exeSystemBeginTurn],
+        [WarActionCodes.ActionSystemCallWarEvent,       _exeSystemCallWarEvent],
+        [WarActionCodes.ActionSystemDestroyPlayerForce, _exeSystemDestroyPlayerForce],
+        [WarActionCodes.ActionSystemEndWar,             _exeSystemEndWar],
+        [WarActionCodes.ActionPlayerDeleteUnit,         _exePlayerDeleteUnit],
+        [WarActionCodes.ActionPlayerEndTurn,            _exePlayerEndTurn],
+        [WarActionCodes.ActionPlayerProduceUnit,        _exePlayerProduceUnit],
+        [WarActionCodes.ActionPlayerSurrender,          _exePlayerSurrender],
+        [WarActionCodes.ActionPlayerVoteForDraw,        _exePlayerVoteForDraw],
+        [WarActionCodes.ActionUnitAttackUnit,           _exeUnitAttackUnit],
+        [WarActionCodes.ActionUnitAttackTile,           _exeUnitAttackTile],
+        [WarActionCodes.ActionUnitBeLoaded,             _exeUnitBeLoaded],
+        [WarActionCodes.ActionUnitBuildTile,            _exeUnitBuildTile],
+        [WarActionCodes.ActionUnitCaptureTile,          _exeUnitCaptureTile],
+        [WarActionCodes.ActionUnitDive,                 _exeUnitDive],
+        [WarActionCodes.ActionUnitDropUnit,             _exeUnitDropUnit],
+        [WarActionCodes.ActionUnitJoinUnit,             _exeUnitJoinUnit],
+        [WarActionCodes.ActionUnitLaunchFlare,          _exeUnitLaunchFlare],
+        [WarActionCodes.ActionUnitLaunchSilo,           _exeUnitLaunchSilo],
+        [WarActionCodes.ActionUnitLoadCo,               _exeUnitLoadCo],
+        [WarActionCodes.ActionUnitProduceUnit,          _exeUnitProduceUnit],
+        [WarActionCodes.ActionUnitSupplyUnit,           _exeUnitSupplyUnit],
+        [WarActionCodes.ActionUnitSurface,              _exeUnitSurface],
+        [WarActionCodes.ActionUnitUseCoSkill,           _exeUnitUseCoSkill],
+        [WarActionCodes.ActionUnitWait,                 _exeUnitWait],
     ]);
     const _FAST_EXECUTORS = new Map<WarActionCodes, (war: RwWar, data: IActionContainer) => Promise<void>>([
-        [WarActionCodes.ActionSystemBeginTurn,      _fastExeSystemBeginTurn],
-        [WarActionCodes.ActionPlayerDeleteUnit,     _fastExePlayerDeleteUnit],
-        [WarActionCodes.ActionPlayerEndTurn,        _fastExePlayerEndTurn],
-        [WarActionCodes.ActionPlayerProduceUnit,    _fastExePlayerProduceUnit],
-        [WarActionCodes.ActionPlayerSurrender,      _fastExePlayerSurrender],
-        [WarActionCodes.ActionPlayerVoteForDraw,    _fastExePlayerVoteForDraw],
-        [WarActionCodes.ActionUnitAttackUnit,       _fastExeUnitAttackUnit],
-        [WarActionCodes.ActionUnitAttackTile,       _fastExeUnitAttackTile],
-        [WarActionCodes.ActionUnitBeLoaded,         _fastExeUnitBeLoaded],
-        [WarActionCodes.ActionUnitBuildTile,        _fastExeUnitBuildTile],
-        [WarActionCodes.ActionUnitCaptureTile,      _fastExeUnitCaptureTile],
-        [WarActionCodes.ActionUnitDive,             _fastExeUnitDive],
-        [WarActionCodes.ActionUnitDropUnit,         _fastExeUnitDropUnit],
-        [WarActionCodes.ActionUnitJoinUnit,         _fastExeUnitJoinUnit],
-        [WarActionCodes.ActionUnitLaunchFlare,      _fastExeUnitLaunchFlare],
-        [WarActionCodes.ActionUnitLaunchSilo,       _fastExeUnitLaunchSilo],
-        [WarActionCodes.ActionUnitLoadCo,           _fastExeUnitLoadCo],
-        [WarActionCodes.ActionUnitProduceUnit,      _fastExeUnitProduceUnit],
-        [WarActionCodes.ActionUnitSupplyUnit,       _fastExeUnitSupplyUnit],
-        [WarActionCodes.ActionUnitSurface,          _fastExeUnitSurface],
-        [WarActionCodes.ActionUnitUseCoSkill,       _fastExeUnitUseCoSkill],
-        [WarActionCodes.ActionUnitWait,             _fastExeUnitWait],
+        [WarActionCodes.ActionSystemBeginTurn,          _fastExeSystemBeginTurn],
+        [WarActionCodes.ActionSystemCallWarEvent,       _fastExeSystemCallWarEvent],
+        [WarActionCodes.ActionSystemDestroyPlayerForce, _fastExeSystemDestroyPlayerForce],
+        [WarActionCodes.ActionSystemEndWar,             _fastExeSystemEndWar],
+        [WarActionCodes.ActionPlayerDeleteUnit,         _fastExePlayerDeleteUnit],
+        [WarActionCodes.ActionPlayerEndTurn,            _fastExePlayerEndTurn],
+        [WarActionCodes.ActionPlayerProduceUnit,        _fastExePlayerProduceUnit],
+        [WarActionCodes.ActionPlayerSurrender,          _fastExePlayerSurrender],
+        [WarActionCodes.ActionPlayerVoteForDraw,        _fastExePlayerVoteForDraw],
+        [WarActionCodes.ActionUnitAttackUnit,           _fastExeUnitAttackUnit],
+        [WarActionCodes.ActionUnitAttackTile,           _fastExeUnitAttackTile],
+        [WarActionCodes.ActionUnitBeLoaded,             _fastExeUnitBeLoaded],
+        [WarActionCodes.ActionUnitBuildTile,            _fastExeUnitBuildTile],
+        [WarActionCodes.ActionUnitCaptureTile,          _fastExeUnitCaptureTile],
+        [WarActionCodes.ActionUnitDive,                 _fastExeUnitDive],
+        [WarActionCodes.ActionUnitDropUnit,             _fastExeUnitDropUnit],
+        [WarActionCodes.ActionUnitJoinUnit,             _fastExeUnitJoinUnit],
+        [WarActionCodes.ActionUnitLaunchFlare,          _fastExeUnitLaunchFlare],
+        [WarActionCodes.ActionUnitLaunchSilo,           _fastExeUnitLaunchSilo],
+        [WarActionCodes.ActionUnitLoadCo,               _fastExeUnitLoadCo],
+        [WarActionCodes.ActionUnitProduceUnit,          _fastExeUnitProduceUnit],
+        [WarActionCodes.ActionUnitSupplyUnit,           _fastExeUnitSupplyUnit],
+        [WarActionCodes.ActionUnitSurface,              _fastExeUnitSurface],
+        [WarActionCodes.ActionUnitUseCoSkill,           _fastExeUnitUseCoSkill],
+        [WarActionCodes.ActionUnitWait,                 _fastExeUnitWait],
     ]);
 
-    export function executeNextAction(war: RwWar, isFastExecute: boolean): Promise<void> | void {
+    export async function executeNextAction(war: RwWar, isFastExecute: boolean): Promise<void> {
         const action = war.getNextAction();
-        if ((action)                    &&
-            (war.getIsRunning())        &&
-            (!war.checkIsInEnd())       &&
-            (!war.getIsExecutingAction())
+        if ((action == null)            ||
+            (!war.getIsRunning())       ||
+            (war.checkIsInEnd())        ||
+            (war.getIsExecutingAction())
         ) {
-            return _executeAction(war, action, isFastExecute);
-        } else {
             FloatText.show(Lang.getText(Lang.Type.B0110));
-            return;
+        } else {
+            await _executeAction(war, action, isFastExecute);
         }
     }
 
@@ -137,6 +142,38 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         FloatText.show(`${await war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0094)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
 
         war.getTurnManager().endPhaseWaitBeginTurn(data.ActionSystemBeginTurn);
+
+        actionPlanner.setStateIdle();
+    }
+
+    async function _exeSystemCallWarEvent(war: RwWar, data: IActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0451)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+
+        // TODO call the event.
+
+        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
+    }
+
+    async function _exeSystemDestroyPlayerForce(war: RwWar, data: IActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${await war.getPlayerInTurn().getNickname()}${Lang.getText(Lang.Type.B0450)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+
+        DestructionHelpers.destroyPlayerForce(war, data.ActionSystemDestroyPlayerForce.targetPlayerIndex, true);
+
+        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
+    }
+
+    async function _exeSystemEndWar(war: RwWar, data: IActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0087)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+
+        // Nothing to do.
 
         actionPlanner.setStateIdle();
     }
@@ -1222,6 +1259,33 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function _fastExeSystemBeginTurn(war: RwWar, data: IActionContainer): Promise<void> {
         war.getTurnManager().endPhaseWaitBeginTurn(data.ActionSystemBeginTurn);
+    }
+
+    async function _fastExeSystemCallWarEvent(war: RwWar, data: IActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        // TODO call the event.
+
+        actionPlanner.setStateIdle();
+    }
+
+    async function _fastExeSystemDestroyPlayerForce(war: RwWar, data: IActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        DestructionHelpers.destroyPlayerForce(war, data.ActionSystemDestroyPlayerForce.targetPlayerIndex, false);
+
+        actionPlanner.setStateIdle();
+    }
+
+    async function _fastExeSystemEndWar(war: RwWar, data: IActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        // Nothing to do.
+
+        actionPlanner.setStateIdle();
     }
 
     async function _fastExePlayerDeleteUnit(war: RwWar, data: IActionContainer): Promise<void> {

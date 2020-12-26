@@ -19,38 +19,41 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
     import UnitActionState      = Types.UnitActionState;
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;
-    import ActionContainer      = ProtoTypes.WarAction.IActionContainer;
+    import IActionContainer     = ProtoTypes.WarAction.IActionContainer;
     import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
-    const _EXECUTORS = new Map<WarActionCodes, (war: MpwWar, data: ActionContainer) => Promise<void>>([
-        [WarActionCodes.ActionSystemBeginTurn,      _exeSystemBeginTurn],
-        [WarActionCodes.ActionPlayerDeleteUnit,     _exePlayerDeleteUnit],
-        [WarActionCodes.ActionPlayerEndTurn,        _exePlayerEndTurn],
-        [WarActionCodes.ActionPlayerProduceUnit,    _exePlayerProduceUnit],
-        [WarActionCodes.ActionPlayerSurrender,      _exePlayerSurrender],
-        [WarActionCodes.ActionPlayerVoteForDraw,    _exePlayerVoteForDraw],
-        [WarActionCodes.ActionUnitAttackUnit,       _exeUnitAttackUnit],
-        [WarActionCodes.ActionUnitAttackTile,       _exeUnitAttackTile],
-        [WarActionCodes.ActionUnitBeLoaded,         _exeUnitBeLoaded],
-        [WarActionCodes.ActionUnitBuildTile,        _exeUnitBuildTile],
-        [WarActionCodes.ActionUnitCaptureTile,      _exeUnitCaptureTile],
-        [WarActionCodes.ActionUnitDive,             _exeUnitDive],
-        [WarActionCodes.ActionUnitDropUnit,         _exeUnitDropUnit],
-        [WarActionCodes.ActionUnitJoinUnit,         _exeUnitJoinUnit],
-        [WarActionCodes.ActionUnitLaunchFlare,      _exeUnitLaunchFlare],
-        [WarActionCodes.ActionUnitLaunchSilo,       _exeUnitLaunchSilo],
-        [WarActionCodes.ActionUnitLoadCo,           _exeUnitLoadCo],
-        [WarActionCodes.ActionUnitProduceUnit,      _exeUnitProduceUnit],
-        [WarActionCodes.ActionUnitSupplyUnit,       _exeUnitSupplyUnit],
-        [WarActionCodes.ActionUnitSurface,          _exeUnitSurface],
-        [WarActionCodes.ActionUnitUseCoSkill,       _exeUnitUseCoSkill],
-        [WarActionCodes.ActionUnitWait,             _exeUnitWait],
+    const _EXECUTORS = new Map<WarActionCodes, (war: MpwWar, data: IActionContainer) => Promise<void>>([
+        [WarActionCodes.ActionSystemBeginTurn,          _exeSystemBeginTurn],
+        [WarActionCodes.ActionSystemCallWarEvent,       _exeSystemCallWarEvent],
+        [WarActionCodes.ActionSystemDestroyPlayerForce, _exeSystemDestroyPlayerForce],
+        [WarActionCodes.ActionSystemEndWar,             _exeSystemEndWar],
+        [WarActionCodes.ActionPlayerDeleteUnit,         _exePlayerDeleteUnit],
+        [WarActionCodes.ActionPlayerEndTurn,            _exePlayerEndTurn],
+        [WarActionCodes.ActionPlayerProduceUnit,        _exePlayerProduceUnit],
+        [WarActionCodes.ActionPlayerSurrender,          _exePlayerSurrender],
+        [WarActionCodes.ActionPlayerVoteForDraw,        _exePlayerVoteForDraw],
+        [WarActionCodes.ActionUnitAttackUnit,           _exeUnitAttackUnit],
+        [WarActionCodes.ActionUnitAttackTile,           _exeUnitAttackTile],
+        [WarActionCodes.ActionUnitBeLoaded,             _exeUnitBeLoaded],
+        [WarActionCodes.ActionUnitBuildTile,            _exeUnitBuildTile],
+        [WarActionCodes.ActionUnitCaptureTile,          _exeUnitCaptureTile],
+        [WarActionCodes.ActionUnitDive,                 _exeUnitDive],
+        [WarActionCodes.ActionUnitDropUnit,             _exeUnitDropUnit],
+        [WarActionCodes.ActionUnitJoinUnit,             _exeUnitJoinUnit],
+        [WarActionCodes.ActionUnitLaunchFlare,          _exeUnitLaunchFlare],
+        [WarActionCodes.ActionUnitLaunchSilo,           _exeUnitLaunchSilo],
+        [WarActionCodes.ActionUnitLoadCo,               _exeUnitLoadCo],
+        [WarActionCodes.ActionUnitProduceUnit,          _exeUnitProduceUnit],
+        [WarActionCodes.ActionUnitSupplyUnit,           _exeUnitSupplyUnit],
+        [WarActionCodes.ActionUnitSurface,              _exeUnitSurface],
+        [WarActionCodes.ActionUnitUseCoSkill,           _exeUnitUseCoSkill],
+        [WarActionCodes.ActionUnitWait,                 _exeUnitWait],
     ]);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Util functions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function checkAndRunFirstCachedAction(war: MpwWar, actionList: ActionContainer[]): Promise<void> {
+    export async function checkAndRunFirstCachedAction(war: MpwWar, actionList: IActionContainer[]): Promise<void> {
         if ((!war.getIsRunning()) || (war.getIsEnded()) || (war.getIsExecutingAction())) {
             return;
         }
@@ -65,54 +68,49 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
         war.setIsExecutingAction(false);
 
-        if (war.getIsRunning()) {
-            if (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().size) {
-                war.setIsEnded(true);
-                CommonAlertPanel.show({
-                    title   : Lang.getText(Lang.Type.B0035),
-                    content : Lang.getText(Lang.Type.A0023),
-                    callback: () => {
-                        if (war instanceof RankMatchWar.RmwWar) {
-                            Utility.FlowManager.gotoRmrMyWarListPanel();
-                        } else {
-                            Utility.FlowManager.gotoMcrMyWarListPanel();
-                        }
-                    },
-                });
-
+        const playerManager     = war.getPlayerManager();
+        const remainingVotes    = war.getRemainingVotesForDraw();
+        const selfPlayer        = playerManager.getPlayerByUserId(User.UserModel.getSelfUserId());
+        const callbackForGoBack = () => {
+            if (war instanceof RankMatchWar.RmwWar) {
+                Utility.FlowManager.gotoRmrMyWarListPanel();
             } else {
-                if (war.getRemainingVotesForDraw() === 0) {
+                Utility.FlowManager.gotoMcrMyWarListPanel();
+            }
+        };
+        if (war.getIsEnded()) {
+            if (remainingVotes === 0) {
+                CommonAlertPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0030),
+                    callback: callbackForGoBack,
+                });
+            } else {
+                if (selfPlayer == null) {
+                    CommonAlertPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : Lang.getText(Lang.Type.A0035),
+                        callback: callbackForGoBack,
+                    });
+                } else {
+                    CommonAlertPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : selfPlayer.getAliveState() === Types.PlayerAliveState.Alive ? Lang.getText(Lang.Type.A0022) : Lang.getText(Lang.Type.A0023),
+                        callback: callbackForGoBack,
+                    });
+                }
+            }
+        } else {
+            if (war.getIsRunning()) {
+                if (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().size) {
                     war.setIsEnded(true);
                     CommonAlertPanel.show({
-                        title   : Lang.getText(Lang.Type.B0082),
-                        content : Lang.getText(Lang.Type.A0030),
-                        callback: () => {
-                            if (war instanceof RankMatchWar.RmwWar) {
-                                Utility.FlowManager.gotoRmrMyWarListPanel();
-                            } else {
-                                Utility.FlowManager.gotoMcrMyWarListPanel();
-                            }
-                        },
+                        title   : Lang.getText(Lang.Type.B0035),
+                        content : selfPlayer ? Lang.getText(Lang.Type.A0023) : Lang.getText(Lang.Type.A0152),
+                        callback: callbackForGoBack,
                     });
-
                 } else {
-                    if (war.getPlayerManager().getAliveTeamsCount(false) <= 1) {
-                        war.setIsEnded(true);
-                        CommonAlertPanel.show({
-                            title   : Lang.getText(Lang.Type.B0034),
-                            content : Lang.getText(Lang.Type.A0022),
-                            callback: () => {
-                                if (war instanceof RankMatchWar.RmwWar) {
-                                    Utility.FlowManager.gotoRmrMyWarListPanel();
-                                } else {
-                                    Utility.FlowManager.gotoMcrMyWarListPanel();
-                                }
-                            },
-                        });
-
-                    } else {
-                        checkAndRunFirstCachedAction(war, actionList);
-                    }
+                    checkAndRunFirstCachedAction(war, actionList);
                 }
             }
         }
@@ -121,7 +119,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The 'true' executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _exeSystemBeginTurn(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeSystemBeginTurn(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(Lang.getFormattedText(Lang.Type.F0022, await war.getPlayerInTurn().getNickname(), war.getPlayerIndexInTurn()));
@@ -131,7 +129,39 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerDeleteUnit(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeSystemCallWarEvent(war: MpwWar, data: IActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0451)}`);
+
+        // TODO call the event.
+
+        MpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
+    }
+
+    async function _exeSystemDestroyPlayerForce(war: MpwWar, data: IActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${await war.getPlayerInTurn().getNickname()}${Lang.getText(Lang.Type.B0450)}`);
+
+        DestructionHelpers.destroyPlayerForce(war, data.ActionSystemDestroyPlayerForce.targetPlayerIndex, true);
+
+        MpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
+    }
+
+    async function _exeSystemEndWar(war: MpwWar, data: IActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0087)}`);
+
+        war.setIsEnded(true);
+
+        actionPlanner.setStateIdle();
+    }
+
+    async function _exePlayerDeleteUnit(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -147,7 +177,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerEndTurn(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exePlayerEndTurn(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(Lang.getFormattedText(Lang.Type.F0030, await war.getPlayerInTurn().getNickname(), war.getPlayerIndexInTurn()));
@@ -158,7 +188,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerProduceUnit(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exePlayerProduceUnit(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionPlayerProduceUnit;
         const extraData     = action.extraData;
@@ -185,7 +215,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerSurrender(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exePlayerSurrender(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -198,7 +228,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerVoteForDraw(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exePlayerVoteForDraw(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -222,7 +252,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitAttackUnit(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitAttackUnit(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitAttackUnit;
         const extraData     = action.extraData;
@@ -293,7 +323,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         }
     }
 
-    async function _exeUnitAttackTile(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitAttackTile(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitAttackTile;
         const extraData     = action.extraData;
@@ -359,7 +389,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         }
     }
 
-    async function _exeUnitBeLoaded(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitBeLoaded(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitBeLoaded;
         const extraData     = action.extraData;
@@ -394,7 +424,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         }
     }
 
-    async function _exeUnitBuildTile(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitBuildTile(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitBuildTile;
         const extraData     = action.extraData;
@@ -438,7 +468,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitCaptureTile(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitCaptureTile(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitCaptureTile;
         const extraData     = action.extraData;
@@ -486,7 +516,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         }
     }
 
-    async function _exeUnitDive(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitDive(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitDive;
         const extraData     = action.extraData;
@@ -524,7 +554,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitDropUnit(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitDropUnit(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitDropUnit;
         const extraData     = action.extraData;
@@ -583,7 +613,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitJoinUnit(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitJoinUnit(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitJoinUnit;
         const extraData     = action.extraData;
@@ -673,7 +703,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         }
     }
 
-    async function _exeUnitLaunchFlare(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitLaunchFlare(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitLaunchFlare;
         const extraData     = action.extraData;
@@ -710,7 +740,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitLaunchSilo(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitLaunchSilo(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitLaunchSilo;
         const extraData     = action.extraData;
@@ -765,7 +795,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         }
     }
 
-    async function _exeUnitLoadCo(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitLoadCo(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitLoadCo;
         const extraData     = action.extraData;
@@ -807,7 +837,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitProduceUnit(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitProduceUnit(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitProduceUnit;
         const extraData     = action.extraData;
@@ -855,7 +885,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         }
     }
 
-    async function _exeUnitSupplyUnit(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitSupplyUnit(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitSupplyUnit;
         const extraData     = action.extraData;
@@ -909,7 +939,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         }
     }
 
-    async function _exeUnitSurface(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitSurface(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitSurface;
         const extraData     = action.extraData;
@@ -947,7 +977,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitUseCoSkill(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitUseCoSkill(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitUseCoSkill;
         const extraData     = action.extraData;
@@ -1051,7 +1081,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         }
     }
 
-    async function _exeUnitWait(war: MpwWar, data: ActionContainer): Promise<void> {
+    async function _exeUnitWait(war: MpwWar, data: IActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const action        = data.ActionUnitWait;
         const extraData     = action.extraData

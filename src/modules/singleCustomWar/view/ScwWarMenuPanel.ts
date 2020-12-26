@@ -623,7 +623,7 @@ namespace TinyWars.SingleCustomWar {
                             player.setUserId(User.UserModel.getSelfUserId());
                         } else {
                             player.setUserId(null);
-                            ScwModel.checkAndRequestBeginTurnOrRunRobot(war);
+                            ScwModel.checkAndRunRobot();
                         }
                         this._updateView();
                     },

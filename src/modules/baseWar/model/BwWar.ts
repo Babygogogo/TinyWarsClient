@@ -67,7 +67,7 @@ namespace TinyWars.BaseWar {
             this.getPlayerManager().startRunning(this);
             this.getField().startRunning(this);
 
-            this.setIsRunning(true);
+            this._setIsRunning(true);
 
             return this;
         }
@@ -81,12 +81,12 @@ namespace TinyWars.BaseWar {
             this.getField().stopRunning();
             this.getView().stopRunning();
 
-            this.setIsRunning(false);
+            this._setIsRunning(false);
 
             return this;
         }
 
-        public setIsRunning(isRunning: boolean): void {
+        private _setIsRunning(isRunning: boolean): void {
             this._isRunning = isRunning;
         }
         public getIsRunning(): boolean {

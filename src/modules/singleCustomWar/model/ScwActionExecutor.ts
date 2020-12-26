@@ -14,6 +14,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
     import DamageCalculator         = Utility.DamageCalculator;
     import BwHelpers                = BaseWar.BwHelpers;
     import BwCoSkillHelper          = BaseWar.BwCoSkillHelper;
+    import CommonAlertPanel         = Common.CommonAlertPanel;
     import GridIndex                = Types.GridIndex;
     import UnitActionState          = Types.UnitActionState;
     import MovePath                 = Types.MovePath;
@@ -23,32 +24,116 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
     import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     const _EXECUTORS = new Map<WarActionCodes, (war: ScwWar, data: IActionContainer) => Promise<void>>([
-        [WarActionCodes.ActionSystemBeginTurn,      _exeSystemBeginTurn],
-        [WarActionCodes.ActionPlayerDeleteUnit,     _exePlayerDeleteUnit],
-        [WarActionCodes.ActionPlayerEndTurn,        _exePlayerEndTurn],
-        [WarActionCodes.ActionPlayerProduceUnit,    _exePlayerProduceUnit],
-        [WarActionCodes.ActionPlayerSurrender,      _exePlayerSurrender],
-        [WarActionCodes.ActionPlayerVoteForDraw,    _exePlayerVoteForDraw],
-        [WarActionCodes.ActionUnitAttackUnit,       _exeUnitAttackUnit],
-        [WarActionCodes.ActionUnitAttackTile,       _exeUnitAttackTile],
-        [WarActionCodes.ActionUnitBeLoaded,         _exeUnitBeLoaded],
-        [WarActionCodes.ActionUnitBuildTile,        _exeUnitBuildTile],
-        [WarActionCodes.ActionUnitCaptureTile,      _exeUnitCaptureTile],
-        [WarActionCodes.ActionUnitDive,             _exeUnitDive],
-        [WarActionCodes.ActionUnitDropUnit,         _exeUnitDropUnit],
-        [WarActionCodes.ActionUnitJoinUnit,         _exeUnitJoinUnit],
-        [WarActionCodes.ActionUnitLaunchFlare,      _exeUnitLaunchFlare],
-        [WarActionCodes.ActionUnitLaunchSilo,       _exeUnitLaunchSilo],
-        [WarActionCodes.ActionUnitLoadCo,           _exeUnitLoadCo],
-        [WarActionCodes.ActionUnitProduceUnit,      _exeUnitProduceUnit],
-        [WarActionCodes.ActionUnitSupplyUnit,       _exeUnitSupplyUnit],
-        [WarActionCodes.ActionUnitSurface,          _exeUnitSurface],
-        [WarActionCodes.ActionUnitUseCoSkill,       _exeUnitUseCoSkill],
-        [WarActionCodes.ActionUnitWait,             _exeUnitWait],
+        [WarActionCodes.ActionSystemBeginTurn,          _exeSystemBeginTurn],
+        [WarActionCodes.ActionSystemCallWarEvent,       _exeSystemCallWarEvent],
+        [WarActionCodes.ActionSystemDestroyPlayerForce, _exeSystemDestroyPlayerForce],
+        [WarActionCodes.ActionSystemEndWar,             _exeSystemEndWar],
+        [WarActionCodes.ActionPlayerDeleteUnit,         _exePlayerDeleteUnit],
+        [WarActionCodes.ActionPlayerEndTurn,            _exePlayerEndTurn],
+        [WarActionCodes.ActionPlayerProduceUnit,        _exePlayerProduceUnit],
+        [WarActionCodes.ActionPlayerSurrender,          _exePlayerSurrender],
+        [WarActionCodes.ActionPlayerVoteForDraw,        _exePlayerVoteForDraw],
+        [WarActionCodes.ActionUnitAttackUnit,           _exeUnitAttackUnit],
+        [WarActionCodes.ActionUnitAttackTile,           _exeUnitAttackTile],
+        [WarActionCodes.ActionUnitBeLoaded,             _exeUnitBeLoaded],
+        [WarActionCodes.ActionUnitBuildTile,            _exeUnitBuildTile],
+        [WarActionCodes.ActionUnitCaptureTile,          _exeUnitCaptureTile],
+        [WarActionCodes.ActionUnitDive,                 _exeUnitDive],
+        [WarActionCodes.ActionUnitDropUnit,             _exeUnitDropUnit],
+        [WarActionCodes.ActionUnitJoinUnit,             _exeUnitJoinUnit],
+        [WarActionCodes.ActionUnitLaunchFlare,          _exeUnitLaunchFlare],
+        [WarActionCodes.ActionUnitLaunchSilo,           _exeUnitLaunchSilo],
+        [WarActionCodes.ActionUnitLoadCo,               _exeUnitLoadCo],
+        [WarActionCodes.ActionUnitProduceUnit,          _exeUnitProduceUnit],
+        [WarActionCodes.ActionUnitSupplyUnit,           _exeUnitSupplyUnit],
+        [WarActionCodes.ActionUnitSurface,              _exeUnitSurface],
+        [WarActionCodes.ActionUnitUseCoSkill,           _exeUnitUseCoSkill],
+        [WarActionCodes.ActionUnitWait,                 _exeUnitWait],
     ]);
 
-    export function execute(war: ScwWar, container: IActionContainer): Promise<void> {
-        return _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
+    export async function checkAndRunFirstCachedAction(war: ScwWar, actionList: IActionContainer[]): Promise<void> {
+        if ((!war.getIsRunning()) || (war.getIsEnded()) || (war.getIsExecutingAction())) {
+            return;
+        }
+
+        const container = actionList.shift();
+        if (container == null) {
+            return;
+        }
+
+        war.setIsExecutingAction(true);
+        if (war.getIsSinglePlayerCheating()) {
+            war.setExecutedActionsCount(war.getExecutedActionsCount() + 1);
+        } else {
+            war.addExecutedAction(container);
+        }
+        await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
+        war.setIsExecutingAction(false);
+
+        if (war.getIsRunning()) {
+            if (war.getPlayerIndexInTurn() === CommonConstants.WarNeutralPlayerIndex) {
+                if (actionList.length) {
+                    checkAndRunFirstCachedAction(war, actionList);
+                } else {
+                    ScwModel.checkAndRunRobot();
+                }
+            } else {
+                const playerManager = war.getPlayerManager();
+                if (!playerManager.getAliveWatcherTeamIndexesForSelf().size) {
+                    if (war.getHumanPlayers().length > 0) {
+                        war.setIsEnded(true);
+                        CommonAlertPanel.show({
+                            title   : Lang.getText(Lang.Type.B0035),
+                            content : Lang.getText(Lang.Type.A0023),
+                            callback: () => Utility.FlowManager.gotoLobby(),
+                        });
+                    } else {
+                        if (playerManager.getAliveTeamsCount(false) <= 1) {
+                            war.setIsEnded(true);
+                            CommonAlertPanel.show({
+                                title   : Lang.getText(Lang.Type.B0034),
+                                content : Lang.getText(Lang.Type.A0022),
+                                callback: () => Utility.FlowManager.gotoLobby(),
+                            });
+
+                        } else {
+                            if (actionList.length) {
+                                checkAndRunFirstCachedAction(war, actionList);
+                            } else {
+                                ScwModel.checkAndRunRobot();
+                            }
+                        }
+                    }
+
+                } else {
+                    if (war.getRemainingVotesForDraw() === 0) {
+                        war.setIsEnded(true);
+                        CommonAlertPanel.show({
+                            title   : Lang.getText(Lang.Type.B0082),
+                            content : Lang.getText(Lang.Type.A0030),
+                            callback: () => Utility.FlowManager.gotoLobby(),
+                        });
+
+                    } else {
+                        if (playerManager.getAliveTeamsCount(false) <= 1) {
+                            war.setIsEnded(true);
+                            CommonAlertPanel.show({
+                                title   : Lang.getText(Lang.Type.B0034),
+                                content : Lang.getText(Lang.Type.A0022),
+                                callback: () => Utility.FlowManager.gotoLobby(),
+                            });
+
+                        } else {
+                            if (actionList.length) {
+                                checkAndRunFirstCachedAction(war, actionList);
+                            } else {
+                                ScwModel.checkAndRunRobot();
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,6 +155,38 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
 
         await war.getTurnManager().endPhaseWaitBeginTurn(data.ActionSystemBeginTurn);
+        actionPlanner.setStateIdle();
+    }
+
+    async function _exeSystemCallWarEvent(war: ScwWar, data: IActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0451)}`);
+
+        // TODO call the event.
+
+        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
+    }
+
+    async function _exeSystemDestroyPlayerForce(war: ScwWar, data: IActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${await war.getPlayerInTurn().getNickname()}${Lang.getText(Lang.Type.B0450)}`);
+
+        DestructionHelpers.destroyPlayerForce(war, data.ActionSystemDestroyPlayerForce.targetPlayerIndex, true);
+
+        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
+    }
+
+    async function _exeSystemEndWar(war: ScwWar, data: IActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0087)}`);
+
+        war.setIsEnded(true);
+
         actionPlanner.setStateIdle();
     }
 
