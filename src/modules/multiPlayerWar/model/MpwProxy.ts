@@ -13,45 +13,48 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: Codes.MsgMpwCommonBroadcastGameStart,    callback: _onMsgMpwCommonBroadcastGameStart     },
-            { msgCode: Codes.MsgMpwCommonHandleBoot,            callback: _onMsgMpwCommonHandleBoot             },
-            { msgCode: Codes.MsgMpwCommonContinueWar,           callback: _onMsgMpwCommonContinueWar            },
-            { msgCode: Codes.MsgMpwCommonGetMyWarInfoList,      callback: _onMsgMpwCommonGetMyWarInfoList       },
-            { msgCode: Codes.MsgMpwCommonSyncWar,               callback: _onMsgMpwCommonSyncWar,               },
+            { msgCode: Codes.MsgMpwCommonBroadcastGameStart,        callback: _onMsgMpwCommonBroadcastGameStart },
+            { msgCode: Codes.MsgMpwCommonHandleBoot,                callback: _onMsgMpwCommonHandleBoot },
+            { msgCode: Codes.MsgMpwCommonContinueWar,               callback: _onMsgMpwCommonContinueWar },
+            { msgCode: Codes.MsgMpwCommonGetMyWarInfoList,          callback: _onMsgMpwCommonGetMyWarInfoList },
+            { msgCode: Codes.MsgMpwCommonSyncWar,                   callback: _onMsgMpwCommonSyncWar },
 
-            { msgCode: Codes.MsgMpwWatchGetUnwatchedWarInfos,   callback: _onMsgMpwWatchGetUnwatchedWarInfos    },
-            { msgCode: Codes.MsgMpwWatchGetOngoingWarInfos,     callback: _onMsgMpwWatchGetOngoingWarInfos      },
-            { msgCode: Codes.MsgMpwWatchGetRequestedWarInfos,   callback: _onMsgMpwWatchGetRequestedWarInfos    },
-            { msgCode: Codes.MsgMpwWatchGetWatchedWarInfos,     callback: _onMsgMpwWatchGetWatchedWarInfos      },
-            { msgCode: Codes.MsgMpwWatchMakeRequest,            callback: _onMsgMpwWatchMakeRequest             },
-            { msgCode: Codes.MsgMpwWatchHandleRequest,          callback: _onMsgMpwWatchHandleRequest           },
-            { msgCode: Codes.MsgMpwWatchDeleteWatcher,          callback: _onMsgMpwWatchDeleteWatcher           },
-            { msgCode: Codes.MsgMpwWatchContinueWar,            callback: _onMsgMpwWatchContinueWar             },
+            { msgCode: Codes.MsgMpwWatchGetUnwatchedWarInfos,       callback: _onMsgMpwWatchGetUnwatchedWarInfos },
+            { msgCode: Codes.MsgMpwWatchGetOngoingWarInfos,         callback: _onMsgMpwWatchGetOngoingWarInfos },
+            { msgCode: Codes.MsgMpwWatchGetRequestedWarInfos,       callback: _onMsgMpwWatchGetRequestedWarInfos },
+            { msgCode: Codes.MsgMpwWatchGetWatchedWarInfos,         callback: _onMsgMpwWatchGetWatchedWarInfos },
+            { msgCode: Codes.MsgMpwWatchMakeRequest,                callback: _onMsgMpwWatchMakeRequest },
+            { msgCode: Codes.MsgMpwWatchHandleRequest,              callback: _onMsgMpwWatchHandleRequest },
+            { msgCode: Codes.MsgMpwWatchDeleteWatcher,              callback: _onMsgMpwWatchDeleteWatcher },
+            { msgCode: Codes.MsgMpwWatchContinueWar,                callback: _onMsgMpwWatchContinueWar },
 
-            { msgCode: Codes.MsgMpwActionSystemBeginTurn,       callback: _onMsgMpwActionSystemBeginTurn        },
+            { msgCode: Codes.MsgMpwActionSystemBeginTurn,           callback: _onMsgMpwActionSystemBeginTurn },
+            { msgCode: Codes.MsgMpwActionSystemCallWarEvent,        callback: _onMsgMpwActionSystemCallWarEvent },
+            { msgCode: Codes.MsgMpwActionSystemDestroyPlayerForce,  callback: _onMsgMpwActionSystemDestroyPlayerForce },
+            { msgCode: Codes.MsgMpwActionSystemEndWar,              callback: _onMsgMpwActionSystemEndWar },
 
-            { msgCode: Codes.MsgMpwActionPlayerDeleteUnit,      callback: _onMsgMpwActionPlayerDeleteUnit       },
-            { msgCode: Codes.MsgMpwActionPlayerEndTurn,         callback: _onMsgMpwActionPlayerEndTurn          },
-            { msgCode: Codes.MsgMpwActionPlayerProduceUnit,     callback: _onMsgMpwActionPlayerProduceUnit      },
-            { msgCode: Codes.MsgMpwActionPlayerSurrender,       callback: _onMsgMpwActionPlayerSurrender        },
-            { msgCode: Codes.MsgMpwActionPlayerVoteForDraw,     callback: _onMsgMpwActionPlayerVoteForDraw      },
+            { msgCode: Codes.MsgMpwActionPlayerDeleteUnit,          callback: _onMsgMpwActionPlayerDeleteUnit },
+            { msgCode: Codes.MsgMpwActionPlayerEndTurn,             callback: _onMsgMpwActionPlayerEndTurn },
+            { msgCode: Codes.MsgMpwActionPlayerProduceUnit,         callback: _onMsgMpwActionPlayerProduceUnit },
+            { msgCode: Codes.MsgMpwActionPlayerSurrender,           callback: _onMsgMpwActionPlayerSurrender },
+            { msgCode: Codes.MsgMpwActionPlayerVoteForDraw,         callback: _onMsgMpwActionPlayerVoteForDraw },
 
-            { msgCode: Codes.MsgMpwActionUnitAttackUnit,        callback: _onMsgMpwActionUnitAttackUnit         },
-            { msgCode: Codes.MsgMpwActionUnitAttackTile,        callback: _onMsgMpwActionUnitAttackTile         },
-            { msgCode: Codes.MsgMpwActionUnitBeLoaded,          callback: _onMsgMpwActionUnitBeLoaded           },
-            { msgCode: Codes.MsgMpwActionUnitBuildTile,         callback: _onMsgMpwActionUnitBuildTile          },
-            { msgCode: Codes.MsgMpwActionUnitCaptureTile,       callback: _onMsgMpwActionUnitCaptureTile        },
-            { msgCode: Codes.MsgMpwActionUnitDive,              callback: _onMsgMpwActionUnitDive               },
-            { msgCode: Codes.MsgMpwActionUnitDropUnit,          callback: _onMsgMpwActionUnitDropUnit           },
-            { msgCode: Codes.MsgMpwActionUnitJoinUnit,          callback: _onMsgMpwActionUnitJoinUnit           },
-            { msgCode: Codes.MsgMpwActionUnitLaunchFlare,       callback: _onMsgMpwActionUnitLaunchFlare        },
-            { msgCode: Codes.MsgMpwActionUnitLaunchSilo,        callback: _onMsgMpwActionUnitLaunchSilo         },
-            { msgCode: Codes.MsgMpwActionUnitLoadCo,            callback: _onMsgMpwActionUnitLoadCo             },
-            { msgCode: Codes.MsgMpwActionUnitProduceUnit,       callback: _onMsgMpwActionUnitProduceUnit        },
-            { msgCode: Codes.MsgMpwActionUnitSupplyUnit,        callback: _onMsgMpwActionUnitSupplyUnit         },
-            { msgCode: Codes.MsgMpwActionUnitSurface,           callback: _onMsgMpwActionUnitSurface            },
-            { msgCode: Codes.MsgMpwActionUnitUseCoSkill,        callback: _onMsgMpwActionUnitUseCoSkill         },
-            { msgCode: Codes.MsgMpwActionUnitWait,              callback: _onMsgMpwActionUnitWait               },
+            { msgCode: Codes.MsgMpwActionUnitAttackUnit,            callback: _onMsgMpwActionUnitAttackUnit },
+            { msgCode: Codes.MsgMpwActionUnitAttackTile,            callback: _onMsgMpwActionUnitAttackTile },
+            { msgCode: Codes.MsgMpwActionUnitBeLoaded,              callback: _onMsgMpwActionUnitBeLoaded },
+            { msgCode: Codes.MsgMpwActionUnitBuildTile,             callback: _onMsgMpwActionUnitBuildTile },
+            { msgCode: Codes.MsgMpwActionUnitCaptureTile,           callback: _onMsgMpwActionUnitCaptureTile },
+            { msgCode: Codes.MsgMpwActionUnitDive,                  callback: _onMsgMpwActionUnitDive },
+            { msgCode: Codes.MsgMpwActionUnitDropUnit,              callback: _onMsgMpwActionUnitDropUnit },
+            { msgCode: Codes.MsgMpwActionUnitJoinUnit,              callback: _onMsgMpwActionUnitJoinUnit },
+            { msgCode: Codes.MsgMpwActionUnitLaunchFlare,           callback: _onMsgMpwActionUnitLaunchFlare },
+            { msgCode: Codes.MsgMpwActionUnitLaunchSilo,            callback: _onMsgMpwActionUnitLaunchSilo },
+            { msgCode: Codes.MsgMpwActionUnitLoadCo,                callback: _onMsgMpwActionUnitLoadCo },
+            { msgCode: Codes.MsgMpwActionUnitProduceUnit,           callback: _onMsgMpwActionUnitProduceUnit },
+            { msgCode: Codes.MsgMpwActionUnitSupplyUnit,            callback: _onMsgMpwActionUnitSupplyUnit },
+            { msgCode: Codes.MsgMpwActionUnitSurface,               callback: _onMsgMpwActionUnitSurface },
+            { msgCode: Codes.MsgMpwActionUnitUseCoSkill,            callback: _onMsgMpwActionUnitUseCoSkill },
+            { msgCode: Codes.MsgMpwActionUnitWait,                  callback: _onMsgMpwActionUnitWait },
         ], MpwProxy);
     }
 
@@ -249,6 +252,30 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         if (!data.errorCode) {
             MpwModel.updateByActionContainer(data.actionContainer, data.warId);
             Notify.dispatch(Notify.Type.MsgMpwActionSystemBeginTurn, data);
+        }
+    }
+
+    function _onMsgMpwActionSystemCallWarEvent(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwActionSystemCallWarEvent.IS;
+        if (!data.errorCode) {
+            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
+            Notify.dispatch(Notify.Type.MsgMpwActionSystemCallWarEvent, data);
+        }
+    }
+
+    function _onMsgMpwActionSystemDestroyPlayerForce(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwActionSystemDestroyPlayerForce.IS;
+        if (!data.errorCode) {
+            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
+            Notify.dispatch(Notify.Type.MsgMpwActionSystemDestroyPlayerForce, data);
+        }
+    }
+
+    function _onMsgMpwActionSystemEndWar(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwActionSystemEndWar.IS;
+        if (!data.errorCode) {
+            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
+            Notify.dispatch(Notify.Type.MsgMpwActionSystemEndWar, data);
         }
     }
 
