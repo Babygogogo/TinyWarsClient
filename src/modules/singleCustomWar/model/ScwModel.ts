@@ -144,8 +144,8 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             Logger.error(`ScwModel.checkAndHandleAutoActions() empty playerManager.`);
             return false;
         }
-        if ((war.getRemainingVotesForDraw() === 0)          ||
-            (playerManager.getAliveTeamsCount(false) <= 1)
+        if ((war.getRemainingVotesForDraw() === 0)              ||
+            (playerManager.getAliveOrDyingTeamsCount(false) <= 1)
         ) {
             await handleSystemEndWar(war);
             await checkAndHandleAutoActions(war);
