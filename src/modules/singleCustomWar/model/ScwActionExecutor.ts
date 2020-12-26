@@ -14,7 +14,6 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
     import DamageCalculator         = Utility.DamageCalculator;
     import BwHelpers                = BaseWar.BwHelpers;
     import BwCoSkillHelper          = BaseWar.BwCoSkillHelper;
-    import CommonAlertPanel         = Common.CommonAlertPanel;
     import GridIndex                = Types.GridIndex;
     import UnitActionState          = Types.UnitActionState;
     import MovePath                 = Types.MovePath;
@@ -51,13 +50,8 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         [WarActionCodes.ActionUnitWait,                 _exeUnitWait],
     ]);
 
-    export async function checkAndRunFirstCachedAction(war: ScwWar, actionList: IActionContainer[]): Promise<void> {
+    export async function checkAndExecute(war: ScwWar, container: IActionContainer): Promise<void> {
         if ((!war.getIsRunning()) || (war.getIsEnded()) || (war.getIsExecutingAction())) {
-            return;
-        }
-
-        const container = actionList.shift();
-        if (container == null) {
             return;
         }
 
@@ -69,71 +63,6 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
         await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
         war.setIsExecutingAction(false);
-
-        if (war.getIsRunning()) {
-            if (war.getPlayerIndexInTurn() === CommonConstants.WarNeutralPlayerIndex) {
-                if (actionList.length) {
-                    checkAndRunFirstCachedAction(war, actionList);
-                } else {
-                    ScwModel.checkAndRunRobot();
-                }
-            } else {
-                const playerManager = war.getPlayerManager();
-                if (!playerManager.getAliveWatcherTeamIndexesForSelf().size) {
-                    if (war.getHumanPlayers().length > 0) {
-                        war.setIsEnded(true);
-                        CommonAlertPanel.show({
-                            title   : Lang.getText(Lang.Type.B0035),
-                            content : Lang.getText(Lang.Type.A0023),
-                            callback: () => Utility.FlowManager.gotoLobby(),
-                        });
-                    } else {
-                        if (playerManager.getAliveTeamsCount(false) <= 1) {
-                            war.setIsEnded(true);
-                            CommonAlertPanel.show({
-                                title   : Lang.getText(Lang.Type.B0034),
-                                content : Lang.getText(Lang.Type.A0022),
-                                callback: () => Utility.FlowManager.gotoLobby(),
-                            });
-
-                        } else {
-                            if (actionList.length) {
-                                checkAndRunFirstCachedAction(war, actionList);
-                            } else {
-                                ScwModel.checkAndRunRobot();
-                            }
-                        }
-                    }
-
-                } else {
-                    if (war.getRemainingVotesForDraw() === 0) {
-                        war.setIsEnded(true);
-                        CommonAlertPanel.show({
-                            title   : Lang.getText(Lang.Type.B0082),
-                            content : Lang.getText(Lang.Type.A0030),
-                            callback: () => Utility.FlowManager.gotoLobby(),
-                        });
-
-                    } else {
-                        if (playerManager.getAliveTeamsCount(false) <= 1) {
-                            war.setIsEnded(true);
-                            CommonAlertPanel.show({
-                                title   : Lang.getText(Lang.Type.B0034),
-                                content : Lang.getText(Lang.Type.A0022),
-                                callback: () => Utility.FlowManager.gotoLobby(),
-                            });
-
-                        } else {
-                            if (actionList.length) {
-                                checkAndRunFirstCachedAction(war, actionList);
-                            } else {
-                                ScwModel.checkAndRunRobot();
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

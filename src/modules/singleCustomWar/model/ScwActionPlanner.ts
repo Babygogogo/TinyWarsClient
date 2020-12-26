@@ -208,13 +208,6 @@ namespace TinyWars.SingleCustomWar {
             ScwLocalProxy.reqUnitSupply(this._getWar() as ScwWar, this.getMovePath(), unit ? unit.getUnitId() : undefined);
         }
 
-        public setStateRequestingPlayerBeginTurn(): void {
-            this._setState(State.RequestingPlayerBeginTurn);
-            this._updateView();
-
-            ScwLocalProxy.reqPlayerBeginTurn(this._getWar() as ScwWar);
-        }
-
         public setStateRequestingPlayerEndTurn(): void {
             this._setState(State.RequestingPlayerEndTurn);
             this._updateView();

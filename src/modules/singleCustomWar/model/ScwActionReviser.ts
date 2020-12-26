@@ -8,8 +8,6 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     import VisibilityHelpers        = Utility.VisibilityHelpers;
     import ConfigManager            = Utility.ConfigManager;
     import BwWar                    = BaseWar.BwWar;
-    import BwUnit                   = BaseWar.BwUnit;
-    import BwTile                   = BaseWar.BwTile;
     import BwUnitMap                = BaseWar.BwUnitMap;
     import BwPlayer                 = BaseWar.BwPlayer;
     import TurnPhaseCode            = Types.TurnPhaseCode;
@@ -17,12 +15,10 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     import GridIndex                = Types.GridIndex;
     import UnitActionState          = Types.UnitActionState;
     import DropDestination          = Types.DropDestination;
-    import UnitAttributes           = Types.UnitAttributes;
     import WarAction                = ProtoTypes.WarAction.IActionContainer;
     import Structure                = ProtoTypes.Structure;
     import IWarUseCoSkillExtraData  = Structure.IDataForUseCoSkill;
     import IGridIndex               = Structure.IGridIndex;
-    import IDataForModifyUnit       = Structure.IDataForModifyUnit;
     import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     type DamageMaps = {
@@ -36,69 +32,26 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     }
 
     export function revise(war: ScwWar, container: RawWarAction): WarAction {
-        if      (container.SystemBeginTurn)             { return reviseSystemBeginTurn(war, container); }
-        else if (container.SystemCallWarEvent)          { return reviseSystemCallWarEvent(war, container); }
-        else if (container.SystemDestroyPlayerForce)    { return reviseSystemDestroyPlayerForce(war, container); }
-        else if (container.SystemEndWar)                { return reviseSystemEndWar(war, container); }
-        else if (container.PlayerDeleteUnit)            { return revisePlayerDeleteUnit(war, container); }
-        else if (container.PlayerEndTurn)               { return revisePlayerEndTurn(war, container); }
-        else if (container.PlayerProduceUnit)           { return revisePlayerProduceUnit(war, container); }
-        else if (container.UnitAttackUnit)              { return reviseUnitAttackUnit(war, container); }
-        else if (container.UnitAttackTile)              { return reviseUnitAttackTile(war, container); }
-        else if (container.UnitBeLoaded)                { return reviseUnitBeLoaded(war, container); }
-        else if (container.UnitBuildTile)               { return reviseUnitBuildTile(war, container); }
-        else if (container.UnitCaptureTile)             { return reviseUnitCaptureTile(war, container); }
-        else if (container.UnitDive)                    { return reviseUnitDive(war, container); }
-        else if (container.UnitDrop)                    { return reviseUnitDrop(war, container); }
-        else if (container.UnitJoin)                    { return reviseUnitJoin(war, container); }
-        else if (container.UnitLaunchFlare)             { return reviseUnitLaunchFlare(war, container); }
-        else if (container.UnitLaunchSilo)              { return reviseUnitLaunchSilo(war, container); }
-        else if (container.UnitLoadCo)                  { return reviseUnitLoadCo(war, container); }
-        else if (container.UnitProduceUnit)             { return reviseUnitProduceUnit(war, container); }
-        else if (container.UnitSupply)                  { return reviseUnitSupply(war, container); }
-        else if (container.UnitSurface)                 { return reviseUnitSurface(war, container); }
-        else if (container.UnitUseCoSkill)              { return reviseUnitUseCoSkill(war, container); }
-        else if (container.UnitWait)                    { return reviseUnitWait(war, container); }
-        else                                            { return null; }
-    }
-
-    function reviseSystemBeginTurn(war: BwWar, container: RawWarAction): WarAction {    // DONE
-        const currPhaseCode = war.getTurnManager().getPhaseCode();
-        Logger.assert(
-            currPhaseCode === TurnPhaseCode.WaitBeginTurn,
-            `ScwActionReviser.revisePlayerBeginTurn() invalid turn phase code: ${currPhaseCode}`
-        );
-
-        return {
-            actionId                : war.getExecutedActionsCount(),
-            ActionSystemBeginTurn   : {},
-        }
-    }
-
-    function reviseSystemCallWarEvent(war: BwWar, container: RawWarAction): WarAction {
-        return {
-            actionId                : war.getExecutedActionsCount(),
-            ActionSystemCallWarEvent: {
-                eventId : container.SystemCallWarEvent.eventId,
-            },
-        };
-    }
-
-    function reviseSystemDestroyPlayerForce(war: BwWar, container: RawWarAction): WarAction {
-        return {
-            actionId                        : war.getExecutedActionsCount(),
-            ActionSystemDestroyPlayerForce  : {
-                targetPlayerIndex   : container.SystemDestroyPlayerForce.targetPlayerIndex,
-            },
-        };
-    }
-
-    function reviseSystemEndWar(war: BwWar, container: RawWarAction): WarAction {
-        return {
-            actionId            : war.getExecutedActionsCount(),
-            ActionSystemEndWar  : {
-            },
-        };
+        if      (container.PlayerDeleteUnit)    { return revisePlayerDeleteUnit(war, container); }
+        else if (container.PlayerEndTurn)       { return revisePlayerEndTurn(war, container); }
+        else if (container.PlayerProduceUnit)   { return revisePlayerProduceUnit(war, container); }
+        else if (container.UnitAttackUnit)      { return reviseUnitAttackUnit(war, container); }
+        else if (container.UnitAttackTile)      { return reviseUnitAttackTile(war, container); }
+        else if (container.UnitBeLoaded)        { return reviseUnitBeLoaded(war, container); }
+        else if (container.UnitBuildTile)       { return reviseUnitBuildTile(war, container); }
+        else if (container.UnitCaptureTile)     { return reviseUnitCaptureTile(war, container); }
+        else if (container.UnitDive)            { return reviseUnitDive(war, container); }
+        else if (container.UnitDrop)            { return reviseUnitDrop(war, container); }
+        else if (container.UnitJoin)            { return reviseUnitJoin(war, container); }
+        else if (container.UnitLaunchFlare)     { return reviseUnitLaunchFlare(war, container); }
+        else if (container.UnitLaunchSilo)      { return reviseUnitLaunchSilo(war, container); }
+        else if (container.UnitLoadCo)          { return reviseUnitLoadCo(war, container); }
+        else if (container.UnitProduceUnit)     { return reviseUnitProduceUnit(war, container); }
+        else if (container.UnitSupply)          { return reviseUnitSupply(war, container); }
+        else if (container.UnitSurface)         { return reviseUnitSurface(war, container); }
+        else if (container.UnitUseCoSkill)      { return reviseUnitUseCoSkill(war, container); }
+        else if (container.UnitWait)            { return reviseUnitWait(war, container); }
+        else                                    { return reviseUnknownAction(war, container); }
     }
 
     function revisePlayerDeleteUnit(war: BwWar, container: RawWarAction): WarAction {   // DONE
@@ -463,23 +416,12 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function sorterForRepairUnits(unit1: BwUnit, unit2: BwUnit): number {
-        const cost1 = unit1.getProductionFinalCost();
-        const cost2 = unit2.getProductionFinalCost();
-        if (cost1 !== cost2) {
-            return cost2 - cost1;
-        } else {
-            return unit1.getUnitId() - unit2.getUnitId();
-        }
+    function reviseUnknownAction(war: BwWar, rawAction: RawWarAction): WarAction {
+        Logger.error(`ScwActionReviser.reviseUnknownAction() invalid rawAction: ${JSON.stringify(rawAction)}`);
+        return null;
     }
 
-    function updateAttributesByRepairData(attributes: UnitAttributes, repairData: IDataForModifyUnit): void {
-        attributes.hp   += (repairData.deltaHp || 0);
-        attributes.fuel += (repairData.deltaFuel || 0);
-        (attributes.primaryAmmo != null) && (attributes.primaryAmmo += (repairData.deltaPrimaryWeaponAmmo || 0));
-        (attributes.flareAmmo != null) && (attributes.flareAmmo += (repairData.deltaFlareAmmo || 0));
-    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     function convertGridIndex(raw: IGridIndex | undefined | null): GridIndex | undefined {
         return ((!raw) || (raw.x == null) || (raw.y == null))
@@ -559,24 +501,6 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
                     isBlocked       : isBlocked,
                     fuelConsumption : revisedTotalFuelConsumption,
                 };
-            }
-        }
-    }
-
-    function getLostPlayerIndex(war: BwWar, attacker: BwUnit, target: BwUnit | BwTile, attackDamage: number, counterDamage: number | undefined): number | undefined {
-        if (attackDamage >= target.getCurrentHp()!) {
-            const playerIndex = target.getPlayerIndex();
-            if ((target instanceof BwTile) || (playerIndex === 0)) {
-                return undefined;
-            } else {
-                return (war.getUnitMap().countUnitsOnMapForPlayer(playerIndex) === 1) ? playerIndex : undefined;
-            }
-        } else {
-            if ((counterDamage != null) && (counterDamage >= attacker.getCurrentHp())) {
-                const playerIndex = attacker.getPlayerIndex();
-                return (war.getUnitMap().countUnitsOnMapForPlayer(playerIndex) === 1) ? playerIndex : undefined;
-            } else {
-                return undefined;
             }
         }
     }

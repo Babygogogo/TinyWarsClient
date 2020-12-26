@@ -1,7 +1,6 @@
 
 namespace TinyWars.BaseWar {
     import Logger                   = Utility.Logger;
-    import Notify                   = Utility.Notify;
     import Types                    = Utility.Types;
     import ProtoTypes               = Utility.ProtoTypes;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
@@ -22,7 +21,7 @@ namespace TinyWars.BaseWar {
         private _isRunning              = false;
         private _isExecutingAction      = false;
 
-        public async abstract init(data: ISerialWar): Promise<BwWar>;
+        public abstract init(data: ISerialWar): Promise<BwWar>;
         public abstract serializeForSimulation(): ISerialWar | undefined;
         public abstract getWarType(): Types.WarType;
         protected abstract _getPlayerManagerClass(): new () => BwPlayerManager;
@@ -241,6 +240,11 @@ namespace TinyWars.BaseWar {
         }
         public setExecutedActionsCount(count: number): void {
             this._executedActionsCount = count;
+        }
+
+        public getNextWarEventId(): number | undefined {
+            // TODO: return the correct event id.
+            return undefined;
         }
 
         protected _setPlayerManager(manager: BwPlayerManager): void {

@@ -5,10 +5,6 @@ namespace TinyWars.Utility.Types {
     ////////////////////////////////////////////////////////////////////////////////
     export type RawWarActionContainer = {
         actionId?                   : number;
-        SystemBeginTurn?            : RawWarActionSystemBeginTurn;
-        SystemCallWarEvent?         : RawWarActionSystemCallWarEvent;
-        SystemDestroyPlayerForce?   : RawWarActionSystemDestroyPlayerForce;
-        SystemEndWar?               : RawWarActionSystemEndWar;
         PlayerDeleteUnit?           : RawWarActionPlayerDeleteUnit;
         PlayerEndTurn?              : RawWarActionPlayerEndTurn;
         PlayerProduceUnit?          : RawWarActionPlayerProduceUnit;
@@ -28,16 +24,6 @@ namespace TinyWars.Utility.Types {
         UnitSurface?                : RawWarActionUnitSurface;
         UnitUseCoSkill?             : RawWarActionUnitUseCoSkill;
         UnitWait?                   : RawWarActionUnitWait;
-    }
-    export type RawWarActionSystemBeginTurn = {
-    }
-    export type RawWarActionSystemCallWarEvent = {
-        eventId : number;
-    }
-    export type RawWarActionSystemDestroyPlayerForce = {
-        targetPlayerIndex   : number;
-    }
-    export type RawWarActionSystemEndWar = {
     }
     export type RawWarActionPlayerDeleteUnit = {
         gridIndex: GridIndex;
