@@ -7,24 +7,25 @@ export const enum NetErrorCode {
 
     IllegalRequest,
 
-    User0000 = 10000,               // 玩家登录-socket已有user id
-    User0001,                       // 玩家登录-账号或密码错误
-    User0002,                       // 玩家登录-已处于已登录的状态
-    User0003,                       // 服务端内部错误
-    User0004,                       // 服务端内部错误
+    MsgUserLogin0000        = 100,  // socket已有user id
+    MsgUserLogin0001,               // 账号不合法
+    MsgUserLogin0002,               // 已处于已登录的状态
+    MsgUserLogin0003,               // 密码不合法
+    MsgUserLogin0004,
+    MsgUserLogin0005,               // 账号不存在
+    MsgUserLogin0006,               // 账号或密码不正确
 
-    Register_InvalidAccount,
-    Register_UsedAccount,
-    Register_AlreadyLoggedIn,
-    Register_InvalidPassword,
-    Register_InvalidNickname,
-    Register_UsedNickname,
+    MsgUserRegister0000     = 200,  // 账号不合法
+    MsgUserRegister0001,            // 账号已存在
+    MsgUserRegister0002,            // 已处于已登录的状态
+    MsgUserRegister0003,            // 密码不合法
+    MsgUserRegister0004,            // 昵称不合法
+    MsgUserRegister0005,            // 昵称已被使用
 
-    MmMergeMap_SameSrcAndDst,
-    MmMergeMap_NoSrcStatisticsData,
-    MmMergeMap_NoDstStatisticsData,
+    MsgUserSetNickname0000  = 300,  // 昵称不合法
+    MsgUserSetNickname0001,         // 昵称已被使用
 
-    Mcr0000 = 20000,                // 自定义多人房间-已加入太多房间
+    MsgMcrCreateRoom0000    = 400,  // 已加入太多房间
     CreateMultiCustomWar_TooManyCreatedRooms,
     CreateMultiCustomWar_InvalidParams,
 

@@ -2537,6 +2537,10 @@ namespace TinyWars.Utility.Lang {
             `触发事件`,
             `An event is triggered.`,
         ],
+        [Type.B0452]: [
+            `错误码`,
+            `Error`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2920,10 +2924,6 @@ namespace TinyWars.Utility.Lang {
             `启用SetPath模式后，在指定部队移动路线时，您需要连续点击两次目标格子才能呼出操作菜单。这会增加操作量，但同时也便于指定移动路线，这在雾战中尤其有用。\n您确定要启用吗？\n（当前状态：%s）`,
             `While the Set Path mode is enabled, you have to double click (or touch) a tile in order to make the unit action panel appear when you are moving units. This mode can be useful especially in FoW.\nAre you sure to enable it? \n(Current status: %s)`,
         ],
-        [Type.F0034]: [
-            `服务器内部错误，请通知作者，错误码: %d`,
-            `Server internal error, code: %d`,
-        ],
     };
 
     const NET_ERROR_TEXT: { [netErrorCode: number]: string[] } = {
@@ -2939,57 +2939,61 @@ namespace TinyWars.Utility.Lang {
             "非法请求",
             "Illegal request.",
         ],
-        [ErrorCode.User0000]: [
-            `登录失败，可能是服务器内部错误。请尝试刷新游戏，并通知作者。`,
-            `Failed to login. Please refresh the game.`,
+        [ErrorCode.MsgUserLogin0001]: [
+            "账号不合法，请检查后重试",
+            "Invalid account.",
         ],
-        [ErrorCode.User0001]: [
-            "账号或密码不正确，请检查后重试",
-            "Invalid account and/or password.",
-        ],
-        [ErrorCode.User0002]: [
+        [ErrorCode.MsgUserLogin0002]: [
             "您已处于登陆状态，不可再次登陆",
             "You have logged in already.",
         ],
-        [ErrorCode.Register_InvalidAccount]: [
+        [ErrorCode.MsgUserLogin0003]: [
+            "密码不合法，请检查后重试",
+            "Invalid password.",
+        ],
+        [ErrorCode.MsgUserLogin0005]: [
+            "账号不存在，请检查后重试",
+            "The account doesn't exist.",
+        ],
+        [ErrorCode.MsgUserLogin0006]: [
+            "账号或密码不正确，请检查后重试",
+            "Incorrect account and/or password.",
+        ],
+        [ErrorCode.MsgUserRegister0000]: [
             "账号不符合要求，请检查后重试",
             "Invalid account.",
         ],
-        [ErrorCode.Register_UsedAccount]: [
+        [ErrorCode.MsgUserRegister0001]: [
             "该账号已被注册，请修改后再试",
             "The account has been registered.",
         ],
-        [ErrorCode.Register_AlreadyLoggedIn]: [
+        [ErrorCode.MsgUserRegister0002]: [
             "您已处于登陆状态，不可注册账号",
             "You have logged in already.",
         ],
-        [ErrorCode.Register_InvalidPassword]: [
+        [ErrorCode.MsgUserRegister0003]: [
             "密码不符合要求，请检查后重试",
             "Invalid password.",
         ],
-        [ErrorCode.Register_InvalidNickname]: [
+        [ErrorCode.MsgUserRegister0004]: [
             "昵称不符合要求，请检查后重试",
             "Invalid nickname.",
         ],
-        [ErrorCode.Register_UsedNickname]: [
+        [ErrorCode.MsgUserRegister0005]: [
             "该昵称已被使用，请修改后再试",
             "The nickname has been used.",
         ],
-        [ErrorCode.MmMergeMap_SameSrcAndDst]: [
-            "",
-            "",
+        [ErrorCode.MsgUserSetNickname0000]: [
+            "昵称不符合要求，请检查后重试",
+            "Invalid nickname.",
         ],
-        [ErrorCode.MmMergeMap_NoSrcStatisticsData]: [
-            "",
-            "",
+        [ErrorCode.MsgUserSetNickname0001]: [
+            "该昵称已被使用，请修改后再试",
+            "The nickname has been used.",
         ],
-        [ErrorCode.MmMergeMap_NoDstStatisticsData]: [
-            "",
-            "",
-        ],
-        [ErrorCode.Mcr0000]: [
-            "您已参与了许多未开始的战局，请退出部分后重试",
-            "You have joined too many wars.",
+        [ErrorCode.MsgMcrCreateRoom0000]: [
+            "您已加入了许多未开战的房间，请退出部分后重试",
+            "You have joined too many rooms.",
         ],
         [ErrorCode.CreateMultiCustomWar_TooManyCreatedRooms]: [
             "您已创建了许多未开始的房间，请退出部分后重试",
@@ -3309,12 +3313,8 @@ namespace TinyWars.Utility.Lang {
     }
 
     export function getNetErrorText(code: ErrorCode): string {
-        const texts = NET_ERROR_TEXT[code];
-        if (texts) {
-            return texts[_languageType];
-        } else {
-            return getFormattedText(Type.F0034, code);
-        }
+        const textList = NET_ERROR_TEXT[code];
+        return `${getText(Type.B0452)} ${code}${textList ? `: ${textList[_languageType]}` : ``}`;
     }
 
     export function getRichText(richType: RichType): string {
