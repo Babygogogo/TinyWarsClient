@@ -3031,7 +3031,7 @@ namespace TinyWars.Utility.Lang {
             "地图不存在，获取dynamic info失败。",
             "The map doesn't exist thus fail to get its dynamic info.",
         ],
-        [ErrorCode.GetMapRawData_NoSuchMap]: [
+        [ErrorCode.MsgMapGetRawData0001]: [
             "地图不存在，获取raw data失败。",
             "The map doesn't exist thus fail to get its raw data.",
         ],
