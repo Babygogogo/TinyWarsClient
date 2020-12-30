@@ -742,6 +742,11 @@ namespace TinyWars.Utility.Lang {
             `您正在观战的玩家已被击败。\n即将回到大厅…`,
             `The player that you are watching has lost.`,
         ],
+        [Type.A0153]: [
+            `请把错误码告知开发组`,
+            `Please notify the developing group.`,
+        ],
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2931,11 +2936,7 @@ namespace TinyWars.Utility.Lang {
             "",
             "",
         ],
-        [ErrorCode.InternalError]: [
-            "服务器内部错误，请通知作者",
-            "Server internal errors.",
-        ],
-        [ErrorCode.IllegalRequest]: [
+        [ErrorCode.IllegalRequest0000]: [
             "非法请求",
             "Illegal request.",
         ],
@@ -2991,103 +2992,79 @@ namespace TinyWars.Utility.Lang {
             "该昵称已被使用，请修改后再试",
             "The nickname has been used.",
         ],
-        [ErrorCode.MsgMcrCreateRoom0000]: [
+        [ErrorCode.MsgMcrCreateRoom0007]: [
             "您已加入了许多未开战的房间，请退出部分后重试",
             "You have joined too many rooms.",
         ],
-        [ErrorCode.CreateMultiCustomWar_TooManyCreatedRooms]: [
+        [ErrorCode.MsgMcrCreateRoom0008]: [
             "您已创建了许多未开始的房间，请退出部分后重试",
             "You have created too many rooms simultaneously.",
         ],
-        [ErrorCode.CreateMultiCustomWar_InvalidParams]: [
-            "部分设定不符合规则，请检查后重试",
-            "Invalid settings.",
+        [ErrorCode.MsgMcrExitRoom0002]: [
+            "房间不存在",
+            "The room doesn't exist.",
         ],
-        [ErrorCode.ExitMultiCustomWar_WarInfoNotExist]: [
-            "战局不存在",
-            "The game doesn't exist.",
-        ],
-        [ErrorCode.ExitMultiCustomWar_NotJoined]: [
+        [ErrorCode.MsgMcrExitRoom0004]: [
             "您并未参加该战局",
             "You haven't joined the game.",
         ],
-        [ErrorCode.JoinMultiCustomWar_TooManyJoinedWars]: [
+        [ErrorCode.MsgMcrJoinRoom0004]: [
             "您已参与了许多未开始的战局，请退出部分后重试",
             "You have joined too many wars.",
         ],
-        [ErrorCode.JoinMultiCustomWar_InvalidParams]: [
-            "部分设定不符合规则，请检查后重试",
-            "Invalid settings.",
-        ],
-        [ErrorCode.JoinMultiCustomWar_WarInfoNotExist]: [
+        [ErrorCode.MsgMcrJoinRoom0006]: [
             "房间不存在",
-            "The game doesn't exist.",
+            "The room doesn't exist.",
         ],
-        [ErrorCode.JoinMultiCustomWar_AlreadyJoined]: [
+        [ErrorCode.MsgMcrJoinRoom0013]: [
             "您已加入了该房间。",
-            "You have already joined the game.",
-        ],
-        [ErrorCode.GetMapDynamicInfo_NoSuchMap]: [
-            "地图不存在，获取dynamic info失败。",
-            "The map doesn't exist thus fail to get its dynamic info.",
+            "You have already joined the room.",
         ],
         [ErrorCode.MsgMapGetRawData0001]: [
             "地图不存在，获取raw data失败。",
             "The map doesn't exist thus fail to get its raw data.",
         ],
-        [ErrorCode.GetUserPublicInfo_NoSuchUser]: [
+        [ErrorCode.MsgUserGetPublicInfo0001]: [
             "用户不存在，获取user public info失败。",
             "The user doesn't exist thus fail to get its public info.",
         ],
-        [ErrorCode.McrContinueWar_NoSuchWar]: [
+        [ErrorCode.MsgMpwCommonContinueWar0001]: [
             `战局不存在`,
             `The game doesn't exist.`,
         ],
-        [ErrorCode.McrContinueWar_DefeatedOrNotJoined]: [
+        [ErrorCode.MsgMpwCommonContinueWar0003]: [
             `您未参与该战局，或已经被击败`,
             `You have not joined the game, or you have been defeated.`,
         ],
-        [ErrorCode.McwBeginTurn_NoSuchWar]: [
+        [ErrorCode.MsgMpwActionPlayerEndTurn0003]: [
             `战局不存在`,
             `The game doesn't exist.`,
         ],
-        [ErrorCode.McwBeginTurn_InvalidActionId]: [
+        [ErrorCode.MsgMpwActionPlayerEndTurn0004]: [
             `战局数据不同步，请刷新`,
             `The local data is out of synchronization. Please refresh.`,
         ],
-        [ErrorCode.McwBeginTurn_NotInTurn]: [
-            `当前无法开始您的回合`,
-            `Unable to begin turn.`,
-        ],
-        [ErrorCode.McwEndTurn_NoSuchWar]: [
-            `战局不存在`,
-            `The game doesn't exist.`,
-        ],
-        [ErrorCode.McwEndTurn_InvalidActionId]: [
-            `战局数据不同步，请刷新`,
-            `The local data is out of synchronization. Please refresh.`,
-        ],
-        [ErrorCode.McwEndTurn_NotInTurn]: [
+        [ErrorCode.MsgMpwActionPlayerEndTurn0006]: [
             `当前无法结束您的回合`,
             `Unable to end turn.`,
         ],
-        [ErrorCode.McwEndTurn_NotVotedForDraw]: [
+        [ErrorCode.MsgMpwActionPlayerEndTurn0009]: [
             `您尚未完成关于和局的投票`,
             `You haven't voted for the draw of game.`,
         ],
-        [ErrorCode.McwWatchRequestWatcher_TargetPlayerLost]: [
+        [ErrorCode.MsgMpwWatchMakeRequest0005]: [
             `该玩家已战败，无法观战`,
             `The target player has been defeated in the game.`
         ],
-        [ErrorCode.McwWatchRequestWatcher_AlreadyRequested]: [
+        [ErrorCode.MsgMpwWatchMakeRequest0006]: [
             `已请求观战该玩家`,
             `You have already requested to watch the player.`,
         ],
-        [ErrorCode.McwWatchRequestWatcher_AlreadyAccepted]: [
+        [ErrorCode.MsgMpwWatchMakeRequest0007]: [
             `观战请求已被接受`,
             `The request has already been accepted.`,
         ],
-        [ErrorCode.ServerDisconnect_ServerMaintenance]: [
+        [ErrorCode.ServerDisconnect0001]: [
             `服务器维护中`,
             `The server is under maintenance.`,
         ],
@@ -3313,8 +3290,9 @@ namespace TinyWars.Utility.Lang {
     }
 
     export function getNetErrorText(code: ErrorCode): string {
-        const textList = NET_ERROR_TEXT[code];
-        return `${getText(Type.B0452)} ${code}${textList ? `: ${textList[_languageType]}` : ``}`;
+        const textList  = NET_ERROR_TEXT[code];
+        const text      = textList ? textList[_languageType] : undefined;
+        return `${getText(Type.B0452)} ${code}: ${text || getText(Type.A0153)}`;
     }
 
     export function getRichText(richType: RichType): string {
