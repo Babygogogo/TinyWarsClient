@@ -9,7 +9,7 @@ namespace TinyWars.ReplayWar {
     import ProtoTypes           = Utility.ProtoTypes;
     import BwHelpers            = BaseWar.BwHelpers;
     import WarType              = Types.WarType;
-    import IActionContainer     = ProtoTypes.WarAction.IActionContainer;
+    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
 
     type CheckPointData = {
@@ -18,7 +18,7 @@ namespace TinyWars.ReplayWar {
     }
 
     export class RwWar extends SinglePlayerWar.SpwWar {
-        private _executedActions                : IActionContainer[];
+        private _executedActions                : IWarActionContainer[];
         private _settingsForMcw                 : ProtoTypes.WarSettings.ISettingsForMcw;
         private _settingsForScw                 : ProtoTypes.WarSettings.ISettingsForScw;
         private _settingsForRmw                 : ProtoTypes.WarSettings.ISettingsForRmw;
@@ -433,13 +433,13 @@ namespace TinyWars.ReplayWar {
         public getTotalActionsCount(): number {
             return this._getAllExecutedActions().length;
         }
-        public getNextAction(): IActionContainer {
+        public getNextAction(): IWarActionContainer {
             return this._getAllExecutedActions()[this.getNextActionId()];
         }
-        private _setAllExecutedActions(actions: IActionContainer[]): void {
+        private _setAllExecutedActions(actions: IWarActionContainer[]): void {
             this._executedActions = actions;
         }
-        private _getAllExecutedActions(): IActionContainer[] {
+        private _getAllExecutedActions(): IWarActionContainer[] {
             return this._executedActions;
         }
 

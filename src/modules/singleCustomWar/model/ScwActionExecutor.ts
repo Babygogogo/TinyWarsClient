@@ -1,56 +1,56 @@
 
 namespace TinyWars.SingleCustomWar.ScwActionExecutor {
-    import Types                    = Utility.Types;
-    import Logger                   = Utility.Logger;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import Helpers                  = Utility.Helpers;
-    import DestructionHelpers       = Utility.DestructionHelpers;
-    import GridIndexHelpers         = Utility.GridIndexHelpers;
-    import VisibilityHelpers        = Utility.VisibilityHelpers;
-    import Lang                     = Utility.Lang;
-    import FloatText                = Utility.FloatText;
-    import WarActionCodes           = Utility.WarActionCodes;
-    import ConfigManager            = Utility.ConfigManager;
-    import DamageCalculator         = Utility.DamageCalculator;
-    import BwHelpers                = BaseWar.BwHelpers;
-    import BwCoSkillHelper          = BaseWar.BwCoSkillHelper;
-    import GridIndex                = Types.GridIndex;
-    import UnitActionState          = Types.UnitActionState;
-    import MovePath                 = Types.MovePath;
-    import TileType                 = Types.TileType;
-    import IActionContainer         = ProtoTypes.WarAction.IActionContainer;
-    import IDataForUseCoSkill       = ProtoTypes.Structure.IDataForUseCoSkill;
-    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
+    import Types                = Utility.Types;
+    import Logger               = Utility.Logger;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import Helpers              = Utility.Helpers;
+    import DestructionHelpers   = Utility.DestructionHelpers;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import Lang                 = Utility.Lang;
+    import FloatText            = Utility.FloatText;
+    import WarActionCodes       = Utility.WarActionCodes;
+    import ConfigManager        = Utility.ConfigManager;
+    import DamageCalculator     = Utility.DamageCalculator;
+    import BwHelpers            = BaseWar.BwHelpers;
+    import BwCoSkillHelper      = BaseWar.BwCoSkillHelper;
+    import GridIndex            = Types.GridIndex;
+    import UnitActionState      = Types.UnitActionState;
+    import MovePath             = Types.MovePath;
+    import TileType             = Types.TileType;
+    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
+    import IDataForUseCoSkill   = ProtoTypes.Structure.IDataForUseCoSkill;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
-    const _EXECUTORS = new Map<WarActionCodes, (war: ScwWar, data: IActionContainer) => Promise<void>>([
-        [WarActionCodes.ActionSystemBeginTurn,          _exeSystemBeginTurn],
-        [WarActionCodes.ActionSystemCallWarEvent,       _exeSystemCallWarEvent],
-        [WarActionCodes.ActionSystemDestroyPlayerForce, _exeSystemDestroyPlayerForce],
-        [WarActionCodes.ActionSystemEndWar,             _exeSystemEndWar],
-        [WarActionCodes.ActionPlayerDeleteUnit,         _exePlayerDeleteUnit],
-        [WarActionCodes.ActionPlayerEndTurn,            _exePlayerEndTurn],
-        [WarActionCodes.ActionPlayerProduceUnit,        _exePlayerProduceUnit],
-        [WarActionCodes.ActionPlayerSurrender,          _exePlayerSurrender],
-        [WarActionCodes.ActionPlayerVoteForDraw,        _exePlayerVoteForDraw],
-        [WarActionCodes.ActionUnitAttackUnit,           _exeUnitAttackUnit],
-        [WarActionCodes.ActionUnitAttackTile,           _exeUnitAttackTile],
-        [WarActionCodes.ActionUnitBeLoaded,             _exeUnitBeLoaded],
-        [WarActionCodes.ActionUnitBuildTile,            _exeUnitBuildTile],
-        [WarActionCodes.ActionUnitCaptureTile,          _exeUnitCaptureTile],
-        [WarActionCodes.ActionUnitDive,                 _exeUnitDive],
-        [WarActionCodes.ActionUnitDropUnit,             _exeUnitDropUnit],
-        [WarActionCodes.ActionUnitJoinUnit,             _exeUnitJoinUnit],
-        [WarActionCodes.ActionUnitLaunchFlare,          _exeUnitLaunchFlare],
-        [WarActionCodes.ActionUnitLaunchSilo,           _exeUnitLaunchSilo],
-        [WarActionCodes.ActionUnitLoadCo,               _exeUnitLoadCo],
-        [WarActionCodes.ActionUnitProduceUnit,          _exeUnitProduceUnit],
-        [WarActionCodes.ActionUnitSupplyUnit,           _exeUnitSupplyUnit],
-        [WarActionCodes.ActionUnitSurface,              _exeUnitSurface],
-        [WarActionCodes.ActionUnitUseCoSkill,           _exeUnitUseCoSkill],
-        [WarActionCodes.ActionUnitWait,                 _exeUnitWait],
+    const _EXECUTORS = new Map<WarActionCodes, (war: ScwWar, data: IWarActionContainer) => Promise<void>>([
+        [WarActionCodes.WarActionSystemBeginTurn,           _exeSystemBeginTurn],
+        [WarActionCodes.WarActionSystemCallWarEvent,        _exeSystemCallWarEvent],
+        [WarActionCodes.WarActionSystemDestroyPlayerForce,  _exeSystemDestroyPlayerForce],
+        [WarActionCodes.WarActionSystemEndWar,              _exeSystemEndWar],
+        [WarActionCodes.WarActionPlayerDeleteUnit,          _exePlayerDeleteUnit],
+        [WarActionCodes.WarActionPlayerEndTurn,             _exePlayerEndTurn],
+        [WarActionCodes.WarActionPlayerProduceUnit,         _exePlayerProduceUnit],
+        [WarActionCodes.WarActionPlayerSurrender,           _exePlayerSurrender],
+        [WarActionCodes.WarActionPlayerVoteForDraw,         _exePlayerVoteForDraw],
+        [WarActionCodes.WarActionUnitAttackUnit,            _exeUnitAttackUnit],
+        [WarActionCodes.WarActionUnitAttackTile,            _exeUnitAttackTile],
+        [WarActionCodes.WarActionUnitBeLoaded,              _exeUnitBeLoaded],
+        [WarActionCodes.WarActionUnitBuildTile,             _exeUnitBuildTile],
+        [WarActionCodes.WarActionUnitCaptureTile,           _exeUnitCaptureTile],
+        [WarActionCodes.WarActionUnitDive,                  _exeUnitDive],
+        [WarActionCodes.WarActionUnitDropUnit,              _exeUnitDropUnit],
+        [WarActionCodes.WarActionUnitJoinUnit,              _exeUnitJoinUnit],
+        [WarActionCodes.WarActionUnitLaunchFlare,           _exeUnitLaunchFlare],
+        [WarActionCodes.WarActionUnitLaunchSilo,            _exeUnitLaunchSilo],
+        [WarActionCodes.WarActionUnitLoadCo,                _exeUnitLoadCo],
+        [WarActionCodes.WarActionUnitProduceUnit,           _exeUnitProduceUnit],
+        [WarActionCodes.WarActionUnitSupplyUnit,            _exeUnitSupplyUnit],
+        [WarActionCodes.WarActionUnitSurface,               _exeUnitSurface],
+        [WarActionCodes.WarActionUnitUseCoSkill,            _exeUnitUseCoSkill],
+        [WarActionCodes.WarActionUnitWait,                  _exeUnitWait],
     ]);
 
-    export async function checkAndExecute(war: ScwWar, container: IActionContainer): Promise<void> {
+    export async function checkAndExecute(war: ScwWar, container: IWarActionContainer): Promise<void> {
         if ((!war.getIsRunning()) || (war.getIsEnded()) || (war.getIsExecutingAction())) {
             return;
         }
@@ -68,7 +68,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The 'true' executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _exeSystemBeginTurn(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeSystemBeginTurn(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -83,11 +83,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             ));
         }
 
-        await war.getTurnManager().endPhaseWaitBeginTurn(data.ActionSystemBeginTurn);
+        await war.getTurnManager().endPhaseWaitBeginTurn(data.WarActionSystemBeginTurn);
         actionPlanner.setStateIdle();
     }
 
-    async function _exeSystemCallWarEvent(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeSystemCallWarEvent(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0451)}`);
@@ -98,18 +98,18 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeSystemDestroyPlayerForce(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeSystemDestroyPlayerForce(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${await war.getPlayerInTurn().getNickname()}${Lang.getText(Lang.Type.B0450)}`);
 
-        DestructionHelpers.destroyPlayerForce(war, data.ActionSystemDestroyPlayerForce.targetPlayerIndex, true);
+        DestructionHelpers.destroyPlayerForce(war, data.WarActionSystemDestroyPlayerForce.targetPlayerIndex, true);
 
         ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _exeSystemEndWar(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeSystemEndWar(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0087)}`);
@@ -119,11 +119,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerDeleteUnit(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerDeleteUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action    = data.ActionPlayerDeleteUnit;
+        const action    = data.WarActionPlayerDeleteUnit;
         const gridIndex = action.gridIndex as GridIndex;
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit) {
@@ -135,19 +135,19 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerEndTurn(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerEndTurn(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        await war.getTurnManager().endPhaseMain(data.ActionPlayerEndTurn);
+        await war.getTurnManager().endPhaseMain(data.WarActionPlayerEndTurn);
 
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerProduceUnit(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerProduceUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action        = data.ActionPlayerProduceUnit;
+        const action        = data.WarActionPlayerProduceUnit;
         const gridIndex     = action.gridIndex as GridIndex;
         const unitType      = action.unitType;
         const unitHp        = action.unitHp;
@@ -177,11 +177,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerSurrender(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerSurrender(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const player        = war.getPlayerInTurn();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(Lang.getFormattedText(data.ActionPlayerSurrender.isBoot ? Lang.Type.F0028 : Lang.Type.F0008, await player.getNickname()));
+        FloatText.show(Lang.getFormattedText(data.WarActionPlayerSurrender.isBoot ? Lang.Type.F0028 : Lang.Type.F0008, await player.getNickname()));
 
         player.setAliveState(Types.PlayerAliveState.Dying);
 
@@ -189,11 +189,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerVoteForDraw(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerVoteForDraw(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action = data.ActionPlayerVoteForDraw;
+        const action = data.WarActionPlayerVoteForDraw;
 
         const playerInTurn = war.getPlayerInTurn();
         playerInTurn.setHasVotedForDraw(true);
@@ -214,11 +214,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitAttackUnit(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitAttackUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action        = data.ActionUnitAttackUnit;
+        const action        = data.WarActionUnitAttackUnit;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -393,11 +393,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
     }
 
-    async function _exeUnitAttackTile(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitAttackTile(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action        = data.ActionUnitAttackTile;
+        const action        = data.WarActionUnitAttackTile;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -458,11 +458,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
     }
 
-    async function _exeUnitBeLoaded(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitBeLoaded(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action        = data.ActionUnitBeLoaded;
+        const action        = data.WarActionUnitBeLoaded;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -491,11 +491,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
     }
 
-    async function _exeUnitBuildTile(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitBuildTile(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action        = data.ActionUnitBuildTile;
+        const action        = data.WarActionUnitBuildTile;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -538,11 +538,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitCaptureTile(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitCaptureTile(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action        = data.ActionUnitCaptureTile;
+        const action        = data.WarActionUnitCaptureTile;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -588,11 +588,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
     }
 
-    async function _exeUnitDive(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitDive(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action        = data.ActionUnitDive;
+        const action        = data.WarActionUnitDive;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -624,11 +624,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitDropUnit(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitDropUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action            = data.ActionUnitDropUnit;
+        const action            = data.WarActionUnitDropUnit;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -681,11 +681,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitJoinUnit(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitJoinUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action            = data.ActionUnitJoinUnit;
+        const action            = data.WarActionUnitJoinUnit;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -769,11 +769,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
     }
 
-    async function _exeUnitLaunchFlare(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitLaunchFlare(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action        = data.ActionUnitLaunchFlare;
+        const action        = data.WarActionUnitLaunchFlare;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
@@ -804,11 +804,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitLaunchSilo(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitLaunchSilo(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action        = data.ActionUnitLaunchSilo;
+        const action        = data.WarActionUnitLaunchSilo;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const launchUnitId  = action.launchUnitId;
@@ -859,11 +859,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
     }
 
-    async function _exeUnitLoadCo(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitLoadCo(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action        = data.ActionUnitLoadCo;
+        const action        = data.WarActionUnitLoadCo;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -899,11 +899,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitProduceUnit(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitProduceUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action        = data.ActionUnitProduceUnit;
+        const action        = data.WarActionUnitProduceUnit;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
@@ -945,11 +945,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
     }
 
-    async function _exeUnitSupplyUnit(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitSupplyUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action        = data.ActionUnitSupplyUnit;
+        const action        = data.WarActionUnitSupplyUnit;
         const revisedPath   = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = revisedPath.nodes;
@@ -997,11 +997,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
     }
 
-    async function _exeUnitSurface(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitSurface(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action    = data.ActionUnitSurface;
+        const action    = data.WarActionUnitSurface;
         const unitMap   = war.getUnitMap();
         if (unitMap == null) {
             Logger.error(`ScwModel._exeUnitSurface() empty unitMap.`);
@@ -1038,11 +1038,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitUseCoSkill(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitUseCoSkill(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action    = data.ActionUnitUseCoSkill;
+        const action    = data.WarActionUnitUseCoSkill;
         const skillType = action.skillType;
         if (skillType == null) {
             Logger.error(`ScwModel._exeUnitUseCoSkill() empty skillType.`);
@@ -1166,11 +1166,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
     }
 
-    async function _exeUnitWait(war: ScwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitWait(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        const action    = data.ActionUnitWait;
+        const action    = data.WarActionUnitWait;
         const unitMap   = war.getUnitMap();
         if (unitMap == null) {
             Logger.error(`ScwModel._exeUnitWait() empty unitMap.`);

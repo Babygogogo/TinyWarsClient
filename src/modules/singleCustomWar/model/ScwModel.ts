@@ -1,14 +1,14 @@
 
 namespace TinyWars.SingleCustomWar.ScwModel {
-    import Types                    = Utility.Types;
-    import Logger                   = Utility.Logger;
-    import Lang                     = Utility.Lang;
-    import ConfigManager            = Utility.ConfigManager;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import WarSerialization         = ProtoTypes.WarSerialization;
-    import IActionContainer         = ProtoTypes.WarAction.IActionContainer;
-    import CommonAlertPanel         = Common.CommonAlertPanel;
-    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
+    import Types                = Utility.Types;
+    import Logger               = Utility.Logger;
+    import Lang                 = Utility.Lang;
+    import ConfigManager        = Utility.ConfigManager;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import WarSerialization     = ProtoTypes.WarSerialization;
+    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
+    import CommonAlertPanel     = Common.CommonAlertPanel;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     let _war: ScwWar;
     export function init(): void {
@@ -50,7 +50,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Util functions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function handlePlayerAction(action: IActionContainer): Promise<void> {
+    export async function handlePlayerAction(action: IWarActionContainer): Promise<void> {
         await checkAndHandleAutoActionsAndRobot();
         await handleAutoActionsAndPlayerAction(action);
         await checkAndHandleAutoActionsAndRobot();
@@ -67,7 +67,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function handleAutoActionsAndPlayerAction(playerAction: IActionContainer): Promise<void> {
+    async function handleAutoActionsAndPlayerAction(playerAction: IWarActionContainer): Promise<void> {
         const war = getWar();
         if (!checkCanExecuteAction(war)) {
             return;
@@ -222,38 +222,38 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     }
     async function handleSystemBeginTurn(war: ScwWar): Promise<void> {
         await ScwActionExecutor.checkAndExecute(war, {
-            actionId                : war.getExecutedActionsCount(),
-            ActionSystemBeginTurn   : {
+            actionId                    : war.getExecutedActionsCount(),
+            WarActionSystemBeginTurn    : {
             },
         })
     }
     async function handleSystemCallWarEvent(war: ScwWar, eventId: number): Promise<void> {
         await ScwActionExecutor.checkAndExecute(war, {
-            actionId                : war.getExecutedActionsCount(),
-            ActionSystemCallWarEvent: {
+            actionId                    : war.getExecutedActionsCount(),
+            WarActionSystemCallWarEvent : {
                 eventId,
             }
         });
     }
     async function handleSystemDestroyPlayerForce(war: ScwWar, playerIndex: number): Promise<void> {
         await ScwActionExecutor.checkAndExecute(war, {
-            actionId                        : war.getExecutedActionsCount(),
-            ActionSystemDestroyPlayerForce  : {
+            actionId                            : war.getExecutedActionsCount(),
+            WarActionSystemDestroyPlayerForce   : {
                 targetPlayerIndex           : playerIndex,
             },
         });
     }
     async function handleSystemEndWar(war: ScwWar): Promise<void> {
         await ScwActionExecutor.checkAndExecute(war, {
-            actionId            : war.getExecutedActionsCount(),
-            ActionSystemEndWar  : {
+            actionId                : war.getExecutedActionsCount(),
+            WarActionSystemEndWar   : {
             },
         });
     }
     async function handlePlayerEndTurn(war: ScwWar): Promise<void> {
         await ScwActionExecutor.checkAndExecute(war, {
-            actionId            : war.getExecutedActionsCount(),
-            ActionPlayerEndTurn : {
+            actionId                : war.getExecutedActionsCount(),
+            WarActionPlayerEndTurn  : {
             },
         });
     }

@@ -3,7 +3,7 @@ namespace TinyWars.Utility.Helpers {
     import ColorType            = Types.ColorType;
     import MessageCodes         = Network.Codes;
     import IMessageContainer    = ProtoTypes.NetMessage.IMessageContainer;
-    import IActionContainer     = ProtoTypes.WarAction.IActionContainer;
+    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
 
     const COLOR_MATRIX_FILTERS = {
         [ColorType.Gray]: new egret.ColorMatrixFilter([
@@ -121,11 +121,11 @@ namespace TinyWars.Utility.Helpers {
         return undefined;
     }
 
-    export function getWarActionCode(container: IActionContainer): WarActionCodes | null {
+    export function getWarActionCode(container: IWarActionContainer): WarActionCodes | null {
         const name = getWarActionName(container);
         return name == null ? null : WarActionCodes[name];
     }
-    export function getWarActionName(container: IActionContainer): string | null {
+    export function getWarActionName(container: IWarActionContainer): string | null {
         for (const k in container) {
             if (k !== "actionId") {
                 return k;

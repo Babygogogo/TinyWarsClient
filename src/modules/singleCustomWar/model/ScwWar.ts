@@ -8,11 +8,11 @@ namespace TinyWars.SingleCustomWar {
     import BwSettingsHelper     = BaseWar.BwSettingsHelper;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForScw      = ProtoTypes.WarSettings.ISettingsForScw;
-    import IActionContainer     = ProtoTypes.WarAction.IActionContainer;
+    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
 
     export class ScwWar extends SinglePlayerWar.SpwWar {
         private _settingsForSinglePlayer    : ISettingsForScw;
-        private _executedActions            : IActionContainer[];
+        private _executedActions            : IWarActionContainer[];
         private _saveSlotIndex              : number;
         private _saveSlotComment            : string;
 
@@ -416,13 +416,13 @@ namespace TinyWars.SingleCustomWar {
             BwSettingsHelper.setLuckUpperLimit(warRule, playerIndex, value);
         }
 
-        private _setAllExecutedActions(actions: IActionContainer[]): void {
+        private _setAllExecutedActions(actions: IWarActionContainer[]): void {
             this._executedActions = actions;
         }
-        private _getAllExecutedActions(): IActionContainer[] | null {
+        private _getAllExecutedActions(): IWarActionContainer[] | null {
             return this._executedActions;
         }
-        public addExecutedAction(action: IActionContainer): void {
+        public addExecutedAction(action: IWarActionContainer): void {
             const executedActions = this._getAllExecutedActions();
             if (executedActions == null) {
                 Logger.error(`ScwWar.addExecutedAction() empty executedActions.`);

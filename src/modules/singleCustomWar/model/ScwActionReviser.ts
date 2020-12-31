@@ -15,7 +15,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     import GridIndex                = Types.GridIndex;
     import UnitActionState          = Types.UnitActionState;
     import DropDestination          = Types.DropDestination;
-    import WarAction                = ProtoTypes.WarAction.IActionContainer;
+    import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
     import Structure                = ProtoTypes.Structure;
     import IWarUseCoSkillExtraData  = Structure.IDataForUseCoSkill;
     import IGridIndex               = Structure.IGridIndex;
@@ -31,7 +31,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         sameTeamMap : boolean[][];
     }
 
-    export function revise(war: ScwWar, container: RawWarAction): WarAction {
+    export function revise(war: ScwWar, container: RawWarAction): IWarActionContainer {
         if      (container.PlayerDeleteUnit)    { return revisePlayerDeleteUnit(war, container); }
         else if (container.PlayerEndTurn)       { return revisePlayerEndTurn(war, container); }
         else if (container.PlayerProduceUnit)   { return revisePlayerProduceUnit(war, container); }
@@ -54,7 +54,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         else                                    { return reviseUnknownAction(war, container); }
     }
 
-    function revisePlayerDeleteUnit(war: BwWar, container: RawWarAction): WarAction {   // DONE
+    function revisePlayerDeleteUnit(war: BwWar, container: RawWarAction): IWarActionContainer {   // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -63,13 +63,13 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
 
         return {
             actionId                    : war.getExecutedActionsCount(),
-            ActionPlayerDeleteUnit   : {
+            WarActionPlayerDeleteUnit   : {
                 gridIndex: container.PlayerDeleteUnit.gridIndex,
             },
         }
     }
 
-    function revisePlayerEndTurn(war: BwWar, container: RawWarAction): WarAction { // DONE
+    function revisePlayerEndTurn(war: BwWar, container: RawWarAction): IWarActionContainer { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -78,11 +78,11 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
 
         return {
             actionId                : war.getExecutedActionsCount(),
-            ActionPlayerEndTurn  : {}
+            WarActionPlayerEndTurn  : {}
         };
     }
 
-    function revisePlayerProduceUnit(war: BwWar, container: RawWarAction): WarAction {  // DONE
+    function revisePlayerProduceUnit(war: BwWar, container: RawWarAction): IWarActionContainer {  // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -95,7 +95,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const unitHp        = action.unitHp;
         return {
             actionId                    : war.getExecutedActionsCount(),
-            ActionPlayerProduceUnit  : {
+            WarActionPlayerProduceUnit  : {
                 gridIndex,
                 unitHp,
                 unitType,
@@ -103,7 +103,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    function reviseUnitAttackUnit(war: ScwWar, container: RawWarAction): WarAction { // DONE
+    function reviseUnitAttackUnit(war: ScwWar, container: RawWarAction): IWarActionContainer { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -116,8 +116,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const targetGridIndex               = action.targetGridIndex;
         const revisedPath                   = getRevisedPath(war, rawPath, launchUnitId);
         return {
-            actionId            : war.getExecutedActionsCount(),
-            ActionUnitAttackUnit : {
+            actionId                : war.getExecutedActionsCount(),
+            WarActionUnitAttackUnit : {
                 path    : revisedPath,
                 launchUnitId,
                 targetGridIndex,
@@ -125,7 +125,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    function reviseUnitAttackTile(war: ScwWar, container: RawWarAction): WarAction { // DONE
+    function reviseUnitAttackTile(war: ScwWar, container: RawWarAction): IWarActionContainer { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -138,8 +138,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const targetGridIndex               = action.targetGridIndex;
         const revisedPath                   = getRevisedPath(war, rawPath, launchUnitId);
         return {
-            actionId            : war.getExecutedActionsCount(),
-            ActionUnitAttackTile : {
+            actionId                : war.getExecutedActionsCount(),
+            WarActionUnitAttackTile : {
                 path    : revisedPath,
                 launchUnitId,
                 targetGridIndex,
@@ -147,7 +147,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    function reviseUnitBeLoaded(war: BwWar, rawAction: RawWarAction): WarAction {   // DONE
+    function reviseUnitBeLoaded(war: BwWar, rawAction: RawWarAction): IWarActionContainer {   // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -158,14 +158,14 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const launchUnitId  = action.launchUnitId;
         return {
             actionId                : war.getExecutedActionsCount(),
-            ActionUnitBeLoaded   : {
+            WarActionUnitBeLoaded   : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
         };
     }
 
-    function reviseUnitBuildTile(war: BwWar, rawAction: RawWarAction): WarAction {  // DONE
+    function reviseUnitBuildTile(war: BwWar, rawAction: RawWarAction): IWarActionContainer {  // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -176,14 +176,14 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const launchUnitId  = action.launchUnitId;
         return {
             actionId                : war.getExecutedActionsCount(),
-            ActionUnitBuildTile  : {
+            WarActionUnitBuildTile  : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
         };
     }
 
-    function reviseUnitCaptureTile(war: BwWar, rawAction: RawWarAction): WarAction {    // DONE
+    function reviseUnitCaptureTile(war: BwWar, rawAction: RawWarAction): IWarActionContainer {    // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -194,14 +194,14 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const launchUnitId  = action.launchUnitId;
         return {
             actionId                : war.getExecutedActionsCount(),
-            ActionUnitCaptureTile: {
+            WarActionUnitCaptureTile: {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
         };
     }
 
-    function reviseUnitDive(war: BwWar, rawAction: RawWarAction): WarAction {   // DONE
+    function reviseUnitDive(war: BwWar, rawAction: RawWarAction): IWarActionContainer {   // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -212,14 +212,14 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const launchUnitId  = action.launchUnitId;
         return {
             actionId            : war.getExecutedActionsCount(),
-            ActionUnitDive   : {
+            WarActionUnitDive   : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
         };
     }
 
-    function reviseUnitDrop(war: BwWar, rawAction: RawWarAction): WarAction {   // DONE
+    function reviseUnitDrop(war: BwWar, rawAction: RawWarAction): IWarActionContainer {   // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -232,8 +232,8 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const revisedDropDestinations   = getRevisedDropDestinations(war, action, revisedPath);
         const isDropBlocked             =  (!revisedPath.isBlocked) && (revisedDropDestinations.length < action.dropDestinations!.length);
         return {
-            actionId            : war.getExecutedActionsCount(),
-            ActionUnitDropUnit  : {
+            actionId                : war.getExecutedActionsCount(),
+            WarActionUnitDropUnit   : {
                 path            : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
                 dropDestinations: revisedDropDestinations,
@@ -242,7 +242,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    function reviseUnitJoin(war: BwWar, rawAction: RawWarAction): WarAction {   // DONE
+    function reviseUnitJoin(war: BwWar, rawAction: RawWarAction): IWarActionContainer {   // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -252,15 +252,15 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const action        = rawAction.UnitJoin;
         const launchUnitId  = action.launchUnitId;
         return {
-            actionId            : war.getExecutedActionsCount(),
-            ActionUnitJoinUnit  : {
+            actionId                : war.getExecutedActionsCount(),
+            WarActionUnitJoinUnit   : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
         };
     }
 
-    function reviseUnitLaunchFlare(war: BwWar, rawAction: RawWarAction): WarAction {    // DONE
+    function reviseUnitLaunchFlare(war: BwWar, rawAction: RawWarAction): IWarActionContainer {    // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -271,7 +271,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const launchUnitId  = action.launchUnitId;
         return {
             actionId                : war.getExecutedActionsCount(),
-            ActionUnitLaunchFlare: {
+            WarActionUnitLaunchFlare: {
                 path            : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
                 targetGridIndex : action.targetGridIndex,
@@ -279,7 +279,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    function reviseUnitLaunchSilo(war: BwWar, rawAction: RawWarAction): WarAction { // DONE
+    function reviseUnitLaunchSilo(war: BwWar, rawAction: RawWarAction): IWarActionContainer { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -290,7 +290,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const launchUnitId  = action.launchUnitId;
         return {
             actionId                : war.getExecutedActionsCount(),
-            ActionUnitLaunchSilo : {
+            WarActionUnitLaunchSilo : {
                 path            : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
                 targetGridIndex : action.targetGridIndex,
@@ -298,7 +298,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    function reviseUnitLoadCo(war: BwWar, rawAction: RawWarAction): WarAction { // DONE
+    function reviseUnitLoadCo(war: BwWar, rawAction: RawWarAction): IWarActionContainer { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -309,14 +309,14 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const launchUnitId  = action.launchUnitId;
         return {
             actionId            : war.getExecutedActionsCount(),
-            ActionUnitLoadCo : {
+            WarActionUnitLoadCo : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
         };
     }
 
-    function reviseUnitProduceUnit(war: BwWar, rawAction: RawWarAction): WarAction {    // DONE
+    function reviseUnitProduceUnit(war: BwWar, rawAction: RawWarAction): IWarActionContainer {    // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -327,14 +327,14 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const launchUnitId  = action.launchUnitId;
         return {
             actionId                    : war.getExecutedActionsCount(),
-            ActionUnitProduceUnit    : {
+            WarActionUnitProduceUnit    : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
         };
     }
 
-    function reviseUnitSupply(war: BwWar, rawAction: RawWarAction): WarAction { // DONE
+    function reviseUnitSupply(war: BwWar, rawAction: RawWarAction): IWarActionContainer { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -345,14 +345,14 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const launchUnitId  = action.launchUnitId;
         return {
             actionId                : war.getExecutedActionsCount(),
-            ActionUnitSupplyUnit    : {
+            WarActionUnitSupplyUnit : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
         };
     }
 
-    function reviseUnitSurface(war: BwWar, rawAction: RawWarAction): WarAction {    // DONE
+    function reviseUnitSurface(war: BwWar, rawAction: RawWarAction): IWarActionContainer {    // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -363,14 +363,14 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const launchUnitId  = action.launchUnitId;
         return {
             actionId            : war.getExecutedActionsCount(),
-            ActionUnitSurface: {
+            WarActionUnitSurface: {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
         };
     }
 
-    function reviseUnitUseCoSkill(war: ScwWar, rawAction: RawWarAction): WarAction { // DONE
+    function reviseUnitUseCoSkill(war: ScwWar, rawAction: RawWarAction): IWarActionContainer { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -387,7 +387,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
 
         return {
             actionId                : war.getExecutedActionsCount(),
-            ActionUnitUseCoSkill    : {
+            WarActionUnitUseCoSkill : {
                 path        : revisedPath,
                 launchUnitId,
                 skillType,
@@ -398,7 +398,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    function reviseUnitWait(war: BwWar, rawAction: RawWarAction): WarAction {   // DONE
+    function reviseUnitWait(war: BwWar, rawAction: RawWarAction): IWarActionContainer {   // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
@@ -409,14 +409,14 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const launchUnitId  = action.launchUnitId;
         return {
             actionId            : war.getExecutedActionsCount(),
-            ActionUnitWait      : {
+            WarActionUnitWait   : {
                 path    : getRevisedPath(war, action.path, launchUnitId),
                 launchUnitId,
             },
         };
     }
 
-    function reviseUnknownAction(war: BwWar, rawAction: RawWarAction): WarAction {
+    function reviseUnknownAction(war: BwWar, rawAction: RawWarAction): IWarActionContainer {
         Logger.error(`ScwActionReviser.reviseUnknownAction() invalid rawAction: ${JSON.stringify(rawAction)}`);
         return null;
     }
