@@ -217,7 +217,7 @@ namespace TinyWars.ReplayWar {
 
         private _updateLabelTurn(): void {
             const war               = this._war;
-            this._labelTurn.text    = `${war.getTurnManager().getTurnIndex() + 1}`;
+            this._labelTurn.text    = `${war.getTurnManager().getTurnIndex()}`;
         }
 
         private _updateLabelAction(): void {

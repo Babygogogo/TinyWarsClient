@@ -89,7 +89,7 @@ namespace TinyWars.MapEditor.MeUtility {
             remainingVotesForDraw   : null,
             playerManager           : createISerialPlayerManager(),
             turnManager             : {
-                turnIndex       : 0,
+                turnIndex       : CommonConstants.WarFirstTurnIndex,
                 turnPhaseCode   : Types.TurnPhaseCode.WaitBeginTurn,
                 playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 enterTurnTime   : 0,

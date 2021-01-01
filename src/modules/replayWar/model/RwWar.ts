@@ -369,7 +369,7 @@ namespace TinyWars.ReplayWar {
                 await this._loadCheckPoint(checkPointId);
                 await Helpers.checkAndCallLater();
                 this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex() + 1})`);
+                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
 
             } else {
                 this.setIsAutoReplay(false);
@@ -391,7 +391,7 @@ namespace TinyWars.ReplayWar {
                 await this._loadCheckPoint(checkPointId);
                 await Helpers.checkAndCallLater();
                 this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex() + 1})`);
+                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
             }
         }
         public checkIsInBeginning(): boolean {
@@ -405,7 +405,7 @@ namespace TinyWars.ReplayWar {
             await this._loadCheckPoint(this.getCheckPointId(this.getNextActionId()) - 1);
             await Helpers.checkAndCallLater();
             this.startRunning().startRunningView();
-            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex() + 1})`);
+            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
         }
         private async _loadCheckPoint(checkPointId: number): Promise<void> {
             const checkPointData    = this.getCheckPointData(checkPointId);

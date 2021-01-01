@@ -113,7 +113,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
         if (war.getNextActionId() >= war.getTotalActionsCount()) {
             war.setIsAutoReplay(false);
-            FloatText.show(`${Lang.getText(Lang.Type.B0093)} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1}`);
+            FloatText.show(`${Lang.getText(Lang.Type.B0093)} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()}`);
         }
         war.setIsExecutingAction(false);
 
@@ -139,7 +139,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeSystemBeginTurn(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${await war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0094)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${await war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0094)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         war.getTurnManager().endPhaseWaitBeginTurn(data.WarActionSystemBeginTurn);
 
@@ -149,7 +149,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeSystemCallWarEvent(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0451)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0451)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         // TODO call the event.
 
@@ -160,7 +160,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeSystemDestroyPlayerForce(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${await war.getPlayerInTurn().getNickname()}${Lang.getText(Lang.Type.B0450)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${await war.getPlayerInTurn().getNickname()}${Lang.getText(Lang.Type.B0450)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         DestructionHelpers.destroyPlayerForce(war, data.WarActionSystemDestroyPlayerForce.targetPlayerIndex, true);
 
@@ -171,7 +171,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeSystemEndWar(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0087)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0087)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         // Nothing to do.
 
@@ -181,7 +181,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exePlayerDeleteUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0081)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0081)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action    = data.WarActionPlayerDeleteUnit;
         const gridIndex = action.gridIndex as GridIndex;
@@ -201,7 +201,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exePlayerEndTurn(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0036)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0036)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         war.getTurnManager().endPhaseMain(data.WarActionPlayerEndTurn);
 
@@ -213,7 +213,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const action        = data.WarActionPlayerProduceUnit;
         const unitType      = action.unitType;
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(unitType)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(unitType)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const gridIndex     = action.gridIndex as GridIndex;
         const unitHp        = action.unitHp;
@@ -249,7 +249,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateExecutingAction();
         FloatText.show(
             `${await player.getNickname()} ${Lang.getText(data.WarActionPlayerSurrender.isBoot ? Lang.Type.B0396: Lang.Type.B0055)} ` +
-            `(${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`
+            `(${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`
         );
 
         player.setAliveState(Types.PlayerAliveState.Dying);
@@ -264,7 +264,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateExecutingAction();
         FloatText.show(
             `${await war.getPlayerInTurn().getNickname()} ${action.isAgree ? Lang.getText(Lang.Type.B0096) : Lang.getText(Lang.Type.B0085)}` +
-            `(${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`
+            `(${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`
         );
 
         const playerInTurn = war.getPlayerInTurn();
@@ -289,7 +289,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitAttackUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action        = data.WarActionUnitAttackUnit;
         const path          = action.path as MovePath;
@@ -469,7 +469,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitAttackTile(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action        = data.WarActionUnitAttackTile;
         const path          = action.path as MovePath;
@@ -535,7 +535,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitBeLoaded(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0098)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0098)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action        = data.WarActionUnitBeLoaded;
         const path          = action.path as MovePath;
@@ -569,7 +569,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitBuildTile(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0099)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0099)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action        = data.WarActionUnitBuildTile;
         const path          = action.path as MovePath;
@@ -615,7 +615,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitCaptureTile(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0100)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0100)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action        = data.WarActionUnitCaptureTile;
         const path          = action.path as MovePath;
@@ -664,7 +664,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitDive(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0101)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0101)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action        = data.WarActionUnitDive;
         const path          = action.path as MovePath;
@@ -691,7 +691,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitDropUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0102)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0102)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action            = data.WarActionUnitDropUnit;
         const path              = action.path as MovePath;
@@ -749,7 +749,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitJoinUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0103)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0103)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action            = data.WarActionUnitJoinUnit;
         const path              = action.path as MovePath;
@@ -838,7 +838,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitLaunchFlare(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0104)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0104)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action        = data.WarActionUnitLaunchFlare;
         const path          = action.path as MovePath;
@@ -874,7 +874,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitLaunchSilo(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0105)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0105)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action        = data.WarActionUnitLaunchSilo;
         const path          = action.path as MovePath;
@@ -928,7 +928,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitLoadCo(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0139)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0139)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action        = data.WarActionUnitLoadCo;
         const path          = action.path as MovePath;
@@ -969,7 +969,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitProduceUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0106)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0106)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action        = data.WarActionUnitProduceUnit;
         const path          = action.path as MovePath;
@@ -1016,7 +1016,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitSupplyUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0107)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0107)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action        = data.WarActionUnitSupplyUnit;
         const revisedPath   = action.path as MovePath;
@@ -1069,7 +1069,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitSurface(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0108)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0108)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action    = data.WarActionUnitSurface;
         const unitMap   = war.getUnitMap();
@@ -1102,7 +1102,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitUseCoSkill(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0142)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0142)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action    = data.WarActionUnitUseCoSkill;
         const skillType = action.skillType;
@@ -1231,7 +1231,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _exeUnitWait(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0109)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0109)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const action    = data.WarActionUnitWait;
         const unitMap   = war.getUnitMap();

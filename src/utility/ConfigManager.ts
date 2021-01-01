@@ -57,7 +57,7 @@ namespace TinyWars.Utility.ConfigManager {
     ////////////////////////////////////////////////////////////////////////////////
     // Constants.
     ////////////////////////////////////////////////////////////////////////////////
-    export const COMMON_CONSTANTS           = {
+    export const COMMON_CONSTANTS = {
         MapEditorSlotMaxCountForNormal          : 3,
         MapEditorSlotMaxCountForCommittee       : 100,
         ScwSaveSlotMaxCount                     : 10,
@@ -82,6 +82,7 @@ namespace TinyWars.Utility.ConfigManager {
         WarFirstPlayerIndex                     : 1,
         WarMaxPlayerIndex                       : 4,
         WarFirstTeamIndex                       : 1,
+        WarFirstTurnIndex                       : 1,
 
         ReplayMaxRating                         : 10,
         ReplayMinRating                         : 0,

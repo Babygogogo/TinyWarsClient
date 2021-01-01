@@ -241,7 +241,7 @@ namespace TinyWars.SingleCustomWar {
             const war = this._war;
             return {
                 titleText               : Lang.getText(Lang.Type.B0091),
-                infoText                : `${war.getTurnManager().getTurnIndex() + 1} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionsCount() + 1})`,
+                infoText                : `${war.getTurnManager().getTurnIndex()} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionsCount() + 1})`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
             };
