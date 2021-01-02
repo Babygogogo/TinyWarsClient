@@ -346,14 +346,14 @@ namespace TinyWars.Utility.Types {
     }
 
     export const enum TurnPhaseCode {
-        WaitBeginTurn,
+        WaitBeginTurn       = 0,
+        Main                = 1,
         GetFund,
         ConsumeFuel,
         RepairUnitByTile,
         DestroyUnitsOutOfFuel,
         RepairUnitByUnit,
         ActivateMapWeapon,
-        Main,
         ResetUnitState,
         ResetVisionForCurrentPlayer,
         TickTurnAndPlayerIndex,

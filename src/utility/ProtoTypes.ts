@@ -3765,109 +3765,109 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a WarEventConditionEventCalledTimes. */
-    interface IWarEventConditionEventCalledTimes {
+    /** Properties of a WarEventConditionEventCalledCount. */
+    interface IWarEventConditionEventCalledCount {
 
-        /** WarEventConditionEventCalledTimes eventIdEqualTo */
+        /** WarEventConditionEventCalledCount eventIdEqualTo */
         eventIdEqualTo?: (number|null);
 
-        /** WarEventConditionEventCalledTimes timesEqualTo */
-        timesEqualTo?: (number|null);
+        /** WarEventConditionEventCalledCount countEqualTo */
+        countEqualTo?: (number|null);
 
-        /** WarEventConditionEventCalledTimes timesLessThan */
-        timesLessThan?: (number|null);
+        /** WarEventConditionEventCalledCount countLessThan */
+        countLessThan?: (number|null);
 
-        /** WarEventConditionEventCalledTimes timesGreaterThan */
-        timesGreaterThan?: (number|null);
+        /** WarEventConditionEventCalledCount countGreaterThan */
+        countGreaterThan?: (number|null);
     }
 
-    /** Represents a WarEventConditionEventCalledTimes. */
-    class WarEventConditionEventCalledTimes implements IWarEventConditionEventCalledTimes {
+    /** Represents a WarEventConditionEventCalledCount. */
+    class WarEventConditionEventCalledCount implements IWarEventConditionEventCalledCount {
 
         /**
-         * Constructs a new WarEventConditionEventCalledTimes.
+         * Constructs a new WarEventConditionEventCalledCount.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarEvent.IWarEventConditionEventCalledTimes);
+        constructor(properties?: WarEvent.IWarEventConditionEventCalledCount);
 
-        /** WarEventConditionEventCalledTimes eventIdEqualTo. */
+        /** WarEventConditionEventCalledCount eventIdEqualTo. */
         public eventIdEqualTo: number;
 
-        /** WarEventConditionEventCalledTimes timesEqualTo. */
-        public timesEqualTo: number;
+        /** WarEventConditionEventCalledCount countEqualTo. */
+        public countEqualTo: number;
 
-        /** WarEventConditionEventCalledTimes timesLessThan. */
-        public timesLessThan: number;
+        /** WarEventConditionEventCalledCount countLessThan. */
+        public countLessThan: number;
 
-        /** WarEventConditionEventCalledTimes timesGreaterThan. */
-        public timesGreaterThan: number;
+        /** WarEventConditionEventCalledCount countGreaterThan. */
+        public countGreaterThan: number;
 
         /**
-         * Creates a new WarEventConditionEventCalledTimes instance using the specified properties.
+         * Creates a new WarEventConditionEventCalledCount instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns WarEventConditionEventCalledTimes instance
+         * @returns WarEventConditionEventCalledCount instance
          */
-        public static create(properties?: WarEvent.IWarEventConditionEventCalledTimes): WarEvent.WarEventConditionEventCalledTimes;
+        public static create(properties?: WarEvent.IWarEventConditionEventCalledCount): WarEvent.WarEventConditionEventCalledCount;
 
         /**
-         * Encodes the specified WarEventConditionEventCalledTimes message. Does not implicitly {@link WarEvent.WarEventConditionEventCalledTimes.verify|verify} messages.
-         * @param message WarEventConditionEventCalledTimes message or plain object to encode
+         * Encodes the specified WarEventConditionEventCalledCount message. Does not implicitly {@link WarEvent.WarEventConditionEventCalledCount.verify|verify} messages.
+         * @param message WarEventConditionEventCalledCount message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarEvent.IWarEventConditionEventCalledTimes, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarEvent.IWarEventConditionEventCalledCount, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified WarEventConditionEventCalledTimes message, length delimited. Does not implicitly {@link WarEvent.WarEventConditionEventCalledTimes.verify|verify} messages.
-         * @param message WarEventConditionEventCalledTimes message or plain object to encode
+         * Encodes the specified WarEventConditionEventCalledCount message, length delimited. Does not implicitly {@link WarEvent.WarEventConditionEventCalledCount.verify|verify} messages.
+         * @param message WarEventConditionEventCalledCount message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarEvent.IWarEventConditionEventCalledTimes, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarEvent.IWarEventConditionEventCalledCount, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a WarEventConditionEventCalledTimes message from the specified reader or buffer.
+         * Decodes a WarEventConditionEventCalledCount message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns WarEventConditionEventCalledTimes
+         * @returns WarEventConditionEventCalledCount
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WarEventConditionEventCalledTimes;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WarEventConditionEventCalledCount;
 
         /**
-         * Decodes a WarEventConditionEventCalledTimes message from the specified reader or buffer, length delimited.
+         * Decodes a WarEventConditionEventCalledCount message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns WarEventConditionEventCalledTimes
+         * @returns WarEventConditionEventCalledCount
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WarEventConditionEventCalledTimes;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WarEventConditionEventCalledCount;
 
         /**
-         * Verifies a WarEventConditionEventCalledTimes message.
+         * Verifies a WarEventConditionEventCalledCount message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a WarEventConditionEventCalledTimes message from a plain object. Also converts values to their respective internal types.
+         * Creates a WarEventConditionEventCalledCount message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns WarEventConditionEventCalledTimes
+         * @returns WarEventConditionEventCalledCount
          */
-        public static fromObject(object: { [k: string]: any }): WarEvent.WarEventConditionEventCalledTimes;
+        public static fromObject(object: { [k: string]: any }): WarEvent.WarEventConditionEventCalledCount;
 
         /**
-         * Creates a plain object from a WarEventConditionEventCalledTimes message. Also converts values to other types if specified.
-         * @param message WarEventConditionEventCalledTimes
+         * Creates a plain object from a WarEventConditionEventCalledCount message. Also converts values to other types if specified.
+         * @param message WarEventConditionEventCalledCount
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarEvent.WarEventConditionEventCalledTimes, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarEvent.WarEventConditionEventCalledCount, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this WarEventConditionEventCalledTimes to JSON.
+         * Converts this WarEventConditionEventCalledCount to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -3891,8 +3891,8 @@ export declare namespace WarEvent {
         /** WarEventCondition WarEventConditionPlayerAliveState */
         WarEventConditionPlayerAliveState?: (WarEvent.IWarEventConditionPlayerAliveState|null);
 
-        /** WarEventCondition WarEventConditionEventCalledTimes */
-        WarEventConditionEventCalledTimes?: (WarEvent.IWarEventConditionEventCalledTimes|null);
+        /** WarEventCondition WarEventConditionEventCalledCount */
+        WarEventConditionEventCalledCount?: (WarEvent.IWarEventConditionEventCalledCount|null);
     }
 
     /** Represents a WarEventCondition. */
@@ -3919,8 +3919,8 @@ export declare namespace WarEvent {
         /** WarEventCondition WarEventConditionPlayerAliveState. */
         public WarEventConditionPlayerAliveState?: (WarEvent.IWarEventConditionPlayerAliveState|null);
 
-        /** WarEventCondition WarEventConditionEventCalledTimes. */
-        public WarEventConditionEventCalledTimes?: (WarEvent.IWarEventConditionEventCalledTimes|null);
+        /** WarEventCondition WarEventConditionEventCalledCount. */
+        public WarEventConditionEventCalledCount?: (WarEvent.IWarEventConditionEventCalledCount|null);
 
         /**
          * Creates a new WarEventCondition instance using the specified properties.
@@ -4193,6 +4193,9 @@ export declare namespace WarEvent {
 
     /** Properties of a WarEventActionAddUnit. */
     interface IWarEventActionAddUnit {
+
+        /** WarEventActionAddUnit unitList */
+        unitList?: (WarEvent.WarEventActionAddUnit.IDataForAddUnit[]|null);
     }
 
     /** Represents a WarEventActionAddUnit. */
@@ -4203,6 +4206,9 @@ export declare namespace WarEvent {
          * @param [properties] Properties to set
          */
         constructor(properties?: WarEvent.IWarEventActionAddUnit);
+
+        /** WarEventActionAddUnit unitList. */
+        public unitList: WarEvent.WarEventActionAddUnit.IDataForAddUnit[];
 
         /**
          * Creates a new WarEventActionAddUnit instance using the specified properties.
@@ -4273,6 +4279,105 @@ export declare namespace WarEvent {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarEventActionAddUnit {
+
+        /** Properties of a DataForAddUnit. */
+        interface IDataForAddUnit {
+
+            /** DataForAddUnit unitData */
+            unitData?: (WarSerialization.ISerialUnit|null);
+
+            /** DataForAddUnit canBeBlocked */
+            canBeBlocked?: (boolean|null);
+        }
+
+        /** Represents a DataForAddUnit. */
+        class DataForAddUnit implements IDataForAddUnit {
+
+            /**
+             * Constructs a new DataForAddUnit.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarEvent.WarEventActionAddUnit.IDataForAddUnit);
+
+            /** DataForAddUnit unitData. */
+            public unitData?: (WarSerialization.ISerialUnit|null);
+
+            /** DataForAddUnit canBeBlocked. */
+            public canBeBlocked: boolean;
+
+            /**
+             * Creates a new DataForAddUnit instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns DataForAddUnit instance
+             */
+            public static create(properties?: WarEvent.WarEventActionAddUnit.IDataForAddUnit): WarEvent.WarEventActionAddUnit.DataForAddUnit;
+
+            /**
+             * Encodes the specified DataForAddUnit message. Does not implicitly {@link WarEvent.WarEventActionAddUnit.DataForAddUnit.verify|verify} messages.
+             * @param message DataForAddUnit message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarEvent.WarEventActionAddUnit.IDataForAddUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified DataForAddUnit message, length delimited. Does not implicitly {@link WarEvent.WarEventActionAddUnit.DataForAddUnit.verify|verify} messages.
+             * @param message DataForAddUnit message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarEvent.WarEventActionAddUnit.IDataForAddUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a DataForAddUnit message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns DataForAddUnit
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WarEventActionAddUnit.DataForAddUnit;
+
+            /**
+             * Decodes a DataForAddUnit message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns DataForAddUnit
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WarEventActionAddUnit.DataForAddUnit;
+
+            /**
+             * Verifies a DataForAddUnit message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a DataForAddUnit message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns DataForAddUnit
+             */
+            public static fromObject(object: { [k: string]: any }): WarEvent.WarEventActionAddUnit.DataForAddUnit;
+
+            /**
+             * Creates a plain object from a DataForAddUnit message. Also converts values to other types if specified.
+             * @param message DataForAddUnit
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarEvent.WarEventActionAddUnit.DataForAddUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this DataForAddUnit to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Properties of a WarEventAction. */
@@ -4377,8 +4482,14 @@ export declare namespace WarEvent {
         /** WarEvent eventId */
         eventId?: (number|null);
 
-        /** WarEvent maxCallTimesPerTurn */
-        maxCallTimesPerTurn?: (number|null);
+        /** WarEvent eventNameList */
+        eventNameList?: (string[]|null);
+
+        /** WarEvent maxCallCountInPlayerTurn */
+        maxCallCountInPlayerTurn?: (number|null);
+
+        /** WarEvent maxCallCountTotal */
+        maxCallCountTotal?: (number|null);
 
         /** WarEvent conditionNodeId */
         conditionNodeId?: (number|null);
@@ -4399,8 +4510,14 @@ export declare namespace WarEvent {
         /** WarEvent eventId. */
         public eventId: number;
 
-        /** WarEvent maxCallTimesPerTurn. */
-        public maxCallTimesPerTurn: number;
+        /** WarEvent eventNameList. */
+        public eventNameList: string[];
+
+        /** WarEvent maxCallCountInPlayerTurn. */
+        public maxCallCountInPlayerTurn: number;
+
+        /** WarEvent maxCallCountTotal. */
+        public maxCallCountTotal: number;
 
         /** WarEvent conditionNodeId. */
         public conditionNodeId: number;
@@ -5027,6 +5144,9 @@ export declare namespace WarRule {
 
         /** WarRule ruleForPlayers */
         ruleForPlayers?: (WarRule.IRuleForPlayers|null);
+
+        /** WarRule warEventIdList */
+        warEventIdList?: (number[]|null);
     }
 
     /** Represents a WarRule. */
@@ -5052,6 +5172,9 @@ export declare namespace WarRule {
 
         /** WarRule ruleForPlayers. */
         public ruleForPlayers?: (WarRule.IRuleForPlayers|null);
+
+        /** WarRule warEventIdList. */
+        public warEventIdList: number[];
 
         /**
          * Creates a new WarRule instance using the specified properties.
@@ -5970,11 +6093,11 @@ export declare namespace WarSerialization {
         /** DataForWarEventCalledCount eventId */
         eventId?: (number|null);
 
-        /** DataForWarEventCalledCount calledCount */
-        calledCount?: (number|null);
+        /** DataForWarEventCalledCount calledCountTotal */
+        calledCountTotal?: (number|null);
 
-        /** DataForWarEventCalledCount isCalledInTurn */
-        isCalledInTurn?: (boolean|null);
+        /** DataForWarEventCalledCount calledCountInPlayerTurn */
+        calledCountInPlayerTurn?: (number|null);
     }
 
     /** Represents a DataForWarEventCalledCount. */
@@ -5989,11 +6112,11 @@ export declare namespace WarSerialization {
         /** DataForWarEventCalledCount eventId. */
         public eventId: number;
 
-        /** DataForWarEventCalledCount calledCount. */
-        public calledCount: number;
+        /** DataForWarEventCalledCount calledCountTotal. */
+        public calledCountTotal: number;
 
-        /** DataForWarEventCalledCount isCalledInTurn. */
-        public isCalledInTurn: boolean;
+        /** DataForWarEventCalledCount calledCountInPlayerTurn. */
+        public calledCountInPlayerTurn: number;
 
         /**
          * Creates a new DataForWarEventCalledCount instance using the specified properties.

@@ -87,6 +87,9 @@ namespace TinyWars.MapEditor.MeUtility {
             executedActions         : null,
             executedActionsCount    : 0,
             remainingVotesForDraw   : null,
+            warEventData            : {
+                calledCountList     : [],
+            },
             playerManager           : createISerialPlayerManager(),
             turnManager             : {
                 turnIndex       : CommonConstants.WarFirstTurnIndex,

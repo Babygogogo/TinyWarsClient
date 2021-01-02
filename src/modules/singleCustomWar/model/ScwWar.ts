@@ -148,6 +148,12 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
+            const warEventData = this._getWarEventData();
+            if (warEventData == null) {
+                Logger.error(`ScwWar.serialize() empty warEventData.`);
+                return undefined;
+            }
+
             const playerManager = this.getPlayerManager();
             if (!(playerManager instanceof ScwPlayerManager)) {
                 Logger.error(`ScwWar.serialize() invalid playerManager.`);
@@ -194,6 +200,7 @@ namespace TinyWars.SingleCustomWar {
                 executedActions             : isCheating ? [] : this._getAllExecutedActions(),
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                warEventData,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,
@@ -216,6 +223,12 @@ namespace TinyWars.SingleCustomWar {
             const executedActionsCount = this.getExecutedActionsCount();
             if (executedActionsCount == null) {
                 Logger.error(`ScwWar.serializeForSimulation() empty executedActionsCount.`);
+                return undefined;
+            }
+
+            const warEventData = this._getWarEventData();
+            if (warEventData == null) {
+                Logger.error(`ScwWar.serializeForSimulation() empty warEventData.`);
                 return undefined;
             }
 
@@ -268,6 +281,7 @@ namespace TinyWars.SingleCustomWar {
                 executedActions             : [],
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                warEventData,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,

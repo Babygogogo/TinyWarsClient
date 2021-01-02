@@ -133,6 +133,12 @@ namespace TinyWars.MapEditor {
                 return undefined;
             }
 
+            const warEventData = this._getWarEventData();
+            if (warEventData == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty warEventData.`);
+                return undefined;
+            }
+
             const playerManager = this.getPlayerManager();
             if (playerManager == null) {
                 Logger.error(`MeWar.serializeForSimulation() empty playerManager.`);
@@ -182,6 +188,7 @@ namespace TinyWars.MapEditor {
                 executedActions             : [],
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                warEventData,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,

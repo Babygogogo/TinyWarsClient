@@ -111,6 +111,12 @@ namespace TinyWars.MultiCustomWar {
                 return undefined;
             }
 
+            const warEventData = this._getWarEventData();
+            if (warEventData == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty warEventData.`);
+                return undefined;
+            }
+
             const playerManager = this.getPlayerManager();
             if (playerManager == null) {
                 Logger.error(`McwWar.serializeForSimulation() empty playerManager.`);
@@ -160,6 +166,7 @@ namespace TinyWars.MultiCustomWar {
                 executedActions             : [],
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                warEventData,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,

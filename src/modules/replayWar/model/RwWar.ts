@@ -155,6 +155,12 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
+            const warEventData = this._getWarEventData();
+            if (warEventData == null) {
+                Logger.error(`ReplayWar.serializeForCheckPoint() empty warEventData.`);
+                return undefined;
+            }
+
             const playerManager = this.getPlayerManager();
             if (playerManager == null) {
                 Logger.error(`ReplayWar.serializeForCheckPoint() empty playerManager.`);
@@ -204,6 +210,7 @@ namespace TinyWars.ReplayWar {
                     executedActions             : null,
                     executedActionsCount        : null,
                     remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                    warEventData                : Helpers.deepClone(warEventData),
                     playerManager               : serialPlayerManager,
                     turnManager                 : serialTurnManager,
                     field                       : serialField,
@@ -227,6 +234,12 @@ namespace TinyWars.ReplayWar {
             const executedActionsCount = this.getExecutedActionsCount();
             if (executedActionsCount == null) {
                 Logger.error(`ReplayWar.serializeForSimulation() empty executedActionsCount`);
+                return undefined;
+            }
+
+            const warEventData = this._getWarEventData();
+            if (warEventData == null) {
+                Logger.error(`ReplayWar.serializeForSimulation() empty warEventData.`);
                 return undefined;
             }
 
@@ -285,6 +298,7 @@ namespace TinyWars.ReplayWar {
                 executedActions             : [],
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                warEventData,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,
@@ -425,6 +439,7 @@ namespace TinyWars.ReplayWar {
             );
             this.setRemainingVotesForDraw(warData.remainingVotesForDraw);
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: warData.seedRandomCurrentState }));
+            this._setWarEventData(Helpers.deepClone(warData.warEventData));
 
             await Helpers.checkAndCallLater();
             this._fastInitView();

@@ -93,38 +93,32 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     async function _executeAction(war: RwWar, container: IWarActionContainer, isFastExecute: boolean): Promise<void> {
         war.setIsExecutingAction(true);
         war.setNextActionId(war.getNextActionId() + 1);
-
-        const actionId = war.getNextActionId();
-        if (war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) {
-            if (war.getCheckPointId(actionId) == null) {
-                war.setCheckPointId(actionId, war.getCheckPointId(actionId - 1) + 1);
-            }
-        } else {
-            if (war.getCheckPointId(actionId) == null) {
-                war.setCheckPointId(actionId, war.getCheckPointId(actionId - 1));
-            }
-        }
-
         if (isFastExecute) {
             await _FAST_EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
         } else {
             await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
         }
-
-        if (war.getNextActionId() >= war.getTotalActionsCount()) {
-            war.setIsAutoReplay(false);
-            FloatText.show(`${Lang.getText(Lang.Type.B0093)} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()}`);
-        }
         war.setIsExecutingAction(false);
 
-        if ((war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) || (war.checkIsInEnd())) {
-            const checkPointId = war.getCheckPointId(actionId);
-            if (war.getCheckPointData(checkPointId) == null) {
-                war.setCheckPointData(checkPointId, war.serializeForCheckPoint());
-            }
+        const isInEnd = war.checkIsInEnd();
+        if (isInEnd) {
+            war.setIsAutoReplay(false);
         }
 
-        if ((!war.checkIsInEnd()) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction()) && (war.getIsRunning())) {
+        const actionId          = war.getNextActionId();
+        const turnManager       = war.getTurnManager();
+        const prevCheckPointId  = war.getCheckPointId(actionId - 1);
+        const prevTurnData      = war.getCheckPointData(prevCheckPointId).warData.turnManager;
+        const isNewCheckPoint   = (isInEnd) || (turnManager.getTurnIndex() !== prevTurnData.turnIndex) || (turnManager.getPlayerIndexInTurn() !== prevTurnData.playerIndex);
+        const checkPointId      = isNewCheckPoint ? prevCheckPointId + 1 : prevCheckPointId;
+        if (war.getCheckPointId(actionId) == null) {
+            war.setCheckPointId(actionId, checkPointId);
+        }
+        if (war.getCheckPointData(checkPointId) == null) {
+            war.setCheckPointData(checkPointId, war.serializeForCheckPoint());
+        }
+
+        if ((!isInEnd) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction()) && (war.getIsRunning())) {
             egret.setTimeout(() => {
                 if ((!war.checkIsInEnd()) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction()) && (war.getIsRunning())) {
                     _executeAction(war, war.getNextAction(), isFastExecute);
