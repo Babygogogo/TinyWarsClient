@@ -8465,8 +8465,8 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForSystemCallWarEvent. */
         interface IExtraDataForSystemCallWarEvent {
 
-            /** ExtraDataForSystemCallWarEvent warEventActionId */
-            warEventActionId?: (number|null);
+            /** ExtraDataForSystemCallWarEvent indexForActionIdList */
+            indexForActionIdList?: (number|null);
 
             /** ExtraDataForSystemCallWarEvent ExtraDataForWeaAddUnit */
             ExtraDataForWeaAddUnit?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit|null);
@@ -8481,8 +8481,8 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent);
 
-            /** ExtraDataForSystemCallWarEvent warEventActionId. */
-            public warEventActionId: number;
+            /** ExtraDataForSystemCallWarEvent indexForActionIdList. */
+            public indexForActionIdList: number;
 
             /** ExtraDataForSystemCallWarEvent ExtraDataForWeaAddUnit. */
             public ExtraDataForWeaAddUnit?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit|null);

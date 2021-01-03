@@ -145,7 +145,10 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0451)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        // TODO call the event.
+        const warEventManager   = war.getWarEventManager();
+        const warEventId        = data.WarActionSystemCallWarEvent.warEventId;
+        warEventManager.updateWarEventCalledCountOnCall(warEventId)
+        await warEventManager.callWarEvent(warEventId, false);
 
         RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
@@ -1259,7 +1262,10 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
-        // TODO call the event.
+        const warEventManager   = war.getWarEventManager();
+        const warEventId        = data.WarActionSystemCallWarEvent.warEventId;
+        warEventManager.updateWarEventCalledCountOnCall(warEventId)
+        await warEventManager.callWarEvent(warEventId, true);
 
         actionPlanner.setStateIdle();
     }

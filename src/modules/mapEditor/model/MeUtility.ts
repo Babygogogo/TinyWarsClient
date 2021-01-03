@@ -450,7 +450,12 @@ namespace TinyWars.MapEditor.MeUtility {
 
         const actionDict = new Map<number, IWarEventAction>();
         for (const action of warEventData.actionList || []) {
-            const actionId = action.WarEventActionCommonData?.actionId;
+            const commonData = action.WarEventActionCommonData;
+            if (commonData == null) {
+                return false;
+            }
+
+            const actionId = commonData.actionId;
             if ((actionId == null) || (actionDict.has(actionId))) {
                 return false;
             }
@@ -462,7 +467,12 @@ namespace TinyWars.MapEditor.MeUtility {
 
         const conditionDict = new Map<number, IWarEventCondition>();
         for (const condition of warEventData.conditionList || []) {
-            const conditionId = condition.WecCommonData?.conditionId;
+            const commonData = condition.WecCommonData;
+            if (commonData == null) {
+                return false;
+            }
+
+            const conditionId = commonData.conditionId;
             if ((conditionId == null) || (conditionDict.has(conditionId))) {
                 return false;
             }

@@ -69,16 +69,17 @@ namespace TinyWars.BaseWar {
             return this._calledCountList;
         }
 
-        public async callWarEvent(warEventId: number): Promise<IExtraDataForSystemCallWarEvent[] | undefined> { // DONE
-            const event = this._getWarEvent(warEventId);
+        public async callWarEvent(warEventId: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent[] | undefined> { // DONE
+            const event = this.getWarEvent(warEventId);
             if (event == null) {
                 Logger.error(`BwWarEventManager.callWarEvent() empty event.`);
                 return undefined;
             }
 
-            const extraDataList: IExtraDataForSystemCallWarEvent[] = [];
-            for (const actionId of event.actionIdList || []) {
-                const extraData = await this._callWarAction(actionId);
+            const extraDataList : IExtraDataForSystemCallWarEvent[] = [];
+            const actionIdList  = event.actionIdList || [];
+            for (let index = 0; index < actionIdList.length; ++index) {
+                const extraData = await this._callWarAction(actionIdList[index], index, isFastExecute);
                 if (extraData) {
                     extraDataList.push(extraData);
                 }
@@ -86,20 +87,20 @@ namespace TinyWars.BaseWar {
 
             return extraDataList;
         }
-        private async _callWarAction(warEventActionId: number): Promise<IExtraDataForSystemCallWarEvent | undefined> {
-            const action = this._getAction(warEventActionId);
+        private async _callWarAction(warEventActionId: number, indexForActionIdList: number, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | undefined> {
+            const action = this.getWarEventAction(warEventActionId);
             if (action == null) {
                 Logger.error(`BwWarEventManager._callWarAction() empty action.`);
                 return undefined;
             }
 
             if (action.WarEventActionAddUnit) {
-                return await this._callActionAddUnit(warEventActionId, action.WarEventActionAddUnit);
+                return await this._callActionAddUnit(indexForActionIdList, action.WarEventActionAddUnit, isFastExecute);
             }
 
             // TODO add more actions.
         }
-        private async _callActionAddUnit(warEventActionId: number, action: WarEvent.IWarEventActionAddUnit): Promise<IExtraDataForSystemCallWarEvent | undefined> {
+        private async _callActionAddUnit(indexForActionIdList: number, action: WarEvent.IWarEventActionAddUnit, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | undefined> {
             const unitList = action.unitList;
             if (unitList == null) {
                 Logger.error(`BwWarEventManager._callActionAddUnit() empty unitList.`);
@@ -242,7 +243,7 @@ namespace TinyWars.BaseWar {
                 unitMap.setUnitOnMap(unit);
             }
             return {
-                warEventActionId,
+                indexForActionIdList,
                 ExtraDataForWeaAddUnit: {
                     unitList    : resultingUnitList,
                 },
@@ -280,15 +281,22 @@ namespace TinyWars.BaseWar {
             }
         }
         public updateWarEventCalledCountOnPlayerTurnSwitched(): void {                      // DONE
-            this._getCalledCountList()?.forEach(v => {
-                v.calledCountInPlayerTurn = 0;
-            });
+            const list = this._getCalledCountList();
+            if (list) {
+                list.forEach(v => {
+                    v.calledCountInPlayerTurn = 0;
+                });
+            }
         }
         public getWarEventCalledCountTotal(eventId: number): number {                       // DONE
-            return this._getCalledCountList()?.find(v => v.eventId === eventId)?.calledCountTotal || 0;
+            const list = this._getCalledCountList();
+            const data = list ? list.find(v => v.eventId === eventId) : null;
+            return data ? data.calledCountTotal || 0 : 0;
         }
         public getWarEventCalledCountInPlayerTurn(eventId: number): number {                // DONE
-            return this._getCalledCountList()?.find(v => v.eventId === eventId)?.calledCountInPlayerTurn || 0;
+            const list = this._getCalledCountList();
+            const data = list ? list.find(v => v.eventId === eventId) : null;
+            return data ? data.calledCountInPlayerTurn || 0 : 0;
         }
 
         public getCallableWarEventId(): number | undefined {                                // DONE
@@ -298,7 +306,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const warRule = war.getSettingsForCommon()?.warRule;
+            const warRule = war.getWarRule();
             if (warRule == null) {
                 Logger.error(`BwWarEventManager.getCallableWarEventId() empty warRule.`);
                 return undefined;
@@ -313,7 +321,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _checkCanCallWarEvent(warEventId: number): boolean | undefined {            // DONE
-            const warEvent = this._getWarEvent(warEventId);
+            const warEvent = this.getWarEvent(warEventId);
             if (warEvent == null) {
                 Logger.error(`BwWarEventManager._checkCanCallWarEvent() empty warEvent.`);
                 return undefined;
@@ -395,7 +403,7 @@ namespace TinyWars.BaseWar {
                 }
             }
 
-            if ((!conditionIdList?.length) && (!subNodeIdList?.length)) {
+            if ((!(conditionIdList || []).length) && (!(subNodeIdList || []).length)) {
                 Logger.error(`BwWarEventManager._checkIsMeetConditionNode() empty conditionIdList and subNodeIdList.`);
                 return undefined;
             }
@@ -409,7 +417,13 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const isNot = condition.WecCommonData?.isNot;
+            const wecCommonData = condition.WecCommonData;
+            if (wecCommonData == null) {
+                Logger.error(`BwWarEventManager._checkIsMeetCondition() empty wecCommonData.`);
+                return undefined;
+            }
+
+            const isNot = wecCommonData.isNot;
             if (isNot == null) {
                 Logger.error(`BwWarEventManager._checkIsMeetCondition() empty isNot.`);
                 return undefined;
@@ -797,7 +811,7 @@ namespace TinyWars.BaseWar {
             return isNot ? true : false;
         }
 
-        private _getWarEvent(warEventId: number): WarEvent.IWarEvent | undefined {                  // DONE
+        public getWarEvent(warEventId: number): WarEvent.IWarEvent | undefined {                    // DONE
             const warEventData = this.getWarEventData();
             if (warEventData == null) {
                 Logger.error(`BwWarEventManager._getWarEvent() empty warEventData.`);
@@ -840,9 +854,9 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return list.find(v => v.WecCommonData?.conditionId === conditionId);
+            return list.find(v => v.WecCommonData.conditionId === conditionId);
         }
-        private _getAction(actionId: number): WarEvent.IWarEventAction | undefined {                // DONE
+        public getWarEventAction(actionId: number): WarEvent.IWarEventAction | undefined {          // DONE
             const warEventData = this.getWarEventData();
             if (warEventData == null) {
                 Logger.error(`BwWarEventManager._getAction() empty warEventData.`);
@@ -855,7 +869,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return list.find(v => v.WarEventActionCommonData?.actionId === actionId);
+            return list.find(v => v.WarEventActionCommonData.actionId === actionId);
         }
     }
 
@@ -917,4 +931,60 @@ namespace TinyWars.BaseWar {
 
         return undefined;
     }
+
+    /*
+    const testWarEventData: ProtoTypes.Map.IDataForWarEvent = {
+        conditionList: [                        // 条件列表
+            {
+                WecCommonData: {
+                    conditionId : 1,            // 条件id
+                    isNot       : false,        // 不取反
+                },
+                WecPlayerIndexInTurnEqualTo: {
+                    valueEqualTo: 2,            // 在进入p2回合时满足条件
+                },
+            },
+        ],
+        conditionNodeList: [                    // 条件组合节点，用于对上面的条件进行排列组合
+            {
+                nodeId          : 1,
+                isAnd           : true,
+                subNodeIdList   : null,
+                conditionIdList : [1],
+            }
+        ],
+        actionList: [                           // 动作列表
+            {
+                WarEventActionCommonData: {
+                    actionId    : 1,            // 动作id
+                },
+                WarEventActionAddUnit: {        // 增加部队
+                    unitList: [
+                        {
+                            canBeBlockedByUnit  : false,    // 是否会被指定位置的已有部队阻断增援
+                            needMovableTile     : true,     // 是否自动寻找合适的地形，比如海军不在陆地上刷出
+                            unitData            : {         // 部队属性
+                                gridIndex       : { x: 10, y: 1 },
+                                unitType        : 8,
+                                playerIndex     : 2,
+                                currentHp       : 89,
+                            },
+                        }
+                    ],
+                },
+            },
+        ],
+        eventList: [                            // 事件列表
+            {
+                eventId                     : 1,                // 事件id，在地图规则中被引用
+                eventNameList               : ["一大坨增援"],   // 自定义名称
+                maxCallCountInPlayerTurn    : 1,                // 每回合最多1次
+                maxCallCountTotal           : 1,                // 每局最多一次
+                conditionNodeId             : 1,                // 条件组合id，满足时执行动作列表
+                actionIdList                : [1, 1, 1, 1, 1, ],// 动作id列表，
+                // 动作1是刷出1个坦克，这里指定执行5次，而且坦克不会被已有部队阻断，所以执行时就直接刷出5个坦克
+            },
+        ],
+    };
+    */
 }

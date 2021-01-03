@@ -77,6 +77,7 @@ namespace TinyWars.BaseWar {
         }
 
         public startRunning(): BwWar {
+            this.getWarEventManager().startRunning(this);
             this.getTurnManager().startRunning(this);
             this.getPlayerManager().startRunning(this);
             this.getField().startRunning(this);

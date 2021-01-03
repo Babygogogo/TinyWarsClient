@@ -134,7 +134,31 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0451)}`);
 
-        // TODO call the event.
+        const action            = data.WarActionSystemCallWarEvent;
+        const extraDataList     = action.extraDataList;
+        const warEventId        = action.warEventId;
+        const warEventManager   = war.getWarEventManager();
+        const unitMap           = war.getUnitMap();
+        const configVersion     = war.getConfigVersion();
+        const UnitClass         = unitMap.getUnitClass();
+        warEventManager.updateWarEventCalledCountOnCall(warEventId);
+
+        const actionIdList = warEventManager.getWarEvent(warEventId).actionIdList;
+        for (let index = 0; index < actionIdList.length; ++index) {
+            const warEventAction = warEventManager.getWarEventAction(actionIdList[index]);
+            if (warEventAction.WarEventActionAddUnit) {
+                for (const unitData of extraDataList.find(v => v.indexForActionIdList === index).ExtraDataForWeaAddUnit.unitList) {
+                    const unit = new UnitClass().init(unitData, configVersion);
+                    unit.startRunning(war);
+                    unit.startRunningView();
+                    unitMap.setUnitOnMap(unit);
+                    unitMap.setNextUnitId(Math.max(unitData.unitId + 1, unitMap.getNextUnitId()));
+                }
+
+            } else {
+                // TODO add executors for other actions.
+            }
+        }
 
         MpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();

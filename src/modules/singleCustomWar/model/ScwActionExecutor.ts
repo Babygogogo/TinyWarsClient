@@ -92,7 +92,10 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0451)}`);
 
-        // TODO call the event.
+        const warEventManager   = war.getWarEventManager();
+        const warEventId        = data.WarActionSystemCallWarEvent.warEventId;
+        warEventManager.updateWarEventCalledCountOnCall(warEventId)
+        await warEventManager.callWarEvent(warEventId, false);
 
         ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
