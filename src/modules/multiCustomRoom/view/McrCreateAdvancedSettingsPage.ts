@@ -65,11 +65,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapRawData.playersCount;
+            this._labelPlayersCount.text = "" + this._mapRawData.playersCountUnneutral;
         }
 
         private _updateListPlayer(): void {
-            const playersCount  = this._mapRawData.playersCount;
+            const playersCount  = this._mapRawData.playersCountUnneutral;
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });

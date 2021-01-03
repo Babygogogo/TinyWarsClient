@@ -148,12 +148,6 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
-            const warEventData = this._getWarEventData();
-            if (warEventData == null) {
-                Logger.error(`ScwWar.serialize() empty warEventData.`);
-                return undefined;
-            }
-
             const playerManager = this.getPlayerManager();
             if (!(playerManager instanceof ScwPlayerManager)) {
                 Logger.error(`ScwWar.serialize() invalid playerManager.`);
@@ -169,6 +163,12 @@ namespace TinyWars.SingleCustomWar {
             const field = this.getField();
             if (!(field instanceof ScwField)) {
                 Logger.error(`ScwWar.serialize() empty field.`);
+                return undefined;
+            }
+
+            const warEventManager = this.getWarEventManager();
+            if (warEventManager == null) {
+                Logger.error(`ScwWar.serialize() empty warEventManager.`);
                 return undefined;
             }
 
@@ -190,6 +190,12 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
+            const serialWarEventManager = warEventManager.serialize();
+            if (serialWarEventManager == null) {
+                Logger.error(`ScwWar.serializeForSimulation() empty serialWarEventManager.`);
+                return undefined;
+            }
+
             return {
                 settingsForCommon,
                 settingsForScw,
@@ -200,7 +206,7 @@ namespace TinyWars.SingleCustomWar {
                 executedActions             : isCheating ? [] : this._getAllExecutedActions(),
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
-                warEventData,
+                warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,
@@ -226,12 +232,6 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
-            const warEventData = this._getWarEventData();
-            if (warEventData == null) {
-                Logger.error(`ScwWar.serializeForSimulation() empty warEventData.`);
-                return undefined;
-            }
-
             const playerManager = this.getPlayerManager();
             if (!(playerManager instanceof ScwPlayerManager)) {
                 Logger.error(`ScwWar.serializeForSimulation() invalid playerManager.`);
@@ -247,6 +247,12 @@ namespace TinyWars.SingleCustomWar {
             const field = this.getField();
             if (!(field instanceof ScwField)) {
                 Logger.error(`ScwWar.serializeForSimulation() empty field.`);
+                return undefined;
+            }
+
+            const warEventManager = this.getWarEventManager();
+            if (warEventManager == null) {
+                Logger.error(`ScwWar.serializeForSimulation() empty warEventManager.`);
                 return undefined;
             }
 
@@ -268,6 +274,12 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
+            const serialWarEventManager = warEventManager.serializeForSimulation();
+            if (serialWarEventManager == null) {
+                Logger.error(`ScwWar.serializeForSimulation() empty serialWarEventManager.`);
+                return undefined;
+            }
+
             return {
                 settingsForCommon,
                 settingsForScw,
@@ -281,7 +293,7 @@ namespace TinyWars.SingleCustomWar {
                 executedActions             : [],
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
-                warEventData,
+                warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,
@@ -299,6 +311,9 @@ namespace TinyWars.SingleCustomWar {
         }
         protected _getTurnManagerClass(): new () => ScwTurnManager {
             return ScwTurnManager;
+        }
+        protected _getWarEventManagerClass(): new () => ScwWarEventManager {
+            return ScwWarEventManager;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -131,9 +131,15 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
 
         // Handle war events.
-        const nextWarEventId = war.getNextWarEventId();
-        if (nextWarEventId != null) {
-            await handleSystemCallWarEvent(war, nextWarEventId);
+        const warEventManager = war.getWarEventManager();
+        if (warEventManager == null) {
+            Logger.error(`ScwModel.checkAndHandleAutoActions() empty warEventManager.`);
+            return undefined;
+        }
+
+        const callableWarEventId = warEventManager.getCallableWarEventId();
+        if (callableWarEventId != null) {
+            await handleSystemCallWarEvent(war, callableWarEventId);
             await checkAndHandleAutoActions(war);
             return true;
         }
@@ -227,12 +233,12 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             },
         })
     }
-    async function handleSystemCallWarEvent(war: ScwWar, eventId: number): Promise<void> {
+    async function handleSystemCallWarEvent(war: ScwWar, warEventId: number): Promise<void> {
         await ScwActionExecutor.checkAndExecute(war, {
             actionId                    : war.getExecutedActionsCount(),
             WarActionSystemCallWarEvent : {
-                eventId,
-            }
+                warEventId,
+            },
         });
     }
     async function handleSystemDestroyPlayerForce(war: ScwWar, playerIndex: number): Promise<void> {

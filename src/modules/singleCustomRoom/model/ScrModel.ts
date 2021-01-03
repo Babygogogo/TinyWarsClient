@@ -35,7 +35,7 @@ namespace TinyWars.SingleCustomRoom {
             slotIndex           : 0,
             settingsForCommon   : {
                 mapId           : undefined,
-                configVersion   : Utility.ConfigManager.getLatestConfigVersion(),
+                configVersion   : Utility.ConfigManager.getLatestFormalVersion(),
             },
             settingsForScw: {
             },
@@ -67,7 +67,7 @@ namespace TinyWars.SingleCustomRoom {
 
         export async function resetCreateWarDataByMapId(mapId: number): Promise<void> {
             getCreateWarData().settingsForCommon.mapId = mapId;
-            setCreateWarConfigVersion(Utility.ConfigManager.getLatestConfigVersion());
+            setCreateWarConfigVersion(Utility.ConfigManager.getLatestFormalVersion());
             await resetCreateWarDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
             setCreateWarSaveSlotIndex(getAvailableSaveSlot(getSaveSlotInfoList()));
         }
@@ -109,7 +109,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         async function resetCreateWarPlayerInfoList(): Promise<void> {
-            const playersCount      = (await getCreateWarMapRawData()).playersCount;
+            const playersCount      = (await getCreateWarMapRawData()).playersCountUnneutral;
             const settingsForCommon = getCreateWarData().settingsForCommon;
             const list              : ProtoTypes.Structure.IWarPlayerInfo[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {

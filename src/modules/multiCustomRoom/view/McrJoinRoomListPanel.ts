@@ -192,7 +192,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelHasFog.text      = Lang.getText(hasFog ? Lang.Type.B0012 : Lang.Type.B0001);
             this._labelHasFog.textColor = hasFog ? 0xFF0000 : 0x00FF00;
             this._labelWarComment.text  = roomInfo.settingsForMcw.warComment || "----";
-            this._listPlayer.bindData(this._createDataForListPlayer(roomInfo, mapRawData.playersCount));
+            this._listPlayer.bindData(this._createDataForListPlayer(roomInfo, mapRawData.playersCountUnneutral));
 
             this._groupInfo.visible      = true;
             this._groupInfo.alpha        = 1;

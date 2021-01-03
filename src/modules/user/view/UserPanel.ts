@@ -249,7 +249,7 @@ namespace TinyWars.User {
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rank                      = data ? data.currentRank : null;
             const rankText                  = `(${rank == null ? Lang.getText(Lang.Type.B0435) : `No.${rank}`})`;
-            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
+            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestFormalVersion(), score)})`;
             this._labelStdRankScore.text    = `${score} ${rankText} ${rankName}`;
         }
         private async _updateLabelFogRankScore(): Promise<void> {
@@ -258,7 +258,7 @@ namespace TinyWars.User {
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rank                      = data ? data.currentRank : null;
             const rankText                  = `(${rank == null ? Lang.getText(Lang.Type.B0435) : `No.${rank}`})`;
-            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
+            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestFormalVersion(), score)})`;
             this._labelFogRankScore.text    = `${score} ${rankText} ${rankName}`;
         }
         private async _updateSclHistory(): Promise<void> {

@@ -240,7 +240,7 @@ namespace TinyWars.MultiCustomRoom {
                 const playerData    = warInfo.playerInfoList.find(v => v.userId === selfUserId);
                 const coId          = playerData ? playerData.coId : null;
                 if (coId != null) {
-                    const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
+                    const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
                     this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
                 }
             }
@@ -270,7 +270,7 @@ namespace TinyWars.MultiCustomRoom {
                 const playerInfoList    = warInfo.playerInfoList;
                 const playerRules       = settingsForCommon.warRule.ruleForPlayers;
                 const configVersion     = settingsForCommon.configVersion;
-                const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCount;
+                const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCountUnneutral;
                 for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                     dataList.push({
                         configVersion,

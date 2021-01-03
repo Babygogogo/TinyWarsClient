@@ -56,11 +56,11 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + MeModel.Sim.getMapRawData().playersCount;
+            this._labelPlayersCount.text = "" + MeModel.Sim.getMapRawData().playersCountUnneutral;
         }
 
         private _updateListPlayer(): void {
-            const playersCount  = MeModel.Sim.getMapRawData().playersCount;
+            const playersCount  = MeModel.Sim.getMapRawData().playersCountUnneutral;
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });

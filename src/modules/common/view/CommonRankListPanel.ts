@@ -97,7 +97,7 @@ namespace TinyWars.Common {
             const warType       = Types.WarType.RmwStd;
             const dataList      : DataForUserRenderer[] = [];
             for (const data of CommonModel.getRankList() || []) {
-                if ((data.playersCount === playersCount) && (data.warType === warType)) {
+                if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     dataList.push({
                         rank    : dataList.length + 1,
                         userId  : data.userId,
@@ -116,7 +116,7 @@ namespace TinyWars.Common {
             const warType       = Types.WarType.RmwFog;
             const dataList      : DataForUserRenderer[] = [];
             for (const data of CommonModel.getRankList() || []) {
-                if ((data.playersCount === playersCount) && (data.warType === warType)) {
+                if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     dataList.push({
                         rank    : dataList.length + 1,
                         userId  : data.userId,
@@ -171,7 +171,7 @@ namespace TinyWars.Common {
 
             const userInfo = await User.UserModel.getUserPublicInfo(data.userId);
             const rankInfo = userInfo.userRankScore.dataList.find(v => {
-                return (v.playersCount === data.playersCount) && (v.warType === data.warType);
+                return (v.playersCountUnneutral === data.playersCount) && (v.warType === data.warType);
             });
             label.text = `No.${data.rank}  ${rankInfo.currentScore}\n${userInfo.nickname}`;
         }

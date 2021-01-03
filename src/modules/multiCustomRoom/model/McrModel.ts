@@ -185,7 +185,7 @@ namespace TinyWars.MultiCustomRoom {
 
             export async function resetDataByMapId(mapId: number): Promise<void> {
                 setMapId(mapId);
-                setConfigVersion(Utility.ConfigManager.getLatestConfigVersion());
+                setConfigVersion(Utility.ConfigManager.getLatestFormalVersion());
                 setWarName("");
                 setWarPassword("");
                 setWarComment("");
@@ -217,7 +217,7 @@ namespace TinyWars.MultiCustomRoom {
                 const mapRawData        = await getMapRawData();
                 const settingsForCommon = getData().settingsForCommon;
                 if (ruleId == null) {
-                    settingsForCommon.warRule = BwSettingsHelper.createDefaultWarRule(ruleId, mapRawData.playersCount);
+                    settingsForCommon.warRule = BwSettingsHelper.createDefaultWarRule(ruleId, mapRawData.playersCountUnneutral);
                     setPresetWarRuleId(ruleId);
                     setSelfCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
 

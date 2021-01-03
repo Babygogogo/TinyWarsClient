@@ -94,7 +94,7 @@ namespace TinyWars.WarMap {
             }
 
             const dataList          : DataForTileRenderer[] = [];
-            const maxPlayerIndex    = mapRawData.playersCount;
+            const maxPlayerIndex    = mapRawData.playersCountUnneutral;
             for (const [tileType, subDict] of dict) {
                 dataList.push({
                     configVersion,

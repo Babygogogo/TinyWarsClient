@@ -229,7 +229,7 @@ namespace TinyWars.Utility.FlowManager {
         return (!_hasOnceWentToLobby)
             && (User.UserModel.getIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
-            && (Utility.ConfigManager.checkIsConfigLoaded(Utility.ConfigManager.getLatestConfigVersion()))
+            && (Utility.ConfigManager.checkIsConfigLoaded(Utility.ConfigManager.getLatestFormalVersion()))
     }
 
     function _removeLoadingDom(): void {

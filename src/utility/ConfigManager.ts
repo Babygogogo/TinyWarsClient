@@ -58,6 +58,20 @@ namespace TinyWars.Utility.ConfigManager {
     // Constants.
     ////////////////////////////////////////////////////////////////////////////////
     export const COMMON_CONSTANTS = {
+        NameListMaxLength                       : 5,
+
+        WarEventNameMaxLength                   : 150,
+        WarEventMaxEventsPerMap                 : 10,
+        WarEventMaxConditionNodesPerMap         : 50,
+        WarEventMaxConditionsPerMap             : 50,
+        WarEventMaxActionsPerMap                : 50,
+        WarEventMaxActionsPerEvent              : 10,
+        WarEventMaxConditionsPerNode            : 10,
+        WarEventMaxSubConditionNodesPerNode     : 10,
+        WarEventMaxCallCountTotal               : 100,
+        WarEventMaxCallCountInPlayerTurn        : 10,
+        WarEventActionAddUnitMaxCount           : 50,
+
         MapEditorSlotMaxCountForNormal          : 3,
         MapEditorSlotMaxCountForCommittee       : 100,
         ScwSaveSlotMaxCount                     : 10,
@@ -847,7 +861,7 @@ namespace TinyWars.Utility.ConfigManager {
     export function init(): void {
     }
 
-    export function getLatestConfigVersion(): string {
+    export function getLatestFormalVersion(): string {
         return _latestFormalVersion;
     }
     export function setLatestConfigVersion(version: string): void {

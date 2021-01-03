@@ -170,7 +170,7 @@ namespace TinyWars.RankMatchRoom {
             const availableCoIdList = RmrModel.SelfSettings.generateAvailableCoIdList(roomInfo, openParam.playerIndex);
 
             let index = 0;
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestConfigVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestFormalVersion())) {
                 if (availableCoIdList.indexOf(cfg.coId) >= 0) {
                     dataList.push({
                         roomInfo,
@@ -330,7 +330,7 @@ namespace TinyWars.RankMatchRoom {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getLanguageType()];
         }
     }
 }

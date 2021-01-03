@@ -511,5 +511,6 @@ namespace TinyWars.Utility.Types {
         InvalidUnits,
         InvalidTiles,
         InvalidWarRuleList,
+        InvalidWarEventData,
     }
 }

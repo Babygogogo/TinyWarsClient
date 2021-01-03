@@ -331,7 +331,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateLabelMapName(): void {
             WarMapModel.getMapNameInCurrentLanguage(this._mapRawData.mapId).then(v =>
-                this._labelMapName.text = `${v} (${this._mapRawData.playersCount}P)`
+                this._labelMapName.text = `${v} (${this._mapRawData.playersCountUnneutral}P)`
             );
         }
 

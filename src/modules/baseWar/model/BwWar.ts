@@ -5,7 +5,6 @@ namespace TinyWars.BaseWar {
     import ProtoTypes               = Utility.ProtoTypes;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import IWarSettingsForCommon    = ProtoTypes.WarSettings.ISettingsForCommon;
-    import ISerialWarEventData      = ProtoTypes.WarSerialization.ISerialWarEventData;
 
     export abstract class BwWar {
         private _settingsForCommon          : IWarSettingsForCommon;
@@ -13,11 +12,11 @@ namespace TinyWars.BaseWar {
         private _warId                      : number;
         private _executedActionsCount       : number;
         private _remainingVotesForDraw      : number | null | undefined;
-        private _warEventData               : ISerialWarEventData;
 
         private _playerManager              : BwPlayerManager;
         private _field                      : BwField;
         private _turnManager                : BwTurnManager;
+        private _warEventManager            : BwWarEventManager;
 
         private _view                   : BwWarView;
         private _isRunning              = false;
@@ -30,6 +29,7 @@ namespace TinyWars.BaseWar {
         protected abstract _getTurnManagerClass(): new () => BwTurnManager;
         protected abstract _getFieldClass(): new () => BwField;
         protected abstract _getViewClass(): new () => BwWarView;
+        protected abstract _getWarEventManagerClass(): new () => BwWarEventManager;
 
         protected _baseInit(data: ISerialWar): BwWar {
             const settingsForCommon = data.settingsForCommon;
@@ -44,16 +44,22 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const warEventData = data.warEventData;
-            if (warEventData == null) {
-                Logger.error(`BwWar._baseInit() empty warEventData.`);
+            const dataForWarEventManager = data.warEventManager;
+            if (dataForWarEventManager == null) {
+                Logger.error(`BwWar._baseInit() empty dataForWarEventManager.`);
+                return undefined;
+            }
+
+            const warEventManager = (this.getWarEventManager() || new (this._getWarEventManagerClass())()).init(dataForWarEventManager);
+            if (warEventManager == null) {
+                Logger.error(`BwWar._baseInit() empty warEventManager.`);
                 return undefined;
             }
 
             this._setWarId(data.warId);
             this._setSettingsForCommon(settingsForCommon);
             this.setExecutedActionsCount(executedActionsCount);
-            this._setWarEventData(warEventData);
+            this._setWarEventManager(warEventManager);
             this.setRemainingVotesForDraw(data.remainingVotesForDraw);
 
             return this;
@@ -251,84 +257,6 @@ namespace TinyWars.BaseWar {
             this._executedActionsCount = count;
         }
 
-        protected _setWarEventData(data: ISerialWarEventData): void {
-            this._warEventData = data;
-        }
-        protected _getWarEventData(): ISerialWarEventData | undefined {
-            return this._warEventData;
-        }
-        public updateWarEventCalledCountOnCall(eventId: number): void {
-            const warEventData = this._getWarEventData();
-            if (warEventData == null) {
-                Logger.error(`BwWar.updateWarEventCalledCountOnCall() empty warEventData.`);
-                return undefined;
-            }
-
-            const calledCountList = warEventData.calledCountList;
-            if (calledCountList == null) {
-                warEventData.calledCountList = [{
-                    eventId,
-                    calledCountTotal        : 1,
-                    calledCountInPlayerTurn : 1,
-                }];
-            } else {
-                const data = calledCountList.find(v => v.eventId === eventId);
-                if (data) {
-                    if (data.calledCountInPlayerTurn == null) {
-                        Logger.error(`BwWar.updateWarEventCalledCountOnCall() empty data.calledCountInPlayerTurn.`);
-                        return undefined;
-                    }
-                    if (data.calledCountTotal == null) {
-                        Logger.error(`BwWar.updateWarEventCalledCountOnCall() empty data.calledCountTotal.`);
-                        return undefined;
-                    }
-                    ++data.calledCountInPlayerTurn;
-                    ++data.calledCountTotal;
-                } else {
-                    calledCountList.push({
-                        eventId,
-                        calledCountTotal        : 1,
-                        calledCountInPlayerTurn : 1,
-                    });
-                }
-            }
-        }
-        public updateWarEventCalledCountOnPlayerTurnSwitched(): void {
-            const warEventData = this._getWarEventData();
-            if (warEventData == null) {
-                Logger.error(`BwWar.updateWarEventCalledCountOnPlayerTurnSwitched() empty warEventData.`);
-                return undefined;
-            }
-
-            (warEventData.calledCountList || []).forEach(v => {
-                v.calledCountInPlayerTurn = 0;
-            });
-        }
-        public getWarEventCalledCountTotal(eventId: number): number | undefined {
-            const warEventData = this._getWarEventData();
-            if (warEventData == null) {
-                Logger.error(`BwWar.getWarEventCalledCountTotal() empty warEventData.`);
-                return undefined;
-            }
-
-            const data = (warEventData.calledCountList || []).find(v => v.eventId === eventId);
-            return data ? data.calledCountTotal || 0 : 0;
-        }
-        public getWarEventCalledCountInPlayerTurn(eventId: number): number | undefined {
-            const warEventData = this._getWarEventData();
-            if (warEventData == null) {
-                Logger.error(`BwWar.getWarEventCalledCountInPlayerTurn() empty warEventData.`);
-                return undefined;
-            }
-
-            const data = (warEventData.calledCountList || []).find(v => v.eventId === eventId);
-            return data ? data.calledCountInPlayerTurn || 0 : 0;
-        }
-        public getNextWarEventId(): number | undefined {
-            // TODO: return the correct event id.
-            return undefined;
-        }
-
         protected _setPlayerManager(manager: BwPlayerManager): void {
             this._playerManager = manager;
         }
@@ -376,6 +304,13 @@ namespace TinyWars.BaseWar {
         }
         public getEnterTurnTime(): number {
             return this.getTurnManager().getEnterTurnTime();
+        }
+
+        private _setWarEventManager(manager: BwWarEventManager): void {
+            this._warEventManager = manager;
+        }
+        public getWarEventManager(): BwWarEventManager | undefined {
+            return this._warEventManager;
         }
 
         public getWatcherTeamIndexes(watcherUserId: number): Set<number> {

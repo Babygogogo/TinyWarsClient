@@ -198,7 +198,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateLabelMapName(): void {
             WarMapModel.getMapNameInCurrentLanguage(this._mapRawData.mapId).then(v =>
-                this._labelMapName.text = `${v} (${this._mapRawData.playersCount}P)`
+                this._labelMapName.text = `${v} (${this._mapRawData.playersCountUnneutral}P)`
             );
         }
 
@@ -225,7 +225,7 @@ namespace TinyWars.MultiCustomRoom {
             if (coId == null) {
                 this._labelCoName.text = `(${Lang.getText(Lang.Type.B0001)} CO)`;
             } else {
-                const cfg               = Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getLatestConfigVersion(), coId);
+                const cfg               = Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getLatestFormalVersion(), coId);
                 this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
             }
         }

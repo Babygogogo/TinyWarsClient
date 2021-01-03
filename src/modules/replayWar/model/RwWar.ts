@@ -147,17 +147,14 @@ namespace TinyWars.ReplayWar {
         protected _getTurnManagerClass(): new () => RwTurnManager {
             return RwTurnManager;
         }
+        protected _getWarEventManagerClass(): new () => RwWarEventManager {
+            return RwWarEventManager;
+        }
 
         public serializeForCheckPoint(): CheckPointData {
             const seedRandomCurrentState = this._getSeedRandomCurrentState();
             if (seedRandomCurrentState == null) {
                 Logger.error(`ReplayWar.serializeForCheckPoint() empty seedRandomCurrentState.`);
-                return undefined;
-            }
-
-            const warEventData = this._getWarEventData();
-            if (warEventData == null) {
-                Logger.error(`ReplayWar.serializeForCheckPoint() empty warEventData.`);
                 return undefined;
             }
 
@@ -170,6 +167,12 @@ namespace TinyWars.ReplayWar {
             const turnManager = this.getTurnManager();
             if (turnManager == null) {
                 Logger.error(`ReplayWar.serializeForCheckPoint() empty turnManager.`);
+                return undefined;
+            }
+
+            const warEventManager = this.getWarEventManager();
+            if (warEventManager == null) {
+                Logger.error(`RwWar.serializeForCheckPoint() empty warEventManager.`);
                 return undefined;
             }
 
@@ -197,6 +200,12 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
+            const serialWarEventManager = warEventManager.serialize();
+            if (serialWarEventManager == null) {
+                Logger.error(`RwWar.serializeForCheckPoint() empty serialWarEventManager.`);
+                return undefined;
+            }
+
             return {
                 nextActionId    : this.getNextActionId(),
                 warData         : {
@@ -210,7 +219,7 @@ namespace TinyWars.ReplayWar {
                     executedActions             : null,
                     executedActionsCount        : null,
                     remainingVotesForDraw       : this.getRemainingVotesForDraw(),
-                    warEventData                : Helpers.deepClone(warEventData),
+                    warEventManager             : Helpers.deepClone(serialWarEventManager),
                     playerManager               : serialPlayerManager,
                     turnManager                 : serialTurnManager,
                     field                       : serialField,
@@ -237,12 +246,6 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
-            const warEventData = this._getWarEventData();
-            if (warEventData == null) {
-                Logger.error(`ReplayWar.serializeForSimulation() empty warEventData.`);
-                return undefined;
-            }
-
             const warId = this.getWarId();
             if (warId == null) {
                 Logger.error(`ReplayWar.serializeForSimulation() empty warId.`);
@@ -261,6 +264,12 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
+            const warEventManager = this.getWarEventManager();
+            if (warEventManager == null) {
+                Logger.error(`RwWar.serializeForSimulation() empty warEventManager.`);
+                return undefined;
+            }
+
             const field = this.getField();
             if (field == null) {
                 Logger.error(`ReplayWar.serializeForSimulation() empty field.`);
@@ -276,6 +285,12 @@ namespace TinyWars.ReplayWar {
             const serialTurnManager = turnManager.serializeForSimulation();
             if (serialTurnManager == null) {
                 Logger.error(`ReplayWar.serializeForSimulation() empty serialTurnManager.`);
+                return undefined;
+            }
+
+            const serialWarEventManager = warEventManager.serializeForSimulation();
+            if (serialWarEventManager == null) {
+                Logger.error(`RwWar.serializeForSimulation() empty serialWarEventManager.`);
                 return undefined;
             }
 
@@ -298,7 +313,7 @@ namespace TinyWars.ReplayWar {
                 executedActions             : [],
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
-                warEventData,
+                warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,
@@ -428,6 +443,7 @@ namespace TinyWars.ReplayWar {
             this.setNextActionId(checkPointData.nextActionId);
             this.getPlayerManager().fastInit(warData.playerManager);
             this.getTurnManager().fastInit(warData.turnManager);
+            this.getWarEventManager().fastInit(warData.warEventManager);
             await this.getField().fastInit(
                 warData.field,
                 this.getConfigVersion(),
@@ -439,7 +455,6 @@ namespace TinyWars.ReplayWar {
             );
             this.setRemainingVotesForDraw(warData.remainingVotesForDraw);
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: warData.seedRandomCurrentState }));
-            this._setWarEventData(Helpers.deepClone(warData.warEventData));
 
             await Helpers.checkAndCallLater();
             this._fastInitView();

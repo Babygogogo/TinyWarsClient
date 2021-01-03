@@ -357,7 +357,7 @@ namespace TinyWars.Common {
 
         private _createDataForListUnit(): DataForUnitRenderer[] {
             const data          : DataForUnitRenderer[] = [];
-            const configVersion = ConfigManager.getLatestConfigVersion();
+            const configVersion = ConfigManager.getLatestFormalVersion();
             const unitTypes     = ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All);
             for (let index = 0; index < unitTypes.length; ++index) {
                 data.push({

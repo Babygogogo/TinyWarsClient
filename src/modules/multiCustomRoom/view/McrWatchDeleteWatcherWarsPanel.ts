@@ -177,7 +177,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
             this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0001));
             this._labelWarComment.text  = (settingsForMcw ? settingsForMcw.warComment : null) || "----";
-            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCount));
+            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
 
             this._groupInfo.visible      = true;
             this._groupInfo.alpha        = 1;

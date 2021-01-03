@@ -380,7 +380,7 @@ namespace TinyWars.MultiCustomRoom {
                     group.visible   = true;
                     const coId      = playerData ? playerData.coId : null;
                     if (coId != null) {
-                        this._labelCoName.text = ConfigManager.getCoNameAndTierText(ConfigManager.getLatestConfigVersion(), coId);
+                        this._labelCoName.text = ConfigManager.getCoNameAndTierText(ConfigManager.getLatestFormalVersion(), coId);
                     }
                 }
             }
@@ -434,7 +434,7 @@ namespace TinyWars.MultiCustomRoom {
                 const settingsForCommon = roomInfo.settingsForCommon;
                 const playerDataList    = roomInfo.playerDataList;
                 const playerRules       = settingsForCommon.warRule.ruleForPlayers;
-                const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCount;
+                const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCountUnneutral;
                 for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                     dataList.push({
                         roomInfo,

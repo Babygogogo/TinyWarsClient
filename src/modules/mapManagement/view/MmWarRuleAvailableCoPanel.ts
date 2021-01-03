@@ -102,7 +102,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestConfigVersion())) {
+            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setState(CoTierState.AllAvailable);
@@ -126,7 +126,7 @@ namespace TinyWars.MapManagement {
 
         private _updateGroupCoTiers(): void {
             const availableCoIdSet  = this._availableCoIdSet;
-            const configVersion     = ConfigManager.getLatestConfigVersion();
+            const configVersion     = ConfigManager.getLatestFormalVersion();
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
                     ? ConfigManager.getAvailableCustomCoIdList(configVersion)
@@ -143,7 +143,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestConfigVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -236,7 +236,7 @@ namespace TinyWars.MapManagement {
         public setCoId(coId: number): void {
             this._coId = coId;
 
-            this._labelName.text = `${ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId).name}`;
+            this._labelName.text = `${ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId).name}`;
         }
         public getCoId(): number {
             return this._coId;

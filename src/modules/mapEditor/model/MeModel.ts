@@ -99,7 +99,7 @@ namespace TinyWars.MapEditor.MeModel {
         function resetDataByPresetWarRuleId(ruleId: number | null): void {
             const settingsForCommon = getWarData().settingsForCommon;
             const mapRawData        = getMapRawData();
-            const playersCount      = mapRawData.playersCount;
+            const playersCount      = mapRawData.playersCountUnneutral;
 
             if (ruleId == null) {
                 settingsForCommon.warRule = BwSettingsHelper.createDefaultWarRule(ruleId, playersCount);

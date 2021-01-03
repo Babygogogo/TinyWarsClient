@@ -122,8 +122,8 @@ namespace TinyWars.MultiCustomRoom {
             const renderer          = e.currentTarget as RendererForCoTier;
             const availableCoIdSet  = this._availableCoIdSet;
             const coIdList          = renderer.getIsCustomSwitch()
-                ? ConfigManager.getAvailableCustomCoIdList(ConfigManager.getLatestConfigVersion())
-                : ConfigManager.getAvailableCoIdListInTier(ConfigManager.getLatestConfigVersion(), renderer.getCoTier());
+                ? ConfigManager.getAvailableCustomCoIdList(ConfigManager.getLatestFormalVersion())
+                : ConfigManager.getAvailableCoIdListInTier(ConfigManager.getLatestFormalVersion(), renderer.getCoTier());
 
             if (renderer.getState() === CoTierState.Unavailable) {
                 for (const coId of coIdList) {
@@ -196,7 +196,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestConfigVersion())) {
+            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setState(CoTierState.AllAvailable);
@@ -239,7 +239,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestConfigVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -333,7 +333,7 @@ namespace TinyWars.MultiCustomRoom {
         public setCoId(coId: number): void {
             this._coId = coId;
 
-            const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
+            const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
             this._labelName.text    = `${cfg.name} (T${cfg.tier})`;
         }
         public getCoId(): number {

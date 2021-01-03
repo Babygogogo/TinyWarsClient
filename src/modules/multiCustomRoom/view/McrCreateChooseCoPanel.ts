@@ -147,7 +147,7 @@ namespace TinyWars.MultiCustomRoom {
             const availableCoIdList = McrModel.Create.getAvailableCoIdList(McrModel.Create.getSelfPlayerIndex());
 
             let index = 0;
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestConfigVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestFormalVersion())) {
                 if (availableCoIdList.indexOf(cfg.coId) >= 0) {
                     data.push({
                         coBasicCfg  : cfg,
@@ -306,7 +306,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getLanguageType()];
         }
     }
 }

@@ -1,27 +1,32 @@
 
 namespace TinyWars.MapEditor.MeUtility {
-    import ProtoTypes       = Utility.ProtoTypes;
-    import Types            = Utility.Types;
-    import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
-    import ConfigManager    = Utility.ConfigManager;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
-    import BwHelpers        = BaseWar.BwHelpers;
-    import BwTile           = BaseWar.BwTile;
-    import GridIndex        = Types.GridIndex;
-    import TileObjectType   = Types.TileObjectType;
-    import TileBaseType     = Types.TileBaseType;
-    import SymmetryType     = Types.SymmetryType;
-    import LanguageType     = Types.LanguageType;
-    import InvalidationType = Types.CustomMapInvalidationType;
-    import IMapRawData      = ProtoTypes.Map.IMapRawData;
-    import IWarRule         = ProtoTypes.WarRule.IWarRule;
-    import WarSerialization = ProtoTypes.WarSerialization;
-    import ISerialTile      = WarSerialization.ISerialTile;
-    import ISerialUnit      = WarSerialization.ISerialUnit;
-    import MapConstants     = ConfigManager.MAP_CONSTANTS;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import Types                    = Utility.Types;
+    import Lang                     = Utility.Lang;
+    import Helpers                  = Utility.Helpers;
+    import ConfigManager            = Utility.ConfigManager;
+    import GridIndexHelpers         = Utility.GridIndexHelpers;
+    import BwSettingsHelper         = BaseWar.BwSettingsHelper;
+    import BwHelpers                = BaseWar.BwHelpers;
+    import BwTile                   = BaseWar.BwTile;
+    import GridIndex                = Types.GridIndex;
+    import TileObjectType           = Types.TileObjectType;
+    import TileBaseType             = Types.TileBaseType;
+    import SymmetryType             = Types.SymmetryType;
+    import LanguageType             = Types.LanguageType;
+    import InvalidationType         = Types.CustomMapInvalidationType;
+    import IMapRawData              = ProtoTypes.Map.IMapRawData;
+    import IDataForWarEvent         = ProtoTypes.Map.IDataForWarEvent;
+    import IWarRule                 = ProtoTypes.WarRule.IWarRule;
+    import WarSerialization         = ProtoTypes.WarSerialization;
+    import IWarEvent                = ProtoTypes.WarEvent.IWarEvent;
+    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
+    import IWarEventConditionNode   = ProtoTypes.WarEvent.IWarEventConditionNode;
+    import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
+    import ISerialTile              = WarSerialization.ISerialTile;
+    import ISerialUnit              = WarSerialization.ISerialUnit;
+    import MapConstants             = ConfigManager.MAP_CONSTANTS;
+    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     export type AsymmetricalCounters = {
         UpToDown            : number | null;
@@ -31,22 +36,29 @@ namespace TinyWars.MapEditor.MeUtility {
         Rotation            : number | null;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function createDefaultMapRawData(slotIndex: number): Promise<IMapRawData> {
         const mapWidth  = 20;
         const mapHeight = 15;
         return {
-            designerName    : await User.UserModel.getSelfNickname(),
-            designerUserId  : User.UserModel.getSelfUserId(),
-            mapNameList     : [
+            designerName            : await User.UserModel.getSelfNickname(),
+            designerUserId          : User.UserModel.getSelfUserId(),
+            mapNameList             : [
                 `${Lang.getTextWithLanguage(Lang.Type.B0279, LanguageType.Chinese)} - ${slotIndex}`,
                 `${Lang.getTextWithLanguage(Lang.Type.B0279, LanguageType.English)} - ${slotIndex}`,
             ],
             mapWidth,
             mapHeight,
-            playersCount    : 2,
-            modifiedTime    : Time.TimeModel.getServerTimestamp(),
-            tileDataList    : createDefaultTileDataList(mapWidth, mapHeight, TileBaseType.Plain),
-            unitDataList    : [],
+            playersCountUnneutral   : 2,
+            modifiedTime            : Time.TimeModel.getServerTimestamp(),
+            tileDataList            : createDefaultTileDataList(mapWidth, mapHeight, TileBaseType.Plain),
+            unitDataList            : [],
+            warEventData            : {
+                eventList           : [],
+                actionList          : [],
+                conditionList       : [],
+                conditionNodeList   : [],
+            },
         };
     }
     function createDefaultTileDataList(mapWidth: number, mapHeight: number, tileBaseType: TileBaseType): ISerialTile[] {
@@ -67,6 +79,7 @@ namespace TinyWars.MapEditor.MeUtility {
         };
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function createISerialWar(data: ProtoTypes.Map.IMapEditorData): WarSerialization.ISerialWar {
         const mapRawData    = data.mapRawData;
         const warRuleList   = mapRawData.warRuleList;
@@ -74,7 +87,7 @@ namespace TinyWars.MapEditor.MeUtility {
         const unitDataList  = mapRawData.unitDataList || [];
         return {
             settingsForCommon   : {
-                configVersion   : ConfigManager.getLatestConfigVersion(),
+                configVersion   : ConfigManager.getLatestFormalVersion(),
                 mapId           : data.mapRawData.mapId,
                 presetWarRuleId : warRule.ruleId,
                 warRule,
@@ -87,7 +100,8 @@ namespace TinyWars.MapEditor.MeUtility {
             executedActions         : null,
             executedActionsCount    : 0,
             remainingVotesForDraw   : null,
-            warEventData            : {
+            warEventManager         : {
+                warEventData        : mapRawData.warEventData,
                 calledCountList     : [],
             },
             playerManager           : createISerialPlayerManager(),
@@ -136,6 +150,7 @@ namespace TinyWars.MapEditor.MeUtility {
         return { players };
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getMapInvalidationType(mapRawData: IMapRawData): InvalidationType {
         if (!checkIsMapDesignerNameValid(mapRawData.designerName)) {
             return InvalidationType.InvalidMapDesigner;
@@ -147,8 +162,10 @@ namespace TinyWars.MapEditor.MeUtility {
             return InvalidationType.InvalidUnits;
         } else if (!checkIsTilesValid(mapRawData)) {
             return InvalidationType.InvalidTiles;
-        } else if (!checkIsWarRuleListValid(mapRawData.warRuleList, mapRawData.playersCount!)) {
+        } else if (!checkIsWarRuleListValid(mapRawData.warRuleList, mapRawData.playersCountUnneutral, mapRawData.warEventData)) {
             return InvalidationType.InvalidWarRuleList;
+        } else if (!checkIsWarEventDataValid(mapRawData)) {
+            return InvalidationType.InvalidWarEventData;
         } else {
             return InvalidationType.Valid;
         }
@@ -166,7 +183,7 @@ namespace TinyWars.MapEditor.MeUtility {
             }));
     }
     function checkIsPlayersCountValid(mapRawData: IMapRawData): boolean {
-        const playersCount = mapRawData.playersCount;
+        const playersCount = mapRawData.playersCountUnneutral;
         if ((playersCount == null) || (playersCount <= 1) || (playersCount > CommonConstants.WarMaxPlayerIndex)) {
             return false;
         }
@@ -202,7 +219,7 @@ namespace TinyWars.MapEditor.MeUtility {
 
         const unitDataList  = mapRawData.unitDataList;
         if (unitDataList) {
-            const configVersion         = ConfigManager.getLatestConfigVersion()!;
+            const configVersion         = ConfigManager.getLatestFormalVersion()!;
             const maxPromotion          = ConfigManager.getUnitMaxPromotion(configVersion);
             const units                 = new Map<number, ISerialUnit>();
             const indexesForUnitOnMap   = new Set<number>();
@@ -327,7 +344,7 @@ namespace TinyWars.MapEditor.MeUtility {
         }
 
         const indexes       = new Set<number>();
-        const configVersion = ConfigManager.getLatestConfigVersion()!;
+        const configVersion = ConfigManager.getLatestFormalVersion()!;
         for (const tileData of mapRawData.tileDataList || []) {
             const gridIndex                 = tileData.gridIndex as GridIndex;
             const { x: gridX, y: gridY }    = gridIndex;
@@ -392,7 +409,7 @@ namespace TinyWars.MapEditor.MeUtility {
 
         return true;
     }
-    function checkIsWarRuleListValid(ruleList: IWarRule[] | null | undefined, playersCount: number): boolean {
+    function checkIsWarRuleListValid(ruleList: IWarRule[] | null | undefined, playersCount: number, warEventData: IDataForWarEvent | null | undefined): boolean {
         const rulesCount = ruleList ? ruleList.length : 0;
         if ((rulesCount <= 0) || (rulesCount > CommonConstants.WarRuleMaxCount)) {
             return false;
@@ -406,7 +423,7 @@ namespace TinyWars.MapEditor.MeUtility {
             }
             ruleIdSet.add(ruleId);
 
-            if ((!BwSettingsHelper.checkIsValidWarRule(rule))           ||
+            if ((!BwSettingsHelper.checkIsValidWarRule(rule, warEventData)) ||
                 (BwSettingsHelper.getPlayersCount(rule) !== playersCount)
             ) {
                 return false;
@@ -416,34 +433,479 @@ namespace TinyWars.MapEditor.MeUtility {
         return true;
     }
 
+    type WarEventDict               = Map<number, IWarEvent>;
+    type WarEventActionDict         = Map<number, IWarEventAction>;
+    type WarEventConditionDict      = Map<number, IWarEventCondition>;
+    type WarEventConditionNodeDict  = Map<number, IWarEventConditionNode>;
+    function checkIsWarEventDataValid(mapRawData: IMapRawData): boolean {   // DONE
+        const warEventData = mapRawData.warEventData;
+        if (warEventData == null) {
+            return true;
+        }
+
+        const warRuleList = mapRawData.warRuleList;
+        if (warRuleList == null) {
+            return false;
+        }
+
+        const actionDict = new Map<number, IWarEventAction>();
+        for (const action of warEventData.actionList || []) {
+            const actionId = action.WarEventActionCommonData?.actionId;
+            if ((actionId == null) || (actionDict.has(actionId))) {
+                return false;
+            }
+            actionDict.set(actionId, action);
+        }
+        if (actionDict.size > CommonConstants.WarEventMaxActionsPerMap) {
+            return false;
+        }
+
+        const conditionDict = new Map<number, IWarEventCondition>();
+        for (const condition of warEventData.conditionList || []) {
+            const conditionId = condition.WecCommonData?.conditionId;
+            if ((conditionId == null) || (conditionDict.has(conditionId))) {
+                return false;
+            }
+            conditionDict.set(conditionId, condition);
+        }
+        if (conditionDict.size > CommonConstants.WarEventMaxConditionsPerMap) {
+            return false;
+        }
+
+        const nodeDict = new Map<number, IWarEventConditionNode>();
+        for (const node of warEventData.conditionNodeList || []) {
+            const nodeId = node.nodeId;
+            if ((nodeId == null) || (nodeDict.has(nodeId))) {
+                return false;
+            }
+            nodeDict.set(nodeId, node);
+        }
+        if (nodeDict.size > CommonConstants.WarEventMaxConditionNodesPerMap) {
+            return false;
+        }
+
+        const eventDict = new Map<number, IWarEvent>();
+        for (const event of warEventData.eventList || []) {
+            const eventId = event.eventId;
+            if ((eventId == null) || (eventDict.has(eventId))) {
+                return false;
+            }
+            eventDict.set(eventId, event);
+        }
+        if (eventDict.size > CommonConstants.WarEventMaxEventsPerMap) {
+            return false;
+        }
+
+        if (!checkIsEveryWarEventActionInUse(actionDict, eventDict)) {
+            return false;
+        }
+        if (!checkIsEveryWarEventConditionInUse(conditionDict, nodeDict)) {
+            return false;
+        }
+        if (!checkIsEveryWarEventConditionNodeInUse(nodeDict, eventDict)) {
+            return false;
+        }
+        if (!checkIsEveryWarEventInUse(eventDict, warRuleList)) {
+            return false;
+        }
+
+        for (const [, action] of actionDict) {
+            if (!checkIsValidWarEventAction({ action, eventDict, mapRawData })) {
+                return false;
+            }
+        }
+        for (const [, condition] of conditionDict) {
+            if (!checkIsValidWarEventCondition({ condition, eventDict })) {
+                return false;
+            }
+        }
+        for (const [, conditionNode] of nodeDict) {
+            if (!checkIsValidWarEventConditionNode({ conditionNode, conditionDict, nodeDict })) {
+                return false;
+            }
+        }
+        for (const [, warEvent] of eventDict) {
+            if (!checkIsValidWarEvent({ warEvent, nodeDict, actionDict })) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    function checkIsEveryWarEventActionInUse(actionDict: WarEventActionDict, eventDict: WarEventDict): boolean {    // DONE
+        for (const [actionId] of actionDict) {
+            let isInUse = false;
+            for (const [, event] of eventDict) {
+                if ((event.actionIdList || []).indexOf(actionId) >= 0) {
+                    isInUse = true;
+                    break;
+                }
+            }
+            if (!isInUse) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    function checkIsEveryWarEventConditionInUse(conditionDict: WarEventConditionDict, nodeDict: WarEventConditionNodeDict): boolean {   // DONE
+        for (const [conditionId] of conditionDict) {
+            let isInUse = false;
+            for (const [, node] of nodeDict) {
+                if ((node.conditionIdList || []).indexOf(conditionId) >= 0) {
+                    isInUse = true;
+                    break;
+                }
+            }
+            if (!isInUse) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    function checkIsEveryWarEventConditionNodeInUse(nodeDict: WarEventConditionNodeDict, eventDict: WarEventDict): boolean {    // DONE
+        for (const [nodeId] of nodeDict) {
+            let isInUse = false;
+            for (const [, event] of eventDict) {
+                if (event.conditionNodeId === nodeId) {
+                    isInUse = true;
+                    break;
+                }
+            }
+            if (isInUse) {
+                continue;
+            }
+
+            for (const [, node] of nodeDict) {
+                if ((node.subNodeIdList || []).indexOf(nodeId) >= 0) {
+                    isInUse = true;
+                    break;
+                }
+            }
+            if (!isInUse) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    function checkIsEveryWarEventInUse(eventDict: WarEventDict, warRuleList: ProtoTypes.WarRule.IWarRule[]): boolean {  // DONE
+        for (const [eventId] of eventDict) {
+            let isInUse = false;
+            for (const warRule of warRuleList) {
+                if ((warRule.warEventIdList || []).indexOf(eventId) >= 0) {
+                    isInUse = true;
+                    break;
+                }
+            }
+
+            if (!isInUse) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function checkIsValidWarEventAction({ action, eventDict, mapRawData }: {    // DONE
+        action      : IWarEventAction;
+        eventDict   : WarEventDict;
+        mapRawData  : IMapRawData;
+    }): boolean {
+        if (Object.keys(action).length !== 2) {
+            return false;
+        }
+
+        const playersCountUnneutral = mapRawData.playersCountUnneutral;
+        if (playersCountUnneutral == null) {
+            return false;
+        }
+
+        const configVersion = ConfigManager.getLatestFormalVersion();
+        if (configVersion == null) {
+            return false;
+        }
+
+        const mapHeight = mapRawData.mapHeight;
+        const mapWidth  = mapRawData.mapWidth;
+        if ((!mapHeight) || (!mapWidth)) {
+            return false;
+        }
+        const mapSize: Types.MapSize = { width: mapWidth, height: mapHeight };
+
+        const actionAddUnit = action.WarEventActionAddUnit;
+        if (actionAddUnit) {
+            const { unitList } = actionAddUnit;
+            if ((unitList == null)                                              ||
+                (unitList.length <= 0)                                          ||
+                (unitList.length > CommonConstants.WarEventActionAddUnitMaxCount)
+            ) {
+                return false;
+            }
+
+            for (const data of unitList) {
+                const {
+                    needMovableTile,
+                    canBeBlockedByUnit,
+                    unitData,
+                } = data;
+                if ((needMovableTile == null) || (canBeBlockedByUnit) || (unitData == null)) {
+                    return false;
+                }
+
+                if (unitData.loaderUnitId != null) {
+                    return false;
+                }
+
+                if (!BwHelpers.checkIsUnitDataValidIgnoringUnitId({
+                    unitData,
+                    playersCountUnneutral,
+                    configVersion,
+                    mapSize ,
+                })) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // TODO add more checkers when the action types grow.
+
+        return false;
+    }
+    function checkIsValidWarEventCondition({ condition, eventDict }: {  // DONE
+        condition   : IWarEventCondition;
+        eventDict   : WarEventDict;
+    }): boolean {
+        if (Object.keys(condition).length !== 2) {
+            return false;
+        }
+
+        const commonData = condition.WecCommonData;
+        if ((commonData == null) || (commonData.isNot == null)) {
+            return false;
+        }
+
+        const conEventCalledCountTotalEqualTo = condition.WecEventCalledCountTotalEqualTo;
+        if (conEventCalledCountTotalEqualTo) {
+            return (conEventCalledCountTotalEqualTo.countEqualTo != null)
+                && (conEventCalledCountTotalEqualTo.eventIdEqualTo != null);
+        }
+
+        const conEventCalledCountTotalGreaterThan = condition.WecEventCalledCountTotalGreaterThan;
+        if (conEventCalledCountTotalGreaterThan) {
+            return (conEventCalledCountTotalGreaterThan.countGreaterThan != null)
+                && (conEventCalledCountTotalGreaterThan.eventIdEqualTo != null);
+        }
+
+        const conEventCalledCountTotalLessThan = condition.WecEventCalledCountTotalLessThan;
+        if (conEventCalledCountTotalLessThan) {
+            return (conEventCalledCountTotalLessThan.countLessThan != null)
+                && (conEventCalledCountTotalLessThan.eventIdEqualTo != null);
+        }
+
+        const conPlayerAliveStateEqualTo = condition.WecPlayerAliveStateEqualTo;
+        if (conPlayerAliveStateEqualTo) {
+            const { playerIndexEqualTo, aliveStateEqualTo } = conPlayerAliveStateEqualTo;
+
+            if ((aliveStateEqualTo !== Types.PlayerAliveState.Alive)    &&
+                (aliveStateEqualTo !== Types.PlayerAliveState.Dead)     &&
+                (aliveStateEqualTo !== Types.PlayerAliveState.Dying)
+            ) {
+                return false;
+            }
+
+            if (playerIndexEqualTo == null) {
+                return false;
+            }
+
+            return true;
+        }
+
+        const conTurnIndexEqualTo = condition.WecTurnIndexEqualTo;
+        if (conTurnIndexEqualTo) {
+            return conTurnIndexEqualTo.valueEqualTo != null;
+        }
+
+        const conTurnIndexGreaterThan = condition.WecTurnIndexGreaterThan;
+        if (conTurnIndexGreaterThan) {
+            return conTurnIndexGreaterThan.valueGreaterThan != null;
+        }
+
+        const conTurnIndexLessThan = condition.WecTurnIndexLessThan;
+        if (conTurnIndexLessThan) {
+            return conTurnIndexLessThan.valueLessThan != null;
+        }
+
+        const conTurnIndexRemainderEqualTo = condition.WecTurnIndexRemainderEqualTo;
+        if (conTurnIndexRemainderEqualTo) {
+            const { divider, remainderEqualTo } = conTurnIndexRemainderEqualTo;
+            return (!!divider) && (remainderEqualTo != null);
+        }
+
+        const conPlayerIndexInTurnEqualTo = condition.WecPlayerIndexInTurnEqualTo;
+        if (conPlayerIndexInTurnEqualTo) {
+            return conPlayerIndexInTurnEqualTo.valueEqualTo != null;
+        }
+
+        const conPlayerIndexInTurnGreaterThan = condition.WecPlayerIndexInTurnGreaterThan;
+        if (conPlayerIndexInTurnGreaterThan) {
+            return conPlayerIndexInTurnGreaterThan.valueGreaterThan != null;
+        }
+
+        const conPlayerIndexInTurnLessThan = condition.WecPlayerIndexInTurnLessThan;
+        if (conPlayerIndexInTurnLessThan) {
+            return conPlayerIndexInTurnLessThan.valueLessThan != null;
+        }
+
+        const conTurnPhaseEqualTo = condition.WecTurnPhaseEqualTo;
+        if (conTurnPhaseEqualTo) {
+            const value = conTurnPhaseEqualTo.valueEqualTo;
+            return (value === Types.TurnPhaseCode.Main)
+                || (value === Types.TurnPhaseCode.WaitBeginTurn);
+        }
+
+        // TODO add more checkers when the condition types grow.
+
+        return false;
+    }
+    function checkIsValidWarEventConditionNode({ conditionNode, conditionDict, nodeDict }: {    // DONE
+        conditionNode   : IWarEventConditionNode;
+        conditionDict   : WarEventConditionDict;
+        nodeDict        : WarEventConditionNodeDict;
+    }): boolean {
+        if (conditionNode.isAnd == null) {
+            return false;
+        }
+
+        const currNodeId = conditionNode.nodeId;
+        if (currNodeId == null) {
+            return false;
+        }
+
+        const conditionIdList   = conditionNode.conditionIdList || [];
+        const subNodeIdList     = conditionNode.subNodeIdList || [];
+        if ((conditionIdList.length > CommonConstants.WarEventMaxConditionsPerNode)         ||
+            (subNodeIdList.length > CommonConstants.WarEventMaxSubConditionNodesPerNode)    ||
+            (conditionIdList.length + subNodeIdList.length <= 0)
+        ) {
+            return false;
+        }
+
+        for (const conditionId of conditionIdList) {
+            if (!conditionDict.has(conditionId)) {
+                return false;
+            }
+        }
+
+        for (const subNodeId of subNodeIdList) {
+            if (!nodeDict.has(subNodeId)) {
+                return false;
+            }
+        }
+
+        const usedNodeIdList    = [currNodeId];
+        const usedNodeIdSet     = new Set<number>();
+        for (let i = 0; i < usedNodeIdList.length; ++i) {
+            const nodeId = usedNodeIdList[i];
+            if (usedNodeIdSet.has(nodeId)) {
+                return false;
+            }
+            usedNodeIdSet.add(nodeId);
+
+            const subNode = nodeDict.get(nodeId);
+            if (subNode == null) {
+                return false;
+            }
+
+            const idList = subNode.subNodeIdList;
+            if (idList) {
+                usedNodeIdList.push(...idList);
+            }
+        }
+
+        return true;
+    }
+    function checkIsValidWarEvent({ warEvent, nodeDict, actionDict }: { // DONE
+        warEvent    : IWarEvent;
+        nodeDict    : WarEventConditionNodeDict;
+        actionDict  : WarEventActionDict;
+    }): boolean {
+        const eventNameList = warEvent.eventNameList;
+        if ((eventNameList == null)                                                                     ||
+            (eventNameList.length <= 0)                                                                 ||
+            (eventNameList.length > CommonConstants.NameListMaxLength)                                  ||
+            (eventNameList.some(v => v.length <= 0 || v.length > CommonConstants.WarEventNameMaxLength))
+        ) {
+            return false;
+        }
+
+        const maxCallCountInPlayerTurn = warEvent.maxCallCountInPlayerTurn;
+        if ((maxCallCountInPlayerTurn == null)                                          ||
+            (maxCallCountInPlayerTurn < 1)                                              ||
+            (maxCallCountInPlayerTurn > CommonConstants.WarEventMaxCallCountInPlayerTurn)
+        ) {
+            return false;
+        }
+
+        const maxCallCountTotal = warEvent.maxCallCountTotal;
+        if ((maxCallCountTotal == null)                                     ||
+            (maxCallCountTotal < 1)                                         ||
+            (maxCallCountTotal > CommonConstants.WarEventMaxCallCountTotal)
+        ) {
+            return false;
+        }
+
+        const conditionNodeId = warEvent.conditionNodeId;
+        if ((conditionNodeId == null) || (!nodeDict.has(conditionNodeId))) {
+            return false;
+        }
+
+        const actionIdList = warEvent.actionIdList;
+        if ((actionIdList == null)                                              ||
+            (actionIdList.length > CommonConstants.WarEventMaxActionsPerEvent)  ||
+            (actionIdList.length <= 0)                                          ||
+            (actionIdList.some(v => !actionDict.has(v)))
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function clearMap(mapRawData: IMapRawData, newWidth: number, newHeight: number): IMapRawData {
         return {
-            mapId           : mapRawData.mapId,
-            designerName    : mapRawData.designerName,
-            designerUserId  : mapRawData.designerUserId,
-            mapNameList     : mapRawData.mapNameList,
-            mapWidth        : newWidth,
-            mapHeight       : newHeight,
-            playersCount    : mapRawData.playersCount,
-            modifiedTime    : Time.TimeModel.getServerTimestamp(),
-            tileDataList    : createDefaultTileDataList(newWidth, newHeight, TileBaseType.Plain),
-            unitDataList    : null,
-            warRuleList     : mapRawData.warRuleList,
+            mapId                   : mapRawData.mapId,
+            designerName            : mapRawData.designerName,
+            designerUserId          : mapRawData.designerUserId,
+            mapNameList             : mapRawData.mapNameList,
+            mapWidth                : newWidth,
+            mapHeight               : newHeight,
+            playersCountUnneutral   : mapRawData.playersCountUnneutral,
+            warEventData            : mapRawData.warEventData,
+            modifiedTime            : Time.TimeModel.getServerTimestamp(),
+            tileDataList            : createDefaultTileDataList(newWidth, newHeight, TileBaseType.Plain),
+            unitDataList            : null,
+            warRuleList             : mapRawData.warRuleList,
         };
     }
     export function resizeMap(mapRawData: IMapRawData, newWidth: number, newHeight: number): IMapRawData {
         return {
-            mapId           : mapRawData.mapId,
-            designerName    : mapRawData.designerName,
-            designerUserId  : mapRawData.designerUserId,
-            mapNameList     : mapRawData.mapNameList,
-            mapWidth        : newWidth,
-            mapHeight       : newHeight,
-            playersCount    : mapRawData.playersCount,
-            modifiedTime    : Time.TimeModel.getServerTimestamp(),
-            tileDataList    : getNewTileDataListForResize(mapRawData, newWidth, newHeight),
-            unitDataList    : getNewUnitDataListForResize(mapRawData, newWidth, newHeight),
-            warRuleList     : mapRawData.warRuleList,
+            mapId                   : mapRawData.mapId,
+            designerName            : mapRawData.designerName,
+            designerUserId          : mapRawData.designerUserId,
+            mapNameList             : mapRawData.mapNameList,
+            mapWidth                : newWidth,
+            mapHeight               : newHeight,
+            playersCountUnneutral   : mapRawData.playersCountUnneutral,
+            warEventData            : mapRawData.warEventData,
+            modifiedTime            : Time.TimeModel.getServerTimestamp(),
+            tileDataList            : getNewTileDataListForResize(mapRawData, newWidth, newHeight),
+            unitDataList            : getNewUnitDataListForResize(mapRawData, newWidth, newHeight),
+            warRuleList             : mapRawData.warRuleList,
         };
     }
     function getNewTileDataListForResize(mapRawData: IMapRawData, newWidth: number, newHeight: number): ISerialTile[] {
@@ -479,19 +941,21 @@ namespace TinyWars.MapEditor.MeUtility {
         return unitList;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function addOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): IMapRawData {
         return {
-            mapId           : mapRawData.mapId,
-            designerName    : mapRawData.designerName,
-            designerUserId  : mapRawData.designerUserId,
-            mapNameList     : mapRawData.mapNameList,
-            mapWidth        : mapRawData.mapWidth,
-            mapHeight       : mapRawData.mapHeight,
-            playersCount    : mapRawData.playersCount,
-            modifiedTime    : Time.TimeModel.getServerTimestamp(),
-            tileDataList    : getNewTileDataListForOffset(mapRawData, offsetX, offsetY),
-            unitDataList    : getNewUnitDataListForOffset(mapRawData, offsetX, offsetY),
-            warRuleList     : mapRawData.warRuleList,
+            mapId                   : mapRawData.mapId,
+            designerName            : mapRawData.designerName,
+            designerUserId          : mapRawData.designerUserId,
+            mapNameList             : mapRawData.mapNameList,
+            mapWidth                : mapRawData.mapWidth,
+            mapHeight               : mapRawData.mapHeight,
+            playersCountUnneutral   : mapRawData.playersCountUnneutral,
+            modifiedTime            : Time.TimeModel.getServerTimestamp(),
+            tileDataList            : getNewTileDataListForOffset(mapRawData, offsetX, offsetY),
+            unitDataList            : getNewUnitDataListForOffset(mapRawData, offsetX, offsetY),
+            warRuleList             : mapRawData.warRuleList,
+            warEventData            : mapRawData.warEventData,
         }
     }
     function getNewTileDataListForOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): ISerialTile[] {
@@ -541,6 +1005,7 @@ namespace TinyWars.MapEditor.MeUtility {
         return unitDataList;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getAsymmetricalCounters(war: MeWar): AsymmetricalCounters {
         const tileMap               = war.getTileMap();
         const mapSize               = tileMap.getMapSize();

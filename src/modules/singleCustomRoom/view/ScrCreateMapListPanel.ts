@@ -162,7 +162,7 @@ namespace TinyWars.SingleCustomRoom {
                 if ((!mapBriefData.mapExtraData.mapComplexInfo.availability.canScw)                                     ||
                     ((mapName) && (mapName.toLowerCase().indexOf(mapName) < 0))                                         ||
                     ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))               ||
-                    ((playersCount) && (mapBriefData.playersCount !== playersCount))                                    ||
+                    ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                           ||
                     ((playedTimes != null) && (await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId) < playedTimes))  ||
                     ((minRating != null) && (!(await WarMapModel.getAverageRating(mapId) >= minRating)))
                 ) {
@@ -182,11 +182,10 @@ namespace TinyWars.SingleCustomRoom {
 
         private async _showMap(mapId: number): Promise<void> {
             const mapRawData                = await WarMapModel.getRawData(mapId);
-            const mapExtraData              = await WarMapModel.getBriefData(mapId);
             const averageRating             = await WarMapModel.getAverageRating(mapId);
             this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-            this._labelPlayersCount.text    = Lang.getFormattedText(Lang.Type.F0002, mapRawData.playersCount);
+            this._labelPlayersCount.text    = Lang.getFormattedText(Lang.Type.F0002, mapRawData.playersCountUnneutral);
             this._labelRating.text          = Lang.getFormattedText(Lang.Type.F0003, averageRating != null ? averageRating.toFixed(2) : Lang.getText(Lang.Type.B0001));
             this._labelPlayedTimes.text     = Lang.getFormattedText(Lang.Type.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
             this._groupInfo.visible         = true;

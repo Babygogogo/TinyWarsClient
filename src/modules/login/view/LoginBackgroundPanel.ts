@@ -54,7 +54,7 @@ namespace TinyWars.Login {
             this._labelVersion.text = `v.${window.CLIENT_VERSION}`;
             this._updateBtnLanguages();
 
-            if (Utility.ConfigManager.getLatestConfigVersion()) {
+            if (Utility.ConfigManager.getLatestFormalVersion()) {
                 // this._initGroupUnits();
             }
         }

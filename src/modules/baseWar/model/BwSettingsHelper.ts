@@ -456,7 +456,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             visionRangeModifier     : CommonConstants.WarRuleVisionRangeModifierDefault,
             luckLowerLimit          : CommonConstants.WarRuleLuckDefaultLowerLimit,
             luckUpperLimit          : CommonConstants.WarRuleLuckDefaultUpperLimit,
-            availableCoIdList       : ConfigManager.getAvailableCoList(ConfigManager.getLatestConfigVersion()).map(v => v.coId),
+            availableCoIdList       : ConfigManager.getAvailableCoList(ConfigManager.getLatestFormalVersion()).map(v => v.coId),
         }
     }
     export function reviseWarRule(warRule: IWarRule, playersCount: number): void {
@@ -486,7 +486,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         }
     }
 
-    export function checkIsValidWarRule(rule: IWarRule): boolean {
+    export function checkIsValidWarRule(rule: IWarRule, warEventData: ProtoTypes.Map.IDataForWarEvent): boolean {
         const ruleNameList = rule.ruleNameList;
         if ((!ruleNameList) || (!ruleNameList.length)) {
             return false;
@@ -513,10 +513,17 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             return false;
         }
 
+        const warEventList = warEventData ? warEventData.eventList || [] : [];
+        for (const warEventId of rule.warEventIdList || []) {
+            if (!warEventList.some(v => v.eventId === warEventId)) {
+                return false;
+            }
+        }
+
         return true;
     }
     export function checkIsValidRuleForPlayers(ruleForPlayers: WarRule.IRuleForPlayers): boolean | undefined {
-        const configVersion = ConfigManager.getLatestConfigVersion();
+        const configVersion = ConfigManager.getLatestFormalVersion();
         if (configVersion == null) {
             Logger.error(`BwSettingsHelper.checkIsValidRuleForPlayers() empty configVersion.`);
             return undefined;
@@ -604,7 +611,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             || (!!canWr);
     }
     function checkIsValidRuleForGlobalParams(rule: WarRule.IRuleForGlobalParams): boolean | undefined {
-        const configVersion = ConfigManager.getLatestConfigVersion();
+        const configVersion = ConfigManager.getLatestFormalVersion();
         if (configVersion == null) {
             Logger.error(`BwSettingsHelper.checkIsValidRuleForGlobalParams() empty configVersion.`);
             return undefined;

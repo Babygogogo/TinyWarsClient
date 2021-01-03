@@ -163,7 +163,7 @@ namespace TinyWars.MultiCustomRoom {
             const playerDataList    = roomInfo.playerDataList;
             const playerRules       = roomInfo.settingsForCommon.warRule.ruleForPlayers;
             const dataList          : DataForPlayerRenderer[] = [];
-            for (let playerIndex = 1; playerIndex <= mapRawData.playersCount; ++playerIndex) {
+            for (let playerIndex = 1; playerIndex <= mapRawData.playersCountUnneutral; ++playerIndex) {
                 const playerData = playerDataList.find(v => v.playerIndex === playerIndex);
                 dataList.push({
                     playerIndex,

@@ -446,7 +446,7 @@ namespace TinyWars.RankMatchRoom {
                 const settingsForCommon = roomInfo.settingsForCommon;
                 const playerDataList    = roomInfo.playerDataList;
                 const playerRules       = settingsForCommon.warRule.ruleForPlayers;
-                const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCount;
+                const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCountUnneutral;
                 for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                     dataList.push({
                         roomInfo,

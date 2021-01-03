@@ -146,7 +146,7 @@ namespace TinyWars.MultiCustomRoom {
         private async _createDataForListCo(): Promise<DataForCoRenderer[]> {
             const dataList      : DataForCoRenderer[] = [];
             const playerIndex   = McrModel.Join.getPlayerIndex();
-            const configVersion = ConfigManager.getLatestConfigVersion();
+            const configVersion = ConfigManager.getLatestFormalVersion();
             let index           = 0;
             for (const coId of BwSettingsHelper.getPlayerRule((await McrModel.Join.getRoomInfo()).settingsForCommon.warRule, playerIndex).availableCoIdList) {
                 const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
@@ -308,7 +308,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getLanguageType()];
         }
     }
 }

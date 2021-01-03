@@ -2697,8 +2697,8 @@ export declare namespace Map {
         /** MapRawData mapHeight */
         mapHeight?: (number|null);
 
-        /** MapRawData playersCount */
-        playersCount?: (number|null);
+        /** MapRawData playersCountUnneutral */
+        playersCountUnneutral?: (number|null);
 
         /** MapRawData modifiedTime */
         modifiedTime?: (number|null);
@@ -2746,8 +2746,8 @@ export declare namespace Map {
         /** MapRawData mapHeight. */
         public mapHeight: number;
 
-        /** MapRawData playersCount. */
-        public playersCount: number;
+        /** MapRawData playersCountUnneutral. */
+        public playersCountUnneutral: number;
 
         /** MapRawData modifiedTime. */
         public modifiedTime: number;
@@ -2958,8 +2958,8 @@ export declare namespace Map {
         /** MapBriefData mapExtraData */
         mapExtraData?: (Map.IMapExtraData|null);
 
-        /** MapBriefData playersCount */
-        playersCount?: (number|null);
+        /** MapBriefData playersCountUnneutral */
+        playersCountUnneutral?: (number|null);
 
         /** MapBriefData designerName */
         designerName?: (string|null);
@@ -2983,8 +2983,8 @@ export declare namespace Map {
         /** MapBriefData mapExtraData. */
         public mapExtraData?: (Map.IMapExtraData|null);
 
-        /** MapBriefData playersCount. */
-        public playersCount: number;
+        /** MapBriefData playersCountUnneutral. */
+        public playersCountUnneutral: number;
 
         /** MapBriefData designerName. */
         public designerName: string;
@@ -3261,613 +3261,1207 @@ export declare class WarEvent implements IWarEvent {
 
 export declare namespace WarEvent {
 
-    /** Properties of a WarEventConditionCommonData. */
-    interface IWarEventConditionCommonData {
+    /** Properties of a WecCommonData. */
+    interface IWecCommonData {
 
-        /** WarEventConditionCommonData conditionId */
+        /** WecCommonData conditionId */
         conditionId?: (number|null);
 
-        /** WarEventConditionCommonData isNot */
-        isNot?: (number|null);
+        /** WecCommonData isNot */
+        isNot?: (boolean|null);
     }
 
-    /** Represents a WarEventConditionCommonData. */
-    class WarEventConditionCommonData implements IWarEventConditionCommonData {
+    /** Represents a WecCommonData. */
+    class WecCommonData implements IWecCommonData {
 
         /**
-         * Constructs a new WarEventConditionCommonData.
+         * Constructs a new WecCommonData.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarEvent.IWarEventConditionCommonData);
+        constructor(properties?: WarEvent.IWecCommonData);
 
-        /** WarEventConditionCommonData conditionId. */
+        /** WecCommonData conditionId. */
         public conditionId: number;
 
-        /** WarEventConditionCommonData isNot. */
-        public isNot: number;
+        /** WecCommonData isNot. */
+        public isNot: boolean;
 
         /**
-         * Creates a new WarEventConditionCommonData instance using the specified properties.
+         * Creates a new WecCommonData instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns WarEventConditionCommonData instance
+         * @returns WecCommonData instance
          */
-        public static create(properties?: WarEvent.IWarEventConditionCommonData): WarEvent.WarEventConditionCommonData;
+        public static create(properties?: WarEvent.IWecCommonData): WarEvent.WecCommonData;
 
         /**
-         * Encodes the specified WarEventConditionCommonData message. Does not implicitly {@link WarEvent.WarEventConditionCommonData.verify|verify} messages.
-         * @param message WarEventConditionCommonData message or plain object to encode
+         * Encodes the specified WecCommonData message. Does not implicitly {@link WarEvent.WecCommonData.verify|verify} messages.
+         * @param message WecCommonData message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarEvent.IWarEventConditionCommonData, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarEvent.IWecCommonData, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified WarEventConditionCommonData message, length delimited. Does not implicitly {@link WarEvent.WarEventConditionCommonData.verify|verify} messages.
-         * @param message WarEventConditionCommonData message or plain object to encode
+         * Encodes the specified WecCommonData message, length delimited. Does not implicitly {@link WarEvent.WecCommonData.verify|verify} messages.
+         * @param message WecCommonData message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarEvent.IWarEventConditionCommonData, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarEvent.IWecCommonData, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a WarEventConditionCommonData message from the specified reader or buffer.
+         * Decodes a WecCommonData message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns WarEventConditionCommonData
+         * @returns WecCommonData
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WarEventConditionCommonData;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecCommonData;
 
         /**
-         * Decodes a WarEventConditionCommonData message from the specified reader or buffer, length delimited.
+         * Decodes a WecCommonData message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns WarEventConditionCommonData
+         * @returns WecCommonData
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WarEventConditionCommonData;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecCommonData;
 
         /**
-         * Verifies a WarEventConditionCommonData message.
+         * Verifies a WecCommonData message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a WarEventConditionCommonData message from a plain object. Also converts values to their respective internal types.
+         * Creates a WecCommonData message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns WarEventConditionCommonData
+         * @returns WecCommonData
          */
-        public static fromObject(object: { [k: string]: any }): WarEvent.WarEventConditionCommonData;
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecCommonData;
 
         /**
-         * Creates a plain object from a WarEventConditionCommonData message. Also converts values to other types if specified.
-         * @param message WarEventConditionCommonData
+         * Creates a plain object from a WecCommonData message. Also converts values to other types if specified.
+         * @param message WecCommonData
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarEvent.WarEventConditionCommonData, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarEvent.WecCommonData, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this WarEventConditionCommonData to JSON.
+         * Converts this WecCommonData to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a WarEventConditionTurnIndex. */
-    interface IWarEventConditionTurnIndex {
+    /** Properties of a WecTurnIndexEqualTo. */
+    interface IWecTurnIndexEqualTo {
 
-        /** WarEventConditionTurnIndex turnIndexEqualTo */
-        turnIndexEqualTo?: (number|null);
-
-        /** WarEventConditionTurnIndex turnIndexLessThan */
-        turnIndexLessThan?: (number|null);
-
-        /** WarEventConditionTurnIndex turnIndexGreaterThan */
-        turnIndexGreaterThan?: (number|null);
-
-        /** WarEventConditionTurnIndex turnIndexDividerAndRemainder */
-        turnIndexDividerAndRemainder?: (number[]|null);
+        /** WecTurnIndexEqualTo valueEqualTo */
+        valueEqualTo?: (number|null);
     }
 
-    /** Represents a WarEventConditionTurnIndex. */
-    class WarEventConditionTurnIndex implements IWarEventConditionTurnIndex {
+    /** Represents a WecTurnIndexEqualTo. */
+    class WecTurnIndexEqualTo implements IWecTurnIndexEqualTo {
 
         /**
-         * Constructs a new WarEventConditionTurnIndex.
+         * Constructs a new WecTurnIndexEqualTo.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarEvent.IWarEventConditionTurnIndex);
+        constructor(properties?: WarEvent.IWecTurnIndexEqualTo);
 
-        /** WarEventConditionTurnIndex turnIndexEqualTo. */
-        public turnIndexEqualTo: number;
-
-        /** WarEventConditionTurnIndex turnIndexLessThan. */
-        public turnIndexLessThan: number;
-
-        /** WarEventConditionTurnIndex turnIndexGreaterThan. */
-        public turnIndexGreaterThan: number;
-
-        /** WarEventConditionTurnIndex turnIndexDividerAndRemainder. */
-        public turnIndexDividerAndRemainder: number[];
+        /** WecTurnIndexEqualTo valueEqualTo. */
+        public valueEqualTo: number;
 
         /**
-         * Creates a new WarEventConditionTurnIndex instance using the specified properties.
+         * Creates a new WecTurnIndexEqualTo instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns WarEventConditionTurnIndex instance
+         * @returns WecTurnIndexEqualTo instance
          */
-        public static create(properties?: WarEvent.IWarEventConditionTurnIndex): WarEvent.WarEventConditionTurnIndex;
+        public static create(properties?: WarEvent.IWecTurnIndexEqualTo): WarEvent.WecTurnIndexEqualTo;
 
         /**
-         * Encodes the specified WarEventConditionTurnIndex message. Does not implicitly {@link WarEvent.WarEventConditionTurnIndex.verify|verify} messages.
-         * @param message WarEventConditionTurnIndex message or plain object to encode
+         * Encodes the specified WecTurnIndexEqualTo message. Does not implicitly {@link WarEvent.WecTurnIndexEqualTo.verify|verify} messages.
+         * @param message WecTurnIndexEqualTo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarEvent.IWarEventConditionTurnIndex, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarEvent.IWecTurnIndexEqualTo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified WarEventConditionTurnIndex message, length delimited. Does not implicitly {@link WarEvent.WarEventConditionTurnIndex.verify|verify} messages.
-         * @param message WarEventConditionTurnIndex message or plain object to encode
+         * Encodes the specified WecTurnIndexEqualTo message, length delimited. Does not implicitly {@link WarEvent.WecTurnIndexEqualTo.verify|verify} messages.
+         * @param message WecTurnIndexEqualTo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarEvent.IWarEventConditionTurnIndex, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarEvent.IWecTurnIndexEqualTo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a WarEventConditionTurnIndex message from the specified reader or buffer.
+         * Decodes a WecTurnIndexEqualTo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns WarEventConditionTurnIndex
+         * @returns WecTurnIndexEqualTo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WarEventConditionTurnIndex;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecTurnIndexEqualTo;
 
         /**
-         * Decodes a WarEventConditionTurnIndex message from the specified reader or buffer, length delimited.
+         * Decodes a WecTurnIndexEqualTo message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns WarEventConditionTurnIndex
+         * @returns WecTurnIndexEqualTo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WarEventConditionTurnIndex;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecTurnIndexEqualTo;
 
         /**
-         * Verifies a WarEventConditionTurnIndex message.
+         * Verifies a WecTurnIndexEqualTo message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a WarEventConditionTurnIndex message from a plain object. Also converts values to their respective internal types.
+         * Creates a WecTurnIndexEqualTo message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns WarEventConditionTurnIndex
+         * @returns WecTurnIndexEqualTo
          */
-        public static fromObject(object: { [k: string]: any }): WarEvent.WarEventConditionTurnIndex;
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecTurnIndexEqualTo;
 
         /**
-         * Creates a plain object from a WarEventConditionTurnIndex message. Also converts values to other types if specified.
-         * @param message WarEventConditionTurnIndex
+         * Creates a plain object from a WecTurnIndexEqualTo message. Also converts values to other types if specified.
+         * @param message WecTurnIndexEqualTo
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarEvent.WarEventConditionTurnIndex, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarEvent.WecTurnIndexEqualTo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this WarEventConditionTurnIndex to JSON.
+         * Converts this WecTurnIndexEqualTo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a WarEventConditionTurnPhase. */
-    interface IWarEventConditionTurnPhase {
+    /** Properties of a WecTurnIndexGreaterThan. */
+    interface IWecTurnIndexGreaterThan {
 
-        /** WarEventConditionTurnPhase turnPhaseEqualTo */
-        turnPhaseEqualTo?: (number|null);
+        /** WecTurnIndexGreaterThan valueGreaterThan */
+        valueGreaterThan?: (number|null);
     }
 
-    /** Represents a WarEventConditionTurnPhase. */
-    class WarEventConditionTurnPhase implements IWarEventConditionTurnPhase {
+    /** Represents a WecTurnIndexGreaterThan. */
+    class WecTurnIndexGreaterThan implements IWecTurnIndexGreaterThan {
 
         /**
-         * Constructs a new WarEventConditionTurnPhase.
+         * Constructs a new WecTurnIndexGreaterThan.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarEvent.IWarEventConditionTurnPhase);
+        constructor(properties?: WarEvent.IWecTurnIndexGreaterThan);
 
-        /** WarEventConditionTurnPhase turnPhaseEqualTo. */
-        public turnPhaseEqualTo: number;
+        /** WecTurnIndexGreaterThan valueGreaterThan. */
+        public valueGreaterThan: number;
 
         /**
-         * Creates a new WarEventConditionTurnPhase instance using the specified properties.
+         * Creates a new WecTurnIndexGreaterThan instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns WarEventConditionTurnPhase instance
+         * @returns WecTurnIndexGreaterThan instance
          */
-        public static create(properties?: WarEvent.IWarEventConditionTurnPhase): WarEvent.WarEventConditionTurnPhase;
+        public static create(properties?: WarEvent.IWecTurnIndexGreaterThan): WarEvent.WecTurnIndexGreaterThan;
 
         /**
-         * Encodes the specified WarEventConditionTurnPhase message. Does not implicitly {@link WarEvent.WarEventConditionTurnPhase.verify|verify} messages.
-         * @param message WarEventConditionTurnPhase message or plain object to encode
+         * Encodes the specified WecTurnIndexGreaterThan message. Does not implicitly {@link WarEvent.WecTurnIndexGreaterThan.verify|verify} messages.
+         * @param message WecTurnIndexGreaterThan message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarEvent.IWarEventConditionTurnPhase, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarEvent.IWecTurnIndexGreaterThan, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified WarEventConditionTurnPhase message, length delimited. Does not implicitly {@link WarEvent.WarEventConditionTurnPhase.verify|verify} messages.
-         * @param message WarEventConditionTurnPhase message or plain object to encode
+         * Encodes the specified WecTurnIndexGreaterThan message, length delimited. Does not implicitly {@link WarEvent.WecTurnIndexGreaterThan.verify|verify} messages.
+         * @param message WecTurnIndexGreaterThan message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarEvent.IWarEventConditionTurnPhase, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarEvent.IWecTurnIndexGreaterThan, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a WarEventConditionTurnPhase message from the specified reader or buffer.
+         * Decodes a WecTurnIndexGreaterThan message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns WarEventConditionTurnPhase
+         * @returns WecTurnIndexGreaterThan
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WarEventConditionTurnPhase;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecTurnIndexGreaterThan;
 
         /**
-         * Decodes a WarEventConditionTurnPhase message from the specified reader or buffer, length delimited.
+         * Decodes a WecTurnIndexGreaterThan message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns WarEventConditionTurnPhase
+         * @returns WecTurnIndexGreaterThan
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WarEventConditionTurnPhase;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecTurnIndexGreaterThan;
 
         /**
-         * Verifies a WarEventConditionTurnPhase message.
+         * Verifies a WecTurnIndexGreaterThan message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a WarEventConditionTurnPhase message from a plain object. Also converts values to their respective internal types.
+         * Creates a WecTurnIndexGreaterThan message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns WarEventConditionTurnPhase
+         * @returns WecTurnIndexGreaterThan
          */
-        public static fromObject(object: { [k: string]: any }): WarEvent.WarEventConditionTurnPhase;
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecTurnIndexGreaterThan;
 
         /**
-         * Creates a plain object from a WarEventConditionTurnPhase message. Also converts values to other types if specified.
-         * @param message WarEventConditionTurnPhase
+         * Creates a plain object from a WecTurnIndexGreaterThan message. Also converts values to other types if specified.
+         * @param message WecTurnIndexGreaterThan
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarEvent.WarEventConditionTurnPhase, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarEvent.WecTurnIndexGreaterThan, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this WarEventConditionTurnPhase to JSON.
+         * Converts this WecTurnIndexGreaterThan to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a WarEventConditionPlayerIndexInTurn. */
-    interface IWarEventConditionPlayerIndexInTurn {
+    /** Properties of a WecTurnIndexLessThan. */
+    interface IWecTurnIndexLessThan {
 
-        /** WarEventConditionPlayerIndexInTurn playerIndexInTurnEqualTo */
-        playerIndexInTurnEqualTo?: (number|null);
-
-        /** WarEventConditionPlayerIndexInTurn playerIndexInTurnLessThan */
-        playerIndexInTurnLessThan?: (number|null);
-
-        /** WarEventConditionPlayerIndexInTurn playerIndexInTurnGreaterThan */
-        playerIndexInTurnGreaterThan?: (number|null);
+        /** WecTurnIndexLessThan valueLessThan */
+        valueLessThan?: (number|null);
     }
 
-    /** Represents a WarEventConditionPlayerIndexInTurn. */
-    class WarEventConditionPlayerIndexInTurn implements IWarEventConditionPlayerIndexInTurn {
+    /** Represents a WecTurnIndexLessThan. */
+    class WecTurnIndexLessThan implements IWecTurnIndexLessThan {
 
         /**
-         * Constructs a new WarEventConditionPlayerIndexInTurn.
+         * Constructs a new WecTurnIndexLessThan.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarEvent.IWarEventConditionPlayerIndexInTurn);
+        constructor(properties?: WarEvent.IWecTurnIndexLessThan);
 
-        /** WarEventConditionPlayerIndexInTurn playerIndexInTurnEqualTo. */
-        public playerIndexInTurnEqualTo: number;
-
-        /** WarEventConditionPlayerIndexInTurn playerIndexInTurnLessThan. */
-        public playerIndexInTurnLessThan: number;
-
-        /** WarEventConditionPlayerIndexInTurn playerIndexInTurnGreaterThan. */
-        public playerIndexInTurnGreaterThan: number;
+        /** WecTurnIndexLessThan valueLessThan. */
+        public valueLessThan: number;
 
         /**
-         * Creates a new WarEventConditionPlayerIndexInTurn instance using the specified properties.
+         * Creates a new WecTurnIndexLessThan instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns WarEventConditionPlayerIndexInTurn instance
+         * @returns WecTurnIndexLessThan instance
          */
-        public static create(properties?: WarEvent.IWarEventConditionPlayerIndexInTurn): WarEvent.WarEventConditionPlayerIndexInTurn;
+        public static create(properties?: WarEvent.IWecTurnIndexLessThan): WarEvent.WecTurnIndexLessThan;
 
         /**
-         * Encodes the specified WarEventConditionPlayerIndexInTurn message. Does not implicitly {@link WarEvent.WarEventConditionPlayerIndexInTurn.verify|verify} messages.
-         * @param message WarEventConditionPlayerIndexInTurn message or plain object to encode
+         * Encodes the specified WecTurnIndexLessThan message. Does not implicitly {@link WarEvent.WecTurnIndexLessThan.verify|verify} messages.
+         * @param message WecTurnIndexLessThan message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarEvent.IWarEventConditionPlayerIndexInTurn, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarEvent.IWecTurnIndexLessThan, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified WarEventConditionPlayerIndexInTurn message, length delimited. Does not implicitly {@link WarEvent.WarEventConditionPlayerIndexInTurn.verify|verify} messages.
-         * @param message WarEventConditionPlayerIndexInTurn message or plain object to encode
+         * Encodes the specified WecTurnIndexLessThan message, length delimited. Does not implicitly {@link WarEvent.WecTurnIndexLessThan.verify|verify} messages.
+         * @param message WecTurnIndexLessThan message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarEvent.IWarEventConditionPlayerIndexInTurn, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarEvent.IWecTurnIndexLessThan, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a WarEventConditionPlayerIndexInTurn message from the specified reader or buffer.
+         * Decodes a WecTurnIndexLessThan message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns WarEventConditionPlayerIndexInTurn
+         * @returns WecTurnIndexLessThan
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WarEventConditionPlayerIndexInTurn;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecTurnIndexLessThan;
 
         /**
-         * Decodes a WarEventConditionPlayerIndexInTurn message from the specified reader or buffer, length delimited.
+         * Decodes a WecTurnIndexLessThan message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns WarEventConditionPlayerIndexInTurn
+         * @returns WecTurnIndexLessThan
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WarEventConditionPlayerIndexInTurn;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecTurnIndexLessThan;
 
         /**
-         * Verifies a WarEventConditionPlayerIndexInTurn message.
+         * Verifies a WecTurnIndexLessThan message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a WarEventConditionPlayerIndexInTurn message from a plain object. Also converts values to their respective internal types.
+         * Creates a WecTurnIndexLessThan message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns WarEventConditionPlayerIndexInTurn
+         * @returns WecTurnIndexLessThan
          */
-        public static fromObject(object: { [k: string]: any }): WarEvent.WarEventConditionPlayerIndexInTurn;
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecTurnIndexLessThan;
 
         /**
-         * Creates a plain object from a WarEventConditionPlayerIndexInTurn message. Also converts values to other types if specified.
-         * @param message WarEventConditionPlayerIndexInTurn
+         * Creates a plain object from a WecTurnIndexLessThan message. Also converts values to other types if specified.
+         * @param message WecTurnIndexLessThan
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarEvent.WarEventConditionPlayerIndexInTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarEvent.WecTurnIndexLessThan, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this WarEventConditionPlayerIndexInTurn to JSON.
+         * Converts this WecTurnIndexLessThan to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a WarEventConditionPlayerAliveState. */
-    interface IWarEventConditionPlayerAliveState {
+    /** Properties of a WecTurnIndexRemainderEqualTo. */
+    interface IWecTurnIndexRemainderEqualTo {
 
-        /** WarEventConditionPlayerAliveState playerIndexEqualTo */
-        playerIndexEqualTo?: (number|null);
+        /** WecTurnIndexRemainderEqualTo divider */
+        divider?: (number|null);
 
-        /** WarEventConditionPlayerAliveState playerIndexLessThan */
-        playerIndexLessThan?: (number|null);
-
-        /** WarEventConditionPlayerAliveState playerIndexGreaterThan */
-        playerIndexGreaterThan?: (number|null);
-
-        /** WarEventConditionPlayerAliveState aliveStateEqualTo */
-        aliveStateEqualTo?: (number|null);
+        /** WecTurnIndexRemainderEqualTo remainderEqualTo */
+        remainderEqualTo?: (number|null);
     }
 
-    /** Represents a WarEventConditionPlayerAliveState. */
-    class WarEventConditionPlayerAliveState implements IWarEventConditionPlayerAliveState {
+    /** Represents a WecTurnIndexRemainderEqualTo. */
+    class WecTurnIndexRemainderEqualTo implements IWecTurnIndexRemainderEqualTo {
 
         /**
-         * Constructs a new WarEventConditionPlayerAliveState.
+         * Constructs a new WecTurnIndexRemainderEqualTo.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarEvent.IWarEventConditionPlayerAliveState);
+        constructor(properties?: WarEvent.IWecTurnIndexRemainderEqualTo);
 
-        /** WarEventConditionPlayerAliveState playerIndexEqualTo. */
-        public playerIndexEqualTo: number;
+        /** WecTurnIndexRemainderEqualTo divider. */
+        public divider: number;
 
-        /** WarEventConditionPlayerAliveState playerIndexLessThan. */
-        public playerIndexLessThan: number;
-
-        /** WarEventConditionPlayerAliveState playerIndexGreaterThan. */
-        public playerIndexGreaterThan: number;
-
-        /** WarEventConditionPlayerAliveState aliveStateEqualTo. */
-        public aliveStateEqualTo: number;
+        /** WecTurnIndexRemainderEqualTo remainderEqualTo. */
+        public remainderEqualTo: number;
 
         /**
-         * Creates a new WarEventConditionPlayerAliveState instance using the specified properties.
+         * Creates a new WecTurnIndexRemainderEqualTo instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns WarEventConditionPlayerAliveState instance
+         * @returns WecTurnIndexRemainderEqualTo instance
          */
-        public static create(properties?: WarEvent.IWarEventConditionPlayerAliveState): WarEvent.WarEventConditionPlayerAliveState;
+        public static create(properties?: WarEvent.IWecTurnIndexRemainderEqualTo): WarEvent.WecTurnIndexRemainderEqualTo;
 
         /**
-         * Encodes the specified WarEventConditionPlayerAliveState message. Does not implicitly {@link WarEvent.WarEventConditionPlayerAliveState.verify|verify} messages.
-         * @param message WarEventConditionPlayerAliveState message or plain object to encode
+         * Encodes the specified WecTurnIndexRemainderEqualTo message. Does not implicitly {@link WarEvent.WecTurnIndexRemainderEqualTo.verify|verify} messages.
+         * @param message WecTurnIndexRemainderEqualTo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarEvent.IWarEventConditionPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarEvent.IWecTurnIndexRemainderEqualTo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified WarEventConditionPlayerAliveState message, length delimited. Does not implicitly {@link WarEvent.WarEventConditionPlayerAliveState.verify|verify} messages.
-         * @param message WarEventConditionPlayerAliveState message or plain object to encode
+         * Encodes the specified WecTurnIndexRemainderEqualTo message, length delimited. Does not implicitly {@link WarEvent.WecTurnIndexRemainderEqualTo.verify|verify} messages.
+         * @param message WecTurnIndexRemainderEqualTo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarEvent.IWarEventConditionPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarEvent.IWecTurnIndexRemainderEqualTo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a WarEventConditionPlayerAliveState message from the specified reader or buffer.
+         * Decodes a WecTurnIndexRemainderEqualTo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns WarEventConditionPlayerAliveState
+         * @returns WecTurnIndexRemainderEqualTo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WarEventConditionPlayerAliveState;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecTurnIndexRemainderEqualTo;
 
         /**
-         * Decodes a WarEventConditionPlayerAliveState message from the specified reader or buffer, length delimited.
+         * Decodes a WecTurnIndexRemainderEqualTo message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns WarEventConditionPlayerAliveState
+         * @returns WecTurnIndexRemainderEqualTo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WarEventConditionPlayerAliveState;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecTurnIndexRemainderEqualTo;
 
         /**
-         * Verifies a WarEventConditionPlayerAliveState message.
+         * Verifies a WecTurnIndexRemainderEqualTo message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a WarEventConditionPlayerAliveState message from a plain object. Also converts values to their respective internal types.
+         * Creates a WecTurnIndexRemainderEqualTo message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns WarEventConditionPlayerAliveState
+         * @returns WecTurnIndexRemainderEqualTo
          */
-        public static fromObject(object: { [k: string]: any }): WarEvent.WarEventConditionPlayerAliveState;
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecTurnIndexRemainderEqualTo;
 
         /**
-         * Creates a plain object from a WarEventConditionPlayerAliveState message. Also converts values to other types if specified.
-         * @param message WarEventConditionPlayerAliveState
+         * Creates a plain object from a WecTurnIndexRemainderEqualTo message. Also converts values to other types if specified.
+         * @param message WecTurnIndexRemainderEqualTo
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarEvent.WarEventConditionPlayerAliveState, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarEvent.WecTurnIndexRemainderEqualTo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this WarEventConditionPlayerAliveState to JSON.
+         * Converts this WecTurnIndexRemainderEqualTo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a WarEventConditionEventCalledCount. */
-    interface IWarEventConditionEventCalledCount {
+    /** Properties of a WecTurnPhaseEqualTo. */
+    interface IWecTurnPhaseEqualTo {
 
-        /** WarEventConditionEventCalledCount eventIdEqualTo */
+        /** WecTurnPhaseEqualTo valueEqualTo */
+        valueEqualTo?: (number|null);
+    }
+
+    /** Represents a WecTurnPhaseEqualTo. */
+    class WecTurnPhaseEqualTo implements IWecTurnPhaseEqualTo {
+
+        /**
+         * Constructs a new WecTurnPhaseEqualTo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecTurnPhaseEqualTo);
+
+        /** WecTurnPhaseEqualTo valueEqualTo. */
+        public valueEqualTo: number;
+
+        /**
+         * Creates a new WecTurnPhaseEqualTo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecTurnPhaseEqualTo instance
+         */
+        public static create(properties?: WarEvent.IWecTurnPhaseEqualTo): WarEvent.WecTurnPhaseEqualTo;
+
+        /**
+         * Encodes the specified WecTurnPhaseEqualTo message. Does not implicitly {@link WarEvent.WecTurnPhaseEqualTo.verify|verify} messages.
+         * @param message WecTurnPhaseEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecTurnPhaseEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecTurnPhaseEqualTo message, length delimited. Does not implicitly {@link WarEvent.WecTurnPhaseEqualTo.verify|verify} messages.
+         * @param message WecTurnPhaseEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecTurnPhaseEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecTurnPhaseEqualTo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecTurnPhaseEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecTurnPhaseEqualTo;
+
+        /**
+         * Decodes a WecTurnPhaseEqualTo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecTurnPhaseEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecTurnPhaseEqualTo;
+
+        /**
+         * Verifies a WecTurnPhaseEqualTo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecTurnPhaseEqualTo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecTurnPhaseEqualTo
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecTurnPhaseEqualTo;
+
+        /**
+         * Creates a plain object from a WecTurnPhaseEqualTo message. Also converts values to other types if specified.
+         * @param message WecTurnPhaseEqualTo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecTurnPhaseEqualTo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecTurnPhaseEqualTo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecPlayerIndexInTurnEqualTo. */
+    interface IWecPlayerIndexInTurnEqualTo {
+
+        /** WecPlayerIndexInTurnEqualTo valueEqualTo */
+        valueEqualTo?: (number|null);
+    }
+
+    /** Represents a WecPlayerIndexInTurnEqualTo. */
+    class WecPlayerIndexInTurnEqualTo implements IWecPlayerIndexInTurnEqualTo {
+
+        /**
+         * Constructs a new WecPlayerIndexInTurnEqualTo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecPlayerIndexInTurnEqualTo);
+
+        /** WecPlayerIndexInTurnEqualTo valueEqualTo. */
+        public valueEqualTo: number;
+
+        /**
+         * Creates a new WecPlayerIndexInTurnEqualTo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecPlayerIndexInTurnEqualTo instance
+         */
+        public static create(properties?: WarEvent.IWecPlayerIndexInTurnEqualTo): WarEvent.WecPlayerIndexInTurnEqualTo;
+
+        /**
+         * Encodes the specified WecPlayerIndexInTurnEqualTo message. Does not implicitly {@link WarEvent.WecPlayerIndexInTurnEqualTo.verify|verify} messages.
+         * @param message WecPlayerIndexInTurnEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecPlayerIndexInTurnEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecPlayerIndexInTurnEqualTo message, length delimited. Does not implicitly {@link WarEvent.WecPlayerIndexInTurnEqualTo.verify|verify} messages.
+         * @param message WecPlayerIndexInTurnEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecPlayerIndexInTurnEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecPlayerIndexInTurnEqualTo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecPlayerIndexInTurnEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecPlayerIndexInTurnEqualTo;
+
+        /**
+         * Decodes a WecPlayerIndexInTurnEqualTo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecPlayerIndexInTurnEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecPlayerIndexInTurnEqualTo;
+
+        /**
+         * Verifies a WecPlayerIndexInTurnEqualTo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecPlayerIndexInTurnEqualTo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecPlayerIndexInTurnEqualTo
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecPlayerIndexInTurnEqualTo;
+
+        /**
+         * Creates a plain object from a WecPlayerIndexInTurnEqualTo message. Also converts values to other types if specified.
+         * @param message WecPlayerIndexInTurnEqualTo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecPlayerIndexInTurnEqualTo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecPlayerIndexInTurnEqualTo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecPlayerIndexInTurnGreaterThan. */
+    interface IWecPlayerIndexInTurnGreaterThan {
+
+        /** WecPlayerIndexInTurnGreaterThan valueGreaterThan */
+        valueGreaterThan?: (number|null);
+    }
+
+    /** Represents a WecPlayerIndexInTurnGreaterThan. */
+    class WecPlayerIndexInTurnGreaterThan implements IWecPlayerIndexInTurnGreaterThan {
+
+        /**
+         * Constructs a new WecPlayerIndexInTurnGreaterThan.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecPlayerIndexInTurnGreaterThan);
+
+        /** WecPlayerIndexInTurnGreaterThan valueGreaterThan. */
+        public valueGreaterThan: number;
+
+        /**
+         * Creates a new WecPlayerIndexInTurnGreaterThan instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecPlayerIndexInTurnGreaterThan instance
+         */
+        public static create(properties?: WarEvent.IWecPlayerIndexInTurnGreaterThan): WarEvent.WecPlayerIndexInTurnGreaterThan;
+
+        /**
+         * Encodes the specified WecPlayerIndexInTurnGreaterThan message. Does not implicitly {@link WarEvent.WecPlayerIndexInTurnGreaterThan.verify|verify} messages.
+         * @param message WecPlayerIndexInTurnGreaterThan message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecPlayerIndexInTurnGreaterThan, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecPlayerIndexInTurnGreaterThan message, length delimited. Does not implicitly {@link WarEvent.WecPlayerIndexInTurnGreaterThan.verify|verify} messages.
+         * @param message WecPlayerIndexInTurnGreaterThan message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecPlayerIndexInTurnGreaterThan, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecPlayerIndexInTurnGreaterThan message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecPlayerIndexInTurnGreaterThan
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecPlayerIndexInTurnGreaterThan;
+
+        /**
+         * Decodes a WecPlayerIndexInTurnGreaterThan message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecPlayerIndexInTurnGreaterThan
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecPlayerIndexInTurnGreaterThan;
+
+        /**
+         * Verifies a WecPlayerIndexInTurnGreaterThan message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecPlayerIndexInTurnGreaterThan message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecPlayerIndexInTurnGreaterThan
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecPlayerIndexInTurnGreaterThan;
+
+        /**
+         * Creates a plain object from a WecPlayerIndexInTurnGreaterThan message. Also converts values to other types if specified.
+         * @param message WecPlayerIndexInTurnGreaterThan
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecPlayerIndexInTurnGreaterThan, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecPlayerIndexInTurnGreaterThan to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecPlayerIndexInTurnLessThan. */
+    interface IWecPlayerIndexInTurnLessThan {
+
+        /** WecPlayerIndexInTurnLessThan valueLessThan */
+        valueLessThan?: (number|null);
+    }
+
+    /** Represents a WecPlayerIndexInTurnLessThan. */
+    class WecPlayerIndexInTurnLessThan implements IWecPlayerIndexInTurnLessThan {
+
+        /**
+         * Constructs a new WecPlayerIndexInTurnLessThan.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecPlayerIndexInTurnLessThan);
+
+        /** WecPlayerIndexInTurnLessThan valueLessThan. */
+        public valueLessThan: number;
+
+        /**
+         * Creates a new WecPlayerIndexInTurnLessThan instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecPlayerIndexInTurnLessThan instance
+         */
+        public static create(properties?: WarEvent.IWecPlayerIndexInTurnLessThan): WarEvent.WecPlayerIndexInTurnLessThan;
+
+        /**
+         * Encodes the specified WecPlayerIndexInTurnLessThan message. Does not implicitly {@link WarEvent.WecPlayerIndexInTurnLessThan.verify|verify} messages.
+         * @param message WecPlayerIndexInTurnLessThan message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecPlayerIndexInTurnLessThan, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecPlayerIndexInTurnLessThan message, length delimited. Does not implicitly {@link WarEvent.WecPlayerIndexInTurnLessThan.verify|verify} messages.
+         * @param message WecPlayerIndexInTurnLessThan message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecPlayerIndexInTurnLessThan, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecPlayerIndexInTurnLessThan message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecPlayerIndexInTurnLessThan
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecPlayerIndexInTurnLessThan;
+
+        /**
+         * Decodes a WecPlayerIndexInTurnLessThan message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecPlayerIndexInTurnLessThan
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecPlayerIndexInTurnLessThan;
+
+        /**
+         * Verifies a WecPlayerIndexInTurnLessThan message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecPlayerIndexInTurnLessThan message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecPlayerIndexInTurnLessThan
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecPlayerIndexInTurnLessThan;
+
+        /**
+         * Creates a plain object from a WecPlayerIndexInTurnLessThan message. Also converts values to other types if specified.
+         * @param message WecPlayerIndexInTurnLessThan
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecPlayerIndexInTurnLessThan, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecPlayerIndexInTurnLessThan to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecEventCalledCountTotalEqualTo. */
+    interface IWecEventCalledCountTotalEqualTo {
+
+        /** WecEventCalledCountTotalEqualTo eventIdEqualTo */
         eventIdEqualTo?: (number|null);
 
-        /** WarEventConditionEventCalledCount countEqualTo */
+        /** WecEventCalledCountTotalEqualTo countEqualTo */
         countEqualTo?: (number|null);
+    }
 
-        /** WarEventConditionEventCalledCount countLessThan */
-        countLessThan?: (number|null);
+    /** Represents a WecEventCalledCountTotalEqualTo. */
+    class WecEventCalledCountTotalEqualTo implements IWecEventCalledCountTotalEqualTo {
 
-        /** WarEventConditionEventCalledCount countGreaterThan */
+        /**
+         * Constructs a new WecEventCalledCountTotalEqualTo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecEventCalledCountTotalEqualTo);
+
+        /** WecEventCalledCountTotalEqualTo eventIdEqualTo. */
+        public eventIdEqualTo: number;
+
+        /** WecEventCalledCountTotalEqualTo countEqualTo. */
+        public countEqualTo: number;
+
+        /**
+         * Creates a new WecEventCalledCountTotalEqualTo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecEventCalledCountTotalEqualTo instance
+         */
+        public static create(properties?: WarEvent.IWecEventCalledCountTotalEqualTo): WarEvent.WecEventCalledCountTotalEqualTo;
+
+        /**
+         * Encodes the specified WecEventCalledCountTotalEqualTo message. Does not implicitly {@link WarEvent.WecEventCalledCountTotalEqualTo.verify|verify} messages.
+         * @param message WecEventCalledCountTotalEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecEventCalledCountTotalEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecEventCalledCountTotalEqualTo message, length delimited. Does not implicitly {@link WarEvent.WecEventCalledCountTotalEqualTo.verify|verify} messages.
+         * @param message WecEventCalledCountTotalEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecEventCalledCountTotalEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecEventCalledCountTotalEqualTo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecEventCalledCountTotalEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecEventCalledCountTotalEqualTo;
+
+        /**
+         * Decodes a WecEventCalledCountTotalEqualTo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecEventCalledCountTotalEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecEventCalledCountTotalEqualTo;
+
+        /**
+         * Verifies a WecEventCalledCountTotalEqualTo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecEventCalledCountTotalEqualTo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecEventCalledCountTotalEqualTo
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecEventCalledCountTotalEqualTo;
+
+        /**
+         * Creates a plain object from a WecEventCalledCountTotalEqualTo message. Also converts values to other types if specified.
+         * @param message WecEventCalledCountTotalEqualTo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecEventCalledCountTotalEqualTo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecEventCalledCountTotalEqualTo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecEventCalledCountTotalGreaterThan. */
+    interface IWecEventCalledCountTotalGreaterThan {
+
+        /** WecEventCalledCountTotalGreaterThan eventIdEqualTo */
+        eventIdEqualTo?: (number|null);
+
+        /** WecEventCalledCountTotalGreaterThan countGreaterThan */
         countGreaterThan?: (number|null);
     }
 
-    /** Represents a WarEventConditionEventCalledCount. */
-    class WarEventConditionEventCalledCount implements IWarEventConditionEventCalledCount {
+    /** Represents a WecEventCalledCountTotalGreaterThan. */
+    class WecEventCalledCountTotalGreaterThan implements IWecEventCalledCountTotalGreaterThan {
 
         /**
-         * Constructs a new WarEventConditionEventCalledCount.
+         * Constructs a new WecEventCalledCountTotalGreaterThan.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarEvent.IWarEventConditionEventCalledCount);
+        constructor(properties?: WarEvent.IWecEventCalledCountTotalGreaterThan);
 
-        /** WarEventConditionEventCalledCount eventIdEqualTo. */
+        /** WecEventCalledCountTotalGreaterThan eventIdEqualTo. */
         public eventIdEqualTo: number;
 
-        /** WarEventConditionEventCalledCount countEqualTo. */
-        public countEqualTo: number;
-
-        /** WarEventConditionEventCalledCount countLessThan. */
-        public countLessThan: number;
-
-        /** WarEventConditionEventCalledCount countGreaterThan. */
+        /** WecEventCalledCountTotalGreaterThan countGreaterThan. */
         public countGreaterThan: number;
 
         /**
-         * Creates a new WarEventConditionEventCalledCount instance using the specified properties.
+         * Creates a new WecEventCalledCountTotalGreaterThan instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns WarEventConditionEventCalledCount instance
+         * @returns WecEventCalledCountTotalGreaterThan instance
          */
-        public static create(properties?: WarEvent.IWarEventConditionEventCalledCount): WarEvent.WarEventConditionEventCalledCount;
+        public static create(properties?: WarEvent.IWecEventCalledCountTotalGreaterThan): WarEvent.WecEventCalledCountTotalGreaterThan;
 
         /**
-         * Encodes the specified WarEventConditionEventCalledCount message. Does not implicitly {@link WarEvent.WarEventConditionEventCalledCount.verify|verify} messages.
-         * @param message WarEventConditionEventCalledCount message or plain object to encode
+         * Encodes the specified WecEventCalledCountTotalGreaterThan message. Does not implicitly {@link WarEvent.WecEventCalledCountTotalGreaterThan.verify|verify} messages.
+         * @param message WecEventCalledCountTotalGreaterThan message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarEvent.IWarEventConditionEventCalledCount, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarEvent.IWecEventCalledCountTotalGreaterThan, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified WarEventConditionEventCalledCount message, length delimited. Does not implicitly {@link WarEvent.WarEventConditionEventCalledCount.verify|verify} messages.
-         * @param message WarEventConditionEventCalledCount message or plain object to encode
+         * Encodes the specified WecEventCalledCountTotalGreaterThan message, length delimited. Does not implicitly {@link WarEvent.WecEventCalledCountTotalGreaterThan.verify|verify} messages.
+         * @param message WecEventCalledCountTotalGreaterThan message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarEvent.IWarEventConditionEventCalledCount, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarEvent.IWecEventCalledCountTotalGreaterThan, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a WarEventConditionEventCalledCount message from the specified reader or buffer.
+         * Decodes a WecEventCalledCountTotalGreaterThan message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns WarEventConditionEventCalledCount
+         * @returns WecEventCalledCountTotalGreaterThan
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WarEventConditionEventCalledCount;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecEventCalledCountTotalGreaterThan;
 
         /**
-         * Decodes a WarEventConditionEventCalledCount message from the specified reader or buffer, length delimited.
+         * Decodes a WecEventCalledCountTotalGreaterThan message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns WarEventConditionEventCalledCount
+         * @returns WecEventCalledCountTotalGreaterThan
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WarEventConditionEventCalledCount;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecEventCalledCountTotalGreaterThan;
 
         /**
-         * Verifies a WarEventConditionEventCalledCount message.
+         * Verifies a WecEventCalledCountTotalGreaterThan message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a WarEventConditionEventCalledCount message from a plain object. Also converts values to their respective internal types.
+         * Creates a WecEventCalledCountTotalGreaterThan message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns WarEventConditionEventCalledCount
+         * @returns WecEventCalledCountTotalGreaterThan
          */
-        public static fromObject(object: { [k: string]: any }): WarEvent.WarEventConditionEventCalledCount;
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecEventCalledCountTotalGreaterThan;
 
         /**
-         * Creates a plain object from a WarEventConditionEventCalledCount message. Also converts values to other types if specified.
-         * @param message WarEventConditionEventCalledCount
+         * Creates a plain object from a WecEventCalledCountTotalGreaterThan message. Also converts values to other types if specified.
+         * @param message WecEventCalledCountTotalGreaterThan
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarEvent.WarEventConditionEventCalledCount, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarEvent.WecEventCalledCountTotalGreaterThan, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this WarEventConditionEventCalledCount to JSON.
+         * Converts this WecEventCalledCountTotalGreaterThan to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecEventCalledCountTotalLessThan. */
+    interface IWecEventCalledCountTotalLessThan {
+
+        /** WecEventCalledCountTotalLessThan eventIdEqualTo */
+        eventIdEqualTo?: (number|null);
+
+        /** WecEventCalledCountTotalLessThan countLessThan */
+        countLessThan?: (number|null);
+    }
+
+    /** Represents a WecEventCalledCountTotalLessThan. */
+    class WecEventCalledCountTotalLessThan implements IWecEventCalledCountTotalLessThan {
+
+        /**
+         * Constructs a new WecEventCalledCountTotalLessThan.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecEventCalledCountTotalLessThan);
+
+        /** WecEventCalledCountTotalLessThan eventIdEqualTo. */
+        public eventIdEqualTo: number;
+
+        /** WecEventCalledCountTotalLessThan countLessThan. */
+        public countLessThan: number;
+
+        /**
+         * Creates a new WecEventCalledCountTotalLessThan instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecEventCalledCountTotalLessThan instance
+         */
+        public static create(properties?: WarEvent.IWecEventCalledCountTotalLessThan): WarEvent.WecEventCalledCountTotalLessThan;
+
+        /**
+         * Encodes the specified WecEventCalledCountTotalLessThan message. Does not implicitly {@link WarEvent.WecEventCalledCountTotalLessThan.verify|verify} messages.
+         * @param message WecEventCalledCountTotalLessThan message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecEventCalledCountTotalLessThan, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecEventCalledCountTotalLessThan message, length delimited. Does not implicitly {@link WarEvent.WecEventCalledCountTotalLessThan.verify|verify} messages.
+         * @param message WecEventCalledCountTotalLessThan message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecEventCalledCountTotalLessThan, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecEventCalledCountTotalLessThan message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecEventCalledCountTotalLessThan
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecEventCalledCountTotalLessThan;
+
+        /**
+         * Decodes a WecEventCalledCountTotalLessThan message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecEventCalledCountTotalLessThan
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecEventCalledCountTotalLessThan;
+
+        /**
+         * Verifies a WecEventCalledCountTotalLessThan message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecEventCalledCountTotalLessThan message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecEventCalledCountTotalLessThan
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecEventCalledCountTotalLessThan;
+
+        /**
+         * Creates a plain object from a WecEventCalledCountTotalLessThan message. Also converts values to other types if specified.
+         * @param message WecEventCalledCountTotalLessThan
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecEventCalledCountTotalLessThan, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecEventCalledCountTotalLessThan to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a WecPlayerAliveStateEqualTo. */
+    interface IWecPlayerAliveStateEqualTo {
+
+        /** WecPlayerAliveStateEqualTo playerIndexEqualTo */
+        playerIndexEqualTo?: (number|null);
+
+        /** WecPlayerAliveStateEqualTo aliveStateEqualTo */
+        aliveStateEqualTo?: (number|null);
+    }
+
+    /** Represents a WecPlayerAliveStateEqualTo. */
+    class WecPlayerAliveStateEqualTo implements IWecPlayerAliveStateEqualTo {
+
+        /**
+         * Constructs a new WecPlayerAliveStateEqualTo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWecPlayerAliveStateEqualTo);
+
+        /** WecPlayerAliveStateEqualTo playerIndexEqualTo. */
+        public playerIndexEqualTo: number;
+
+        /** WecPlayerAliveStateEqualTo aliveStateEqualTo. */
+        public aliveStateEqualTo: number;
+
+        /**
+         * Creates a new WecPlayerAliveStateEqualTo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WecPlayerAliveStateEqualTo instance
+         */
+        public static create(properties?: WarEvent.IWecPlayerAliveStateEqualTo): WarEvent.WecPlayerAliveStateEqualTo;
+
+        /**
+         * Encodes the specified WecPlayerAliveStateEqualTo message. Does not implicitly {@link WarEvent.WecPlayerAliveStateEqualTo.verify|verify} messages.
+         * @param message WecPlayerAliveStateEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWecPlayerAliveStateEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WecPlayerAliveStateEqualTo message, length delimited. Does not implicitly {@link WarEvent.WecPlayerAliveStateEqualTo.verify|verify} messages.
+         * @param message WecPlayerAliveStateEqualTo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWecPlayerAliveStateEqualTo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WecPlayerAliveStateEqualTo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WecPlayerAliveStateEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WecPlayerAliveStateEqualTo;
+
+        /**
+         * Decodes a WecPlayerAliveStateEqualTo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WecPlayerAliveStateEqualTo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WecPlayerAliveStateEqualTo;
+
+        /**
+         * Verifies a WecPlayerAliveStateEqualTo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WecPlayerAliveStateEqualTo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WecPlayerAliveStateEqualTo
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WecPlayerAliveStateEqualTo;
+
+        /**
+         * Creates a plain object from a WecPlayerAliveStateEqualTo message. Also converts values to other types if specified.
+         * @param message WecPlayerAliveStateEqualTo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WecPlayerAliveStateEqualTo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WecPlayerAliveStateEqualTo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -3876,23 +4470,44 @@ export declare namespace WarEvent {
     /** Properties of a WarEventCondition. */
     interface IWarEventCondition {
 
-        /** WarEventCondition WarEventConditionCommonData */
-        WarEventConditionCommonData?: (WarEvent.IWarEventConditionCommonData|null);
+        /** WarEventCondition WecCommonData */
+        WecCommonData?: (WarEvent.IWecCommonData|null);
 
-        /** WarEventCondition WarEventConditionTurnIndex */
-        WarEventConditionTurnIndex?: (WarEvent.IWarEventConditionTurnIndex|null);
+        /** WarEventCondition WecTurnIndexEqualTo */
+        WecTurnIndexEqualTo?: (WarEvent.IWecTurnIndexEqualTo|null);
 
-        /** WarEventCondition WarEventConditionTurnPhase */
-        WarEventConditionTurnPhase?: (WarEvent.IWarEventConditionTurnPhase|null);
+        /** WarEventCondition WecTurnIndexGreaterThan */
+        WecTurnIndexGreaterThan?: (WarEvent.IWecTurnIndexGreaterThan|null);
 
-        /** WarEventCondition WarEventConditionPlayerIndexInTurn */
-        WarEventConditionPlayerIndexInTurn?: (WarEvent.IWarEventConditionPlayerIndexInTurn|null);
+        /** WarEventCondition WecTurnIndexLessThan */
+        WecTurnIndexLessThan?: (WarEvent.IWecTurnIndexLessThan|null);
 
-        /** WarEventCondition WarEventConditionPlayerAliveState */
-        WarEventConditionPlayerAliveState?: (WarEvent.IWarEventConditionPlayerAliveState|null);
+        /** WarEventCondition WecTurnIndexRemainderEqualTo */
+        WecTurnIndexRemainderEqualTo?: (WarEvent.IWecTurnIndexRemainderEqualTo|null);
 
-        /** WarEventCondition WarEventConditionEventCalledCount */
-        WarEventConditionEventCalledCount?: (WarEvent.IWarEventConditionEventCalledCount|null);
+        /** WarEventCondition WecTurnPhaseEqualTo */
+        WecTurnPhaseEqualTo?: (WarEvent.IWecTurnPhaseEqualTo|null);
+
+        /** WarEventCondition WecPlayerIndexInTurnEqualTo */
+        WecPlayerIndexInTurnEqualTo?: (WarEvent.IWecPlayerIndexInTurnEqualTo|null);
+
+        /** WarEventCondition WecPlayerIndexInTurnGreaterThan */
+        WecPlayerIndexInTurnGreaterThan?: (WarEvent.IWecPlayerIndexInTurnGreaterThan|null);
+
+        /** WarEventCondition WecPlayerIndexInTurnLessThan */
+        WecPlayerIndexInTurnLessThan?: (WarEvent.IWecPlayerIndexInTurnLessThan|null);
+
+        /** WarEventCondition WecEventCalledCountTotalEqualTo */
+        WecEventCalledCountTotalEqualTo?: (WarEvent.IWecEventCalledCountTotalEqualTo|null);
+
+        /** WarEventCondition WecEventCalledCountTotalGreaterThan */
+        WecEventCalledCountTotalGreaterThan?: (WarEvent.IWecEventCalledCountTotalGreaterThan|null);
+
+        /** WarEventCondition WecEventCalledCountTotalLessThan */
+        WecEventCalledCountTotalLessThan?: (WarEvent.IWecEventCalledCountTotalLessThan|null);
+
+        /** WarEventCondition WecPlayerAliveStateEqualTo */
+        WecPlayerAliveStateEqualTo?: (WarEvent.IWecPlayerAliveStateEqualTo|null);
     }
 
     /** Represents a WarEventCondition. */
@@ -3904,23 +4519,44 @@ export declare namespace WarEvent {
          */
         constructor(properties?: WarEvent.IWarEventCondition);
 
-        /** WarEventCondition WarEventConditionCommonData. */
-        public WarEventConditionCommonData?: (WarEvent.IWarEventConditionCommonData|null);
+        /** WarEventCondition WecCommonData. */
+        public WecCommonData?: (WarEvent.IWecCommonData|null);
 
-        /** WarEventCondition WarEventConditionTurnIndex. */
-        public WarEventConditionTurnIndex?: (WarEvent.IWarEventConditionTurnIndex|null);
+        /** WarEventCondition WecTurnIndexEqualTo. */
+        public WecTurnIndexEqualTo?: (WarEvent.IWecTurnIndexEqualTo|null);
 
-        /** WarEventCondition WarEventConditionTurnPhase. */
-        public WarEventConditionTurnPhase?: (WarEvent.IWarEventConditionTurnPhase|null);
+        /** WarEventCondition WecTurnIndexGreaterThan. */
+        public WecTurnIndexGreaterThan?: (WarEvent.IWecTurnIndexGreaterThan|null);
 
-        /** WarEventCondition WarEventConditionPlayerIndexInTurn. */
-        public WarEventConditionPlayerIndexInTurn?: (WarEvent.IWarEventConditionPlayerIndexInTurn|null);
+        /** WarEventCondition WecTurnIndexLessThan. */
+        public WecTurnIndexLessThan?: (WarEvent.IWecTurnIndexLessThan|null);
 
-        /** WarEventCondition WarEventConditionPlayerAliveState. */
-        public WarEventConditionPlayerAliveState?: (WarEvent.IWarEventConditionPlayerAliveState|null);
+        /** WarEventCondition WecTurnIndexRemainderEqualTo. */
+        public WecTurnIndexRemainderEqualTo?: (WarEvent.IWecTurnIndexRemainderEqualTo|null);
 
-        /** WarEventCondition WarEventConditionEventCalledCount. */
-        public WarEventConditionEventCalledCount?: (WarEvent.IWarEventConditionEventCalledCount|null);
+        /** WarEventCondition WecTurnPhaseEqualTo. */
+        public WecTurnPhaseEqualTo?: (WarEvent.IWecTurnPhaseEqualTo|null);
+
+        /** WarEventCondition WecPlayerIndexInTurnEqualTo. */
+        public WecPlayerIndexInTurnEqualTo?: (WarEvent.IWecPlayerIndexInTurnEqualTo|null);
+
+        /** WarEventCondition WecPlayerIndexInTurnGreaterThan. */
+        public WecPlayerIndexInTurnGreaterThan?: (WarEvent.IWecPlayerIndexInTurnGreaterThan|null);
+
+        /** WarEventCondition WecPlayerIndexInTurnLessThan. */
+        public WecPlayerIndexInTurnLessThan?: (WarEvent.IWecPlayerIndexInTurnLessThan|null);
+
+        /** WarEventCondition WecEventCalledCountTotalEqualTo. */
+        public WecEventCalledCountTotalEqualTo?: (WarEvent.IWecEventCalledCountTotalEqualTo|null);
+
+        /** WarEventCondition WecEventCalledCountTotalGreaterThan. */
+        public WecEventCalledCountTotalGreaterThan?: (WarEvent.IWecEventCalledCountTotalGreaterThan|null);
+
+        /** WarEventCondition WecEventCalledCountTotalLessThan. */
+        public WecEventCalledCountTotalLessThan?: (WarEvent.IWecEventCalledCountTotalLessThan|null);
+
+        /** WarEventCondition WecPlayerAliveStateEqualTo. */
+        public WecPlayerAliveStateEqualTo?: (WarEvent.IWecPlayerAliveStateEqualTo|null);
 
         /**
          * Creates a new WarEventCondition instance using the specified properties.
@@ -4289,8 +4925,11 @@ export declare namespace WarEvent {
             /** DataForAddUnit unitData */
             unitData?: (WarSerialization.ISerialUnit|null);
 
-            /** DataForAddUnit canBeBlocked */
-            canBeBlocked?: (boolean|null);
+            /** DataForAddUnit canBeBlockedByUnit */
+            canBeBlockedByUnit?: (boolean|null);
+
+            /** DataForAddUnit needMovableTile */
+            needMovableTile?: (boolean|null);
         }
 
         /** Represents a DataForAddUnit. */
@@ -4305,8 +4944,11 @@ export declare namespace WarEvent {
             /** DataForAddUnit unitData. */
             public unitData?: (WarSerialization.ISerialUnit|null);
 
-            /** DataForAddUnit canBeBlocked. */
-            public canBeBlocked: boolean;
+            /** DataForAddUnit canBeBlockedByUnit. */
+            public canBeBlockedByUnit: boolean;
+
+            /** DataForAddUnit needMovableTile. */
+            public needMovableTile: boolean;
 
             /**
              * Creates a new DataForAddUnit instance using the specified properties.
@@ -7275,91 +7917,97 @@ export declare namespace WarSerialization {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a SerialWarEventData. */
-    interface ISerialWarEventData {
+    /** Properties of a SerialWarEventManager. */
+    interface ISerialWarEventManager {
 
-        /** SerialWarEventData calledCountList */
+        /** SerialWarEventManager warEventData */
+        warEventData?: (Map.IDataForWarEvent|null);
+
+        /** SerialWarEventManager calledCountList */
         calledCountList?: (WarSerialization.IDataForWarEventCalledCount[]|null);
     }
 
-    /** Represents a SerialWarEventData. */
-    class SerialWarEventData implements ISerialWarEventData {
+    /** Represents a SerialWarEventManager. */
+    class SerialWarEventManager implements ISerialWarEventManager {
 
         /**
-         * Constructs a new SerialWarEventData.
+         * Constructs a new SerialWarEventManager.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarSerialization.ISerialWarEventData);
+        constructor(properties?: WarSerialization.ISerialWarEventManager);
 
-        /** SerialWarEventData calledCountList. */
+        /** SerialWarEventManager warEventData. */
+        public warEventData?: (Map.IDataForWarEvent|null);
+
+        /** SerialWarEventManager calledCountList. */
         public calledCountList: WarSerialization.IDataForWarEventCalledCount[];
 
         /**
-         * Creates a new SerialWarEventData instance using the specified properties.
+         * Creates a new SerialWarEventManager instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns SerialWarEventData instance
+         * @returns SerialWarEventManager instance
          */
-        public static create(properties?: WarSerialization.ISerialWarEventData): WarSerialization.SerialWarEventData;
+        public static create(properties?: WarSerialization.ISerialWarEventManager): WarSerialization.SerialWarEventManager;
 
         /**
-         * Encodes the specified SerialWarEventData message. Does not implicitly {@link WarSerialization.SerialWarEventData.verify|verify} messages.
-         * @param message SerialWarEventData message or plain object to encode
+         * Encodes the specified SerialWarEventManager message. Does not implicitly {@link WarSerialization.SerialWarEventManager.verify|verify} messages.
+         * @param message SerialWarEventManager message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarSerialization.ISerialWarEventData, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarSerialization.ISerialWarEventManager, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified SerialWarEventData message, length delimited. Does not implicitly {@link WarSerialization.SerialWarEventData.verify|verify} messages.
-         * @param message SerialWarEventData message or plain object to encode
+         * Encodes the specified SerialWarEventManager message, length delimited. Does not implicitly {@link WarSerialization.SerialWarEventManager.verify|verify} messages.
+         * @param message SerialWarEventManager message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarSerialization.ISerialWarEventData, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarSerialization.ISerialWarEventManager, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a SerialWarEventData message from the specified reader or buffer.
+         * Decodes a SerialWarEventManager message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns SerialWarEventData
+         * @returns SerialWarEventManager
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.SerialWarEventData;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSerialization.SerialWarEventManager;
 
         /**
-         * Decodes a SerialWarEventData message from the specified reader or buffer, length delimited.
+         * Decodes a SerialWarEventManager message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns SerialWarEventData
+         * @returns SerialWarEventManager
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.SerialWarEventData;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSerialization.SerialWarEventManager;
 
         /**
-         * Verifies a SerialWarEventData message.
+         * Verifies a SerialWarEventManager message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a SerialWarEventData message from a plain object. Also converts values to their respective internal types.
+         * Creates a SerialWarEventManager message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns SerialWarEventData
+         * @returns SerialWarEventManager
          */
-        public static fromObject(object: { [k: string]: any }): WarSerialization.SerialWarEventData;
+        public static fromObject(object: { [k: string]: any }): WarSerialization.SerialWarEventManager;
 
         /**
-         * Creates a plain object from a SerialWarEventData message. Also converts values to other types if specified.
-         * @param message SerialWarEventData
+         * Creates a plain object from a SerialWarEventManager message. Also converts values to other types if specified.
+         * @param message SerialWarEventManager
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarSerialization.SerialWarEventData, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarSerialization.SerialWarEventManager, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this SerialWarEventData to JSON.
+         * Converts this SerialWarEventManager to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -7410,8 +8058,8 @@ export declare namespace WarSerialization {
         /** SerialWar field */
         field?: (WarSerialization.ISerialField|null);
 
-        /** SerialWar warEventData */
-        warEventData?: (WarSerialization.ISerialWarEventData|null);
+        /** SerialWar warEventManager */
+        warEventManager?: (WarSerialization.ISerialWarEventManager|null);
     }
 
     /** Represents a SerialWar. */
@@ -7465,8 +8113,8 @@ export declare namespace WarSerialization {
         /** SerialWar field. */
         public field?: (WarSerialization.ISerialField|null);
 
-        /** SerialWar warEventData. */
-        public warEventData?: (WarSerialization.ISerialWarEventData|null);
+        /** SerialWar warEventManager. */
+        public warEventManager?: (WarSerialization.ISerialWarEventManager|null);
 
         /**
          * Creates a new SerialWar instance using the specified properties.
@@ -7629,8 +8277,11 @@ export declare namespace WarAction {
     /** Properties of a WarActionSystemCallWarEvent. */
     interface IWarActionSystemCallWarEvent {
 
-        /** WarActionSystemCallWarEvent eventId */
-        eventId?: (number|null);
+        /** WarActionSystemCallWarEvent warEventId */
+        warEventId?: (number|null);
+
+        /** WarActionSystemCallWarEvent extraDataList */
+        extraDataList?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent[]|null);
     }
 
     /** Represents a WarActionSystemCallWarEvent. */
@@ -7642,8 +8293,11 @@ export declare namespace WarAction {
          */
         constructor(properties?: WarAction.IWarActionSystemCallWarEvent);
 
-        /** WarActionSystemCallWarEvent eventId. */
-        public eventId: number;
+        /** WarActionSystemCallWarEvent warEventId. */
+        public warEventId: number;
+
+        /** WarActionSystemCallWarEvent extraDataList. */
+        public extraDataList: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent[];
 
         /**
          * Creates a new WarActionSystemCallWarEvent instance using the specified properties.
@@ -7714,6 +8368,195 @@ export declare namespace WarAction {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionSystemCallWarEvent {
+
+        /** Properties of an ExtraDataForWeaAddUnit. */
+        interface IExtraDataForWeaAddUnit {
+
+            /** ExtraDataForWeaAddUnit unitList */
+            unitList?: (WarSerialization.ISerialUnit[]|null);
+        }
+
+        /** Represents an ExtraDataForWeaAddUnit. */
+        class ExtraDataForWeaAddUnit implements IExtraDataForWeaAddUnit {
+
+            /**
+             * Constructs a new ExtraDataForWeaAddUnit.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit);
+
+            /** ExtraDataForWeaAddUnit unitList. */
+            public unitList: WarSerialization.ISerialUnit[];
+
+            /**
+             * Creates a new ExtraDataForWeaAddUnit instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForWeaAddUnit instance
+             */
+            public static create(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit): WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit;
+
+            /**
+             * Encodes the specified ExtraDataForWeaAddUnit message. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit.verify|verify} messages.
+             * @param message ExtraDataForWeaAddUnit message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForWeaAddUnit message, length delimited. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit.verify|verify} messages.
+             * @param message ExtraDataForWeaAddUnit message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForWeaAddUnit message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForWeaAddUnit
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit;
+
+            /**
+             * Decodes an ExtraDataForWeaAddUnit message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForWeaAddUnit
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit;
+
+            /**
+             * Verifies an ExtraDataForWeaAddUnit message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForWeaAddUnit message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForWeaAddUnit
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit;
+
+            /**
+             * Creates a plain object from an ExtraDataForWeaAddUnit message. Also converts values to other types if specified.
+             * @param message ExtraDataForWeaAddUnit
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionSystemCallWarEvent.ExtraDataForWeaAddUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForWeaAddUnit to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of an ExtraDataForSystemCallWarEvent. */
+        interface IExtraDataForSystemCallWarEvent {
+
+            /** ExtraDataForSystemCallWarEvent warEventActionId */
+            warEventActionId?: (number|null);
+
+            /** ExtraDataForSystemCallWarEvent ExtraDataForWeaAddUnit */
+            ExtraDataForWeaAddUnit?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit|null);
+        }
+
+        /** Represents an ExtraDataForSystemCallWarEvent. */
+        class ExtraDataForSystemCallWarEvent implements IExtraDataForSystemCallWarEvent {
+
+            /**
+             * Constructs a new ExtraDataForSystemCallWarEvent.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent);
+
+            /** ExtraDataForSystemCallWarEvent warEventActionId. */
+            public warEventActionId: number;
+
+            /** ExtraDataForSystemCallWarEvent ExtraDataForWeaAddUnit. */
+            public ExtraDataForWeaAddUnit?: (WarAction.WarActionSystemCallWarEvent.IExtraDataForWeaAddUnit|null);
+
+            /**
+             * Creates a new ExtraDataForSystemCallWarEvent instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForSystemCallWarEvent instance
+             */
+            public static create(properties?: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent): WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent;
+
+            /**
+             * Encodes the specified ExtraDataForSystemCallWarEvent message. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent.verify|verify} messages.
+             * @param message ExtraDataForSystemCallWarEvent message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemCallWarEvent message, length delimited. Does not implicitly {@link WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent.verify|verify} messages.
+             * @param message ExtraDataForSystemCallWarEvent message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForSystemCallWarEvent message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForSystemCallWarEvent
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent;
+
+            /**
+             * Decodes an ExtraDataForSystemCallWarEvent message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForSystemCallWarEvent
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent;
+
+            /**
+             * Verifies an ExtraDataForSystemCallWarEvent message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForSystemCallWarEvent message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForSystemCallWarEvent
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent;
+
+            /**
+             * Creates a plain object from an ExtraDataForSystemCallWarEvent message. Also converts values to other types if specified.
+             * @param message ExtraDataForSystemCallWarEvent
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionSystemCallWarEvent.ExtraDataForSystemCallWarEvent, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForSystemCallWarEvent to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Properties of a WarActionSystemDestroyPlayerForce. */
@@ -13869,8 +14712,8 @@ export declare namespace Structure {
         /** DataForPlayerRank warType */
         warType?: (number|null);
 
-        /** DataForPlayerRank playersCount */
-        playersCount?: (number|null);
+        /** DataForPlayerRank playersCountUnneutral */
+        playersCountUnneutral?: (number|null);
 
         /** DataForPlayerRank userId */
         userId?: (number|null);
@@ -13888,8 +14731,8 @@ export declare namespace Structure {
         /** DataForPlayerRank warType. */
         public warType: number;
 
-        /** DataForPlayerRank playersCount. */
-        public playersCount: number;
+        /** DataForPlayerRank playersCountUnneutral. */
+        public playersCountUnneutral: number;
 
         /** DataForPlayerRank userId. */
         public userId: number;
@@ -16164,8 +17007,8 @@ export declare namespace User {
         /** DataForUserWarStatistics warType */
         warType?: (number|null);
 
-        /** DataForUserWarStatistics playersCount */
-        playersCount?: (number|null);
+        /** DataForUserWarStatistics playersCountUnneutral */
+        playersCountUnneutral?: (number|null);
 
         /** DataForUserWarStatistics wins */
         wins?: (number|null);
@@ -16189,8 +17032,8 @@ export declare namespace User {
         /** DataForUserWarStatistics warType. */
         public warType: number;
 
-        /** DataForUserWarStatistics playersCount. */
-        public playersCount: number;
+        /** DataForUserWarStatistics playersCountUnneutral. */
+        public playersCountUnneutral: number;
 
         /** DataForUserWarStatistics wins. */
         public wins: number;
@@ -16278,8 +17121,8 @@ export declare namespace User {
         /** DataForUserRankScore warType */
         warType?: (number|null);
 
-        /** DataForUserRankScore playersCount */
-        playersCount?: (number|null);
+        /** DataForUserRankScore playersCountUnneutral */
+        playersCountUnneutral?: (number|null);
 
         /** DataForUserRankScore currentScore */
         currentScore?: (number|null);
@@ -16303,8 +17146,8 @@ export declare namespace User {
         /** DataForUserRankScore warType. */
         public warType: number;
 
-        /** DataForUserRankScore playersCount. */
-        public playersCount: number;
+        /** DataForUserRankScore playersCountUnneutral. */
+        public playersCountUnneutral: number;
 
         /** DataForUserRankScore currentScore. */
         public currentScore: number;

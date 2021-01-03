@@ -671,14 +671,14 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
         turnManager.setTurnIndex(nextTurnAndPlayerIndex.turnIndex);
         turnManager.setPlayerIndexInTurn(nextTurnAndPlayerIndex.playerIndex);
         turnManager.setEnterTurnTime(Time.TimeModel.getServerTimestamp());
-        turnManager.getWar().updateWarEventCalledCountOnPlayerTurnSwitched();
+        turnManager.getWar().getWarEventManager().updateWarEventCalledCountOnPlayerTurnSwitched();
     }
     export function runPhaseTickTurnAndPlayerIndexWithoutExtraData(turnManager: BwTurnManager): void {
         const nextTurnAndPlayerIndex = turnManager.getNextTurnAndPlayerIndex();
         turnManager.setTurnIndex(nextTurnAndPlayerIndex.turnIndex);
         turnManager.setPlayerIndexInTurn(nextTurnAndPlayerIndex.playerIndex);
         turnManager.setEnterTurnTime(Time.TimeModel.getServerTimestamp());
-        turnManager.getWar().updateWarEventCalledCountOnPlayerTurnSwitched();
+        turnManager.getWar().getWarEventManager().updateWarEventCalledCountOnPlayerTurnSwitched();
     }
 
     function sorterForRepairUnits(unit1: BwUnit, unit2: BwUnit): number {

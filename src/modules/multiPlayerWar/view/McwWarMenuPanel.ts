@@ -675,7 +675,7 @@ namespace TinyWars.MultiPlayerWar {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const coId  = player.getCoId();
-            const cfg   = coId == null ? null : Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getLatestConfigVersion(), coId);
+            const cfg   = coId == null ? null : Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getLatestFormalVersion(), coId);
             return {
                 titleText   : `CO`,
                 infoText    : !cfg ? `(${Lang.getText(Lang.Type.B0001)})` : `${cfg.name}`,

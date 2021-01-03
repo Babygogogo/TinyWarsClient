@@ -133,9 +133,9 @@ namespace TinyWars.MapEditor {
                 return undefined;
             }
 
-            const warEventData = this._getWarEventData();
-            if (warEventData == null) {
-                Logger.error(`MeWar.serializeForSimulation() empty warEventData.`);
+            const warEventManager = this.getWarEventManager();
+            if (warEventManager == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty warEventManager.`);
                 return undefined;
             }
 
@@ -154,6 +154,12 @@ namespace TinyWars.MapEditor {
             const field = this.getField();
             if (field == null) {
                 Logger.error(`MeWar.serializeForSimulation() empty field.`);
+                return undefined;
+            }
+
+            const serialWarEventManager = warEventManager.serializeForSimulation();
+            if (serialWarEventManager == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty serialWarEventManager.`);
                 return undefined;
             }
 
@@ -188,7 +194,7 @@ namespace TinyWars.MapEditor {
                 executedActions             : [],
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
-                warEventData,
+                warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,
@@ -196,23 +202,23 @@ namespace TinyWars.MapEditor {
         }
 
         public serializeForMap(): IMapRawData {
-            const tileMap   = this.getTileMap();
-            const mapSize   = tileMap.getMapSize();
             const unitMap   = this.getUnitMap() as MeUnitMap;
+            const mapSize   = unitMap.getMapSize();
             unitMap.reviseAllUnitIds();
 
             return {
-                designerName    : this.getMapDesignerName(),
-                designerUserId  : this.getMapDesignerUserId(),
-                mapNameList     : this.getMapNameList(),
-                mapWidth        : mapSize.width,
-                mapHeight       : mapSize.height,
-                playersCount    : (this.getField() as MeField).getMaxPlayerIndex(),
-                modifiedTime    : Time.TimeModel.getServerTimestamp(),
-                tileDataList    : tileMap.serialize().tiles,
-                unitDataList    : unitMap.serialize().units,
-                warRuleList     : this.getWarRuleList(),
-                mapTag          : this.getMapTag(),
+                designerName            : this.getMapDesignerName(),
+                designerUserId          : this.getMapDesignerUserId(),
+                mapNameList             : this.getMapNameList(),
+                mapWidth                : mapSize.width,
+                mapHeight               : mapSize.height,
+                playersCountUnneutral   : (this.getField() as MeField).getMaxPlayerIndex(),
+                modifiedTime            : Time.TimeModel.getServerTimestamp(),
+                tileDataList            : this.getTileMap().serialize().tiles,
+                unitDataList            : unitMap.serialize().units,
+                warRuleList             : this.getWarRuleList(),
+                mapTag                  : this.getMapTag(),
+                warEventData            : this.getWarEventManager().getWarEventData(),
             };
         }
 
@@ -231,6 +237,9 @@ namespace TinyWars.MapEditor {
         }
         protected _getTurnManagerClass(): new () => MeTurnManager {
             return MeTurnManager;
+        }
+        protected _getWarEventManagerClass(): new () => MeWarEventManager {
+            return MeWarEventManager;
         }
 
         private _setDrawer(drawer: MeDrawer): void {
