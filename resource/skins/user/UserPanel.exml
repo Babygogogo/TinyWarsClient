@@ -134,6 +134,8 @@
                                          skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <GameUi:UiButton id="_btnChat" label="聊天" y="340" x="236" width="200"
                                          skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+                        <GameUi:UiButton id="_btnComplaint" label="意见反馈" y="340" x="236" width="200"
+                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <GameUi:UiButton id="_btnSwitchTexture" label="切换贴图" y="350" x="246" width="200"
                                          skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <GameUi:UiButton id="_btnUnitsInfo" label="部队属性表" y="360" x="256" width="200"

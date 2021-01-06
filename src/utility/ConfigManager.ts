@@ -58,6 +58,7 @@ namespace TinyWars.Utility.ConfigManager {
     // Constants.
     ////////////////////////////////////////////////////////////////////////////////
     export const COMMON_CONSTANTS = {
+        AdminUserId                             : 1000001,
         NameListMaxLength                       : 5,
 
         WarEventNameMaxLength                   : 150,

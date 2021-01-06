@@ -19,7 +19,7 @@ namespace TinyWars.Chat.ChatProxy {
 
     export function reqChatAddMessage(
         content     : string,
-        toCategory  : number,
+        toCategory  : Types.ChatMessageToCategory,
         toTarget    : number,
     ): void {
         NetManager.send({ MsgChatAddMessage: { c: {

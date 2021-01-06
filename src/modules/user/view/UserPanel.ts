@@ -1,15 +1,13 @@
 
 namespace TinyWars.User {
-    import Lang                         = Utility.Lang;
-    import Helpers                      = Utility.Helpers;
-    import Notify                       = Utility.Notify;
-    import Types                        = Utility.Types;
-    import LocalStorage                 = Utility.LocalStorage;
-    import ProtoTypes                   = Utility.ProtoTypes;
-    import ConfigManager                = Utility.ConfigManager;
-    import WarType                      = Types.WarType;
-    import IDataForUserWarStatistics    = ProtoTypes.User.IDataForUserWarStatistics;
-    import CommonConstants              = ConfigManager.COMMON_CONSTANTS;
+    import Lang             = Utility.Lang;
+    import Helpers          = Utility.Helpers;
+    import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
+    import LocalStorage     = Utility.LocalStorage;
+    import ConfigManager    = Utility.ConfigManager;
+    import WarType          = Types.WarType;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class UserPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -41,15 +39,16 @@ namespace TinyWars.User {
         private _sclHistory                 : TinyWars.GameUi.UiScrollList;
 
         private _groupButtons               : eui.Group;
-        private _btnChangeNickname          : TinyWars.GameUi.UiButton;
-        private _btnChangePassword          : TinyWars.GameUi.UiButton;
-        private _btnChangeDiscordId         : TinyWars.GameUi.UiButton;
+        private _btnChangeNickname          : GameUi.UiButton;
+        private _btnChangePassword          : GameUi.UiButton;
+        private _btnChangeDiscordId         : GameUi.UiButton;
         private _btnRankList                : GameUi.UiButton;
-        private _btnShowOnlineUsers         : TinyWars.GameUi.UiButton;
-        private _btnChangeLanguage          : TinyWars.GameUi.UiButton;
-        private _btnServerStatus            : TinyWars.GameUi.UiButton;
-        private _btnChat                    : TinyWars.GameUi.UiButton;
-        private _btnSwitchTexture           : TinyWars.GameUi.UiButton;
+        private _btnShowOnlineUsers         : GameUi.UiButton;
+        private _btnChangeLanguage          : GameUi.UiButton;
+        private _btnServerStatus            : GameUi.UiButton;
+        private _btnChat                    : GameUi.UiButton;
+        private _btnComplaint               : GameUi.UiButton;
+        private _btnSwitchTexture           : GameUi.UiButton;
         private _btnUnitsInfo               : GameUi.UiButton;
 
         private _userId: number;
@@ -94,6 +93,7 @@ namespace TinyWars.User {
                 { ui: this._btnChangeLanguage,  callback: this._onTouchedBtnChangeLanguage },
                 { ui: this._btnServerStatus,    callback: this._onTouchedBtnServerStatus },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
+                { ui: this._btnComplaint,       callback: this._onTouchedBtnComplaint },
                 { ui: this._btnSwitchTexture,   callback: this._onTouchedBtnSwitchTexture },
                 { ui: this._btnUnitsInfo,       callback: this._onTouchedBtnUnitsInfo },
                 { ui: this._btnClose,           callback: this.close },
@@ -160,6 +160,10 @@ namespace TinyWars.User {
             this.close();
             Chat.ChatPanel.show({ toUserId: userId });
         }
+        private _onTouchedBtnComplaint(e: egret.TouchEvent): void {
+            this.close();
+            Chat.ChatPanel.show({ toUserId: CommonConstants.AdminUserId });
+        }
         private _onTouchedBtnSwitchTexture(e: egret.TouchEvent): void {
             User.UserProxy.reqUserSetSettings({
                 unitAndTileTextureVersion   : User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0
@@ -202,6 +206,7 @@ namespace TinyWars.User {
                 group.addChild(this._btnChangePassword);
                 group.addChild(this._btnChangeNickname);
                 group.addChild(this._btnChangeDiscordId);
+                group.addChild(this._btnComplaint);
             } else {
                 group.addChild(this._btnChat);
             }
@@ -237,6 +242,7 @@ namespace TinyWars.User {
             this._updateBtnUnitsInfo();
             this._updateBtnServerStatus();
             this._updateBtnChat();
+            this._updateBtnComplaint();
         }
 
         private async _updateLabelTitle(): Promise<void> {
@@ -325,6 +331,9 @@ namespace TinyWars.User {
         }
         private _updateBtnChat(): void {
             this._btnChat.label = Lang.getText(Lang.Type.B0383);
+        }
+        private _updateBtnComplaint(): void {
+            this._btnComplaint.label = Lang.getText(Lang.Type.B0453);
         }
     }
 

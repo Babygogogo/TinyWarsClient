@@ -335,7 +335,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.A0056]: [
             `未知错误，请拖动截图发给作者，谢谢`,
-            `Error! Please make a screenshot and send it to the game maker`,
+            `Error! Please make a screenshot and send it to the developing group.`,
         ],
         [Type.A0057]: [
             `禁用此项会清空您当前选择的CO（您可以重新选择一个）。确定要禁用吗？`,
@@ -2545,6 +2545,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0452]: [
             `错误码`,
             `Error`,
+        ],
+        [Type.B0453]: [
+            `意见反馈`,
+            `Complaint`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
