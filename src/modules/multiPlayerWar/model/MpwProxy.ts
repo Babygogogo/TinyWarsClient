@@ -1,6 +1,6 @@
 
 namespace TinyWars.MultiPlayerWar.MpwProxy {
-    import NetManager   = Network.Manager;
+    import NetManager   = Network.NetManager;
     import Codes        = Network.Codes;
     import Types        = Utility.Types;
     import ProtoTypes   = Utility.ProtoTypes;

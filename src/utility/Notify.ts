@@ -93,6 +93,10 @@ namespace TinyWars.Utility.Notify {
         MsgBroadcastDeleteMessage,
         MsgBroadcastDoBroadcast,
 
+        MsgChangeLogGetMessageList,
+        MsgChangeLogAddMessage,
+        MsgChangeLogModifyMessage,
+
         MsgUserLogin,
         MsgUserRegister,
         MsgUserLogout,

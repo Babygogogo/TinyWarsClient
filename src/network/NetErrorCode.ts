@@ -86,6 +86,19 @@ export const enum NetErrorCode {
 
     MsgBroadcastGetMessageList0000,
 
+    MsgChangeLogAddMessage0000,
+    MsgChangeLogAddMessage0001,
+    MsgChangeLogAddMessage0002,
+    MsgChangeLogAddMessage0003,
+
+    MsgChangeLogModifyMessage0000,
+    MsgChangeLogModifyMessage0001,
+    MsgChangeLogModifyMessage0002,
+    MsgChangeLogModifyMessage0003,
+    MsgChangeLogModifyMessage0004,
+
+    MsgChangeLogGetMessageList0000,
+
     MsgChatAddMessage0000,
     MsgChatAddMessage0001,
 

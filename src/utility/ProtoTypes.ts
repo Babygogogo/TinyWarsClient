@@ -13552,6 +13552,285 @@ export declare namespace Broadcast {
     }
 }
 
+/** Properties of a ChangeLog. */
+export declare interface IChangeLog {
+}
+
+/** Represents a ChangeLog. */
+export declare class ChangeLog implements IChangeLog {
+
+    /**
+     * Constructs a new ChangeLog.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IChangeLog);
+
+    /**
+     * Creates a new ChangeLog instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns ChangeLog instance
+     */
+    public static create(properties?: IChangeLog): ChangeLog;
+
+    /**
+     * Encodes the specified ChangeLog message. Does not implicitly {@link ChangeLog.verify|verify} messages.
+     * @param message ChangeLog message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IChangeLog, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Encodes the specified ChangeLog message, length delimited. Does not implicitly {@link ChangeLog.verify|verify} messages.
+     * @param message ChangeLog message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IChangeLog, writer?: protobuf.Writer): protobuf.Writer;
+
+    /**
+     * Decodes a ChangeLog message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns ChangeLog
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ChangeLog;
+
+    /**
+     * Decodes a ChangeLog message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns ChangeLog
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ChangeLog;
+
+    /**
+     * Verifies a ChangeLog message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a ChangeLog message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns ChangeLog
+     */
+    public static fromObject(object: { [k: string]: any }): ChangeLog;
+
+    /**
+     * Creates a plain object from a ChangeLog message. Also converts values to other types if specified.
+     * @param message ChangeLog
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: ChangeLog, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this ChangeLog to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+export declare namespace ChangeLog {
+
+    /** Properties of a ChangeLogMessage. */
+    interface IChangeLogMessage {
+
+        /** ChangeLogMessage messageId */
+        messageId?: (number|null);
+
+        /** ChangeLogMessage textList */
+        textList?: (string[]|null);
+
+        /** ChangeLogMessage createTimestamp */
+        createTimestamp?: (number|null);
+    }
+
+    /** Represents a ChangeLogMessage. */
+    class ChangeLogMessage implements IChangeLogMessage {
+
+        /**
+         * Constructs a new ChangeLogMessage.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ChangeLog.IChangeLogMessage);
+
+        /** ChangeLogMessage messageId. */
+        public messageId: number;
+
+        /** ChangeLogMessage textList. */
+        public textList: string[];
+
+        /** ChangeLogMessage createTimestamp. */
+        public createTimestamp: number;
+
+        /**
+         * Creates a new ChangeLogMessage instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ChangeLogMessage instance
+         */
+        public static create(properties?: ChangeLog.IChangeLogMessage): ChangeLog.ChangeLogMessage;
+
+        /**
+         * Encodes the specified ChangeLogMessage message. Does not implicitly {@link ChangeLog.ChangeLogMessage.verify|verify} messages.
+         * @param message ChangeLogMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ChangeLog.IChangeLogMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified ChangeLogMessage message, length delimited. Does not implicitly {@link ChangeLog.ChangeLogMessage.verify|verify} messages.
+         * @param message ChangeLogMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ChangeLog.IChangeLogMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a ChangeLogMessage message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns ChangeLogMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ChangeLog.ChangeLogMessage;
+
+        /**
+         * Decodes a ChangeLogMessage message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns ChangeLogMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ChangeLog.ChangeLogMessage;
+
+        /**
+         * Verifies a ChangeLogMessage message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ChangeLogMessage message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ChangeLogMessage
+         */
+        public static fromObject(object: { [k: string]: any }): ChangeLog.ChangeLogMessage;
+
+        /**
+         * Creates a plain object from a ChangeLogMessage message. Also converts values to other types if specified.
+         * @param message ChangeLogMessage
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: ChangeLog.ChangeLogMessage, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ChangeLogMessage to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a ChangeLogInfo. */
+    interface IChangeLogInfo {
+
+        /** ChangeLogInfo messageList */
+        messageList?: (ChangeLog.IChangeLogMessage[]|null);
+    }
+
+    /** Represents a ChangeLogInfo. */
+    class ChangeLogInfo implements IChangeLogInfo {
+
+        /**
+         * Constructs a new ChangeLogInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ChangeLog.IChangeLogInfo);
+
+        /** ChangeLogInfo messageList. */
+        public messageList: ChangeLog.IChangeLogMessage[];
+
+        /**
+         * Creates a new ChangeLogInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ChangeLogInfo instance
+         */
+        public static create(properties?: ChangeLog.IChangeLogInfo): ChangeLog.ChangeLogInfo;
+
+        /**
+         * Encodes the specified ChangeLogInfo message. Does not implicitly {@link ChangeLog.ChangeLogInfo.verify|verify} messages.
+         * @param message ChangeLogInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ChangeLog.IChangeLogInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified ChangeLogInfo message, length delimited. Does not implicitly {@link ChangeLog.ChangeLogInfo.verify|verify} messages.
+         * @param message ChangeLogInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ChangeLog.IChangeLogInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a ChangeLogInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns ChangeLogInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ChangeLog.ChangeLogInfo;
+
+        /**
+         * Decodes a ChangeLogInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns ChangeLogInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ChangeLog.ChangeLogInfo;
+
+        /**
+         * Verifies a ChangeLogInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ChangeLogInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ChangeLogInfo
+         */
+        public static fromObject(object: { [k: string]: any }): ChangeLog.ChangeLogInfo;
+
+        /**
+         * Creates a plain object from a ChangeLogInfo message. Also converts values to other types if specified.
+         * @param message ChangeLogInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: ChangeLog.ChangeLogInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ChangeLogInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+}
+
 /** Properties of a Structure. */
 export declare interface IStructure {
 }
@@ -17328,14 +17607,17 @@ export declare namespace User {
     /** Properties of a UserPrivilege. */
     interface IUserPrivilege {
 
-        /** UserPrivilege isAdmin */
-        isAdmin?: (boolean|null);
-
         /** UserPrivilege canLogin */
         canLogin?: (boolean|null);
 
+        /** UserPrivilege isAdmin */
+        isAdmin?: (boolean|null);
+
         /** UserPrivilege isMapCommittee */
         isMapCommittee?: (boolean|null);
+
+        /** UserPrivilege isChangeLogEditor */
+        isChangeLogEditor?: (boolean|null);
     }
 
     /** Represents a UserPrivilege. */
@@ -17347,14 +17629,17 @@ export declare namespace User {
          */
         constructor(properties?: User.IUserPrivilege);
 
-        /** UserPrivilege isAdmin. */
-        public isAdmin: boolean;
-
         /** UserPrivilege canLogin. */
         public canLogin: boolean;
 
+        /** UserPrivilege isAdmin. */
+        public isAdmin: boolean;
+
         /** UserPrivilege isMapCommittee. */
         public isMapCommittee: boolean;
+
+        /** UserPrivilege isChangeLogEditor. */
+        public isChangeLogEditor: boolean;
 
         /**
          * Creates a new UserPrivilege instance using the specified properties.
@@ -18479,6 +18764,15 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgBroadcastDoBroadcast */
         MsgBroadcastDoBroadcast?: (NetMessage.IMsgBroadcastDoBroadcast|null);
+
+        /** MessageContainer MsgChangeLogGetMessageList */
+        MsgChangeLogGetMessageList?: (NetMessage.IMsgChangeLogGetMessageList|null);
+
+        /** MessageContainer MsgChangeLogAddMessage */
+        MsgChangeLogAddMessage?: (NetMessage.IMsgChangeLogAddMessage|null);
+
+        /** MessageContainer MsgChangeLogModifyMessage */
+        MsgChangeLogModifyMessage?: (NetMessage.IMsgChangeLogModifyMessage|null);
     }
 
     /** Represents a MessageContainer. */
@@ -18810,6 +19104,15 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgBroadcastDoBroadcast. */
         public MsgBroadcastDoBroadcast?: (NetMessage.IMsgBroadcastDoBroadcast|null);
+
+        /** MessageContainer MsgChangeLogGetMessageList. */
+        public MsgChangeLogGetMessageList?: (NetMessage.IMsgChangeLogGetMessageList|null);
+
+        /** MessageContainer MsgChangeLogAddMessage. */
+        public MsgChangeLogAddMessage?: (NetMessage.IMsgChangeLogAddMessage|null);
+
+        /** MessageContainer MsgChangeLogModifyMessage. */
+        public MsgChangeLogModifyMessage?: (NetMessage.IMsgChangeLogModifyMessage|null);
 
         /**
          * Creates a new MessageContainer instance using the specified properties.
@@ -21423,6 +21726,861 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgBroadcastDoBroadcast.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgChangeLogGetMessageList. */
+    interface IMsgChangeLogGetMessageList {
+
+        /** MsgChangeLogGetMessageList c */
+        c?: (NetMessage.MsgChangeLogGetMessageList.IC|null);
+
+        /** MsgChangeLogGetMessageList s */
+        s?: (NetMessage.MsgChangeLogGetMessageList.IS|null);
+    }
+
+    /** Represents a MsgChangeLogGetMessageList. */
+    class MsgChangeLogGetMessageList implements IMsgChangeLogGetMessageList {
+
+        /**
+         * Constructs a new MsgChangeLogGetMessageList.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgChangeLogGetMessageList);
+
+        /** MsgChangeLogGetMessageList c. */
+        public c?: (NetMessage.MsgChangeLogGetMessageList.IC|null);
+
+        /** MsgChangeLogGetMessageList s. */
+        public s?: (NetMessage.MsgChangeLogGetMessageList.IS|null);
+
+        /**
+         * Creates a new MsgChangeLogGetMessageList instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgChangeLogGetMessageList instance
+         */
+        public static create(properties?: NetMessage.IMsgChangeLogGetMessageList): NetMessage.MsgChangeLogGetMessageList;
+
+        /**
+         * Encodes the specified MsgChangeLogGetMessageList message. Does not implicitly {@link NetMessage.MsgChangeLogGetMessageList.verify|verify} messages.
+         * @param message MsgChangeLogGetMessageList message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgChangeLogGetMessageList, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgChangeLogGetMessageList message, length delimited. Does not implicitly {@link NetMessage.MsgChangeLogGetMessageList.verify|verify} messages.
+         * @param message MsgChangeLogGetMessageList message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgChangeLogGetMessageList, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgChangeLogGetMessageList message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgChangeLogGetMessageList
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgChangeLogGetMessageList;
+
+        /**
+         * Decodes a MsgChangeLogGetMessageList message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgChangeLogGetMessageList
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgChangeLogGetMessageList;
+
+        /**
+         * Verifies a MsgChangeLogGetMessageList message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgChangeLogGetMessageList message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgChangeLogGetMessageList
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgChangeLogGetMessageList;
+
+        /**
+         * Creates a plain object from a MsgChangeLogGetMessageList message. Also converts values to other types if specified.
+         * @param message MsgChangeLogGetMessageList
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgChangeLogGetMessageList, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgChangeLogGetMessageList to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgChangeLogGetMessageList {
+
+        /** Properties of a C. */
+        interface IC {
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgChangeLogGetMessageList.IC);
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgChangeLogGetMessageList.IC): NetMessage.MsgChangeLogGetMessageList.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgChangeLogGetMessageList.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgChangeLogGetMessageList.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgChangeLogGetMessageList.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgChangeLogGetMessageList.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgChangeLogGetMessageList.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgChangeLogGetMessageList.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgChangeLogGetMessageList.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgChangeLogGetMessageList.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S messageList */
+            messageList?: (ChangeLog.IChangeLogMessage[]|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgChangeLogGetMessageList.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S messageList. */
+            public messageList: ChangeLog.IChangeLogMessage[];
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgChangeLogGetMessageList.IS): NetMessage.MsgChangeLogGetMessageList.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgChangeLogGetMessageList.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgChangeLogGetMessageList.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgChangeLogGetMessageList.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgChangeLogGetMessageList.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgChangeLogGetMessageList.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgChangeLogGetMessageList.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgChangeLogGetMessageList.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgChangeLogGetMessageList.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgChangeLogAddMessage. */
+    interface IMsgChangeLogAddMessage {
+
+        /** MsgChangeLogAddMessage c */
+        c?: (NetMessage.MsgChangeLogAddMessage.IC|null);
+
+        /** MsgChangeLogAddMessage s */
+        s?: (NetMessage.MsgChangeLogAddMessage.IS|null);
+    }
+
+    /** Represents a MsgChangeLogAddMessage. */
+    class MsgChangeLogAddMessage implements IMsgChangeLogAddMessage {
+
+        /**
+         * Constructs a new MsgChangeLogAddMessage.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgChangeLogAddMessage);
+
+        /** MsgChangeLogAddMessage c. */
+        public c?: (NetMessage.MsgChangeLogAddMessage.IC|null);
+
+        /** MsgChangeLogAddMessage s. */
+        public s?: (NetMessage.MsgChangeLogAddMessage.IS|null);
+
+        /**
+         * Creates a new MsgChangeLogAddMessage instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgChangeLogAddMessage instance
+         */
+        public static create(properties?: NetMessage.IMsgChangeLogAddMessage): NetMessage.MsgChangeLogAddMessage;
+
+        /**
+         * Encodes the specified MsgChangeLogAddMessage message. Does not implicitly {@link NetMessage.MsgChangeLogAddMessage.verify|verify} messages.
+         * @param message MsgChangeLogAddMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgChangeLogAddMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgChangeLogAddMessage message, length delimited. Does not implicitly {@link NetMessage.MsgChangeLogAddMessage.verify|verify} messages.
+         * @param message MsgChangeLogAddMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgChangeLogAddMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgChangeLogAddMessage message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgChangeLogAddMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgChangeLogAddMessage;
+
+        /**
+         * Decodes a MsgChangeLogAddMessage message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgChangeLogAddMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgChangeLogAddMessage;
+
+        /**
+         * Verifies a MsgChangeLogAddMessage message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgChangeLogAddMessage message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgChangeLogAddMessage
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgChangeLogAddMessage;
+
+        /**
+         * Creates a plain object from a MsgChangeLogAddMessage message. Also converts values to other types if specified.
+         * @param message MsgChangeLogAddMessage
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgChangeLogAddMessage, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgChangeLogAddMessage to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgChangeLogAddMessage {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C textList */
+            textList?: (string[]|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgChangeLogAddMessage.IC);
+
+            /** C textList. */
+            public textList: string[];
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgChangeLogAddMessage.IC): NetMessage.MsgChangeLogAddMessage.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgChangeLogAddMessage.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgChangeLogAddMessage.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgChangeLogAddMessage.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgChangeLogAddMessage.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgChangeLogAddMessage.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgChangeLogAddMessage.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgChangeLogAddMessage.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgChangeLogAddMessage.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S messageId */
+            messageId?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgChangeLogAddMessage.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S messageId. */
+            public messageId: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgChangeLogAddMessage.IS): NetMessage.MsgChangeLogAddMessage.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgChangeLogAddMessage.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgChangeLogAddMessage.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgChangeLogAddMessage.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgChangeLogAddMessage.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgChangeLogAddMessage.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgChangeLogAddMessage.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgChangeLogAddMessage.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgChangeLogAddMessage.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgChangeLogModifyMessage. */
+    interface IMsgChangeLogModifyMessage {
+
+        /** MsgChangeLogModifyMessage c */
+        c?: (NetMessage.MsgChangeLogModifyMessage.IC|null);
+
+        /** MsgChangeLogModifyMessage s */
+        s?: (NetMessage.MsgChangeLogModifyMessage.IS|null);
+    }
+
+    /** Represents a MsgChangeLogModifyMessage. */
+    class MsgChangeLogModifyMessage implements IMsgChangeLogModifyMessage {
+
+        /**
+         * Constructs a new MsgChangeLogModifyMessage.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgChangeLogModifyMessage);
+
+        /** MsgChangeLogModifyMessage c. */
+        public c?: (NetMessage.MsgChangeLogModifyMessage.IC|null);
+
+        /** MsgChangeLogModifyMessage s. */
+        public s?: (NetMessage.MsgChangeLogModifyMessage.IS|null);
+
+        /**
+         * Creates a new MsgChangeLogModifyMessage instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgChangeLogModifyMessage instance
+         */
+        public static create(properties?: NetMessage.IMsgChangeLogModifyMessage): NetMessage.MsgChangeLogModifyMessage;
+
+        /**
+         * Encodes the specified MsgChangeLogModifyMessage message. Does not implicitly {@link NetMessage.MsgChangeLogModifyMessage.verify|verify} messages.
+         * @param message MsgChangeLogModifyMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgChangeLogModifyMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgChangeLogModifyMessage message, length delimited. Does not implicitly {@link NetMessage.MsgChangeLogModifyMessage.verify|verify} messages.
+         * @param message MsgChangeLogModifyMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgChangeLogModifyMessage, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgChangeLogModifyMessage message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgChangeLogModifyMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgChangeLogModifyMessage;
+
+        /**
+         * Decodes a MsgChangeLogModifyMessage message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgChangeLogModifyMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgChangeLogModifyMessage;
+
+        /**
+         * Verifies a MsgChangeLogModifyMessage message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgChangeLogModifyMessage message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgChangeLogModifyMessage
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgChangeLogModifyMessage;
+
+        /**
+         * Creates a plain object from a MsgChangeLogModifyMessage message. Also converts values to other types if specified.
+         * @param message MsgChangeLogModifyMessage
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgChangeLogModifyMessage, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgChangeLogModifyMessage to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgChangeLogModifyMessage {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C messageId */
+            messageId?: (number|null);
+
+            /** C textList */
+            textList?: (string[]|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgChangeLogModifyMessage.IC);
+
+            /** C messageId. */
+            public messageId: number;
+
+            /** C textList. */
+            public textList: string[];
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgChangeLogModifyMessage.IC): NetMessage.MsgChangeLogModifyMessage.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgChangeLogModifyMessage.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgChangeLogModifyMessage.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgChangeLogModifyMessage.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgChangeLogModifyMessage.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgChangeLogModifyMessage.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgChangeLogModifyMessage.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgChangeLogModifyMessage.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgChangeLogModifyMessage.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S messageId */
+            messageId?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgChangeLogModifyMessage.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S messageId. */
+            public messageId: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgChangeLogModifyMessage.IS): NetMessage.MsgChangeLogModifyMessage.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgChangeLogModifyMessage.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgChangeLogModifyMessage.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgChangeLogModifyMessage.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgChangeLogModifyMessage.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgChangeLogModifyMessage.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgChangeLogModifyMessage.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgChangeLogModifyMessage.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgChangeLogModifyMessage.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

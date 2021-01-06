@@ -34,7 +34,7 @@ namespace TinyWars.Utility.FlowManager {
             );
         };
 
-        Network.Manager.addListeners(_NET_EVENTS, FlowManager);
+        Network.NetManager.addListeners(_NET_EVENTS, FlowManager);
         Notify.addEventListeners(_NOTIFY_EVENTS, FlowManager);
         Utility.StageManager.init(stage);
         await Promise.all([ResManager.init(), ProtoManager.init()]);
@@ -42,7 +42,7 @@ namespace TinyWars.Utility.FlowManager {
         Lang.init();
         NoSleepManager.init();
         ConfigManager.init();
-        Network.Manager.init();
+        Network.NetManager.init();
         MpwProxy.init();
         MpwModel.init();
         Time.TimeModel.init();
@@ -64,6 +64,7 @@ namespace TinyWars.Utility.FlowManager {
         Common.CommonProxy.init();
         Common.CommonModel.init();
         Broadcast.BroadcastProxy.init();
+        ChangeLog.ChangeLogProxy.init();
 
         _removeLoadingDom();
         gotoLogin();

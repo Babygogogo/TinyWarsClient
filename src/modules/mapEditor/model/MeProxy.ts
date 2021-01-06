@@ -1,6 +1,6 @@
 
 namespace TinyWars.MapEditor.MeProxy {
-    import NetManager   = Network.Manager;
+    import NetManager   = Network.NetManager;
     import NetCodes     = Network.Codes;
     import ProtoTypes   = Utility.ProtoTypes;
     import Notify       = Utility.Notify;

@@ -108,4 +108,7 @@ MsgBroadcastGetMessageList = 280,
 MsgBroadcastAddMessage = 281,
 MsgBroadcastDeleteMessage = 282,
 MsgBroadcastDoBroadcast = 283,
+MsgChangeLogGetMessageList = 300,
+MsgChangeLogAddMessage = 301,
+MsgChangeLogModifyMessage = 302,
 }}

@@ -3,7 +3,7 @@ namespace TinyWars.Time.TimeModel {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import LocalStorage = Utility.LocalStorage;
-    import NetManager   = Network.Manager;
+    import NetManager   = Network.NetManager;
 
     const TILE_ANIMATION_INTERVAL_MS = 350;
     const UNIT_ANIMATION_INTERVAL_MS = 120;

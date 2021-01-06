@@ -4,7 +4,7 @@ namespace TinyWars.Chat.ChatProxy {
     import NotifyType   = Utility.Notify.Type;
     import ProtoTypes   = Utility.ProtoTypes;
     import Types        = Utility.Types;
-    import NetManager   = Network.Manager;
+    import NetManager   = Network.NetManager;
     import ActionCode   = Network.Codes;
     import NetMessage   = ProtoTypes.NetMessage;
 

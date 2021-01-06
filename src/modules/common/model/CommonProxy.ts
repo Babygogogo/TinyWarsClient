@@ -5,7 +5,7 @@ namespace TinyWars.Common.CommonProxy {
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
     import NetMessage       = ProtoTypes.NetMessage;
-    import NetManager       = Network.Manager;
+    import NetManager       = Network.NetManager;
     import ActionCode       = Network.Codes;
 
     export function init(): void {

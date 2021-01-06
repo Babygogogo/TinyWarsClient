@@ -36,7 +36,7 @@ namespace TinyWars.Common {
             this.skinName = "resource/skins/common/CommonHelpPanel.exml";
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => CommonHelpPanel.hide();
+            this._callbackForTouchMask = () => this.close();
         }
 
         protected _onOpened(): void {

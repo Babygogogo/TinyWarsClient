@@ -3,7 +3,7 @@ namespace TinyWars.Broadcast.BroadcastProxy {
     import Notify           = Utility.Notify;
     import ProtoTypes       = Utility.ProtoTypes;
     import NetMessage       = ProtoTypes.NetMessage;
-    import NetManager       = Network.Manager;
+    import NetManager       = Network.NetManager;
     import NetworkCodes     = Network.Codes;
 
     export function init(): void {

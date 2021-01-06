@@ -1,6 +1,6 @@
 
 namespace TinyWars.RankMatchRoom.RmrProxy {
-    import NetManager   = Network.Manager;
+    import NetManager   = Network.NetManager;
     import ActionCode   = Network.Codes;
     import ProtoTypes   = Utility.ProtoTypes;
     import Notify       = Utility.Notify;

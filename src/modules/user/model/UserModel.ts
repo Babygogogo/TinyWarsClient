@@ -65,7 +65,7 @@ namespace TinyWars.User {
             return _selfPassword;
         }
 
-        async function getSelfPublicInfo(): Promise<IUserPublicInfo> {
+        export async function getSelfPublicInfo(): Promise<IUserPublicInfo> {
             return await getUserPublicInfo(getSelfUserId());
         }
         export async function getIsSelfAdmin(): Promise<boolean> {

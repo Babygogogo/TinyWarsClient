@@ -2550,6 +2550,10 @@ namespace TinyWars.Utility.Lang {
             `意见反馈`,
             `Complaint`,
         ],
+        [Type.B0454]: [
+            `新增日志`,
+            `Add Log`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3557,7 +3561,7 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getNameInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {
+    export function getTextInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {
         if (!nameList) {
             return undefined;
         } else {
