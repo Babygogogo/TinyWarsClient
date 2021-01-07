@@ -157,8 +157,7 @@ namespace TinyWars.SingleCustomRoom {
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
-                const mapNameList   = mapBriefData.mapNameList;
-                const mapName       = mapNameList[Lang.getLanguageType() === Types.LanguageType.Chinese ? 0 : 1] || mapNameList[0];
+                const mapName = Lang.getTextInCurrentLanguage(mapBriefData.mapNameList);
                 if ((!mapBriefData.mapExtraData.mapComplexInfo.availability.canScw)                                     ||
                     ((mapName) && (mapName.toLowerCase().indexOf(mapName) < 0))                                         ||
                     ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))               ||

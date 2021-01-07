@@ -2,6 +2,7 @@
 namespace TinyWars.Utility.Helpers {
     import ColorType            = Types.ColorType;
     import MessageCodes         = Network.Codes;
+    import ILanguageText        = ProtoTypes.Structure.ILanguageText;
     import IMessageContainer    = ProtoTypes.NetMessage.IMessageContainer;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
 
@@ -162,6 +163,61 @@ namespace TinyWars.Utility.Helpers {
 
     export function checkIsNumber(value: any): boolean {
         return value === +value;
+    }
+
+    export function checkIsValidLanguageType(t: number | null | undefined): boolean {
+        return (t === Types.LanguageType.Chinese)
+            || (t === Types.LanguageType.English);
+    }
+    export function checkIsValidLanguageText({ data, minLength, maxLength }: {
+        data        : ILanguageText;
+        minLength   : number;
+        maxLength   : number;
+    }): boolean {
+        if (!checkIsValidLanguageType(data.languageType)) {
+            return false;
+        }
+
+        const text = data.text;
+        if (text == null) {
+            return false;
+        }
+
+        const length = text.length;
+        return (length >= minLength) && (length <= maxLength);
+    }
+    export function checkIsValidLanguageTextList({ list, minTextLength, maxTextLength }: {
+        list            : ILanguageText[];
+        minTextLength   : number;
+        maxTextLength   : number;
+    }): boolean {
+        if (list.length <= 0) {
+            return false;
+        }
+
+        const languageTypeSet = new Set<number>();
+        for (const data of list) {
+            const languageType = data.languageType;
+            if ((languageType == null)                      ||
+                (!checkIsValidLanguageType(languageType))   ||
+                (languageTypeSet.has(languageType))
+            ) {
+                return false;
+            }
+            languageTypeSet.add(languageType);
+
+            const text = data.text;
+            if (text == null) {
+                return false;
+            }
+
+            const length = text.length;
+            if ((length > maxTextLength) || (length < minTextLength)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     export function getObjectKeysCount(obj: { [key: string]: any }): number {

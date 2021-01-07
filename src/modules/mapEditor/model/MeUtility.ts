@@ -175,11 +175,12 @@ namespace TinyWars.MapEditor.MeUtility {
             && (mapDesigner.length > 0)
             && (mapDesigner.length <= MapConstants.MaxDesignerLength);
     }
-    function checkIsMapNameListValid(mapNameList: string[] | null | undefined): boolean {
+    function checkIsMapNameListValid(mapNameList: ProtoTypes.Structure.ILanguageText[] | null | undefined): boolean {
         return (mapNameList != null)
-            && (mapNameList.length > 0)
-            && (mapNameList.every(mapName => {
-                return (!!mapName) && (mapName.length <= MapConstants.MaxMapNameLength);
+            && (Helpers.checkIsValidLanguageTextList({
+                list            : mapNameList,
+                minTextLength   : 1,
+                maxTextLength   : MapConstants.MaxMapNameLength,
             }));
     }
     function checkIsPlayersCountValid(mapRawData: IMapRawData): boolean {

@@ -101,14 +101,7 @@ namespace TinyWars.WarMap {
             if (!mapBriefData) {
                 return null;
             } else {
-                const nameList = mapBriefData.mapNameList;
-                if (!nameList) {
-                    return undefined;
-                } else {
-                    return Lang.getLanguageType() === Types.LanguageType.English
-                        ? nameList[1] || nameList[0]
-                        : nameList[0];
-                }
+                return Lang.getTextInCurrentLanguage(mapBriefData.mapNameList);
             }
         }
         export async function getDesignerName(mapId: number): Promise<string | null> {

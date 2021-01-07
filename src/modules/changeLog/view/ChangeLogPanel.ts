@@ -122,7 +122,7 @@ namespace TinyWars.ChangeLog {
 
             const data              = this.data as DataForMessageRenderer;
             this._labelIndex.text   = `${Helpers.getNumText(data.messageId, 3)} (${Helpers.getTimestampShortText(data.createTimestamp)})`;
-            this._labelContent.text = Lang.getTextInCurrentLanguage(data.textList);
+            this._labelContent.text = Lang.getStringInCurrentLanguage(data.textList);
 
             const btnModify     = this._btnModify;
             btnModify.label     = Lang.getText(Lang.Type.B0317);

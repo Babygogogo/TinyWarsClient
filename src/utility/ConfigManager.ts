@@ -1145,7 +1145,7 @@ namespace TinyWars.Utility.ConfigManager {
 
     export function getRankName(version: string, rankScore: number): string {
         const cfg = getPlayerRankCfg(version, rankScore);
-        return cfg ? Lang.getTextInCurrentLanguage(cfg.nameList) : undefined;
+        return cfg ? Lang.getStringInCurrentLanguage(cfg.nameList) : undefined;
     }
     export function getPlayerRankCfg(version: string, rankScore: number): IPlayerRankCfg {
         const cfgs  = _ALL_CONFIGS.get(version)!.PlayerRank;

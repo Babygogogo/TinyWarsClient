@@ -2689,7 +2689,7 @@ export declare namespace Map {
         designerUserId?: (number|null);
 
         /** MapRawData mapNameList */
-        mapNameList?: (string[]|null);
+        mapNameList?: (Structure.ILanguageText[]|null);
 
         /** MapRawData mapWidth */
         mapWidth?: (number|null);
@@ -2738,7 +2738,7 @@ export declare namespace Map {
         public designerUserId: number;
 
         /** MapRawData mapNameList. */
-        public mapNameList: string[];
+        public mapNameList: Structure.ILanguageText[];
 
         /** MapRawData mapWidth. */
         public mapWidth: number;
@@ -2965,7 +2965,7 @@ export declare namespace Map {
         designerName?: (string|null);
 
         /** MapBriefData mapNameList */
-        mapNameList?: (string[]|null);
+        mapNameList?: (Structure.ILanguageText[]|null);
 
         /** MapBriefData mapTag */
         mapTag?: (Map.IDataForMapTag|null);
@@ -2990,7 +2990,7 @@ export declare namespace Map {
         public designerName: string;
 
         /** MapBriefData mapNameList. */
-        public mapNameList: string[];
+        public mapNameList: Structure.ILanguageText[];
 
         /** MapBriefData mapTag. */
         public mapTag?: (Map.IDataForMapTag|null);
@@ -5125,7 +5125,7 @@ export declare namespace WarEvent {
         eventId?: (number|null);
 
         /** WarEvent eventNameList */
-        eventNameList?: (string[]|null);
+        eventNameList?: (Structure.ILanguageText[]|null);
 
         /** WarEvent maxCallCountInPlayerTurn */
         maxCallCountInPlayerTurn?: (number|null);
@@ -5153,7 +5153,7 @@ export declare namespace WarEvent {
         public eventId: number;
 
         /** WarEvent eventNameList. */
-        public eventNameList: string[];
+        public eventNameList: Structure.ILanguageText[];
 
         /** WarEvent maxCallCountInPlayerTurn. */
         public maxCallCountInPlayerTurn: number;
@@ -5776,7 +5776,7 @@ export declare namespace WarRule {
         ruleId?: (number|null);
 
         /** WarRule ruleNameList */
-        ruleNameList?: (string[]|null);
+        ruleNameList?: (Structure.ILanguageText[]|null);
 
         /** WarRule ruleAvailability */
         ruleAvailability?: (WarRule.IDataForWarRuleAvailability|null);
@@ -5804,7 +5804,7 @@ export declare namespace WarRule {
         public ruleId: number;
 
         /** WarRule ruleNameList. */
-        public ruleNameList: string[];
+        public ruleNameList: Structure.ILanguageText[];
 
         /** WarRule ruleAvailability. */
         public ruleAvailability?: (WarRule.IDataForWarRuleAvailability|null);
@@ -13360,7 +13360,7 @@ export declare namespace Broadcast {
         messageId?: (number|null);
 
         /** BroadcastMessage textList */
-        textList?: (string[]|null);
+        textList?: (Structure.ILanguageText[]|null);
 
         /** BroadcastMessage startTime */
         startTime?: (number|null);
@@ -13382,7 +13382,7 @@ export declare namespace Broadcast {
         public messageId: number;
 
         /** BroadcastMessage textList. */
-        public textList: string[];
+        public textList: Structure.ILanguageText[];
 
         /** BroadcastMessage startTime. */
         public startTime: number;
@@ -13645,7 +13645,7 @@ export declare namespace ChangeLog {
         messageId?: (number|null);
 
         /** ChangeLogMessage textList */
-        textList?: (string[]|null);
+        textList?: (Structure.ILanguageText[]|null);
 
         /** ChangeLogMessage createTimestamp */
         createTimestamp?: (number|null);
@@ -13664,7 +13664,7 @@ export declare namespace ChangeLog {
         public messageId: number;
 
         /** ChangeLogMessage textList. */
-        public textList: string[];
+        public textList: Structure.ILanguageText[];
 
         /** ChangeLogMessage createTimestamp. */
         public createTimestamp: number;
@@ -14308,6 +14308,102 @@ export declare namespace Structure {
 
         /**
          * Converts this SeedRandomState to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a LanguageText. */
+    interface ILanguageText {
+
+        /** LanguageText languageType */
+        languageType?: (number|null);
+
+        /** LanguageText text */
+        text?: (string|null);
+    }
+
+    /** Represents a LanguageText. */
+    class LanguageText implements ILanguageText {
+
+        /**
+         * Constructs a new LanguageText.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Structure.ILanguageText);
+
+        /** LanguageText languageType. */
+        public languageType: number;
+
+        /** LanguageText text. */
+        public text: string;
+
+        /**
+         * Creates a new LanguageText instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns LanguageText instance
+         */
+        public static create(properties?: Structure.ILanguageText): Structure.LanguageText;
+
+        /**
+         * Encodes the specified LanguageText message. Does not implicitly {@link Structure.LanguageText.verify|verify} messages.
+         * @param message LanguageText message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Structure.ILanguageText, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified LanguageText message, length delimited. Does not implicitly {@link Structure.LanguageText.verify|verify} messages.
+         * @param message LanguageText message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Structure.ILanguageText, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a LanguageText message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns LanguageText
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.LanguageText;
+
+        /**
+         * Decodes a LanguageText message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns LanguageText
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.LanguageText;
+
+        /**
+         * Verifies a LanguageText message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a LanguageText message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns LanguageText
+         */
+        public static fromObject(object: { [k: string]: any }): Structure.LanguageText;
+
+        /**
+         * Creates a plain object from a LanguageText message. Also converts values to other types if specified.
+         * @param message LanguageText
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Structure.LanguageText, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this LanguageText to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -20982,7 +21078,7 @@ export declare namespace NetMessage {
         interface IC {
 
             /** C textList */
-            textList?: (string[]|null);
+            textList?: (Structure.ILanguageText[]|null);
 
             /** C startTime */
             startTime?: (number|null);
@@ -21001,7 +21097,7 @@ export declare namespace NetMessage {
             constructor(properties?: NetMessage.MsgBroadcastAddMessage.IC);
 
             /** C textList. */
-            public textList: string[];
+            public textList: Structure.ILanguageText[];
 
             /** C startTime. */
             public startTime: number;
@@ -22116,7 +22212,7 @@ export declare namespace NetMessage {
         interface IC {
 
             /** C textList */
-            textList?: (string[]|null);
+            textList?: (Structure.ILanguageText[]|null);
         }
 
         /** Represents a C. */
@@ -22129,7 +22225,7 @@ export declare namespace NetMessage {
             constructor(properties?: NetMessage.MsgChangeLogAddMessage.IC);
 
             /** C textList. */
-            public textList: string[];
+            public textList: Structure.ILanguageText[];
 
             /**
              * Creates a new C instance using the specified properties.
@@ -22404,7 +22500,7 @@ export declare namespace NetMessage {
             messageId?: (number|null);
 
             /** C textList */
-            textList?: (string[]|null);
+            textList?: (Structure.ILanguageText[]|null);
         }
 
         /** Represents a C. */
@@ -22420,7 +22516,7 @@ export declare namespace NetMessage {
             public messageId: number;
 
             /** C textList. */
-            public textList: string[];
+            public textList: Structure.ILanguageText[];
 
             /**
              * Creates a new C instance using the specified properties.

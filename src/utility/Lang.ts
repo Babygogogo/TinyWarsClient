@@ -3575,17 +3575,12 @@ namespace TinyWars.Utility.Lang {
     }
 
     export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined {
-        if (warRule.ruleId == null) {
-            return getText(Type.B0321);
-        } else {
-            const list = warRule.ruleNameList;
-            return getLanguageType() === LanguageType.Chinese
-                ? list[0]
-                : list[1] || list[0];
-        }
+        return (warRule.ruleId == null)
+            ? getText(Type.B0321)
+            : getTextInCurrentLanguage(warRule.ruleNameList);
     }
 
-    export function getTextInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {
+    export function getStringInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {
         if (!nameList) {
             return undefined;
         } else {
@@ -3593,6 +3588,10 @@ namespace TinyWars.Utility.Lang {
                 ? nameList[0]
                 : nameList[1] || nameList[0];
         }
+    }
+    export function getTextInCurrentLanguage(textList: ProtoTypes.Structure.ILanguageText[]): string | undefined {
+        const data = (textList || []).find(v => v.languageType === getLanguageType());
+        return data ? data.text : undefined;
     }
 
     export function getBootTimerTypeName(type: Types.BootTimerType): string {
