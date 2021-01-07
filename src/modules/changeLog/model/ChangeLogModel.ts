@@ -11,4 +11,7 @@ namespace TinyWars.ChangeLog.ChangeLogModel {
     export function getAllMessageList(): IChangeLogMessage[] | undefined {
         return _messageList;
     }
+    export function getMessage(messageId: number): IChangeLogMessage | undefined {
+        return (getAllMessageList() || []).find(v => v.messageId === messageId);
+    }
 }

@@ -4,6 +4,7 @@ namespace TinyWars.ChangeLog {
     import Helpers      = Utility.Helpers;
     import ProtoTypes   = Utility.ProtoTypes;
     import Lang         = Utility.Lang;
+    import FloatText    = Utility.FloatText;
 
     export class ChangeLogPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
@@ -68,18 +69,22 @@ namespace TinyWars.ChangeLog {
             this._updateListMessageAndLabelNoMessage();
         }
         private _onMsgChangeLogAddMessage(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0154));
             ChangeLogProxy.reqChangeLogGetMessageList();
         }
         private _onMsgChangeLogModifyMessage(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0154));
             ChangeLogProxy.reqChangeLogGetMessageList();
         }
 
         private _onTouchedBtnAddMessage(e: egret.TouchEvent): void {
-            // TODO
+            ChangeLogAddPanel.show();
         }
 
         private _updateView(): void {
             this._updateComponentsForLanguage();
+
+            this._updateBtnAddMessage();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -92,6 +97,11 @@ namespace TinyWars.ChangeLog {
             const messageList               = ChangeLogModel.getAllMessageList() || [];
             this._labelNoMessage.visible    = !messageList.length;
             this._listMessage.bindData(messageList.reverse());
+        }
+        private async _updateBtnAddMessage(): Promise<void> {
+            const btn   = this._btnAddMessage;
+            btn.visible = false;
+            btn.visible = await User.UserModel.checkCanSelfEditChangeLog();
         }
     }
 
@@ -117,13 +127,11 @@ namespace TinyWars.ChangeLog {
             const btnModify     = this._btnModify;
             btnModify.label     = Lang.getText(Lang.Type.B0317);
             btnModify.visible   = false;
-
-            const privilege     = (await User.UserModel.getSelfPublicInfo()).userPrivilege;
-            btnModify.visible   = (!!privilege) && ((!!privilege.isChangeLogEditor) || (!!privilege.isAdmin));
+            btnModify.visible   = await User.UserModel.checkCanSelfEditChangeLog();
         }
 
         private _onTouchedBtnModify(e: egret.TouchEvent): void {
-            // TODO
+            ChangeLogModifyPanel.show({ messageId: (this.data as DataForMessageRenderer).messageId });
         }
     }
 }

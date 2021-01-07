@@ -746,6 +746,18 @@ namespace TinyWars.Utility.Lang {
             `请把错误码告知开发组`,
             `Please notify the developing group.`,
         ],
+        [Type.A0154]: [
+            `已成功提交更新日志。`,
+            `The change log has been updated successfully.`,
+        ],
+        [Type.A0155]: [
+            `输入内容太短，请检查`,
+            `The texts are too short.`,
+        ],
+        [Type.A0156]: [
+            `您最少需要填写一种语言的内容`,
+            `You have to write down at least one of the text.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2554,6 +2566,14 @@ namespace TinyWars.Utility.Lang {
             `新增日志`,
             `Add Log`,
         ],
+        [Type.B0455]: [
+            `中文`,
+            `In Chinese`,
+        ],
+        [Type.B0456]: [
+            `英文`,
+            `In English`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2936,6 +2956,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0033]: [
             `启用SetPath模式后，在指定部队移动路线时，您需要连续点击两次目标格子才能呼出操作菜单。这会增加操作量，但同时也便于指定移动路线，这在雾战中尤其有用。\n您确定要启用吗？\n（当前状态：%s）`,
             `While the Set Path mode is enabled, you have to double click (or touch) a tile in order to make the unit action panel appear when you are moving units. This mode can be useful especially in FoW.\nAre you sure to enable it? \n(Current status: %s)`,
+        ],
+        [Type.F0034]: [
+            `最多输入%d个字符，请检查`,
+            `Please limit the text length to %d characters.`,
         ],
     };
 

@@ -78,6 +78,13 @@ namespace TinyWars.User {
             const privilege = info ? info.userPrivilege : null;
             return privilege ? (!!privilege.isMapCommittee) : false;
         }
+        export async function checkCanSelfEditChangeLog(): Promise<boolean> {
+            const info      = await getSelfPublicInfo();
+            const privilege = info ? info.userPrivilege : null;
+            return (!!privilege)
+                && ((privilege.isAdmin) || (privilege.isChangeLogEditor));
+        }
+
         export async function getSelfNickname(): Promise<string> {
             const info = await getSelfPublicInfo();
             return info ? info.nickname : undefined;

@@ -61,6 +61,10 @@ namespace TinyWars.Utility.ConfigManager {
         AdminUserId                             : 1000001,
         NameListMaxLength                       : 5,
 
+        ChangeLogTextMaxLength                  : 200,
+        ChangeLogTextListMaxLength              : 2,
+        ChangeLogMessageListMaxLength           : 100,
+
         WarEventNameMaxLength                   : 150,
         WarEventMaxEventsPerMap                 : 10,
         WarEventMaxConditionNodesPerMap         : 50,

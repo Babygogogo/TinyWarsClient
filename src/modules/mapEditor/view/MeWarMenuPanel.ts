@@ -31,14 +31,14 @@ namespace TinyWars.MapEditor {
         private _labelMenuTitle         : GameUi.UiLabel;
         private _labelMapInfoTitle      : TinyWars.GameUi.UiLabel;
 
-        private  _btnModifyMapName      : TinyWars.GameUi.UiButton;
-        private  _labelMapName          : TinyWars.GameUi.UiLabel;
+        private _btnModifyMapName       : TinyWars.GameUi.UiButton;
+        private _labelMapName           : TinyWars.GameUi.UiLabel;
 
-        private  _btnModifyMapDesigner  : TinyWars.GameUi.UiButton;
-        private  _labelMapDesigner      : TinyWars.GameUi.UiLabel;
+        private _btnModifyMapDesigner   : TinyWars.GameUi.UiButton;
+        private _labelMapDesigner       : TinyWars.GameUi.UiLabel;
 
-        private  _btnModifyMapSize      : TinyWars.GameUi.UiButton;
-        private  _labelMapSize          : TinyWars.GameUi.UiLabel;
+        private _btnModifyMapSize       : TinyWars.GameUi.UiButton;
+        private _labelMapSize           : TinyWars.GameUi.UiLabel;
 
         private _listTile               : GameUi.UiScrollList;
         private _listUnit               : GameUi.UiScrollList;
