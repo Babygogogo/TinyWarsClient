@@ -187,35 +187,7 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnModifyRuleName(e: egret.TouchEvent): void {
             const rule = this._selectedRule;
             if ((rule) && (!this._war.getIsReviewingMap())) {
-                Common.CommonInputPanel.show({
-                    title           : Lang.getText(Lang.Type.B0315),
-                    currentValue    : rule.ruleNameList.join(","),
-                    maxChars        : CommonConstants.WarRuleNameMaxLength * 2 + 1,
-                    charRestrict    : null,
-                    tips            : Lang.getText(Lang.Type.A0131),
-                    callback        : panel => {
-                        const value     = panel.getInputText();
-                        const nameList  : string[] = [];
-                        for (const rawName of (value ? value.split(",") : [])) {
-                            const ruleName = rawName.trim();
-                            if (ruleName) {
-                                nameList.push(ruleName);
-                            }
-                        }
-
-                        if (!nameList.length) {
-                            FloatText.show(Lang.getText(Lang.Type.A0098));
-                        } else if (nameList.some(v => v.length > CommonConstants.WarRuleNameMaxLength)) {
-                            FloatText.show(Lang.getFormattedText(Lang.Type.F0032, CommonConstants.WarRuleNameMaxLength))
-                        } else {
-                            rule.ruleNameList.length = 0;
-                            for (const ruleName of nameList) {
-                                rule.ruleNameList.push(ruleName);
-                            }
-                            this._updateLabelRuleName(rule);
-                        }
-                    },
-                });
+                MeModifyRuleNamePanel.show({ ruleId: rule.ruleId });
             }
         }
 

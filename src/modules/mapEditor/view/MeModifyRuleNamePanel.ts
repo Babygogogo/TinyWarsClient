@@ -1,20 +1,25 @@
 
-namespace TinyWars.ChangeLog {
+namespace TinyWars.MapEditor {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
+    import Types            = Utility.Types;
     import FloatText        = Utility.FloatText;
     import ProtoTypes       = Utility.ProtoTypes;
-    import Types            = Utility.Types;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export class ChangeLogAddPanel extends GameUi.UiPanel {
+    type OpenDataForModifyRuleNamePanel = {
+        ruleId  : number;
+    }
+
+    export class MeModifyRuleNamePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: ChangeLogAddPanel;
+        private static _instance: MeModifyRuleNamePanel;
 
+        private _openData       : OpenDataForModifyRuleNamePanel;
         private _inputChinese   : GameUi.UiTextInput;
         private _inputEnglish   : GameUi.UiTextInput;
         private _labelTip       : GameUi.UiLabel;
@@ -24,17 +29,18 @@ namespace TinyWars.ChangeLog {
         private _btnModify      : GameUi.UiButton;
         private _btnClose       : GameUi.UiButton;
 
-        public static show(): void {
-            if (!ChangeLogAddPanel._instance) {
-                ChangeLogAddPanel._instance = new ChangeLogAddPanel();
+        public static show(openData: OpenDataForModifyRuleNamePanel): void {
+            if (!MeModifyRuleNamePanel._instance) {
+                MeModifyRuleNamePanel._instance = new MeModifyRuleNamePanel();
             }
 
-            ChangeLogAddPanel._instance.open();
+            MeModifyRuleNamePanel._instance._openData = openData;
+            MeModifyRuleNamePanel._instance.open();
         }
 
         public static hide(): void {
-            if (ChangeLogAddPanel._instance) {
-                ChangeLogAddPanel._instance.close();
+            if (MeModifyRuleNamePanel._instance) {
+                MeModifyRuleNamePanel._instance.close();
             }
         }
 
@@ -44,7 +50,7 @@ namespace TinyWars.ChangeLog {
             this._setAutoAdjustHeightEnabled(true);
             this._setTouchMaskEnabled(true);
             this._callbackForTouchMask  = () => this.close();
-            this.skinName               = "resource/skins/changeLog/ChangeLogAddPanel.exml";
+            this.skinName               = "resource/skins/mapEditor/MeModifyRuleNamePanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -74,25 +80,29 @@ namespace TinyWars.ChangeLog {
             ];
             if (textList.every(v => v.text.length <= 0)) {
                 FloatText.show(Lang.getText(Lang.Type.A0155));
-            } else if (textList.some(v => v.text.length > CommonConstants.ChangeLogTextMaxLength)) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.ChangeLogTextMaxLength));
+            } else if (textList.some(v => v.text.length > CommonConstants.WarRuleNameMaxLength)) {
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.WarRuleNameMaxLength));
             } else {
-                ChangeLogProxy.reqChangeLogAddMessage(textList);
+                MeManager.getWar().setWarRuleNameList(this._openData.ruleId, textList);
                 this.close();
             }
         }
 
         private _updateView(): void {
             this._updateComponentsForLanguage();
+
+            const textList          = MeManager.getWar().getWarRuleByRuleId(this._openData.ruleId).ruleNameList;
+            this._inputChinese.text = Lang.getTextInLanguage(textList, Types.LanguageType.Chinese);
+            this._inputEnglish.text = Lang.getTextInLanguage(textList, Types.LanguageType.English);
         }
 
         private _updateComponentsForLanguage(): void {
             this._btnClose.label    = Lang.getText(Lang.Type.B0146);
-            this._btnModify.label   = Lang.getText(Lang.Type.B0320);
+            this._btnModify.label   = Lang.getText(Lang.Type.B0317);
             this._labelChinese.text = Lang.getText(Lang.Type.B0455);
             this._labelEnglish.text = Lang.getText(Lang.Type.B0456);
             this._labelTip.text     = Lang.getText(Lang.Type.A0156);
-            this._labelTitle.text   = Lang.getText(Lang.Type.B0454);
+            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0317)} #${this._openData.ruleId}`;
         }
     }
 }

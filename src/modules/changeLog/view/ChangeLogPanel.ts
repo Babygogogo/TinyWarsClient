@@ -13,6 +13,7 @@ namespace TinyWars.ChangeLog {
         private static _instance: ChangeLogPanel;
 
         private _listMessage    : GameUi.UiScrollList;
+        private _labelTitle     : GameUi.UiLabel;
         private _labelNoMessage : GameUi.UiLabel;
         private _btnAddMessage  : GameUi.UiButton;
         private _btnClose       : GameUi.UiButton;
@@ -89,6 +90,7 @@ namespace TinyWars.ChangeLog {
 
         private _updateComponentsForLanguage(): void {
             this._updateListMessageAndLabelNoMessage();
+            this._labelTitle.text       = Lang.getText(Lang.Type.B0457);
             this._labelNoMessage.text   = Lang.getText(Lang.Type.B0278);
             this._btnClose.label        = Lang.getText(Lang.Type.B0146);
             this._btnAddMessage.label   = Lang.getText(Lang.Type.B0454);
@@ -121,7 +123,7 @@ namespace TinyWars.ChangeLog {
             super.dataChanged();
 
             const data              = this.data as DataForMessageRenderer;
-            this._labelIndex.text   = `${Helpers.getNumText(data.messageId, 3)} (${Helpers.getTimestampShortText(data.createTimestamp)})`;
+            this._labelIndex.text   = `#${Helpers.getNumText(data.messageId, 3)} (${Helpers.getTimestampShortText(data.createTimestamp)})`;
             this._labelContent.text = Lang.getTextInLanguage(data.textList);
 
             const btnModify     = this._btnModify;

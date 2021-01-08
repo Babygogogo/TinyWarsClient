@@ -285,13 +285,6 @@ namespace TinyWars.MapEditor {
             this._mapNameList = value;
         }
 
-        public getWarRuleList(): IWarRule[] {
-            return this._warRuleList;
-        }
-        public setWarRuleList(value: IWarRule[]) {
-            this._warRuleList = value;
-        }
-
         public getIsReviewingMap(): boolean {
             return this._isReviewingMap;
         }
@@ -304,6 +297,16 @@ namespace TinyWars.MapEditor {
         }
         public setIsMapModified(hasSubmitted: boolean): void {
             this._isMapModified = hasSubmitted;
+        }
+
+        public getWarRuleList(): IWarRule[] {
+            return this._warRuleList;
+        }
+        public setWarRuleList(value: IWarRule[]) {
+            this._warRuleList = value;
+        }
+        public getWarRuleByRuleId(ruleId: number): IWarRule {
+            return this.getWarRuleList().find(v => v.ruleId === ruleId);
         }
 
         public reviseWarRuleList(): void {
@@ -329,6 +332,12 @@ namespace TinyWars.MapEditor {
                 for (let index = ruleIndex; index < ruleList.length; ++index) {
                     --ruleList[index].ruleId;
                 }
+            }
+        }
+        public setWarRuleNameList(ruleId: number, nameList: ILanguageText[]): void {
+            const rule = this.getWarRuleByRuleId(ruleId);
+            if (rule) {
+                rule.ruleNameList = nameList;
             }
         }
 
