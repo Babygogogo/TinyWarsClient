@@ -9,6 +9,7 @@ namespace TinyWars.MapEditor {
     import IWarRule         = ProtoTypes.WarRule.IWarRule;
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
     import IDataForMapTag   = ProtoTypes.Map.IDataForMapTag;
+    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
 
     export class MeWar extends BaseWar.BwWar {
         private _drawer             : MeDrawer;
@@ -16,7 +17,7 @@ namespace TinyWars.MapEditor {
         private _mapSlotIndex       : number;
         private _mapDesignerUserId  : number;
         private _mapDesignerName    : string;
-        private _mapNameList        : string[];
+        private _mapNameList        : ILanguageText[];
         private _isReviewingMap     = false;
         private _warRuleList        : IWarRule[] = [];
         private _isMapModified      = false;
@@ -277,10 +278,10 @@ namespace TinyWars.MapEditor {
             this._mapDesignerName = value;
         }
 
-        public getMapNameList(): string[] {
+        public getMapNameList(): ILanguageText[] {
             return this._mapNameList;
         }
-        public setMapNameList(value: string[]) {
+        public setMapNameList(value: ILanguageText[]) {
             this._mapNameList = value;
         }
 

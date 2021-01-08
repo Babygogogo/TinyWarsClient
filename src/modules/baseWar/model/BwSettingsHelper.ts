@@ -419,8 +419,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         return {
             ruleId,
             ruleNameList    : [
-                Lang.getTextWithLanguage(Lang.Type.B0001, LanguageType.Chinese),
-                Lang.getTextWithLanguage(Lang.Type.B0001, LanguageType.English),
+                { languageType: LanguageType.Chinese, text: Lang.getTextWithLanguage(Lang.Type.B0001, LanguageType.Chinese) },
+                { languageType: LanguageType.English, text: Lang.getTextWithLanguage(Lang.Type.B0001, LanguageType.English) },
             ],
             ruleAvailability: {
                 canMcw  : true,
@@ -488,14 +488,14 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
     export function checkIsValidWarRule(rule: IWarRule, warEventData: ProtoTypes.Map.IDataForWarEvent): boolean {
         const ruleNameList = rule.ruleNameList;
-        if ((!ruleNameList) || (!ruleNameList.length)) {
+        if ((!ruleNameList)                             ||
+            (!Helpers.checkIsValidLanguageTextList({
+                list            : ruleNameList,
+                minTextLength   : 1,
+                maxTextLength   : CommonConstants.WarRuleNameMaxLength,
+            }))
+        ) {
             return false;
-        }
-        for (const ruleName of ruleNameList) {
-            const length = ruleName.length;
-            if ((length <= 0) || (length > CommonConstants.WarRuleNameMaxLength)) {
-                return false;
-            }
         }
 
         const ruleForPlayers = rule.ruleForPlayers;

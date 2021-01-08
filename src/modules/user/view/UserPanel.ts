@@ -16,27 +16,27 @@ namespace TinyWars.User {
         private static _instance: UserPanel;
 
         private _group                      : eui.Group;
-        private _labelTitle                 : TinyWars.GameUi.UiLabel;
-        private _btnClose                   : TinyWars.GameUi.UiButton;
+        private _labelTitle                 : GameUi.UiLabel;
+        private _btnClose                   : GameUi.UiButton;
 
-        private _labelStdRankTitle          : TinyWars.GameUi.UiLabel;
-        private _labelStdRankScore          : TinyWars.GameUi.UiLabel;
-        private _labelFogRankTitle          : TinyWars.GameUi.UiLabel;
-        private _labelFogRankScore          : TinyWars.GameUi.UiLabel;
+        private _labelStdRankTitle          : GameUi.UiLabel;
+        private _labelStdRankScore          : GameUi.UiLabel;
+        private _labelFogRankTitle          : GameUi.UiLabel;
+        private _labelFogRankScore          : GameUi.UiLabel;
 
-        private _labelRegisterTimeTitle     : TinyWars.GameUi.UiLabel;
-        private _labelRegisterTime          : TinyWars.GameUi.UiLabel;
-        private _labelLastLoginTimeTitle    : TinyWars.GameUi.UiLabel;
-        private _labelLastLoginTime         : TinyWars.GameUi.UiLabel;
-        private _labelOnlineTimeTitle       : TinyWars.GameUi.UiLabel;
-        private _labelOnlineTime            : TinyWars.GameUi.UiLabel;
-        private _labelLoginCountTitle       : TinyWars.GameUi.UiLabel;
-        private _labelLoginCount            : TinyWars.GameUi.UiLabel;
-        private _labelUserId                : TinyWars.GameUi.UiLabel;
-        private _labelDiscordId             : TinyWars.GameUi.UiLabel;
+        private _labelRegisterTimeTitle     : GameUi.UiLabel;
+        private _labelRegisterTime          : GameUi.UiLabel;
+        private _labelLastLoginTimeTitle    : GameUi.UiLabel;
+        private _labelLastLoginTime         : GameUi.UiLabel;
+        private _labelOnlineTimeTitle       : GameUi.UiLabel;
+        private _labelOnlineTime            : GameUi.UiLabel;
+        private _labelLoginCountTitle       : GameUi.UiLabel;
+        private _labelLoginCount            : GameUi.UiLabel;
+        private _labelUserId                : GameUi.UiLabel;
+        private _labelDiscordId             : GameUi.UiLabel;
 
-        private _labelHistoryTitle          : TinyWars.GameUi.UiLabel;
-        private _sclHistory                 : TinyWars.GameUi.UiScrollList;
+        private _labelHistoryTitle          : GameUi.UiLabel;
+        private _sclHistory                 : GameUi.UiScrollList;
 
         private _groupButtons               : eui.Group;
         private _btnChangeNickname          : GameUi.UiButton;
@@ -50,6 +50,7 @@ namespace TinyWars.User {
         private _btnComplaint               : GameUi.UiButton;
         private _btnSwitchTexture           : GameUi.UiButton;
         private _btnUnitsInfo               : GameUi.UiButton;
+        private _btnChangeLog               : GameUi.UiButton;
 
         private _userId: number;
 
@@ -72,8 +73,8 @@ namespace TinyWars.User {
 
             this._setAutoAdjustHeightEnabled();
             this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
-            this.skinName = "resource/skins/user/UserPanel.exml";
+            this._callbackForTouchMask  = () => this.close();
+            this.skinName               = "resource/skins/user/UserPanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -96,6 +97,7 @@ namespace TinyWars.User {
                 { ui: this._btnComplaint,       callback: this._onTouchedBtnComplaint },
                 { ui: this._btnSwitchTexture,   callback: this._onTouchedBtnSwitchTexture },
                 { ui: this._btnUnitsInfo,       callback: this._onTouchedBtnUnitsInfo },
+                { ui: this._btnChangeLog,       callback: this._onTouchedBtnChangeLog },
                 { ui: this._btnClose,           callback: this.close },
             ];
             this._sclHistory.setItemRenderer(HistoryRenderer);
@@ -174,6 +176,9 @@ namespace TinyWars.User {
         private _onTouchedBtnUnitsInfo(e: egret.TouchEvent): void {
             Common.CommonDamageChartPanel.show();
         }
+        private _onTouchedBtnChangeLog(e: egret.TouchEvent): void {
+            ChangeLog.ChangeLogPanel.show();
+        }
 
         private _showOpenAnimation(): void {
             const group = this._group;
@@ -215,6 +220,7 @@ namespace TinyWars.User {
             group.addChild(this._btnChangeLanguage);
             group.addChild(this._btnSwitchTexture);
             group.addChild(this._btnUnitsInfo);
+            group.addChild(this._btnChangeLog);
             group.addChild(this._btnServerStatus);
         }
 
@@ -240,6 +246,7 @@ namespace TinyWars.User {
             this._updateBtnChangeLanguage();
             this._updateBtnSwitchTexture();
             this._updateBtnUnitsInfo();
+            this._updateBtnChangeLog();
             this._updateBtnServerStatus();
             this._updateBtnChat();
             this._updateBtnComplaint();
@@ -325,6 +332,9 @@ namespace TinyWars.User {
         }
         private _updateBtnUnitsInfo(): void {
             this._btnUnitsInfo.label = Lang.getText(Lang.Type.B0440);
+        }
+        private _updateBtnChangeLog(): void {
+            this._btnChangeLog.label = Lang.getText(Lang.Type.B0457);
         }
         private _updateBtnServerStatus(): void {
             this._btnServerStatus.label = Lang.getText(Lang.Type.B0327);

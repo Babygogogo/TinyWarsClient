@@ -1,10 +1,11 @@
 
 namespace TinyWars.ChangeLog.ChangeLogProxy {
-    import Notify       = Utility.Notify;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import NetMessage   = ProtoTypes.NetMessage;
-    import NetManager   = Network.NetManager;
-    import NetworkCodes = Network.Codes;
+    import Notify           = Utility.Notify;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+    import NetMessage       = ProtoTypes.NetMessage;
+    import NetManager       = Network.NetManager;
+    import NetworkCodes     = Network.Codes;
 
     export function init(): void {
         NetManager.addListeners([
@@ -14,7 +15,7 @@ namespace TinyWars.ChangeLog.ChangeLogProxy {
         ], ChangeLogProxy);
     }
 
-    export function reqChangeLogAddMessage(textList: string[]): void {
+    export function reqChangeLogAddMessage(textList: ILanguageText[]): void {
         NetManager.send({
             MsgChangeLogAddMessage: { c: {
                 textList,
@@ -28,7 +29,7 @@ namespace TinyWars.ChangeLog.ChangeLogProxy {
         }
     }
 
-    export function reqChangeLogModifyMessage(messageId: number, textList: string[]): void {
+    export function reqChangeLogModifyMessage(messageId: number, textList: ILanguageText[]): void {
         NetManager.send({
             MsgChangeLogModifyMessage: { c: {
                 messageId,

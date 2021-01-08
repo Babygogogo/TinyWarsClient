@@ -52,7 +52,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.getTextInCurrentLanguage(MeModel.Sim.getMapRawData().mapNameList);
+            this._labelMapName.text = Lang.getTextInLanguage(MeModel.Sim.getMapRawData().mapNameList);
         }
 
         private _updateLabelPlayersCount(): void {

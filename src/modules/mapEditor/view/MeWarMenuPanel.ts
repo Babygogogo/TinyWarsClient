@@ -76,6 +76,7 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.TileAnimationTick,                  callback: this._onNotifyTileAnimationTick },
                 { type: Notify.Type.UnitAnimationTick,                  callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: Notify.Type.MeMapNameChanged,                   callback: this._onNotifyMeMapNameChanged },
                 { type: Notify.Type.MsgMeSubmitMap,                     callback: this._onMsgMeSubmitMap },
                 { type: Notify.Type.MsgMmReviewMap,                     callback: this._onMsgMmReviewMap },
                 { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
@@ -164,6 +165,10 @@ namespace TinyWars.MapEditor {
             this._updateView();
         }
 
+        private _onNotifyMeMapNameChanged(e: egret.Event): void {
+            this._updateLabelMapName();
+        }
+
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             const type = this._menuType;
             if (type === MenuType.Main) {
@@ -180,34 +185,7 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnModifyMapName(e: egret.TouchEvent): void {
             const war = this._war;
             if (!war.getIsReviewingMap()) {
-                const mapNameList = war.getMapNameList();
-                Common.CommonInputPanel.show({
-                    title           : Lang.getText(Lang.Type.B0225),
-                    tips            : Lang.getText(Lang.Type.A0131),
-                    currentValue    : mapNameList.join(","),
-                    maxChars        : Utility.ConfigManager.MAP_CONSTANTS.MaxMapNameLength * 2 + 1,
-                    charRestrict    : null,
-                    callback        : (panel) => {
-                        const value         = panel.getInputText();
-                        const newNameList   : string[] = [];
-                        for (const rawName of (value ? value.split(",") : [])) {
-                            const ruleName = rawName.trim();
-                            if (ruleName) {
-                                newNameList.push(ruleName);
-                            }
-                        }
-
-                        if (!newNameList.length) {
-                            FloatText.show(Lang.getText(Lang.Type.A0098));
-                        } else {
-                            mapNameList.length = 0;
-                            for (const ruleName of newNameList) {
-                                mapNameList.push(ruleName);
-                            }
-                            this._updateLabelMapName();
-                        }
-                    },
-                });
+                MeModifyMapNamePanel.show();
             }
         }
 
@@ -224,7 +202,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0163),
                     tips            : null,
                     currentValue    : war.getMapDesignerName(),
-                    maxChars        : Utility.ConfigManager.MAP_CONSTANTS.MaxDesignerLength,
+                    maxChars        : Utility.ConfigManager.COMMON_CONSTANTS.MaxDesignerLength,
                     charRestrict    : null,
                     callback        : (panel) => {
                         war.setMapDesignerName(panel.getInputText());
@@ -276,7 +254,11 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = (this._war.getMapNameList() || []).join(",");
+            const nameList: string[] = [];
+            for (const data of this._war.getMapNameList() || []) {
+                nameList.push(data.text);
+            }
+            this._labelMapName.text = nameList.join(`, `);
         }
 
         private _updateGroupMapDesigner(): void {

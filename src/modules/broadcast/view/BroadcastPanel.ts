@@ -82,7 +82,7 @@ namespace TinyWars.Broadcast {
             const textList: string[] = [];
             for (const message of messageList) {
                 ongoingSet.add(message.messageId);
-                textList.push(Lang.getStringInCurrentLanguage(message.textList));
+                textList.push(Lang.getTextInLanguage(message.textList));
             }
 
             const group = this._groupLamp;

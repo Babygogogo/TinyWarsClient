@@ -25,7 +25,6 @@ namespace TinyWars.MapEditor.MeUtility {
     import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
     import ISerialTile              = WarSerialization.ISerialTile;
     import ISerialUnit              = WarSerialization.ISerialUnit;
-    import MapConstants             = ConfigManager.MAP_CONSTANTS;
     import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     export type AsymmetricalCounters = {
@@ -44,8 +43,8 @@ namespace TinyWars.MapEditor.MeUtility {
             designerName            : await User.UserModel.getSelfNickname(),
             designerUserId          : User.UserModel.getSelfUserId(),
             mapNameList             : [
-                `${Lang.getTextWithLanguage(Lang.Type.B0279, LanguageType.Chinese)} - ${slotIndex}`,
-                `${Lang.getTextWithLanguage(Lang.Type.B0279, LanguageType.English)} - ${slotIndex}`,
+                { languageType: LanguageType.Chinese, text: `${Lang.getTextWithLanguage(Lang.Type.B0279, LanguageType.Chinese)} - ${slotIndex}`},
+                { languageType: LanguageType.English, text: `${Lang.getTextWithLanguage(Lang.Type.B0279, LanguageType.English)} - ${slotIndex}`},
             ],
             mapWidth,
             mapHeight,
@@ -173,14 +172,14 @@ namespace TinyWars.MapEditor.MeUtility {
     function checkIsMapDesignerNameValid(mapDesigner: string | null | undefined): boolean {
         return (mapDesigner != null)
             && (mapDesigner.length > 0)
-            && (mapDesigner.length <= MapConstants.MaxDesignerLength);
+            && (mapDesigner.length <= CommonConstants.MaxDesignerLength);
     }
     function checkIsMapNameListValid(mapNameList: ProtoTypes.Structure.ILanguageText[] | null | undefined): boolean {
         return (mapNameList != null)
             && (Helpers.checkIsValidLanguageTextList({
                 list            : mapNameList,
                 minTextLength   : 1,
-                maxTextLength   : MapConstants.MaxMapNameLength,
+                maxTextLength   : CommonConstants.MaxMapNameLength,
             }));
     }
     function checkIsPlayersCountValid(mapRawData: IMapRawData): boolean {
@@ -214,7 +213,7 @@ namespace TinyWars.MapEditor.MeUtility {
             return false;
         }
         const gridsCount = mapWidth * mapHeight;
-        if (gridsCount > MapConstants.MaxGridsCount) {
+        if (gridsCount > CommonConstants.MaxGridsCount) {
             return false;
         }
 
@@ -335,7 +334,7 @@ namespace TinyWars.MapEditor.MeUtility {
             return false;
         }
         const gridsCount = mapWidth * mapHeight;
-        if (gridsCount > MapConstants.MaxGridsCount) {
+        if (gridsCount > CommonConstants.MaxGridsCount) {
             return false;
         }
 
@@ -845,10 +844,12 @@ namespace TinyWars.MapEditor.MeUtility {
         actionDict  : WarEventActionDict;
     }): boolean {
         const eventNameList = warEvent.eventNameList;
-        if ((eventNameList == null)                                                                     ||
-            (eventNameList.length <= 0)                                                                 ||
-            (eventNameList.length > CommonConstants.NameListMaxLength)                                  ||
-            (eventNameList.some(v => v.length <= 0 || v.length > CommonConstants.WarEventNameMaxLength))
+        if ((eventNameList == null)                                     ||
+            (!Helpers.checkIsValidLanguageTextList({
+                list            : eventNameList,
+                maxTextLength   : CommonConstants.WarEventNameMaxLength,
+                minTextLength   : 1
+            }))
         ) {
             return false;
         }

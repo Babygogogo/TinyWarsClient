@@ -5,6 +5,7 @@ namespace TinyWars.Broadcast.BroadcastProxy {
     import NetMessage       = ProtoTypes.NetMessage;
     import NetManager       = Network.NetManager;
     import NetworkCodes     = Network.Codes;
+    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
 
     export function init(): void {
         NetManager.addListeners([
@@ -15,7 +16,7 @@ namespace TinyWars.Broadcast.BroadcastProxy {
         ], BroadcastProxy);
     }
 
-    export function reqBroadcastAddMessage(textList: string[], startTime: number, endTime: number): void {
+    export function reqBroadcastAddMessage(textList: ILanguageText[], startTime: number, endTime: number): void {
         NetManager.send({
             MsgBroadcastAddMessage: { c: {
                 textList,

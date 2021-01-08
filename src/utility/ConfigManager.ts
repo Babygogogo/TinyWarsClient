@@ -65,6 +65,10 @@ namespace TinyWars.Utility.ConfigManager {
         ChangeLogTextListMaxLength              : 2,
         ChangeLogMessageListMaxLength           : 100,
 
+        MaxGridsCount                           : 1000,
+        MaxMapNameLength                        : 30,
+        MaxDesignerLength                       : 30,
+
         WarEventNameMaxLength                   : 150,
         WarEventMaxEventsPerMap                 : 10,
         WarEventMaxConditionNodesPerMap         : 50,
@@ -855,13 +859,6 @@ namespace TinyWars.Utility.ConfigManager {
     ////////////////////////////////////////////////////////////////////////////////
     export const SILO_RADIUS                = 2;
     export const SILO_DAMAGE                = 30;
-
-    export const MAP_CONSTANTS              = {
-        MaxGridsCount           : 1000,
-        MaxMapNameLength        : 30,
-        MaxMapNameEnglishLength : 30,
-        MaxDesignerLength       : 30,
-    };
 
     export function init(): void {
     }

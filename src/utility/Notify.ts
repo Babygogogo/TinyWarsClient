@@ -81,6 +81,7 @@ namespace TinyWars.Utility.Notify {
         MeDrawerModeChanged,
         MeUnitChanged,
         MeTileChanged,
+        MeMapNameChanged,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MsgCommonHeartbeat,

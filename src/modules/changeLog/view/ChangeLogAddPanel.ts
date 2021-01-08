@@ -4,6 +4,9 @@ namespace TinyWars.ChangeLog {
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
     import FloatText        = Utility.FloatText;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Types            = Utility.Types;
+    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class ChangeLogAddPanel extends GameUi.UiPanel {
@@ -63,10 +66,15 @@ namespace TinyWars.ChangeLog {
         }
 
         private _onTouchedBtnModify(e: egret.TouchEvent): void {
-            const textList = [this._inputChinese.text || ``, this._inputEnglish.text || ``];
-            if (textList.every(v => v.length <= 0)) {
+            const chineseText   = this._inputChinese.text || ``;
+            const englishText   = this._inputEnglish.text || ``;
+            const textList      : ILanguageText[] = [
+                { languageType: Types.LanguageType.Chinese, text: chineseText || englishText },
+                { languageType: Types.LanguageType.English, text: englishText || chineseText },
+            ];
+            if (textList.every(v => v.text.length <= 0)) {
                 FloatText.show(Lang.getText(Lang.Type.A0155));
-            } else if (textList.some(v => v.length > CommonConstants.ChangeLogTextMaxLength)) {
+            } else if (textList.some(v => v.text.length > CommonConstants.ChangeLogTextMaxLength)) {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.ChangeLogTextMaxLength));
             } else {
                 ChangeLogProxy.reqChangeLogAddMessage(textList);

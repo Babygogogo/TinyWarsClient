@@ -2574,6 +2574,14 @@ namespace TinyWars.Utility.Lang {
             `英文`,
             `In English`,
         ],
+        [Type.B0457]: [
+            `更新日志`,
+            `Change Log`,
+        ],
+        [Type.B0458]: [
+            `设定地图名称`,
+            `Edit Map Name`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3577,7 +3585,7 @@ namespace TinyWars.Utility.Lang {
     export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined {
         return (warRule.ruleId == null)
             ? getText(Type.B0321)
-            : getTextInCurrentLanguage(warRule.ruleNameList);
+            : getTextInLanguage(warRule.ruleNameList);
     }
 
     export function getStringInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {
@@ -3589,8 +3597,8 @@ namespace TinyWars.Utility.Lang {
                 : nameList[1] || nameList[0];
         }
     }
-    export function getTextInCurrentLanguage(textList: ProtoTypes.Structure.ILanguageText[]): string | undefined {
-        const data = (textList || []).find(v => v.languageType === getLanguageType());
+    export function getTextInLanguage(textList: ProtoTypes.Structure.ILanguageText[], languageType = getLanguageType()): string | undefined {
+        const data = (textList || []).find(v => v.languageType === languageType);
         return data ? data.text : undefined;
     }
 

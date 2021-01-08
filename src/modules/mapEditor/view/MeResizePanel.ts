@@ -132,7 +132,7 @@ namespace TinyWars.MapEditor {
             this._labelCurrSizeTitle.text   = Lang.getText(Lang.Type.B0291);
             this._labelNewSizeTitle.text    = Lang.getText(Lang.Type.B0292);
             this._labelTips1.text           = Lang.getText(Lang.Type.A0086);
-            this._labelTips2.text           = Lang.getFormattedText(Lang.Type.F0023, Utility.ConfigManager.MAP_CONSTANTS.MaxGridsCount);
+            this._labelTips2.text           = Lang.getFormattedText(Lang.Type.F0023, Utility.ConfigManager.COMMON_CONSTANTS.MaxGridsCount);
         }
     }
 }

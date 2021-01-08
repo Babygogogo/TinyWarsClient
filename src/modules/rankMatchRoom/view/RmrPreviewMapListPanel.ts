@@ -153,7 +153,7 @@ namespace TinyWars.RankMatchRoom {
                 } else {
                     data.push({
                         mapId,
-                        mapName : Lang.getTextInCurrentLanguage(mapBriefData.mapNameList),
+                        mapName : Lang.getTextInLanguage(mapBriefData.mapNameList),
                         panel   : this,
                     });
                 }

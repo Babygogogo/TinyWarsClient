@@ -1,5 +1,5 @@
 
-namespace TinyWars.ChangeLog {
+namespace TinyWars.MapEditor {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
@@ -9,17 +9,12 @@ namespace TinyWars.ChangeLog {
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    type OpenDataForChangeLogModifyPanel = {
-        messageId   : number;
-    }
-
-    export class ChangeLogModifyPanel extends GameUi.UiPanel {
+    export class MeModifyMapNamePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: ChangeLogModifyPanel;
+        private static _instance: MeModifyMapNamePanel;
 
-        private _openData       : OpenDataForChangeLogModifyPanel;
         private _inputChinese   : GameUi.UiTextInput;
         private _inputEnglish   : GameUi.UiTextInput;
         private _labelTip       : GameUi.UiLabel;
@@ -29,18 +24,17 @@ namespace TinyWars.ChangeLog {
         private _btnModify      : GameUi.UiButton;
         private _btnClose       : GameUi.UiButton;
 
-        public static show(openData: OpenDataForChangeLogModifyPanel): void {
-            if (!ChangeLogModifyPanel._instance) {
-                ChangeLogModifyPanel._instance = new ChangeLogModifyPanel();
+        public static show(): void {
+            if (!MeModifyMapNamePanel._instance) {
+                MeModifyMapNamePanel._instance = new MeModifyMapNamePanel();
             }
 
-            ChangeLogModifyPanel._instance._openData = openData;
-            ChangeLogModifyPanel._instance.open();
+            MeModifyMapNamePanel._instance.open();
         }
 
         public static hide(): void {
-            if (ChangeLogModifyPanel._instance) {
-                ChangeLogModifyPanel._instance.close();
+            if (MeModifyMapNamePanel._instance) {
+                MeModifyMapNamePanel._instance.close();
             }
         }
 
@@ -50,7 +44,7 @@ namespace TinyWars.ChangeLog {
             this._setAutoAdjustHeightEnabled(true);
             this._setTouchMaskEnabled(true);
             this._callbackForTouchMask  = () => this.close();
-            this.skinName               = "resource/skins/changeLog/ChangeLogModifyPanel.exml";
+            this.skinName               = "resource/skins/mapEditor/MeModifyMapNamePanel.exml";
         }
 
         protected _onFirstOpened(): void {
@@ -80,10 +74,11 @@ namespace TinyWars.ChangeLog {
             ];
             if (textList.every(v => v.text.length <= 0)) {
                 FloatText.show(Lang.getText(Lang.Type.A0155));
-            } else if (textList.some(v => v.text.length > CommonConstants.ChangeLogTextMaxLength)) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.ChangeLogTextMaxLength));
+            } else if (textList.some(v => v.text.length > CommonConstants.MaxMapNameLength)) {
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.MaxMapNameLength));
             } else {
-                ChangeLogProxy.reqChangeLogModifyMessage(this._openData.messageId, textList);
+                MeManager.getWar().setMapNameList(textList);
+                Notify.dispatch(Notify.Type.MeMapNameChanged);
                 this.close();
             }
         }
@@ -91,7 +86,7 @@ namespace TinyWars.ChangeLog {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const textList          = ChangeLogModel.getMessage(this._openData.messageId).textList || [];
+            const textList          = MeManager.getWar().getMapNameList() || [];
             this._inputChinese.text = Lang.getTextInLanguage(textList, Types.LanguageType.Chinese);
             this._inputEnglish.text = Lang.getTextInLanguage(textList, Types.LanguageType.English);
         }
@@ -102,7 +97,7 @@ namespace TinyWars.ChangeLog {
             this._labelChinese.text = Lang.getText(Lang.Type.B0455);
             this._labelEnglish.text = Lang.getText(Lang.Type.B0456);
             this._labelTip.text     = Lang.getText(Lang.Type.A0156);
-            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0317)} #${this._openData.messageId}`;
+            this._labelTitle.text   = Lang.getText(Lang.Type.B0458);
         }
     }
 }
