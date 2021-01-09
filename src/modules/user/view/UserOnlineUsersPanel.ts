@@ -47,13 +47,13 @@ namespace TinyWars.User {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgUserGetOnlineUsers,    callback: this._onNotifySUserGetOnlineUsers },
-            ];
-            this._uiListeners = [
+                { type: Notify.Type.MsgUserGetOnlineUsers,  callback: this._onNotifySUserGetOnlineUsers },
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnClose, callback: this.close },
-            ];
+            ]);
             this._listUser.setItemRenderer(UserRenderer);
         }
         protected _onOpened(): void {
@@ -126,7 +126,7 @@ namespace TinyWars.User {
         nickname    : string;
     }
 
-    class UserRenderer extends eui.ItemRenderer {
+    class UserRenderer extends GameUi.UiListItemRenderer {
         private _group      : eui.Group;
         private _imgBg      : GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;

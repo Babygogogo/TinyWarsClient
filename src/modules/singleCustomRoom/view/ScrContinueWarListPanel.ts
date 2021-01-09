@@ -48,14 +48,14 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgScrContinueWarFailed,    callback: this._onMsgScrContinueWarFailed },
                 { type: Notify.Type.MsgScrContinueWar,          callback: this._onMsgScrContinueWar },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listWar.setItemRenderer(WarRenderer);
         }
 
@@ -204,7 +204,7 @@ namespace TinyWars.SingleCustomRoom {
         panel       : ScrContinueWarListPanel;
     }
 
-    class WarRenderer extends eui.ItemRenderer {
+    class WarRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _labelSlotIndex : GameUi.UiLabel;

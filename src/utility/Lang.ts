@@ -1092,7 +1092,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0081]: [
             `删除部队`,
-            `Delete`,
+            `Delete Unit`,
         ],
         [Type.B0082]: [
             `和局`,
@@ -2593,6 +2593,26 @@ namespace TinyWars.Utility.Lang {
         [Type.B0460]: [
             `设置权限`,
             `Set Privilege`,
+        ],
+        [Type.B0461]: [
+            `战局事件列表`,
+            `War Event List`,
+        ],
+        [Type.B0462]: [
+            `战局事件ID`,
+            `War Event ID`,
+        ],
+        [Type.B0463]: [
+            `上移`,
+            `Up`,
+        ],
+        [Type.B0464]: [
+            `下移`,
+            `Down`,
+        ],
+        [Type.B0465]: [
+            `编辑`,
+            `Edit`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -47,14 +47,14 @@ namespace TinyWars.MapEditor {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
                 { ui: this._groupFill,  callback: this._onTouchedGroupFill },
-            ];
+            ]);
             this._listCategory.setItemRenderer(CategoryRenderer);
             this._listRecent.setItemRenderer(TileBaseRenderer);
         }
@@ -181,7 +181,7 @@ namespace TinyWars.MapEditor {
         panel                   : MeChooseTileBasePanel;
     }
 
-    class CategoryRenderer extends eui.ItemRenderer {
+    class CategoryRenderer extends GameUi.UiListItemRenderer {
         private _labelCategory  : GameUi.UiLabel;
         private _listTileBase   : GameUi.UiScrollList;
 
@@ -224,7 +224,7 @@ namespace TinyWars.MapEditor {
         panel               : MeChooseTileBasePanel;
     }
 
-    class TileBaseRenderer extends eui.ItemRenderer {
+    class TileBaseRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
 

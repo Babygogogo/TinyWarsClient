@@ -13,9 +13,9 @@ namespace TinyWars.GameUi {
         protected abstract readonly _LAYER_TYPE  : Utility.Types.LayerType;
         protected abstract readonly _IS_EXCLUSIVE: boolean;
 
-        protected _uiListeners    : UiListener[];
-        protected _notifyListeners: Utility.Notify.Listener[];
-        protected _notifyPriority = 0;
+        private _uiListenerArray    : UiListener[];
+        private _notifyListenerArray: Utility.Notify.Listener[];
+        private _notifyPriority     = 0;
 
         private _isChildrenCreated  = false;
         private _isSkinLoaded       = false;
@@ -177,23 +177,42 @@ namespace TinyWars.GameUi {
             this._callbackForTouchMask && this._callbackForTouchMask();
         }
 
+        protected _setUiListenerArray(array: UiListener[]): void {
+            this._uiListenerArray = array;
+        }
+        protected _getUiListenerArray(): UiListener[] | undefined {
+            return this._uiListenerArray;
+        }
+        protected _setNotifyListenerArray(array: Utility.Notify.Listener[]): void {
+            this._notifyListenerArray = array;
+        }
+        protected _getNotifyListenerArray(): Utility.Notify.Listener[] | undefined {
+            return this._notifyListenerArray;
+        }
+
         private _registerListeners(): void {
-            if (this._notifyListeners) {
-                Utility.Notify.addEventListeners(this._notifyListeners, this);
+            const notifyListenerArray = this._getNotifyListenerArray();
+            if (notifyListenerArray) {
+                Utility.Notify.addEventListeners(notifyListenerArray, this);
             }
-            if (this._uiListeners) {
-                for (const l of this._uiListeners) {
+
+            const uiListenerArray = this._getUiListenerArray();
+            if (uiListenerArray) {
+                for (const l of uiListenerArray) {
                     l.ui.addEventListener(l.eventType || egret.TouchEvent.TOUCH_TAP, l.callback, l.thisObject || this);
                 }
             }
         }
 
         private _unregisterListeners(): void {
-            if (this._notifyListeners) {
-                Utility.Notify.removeEventListeners(this._notifyListeners, this);
+            const notifyListenerArray = this._getNotifyListenerArray();
+            if (notifyListenerArray) {
+                Utility.Notify.removeEventListeners(notifyListenerArray, this);
             }
-            if (this._uiListeners) {
-                for (const l of this._uiListeners) {
+
+            const uiListenerArray = this._getUiListenerArray();
+            if (uiListenerArray) {
+                for (const l of uiListenerArray) {
                     l.ui.removeEventListener(l.eventType || egret.TouchEvent.TOUCH_TAP, l.callback, l.thisObject || this);
                 }
             }

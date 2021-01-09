@@ -104,7 +104,7 @@ namespace TinyWars.MultiCustomRoom {
         warInfo     : IMpwWarInfo;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _listInfo   : GameUi.UiScrollList;
 
         protected childrenCreated(): void {
@@ -237,7 +237,7 @@ namespace TinyWars.MultiCustomRoom {
         infoColor   : number;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

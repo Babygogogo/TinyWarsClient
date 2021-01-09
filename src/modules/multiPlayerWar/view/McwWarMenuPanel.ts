@@ -72,17 +72,17 @@ namespace TinyWars.MultiPlayerWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyMcwPlannerStateChanged },
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnHome,        callback: this._onTouchedBtnHome },
                 { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
-            ];
+            ]);
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._listWarInfo.setItemRenderer(InfoRenderer);
@@ -551,7 +551,7 @@ namespace TinyWars.MultiPlayerWar {
         callback: () => void;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
 
@@ -576,7 +576,7 @@ namespace TinyWars.MultiPlayerWar {
         player  : MpwPlayer;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _labelName      : GameUi.UiLabel;
         private _labelForce     : GameUi.UiLabel;
@@ -870,7 +870,7 @@ namespace TinyWars.MultiPlayerWar {
         infoColor   : number;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

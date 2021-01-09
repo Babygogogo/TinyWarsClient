@@ -70,10 +70,10 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
                 { ui: this._btnBack,    callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listCo.setItemRenderer(CoRenderer);
             this._listPassiveSkill.setItemRenderer(SkillRenderer);
             this._listCop.setItemRenderer(SkillRenderer);
@@ -259,7 +259,7 @@ namespace TinyWars.MultiCustomRoom {
         panel       : McrJoinCoListPanel;
     }
 
-    class CoRenderer extends eui.ItemRenderer {
+    class CoRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
@@ -299,7 +299,7 @@ namespace TinyWars.MultiCustomRoom {
         skillId : number;
     }
 
-    class SkillRenderer extends eui.ItemRenderer {
+    class SkillRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 

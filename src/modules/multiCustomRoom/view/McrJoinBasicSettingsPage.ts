@@ -258,7 +258,7 @@ namespace TinyWars.MultiCustomRoom {
         playerIndex     : number;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex     : GameUi.UiLabel;
         private _labelNickname  : GameUi.UiLabel;
 

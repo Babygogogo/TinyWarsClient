@@ -56,14 +56,14 @@ namespace TinyWars.RankMatchRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgRmrDeleteRoom,   callback: this._onMsgRmrDeleteRoom },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {
@@ -277,7 +277,7 @@ namespace TinyWars.RankMatchRoom {
         Unavailable,
     }
 
-    class RendererForCoTier extends eui.ItemRenderer {
+    class RendererForCoTier extends GameUi.UiListItemRenderer {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 
@@ -323,7 +323,7 @@ namespace TinyWars.RankMatchRoom {
         }
     }
 
-    class RendererForCoName extends eui.ItemRenderer {
+    class RendererForCoName extends GameUi.UiListItemRenderer {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 

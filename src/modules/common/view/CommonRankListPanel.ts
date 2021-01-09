@@ -43,13 +43,13 @@ namespace TinyWars.Common {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgCommonGetRankList,   callback: this._onMsgCommonGetRankList },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnClose, callback: this.close },
-            ];
+            ]);
             this._listStd.setItemRenderer(UserRenderer);
             this._listFog.setItemRenderer(UserRenderer);
         }
@@ -138,7 +138,7 @@ namespace TinyWars.Common {
         warType     : Types.WarType;
     }
 
-    class UserRenderer extends eui.ItemRenderer {
+    class UserRenderer extends GameUi.UiListItemRenderer {
         private _group      : eui.Group;
         private _imgBg      : GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;

@@ -36,10 +36,10 @@ namespace TinyWars.MapManagement {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

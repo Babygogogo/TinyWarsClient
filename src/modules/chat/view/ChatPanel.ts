@@ -67,16 +67,16 @@ namespace TinyWars.Chat {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgChatAddMessage,      callback: this._onMsgChatAddMessage },
                 { type: Notify.Type.MsgChatGetAllMessages,  callback: this._onMsgChatGetAllMessages },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this.close },
                 { ui: this._btnRefresh, callback: this._onTouchedBtnRefresh },
                 { ui: this._btnSend,    callback: this._onTouchedBtnSend },
-            ];
+            ]);
             this._listChat.setItemRenderer(ChatPageRenderer);
             this._listMessage.setItemRenderer(MessageRenderer);
         }
@@ -427,33 +427,18 @@ namespace TinyWars.Chat {
         toTarget    : number;
     }
 
-    class ChatPageRenderer extends eui.ItemRenderer {
+    class ChatPageRenderer extends GameUi.UiListItemRenderer {
         private _labelName      : GameUi.UiLabel;
         private _labelType      : GameUi.UiLabel;
         private _imgRed         : GameUi.UiLabel;
-        private _notifyEvents   : Notify.Listener[] = [
-            { type: Notify.Type.MsgChatGetAllMessages,            callback: this._onMsgChatGetAllMessages },
-            { type: Notify.Type.MsgChatAddMessage,                callback: this._onMsgChatAddMessage },
-            { type: Notify.Type.MsgChatGetAllReadProgressList,    callback: this._onMsgChatGetAllReadProgressList },
-            { type: Notify.Type.MsgChatUpdateReadProgress,        callback: this._onMsgChatUpdateReadProgress },
-        ];
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
-        }
-        private _onAddedToStage(e: egret.Event): void {
-            this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
-            this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
-
-            Notify.addEventListeners(this._notifyEvents, this);
-        }
-        private _onRemovedFromStage(e: egret.Event): void {
-            this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
-            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
-
-            Notify.removeEventListeners(this._notifyEvents, this);
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.MsgChatGetAllMessages,            callback: this._onMsgChatGetAllMessages },
+                { type: Notify.Type.MsgChatAddMessage,                callback: this._onMsgChatAddMessage },
+                { type: Notify.Type.MsgChatGetAllReadProgressList,    callback: this._onMsgChatGetAllReadProgressList },
+                { type: Notify.Type.MsgChatUpdateReadProgress,        callback: this._onMsgChatUpdateReadProgress },
+            ]);
         }
 
         public onItemTapEvent(e: egret.TouchEvent): void {
@@ -530,7 +515,7 @@ namespace TinyWars.Chat {
 
     type DataForMessageRenderer = ProtoTypes.Chat.IChatMessage;
 
-    class MessageRenderer extends eui.ItemRenderer {
+    class MessageRenderer extends GameUi.UiListItemRenderer {
         private _labelName      : TinyWars.GameUi.UiLabel;
         private _labelContent   : TinyWars.GameUi.UiLabel;
 

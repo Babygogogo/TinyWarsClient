@@ -52,16 +52,16 @@ namespace TinyWars.ReplayWar {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnClose,           callback: this.close },
                 { ui: this._btnReset,           callback: this._onTouchedBtnReset },
                 { ui: this._btnSearch,          callback: this._onTouchedBtnSearch },
                 { ui: this._inputGlobalRating,  callback: this._onFocusOutInputGlobalRating,    eventType: egret.Event.FOCUS_OUT },
                 { ui: this._inputMyRating,      callback: this._onFocusOutInputMyRating,        eventType: egret.Event.FOCUS_OUT },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

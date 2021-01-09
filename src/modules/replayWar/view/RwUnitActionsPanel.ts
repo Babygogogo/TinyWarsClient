@@ -43,13 +43,13 @@ namespace TinyWars.ReplayWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 // { type: Notify.Type.GlobalTouchBegin,           callback: this._onNotifyGlobalTouchBegin },
                 // { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
                 // { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
                 { type: Notify.Type.ZoomableContentsMoved,      callback: this._onNotifyZoomableContentsMoved },
                 { type: Notify.Type.UnitAnimationTick,          callback: this._onNotifyUnitAnimationTick },
-            ];
+            ]);
 
             this._listAction.setItemRenderer(UnitActionRenderer);
         }
@@ -151,7 +151,7 @@ namespace TinyWars.ReplayWar {
         canProduceUnit? : boolean;
     }
 
-    class UnitActionRenderer extends eui.ItemRenderer {
+    class UnitActionRenderer extends GameUi.UiListItemRenderer {
         private _labelAction: GameUi.UiLabel;
         private _labelCost  : GameUi.UiLabel;
         private _conUnitView: eui.Group;

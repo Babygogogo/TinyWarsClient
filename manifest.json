@@ -46,6 +46,7 @@
 		"bin-debug/modules/user/model/UserModel.js",
 		"bin-debug/utility/DestructionHelpers.js",
 		"bin-debug/gameui/UiImage.js",
+		"bin-debug/gameui/UiListItemRenderer.js",
 		"bin-debug/gameui/UiTabPage.js",
 		"bin-debug/modules/baseWar/model/BwActionPlanner.js",
 		"bin-debug/modules/baseWar/model/BwCoSkillHelpers.js",

@@ -62,11 +62,11 @@ namespace TinyWars.User {
         }
 
         public _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.MsgUserGetPublicInfo,   callback: this._onNotifyMsgUserGetPublicInfo },
                 { type: Notify.Type.MsgUserSetPrivilege,    callback: this._onNotifyMsgUserSetPrivilege },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnGetInfo,             callback: this._onTouchedBtnGetInfo },
                 { ui: this._btnConfirm,             callback: this._onTouchedBtnConfirm },
                 { ui: this._btnCancel,              callback: this.close },
@@ -75,7 +75,7 @@ namespace TinyWars.User {
                 { ui: this._groupIsAdmin,           callback: this._onTouchedGroupIsAdmin },
                 { ui: this._groupIsChangeLogEditor, callback: this._onTouchedGroupIsChangeLogEditor },
                 { ui: this._groupIsMapCommittee,    callback: this._onTouchedGroupIsMapCommittee },
-            ];
+            ]);
         }
 
         public _onOpened(): void {

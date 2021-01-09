@@ -52,17 +52,17 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
                 { type: Notify.Type.MsgMcrExitRoom,                 callback: this._onMsgMcrExitRoom },
                 { type: Notify.Type.MsgMcrDeletePlayer,             callback: this._onMsgMcrDeletePlayer },
                 { type: Notify.Type.MsgMcrDeleteRoom,               callback: this._onMsgMcrDeleteRoom },
                 { type: Notify.Type.MsgMcrStartWar,                 callback: this._onMsgMcrStartWar },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listWar.setItemRenderer(WarRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
@@ -236,7 +236,7 @@ namespace TinyWars.MultiCustomRoom {
         panel   : McrMyRoomListPanel;
     }
 
-    class WarRenderer extends eui.ItemRenderer {
+    class WarRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose  : GameUi.UiButton;
         private _btnNext    : GameUi.UiButton;
         private _labelName  : GameUi.UiLabel;
@@ -284,7 +284,7 @@ namespace TinyWars.MultiCustomRoom {
         teamIndex   : number;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
 

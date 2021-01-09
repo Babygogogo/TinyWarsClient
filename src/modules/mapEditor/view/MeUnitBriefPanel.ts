@@ -49,7 +49,7 @@ namespace TinyWars.MapEditor {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyMcwCursorGridIndexChanged },
@@ -61,7 +61,7 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
                 { type: Notify.Type.MeUnitChanged,                  callback: this._onNotifyMeUnitChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-            ];
+            ]);
         }
         protected _onOpened(): void {
             const war       = MeManager.getWar();

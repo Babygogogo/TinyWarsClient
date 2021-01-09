@@ -49,14 +49,14 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnClose,  callback: this._onTouchedBtnClose },
                 { ui: this._btnReset,  callback: this._onTouchedBtnReset },
                 { ui: this._btnSearch, callback: this._onTouchedBtnSearch },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

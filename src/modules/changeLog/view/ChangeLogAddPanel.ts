@@ -48,13 +48,13 @@ namespace TinyWars.ChangeLog {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
-            ];
+            ]);
 
             this._inputChinese.maxChars = CommonConstants.ChangeLogTextMaxLength;
             this._inputEnglish.maxChars = CommonConstants.ChangeLogTextMaxLength;

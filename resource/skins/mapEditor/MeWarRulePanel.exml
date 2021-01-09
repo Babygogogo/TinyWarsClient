@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group top="40" bottom="0" width="160" left="0">
+    <e:Group top="40" bottom="0" width="160" left="0" locked="true">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" />
         <GameUi:UiLabel id="_labelMenuTitle" text="预设规则" y="10" bold="true" size="20" textColor="0xffffff"
@@ -43,7 +43,7 @@
                         left="-1" right="1" top="0" bottom="0" locked="true" />
         <e:Scroller top="10" bottom="10" left="0" right="0">
             <e:Group>
-                <e:Group x="0" y="0" width="800">
+                <e:Group x="0" y="0" width="800" locked="true">
                     <e:Group height="28" x="0" y="0" scaleX="1" scaleY="1" locked="true">
                         <GameUi:UiButton id="_btnModifyRuleName" label="规则名" x="330" width="160" top="0" bottom="0"
                                          height="28" skinName="Skins.Component.Button.ButtonSelfAdaption001" />
@@ -81,7 +81,7 @@
                 </e:Group>
                 <GameUi:UiImage source="c08_t06_s01_f01" left="0" right="0" bottom="0" width="780" height="1"
                                 locked="true" />
-                <e:Group x="0" y="74" width="800">
+                <e:Group x="0" y="74" width="800" locked="true">
                     <GameUi:UiLabel id="_labelAvailability" text="可用模式" textColor="0xFFFFFF" y="0" size="20" x="0" />
                     <e:Group x="10" y="10">
                         <e:Group height="28" x="0" y="34">
@@ -144,8 +144,58 @@
                         <e:VerticalLayout horizontalAlign="center" />
                     </e:layout>
                 </e:Group>
-                <GameUi:UiImage source="c08_t06_s01_f01" left="0" right="0" bottom="0" width="780" height="1" />
-                <e:Group x="0" y="74" width="800">
+                <GameUi:UiImage source="c08_t06_s01_f01" left="0" right="0" bottom="0" width="780" height="1"
+                                locked="true" />
+                <e:Group x="10" y="84" width="800">
+                    <GameUi:UiLabel id="_labelWarEventListTitle" text="战局事件列表" textColor="0xFFFFFF" y="0" size="20"
+                                    horizontalCenter="0" locked="true" />
+                    <e:Group y="0" right="0" locked="true">
+                        <GameUi:UiButton id="_btnAddWarEvent" label="新增"
+                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" x="0" y="0" />
+                        <GameUi:UiButton id="_btnEditWarEvent" label="编辑"
+                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" x="0" y="0" />
+                        <e:layout>
+                            <e:HorizontalLayout/>
+                        </e:layout>
+                    </e:Group>
+                    <GameUi:UiScrollList id="_listWarEvent" scaleX="1" scaleY="1" y="30" horizontalCenter="0"
+                                         width="780">
+                        <e:List>
+                            <e:itemRendererSkinName>
+                                <e:Skin width="780" currentState="up" states="down,up">
+                                    <e:Group y="8" left="0">
+                                        <GameUi:UiLabel id="_labelWarEventIdTitle" text="事件ID" textColor="0xFFFFFF"
+                                                        y="-1" size="12" left="0" x="-116" scaleX="1" scaleY="1" />
+                                        <GameUi:UiLabel id="_labelWarEventId" text="1" textColor="0xFFFFFF" y="-1"
+                                                        size="12" left="0" x="-116" scaleX="1" scaleY="1" />
+                                        <e:layout>
+                                            <e:HorizontalLayout/>
+                                        </e:layout>
+                                    </e:Group>
+                                    <e:Group top="0" x="140">
+                                        <GameUi:UiButton id="_btnUp" label="上移"
+                                                         skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                         x="-185" y="-8" scaleX="1" scaleY="1" />
+                                        <GameUi:UiButton id="_btnDown" label="下移"
+                                                         skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                         x="-175" y="2" scaleX="1" scaleY="1" />
+                                        <GameUi:UiButton id="_btnDelete" label="删除"
+                                                         skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                         x="-195" y="-18" scaleX="1" scaleY="1" />
+                                        <e:layout>
+                                            <e:HorizontalLayout/>
+                                        </e:layout>
+                                    </e:Group>
+                                    <GameUi:UiLabel id="_labelWarEventName" text="事件名称" textColor="0xFFFFFF" y="30"
+                                                    size="16" scaleX="1" scaleY="1" left="0" right="0" locked="true" />
+                                </e:Skin>
+                            </e:itemRendererSkinName>
+                        </e:List>
+                    </GameUi:UiScrollList>
+                </e:Group>
+                <GameUi:UiImage source="c08_t06_s01_f01" left="0" right="0" bottom="0" width="780" height="1"
+                                locked="true" />
+                <e:Group x="0" y="74" width="800" locked="true">
                     <GameUi:UiLabel id="_labelPlayerList" text="玩家列表" textColor="0xFFFFFF" y="0" size="20" x="0" />
                     <GameUi:UiScrollList id="_listPlayer" scaleX="1" scaleY="1" y="26" x="0">
                         <e:List>

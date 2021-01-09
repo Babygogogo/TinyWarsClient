@@ -42,15 +42,15 @@ namespace TinyWars.Lobby {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this, callback: this._onResize, eventType: egret.Event.RESIZE },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
                 { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
                 { type: Notify.Type.MsgRmrGetMyRoomPublicInfoList,  callback: this._onMsgRmrGetMyRoomPublicInfoList },
-            ];
+            ]);
 
             this._listCommand.setItemRenderer(CommandRenderer);
         }
@@ -174,7 +174,7 @@ namespace TinyWars.Lobby {
         redChecker? : () => Promise<boolean>;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _labelCommand   : GameUi.UiLabel;
         private _imgRed         : GameUi.UiImage;
 

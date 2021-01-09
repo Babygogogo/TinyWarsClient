@@ -47,13 +47,13 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
+            ]);
             this._listPlayer.setItemRenderer(RequesterRenderer);
         }
 
@@ -140,7 +140,7 @@ namespace TinyWars.MultiCustomRoom {
         isDelete        : boolean;
     }
 
-    class RequesterRenderer extends eui.ItemRenderer {
+    class RequesterRenderer extends GameUi.UiListItemRenderer {
         private _labelName              : GameUi.UiLabel;
         private _labelIsOpponent        : GameUi.UiLabel;
         private _labelIsWatchingOthers  : GameUi.UiLabel;

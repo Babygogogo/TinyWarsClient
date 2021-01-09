@@ -1,10 +1,11 @@
 
 namespace TinyWars.GameUi {
     import Notify       = Utility.Notify;
+    import Logger       = Utility.Logger;
     import StageManager = Utility.StageManager;
 
     export class UiScrollList extends eui.Scroller {
-        private _itemRenderer : new () => eui.ItemRenderer;
+        private _itemRenderer : new () => GameUi.UiListItemRenderer;
         private _dataProvider : eui.ArrayCollection;
 
         private _scrollVerticalPercentage   : number;
@@ -20,11 +21,10 @@ namespace TinyWars.GameUi {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public setItemRenderer(itemRenderer: new () => eui.ItemRenderer): void {
-            this._itemRenderer = itemRenderer;
-            if ((this.viewport) && (this.viewport instanceof eui.List)) {
-                this.viewport.addEventListener(eui.ItemTapEvent.ITEM_TAP, this._onTouchedListItem, this);
-                this.viewport.itemRenderer = itemRenderer;
+        public setItemRenderer(itemRenderer: new () => GameUi.UiListItemRenderer): void {
+            if (this._itemRenderer !== itemRenderer) {
+                this._itemRenderer              = itemRenderer;
+                this.getViewList().itemRenderer = itemRenderer;
             }
         }
 
@@ -42,8 +42,8 @@ namespace TinyWars.GameUi {
                 provider.removeItemAt(i);
             }
 
-            const viewport = this.viewport;
-            if ((viewport) && (viewport instanceof eui.List)) {
+            const viewport = this.getViewList();
+            if (viewport) {
                 viewport.addEventListener(eui.ItemTapEvent.ITEM_TAP, this._onTouchedListItem, this);
                 if (viewport.dataProvider != provider) {
                     viewport.dataProvider = provider;
@@ -57,20 +57,20 @@ namespace TinyWars.GameUi {
         }
 
         public scrollVerticalTo(percentage : number) : void {
-            if (this.viewport) {
+            if (this.getViewList()) {
                 this._scrollVerticalPercentage = percentage;
                 this.addEventListener(egret.Event.ENTER_FRAME, this._onEnterFrameScrollVertical, this);
             }
         }
 
         public scrollHorizontalTo(percentage : number) : void {
-            if (this.viewport) {
+            if (this.getViewList()) {
                 this._scrollHorizontalPercentage = percentage;
                 this.addEventListener(egret.Event.ENTER_FRAME, this._onEnterFrameScrollHorizontal, this);
             }
         }
 
-        public getViewList() : eui.List {
+        public getViewList(): eui.List {
             return this.viewport as eui.List;
         }
 
@@ -94,8 +94,10 @@ namespace TinyWars.GameUi {
 
         public clear() : void {
             this.bindData([]);
-            if (this.viewport) {
-                this.viewport.removeEventListener(eui.ItemTapEvent.ITEM_TAP, this._onTouchedListItem, this);
+
+            const list = this.getViewList();
+            if (list) {
+                list.removeEventListener(eui.ItemTapEvent.ITEM_TAP, this._onTouchedListItem, this);
             }
         }
 
@@ -103,7 +105,12 @@ namespace TinyWars.GameUi {
             if (e.target === this) {
                 this.removeEventListener(egret.Event.COMPLETE, this._onAllSkinPartsAdded, this);
 
-                let list = this.viewport as eui.List;
+                const list = this.getViewList();
+                if (!(list instanceof eui.List)) {
+                    Logger.error(`UiScrollList._onAllSkinPartsAdded() invalid list!`);
+                    return;
+                }
+
                 list.itemRenderer = this._itemRenderer;
                 list.dataProvider = this._dataProvider;
                 list.addEventListener(eui.ItemTapEvent.ITEM_TAP, this._onTouchedListItem, this);
@@ -125,21 +132,21 @@ namespace TinyWars.GameUi {
         }
 
         private _onTouchedListItem(e : eui.ItemTapEvent) : void {
-            const item: any = (this.viewport as eui.List).getElementAt(e.itemIndex);
+            const item: any = this.getViewList().getElementAt(e.itemIndex);
             (item) && (item.onItemTapEvent) && item.onItemTapEvent(e);
         }
 
         private _onEnterFrameScrollVertical(e : egret.Event) : void {
             this.removeEventListener(egret.Event.ENTER_FRAME, this._onEnterFrameScrollVertical, this);
 
-            const viewport = this.viewport;
+            const viewport = this.getViewList();
             viewport.scrollV = this._scrollVerticalPercentage / 100 * Math.max(0, viewport.contentHeight - viewport.height);
         }
 
         private _onEnterFrameScrollHorizontal(e : egret.Event) : void {
             this.removeEventListener(egret.Event.ENTER_FRAME, this._onEnterFrameScrollHorizontal, this);
 
-            const viewport = this.viewport;
+            const viewport = this.getViewList();
             viewport.scrollH = this._scrollHorizontalPercentage / 100  * Math.max(0, viewport.contentWidth - viewport.width);
         }
 
@@ -149,7 +156,7 @@ namespace TinyWars.GameUi {
                 this.stopAnimation();
 
                 const value         = - e.data / 2;
-                const viewport      = this.viewport as eui.List;
+                const viewport      = this.getViewList();
                 viewport.scrollV    = Math.max(0, Math.min(viewport.scrollV + value, viewport.contentHeight - viewport.height));
                 viewport.scrollH    = Math.max(0, Math.min(viewport.scrollH + value, viewport.contentWidth - viewport.width));
             }

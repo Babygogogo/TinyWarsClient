@@ -81,13 +81,13 @@ namespace TinyWars.MultiPlayerWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listCo.setItemRenderer(CoNameRenderer);
             this._listPassiveSkill.setItemRenderer(SkillRenderer);
             this._listCop.setItemRenderer(SkillRenderer);
@@ -321,7 +321,7 @@ namespace TinyWars.MultiPlayerWar {
         panel           : McwCoListPanel;
     }
 
-    class CoNameRenderer extends eui.ItemRenderer {
+    class CoNameRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
@@ -360,7 +360,7 @@ namespace TinyWars.MultiPlayerWar {
         skillId : number;
     }
 
-    class SkillRenderer extends eui.ItemRenderer {
+    class SkillRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 

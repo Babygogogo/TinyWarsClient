@@ -45,15 +45,15 @@ namespace TinyWars.MapManagement {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
                 { ui: this._btnWarRule,     callback: this._onTouchedBtnWarRule },
                 { ui: this._groupFog,       callback: this._onTouchedGroupMcw },
-            ];
+            ]);
         }
 
         protected async _onOpened(): Promise<void> {

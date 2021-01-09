@@ -35,13 +35,13 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
-            ];
+            ]);
 
             this._listCommand.setItemRenderer(CommandRenderer);
         }
@@ -142,7 +142,7 @@ namespace TinyWars.MultiCustomRoom {
         redChecker? : () => Promise<boolean>;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _labelCommand   : GameUi.UiLabel;
         private _imgRed         : GameUi.UiImage;
 

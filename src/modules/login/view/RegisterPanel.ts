@@ -44,15 +44,15 @@ namespace TinyWars.Login {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserLogin,    callback: this._onMsgUserLogin },
                 { type: NotifyType.MsgUserRegister, callback: this._onMsgUserRegister },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnLogin,    callback: this._onTouchedBtnLogin },
                 { ui: this._btnRegister, callback: this._onTouchedBtnRegister },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

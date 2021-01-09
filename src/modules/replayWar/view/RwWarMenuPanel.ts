@@ -73,16 +73,16 @@ namespace TinyWars.ReplayWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyMcwPlannerStateChanged },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
                 { type: Notify.Type.MsgReplaySetRating,                 callback: this._onMsgReplaySetRating },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
-            ];
+            ]);
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
@@ -419,7 +419,7 @@ namespace TinyWars.ReplayWar {
         callback: () => void;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
 
@@ -444,7 +444,7 @@ namespace TinyWars.ReplayWar {
         player  : BaseWar.BwPlayer;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
         private _labelForce : GameUi.UiLabel;
@@ -728,7 +728,7 @@ namespace TinyWars.ReplayWar {
         infoColor               : number;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

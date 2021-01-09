@@ -51,13 +51,13 @@ namespace TinyWars.RankMatchRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMpwCommonGetMyWarInfoList,   callback: this._onMsgMpwCommonGetMyWarInfoList },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listWar.setItemRenderer(WarRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
@@ -206,7 +206,7 @@ namespace TinyWars.RankMatchRoom {
         panel   : RmrMyWarListPanel;
     }
 
-    class WarRenderer extends eui.ItemRenderer {
+    class WarRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _btnFight       : GameUi.UiButton;
@@ -263,7 +263,7 @@ namespace TinyWars.RankMatchRoom {
         playerIndexInTurn   : number;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex     : GameUi.UiLabel;
         private _labelName      : GameUi.UiLabel;
         private _labelStatus    : GameUi.UiLabel;

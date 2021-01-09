@@ -38,10 +38,10 @@ namespace TinyWars.MultiPlayerWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
-            ];
+            ]);
 
             this._listTile.setItemRenderer(TileRenderer);
         }
@@ -102,7 +102,7 @@ namespace TinyWars.MultiPlayerWar {
         dict            : Map<number, number>;
     }
 
-    class TileRenderer extends eui.ItemRenderer {
+    class TileRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
         private _labelNum0      : TinyWars.GameUi.UiLabel;

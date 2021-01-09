@@ -43,15 +43,15 @@ namespace TinyWars.MapEditor {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm, },
                 { ui: this._inputOffsetX,   callback: this._onFocusOutInputOffsetX, eventType: egret.Event.FOCUS_OUT },
                 { ui: this._inputOffsetY,   callback: this._onFocusOutInputOffsetY, eventType: egret.Event.FOCUS_OUT },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

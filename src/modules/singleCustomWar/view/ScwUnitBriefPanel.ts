@@ -49,7 +49,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyBwCursorGridIndexChanged },
@@ -61,7 +61,7 @@ namespace TinyWars.SingleCustomWar {
                 { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
                 { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-            ];
+            ]);
         }
         protected _onOpened(): void {
             this._war       = ScwModel.getWar();

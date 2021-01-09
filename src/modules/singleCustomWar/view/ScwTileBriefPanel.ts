@@ -60,7 +60,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyBwCursorGridIndexChanged },
@@ -72,10 +72,10 @@ namespace TinyWars.SingleCustomWar {
                 { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
                 { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
                 { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this, callback: this._onTouchedThis, },
-            ];
+            ]);
 
             this._tileView = new ScwTileView();
             this._conTileView.addChild(this._tileView.getImgBase());

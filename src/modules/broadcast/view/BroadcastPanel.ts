@@ -39,11 +39,11 @@ namespace TinyWars.Broadcast {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.TimeTick,                   callback: this._onNotifyTimeTick },
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgBroadcastGetMessageList, callback: this._onMsgBroadcastGetMessageList },
-            ];
+            ]);
 
             this.touchEnabled   = false;
             this.touchChildren  = false;

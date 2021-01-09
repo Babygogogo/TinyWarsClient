@@ -46,21 +46,21 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnStartGame,   callback: this._onTouchedBtnStartGame },
                 { ui: this._btnDeleteRoom,  callback: this._onTouchedBtnDeleteRoom },
                 { ui: this._btnChat,        callback: this._onTouchedBtnChat },
                 { ui: this._btnExitRoom,    callback: this._onTouchedBtnExitRoom },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onMsgMcrGetRoomInfo },
                 { type: Notify.Type.MsgMcrExitRoom,     callback: this._onMsgMcrExitRoom },
                 { type: Notify.Type.MsgMcrDeleteRoom,   callback: this._onMsgMcrDeleteRoom },
                 { type: Notify.Type.MsgMcrStartWar,     callback: this._onMsgMcrStartWar },
                 { type: Notify.Type.MsgMcrDeletePlayer, callback: this._onMsgMcrDeletePlayer },
-            ];
+            ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
             this._btnBack.setTextColor(0x00FF00);
@@ -226,7 +226,7 @@ namespace TinyWars.MultiCustomRoom {
         name: string;
     }
 
-    class TabItemRenderer extends eui.ItemRenderer {
+    class TabItemRenderer extends GameUi.UiListItemRenderer {
         private _labelName: GameUi.UiLabel;
 
         protected dataChanged(): void {

@@ -243,7 +243,7 @@
 //         panel       : MmMergeListPanel;
 //     }
 
-//     class MapNameRenderer extends eui.ItemRenderer {
+//     class MapNameRenderer extends GameUi.UiListItemRenderer {
 //         private _btnChoose: GameUi.UiButton;
 //         private _btnNext  : GameUi.UiButton;
 //         private _labelName: GameUi.UiLabel;

@@ -53,7 +53,7 @@ namespace TinyWars.MultiPlayerWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TimeTick,                       callback: this._onNotifyTimeTick },
                 { type: Notify.Type.BwTurnPhaseCodeChanged,         callback: this._onNotifyMcwTurnPhaseCodeChanged },
@@ -66,8 +66,8 @@ namespace TinyWars.MultiPlayerWar {
                 { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
                 { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
                 { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
@@ -76,7 +76,7 @@ namespace TinyWars.MultiPlayerWar {
                 { ui: this._btnEndTurn,         callback: this._onTouchedBtnEndTurn, },
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

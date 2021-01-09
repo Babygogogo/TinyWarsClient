@@ -41,16 +41,16 @@ namespace TinyWars.ChangeLog {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgChangeLogGetMessageList, callback: this._onMsgChangeLogGetMessageList },
                 { type: Notify.Type.MsgChangeLogAddMessage,     callback: this._onMsgChangeLogAddMessage },
                 { type: Notify.Type.MsgChangeLogModifyMessage,  callback: this._onMsgChangeLogModifyMessage },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnAddMessage,  callback: this._onTouchedBtnAddMessage },
                 { ui: this._btnClose,       callback: this.close },
-            ];
+            ]);
 
             this._listMessage.setItemRenderer(MessageRenderer);
         }
@@ -108,7 +108,7 @@ namespace TinyWars.ChangeLog {
     }
 
     type DataForMessageRenderer = ProtoTypes.ChangeLog.IChangeLogMessage;
-    class MessageRenderer extends eui.ItemRenderer {
+    class MessageRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex     : GameUi.UiLabel;
         private _labelContent   : GameUi.UiLabel;
         private _btnModify      : GameUi.UiButton;

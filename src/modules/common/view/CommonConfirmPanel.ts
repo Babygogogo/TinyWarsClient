@@ -48,10 +48,10 @@ namespace TinyWars.Common {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
-            ];
+            ]);
 
             this._btnConfirm.setTextColor(0x00FF00);
             this._btnCancel.setTextColor(0xFF0000);

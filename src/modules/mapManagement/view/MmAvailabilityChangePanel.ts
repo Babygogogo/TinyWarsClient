@@ -57,10 +57,10 @@ namespace TinyWars.MapManagement {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
                 { ui: this._btnDelete,      callback: this._onTouchedBtnDelete },
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
@@ -69,7 +69,7 @@ namespace TinyWars.MapManagement {
                 { ui: this._groupScw,       callback: this._onTouchedGroupScw },
                 { ui: this._groupRank,      callback: this._onTouchedGroupRank },
                 { ui: this._groupRankFog,   callback: this._onTouchedGroupRankFog },
-            ];
+            ]);
 
             this._btnDelete.setTextColor(0xFF0000);
         }

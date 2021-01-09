@@ -132,7 +132,7 @@ namespace TinyWars.SingleCustomRoom {
 
     type DataForPlayerRenderer = ProtoTypes.Structure.IWarPlayerInfo;
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelPlayerIndex   : GameUi.UiLabel;
         private _labelTeamIndex     : GameUi.UiLabel;
         private _labelName          : GameUi.UiLabel;

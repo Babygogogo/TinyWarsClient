@@ -59,16 +59,16 @@ namespace TinyWars.ReplayWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.MsgReplayGetInfoList,       callback: this._onNotifySMcrGetReplayInfos },
                 { type: Notify.Type.MsgReplayGetData,           callback: this._onNotifySMcrGetReplayData },
                 { type: Notify.Type.MsgReplayGetDataFailed,    callback: this._onNotifySMcrGetReplayDataFailed },
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listMap.setItemRenderer(ReplayRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
@@ -261,7 +261,7 @@ namespace TinyWars.ReplayWar {
         panel       : RwReplayListPanel;
     }
 
-    class ReplayRenderer extends eui.ItemRenderer {
+    class ReplayRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _labelTurnIndex : GameUi.UiLabel;
@@ -309,7 +309,7 @@ namespace TinyWars.ReplayWar {
         playerInfo      : ProtoTypes.Structure.IWarPlayerInfo;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
 

@@ -36,15 +36,15 @@ namespace TinyWars.Login {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.MsgCommonLatestConfigVersion,   callback: this._onMsgCommonLatestConfigVersion },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnLanguage01, callback: this._onTouchedBtnLanguage01 },
                 { ui: this._btnLanguage02, callback: this._onTouchedBtnLanguage02 },
-            ];
+            ]);
 
             this._btnLanguage01.setImgDisplaySource("login_button_language_003");
             this._btnLanguage01.setImgExtraSource("login_button_language_001");

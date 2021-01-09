@@ -34,7 +34,7 @@ namespace TinyWars.Lobby {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogin,                   callback: this._onMsgUserLogin },
                 { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
@@ -43,11 +43,11 @@ namespace TinyWars.Lobby {
                 { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
                 { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
                 { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessages },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnMyInfo,  callback: this._onTouchedBtnMyInfo },
                 { ui: this._btnChat,    callback: this._onTouchedBtnChat },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

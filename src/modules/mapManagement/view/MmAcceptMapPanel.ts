@@ -53,17 +53,17 @@ namespace TinyWars.MapManagement {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm, },
                 { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
                 { ui: this._groupScw,       callback: this._onTouchedGroupScw },
                 { ui: this._groupRank,      callback: this._onTouchedGroupRank },
                 { ui: this._groupRankFog,   callback: this._onTouchedGroupRankFog },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

@@ -72,16 +72,16 @@ namespace TinyWars.MapEditor {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._groupLeftRightBox,          callback: this._onTouchedGroupLeftRightBox, },
                 { ui: this._groupUpDownBox,             callback: this._onTouchedGroupUpDownBox, },
                 { ui: this._groupRotationalBox,         callback: this._onTouchedGroupRotationalBox },
                 { ui: this._groupUpLeftDownRightBox,    callback: this._onTouchedGroupUpLeftDownRightBox },
                 { ui: this._groupUpRightDownLeftBox,    callback: this._onTouchedGroupUpRightDownLeftBox },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

@@ -54,13 +54,13 @@ namespace TinyWars.MapEditor {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

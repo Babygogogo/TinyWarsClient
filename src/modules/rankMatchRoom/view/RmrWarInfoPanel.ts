@@ -40,13 +40,13 @@ namespace TinyWars.RankMatchRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnContinueWar, callback: this._onTouchedBtnContinueWar },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
             this._btnBack.setTextColor(0x00FF00);
@@ -112,7 +112,7 @@ namespace TinyWars.RankMatchRoom {
         name: string;
     }
 
-    class TabItemRenderer extends eui.ItemRenderer {
+    class TabItemRenderer extends GameUi.UiListItemRenderer {
         private _labelName: GameUi.UiLabel;
 
         protected dataChanged(): void {

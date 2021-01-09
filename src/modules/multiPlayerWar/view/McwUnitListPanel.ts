@@ -50,17 +50,17 @@ namespace TinyWars.MultiPlayerWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
                 { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnSwitch, callback: this._onTouchedBtnSwitch },
-            ];
+            ]);
             this._listUnit.setItemRenderer(UnitRenderer);
         }
         protected _onOpened(): void {
@@ -179,7 +179,7 @@ namespace TinyWars.MultiPlayerWar {
         cursor  : MpwCursor;
     }
 
-    class UnitRenderer extends eui.ItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _conUnitView    : eui.Group;
         private _labelName      : GameUi.UiLabel;

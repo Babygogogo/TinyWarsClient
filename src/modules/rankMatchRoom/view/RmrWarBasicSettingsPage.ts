@@ -255,7 +255,7 @@ namespace TinyWars.RankMatchRoom {
         playerInfo      : IWarPlayerInfo;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelNickname  : GameUi.UiLabel;
         private _labelIndex     : GameUi.UiLabel;
         private _labelTeam      : GameUi.UiLabel;

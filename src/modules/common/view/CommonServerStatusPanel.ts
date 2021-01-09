@@ -43,9 +43,9 @@ namespace TinyWars.Common {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.MsgCommonGetServerStatus, callback: this._onMsgCommonGetServerStatus },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

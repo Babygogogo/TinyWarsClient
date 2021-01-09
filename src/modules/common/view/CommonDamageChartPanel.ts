@@ -68,14 +68,14 @@ namespace TinyWars.Common {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this.close },
-            ];
+            ]);
 
             this._listUnit.setItemRenderer(UnitRenderer);
             this._listDamageChart.setItemRenderer(DamageRenderer);
@@ -106,7 +106,7 @@ namespace TinyWars.Common {
             const oldIndex      = this._selectedIndex;
             this._selectedIndex = newIndex;
             if (oldIndex !== newIndex) {
-                (this._listUnit.viewport as eui.List).selectedIndex = newIndex;
+                this._listUnit.getViewList().selectedIndex = newIndex;
                 this._updateUnitViewAndLabelName();
                 this._updateListInfo();
                 this._updateListDamageChart();
@@ -383,7 +383,7 @@ namespace TinyWars.Common {
         panel           : CommonDamageChartPanel;
     }
 
-    class UnitRenderer extends eui.ItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer {
         private _imgChoose  : eui.Image;
         private _labelName  : TinyWars.GameUi.UiLabel;
 
@@ -411,7 +411,7 @@ namespace TinyWars.Common {
         valueText   : string;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
@@ -430,7 +430,7 @@ namespace TinyWars.Common {
         targetTileType? : TileType;
     }
 
-    class DamageRenderer extends eui.ItemRenderer {
+    class DamageRenderer extends GameUi.UiListItemRenderer {
         private _group                  : eui.Group;
         private _conView                : eui.Group;
         private _unitView               : WarMap.WarMapUnitView;

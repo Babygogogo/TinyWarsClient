@@ -79,14 +79,14 @@ namespace TinyWars.User {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: Notify.Type.MsgUserGetPublicInfo,               callback: this._onMsgUserGetPublicInfo },
                 { type: Notify.Type.MsgUserSetNickname,                 callback: this._onMsgUserSetNickname },
                 { type: Notify.Type.MsgUserSetDiscordId,                callback: this._onMsgUserSetDiscordId },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnChangeNickname,  callback: this._onTouchedBtnChangeNickname },
                 { ui: this._btnChangePassword,  callback: this._onTouchedBtnChangePassword },
                 { ui: this._btnChangeDiscordId, callback: this._onTouchedBtnChangeDiscordId },
@@ -101,7 +101,7 @@ namespace TinyWars.User {
                 { ui: this._btnChangeLog,       callback: this._onTouchedBtnChangeLog },
                 { ui: this._btnSetPrivilege,    callback: this._onTouchedBtnSetPrivilege },
                 { ui: this._btnClose,           callback: this.close },
-            ];
+            ]);
             this._sclHistory.setItemRenderer(HistoryRenderer);
         }
         protected _onOpened(): void {
@@ -365,7 +365,7 @@ namespace TinyWars.User {
         playersCount: number;
     }
 
-    class HistoryRenderer extends eui.ItemRenderer {
+    class HistoryRenderer extends GameUi.UiListItemRenderer {
         private _labelType  : TinyWars.GameUi.UiLabel;
         private _labelCount : TinyWars.GameUi.UiLabel;
 

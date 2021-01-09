@@ -54,12 +54,12 @@ namespace TinyWars.RankMatchRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
             this._listMap.setItemRenderer(MapNameRenderer);
         }
         protected _onOpened(): void {
@@ -198,7 +198,7 @@ namespace TinyWars.RankMatchRoom {
         panel   : RmrPreviewMapListPanel;
     }
 
-    class MapNameRenderer extends eui.ItemRenderer {
+    class MapNameRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 

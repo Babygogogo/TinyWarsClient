@@ -47,17 +47,17 @@ namespace TinyWars.RankMatchRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgRmrGetMaxConcurrentCount,    callback: this._onMsgRmrGetMaxConcurrentCount },
                 { type: Notify.Type.MsgRmrSetMaxConcurrentCount,    callback: this._onMsgRmrSetMaxConcurrentCount },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnConfirm,         callback: this._onTouchedBtnConfirm },
                 { ui: this._btnModifyHasFog,    callback: this._onTouchedBtnModifyHasFog },
                 { ui: this._btnModifyCount,     callback: this._onTouchedBtnModifyCount },
-            ];
+            ]);
 
             this._btnConfirm.setTextColor(0x00FF00);
             this._btnCancel.setTextColor(0xFF0000);

@@ -70,7 +70,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
                 { type: Notify.Type.BwCoIdChanged,                      callback: this._onNotifyBwCoIdChanged },
@@ -79,10 +79,10 @@ namespace TinyWars.SingleCustomWar {
                 { type: Notify.Type.MsgScrSaveWar,                      callback: this._onMsgScrSaveWar },
                 { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
                 { type: Notify.Type.MsgScrDeleteWar,                    callback: this._onMsgScrDeleteWar },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
-            ];
+            ]);
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._listWarInfo.setItemRenderer(InfoRenderer);
@@ -562,7 +562,7 @@ namespace TinyWars.SingleCustomWar {
         callback: () => void;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
 
@@ -588,7 +588,7 @@ namespace TinyWars.SingleCustomWar {
         panel       : ScwWarMenuPanel;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _btnName        : GameUi.UiButton;
         private _labelForce     : GameUi.UiLabel;
@@ -1181,7 +1181,7 @@ namespace TinyWars.SingleCustomWar {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

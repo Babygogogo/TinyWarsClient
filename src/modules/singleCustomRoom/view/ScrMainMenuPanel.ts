@@ -33,12 +33,12 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Utility.Notify.Type.MsgUserLogout, callback: this._onMsgUserLogout },
-            ];
+            ]);
 
             this._listCommand.setItemRenderer(CommandRenderer);
         }
@@ -110,7 +110,7 @@ namespace TinyWars.SingleCustomRoom {
         callback: () => void;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _labelCommand: GameUi.UiLabel;
 
         protected dataChanged(): void {

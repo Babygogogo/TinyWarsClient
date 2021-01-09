@@ -53,14 +53,14 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMpwWatchGetWatchedWarInfos,    callback: this._onNotifySMcwWatchGetWatchedWarInfos },
                 { type: Notify.Type.MsgMpwWatchDeleteWatcher,         callback: this._onNotifySMcwWatchDeleteWatcher },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listWar.setItemRenderer(WarRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
@@ -215,7 +215,7 @@ namespace TinyWars.MultiCustomRoom {
         panel   : McrWatchDeleteWatcherWarsPanel;
     }
 
-    class WarRenderer extends eui.ItemRenderer {
+    class WarRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _labelName      : GameUi.UiLabel;
@@ -260,7 +260,7 @@ namespace TinyWars.MultiCustomRoom {
         configVersion   : string;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
         private _labelTeam : GameUi.UiLabel;

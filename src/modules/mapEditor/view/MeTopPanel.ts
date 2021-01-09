@@ -55,7 +55,7 @@ namespace TinyWars.MapEditor {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
@@ -66,8 +66,8 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
                 { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnModePreview,             callback: this._onTouchedBtnModePreview },
                 { ui: this._btnModeDrawTileBase,        callback: this._onTouchedBtnModeDrawTileBase },
                 { ui: this._btnModeDrawTileObject,      callback: this._onTouchedBtnModeDrawTileObject },
@@ -77,7 +77,7 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnVisibility,              callback: this._onTouchedBtnVisibility },
                 { ui: this._btnSymmetry,                callback: this._onTouchedBtnSymmetry },
                 { ui: this._btnMenu,                    callback: this._onTouchedBtnMenu, },
-            ];
+            ]);
             this._conTileView.addChild(this._tileView.getImgBase());
             this._conTileView.addChild(this._tileView.getImgObject());
             this._conUnitView.addChild(this._unitView);

@@ -42,9 +42,9 @@ namespace TinyWars.Common {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnClose, callback: this._onTouchedBtnClose },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

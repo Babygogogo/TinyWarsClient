@@ -71,7 +71,7 @@ namespace TinyWars.MapEditor {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,                  callback: this._onNotifyTileAnimationTick },
                 { type: Notify.Type.UnitAnimationTick,                  callback: this._onNotifyUnitAnimationTick },
@@ -80,13 +80,13 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.MsgMeSubmitMap,                     callback: this._onMsgMeSubmitMap },
                 { type: Notify.Type.MsgMmReviewMap,                     callback: this._onMsgMmReviewMap },
                 { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
                 { ui: this._btnModifyMapDesigner,   callback: this._onTouchedBtnModifyMapDesigner },
                 { ui: this._btnModifyMapName,       callback: this._onTouchedBtnModifyMapName },
                 { ui: this._btnModifyMapSize,       callback: this._onTouchedBtnModifyMapSize },
-            ];
+            ]);
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listTile.setItemRenderer(TileRenderer);
             this._listUnit.setItemRenderer(UnitRenderer);
@@ -684,7 +684,7 @@ namespace TinyWars.MapEditor {
         callback: () => void;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
 
@@ -712,7 +712,7 @@ namespace TinyWars.MapEditor {
         playerIndex : number;
     }
 
-    class TileRenderer extends eui.ItemRenderer {
+    class TileRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _labelNum       : GameUi.UiLabel;
         private _conTileView    : eui.Group;
@@ -751,7 +751,7 @@ namespace TinyWars.MapEditor {
         dataForDrawUnit : DataForDrawUnit;
     }
 
-    class UnitRenderer extends eui.ItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _labelNum       : GameUi.UiLabel;
         private _conUnitView    : eui.Group;

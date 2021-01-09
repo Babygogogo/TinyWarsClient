@@ -44,13 +44,13 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
+            ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
 
@@ -143,7 +143,7 @@ namespace TinyWars.MultiCustomRoom {
         isRequesting    : boolean;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex     : GameUi.UiLabel;
         private _labelTeam      : GameUi.UiLabel;
         private _labelName      : GameUi.UiLabel;

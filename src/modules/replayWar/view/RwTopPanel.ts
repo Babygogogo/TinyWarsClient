@@ -54,7 +54,7 @@ namespace TinyWars.ReplayWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
@@ -66,8 +66,8 @@ namespace TinyWars.ReplayWar {
                 { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
                 { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
                 { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
@@ -77,7 +77,7 @@ namespace TinyWars.ReplayWar {
                 { ui: this._btnPause,           callback: this._onTouchedBtnPause, },
                 { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

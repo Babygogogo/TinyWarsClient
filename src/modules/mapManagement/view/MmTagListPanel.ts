@@ -55,14 +55,14 @@ namespace TinyWars.MapManagement {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMmSetMapTag,     callback: this._onMsgMmSetMapTag },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listMap.setItemRenderer(MapNameRenderer);
         }
         protected _onOpened(): void {
@@ -204,7 +204,7 @@ namespace TinyWars.MapManagement {
         panel   : MmTagListPanel;
     }
 
-    class MapNameRenderer extends eui.ItemRenderer {
+    class MapNameRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose  : GameUi.UiButton;
         private _btnNext    : GameUi.UiButton;
         private _labelId    : GameUi.UiLabel;

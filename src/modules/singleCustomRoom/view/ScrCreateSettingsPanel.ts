@@ -41,14 +41,14 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgScrCreateWar,    callback: this._onMsgScrCreateWar },
-            ];
+            ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
         }
 
@@ -142,7 +142,7 @@ namespace TinyWars.SingleCustomRoom {
         name: string;
     }
 
-    class TabItemRenderer extends eui.ItemRenderer {
+    class TabItemRenderer extends GameUi.UiListItemRenderer {
         private _labelName: GameUi.UiLabel;
 
         protected dataChanged(): void {

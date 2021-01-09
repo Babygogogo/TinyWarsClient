@@ -43,13 +43,13 @@ namespace TinyWars.SingleCustomWar {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
             this._srlSaveSlot.setItemRenderer(SlotRenderer);
         }
         protected _onOpened(): void {
@@ -114,7 +114,7 @@ namespace TinyWars.SingleCustomWar {
         slotInfo    : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo | null;
     }
 
-    class SlotRenderer extends eui.ItemRenderer {
+    class SlotRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _imgBg          : GameUi.UiImage;
         private _labelSlotIndex : GameUi.UiLabel;

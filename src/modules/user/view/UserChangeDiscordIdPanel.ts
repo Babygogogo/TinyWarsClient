@@ -41,14 +41,14 @@ namespace TinyWars.User {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserSetDiscordId,         callback: this._onMsgUserSetDiscordId },
                 { type: NotifyType.MsgUserSetDiscordIdFailed,   callback: this._onMsgUserSetDiscordIdFailed },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
+            ]);
         }
         protected async _onOpened(): Promise<void> {
             this._isRequesting          = false;

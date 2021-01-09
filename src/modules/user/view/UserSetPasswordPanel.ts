@@ -44,14 +44,14 @@ namespace TinyWars.User {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserSetPassword,  callback: this._onMsgUserSetPassword },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

@@ -54,12 +54,12 @@ namespace TinyWars.MapManagement {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {
@@ -174,7 +174,7 @@ namespace TinyWars.MapManagement {
         Unavailable,
     }
 
-    class RendererForCoTier extends eui.ItemRenderer {
+    class RendererForCoTier extends GameUi.UiListItemRenderer {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 
@@ -220,7 +220,7 @@ namespace TinyWars.MapManagement {
         }
     }
 
-    class RendererForCoName extends eui.ItemRenderer {
+    class RendererForCoName extends GameUi.UiListItemRenderer {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 

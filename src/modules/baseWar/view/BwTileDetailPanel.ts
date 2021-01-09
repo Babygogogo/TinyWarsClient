@@ -58,11 +58,11 @@ namespace TinyWars.BaseWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
-            ];
+            ]);
 
             this._imgTileObject.anchorOffsetY = GRID_HEIGHT;
             this._listInfo.setItemRenderer(InfoRenderer);
@@ -347,7 +347,7 @@ namespace TinyWars.BaseWar {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
@@ -378,7 +378,7 @@ namespace TinyWars.BaseWar {
         playerIndex     : number;
     }
 
-    class MoveCostRenderer extends eui.ItemRenderer {
+    class MoveCostRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _conView        : eui.Group;
         private _unitView       : WarMap.WarMapUnitView;

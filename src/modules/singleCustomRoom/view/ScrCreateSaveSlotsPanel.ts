@@ -40,12 +40,12 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         protected _onFirstOpened(): void {
-            this._uiListeners = [
+            this._setUiListenerArray([
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
             this._srlSaveSlot.setItemRenderer(SlotRenderer);
         }
         protected _onOpened(): void {
@@ -102,7 +102,7 @@ namespace TinyWars.SingleCustomRoom {
         slotInfo    : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo | null;
     }
 
-    class SlotRenderer extends eui.ItemRenderer {
+    class SlotRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _imgBg          : GameUi.UiImage;
         private _labelSlotIndex : GameUi.UiLabel;

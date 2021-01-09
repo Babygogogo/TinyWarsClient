@@ -45,14 +45,14 @@ namespace TinyWars.MapEditor {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._groupTileBase,      callback: this._onTouchedGroupTileBase, },
                 { ui: this._groupTileObject,    callback: this._onTouchedGroupTileObject, },
                 { ui: this._groupUnit,          callback: this._onTouchedGroupUnit },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

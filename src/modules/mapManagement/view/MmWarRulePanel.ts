@@ -72,13 +72,13 @@ namespace TinyWars.MapManagement {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
-            ];
+            ]);
             this._listWarRule.setItemRenderer(WarRuleNameRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
         }
@@ -229,7 +229,7 @@ namespace TinyWars.MapManagement {
         panel   : MmWarRulePanel;
     }
 
-    class WarRuleNameRenderer extends eui.ItemRenderer {
+    class WarRuleNameRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
@@ -262,7 +262,7 @@ namespace TinyWars.MapManagement {
         panel       : MmWarRulePanel;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _listInfo   : GameUi.UiScrollList;
 
         protected childrenCreated(): void {
@@ -423,7 +423,7 @@ namespace TinyWars.MapManagement {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

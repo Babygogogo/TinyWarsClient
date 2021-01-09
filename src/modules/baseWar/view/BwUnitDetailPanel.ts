@@ -68,14 +68,14 @@ namespace TinyWars.BaseWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnUnitsInfo,   callback: this._onTouchedBtnUnitsInfo },
-            ];
+            ]);
 
             this._listDamageChart.setItemRenderer(DamageRenderer);
             this._listInfo.setItemRenderer(InfoRenderer);
@@ -613,7 +613,7 @@ namespace TinyWars.BaseWar {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
@@ -645,7 +645,7 @@ namespace TinyWars.BaseWar {
         targetTileType? : TileType;
     }
 
-    class DamageRenderer extends eui.ItemRenderer {
+    class DamageRenderer extends GameUi.UiListItemRenderer {
         private _group                  : eui.Group;
         private _conView                : eui.Group;
         private _unitView               : WarMap.WarMapUnitView;

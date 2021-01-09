@@ -50,14 +50,14 @@ namespace TinyWars.Common {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
                 { ui: this._input,      callback: this._onFocusOutInput,    eventType: egret.Event.FOCUS_OUT },
-            ];
+            ]);
         }
 
         protected _onOpened(): void {

@@ -51,15 +51,15 @@ namespace TinyWars.MultiPlayerWar {
         }
 
         protected _onFirstOpened(): void {
-            this._notifyListeners = [
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
                 { ui: this._btnDetail, callback: this._onTouchedBtnDetail },
-            ];
+            ]);
             this._listUnit.setItemRenderer(UnitRenderer);
         }
         protected _onOpened(): void {
@@ -98,7 +98,7 @@ namespace TinyWars.MultiPlayerWar {
             this._war.getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnDetail(e: egret.TouchEvent): void {
-            const selectedIndex = (this._listUnit.viewport as eui.List).selectedIndex;
+            const selectedIndex = this._listUnit.getViewList().selectedIndex;
             const data          = selectedIndex != null ? this._dataForList[selectedIndex] : null;
             if (data) {
                 BaseWar.BwUnitDetailPanel.show({
@@ -185,7 +185,7 @@ namespace TinyWars.MultiPlayerWar {
         unitProductionSkillCfg  : number[] | null;
     }
 
-    class UnitRenderer extends eui.ItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _imgBg          : GameUi.UiImage;
         private _conUnitView    : eui.Group;
