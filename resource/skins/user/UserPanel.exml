@@ -142,6 +142,8 @@
                                          skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <GameUi:UiButton id="_btnChangeLog" label="更新日志" y="360" x="256" width="200"
                                          skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+                        <GameUi:UiButton id="_btnSetPrivilege" label="设置权限" y="360" x="256" width="200"
+                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <e:layout>
                             <e:TileLayout orientation="rows" requestedColumnCount="4" />
                         </e:layout>

@@ -84,6 +84,7 @@ namespace TinyWars.MapEditor {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.WarRuleNameMaxLength));
             } else {
                 MeManager.getWar().setWarRuleNameList(this._openData.ruleId, textList);
+                Notify.dispatch(Notify.Type.MeWarRuleNameChanged);
                 this.close();
             }
         }
@@ -102,7 +103,7 @@ namespace TinyWars.MapEditor {
             this._labelChinese.text = Lang.getText(Lang.Type.B0455);
             this._labelEnglish.text = Lang.getText(Lang.Type.B0456);
             this._labelTip.text     = Lang.getText(Lang.Type.A0156);
-            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0317)} #${this._openData.ruleId}`;
+            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0459)} #${this._openData.ruleId}`;
         }
     }
 }

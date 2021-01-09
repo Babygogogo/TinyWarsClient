@@ -72,7 +72,7 @@ namespace TinyWars.Common {
         }
 
         private _updateComponentsForLanguage(): void {
-            if (Lang.getLanguageType() === Types.LanguageType.Chinese) {
+            if (Lang.getCurrentLanguageType() === Types.LanguageType.Chinese) {
                 this._btnClose.setImgDisplaySource("button_confirm_001");
             } else {
                 this._btnClose.setImgDisplaySource("button_confirm_002");

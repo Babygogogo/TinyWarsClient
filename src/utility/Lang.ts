@@ -758,6 +758,10 @@ namespace TinyWars.Utility.Lang {
             `您最少需要填写一种语言的内容`,
             `You have to write down at least one of the text.`,
         ],
+        [Type.A0157]: [
+            `已成功修改用户权限`,
+            `The user privilege has been updated successfully.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2586,6 +2590,10 @@ namespace TinyWars.Utility.Lang {
             `设定规则名称`,
             `Edit Rule Name`,
         ],
+        [Type.B0460]: [
+            `设置权限`,
+            `Set Privilege`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3315,7 +3323,7 @@ namespace TinyWars.Utility.Lang {
         setLanguageType(LocalStorage.getLanguageType());
     }
 
-    export function getLanguageType(): LanguageType {
+    export function getCurrentLanguageType(): LanguageType {
         return _languageType;
     }
     export function setLanguageType(language: LanguageType): void {
@@ -3596,14 +3604,21 @@ namespace TinyWars.Utility.Lang {
         if (!nameList) {
             return undefined;
         } else {
-            return getLanguageType() === LanguageType.Chinese
+            return getCurrentLanguageType() === LanguageType.Chinese
                 ? nameList[0]
                 : nameList[1] || nameList[0];
         }
     }
-    export function getTextInLanguage(textList: ProtoTypes.Structure.ILanguageText[], languageType = getLanguageType()): string | undefined {
+    export function getTextInLanguage(textList: ProtoTypes.Structure.ILanguageText[], languageType = getCurrentLanguageType()): string | undefined {
         const data = (textList || []).find(v => v.languageType === languageType);
         return data ? data.text : undefined;
+    }
+    export function concatLanguageTextList(textList: ProtoTypes.Structure.ILanguageText[]): string {
+        const strList: string[] = [];
+        for (const data of textList || []) {
+            strList.push(data.text);
+        }
+        return strList.join(`, `);
     }
 
     export function getBootTimerTypeName(type: Types.BootTimerType): string {

@@ -101,6 +101,9 @@ export const enum NetErrorCode {
 
     MsgChatAddMessage0000,
     MsgChatAddMessage0001,
+    MsgChatAddMessage0002,
+    MsgChatAddMessage0003,
+    MsgChatAddMessage0004,
 
     MsgChatUpdateReadProgress0000,
     MsgChatUpdateReadProgress0001,
@@ -752,6 +755,8 @@ export const enum NetErrorCode {
     MsgUserLogin0004,
     MsgUserLogin0005,                   // 账号不存在
     MsgUserLogin0006,                   // 账号或密码不正确
+    MsgUserLogin0007,                   // 账号权限设定不存在
+    MsgUserLogin0008,                   // 账号无权登录
 
     MsgUserRegister0000,                // 账号不合法
     MsgUserRegister0001,                // 账号已存在

@@ -113,7 +113,7 @@ namespace TinyWars.Login {
         }
 
         private _updateComponentsForLanguage(): void {
-            if (Lang.getLanguageType() === Types.LanguageType.Chinese) {
+            if (Lang.getCurrentLanguageType() === Types.LanguageType.Chinese) {
                 this._imgAccountTitle.source        = "login_text_account_001";
                 this._imgPasswordTitle.source       = "login_text_password_001";
                 this._imgRememberPassword.source    = "login_text_remember_001";

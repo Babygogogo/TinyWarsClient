@@ -17706,6 +17706,9 @@ export declare namespace User {
         /** UserPrivilege canLogin */
         canLogin?: (boolean|null);
 
+        /** UserPrivilege canChat */
+        canChat?: (boolean|null);
+
         /** UserPrivilege isAdmin */
         isAdmin?: (boolean|null);
 
@@ -17727,6 +17730,9 @@ export declare namespace User {
 
         /** UserPrivilege canLogin. */
         public canLogin: boolean;
+
+        /** UserPrivilege canChat. */
+        public canChat: boolean;
 
         /** UserPrivilege isAdmin. */
         public isAdmin: boolean;

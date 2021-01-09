@@ -51,6 +51,7 @@ namespace TinyWars.User {
         private _btnSwitchTexture           : GameUi.UiButton;
         private _btnUnitsInfo               : GameUi.UiButton;
         private _btnChangeLog               : GameUi.UiButton;
+        private _btnSetPrivilege            : GameUi.UiButton;
 
         private _userId: number;
 
@@ -98,6 +99,7 @@ namespace TinyWars.User {
                 { ui: this._btnSwitchTexture,   callback: this._onTouchedBtnSwitchTexture },
                 { ui: this._btnUnitsInfo,       callback: this._onTouchedBtnUnitsInfo },
                 { ui: this._btnChangeLog,       callback: this._onTouchedBtnChangeLog },
+                { ui: this._btnSetPrivilege,    callback: this._onTouchedBtnSetPrivilege },
                 { ui: this._btnClose,           callback: this.close },
             ];
             this._sclHistory.setItemRenderer(HistoryRenderer);
@@ -146,7 +148,7 @@ namespace TinyWars.User {
             UserOnlineUsersPanel.show();
         }
         private _onTouchedBtnChangeLanguage(e: egret.TouchEvent): void {
-            const languageType = Lang.getLanguageType() === Types.LanguageType.Chinese
+            const languageType = Lang.getCurrentLanguageType() === Types.LanguageType.Chinese
                 ? Types.LanguageType.English
                 : Types.LanguageType.Chinese;
             Lang.setLanguageType(languageType);
@@ -179,6 +181,9 @@ namespace TinyWars.User {
         private _onTouchedBtnChangeLog(e: egret.TouchEvent): void {
             ChangeLog.ChangeLogPanel.show();
         }
+        private _onTouchedBtnSetPrivilege(e: egret.TouchEvent): void {
+            UserSetPrivilegePanel.show({ userId: this._userId });
+        }
 
         private _showOpenAnimation(): void {
             const group = this._group;
@@ -204,7 +209,7 @@ namespace TinyWars.User {
             this._updateGroupButtons();
         }
 
-        private _updateGroupButtons(): void {
+        private async _updateGroupButtons(): Promise<void> {
             const group = this._groupButtons;
             group.removeChildren();
             if (this._userId === UserModel.getSelfUserId()) {
@@ -222,6 +227,9 @@ namespace TinyWars.User {
             group.addChild(this._btnUnitsInfo);
             group.addChild(this._btnChangeLog);
             group.addChild(this._btnServerStatus);
+            if (await UserModel.getIsSelfAdmin()) {
+                group.addChild(this._btnSetPrivilege);
+            }
         }
 
         private _updateComponentsForLanguage(): void {
@@ -247,6 +255,7 @@ namespace TinyWars.User {
             this._updateBtnSwitchTexture();
             this._updateBtnUnitsInfo();
             this._updateBtnChangeLog();
+            this._updateBtnSetPrivilege();
             this._updateBtnServerStatus();
             this._updateBtnChat();
             this._updateBtnComplaint();
@@ -321,7 +330,7 @@ namespace TinyWars.User {
             this._btnShowOnlineUsers.label = Lang.getText(Lang.Type.B0151);
         }
         private _updateBtnChangeLanguage(): void {
-            this._btnChangeLanguage.label = Lang.getLanguageType() === Types.LanguageType.Chinese
+            this._btnChangeLanguage.label = Lang.getCurrentLanguageType() === Types.LanguageType.Chinese
                 ? Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.English)
                 : Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.Chinese);
         }
@@ -335,6 +344,9 @@ namespace TinyWars.User {
         }
         private _updateBtnChangeLog(): void {
             this._btnChangeLog.label = Lang.getText(Lang.Type.B0457);
+        }
+        private _updateBtnSetPrivilege(): void {
+            this._btnSetPrivilege.label = Lang.getText(Lang.Type.B0460);
         }
         private _updateBtnServerStatus(): void {
             this._btnServerStatus.label = Lang.getText(Lang.Type.B0327);

@@ -254,11 +254,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateLabelMapName(): void {
-            const nameList: string[] = [];
-            for (const data of this._war.getMapNameList() || []) {
-                nameList.push(data.text);
-            }
-            this._labelMapName.text = nameList.join(`, `);
+            this._labelMapName.text = Lang.concatLanguageTextList(this._war.getMapNameList());
         }
 
         private _updateGroupMapDesigner(): void {

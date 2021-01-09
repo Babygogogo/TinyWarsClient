@@ -41,6 +41,8 @@
 		"resource/skins/mapEditor/MeImportPanel.exml",
 		"resource/skins/mapEditor/MeMapListPanel.exml",
 		"resource/skins/mapEditor/MeMapTagPanel.exml",
+		"resource/skins/mapEditor/MeModifyMapNamePanel.exml",
+		"resource/skins/mapEditor/MeModifyRuleNamePanel.exml",
 		"resource/skins/mapEditor/MeOffsetPanel.exml",
 		"resource/skins/mapEditor/MeResizePanel.exml",
 		"resource/skins/mapEditor/MeSimAdvancedSettingsPage.exml",
@@ -159,6 +161,7 @@
 		"resource/skins/user/UserOnlineUsersPanel.exml",
 		"resource/skins/user/UserPanel.exml",
 		"resource/skins/user/UserSetPasswordPanel.exml",
+		"resource/skins/user/UserSetPrivilegePanel.exml",
 		"resource/skins/utility/LoadingUiPanel.exml",
 		"resource/skins/warMap/WarMapBuildingListPanel.exml"
 	],

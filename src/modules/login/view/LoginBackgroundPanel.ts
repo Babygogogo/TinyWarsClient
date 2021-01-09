@@ -77,20 +77,20 @@ namespace TinyWars.Login {
             // this._initGroupUnits();
         }
         private _onTouchedBtnLanguage01(e: egret.TouchEvent): void {
-            if (Lang.getLanguageType() !== Types.LanguageType.Chinese) {
+            if (Lang.getCurrentLanguageType() !== Types.LanguageType.Chinese) {
                 Lang.setLanguageType(Types.LanguageType.Chinese);
                 Notify.dispatch(Notify.Type.LanguageChanged);
             }
         }
         private _onTouchedBtnLanguage02(e: egret.TouchEvent): void {
-            if (Lang.getLanguageType() !== Types.LanguageType.English) {
+            if (Lang.getCurrentLanguageType() !== Types.LanguageType.English) {
                 Lang.setLanguageType(Types.LanguageType.English);
                 Notify.dispatch(Notify.Type.LanguageChanged);
             }
         }
 
         private _updateBtnLanguages(): void {
-            const languageType = Lang.getLanguageType();
+            const languageType = Lang.getCurrentLanguageType();
             this._btnLanguage01.setImgDisplaySource(languageType === Types.LanguageType.Chinese
                 ? "login_button_language_001"
                 : "login_button_language_003"

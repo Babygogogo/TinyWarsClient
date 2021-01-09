@@ -55,6 +55,9 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
             ];
+
+            this._inputChinese.maxChars = CommonConstants.MaxMapNameLength;
+            this._inputEnglish.maxChars = CommonConstants.MaxMapNameLength;
         }
 
         protected _onOpened(): void {

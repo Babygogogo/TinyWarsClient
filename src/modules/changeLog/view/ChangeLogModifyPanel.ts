@@ -61,6 +61,9 @@ namespace TinyWars.ChangeLog {
                 { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
             ];
+
+            this._inputChinese.maxChars = CommonConstants.ChangeLogTextMaxLength;
+            this._inputEnglish.maxChars = CommonConstants.ChangeLogTextMaxLength;
         }
 
         protected _onOpened(): void {

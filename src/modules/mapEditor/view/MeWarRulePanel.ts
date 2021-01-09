@@ -77,6 +77,7 @@ namespace TinyWars.MapEditor {
         protected _onFirstOpened(): void {
             this._notifyListeners = [
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MeWarRuleNameChanged,   callback: this._onNotifyMeWarRuleNameChanged },
             ];
             this._uiListeners = [
                 { ui: this._btnBack,                callback: this._onTouchTapBtnBack },
@@ -133,6 +134,10 @@ namespace TinyWars.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
+        }
+
+        private _onNotifyMeWarRuleNameChanged(e: egret.Event): void {
+            this._updateLabelRuleName(this._selectedRule);
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
@@ -288,7 +293,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateLabelRuleName(rule: IWarRule): void {
-            this._labelRuleName.text = (rule ? rule.ruleNameList || [] : []).join(",");
+            this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameList : undefined) || Lang.getText(Lang.Type.B0001);
         }
         private _updateImgHasFog(rule: IWarRule): void {
             this._imgHasFog.visible = rule ? rule.ruleForGlobalParams.hasFogByDefault : false;

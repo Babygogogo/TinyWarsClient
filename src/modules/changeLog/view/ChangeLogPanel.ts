@@ -98,7 +98,7 @@ namespace TinyWars.ChangeLog {
         private _updateListMessageAndLabelNoMessage(): void {
             const messageList               = ChangeLogModel.getAllMessageList() || [];
             this._labelNoMessage.visible    = !messageList.length;
-            this._listMessage.bindData(messageList.reverse());
+            this._listMessage.bindData(messageList);
         }
         private async _updateBtnAddMessage(): Promise<void> {
             const btn   = this._btnAddMessage;
