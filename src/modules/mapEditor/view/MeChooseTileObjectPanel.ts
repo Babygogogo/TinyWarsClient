@@ -35,13 +35,13 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/mapEditor/MeChooseTileObjectPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
@@ -51,9 +51,7 @@ namespace TinyWars.MapEditor {
             ]);
             this._listRecent.setItemRenderer(TileObjectRenderer);
             this._listCategory.setItemRenderer(CategoryRenderer);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             this._updateListRecent();

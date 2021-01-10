@@ -36,13 +36,13 @@ namespace TinyWars.SingleCustomWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/singleCustomWar/ScwLoadWarPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
@@ -51,8 +51,7 @@ namespace TinyWars.SingleCustomWar {
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
             this._srlSaveSlot.setItemRenderer(SlotRenderer);
-        }
-        protected _onOpened(): void {
+
             this._updateView();
         }
         protected _onClosed(): void {

@@ -41,11 +41,11 @@ namespace TinyWars.MapManagement {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapManagement/MmReviewListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMmGetReviewingMaps,  callback: this._onMsgMmGetReviewingMaps },
@@ -54,9 +54,7 @@ namespace TinyWars.MapManagement {
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ]);
             this._listMap.setItemRenderer(MapRenderer);
-        }
 
-        protected _onOpened(): void {
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
 

@@ -31,11 +31,11 @@ namespace TinyWars.Login {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/login/LoginBackgroundPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
@@ -48,9 +48,7 @@ namespace TinyWars.Login {
 
             this._btnLanguage01.setImgDisplaySource("login_button_language_003");
             this._btnLanguage01.setImgExtraSource("login_button_language_001");
-        }
 
-        protected _onOpened(): void {
             this._labelVersion.text = `v.${window.CLIENT_VERSION}`;
             this._updateBtnLanguages();
 

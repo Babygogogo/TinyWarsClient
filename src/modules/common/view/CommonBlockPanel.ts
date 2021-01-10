@@ -34,8 +34,8 @@ namespace TinyWars.Common {
             super();
 
             this.skinName = "resource/skins/common/CommonBlockPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
         }
 
         protected _onOpened(): void {

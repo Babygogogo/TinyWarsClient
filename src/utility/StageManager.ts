@@ -105,7 +105,7 @@ namespace TinyWars.Utility {
             const height = this.height;
             for (let i = 0; i < this.numChildren; ++i) {
                 const child = this.getChildAt(i);
-                if ((child instanceof GameUi.UiPanel) && (child.checkIsAutoAdjustHeight())) {
+                if ((child instanceof GameUi.UiPanel) && (child.getIsAutoAdjustHeight())) {
                     child.height = height;
                 }
             }

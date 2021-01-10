@@ -38,13 +38,13 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/multiCustomRoom/McrWatchHandleRequestDetailPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -53,9 +53,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ]);
             this._listPlayer.setItemRenderer(RequesterRenderer);
-        }
 
-        protected _onOpened(): void {
             this._dataForListPlayer = this._generateDataForListPlayer();
             this._updateView();
         }

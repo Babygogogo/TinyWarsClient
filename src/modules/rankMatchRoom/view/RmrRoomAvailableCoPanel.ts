@@ -50,12 +50,12 @@ namespace TinyWars.RankMatchRoom {
             super();
 
             this.skinName = "resource/skins/rankMatchRoom/RmrRoomAvailableCoPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
@@ -64,9 +64,7 @@ namespace TinyWars.RankMatchRoom {
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgRmrDeleteRoom,   callback: this._onMsgRmrDeleteRoom },
             ]);
-        }
 
-        protected _onOpened(): void {
             const availableCoIdSet  = this._availableCoIdSet;
             const allCoIdSet        = this._allCoIdSet;
             availableCoIdSet.clear();

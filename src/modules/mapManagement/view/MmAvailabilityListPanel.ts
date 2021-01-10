@@ -58,11 +58,11 @@ namespace TinyWars.MapManagement {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapManagement/MmAvailabilityListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMmSetMapAvailability,  callback: this._onNotifySMmChangeAvailability },
@@ -73,8 +73,7 @@ namespace TinyWars.MapManagement {
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ]);
             this._listMap.setItemRenderer(MapNameRenderer);
-        }
-        protected _onOpened(): void {
+
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);

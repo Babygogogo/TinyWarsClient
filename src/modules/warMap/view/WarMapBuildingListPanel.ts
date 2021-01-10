@@ -41,20 +41,18 @@ namespace TinyWars.WarMap {
             super();
 
             this.skinName = "resource/skins/warMap/WarMapBuildingListPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
-
             this._listTile.setItemRenderer(TileRenderer);
-        }
-        protected _onOpened(): void {
+
             this._updateComponentsForLanguage();
             this._updateListTile();
         }

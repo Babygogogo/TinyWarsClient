@@ -25,7 +25,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
-        private _tileView       : ScwTileView;
+        private _tileView       = new ScwTileView();
         private _labelName      : GameUi.UiLabel;
         private _labelGridIndex : GameUi.UiLabel;
         private _labelState     : GameUi.UiLabel;
@@ -55,11 +55,11 @@ namespace TinyWars.SingleCustomWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/multiCustomWar/McwTileBriefPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
@@ -77,11 +77,9 @@ namespace TinyWars.SingleCustomWar {
                 { ui: this, callback: this._onTouchedThis, },
             ]);
 
-            this._tileView = new ScwTileView();
             this._conTileView.addChild(this._tileView.getImgBase());
             this._conTileView.addChild(this._tileView.getImgObject());
-        }
-        protected _onOpened(): void {
+
             this._war       = ScwModel.getWar();
             this._tileMap   = this._war.getTileMap() as ScwTileMap;
             this._cursor    = this._war.getField().getCursor() as ScwCursor;
@@ -89,7 +87,7 @@ namespace TinyWars.SingleCustomWar {
             this._updateView();
         }
         protected _onClosed(): void {
-            delete this._war;
+            this._war = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

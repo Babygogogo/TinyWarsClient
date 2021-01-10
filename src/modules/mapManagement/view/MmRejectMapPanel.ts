@@ -30,19 +30,17 @@ namespace TinyWars.MapManagement {
         public constructor() {
             super();
 
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmRejectMapPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
             this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
             this._labelTitle.text   = Lang.getText(Lang.Type.B0297);

@@ -20,15 +20,15 @@ namespace TinyWars.BaseWar {
 
         private static _instance: BwTileDetailPanel;
 
-        private _group                      : eui.Group;
-        private _labelName                  : GameUi.UiLabel;
-        private _imgTileBase                : GameUi.UiImage;
-        private _imgTileObject              : GameUi.UiImage;
-        private _listInfo                   : GameUi.UiScrollList;
-        private _labelMoveCost              : GameUi.UiLabel;
-        private _listMoveCost               : GameUi.UiScrollList;
+        private _group              : eui.Group;
+        private _labelName          : GameUi.UiLabel;
+        private _imgTileBase        : GameUi.UiImage;
+        private _imgTileObject      : GameUi.UiImage;
+        private _listInfo           : GameUi.UiScrollList;
+        private _labelMoveCost      : GameUi.UiLabel;
+        private _listMoveCost       : GameUi.UiScrollList;
 
-        private _openData   : OpenDataForBwTileDetailPanel;
+        private _openData           : OpenDataForBwTileDetailPanel;
         private _dataForListMoveCost: DataForMoveRangeRenderer[];
 
         public static show(data: OpenDataForBwTileDetailPanel): void {
@@ -51,24 +51,23 @@ namespace TinyWars.BaseWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/baseWar/BwTileDetailPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
             ]);
-
-            this._imgTileObject.anchorOffsetY = GRID_HEIGHT;
             this._listInfo.setItemRenderer(InfoRenderer);
             this._listMoveCost.setItemRenderer(MoveCostRenderer);
-        }
-        protected _onOpened(): void {
+
+            this._imgTileObject.anchorOffsetY = GRID_HEIGHT;
+
             this._updateView();
         }
         protected _onClosed(): void {

@@ -66,12 +66,12 @@ namespace TinyWars.MapManagement {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmWarRulePanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
             ]);
@@ -81,8 +81,7 @@ namespace TinyWars.MapManagement {
             ]);
             this._listWarRule.setItemRenderer(WarRuleNameRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
-        protected _onOpened(): void {
+
             this._updateComponentsForLanguage();
 
             this._resetView();

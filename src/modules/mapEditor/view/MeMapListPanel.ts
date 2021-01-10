@@ -37,11 +37,11 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapEditor/MeMapListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMeGetDataList,     callback: this._onNotifySMeGetDataList },
@@ -50,9 +50,7 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ]);
             this._listMap.setItemRenderer(MapRenderer);
-        }
 
-        protected _onOpened(): void {
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
 

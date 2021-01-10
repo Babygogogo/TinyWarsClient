@@ -43,11 +43,11 @@ namespace TinyWars.Common {
             super();
 
             this.skinName = "resource/skins/common/CommonConfirmPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
@@ -55,9 +55,7 @@ namespace TinyWars.Common {
 
             this._btnConfirm.setTextColor(0x00FF00);
             this._btnCancel.setTextColor(0xFF0000);
-        }
 
-        protected _onOpened(): void {
             this._showOpenAnimation();
 
             const openData          = this._openData;

@@ -40,21 +40,19 @@ namespace TinyWars.Common {
         public constructor() {
             super();
 
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/common/CommonAlertPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnClose, callback: this._onTouchedBtnClose },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             this._labelTitle.text = this._openData.title;

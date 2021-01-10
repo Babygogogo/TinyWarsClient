@@ -34,11 +34,11 @@ namespace TinyWars.Broadcast {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled(true);
+            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/broadcast/BroadcastPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.TimeTick,                   callback: this._onNotifyTimeTick },
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
@@ -47,9 +47,7 @@ namespace TinyWars.Broadcast {
 
             this.touchEnabled   = false;
             this.touchChildren  = false;
-        }
 
-        protected _onOpened(): void {
             this._resetView();
         }
 

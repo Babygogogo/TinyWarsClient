@@ -40,7 +40,7 @@ namespace TinyWars.Common {
         private _selectedIndex          : number;
         private _dataForListUnit        : DataForUnitRenderer[];
         private _dataForListDamageChart : DataForDamageRenderer[];
-        private _unitView               : WarMap.WarMapUnitView;
+        private _unitView               = new WarMap.WarMapUnitView();
 
         public static show(): void {
             if (!CommonDamageChartPanel._instance) {
@@ -61,13 +61,13 @@ namespace TinyWars.Common {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/common/CommonDamageChartPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
@@ -76,14 +76,11 @@ namespace TinyWars.Common {
             this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this.close },
             ]);
-
             this._listUnit.setItemRenderer(UnitRenderer);
             this._listDamageChart.setItemRenderer(DamageRenderer);
             this._listInfo.setItemRenderer(InfoRenderer);
-            this._unitView = new WarMap.WarMapUnitView();
+
             this._conUnitView.addChild(this._unitView);
-        }
-        protected _onOpened(): void {
             this._showOpenAnimation();
 
             const listUnit          = this._listUnit;

@@ -39,7 +39,7 @@ namespace TinyWars.BaseWar {
 
         private _openData   : OpenDataForBwUnitDetailPanel;
         private _dataForList: DataForDamageRenderer[];
-        private _unitView   : WarMap.WarMapUnitView;
+        private _unitView   = new WarMap.WarMapUnitView();
 
         public static show(data: OpenDataForBwUnitDetailPanel): void {
             if (!BwUnitDetailPanel._instance) {
@@ -61,13 +61,13 @@ namespace TinyWars.BaseWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/baseWar/BwUnitDetailPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
@@ -79,10 +79,8 @@ namespace TinyWars.BaseWar {
 
             this._listDamageChart.setItemRenderer(DamageRenderer);
             this._listInfo.setItemRenderer(InfoRenderer);
-            this._unitView = new WarMap.WarMapUnitView();
             this._conUnitView.addChild(this._unitView);
-        }
-        protected _onOpened(): void {
+
             this._updateView();
         }
         protected _onClosed(): void {

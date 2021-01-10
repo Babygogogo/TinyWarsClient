@@ -33,7 +33,7 @@ namespace TinyWars.Lobby {
             this.skinName = "resource/skins/lobby/LobbyTopPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogin,                   callback: this._onMsgUserLogin },
@@ -48,9 +48,7 @@ namespace TinyWars.Lobby {
                 { ui: this._btnMyInfo,  callback: this._onTouchedBtnMyInfo },
                 { ui: this._btnChat,    callback: this._onTouchedBtnChat },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._showOpenAnimation();
 
             this._updateView();

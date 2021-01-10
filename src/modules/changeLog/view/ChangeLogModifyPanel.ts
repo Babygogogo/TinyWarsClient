@@ -47,13 +47,13 @@ namespace TinyWars.ChangeLog {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled(true);
-            this._setTouchMaskEnabled(true);
-            this._callbackForTouchMask  = () => this.close();
+            this._setIsAutoAdjustHeight(true);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
             this.skinName               = "resource/skins/changeLog/ChangeLogModifyPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -64,9 +64,7 @@ namespace TinyWars.ChangeLog {
 
             this._inputChinese.maxChars = CommonConstants.ChangeLogTextMaxLength;
             this._inputEnglish.maxChars = CommonConstants.ChangeLogTextMaxLength;
-        }
 
-        protected _onOpened(): void {
             this._updateView();
         }
 

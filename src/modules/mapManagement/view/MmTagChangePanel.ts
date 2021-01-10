@@ -39,12 +39,12 @@ namespace TinyWars.MapManagement {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmTagChangePanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -54,9 +54,7 @@ namespace TinyWars.MapManagement {
                 { ui: this._btnWarRule,     callback: this._onTouchedBtnWarRule },
                 { ui: this._groupFog,       callback: this._onTouchedGroupMcw },
             ]);
-        }
 
-        protected async _onOpened(): Promise<void> {
             this._updateComponentsForLanguage();
 
             const mapTag            = (await WarMapModel.getBriefData(this._mapId)).mapTag || {};

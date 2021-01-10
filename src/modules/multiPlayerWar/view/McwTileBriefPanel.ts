@@ -22,7 +22,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
-        private _tileView       : McwTileView;
+        private _tileView       = new McwTileView();
         private _labelName      : GameUi.UiLabel;
         private _labelGridIndex : GameUi.UiLabel;
         private _labelState     : GameUi.UiLabel;
@@ -52,11 +52,11 @@ namespace TinyWars.MultiPlayerWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/multiCustomWar/McwTileBriefPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
@@ -74,11 +74,9 @@ namespace TinyWars.MultiPlayerWar {
                 { ui: this, callback: this._onTouchedThis, },
             ]);
 
-            this._tileView = new McwTileView();
             this._conTileView.addChild(this._tileView.getImgBase());
             this._conTileView.addChild(this._tileView.getImgObject());
-        }
-        protected _onOpened(): void {
+
             this._war       = MpwModel.getWar();
             this._tileMap   = this._war.getTileMap() as MpwTileMap;
             this._cursor    = this._war.getField().getCursor() as MpwCursor;

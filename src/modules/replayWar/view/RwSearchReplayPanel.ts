@@ -45,13 +45,13 @@ namespace TinyWars.ReplayWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/replayWar/RwSearchReplayPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnClose,           callback: this.close },
                 { ui: this._btnReset,           callback: this._onTouchedBtnReset },
@@ -62,9 +62,7 @@ namespace TinyWars.ReplayWar {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
             this._btnReset.enabled  = true;
             this._btnSearch.enabled = true;

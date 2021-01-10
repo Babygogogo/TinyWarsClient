@@ -49,11 +49,11 @@ namespace TinyWars.RankMatchRoom {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/rankMatchRoom/RmrPreviewMapListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ]);
@@ -61,8 +61,7 @@ namespace TinyWars.RankMatchRoom {
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._listMap.setItemRenderer(MapNameRenderer);
-        }
-        protected _onOpened(): void {
+
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);

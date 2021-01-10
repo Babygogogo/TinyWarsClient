@@ -37,13 +37,13 @@ namespace TinyWars.User {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask  = () => this.close();
-            this.skinName               = "resource/skins/user/UserSetPasswordPanel.exml";
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+            this.skinName = "resource/skins/user/UserSetPasswordPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserSetPassword,  callback: this._onMsgUserSetPassword },
@@ -52,9 +52,7 @@ namespace TinyWars.User {
                 { ui: this._btnCancel,  callback: this.close },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._updateOnLanguageChanged();
         }
 

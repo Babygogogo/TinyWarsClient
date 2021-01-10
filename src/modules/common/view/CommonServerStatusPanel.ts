@@ -36,19 +36,17 @@ namespace TinyWars.Common {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask  = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName               = "resource/skins/common/CommonServerStatusPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.MsgCommonGetServerStatus, callback: this._onMsgCommonGetServerStatus },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             CommonProxy.reqCommonGetServerStatus();

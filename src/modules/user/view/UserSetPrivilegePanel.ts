@@ -55,13 +55,13 @@ namespace TinyWars.User {
         public constructor() {
             super();
 
-            this._setTouchMaskEnabled(true);
-            this._setAutoAdjustHeightEnabled(true);
-            this._callbackForTouchMask  = () => this.close();
-            this.skinName               = "resource/skins/user/UserSetPrivilegePanel.exml";
+            this._setIsTouchMaskEnabled(true);
+            this._setIsAutoAdjustHeight(true);
+            this._setIsCloseOnTouchedMask();
+            this.skinName = "resource/skins/user/UserSetPrivilegePanel.exml";
         }
 
-        public _onFirstOpened(): void {
+        public _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.MsgUserGetPublicInfo,   callback: this._onNotifyMsgUserGetPublicInfo },
                 { type: Notify.Type.MsgUserSetPrivilege,    callback: this._onNotifyMsgUserSetPrivilege },
@@ -76,9 +76,7 @@ namespace TinyWars.User {
                 { ui: this._groupIsChangeLogEditor, callback: this._onTouchedGroupIsChangeLogEditor },
                 { ui: this._groupIsMapCommittee,    callback: this._onTouchedGroupIsMapCommittee },
             ]);
-        }
 
-        public _onOpened(): void {
             const userId = this._openData.userId;
             this._inputUserId.text = `${userId}`;
             UserProxy.reqUserGetPublicInfo(userId);

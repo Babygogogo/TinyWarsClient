@@ -45,11 +45,11 @@ namespace TinyWars.Common {
             super();
 
             this.skinName = "resource/skins/common/CommonInputPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -58,9 +58,7 @@ namespace TinyWars.Common {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
                 { ui: this._input,      callback: this._onFocusOutInput,    eventType: egret.Event.FOCUS_OUT },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._showOpenAnimation();
             this._updateComponentsForLanguage();
 

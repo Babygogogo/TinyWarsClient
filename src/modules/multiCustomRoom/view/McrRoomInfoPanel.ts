@@ -41,11 +41,11 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled(true);
+            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/multiCustomRoom/McrRoomInfoPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnStartGame,   callback: this._onTouchedBtnStartGame },
@@ -68,9 +68,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnDeleteRoom.setTextColor(0xFF0000);
             this._btnChat.setTextColor(0x00FF00);
             this._btnExitRoom.setTextColor(0xFF0000);
-        }
 
-        protected _onOpened(): void {
             const roomId = this._roomId;
             this._tabSettings.bindData([
                 {

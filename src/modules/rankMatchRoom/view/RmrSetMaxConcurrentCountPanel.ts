@@ -42,11 +42,11 @@ namespace TinyWars.RankMatchRoom {
             super();
 
             this.skinName = "resource/skins/rankMatchRoom/RmrSetMaxConcurrentCountPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgRmrGetMaxConcurrentCount,    callback: this._onMsgRmrGetMaxConcurrentCount },
@@ -63,9 +63,7 @@ namespace TinyWars.RankMatchRoom {
             this._btnCancel.setTextColor(0xFF0000);
             this._btnModifyHasFog.setTextColor(0x00FF00);
             this._btnModifyCount.setTextColor(0x00FF00);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             const hasFog    = false;

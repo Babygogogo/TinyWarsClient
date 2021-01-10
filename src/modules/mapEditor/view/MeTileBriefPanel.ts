@@ -23,7 +23,7 @@ namespace TinyWars.MapEditor {
 
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
-        private _tileView       : MeTileView;
+        private _tileView       = new MeTileView();
         private _labelName      : GameUi.UiLabel;
         private _labelGridIndex : GameUi.UiLabel;
         private _labelState     : GameUi.UiLabel;
@@ -53,11 +53,11 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/mapEditor/MeTileBriefPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
@@ -75,11 +75,9 @@ namespace TinyWars.MapEditor {
                 { ui: this, callback: this._onTouchedThis, },
             ]);
 
-            this._tileView = new MeTileView();
             this._conTileView.addChild(this._tileView.getImgBase());
             this._conTileView.addChild(this._tileView.getImgObject());
-        }
-        protected _onOpened(): void {
+
             const war       = MeManager.getWar();
             this._war       = war;
             this._tileMap   = war.getTileMap() as MeTileMap;

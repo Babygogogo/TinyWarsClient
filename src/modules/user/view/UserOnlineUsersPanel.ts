@@ -42,11 +42,11 @@ namespace TinyWars.User {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/user/UserOnlineUsersPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserGetOnlineUsers,  callback: this._onNotifySUserGetOnlineUsers },
@@ -55,8 +55,7 @@ namespace TinyWars.User {
                 { ui: this._btnClose, callback: this.close },
             ]);
             this._listUser.setItemRenderer(UserRenderer);
-        }
-        protected _onOpened(): void {
+
             UserProxy.reqUserGetOnlineUsers();
 
             this._updateView();

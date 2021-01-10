@@ -30,11 +30,11 @@ namespace TinyWars.RankMatchRoom {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/rankMatchRoom/RmrMainMenuPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ]);
@@ -44,11 +44,8 @@ namespace TinyWars.RankMatchRoom {
                 { type: Notify.Type.MsgRmrGetRoomPublicInfo,        callback: this._onMsgRmrGetRoomPublicInfo },
                 { type: Notify.Type.MsgRmrGetMyRoomPublicInfoList,  callback: this._onMsgRmrGetMyRoomPublicInfoList },
             ]);
-
             this._listCommand.setItemRenderer(CommandRenderer);
-        }
 
-        protected _onOpened(): void {
             this._updateView();
         }
 

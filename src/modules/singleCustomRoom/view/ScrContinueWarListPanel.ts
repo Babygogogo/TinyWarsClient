@@ -43,11 +43,11 @@ namespace TinyWars.SingleCustomRoom {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/singleCustomRoom/ScrContinueWarListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgScrContinueWarFailed,    callback: this._onMsgScrContinueWarFailed },
@@ -57,9 +57,7 @@ namespace TinyWars.SingleCustomRoom {
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ]);
             this._listWar.setItemRenderer(WarRenderer);
-        }
 
-        protected _onOpened(): void {
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);

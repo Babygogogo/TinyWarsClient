@@ -43,11 +43,11 @@ namespace TinyWars.ReplayWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/replayWar/RwUnitBriefPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
@@ -61,8 +61,7 @@ namespace TinyWars.ReplayWar {
                 { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
             ]);
-        }
-        protected _onOpened(): void {
+
             this._war       = RwModel.getWar();
             this._unitMap   = this._war.getUnitMap() as RwUnitMap;
             this._cursor    = this._war.getField().getCursor() as RwCursor;

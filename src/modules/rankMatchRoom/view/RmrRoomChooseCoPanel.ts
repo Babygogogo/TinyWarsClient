@@ -70,11 +70,11 @@ namespace TinyWars.RankMatchRoom {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/rankMatchRoom/RmrRoomChooseCoPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgRmrDeleteRoom,   callback: this._onMsgRmrDeleteRoom },
@@ -87,8 +87,7 @@ namespace TinyWars.RankMatchRoom {
             this._listPassiveSkill.setItemRenderer(SkillRenderer);
             this._listCop.setItemRenderer(SkillRenderer);
             this._listScop.setItemRenderer(SkillRenderer);
-        }
-        protected _onOpened(): void {
+
             this._initListCo();
             this._updateComponentsForLanguage();
         }

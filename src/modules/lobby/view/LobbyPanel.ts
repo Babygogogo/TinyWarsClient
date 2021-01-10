@@ -37,11 +37,11 @@ namespace TinyWars.Lobby {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/lobby/LobbyPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this, callback: this._onResize, eventType: egret.Event.RESIZE },
             ]);
@@ -51,11 +51,8 @@ namespace TinyWars.Lobby {
                 { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
                 { type: Notify.Type.MsgRmrGetMyRoomPublicInfoList,  callback: this._onMsgRmrGetMyRoomPublicInfoList },
             ]);
-
             this._listCommand.setItemRenderer(CommandRenderer);
-        }
 
-        protected async _onOpened(): Promise<void> {
             this._showOpenAnimation();
 
             this._updateComponentsForLanguage();

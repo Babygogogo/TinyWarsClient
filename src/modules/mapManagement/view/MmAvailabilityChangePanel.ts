@@ -51,12 +51,12 @@ namespace TinyWars.MapManagement {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmAvailabilityChangePanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -72,9 +72,6 @@ namespace TinyWars.MapManagement {
             ]);
 
             this._btnDelete.setTextColor(0xFF0000);
-        }
-
-        protected async _onOpened(): Promise<void> {
             this._updateComponentsForLanguage();
 
             const availability          = (await WarMapModel.getBriefData(this._mapId)).mapExtraData.mapComplexInfo.availability;

@@ -44,12 +44,12 @@ namespace TinyWars.MultiCustomRoom {
             super();
 
             this.skinName = "resource/skins/multiCustomRoom/McrCreateAvailableCoPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
@@ -57,9 +57,7 @@ namespace TinyWars.MultiCustomRoom {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
-        }
 
-        protected _onOpened(): void {
             const availableCoIdSet = this._availableCoIdSet;
             availableCoIdSet.clear();
             for (const coId of McrModel.Create.getAvailableCoIdList(this._playerIndex)) {

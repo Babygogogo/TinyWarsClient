@@ -49,20 +49,18 @@ namespace TinyWars.MapManagement {
             super();
 
             this.skinName = "resource/skins/mapManagement/MmWarRuleAvailableCoPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
-        }
 
-        protected _onOpened(): void {
             const availableCoIdSet  = this._availableCoIdSet;
             const openParam         = this._openParam;
             availableCoIdSet.clear();

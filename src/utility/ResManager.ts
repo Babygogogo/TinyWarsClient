@@ -116,7 +116,7 @@ namespace TinyWars.Utility {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/utility/LoadingUiPanel.exml";
         }
 

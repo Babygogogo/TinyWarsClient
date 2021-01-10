@@ -22,7 +22,7 @@ namespace TinyWars.ReplayWar {
 
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
-        private _tileView       : RwTileView;
+        private _tileView       = new RwTileView();
         private _labelName      : GameUi.UiLabel;
         private _labelGridIndex : GameUi.UiLabel;
         private _labelState     : GameUi.UiLabel;
@@ -52,11 +52,11 @@ namespace TinyWars.ReplayWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/replayWar/RwTileBriefPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
@@ -73,12 +73,9 @@ namespace TinyWars.ReplayWar {
             this._setUiListenerArray([
                 { ui: this, callback: this._onTouchedThis, },
             ]);
-
-            this._tileView = new RwTileView();
             this._conTileView.addChild(this._tileView.getImgBase());
             this._conTileView.addChild(this._tileView.getImgObject());
-        }
-        protected _onOpened(): void {
+
             this._war       = RwModel.getWar();
             this._tileMap   = this._war.getTileMap() as RwTileMap;
             this._cursor    = this._war.getField().getCursor() as RwCursor;

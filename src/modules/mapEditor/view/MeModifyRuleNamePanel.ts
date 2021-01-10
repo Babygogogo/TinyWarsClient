@@ -47,13 +47,13 @@ namespace TinyWars.MapEditor {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled(true);
-            this._setTouchMaskEnabled(true);
-            this._callbackForTouchMask  = () => this.close();
+            this._setIsAutoAdjustHeight(true);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
             this.skinName               = "resource/skins/mapEditor/MeModifyRuleNamePanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
@@ -61,9 +61,7 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._updateView();
         }
 

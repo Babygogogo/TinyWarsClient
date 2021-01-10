@@ -42,11 +42,11 @@ namespace TinyWars.MapEditor {
             super();
 
             this.skinName = "resource/skins/mapEditor/MeConfirmSaveMapPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -55,9 +55,7 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnConfirm,         callback: this._onTouchedBtnConfirm, },
                 { ui: this._groupNeedReview,    callback: this._onTouchedGroupNeedReview },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
             this._needReview = false;
             this._updateImgNeedReview();

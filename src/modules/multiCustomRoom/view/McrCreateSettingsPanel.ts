@@ -34,11 +34,11 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled(true);
+            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/multiCustomRoom/McrCreateSettingsPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
@@ -48,9 +48,7 @@ namespace TinyWars.MultiCustomRoom {
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
-        }
 
-        protected _onOpened(): void {
             this._tabSettings.bindData([
                 {
                     tabItemData: { name: Lang.getText(Lang.Type.B0002) },

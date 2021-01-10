@@ -39,11 +39,11 @@ namespace TinyWars.Login {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/login/RegisterPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserLogin,    callback: this._onMsgUserLogin },
@@ -53,9 +53,7 @@ namespace TinyWars.Login {
                 { ui: this._btnLogin,    callback: this._onTouchedBtnLogin },
                 { ui: this._btnRegister, callback: this._onTouchedBtnRegister },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._updateOnLanguageChanged();
         }
 

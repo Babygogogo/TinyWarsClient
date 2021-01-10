@@ -47,11 +47,11 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiCustomRoom/McrMyRoomListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
@@ -65,9 +65,7 @@ namespace TinyWars.MultiCustomRoom {
             ]);
             this._listWar.setItemRenderer(WarRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             this._groupInfo.visible = false;

@@ -28,22 +28,19 @@ namespace TinyWars.SingleCustomRoom {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/singleCustomRoom/ScrMainMenuPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ]);
             this._setNotifyListenerArray([
                 { type: Utility.Notify.Type.MsgUserLogout, callback: this._onMsgUserLogout },
             ]);
-
             this._listCommand.setItemRenderer(CommandRenderer);
-        }
 
-        protected _onOpened(): void {
             this._listCommand.bindData(this._createDataForListCommand());
         }
 

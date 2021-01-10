@@ -50,7 +50,7 @@ namespace TinyWars.SingleCustomWar {
             this.skinName = "resource/skins/singleCustomWar/ScwTopPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwTurnPhaseCodeChanged,         callback: this._onNotifyBwTurnPhaseCodeChanged },
@@ -74,9 +74,7 @@ namespace TinyWars.SingleCustomWar {
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._war = ScwModel.getWar();
             this._updateView();
         }

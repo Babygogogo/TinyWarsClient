@@ -31,21 +31,19 @@ namespace TinyWars.MultiPlayerWar {
         private constructor() {
             super();
 
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/multiCustomWar/McwBuildingListPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => McwBuildingListPanel.hide();
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
-
             this._listTile.setItemRenderer(TileRenderer);
-        }
-        protected _onOpened(): void {
+
             this._updateComponentsForLanguage();
             this._updateListTile();
         }

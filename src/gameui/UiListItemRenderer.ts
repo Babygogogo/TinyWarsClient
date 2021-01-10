@@ -52,7 +52,7 @@ namespace TinyWars.GameUi {
         }
 
         private _doOpen(): void {
-            if (this._checkIsReadyForOpen()) {
+            if (!this._checkIsReadyForOpen()) {
                 return;
             }
 

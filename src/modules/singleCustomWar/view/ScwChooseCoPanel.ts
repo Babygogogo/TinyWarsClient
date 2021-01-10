@@ -70,11 +70,11 @@ namespace TinyWars.SingleCustomWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/singleCustomWar/ScwChooseCoPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
                 { ui: this._btnBack,    callback: this._onTouchTapBtnBack },
@@ -83,8 +83,7 @@ namespace TinyWars.SingleCustomWar {
             this._listPassiveSkill.setItemRenderer(SkillRenderer);
             this._listCop.setItemRenderer(SkillRenderer);
             this._listScop.setItemRenderer(SkillRenderer);
-        }
-        protected _onOpened(): void {
+
             this._initListCo();
             this._updateView();
         }

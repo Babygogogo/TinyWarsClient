@@ -38,11 +38,11 @@ namespace TinyWars.Common {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/common/CommonRankListPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgCommonGetRankList,   callback: this._onMsgCommonGetRankList },
@@ -52,8 +52,7 @@ namespace TinyWars.Common {
             ]);
             this._listStd.setItemRenderer(UserRenderer);
             this._listFog.setItemRenderer(UserRenderer);
-        }
-        protected _onOpened(): void {
+
             CommonProxy.reqGetRankList();
 
             this._updateView();

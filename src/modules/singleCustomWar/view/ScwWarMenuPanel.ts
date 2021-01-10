@@ -65,11 +65,11 @@ namespace TinyWars.SingleCustomWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/singleCustomWar/ScwWarMenuPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
@@ -86,8 +86,7 @@ namespace TinyWars.SingleCustomWar {
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._listWarInfo.setItemRenderer(InfoRenderer);
-        }
-        protected _onOpened(): void {
+
             const war           = ScwModel.getWar();
             this._war           = war;
             this._unitMap       = war.getUnitMap() as ScwUnitMap;

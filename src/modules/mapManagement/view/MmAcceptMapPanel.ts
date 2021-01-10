@@ -48,11 +48,11 @@ namespace TinyWars.MapManagement {
             super();
 
             this.skinName = "resource/skins/mapManagement/MmAcceptMapPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -64,9 +64,7 @@ namespace TinyWars.MapManagement {
                 { ui: this._groupRank,      callback: this._onTouchedGroupRank },
                 { ui: this._groupRankFog,   callback: this._onTouchedGroupRankFog },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             this._imgMcw.visible        = false;

@@ -36,11 +36,11 @@ namespace TinyWars.SingleCustomRoom {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled(true);
+            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/singleCustomRoom/ScrCreateSettingsPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
@@ -50,9 +50,7 @@ namespace TinyWars.SingleCustomRoom {
                 { type: Notify.Type.MsgScrCreateWar,    callback: this._onMsgScrCreateWar },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
-        }
 
-        protected _onOpened(): void {
             this._tabSettings.bindData([
                 {
                     tabItemData: { name: Lang.getText(Lang.Type.B0002) },

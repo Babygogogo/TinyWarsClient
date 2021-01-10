@@ -31,11 +31,11 @@ namespace TinyWars.MapManagement {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapManagement/MmMainMenuPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
             ]);
@@ -44,11 +44,8 @@ namespace TinyWars.MapManagement {
                 { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
                 { type: Notify.Type.MsgMmReloadAllMaps, callback: this._onMsgMmReloadAllMaps },
             ]);
-
             this._listCommand.setItemRenderer(CommandRenderer);
-        }
 
-        protected async _onOpened(): Promise<void> {
             this._updateView();
             this._listCommand.bindData(await this._createDataForListCommand());
         }

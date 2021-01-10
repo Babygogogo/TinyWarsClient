@@ -52,7 +52,7 @@ namespace TinyWars.MultiPlayerWar {
             this.skinName = "resource/skins/multiCustomWar/McwTopPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TimeTick,                       callback: this._onNotifyTimeTick },
@@ -77,9 +77,7 @@ namespace TinyWars.MultiPlayerWar {
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._war = MpwModel.getWar();
             this._updateView();
         }

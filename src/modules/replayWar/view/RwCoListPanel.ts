@@ -68,13 +68,13 @@ namespace TinyWars.ReplayWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/replayWar/RwCoListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
@@ -86,8 +86,7 @@ namespace TinyWars.ReplayWar {
             this._listPassiveSkill.setItemRenderer(SkillRenderer);
             this._listCop.setItemRenderer(SkillRenderer);
             this._listScop.setItemRenderer(SkillRenderer);
-        }
-        protected _onOpened(): void {
+
             this._updateComponentsForLanguage();
 
             this._war           = RwModel.getWar();

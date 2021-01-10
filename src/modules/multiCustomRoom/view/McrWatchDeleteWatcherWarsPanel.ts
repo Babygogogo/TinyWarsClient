@@ -48,24 +48,22 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiCustomRoom/McrWatchDeleteWatcherWarsPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMpwWatchGetWatchedWarInfos,    callback: this._onNotifySMcwWatchGetWatchedWarInfos },
-                { type: Notify.Type.MsgMpwWatchDeleteWatcher,         callback: this._onNotifySMcwWatchDeleteWatcher },
+                { type: Notify.Type.MsgMpwWatchGetWatchedWarInfos,  callback: this._onNotifySMcwWatchGetWatchedWarInfos },
+                { type: Notify.Type.MsgMpwWatchDeleteWatcher,       callback: this._onNotifySMcwWatchDeleteWatcher },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
             ]);
             this._listWar.setItemRenderer(WarRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
 
-        protected _onOpened(): void {
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);

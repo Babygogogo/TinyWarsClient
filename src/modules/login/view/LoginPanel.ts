@@ -42,11 +42,11 @@ namespace TinyWars.Login {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/login/LoginPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserLogin,    callback: this._onMsgUserLogin },
@@ -57,9 +57,7 @@ namespace TinyWars.Login {
                 { ui: this._btnForgetPassword,      callback: this._onTouchedBtnForgetPassword },
                 { ui: this._groupRememberPassword,  callback: this._onTouchedGroupRememberPassword },
             ]);
-        }
 
-        protected _onOpened(): void {
             const isRememberPassword                = LocalStorage.getIsRememberPassword();
             this._inputAccount.text                 = LocalStorage.getAccount();
             this._inputPassword.text                = isRememberPassword ? LocalStorage.getPassword() : null;

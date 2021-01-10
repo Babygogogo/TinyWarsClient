@@ -38,13 +38,13 @@ namespace TinyWars.MultiCustomRoom {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => McrJoinPasswordPanel.hide();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/multiCustomRoom/McrJoinPasswordPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnCancel,        callback: this._onTouchedBtnCancel },
                 { ui: this._btnConfirm,       callback: this._onTouchedBtnConfirm },
@@ -52,9 +52,7 @@ namespace TinyWars.MultiCustomRoom {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
             this._inputWarPassword.text = "";
         }

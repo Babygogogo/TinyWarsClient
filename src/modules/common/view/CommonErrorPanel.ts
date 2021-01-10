@@ -37,17 +37,15 @@ namespace TinyWars.Common {
             super();
 
             this.skinName = "resource/skins/common/CommonErrorPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-        }
-
-        protected _onFirstOpened(): void {
-            this._setUiListenerArray([
-                { ui: this._btnClose, callback: this._onTouchedBtnClose },
-            ]);
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
         }
 
         protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnClose, callback: this._onTouchedBtnClose },
+            ]);
+
             this._btnClose.label    = Lang.getText(Lang.Type.B0026);
             this._labelTitle.text   = Lang.getText(Lang.Type.A0056);
             this._labelContent.setRichText(this._openData.content);

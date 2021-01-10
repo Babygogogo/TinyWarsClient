@@ -34,13 +34,13 @@ namespace TinyWars.User {
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/user/UserChangeNicknamePanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserSetNickname,          callback: this._onMsgUserSetNickname },
@@ -49,8 +49,7 @@ namespace TinyWars.User {
             this._setUiListenerArray([
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ]);
-        }
-        protected async _onOpened(): Promise<void> {
+
             this._isRequesting          = false;
             this._inputNickname.text    = await UserModel.getSelfNickname();
             this._updateComponentsForLanguage();

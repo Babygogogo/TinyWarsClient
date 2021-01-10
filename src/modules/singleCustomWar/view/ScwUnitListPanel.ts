@@ -43,11 +43,11 @@ namespace TinyWars.SingleCustomWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/multiCustomWar/McwUnitListPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
@@ -59,8 +59,7 @@ namespace TinyWars.SingleCustomWar {
                 { ui: this._btnSwitch, callback: this._onTouchedBtnSwitch },
             ]);
             this._listUnit.setItemRenderer(UnitRenderer);
-        }
-        protected _onOpened(): void {
+
             const war           = ScwModel.getWar();
             this._war           = war;
             this._unitMap       = war.getUnitMap() as ScwUnitMap;

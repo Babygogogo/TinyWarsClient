@@ -74,12 +74,12 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapEditor/MeWarRulePanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MeWarRuleNameChanged,   callback: this._onNotifyMeWarRuleNameChanged },
@@ -101,8 +101,7 @@ namespace TinyWars.MapEditor {
             this._listWarRule.setItemRenderer(WarRuleNameRenderer);
             this._listWarEvent.setItemRenderer(WarEventRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
-        protected _onOpened(): void {
+
             this._updateComponentsForLanguage();
 
             this._war = MeManager.getWar();

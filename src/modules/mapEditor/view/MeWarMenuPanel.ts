@@ -66,11 +66,11 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/mapEditor/MeWarMenuPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,                  callback: this._onNotifyTileAnimationTick },
@@ -90,8 +90,7 @@ namespace TinyWars.MapEditor {
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listTile.setItemRenderer(TileRenderer);
             this._listUnit.setItemRenderer(UnitRenderer);
-        }
-        protected _onOpened(): void {
+
             const war           = MeManager.getWar();
             this._war           = war;
             this._menuType      = MenuType.Main;

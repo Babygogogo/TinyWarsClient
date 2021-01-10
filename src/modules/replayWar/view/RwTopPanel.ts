@@ -53,7 +53,7 @@ namespace TinyWars.ReplayWar {
             this.skinName = "resource/skins/replayWar/RwTopPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
@@ -78,9 +78,7 @@ namespace TinyWars.ReplayWar {
                 { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ]);
-        }
 
-        protected _onOpened(): void {
             this._war = RwModel.getWar();
             this._updateView();
         }

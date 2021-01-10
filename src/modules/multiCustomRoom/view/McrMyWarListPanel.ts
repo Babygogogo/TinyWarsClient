@@ -48,11 +48,11 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiCustomRoom/McrMyWarListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMpwCommonGetMyWarInfoList,   callback: this._onMsgMpwCommonGetMyWarInfoList },
@@ -62,9 +62,7 @@ namespace TinyWars.MultiCustomRoom {
             ]);
             this._listWar.setItemRenderer(WarRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
 
-        protected _onOpened(): void {
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);

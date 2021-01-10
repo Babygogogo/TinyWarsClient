@@ -60,13 +60,13 @@ namespace TinyWars.Chat {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/chat/ChatPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgChatAddMessage,      callback: this._onMsgChatAddMessage },
@@ -79,8 +79,7 @@ namespace TinyWars.Chat {
             ]);
             this._listChat.setItemRenderer(ChatPageRenderer);
             this._listMessage.setItemRenderer(MessageRenderer);
-        }
-        protected async _onOpened(): Promise<void> {
+
             this._showOpenAnimation();
             this._updateComponentsForLanguage();
 

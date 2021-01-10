@@ -46,11 +46,11 @@ namespace TinyWars.MultiPlayerWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/multiCustomWar/McwProduceUnitPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
@@ -61,8 +61,7 @@ namespace TinyWars.MultiPlayerWar {
                 { ui: this._btnDetail, callback: this._onTouchedBtnDetail },
             ]);
             this._listUnit.setItemRenderer(UnitRenderer);
-        }
-        protected _onOpened(): void {
+
             this._war = MpwModel.getWar();
             this._updateView();
 
