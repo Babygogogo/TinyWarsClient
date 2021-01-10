@@ -63,7 +63,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
         private _listPlayer             : TinyWars.GameUi.UiScrollList;
 
-        protected _dataForOpen  : OpenParamForRoomBasicSettingsPage;
+        protected _openData  : OpenParamForRoomBasicSettingsPage;
         private _roomInfo       : ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
 
         public constructor() {
@@ -72,8 +72,8 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrRoomBasicSettingsPage.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected async _onOpened(): Promise<void> {
+            this._setUiListenerArray([
                 { ui: this._btnBuildings,           callback: this._onTouchedBtnBuildings },
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
                 { ui: this._btnModifyPlayerIndex,   callback: this._onTouchedBtnModifyPlayerIndex, },
@@ -83,21 +83,19 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnHelpSkinId,          callback: this._onTouchedBtnHelpSkinId, },
                 { ui: this._btnHelpTimeLimit,       callback: this._onTouchedBtnHelpTimeLimit, },
                 { ui: this._btnChangeCo,            callback: this._onTouchedBtnChangeCo, },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onMsgMcrGetRoomInfo },
-            ];
+            ]);
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._btnModifyPlayerIndex.setTextColor(0x00FF00);
             this._btnModifySkinId.setTextColor(0x00FF00);
             this._btnChangeCo.setTextColor(0x00FF00);
             this._btnModifyReady.setTextColor(0x00FF00);
-        }
 
-        protected async _onOpened(): Promise<void> {
-            const roomId    = this._dataForOpen.roomId;
+            const roomId    = this._openData.roomId;
             this._roomInfo  = await McrModel.getRoomInfo(roomId);
 
             this._updateComponentsForLanguage();

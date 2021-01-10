@@ -15,7 +15,7 @@ namespace TinyWars.SingleCustomRoom {
         private _labelPlayerList        : GameUi.UiLabel;
         private _listPlayer             : GameUi.UiScrollList;
 
-        protected _mapRawData   : ProtoTypes.Map.IMapRawData;
+        private _mapRawData             : ProtoTypes.Map.IMapRawData;
 
         public constructor() {
             super();
@@ -23,15 +23,12 @@ namespace TinyWars.SingleCustomRoom {
             this.skinName = "resource/skins/singleCustomRoom/ScrCreateAdvancedSettingsPage.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-
-            this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
-
         protected async _onOpened(): Promise<void> {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ]);
+            this._listPlayer.setItemRenderer(PlayerRenderer);
+
             this._mapRawData = await ScrModel.getCreateWarMapRawData();
 
             this._updateComponentsForLanguage();

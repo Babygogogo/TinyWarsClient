@@ -20,7 +20,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
         private _listPlayer         : TinyWars.GameUi.UiScrollList;
 
-        protected _dataForOpen  : OpenParamForWarAdvancedSettingsPage;
+        protected _openData  : OpenParamForWarAdvancedSettingsPage;
         private _warInfo        : IMpwWarInfo;
 
         public constructor() {
@@ -29,18 +29,16 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrWarAdvancedSettingsPage.exml";
         }
 
-        public _onFirstOpened(): void {
-            this._uiListeners = [
-                { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
-            ];
-            this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-            this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
-
         protected async _onOpened(): Promise<void> {
-            this._warInfo = this._dataForOpen.warInfo;
+            this._setUiListenerArray([
+                { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
+            ]);
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            ]);
+            this._listPlayer.setItemRenderer(PlayerRenderer);
+
+            this._warInfo = this._openData.warInfo;
 
             this._updateComponentsForLanguage();
         }

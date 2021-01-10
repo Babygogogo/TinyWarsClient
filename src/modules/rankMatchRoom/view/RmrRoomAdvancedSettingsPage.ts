@@ -21,7 +21,7 @@ namespace TinyWars.RankMatchRoom {
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
         private _listPlayer         : TinyWars.GameUi.UiScrollList;
 
-        protected _dataForOpen  : OpenParamForRoomAdvancedSettingsPage;
+        protected _openData  : OpenParamForRoomAdvancedSettingsPage;
         private _roomInfo       : IRmrRoomInfo;
 
         public constructor() {
@@ -30,19 +30,17 @@ namespace TinyWars.RankMatchRoom {
             this.skinName = "resource/skins/rankMatchRoom/RmrRoomAdvancedSettingsPage.exml";
         }
 
-        public _onFirstOpened(): void {
-            this._uiListeners = [
+        protected async _onOpened(): Promise<void> {
+            this._setUiListenerArray([
                 { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgRmrGetRoomPublicInfo,    callback: this._onMsgRmrGetRoomPublicInfo },
-            ];
+            ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
 
-        protected async _onOpened(): Promise<void> {
-            const roomId    = this._dataForOpen.roomId;
+            const roomId    = this._openData.roomId;
             this._roomInfo  = await RmrModel.getRoomInfo(roomId);
 
             this._updateComponentsForLanguage();

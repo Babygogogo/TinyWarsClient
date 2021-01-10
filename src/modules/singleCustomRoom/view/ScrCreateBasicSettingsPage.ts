@@ -33,23 +33,20 @@ namespace TinyWars.SingleCustomRoom {
             this.skinName = "resource/skins/singleCustomRoom/ScrCreateBasicSettingsPage.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected async _onOpened(): Promise<void> {
+            this._setUiListenerArray([
                 { ui: this._btnChangeSaveSlot,  callback: this._onTouchedBtnChangeSaveSlot, },
                 { ui: this._btnPrevFog,         callback: this._onTouchedBtnPrevFog, },
                 { ui: this._btnNextFog,         callback: this._onTouchedBtnNextFog, },
                 { ui: this._btnHelpFog,         callback: this._onTouchedBtnHelpFog, },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.ScrCreateWarSaveSlotChanged,        callback: this._onNotifyScrCreateWarSaveSlotChanged },
                 { type: Notify.Type.ScrCreateWarPlayerInfoListChanged,  callback: this._onNotifyScrCreateWarPlayerInfoListChanged },
-            ];
-
+            ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
 
-        protected async _onOpened(): Promise<void> {
             this._mapRawData = await ScrModel.getCreateWarMapRawData();
 
             this._updateComponentsForLanguage();

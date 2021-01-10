@@ -23,14 +23,12 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrJoinAdvancedSettingsPage.exml";
         }
 
-        public _onFirstOpened(): void {
-            this._uiListeners = [
-                { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
-            ];
-            this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
-
         protected async _onOpened(): Promise<void> {
+            this._setUiListenerArray([
+                { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
+            ]);
+            this._listPlayer.setItemRenderer(PlayerRenderer);
+
             this._mapRawData = await McrModel.Join.getMapRawData();
 
             this._updateComponentsForLanguage();

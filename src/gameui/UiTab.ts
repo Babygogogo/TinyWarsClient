@@ -7,7 +7,7 @@ namespace TinyWars.GameUi {
         private _page    : eui.Group;   // 页面内容，仅用于占位
 
         private _dataProvider    : eui.ArrayCollection;
-        private _barItemRenderer : any;
+        private _barItemRenderer : new () => GameUi.UiListItemRenderer;
         private _selectedIndex   : number = -1;
 
         public constructor() {
@@ -54,8 +54,7 @@ namespace TinyWars.GameUi {
                 if (!pageInstance) {
                     Logger.error("pageInstance is null");
                 } else {
-                    this._page.addChild(pageInstance);
-                    pageInstance.open(data.pageData);
+                    pageInstance.open(this._page, data.pageData);
                 }
             }
         }
@@ -72,7 +71,7 @@ namespace TinyWars.GameUi {
             return data.pageInstance;
         }
 
-        public setBarItemRenderer(itemRenderer: new () => eui.ItemRenderer ): void {
+        public setBarItemRenderer(itemRenderer: new () => GameUi.UiListItemRenderer ): void {
             this._barItemRenderer = itemRenderer;
             if (this._bar) {
                 this._bar.itemRenderer = itemRenderer;
@@ -115,18 +114,7 @@ namespace TinyWars.GameUi {
         }
 
         private _createPageInstance(data : DataForUiTab) : UiTabPage | undefined {
-            const pageClass = data.pageClass;
-            if (typeof pageClass !== "string") {
-                return new pageClass();
-            } else {
-                const def = egret.getDefinitionByName(pageClass)
-                if (def) {
-                    return new def();
-                } else {
-                    Logger.error("UiTab._createPageInstance() 找不到pageClassName对应的类: " + pageClass);
-                    return undefined;
-                }
-            }
+            return new data.pageClass();
         }
 
         private _removeAllCachedPagesFromParent() : void {
@@ -134,9 +122,8 @@ namespace TinyWars.GameUi {
             if (dataProvider) {
                 for (let i = 0; i < dataProvider.length; ++i) {
                     const pageInstance = (dataProvider.getItemAt(i) as DataForUiTab).pageInstance;
-                    if ((pageInstance) && (pageInstance.parent)) {
+                    if (pageInstance) {
                         pageInstance.close();
-                        pageInstance.parent.removeChild(pageInstance);
                     }
                 }
             }
@@ -147,7 +134,7 @@ namespace TinyWars.GameUi {
         callbackOnTouchedItem?: () => boolean;
         tabItemData          ?: any;
 
-        pageClass : string | (new() => UiTabPage);
+        pageClass : new() => UiTabPage;
         pageData ?: any;
         /**
          * 页面的实例。设计意图是作为UiTab的页面缓存使用，因此外部不必提供此值；

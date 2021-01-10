@@ -62,8 +62,8 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrCreateBasicSettingsPage.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected async _onOpened(): Promise<void> {
+            this._setUiListenerArray([
                 { ui: this._btnModifyWarName,           callback: this._onTouchedBtnModifyWarName, },
                 { ui: this._btnModifyWarPassword,       callback: this._onTouchedBtnModifyWarPassword, },
                 { ui: this._btnModifyWarComment,        callback: this._onTouchedBtnModifyWarComment, },
@@ -81,10 +81,10 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnModifyTimerIncremental2, callback: this._onTouchedBtnModifyTimerIncremental2 },
                 { ui: this._btnChangeCo,                callback: this._onTouchedBtnChangeCo, },
                 { ui: this._btnBuildings,               callback: this._onTouchedBtnBuildings },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
 
             this._btnChangeCo.setTextColor(0x00FF00);
             this._btnModifyHasFog.setTextColor(0x00FF00);
@@ -98,9 +98,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnModifyWarName.setTextColor(0x00FF00);
             this._btnModifyWarPassword.setTextColor(0x00FF00);
             this._btnModifyWarRule.setTextColor(0x00FF00);
-        }
 
-        protected async _onOpened(): Promise<void> {
             this._mapRawData = await McrModel.Create.getMapRawData();
 
             this._updateComponentsForLanguage();

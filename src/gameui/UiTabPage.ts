@@ -8,25 +8,22 @@ namespace TinyWars.GameUi {
     }
 
     export abstract class UiTabPage extends eui.Component {
-        protected _uiListeners    : UiListener[];
-        protected _notifyListeners: Utility.Notify.Listener[];
-        protected _notifyPriority = 0;
+        private _isChildrenCreated      = false;
+        private _isSkinLoaded           = false;
+        private _isOpening              = false;
 
-        private _isChildrenCreated   = false;
-        private _isAllSkinPartsAdded = false;
-        private _isCalledOpen        = false;
+        private _uiListenerArray        : UiListener[];
+        private _notifyListenerArray    : Utility.Notify.Listener[];
+        private _notifyPriority         = 0;
 
-        private _isEverOpened        = false;
-        private _isOpening           = false;
-
-        protected _dataForOpen: any;
+        protected _openData             : any;
 
         protected constructor() {
             super();
 
             this.touchEnabled = false;
-            this.addEventListener(egret.Event.COMPLETE, this._onAllSkinPartsAdded, this);
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+            this.once(egret.Event.COMPLETE, this._onAllSkinPartsAdded, this);
         }
 
         protected childrenCreated(): void {
@@ -37,9 +34,8 @@ namespace TinyWars.GameUi {
         }
 
         private _onAllSkinPartsAdded(): void {
-            this.removeEventListener(egret.Event.COMPLETE, this._onAllSkinPartsAdded, this);
+            this._isSkinLoaded = true;
 
-            this._isAllSkinPartsAdded = true;
             this._doOpen();
         }
 
@@ -53,87 +49,103 @@ namespace TinyWars.GameUi {
         private _onRemovedFromStage(): void {
             this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+
+            this._doClose();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for open self.
         ////////////////////////////////////////////////////////////////////////////////
-        public open(data: any): void {
-            this._isCalledOpen = true;
-            this._dataForOpen  = data;
+        public open(parent: egret.DisplayObjectContainer, data: any): void {
+            this._openData  = data;
+            parent.addChild(this);
+
             this._doOpen();
         }
 
         private _doOpen(): void {
-            if (this._checkIsReadyForOpen()) {
-                this._isCalledOpen = false;
+            if (!this._checkIsReadyForOpen()) {
+                return;
+            }
 
-                if (!this._isEverOpened) {
-                    this._isEverOpened = true;
-                    this._onFirstOpened();
-                }
-
-                if (!this._isOpening) {
-                    this._isOpening = true;
-                    this._registerListeners();
-                }
+            if (!this._getIsOpening()) {
+                this._setIsOpening(true);
 
                 this._onOpened();
+                this._registerListeners();
             }
         }
 
-        protected _onFirstOpened(): void {
-        }
-
-        protected _onOpened(): void {
-        }
+        protected _onOpened(): void {}
 
         private _checkIsReadyForOpen(): boolean {
             return (this.stage != null)
                 && (this._isChildrenCreated)
-                && (this._isAllSkinPartsAdded)
-                && (this._isCalledOpen);
+                && (this._isSkinLoaded);
+        }
+
+        private _getIsOpening(): boolean {
+            return this._isOpening;
+        }
+        private _setIsOpening(isOpening: boolean): void {
+            this._isOpening = isOpening;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for close self.
         ////////////////////////////////////////////////////////////////////////////////
         public close(): void {
+            (this.parent) && (this.parent.removeChild(this));
+
             this._doClose();
         }
 
         private _doClose(): void {
-            if (this._isOpening) {
-                this._isOpening = false;
+            if (this._getIsOpening()) {
+                this._setIsOpening(false);
+
                 this._unregisterListeners();
+                this._setUiListenerArray(undefined);
+                this._setNotifyListenerArray(undefined);
+                this._onClosed();
             }
-
-            this._onClosed();
         }
 
-        protected _onClosed(): void {
-        }
+        protected _onClosed(): void {}
 
         ////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////
+        protected _setUiListenerArray(array: UiListener[]): void {
+            this._uiListenerArray = array;
+        }
+        protected _getUiListenerArray(): UiListener[] | undefined {
+            return this._uiListenerArray;
+        }
+        protected _setNotifyListenerArray(array: Utility.Notify.Listener[]): void {
+            this._notifyListenerArray = array;
+        }
+        protected _getNotifyListenerArray(): Utility.Notify.Listener[] | undefined {
+            return this._notifyListenerArray;
+        }
+
         private _registerListeners(): void {
-            if (this._notifyListeners) {
-                Utility.Notify.addEventListeners(this._notifyListeners, this);
+            if (this._notifyListenerArray) {
+                Utility.Notify.addEventListeners(this._notifyListenerArray, this);
             }
-            if (this._uiListeners) {
-                for (const l of this._uiListeners) {
+            if (this._uiListenerArray) {
+                for (const l of this._uiListenerArray) {
                     l.ui.addEventListener(l.eventType || egret.TouchEvent.TOUCH_TAP, l.callback, l.thisObject || this);
                 }
             }
         }
 
         private _unregisterListeners(): void {
-            if (this._notifyListeners) {
-                Utility.Notify.removeEventListeners(this._notifyListeners, this);
+            if (this._notifyListenerArray) {
+                Utility.Notify.removeEventListeners(this._notifyListenerArray, this);
             }
-            if (this._uiListeners) {
-                for (const l of this._uiListeners) {
+            if (this._uiListenerArray) {
+                for (const l of this._uiListenerArray) {
                     l.ui.removeEventListener(l.eventType || egret.TouchEvent.TOUCH_TAP, l.callback, l.thisObject || this);
                 }
             }
