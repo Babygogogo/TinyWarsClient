@@ -21,7 +21,7 @@ namespace TinyWars.MapEditor {
             if (!MeSimSettingsPanel._instance) {
                 MeSimSettingsPanel._instance = new MeSimSettingsPanel();
             }
-            MeSimSettingsPanel._instance.open();
+            MeSimSettingsPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (MeSimSettingsPanel._instance) {

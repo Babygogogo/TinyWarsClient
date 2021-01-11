@@ -22,7 +22,7 @@ namespace TinyWars.ChangeLog {
             if (!ChangeLogPanel._instance) {
                 ChangeLogPanel._instance = new ChangeLogPanel();
             }
-            ChangeLogPanel._instance.open();
+            ChangeLogPanel._instance.open(undefined);
         }
 
         public static hide(): void {

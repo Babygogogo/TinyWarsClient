@@ -10,11 +10,10 @@ namespace TinyWars.MapEditor {
     import WarRule          = ProtoTypes.WarRule;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    type OpenParam = {
+    type OpenDataForMeAvailableCoPanel = {
         playerRule      : WarRule.IDataForPlayerRule;
         warRule         : WarRule.IWarRule;
         isReviewing     : boolean;
-        callbackOnClose : () => void;
     }
 
     export class MeAvailableCoPanel extends GameUi.UiPanel {
@@ -32,15 +31,13 @@ namespace TinyWars.MapEditor {
         private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
 
-        private _openParam              : OpenParam;
         private _availableCoIdSet       = new Set<number>();
 
-        public static show(openParam: OpenParam): void {
+        public static show(openData: OpenDataForMeAvailableCoPanel): void {
             if (!MeAvailableCoPanel._instance) {
                 MeAvailableCoPanel._instance = new MeAvailableCoPanel();
             }
-            MeAvailableCoPanel._instance._openParam = openParam;
-            MeAvailableCoPanel._instance.open();
+            MeAvailableCoPanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -67,13 +64,13 @@ namespace TinyWars.MapEditor {
             ]);
 
             const availableCoIdSet  = this._availableCoIdSet;
-            const openParam         = this._openParam;
+            const openData          = this._getOpenData<OpenDataForMeAvailableCoPanel>();
             availableCoIdSet.clear();
-            for (const coId of openParam.playerRule.availableCoIdList) {
+            for (const coId of openData.playerRule.availableCoIdList) {
                 availableCoIdSet.add(coId);
             }
 
-            this._btnConfirm.visible = !openParam.isReviewing;
+            this._btnConfirm.visible = !openData.isReviewing;
             this._updateComponentsForLanguage();
             this._initGroupCoTiers();
             this._initGroupCoNames();
@@ -82,8 +79,6 @@ namespace TinyWars.MapEditor {
         protected _onClosed(): void {
             this._clearGroupCoTiers();
             this._clearGroupCoNames();
-            this._openParam.callbackOnClose();
-            this._openParam = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -105,14 +100,15 @@ namespace TinyWars.MapEditor {
                     content : Lang.getText(Lang.Type.A0130),
                 });
             } else {
-                const openParam = this._openParam;
-                BwSettingsHelper.setAvailableCoIdList(openParam.warRule, openParam.playerRule.playerIndex, availableCoIdSet);
+                const openData = this._getOpenData<OpenDataForMeAvailableCoPanel>();
+                BwSettingsHelper.setAvailableCoIdList(openData.warRule, openData.playerRule.playerIndex, availableCoIdSet);
+                Notify.dispatch(Notify.Type.MeAvailableCoChanged);
                 this.close();
             }
         }
 
         private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {
-            if (!this._openParam.isReviewing) {
+            if (!this._getOpenData<OpenDataForMeAvailableCoPanel>().isReviewing) {
                 const renderer          = e.currentTarget as RendererForCoTier;
                 const availableCoIdSet  = this._availableCoIdSet;
                 const coIdList          = renderer.getIsCustomSwitch()
@@ -137,7 +133,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
-            if (!this._openParam.isReviewing) {
+            if (!this._getOpenData<OpenDataForMeAvailableCoPanel>().isReviewing) {
                 const renderer          = e.currentTarget as RendererForCoName;
                 const coId              = renderer.getCoId();
                 const availableCoIdSet  = this._availableCoIdSet;
@@ -161,7 +157,7 @@ namespace TinyWars.MapEditor {
         private _updateComponentsForLanguage(): void {
             this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
             this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
-            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._openParam.playerRule.playerIndex})`;
+            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._getOpenData<OpenDataForMeAvailableCoPanel>().playerRule.playerIndex})`;
         }
 
         private _initGroupCoTiers(): void {

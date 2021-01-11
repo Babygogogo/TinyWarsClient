@@ -7,13 +7,14 @@ namespace TinyWars.MultiCustomRoom {
     import BwSettingsHelper = BaseWar.BwSettingsHelper;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
+    type OpenDataForMcrJoinCoListPanel = {
+        coId    : number | undefined | null;
+    }
     export class McrJoinCoListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: McrJoinCoListPanel;
-
-        private _openData   : number;
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
@@ -48,13 +49,12 @@ namespace TinyWars.MultiCustomRoom {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(coId: number | null): void {
+        public static show(openData: OpenDataForMcrJoinCoListPanel): void {
             if (!McrJoinCoListPanel._instance) {
                 McrJoinCoListPanel._instance = new McrJoinCoListPanel();
             }
 
-            McrJoinCoListPanel._instance._openData = coId;
-            McrJoinCoListPanel._instance.open();
+            McrJoinCoListPanel._instance.open(openData);
         }
         public static hide(): void {
             if (McrJoinCoListPanel._instance) {
@@ -136,9 +136,11 @@ namespace TinyWars.MultiCustomRoom {
             this._dataForListCo = await this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
+
+            const coId = this._getOpenData<OpenDataForMcrJoinCoListPanel>().coId;
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
                 const cfg = data.coBasicCfg;
-                return cfg ? cfg.coId === this._openData : this._openData == null;
+                return cfg ? cfg.coId === coId : coId == null;
             }));
         }
 

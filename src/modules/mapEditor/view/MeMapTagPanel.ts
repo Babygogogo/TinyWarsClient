@@ -23,7 +23,7 @@ namespace TinyWars.MapEditor {
             if (!MeMapTagPanel._instance) {
                 MeMapTagPanel._instance = new MeMapTagPanel();
             }
-            MeMapTagPanel._instance.open();
+            MeMapTagPanel._instance.open(undefined);
         }
 
         public static hide(): void {

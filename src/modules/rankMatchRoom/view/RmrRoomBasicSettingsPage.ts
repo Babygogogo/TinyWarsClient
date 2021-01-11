@@ -223,7 +223,7 @@ namespace TinyWars.RankMatchRoom {
                 if ((selfPlayerData != null)                                                                                            &&
                     ((roomInfo.settingsForRmw.dataListForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex) == null)
                 ) {
-                    RmrRoomAvailableCoPanel.show(roomInfo, selfPlayerData.playerIndex);
+                    RmrRoomAvailableCoPanel.show({ roomInfo, srcPlayerIndex: selfPlayerData.playerIndex });
                 }
             }
         }

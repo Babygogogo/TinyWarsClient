@@ -4,7 +4,7 @@ namespace TinyWars.Common {
     import Notify   = Utility.Notify;
     import Types    = Utility.Types;
 
-    export type OpenDataForCommonAlertPanel = {
+    type OpenDataForCommonAlertPanel = {
         title       : string;
         content     : string;
         callback?   : () => any;
@@ -21,14 +21,11 @@ namespace TinyWars.Common {
         private _labelContent   : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
 
-        private _openData: OpenDataForCommonAlertPanel;
-
-        public static show(data: OpenDataForCommonAlertPanel): void {
+        public static show(openData: OpenDataForCommonAlertPanel): void {
             if (!CommonAlertPanel._instance) {
                 CommonAlertPanel._instance = new CommonAlertPanel();
             }
-            CommonAlertPanel._instance._openData = data;
-            CommonAlertPanel._instance.open();
+            CommonAlertPanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -55,14 +52,17 @@ namespace TinyWars.Common {
 
             this._updateComponentsForLanguage();
 
-            this._labelTitle.text = this._openData.title;
-            this._labelContent.setRichText(this._openData.content);
+            const openData          = this._getOpenData<OpenDataForCommonAlertPanel>();
+            this._labelTitle.text   = openData.title;
+            this._labelContent.setRichText(openData.content);
             this._scrContent.viewport.scrollV = 0;
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
+            const openData = this._getOpenData<OpenDataForCommonAlertPanel>();
+            (openData.callback) && (openData.callback());
+
             this.close();
-            (this._openData.callback) && (this._openData.callback());
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

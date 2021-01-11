@@ -38,7 +38,7 @@ namespace TinyWars.ReplayWar {
             if (!RwTopPanel._instance) {
                 RwTopPanel._instance = new RwTopPanel();
             }
-            RwTopPanel._instance.open();
+            RwTopPanel._instance.open(undefined);
         }
 
         public static hide(): void {
@@ -126,10 +126,10 @@ namespace TinyWars.ReplayWar {
 
         private _onTouchedGroupPlayer(e: egret.TouchEvent): void {
             const userId = this._war.getPlayerInTurn().getUserId();
-            (userId) && (User.UserPanel.show(userId));
+            (userId) && (User.UserPanel.show({ userId }));
         }
         private _onTouchedGroupCo(e: egret.TouchEvent): void {
-            RwCoListPanel.show(Math.max(this._war.getPlayerIndexInTurn() - 1, 0));
+            RwCoListPanel.show({ selectedIndex: Math.max(this._war.getPlayerIndexInTurn() - 1, 0) });
             RwWarMenuPanel.hide();
         }
         private _onTouchedBtnChat(e: egret.TouchEvent): void {

@@ -6,6 +6,9 @@ namespace TinyWars.RankMatchRoom {
     import MpwProxy     = MultiPlayerWar.MpwProxy;
     import IMpwWarInfo  = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
 
+    type OpenDataForRmrWarInfoPanel = {
+        warInfo : IMpwWarInfo;
+    }
     export class RmrWarInfoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
@@ -17,14 +20,11 @@ namespace TinyWars.RankMatchRoom {
         private _btnContinueWar : TinyWars.GameUi.UiButton;
         private _btnBack        : TinyWars.GameUi.UiButton;
 
-        private _warInfo        : IMpwWarInfo;
-
-        public static show(warInfo: IMpwWarInfo): void {
+        public static show(openData: OpenDataForRmrWarInfoPanel): void {
             if (!RmrWarInfoPanel._instance) {
                 RmrWarInfoPanel._instance = new RmrWarInfoPanel();
             }
-            RmrWarInfoPanel._instance._warInfo = warInfo;
-            RmrWarInfoPanel._instance.open();
+            RmrWarInfoPanel._instance.open(openData);
         }
         public static hide(): void {
             if (RmrWarInfoPanel._instance) {
@@ -52,7 +52,7 @@ namespace TinyWars.RankMatchRoom {
             this._btnBack.setTextColor(0x00FF00);
             this._btnContinueWar.setTextColor(0x00FF00);
 
-            const warInfo = this._warInfo;
+            const warInfo = this._getOpenData<OpenDataForRmrWarInfoPanel>().warInfo;
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0002) },
@@ -86,7 +86,7 @@ namespace TinyWars.RankMatchRoom {
         }
 
         private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
-            const warInfo = this._warInfo;
+            const warInfo = this._getOpenData<OpenDataForRmrWarInfoPanel>().warInfo;
             if (warInfo) {
                 MpwProxy.reqMcwCommonContinueWar(warInfo.warId);
             }

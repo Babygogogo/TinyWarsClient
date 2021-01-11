@@ -18,7 +18,7 @@ namespace TinyWars.SinglePlayerLobby {
             if (!SinglePlayerLobbyPanel._instance) {
                 SinglePlayerLobbyPanel._instance = new SinglePlayerLobbyPanel();
             }
-            SinglePlayerLobbyPanel._instance.open();
+            SinglePlayerLobbyPanel._instance.open(undefined);
         }
 
         public static hide(): void {

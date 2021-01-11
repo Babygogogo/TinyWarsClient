@@ -22,7 +22,7 @@ namespace TinyWars.User {
             if (!UserChangeNicknamePanel._instance) {
                 UserChangeNicknamePanel._instance = new UserChangeNicknamePanel();
             }
-            UserChangeNicknamePanel._instance.open();
+            UserChangeNicknamePanel._instance.open(undefined);
         }
 
         public static hide(): void {

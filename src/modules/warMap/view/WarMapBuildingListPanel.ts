@@ -21,14 +21,11 @@ namespace TinyWars.WarMap {
         public _labelTitle  : GameUi.UiLabel;
         public _listTile    : GameUi.UiScrollList;
 
-        private _openData   : OpenDataForBuildingListPanel;
-
         public static show(openData: OpenDataForBuildingListPanel): void {
             if (!WarMapBuildingListPanel._instance) {
                 WarMapBuildingListPanel._instance = new WarMapBuildingListPanel();
             }
-            WarMapBuildingListPanel._instance._openData = openData;
-            WarMapBuildingListPanel._instance.open();
+            WarMapBuildingListPanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -73,7 +70,7 @@ namespace TinyWars.WarMap {
         }
 
         private _updateListTile(): void {
-            const openData      = this._openData;
+            const openData      = this._getOpenData<OpenDataForBuildingListPanel>();
             const mapRawData    = openData.mapRawData;
             const configVersion = openData.configVersion;
             const dict          = new Map<number, Map<number, number>>();

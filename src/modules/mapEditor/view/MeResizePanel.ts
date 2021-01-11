@@ -30,7 +30,7 @@ namespace TinyWars.MapEditor {
             if (!MeResizePanel._instance) {
                 MeResizePanel._instance = new MeResizePanel();
             }
-            MeResizePanel._instance.open();
+            MeResizePanel._instance.open(undefined);
         }
 
         public static hide(): void {

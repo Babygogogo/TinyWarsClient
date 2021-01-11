@@ -136,7 +136,7 @@ namespace TinyWars.MultiCustomRoom {
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        McrCreateAvailableCoPanel.show(playerIndex);
+                        McrCreateAvailableCoPanel.show({ playerIndex });
                     });
                 },
             };

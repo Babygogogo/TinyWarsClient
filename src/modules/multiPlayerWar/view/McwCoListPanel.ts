@@ -4,13 +4,14 @@ namespace TinyWars.MultiPlayerWar {
     import Lang     = Utility.Lang;
     import Notify   = Utility.Notify;
 
+    type OpenDataForMcwCoListPanel = {
+        selectedIndex   : number;
+    }
     export class McwCoListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: McwCoListPanel;
-
-        private _openData   : number;
 
         private _groupList  : eui.Group;
         private _listCo     : GameUi.UiScrollList;
@@ -53,13 +54,12 @@ namespace TinyWars.MultiPlayerWar {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(selectedIndex: number): void {
+        public static show(openData: OpenDataForMcwCoListPanel): void {
             if (!McwCoListPanel._instance) {
                 McwCoListPanel._instance = new McwCoListPanel();
             }
 
-            McwCoListPanel._instance._openData = selectedIndex;
-            McwCoListPanel._instance.open();
+            McwCoListPanel._instance.open(openData);
         }
         public static hide(): void {
             if (McwCoListPanel._instance) {
@@ -99,7 +99,7 @@ namespace TinyWars.MultiPlayerWar {
             this._war           = MpwModel.getWar();
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
-            this.setSelectedIndex(this._openData);
+            this.setSelectedIndex(this._getOpenData<OpenDataForMcwCoListPanel>().selectedIndex);
 
             Notify.dispatch(Notify.Type.BwCoListPanelOpened);
         }

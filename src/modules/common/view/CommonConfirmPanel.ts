@@ -2,7 +2,7 @@
 namespace TinyWars.Common {
     import Lang = Utility.Lang;
 
-    export type OpenDataForCommonConfirmPanel = {
+    type OpenDataForCommonConfirmPanel = {
         title               : string;
         content             : string;
         callback            : () => any;
@@ -23,14 +23,11 @@ namespace TinyWars.Common {
         private _btnCancel      : GameUi.UiButton;
         private _btnConfirm     : GameUi.UiButton;
 
-        private _openData: OpenDataForCommonConfirmPanel;
-
-        public static show(data: OpenDataForCommonConfirmPanel): void {
+        public static show(openData: OpenDataForCommonConfirmPanel): void {
             if (!CommonConfirmPanel._instance) {
                 CommonConfirmPanel._instance = new CommonConfirmPanel();
             }
-            CommonConfirmPanel._instance._openData = data;
-            CommonConfirmPanel._instance.open();
+            CommonConfirmPanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -58,27 +55,23 @@ namespace TinyWars.Common {
 
             this._showOpenAnimation();
 
-            const openData          = this._openData;
+            const openData          = this._getOpenData<OpenDataForCommonConfirmPanel>();
             this._btnConfirm.label  = openData.textForConfirm || Lang.getText(Lang.Type.B0026);
             this._btnCancel.label   = openData.textForCancel || Lang.getText(Lang.Type.B0154);
             this._labelTitle.text   = openData.title;
-            this._labelContent.setRichText(this._openData.content);
-        }
-
-        protected _onClosed(): void {
-            this._openData = null;
+            this._labelContent.setRichText(openData.content);
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            const openData = this._openData;
-            this.close();
+            const openData = this._getOpenData<OpenDataForCommonConfirmPanel>();
             (openData.callbackOnCancel) && (openData.callbackOnCancel());
+
+            this.close();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const openData = this._openData;
+            this._getOpenData<OpenDataForCommonConfirmPanel>().callback();
             this.close();
-            openData.callback();
         }
 
         private _showOpenAnimation(): void {

@@ -16,7 +16,7 @@ namespace TinyWars.SingleCustomRoom {
             if (!ScrMainMenuPanel._instance) {
                 ScrMainMenuPanel._instance = new ScrMainMenuPanel();
             }
-            ScrMainMenuPanel._instance.open();
+            ScrMainMenuPanel._instance.open(undefined);
         }
 
         public static hide(): void {

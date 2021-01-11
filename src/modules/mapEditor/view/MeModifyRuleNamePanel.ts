@@ -19,7 +19,6 @@ namespace TinyWars.MapEditor {
 
         private static _instance: MeModifyRuleNamePanel;
 
-        private _openData       : OpenDataForModifyRuleNamePanel;
         private _inputChinese   : GameUi.UiTextInput;
         private _inputEnglish   : GameUi.UiTextInput;
         private _labelTip       : GameUi.UiLabel;
@@ -34,8 +33,7 @@ namespace TinyWars.MapEditor {
                 MeModifyRuleNamePanel._instance = new MeModifyRuleNamePanel();
             }
 
-            MeModifyRuleNamePanel._instance._openData = openData;
-            MeModifyRuleNamePanel._instance.open();
+            MeModifyRuleNamePanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -81,7 +79,7 @@ namespace TinyWars.MapEditor {
             } else if (textList.some(v => v.text.length > CommonConstants.WarRuleNameMaxLength)) {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.WarRuleNameMaxLength));
             } else {
-                MeManager.getWar().setWarRuleNameList(this._openData.ruleId, textList);
+                MeManager.getWar().setWarRuleNameList(this._getOpenData<OpenDataForModifyRuleNamePanel>().ruleId, textList);
                 Notify.dispatch(Notify.Type.MeWarRuleNameChanged);
                 this.close();
             }
@@ -90,7 +88,7 @@ namespace TinyWars.MapEditor {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const textList          = MeManager.getWar().getWarRuleByRuleId(this._openData.ruleId).ruleNameList;
+            const textList          = MeManager.getWar().getWarRuleByRuleId(this._getOpenData<OpenDataForModifyRuleNamePanel>().ruleId).ruleNameList;
             this._inputChinese.text = Lang.getTextInLanguage(textList, Types.LanguageType.Chinese);
             this._inputEnglish.text = Lang.getTextInLanguage(textList, Types.LanguageType.English);
         }
@@ -101,7 +99,7 @@ namespace TinyWars.MapEditor {
             this._labelChinese.text = Lang.getText(Lang.Type.B0455);
             this._labelEnglish.text = Lang.getText(Lang.Type.B0456);
             this._labelTip.text     = Lang.getText(Lang.Type.A0156);
-            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0459)} #${this._openData.ruleId}`;
+            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0459)} #${this._getOpenData<OpenDataForModifyRuleNamePanel>().ruleId}`;
         }
     }
 }

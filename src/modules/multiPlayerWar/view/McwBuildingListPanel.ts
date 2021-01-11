@@ -19,7 +19,7 @@ namespace TinyWars.MultiPlayerWar {
             if (!McwBuildingListPanel._instance) {
                 McwBuildingListPanel._instance = new McwBuildingListPanel();
             }
-            McwBuildingListPanel._instance.open();
+            McwBuildingListPanel._instance.open(undefined);
         }
 
         public static hide(): void {

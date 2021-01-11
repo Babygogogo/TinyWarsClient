@@ -7,7 +7,7 @@ namespace TinyWars.MultiCustomRoom {
     import BwSettingsHelper = BaseWar.BwSettingsHelper;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    export type OpenParamForMcrRoomChooseCoPanel = {
+    type OpenDataForMcrRoomChooseCoPanel = {
         roomInfo        : ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
         selfPlayerData  : ProtoTypes.Structure.IDataForPlayerInRoom;
     }
@@ -17,8 +17,6 @@ namespace TinyWars.MultiCustomRoom {
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: McrRoomChooseCoPanel;
-
-        private _openParam      : OpenParamForMcrRoomChooseCoPanel;
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
@@ -53,13 +51,12 @@ namespace TinyWars.MultiCustomRoom {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(openParam: OpenParamForMcrRoomChooseCoPanel): void {
+        public static show(openData: OpenDataForMcrRoomChooseCoPanel): void {
             if (!McrRoomChooseCoPanel._instance) {
                 McrRoomChooseCoPanel._instance = new McrRoomChooseCoPanel();
             }
 
-            McrRoomChooseCoPanel._instance._openParam = openParam;
-            McrRoomChooseCoPanel._instance.open();
+            McrRoomChooseCoPanel._instance.open(openData);
         }
         public static hide(): void {
             if (McrRoomChooseCoPanel._instance) {
@@ -125,7 +122,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            McrRoomInfoPanel.show(this._openParam.roomInfo.roomId);
+            McrRoomInfoPanel.show({ roomId: this._getOpenData<OpenDataForMcrRoomChooseCoPanel>().roomInfo.roomId });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -138,7 +135,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initListCo(): void {
-            const selfCoId      = this._openParam.selfPlayerData.coId;
+            const selfCoId      = this._getOpenData<OpenDataForMcrRoomChooseCoPanel>().selfPlayerData.coId;
             const dataForListCo = this._createDataForListCo();
             this._dataForListCo = dataForListCo;
             this._listCo.bindData(dataForListCo);
@@ -148,7 +145,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const data              : DataForCoRenderer[] = [];
-            const openParam         = this._openParam;
+            const openParam         = this._getOpenData<OpenDataForMcrRoomChooseCoPanel>();
             const roomInfo          = openParam.roomInfo;
             const selfPlayerData    = openParam.selfPlayerData;
             const availableCoIdList = BwSettingsHelper.getAvailableCoIdList(roomInfo.settingsForCommon.warRule, selfPlayerData.playerIndex);
@@ -308,7 +305,7 @@ namespace TinyWars.MultiCustomRoom {
                 });
             }
             data.panel.close();
-            McrRoomInfoPanel.show(roomId);
+            McrRoomInfoPanel.show({ roomId });
         }
     }
 

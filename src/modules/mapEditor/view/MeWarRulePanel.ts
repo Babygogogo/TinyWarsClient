@@ -60,7 +60,7 @@ namespace TinyWars.MapEditor {
             if (!MeWarRulePanel._instance) {
                 MeWarRulePanel._instance = new MeWarRulePanel();
             }
-            MeWarRulePanel._instance.open();
+            MeWarRulePanel._instance.open(undefined);
         }
         public static hide(): void {
             if (MeWarRulePanel._instance) {
@@ -497,15 +497,20 @@ namespace TinyWars.MapEditor {
     class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _listInfo   : GameUi.UiScrollList;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.MeAvailableCoChanged, callback: this._onNotifyMeAvailableCoChanged },
+            ]);
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
         protected dataChanged(): void {
             super.dataChanged();
 
+            this._updateView();
+        }
+
+        private _onNotifyMeAvailableCoChanged(e: egret.Event): void {
             this._updateView();
         }
 
@@ -566,9 +571,6 @@ namespace TinyWars.MapEditor {
                             warRule,
                             playerRule,
                             isReviewing,
-                            callbackOnClose : () => {
-                                this._updateView();
-                            },
                         });
                     },
             };

@@ -32,7 +32,7 @@ namespace TinyWars.SingleCustomRoom {
             if (!ScrCreateSearchMapPanel._instance) {
                 ScrCreateSearchMapPanel._instance = new ScrCreateSearchMapPanel();
             }
-            ScrCreateSearchMapPanel._instance.open();
+            ScrCreateSearchMapPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (ScrCreateSearchMapPanel._instance) {

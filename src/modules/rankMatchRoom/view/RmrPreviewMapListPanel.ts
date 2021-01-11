@@ -5,6 +5,9 @@ namespace TinyWars.RankMatchRoom {
     import Lang         = Utility.Lang;
     import WarMapModel  = WarMap.WarMapModel;
 
+    type OpenDataForRmrPreviewMapListPanel = {
+        hasFog  : boolean;
+    }
     export class RmrPreviewMapListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
@@ -25,17 +28,15 @@ namespace TinyWars.RankMatchRoom {
         private _labelPlayedTimes   : GameUi.UiLabel;
         private _labelPlayersCount  : GameUi.UiLabel;
 
-        private _hasFog             : boolean;
         private _dataForList        : DataForMapNameRenderer[] = [];
         private _selectedMapId      : number;
 
-        public static show(hasFog: boolean): void {
+        public static show(openData: OpenDataForRmrPreviewMapListPanel): void {
             if (!RmrPreviewMapListPanel._instance) {
                 RmrPreviewMapListPanel._instance = new RmrPreviewMapListPanel();
             }
 
-            RmrPreviewMapListPanel._instance._hasFog = hasFog;
-            RmrPreviewMapListPanel._instance.open();
+            RmrPreviewMapListPanel._instance.open(openData);
         }
         public static hide(): void {
             if (RmrPreviewMapListPanel._instance) {
@@ -136,7 +137,7 @@ namespace TinyWars.RankMatchRoom {
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
             const data      : DataForMapNameRenderer[] = [];
-            const hasFog    = this._hasFog;
+            const hasFog    = this._getOpenData<OpenDataForRmrPreviewMapListPanel>().hasFog;
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
                 const mapExtraData      = mapBriefData.mapExtraData;
                 const mapAvailability   = mapExtraData.mapComplexInfo.availability;

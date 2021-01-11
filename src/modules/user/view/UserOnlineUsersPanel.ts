@@ -27,7 +27,7 @@ namespace TinyWars.User {
             if (!UserOnlineUsersPanel._instance) {
                 UserOnlineUsersPanel._instance = new UserOnlineUsersPanel();
             }
-            UserOnlineUsersPanel._instance.open();
+            UserOnlineUsersPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (UserOnlineUsersPanel._instance) {
@@ -145,7 +145,7 @@ namespace TinyWars.User {
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
             UserOnlineUsersPanel.hide();
-            UserPanel.show((this.data as DataForUserRenderer).userId);
+            UserPanel.show({ userId: (this.data as DataForUserRenderer).userId });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

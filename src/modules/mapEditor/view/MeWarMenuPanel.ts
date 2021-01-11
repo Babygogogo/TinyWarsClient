@@ -51,7 +51,7 @@ namespace TinyWars.MapEditor {
             if (!MeWarMenuPanel._instance) {
                 MeWarMenuPanel._instance = new MeWarMenuPanel();
             }
-            MeWarMenuPanel._instance.open();
+            MeWarMenuPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (MeWarMenuPanel._instance) {

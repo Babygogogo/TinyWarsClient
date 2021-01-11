@@ -92,36 +92,36 @@ namespace TinyWars.Utility {
         }
     }
 
-    class LoadingUiPanel extends GameUi.UiPanel implements RES.PromiseTaskReporter {
-        protected readonly _IS_EXCLUSIVE = true;
-        protected readonly _LAYER_TYPE   = Types.LayerType.Top;
+    // class LoadingUiPanel extends GameUi.UiPanel implements RES.PromiseTaskReporter {
+    //     protected readonly _IS_EXCLUSIVE = true;
+    //     protected readonly _LAYER_TYPE   = Types.LayerType.Top;
 
-        private static _instance: LoadingUiPanel;
+    //     private static _instance: LoadingUiPanel;
 
-        private _labelProgress: GameUi.UiLabel;
+    //     private _labelProgress: GameUi.UiLabel;
 
-        public static create(): LoadingUiPanel {
-            egret.assert(!LoadingUiPanel._instance);
-            LoadingUiPanel._instance = new LoadingUiPanel();
-            LoadingUiPanel._instance.open();
+    //     public static create(): LoadingUiPanel {
+    //         egret.assert(!LoadingUiPanel._instance);
+    //         LoadingUiPanel._instance = new LoadingUiPanel();
+    //         LoadingUiPanel._instance.open();
 
-            return LoadingUiPanel._instance;
-        }
+    //         return LoadingUiPanel._instance;
+    //     }
 
-        public static destroy(): void {
-            LoadingUiPanel._instance.close();
-            delete LoadingUiPanel._instance;
-        }
+    //     public static destroy(): void {
+    //         LoadingUiPanel._instance.close();
+    //         delete LoadingUiPanel._instance;
+    //     }
 
-        private constructor() {
-            super();
+    //     private constructor() {
+    //         super();
 
-            this._setIsAutoAdjustHeight();
-            this.skinName = "resource/skins/utility/LoadingUiPanel.exml";
-        }
+    //         this._setIsAutoAdjustHeight();
+    //         this.skinName = "resource/skins/utility/LoadingUiPanel.exml";
+    //     }
 
-        public onProgress(current: number, total: number): void {
-            this._labelProgress.text = `Loading...${current}/${total}`;
-        }
-    }
+    //     public onProgress(current: number, total: number): void {
+    //         this._labelProgress.text = `Loading...${current}/${total}`;
+    //     }
+    // }
 }

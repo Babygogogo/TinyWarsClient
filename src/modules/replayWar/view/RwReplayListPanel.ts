@@ -43,7 +43,7 @@ namespace TinyWars.ReplayWar {
             if (!RwReplayListPanel._instance) {
                 RwReplayListPanel._instance = new RwReplayListPanel();
             }
-            RwReplayListPanel._instance.open();
+            RwReplayListPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (RwReplayListPanel._instance) {

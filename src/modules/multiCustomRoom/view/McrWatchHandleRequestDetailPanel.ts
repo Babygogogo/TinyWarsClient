@@ -4,6 +4,9 @@ namespace TinyWars.MultiCustomRoom {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
 
+    type OpenDataForMcrWatchHandleRequestDetailPanel = {
+        watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
+    }
     export class McrWatchHandleRequestDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = false;
@@ -19,15 +22,13 @@ namespace TinyWars.MultiCustomRoom {
         private _btnConfirm             : GameUi.UiButton;
         private _btnCancel              : GameUi.UiButton;
 
-        private _openData           : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
         private _dataForListPlayer  : DataForRequesterRenderer[];
 
-        public static show(warInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo): void {
+        public static show(openData: OpenDataForMcrWatchHandleRequestDetailPanel): void {
             if (!McrWatchHandleRequestDetailPanel._instance) {
                 McrWatchHandleRequestDetailPanel._instance = new McrWatchHandleRequestDetailPanel();
             }
-            McrWatchHandleRequestDetailPanel._instance._openData = warInfo;
-            McrWatchHandleRequestDetailPanel._instance.open();
+            McrWatchHandleRequestDetailPanel._instance.open(openData);
         }
         public static hide(): void {
             if (McrWatchHandleRequestDetailPanel._instance) {
@@ -87,7 +88,7 @@ namespace TinyWars.MultiCustomRoom {
                     declineUserIds.push(data.userId);
                 }
             }
-            MultiPlayerWar.MpwProxy.reqWatchHandleRequest(this._openData.warInfo.warId, acceptUserIds, declineUserIds);
+            MultiPlayerWar.MpwProxy.reqWatchHandleRequest(this._getOpenData<OpenDataForMcrWatchHandleRequestDetailPanel>().watchInfo.warInfo.warId, acceptUserIds, declineUserIds);
             this.close();
         }
 
@@ -110,11 +111,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _generateDataForListPlayer(): DataForRequesterRenderer[] {
-            const openData          = this._openData;
+            const openData          = this._getOpenData<OpenDataForMcrWatchHandleRequestDetailPanel>().watchInfo;
             const warInfo           = openData.warInfo;
             const playerInfoList    = warInfo.playerInfoList;
             const dataList          : DataForRequesterRenderer[] = [];
-            for (const info of this._openData.requesterInfos) {
+            for (const info of openData.requesterInfos) {
                 const userId = info.userId;
                 dataList.push({
                     panel           : this,

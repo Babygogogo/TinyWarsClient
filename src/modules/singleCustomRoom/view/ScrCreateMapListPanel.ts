@@ -42,8 +42,7 @@ namespace TinyWars.SingleCustomRoom {
                 ScrCreateMapListPanel._instance = new ScrCreateMapListPanel();
             }
 
-            (mapFilters) && (ScrCreateMapListPanel._instance.setMapFilters(mapFilters));
-            ScrCreateMapListPanel._instance.open();
+            ScrCreateMapListPanel._instance.open(mapFilters);
         }
         public static hide(): void {
             if (ScrCreateMapListPanel._instance) {
@@ -76,7 +75,7 @@ namespace TinyWars.SingleCustomRoom {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            this.setMapFilters(this._mapFilters);
+            this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
         protected _onClosed(): void {
             this._zoomMap.removeAllContents();

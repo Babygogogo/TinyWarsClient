@@ -36,7 +36,7 @@ namespace TinyWars.MultiCustomRoom {
             if (!McrMyRoomListPanel._instance) {
                 McrMyRoomListPanel._instance = new McrMyRoomListPanel();
             }
-            McrMyRoomListPanel._instance.open();
+            McrMyRoomListPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (McrMyRoomListPanel._instance) {
@@ -272,7 +272,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
-            McrRoomInfoPanel.show(data.roomInfo.roomId);
+            McrRoomInfoPanel.show({ roomId: data.roomInfo.roomId });
         }
     }
 

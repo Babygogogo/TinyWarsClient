@@ -18,7 +18,7 @@ namespace TinyWars.Lobby {
             if (!LobbyTopPanel._instance) {
                 LobbyTopPanel._instance = new LobbyTopPanel();
             }
-            LobbyTopPanel._instance.open();
+            LobbyTopPanel._instance.open(undefined);
         }
 
         public static hide(): void {
@@ -85,7 +85,7 @@ namespace TinyWars.Lobby {
         private _onTouchedBtnMyInfo(e: egret.Event): void {
             User.UserOnlineUsersPanel.hide();
             Chat.ChatPanel.hide();
-            User.UserPanel.show(UserModel.getSelfUserId());
+            User.UserPanel.show({ userId: UserModel.getSelfUserId() });
         }
 
         private _onTouchedBtnChat(e: egret.TouchEvent): void {

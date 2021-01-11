@@ -20,14 +20,11 @@ namespace TinyWars.MapEditor {
         private _labelNoWarEvent: GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
 
-        private _openData       : OpenDataForMeAddWarEventId;
-
         public static show(openData: OpenDataForMeAddWarEventId): void {
             if (!MeAddWarEventToRulePanel._instance) {
                 MeAddWarEventToRulePanel._instance = new MeAddWarEventToRulePanel();
             }
-            MeAddWarEventToRulePanel._instance._openData = openData;
-            MeAddWarEventToRulePanel._instance.open();
+            MeAddWarEventToRulePanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -73,7 +70,7 @@ namespace TinyWars.MapEditor {
         }
         private _updateListMessageAndLabelNoMessage(): void {
             const dataArray : DataForMessageRenderer[] = [];
-            const warRule   = this._openData.warRule;
+            const warRule   = this._getOpenData<OpenDataForMeAddWarEventId>().warRule;
             for (const warEvent of MeManager.getWar().getWarEventManager().getWarEventData().eventList || []) {
                 dataArray.push({
                     warEventId  : warEvent.eventId,

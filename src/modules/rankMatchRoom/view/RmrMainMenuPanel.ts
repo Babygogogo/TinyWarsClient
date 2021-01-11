@@ -18,7 +18,7 @@ namespace TinyWars.RankMatchRoom {
             if (!RmrMainMenuPanel._instance) {
                 RmrMainMenuPanel._instance = new RmrMainMenuPanel();
             }
-            RmrMainMenuPanel._instance.open();
+            RmrMainMenuPanel._instance.open(undefined);
         }
 
         public static hide(): void {
@@ -123,7 +123,7 @@ namespace TinyWars.RankMatchRoom {
                     name    : Lang.getText(Lang.Type.B0441),
                     callback: () => {
                         this.close();
-                        RmrPreviewMapListPanel.show(false);
+                        RmrPreviewMapListPanel.show({ hasFog: false });
                     },
                     redChecker  : async () => {
                         return false;
@@ -133,7 +133,7 @@ namespace TinyWars.RankMatchRoom {
                     name    : Lang.getText(Lang.Type.B0442),
                     callback: () => {
                         this.close();
-                        RmrPreviewMapListPanel.show(true);
+                        RmrPreviewMapListPanel.show({ hasFog: true });
                     },
                     redChecker  : async () => {
                         return false;

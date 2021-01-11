@@ -25,7 +25,7 @@ namespace TinyWars.MapEditor {
             if (!MeChooseUnitPanel._instance) {
                 MeChooseUnitPanel._instance = new MeChooseUnitPanel();
             }
-            MeChooseUnitPanel._instance.open();
+            MeChooseUnitPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (MeChooseUnitPanel._instance) {

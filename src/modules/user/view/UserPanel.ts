@@ -9,6 +9,9 @@ namespace TinyWars.User {
     import WarType          = Types.WarType;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
+    type OpenDataForUserPanel = {
+        userId  : number;
+    }
     export class UserPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -55,12 +58,11 @@ namespace TinyWars.User {
 
         private _userId: number;
 
-        public static show(userId: number): void {
+        public static show(openData: OpenDataForUserPanel): void {
             if (!UserPanel._instance) {
                 UserPanel._instance = new UserPanel();
             }
-            UserPanel._instance._userId = userId;
-            UserPanel._instance.open();
+            UserPanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -105,7 +107,10 @@ namespace TinyWars.User {
             this._sclHistory.setItemRenderer(HistoryRenderer);
 
             this._showOpenAnimation();
-            UserProxy.reqUserGetPublicInfo(this._userId);
+
+            const userId    = this._getOpenData<OpenDataForUserPanel>().userId;
+            this._userId    = userId;
+            UserProxy.reqUserGetPublicInfo(userId);
 
             this._updateView();
         }

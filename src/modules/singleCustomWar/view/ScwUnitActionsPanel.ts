@@ -18,16 +18,14 @@ namespace TinyWars.SingleCustomWar {
         private _group      : eui.Group;
         private _listAction : GameUi.UiScrollList;
 
-        private _openData       : OpenDataForScwUnitActionsPanel;
         private _war            : ScwWar;
         private _actionPlanner  : ScwActionPlanner;
 
-        public static show(data: OpenDataForScwUnitActionsPanel): void {
+        public static show(openData: OpenDataForScwUnitActionsPanel): void {
             if (!ScwUnitActionsPanel._instance) {
                 ScwUnitActionsPanel._instance = new ScwUnitActionsPanel();
             }
-            ScwUnitActionsPanel._instance._openData = data;
-            ScwUnitActionsPanel._instance.open();
+            ScwUnitActionsPanel._instance.open(openData);
         }
         public static hide(): void {
             if (ScwUnitActionsPanel._instance) {
@@ -93,7 +91,7 @@ namespace TinyWars.SingleCustomWar {
             const war           = ScwModel.getWar();
             const unitMap       = war.getUnitMap();
             const dataForList   = [] as DataForUnitActionRenderer[];
-            for (const data of this._openData.actionList) {
+            for (const data of this._getOpenData<OpenDataForScwUnitActionsPanel>().actionList) {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
                     : (new (unitMap.getUnitClass())).init({
@@ -120,7 +118,7 @@ namespace TinyWars.SingleCustomWar {
         private _updatePosition(): void {
             const container = ScwModel.getWar().getView().getFieldContainer();
             const contents  = container.getContents();
-            const gridIndex = this._openData.destination;
+            const gridIndex = this._getOpenData<OpenDataForScwUnitActionsPanel>().destination;
             const gridSize  = Utility.ConfigManager.getGridSize();
             const stage     = Utility.StageManager.getStage();
             const group     = this._group;

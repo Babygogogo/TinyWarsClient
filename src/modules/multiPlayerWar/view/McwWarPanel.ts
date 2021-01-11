@@ -10,7 +10,7 @@ namespace TinyWars.MultiPlayerWar {
             if (!McwWarPanel._instance) {
                 McwWarPanel._instance = new McwWarPanel();
             }
-            McwWarPanel._instance.open();
+            McwWarPanel._instance.open(undefined);
         }
 
         public static hide(): void {

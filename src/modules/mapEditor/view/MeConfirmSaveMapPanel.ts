@@ -29,7 +29,7 @@ namespace TinyWars.MapEditor {
             if (!MeConfirmSaveMapPanel._instance) {
                 MeConfirmSaveMapPanel._instance = new MeConfirmSaveMapPanel();
             }
-            MeConfirmSaveMapPanel._instance.open();
+            MeConfirmSaveMapPanel._instance.open(undefined);
         }
 
         public static hide(): void {

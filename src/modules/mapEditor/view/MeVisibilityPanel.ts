@@ -26,7 +26,7 @@ namespace TinyWars.MapEditor {
             if (!MeVisibilityPanel._instance) {
                 MeVisibilityPanel._instance = new MeVisibilityPanel();
             }
-            MeVisibilityPanel._instance.open();
+            MeVisibilityPanel._instance.open(undefined);
         }
 
         public static hide(): void {

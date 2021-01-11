@@ -29,7 +29,7 @@ namespace TinyWars.MapEditor {
                 MeModifyMapNamePanel._instance = new MeModifyMapNamePanel();
             }
 
-            MeModifyMapNamePanel._instance.open();
+            MeModifyMapNamePanel._instance.open(undefined);
         }
 
         public static hide(): void {

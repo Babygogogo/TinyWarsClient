@@ -4,13 +4,14 @@ namespace TinyWars.ReplayWar {
     import Lang     = Utility.Lang;
     import Notify   = Utility.Notify;
 
+    type OpenDataForRwCoListPanel = {
+        selectedIndex   : number;
+    }
     export class RwCoListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: RwCoListPanel;
-
-        private _openData   : number;
 
         private _listCo     : GameUi.UiScrollList;
         private _btnBack    : GameUi.UiButton;
@@ -47,13 +48,12 @@ namespace TinyWars.ReplayWar {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(selectedIndex: number): void {
+        public static show(openData: OpenDataForRwCoListPanel): void {
             if (!RwCoListPanel._instance) {
                 RwCoListPanel._instance = new RwCoListPanel();
             }
 
-            RwCoListPanel._instance._openData = selectedIndex;
-            RwCoListPanel._instance.open();
+            RwCoListPanel._instance.open(openData);
         }
         public static hide(): void {
             if (RwCoListPanel._instance) {
@@ -92,7 +92,7 @@ namespace TinyWars.ReplayWar {
             this._war           = RwModel.getWar();
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
-            this.setSelectedIndex(this._openData);
+            this.setSelectedIndex(this._getOpenData<OpenDataForRwCoListPanel>().selectedIndex);
 
             Notify.dispatch(Notify.Type.BwCoListPanelOpened);
         }

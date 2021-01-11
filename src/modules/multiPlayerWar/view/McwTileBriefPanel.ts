@@ -38,7 +38,7 @@ namespace TinyWars.MultiPlayerWar {
             if (!McwTileBriefPanel._instance) {
                 McwTileBriefPanel._instance = new McwTileBriefPanel();
             }
-            McwTileBriefPanel._instance.open();
+            McwTileBriefPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (McwTileBriefPanel._instance) {

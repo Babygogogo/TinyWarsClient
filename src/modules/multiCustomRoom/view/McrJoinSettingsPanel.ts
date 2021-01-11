@@ -25,7 +25,7 @@ namespace TinyWars.MultiCustomRoom {
             if (!McrJoinSettingsPanel._instance) {
                 McrJoinSettingsPanel._instance = new McrJoinSettingsPanel();
             }
-            McrJoinSettingsPanel._instance.open();
+            McrJoinSettingsPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (McrJoinSettingsPanel._instance) {

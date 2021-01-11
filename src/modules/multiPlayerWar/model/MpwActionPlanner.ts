@@ -37,7 +37,7 @@ namespace TinyWars.MultiPlayerWar {
 
             this._setState(State.ChoosingProductionTarget);
             this._updateView();
-            McwProduceUnitPanel.show(gridIndex);
+            McwProduceUnitPanel.show({ gridIndex });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

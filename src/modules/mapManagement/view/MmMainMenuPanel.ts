@@ -19,7 +19,7 @@ namespace TinyWars.MapManagement {
             if (!MmMainMenuPanel._instance) {
                 MmMainMenuPanel._instance = new MmMainMenuPanel();
             }
-            MmMainMenuPanel._instance.open();
+            MmMainMenuPanel._instance.open(undefined);
         }
 
         public static hide(): void {

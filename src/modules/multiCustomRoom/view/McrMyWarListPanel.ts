@@ -37,7 +37,7 @@ namespace TinyWars.MultiCustomRoom {
             if (!McrMyWarListPanel._instance) {
                 McrMyWarListPanel._instance = new McrMyWarListPanel();
             }
-            McrMyWarListPanel._instance.open();
+            McrMyWarListPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (McrMyWarListPanel._instance) {
@@ -252,7 +252,7 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
             McrMyWarListPanel.hide();
-            McrWarInfoPanel.show(data.warInfo);
+            McrWarInfoPanel.show({ warInfo: data.warInfo });
         }
 
         private _onTouchedBtnFight(e: egret.Event): void {

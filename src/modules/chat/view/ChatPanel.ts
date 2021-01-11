@@ -36,7 +36,6 @@ namespace TinyWars.Chat {
         private _inputMessage   : TinyWars.GameUi.UiTextInput;
         private _btnSend        : TinyWars.GameUi.UiButton;
 
-        private _openData       : OpenDataForChatPanel;
         private _dataForListChat: DataForChatPageRenderer[] = [];
         private _selectedIndex  : number;
 
@@ -44,8 +43,7 @@ namespace TinyWars.Chat {
             if (!ChatPanel._instance) {
                 ChatPanel._instance = new ChatPanel();
             }
-            ChatPanel._instance._openData = openData;
-            ChatPanel._instance.open();
+            ChatPanel._instance.open(openData);
         }
         public static hide(): void {
             if (ChatPanel._instance) {
@@ -90,7 +88,6 @@ namespace TinyWars.Chat {
             Notify.dispatch(Notify.Type.ChatPanelOpened);
         }
         protected _onClosed(): void {
-            this._openData          = null;
             this._dataForListChat   = null;
             this._selectedIndex     = null;
             this._listChat.clear();
@@ -314,7 +311,7 @@ namespace TinyWars.Chat {
                 }
             }
 
-            const openData = this._openData;
+            const openData = this._getOpenData<OpenDataForChatPanel>();
             const toUserId = openData.toUserId;
             if ((toUserId != null) && (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.Private, toTarget: toUserId }))) {
                 dataDict.set(indexForSort, {
@@ -371,7 +368,7 @@ namespace TinyWars.Chat {
         }
 
         private _getDefaultSelectedIndex(): number {
-            const openData          = this._openData;
+            const openData          = this._getOpenData<OpenDataForChatPanel>();
             const dataForListChat   = this._dataForListChat || [];
 
             const toUserId  = openData.toUserId;

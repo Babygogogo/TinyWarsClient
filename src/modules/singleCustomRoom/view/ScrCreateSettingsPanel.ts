@@ -25,7 +25,7 @@ namespace TinyWars.SingleCustomRoom {
             if (!ScrCreateSettingsPanel._instance) {
                 ScrCreateSettingsPanel._instance = new ScrCreateSettingsPanel();
             }
-            ScrCreateSettingsPanel._instance.open();
+            ScrCreateSettingsPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (ScrCreateSettingsPanel._instance) {

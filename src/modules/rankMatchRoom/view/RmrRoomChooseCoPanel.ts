@@ -7,7 +7,7 @@ namespace TinyWars.RankMatchRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    export type OpenParamForRmrRoomChooseCoPanel = {
+    type OpenDataForRmrRoomChooseCoPanel = {
         roomInfo    : ProtoTypes.RankMatchRoom.IRmrRoomInfo;
         playerIndex : number;
     }
@@ -17,8 +17,6 @@ namespace TinyWars.RankMatchRoom {
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: RmrRoomChooseCoPanel;
-
-        private _openParam      : OpenParamForRmrRoomChooseCoPanel;
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
@@ -53,13 +51,12 @@ namespace TinyWars.RankMatchRoom {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(openParam: OpenParamForRmrRoomChooseCoPanel): void {
+        public static show(openData: OpenDataForRmrRoomChooseCoPanel): void {
             if (!RmrRoomChooseCoPanel._instance) {
                 RmrRoomChooseCoPanel._instance = new RmrRoomChooseCoPanel();
             }
 
-            RmrRoomChooseCoPanel._instance._openParam = openParam;
-            RmrRoomChooseCoPanel._instance.open();
+            RmrRoomChooseCoPanel._instance.open(openData);
         }
         public static hide(): void {
             if (RmrRoomChooseCoPanel._instance) {
@@ -126,7 +123,7 @@ namespace TinyWars.RankMatchRoom {
 
         private _onMsgRmrDeleteRoom(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgRmrDeleteRoom.IS;
-            if (data.roomId === this._openParam.roomInfo.roomId) {
+            if (data.roomId === this._getOpenData<OpenDataForRmrRoomChooseCoPanel>().roomInfo.roomId) {
                 this.close();
                 RmrMyRoomListPanel.show();
             }
@@ -141,7 +138,7 @@ namespace TinyWars.RankMatchRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            RmrRoomInfoPanel.show(this._openParam.roomInfo.roomId);
+            RmrRoomInfoPanel.show({ roomId: this._getOpenData<OpenDataForRmrRoomChooseCoPanel>().roomInfo.roomId });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -164,7 +161,7 @@ namespace TinyWars.RankMatchRoom {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const dataList          : DataForCoRenderer[] = [];
-            const openParam         = this._openParam;
+            const openParam         = this._getOpenData<OpenDataForRmrRoomChooseCoPanel>();
             const roomInfo          = openParam.roomInfo;
             const availableCoIdList = RmrModel.SelfSettings.generateAvailableCoIdList(roomInfo, openParam.playerIndex);
 
@@ -310,7 +307,7 @@ namespace TinyWars.RankMatchRoom {
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data  = this.data as DataForCoRenderer;
             RmrModel.SelfSettings.setCoId(data.coBasicCfg.coId);
-            RmrRoomInfoPanel.show(data.roomInfo.roomId);
+            RmrRoomInfoPanel.show({ roomId: data.roomInfo.roomId });
             data.panel.close();
         }
     }

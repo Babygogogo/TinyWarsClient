@@ -10,7 +10,7 @@ namespace TinyWars.ReplayWar {
             if (!RwWarPanel._instance) {
                 RwWarPanel._instance = new RwWarPanel();
             }
-            RwWarPanel._instance.open();
+            RwWarPanel._instance.open(undefined);
         }
 
         public static hide(): void {

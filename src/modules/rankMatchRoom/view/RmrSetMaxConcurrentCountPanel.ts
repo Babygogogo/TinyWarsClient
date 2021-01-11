@@ -29,7 +29,7 @@ namespace TinyWars.RankMatchRoom {
             if (!RmrSetMaxConcurrentCountPanel._instance) {
                 RmrSetMaxConcurrentCountPanel._instance = new RmrSetMaxConcurrentCountPanel();
             }
-            RmrSetMaxConcurrentCountPanel._instance.open();
+            RmrSetMaxConcurrentCountPanel._instance.open(undefined);
         }
 
         public static hide(): void {

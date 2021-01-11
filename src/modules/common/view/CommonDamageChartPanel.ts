@@ -46,7 +46,7 @@ namespace TinyWars.Common {
             if (!CommonDamageChartPanel._instance) {
                 CommonDamageChartPanel._instance = new CommonDamageChartPanel();
             }
-            CommonDamageChartPanel._instance.open();
+            CommonDamageChartPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (CommonDamageChartPanel._instance) {

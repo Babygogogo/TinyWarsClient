@@ -18,16 +18,14 @@ namespace TinyWars.ReplayWar {
         private _group      : eui.Group;
         private _listAction : GameUi.UiScrollList;
 
-        private _openData       : OpenDataForReplayUnitActionsPanel;
         private _war            : RwWar;
         private _actionPlanner  : RwActionPlanner;
 
-        public static show(data: OpenDataForReplayUnitActionsPanel): void {
+        public static show(openData: OpenDataForReplayUnitActionsPanel): void {
             if (!RwUnitActionsPanel._instance) {
                 RwUnitActionsPanel._instance = new RwUnitActionsPanel();
             }
-            RwUnitActionsPanel._instance._openData = data;
-            RwUnitActionsPanel._instance.open();
+            RwUnitActionsPanel._instance.open(openData);
         }
         public static hide(): void {
             if (RwUnitActionsPanel._instance) {
@@ -93,7 +91,7 @@ namespace TinyWars.ReplayWar {
             const war       = RwModel.getWar();
             const unitMap   = war.getUnitMap();
             const dataList  : DataForUnitActionRenderer[] = [];
-            for (const data of this._openData.actionList) {
+            for (const data of this._getOpenData<OpenDataForReplayUnitActionsPanel>().actionList) {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
                     : (new (unitMap.getUnitClass())).init({
@@ -121,7 +119,7 @@ namespace TinyWars.ReplayWar {
         private _updatePosition(): void {
             const container = RwModel.getWar().getView().getFieldContainer();
             const contents  = container.getContents();
-            const gridIndex = this._openData.destination;
+            const gridIndex = this._getOpenData<OpenDataForReplayUnitActionsPanel>().destination;
             const gridSize  = Utility.ConfigManager.getGridSize();
             const stage     = Utility.StageManager.getStage();
             const group     = this._group;
@@ -141,7 +139,7 @@ namespace TinyWars.ReplayWar {
         }
     }
 
-    export type OpenDataForReplayUnitActionsPanel   = BaseWar.OpenDataForBwUnitActionsPanel;
+    type OpenDataForReplayUnitActionsPanel = BaseWar.OpenDataForBwUnitActionsPanel;
     type DataForUnitActionRenderer = {
         actionType      : UnitActionType;
         callback        : () => void;

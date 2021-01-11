@@ -25,7 +25,7 @@ namespace TinyWars.User {
             if (!UserSetPasswordPanel._instance) {
                 UserSetPasswordPanel._instance = new UserSetPasswordPanel();
             }
-            UserSetPasswordPanel._instance.open();
+            UserSetPasswordPanel._instance.open(undefined);
         }
 
         public static hide(): void {

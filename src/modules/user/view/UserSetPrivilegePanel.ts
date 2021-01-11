@@ -36,14 +36,11 @@ namespace TinyWars.User {
         private _btnCancel              : TinyWars.GameUi.UiButton;
         private _btnConfirm             : TinyWars.GameUi.UiButton;
 
-        private _openData               : OpenDataForUserSetPrivilegePanel;
-
         public static show(openData: OpenDataForUserSetPrivilegePanel): void {
             if (!UserSetPrivilegePanel._instance) {
                 UserSetPrivilegePanel._instance = new UserSetPrivilegePanel();
             }
-            UserSetPrivilegePanel._instance._openData = openData;
-            UserSetPrivilegePanel._instance.open();
+            UserSetPrivilegePanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -77,7 +74,7 @@ namespace TinyWars.User {
                 { ui: this._groupIsMapCommittee,    callback: this._onTouchedGroupIsMapCommittee },
             ]);
 
-            const userId = this._openData.userId;
+            const userId = this._getOpenData<OpenDataForUserSetPrivilegePanel>().userId;
             this._inputUserId.text = `${userId}`;
             UserProxy.reqUserGetPublicInfo(userId);
         }

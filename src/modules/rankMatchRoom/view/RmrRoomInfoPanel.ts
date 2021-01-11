@@ -6,6 +6,9 @@ namespace TinyWars.RankMatchRoom {
     import ProtoTypes   = Utility.ProtoTypes;
     import NetMessage   = ProtoTypes.NetMessage;
 
+    type OpenDataForRmrRoomInfoPanel = {
+        roomId  : number;
+    }
     export class RmrRoomInfoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
@@ -16,14 +19,11 @@ namespace TinyWars.RankMatchRoom {
         private _labelMenuTitle : TinyWars.GameUi.UiLabel;
         private _btnBack        : TinyWars.GameUi.UiButton;
 
-        private _roomId     : number;
-
-        public static show(roomId: number): void {
+        public static show(openData: OpenDataForRmrRoomInfoPanel): void {
             if (!RmrRoomInfoPanel._instance) {
                 RmrRoomInfoPanel._instance = new RmrRoomInfoPanel();
             }
-            RmrRoomInfoPanel._instance._roomId = roomId;
-            RmrRoomInfoPanel._instance.open();
+            RmrRoomInfoPanel._instance.open(openData);
         }
         public static hide(): void {
             if (RmrRoomInfoPanel._instance) {
@@ -52,7 +52,7 @@ namespace TinyWars.RankMatchRoom {
 
             this._updateComponentsForLanguage();
 
-            const roomId = this._roomId;
+            const roomId = this._getOpenData<OpenDataForRmrRoomInfoPanel>().roomId;
             if ((await RmrModel.getRoomInfo(roomId)) == null) {
                 this.close();
                 RmrMyRoomListPanel.show();
@@ -94,7 +94,7 @@ namespace TinyWars.RankMatchRoom {
 
         private _onMsgRmrDeleteRoom(e: egret.Event): void {
             const data = e.data as NetMessage.MsgRmrDeleteRoom.IS;
-            if (data.roomId === this._roomId) {
+            if (data.roomId === this._getOpenData<OpenDataForRmrRoomInfoPanel>().roomId) {
                 FloatText.show(Lang.getText(Lang.Type.A0019));
                 this.close();
                 RmrMyRoomListPanel.show();

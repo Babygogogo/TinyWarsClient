@@ -5,6 +5,9 @@ namespace TinyWars.MapManagement {
     import WarMapModel  = WarMap.WarMapModel;
     import WarMapProxy  = WarMap.WarMapProxy;
 
+    type OpenDataForMmTagChangePanel = {
+        mapId   : number;
+    }
     export class MmTagChangePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -22,12 +25,11 @@ namespace TinyWars.MapManagement {
 
         private _mapId          : number;
 
-        public static show(mapId: number): void {
+        public static show(openData: OpenDataForMmTagChangePanel): void {
             if (!MmTagChangePanel._instance) {
                 MmTagChangePanel._instance = new MmTagChangePanel();
             }
-            MmTagChangePanel._instance._mapId = mapId;
-            MmTagChangePanel._instance.open();
+            MmTagChangePanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -57,7 +59,10 @@ namespace TinyWars.MapManagement {
 
             this._updateComponentsForLanguage();
 
-            const mapTag            = (await WarMapModel.getBriefData(this._mapId)).mapTag || {};
+            const mapId = this._getOpenData<OpenDataForMmTagChangePanel>().mapId;
+            this._mapId = mapId;
+
+            const mapTag            = (await WarMapModel.getBriefData(mapId)).mapTag || {};
             this._imgFog.visible    = !!mapTag.fog;
         }
 

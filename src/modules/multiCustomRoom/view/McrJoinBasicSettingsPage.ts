@@ -162,7 +162,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnChangeCo(e: egret.TouchEvent): void {
             McrJoinSettingsPanel.hide();
-            McrJoinCoListPanel.show(McrModel.Join.getCoId());
+            McrJoinCoListPanel.show({ coId: McrModel.Join.getCoId() });
         }
 
         ////////////////////////////////////////////////////////////////////////////////

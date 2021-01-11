@@ -32,7 +32,7 @@ namespace TinyWars.SingleCustomRoom {
             if (!ScrContinueWarListPanel._instance) {
                 ScrContinueWarListPanel._instance = new ScrContinueWarListPanel();
             }
-            ScrContinueWarListPanel._instance.open();
+            ScrContinueWarListPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (ScrContinueWarListPanel._instance) {

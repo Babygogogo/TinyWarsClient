@@ -34,7 +34,7 @@ namespace TinyWars.RankMatchRoom {
             if (!RmrMyRoomListPanel._instance) {
                 RmrMyRoomListPanel._instance = new RmrMyRoomListPanel();
             }
-            RmrMyRoomListPanel._instance.open();
+            RmrMyRoomListPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (RmrMyRoomListPanel._instance) {
@@ -249,7 +249,7 @@ namespace TinyWars.RankMatchRoom {
             const data      = this.data as DataForWarRenderer;
             const roomInfo  = data.roomInfo;
             RmrModel.SelfSettings.resetData(roomInfo);
-            RmrRoomInfoPanel.show(roomInfo.roomId);
+            RmrRoomInfoPanel.show({ roomId: roomInfo.roomId });
         }
     }
 

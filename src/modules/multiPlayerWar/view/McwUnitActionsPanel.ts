@@ -18,16 +18,14 @@ namespace TinyWars.MultiPlayerWar {
         private _group      : eui.Group;
         private _listAction : GameUi.UiScrollList;
 
-        private _openData       : OpenDataForMcwUnitActionsPanel;
         private _war            : MpwWar;
         private _actionPlanner  : MpwActionPlanner;
 
-        public static show(data: OpenDataForMcwUnitActionsPanel): void {
+        public static show(openData: OpenDataForMcwUnitActionsPanel): void {
             if (!McwUnitActionsPanel._instance) {
                 McwUnitActionsPanel._instance = new McwUnitActionsPanel();
             }
-            McwUnitActionsPanel._instance._openData = data;
-            McwUnitActionsPanel._instance.open();
+            McwUnitActionsPanel._instance.open(openData);
         }
         public static hide(): void {
             if (McwUnitActionsPanel._instance) {
@@ -93,7 +91,7 @@ namespace TinyWars.MultiPlayerWar {
             const war           = MpwModel.getWar();
             const unitClass     = war.getUnitMap().getUnitClass();
             const dataForList   = [] as DataForUnitActionRenderer[];
-            for (const data of this._openData.actionList) {
+            for (const data of this._getOpenData<OpenDataForMcwUnitActionsPanel>().actionList) {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
                     : new unitClass().init({
@@ -121,7 +119,7 @@ namespace TinyWars.MultiPlayerWar {
         private _updatePosition(): void {
             const container = MpwModel.getWar().getView().getFieldContainer();
             const contents  = container.getContents();
-            const gridIndex = this._openData.destination;
+            const gridIndex = this._getOpenData<OpenDataForMcwUnitActionsPanel>().destination;
             const gridSize  = Utility.ConfigManager.getGridSize();
             const stage     = Utility.StageManager.getStage();
             const group     = this._group;

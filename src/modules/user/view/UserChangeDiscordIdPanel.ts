@@ -22,7 +22,7 @@ namespace TinyWars.User {
             if (!UserChangeDiscordIdPanel._instance) {
                 UserChangeDiscordIdPanel._instance = new UserChangeDiscordIdPanel();
             }
-            UserChangeDiscordIdPanel._instance.open();
+            UserChangeDiscordIdPanel._instance.open(undefined);
         }
 
         public static hide(): void {

@@ -53,7 +53,7 @@ namespace TinyWars.MapEditor {
             if (!MeSymmetryPanel._instance) {
                 MeSymmetryPanel._instance = new MeSymmetryPanel();
             }
-            MeSymmetryPanel._instance.open();
+            MeSymmetryPanel._instance.open(undefined);
         }
 
         public static hide(): void {

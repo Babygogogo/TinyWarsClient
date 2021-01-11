@@ -10,7 +10,7 @@ namespace TinyWars.SingleCustomWar {
             if (!ScwBackgroundPanel._instance) {
                 ScwBackgroundPanel._instance = new ScwBackgroundPanel();
             }
-            ScwBackgroundPanel._instance.open();
+            ScwBackgroundPanel._instance.open(undefined);
         }
 
         public static hide(): void {

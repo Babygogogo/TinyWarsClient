@@ -18,7 +18,7 @@ namespace TinyWars.MultiCustomRoom {
             if (!McrWatchMainMenuPanel._instance) {
                 McrWatchMainMenuPanel._instance = new McrWatchMainMenuPanel();
             }
-            McrWatchMainMenuPanel._instance.open();
+            McrWatchMainMenuPanel._instance.open(undefined);
         }
 
         public static hide(): void {

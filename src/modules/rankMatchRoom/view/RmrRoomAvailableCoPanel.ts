@@ -10,6 +10,10 @@ namespace TinyWars.RankMatchRoom {
     import IRmrRoomInfo     = ProtoTypes.RankMatchRoom.IRmrRoomInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
+    type OpenDataForRmrRoomAvailableCoPanel = {
+        roomInfo        : IRmrRoomInfo;
+        srcPlayerIndex  : number;
+    }
     export class RmrRoomAvailableCoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = true;
@@ -30,14 +34,11 @@ namespace TinyWars.RankMatchRoom {
         private _availableCoIdSet       = new Set<number>();
         private _allCoIdSet             = new Set<number>();
 
-        public static show(roomInfo: IRmrRoomInfo, srcPlayerIndex: number): void {
+        public static show(openData: OpenDataForRmrRoomAvailableCoPanel): void {
             if (!RmrRoomAvailableCoPanel._instance) {
                 RmrRoomAvailableCoPanel._instance = new RmrRoomAvailableCoPanel();
             }
-            const instance              = RmrRoomAvailableCoPanel._instance;
-            instance._roomInfo          = roomInfo;
-            instance._srcPlayerIndex    = srcPlayerIndex;
-            instance.open();
+            RmrRoomAvailableCoPanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -65,11 +66,16 @@ namespace TinyWars.RankMatchRoom {
                 { type: Notify.Type.MsgRmrDeleteRoom,   callback: this._onMsgRmrDeleteRoom },
             ]);
 
+            const openData          = this._getOpenData<OpenDataForRmrRoomAvailableCoPanel>();
+            const roomInfo          = openData.roomInfo;
+            const srcPlayerIndex    = openData.srcPlayerIndex;
             const availableCoIdSet  = this._availableCoIdSet;
             const allCoIdSet        = this._allCoIdSet;
+            this._roomInfo          = roomInfo;
+            this._srcPlayerIndex    = srcPlayerIndex;
             availableCoIdSet.clear();
             allCoIdSet.clear();
-            for (const coId of generateAvailableCoIdList(this._roomInfo, this._srcPlayerIndex)) {
+            for (const coId of generateAvailableCoIdList(roomInfo, srcPlayerIndex)) {
                 availableCoIdSet.add(coId);
                 allCoIdSet.add(coId);
             }

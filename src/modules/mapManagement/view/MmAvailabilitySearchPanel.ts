@@ -32,7 +32,7 @@ namespace TinyWars.MapManagement {
             if (!MmAvailabilitySearchPanel._instance) {
                 MmAvailabilitySearchPanel._instance = new MmAvailabilitySearchPanel();
             }
-            MmAvailabilitySearchPanel._instance.open();
+            MmAvailabilitySearchPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (MmAvailabilitySearchPanel._instance) {

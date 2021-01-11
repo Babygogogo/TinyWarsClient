@@ -5,6 +5,9 @@ namespace TinyWars.MultiCustomRoom {
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
 
+    type OpenDataForMcrWatchMakeRequestDetailPanel = {
+        watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
+    }
     export class McrWatchMakeRequestDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = false;
@@ -18,15 +21,13 @@ namespace TinyWars.MultiCustomRoom {
         private _btnConfirm     : GameUi.UiButton;
         private _btnCancel      : GameUi.UiButton;
 
-        private _openData           : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
         private _dataForListPlayer  : DataForPlayerRenderer[];
 
-        public static show(warInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo): void {
+        public static show(openData: OpenDataForMcrWatchMakeRequestDetailPanel): void {
             if (!McrWatchMakeRequestDetailPanel._instance) {
                 McrWatchMakeRequestDetailPanel._instance = new McrWatchMakeRequestDetailPanel();
             }
-            McrWatchMakeRequestDetailPanel._instance._openData = warInfo;
-            McrWatchMakeRequestDetailPanel._instance.open();
+            McrWatchMakeRequestDetailPanel._instance.open(openData);
         }
         public static hide(): void {
             if (McrWatchMakeRequestDetailPanel._instance) {
@@ -85,7 +86,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
             if (userIds.length > 0) {
-                MultiPlayerWar.MpwProxy.reqWatchMakeRequest(this._openData.warInfo.warId, userIds);
+                MultiPlayerWar.MpwProxy.reqWatchMakeRequest(this._getOpenData<OpenDataForMcrWatchMakeRequestDetailPanel>().watchInfo.warInfo.warId, userIds);
             }
             this.close();
         }
@@ -107,7 +108,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _generateDataForListPlayer(): DataForPlayerRenderer[] {
-            const openData          = this._openData;
+            const openData          = this._getOpenData<OpenDataForMcrWatchMakeRequestDetailPanel>().watchInfo;
             const warInfo           = openData.warInfo;
             const configVersion     = warInfo.settingsForCommon.configVersion;
             const ongoingDstUserIds = openData.ongoingDstUserIds || [];

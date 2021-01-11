@@ -25,8 +25,9 @@ namespace TinyWars.GameUi {
         private _isTouchMaskEnabled     = false;
         private _isCloseOnTouchedMask   = false;
         private _callbackOnTouchedMask  : () => void;
-
         private _touchMask              : eui.Group;
+
+        private _openData               : any;
 
         protected constructor() {
             super();
@@ -66,10 +67,12 @@ namespace TinyWars.GameUi {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for open self.
         ////////////////////////////////////////////////////////////////////////////////
-        public open(): void {
+        public open(openData: any): void {
             const layer = Utility.StageManager.getLayer(this._LAYER_TYPE);
             (this._IS_EXCLUSIVE) && (layer.closeAllPanels(this));
             (!this.parent) && (layer.addChild(this));
+
+            this._setOpenData(openData);
 
             this._doOpen();
         }
@@ -98,6 +101,13 @@ namespace TinyWars.GameUi {
                 && (this._isSkinLoaded);
         }
 
+        private _setOpenData(data: any): void {
+            this._openData = data;
+        }
+        protected _getOpenData<T>(): T {
+            return this._openData;
+        }
+
         public getIsOpening(): boolean {
             return this._isOpening;
         }
@@ -110,6 +120,8 @@ namespace TinyWars.GameUi {
         ////////////////////////////////////////////////////////////////////////////////
         public close(): void {
             (this.parent) && (this.parent.removeChild(this));
+
+            this._setOpenData(undefined);
 
             this._doClose();
         }

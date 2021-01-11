@@ -1,6 +1,6 @@
 
 namespace TinyWars.Common {
-    export type OpenDataForCommonBlockPanel = {
+    type OpenDataForCommonBlockPanel = {
         title  : string;
         content: string;
     }
@@ -14,14 +14,11 @@ namespace TinyWars.Common {
         private _labelTitle     : GameUi.UiLabel;
         private _labelContent   : GameUi.UiLabel;
 
-        private _openData: OpenDataForCommonBlockPanel;
-
-        public static show(data: OpenDataForCommonBlockPanel): void {
+        public static show(openData: OpenDataForCommonBlockPanel): void {
             if (!CommonBlockPanel._instance) {
                 CommonBlockPanel._instance = new CommonBlockPanel();
             }
-            CommonBlockPanel._instance._openData = data;
-            CommonBlockPanel._instance.open();
+            CommonBlockPanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -39,8 +36,9 @@ namespace TinyWars.Common {
         }
 
         protected _onOpened(): void {
-            this._labelTitle.text = this._openData.title;
-            this._labelContent.setRichText(this._openData.content);
+            const openData          = this._getOpenData<OpenDataForCommonBlockPanel>();
+            this._labelTitle.text   = openData.title;
+            this._labelContent.setRichText(openData.content);
         }
     }
 }

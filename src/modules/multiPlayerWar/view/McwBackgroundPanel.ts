@@ -10,7 +10,7 @@ namespace TinyWars.MultiPlayerWar {
             if (!McwBackgroundPanel._instance) {
                 McwBackgroundPanel._instance = new McwBackgroundPanel();
             }
-            McwBackgroundPanel._instance.open();
+            McwBackgroundPanel._instance.open(undefined);
         }
 
         public static hide(): void {

@@ -29,7 +29,7 @@ namespace TinyWars.ChangeLog {
                 ChangeLogAddPanel._instance = new ChangeLogAddPanel();
             }
 
-            ChangeLogAddPanel._instance.open();
+            ChangeLogAddPanel._instance.open(undefined);
         }
 
         public static hide(): void {

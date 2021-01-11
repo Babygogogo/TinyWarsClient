@@ -43,8 +43,7 @@ namespace TinyWars.MapManagement {
                 MmAvailabilityListPanel._instance = new MmAvailabilityListPanel();
             }
 
-            (mapFilters) && (MmAvailabilityListPanel._instance._mapFilters = mapFilters);
-            MmAvailabilityListPanel._instance.open();
+            MmAvailabilityListPanel._instance.open(mapFilters);
         }
         public static hide(): void {
             if (MmAvailabilityListPanel._instance) {
@@ -79,7 +78,7 @@ namespace TinyWars.MapManagement {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            this.setMapFilters(this._mapFilters);
+            this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
         protected _onClosed(): void {
             this._zoomMap.removeAllContents();
@@ -247,7 +246,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            MmAvailabilityChangePanel.show((this.data as DataForMapNameRenderer).mapId);
+            MmAvailabilityChangePanel.show({ mapId: (this.data as DataForMapNameRenderer).mapId });
         }
     }
 }

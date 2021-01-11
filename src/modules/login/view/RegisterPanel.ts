@@ -27,7 +27,7 @@ namespace TinyWars.Login {
             if (!RegisterPanel._instance) {
                 RegisterPanel._instance = new RegisterPanel();
             }
-            RegisterPanel._instance.open();
+            RegisterPanel._instance.open(undefined);
         }
 
         public static hide(): void {

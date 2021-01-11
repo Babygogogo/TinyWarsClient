@@ -4,13 +4,14 @@ namespace TinyWars.SingleCustomWar {
     import Lang     = Utility.Lang;
     import Notify   = Utility.Notify;
 
+    type OpenDataForScwCoListPanel = {
+        selectedIndex   : number;
+    }
     export class ScwCoListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: ScwCoListPanel;
-
-        private _openData   : number;
 
         private _labelCommanderInfo : GameUi.UiLabel;
         private _listCo             : GameUi.UiScrollList;
@@ -51,13 +52,12 @@ namespace TinyWars.SingleCustomWar {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(selectedIndex: number): void {
+        public static show(openData: OpenDataForScwCoListPanel): void {
             if (!ScwCoListPanel._instance) {
                 ScwCoListPanel._instance = new ScwCoListPanel();
             }
 
-            ScwCoListPanel._instance._openData = selectedIndex;
-            ScwCoListPanel._instance.open();
+            ScwCoListPanel._instance.open(openData);
         }
         public static hide(): void {
             if (ScwCoListPanel._instance) {
@@ -96,7 +96,7 @@ namespace TinyWars.SingleCustomWar {
             this._war           = ScwModel.getWar();
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
-            this.setSelectedIndex(this._openData);
+            this.setSelectedIndex(this._getOpenData<OpenDataForScwCoListPanel>().selectedIndex);
 
             Notify.dispatch(Notify.Type.BwCoListPanelOpened);
         }

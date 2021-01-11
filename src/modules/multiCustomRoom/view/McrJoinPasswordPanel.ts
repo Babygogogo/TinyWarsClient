@@ -6,6 +6,9 @@ namespace TinyWars.MultiCustomRoom {
     import Notify       = Utility.Notify;
     import WarMapModel  = WarMap.WarMapModel;
 
+    type OpenDataForMcrJoinPasswordPanel = {
+        roomInfo: ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
+    }
     export class McrJoinPasswordPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
@@ -20,14 +23,11 @@ namespace TinyWars.MultiCustomRoom {
         private _btnCancel          : TinyWars.GameUi.UiButton;
         private _btnConfirm         : TinyWars.GameUi.UiButton;
 
-        private _openData: ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
-
-        public static show(data: ProtoTypes.MultiCustomRoom.IMcrRoomInfo): void {
+        public static show(openData: OpenDataForMcrJoinPasswordPanel): void {
             if (!McrJoinPasswordPanel._instance) {
                 McrJoinPasswordPanel._instance = new McrJoinPasswordPanel();
             }
-            McrJoinPasswordPanel._instance._openData = data;
-            McrJoinPasswordPanel._instance.open();
+            McrJoinPasswordPanel._instance.open(openData);
         }
         public static hide(): void {
             if (McrJoinPasswordPanel._instance) {
@@ -66,7 +66,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
-            const roomInfo = this._openData;
+            const roomInfo = this._getOpenData<OpenDataForMcrJoinPasswordPanel>().roomInfo;
             if (this._inputWarPassword.text !== roomInfo.settingsForMcw.warPassword) {
                 FloatText.show(Lang.getText(Lang.Type.A0017));
             } else {
@@ -83,7 +83,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            const info          = this._openData;
+            const info          = this._getOpenData<OpenDataForMcrJoinPasswordPanel>().roomInfo;
             const warName       = info.settingsForMcw.warName;
             const labelWarName  = this._labelWarName;
             if (warName) {

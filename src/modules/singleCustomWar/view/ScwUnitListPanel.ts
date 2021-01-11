@@ -32,7 +32,7 @@ namespace TinyWars.SingleCustomWar {
             if (!BwUnitListPanel._instance) {
                 BwUnitListPanel._instance = new BwUnitListPanel();
             }
-            BwUnitListPanel._instance.open();
+            BwUnitListPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (BwUnitListPanel._instance) {

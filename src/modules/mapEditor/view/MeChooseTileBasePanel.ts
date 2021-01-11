@@ -29,7 +29,7 @@ namespace TinyWars.MapEditor {
             if (!MeChooseTileBasePanel._instance) {
                 MeChooseTileBasePanel._instance = new MeChooseTileBasePanel();
             }
-            MeChooseTileBasePanel._instance.open();
+            MeChooseTileBasePanel._instance.open(undefined);
         }
         public static hide(): void {
             if (MeChooseTileBasePanel._instance) {

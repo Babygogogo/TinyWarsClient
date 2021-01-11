@@ -35,8 +35,7 @@ namespace TinyWars.MapManagement {
                 MmTagListPanel._instance = new MmTagListPanel();
             }
 
-            (mapFilters) && (MmTagListPanel._instance._mapFilters = mapFilters);
-            MmTagListPanel._instance.open();
+            MmTagListPanel._instance.open(mapFilters);
         }
         public static hide(): void {
             if (MmTagListPanel._instance) {
@@ -70,7 +69,7 @@ namespace TinyWars.MapManagement {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            this.setMapFilters(this._mapFilters);
+            this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
         protected _onClosed(): void {
             this._zoomMap.removeAllContents();
@@ -234,7 +233,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            MmTagChangePanel.show((this.data as DataForMapNameRenderer).mapId);
+            MmTagChangePanel.show({ mapId: (this.data as DataForMapNameRenderer).mapId });
         }
     }
 }

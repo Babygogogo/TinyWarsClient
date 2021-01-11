@@ -18,7 +18,7 @@ namespace TinyWars.MapEditor {
             if (!MeImportPanel._instance) {
                 MeImportPanel._instance = new MeImportPanel();
             }
-            MeImportPanel._instance.open();
+            MeImportPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (MeImportPanel._instance) {

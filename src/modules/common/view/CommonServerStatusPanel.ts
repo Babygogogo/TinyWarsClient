@@ -24,7 +24,7 @@ namespace TinyWars.Common {
             if (!CommonServerStatusPanel._instance) {
                 CommonServerStatusPanel._instance = new CommonServerStatusPanel();
             }
-            CommonServerStatusPanel._instance.open();
+            CommonServerStatusPanel._instance.open(undefined);
         }
 
         public static hide(): void {

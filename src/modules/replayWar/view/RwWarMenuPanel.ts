@@ -53,7 +53,7 @@ namespace TinyWars.ReplayWar {
             if (!RwWarMenuPanel._instance) {
                 RwWarMenuPanel._instance = new RwWarMenuPanel();
             }
-            RwWarMenuPanel._instance.open();
+            RwWarMenuPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (RwWarMenuPanel._instance) {
@@ -224,7 +224,6 @@ namespace TinyWars.ReplayWar {
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return [
-                // this._createCommandOpenCoInfoMenu(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandRate(),
                 // this._createCommandChat(),
@@ -241,16 +240,6 @@ namespace TinyWars.ReplayWar {
                 this._createCommandUseNewTexture(),
                 this._createCommandSetPathMode(),
             ].filter(v => !!v);
-        }
-
-        private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | undefined {
-            return {
-                name    : Lang.getText(Lang.Type.B0140),
-                callback: () => {
-                    RwCoListPanel.show(0);
-                    RwWarMenuPanel.hide();
-                },
-            };
         }
 
         private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {

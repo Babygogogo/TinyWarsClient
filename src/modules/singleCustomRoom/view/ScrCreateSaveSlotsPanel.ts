@@ -22,7 +22,7 @@ namespace TinyWars.SingleCustomRoom {
             if (!ScrCreateSaveSlotsPanel._instance) {
                 ScrCreateSaveSlotsPanel._instance = new ScrCreateSaveSlotsPanel();
             }
-            ScrCreateSaveSlotsPanel._instance.open();
+            ScrCreateSaveSlotsPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (ScrCreateSaveSlotsPanel._instance) {

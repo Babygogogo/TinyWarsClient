@@ -19,7 +19,7 @@ namespace TinyWars.Login {
             if (!LoginBackgroundPanel._instance) {
                 LoginBackgroundPanel._instance = new LoginBackgroundPanel();
             }
-            LoginBackgroundPanel._instance.open();
+            LoginBackgroundPanel._instance.open(undefined);
         }
 
         public static hide(): void {

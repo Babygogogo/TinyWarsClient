@@ -4,18 +4,15 @@ namespace TinyWars.SingleCustomRoom {
     import Lang         = Utility.Lang;
     import ProtoTypes   = Utility.ProtoTypes;
 
-    type OpenData = {
+    type OpenDataForScrCreateCoListPanel = {
         dataIndex   : number;
         coId        : number | null;
     }
-
     export class ScrCreateCoListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: ScrCreateCoListPanel;
-
-        private _openData   : OpenData;
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
@@ -50,13 +47,12 @@ namespace TinyWars.SingleCustomRoom {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(openData: OpenData): void {
+        public static show(openData: OpenDataForScrCreateCoListPanel): void {
             if (!ScrCreateCoListPanel._instance) {
                 ScrCreateCoListPanel._instance = new ScrCreateCoListPanel();
             }
 
-            ScrCreateCoListPanel._instance._openData = openData;
-            ScrCreateCoListPanel._instance.open();
+            ScrCreateCoListPanel._instance.open(openData);
         }
         public static hide(): void {
             if (ScrCreateCoListPanel._instance) {
@@ -139,7 +135,7 @@ namespace TinyWars.SingleCustomRoom {
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
 
-            const coId = this._openData.coId;
+            const coId = this._getOpenData<OpenDataForScrCreateCoListPanel>().coId;
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
                 const cfg = data.coBasicCfg;
                 return cfg ? cfg.coId === coId : coId == null;
@@ -147,7 +143,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _createDataForListCo(): DataForCoRenderer[] {
-            const dataIndexForCreateWarPlayerList   = this._openData.dataIndex;
+            const dataIndexForCreateWarPlayerList   = this._getOpenData<OpenDataForScrCreateCoListPanel>().dataIndex;
             const data                              : DataForCoRenderer[] = [];
             let index                               = 0;
             for (const cfg of Utility.ConfigManager.getAvailableCoList(Utility.ConfigManager.getLatestFormalVersion())) {

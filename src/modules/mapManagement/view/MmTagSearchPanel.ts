@@ -30,7 +30,7 @@ namespace TinyWars.MapManagement {
             if (!MmTagSearchPanel._instance) {
                 MmTagSearchPanel._instance = new MmTagSearchPanel();
             }
-            MmTagSearchPanel._instance.open();
+            MmTagSearchPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (MmTagSearchPanel._instance) {

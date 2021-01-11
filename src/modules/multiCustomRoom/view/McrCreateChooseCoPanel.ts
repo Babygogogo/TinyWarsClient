@@ -6,13 +6,14 @@ namespace TinyWars.MultiCustomRoom {
     import ConfigManager    = Utility.ConfigManager;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
+    type OpenDataForMcrCreateChooseCoPanel = {
+        coId    : number | undefined | null;
+    }
     export class McrCreateChooseCoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: McrCreateChooseCoPanel;
-
-        private _openData   : number;
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
@@ -47,13 +48,12 @@ namespace TinyWars.MultiCustomRoom {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(coId: number | null): void {
+        public static show(openData: OpenDataForMcrCreateChooseCoPanel): void {
             if (!McrCreateChooseCoPanel._instance) {
                 McrCreateChooseCoPanel._instance = new McrCreateChooseCoPanel();
             }
 
-            McrCreateChooseCoPanel._instance._openData = coId;
-            McrCreateChooseCoPanel._instance.open();
+            McrCreateChooseCoPanel._instance.open(openData);
         }
         public static hide(): void {
             if (McrCreateChooseCoPanel._instance) {
@@ -135,9 +135,11 @@ namespace TinyWars.MultiCustomRoom {
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
+
+            const coId = this._getOpenData<OpenDataForMcrCreateChooseCoPanel>().coId;
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
                 const cfg = data.coBasicCfg;
-                return cfg ? cfg.coId === this._openData : this._openData == null;
+                return cfg ? cfg.coId === coId : coId == null;
             }));
         }
 

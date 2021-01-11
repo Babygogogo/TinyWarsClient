@@ -37,7 +37,7 @@ namespace TinyWars.MultiPlayerWar {
             if (!McwTopPanel._instance) {
                 McwTopPanel._instance = new McwTopPanel();
             }
-            McwTopPanel._instance.open();
+            McwTopPanel._instance.open(undefined);
         }
 
         public static hide(): void {
@@ -141,10 +141,10 @@ namespace TinyWars.MultiPlayerWar {
 
         private _onTouchedGroupPlayer(e: egret.TouchEvent): void {
             const userId = this._war.getPlayerInTurn().getUserId();
-            (userId) && (User.UserPanel.show(userId));
+            (userId) && (User.UserPanel.show({ userId }));
         }
         private _onTouchedGroupCo(e: egret.TouchEvent): void {
-            McwCoListPanel.show(Math.max(this._war.getPlayerIndexInTurn() - 1, 0));
+            McwCoListPanel.show({ selectedIndex: Math.max(this._war.getPlayerIndexInTurn() - 1, 0) });
             McwWarMenuPanel.hide();
         }
         private _onTouchedBtnChat(e: egret.TouchEvent): void {

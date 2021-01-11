@@ -9,6 +9,9 @@ namespace TinyWars.ReplayWar {
     import GridIndex        = Types.GridIndex;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
+    type OpenDataForRwProduceUnitPanel = {
+        gridIndex: GridIndex;
+    }
     export class RwProduceUnitPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -24,12 +27,11 @@ namespace TinyWars.ReplayWar {
         private _gridIndex  : GridIndex;
         private _dataForList: DataForUnitRenderer[];
 
-        public static show(gridIndex: GridIndex): void {
+        public static show(openData: OpenDataForRwProduceUnitPanel): void {
             if (!RwProduceUnitPanel._instance) {
                 RwProduceUnitPanel._instance = new RwProduceUnitPanel();
             }
-            RwProduceUnitPanel._instance._gridIndex = gridIndex;
-            RwProduceUnitPanel._instance.open();
+            RwProduceUnitPanel._instance.open(openData);
         }
         public static hide(): void {
             if (RwProduceUnitPanel._instance) {
@@ -133,7 +135,7 @@ namespace TinyWars.ReplayWar {
             const configVersion     = war.getConfigVersion();
             const actionPlanner     = war.getActionPlanner() as RwActionPlanner;
             const unitMap           = war.getUnitMap();
-            const gridIndex         = this._gridIndex;
+            const gridIndex         = this._getOpenData<OpenDataForRwProduceUnitPanel>().gridIndex;
             const tile              = war.getTileMap().getTile(gridIndex);
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
             const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();

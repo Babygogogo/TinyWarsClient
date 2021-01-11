@@ -25,7 +25,7 @@ namespace TinyWars.Lobby {
             if (!LobbyPanel._instance) {
                 LobbyPanel._instance = new LobbyPanel();
             }
-            LobbyPanel._instance.open();
+            LobbyPanel._instance.open(undefined);
         }
 
         public static hide(): void {

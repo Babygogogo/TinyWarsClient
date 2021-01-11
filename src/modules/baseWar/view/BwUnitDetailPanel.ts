@@ -37,16 +37,14 @@ namespace TinyWars.BaseWar {
         private _labelDefenseMain2  : GameUi.UiLabel;
         private _labelDefenseSub2   : GameUi.UiLabel;
 
-        private _openData   : OpenDataForBwUnitDetailPanel;
         private _dataForList: DataForDamageRenderer[];
         private _unitView   = new WarMap.WarMapUnitView();
 
-        public static show(data: OpenDataForBwUnitDetailPanel): void {
+        public static show(openData: OpenDataForBwUnitDetailPanel): void {
             if (!BwUnitDetailPanel._instance) {
                 BwUnitDetailPanel._instance = new BwUnitDetailPanel();
             }
-            BwUnitDetailPanel._instance._openData = data;
-            BwUnitDetailPanel._instance.open();
+            BwUnitDetailPanel._instance.open(openData);
         }
         public static hide(): void {
             if (BwUnitDetailPanel._instance) {
@@ -138,7 +136,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateUnitViewAndLabelName(): void {
-            const unit              = this._openData.unit;
+            const unit              = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
             this._labelName.text    = Lang.getUnitName(unit.getType());
             this._unitView.update({
                 gridIndex       : { x: 0, y: 0},
@@ -149,7 +147,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateListInfo(): void {
-            const unit          = this._openData.unit;
+            const unit          = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
             const configVersion = unit.getConfigVersion();
             const unitType      = unit.getType();
             const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
@@ -575,7 +573,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _createDataForListDamageChart(): DataForDamageRenderer[] {
-            const unit              = this._openData.unit;
+            const unit              = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
             const configVersion     = unit.getConfigVersion();
             const attackUnitType    = unit.getType();
             const playerIndex       = unit.getPlayerIndex();

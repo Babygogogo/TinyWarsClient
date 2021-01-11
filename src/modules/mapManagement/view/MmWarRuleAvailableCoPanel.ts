@@ -8,10 +8,9 @@ namespace TinyWars.MapManagement {
     import ProtoTypes       = Utility.ProtoTypes;
     import WarRule          = ProtoTypes.WarRule;
 
-    type OpenParam = {
+    type OpenDataForMmWarRuleAvailableCoPanel = {
         playerRule      : WarRule.IDataForPlayerRule;
         warRule         : WarRule.IWarRule;
-        callbackOnClose : () => void;
     }
 
     export class MmWarRuleAvailableCoPanel extends GameUi.UiPanel {
@@ -28,15 +27,13 @@ namespace TinyWars.MapManagement {
         private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
 
-        private _openParam              : OpenParam;
         private _availableCoIdSet       = new Set<number>();
 
-        public static show(openParam: OpenParam): void {
+        public static show(openData: OpenDataForMmWarRuleAvailableCoPanel): void {
             if (!MmWarRuleAvailableCoPanel._instance) {
                 MmWarRuleAvailableCoPanel._instance = new MmWarRuleAvailableCoPanel();
             }
-            MmWarRuleAvailableCoPanel._instance._openParam = openParam;
-            MmWarRuleAvailableCoPanel._instance.open();
+            MmWarRuleAvailableCoPanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -62,7 +59,7 @@ namespace TinyWars.MapManagement {
             ]);
 
             const availableCoIdSet  = this._availableCoIdSet;
-            const openParam         = this._openParam;
+            const openParam         = this._getOpenData<OpenDataForMmWarRuleAvailableCoPanel>();
             availableCoIdSet.clear();
             for (const coId of openParam.playerRule.availableCoIdList) {
                 availableCoIdSet.add(coId);
@@ -76,8 +73,6 @@ namespace TinyWars.MapManagement {
         protected _onClosed(): void {
             this._clearGroupCoTiers();
             this._clearGroupCoNames();
-            this._openParam.callbackOnClose();
-            this._openParam = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -96,7 +91,7 @@ namespace TinyWars.MapManagement {
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
-            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._openParam.playerRule.playerIndex})`;
+            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._getOpenData<OpenDataForMmWarRuleAvailableCoPanel>().playerRule.playerIndex})`;
         }
 
         private _initGroupCoTiers(): void {

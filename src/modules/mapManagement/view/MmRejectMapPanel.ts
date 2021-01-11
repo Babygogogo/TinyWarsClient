@@ -18,7 +18,7 @@ namespace TinyWars.MapManagement {
             if (!MmRejectMapPanel._instance) {
                 MmRejectMapPanel._instance = new MmRejectMapPanel();
             }
-            MmRejectMapPanel._instance.open();
+            MmRejectMapPanel._instance.open(undefined);
         }
 
         public static hide(): void {

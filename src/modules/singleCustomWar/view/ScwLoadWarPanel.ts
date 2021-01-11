@@ -25,7 +25,7 @@ namespace TinyWars.SingleCustomWar {
                 ScwLoadWarPanel._instance = new ScwLoadWarPanel();
             }
 
-            ScwLoadWarPanel._instance.open();
+            ScwLoadWarPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (ScwLoadWarPanel._instance) {

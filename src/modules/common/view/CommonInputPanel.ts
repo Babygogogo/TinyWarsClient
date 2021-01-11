@@ -3,7 +3,7 @@ namespace TinyWars.Common {
     import Lang     = Utility.Lang;
     import Notify   = Utility.Notify;
 
-    export type OpenDataForCommonInputPanel = {
+    type OpenDataForCommonInputPanel = {
         title           : string;
         currentValue    : string;
         tips            : string | null;
@@ -25,14 +25,11 @@ namespace TinyWars.Common {
         private _btnCancel      : GameUi.UiButton;
         private _btnConfirm     : GameUi.UiButton;
 
-        private _openData: OpenDataForCommonInputPanel;
-
-        public static show(data: OpenDataForCommonInputPanel): void {
+        public static show(openData: OpenDataForCommonInputPanel): void {
             if (!CommonInputPanel._instance) {
                 CommonInputPanel._instance = new CommonInputPanel();
             }
-            CommonInputPanel._instance._openData = data;
-            CommonInputPanel._instance.open();
+            CommonInputPanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -62,7 +59,7 @@ namespace TinyWars.Common {
             this._showOpenAnimation();
             this._updateComponentsForLanguage();
 
-            const openData          = this._openData;
+            const openData          = this._getOpenData<OpenDataForCommonInputPanel>();
             this._labelTitle.text   = openData.title;
             this._labelTips.text    = openData.tips;
             this._input.text        = openData.currentValue;
@@ -75,17 +72,17 @@ namespace TinyWars.Common {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            CommonInputPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            CommonInputPanel.hide();
-            this._openData.callback(this);
+            this._getOpenData<OpenDataForCommonInputPanel>().callback(this);
+            this.close();
         }
 
         private _onFocusOutInput(e: egret.Event): void {
             if (!this._input.text) {
-                this._input.text = this._openData.currentValue;
+                this._input.text = this._getOpenData<OpenDataForCommonInputPanel>().currentValue;
             }
         }
 

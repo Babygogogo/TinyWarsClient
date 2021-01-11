@@ -6,6 +6,9 @@ namespace TinyWars.MultiCustomRoom {
     import Helpers      = Utility.Helpers;
     import Types        = Utility.Types;
 
+    type OpenDataForMcrWatchDeleteWatcherDetailPanel = {
+        watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
+    }
     export class McrWatchDeleteWatcherDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = false;
@@ -21,15 +24,13 @@ namespace TinyWars.MultiCustomRoom {
         private _btnConfirm             : GameUi.UiButton;
         private _btnCancel              : GameUi.UiButton;
 
-        private _openData           : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
         private _dataForListPlayer  : DataForRequesterRenderer[];
 
-        public static show(warInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo): void {
+        public static show(openData: OpenDataForMcrWatchDeleteWatcherDetailPanel): void {
             if (!McrWatchDeleteWatcherDetailPanel._instance) {
                 McrWatchDeleteWatcherDetailPanel._instance = new McrWatchDeleteWatcherDetailPanel();
             }
-            McrWatchDeleteWatcherDetailPanel._instance._openData = warInfo;
-            McrWatchDeleteWatcherDetailPanel._instance.open();
+            McrWatchDeleteWatcherDetailPanel._instance.open(openData);
         }
         public static hide(): void {
             if (McrWatchDeleteWatcherDetailPanel._instance) {
@@ -87,7 +88,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
             if (deleteUserIds.length) {
-                MultiPlayerWar.MpwProxy.reqWatchDeleteWatcher(this._openData.warInfo.warId, deleteUserIds);
+                MultiPlayerWar.MpwProxy.reqWatchDeleteWatcher(this._getOpenData<OpenDataForMcrWatchDeleteWatcherDetailPanel>().watchInfo.warInfo.warId, deleteUserIds);
             }
             this.close();
         }
@@ -111,11 +112,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _generateDataForListPlayer(): DataForRequesterRenderer[] {
-            const openData          = this._openData;
+            const openData          = this._getOpenData<OpenDataForMcrWatchDeleteWatcherDetailPanel>().watchInfo;
             const warInfo           = openData.warInfo;
             const playerInfoList    = warInfo.playerInfoList;
             const dataList          : DataForRequesterRenderer[] = [];
-            for (const info of this._openData.requesterInfos) {
+            for (const info of openData.requesterInfos) {
                 const userId = info.userId;
                 dataList.push({
                     panel           : this,

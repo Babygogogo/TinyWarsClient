@@ -25,7 +25,7 @@ namespace TinyWars.MapEditor {
             if (!MeOffsetPanel._instance) {
                 MeOffsetPanel._instance = new MeOffsetPanel();
             }
-            MeOffsetPanel._instance.open();
+            MeOffsetPanel._instance.open(undefined);
         }
 
         public static hide(): void {

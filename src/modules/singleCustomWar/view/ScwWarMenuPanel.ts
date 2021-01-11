@@ -50,7 +50,7 @@ namespace TinyWars.SingleCustomWar {
             if (!ScwWarMenuPanel._instance) {
                 ScwWarMenuPanel._instance = new ScwWarMenuPanel();
             }
-            ScwWarMenuPanel._instance.open();
+            ScwWarMenuPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (ScwWarMenuPanel._instance) {
@@ -310,7 +310,7 @@ namespace TinyWars.SingleCustomWar {
             return {
                 name    : Lang.getText(Lang.Type.B0140),
                 callback: () => {
-                    ScwCoListPanel.show(this._war.getPlayerIndexInTurn() - 1);
+                    ScwCoListPanel.show({ selectedIndex: this._war.getPlayerIndexInTurn() - 1 });
                     ScwWarMenuPanel.hide();
                 },
             };

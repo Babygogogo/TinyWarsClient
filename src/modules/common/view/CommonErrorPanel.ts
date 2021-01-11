@@ -2,7 +2,7 @@
 namespace TinyWars.Common {
     import Lang = Utility.Lang;
 
-    export type OpenDataForCommonErrorPanel = {
+    type OpenDataForCommonErrorPanel = {
         content     : string;
         callback?   : () => any;
     }
@@ -17,14 +17,11 @@ namespace TinyWars.Common {
         private _labelContent   : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
 
-        private _openData: OpenDataForCommonErrorPanel;
-
-        public static show(data: OpenDataForCommonErrorPanel): void {
+        public static show(openData: OpenDataForCommonErrorPanel): void {
             if (!CommonErrorPanel._instance) {
                 CommonErrorPanel._instance = new CommonErrorPanel();
             }
-            CommonErrorPanel._instance._openData = data;
-            CommonErrorPanel._instance.open();
+            CommonErrorPanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -48,12 +45,14 @@ namespace TinyWars.Common {
 
             this._btnClose.label    = Lang.getText(Lang.Type.B0026);
             this._labelTitle.text   = Lang.getText(Lang.Type.A0056);
-            this._labelContent.setRichText(this._openData.content);
+            this._labelContent.setRichText(this._getOpenData<OpenDataForCommonErrorPanel>().content);
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
-            CommonErrorPanel.hide();
-            (this._openData.callback) && (this._openData.callback());
+            const openData = this._getOpenData<OpenDataForCommonErrorPanel>();
+            (openData.callback) && (openData.callback());
+
+            this.close();
         }
     }
 }

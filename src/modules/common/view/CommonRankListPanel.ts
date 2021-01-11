@@ -27,7 +27,7 @@ namespace TinyWars.Common {
             if (!CommonRankListPanel._instance) {
                 CommonRankListPanel._instance = new CommonRankListPanel();
             }
-            CommonRankListPanel._instance.open();
+            CommonRankListPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (CommonRankListPanel._instance) {
@@ -157,7 +157,7 @@ namespace TinyWars.Common {
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
             CommonRankListPanel.hide();
-            User.UserPanel.show((this.data as DataForUserRenderer).userId);
+            User.UserPanel.show({ userId: (this.data as DataForUserRenderer).userId });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

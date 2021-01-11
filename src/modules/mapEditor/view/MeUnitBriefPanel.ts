@@ -30,7 +30,7 @@ namespace TinyWars.MapEditor {
             if (!MeUnitBriefPanel._instance) {
                 MeUnitBriefPanel._instance = new MeUnitBriefPanel();
             }
-            MeUnitBriefPanel._instance.open();
+            MeUnitBriefPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (MeUnitBriefPanel._instance) {

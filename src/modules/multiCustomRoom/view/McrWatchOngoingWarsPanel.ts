@@ -37,7 +37,7 @@ namespace TinyWars.MultiCustomRoom {
             if (!McrWatchOngoingWarsPanel._instance) {
                 McrWatchOngoingWarsPanel._instance = new McrWatchOngoingWarsPanel();
             }
-            McrWatchOngoingWarsPanel._instance.open();
+            McrWatchOngoingWarsPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (McrWatchOngoingWarsPanel._instance) {

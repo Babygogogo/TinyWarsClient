@@ -34,7 +34,7 @@ namespace TinyWars.ReplayWar {
             if (!RwSearchReplayPanel._instance) {
                 RwSearchReplayPanel._instance = new RwSearchReplayPanel();
             }
-            RwSearchReplayPanel._instance.open();
+            RwSearchReplayPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (RwSearchReplayPanel._instance) {

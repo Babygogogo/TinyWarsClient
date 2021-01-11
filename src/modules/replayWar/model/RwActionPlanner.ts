@@ -31,7 +31,7 @@ namespace TinyWars.ReplayWar {
 
             this._setState(State.ChoosingProductionTarget);
             this._updateView();
-            RwProduceUnitPanel.show(gridIndex);
+            RwProduceUnitPanel.show({ gridIndex });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

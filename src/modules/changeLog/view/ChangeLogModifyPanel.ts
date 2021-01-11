@@ -19,7 +19,6 @@ namespace TinyWars.ChangeLog {
 
         private static _instance: ChangeLogModifyPanel;
 
-        private _openData       : OpenDataForChangeLogModifyPanel;
         private _inputChinese   : GameUi.UiTextInput;
         private _inputEnglish   : GameUi.UiTextInput;
         private _labelTip       : GameUi.UiLabel;
@@ -34,8 +33,7 @@ namespace TinyWars.ChangeLog {
                 ChangeLogModifyPanel._instance = new ChangeLogModifyPanel();
             }
 
-            ChangeLogModifyPanel._instance._openData = openData;
-            ChangeLogModifyPanel._instance.open();
+            ChangeLogModifyPanel._instance.open(undefined);
         }
 
         public static hide(): void {
@@ -84,7 +82,7 @@ namespace TinyWars.ChangeLog {
             } else if (textList.some(v => v.text.length > CommonConstants.ChangeLogTextMaxLength)) {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.ChangeLogTextMaxLength));
             } else {
-                ChangeLogProxy.reqChangeLogModifyMessage(this._openData.messageId, textList);
+                ChangeLogProxy.reqChangeLogModifyMessage(this._getOpenData<OpenDataForChangeLogModifyPanel>().messageId, textList);
                 this.close();
             }
         }
@@ -92,7 +90,7 @@ namespace TinyWars.ChangeLog {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const textList          = ChangeLogModel.getMessage(this._openData.messageId).textList || [];
+            const textList          = ChangeLogModel.getMessage(this._getOpenData<OpenDataForChangeLogModifyPanel>().messageId).textList || [];
             this._inputChinese.text = Lang.getTextInLanguage(textList, Types.LanguageType.Chinese);
             this._inputEnglish.text = Lang.getTextInLanguage(textList, Types.LanguageType.English);
         }
@@ -103,7 +101,7 @@ namespace TinyWars.ChangeLog {
             this._labelChinese.text = Lang.getText(Lang.Type.B0455);
             this._labelEnglish.text = Lang.getText(Lang.Type.B0456);
             this._labelTip.text     = Lang.getText(Lang.Type.A0156);
-            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0317)} #${this._openData.messageId}`;
+            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0317)} #${this._getOpenData<OpenDataForChangeLogModifyPanel>().messageId}`;
         }
     }
 }

@@ -22,7 +22,6 @@ namespace TinyWars.SingleCustomRoom {
         private _btnHelp        : GameUi.UiButton;
         private _btnCancel      : GameUi.UiButton;
 
-        private _openData   : OpenDataForScrCreateCustomSaveSlotsPanel;
         private _dataForList: DataForSlotRenderer[];
 
         public static show(openData: OpenDataForScrCreateCustomSaveSlotsPanel): void {
@@ -30,8 +29,7 @@ namespace TinyWars.SingleCustomRoom {
                 ScrCreateCustomSaveSlotsPanel._instance = new ScrCreateCustomSaveSlotsPanel();
             }
 
-            ScrCreateCustomSaveSlotsPanel._instance._openData = openData;
-            ScrCreateCustomSaveSlotsPanel._instance.open();
+            ScrCreateCustomSaveSlotsPanel._instance.open(openData);
         }
         public static hide(): void {
             if (ScrCreateCustomSaveSlotsPanel._instance) {
@@ -102,7 +100,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
-            const warData   = this._openData;
+            const warData   = this._getOpenData<OpenDataForScrCreateCustomSaveSlotsPanel>();
             const slotList  = ScrModel.getSaveSlotInfoList() || [];
             for (let i = 0; i < CommonConstants.ScwSaveSlotMaxCount; ++i) {
                 dataList.push({

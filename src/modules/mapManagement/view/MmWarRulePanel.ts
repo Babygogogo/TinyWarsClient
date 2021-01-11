@@ -10,6 +10,7 @@ namespace TinyWars.MapManagement {
     import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
     import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
+    type OpenDataForMmWarRulePanel = ProtoTypes.Map.IMapRawData;
     export class MmWarRulePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -40,18 +41,15 @@ namespace TinyWars.MapManagement {
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
         private _listPlayer         : TinyWars.GameUi.UiScrollList;
 
-        private _mapRawData         : ProtoTypes.Map.IMapRawData;
         private _dataForListWarRule : DataForWarRuleNameRenderer[] = [];
         private _selectedIndex      : number;
         private _selectedRule       : IWarRule;
 
-        public static show(mapRawData: ProtoTypes.Map.IMapRawData): void {
+        public static show(openData: OpenDataForMmWarRulePanel): void {
             if (!MmWarRulePanel._instance) {
                 MmWarRulePanel._instance = new MmWarRulePanel();
             }
-            const instance          = MmWarRulePanel._instance;
-            instance._mapRawData    = mapRawData;
-            instance.open();
+            MmWarRulePanel._instance.open(openData);
         }
         public static hide(): void {
             if (MmWarRulePanel._instance) {
@@ -87,7 +85,6 @@ namespace TinyWars.MapManagement {
             this._resetView();
         }
         protected _onClosed(): void {
-            this._mapRawData = null;
             this._listWarRule.clear();
             this._listPlayer.clear();
         }
@@ -158,7 +155,7 @@ namespace TinyWars.MapManagement {
         private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
             const data  : DataForWarRuleNameRenderer[] = [];
             let index   = 0;
-            for (const rule of this._mapRawData.warRuleList || []) {
+            for (const rule of this._getOpenData<OpenDataForMmWarRulePanel>().warRuleList || []) {
                 data.push({
                     index,
                     rule,
@@ -325,9 +322,6 @@ namespace TinyWars.MapManagement {
                     MmWarRuleAvailableCoPanel.show({
                         warRule,
                         playerRule,
-                        callbackOnClose : () => {
-                            this._updateView();
-                        },
                     });
                 },
             };

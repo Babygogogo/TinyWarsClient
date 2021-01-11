@@ -37,7 +37,7 @@ namespace TinyWars.MultiCustomRoom {
             if (!McrWatchDeleteWatcherWarsPanel._instance) {
                 McrWatchDeleteWatcherWarsPanel._instance = new McrWatchDeleteWatcherWarsPanel();
             }
-            McrWatchDeleteWatcherWarsPanel._instance.open();
+            McrWatchDeleteWatcherWarsPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (McrWatchDeleteWatcherWarsPanel._instance) {
@@ -249,7 +249,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            McrWatchDeleteWatcherDetailPanel.show((this.data as DataForWarRenderer).info);
+            McrWatchDeleteWatcherDetailPanel.show({ watchInfo: (this.data as DataForWarRenderer).info });
         }
     }
 

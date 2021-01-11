@@ -8,6 +8,9 @@ namespace TinyWars.MultiCustomRoom {
     import ConfirmPanel     = Common.CommonConfirmPanel;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
+    type OpenDataForMcrCreateAvailableCoPanel = {
+        playerIndex : number;
+    }
     export class McrCreateAvailableCoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = true;
@@ -26,12 +29,11 @@ namespace TinyWars.MultiCustomRoom {
         private _playerIndex            : number;
         private _availableCoIdSet       = new Set<number>();
 
-        public static show(playerIndex: number): void {
+        public static show(openData: OpenDataForMcrCreateAvailableCoPanel): void {
             if (!McrCreateAvailableCoPanel._instance) {
                 McrCreateAvailableCoPanel._instance = new McrCreateAvailableCoPanel();
             }
-            McrCreateAvailableCoPanel._instance._playerIndex = playerIndex;
-            McrCreateAvailableCoPanel._instance.open();
+            McrCreateAvailableCoPanel._instance.open(openData);
         }
 
         public static hide(): void {
@@ -57,6 +59,9 @@ namespace TinyWars.MultiCustomRoom {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
+
+            const playerIndex = this._getOpenData<OpenDataForMcrCreateAvailableCoPanel>().playerIndex;
+            this._playerIndex = playerIndex;
 
             const availableCoIdSet = this._availableCoIdSet;
             availableCoIdSet.clear();

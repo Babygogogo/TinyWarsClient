@@ -23,7 +23,7 @@ namespace TinyWars.MultiCustomRoom {
             if (!McrCreateSettingsPanel._instance) {
                 McrCreateSettingsPanel._instance = new McrCreateSettingsPanel();
             }
-            McrCreateSettingsPanel._instance.open();
+            McrCreateSettingsPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (McrCreateSettingsPanel._instance) {

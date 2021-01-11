@@ -10,7 +10,7 @@ namespace TinyWars.MapEditor {
             if (!MeBackgroundPanel._instance) {
                 MeBackgroundPanel._instance = new MeBackgroundPanel();
             }
-            MeBackgroundPanel._instance.open();
+            MeBackgroundPanel._instance.open(undefined);
         }
 
         public static hide(): void {

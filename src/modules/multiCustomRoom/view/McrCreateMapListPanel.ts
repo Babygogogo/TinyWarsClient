@@ -46,8 +46,7 @@ namespace TinyWars.MultiCustomRoom {
                 McrCreateMapListPanel._instance = new McrCreateMapListPanel();
             }
 
-            (mapFilters) && (McrCreateMapListPanel._instance._mapFilters = mapFilters);
-            McrCreateMapListPanel._instance.open();
+            McrCreateMapListPanel._instance.open(mapFilters);
         }
         public static hide(): void {
             if (McrCreateMapListPanel._instance) {
@@ -80,7 +79,7 @@ namespace TinyWars.MultiCustomRoom {
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            this.setMapFilters(this._mapFilters);
+            this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
         protected _onClosed(): void {
             this._zoomMap.removeAllContents();

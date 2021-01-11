@@ -22,7 +22,7 @@ namespace TinyWars.Broadcast {
             if (!BroadcastPanel._instance) {
                 BroadcastPanel._instance = new BroadcastPanel();
             }
-            BroadcastPanel._instance.open();
+            BroadcastPanel._instance.open(undefined);
         }
 
         public static hide(): void {

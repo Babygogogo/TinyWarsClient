@@ -30,7 +30,7 @@ namespace TinyWars.SingleCustomWar {
             if (!ScwUnitBriefPanel._instance) {
                 ScwUnitBriefPanel._instance = new ScwUnitBriefPanel();
             }
-            ScwUnitBriefPanel._instance.open();
+            ScwUnitBriefPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (ScwUnitBriefPanel._instance) {

@@ -38,7 +38,7 @@ namespace TinyWars.MultiCustomRoom {
             if (!McrJoinRoomListPanel._instance) {
                 McrJoinRoomListPanel._instance = new McrJoinRoomListPanel();
             }
-            McrJoinRoomListPanel._instance.open();
+            McrJoinRoomListPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (McrJoinRoomListPanel._instance) {
@@ -123,7 +123,7 @@ namespace TinyWars.MultiCustomRoom {
         private _onMsgMcrJoinRoom(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMcrJoinRoom.IS;
             this.close();
-            McrRoomInfoPanel.show(data.roomId);
+            McrRoomInfoPanel.show({ roomId: data.roomId });
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -259,7 +259,7 @@ namespace TinyWars.MultiCustomRoom {
             const data      = this.data as DataForWarRenderer;
             const roomInfo  = data.roomInfo;
             if (roomInfo.settingsForMcw.warPassword) {
-                McrJoinPasswordPanel.show(roomInfo);
+                McrJoinPasswordPanel.show({ roomInfo });
             } else {
                 const joinData = McrModel.Join.getFastJoinData(roomInfo);
                 if (joinData) {

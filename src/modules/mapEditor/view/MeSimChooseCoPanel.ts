@@ -17,8 +17,6 @@ namespace TinyWars.MapEditor {
 
         private static _instance: MeSimChooseCoPanel;
 
-        private _openData       : OpenDataForSimChooseCoPanel;
-
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
         private _listCo         : GameUi.UiScrollList;
@@ -57,8 +55,7 @@ namespace TinyWars.MapEditor {
                 MeSimChooseCoPanel._instance = new MeSimChooseCoPanel();
             }
 
-            MeSimChooseCoPanel._instance._openData = openData;
-            MeSimChooseCoPanel._instance.open();
+            MeSimChooseCoPanel._instance.open(openData);
         }
         public static hide(): void {
             if (MeSimChooseCoPanel._instance) {
@@ -140,15 +137,17 @@ namespace TinyWars.MapEditor {
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
+
+            const openData = this._getOpenData<OpenDataForSimChooseCoPanel>();
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
                 const cfg = data.coBasicCfg;
-                return cfg ? cfg.coId === this._openData.coId : this._openData == null;
+                return cfg ? cfg.coId === openData.coId : openData == null;
             }));
         }
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const data          : DataForCoRenderer[] = [];
-            const playerIndex   = this._openData.playerIndex;
+            const playerIndex   = this._getOpenData<OpenDataForSimChooseCoPanel>().playerIndex;
             let index           = 0;
             for (const cfg of ConfigManager.getAvailableCoList(MeModel.Sim.getWarData().settingsForCommon.configVersion)) {
                 data.push({

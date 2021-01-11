@@ -30,7 +30,7 @@ namespace TinyWars.MapManagement {
             if (!MmReviewListPanel._instance) {
                 MmReviewListPanel._instance = new MmReviewListPanel();
             }
-            MmReviewListPanel._instance.open();
+            MmReviewListPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (MmReviewListPanel._instance) {

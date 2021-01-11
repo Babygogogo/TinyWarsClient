@@ -39,7 +39,7 @@ namespace TinyWars.MapEditor {
             if (!MeTileBriefPanel._instance) {
                 MeTileBriefPanel._instance = new MeTileBriefPanel();
             }
-            MeTileBriefPanel._instance.open();
+            MeTileBriefPanel._instance.open(undefined);
         }
         public static hide(): void {
             if (MeTileBriefPanel._instance) {

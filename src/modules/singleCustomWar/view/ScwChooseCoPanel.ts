@@ -7,7 +7,7 @@ namespace TinyWars.SingleCustomWar {
     import Notify           = Utility.Notify;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    export type OpenParamForChooseCoPanel = {
+    type OpenDataForScwChooseCoPanel = {
         war         : BaseWar.BwWar;
         playerIndex : number;
     }
@@ -17,8 +17,6 @@ namespace TinyWars.SingleCustomWar {
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: ScwChooseCoPanel;
-
-        private _openParam      : OpenParamForChooseCoPanel;
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
@@ -53,13 +51,12 @@ namespace TinyWars.SingleCustomWar {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(openParam: OpenParamForChooseCoPanel): void {
+        public static show(openData: OpenDataForScwChooseCoPanel): void {
             if (!ScwChooseCoPanel._instance) {
                 ScwChooseCoPanel._instance = new ScwChooseCoPanel();
             }
 
-            ScwChooseCoPanel._instance._openParam = openParam;
-            ScwChooseCoPanel._instance.open();
+            ScwChooseCoPanel._instance.open(openData);
         }
         public static hide(): void {
             if (ScwChooseCoPanel._instance) {
@@ -137,7 +134,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _initListCo(): void {
-            const openParam     = this._openParam;
+            const openParam     = this._getOpenData<OpenDataForScwChooseCoPanel>();
             const selfCoId      = openParam.war.getPlayer(openParam.playerIndex).getCoId();
             const dataForListCo = this._createDataForListCo();
             this._dataForListCo = dataForListCo;
@@ -148,7 +145,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const data          : DataForCoRenderer[] = [];
-            const openParam     = this._openParam;
+            const openParam     = this._getOpenData<OpenDataForScwChooseCoPanel>();
             const war           = openParam.war;
             const playerIndex   = openParam.playerIndex;
 
