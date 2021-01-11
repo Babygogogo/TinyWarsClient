@@ -59,9 +59,9 @@ namespace TinyWars.MapManagement {
             ]);
 
             const availableCoIdSet  = this._availableCoIdSet;
-            const openParam         = this._getOpenData<OpenDataForMmWarRuleAvailableCoPanel>();
+            const openData          = this._getOpenData<OpenDataForMmWarRuleAvailableCoPanel>();
             availableCoIdSet.clear();
-            for (const coId of openParam.playerRule.availableCoIdList) {
+            for (const coId of openData.playerRule.availableCoIdList) {
                 availableCoIdSet.add(coId);
             }
 

@@ -244,8 +244,8 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedBtnEditWarEvent(e: egret.TouchEvent): void {
-            // TODO
-            FloatText.show("TODO");
+            this.close();
+            MeWePanel.show();
         }
 
         private _onTouchedBtnAddWarEvent(e: egret.TouchEvent): void {

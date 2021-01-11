@@ -13,10 +13,9 @@ namespace TinyWars.MultiCustomRoom {
     import NetMessage       = ProtoTypes.NetMessage;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export type OpenParamForRoomBasicSettingsPage = {
+    export type OpenDataForMcrRoomBasicSettingsPage = {
         roomId  : number;
     }
-
     export class McrRoomBasicSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle        : TinyWars.GameUi.UiButton;
         private _labelMapName           : TinyWars.GameUi.UiLabel;
@@ -63,8 +62,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
         private _listPlayer             : TinyWars.GameUi.UiScrollList;
 
-        protected _openData  : OpenParamForRoomBasicSettingsPage;
-        private _roomInfo       : ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
+        private _roomInfo               : ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
 
         public constructor() {
             super();
@@ -95,7 +93,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnChangeCo.setTextColor(0x00FF00);
             this._btnModifyReady.setTextColor(0x00FF00);
 
-            const roomId    = this._openData.roomId;
+            const roomId    = this._getOpenData<OpenDataForMcrRoomBasicSettingsPage>().roomId;
             this._roomInfo  = await McrModel.getRoomInfo(roomId);
 
             this._updateComponentsForLanguage();

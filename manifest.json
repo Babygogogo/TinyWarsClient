@@ -168,6 +168,8 @@
 		"bin-debug/modules/mapEditor/view/MeWarPanel.js",
 		"bin-debug/modules/mapEditor/view/MeWarRulePanel.js",
 		"bin-debug/modules/mapEditor/view/MeWarView.js",
+		"bin-debug/modules/mapEditor/view/MeWeEventsPage.js",
+		"bin-debug/modules/mapEditor/view/MeWePanel.js",
 		"bin-debug/modules/mapManagement/view/MmAcceptMapPanel.js",
 		"bin-debug/modules/mapManagement/view/MmAvailabilityChangePanel.js",
 		"bin-debug/modules/mapManagement/view/MmAvailabilityListPanel.js",

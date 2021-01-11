@@ -59,14 +59,14 @@ namespace TinyWars.RankMatchRoom {
                     pageClass   : RmrWarBasicSettingsPage,
                     pageData    : {
                         warInfo
-                    } as OpenParamForWarBasicSettingsPage,
+                    } as OpenDataForRmrWarBasicSettingsPage,
                 },
                 {
                     tabItemData: { name: Lang.getText(Lang.Type.B0003) },
                     pageClass  : RmrWarAdvancedSettingsPage,
                     pageData    : {
                         warInfo
-                    } as OpenParamForWarAdvancedSettingsPage,
+                    } as OpenDataForWarAdvancedSettingsPage,
                 },
             ]);
 

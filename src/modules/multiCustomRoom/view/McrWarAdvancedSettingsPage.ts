@@ -9,7 +9,7 @@ namespace TinyWars.MultiCustomRoom {
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export type OpenParamForWarAdvancedSettingsPage = {
+    export type OpenDataForMcrWarAdvancedSettingsPage = {
         warInfo : IMpwWarInfo;
     }
 
@@ -20,8 +20,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
         private _listPlayer         : TinyWars.GameUi.UiScrollList;
 
-        protected _openData  : OpenParamForWarAdvancedSettingsPage;
-        private _warInfo        : IMpwWarInfo;
+        private _warInfo            : IMpwWarInfo;
 
         public constructor() {
             super();
@@ -38,7 +37,7 @@ namespace TinyWars.MultiCustomRoom {
             ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            this._warInfo = this._openData.warInfo;
+            this._warInfo = this._getOpenData<OpenDataForMcrWarAdvancedSettingsPage>().warInfo;
 
             this._updateComponentsForLanguage();
         }

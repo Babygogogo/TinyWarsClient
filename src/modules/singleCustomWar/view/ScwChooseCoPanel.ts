@@ -134,8 +134,8 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _initListCo(): void {
-            const openParam     = this._getOpenData<OpenDataForScwChooseCoPanel>();
-            const selfCoId      = openParam.war.getPlayer(openParam.playerIndex).getCoId();
+            const openData      = this._getOpenData<OpenDataForScwChooseCoPanel>();
+            const selfCoId      = openData.war.getPlayer(openData.playerIndex).getCoId();
             const dataForListCo = this._createDataForListCo();
             this._dataForListCo = dataForListCo;
             this._listCo.bindData(dataForListCo);
@@ -145,9 +145,9 @@ namespace TinyWars.SingleCustomWar {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const data          : DataForCoRenderer[] = [];
-            const openParam     = this._getOpenData<OpenDataForScwChooseCoPanel>();
-            const war           = openParam.war;
-            const playerIndex   = openParam.playerIndex;
+            const openData      = this._getOpenData<OpenDataForScwChooseCoPanel>();
+            const war           = openData.war;
+            const playerIndex   = openData.playerIndex;
 
             let index = 0;
             for (const coBasicCfg of ConfigManager.getAvailableCoList(war.getConfigVersion())) {

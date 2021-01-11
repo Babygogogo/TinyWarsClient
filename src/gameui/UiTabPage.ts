@@ -16,7 +16,7 @@ namespace TinyWars.GameUi {
         private _notifyListenerArray    : Utility.Notify.Listener[];
         private _notifyPriority         = 0;
 
-        protected _openData             : any;
+        private _openData               : any;
 
         protected constructor() {
             super();
@@ -57,7 +57,7 @@ namespace TinyWars.GameUi {
         // Functions for open self.
         ////////////////////////////////////////////////////////////////////////////////
         public open(parent: egret.DisplayObjectContainer, data: any): void {
-            this._openData  = data;
+            this._setOpenData(data);
             parent.addChild(this);
 
             this._doOpen();
@@ -91,6 +91,13 @@ namespace TinyWars.GameUi {
             this._isOpening = isOpening;
         }
 
+        private _setOpenData(data: any): void {
+            this._openData = data;
+        }
+        protected _getOpenData<T>(): T {
+            return this._openData;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for close self.
         ////////////////////////////////////////////////////////////////////////////////
@@ -98,6 +105,8 @@ namespace TinyWars.GameUi {
             (this.parent) && (this.parent.removeChild(this));
 
             this._doClose();
+
+            this._setOpenData(undefined);
         }
 
         private _doClose(): void {

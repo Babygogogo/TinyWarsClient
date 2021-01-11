@@ -14,7 +14,7 @@ namespace TinyWars.RankMatchRoom {
     import IWarPlayerInfo   = ProtoTypes.Structure.IWarPlayerInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export type OpenParamForWarBasicSettingsPage = {
+    export type OpenDataForRmrWarBasicSettingsPage = {
         warInfo  : IMpwWarInfo;
     }
 
@@ -48,8 +48,7 @@ namespace TinyWars.RankMatchRoom {
         private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
         private _listPlayer             : TinyWars.GameUi.UiScrollList;
 
-        protected _openData     : OpenParamForWarBasicSettingsPage;
-        private _warInfo        : IMpwWarInfo;
+        private _warInfo                : IMpwWarInfo;
 
         public constructor() {
             super();
@@ -70,7 +69,7 @@ namespace TinyWars.RankMatchRoom {
             ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            this._warInfo = this._openData.warInfo;
+            this._warInfo = this._getOpenData<OpenDataForRmrWarBasicSettingsPage>().warInfo;
 
             this._updateComponentsForLanguage();
             this._updateComponentsForWarInfo();

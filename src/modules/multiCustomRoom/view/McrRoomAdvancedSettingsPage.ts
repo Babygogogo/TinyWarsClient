@@ -11,7 +11,7 @@ namespace TinyWars.MultiCustomRoom {
     import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export type OpenParamForRoomAdvancedSettingsPage = {
+    export type OpenDataForMcrRoomAdvancedSettingsPage = {
         roomId  : number;
     }
 
@@ -22,8 +22,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
         private _listPlayer         : TinyWars.GameUi.UiScrollList;
 
-        protected _openData  : OpenParamForRoomAdvancedSettingsPage;
-        private _roomInfo       : IMcrRoomInfo;
+        private _roomInfo           : IMcrRoomInfo;
 
         public constructor() {
             super();
@@ -41,7 +40,7 @@ namespace TinyWars.MultiCustomRoom {
             ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            const roomId    = this._openData.roomId;
+            const roomId    = this._getOpenData<OpenDataForMcrRoomAdvancedSettingsPage>().roomId;
             this._roomInfo  = await McrModel.getRoomInfo(roomId);
 
             this._updateComponentsForLanguage();

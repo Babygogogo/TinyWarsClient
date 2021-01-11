@@ -145,9 +145,9 @@ namespace TinyWars.MultiCustomRoom {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const data              : DataForCoRenderer[] = [];
-            const openParam         = this._getOpenData<OpenDataForMcrRoomChooseCoPanel>();
-            const roomInfo          = openParam.roomInfo;
-            const selfPlayerData    = openParam.selfPlayerData;
+            const openData          = this._getOpenData<OpenDataForMcrRoomChooseCoPanel>();
+            const roomInfo          = openData.roomInfo;
+            const selfPlayerData    = openData.selfPlayerData;
             const availableCoIdList = BwSettingsHelper.getAvailableCoIdList(roomInfo.settingsForCommon.warRule, selfPlayerData.playerIndex);
 
             let index = 0;

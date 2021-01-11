@@ -161,9 +161,9 @@ namespace TinyWars.RankMatchRoom {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const dataList          : DataForCoRenderer[] = [];
-            const openParam         = this._getOpenData<OpenDataForRmrRoomChooseCoPanel>();
-            const roomInfo          = openParam.roomInfo;
-            const availableCoIdList = RmrModel.SelfSettings.generateAvailableCoIdList(roomInfo, openParam.playerIndex);
+            const openData          = this._getOpenData<OpenDataForRmrRoomChooseCoPanel>();
+            const roomInfo          = openData.roomInfo;
+            const availableCoIdList = RmrModel.SelfSettings.generateAvailableCoIdList(roomInfo, openData.playerIndex);
 
             let index = 0;
             for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestFormalVersion())) {

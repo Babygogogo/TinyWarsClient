@@ -10,7 +10,7 @@ namespace TinyWars.RankMatchRoom {
     import IRmrRoomInfo     = ProtoTypes.RankMatchRoom.IRmrRoomInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export type OpenParamForRoomAdvancedSettingsPage = {
+    export type OpenDataForRmrRoomAdvancedSettingsPage = {
         roomId  : number;
     }
 
@@ -21,7 +21,6 @@ namespace TinyWars.RankMatchRoom {
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
         private _listPlayer         : TinyWars.GameUi.UiScrollList;
 
-        protected _openData  : OpenParamForRoomAdvancedSettingsPage;
         private _roomInfo       : IRmrRoomInfo;
 
         public constructor() {
@@ -40,7 +39,7 @@ namespace TinyWars.RankMatchRoom {
             ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            const roomId    = this._openData.roomId;
+            const roomId    = this._getOpenData<OpenDataForRmrRoomAdvancedSettingsPage>().roomId;
             this._roomInfo  = await RmrModel.getRoomInfo(roomId);
 
             this._updateComponentsForLanguage();

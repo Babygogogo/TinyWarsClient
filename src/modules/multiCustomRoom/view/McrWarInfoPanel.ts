@@ -59,14 +59,14 @@ namespace TinyWars.MultiCustomRoom {
                     pageClass   : McrWarBasicSettingsPage,
                     pageData    : {
                         warInfo
-                    } as OpenParamForWarBasicSettingsPage,
+                    } as OpenDataForMcrWarBasicSettingsPage,
                 },
                 {
                     tabItemData: { name: Lang.getText(Lang.Type.B0003) },
                     pageClass  : McrWarAdvancedSettingsPage,
                     pageData    : {
                         warInfo
-                    } as OpenParamForWarAdvancedSettingsPage,
+                    } as OpenDataForMcrWarAdvancedSettingsPage,
                 },
             ]);
 
