@@ -396,6 +396,40 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         return playerRuleDataList.length;
     }
 
+    export function moveWarEventId(warRule: IWarRule, warEventId: number, deltaIndex: number): void {
+        const warEventIdArray   = warRule.warEventIdList;
+        const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
+        if (currIndex < 0) {
+            Logger.error(`BwSettingsHelper.moveWarEventId() invalid currIndex.`);
+            return;
+        }
+
+        const newIndex = Math.max(0, Math.min(warEventIdArray.length - 1, currIndex + deltaIndex));
+        if (currIndex !== newIndex) {
+            warEventIdArray.splice(currIndex, 1);
+            warEventIdArray.splice(newIndex, 0, warEventId);
+        }
+    }
+    export function deleteWarEventId(warRule: IWarRule, warEventId: number): void {
+        const warEventIdArray   = warRule.warEventIdList;
+        const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
+        if (currIndex < 0) {
+            Logger.error(`BwSettingsHelper.deleteWarEventId() invalid currIndex.`);
+            return;
+        }
+
+        warEventIdArray.splice(currIndex, 1);
+    }
+    export function addWarEventId(warRule: IWarRule, warEventId: number): void {
+        const warEventIdArray = warRule.warEventIdList;
+        if (warEventIdArray.indexOf(warEventId) >= 0) {
+            Logger.error(`BwSettingsHelper.addWarEventId() the warEventId exists.`);
+            return;
+        }
+
+        warEventIdArray.push(warEventId);
+    }
+
     export function getRandomCoIdWithSettingsForCommon(settingsForCommon: ISettingsForCommon, playerIndex: number): number {
         const configVersion = settingsForCommon.configVersion;
         return getRandomCoIdWithCoIdList(getPlayerRule(settingsForCommon.warRule, playerIndex).availableCoIdList.filter(coId => {

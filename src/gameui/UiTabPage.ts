@@ -130,22 +130,27 @@ namespace TinyWars.GameUi {
         }
 
         private _registerListeners(): void {
-            if (this._notifyListenerArray) {
-                Utility.Notify.addEventListeners(this._notifyListenerArray, this);
+            const notifyListenerArray = this._getNotifyListenerArray();
+            if (notifyListenerArray) {
+                Utility.Notify.addEventListeners(notifyListenerArray, this);
             }
-            if (this._uiListenerArray) {
-                for (const l of this._uiListenerArray) {
+
+            const uiListenerArray = this._getUiListenerArray();
+            if (uiListenerArray) {
+                for (const l of uiListenerArray) {
                     l.ui.addEventListener(l.eventType || egret.TouchEvent.TOUCH_TAP, l.callback, l.thisObject || this);
                 }
             }
         }
-
         private _unregisterListeners(): void {
-            if (this._notifyListenerArray) {
-                Utility.Notify.removeEventListeners(this._notifyListenerArray, this);
+            const notifyListenerArray = this._getNotifyListenerArray();
+            if (notifyListenerArray) {
+                Utility.Notify.removeEventListeners(notifyListenerArray, this);
             }
-            if (this._uiListenerArray) {
-                for (const l of this._uiListenerArray) {
+
+            const uiListenerArray = this._getUiListenerArray();
+            if (uiListenerArray) {
+                for (const l of uiListenerArray) {
                     l.ui.removeEventListener(l.eventType || egret.TouchEvent.TOUCH_TAP, l.callback, l.thisObject || this);
                 }
             }

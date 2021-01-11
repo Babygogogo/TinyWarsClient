@@ -1,0 +1,165 @@
+
+namespace TinyWars.MapEditor {
+    import Notify           = Utility.Notify;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Lang             = Utility.Lang;
+    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+
+    type OpenDataForMeAddWarEventId = {
+        warRule     : ProtoTypes.WarRule.IWarRule;
+    }
+
+    export class MeAddWarEventToRulePanel extends GameUi.UiPanel {
+        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+        protected readonly _IS_EXCLUSIVE = false;
+
+        private static _instance: MeAddWarEventToRulePanel;
+
+        private _listWarEvent   : GameUi.UiScrollList;
+        private _labelTitle     : GameUi.UiLabel;
+        private _labelNoWarEvent: GameUi.UiLabel;
+        private _btnClose       : GameUi.UiButton;
+
+        private _openData       : OpenDataForMeAddWarEventId;
+
+        public static show(openData: OpenDataForMeAddWarEventId): void {
+            if (!MeAddWarEventToRulePanel._instance) {
+                MeAddWarEventToRulePanel._instance = new MeAddWarEventToRulePanel();
+            }
+            MeAddWarEventToRulePanel._instance._openData = openData;
+            MeAddWarEventToRulePanel._instance.open();
+        }
+
+        public static hide(): void {
+            if (MeAddWarEventToRulePanel._instance) {
+                MeAddWarEventToRulePanel._instance.close();
+            }
+        }
+
+        private constructor() {
+            super();
+
+            this._setIsAutoAdjustHeight(true);
+            this._setIsTouchMaskEnabled(true);
+            this._setIsCloseOnTouchedMask();
+            this.skinName = "resource/skins/mapEditor/MeAddWarEventToRulePanel.exml";
+        }
+
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            ]);
+            this._setUiListenerArray([
+                { ui: this._btnClose,       callback: this.close },
+            ]);
+            this._listWarEvent.setItemRenderer(WarEventRenderer);
+
+            this._updateView();
+        }
+
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
+        private _updateView(): void {
+            this._updateComponentsForLanguage();
+            this._updateListMessageAndLabelNoMessage();
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._labelTitle.text       = Lang.getText(Lang.Type.B0468);
+            this._labelNoWarEvent.text  = Lang.getText(Lang.Type.B0278);
+            this._btnClose.label        = Lang.getText(Lang.Type.B0146);
+        }
+        private _updateListMessageAndLabelNoMessage(): void {
+            const dataArray : DataForMessageRenderer[] = [];
+            const warRule   = this._openData.warRule;
+            for (const warEvent of MeManager.getWar().getWarEventManager().getWarEventData().eventList || []) {
+                dataArray.push({
+                    warEventId  : warEvent.eventId,
+                    warRule,
+                });
+            }
+
+            this._labelNoWarEvent.visible = !dataArray.length;
+            this._listWarEvent.bindData(dataArray.sort((v1, v2) => v1.warEventId - v2.warEventId));
+        }
+    }
+
+    type DataForMessageRenderer = {
+        warEventId  : number;
+        warRule     : ProtoTypes.WarRule.IWarRule;
+    }
+    class WarEventRenderer extends GameUi.UiListItemRenderer {
+        private _labelId    : GameUi.UiLabel;
+        private _btnDelete  : GameUi.UiButton;
+        private _labelName  : GameUi.UiLabel;
+        private _btnAdd     : GameUi.UiButton;
+
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnAdd,     callback: this._onTouchedBtnAdd },
+                { ui: this._btnDelete,  callback: this._onTouchedBtnDelete },
+            ]);
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MeWarEventIdArrayChanged,   callback: this._onNotifyMeWarEventIdArrayChanged },
+            ]);
+            this._updateComponentsForLanguage();
+            this._btnDelete.setTextColor(0xFF0000);
+        }
+
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+        private _onNotifyMeWarEventIdArrayChanged(e: egret.Event): void {
+            this._updateBtnAddAndBtnDelete();
+        }
+        private _onTouchedBtnAdd(e: egret.TouchEvent): void {
+            const data = this.data as DataForMessageRenderer;
+            if (data) {
+                BwSettingsHelper.addWarEventId(data.warRule, data.warEventId);
+                Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
+            }
+        }
+        private _onTouchedBtnDelete(e: egret.TouchEvent): void {
+            const data = this.data as DataForMessageRenderer;
+            if (data) {
+                BwSettingsHelper.deleteWarEventId(data.warRule, data.warEventId);
+                Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
+            }
+        }
+
+        protected async dataChanged(): Promise<void> {
+            super.dataChanged();
+
+            const data          = this.data as DataForMessageRenderer;
+            this._labelId.text  = `#${data.warEventId}`;
+            this._updateLabelName();
+            this._updateBtnAddAndBtnDelete();
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._btnDelete.label   = Lang.getText(Lang.Type.B0220);
+            this._btnAdd.label      = Lang.getText(Lang.Type.B0467);
+
+            this._updateLabelName();
+        }
+
+        private _updateLabelName(): void {
+            const data              = this.data as DataForMessageRenderer;
+            this._labelName.text    = data
+                ? Lang.getTextInLanguage(MeManager.getWar().getWarEventManager().getWarEvent(data.warEventId).eventNameList)
+                : undefined;
+        }
+
+        private _updateBtnAddAndBtnDelete(): void {
+            const data = this.data as DataForMessageRenderer;
+            if (data) {
+                const isAdded               = data.warRule.warEventIdList.indexOf(data.warEventId) >= 0;
+                this._btnAdd.visible        = !isAdded;
+                this._btnDelete.visible     = isAdded;
+            }
+        }
+    }
+}

@@ -149,6 +149,9 @@
                 <e:Group x="10" y="84" width="800">
                     <GameUi:UiLabel id="_labelWarEventListTitle" text="战局事件列表" textColor="0xFFFFFF" y="0" size="20"
                                     horizontalCenter="0" locked="true" />
+                    <GameUi:UiButton id="_btnTestWarEvent" label="测试"
+                                     skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" left="0"
+                                     top="0" locked="true" />
                     <e:Group y="0" right="0" locked="true">
                         <GameUi:UiButton id="_btnAddWarEvent" label="新增"
                                          skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" x="0" y="0" />

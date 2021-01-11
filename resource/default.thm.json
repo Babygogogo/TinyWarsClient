@@ -31,6 +31,7 @@
 		"resource/skins/login/LoginBackgroundPanel.exml",
 		"resource/skins/login/LoginPanel.exml",
 		"resource/skins/login/RegisterPanel.exml",
+		"resource/skins/mapEditor/MeAddWarEventToRulePanel.exml",
 		"resource/skins/mapEditor/MeAvailableCoPanel.exml",
 		"resource/skins/mapEditor/MeBackgroundPanel.exml",
 		"resource/skins/mapEditor/MeChooseTileBasePanel.exml",

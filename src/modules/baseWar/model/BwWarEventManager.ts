@@ -19,13 +19,13 @@ namespace TinyWars.BaseWar {
         private _calledCountList?   : IDataForWarEventCalledCount[] | null | undefined;
 
         public init(data: ISerialWarEventManager): BwWarEventManager | undefined {
-            this._setWarEventData(data.warEventData);
+            this.setWarEventData(data.warEventData);
             this._setCalledCountList(data.calledCountList);
 
             return this;
         }
         public fastInit(data: ISerialWarEventManager): BwWarEventManager {
-            this._setWarEventData(Helpers.deepClone(data.warEventData));
+            this.setWarEventData(Helpers.deepClone(data.warEventData));
             this._setCalledCountList(Helpers.deepClone(data.calledCountList));
 
             return this;
@@ -55,7 +55,7 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
-        private _setWarEventData(data: IDataForWarEvent | null | undefined): void {
+        public setWarEventData(data: IDataForWarEvent | null | undefined): void {
             this._warEventData = data;
         }
         public getWarEventData(): IDataForWarEvent | undefined | null {
@@ -931,60 +931,4 @@ namespace TinyWars.BaseWar {
 
         return undefined;
     }
-
-    /*
-    const testWarEventData: ProtoTypes.Map.IDataForWarEvent = {
-        conditionList: [                        // 条件列表
-            {
-                WecCommonData: {
-                    conditionId : 1,            // 条件id
-                    isNot       : false,        // 不取反
-                },
-                WecPlayerIndexInTurnEqualTo: {
-                    valueEqualTo: 2,            // 在进入p2回合时满足条件
-                },
-            },
-        ],
-        conditionNodeList: [                    // 条件组合节点，用于对上面的条件进行排列组合
-            {
-                nodeId          : 1,
-                isAnd           : true,
-                subNodeIdList   : null,
-                conditionIdList : [1],
-            }
-        ],
-        actionList: [                           // 动作列表
-            {
-                WarEventActionCommonData: {
-                    actionId    : 1,            // 动作id
-                },
-                WarEventActionAddUnit: {        // 增加部队
-                    unitList: [
-                        {
-                            canBeBlockedByUnit  : false,    // 是否会被指定位置的已有部队阻断增援
-                            needMovableTile     : true,     // 是否自动寻找合适的地形，比如海军不在陆地上刷出
-                            unitData            : {         // 部队属性
-                                gridIndex       : { x: 10, y: 1 },
-                                unitType        : 8,
-                                playerIndex     : 2,
-                                currentHp       : 89,
-                            },
-                        }
-                    ],
-                },
-            },
-        ],
-        eventList: [                            // 事件列表
-            {
-                eventId                     : 1,                // 事件id，在地图规则中被引用
-                eventNameList               : ["一大坨增援"],   // 自定义名称
-                maxCallCountInPlayerTurn    : 1,                // 每回合最多1次
-                maxCallCountTotal           : 1,                // 每局最多一次
-                conditionNodeId             : 1,                // 条件组合id，满足时执行动作列表
-                actionIdList                : [1, 1, 1, 1, 1, ],// 动作id列表，
-                // 动作1是刷出1个坦克，这里指定执行5次，而且坦克不会被已有部队阻断，所以执行时就直接刷出5个坦克
-            },
-        ],
-    };
-    */
 }

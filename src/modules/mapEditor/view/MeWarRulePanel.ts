@@ -43,6 +43,7 @@ namespace TinyWars.MapEditor {
         private _imgAvailabilityWr      : GameUi.UiImage;
 
         private _labelWarEventListTitle : GameUi.UiLabel;
+        private _btnTestWarEvent        : GameUi.UiButton;
         private _btnAddWarEvent         : GameUi.UiButton;
         private _btnEditWarEvent        : GameUi.UiButton;
         private _listWarEvent           : GameUi.UiScrollList;
@@ -81,8 +82,9 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MeWarRuleNameChanged,   callback: this._onNotifyMeWarRuleNameChanged },
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MeWarRuleNameChanged,       callback: this._onNotifyMeWarRuleNameChanged },
+                { type: Notify.Type.MeWarEventIdArrayChanged,   callback: this._onNotifyMeWarEventIdArrayChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,                callback: this._onTouchTapBtnBack },
@@ -97,6 +99,7 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnAvailabilityWr,      callback: this._onTouchedBtnAvailabilityWr },
                 { ui: this._btnEditWarEvent,        callback: this._onTouchedBtnEditWarEvent },
                 { ui: this._btnAddWarEvent,         callback: this._onTouchedBtnAddWarEvent },
+                { ui: this._btnTestWarEvent,        callback: this._onTouchedBtnTestWarEvent },
             ]);
             this._listWarRule.setItemRenderer(WarRuleNameRenderer);
             this._listWarEvent.setItemRenderer(WarEventRenderer);
@@ -146,6 +149,10 @@ namespace TinyWars.MapEditor {
 
         private _onNotifyMeWarRuleNameChanged(e: egret.Event): void {
             this._updateLabelRuleName(this._selectedRule);
+        }
+
+        private _onNotifyMeWarEventIdArrayChanged(e: egret.Event): void {
+            this._updateListWarEvent();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
@@ -242,8 +249,84 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedBtnAddWarEvent(e: egret.TouchEvent): void {
-            // TODO
-            FloatText.show("TODO");
+            MeAddWarEventToRulePanel.show({
+                warRule : this._selectedRule,
+            });
+        }
+
+        private _onTouchedBtnTestWarEvent(e: egret.TouchEvent): void {
+            const testData: ProtoTypes.Map.IDataForWarEvent = {
+                conditionList: [                        // 条件列表
+                    {
+                        WecCommonData: {
+                            conditionId : 1,            // 条件id
+                            isNot       : false,        // 不取反
+                        },
+                        WecPlayerIndexInTurnEqualTo: {
+                            valueEqualTo: 2,            // 在进入p2回合时满足条件
+                        },
+                    },
+                ],
+                conditionNodeList: [                    // 条件组合节点，用于对上面的条件进行排列组合
+                    {
+                        nodeId          : 1,
+                        isAnd           : true,
+                        subNodeIdList   : null,
+                        conditionIdList : [1],
+                    }
+                ],
+                actionList: [                           // 动作列表
+                    {
+                        WarEventActionCommonData: {
+                            actionId    : 1,            // 动作id
+                        },
+                        WarEventActionAddUnit: {        // 增加部队
+                            unitList: [
+                                {
+                                    canBeBlockedByUnit  : false,    // 是否会被指定位置的已有部队阻断增援
+                                    needMovableTile     : true,     // 是否自动寻找合适的地形，比如海军不在陆地上刷出
+                                    unitData            : {         // 部队属性
+                                        gridIndex       : { x: 10, y: 1 },
+                                        unitType        : 8,
+                                        playerIndex     : 2,
+                                        currentHp       : 89,
+                                    },
+                                }
+                            ],
+                        },
+                    },
+                ],
+                eventList: [                            // 事件列表
+                    {
+                        eventId                     : 1,                // 事件id，在地图规则中被引用
+                        eventNameList               : [
+                            { languageType: Types.LanguageType.Chinese, text: `一大坨增援` },
+                            { languageType: Types.LanguageType.English, text: `Reinforcement` },
+                        ],                                              // 自定义名称
+                        maxCallCountInPlayerTurn    : 1,                // 每回合最多1次
+                        maxCallCountTotal           : 1,                // 每局最多一次
+                        conditionNodeId             : 1,                // 条件组合id，满足时执行动作列表
+                        actionIdList                : [1, 1, 1, 1, 1, ],// 动作id列表，
+                        // 动作1是刷出1个坦克，这里指定执行5次，而且坦克不会被已有部队阻断，所以执行时就直接刷出5个坦克
+                    },
+                    {
+                        eventId                     : 2,                // 事件id，在地图规则中被引用
+                        eventNameList               : [
+                            { languageType: Types.LanguageType.Chinese, text: `一大坨增援2` },
+                            { languageType: Types.LanguageType.English, text: `Reinforcement2` },
+                        ],                                              // 自定义名称
+                        maxCallCountInPlayerTurn    : 1,                // 每回合最多1次
+                        maxCallCountTotal           : 1,                // 每局最多一次
+                        conditionNodeId             : 1,                // 条件组合id，满足时执行动作列表
+                        actionIdList                : [1, 1, 1, 1, 1, ],// 动作id列表，
+                        // 动作1是刷出1个坦克，这里指定执行5次，而且坦克不会被已有部队阻断，所以执行时就直接刷出5个坦克
+                    },
+                ],
+            };
+
+            this._war.getWarEventManager().setWarEventData(testData);
+            this._selectedRule.warEventIdList = [1, 2];
+            this._updateListWarEvent();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -256,6 +339,7 @@ namespace TinyWars.MapEditor {
             this._btnAddRule.visible        = canModify;
             this._btnAddWarEvent.visible    = canModify;
             this._btnEditWarEvent.visible   = canModify;
+            this._btnTestWarEvent.visible   = window.CLIENT_VERSION === "DEVELOP";
             this._btnBack.setTextColor(0x00FF00);
             this._btnAvailabilityMcw.setTextColor(colorForButtons);
             this._btnAvailabilityRank.setTextColor(colorForButtons);
@@ -312,7 +396,7 @@ namespace TinyWars.MapEditor {
             this._updateImgAvailabilityScw(rule);
             this._updateImgAvailabilityRank(rule);
             this._updateImgAvailabilityWr(rule);
-            this._updateListWarEvent(rule);
+            this._updateListWarEvent();
             this._updateListPlayerRule(rule);
         }
 
@@ -334,9 +418,19 @@ namespace TinyWars.MapEditor {
         private _updateImgAvailabilityWr(rule: IWarRule): void {
             this._imgAvailabilityWr.visible = rule ? rule.ruleAvailability.canWr : false;
         }
-        private _updateListWarEvent(rule: IWarRule): void {
-            // TODO
-            this._listWarEvent.bindData(["", ""]);
+        private _updateListWarEvent(): void {
+            const dataArray         : DataForWarEventRenderer[] = [];
+            const warRule           = this._selectedRule;
+            const warEventManager   = this._war.getWarEventManager();
+            for (const warEventId of warRule.warEventIdList || []) {
+                dataArray.push({
+                    panel   : this,
+                    warEventManager,
+                    warEventId,
+                    warRule,
+                });
+            }
+            this._listWarEvent.bindData(dataArray);
         }
         private _updateListPlayerRule(rule: IWarRule): void {
             const playerRuleDataList    = rule ? rule.ruleForPlayers.playerRuleDataList : null;
@@ -809,7 +903,10 @@ namespace TinyWars.MapEditor {
     }
 
     type DataForWarEventRenderer = {
-
+        panel           : MeWarRulePanel;
+        warEventManager : MeWarEventManager;
+        warEventId      : number;
+        warRule         : IWarRule;
     };
     class WarEventRenderer extends GameUi.UiListItemRenderer {
         private _labelWarEventIdTitle   : GameUi.UiLabel;
@@ -833,16 +930,25 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedBtnUp(e: egret.TouchEvent): void {
-            // TODO
-            FloatText.show("TODO");
+            const data = this.data as DataForWarEventRenderer;
+            if (data) {
+                BwSettingsHelper.moveWarEventId(data.warRule, data.warEventId, -1);
+                Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
+            }
         }
         private _onTouchedBtnDown(e: egret.TouchEvent): void {
-            // TODO
-            FloatText.show("TODO");
+            const data = this.data as DataForWarEventRenderer;
+            if (data) {
+                BwSettingsHelper.moveWarEventId(data.warRule, data.warEventId, 1);
+                Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
+            }
         }
         private _onTouchedBtnDelete(e: egret.TouchEvent): void {
-            // TODO
-            FloatText.show("TODO");
+            const data = this.data as DataForWarEventRenderer;
+            if (data) {
+                BwSettingsHelper.deleteWarEventId(data.warRule, data.warEventId);
+                Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
+            }
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
@@ -851,9 +957,8 @@ namespace TinyWars.MapEditor {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForWarEventRenderer;
-            // TODO
-            this._labelWarEventId.text = "TODO";
+            const data                  = this.data as DataForWarEventRenderer;
+            this._labelWarEventId.text  = `${data.warEventId}`;
             this._updateLabelWarEventName();
         }
 
@@ -865,8 +970,10 @@ namespace TinyWars.MapEditor {
             this._updateLabelWarEventName();
         }
         private _updateLabelWarEventName(): void {
-            // TODO
-            this._labelWarEventName.text = "TODO";
+            const data = this.data as DataForWarEventRenderer;
+            if (data) {
+                this._labelWarEventName.text = Lang.getTextInLanguage(data.warEventManager.getWarEvent(data.warEventId).eventNameList);
+            }
         }
     }
 
