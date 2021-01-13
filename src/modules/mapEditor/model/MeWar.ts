@@ -101,8 +101,8 @@ namespace TinyWars.MapEditor {
             this.setMapModifiedTime(mapRawData.modifiedTime);
             this.setMapDesignerUserId(mapRawData.designerUserId);
             this.setMapDesignerName(mapRawData.designerName);
-            this.setMapNameList(mapRawData.mapNameList);
-            this.setWarRuleList(mapRawData.warRuleList || [warData.settingsForCommon.warRule]);
+            this.setMapNameArray(mapRawData.mapNameArray);
+            this.setWarRuleArray(mapRawData.warRuleArray || [warData.settingsForCommon.warRule]);
             this.setMapTag(mapRawData.mapTag);
         }
 
@@ -210,16 +210,16 @@ namespace TinyWars.MapEditor {
             return {
                 designerName            : this.getMapDesignerName(),
                 designerUserId          : this.getMapDesignerUserId(),
-                mapNameList             : this.getMapNameList(),
+                mapNameArray            : this.getMapNameArray(),
                 mapWidth                : mapSize.width,
                 mapHeight               : mapSize.height,
                 playersCountUnneutral   : (this.getField() as MeField).getMaxPlayerIndex(),
                 modifiedTime            : Time.TimeModel.getServerTimestamp(),
-                tileDataList            : this.getTileMap().serialize().tiles,
-                unitDataList            : unitMap.serialize().units,
-                warRuleList             : this.getWarRuleList(),
+                tileDataArray           : this.getTileMap().serialize().tiles,
+                unitDataArray           : unitMap.serialize().units,
+                warRuleArray            : this.getWarRuleArray(),
                 mapTag                  : this.getMapTag(),
-                warEventData            : this.getWarEventManager().getWarEventData(),
+                warEventFullData        : this.getWarEventManager().getWarEventFullData(),
             };
         }
 
@@ -278,10 +278,10 @@ namespace TinyWars.MapEditor {
             this._mapDesignerName = value;
         }
 
-        public getMapNameList(): ILanguageText[] {
+        public getMapNameArray(): ILanguageText[] {
             return this._mapNameList;
         }
-        public setMapNameList(value: ILanguageText[]) {
+        public setMapNameArray(value: ILanguageText[]) {
             this._mapNameList = value;
         }
 
@@ -299,18 +299,18 @@ namespace TinyWars.MapEditor {
             this._isMapModified = hasSubmitted;
         }
 
-        public getWarRuleList(): IWarRule[] {
+        public getWarRuleArray(): IWarRule[] {
             return this._warRuleList;
         }
-        public setWarRuleList(value: IWarRule[]) {
+        public setWarRuleArray(value: IWarRule[]) {
             this._warRuleList = value;
         }
         public getWarRuleByRuleId(ruleId: number): IWarRule {
-            return this.getWarRuleList().find(v => v.ruleId === ruleId);
+            return this.getWarRuleArray().find(v => v.ruleId === ruleId);
         }
 
         public reviseWarRuleList(): void {
-            const ruleList = this.getWarRuleList();
+            const ruleList = this.getWarRuleArray();
             if (!ruleList.length) {
                 this.addWarRule();
             } else {
@@ -321,11 +321,11 @@ namespace TinyWars.MapEditor {
             }
         }
         public addWarRule(): void {
-            const ruleList = this.getWarRuleList();
+            const ruleList = this.getWarRuleArray();
             ruleList.push(BwSettingsHelper.createDefaultWarRule(ruleList.length, (this.getField() as MeField).getMaxPlayerIndex()));
         }
         public deleteWarRule(ruleId: number): void {
-            const ruleList  = this.getWarRuleList();
+            const ruleList  = this.getWarRuleArray();
             const ruleIndex = ruleList.findIndex(v => v.ruleId === ruleId);
             if (ruleIndex >= 0) {
                 ruleList.splice(ruleIndex, 1);
@@ -334,10 +334,10 @@ namespace TinyWars.MapEditor {
                 }
             }
         }
-        public setWarRuleNameList(ruleId: number, nameList: ILanguageText[]): void {
+        public setWarRuleNameList(ruleId: number, nameArray: ILanguageText[]): void {
             const rule = this.getWarRuleByRuleId(ruleId);
             if (rule) {
-                rule.ruleNameList = nameList;
+                rule.ruleNameArray = nameArray;
             }
         }
 

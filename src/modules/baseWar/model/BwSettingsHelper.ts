@@ -9,6 +9,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
     import LanguageType         = Types.LanguageType;
     import WarSettings          = ProtoTypes.WarSettings;
     import WarRule              = ProtoTypes.WarRule;
+    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
     import ISettingsForCommon   = WarSettings.ISettingsForCommon;
     import IDataForPlayerRule   = WarRule.IDataForPlayerRule;
     import IWarRule             = WarRule.IWarRule;
@@ -18,7 +19,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         playerIndex             : CommonConstants.WarNeutralPlayerIndex,
         teamIndex               : 0,
         attackPowerModifier     : 0,
-        availableCoIdList       : [0],
+        availableCoIdArray      : [0],
         energyGrowthMultiplier  : 100,
         initialEnergyPercentage : 0,
         initialFund             : 0,
@@ -280,13 +281,13 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             return undefined;
         }
 
-        const coIdList = playerRule.availableCoIdList;
-        if ((coIdList == null) || (!coIdList.length)) {
+        const coIdArray = playerRule.availableCoIdArray;
+        if ((coIdArray == null) || (!coIdArray.length)) {
             Logger.error(`BwSettingsHelper.getAvailableCoIdList() empty coIdList.`);
             return undefined;
         }
 
-        return coIdList;
+        return coIdArray;
     }
     export function addAvailableCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
         const coIdList = getAvailableCoIdList(warRule, playerIndex);
@@ -371,13 +372,13 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             return undefined;
         }
 
-        const playerRuleDataList = ruleForPlayers.playerRuleDataList;
-        if (playerRuleDataList == null) {
-            Logger.error(`BwSettingsHelper.getPlayerRule() empty playerRuleDataList.`);
+        const playerRuleDataArray = ruleForPlayers.playerRuleDataArray;
+        if (playerRuleDataArray == null) {
+            Logger.error(`BwSettingsHelper.getPlayerRule() empty playerRuleDataArray.`);
             return undefined;
         }
 
-        return playerRuleDataList.find(v => v.playerIndex === playerIndex);
+        return playerRuleDataArray.find(v => v.playerIndex === playerIndex);
     }
 
     export function getPlayersCount(warRule: IWarRule): number {
@@ -387,17 +388,17 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             return undefined;
         }
 
-        const playerRuleDataList = ruleForPlayers.playerRuleDataList;
-        if (playerRuleDataList == null) {
-            Logger.error(`BwSettingsHelper.getPlayersCount() empty playerRuleDataList.`);
+        const playerRuleDataArray = ruleForPlayers.playerRuleDataArray;
+        if (playerRuleDataArray == null) {
+            Logger.error(`BwSettingsHelper.getPlayersCount() empty playerRuleDataArray.`);
             return undefined;
         }
 
-        return playerRuleDataList.length;
+        return playerRuleDataArray.length;
     }
 
     export function moveWarEventId(warRule: IWarRule, warEventId: number, deltaIndex: number): void {
-        const warEventIdArray   = warRule.warEventIdList;
+        const warEventIdArray   = warRule.warEventIdArray;
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
             Logger.error(`BwSettingsHelper.moveWarEventId() invalid currIndex.`);
@@ -411,7 +412,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         }
     }
     export function deleteWarEventId(warRule: IWarRule, warEventId: number): void {
-        const warEventIdArray   = warRule.warEventIdList;
+        const warEventIdArray   = warRule.warEventIdArray;
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
             Logger.error(`BwSettingsHelper.deleteWarEventId() invalid currIndex.`);
@@ -421,7 +422,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         warEventIdArray.splice(currIndex, 1);
     }
     export function addWarEventId(warRule: IWarRule, warEventId: number): void {
-        const warEventIdArray = warRule.warEventIdList;
+        const warEventIdArray = warRule.warEventIdArray;
         if (warEventIdArray.indexOf(warEventId) >= 0) {
             Logger.error(`BwSettingsHelper.addWarEventId() the warEventId exists.`);
             return;
@@ -432,7 +433,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
 
     export function getRandomCoIdWithSettingsForCommon(settingsForCommon: ISettingsForCommon, playerIndex: number): number {
         const configVersion = settingsForCommon.configVersion;
-        return getRandomCoIdWithCoIdList(getPlayerRule(settingsForCommon.warRule, playerIndex).availableCoIdList.filter(coId => {
+        return getRandomCoIdWithCoIdList(getPlayerRule(settingsForCommon.warRule, playerIndex).availableCoIdArray.filter(coId => {
             const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
             return (cfg != null) && (cfg.isEnabled);
         }));
@@ -452,7 +453,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
     export function createDefaultWarRule(ruleId: number, playersCount: number): IWarRule {
         return {
             ruleId,
-            ruleNameList    : [
+            ruleNameArray   : [
                 { languageType: LanguageType.Chinese, text: Lang.getTextWithLanguage(Lang.Type.B0001, LanguageType.Chinese) },
                 { languageType: LanguageType.English, text: Lang.getTextWithLanguage(Lang.Type.B0001, LanguageType.English) },
             ],
@@ -466,7 +467,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
                 hasFogByDefault : false,
             },
             ruleForPlayers: {
-                playerRuleDataList: createDefaultPlayerRuleList(playersCount),
+                playerRuleDataArray: createDefaultPlayerRuleList(playersCount),
             },
         }
     }
@@ -490,41 +491,41 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             visionRangeModifier     : CommonConstants.WarRuleVisionRangeModifierDefault,
             luckLowerLimit          : CommonConstants.WarRuleLuckDefaultLowerLimit,
             luckUpperLimit          : CommonConstants.WarRuleLuckDefaultUpperLimit,
-            availableCoIdList       : ConfigManager.getAvailableCoList(ConfigManager.getLatestFormalVersion()).map(v => v.coId),
+            availableCoIdArray      : ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion()).map(v => v.coId),
         }
     }
     export function reviseWarRule(warRule: IWarRule, playersCount: number): void {
         const ruleForPlayers = warRule.ruleForPlayers;
-        if (!ruleForPlayers.playerRuleDataList) {
-            ruleForPlayers.playerRuleDataList = [];
+        if (!ruleForPlayers.playerRuleDataArray) {
+            ruleForPlayers.playerRuleDataArray = [];
         }
 
-        const playerRuleDataList = ruleForPlayers.playerRuleDataList;
-        for (let index = 0; index < playerRuleDataList.length; ++index) {
-            const playerRule = playerRuleDataList[index];
+        const playerRuleDataArray = ruleForPlayers.playerRuleDataArray;
+        for (let index = 0; index < playerRuleDataArray.length; ++index) {
+            const playerRule = playerRuleDataArray[index];
             if (playerRule.playerIndex > playersCount) {
-                playerRuleDataList.splice(index, 1);
+                playerRuleDataArray.splice(index, 1);
                 --index;
                 continue;
             }
         }
 
-        for (const playerRule of playerRuleDataList) {
+        for (const playerRule of playerRuleDataArray) {
             playerRule.teamIndex = Math.min(playerRule.teamIndex, playersCount);
         }
 
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
-            if (playerRuleDataList.find(v => v.playerIndex === playerIndex) == null) {
-                playerRuleDataList.push(createDefaultPlayerRule(playerIndex));
+            if (playerRuleDataArray.find(v => v.playerIndex === playerIndex) == null) {
+                playerRuleDataArray.push(createDefaultPlayerRule(playerIndex));
             }
         }
     }
 
-    export function checkIsValidWarRule(rule: IWarRule, warEventData: ProtoTypes.Map.IDataForWarEvent): boolean {
-        const ruleNameList = rule.ruleNameList;
-        if ((!ruleNameList)                             ||
-            (!Helpers.checkIsValidLanguageTextList({
-                list            : ruleNameList,
+    export function checkIsValidWarRule(rule: IWarRule, warEventData: IWarEventFullData): boolean {
+        const ruleNameArray = rule.ruleNameArray;
+        if ((!ruleNameArray)                             ||
+            (!Helpers.checkIsValidLanguageTextArray({
+                list            : ruleNameArray,
                 minTextLength   : 1,
                 maxTextLength   : CommonConstants.WarRuleNameMaxLength,
             }))
@@ -547,9 +548,9 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             return false;
         }
 
-        const warEventList = warEventData ? warEventData.eventList || [] : [];
-        for (const warEventId of rule.warEventIdList || []) {
-            if (!warEventList.some(v => v.eventId === warEventId)) {
+        const warEventArray = warEventData ? warEventData.eventArray || [] : [];
+        for (const warEventId of rule.warEventIdArray || []) {
+            if (!warEventArray.some(v => v.eventId === warEventId)) {
                 return false;
             }
         }
@@ -563,19 +564,19 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             return undefined;
         }
 
-        const ruleList = ruleForPlayers.playerRuleDataList;
-        if (!ruleList) {
+        const ruleArray = ruleForPlayers.playerRuleDataArray;
+        if (!ruleArray) {
             return false;
         }
 
-        const playersCount = ruleList.length;
+        const playersCount = ruleArray.length;
         if (playersCount < 2) {
             return false;
         }
 
         const playerIndexSet    = new Set<number>();
         const teamIndexSet      = new Set<number>();
-        for (const data of ruleList) {
+        for (const data of ruleArray) {
             const playerIndex   = data.playerIndex;
             const teamIndex     = data.teamIndex;
             if ((playerIndex    ==  null)                                       ||
@@ -590,7 +591,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             }
 
             const {
-                initialFund,        availableCoIdList,      incomeMultiplier,       initialEnergyPercentage,    energyGrowthMultiplier,
+                initialFund,        availableCoIdArray,     incomeMultiplier,       initialEnergyPercentage,    energyGrowthMultiplier,
                 moveRangeModifier,  attackPowerModifier,    visionRangeModifier,    luckUpperLimit,             luckLowerLimit,
             } = data;
             if ((initialFund                == null)                                                    ||
@@ -621,9 +622,9 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
                 (luckUpperLimit             > CommonConstants.WarRuleLuckMaxLimit)                      ||
                 (luckUpperLimit             < CommonConstants.WarRuleLuckMinLimit)                      ||
                 (luckUpperLimit             < luckLowerLimit)                                           ||
-                (availableCoIdList          == null)                                                    ||
-                (availableCoIdList.every(v => v !== CommonConstants.CoEmptyId))                         ||
-                (availableCoIdList.some(coId => ConfigManager.getCoBasicCfg(configVersion, coId) == null))
+                (availableCoIdArray          == null)                                                    ||
+                (availableCoIdArray.every(v => v !== CommonConstants.CoEmptyId))                         ||
+                (availableCoIdArray.some(coId => ConfigManager.getCoBasicCfg(configVersion, coId) == null))
             ) {
                 return false;
             }

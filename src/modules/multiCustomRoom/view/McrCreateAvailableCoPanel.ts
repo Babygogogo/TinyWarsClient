@@ -242,7 +242,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestFormalVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);

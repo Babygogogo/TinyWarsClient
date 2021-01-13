@@ -88,7 +88,7 @@ namespace TinyWars.MapEditor {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const textList          = MeManager.getWar().getWarRuleByRuleId(this._getOpenData<OpenDataForModifyRuleNamePanel>().ruleId).ruleNameList;
+            const textList          = MeManager.getWar().getWarRuleByRuleId(this._getOpenData<OpenDataForModifyRuleNamePanel>().ruleId).ruleNameArray;
             this._inputChinese.text = Lang.getTextInLanguage(textList, Types.LanguageType.Chinese);
             this._inputEnglish.text = Lang.getTextInLanguage(textList, Types.LanguageType.English);
         }

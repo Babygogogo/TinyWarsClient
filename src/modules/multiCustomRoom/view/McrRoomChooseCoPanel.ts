@@ -151,7 +151,7 @@ namespace TinyWars.MultiCustomRoom {
             const availableCoIdList = BwSettingsHelper.getAvailableCoIdList(roomInfo.settingsForCommon.warRule, selfPlayerData.playerIndex);
 
             let index = 0;
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestFormalVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
                 if (availableCoIdList.indexOf(cfg.coId) >= 0) {
                     data.push({
                         roomInfo,

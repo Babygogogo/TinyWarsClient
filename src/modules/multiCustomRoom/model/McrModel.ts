@@ -192,7 +192,7 @@ namespace TinyWars.MultiCustomRoom {
                 setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
                 setSelfPlayerIndex(CommonConstants.WarFirstPlayerIndex);
 
-                const warRule = (await getMapRawData()).warRuleList.find(v => v.ruleAvailability.canMcw);
+                const warRule = (await getMapRawData()).warRuleArray.find(v => v.ruleAvailability.canMcw);
                 await resetDataByPresetWarRuleId(warRule ? warRule.ruleId : null);
             }
             export function getData(): DataForCreateRoom {
@@ -222,7 +222,7 @@ namespace TinyWars.MultiCustomRoom {
                     setSelfCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
 
                 } else {
-                    const warRule = mapRawData.warRuleList.find(warRule => warRule.ruleId === ruleId);
+                    const warRule = mapRawData.warRuleArray.find(warRule => warRule.ruleId === ruleId);
                     if (warRule == null) {
                         Logger.error(`McwModel.resetDataByPresetWarRuleId() empty warRule.`);
                         return undefined;
@@ -243,20 +243,20 @@ namespace TinyWars.MultiCustomRoom {
             }
             export async function tickPresetWarRuleId(): Promise<void> {
                 const currWarRuleId = getPresetWarRuleId();
-                const warRuleList   = (await getMapRawData()).warRuleList;
+                const warRuleArray  = (await getMapRawData()).warRuleArray;
                 if (currWarRuleId == null) {
-                    const warRule = warRuleList.find(v => v.ruleAvailability.canMcw);
+                    const warRule = warRuleArray.find(v => v.ruleAvailability.canMcw);
                     await resetDataByPresetWarRuleId(warRule ? warRule.ruleId : null);
                 } else {
                     const warRuleIdList: number[] = [];
-                    for (let ruleId = currWarRuleId + 1; ruleId < warRuleList.length; ++ ruleId) {
+                    for (let ruleId = currWarRuleId + 1; ruleId < warRuleArray.length; ++ ruleId) {
                         warRuleIdList.push(ruleId);
                     }
                     for (let ruleId = 0; ruleId < currWarRuleId; ++ruleId) {
                         warRuleIdList.push(ruleId);
                     }
                     for (const ruleId of warRuleIdList) {
-                        if (warRuleList.find(v => v.ruleId === ruleId).ruleAvailability.canMcw) {
+                        if (warRuleArray.find(v => v.ruleId === ruleId).ruleAvailability.canMcw) {
                             await resetDataByPresetWarRuleId(ruleId);
                             return;
                         }

@@ -148,7 +148,7 @@ namespace TinyWars.MultiCustomRoom {
             const availableCoIdList = McrModel.Create.getAvailableCoIdList(McrModel.Create.getSelfPlayerIndex());
 
             let index = 0;
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestFormalVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
                 if (availableCoIdList.indexOf(cfg.coId) >= 0) {
                     data.push({
                         coBasicCfg  : cfg,

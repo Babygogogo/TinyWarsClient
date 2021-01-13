@@ -23,8 +23,8 @@ namespace TinyWars.MapEditor {
                     coCurrentEnergy             : null,
                     coUsingSkillType            : Types.CoSkillType.Passive,
                     coIsDestroyedInTurn         : false,
-                    watchRequestSrcUserIdList   : [],
-                    watchOngoingSrcUserIdList   : [],
+                    watchRequestSrcUserIdArray  : [],
+                    watchOngoingSrcUserIdArray  : [],
                     restTimeToBoot              : 0,
                     unitAndTileSkinId           : playerIndex,
                 });

@@ -166,7 +166,7 @@ namespace TinyWars.RankMatchRoom {
             const availableCoIdList = RmrModel.SelfSettings.generateAvailableCoIdList(roomInfo, openData.playerIndex);
 
             let index = 0;
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestFormalVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
                 if (availableCoIdList.indexOf(cfg.coId) >= 0) {
                     dataList.push({
                         roomInfo,

@@ -61,7 +61,7 @@ namespace TinyWars.MapManagement {
             const availableCoIdSet  = this._availableCoIdSet;
             const openData          = this._getOpenData<OpenDataForMmWarRuleAvailableCoPanel>();
             availableCoIdSet.clear();
-            for (const coId of openData.playerRule.availableCoIdList) {
+            for (const coId of openData.playerRule.availableCoIdArray) {
                 availableCoIdSet.add(coId);
             }
 
@@ -136,7 +136,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestFormalVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);

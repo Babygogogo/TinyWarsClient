@@ -155,7 +155,7 @@ namespace TinyWars.MapManagement {
         private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
             const data  : DataForWarRuleNameRenderer[] = [];
             let index   = 0;
-            for (const rule of this._getOpenData<OpenDataForMmWarRulePanel>().warRuleList || []) {
+            for (const rule of this._getOpenData<OpenDataForMmWarRulePanel>().warRuleArray || []) {
                 data.push({
                     index,
                     rule,
@@ -179,7 +179,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _updateLabelRuleName(rule: IWarRule): void {
-            this._labelRuleName.text = (rule ? rule.ruleNameList || [] : []).join(",");
+            this._labelRuleName.text = (rule ? rule.ruleNameArray || [] : []).join(",");
         }
         private _updateImgHasFog(rule: IWarRule): void {
             this._imgHasFog.visible = rule ? rule.ruleForGlobalParams.hasFogByDefault : false;
@@ -197,7 +197,7 @@ namespace TinyWars.MapManagement {
             this._imgAvailabilityWr.visible = rule ? rule.ruleAvailability.canWr : false;
         }
         public updateListPlayerRule(rule: IWarRule): void {
-            const playerRuleDataList    = rule ? rule.ruleForPlayers.playerRuleDataList : null;
+            const playerRuleDataList    = rule ? rule.ruleForPlayers.playerRuleDataArray : null;
             const listPlayer            = this._listPlayer;
             if ((!playerRuleDataList) || (!playerRuleDataList.length)) {
                 listPlayer.clear();
@@ -316,7 +316,7 @@ namespace TinyWars.MapManagement {
         private _createDataAvailableCoIdList(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0403),
-                infoText                : `${playerRule.availableCoIdList.length}`,
+                infoText                : `${playerRule.availableCoIdArray.length}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     MmWarRuleAvailableCoPanel.show({

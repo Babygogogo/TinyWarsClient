@@ -45,7 +45,7 @@ namespace TinyWars.BaseWar {
                     return undefined;
                 }
 
-                resetMapFromPath(mapFromPath, mapSize, d.visibilityList);
+                resetMapFromPath(mapFromPath, mapSize, d.visibilityArray);
             }
 
             this._setMapSize(mapSize);
@@ -81,11 +81,11 @@ namespace TinyWars.BaseWar {
 
             const serialMapsFromPath: IDataForFogMapFromPath[] = [];
             for (const [playerIndex, map] of allMapsFromPath) {
-                const visibilityList = BwHelpers.getVisibilityListWithMapFromPath(map, mapSize);
-                if (visibilityList != null) {
+                const visibilityArray = BwHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                if (visibilityArray != null) {
                     serialMapsFromPath.push({
                         playerIndex,
-                        visibilityList,
+                        visibilityArray,
                     });
                 }
             }
@@ -108,11 +108,11 @@ namespace TinyWars.BaseWar {
                 if ((player.getAliveState() === Types.PlayerAliveState.Alive) &&
                     (targetTeamIndexes.has(player.getTeamIndex()))
                 ) {
-                    const visibilityList = BwHelpers.getVisibilityListWithMapFromPath(map, mapSize);
-                    if (visibilityList != null) {
+                    const visibilityArray = BwHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+                    if (visibilityArray != null) {
                         mapsFromPath.push({
                             playerIndex,
-                            visibilityList,
+                            visibilityArray,
                         });
                     }
                 }

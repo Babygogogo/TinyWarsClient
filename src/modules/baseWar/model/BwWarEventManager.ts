@@ -8,24 +8,24 @@ namespace TinyWars.BaseWar {
     import Logger                           = Utility.Logger;
     import ISerialWarEventManager           = ProtoTypes.WarSerialization.ISerialWarEventManager;
     import IDataForWarEventCalledCount      = ProtoTypes.WarSerialization.IDataForWarEventCalledCount;
-    import IDataForWarEvent                 = ProtoTypes.Map.IDataForWarEvent;
+    import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
     import WarEvent                         = ProtoTypes.WarEvent;
     import IExtraDataForSystemCallWarEvent  = ProtoTypes.WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent;
     import CommonConstants                  = ConfigManager.COMMON_CONSTANTS;
 
     export abstract class BwWarEventManager {
         private _war?               : BwWar;
-        private _warEventData?      : IDataForWarEvent | null | undefined;
+        private _warEventFullData?      : IWarEventFullData | null | undefined;
         private _calledCountList?   : IDataForWarEventCalledCount[] | null | undefined;
 
         public init(data: ISerialWarEventManager): BwWarEventManager | undefined {
-            this.setWarEventData(data.warEventData);
+            this.setWarEventFullData(data.warEventFullData);
             this._setCalledCountList(data.calledCountList);
 
             return this;
         }
         public fastInit(data: ISerialWarEventManager): BwWarEventManager {
-            this.setWarEventData(Helpers.deepClone(data.warEventData));
+            this.setWarEventFullData(Helpers.deepClone(data.warEventFullData));
             this._setCalledCountList(Helpers.deepClone(data.calledCountList));
 
             return this;
@@ -33,14 +33,14 @@ namespace TinyWars.BaseWar {
 
         public serialize(): ISerialWarEventManager | undefined {
             return {
-                warEventData    : this.getWarEventData(),
-                calledCountList : this._getCalledCountList(),
+                warEventFullData    : this.getWarEventFullData(),
+                calledCountList     : this._getCalledCountList(),
             };
         }
         public serializeForSimulation(): ISerialWarEventManager | undefined {
             return {
-                warEventData    : this.getWarEventData(),
-                calledCountList : this._getCalledCountList(),
+                warEventFullData    : this.getWarEventFullData(),
+                calledCountList     : this._getCalledCountList(),
             };
         }
 
@@ -55,11 +55,11 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
-        public setWarEventData(data: IDataForWarEvent | null | undefined): void {
-            this._warEventData = data;
+        public setWarEventFullData(data: IWarEventFullData | null | undefined): void {
+            this._warEventFullData = data;
         }
-        public getWarEventData(): IDataForWarEvent | undefined | null {
-            return this._warEventData;
+        public getWarEventFullData(): IWarEventFullData | undefined | null {
+            return this._warEventFullData;
         }
 
         private _setCalledCountList(list: IDataForWarEventCalledCount[] | null | undefined): void {
@@ -77,9 +77,9 @@ namespace TinyWars.BaseWar {
             }
 
             const extraDataList : IExtraDataForSystemCallWarEvent[] = [];
-            const actionIdList  = event.actionIdList || [];
-            for (let index = 0; index < actionIdList.length; ++index) {
-                const extraData = await this._callWarAction(actionIdList[index], index, isFastExecute);
+            const actionIdArray = event.actionIdArray || [];
+            for (let index = 0; index < actionIdArray.length; ++index) {
+                const extraData = await this._callWarAction(actionIdArray[index], index, isFastExecute);
                 if (extraData) {
                     extraDataList.push(extraData);
                 }
@@ -101,9 +101,9 @@ namespace TinyWars.BaseWar {
             // TODO add more actions.
         }
         private async _callActionAddUnit(indexForActionIdList: number, action: WarEvent.IWarEventActionAddUnit, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | undefined> {
-            const unitList = action.unitList;
-            if (unitList == null) {
-                Logger.error(`BwWarEventManager._callActionAddUnit() empty unitList.`);
+            const unitArray = action.unitArray;
+            if (unitArray == null) {
+                Logger.error(`BwWarEventManager._callActionAddUnit() empty unitArray.`);
                 return undefined;
             }
 
@@ -145,7 +145,7 @@ namespace TinyWars.BaseWar {
 
             const playersCountUnneutral = playerManager.getTotalPlayersCount(false);
             const resultingUnitList     : ProtoTypes.WarSerialization.ISerialUnit[] = [];
-            for (const data of unitList) {
+            for (const data of unitArray) {
                 const { canBeBlockedByUnit, needMovableTile, unitData } = data;
                 if (canBeBlockedByUnit == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty canBeBlockedByUnit.`);
@@ -312,7 +312,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            for (const warEventId of warRule.warEventIdList || []) {
+            for (const warEventId of warRule.warEventIdArray || []) {
                 if (this._checkCanCallWarEvent(warEventId)) {
                     return warEventId;
                 }
@@ -367,9 +367,9 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const conditionIdList = node.conditionIdList;
-            if (conditionIdList) {
-                for (const conditionId of conditionIdList) {
+            const conditionIdArray = node.conditionIdArray;
+            if (conditionIdArray) {
+                for (const conditionId of conditionIdArray) {
                     const isConditionMet = this._checkIsMeetCondition(conditionId);
                     if (isConditionMet == null) {
                         Logger.error(`BwWarEventManager._checkIsMeetConditionNode() empty isConditionMet.`);
@@ -385,9 +385,9 @@ namespace TinyWars.BaseWar {
                 }
             }
 
-            const subNodeIdList = node.subNodeIdList;
-            if (subNodeIdList) {
-                for (const subNodeId of subNodeIdList) {
+            const subNodeIdArray = node.subNodeIdArray;
+            if (subNodeIdArray) {
+                for (const subNodeId of subNodeIdArray) {
                     const isSubNodeMet = this._checkIsMeetConditionNode(subNodeId);
                     if (isSubNodeMet == null) {
                         Logger.error(`BwWarEventManager._checkIsMeetConditionNode() empty isSubNodeMet.`);
@@ -403,7 +403,7 @@ namespace TinyWars.BaseWar {
                 }
             }
 
-            if ((!(conditionIdList || []).length) && (!(subNodeIdList || []).length)) {
+            if ((!(conditionIdArray || []).length) && (!(subNodeIdArray || []).length)) {
                 Logger.error(`BwWarEventManager._checkIsMeetConditionNode() empty conditionIdList and subNodeIdList.`);
                 return undefined;
             }
@@ -812,64 +812,64 @@ namespace TinyWars.BaseWar {
         }
 
         public getWarEvent(warEventId: number): WarEvent.IWarEvent | undefined {                    // DONE
-            const warEventData = this.getWarEventData();
+            const warEventData = this.getWarEventFullData();
             if (warEventData == null) {
                 Logger.error(`BwWarEventManager._getWarEvent() empty warEventData.`);
                 return undefined;
             }
 
-            const eventList = warEventData.eventList;
-            if (eventList == null) {
-                Logger.error(`BwWarEventManager._getWarEvent() empty eventList.`);
+            const eventArray = warEventData.eventArray;
+            if (eventArray == null) {
+                Logger.error(`BwWarEventManager._getWarEvent() empty eventArray.`);
                 return undefined;
             }
 
-            return eventList.find(v => v.eventId === warEventId);
+            return eventArray.find(v => v.eventId === warEventId);
         }
         private _getConditionNode(nodeId: number): WarEvent.IWarEventConditionNode | undefined {    // DONE
-            const warEventData = this.getWarEventData();
+            const warEventData = this.getWarEventFullData();
             if (warEventData == null) {
                 Logger.error(`BwWarEventManager._getConditionNode() empty warEventData.`);
                 return undefined;
             }
 
-            const list = warEventData.conditionNodeList;
-            if (list == null) {
-                Logger.error(`BwWarEventManager._getConditionNode() empty list.`);
+            const arr = warEventData.conditionNodeArray;
+            if (arr == null) {
+                Logger.error(`BwWarEventManager._getConditionNode() empty arr.`);
                 return undefined;
             }
 
-            return list.find(v => v.nodeId === nodeId);
+            return arr.find(v => v.nodeId === nodeId);
         }
         private _getCondition(conditionId: number): WarEvent.IWarEventCondition | undefined {       // DONE
-            const warEventData = this.getWarEventData();
+            const warEventData = this.getWarEventFullData();
             if (warEventData == null) {
                 Logger.error(`BwWarEventManager._getCondition() empty warEventData.`);
                 return undefined;
             }
 
-            const list = warEventData.conditionList;
-            if (list == null) {
-                Logger.error(`BwWarEventManager._getCondition() empty list.`);
+            const arr = warEventData.conditionArray;
+            if (arr == null) {
+                Logger.error(`BwWarEventManager._getCondition() empty arr.`);
                 return undefined;
             }
 
-            return list.find(v => v.WecCommonData.conditionId === conditionId);
+            return arr.find(v => v.WecCommonData.conditionId === conditionId);
         }
         public getWarEventAction(actionId: number): WarEvent.IWarEventAction | undefined {          // DONE
-            const warEventData = this.getWarEventData();
+            const warEventData = this.getWarEventFullData();
             if (warEventData == null) {
                 Logger.error(`BwWarEventManager._getAction() empty warEventData.`);
                 return undefined;
             }
 
-            const list = warEventData.actionList;
-            if (list == null) {
-                Logger.error(`BwWarEventManager._getAction() empty list.`);
+            const arr = warEventData.actionArray;
+            if (arr == null) {
+                Logger.error(`BwWarEventManager._getAction() empty arr.`);
                 return undefined;
             }
 
-            return list.find(v => v.WarEventActionCommonData.actionId === actionId);
+            return arr.find(v => v.WarEventActionCommonData.actionId === actionId);
         }
     }
 

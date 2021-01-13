@@ -890,7 +890,7 @@ namespace TinyWars.BaseWar.BwHelpers {
     }
 
     export function getTeamIndexByRuleForPlayers(ruleForPlayers: IRuleForPlayers, playerIndex: number): number | null | undefined {
-        for (const playerRule of ruleForPlayers.playerRuleDataList || []) {
+        for (const playerRule of ruleForPlayers.playerRuleDataArray || []) {
             if (playerRule.playerIndex === playerIndex) {
                 return playerRule.teamIndex;
             }
@@ -898,7 +898,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         return undefined;
     }
 
-    export function getVisibilityListWithMapFromPath(map: Visibility[][], mapSize: MapSize): Visibility[] | undefined {
+    export function getVisibilityArrayWithMapFromPath(map: Visibility[][], mapSize: MapSize): Visibility[] | undefined {
         const { width, height } = mapSize;
         const data              = new Array(width * height);
         let needSerialize       = false;

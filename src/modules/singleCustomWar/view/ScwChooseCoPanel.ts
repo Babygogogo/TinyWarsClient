@@ -150,7 +150,7 @@ namespace TinyWars.SingleCustomWar {
             const playerIndex   = openData.playerIndex;
 
             let index = 0;
-            for (const coBasicCfg of ConfigManager.getAvailableCoList(war.getConfigVersion())) {
+            for (const coBasicCfg of ConfigManager.getAvailableCoArray(war.getConfigVersion())) {
                 data.push({
                     war,
                     playerIndex,

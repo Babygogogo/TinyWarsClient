@@ -149,7 +149,7 @@ namespace TinyWars.MapEditor {
             const data          : DataForCoRenderer[] = [];
             const playerIndex   = this._getOpenData<OpenDataForSimChooseCoPanel>().playerIndex;
             let index           = 0;
-            for (const cfg of ConfigManager.getAvailableCoList(MeModel.Sim.getWarData().settingsForCommon.configVersion)) {
+            for (const cfg of ConfigManager.getAvailableCoArray(MeModel.Sim.getWarData().settingsForCommon.configVersion)) {
                 data.push({
                     playerIndex,
                     coBasicCfg  : cfg,

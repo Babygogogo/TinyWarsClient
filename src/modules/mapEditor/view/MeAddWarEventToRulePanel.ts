@@ -71,7 +71,7 @@ namespace TinyWars.MapEditor {
         private _updateListMessageAndLabelNoMessage(): void {
             const dataArray : DataForMessageRenderer[] = [];
             const warRule   = this._getOpenData<OpenDataForMeAddWarEventId>().warRule;
-            for (const warEvent of MeManager.getWar().getWarEventManager().getWarEventData().eventList || []) {
+            for (const warEvent of MeManager.getWar().getWarEventManager().getWarEventFullData().eventArray || []) {
                 dataArray.push({
                     warEventId  : warEvent.eventId,
                     warRule,
@@ -146,14 +146,14 @@ namespace TinyWars.MapEditor {
         private _updateLabelName(): void {
             const data              = this.data as DataForMessageRenderer;
             this._labelName.text    = data
-                ? Lang.getTextInLanguage(MeManager.getWar().getWarEventManager().getWarEvent(data.warEventId).eventNameList)
+                ? Lang.getTextInLanguage(MeManager.getWar().getWarEventManager().getWarEvent(data.warEventId).eventNameArray)
                 : undefined;
         }
 
         private _updateBtnAddAndBtnDelete(): void {
             const data = this.data as DataForMessageRenderer;
             if (data) {
-                const isAdded               = data.warRule.warEventIdList.indexOf(data.warEventId) >= 0;
+                const isAdded               = data.warRule.warEventIdArray.indexOf(data.warEventId) >= 0;
                 this._btnAdd.visible        = !isAdded;
                 this._btnDelete.visible     = isAdded;
             }

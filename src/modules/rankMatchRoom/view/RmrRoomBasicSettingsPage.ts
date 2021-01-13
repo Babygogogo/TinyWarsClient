@@ -220,7 +220,7 @@ namespace TinyWars.RankMatchRoom {
                 const selfUserId        = User.UserModel.getSelfUserId();
                 const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
                 if ((selfPlayerData != null)                                                                                            &&
-                    ((roomInfo.settingsForRmw.dataListForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex) == null)
+                    ((roomInfo.settingsForRmw.dataArrayForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex) == null)
                 ) {
                     RmrRoomAvailableCoPanel.show({ roomInfo, srcPlayerIndex: selfPlayerData.playerIndex });
                 }
@@ -331,7 +331,7 @@ namespace TinyWars.RankMatchRoom {
 
             (!group.parent) && (this._groupSelfInfo.addChild(group));
 
-            const dataForBanCo  = (roomInfo.settingsForRmw.dataListForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex);
+            const dataForBanCo  = (roomInfo.settingsForRmw.dataArrayForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex);
             const label         = this._labelBanCo;
             const btn           = this._btnBanCo;
             if (dataForBanCo) {

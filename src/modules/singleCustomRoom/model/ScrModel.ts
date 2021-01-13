@@ -80,7 +80,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         export async function resetCreateWarDataByPresetWarRuleId(ruleId: number): Promise<void> {
-            const warRule = (await getCreateWarMapRawData()).warRuleList.find(warRule => warRule.ruleId === ruleId);
+            const warRule = (await getCreateWarMapRawData()).warRuleArray.find(warRule => warRule.ruleId === ruleId);
             if (warRule == null) {
                 Logger.error(`ScwModel.setCreateWarPresetWarRuleId() empty warRule.`);
                 return undefined;
@@ -104,7 +104,7 @@ namespace TinyWars.SingleCustomRoom {
             if (currWarRuleId == null) {
                 await resetCreateWarDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
             } else {
-                await resetCreateWarDataByPresetWarRuleId((currWarRuleId + 1) % (await getCreateWarMapRawData()).warRuleList.length);
+                await resetCreateWarDataByPresetWarRuleId((currWarRuleId + 1) % (await getCreateWarMapRawData()).warRuleArray.length);
             }
         }
 
@@ -153,7 +153,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         export function setCreateWarCoId(playerIndex: number, coId: number): void {
-            const availableCoIdList = getCreateWarPlayerRule(playerIndex).availableCoIdList;
+            const availableCoIdList = getCreateWarPlayerRule(playerIndex).availableCoIdArray;
             if (availableCoIdList.indexOf(coId) < 0) {
                 setCreateWarPresetWarRuleId(null);
                 availableCoIdList.push(coId);
@@ -261,7 +261,7 @@ namespace TinyWars.SingleCustomRoom {
 
         export function getCreateWarInvalidParamTips(): string | null{
             const teamSet = new Set<number>();
-            for (const playerRule of getCreateWarData().settingsForCommon.warRule.ruleForPlayers.playerRuleDataList) {
+            for (const playerRule of getCreateWarData().settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray) {
                 teamSet.add(playerRule.teamIndex);
             }
             if (teamSet.size <= 1) {

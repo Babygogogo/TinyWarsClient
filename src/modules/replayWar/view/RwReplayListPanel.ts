@@ -205,7 +205,7 @@ namespace TinyWars.ReplayWar {
                 const mapRawData    = await WarMapModel.getRawData(data.info.replayBriefInfo.mapId);
                 const tileMapView   = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-                tileMapView.updateWithTileDataList(mapRawData.tileDataList);
+                tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
 
                 const unitMapView = new WarMap.WarMapUnitMapView();
                 unitMapView.initWithMapRawData(mapRawData);

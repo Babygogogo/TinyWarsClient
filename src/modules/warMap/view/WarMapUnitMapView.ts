@@ -34,7 +34,7 @@ namespace TinyWars.WarMap {
             this._reviseZOrderForAllUnits();
         }
         public initWithMapRawData(mapRawData: ProtoTypes.Map.IMapRawData): void {
-            this.initWithDataList(_createUnitViewDataList(mapRawData.unitDataList));
+            this.initWithDataList(_createUnitViewDataList(mapRawData.unitDataArray));
         }
 
         private _onNotifyUnitAnimationTick(e: egret.Event): void {

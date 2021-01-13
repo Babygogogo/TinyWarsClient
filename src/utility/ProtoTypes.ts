@@ -2172,8 +2172,8 @@ export declare namespace Map {
         /** DataForMapWarStatistics warType */
         warType?: (number|null);
 
-        /** DataForMapWarStatistics playerStatisticsList */
-        playerStatisticsList?: (Map.IDataForMapWarPlayerStatistics[]|null);
+        /** DataForMapWarStatistics playerStatisticsArray */
+        playerStatisticsArray?: (Map.IDataForMapWarPlayerStatistics[]|null);
     }
 
     /** Represents a DataForMapWarStatistics. */
@@ -2194,8 +2194,8 @@ export declare namespace Map {
         /** DataForMapWarStatistics warType. */
         public warType: number;
 
-        /** DataForMapWarStatistics playerStatisticsList. */
-        public playerStatisticsList: Map.IDataForMapWarPlayerStatistics[];
+        /** DataForMapWarStatistics playerStatisticsArray. */
+        public playerStatisticsArray: Map.IDataForMapWarPlayerStatistics[];
 
         /**
          * Creates a new DataForMapWarStatistics instance using the specified properties.
@@ -2472,109 +2472,109 @@ export declare namespace Map {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a DataForWarEvent. */
-    interface IDataForWarEvent {
+    /** Properties of a WarEventFullData. */
+    interface IWarEventFullData {
 
-        /** DataForWarEvent conditionList */
-        conditionList?: (WarEvent.IWarEventCondition[]|null);
+        /** WarEventFullData conditionArray */
+        conditionArray?: (WarEvent.IWarEventCondition[]|null);
 
-        /** DataForWarEvent conditionNodeList */
-        conditionNodeList?: (WarEvent.IWarEventConditionNode[]|null);
+        /** WarEventFullData conditionNodeArray */
+        conditionNodeArray?: (WarEvent.IWarEventConditionNode[]|null);
 
-        /** DataForWarEvent actionList */
-        actionList?: (WarEvent.IWarEventAction[]|null);
+        /** WarEventFullData actionArray */
+        actionArray?: (WarEvent.IWarEventAction[]|null);
 
-        /** DataForWarEvent eventList */
-        eventList?: (WarEvent.IWarEvent[]|null);
+        /** WarEventFullData eventArray */
+        eventArray?: (WarEvent.IWarEvent[]|null);
     }
 
-    /** Represents a DataForWarEvent. */
-    class DataForWarEvent implements IDataForWarEvent {
+    /** Represents a WarEventFullData. */
+    class WarEventFullData implements IWarEventFullData {
 
         /**
-         * Constructs a new DataForWarEvent.
+         * Constructs a new WarEventFullData.
          * @param [properties] Properties to set
          */
-        constructor(properties?: Map.IDataForWarEvent);
+        constructor(properties?: Map.IWarEventFullData);
 
-        /** DataForWarEvent conditionList. */
-        public conditionList: WarEvent.IWarEventCondition[];
+        /** WarEventFullData conditionArray. */
+        public conditionArray: WarEvent.IWarEventCondition[];
 
-        /** DataForWarEvent conditionNodeList. */
-        public conditionNodeList: WarEvent.IWarEventConditionNode[];
+        /** WarEventFullData conditionNodeArray. */
+        public conditionNodeArray: WarEvent.IWarEventConditionNode[];
 
-        /** DataForWarEvent actionList. */
-        public actionList: WarEvent.IWarEventAction[];
+        /** WarEventFullData actionArray. */
+        public actionArray: WarEvent.IWarEventAction[];
 
-        /** DataForWarEvent eventList. */
-        public eventList: WarEvent.IWarEvent[];
+        /** WarEventFullData eventArray. */
+        public eventArray: WarEvent.IWarEvent[];
 
         /**
-         * Creates a new DataForWarEvent instance using the specified properties.
+         * Creates a new WarEventFullData instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns DataForWarEvent instance
+         * @returns WarEventFullData instance
          */
-        public static create(properties?: Map.IDataForWarEvent): Map.DataForWarEvent;
+        public static create(properties?: Map.IWarEventFullData): Map.WarEventFullData;
 
         /**
-         * Encodes the specified DataForWarEvent message. Does not implicitly {@link Map.DataForWarEvent.verify|verify} messages.
-         * @param message DataForWarEvent message or plain object to encode
+         * Encodes the specified WarEventFullData message. Does not implicitly {@link Map.WarEventFullData.verify|verify} messages.
+         * @param message WarEventFullData message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: Map.IDataForWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: Map.IWarEventFullData, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified DataForWarEvent message, length delimited. Does not implicitly {@link Map.DataForWarEvent.verify|verify} messages.
-         * @param message DataForWarEvent message or plain object to encode
+         * Encodes the specified WarEventFullData message, length delimited. Does not implicitly {@link Map.WarEventFullData.verify|verify} messages.
+         * @param message WarEventFullData message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: Map.IDataForWarEvent, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: Map.IWarEventFullData, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a DataForWarEvent message from the specified reader or buffer.
+         * Decodes a WarEventFullData message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns DataForWarEvent
+         * @returns WarEventFullData
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Map.DataForWarEvent;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Map.WarEventFullData;
 
         /**
-         * Decodes a DataForWarEvent message from the specified reader or buffer, length delimited.
+         * Decodes a WarEventFullData message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns DataForWarEvent
+         * @returns WarEventFullData
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Map.DataForWarEvent;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Map.WarEventFullData;
 
         /**
-         * Verifies a DataForWarEvent message.
+         * Verifies a WarEventFullData message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a DataForWarEvent message from a plain object. Also converts values to their respective internal types.
+         * Creates a WarEventFullData message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns DataForWarEvent
+         * @returns WarEventFullData
          */
-        public static fromObject(object: { [k: string]: any }): Map.DataForWarEvent;
+        public static fromObject(object: { [k: string]: any }): Map.WarEventFullData;
 
         /**
-         * Creates a plain object from a DataForWarEvent message. Also converts values to other types if specified.
-         * @param message DataForWarEvent
+         * Creates a plain object from a WarEventFullData message. Also converts values to other types if specified.
+         * @param message WarEventFullData
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: Map.DataForWarEvent, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: Map.WarEventFullData, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this DataForWarEvent to JSON.
+         * Converts this WarEventFullData to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -2586,8 +2586,8 @@ export declare namespace Map {
         /** MapComplexInfo availability */
         availability?: (Map.IDataForMapAvailability|null);
 
-        /** MapComplexInfo warStatisticsList */
-        warStatisticsList?: (Map.IDataForMapWarStatistics[]|null);
+        /** MapComplexInfo warStatisticsArray */
+        warStatisticsArray?: (Map.IDataForMapWarStatistics[]|null);
     }
 
     /** Represents a MapComplexInfo. */
@@ -2602,8 +2602,8 @@ export declare namespace Map {
         /** MapComplexInfo availability. */
         public availability?: (Map.IDataForMapAvailability|null);
 
-        /** MapComplexInfo warStatisticsList. */
-        public warStatisticsList: Map.IDataForMapWarStatistics[];
+        /** MapComplexInfo warStatisticsArray. */
+        public warStatisticsArray: Map.IDataForMapWarStatistics[];
 
         /**
          * Creates a new MapComplexInfo instance using the specified properties.
@@ -2688,8 +2688,8 @@ export declare namespace Map {
         /** MapRawData designerUserId */
         designerUserId?: (number|null);
 
-        /** MapRawData mapNameList */
-        mapNameList?: (Structure.ILanguageText[]|null);
+        /** MapRawData mapNameArray */
+        mapNameArray?: (Structure.ILanguageText[]|null);
 
         /** MapRawData mapWidth */
         mapWidth?: (number|null);
@@ -2703,17 +2703,17 @@ export declare namespace Map {
         /** MapRawData modifiedTime */
         modifiedTime?: (number|null);
 
-        /** MapRawData tileDataList */
-        tileDataList?: (WarSerialization.ISerialTile[]|null);
+        /** MapRawData tileDataArray */
+        tileDataArray?: (WarSerialization.ISerialTile[]|null);
 
-        /** MapRawData unitDataList */
-        unitDataList?: (WarSerialization.ISerialUnit[]|null);
+        /** MapRawData unitDataArray */
+        unitDataArray?: (WarSerialization.ISerialUnit[]|null);
 
-        /** MapRawData warRuleList */
-        warRuleList?: (WarRule.IWarRule[]|null);
+        /** MapRawData warRuleArray */
+        warRuleArray?: (WarRule.IWarRule[]|null);
 
-        /** MapRawData warEventData */
-        warEventData?: (Map.IDataForWarEvent|null);
+        /** MapRawData warEventFullData */
+        warEventFullData?: (Map.IWarEventFullData|null);
 
         /** MapRawData mapTag */
         mapTag?: (Map.IDataForMapTag|null);
@@ -2737,8 +2737,8 @@ export declare namespace Map {
         /** MapRawData designerUserId. */
         public designerUserId: number;
 
-        /** MapRawData mapNameList. */
-        public mapNameList: Structure.ILanguageText[];
+        /** MapRawData mapNameArray. */
+        public mapNameArray: Structure.ILanguageText[];
 
         /** MapRawData mapWidth. */
         public mapWidth: number;
@@ -2752,17 +2752,17 @@ export declare namespace Map {
         /** MapRawData modifiedTime. */
         public modifiedTime: number;
 
-        /** MapRawData tileDataList. */
-        public tileDataList: WarSerialization.ISerialTile[];
+        /** MapRawData tileDataArray. */
+        public tileDataArray: WarSerialization.ISerialTile[];
 
-        /** MapRawData unitDataList. */
-        public unitDataList: WarSerialization.ISerialUnit[];
+        /** MapRawData unitDataArray. */
+        public unitDataArray: WarSerialization.ISerialUnit[];
 
-        /** MapRawData warRuleList. */
-        public warRuleList: WarRule.IWarRule[];
+        /** MapRawData warRuleArray. */
+        public warRuleArray: WarRule.IWarRule[];
 
-        /** MapRawData warEventData. */
-        public warEventData?: (Map.IDataForWarEvent|null);
+        /** MapRawData warEventFullData. */
+        public warEventFullData?: (Map.IWarEventFullData|null);
 
         /** MapRawData mapTag. */
         public mapTag?: (Map.IDataForMapTag|null);
@@ -2964,8 +2964,8 @@ export declare namespace Map {
         /** MapBriefData designerName */
         designerName?: (string|null);
 
-        /** MapBriefData mapNameList */
-        mapNameList?: (Structure.ILanguageText[]|null);
+        /** MapBriefData mapNameArray */
+        mapNameArray?: (Structure.ILanguageText[]|null);
 
         /** MapBriefData mapTag */
         mapTag?: (Map.IDataForMapTag|null);
@@ -2989,8 +2989,8 @@ export declare namespace Map {
         /** MapBriefData designerName. */
         public designerName: string;
 
-        /** MapBriefData mapNameList. */
-        public mapNameList: Structure.ILanguageText[];
+        /** MapBriefData mapNameArray. */
+        public mapNameArray: Structure.ILanguageText[];
 
         /** MapBriefData mapTag. */
         public mapTag?: (Map.IDataForMapTag|null);
@@ -4638,11 +4638,11 @@ export declare namespace WarEvent {
         /** WarEventConditionNode isAnd */
         isAnd?: (boolean|null);
 
-        /** WarEventConditionNode subNodeIdList */
-        subNodeIdList?: (number[]|null);
+        /** WarEventConditionNode subNodeIdArray */
+        subNodeIdArray?: (number[]|null);
 
-        /** WarEventConditionNode conditionIdList */
-        conditionIdList?: (number[]|null);
+        /** WarEventConditionNode conditionIdArray */
+        conditionIdArray?: (number[]|null);
     }
 
     /** Represents a WarEventConditionNode. */
@@ -4660,11 +4660,11 @@ export declare namespace WarEvent {
         /** WarEventConditionNode isAnd. */
         public isAnd: boolean;
 
-        /** WarEventConditionNode subNodeIdList. */
-        public subNodeIdList: number[];
+        /** WarEventConditionNode subNodeIdArray. */
+        public subNodeIdArray: number[];
 
-        /** WarEventConditionNode conditionIdList. */
-        public conditionIdList: number[];
+        /** WarEventConditionNode conditionIdArray. */
+        public conditionIdArray: number[];
 
         /**
          * Creates a new WarEventConditionNode instance using the specified properties.
@@ -4830,8 +4830,8 @@ export declare namespace WarEvent {
     /** Properties of a WarEventActionAddUnit. */
     interface IWarEventActionAddUnit {
 
-        /** WarEventActionAddUnit unitList */
-        unitList?: (WarEvent.WarEventActionAddUnit.IDataForAddUnit[]|null);
+        /** WarEventActionAddUnit unitArray */
+        unitArray?: (WarEvent.WarEventActionAddUnit.IDataForAddUnit[]|null);
     }
 
     /** Represents a WarEventActionAddUnit. */
@@ -4843,8 +4843,8 @@ export declare namespace WarEvent {
          */
         constructor(properties?: WarEvent.IWarEventActionAddUnit);
 
-        /** WarEventActionAddUnit unitList. */
-        public unitList: WarEvent.WarEventActionAddUnit.IDataForAddUnit[];
+        /** WarEventActionAddUnit unitArray. */
+        public unitArray: WarEvent.WarEventActionAddUnit.IDataForAddUnit[];
 
         /**
          * Creates a new WarEventActionAddUnit instance using the specified properties.
@@ -5124,8 +5124,8 @@ export declare namespace WarEvent {
         /** WarEvent eventId */
         eventId?: (number|null);
 
-        /** WarEvent eventNameList */
-        eventNameList?: (Structure.ILanguageText[]|null);
+        /** WarEvent eventNameArray */
+        eventNameArray?: (Structure.ILanguageText[]|null);
 
         /** WarEvent maxCallCountInPlayerTurn */
         maxCallCountInPlayerTurn?: (number|null);
@@ -5136,8 +5136,8 @@ export declare namespace WarEvent {
         /** WarEvent conditionNodeId */
         conditionNodeId?: (number|null);
 
-        /** WarEvent actionIdList */
-        actionIdList?: (number[]|null);
+        /** WarEvent actionIdArray */
+        actionIdArray?: (number[]|null);
     }
 
     /** Represents a WarEvent. */
@@ -5152,8 +5152,8 @@ export declare namespace WarEvent {
         /** WarEvent eventId. */
         public eventId: number;
 
-        /** WarEvent eventNameList. */
-        public eventNameList: Structure.ILanguageText[];
+        /** WarEvent eventNameArray. */
+        public eventNameArray: Structure.ILanguageText[];
 
         /** WarEvent maxCallCountInPlayerTurn. */
         public maxCallCountInPlayerTurn: number;
@@ -5164,8 +5164,8 @@ export declare namespace WarEvent {
         /** WarEvent conditionNodeId. */
         public conditionNodeId: number;
 
-        /** WarEvent actionIdList. */
-        public actionIdList: number[];
+        /** WarEvent actionIdArray. */
+        public actionIdArray: number[];
 
         /**
          * Creates a new WarEvent instance using the specified properties.
@@ -5361,8 +5361,8 @@ export declare namespace WarRule {
         /** DataForPlayerRule luckUpperLimit */
         luckUpperLimit?: (number|null);
 
-        /** DataForPlayerRule availableCoIdList */
-        availableCoIdList?: (number[]|null);
+        /** DataForPlayerRule availableCoIdArray */
+        availableCoIdArray?: (number[]|null);
     }
 
     /** Represents a DataForPlayerRule. */
@@ -5407,8 +5407,8 @@ export declare namespace WarRule {
         /** DataForPlayerRule luckUpperLimit. */
         public luckUpperLimit: number;
 
-        /** DataForPlayerRule availableCoIdList. */
-        public availableCoIdList: number[];
+        /** DataForPlayerRule availableCoIdArray. */
+        public availableCoIdArray: number[];
 
         /**
          * Creates a new DataForPlayerRule instance using the specified properties.
@@ -5592,8 +5592,8 @@ export declare namespace WarRule {
     /** Properties of a RuleForPlayers. */
     interface IRuleForPlayers {
 
-        /** RuleForPlayers playerRuleDataList */
-        playerRuleDataList?: (WarRule.IDataForPlayerRule[]|null);
+        /** RuleForPlayers playerRuleDataArray */
+        playerRuleDataArray?: (WarRule.IDataForPlayerRule[]|null);
     }
 
     /** Represents a RuleForPlayers. */
@@ -5605,8 +5605,8 @@ export declare namespace WarRule {
          */
         constructor(properties?: WarRule.IRuleForPlayers);
 
-        /** RuleForPlayers playerRuleDataList. */
-        public playerRuleDataList: WarRule.IDataForPlayerRule[];
+        /** RuleForPlayers playerRuleDataArray. */
+        public playerRuleDataArray: WarRule.IDataForPlayerRule[];
 
         /**
          * Creates a new RuleForPlayers instance using the specified properties.
@@ -5775,8 +5775,8 @@ export declare namespace WarRule {
         /** WarRule ruleId */
         ruleId?: (number|null);
 
-        /** WarRule ruleNameList */
-        ruleNameList?: (Structure.ILanguageText[]|null);
+        /** WarRule ruleNameArray */
+        ruleNameArray?: (Structure.ILanguageText[]|null);
 
         /** WarRule ruleAvailability */
         ruleAvailability?: (WarRule.IDataForWarRuleAvailability|null);
@@ -5787,8 +5787,8 @@ export declare namespace WarRule {
         /** WarRule ruleForPlayers */
         ruleForPlayers?: (WarRule.IRuleForPlayers|null);
 
-        /** WarRule warEventIdList */
-        warEventIdList?: (number[]|null);
+        /** WarRule warEventIdArray */
+        warEventIdArray?: (number[]|null);
     }
 
     /** Represents a WarRule. */
@@ -5803,8 +5803,8 @@ export declare namespace WarRule {
         /** WarRule ruleId. */
         public ruleId: number;
 
-        /** WarRule ruleNameList. */
-        public ruleNameList: Structure.ILanguageText[];
+        /** WarRule ruleNameArray. */
+        public ruleNameArray: Structure.ILanguageText[];
 
         /** WarRule ruleAvailability. */
         public ruleAvailability?: (WarRule.IDataForWarRuleAvailability|null);
@@ -5815,8 +5815,8 @@ export declare namespace WarRule {
         /** WarRule ruleForPlayers. */
         public ruleForPlayers?: (WarRule.IRuleForPlayers|null);
 
-        /** WarRule warEventIdList. */
-        public warEventIdList: number[];
+        /** WarRule warEventIdArray. */
+        public warEventIdArray: number[];
 
         /**
          * Creates a new WarRule instance using the specified properties.
@@ -5889,91 +5889,91 @@ export declare namespace WarRule {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a WarRuleList. */
-    interface IWarRuleList {
+    /** Properties of a WarRuleArray. */
+    interface IWarRuleArray {
 
-        /** WarRuleList warRuleList */
-        warRuleList?: (WarRule.IWarRule[]|null);
+        /** WarRuleArray warRuleArray */
+        warRuleArray?: (WarRule.IWarRule[]|null);
     }
 
-    /** Represents a WarRuleList. */
-    class WarRuleList implements IWarRuleList {
+    /** Represents a WarRuleArray. */
+    class WarRuleArray implements IWarRuleArray {
 
         /**
-         * Constructs a new WarRuleList.
+         * Constructs a new WarRuleArray.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarRule.IWarRuleList);
+        constructor(properties?: WarRule.IWarRuleArray);
 
-        /** WarRuleList warRuleList. */
-        public warRuleList: WarRule.IWarRule[];
+        /** WarRuleArray warRuleArray. */
+        public warRuleArray: WarRule.IWarRule[];
 
         /**
-         * Creates a new WarRuleList instance using the specified properties.
+         * Creates a new WarRuleArray instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns WarRuleList instance
+         * @returns WarRuleArray instance
          */
-        public static create(properties?: WarRule.IWarRuleList): WarRule.WarRuleList;
+        public static create(properties?: WarRule.IWarRuleArray): WarRule.WarRuleArray;
 
         /**
-         * Encodes the specified WarRuleList message. Does not implicitly {@link WarRule.WarRuleList.verify|verify} messages.
-         * @param message WarRuleList message or plain object to encode
+         * Encodes the specified WarRuleArray message. Does not implicitly {@link WarRule.WarRuleArray.verify|verify} messages.
+         * @param message WarRuleArray message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarRule.IWarRuleList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarRule.IWarRuleArray, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified WarRuleList message, length delimited. Does not implicitly {@link WarRule.WarRuleList.verify|verify} messages.
-         * @param message WarRuleList message or plain object to encode
+         * Encodes the specified WarRuleArray message, length delimited. Does not implicitly {@link WarRule.WarRuleArray.verify|verify} messages.
+         * @param message WarRuleArray message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarRule.IWarRuleList, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarRule.IWarRuleArray, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a WarRuleList message from the specified reader or buffer.
+         * Decodes a WarRuleArray message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns WarRuleList
+         * @returns WarRuleArray
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarRule.WarRuleList;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarRule.WarRuleArray;
 
         /**
-         * Decodes a WarRuleList message from the specified reader or buffer, length delimited.
+         * Decodes a WarRuleArray message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns WarRuleList
+         * @returns WarRuleArray
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarRule.WarRuleList;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarRule.WarRuleArray;
 
         /**
-         * Verifies a WarRuleList message.
+         * Verifies a WarRuleArray message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a WarRuleList message from a plain object. Also converts values to their respective internal types.
+         * Creates a WarRuleArray message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns WarRuleList
+         * @returns WarRuleArray
          */
-        public static fromObject(object: { [k: string]: any }): WarRule.WarRuleList;
+        public static fromObject(object: { [k: string]: any }): WarRule.WarRuleArray;
 
         /**
-         * Creates a plain object from a WarRuleList message. Also converts values to other types if specified.
-         * @param message WarRuleList
+         * Creates a plain object from a WarRuleArray message. Also converts values to other types if specified.
+         * @param message WarRuleArray
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarRule.WarRuleList, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarRule.WarRuleArray, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this WarRuleList to JSON.
+         * Converts this WarRuleArray to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -6285,8 +6285,8 @@ export declare namespace WarSettings {
     /** Properties of a SettingsForRmw. */
     interface ISettingsForRmw {
 
-        /** SettingsForRmw dataListForBanCo */
-        dataListForBanCo?: (Structure.IDataForPlayerBanCo[]|null);
+        /** SettingsForRmw dataArrayForBanCo */
+        dataArrayForBanCo?: (Structure.IDataForPlayerBanCo[]|null);
     }
 
     /** Represents a SettingsForRmw. */
@@ -6298,8 +6298,8 @@ export declare namespace WarSettings {
          */
         constructor(properties?: WarSettings.ISettingsForRmw);
 
-        /** SettingsForRmw dataListForBanCo. */
-        public dataListForBanCo: Structure.IDataForPlayerBanCo[];
+        /** SettingsForRmw dataArrayForBanCo. */
+        public dataArrayForBanCo: Structure.IDataForPlayerBanCo[];
 
         /**
          * Creates a new SettingsForRmw instance using the specified properties.
@@ -6639,8 +6639,8 @@ export declare namespace WarSerialization {
         /** DataForFogMapFromPath playerIndex */
         playerIndex?: (number|null);
 
-        /** DataForFogMapFromPath visibilityList */
-        visibilityList?: (number[]|null);
+        /** DataForFogMapFromPath visibilityArray */
+        visibilityArray?: (number[]|null);
     }
 
     /** Represents a DataForFogMapFromPath. */
@@ -6655,8 +6655,8 @@ export declare namespace WarSerialization {
         /** DataForFogMapFromPath playerIndex. */
         public playerIndex: number;
 
-        /** DataForFogMapFromPath visibilityList. */
-        public visibilityList: number[];
+        /** DataForFogMapFromPath visibilityArray. */
+        public visibilityArray: number[];
 
         /**
          * Creates a new DataForFogMapFromPath instance using the specified properties.
@@ -7188,11 +7188,11 @@ export declare namespace WarSerialization {
         /** SerialPlayer coIsDestroyedInTurn */
         coIsDestroyedInTurn?: (boolean|null);
 
-        /** SerialPlayer watchOngoingSrcUserIdList */
-        watchOngoingSrcUserIdList?: (number[]|null);
+        /** SerialPlayer watchOngoingSrcUserIdArray */
+        watchOngoingSrcUserIdArray?: (number[]|null);
 
-        /** SerialPlayer watchRequestSrcUserIdList */
-        watchRequestSrcUserIdList?: (number[]|null);
+        /** SerialPlayer watchRequestSrcUserIdArray */
+        watchRequestSrcUserIdArray?: (number[]|null);
 
         /** SerialPlayer restTimeToBoot */
         restTimeToBoot?: (number|null);
@@ -7240,11 +7240,11 @@ export declare namespace WarSerialization {
         /** SerialPlayer coIsDestroyedInTurn. */
         public coIsDestroyedInTurn: boolean;
 
-        /** SerialPlayer watchOngoingSrcUserIdList. */
-        public watchOngoingSrcUserIdList: number[];
+        /** SerialPlayer watchOngoingSrcUserIdArray. */
+        public watchOngoingSrcUserIdArray: number[];
 
-        /** SerialPlayer watchRequestSrcUserIdList. */
-        public watchRequestSrcUserIdList: number[];
+        /** SerialPlayer watchRequestSrcUserIdArray. */
+        public watchRequestSrcUserIdArray: number[];
 
         /** SerialPlayer restTimeToBoot. */
         public restTimeToBoot: number;
@@ -7920,8 +7920,8 @@ export declare namespace WarSerialization {
     /** Properties of a SerialWarEventManager. */
     interface ISerialWarEventManager {
 
-        /** SerialWarEventManager warEventData */
-        warEventData?: (Map.IDataForWarEvent|null);
+        /** SerialWarEventManager warEventFullData */
+        warEventFullData?: (Map.IWarEventFullData|null);
 
         /** SerialWarEventManager calledCountList */
         calledCountList?: (WarSerialization.IDataForWarEventCalledCount[]|null);
@@ -7936,8 +7936,8 @@ export declare namespace WarSerialization {
          */
         constructor(properties?: WarSerialization.ISerialWarEventManager);
 
-        /** SerialWarEventManager warEventData. */
-        public warEventData?: (Map.IDataForWarEvent|null);
+        /** SerialWarEventManager warEventFullData. */
+        public warEventFullData?: (Map.IWarEventFullData|null);
 
         /** SerialWarEventManager calledCountList. */
         public calledCountList: WarSerialization.IDataForWarEventCalledCount[];
@@ -14769,8 +14769,8 @@ export declare namespace Structure {
         /** DataForReviewWarRule reviewComment */
         reviewComment?: (string|null);
 
-        /** DataForReviewWarRule warRuleList */
-        warRuleList?: (WarRule.IWarRuleList|null);
+        /** DataForReviewWarRule warRuleArray */
+        warRuleArray?: (WarRule.IWarRuleArray|null);
     }
 
     /** Represents a DataForReviewWarRule. */
@@ -14797,8 +14797,8 @@ export declare namespace Structure {
         /** DataForReviewWarRule reviewComment. */
         public reviewComment: string;
 
-        /** DataForReviewWarRule warRuleList. */
-        public warRuleList?: (WarRule.IWarRuleList|null);
+        /** DataForReviewWarRule warRuleArray. */
+        public warRuleArray?: (WarRule.IWarRuleArray|null);
 
         /**
          * Creates a new DataForReviewWarRule instance using the specified properties.

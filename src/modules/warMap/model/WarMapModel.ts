@@ -52,7 +52,7 @@ namespace TinyWars.WarMap {
                 });
             }
 
-            new Promise((resolve, reject) => {
+            new Promise<void>((resolve, reject) => {
                 const callbackOnSucceed = (e: egret.Event): void => {
                     const data = e.data as MsgMapGetBriefDataIs;
                     if (data.mapId === mapId) {
@@ -101,7 +101,7 @@ namespace TinyWars.WarMap {
             if (!mapBriefData) {
                 return null;
             } else {
-                return Lang.getTextInLanguage(mapBriefData.mapNameList);
+                return Lang.getTextInLanguage(mapBriefData.mapNameArray);
             }
         }
         export async function getDesignerName(mapId: number): Promise<string | null> {
@@ -114,7 +114,7 @@ namespace TinyWars.WarMap {
                 return undefined;
             }
 
-            const warRule = (mapRawData.warRuleList || []).find(v => v.ruleId === warRuleId);
+            const warRule = (mapRawData.warRuleArray || []).find(v => v.ruleId === warRuleId);
             if (warRuleId == null) {
                 return undefined;
             }
@@ -124,7 +124,7 @@ namespace TinyWars.WarMap {
                 return undefined;
             }
 
-            return (ruleForPlayers.playerRuleDataList || []).find(v => v.playerIndex === playerIndex);
+            return (ruleForPlayers.playerRuleDataArray || []).find(v => v.playerIndex === playerIndex);
         }
         export async function getMultiPlayerTotalPlayedTimes(mapId: number): Promise<number> {
             const mapBriefData = await getBriefData(mapId);
@@ -134,7 +134,7 @@ namespace TinyWars.WarMap {
 
             const complexInfo   = mapBriefData.mapExtraData.mapComplexInfo;
             let totalTimes      = 0;
-            for (const info of complexInfo ? complexInfo.warStatisticsList || [] : []) {
+            for (const info of complexInfo ? complexInfo.warStatisticsArray || [] : []) {
                 if ((info.warType === WarType.McwFog) ||
                     (info.warType === WarType.McwStd) ||
                     (info.warType === WarType.RmwFog) ||
@@ -174,7 +174,7 @@ namespace TinyWars.WarMap {
                 });
             }
 
-            new Promise((resolve, reject) => {
+            new Promise<void>((resolve, reject) => {
                 const callbackOnSucceed = (e: egret.Event): void => {
                     const data = e.data as MsgMapGetRawDataIs;
                     if (data.mapId === mapId) {

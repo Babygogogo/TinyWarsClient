@@ -367,9 +367,9 @@ namespace TinyWars.RankMatchRoom {
 
     function generateAvailableCoIdList(roomInfo: IRmrRoomInfo, srcPlayerIndex: number): Set<number> {
         const coIds = new Set<number>();
-        for (const playerRule of roomInfo.settingsForCommon.warRule.ruleForPlayers.playerRuleDataList) {
+        for (const playerRule of roomInfo.settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray) {
             if (playerRule.playerIndex !== srcPlayerIndex) {
-                for (const coId of playerRule.availableCoIdList) {
+                for (const coId of playerRule.availableCoIdArray) {
                     coIds.add(coId);
                 }
             }

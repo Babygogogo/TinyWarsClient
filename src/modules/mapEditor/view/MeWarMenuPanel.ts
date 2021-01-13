@@ -253,7 +253,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.concatLanguageTextList(this._war.getMapNameList());
+            this._labelMapName.text = Lang.concatLanguageTextList(this._war.getMapNameArray());
         }
 
         private _updateGroupMapDesigner(): void {
@@ -466,7 +466,7 @@ namespace TinyWars.MapEditor {
                         MeWarRulePanel.show();
                         this.close();
                     } else {
-                        if (war.getWarRuleList().length) {
+                        if (war.getWarRuleArray().length) {
                             MeWarRulePanel.show();
                             this.close();
                         } else {

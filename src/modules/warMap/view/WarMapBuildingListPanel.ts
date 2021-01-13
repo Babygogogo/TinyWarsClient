@@ -74,7 +74,7 @@ namespace TinyWars.WarMap {
             const mapRawData    = openData.mapRawData;
             const configVersion = openData.configVersion;
             const dict          = new Map<number, Map<number, number>>();
-            for (const tileData of mapRawData.tileDataList) {
+            for (const tileData of mapRawData.tileDataArray) {
                 const template = ConfigManager.getTileTemplateCfg(configVersion, Types.TileBaseType.Plain, tileData.objectType);
                 if ((template) && (template.maxCapturePoint != null)) {
                     const tileType = template.type;

@@ -154,7 +154,7 @@ namespace TinyWars.MapManagement {
             } else {
                 const tileMapView = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapData.mapWidth, mapData.mapHeight);
-                tileMapView.updateWithTileDataList(mapData.tileDataList);
+                tileMapView.updateWithTileDataArray(mapData.tileDataArray);
 
                 const unitMapView = new WarMap.WarMapUnitMapView();
                 unitMapView.initWithMapRawData(mapData);
@@ -199,7 +199,7 @@ namespace TinyWars.MapManagement {
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelStatus.text      = Lang.getMapReviewStatusText(status);
             this._labelStatus.textColor = getReviewStatusTextColor(status);
-            this._labelName.text        = Lang.getTextInLanguage(mapRawData.mapNameList) || `(${Lang.getText(Lang.Type.B0277)})`;
+            this._labelName.text        = Lang.getTextInLanguage(mapRawData.mapNameArray) || `(${Lang.getText(Lang.Type.B0277)})`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

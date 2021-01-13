@@ -164,7 +164,7 @@ namespace TinyWars.MapEditor {
             const selectedRule = this._selectedRule;
             if (selectedRule != null) {
                 const war = this._war;
-                if (war.getWarRuleList().length <= 1) {
+                if (war.getWarRuleArray().length <= 1) {
                     FloatText.show(Lang.getText(Lang.Type.A0096));
                 } else {
                     CommonConfirmPanel.show({
@@ -181,7 +181,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnAddRule(e: egret.TouchEvent): void {
             const war = this._war;
-            if (war.getWarRuleList().length >= CommonConstants.WarRuleMaxCount) {
+            if (war.getWarRuleArray().length >= CommonConstants.WarRuleMaxCount) {
                 FloatText.show(Lang.getText(Lang.Type.A0099));
             } else {
                 war.addWarRule();
@@ -255,8 +255,8 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedBtnTestWarEvent(e: egret.TouchEvent): void {
-            const testData: ProtoTypes.Map.IDataForWarEvent = {
-                conditionList: [                        // 条件列表
+            const testData: ProtoTypes.Map.IWarEventFullData = {
+                conditionArray: [                        // 条件列表
                     {
                         WecCommonData: {
                             conditionId : 1,            // 条件id
@@ -267,21 +267,21 @@ namespace TinyWars.MapEditor {
                         },
                     },
                 ],
-                conditionNodeList: [                    // 条件组合节点，用于对上面的条件进行排列组合
+                conditionNodeArray: [                    // 条件组合节点，用于对上面的条件进行排列组合
                     {
                         nodeId          : 1,
                         isAnd           : true,
-                        subNodeIdList   : null,
-                        conditionIdList : [1],
+                        subNodeIdArray  : null,
+                        conditionIdArray: [1],
                     }
                 ],
-                actionList: [                           // 动作列表
+                actionArray: [                          // 动作列表
                     {
                         WarEventActionCommonData: {
                             actionId    : 1,            // 动作id
                         },
                         WarEventActionAddUnit: {        // 增加部队
-                            unitList: [
+                            unitArray: [
                                 {
                                     canBeBlockedByUnit  : false,    // 是否会被指定位置的已有部队阻断增援
                                     needMovableTile     : true,     // 是否自动寻找合适的地形，比如海军不在陆地上刷出
@@ -296,36 +296,36 @@ namespace TinyWars.MapEditor {
                         },
                     },
                 ],
-                eventList: [                            // 事件列表
+                eventArray: [                            // 事件列表
                     {
                         eventId                     : 1,                // 事件id，在地图规则中被引用
-                        eventNameList               : [
+                        eventNameArray              : [
                             { languageType: Types.LanguageType.Chinese, text: `一大坨增援` },
                             { languageType: Types.LanguageType.English, text: `Reinforcement` },
                         ],                                              // 自定义名称
                         maxCallCountInPlayerTurn    : 1,                // 每回合最多1次
                         maxCallCountTotal           : 1,                // 每局最多一次
                         conditionNodeId             : 1,                // 条件组合id，满足时执行动作列表
-                        actionIdList                : [1, 1, 1, 1, 1, ],// 动作id列表，
+                        actionIdArray               : [1, 1, 1, 1, 1, ],// 动作id列表，
                         // 动作1是刷出1个坦克，这里指定执行5次，而且坦克不会被已有部队阻断，所以执行时就直接刷出5个坦克
                     },
                     {
                         eventId                     : 2,                // 事件id，在地图规则中被引用
-                        eventNameList               : [
+                        eventNameArray              : [
                             { languageType: Types.LanguageType.Chinese, text: `一大坨增援2` },
                             { languageType: Types.LanguageType.English, text: `Reinforcement2` },
                         ],                                              // 自定义名称
                         maxCallCountInPlayerTurn    : 1,                // 每回合最多1次
                         maxCallCountTotal           : 1,                // 每局最多一次
                         conditionNodeId             : 1,                // 条件组合id，满足时执行动作列表
-                        actionIdList                : [1, 1, 1, 1, 1, ],// 动作id列表，
+                        actionIdArray               : [1, 1, 1, 1, 1, ],// 动作id列表，
                         // 动作1是刷出1个坦克，这里指定执行5次，而且坦克不会被已有部队阻断，所以执行时就直接刷出5个坦克
                     },
                 ],
             };
 
-            this._war.getWarEventManager().setWarEventData(testData);
-            this._selectedRule.warEventIdList = [1, 2];
+            this._war.getWarEventManager().setWarEventFullData(testData);
+            this._selectedRule.warEventIdArray = [1, 2];
             this._updateListWarEvent();
         }
 
@@ -376,7 +376,7 @@ namespace TinyWars.MapEditor {
         private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
             const data  : DataForWarRuleNameRenderer[] = [];
             let index   = 0;
-            for (const rule of this._war.getWarRuleList()) {
+            for (const rule of this._war.getWarRuleArray()) {
                 data.push({
                     index,
                     rule,
@@ -401,7 +401,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateLabelRuleName(rule: IWarRule): void {
-            this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameList : undefined) || Lang.getText(Lang.Type.B0001);
+            this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameArray : undefined) || Lang.getText(Lang.Type.B0001);
         }
         private _updateImgHasFog(rule: IWarRule): void {
             this._imgHasFog.visible = rule ? rule.ruleForGlobalParams.hasFogByDefault : false;
@@ -422,7 +422,7 @@ namespace TinyWars.MapEditor {
             const dataArray         : DataForWarEventRenderer[] = [];
             const warRule           = this._selectedRule;
             const warEventManager   = this._war.getWarEventManager();
-            for (const warEventId of warRule.warEventIdList || []) {
+            for (const warEventId of warRule.warEventIdArray || []) {
                 dataArray.push({
                     panel   : this,
                     warEventManager,
@@ -433,7 +433,7 @@ namespace TinyWars.MapEditor {
             this._listWarEvent.bindData(dataArray);
         }
         private _updateListPlayerRule(rule: IWarRule): void {
-            const playerRuleDataList    = rule ? rule.ruleForPlayers.playerRuleDataList : null;
+            const playerRuleDataList    = rule ? rule.ruleForPlayers.playerRuleDataArray : null;
             const listPlayer            = this._listPlayer;
             if ((!playerRuleDataList) || (!playerRuleDataList.length)) {
                 listPlayer.clear();
@@ -562,7 +562,7 @@ namespace TinyWars.MapEditor {
         private _createDataAvailableCoIdList(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0403),
-                infoText                : `${playerRule.availableCoIdList.length}`,
+                infoText                : `${playerRule.availableCoIdArray.length}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : isReviewing
                     ? null
@@ -974,7 +974,7 @@ namespace TinyWars.MapEditor {
         private _updateLabelWarEventName(): void {
             const data = this.data as DataForWarEventRenderer;
             if (data) {
-                this._labelWarEventName.text = Lang.getTextInLanguage(data.warEventManager.getWarEvent(data.warEventId).eventNameList);
+                this._labelWarEventName.text = Lang.getTextInLanguage(data.warEventManager.getWarEvent(data.warEventId).eventNameArray);
             }
         }
     }

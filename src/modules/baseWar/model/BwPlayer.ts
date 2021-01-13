@@ -102,8 +102,8 @@ namespace TinyWars.BaseWar {
             this._setUnitAndTileSkinId(unitAndTileSkinId);
             this.setCoId(coId);
             this.setCoCurrentEnergy(data.coCurrentEnergy);
-            this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdList || []);
-            this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdList || []);
+            this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdArray || []);
+            this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
 
             return this;
         }
@@ -186,8 +186,8 @@ namespace TinyWars.BaseWar {
                 userId                      : this.getUserId(),
                 coId,
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
-                watchRequestSrcUserIdList   : [...(this.getWatchRequestSrcUserIds() || [])],
-                watchOngoingSrcUserIdList   : [...(this.getWatchOngoingSrcUserIds() || [])],
+                watchRequestSrcUserIdArray  : [...(this.getWatchRequestSrcUserIds() || [])],
+                watchOngoingSrcUserIdArray  : [...(this.getWatchOngoingSrcUserIds() || [])],
             };
         }
         public serializeForSimulation(): ISerialPlayer {
@@ -266,8 +266,8 @@ namespace TinyWars.BaseWar {
                 userId                      : playerIndex > 0 ? User.UserModel.getSelfUserId() : null,
                 coId,
                 coCurrentEnergy             : this.getCoCurrentEnergy(),
-                watchRequestSrcUserIdList   : [],
-                watchOngoingSrcUserIdList   : []
+                watchRequestSrcUserIdArray  : [],
+                watchOngoingSrcUserIdArray  : []
             };
         }
 

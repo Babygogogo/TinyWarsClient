@@ -1176,7 +1176,7 @@ namespace TinyWars.Utility.ConfigManager {
         return _ALL_CONFIGS.get(version)!.CoSkill[skillId];
     }
 
-    export function getAvailableCoList(version: string): CoBasicCfg[] {
+    export function getAvailableCoArray(version: string): CoBasicCfg[] {
         if (!_AVAILABLE_CO_LIST.has(version)) {
             const list: CoBasicCfg[] = [];
             const cfgs = _ALL_CONFIGS.get(version)!.CoBasic;
@@ -1202,7 +1202,7 @@ namespace TinyWars.Utility.ConfigManager {
     export function getCoTiers(version: string): number[] {
         if (!_CO_TIERS.has(version)) {
             const tiers = new Set<number>();
-            for (const cfg of getAvailableCoList(version)) {
+            for (const cfg of getAvailableCoArray(version)) {
                 tiers.add(cfg.tier);
             }
             _CO_TIERS.set(version, Array.from(tiers).sort());
@@ -1218,7 +1218,7 @@ namespace TinyWars.Utility.ConfigManager {
         const cfgs = _CO_ID_LIST_IN_TIER.get(version);
         if (!cfgs.get(tier)) {
             const idList: number[] = [];
-            for (const cfg of getAvailableCoList(version)) {
+            for (const cfg of getAvailableCoArray(version)) {
                 if (cfg.tier === tier) {
                     idList.push(cfg.coId);
                 }
@@ -1231,7 +1231,7 @@ namespace TinyWars.Utility.ConfigManager {
     export function getAvailableCustomCoIdList(version: string): number[] {
         if (!_CUSTOM_CO_ID_LIST.has(version)) {
             const idList: number[] = [];
-            for (const cfg of getAvailableCoList(version)) {
+            for (const cfg of getAvailableCoArray(version)) {
                 if (cfg.designer !== "Intelligent Systems") {
                     idList.push(cfg.coId);
                 }

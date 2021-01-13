@@ -143,9 +143,9 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         const UnitClass         = unitMap.getUnitClass();
         warEventManager.updateWarEventCalledCountOnCall(warEventId);
 
-        const actionIdList = warEventManager.getWarEvent(warEventId).actionIdList;
-        for (let index = 0; index < actionIdList.length; ++index) {
-            const warEventAction = warEventManager.getWarEventAction(actionIdList[index]);
+        const actionIdArray = warEventManager.getWarEvent(warEventId).actionIdArray;
+        for (let index = 0; index < actionIdArray.length; ++index) {
+            const warEventAction = warEventManager.getWarEventAction(actionIdArray[index]);
             if (warEventAction.WarEventActionAddUnit) {
                 for (const unitData of extraDataList.find(v => v.indexForActionIdList === index).ExtraDataForWeaAddUnit.unitList) {
                     const unit = new UnitClass().init(unitData, configVersion);

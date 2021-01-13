@@ -3637,7 +3637,7 @@ namespace TinyWars.Utility.Lang {
     export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined {
         return (warRule.ruleId == null)
             ? getText(Type.B0321)
-            : getTextInLanguage(warRule.ruleNameList);
+            : getTextInLanguage(warRule.ruleNameArray);
     }
 
     export function getStringInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {

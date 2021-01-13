@@ -155,7 +155,7 @@ namespace TinyWars.SingleCustomRoom {
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
-                const mapName = Lang.getTextInLanguage(mapBriefData.mapNameList);
+                const mapName = Lang.getTextInLanguage(mapBriefData.mapNameArray);
                 if ((!mapBriefData.mapExtraData.mapComplexInfo.availability.canScw)                                     ||
                     ((mapName) && (mapName.toLowerCase().indexOf(mapName) < 0))                                         ||
                     ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))               ||
@@ -192,7 +192,7 @@ namespace TinyWars.SingleCustomRoom {
 
             const tileMapView = new WarMap.WarMapTileMapView();
             tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-            tileMapView.updateWithTileDataList(mapRawData.tileDataList);
+            tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithMapRawData(mapRawData);

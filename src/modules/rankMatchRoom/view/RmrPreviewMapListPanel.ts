@@ -144,7 +144,7 @@ namespace TinyWars.RankMatchRoom {
                 if ((!mapExtraData.isEnabled)                                       ||
                     ((hasFog) && (!mapAvailability.canRankFog))                     ||
                     ((!hasFog) && (!mapAvailability.canRank))                       ||
-                    (!(await WarMapModel.getRawData(mapId)).warRuleList.some(v => {
+                    (!(await WarMapModel.getRawData(mapId)).warRuleArray.some(v => {
                         return (v.ruleAvailability.canRank)
                             && (hasFog === v.ruleForGlobalParams.hasFogByDefault);
                     }))
@@ -153,7 +153,7 @@ namespace TinyWars.RankMatchRoom {
                 } else {
                     data.push({
                         mapId,
-                        mapName : Lang.getTextInLanguage(mapBriefData.mapNameList),
+                        mapName : Lang.getTextInLanguage(mapBriefData.mapNameArray),
                         panel   : this,
                     });
                 }
@@ -177,7 +177,7 @@ namespace TinyWars.RankMatchRoom {
 
             const tileMapView = new WarMap.WarMapTileMapView();
             tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-            tileMapView.updateWithTileDataList(mapRawData.tileDataList);
+            tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithMapRawData(mapRawData);
