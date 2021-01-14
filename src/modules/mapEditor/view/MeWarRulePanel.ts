@@ -974,7 +974,7 @@ namespace TinyWars.MapEditor {
         private _updateLabelWarEventName(): void {
             const data = this.data as DataForWarEventRenderer;
             if (data) {
-                this._labelWarEventName.text = Lang.getTextInLanguage(data.warEventManager.getWarEvent(data.warEventId).eventNameArray);
+                this._labelWarEventName.text = Lang.getLanguageText(data.warEventManager.getWarEvent(data.warEventId).eventNameArray);
             }
         }
     }

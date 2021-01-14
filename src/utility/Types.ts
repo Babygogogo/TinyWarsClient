@@ -221,6 +221,10 @@ namespace TinyWars.Utility.Types {
         Blue,
         White,
     }
+    export const enum ColorValue {
+        Red     = 0xFF0000,
+        White   = 0xFFFFFF,
+    }
 
     export const UiState = {
         Up  : "up",

@@ -101,7 +101,7 @@ namespace TinyWars.WarMap {
             if (!mapBriefData) {
                 return null;
             } else {
-                return Lang.getTextInLanguage(mapBriefData.mapNameArray);
+                return Lang.getLanguageText(mapBriefData.mapNameArray);
             }
         }
         export async function getDesignerName(mapId: number): Promise<string | null> {

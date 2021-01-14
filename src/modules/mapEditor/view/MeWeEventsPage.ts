@@ -7,14 +7,16 @@ namespace TinyWars.MapEditor {
     import Types                    = Utility.Types;
     import FloatText                = Utility.FloatText;
     import ConfigManager            = Utility.ConfigManager;
-    import BwSettingsHelper         = BaseWar.BwSettingsHelper;
+    import BwWarEventHelper         = BaseWar.BwWarEventHelper;
     import WarMapModel              = WarMap.WarMapModel;
     import CommonHelpPanel          = Common.CommonHelpPanel;
+    import WarEvent                 = ProtoTypes.WarEvent;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarEvent                = ProtoTypes.WarEvent.IWarEvent;
-    import IWarEventAction          = ProtoTypes.WarEvent.IWarEventAction;
-    import IWarEventCondition       = ProtoTypes.WarEvent.IWarEventCondition;
-    import IWarEventConditionNode   = ProtoTypes.WarEvent.IWarEventConditionNode;
+    import IWarEvent                = WarEvent.IWarEvent;
+    import IWarEventAction          = WarEvent.IWarEventAction;
+    import IWarEventCondition       = WarEvent.IWarEventCondition;
+    import IWarEventConditionNode   = WarEvent.IWarEventConditionNode;
+    import ColorValue               = Types.ColorValue;
     import CommonConstants          = Utility.ConfigManager.COMMON_CONSTANTS;
 
     export class MeWeEventsPage extends GameUi.UiTabPage {
@@ -133,7 +135,7 @@ namespace TinyWars.MapEditor {
             if (data) {
                 const warEventId        = data.warEventId;
                 const warEvent          = (data.warEventFullData.eventArray || []).find(v => v.eventId === warEventId);
-                this._labelName.text    = `#${warEventId} ${warEvent ? Lang.getTextInLanguage(warEvent.eventNameArray) : `???`}`;
+                this._labelName.text    = `#${warEventId} ${warEvent ? Lang.getLanguageText(warEvent.eventNameArray) : `???`}`;
             }
         }
 
@@ -273,9 +275,65 @@ namespace TinyWars.MapEditor {
                 const eventId = data.eventId;
                 if (eventId != null) {
                     const event = (fullData.eventArray || []).find(v => v.eventId === eventId);
-                    // TODO
+                    if (event == null) {
+                        labelDesc.textColor = ColorValue.Red;
+                        labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0158)}`;
+                    } else {
+                        labelDesc.textColor = ColorValue.White;
+                        labelDesc.text      = `${prefix} ${Lang.getLanguageText(event.eventNameArray)}`;
+                    }
+
+                    return;
                 }
 
+                const nodeId = data.nodeId;
+                if (nodeId != null) {
+                    if (nodeId < 0) {
+                        labelDesc.textColor = ColorValue.Red;
+                        labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0159)}`;
+                        return;
+                    }
+
+                    const node = (fullData.conditionNodeArray || []).find(v => v.nodeId === nodeId);
+                    if (node == null) {
+                        labelDesc.textColor = ColorValue.Red;
+                        labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0160)}`;
+                        return;
+                    }
+
+                    if (((node.subNodeIdArray || []).length) + ((node.conditionIdArray || []).length) <= 0) {
+                        labelDesc.textColor = ColorValue.Red;
+                        labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0161)}`;
+                        return;
+                    }
+
+                    labelDesc.textColor = ColorValue.White;
+                    labelDesc.text      = `${prefix} ${node.isAnd ? Lang.getText(Lang.Type.A0162) : Lang.getText(Lang.Type.A0163)}`;
+                    return;
+                }
+
+                const conditionId = data.conditionId;
+                if (conditionId != null) {
+                    const condition = (fullData.conditionArray || []).find(v => v.WecCommonData.conditionId === conditionId);
+                    if (condition == null) {
+                        labelDesc.textColor = ColorValue.Red;
+                        labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0164)}`;
+                        return;
+                    }
+
+                    const desc = BwWarEventHelper.getDescForCondition(condition);
+                    if (desc) {
+                        labelDesc.textColor = ColorValue.White;
+                        labelDesc.text      = `${prefix} ${desc}`;
+                    } else {
+                        labelDesc.textColor = ColorValue.Red;
+                        labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0165)}`;
+                    }
+
+                    return;
+                }
+
+                // TODO
             }
         }
     }

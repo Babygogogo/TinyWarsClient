@@ -335,8 +335,8 @@ namespace TinyWars.User {
         }
         private _updateBtnChangeLanguage(): void {
             this._btnChangeLanguage.label = Lang.getCurrentLanguageType() === Types.LanguageType.Chinese
-                ? Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.English)
-                : Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.Chinese);
+                ? Lang.getText(Lang.Type.B0148, Types.LanguageType.English)
+                : Lang.getText(Lang.Type.B0148, Types.LanguageType.Chinese);
         }
         private _updateBtnSwitchTexture(): void {
             this._btnSwitchTexture.label = User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0

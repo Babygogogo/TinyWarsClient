@@ -454,8 +454,8 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         return {
             ruleId,
             ruleNameArray   : [
-                { languageType: LanguageType.Chinese, text: Lang.getTextWithLanguage(Lang.Type.B0001, LanguageType.Chinese) },
-                { languageType: LanguageType.English, text: Lang.getTextWithLanguage(Lang.Type.B0001, LanguageType.English) },
+                { languageType: LanguageType.Chinese, text: Lang.getText(Lang.Type.B0001, LanguageType.Chinese) },
+                { languageType: LanguageType.English, text: Lang.getText(Lang.Type.B0001, LanguageType.English) },
             ],
             ruleAvailability: {
                 canMcw  : true,

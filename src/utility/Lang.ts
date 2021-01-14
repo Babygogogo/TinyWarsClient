@@ -762,6 +762,38 @@ namespace TinyWars.Utility.Lang {
             `已成功修改用户权限`,
             `The user privilege has been updated successfully.`,
         ],
+        [Type.A0158]: [
+            `事件数据不存在，请删除本事件`,
+            `The event data doesn't exist. Please delete it.`,
+        ],
+        [Type.A0159]: [
+            `此事件尚未设定条件节点。请在事件编辑器中进行设定。`,
+            `The event contains no condition node. Please add one.`,
+        ],
+        [Type.A0160]: [
+            `条件节点的数据不存在。请删除此条件节点。`,
+            `The condition node data doesn't exist. Please delete it.`,
+        ],
+        [Type.A0161]: [
+            `此条件节点不包含任何子条件和子条件节点。请在条件节点编辑器中进行设定。`,
+            `The condition node contains no condition nor sub node. Please add one.`,
+        ],
+        [Type.A0162]: [
+            `所有子条件和子节点都成立时，此节点成立。`,
+            `The condition node is true if ALL of the sub conditions and/or sub nodes are true.`,
+        ],
+        [Type.A0163]: [
+            `任意子条件或子节点成立时，此节点成立。`,
+            `The condition node is true if ONE of the sub conditions and/or sub nodes is true.`,
+        ],
+        [Type.A0164]: [
+            `条件数据不存在，请删除本条件`,
+            `The condition data doesn't exist. Please delete it.`,
+        ],
+        [Type.A0165]: [
+            `条件数据不合法，请编辑修正`,
+            `The condition data is not valid. Please edit it.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2634,6 +2666,14 @@ namespace TinyWars.Utility.Lang {
             `事件列表`,
             `Event List`,
         ],
+        [Type.B0471]: [
+            `为真`,
+            `is true`,
+        ],
+        [Type.B0472]: [
+            `为假`,
+            `is false`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3021,6 +3061,10 @@ namespace TinyWars.Utility.Lang {
             `最多输入%d个字符，请检查`,
             `Please limit the text length to %d characters.`,
         ],
+        [Type.F0035]: [
+            `事件#%d发生次数等于%d`,
+            `Event #%d `,
+        ],
     };
 
     const NET_ERROR_TEXT: { [netErrorCode: number]: string[] } = {
@@ -3370,11 +3414,8 @@ namespace TinyWars.Utility.Lang {
         _languageType = language;
     }
 
-    export function getText(t: Type): string {
-        return getTextWithLanguage(t, _languageType);
-    }
-    export function getTextWithLanguage(t: Type, language: LanguageType): string {
-        return _LANG_DATA[t][language];
+    export function getText(t: Type, languageType = getCurrentLanguageType()): string {
+        return _LANG_DATA[t][languageType];
     }
 
     export function getFormattedText(t: Type, ...params: any[]): string {
@@ -3637,7 +3678,7 @@ namespace TinyWars.Utility.Lang {
     export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined {
         return (warRule.ruleId == null)
             ? getText(Type.B0321)
-            : getTextInLanguage(warRule.ruleNameArray);
+            : getLanguageText(warRule.ruleNameArray);
     }
 
     export function getStringInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {
@@ -3649,7 +3690,7 @@ namespace TinyWars.Utility.Lang {
                 : nameList[1] || nameList[0];
         }
     }
-    export function getTextInLanguage(textList: ProtoTypes.Structure.ILanguageText[], languageType = getCurrentLanguageType()): string | undefined {
+    export function getLanguageText(textList: ProtoTypes.Structure.ILanguageText[], languageType = getCurrentLanguageType()): string | undefined {
         const data = (textList || []).find(v => v.languageType === languageType);
         return data ? data.text : undefined;
     }

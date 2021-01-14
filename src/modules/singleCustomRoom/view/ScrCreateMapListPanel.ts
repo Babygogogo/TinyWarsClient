@@ -155,7 +155,7 @@ namespace TinyWars.SingleCustomRoom {
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
-                const mapName = Lang.getTextInLanguage(mapBriefData.mapNameArray);
+                const mapName = Lang.getLanguageText(mapBriefData.mapNameArray);
                 if ((!mapBriefData.mapExtraData.mapComplexInfo.availability.canScw)                                     ||
                     ((mapName) && (mapName.toLowerCase().indexOf(mapName) < 0))                                         ||
                     ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))               ||
