@@ -88,8 +88,8 @@ namespace TinyWars.MapEditor {
             this._updateComponentsForLanguage();
 
             const textList          = MeManager.getWar().getMapNameArray() || [];
-            this._inputChinese.text = Lang.getLanguageText(textList, Types.LanguageType.Chinese);
-            this._inputEnglish.text = Lang.getLanguageText(textList, Types.LanguageType.English);
+            this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.Chinese });
+            this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.English });
         }
 
         private _updateComponentsForLanguage(): void {

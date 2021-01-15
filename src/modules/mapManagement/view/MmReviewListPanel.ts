@@ -199,7 +199,7 @@ namespace TinyWars.MapManagement {
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelStatus.text      = Lang.getMapReviewStatusText(status);
             this._labelStatus.textColor = getReviewStatusTextColor(status);
-            this._labelName.text        = Lang.getLanguageText(mapRawData.mapNameArray) || `(${Lang.getText(Lang.Type.B0277)})`;
+            this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData.mapNameArray }) || `(${Lang.getText(Lang.Type.B0277)})`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

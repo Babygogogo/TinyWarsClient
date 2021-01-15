@@ -423,78 +423,72 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const isNot = wecCommonData.isNot;
-            if (isNot == null) {
-                Logger.error(`BwWarEventManager._checkIsMeetCondition() empty isNot.`);
-                return undefined;
-            }
-
             const conEventCalledCountTotalEqualTo = condition.WecEventCalledCountTotalEqualTo;
             if (conEventCalledCountTotalEqualTo) {
-                return this._checkIsMeetConEventCalledCountTotalEqualTo(isNot, conEventCalledCountTotalEqualTo);
+                return this._checkIsMeetConEventCalledCountTotalEqualTo(conEventCalledCountTotalEqualTo);
             }
 
             const conEventCalledCountTotalGreaterThan = condition.WecEventCalledCountTotalGreaterThan;
             if (conEventCalledCountTotalGreaterThan) {
-                return this._checkIsMeetConEventCalledCountTotalGreaterThan(isNot, conEventCalledCountTotalGreaterThan);
+                return this._checkIsMeetConEventCalledCountTotalGreaterThan(conEventCalledCountTotalGreaterThan);
             }
 
             const conEventCalledCountTotalLessThan = condition.WecEventCalledCountTotalLessThan;
             if (conEventCalledCountTotalLessThan) {
-                return this._checkIsMeetConEventCalledCountTotalLessThan(isNot, conEventCalledCountTotalLessThan);
+                return this._checkIsMeetConEventCalledCountTotalLessThan(conEventCalledCountTotalLessThan);
             }
 
             const conPlayerAliveStateEqualTo = condition.WecPlayerAliveStateEqualTo;
             if (conPlayerAliveStateEqualTo) {
-                return this._checkIsMeetPlayerAliveStateEqualTo(isNot, conPlayerAliveStateEqualTo);
+                return this._checkIsMeetPlayerAliveStateEqualTo(conPlayerAliveStateEqualTo);
             }
 
             const conPlayerIndexInTurnEqualTo = condition.WecPlayerIndexInTurnEqualTo;
             if (conPlayerIndexInTurnEqualTo) {
-                return this._checkIsMeetConPlayerIndexInTurnEqualTo(isNot, conPlayerIndexInTurnEqualTo);
+                return this._checkIsMeetConPlayerIndexInTurnEqualTo(conPlayerIndexInTurnEqualTo);
             }
 
             const conPlayerIndexInTurnGreaterThan = condition.WecPlayerIndexInTurnGreaterThan;
             if (conPlayerIndexInTurnGreaterThan) {
-                return this._checkIsMeetConPlayerIndexInTurnGreaterThan(isNot, conPlayerIndexInTurnGreaterThan);
+                return this._checkIsMeetConPlayerIndexInTurnGreaterThan(conPlayerIndexInTurnGreaterThan);
             }
 
             const conPlayerIndexInTurnLessThan = condition.WecPlayerIndexInTurnLessThan;
             if (conPlayerIndexInTurnLessThan) {
-                return this._checkIsMeetConPlayerIndexInTurnLessThan(isNot, conPlayerIndexInTurnLessThan);
+                return this._checkIsMeetConPlayerIndexInTurnLessThan(conPlayerIndexInTurnLessThan);
             }
 
             const conTurnIndexEqualTo = condition.WecTurnIndexEqualTo;
             if (conTurnIndexEqualTo) {
-                return this._checkIsMeetConTurnIndexEqualTo(isNot, conTurnIndexEqualTo);
+                return this._checkIsMeetConTurnIndexEqualTo(conTurnIndexEqualTo);
             }
 
             const conTurnIndexGreaterThan = condition.WecTurnIndexGreaterThan;
             if (conTurnIndexGreaterThan) {
-                return this._checkIsMeetConTurnIndexGreaterThan(isNot, conTurnIndexGreaterThan);
+                return this._checkIsMeetConTurnIndexGreaterThan(conTurnIndexGreaterThan);
             }
 
             const conTurnIndexLessThan = condition.WecTurnIndexLessThan;
             if (conTurnIndexLessThan) {
-                return this._checkIsMeetConTurnIndexLessThan(isNot, conTurnIndexLessThan);
+                return this._checkIsMeetConTurnIndexLessThan(conTurnIndexLessThan);
             }
 
             const conTurnIndexRemainderEqualTo = condition.WecTurnIndexRemainderEqualTo;
             if (conTurnIndexRemainderEqualTo) {
-                return this._checkIsMeetConTurnIndexRemainderEqualTo(isNot, conTurnIndexRemainderEqualTo);
+                return this._checkIsMeetConTurnIndexRemainderEqualTo(conTurnIndexRemainderEqualTo);
             }
 
             const conTurnPhase = condition.WecTurnPhaseEqualTo;
             if (conTurnPhase) {
-                return this._checkIsMeetConTurnPhaseEqualTo(isNot, conTurnPhase);
+                return this._checkIsMeetConTurnPhaseEqualTo(conTurnPhase);
             }
 
             Logger.error(`BwWarEventManager._checkIsMeetCondition() invalid condition!`);
             return undefined;
         }
 
-        private _checkIsMeetConEventCalledCountTotalEqualTo(isNot: boolean, condition: WarEvent.IWecEventCalledCountTotalEqualTo): boolean | undefined {
-            const { eventIdEqualTo, countEqualTo } = condition;
+        private _checkIsMeetConEventCalledCountTotalEqualTo(condition: WarEvent.IWecEventCalledCountTotalEqualTo): boolean | undefined {
+            const { eventIdEqualTo, countEqualTo, isNot } = condition;
             if (eventIdEqualTo == null) {
                 Logger.error(`BwWarEventManager._checkIsMeetConEventCalledCountTotalEqualTo() empty eventIdEqualTo.`);
                 return undefined;
@@ -505,14 +499,12 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (this.getWarEventCalledCountTotal(eventIdEqualTo) === countEqualTo) {
-                return isNot ? false : true;
-            }
-
-            return isNot ? true : false;
+            return (this.getWarEventCalledCountTotal(eventIdEqualTo) === countEqualTo)
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
         }
-        private _checkIsMeetConEventCalledCountTotalGreaterThan(isNot: boolean, condition: WarEvent.IWecEventCalledCountTotalGreaterThan): boolean | undefined {
-            const { eventIdEqualTo, countGreaterThan } = condition;
+        private _checkIsMeetConEventCalledCountTotalGreaterThan(condition: WarEvent.IWecEventCalledCountTotalGreaterThan): boolean | undefined {
+            const { eventIdEqualTo, countGreaterThan, isNot } = condition;
             if (eventIdEqualTo == null) {
                 Logger.error(`BwWarEventManager._checkIsMeetConEventCalledCountTotalGreaterThan() empty eventIdEqualTo.`);
                 return undefined;
@@ -523,14 +515,12 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (this.getWarEventCalledCountTotal(eventIdEqualTo) > countGreaterThan) {
-                return isNot ? false : true;
-            }
-
-            return isNot ? true : false;
+            return (this.getWarEventCalledCountTotal(eventIdEqualTo) > countGreaterThan)
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
         }
-        private _checkIsMeetConEventCalledCountTotalLessThan(isNot: boolean, condition: WarEvent.IWecEventCalledCountTotalLessThan): boolean | undefined {
-            const { eventIdEqualTo, countLessThan } = condition;
+        private _checkIsMeetConEventCalledCountTotalLessThan(condition: WarEvent.IWecEventCalledCountTotalLessThan): boolean | undefined {
+            const { eventIdEqualTo, countLessThan, isNot } = condition;
             if (eventIdEqualTo == null) {
                 Logger.error(`BwWarEventManager._checkIsMeetConEventCalledCountTotalLessThan() empty eventIdEqualTo.`);
                 return undefined;
@@ -541,15 +531,13 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (this.getWarEventCalledCountTotal(eventIdEqualTo) < countLessThan) {
-                return isNot ? false : true;
-            }
-
-            return isNot ? true : false;
+            return (this.getWarEventCalledCountTotal(eventIdEqualTo) < countLessThan)
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
         }
 
-        private _checkIsMeetPlayerAliveStateEqualTo(isNot: boolean, condition: WarEvent.IWecPlayerAliveStateEqualTo): boolean | undefined {
-            const { playerIndexEqualTo, aliveStateEqualTo } = condition;
+        private _checkIsMeetPlayerAliveStateEqualTo(condition: WarEvent.IWecPlayerAliveStateEqualTo): boolean | undefined {
+            const { playerIndexEqualTo, aliveStateEqualTo, isNot } = condition;
             if (aliveStateEqualTo == null) {
                 Logger.error(`BwWarEventManager._checkIsMeetPlayerAliveStateEqualTo() empty aliveStateEqualTo.`);
                 return undefined;
@@ -567,20 +555,14 @@ namespace TinyWars.BaseWar {
             }
 
             const player = war.getPlayer(playerIndexEqualTo);
-            if (player == null) {
-                return isNot ? true : false;
-            }
-
-            if (player.getAliveState() === aliveStateEqualTo) {
-                return isNot ? false : true;
-            }
-
-            return isNot ? true : false;
+            return ((player ? player.getAliveState() : undefined) === aliveStateEqualTo)
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
         }
 
-        private _checkIsMeetConPlayerIndexInTurnEqualTo(isNot: boolean, condition: WarEvent.IWecPlayerIndexInTurnEqualTo): boolean | undefined {
-            const value = condition.valueEqualTo;
-            if (value == null) {
+        private _checkIsMeetConPlayerIndexInTurnEqualTo(condition: WarEvent.IWecPlayerIndexInTurnEqualTo): boolean | undefined {
+            const { valueEqualTo, isNot } = condition;
+            if (valueEqualTo == null) {
                 Logger.error(`BwWarEventManager._checkIsMeetConPlayerIndexInTurnEqualTo() invalid condition.`);
                 return undefined;
             }
@@ -597,15 +579,13 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (playerIndex === value) {
-                return isNot ? false : true;
-            }
-
-            return isNot ? true : false;
+            return (playerIndex === valueEqualTo)
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
         }
-        private _checkIsMeetConPlayerIndexInTurnGreaterThan(isNot: boolean, condition: WarEvent.IWecPlayerIndexInTurnGreaterThan): boolean | undefined {
-            const value = condition.valueGreaterThan;
-            if (value == null) {
+        private _checkIsMeetConPlayerIndexInTurnGreaterThan(condition: WarEvent.IWecPlayerIndexInTurnGreaterThan): boolean | undefined {
+            const { valueGreaterThan, isNot } = condition;
+            if (valueGreaterThan == null) {
                 Logger.error(`BwWarEventManager._checkIsMeetConPlayerIndexInTurnGreaterThan() invalid condition.`);
                 return undefined;
             }
@@ -622,15 +602,13 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (playerIndex > value) {
-                return isNot ? false : true;
-            }
-
-            return isNot ? true : false;
+            return (playerIndex > valueGreaterThan)
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
         }
-        private _checkIsMeetConPlayerIndexInTurnLessThan(isNot: boolean, condition: WarEvent.IWecPlayerIndexInTurnLessThan): boolean | undefined {
-            const value = condition.valueLessThan;
-            if (value == null) {
+        private _checkIsMeetConPlayerIndexInTurnLessThan(condition: WarEvent.IWecPlayerIndexInTurnLessThan): boolean | undefined {
+            const { valueLessThan, isNot } = condition;
+            if (valueLessThan == null) {
                 Logger.error(`BwWarEventManager._checkIsMeetConPlayerIndexInTurnLessThan() invalid condition.`);
                 return undefined;
             }
@@ -647,16 +625,14 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (playerIndex < value) {
-                return isNot ? false : true;
-            }
-
-            return isNot ? true : false;
+            return (playerIndex < valueLessThan)
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
         }
 
-        private _checkIsMeetConTurnIndexEqualTo(isNot: boolean, condition: WarEvent.IWecTurnIndexEqualTo): boolean | undefined {
-            const value = condition.valueEqualTo;
-            if (value == null) {
+        private _checkIsMeetConTurnIndexEqualTo(condition: WarEvent.IWecTurnIndexEqualTo): boolean | undefined {
+            const { valueEqualTo, isNot } = condition;
+            if (valueEqualTo == null) {
                 Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexEqualTo() empty value.`);
                 return undefined;
             }
@@ -679,15 +655,13 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (turnIndex === value) {
-                return isNot ? false : true;
-            }
-
-            return isNot ? true : false;
+            return (turnIndex === valueEqualTo)
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
         }
-        private _checkIsMeetConTurnIndexGreaterThan(isNot: boolean, condition: WarEvent.IWecTurnIndexGreaterThan): boolean | undefined {
-            const value = condition.valueGreaterThan;
-            if (value == null) {
+        private _checkIsMeetConTurnIndexGreaterThan(condition: WarEvent.IWecTurnIndexGreaterThan): boolean | undefined {
+            const { valueGreaterThan, isNot } = condition;
+            if (valueGreaterThan == null) {
                 Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexGreaterThan() empty value.`);
                 return undefined;
             }
@@ -710,15 +684,13 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (turnIndex > value) {
-                return isNot ? false : true;
-            }
-
-            return isNot ? true : false;
+            return (turnIndex > valueGreaterThan)
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
         }
-        private _checkIsMeetConTurnIndexLessThan(isNot: boolean, condition: WarEvent.IWecTurnIndexLessThan): boolean | undefined {
-            const value = condition.valueLessThan;
-            if (value == null) {
+        private _checkIsMeetConTurnIndexLessThan(condition: WarEvent.IWecTurnIndexLessThan): boolean | undefined {
+            const { valueLessThan, isNot } = condition;
+            if (valueLessThan == null) {
                 Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexLessThan() invalid condition.`);
                 return undefined;
             }
@@ -741,14 +713,12 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (turnIndex < value) {
-                return isNot ? false : true;
-            }
-
-            return isNot ? true : false;
+            return (turnIndex < valueLessThan)
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
         }
-        private _checkIsMeetConTurnIndexRemainderEqualTo(isNot: boolean, condition: WarEvent.IWecTurnIndexRemainderEqualTo): boolean | undefined {
-            const { divider, remainderEqualTo } = condition;
+        private _checkIsMeetConTurnIndexRemainderEqualTo(condition: WarEvent.IWecTurnIndexRemainderEqualTo): boolean | undefined {
+            const { divider, remainderEqualTo, isNot } = condition;
             if ((!divider) || (remainderEqualTo == null)) {
                 Logger.error(`BwWarEventManager._checkIsMeetConTurnIndexRemainderEqualTo() invalid condition.`);
                 return undefined;
@@ -772,16 +742,14 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (turnIndex % divider === remainderEqualTo) {
-                return isNot ? false : true;
-            }
-
-            return isNot ? true : false;
+            return (turnIndex % divider === remainderEqualTo)
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
         }
 
-        private _checkIsMeetConTurnPhaseEqualTo(isNot: boolean, condition: WarEvent.IWecTurnPhaseEqualTo): boolean | undefined {
-            const value = condition.valueEqualTo;
-            if (value == null) {
+        private _checkIsMeetConTurnPhaseEqualTo(condition: WarEvent.IWecTurnPhaseEqualTo): boolean | undefined {
+            const { valueEqualTo, isNot } = condition;
+            if (valueEqualTo == null) {
                 Logger.error(`BwWarEventManager._checkIsMeetConTurnPhaseEqualTo() invalid condition.`);
                 return undefined;
             }
@@ -804,11 +772,9 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (phaseCode === value) {
-                return isNot ? false : true;
-            }
-
-            return isNot ? true : false;
+            return (phaseCode === valueEqualTo)
+                ? (isNot ? false : true)
+                : (isNot ? true : false);
         }
 
         public getWarEvent(warEventId: number): WarEvent.IWarEvent | undefined {                    // DONE

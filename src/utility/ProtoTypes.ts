@@ -3266,9 +3266,6 @@ export declare namespace WarEvent {
 
         /** WecCommonData conditionId */
         conditionId?: (number|null);
-
-        /** WecCommonData isNot */
-        isNot?: (boolean|null);
     }
 
     /** Represents a WecCommonData. */
@@ -3282,9 +3279,6 @@ export declare namespace WarEvent {
 
         /** WecCommonData conditionId. */
         public conditionId: number;
-
-        /** WecCommonData isNot. */
-        public isNot: boolean;
 
         /**
          * Creates a new WecCommonData instance using the specified properties.
@@ -3362,6 +3356,9 @@ export declare namespace WarEvent {
 
         /** WecTurnIndexEqualTo valueEqualTo */
         valueEqualTo?: (number|null);
+
+        /** WecTurnIndexEqualTo isNot */
+        isNot?: (boolean|null);
     }
 
     /** Represents a WecTurnIndexEqualTo. */
@@ -3375,6 +3372,9 @@ export declare namespace WarEvent {
 
         /** WecTurnIndexEqualTo valueEqualTo. */
         public valueEqualTo: number;
+
+        /** WecTurnIndexEqualTo isNot. */
+        public isNot: boolean;
 
         /**
          * Creates a new WecTurnIndexEqualTo instance using the specified properties.
@@ -3452,6 +3452,9 @@ export declare namespace WarEvent {
 
         /** WecTurnIndexGreaterThan valueGreaterThan */
         valueGreaterThan?: (number|null);
+
+        /** WecTurnIndexGreaterThan isNot */
+        isNot?: (boolean|null);
     }
 
     /** Represents a WecTurnIndexGreaterThan. */
@@ -3465,6 +3468,9 @@ export declare namespace WarEvent {
 
         /** WecTurnIndexGreaterThan valueGreaterThan. */
         public valueGreaterThan: number;
+
+        /** WecTurnIndexGreaterThan isNot. */
+        public isNot: boolean;
 
         /**
          * Creates a new WecTurnIndexGreaterThan instance using the specified properties.
@@ -3542,6 +3548,9 @@ export declare namespace WarEvent {
 
         /** WecTurnIndexLessThan valueLessThan */
         valueLessThan?: (number|null);
+
+        /** WecTurnIndexLessThan isNot */
+        isNot?: (boolean|null);
     }
 
     /** Represents a WecTurnIndexLessThan. */
@@ -3555,6 +3564,9 @@ export declare namespace WarEvent {
 
         /** WecTurnIndexLessThan valueLessThan. */
         public valueLessThan: number;
+
+        /** WecTurnIndexLessThan isNot. */
+        public isNot: boolean;
 
         /**
          * Creates a new WecTurnIndexLessThan instance using the specified properties.
@@ -3635,6 +3647,9 @@ export declare namespace WarEvent {
 
         /** WecTurnIndexRemainderEqualTo remainderEqualTo */
         remainderEqualTo?: (number|null);
+
+        /** WecTurnIndexRemainderEqualTo isNot */
+        isNot?: (boolean|null);
     }
 
     /** Represents a WecTurnIndexRemainderEqualTo. */
@@ -3651,6 +3666,9 @@ export declare namespace WarEvent {
 
         /** WecTurnIndexRemainderEqualTo remainderEqualTo. */
         public remainderEqualTo: number;
+
+        /** WecTurnIndexRemainderEqualTo isNot. */
+        public isNot: boolean;
 
         /**
          * Creates a new WecTurnIndexRemainderEqualTo instance using the specified properties.
@@ -3728,6 +3746,9 @@ export declare namespace WarEvent {
 
         /** WecTurnPhaseEqualTo valueEqualTo */
         valueEqualTo?: (number|null);
+
+        /** WecTurnPhaseEqualTo isNot */
+        isNot?: (boolean|null);
     }
 
     /** Represents a WecTurnPhaseEqualTo. */
@@ -3741,6 +3762,9 @@ export declare namespace WarEvent {
 
         /** WecTurnPhaseEqualTo valueEqualTo. */
         public valueEqualTo: number;
+
+        /** WecTurnPhaseEqualTo isNot. */
+        public isNot: boolean;
 
         /**
          * Creates a new WecTurnPhaseEqualTo instance using the specified properties.
@@ -3818,6 +3842,9 @@ export declare namespace WarEvent {
 
         /** WecPlayerIndexInTurnEqualTo valueEqualTo */
         valueEqualTo?: (number|null);
+
+        /** WecPlayerIndexInTurnEqualTo isNot */
+        isNot?: (boolean|null);
     }
 
     /** Represents a WecPlayerIndexInTurnEqualTo. */
@@ -3831,6 +3858,9 @@ export declare namespace WarEvent {
 
         /** WecPlayerIndexInTurnEqualTo valueEqualTo. */
         public valueEqualTo: number;
+
+        /** WecPlayerIndexInTurnEqualTo isNot. */
+        public isNot: boolean;
 
         /**
          * Creates a new WecPlayerIndexInTurnEqualTo instance using the specified properties.
@@ -3908,6 +3938,9 @@ export declare namespace WarEvent {
 
         /** WecPlayerIndexInTurnGreaterThan valueGreaterThan */
         valueGreaterThan?: (number|null);
+
+        /** WecPlayerIndexInTurnGreaterThan isNot */
+        isNot?: (boolean|null);
     }
 
     /** Represents a WecPlayerIndexInTurnGreaterThan. */
@@ -3921,6 +3954,9 @@ export declare namespace WarEvent {
 
         /** WecPlayerIndexInTurnGreaterThan valueGreaterThan. */
         public valueGreaterThan: number;
+
+        /** WecPlayerIndexInTurnGreaterThan isNot. */
+        public isNot: boolean;
 
         /**
          * Creates a new WecPlayerIndexInTurnGreaterThan instance using the specified properties.
@@ -3998,6 +4034,9 @@ export declare namespace WarEvent {
 
         /** WecPlayerIndexInTurnLessThan valueLessThan */
         valueLessThan?: (number|null);
+
+        /** WecPlayerIndexInTurnLessThan isNot */
+        isNot?: (boolean|null);
     }
 
     /** Represents a WecPlayerIndexInTurnLessThan. */
@@ -4011,6 +4050,9 @@ export declare namespace WarEvent {
 
         /** WecPlayerIndexInTurnLessThan valueLessThan. */
         public valueLessThan: number;
+
+        /** WecPlayerIndexInTurnLessThan isNot. */
+        public isNot: boolean;
 
         /**
          * Creates a new WecPlayerIndexInTurnLessThan instance using the specified properties.
@@ -4091,6 +4133,9 @@ export declare namespace WarEvent {
 
         /** WecEventCalledCountTotalEqualTo countEqualTo */
         countEqualTo?: (number|null);
+
+        /** WecEventCalledCountTotalEqualTo isNot */
+        isNot?: (boolean|null);
     }
 
     /** Represents a WecEventCalledCountTotalEqualTo. */
@@ -4107,6 +4152,9 @@ export declare namespace WarEvent {
 
         /** WecEventCalledCountTotalEqualTo countEqualTo. */
         public countEqualTo: number;
+
+        /** WecEventCalledCountTotalEqualTo isNot. */
+        public isNot: boolean;
 
         /**
          * Creates a new WecEventCalledCountTotalEqualTo instance using the specified properties.
@@ -4187,6 +4235,9 @@ export declare namespace WarEvent {
 
         /** WecEventCalledCountTotalGreaterThan countGreaterThan */
         countGreaterThan?: (number|null);
+
+        /** WecEventCalledCountTotalGreaterThan isNot */
+        isNot?: (boolean|null);
     }
 
     /** Represents a WecEventCalledCountTotalGreaterThan. */
@@ -4203,6 +4254,9 @@ export declare namespace WarEvent {
 
         /** WecEventCalledCountTotalGreaterThan countGreaterThan. */
         public countGreaterThan: number;
+
+        /** WecEventCalledCountTotalGreaterThan isNot. */
+        public isNot: boolean;
 
         /**
          * Creates a new WecEventCalledCountTotalGreaterThan instance using the specified properties.
@@ -4283,6 +4337,9 @@ export declare namespace WarEvent {
 
         /** WecEventCalledCountTotalLessThan countLessThan */
         countLessThan?: (number|null);
+
+        /** WecEventCalledCountTotalLessThan isNot */
+        isNot?: (boolean|null);
     }
 
     /** Represents a WecEventCalledCountTotalLessThan. */
@@ -4299,6 +4356,9 @@ export declare namespace WarEvent {
 
         /** WecEventCalledCountTotalLessThan countLessThan. */
         public countLessThan: number;
+
+        /** WecEventCalledCountTotalLessThan isNot. */
+        public isNot: boolean;
 
         /**
          * Creates a new WecEventCalledCountTotalLessThan instance using the specified properties.
@@ -4379,6 +4439,9 @@ export declare namespace WarEvent {
 
         /** WecPlayerAliveStateEqualTo aliveStateEqualTo */
         aliveStateEqualTo?: (number|null);
+
+        /** WecPlayerAliveStateEqualTo isNot */
+        isNot?: (boolean|null);
     }
 
     /** Represents a WecPlayerAliveStateEqualTo. */
@@ -4395,6 +4458,9 @@ export declare namespace WarEvent {
 
         /** WecPlayerAliveStateEqualTo aliveStateEqualTo. */
         public aliveStateEqualTo: number;
+
+        /** WecPlayerAliveStateEqualTo isNot. */
+        public isNot: boolean;
 
         /**
          * Creates a new WecPlayerAliveStateEqualTo instance using the specified properties.

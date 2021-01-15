@@ -146,7 +146,7 @@ namespace TinyWars.MapEditor {
         private _updateLabelName(): void {
             const data              = this.data as DataForMessageRenderer;
             this._labelName.text    = data
-                ? Lang.getLanguageText(MeManager.getWar().getWarEventManager().getWarEvent(data.warEventId).eventNameArray)
+                ? Lang.getLanguageText({ textArray: MeManager.getWar().getWarEventManager().getWarEvent(data.warEventId).eventNameArray })
                 : undefined;
         }
 

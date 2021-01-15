@@ -794,6 +794,23 @@ namespace TinyWars.Utility.Lang {
             `条件数据不合法，请编辑修正`,
             `The condition data is not valid. Please edit it.`,
         ],
+        [Type.A0166]: [
+            `数据出错，请删除本项`,
+            `Error. Please delete this line.`,
+        ],
+        [Type.A0167]: [
+            `此事件尚未设定动作。请至少设定一个动作。`,
+            `The event contains no action. Please add at least one action.`,
+        ],
+        [Type.A0168]: [
+            `动作数据不存在，请删除本动作`,
+            `The action data doesn't exist. Please delete this action.`,
+        ],
+        [Type.A0169]: [
+            `动作数据不合法，请编辑修正`,
+            `The action data is not valid. Please edit it.`,
+        ],
+
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2667,12 +2684,24 @@ namespace TinyWars.Utility.Lang {
             `Event List`,
         ],
         [Type.B0471]: [
-            `为真`,
-            `is true`,
+            `存活`,
+            `Alive`,
         ],
         [Type.B0472]: [
-            `为假`,
-            `is false`,
+            `已战败`,
+            `Defeated`,
+        ],
+        [Type.B0473]: [
+            `即将战败`,
+            `Being Defeated`,
+        ],
+        [Type.B0474]: [
+            `准备阶段`,
+            `Standby Phase`,
+        ],
+        [Type.B0475]: [
+            `主要阶段`,
+            `Main Phase`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3063,7 +3092,103 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.F0035]: [
             `事件#%d发生次数等于%d`,
-            `Event #%d `,
+            `Event #%d occurred times == %d`,
+        ],
+        [Type.F0036]: [
+            `事件#%d发生次数不等于%d`,
+            `Event #%d occurred times != %d`,
+        ],
+        [Type.F0037]: [
+            `事件#%d发生次数大于%d`,
+            `Event #%d occurred times > %d`,
+        ],
+        [Type.F0038]: [
+            `事件#%d发生次数小于等于%d`,
+            `Event #%d occurred times <= %d`,
+        ],
+        [Type.F0039]: [
+            `事件#%d发生次数小于%d`,
+            `Event #%d occurred times < %d`,
+        ],
+        [Type.F0040]: [
+            `事件#%d发生次数大于等于%d`,
+            `Event #%d occurred times >= %d`,
+        ],
+        [Type.F0041]: [
+            `玩家P%d的当前状态 == %s`,
+            `The state of the player P%d == %s`,
+        ],
+        [Type.F0042]: [
+            `玩家P%d的当前状态 != %s`,
+            `The state of the player P%d != %s`,
+        ],
+        [Type.F0043]: [
+            `当前是玩家P%d的回合`,
+            `It's P%d's turn currently.`,
+        ],
+        [Type.F0044]: [
+            `当前不是玩家P%d的回合`,
+            `It's not P%d's turn currently.`
+        ],
+        [Type.F0045]: [
+            `当前的玩家序号大于%d`,
+            `The player index in the current turn > %d.`,
+        ],
+        [Type.F0046]: [
+            `当前的玩家序号小于等于%d`,
+            `The player index in the current turn <= %d.`,
+        ],
+        [Type.F0047]: [
+            `当前的玩家序号小于%d`,
+            `The player index in the current turn < %d.`,
+        ],
+        [Type.F0048]: [
+            `当前的玩家序号大于等于%d`,
+            `The player index in the current turn >= %d.`,
+        ],
+        [Type.F0049]: [
+            `当前的回合数等于%d`,
+            `The current turn == %d.`,
+        ],
+        [Type.F0050]: [
+            `当前的回合数等于%d`,
+            `The current turn != %d.`,
+        ],
+        [Type.F0051]: [
+            `当前的回合数大于%d`,
+            `The current turn > %d.`,
+        ],
+        [Type.F0052]: [
+            `当前的回合数小于等于%d`,
+            `The current turn <= %d.`,
+        ],
+        [Type.F0053]: [
+            `当前的回合数小于%d`,
+            `The current turn < %d.`,
+        ],
+        [Type.F0054]: [
+            `当前的回合数大于等于%d`,
+            `The current turn >= %d.`,
+        ],
+        [Type.F0055]: [
+            `当前的回合数除以 %d 的余数 == %d`,
+            `The current turn mod %d == %d.`,
+        ],
+        [Type.F0056]: [
+            `当前的回合数除以 %d 的余数 != %d`,
+            `The current turn mod %d != %d.`,
+        ],
+        [Type.F0057]: [
+            `当前的回合阶段 == %s`,
+            `The current turn phase == %s.`,
+        ],
+        [Type.F0058]: [
+            `当前的回合阶段 != %s`,
+            `The current turn phase != %s.`,
+        ],
+        [Type.F0059]: [
+            `在地图上增加部队: %s`,
+            `Add units on map: %s`,
         ],
     };
 
@@ -3675,10 +3800,27 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
+    export function getPlayerAliveStateName(state: Types.PlayerAliveState): string | undefined {
+        switch (state) {
+            case Types.PlayerAliveState.Alive   : return getText(Type.B0471);
+            case Types.PlayerAliveState.Dead    : return getText(Type.B0472);
+            case Types.PlayerAliveState.Dying   : return getText(Type.B0473);
+            default                             : return undefined;
+        }
+    }
+
+    export function getTurnPhaseName(phaseCode: Types.TurnPhaseCode): string | undefined {
+        switch (phaseCode) {
+            case Types.TurnPhaseCode.WaitBeginTurn  : return getText(Type.B0474);
+            case Types.TurnPhaseCode.Main           : return getText(Type.B0475);
+            default                                 : return undefined;
+        }
+    }
+
     export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined {
         return (warRule.ruleId == null)
             ? getText(Type.B0321)
-            : getLanguageText(warRule.ruleNameArray);
+            : getLanguageText({ textArray: warRule.ruleNameArray });
     }
 
     export function getStringInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {
@@ -3690,9 +3832,20 @@ namespace TinyWars.Utility.Lang {
                 : nameList[1] || nameList[0];
         }
     }
-    export function getLanguageText(textList: ProtoTypes.Structure.ILanguageText[], languageType = getCurrentLanguageType()): string | undefined {
-        const data = (textList || []).find(v => v.languageType === languageType);
-        return data ? data.text : undefined;
+    export function getLanguageText({ textArray, languageType = getCurrentLanguageType(), useAlternate = true }: {
+        textArray       : ProtoTypes.Structure.ILanguageText[];
+        languageType?   : LanguageType;
+        useAlternate?   : boolean;
+    }): string | undefined {
+        const data = (textArray || []).find(v => v.languageType === languageType);
+        if (data) {
+            return data.text;
+        } else {
+            return useAlternate
+                ? getLanguageText({ textArray, languageType: LanguageType.English, useAlternate: false })
+                    || getLanguageText({ textArray, languageType: LanguageType.Chinese, useAlternate: false })
+                : undefined;
+        }
     }
     export function concatLanguageTextList(textList: ProtoTypes.Structure.ILanguageText[]): string {
         const strList: string[] = [];

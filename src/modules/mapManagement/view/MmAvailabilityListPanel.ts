@@ -159,7 +159,7 @@ namespace TinyWars.MapManagement {
             (mapDesigner)       && (mapDesigner = mapDesigner.toLowerCase());
 
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
-                const mapName = Lang.getLanguageText(mapBriefData.mapNameArray);
+                const mapName = Lang.getLanguageText({ textArray: mapBriefData.mapNameArray });
                 if ((!mapBriefData.mapExtraData.isEnabled)                                                                  ||
                     ((mapNameForFilter) && (mapName.toLowerCase().indexOf(mapNameForFilter) < 0))                           ||
                     ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))                   ||

@@ -91,8 +91,8 @@ namespace TinyWars.ChangeLog {
             this._updateComponentsForLanguage();
 
             const textList          = ChangeLogModel.getMessage(this._getOpenData<OpenDataForChangeLogModifyPanel>().messageId).textList || [];
-            this._inputChinese.text = Lang.getLanguageText(textList, Types.LanguageType.Chinese);
-            this._inputEnglish.text = Lang.getLanguageText(textList, Types.LanguageType.English);
+            this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.Chinese });
+            this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.English });
         }
 
         private _updateComponentsForLanguage(): void {

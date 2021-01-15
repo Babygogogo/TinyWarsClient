@@ -260,7 +260,6 @@ namespace TinyWars.MapEditor {
                     {
                         WecCommonData: {
                             conditionId : 1,            // 条件id
-                            isNot       : false,        // 不取反
                         },
                         WecPlayerIndexInTurnEqualTo: {
                             valueEqualTo: 2,            // 在进入p2回合时满足条件
@@ -974,7 +973,7 @@ namespace TinyWars.MapEditor {
         private _updateLabelWarEventName(): void {
             const data = this.data as DataForWarEventRenderer;
             if (data) {
-                this._labelWarEventName.text = Lang.getLanguageText(data.warEventManager.getWarEvent(data.warEventId).eventNameArray);
+                this._labelWarEventName.text = Lang.getLanguageText({ textArray: data.warEventManager.getWarEvent(data.warEventId).eventNameArray });
             }
         }
     }

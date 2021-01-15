@@ -283,7 +283,7 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
         }
 
         const commonData = condition.WecCommonData;
-        if ((commonData == null) || (commonData.isNot == null)) {
+        if (commonData == null) {
             return false;
         }
 
@@ -479,56 +479,93 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // description
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function getDescForCondition(con: IWarEventCondition): string {
-        const commonData = con.WecCommonData;
-        return (getDescForWecEventCalledCountTotalEqualTo(commonData, con.WecEventCalledCountTotalEqualTo))
-            || (getDescForWecEventCalledCountTotalGreaterThan(commonData, con.WecEventCalledCountTotalGreaterThan))
-            || (getDescForWecEventCalledCountTotalLessThan(commonData, con.WecEventCalledCountTotalLessThan))
-            || (getDescForWecPlayerAliveStateEqualTo(commonData, con.WecPlayerAliveStateEqualTo))
-            || (getDescForWecPlayerIndexInTurnEqualTo(commonData, con.WecPlayerIndexInTurnEqualTo))
-            || (getDescForWecPlayerIndexInTurnGreaterThan(commonData, con.WecPlayerIndexInTurnGreaterThan))
-            || (getDescForWecPlayerIndexInTurnLessThan(commonData, con.WecPlayerIndexInTurnLessThan))
-            || (getDescForWecTurnIndexEqualTo(commonData, con.WecTurnIndexEqualTo))
-            || (getDescForWecTurnIndexGreaterThan(commonData, con.WecTurnIndexGreaterThan))
-            || (getDescForWecTurnIndexLessThan(commonData, con.WecTurnIndexLessThan))
-            || (getDescForWecTurnIndexRemainderEqualTo(commonData, con.WecTurnIndexRemainderEqualTo))
-            || (getDescForWecTurnPhaseEqualTo(commonData, con.WecTurnPhaseEqualTo));
+    export function getDescForCondition(con: IWarEventCondition): string | undefined {
+        return (getDescForWecEventCalledCountTotalEqualTo(con.WecEventCalledCountTotalEqualTo))
+            || (getDescForWecEventCalledCountTotalGreaterThan(con.WecEventCalledCountTotalGreaterThan))
+            || (getDescForWecEventCalledCountTotalLessThan(con.WecEventCalledCountTotalLessThan))
+            || (getDescForWecPlayerAliveStateEqualTo(con.WecPlayerAliveStateEqualTo))
+            || (getDescForWecPlayerIndexInTurnEqualTo(con.WecPlayerIndexInTurnEqualTo))
+            || (getDescForWecPlayerIndexInTurnGreaterThan(con.WecPlayerIndexInTurnGreaterThan))
+            || (getDescForWecPlayerIndexInTurnLessThan(con.WecPlayerIndexInTurnLessThan))
+            || (getDescForWecTurnIndexEqualTo(con.WecTurnIndexEqualTo))
+            || (getDescForWecTurnIndexGreaterThan(con.WecTurnIndexGreaterThan))
+            || (getDescForWecTurnIndexLessThan(con.WecTurnIndexLessThan))
+            || (getDescForWecTurnIndexRemainderEqualTo(con.WecTurnIndexRemainderEqualTo))
+            || (getDescForWecTurnPhaseEqualTo(con.WecTurnPhaseEqualTo));
     }
-    function getDescForWecEventCalledCountTotalEqualTo(commonData: WarEvent.IWecCommonData, data: WarEvent.IWecEventCalledCountTotalEqualTo): string | undefined {
-        const { eventIdEqualTo, countEqualTo } = data;
-
+    function getDescForWecEventCalledCountTotalEqualTo(data: WarEvent.IWecEventCalledCountTotalEqualTo): string | undefined {
+        return (data)
+            ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0035 : Lang.Type.F0036, data.eventIdEqualTo, data.countEqualTo)
+            : undefined;
     }
-    function getDescForWecEventCalledCountTotalGreaterThan(commonData: WarEvent.IWecCommonData, data: WarEvent.IWecEventCalledCountTotalGreaterThan): string | undefined {
-
+    function getDescForWecEventCalledCountTotalGreaterThan(data: WarEvent.IWecEventCalledCountTotalGreaterThan): string | undefined {
+        return (data)
+            ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0037 : Lang.Type.F0038, data.eventIdEqualTo, data.countGreaterThan)
+            : undefined;
     }
-    function getDescForWecEventCalledCountTotalLessThan(commonData: WarEvent.IWecCommonData, data: WarEvent.IWecEventCalledCountTotalLessThan): string | undefined {
-
+    function getDescForWecEventCalledCountTotalLessThan(data: WarEvent.IWecEventCalledCountTotalLessThan): string | undefined {
+        return (data)
+            ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0039 : Lang.Type.F0040, data.eventIdEqualTo, data.countLessThan)
+            : undefined;
     }
-    function getDescForWecPlayerAliveStateEqualTo(commonData: WarEvent.IWecCommonData, data: WarEvent.IWecPlayerAliveStateEqualTo): string | undefined {
-
+    function getDescForWecPlayerAliveStateEqualTo(data: WarEvent.IWecPlayerAliveStateEqualTo): string | undefined {
+        return (data)
+            ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0041 : Lang.Type.F0042, data.playerIndexEqualTo, Lang.getPlayerAliveStateName(data.aliveStateEqualTo))
+            : undefined;
     }
-    function getDescForWecPlayerIndexInTurnEqualTo(commonData: WarEvent.IWecCommonData, data: WarEvent.IWecPlayerIndexInTurnEqualTo): string | undefined {
-
+    function getDescForWecPlayerIndexInTurnEqualTo(data: WarEvent.IWecPlayerIndexInTurnEqualTo): string | undefined {
+        return (data)
+            ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0043 : Lang.Type.F0044, data.valueEqualTo)
+            : undefined;
     }
-    function getDescForWecPlayerIndexInTurnGreaterThan(commonData: WarEvent.IWecCommonData, data: WarEvent.IWecPlayerIndexInTurnGreaterThan): string | undefined {
-
+    function getDescForWecPlayerIndexInTurnGreaterThan(data: WarEvent.IWecPlayerIndexInTurnGreaterThan): string | undefined {
+        return (data)
+            ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0045 : Lang.Type.F0046, data.valueGreaterThan)
+            : undefined;
     }
-    function getDescForWecPlayerIndexInTurnLessThan(commonData: WarEvent.IWecCommonData, data: WarEvent.IWecPlayerIndexInTurnLessThan): string | undefined {
-
+    function getDescForWecPlayerIndexInTurnLessThan(data: WarEvent.IWecPlayerIndexInTurnLessThan): string | undefined {
+        return (data)
+            ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0047 : Lang.Type.F0048, data.valueLessThan)
+            : undefined;
     }
-    function getDescForWecTurnIndexEqualTo(commonData: WarEvent.IWecCommonData, data: WarEvent.IWecTurnIndexEqualTo): string | undefined {
-
+    function getDescForWecTurnIndexEqualTo(data: WarEvent.IWecTurnIndexEqualTo): string | undefined {
+        return (data)
+            ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0049 : Lang.Type.F0050, data.valueEqualTo)
+            : undefined;
     }
-    function getDescForWecTurnIndexGreaterThan(commonData: WarEvent.IWecCommonData, data: WarEvent.IWecTurnIndexGreaterThan): string | undefined {
-
+    function getDescForWecTurnIndexGreaterThan(data: WarEvent.IWecTurnIndexGreaterThan): string | undefined {
+        return (data)
+            ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0051 : Lang.Type.F0052, data.valueGreaterThan)
+            : undefined;
     }
-    function getDescForWecTurnIndexLessThan(commonData: WarEvent.IWecCommonData, data: WarEvent.IWecTurnIndexLessThan): string | undefined {
-
+    function getDescForWecTurnIndexLessThan(data: WarEvent.IWecTurnIndexLessThan): string | undefined {
+        return (data)
+            ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0053 : Lang.Type.F0054, data.valueLessThan)
+            : undefined;
     }
-    function getDescForWecTurnIndexRemainderEqualTo(commonData: WarEvent.IWecCommonData, data: WarEvent.IWecTurnIndexRemainderEqualTo): string | undefined {
-
+    function getDescForWecTurnIndexRemainderEqualTo(data: WarEvent.IWecTurnIndexRemainderEqualTo): string | undefined {
+        return (data)
+            ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0055 : Lang.Type.F0056, data.divider, data.remainderEqualTo)
+            : undefined;
     }
-    function getDescForWecTurnPhaseEqualTo(commonData: WarEvent.IWecCommonData, data: WarEvent.IWecTurnPhaseEqualTo): string | undefined {
+    function getDescForWecTurnPhaseEqualTo(data: WarEvent.IWecTurnPhaseEqualTo): string | undefined {
+        return (data)
+            ? Lang.getFormattedText(!data.isNot ? Lang.Type.F0057 : Lang.Type.F0058, Lang.getTurnPhaseName(data.valueEqualTo))
+            : undefined;
+    }
 
+    export function getDescForAction(action: IWarEventAction): string | undefined {
+        return getDescForWeaAddUnit(action.WarEventActionAddUnit);
+    }
+    function getDescForWeaAddUnit(data: WarEvent.IWarEventActionAddUnit): string | undefined {
+        if (!data) {
+            return undefined;
+        } else {
+            const unitNameArray: string[] = [];
+            for (const unitData of data.unitArray || []) {
+                unitNameArray.push(Lang.getUnitName(unitData.unitData.unitType));
+            }
+            return Lang.getFormattedText(Lang.Type.F0059, unitNameArray.join(", "));
+        }
     }
 }

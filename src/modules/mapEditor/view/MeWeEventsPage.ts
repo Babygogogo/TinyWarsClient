@@ -135,7 +135,7 @@ namespace TinyWars.MapEditor {
             if (data) {
                 const warEventId        = data.warEventId;
                 const warEvent          = (data.warEventFullData.eventArray || []).find(v => v.eventId === warEventId);
-                this._labelName.text    = `#${warEventId} ${warEvent ? Lang.getLanguageText(warEvent.eventNameArray) : `???`}`;
+                this._labelName.text    = `#${warEventId} ${warEvent ? Lang.getLanguageText({ textArray: warEvent.eventNameArray }) : `???`}`;
             }
         }
 
@@ -280,7 +280,7 @@ namespace TinyWars.MapEditor {
                         labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0158)}`;
                     } else {
                         labelDesc.textColor = ColorValue.White;
-                        labelDesc.text      = `${prefix} ${Lang.getLanguageText(event.eventNameArray)}`;
+                        labelDesc.text      = `${prefix} ${Lang.getLanguageText({ textArray: event.eventNameArray })}`;
                     }
 
                     return;
@@ -333,7 +333,33 @@ namespace TinyWars.MapEditor {
                     return;
                 }
 
-                // TODO
+                const actionId = data.actionId;
+                if (actionId != null) {
+                    if (actionId < 0) {
+                        labelDesc.textColor = ColorValue.Red;
+                        labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0167)}`;
+                        return;
+                    }
+
+                    const action = (fullData.actionArray || []).find(v => v.WarEventActionCommonData.actionId === actionId);
+                    if (action == null) {
+                        labelDesc.textColor = ColorValue.Red;
+                        labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0168)}`;
+                        return;
+                    }
+
+                    const desc = BwWarEventHelper.getDescForAction(action);
+                    if (desc) {
+                        labelDesc.textColor = ColorValue.White;
+                        labelDesc.text      = `${prefix} ${desc}`;
+                    } else {
+                        labelDesc.textColor = ColorValue.Red;
+                        labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0169)}`;
+                    }
+                }
+
+                labelDesc.textColor = ColorValue.Red;
+                labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0166)}`;
             }
         }
     }
