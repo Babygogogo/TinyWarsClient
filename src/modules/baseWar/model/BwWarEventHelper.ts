@@ -386,10 +386,7 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
 
         const conditionIdArray  = conditionNode.conditionIdArray || [];
         const subNodeIdArray    = conditionNode.subNodeIdArray || [];
-        if ((conditionIdArray.length > CommonConstants.WarEventMaxConditionsPerNode)         ||
-            (subNodeIdArray.length > CommonConstants.WarEventMaxSubConditionNodesPerNode)    ||
-            (conditionIdArray.length + subNodeIdArray.length <= 0)
-        ) {
+        if (conditionIdArray.length + subNodeIdArray.length <= 0) {
             return false;
         }
 

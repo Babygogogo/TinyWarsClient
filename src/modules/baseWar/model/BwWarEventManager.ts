@@ -57,6 +57,36 @@ namespace TinyWars.BaseWar {
 
         public setWarEventFullData(data: IWarEventFullData): void {
             this._warEventFullData = data;
+
+            if (data.actionArray == null) {
+                data.actionArray = [];
+            }
+            if (data.conditionArray == null) {
+                data.conditionArray = [];
+            }
+            if (data.conditionNodeArray == null) {
+                data.conditionNodeArray = [];
+            }
+            if (data.eventArray == null) {
+                data.eventArray = [];
+            }
+
+            for (const node of data.conditionNodeArray) {
+                if (node.subNodeIdArray == null) {
+                    node.subNodeIdArray = [];
+                }
+                if (node.conditionIdArray == null) {
+                    node.conditionIdArray = [];
+                }
+            }
+            for (const event of data.eventArray) {
+                if (event.actionIdArray == null) {
+                    event.actionIdArray = [];
+                }
+                if (event.eventNameArray == null) {
+                    event.eventNameArray = [];
+                }
+            }
         }
         public getWarEventFullData(): IWarEventFullData | undefined | null {
             return this._warEventFullData;

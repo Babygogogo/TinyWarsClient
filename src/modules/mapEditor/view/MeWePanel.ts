@@ -179,7 +179,13 @@ namespace TinyWars.MapEditor {
 
         const nodeId = warEvent.conditionNodeId;
         if (nodeId != null) {
-            dataArray.push(...generateNodeDataArrayForListWarEventDesc({ eventId, nodeId, fullData, prefixArray: prefixArray.concat(`N${nodeId}`) }));
+            dataArray.push(...generateNodeDataArrayForListWarEventDesc({
+                eventId,
+                parentNodeId: undefined,
+                nodeId,
+                fullData,
+                prefixArray : prefixArray.concat(`N${nodeId}`)
+            }));
         } else {
             dataArray.push({
                 descType        : DescType.ConditionNode,
@@ -187,6 +193,7 @@ namespace TinyWars.MapEditor {
                 warEventFullData: fullData,
                 eventId,
                 nodeId          : -1,
+                parentNodeId    : undefined,
             });
         }
 
@@ -213,8 +220,9 @@ namespace TinyWars.MapEditor {
 
         return dataArray;
     }
-    function generateNodeDataArrayForListWarEventDesc({ eventId, nodeId, fullData, prefixArray }: {
+    function generateNodeDataArrayForListWarEventDesc({ eventId, parentNodeId, nodeId, fullData, prefixArray }: {
         eventId     : number;
+        parentNodeId: number | undefined;
         nodeId      : number;
         fullData    : IWarEventFullData;
         prefixArray : string[];
@@ -224,6 +232,7 @@ namespace TinyWars.MapEditor {
             prefixArray,
             warEventFullData: fullData,
             eventId,
+            parentNodeId,
             nodeId,
         }];
 
@@ -238,6 +247,7 @@ namespace TinyWars.MapEditor {
                 prefixArray     : prefixArray.concat([`C${conditionId}`]),
                 warEventFullData: fullData,
                 eventId,
+                parentNodeId    : nodeId,
                 conditionId,
             });
         }
@@ -245,6 +255,7 @@ namespace TinyWars.MapEditor {
         for (const subNodeId of node.subNodeIdArray || []) {
             dataArray.push(...generateNodeDataArrayForListWarEventDesc({
                 eventId,
+                parentNodeId: nodeId,
                 nodeId      : subNodeId,
                 fullData,
                 prefixArray : prefixArray.concat([`N${subNodeId}`])
@@ -269,6 +280,7 @@ namespace TinyWars.MapEditor {
         eventId         : number;
         actionId?       : number;
         conditionId?    : number;
+        parentNodeId?   : number;
         nodeId?         : number;
     }
     class WarEventDescRenderer extends GameUi.UiListItemRenderer {
@@ -278,6 +290,16 @@ namespace TinyWars.MapEditor {
         private _btnModifyMaxCallCountPerTurn   : GameUi.UiButton;
         private _btnModifyMaxCallCountTotal     : GameUi.UiButton;
         private _btnDeleteEvent                 : GameUi.UiButton;
+        private _btnSwitchNodeAndOr             : GameUi.UiButton;
+        private _btnReplaceNode                 : GameUi.UiButton;
+        private _btnAddSubNode                  : GameUi.UiButton;
+        private _btnAddSubCondition             : GameUi.UiButton;
+        private _btnDeleteNode                  : GameUi.UiButton;
+        private _btnReplaceCondition            : GameUi.UiButton;
+        private _btnDeleteCondition             : GameUi.UiButton;
+        private _btnReplaceAction               : GameUi.UiButton;
+        private _btnAddAction                   : GameUi.UiButton;
+        private _btnDeleteAction                : GameUi.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -285,6 +307,16 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnModifyMaxCallCountPerTurn,   callback: this._onTouchedBtnModifyMaxCallCountPerTurn },
                 { ui: this._btnModifyMaxCallCountTotal,     callback: this._onTouchedBtnModifyMaxCallCountTotal },
                 { ui: this._btnDeleteEvent,                 callback: this._onTouchedBtnDeleteEvent },
+                { ui: this._btnSwitchNodeAndOr,             callback: this._onTouchedBtnSwitchNodeAndOr },
+                { ui: this._btnReplaceNode,                 callback: this._onTouchedBtnReplaceNode },
+                { ui: this._btnAddSubNode,                  callback: this._onTouchedBtnAddSubNode },
+                { ui: this._btnAddSubCondition,             callback: this._onTouchedBtnAddSubCondition },
+                { ui: this._btnDeleteNode,                  callback: this._onTouchedBtnDeleteNode },
+                { ui: this._btnReplaceCondition,            callback: this._onTouchedBtnReplaceCondition },
+                { ui: this._btnDeleteCondition,             callback: this._onTouchedBtnDeleteCondition },
+                { ui: this._btnReplaceAction,               callback: this._onTouchedBtnReplaceAction },
+                { ui: this._btnAddAction,                   callback: this._onTouchedBtnAddAction },
+                { ui: this._btnDeleteAction,                callback: this._onTouchedBtnDeleteAction },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
@@ -352,7 +384,7 @@ namespace TinyWars.MapEditor {
             const data      = this.data as DataForWarEventDescRenderer;
             const eventId   = data.eventId;
             CommonConfirmPanel.show({
-                title   : `${Lang.getText(Lang.Type.B0479)} #${eventId}`,
+                title   : `${Lang.getText(Lang.Type.B0479)} E${eventId}`,
                 content : Lang.getText(Lang.Type.A0171),
                 callback: () => {
                     const eventArray = data.warEventFullData.eventArray;
@@ -369,6 +401,214 @@ namespace TinyWars.MapEditor {
                 },
             });
         }
+        private _onTouchedBtnSwitchNodeAndOr(e: egret.TouchEvent): void {
+            const data = this.data as DataForWarEventDescRenderer;
+            if (data) {
+                const node = data.warEventFullData.conditionNodeArray.find(v => v.nodeId === data.nodeId);
+                node.isAnd = !node.isAnd;
+                Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
+            }
+        }
+        private _onTouchedBtnReplaceNode(e: egret.TouchEvent): void {
+            const data = this.data as DataForWarEventDescRenderer;
+            // TODO
+            FloatText.show("TODO");
+        }
+        private _onTouchedBtnAddSubNode(e: egret.TouchEvent): void {
+            const data = this.data as DataForWarEventDescRenderer;
+            if (data) {
+                const fullData = data.warEventFullData;
+                if (fullData.conditionNodeArray == null) {
+                    fullData.conditionNodeArray = [];
+                }
+
+                const nodeArray = fullData.conditionNodeArray;
+                const maxCount  = CommonConstants.WarEventMaxConditionNodesPerMap;
+                if (nodeArray.length >= maxCount) {
+                    FloatText.show(Lang.getText(Lang.Type.A0173));
+                } else {
+                    for (let nodeId = 1; nodeId <= maxCount; ++nodeId) {
+                        if (!nodeArray.some(v => v.nodeId === nodeId)) {
+                            nodeArray.push({
+                                nodeId,
+                                isAnd           : true,
+                                subNodeIdArray  : [],
+                                conditionIdArray: [],
+                            });
+                            nodeArray.sort((v1, v2) => v1.nodeId - v2.nodeId);
+
+                            const parentNode = nodeArray.find(v => v.nodeId === data.nodeId);
+                            if (parentNode.subNodeIdArray == null) {
+                                parentNode.subNodeIdArray = [nodeId];
+                            } else {
+                                const arr = parentNode.subNodeIdArray;
+                                arr.push(nodeId);
+                                arr.sort();
+                            }
+
+                            Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        private _onTouchedBtnAddSubCondition(e: egret.TouchEvent): void {
+            const data = this.data as DataForWarEventDescRenderer;
+            if (data) {
+                const fullData = data.warEventFullData;
+                if (fullData.conditionArray == null) {
+                    fullData.conditionArray = [];
+                }
+
+                const conditionArray    = fullData.conditionArray;
+                const maxCount          = CommonConstants.WarEventMaxConditionsPerMap;
+                if (conditionArray.length >= maxCount) {
+                    FloatText.show(Lang.getText(Lang.Type.A0174));
+                } else {
+                    for (let conditionId = 1; conditionId <= maxCount; ++conditionId) {
+                        if (!conditionArray.some(v => v.WecCommonData.conditionId === conditionId)) {
+                            conditionArray.push({
+                                WecCommonData   : {
+                                    conditionId,
+                                },
+                            });
+                            conditionArray.sort((v1, v2) => v1.WecCommonData.conditionId - v2.WecCommonData.conditionId);
+
+                            const node = fullData.conditionNodeArray.find(v => v.nodeId === data.nodeId);
+                            if (node.conditionIdArray == null) {
+                                node.conditionIdArray = [conditionId];
+                            } else {
+                                const arr = node.conditionIdArray;
+                                arr.push(conditionId);
+                                arr.sort();
+                            }
+
+                            Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        private _onTouchedBtnDeleteNode(e: egret.TouchEvent): void {
+            const data = this.data as DataForWarEventDescRenderer;
+            if (data) {
+                const nodeId = data.nodeId;
+                CommonConfirmPanel.show({
+                    title   : `${Lang.getText(Lang.Type.B0481)} N${nodeId}`,
+                    content : Lang.getText(Lang.Type.A0172),
+                    callback: () => {
+                        const fullData  = data.warEventFullData;
+                        const nodeArray = fullData.conditionNodeArray;
+                        const arr       = nodeArray.find(v => v.nodeId === data.parentNodeId).subNodeIdArray;
+                        arr.splice(arr.indexOf(nodeId), 1);
+
+                        if ((!fullData.eventArray.some(v => v.conditionNodeId == nodeId))       &&
+                            (!nodeArray.some(v => (v.subNodeIdArray || []).indexOf(nodeId) >= 0))
+                        ) {
+                            nodeArray.splice(nodeArray.findIndex(v => v.nodeId === nodeId), 1);
+                        }
+
+                        Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
+                    },
+                });
+            }
+        }
+        private _onTouchedBtnReplaceCondition(e: egret.TouchEvent): void {
+            // TODO
+            FloatText.show("TODO");
+        }
+        private _onTouchedBtnDeleteCondition(e: egret.TouchEvent): void {
+            const data = this.data as DataForWarEventDescRenderer;
+            if (data) {
+                const conditionId = data.conditionId;
+                CommonConfirmPanel.show({
+                    title   : `${Lang.getText(Lang.Type.B0485)} C${conditionId}`,
+                    content : Lang.getText(Lang.Type.A0175),
+                    callback: () => {
+                        const fullData  = data.warEventFullData;
+                        const nodeArray = fullData.conditionNodeArray;
+                        const arr       = nodeArray.find(v => v.nodeId === data.parentNodeId).conditionIdArray;
+                        arr.splice(arr.indexOf(conditionId), 1);
+
+                        if (!nodeArray.some(v => (v.conditionIdArray || []).indexOf(conditionId) >= 0)) {
+                            const conditionArray = fullData.conditionArray;
+                            conditionArray.splice(conditionArray.findIndex(v => v.WecCommonData.conditionId === conditionId), 1);
+                        }
+
+                        Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
+                    },
+                });
+            }
+        }
+        private _onTouchedBtnReplaceAction(e: egret.TouchEvent): void {
+            // TODO
+            FloatText.show("TODO");
+        }
+        private _onTouchedBtnAddAction(e: egret.TouchEvent): void {
+            const data = this.data as DataForWarEventDescRenderer;
+            if (data) {
+                const fullData = data.warEventFullData;
+                if (fullData.actionArray == null) {
+                    fullData.actionArray = [];
+                }
+
+                const actionArray       = fullData.actionArray;
+                const maxCountPerMap    = CommonConstants.WarEventMaxActionsPerMap;
+                if (actionArray.length >= maxCountPerMap) {
+                    FloatText.show(Lang.getText(Lang.Type.A0177));
+                    return;
+                }
+
+                const eventActionArray = fullData.eventArray.find(v => v.eventId === data.eventId).actionIdArray;
+                if (eventActionArray.length >= CommonConstants.WarEventMaxActionsPerEvent) {
+                    FloatText.show(Lang.getText(Lang.Type.A0178));
+                    return;
+                }
+
+                for (let actionId = 1; actionId <= maxCountPerMap; ++actionId) {
+                    if (!actionArray.some(v => v.WarEventActionCommonData.actionId === actionId)) {
+                        actionArray.push({
+                            WarEventActionCommonData: {
+                                actionId,
+                            },
+                        });
+                        actionArray.sort((v1, v2) => v1.WarEventActionCommonData.actionId - v2.WarEventActionCommonData.actionId);
+
+                        eventActionArray.push(actionId);
+                        eventActionArray.sort();
+
+                        Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
+                        return;
+                    }
+                }
+            }
+        }
+        private _onTouchedBtnDeleteAction(e: egret.TouchEvent): void {
+            const data = this.data as DataForWarEventDescRenderer;
+            if (data) {
+                const actionId = data.actionId;
+                CommonConfirmPanel.show({
+                    title   : `${Lang.getText(Lang.Type.B0486)} A${actionId}`,
+                    content : Lang.getText(Lang.Type.A0176),
+                    callback: () => {
+                        const fullData      = data.warEventFullData;
+                        const eventArray    = fullData.eventArray;
+                        const arr           = eventArray.find(v => v.eventId === data.eventId).actionIdArray;
+                        arr.splice(arr.indexOf(actionId), 1);
+
+                        if (!eventArray.some(v => v.actionIdArray.indexOf(actionId) >= 0)) {
+                            const actionArray = fullData.actionArray;
+                            actionArray.splice(actionArray.findIndex(v => v.WarEventActionCommonData.actionId === actionId), 1);
+                        }
+
+                        Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
+                    },
+                });
+            }
+        }
+
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }
@@ -384,6 +624,16 @@ namespace TinyWars.MapEditor {
             this._btnModifyEventName.label              = Lang.getText(Lang.Type.B0317);
             this._btnModifyMaxCallCountPerTurn.label    = Lang.getText(Lang.Type.B0317);
             this._btnModifyMaxCallCountTotal.label      = Lang.getText(Lang.Type.B0317);
+            this._btnSwitchNodeAndOr.label              = Lang.getText(Lang.Type.B0482);
+            this._btnReplaceNode.label                  = Lang.getText(Lang.Type.B0480);
+            this._btnAddSubCondition.label              = Lang.getText(Lang.Type.B0483);
+            this._btnAddSubNode.label                   = Lang.getText(Lang.Type.B0484);
+            this._btnDeleteNode.label                   = Lang.getText(Lang.Type.B0220);
+            this._btnReplaceCondition.label             = Lang.getText(Lang.Type.B0480);
+            this._btnDeleteCondition.label              = Lang.getText(Lang.Type.B0220);
+            this._btnReplaceAction.label                = Lang.getText(Lang.Type.B0480);
+            this._btnAddAction.label                    = Lang.getText(Lang.Type.B0320);
+            this._btnDeleteAction.label                 = Lang.getText(Lang.Type.B0220);
 
             this._updateLabelDescAndButtons();
         }
@@ -479,6 +729,14 @@ namespace TinyWars.MapEditor {
             }
         }
         private _updateForConditionNode(data: DataForWarEventDescRenderer): void {
+            const group = this._groupBtn;
+            group.removeChildren();
+            group.addChild(this._btnReplaceNode);
+
+            if (data.parentNodeId != null) {
+                group.addChild(this._btnDeleteNode);
+            }
+
             const labelDesc     = this._labelDesc;
             const prefixArray   = data.prefixArray;
             // const prefix        = prefixArray.join(`.`);
@@ -499,6 +757,10 @@ namespace TinyWars.MapEditor {
                 return;
             }
 
+            group.addChild(this._btnAddSubCondition);
+            group.addChild(this._btnAddSubNode);
+            group.addChild(this._btnSwitchNodeAndOr);
+
             if (((node.subNodeIdArray || []).length) + ((node.conditionIdArray || []).length) <= 0) {
                 labelDesc.textColor = ColorValue.Red;
                 labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0161)}`;
@@ -509,6 +771,9 @@ namespace TinyWars.MapEditor {
             labelDesc.text      = `${prefix} ${node.isAnd ? Lang.getText(Lang.Type.A0162) : Lang.getText(Lang.Type.A0163)}`;
         }
         private _updateForCondition(data: DataForWarEventDescRenderer): void {
+            const group = this._groupBtn;
+            group.removeChildren();
+
             const labelDesc     = this._labelDesc;
             const prefixArray   = data.prefixArray;
             // const prefix        = prefixArray.join(`.`);
@@ -522,6 +787,9 @@ namespace TinyWars.MapEditor {
                 labelDesc.text      = `${prefix} Error: empty conditionId.`;
                 return;
             }
+
+            group.addChild(this._btnReplaceCondition);
+            group.addChild(this._btnDeleteCondition);
 
             const condition = (fullData.conditionArray || []).find(v => v.WecCommonData.conditionId === conditionId);
             if (condition == null) {
@@ -540,6 +808,10 @@ namespace TinyWars.MapEditor {
             }
         }
         private _updateForAction(data: DataForWarEventDescRenderer): void {
+            const group = this._groupBtn;
+            group.removeChildren();
+            group.addChild(this._btnReplaceAction);
+
             const labelDesc     = this._labelDesc;
             const prefixArray   = data.prefixArray;
             // const prefix        = prefixArray.join(`.`);
@@ -552,6 +824,9 @@ namespace TinyWars.MapEditor {
                 labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0167)}`;
                 return;
             }
+
+            group.addChild(this._btnAddAction);
+            group.addChild(this._btnDeleteAction);
 
             const action = (fullData.actionArray || []).find(v => v.WarEventActionCommonData.actionId === actionId);
             if (action == null) {

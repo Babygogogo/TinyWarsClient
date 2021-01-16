@@ -294,7 +294,7 @@ namespace TinyWars.MapEditor {
                     {
                         nodeId          : 1,
                         isAnd           : true,
-                        subNodeIdArray  : null,
+                        subNodeIdArray  : [3],
                         conditionIdArray: [1],
                     },
                     {
@@ -356,9 +356,6 @@ namespace TinyWars.MapEditor {
                         actionIdArray               : [1, 1, 1, 1, 1, ],// 动作id列表，
                         // 动作1是刷出1个坦克，这里指定执行5次，而且坦克不会被已有部队阻断，所以执行时就直接刷出5个坦克
                     },
-                    {
-                        eventId                     : 3,
-                    }
                 ],
             };
 

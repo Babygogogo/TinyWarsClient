@@ -767,16 +767,16 @@ namespace TinyWars.Utility.Lang {
             `The event data doesn't exist. Please delete it.`,
         ],
         [Type.A0159]: [
-            `此事件尚未设定条件节点。请在事件编辑器中进行设定。`,
-            `The event contains no condition node. Please add one.`,
+            `此事件尚未设定条件节点`,
+            `The event contains no condition node.`,
         ],
         [Type.A0160]: [
             `条件节点的数据不存在。请删除此条件节点。`,
             `The condition node data doesn't exist. Please delete it.`,
         ],
         [Type.A0161]: [
-            `此条件节点不包含任何子条件和子条件节点。请在条件节点编辑器中进行设定。`,
-            `The condition node contains no condition nor sub node. Please add one.`,
+            `此条件节点不包含任何子条件和子条件节点。`,
+            `The condition node contains no condition nor sub node.`,
         ],
         [Type.A0162]: [
             `所有子条件和子节点都成立时，此节点成立。`,
@@ -817,6 +817,34 @@ namespace TinyWars.Utility.Lang {
         [Type.A0171]: [
             `您确定要删除事件吗？`,
             `Are you sure to delete this event?`,
+        ],
+        [Type.A0172]: [
+            `您确定要删除该条件节点吗？`,
+            `Are you sure to delete the condition node?`,
+        ],
+        [Type.A0173]: [
+            `条件节点数量已达上限`,
+            `There are too many condition nodes already.`,
+        ],
+        [Type.A0174]: [
+            `条件数量已达上限`,
+            `There are too many conditions already.`,
+        ],
+        [Type.A0175]: [
+            `您确定要删除该条件吗？`,
+            `Are you sure to delete the condition?`,
+        ],
+        [Type.A0176]: [
+            `您确定要删除该动作吗？`,
+            `Are you sure to delete the action?`,
+        ],
+        [Type.A0177]: [
+            `动作数量已达上限`,
+            `There are too many actions already.`,
+        ],
+        [Type.A0178]: [
+            `事件中的动作数量已达上限`,
+            `There are too many actions in the event already.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2725,6 +2753,34 @@ namespace TinyWars.Utility.Lang {
         [Type.B0479]: [
             `删除事件`,
             `Delete Event`,
+        ],
+        [Type.B0480]: [
+            `替换`,
+            `Replace`,
+        ],
+        [Type.B0481]: [
+            `删除条件节点`,
+            `Delete Condition Node`,
+        ],
+        [Type.B0482]: [
+            `切换与/或`,
+            `ALL/ANY`,
+        ],
+        [Type.B0483]: [
+            `+子条件`,
+            `Sub Cond.`,
+        ],
+        [Type.B0484]: [
+            `+子节点`,
+            `Sub Node`,
+        ],
+        [Type.B0485]: [
+            `删除条件`,
+            `Delete Condition`,
+        ],
+        [Type.B0486]: [
+            `删除动作`,
+            `Delete Action`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
