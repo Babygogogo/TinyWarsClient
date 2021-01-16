@@ -15,17 +15,17 @@ namespace TinyWars.BaseWar {
 
     export abstract class BwWarEventManager {
         private _war?               : BwWar;
-        private _warEventFullData?      : IWarEventFullData | null | undefined;
+        private _warEventFullData?  : IWarEventFullData | null | undefined;
         private _calledCountList?   : IDataForWarEventCalledCount[] | null | undefined;
 
         public init(data: ISerialWarEventManager): BwWarEventManager | undefined {
-            this.setWarEventFullData(data.warEventFullData);
+            this.setWarEventFullData(data.warEventFullData || {});
             this._setCalledCountList(data.calledCountList);
 
             return this;
         }
         public fastInit(data: ISerialWarEventManager): BwWarEventManager {
-            this.setWarEventFullData(Helpers.deepClone(data.warEventFullData));
+            this.setWarEventFullData(Helpers.deepClone(data.warEventFullData || {}));
             this._setCalledCountList(Helpers.deepClone(data.calledCountList));
 
             return this;
@@ -55,7 +55,7 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
-        public setWarEventFullData(data: IWarEventFullData | null | undefined): void {
+        public setWarEventFullData(data: IWarEventFullData): void {
             this._warEventFullData = data;
         }
         public getWarEventFullData(): IWarEventFullData | undefined | null {

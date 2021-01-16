@@ -405,10 +405,15 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
             }
         }
 
-        const usedNodeIdList    = [currNodeId];
+        const usedConditionIdSet = new Set<number>(conditionIdArray);
+        if (usedConditionIdSet.size !== conditionIdArray.length) {
+            return false;
+        }
+
+        const usedNodeIdArray   = [currNodeId];
         const usedNodeIdSet     = new Set<number>();
-        for (let i = 0; i < usedNodeIdList.length; ++i) {
-            const nodeId = usedNodeIdList[i];
+        for (let i = 0; i < usedNodeIdArray.length; ++i) {
+            const nodeId = usedNodeIdArray[i];
             if (usedNodeIdSet.has(nodeId)) {
                 return false;
             }
@@ -419,9 +424,16 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
                 return false;
             }
 
-            const idArray = subNode.subNodeIdArray;
-            if (idArray) {
-                usedNodeIdList.push(...idArray);
+            const nodeIdArray = subNode.subNodeIdArray;
+            if (nodeIdArray) {
+                usedNodeIdArray.push(...nodeIdArray);
+            }
+
+            for (const conId of subNode.conditionIdArray || []) {
+                if (usedConditionIdSet.has(conId)) {
+                    return false;
+                }
+                usedConditionIdSet.add(conId);
             }
         }
 

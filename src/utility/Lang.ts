@@ -784,7 +784,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.A0163]: [
             `任意子条件或子节点成立时，此节点成立。`,
-            `The condition node is true if ONE of the sub conditions and/or sub nodes is true.`,
+            `The condition node is true if ANY of the sub conditions and/or sub nodes is true.`,
         ],
         [Type.A0164]: [
             `条件数据不存在，请删除本条件`,
@@ -810,7 +810,14 @@ namespace TinyWars.Utility.Lang {
             `动作数据不合法，请编辑修正`,
             `The action data is not valid. Please edit it.`,
         ],
-
+        [Type.A0170]: [
+            `事件数量已达上限`,
+            `There are too many events already.`,
+        ],
+        [Type.A0171]: [
+            `您确定要删除事件吗？`,
+            `Are you sure to delete this event?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2702,6 +2709,22 @@ namespace TinyWars.Utility.Lang {
         [Type.B0475]: [
             `主要阶段`,
             `Main Phase`,
+        ],
+        [Type.B0476]: [
+            `事件在每个玩家回合的触发次数上限`,
+            `Upper limit of trigger times per player's turn`,
+        ],
+        [Type.B0477]: [
+            `事件在整局游戏中的触发次数上限`,
+            `Upper limit of trigger times per game`,
+        ],
+        [Type.B0478]: [
+            `修改事件名称`,
+            `Edit Event Name`,
+        ],
+        [Type.B0479]: [
+            `删除事件`,
+            `Delete Event`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -259,10 +259,34 @@ namespace TinyWars.MapEditor {
                 conditionArray: [                        // 条件列表
                     {
                         WecCommonData: {
-                            conditionId : 1,            // 条件id
+                            conditionId : 1,
+                        },
+                        WecTurnPhaseEqualTo : {
+                            valueEqualTo: Types.TurnPhaseCode.Main,
+                        },
+                    },
+                    {
+                        WecCommonData: {
+                            conditionId: 2,
                         },
                         WecPlayerIndexInTurnEqualTo: {
-                            valueEqualTo: 2,            // 在进入p2回合时满足条件
+                            valueEqualTo: 2,
+                        },
+                    },
+                    {
+                        WecCommonData: {
+                            conditionId : 3,            // 条件id
+                        },
+                        WecTurnIndexLessThan: {
+                            valueLessThan: 3,
+                        },
+                    },
+                    {
+                        WecCommonData: {
+                            conditionId : 4,
+                        },
+                        WecTurnIndexGreaterThan: {
+                            valueGreaterThan   : 5,
                         },
                     },
                 ],
@@ -272,6 +296,18 @@ namespace TinyWars.MapEditor {
                         isAnd           : true,
                         subNodeIdArray  : null,
                         conditionIdArray: [1],
+                    },
+                    {
+                        nodeId          : 2,
+                        isAnd           : true,
+                        subNodeIdArray  : [3],
+                        conditionIdArray: [1, 2],
+                    },
+                    {
+                        nodeId          : 3,
+                        isAnd           : false,
+                        subNodeIdArray  : null,
+                        conditionIdArray: [3, 4],
                     }
                 ],
                 actionArray: [                          // 动作列表
@@ -304,7 +340,7 @@ namespace TinyWars.MapEditor {
                         ],                                              // 自定义名称
                         maxCallCountInPlayerTurn    : 1,                // 每回合最多1次
                         maxCallCountTotal           : 1,                // 每局最多一次
-                        conditionNodeId             : 1,                // 条件组合id，满足时执行动作列表
+                        conditionNodeId             : 2,                // 条件组合id，满足时执行动作列表
                         actionIdArray               : [1, 1, 1, 1, 1, ],// 动作id列表，
                         // 动作1是刷出1个坦克，这里指定执行5次，而且坦克不会被已有部队阻断，所以执行时就直接刷出5个坦克
                     },
@@ -320,6 +356,9 @@ namespace TinyWars.MapEditor {
                         actionIdArray               : [1, 1, 1, 1, 1, ],// 动作id列表，
                         // 动作1是刷出1个坦克，这里指定执行5次，而且坦克不会被已有部队阻断，所以执行时就直接刷出5个坦克
                     },
+                    {
+                        eventId                     : 3,
+                    }
                 ],
             };
 
