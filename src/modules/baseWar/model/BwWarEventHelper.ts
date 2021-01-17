@@ -577,4 +577,201 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
             return Lang.getFormattedText(Lang.Type.F0059, unitNameArray.join(", "));
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // misc
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export function checkIsNodeUsedByEvent(fullData: IWarEventFullData, nodeId: number, eventId: number): boolean {
+        const event = (fullData.eventArray || []).find(v => v.eventId === eventId);
+        if (event == null) {
+            return undefined;
+        }
+
+        if (event.conditionNodeId === nodeId) {
+            return true;
+        }
+
+        const nodeArray     = fullData.conditionNodeArray || [];
+        const nodeIdArray   = [event.conditionNodeId];
+        for (const parentNodeId of nodeIdArray) {
+            const node = nodeArray.find(v => v.nodeId === parentNodeId);
+            for (const subNodeId of node ? node.subNodeIdArray || [] : []) {
+                if (subNodeId === nodeId) {
+                    return true;
+                }
+                if (nodeIdArray.indexOf(subNodeId) < 0) {
+                    nodeIdArray.push(subNodeId);
+                }
+            }
+        }
+
+        return false;
+    }
+    export function getNodeUsedCount(fullData: IWarEventFullData, nodeId: number): number {
+        let count = 0;
+        for (const event of fullData.eventArray || []) {
+            if (event.conditionNodeId === nodeId) {
+                ++count;
+            }
+        }
+        for (const node of fullData.conditionNodeArray || []) {
+            for (const subNodeId of node.subNodeIdArray || []) {
+                if (subNodeId === nodeId) {
+                    ++count;
+                }
+            }
+        }
+        return count;
+    }
+
+    export function getAllSubNodesAndConditionsForNode({ fullData, nodeId, ignoreNodeIdSet }: {
+        fullData        : IWarEventFullData;
+        nodeId          : number;
+        ignoreNodeIdSet?: Set<number>;
+    }): {
+        conditionIdSet  : Set<number>;
+        nodeIdSet       : Set<number>;
+    } {
+        const conditionIdSet    = new Set<number>();
+        const nodeIdSet         = new Set<number>();
+        const nodeArray         = fullData.conditionNodeArray || [];
+
+        const nodeIdArrayForSearch = [nodeId];
+        for (const nodeIdForSearch of nodeIdArrayForSearch) {
+            if (((ignoreNodeIdSet) && (ignoreNodeIdSet.has(nodeIdForSearch))) ||
+                (nodeIdSet.has(nodeIdForSearch))
+            ) {
+                continue;
+            }
+
+            nodeIdSet.add(nodeIdForSearch);
+
+            const node = nodeArray.find(v => v.nodeId === nodeIdForSearch);
+            if (node) {
+                for (const conditionId of node.conditionIdArray || []) {
+                    conditionIdSet.add(conditionId);
+                }
+                nodeIdArrayForSearch.push(...(node.subNodeIdArray || []));
+            }
+        }
+
+        return {
+            nodeIdSet,
+            conditionIdSet,
+        };
+    }
+
+    export function checkAndDeleteUnusedNode(fullData: IWarEventFullData, nodeId: number): void {
+        const nodeArray = fullData.conditionNodeArray;
+        if (nodeArray == null) {
+            return;
+        }
+
+        const node = nodeArray.find(v => v.nodeId === nodeId);
+        if (node == null) {
+            return;
+        }
+
+        if (((fullData.eventArray || []).some(v => v.conditionNodeId === nodeId)) ||
+            (nodeArray.some(v => (v.subNodeIdArray || []).indexOf(nodeId) >= 0))
+        ) {
+            return;
+        }
+
+        Helpers.deleteElementFromArray(nodeArray, node);
+    }
+    export function checkAndDeleteUnusedCondition(fullData: IWarEventFullData, conditionId: number): void {
+        const conditionArray = fullData.conditionArray;
+        if (conditionArray == null) {
+            return;
+        }
+
+        const condition = conditionArray.find(v => v.WecCommonData.conditionId === conditionId);
+        if (condition == null) {
+            return;
+        }
+
+        if ((fullData.conditionNodeArray || []).some(v => (v.conditionIdArray || []).indexOf(conditionId) >= 0)) {
+            return;
+        }
+
+        Helpers.deleteElementFromArray(conditionArray, condition);
+    }
+    export function checkAndDeleteUnusedAction(fullData: IWarEventFullData, actionId: number): void {
+        const actionArray = fullData.actionArray;
+        if (actionArray == null) {
+            return;
+        }
+
+        const action = actionArray.find(v => v.WarEventActionCommonData.actionId === actionId);
+        if (action == null) {
+            return;
+        }
+
+        if ((fullData.eventArray || []).some(v => (v.actionIdArray || []).indexOf(actionId) >= 0)) {
+            return;
+        }
+
+        Helpers.deleteElementFromArray(actionArray, action);
+    }
+
+    export function cloneNode(fullData: IWarEventFullData, nodeId: number): number | undefined {
+        const nodeArray = fullData.conditionNodeArray;
+        if (nodeArray == null) {
+            return undefined;
+        }
+
+        const node = nodeArray.find(v => v.nodeId === nodeId);
+        if (node == null) {
+            return undefined;
+        }
+
+        return addNode({
+            fullData,
+            isAnd           : node.isAnd,
+            conditionIdArray: (node.conditionIdArray || []).concat(),
+            subNodeIdArray  : (node.subNodeIdArray || []).concat(),
+        });
+    }
+    export function addNode({ fullData, isAnd = true, conditionIdArray = [], subNodeIdArray = [] }: {
+        fullData            : IWarEventFullData;
+        isAnd?               : boolean;
+        conditionIdArray?    : number[];
+        subNodeIdArray?      : number[];
+    }): number | undefined {
+        if (fullData.conditionNodeArray == null) {
+            fullData.conditionNodeArray = [];
+        }
+
+        const nodeArray = fullData.conditionNodeArray;
+        for (let nodeId = 1; ; ++nodeId) {
+            if (!nodeArray.some(v => v.nodeId === nodeId)) {
+                nodeArray.push({
+                    nodeId,
+                    isAnd,
+                    conditionIdArray,
+                    subNodeIdArray,
+                });
+                nodeArray.sort((v1, v2) => v1.nodeId - v2.nodeId);
+                return nodeId;
+            }
+        }
+    }
+
+    export function addCondition(fullData: IWarEventFullData): number {
+        if (fullData.conditionArray == null) {
+            fullData.conditionArray = [];
+        }
+
+        const conditionArray = fullData.conditionArray;
+        for (let conditionId = 1; ; ++conditionId) {
+            if (!conditionArray.some(v => v.WecCommonData.conditionId === conditionId)) {
+                conditionArray.push({
+                    WecCommonData: { conditionId },
+                });
+                conditionArray.sort((v1, v2) => v1.WecCommonData.conditionId - v2.WecCommonData.conditionId);
+                return conditionId;
+            }
+        }
+    }
 }

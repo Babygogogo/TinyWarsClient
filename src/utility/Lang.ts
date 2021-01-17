@@ -846,6 +846,10 @@ namespace TinyWars.Utility.Lang {
             `事件中的动作数量已达上限`,
             `There are too many actions in the event already.`,
         ],
+        [Type.A0179]: [
+            `无法替换节点，因为这样做会造成循环引用`,
+            `Can't replace the node because of circular reference.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2781,6 +2785,30 @@ namespace TinyWars.Utility.Lang {
         [Type.B0486]: [
             `删除动作`,
             `Delete Action`,
+        ],
+        [Type.B0487]: [
+            `克隆`,
+            `Clone`,
+        ],
+        [Type.B0488]: [
+            `条件节点`,
+            `Condition Node`,
+        ],
+        [Type.B0489]: [
+            `子节点`,
+            `Sub Node`,
+        ],
+        [Type.B0490]: [
+            `子条件`,
+            `Sub Condition`,
+        ],
+        [Type.B0491]: [
+            `替换条件节点`,
+            `Replace Condition Node`,
+        ],
+        [Type.B0492]: [
+            `引用`,
+            `Reference`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

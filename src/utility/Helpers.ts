@@ -236,6 +236,17 @@ namespace TinyWars.Utility.Helpers {
         }
     }
 
+    export function deleteElementFromArray<T>(arr: T[], element: T): void {
+        let index = 0;
+        while (index < arr.length) {
+            if (arr[index] === element) {
+                arr.splice(index, 1);
+            } else {
+                ++index;
+            }
+        }
+    }
+
     /** 获取一个整数的位数。不计负数的符号；0-9计为1；10-99计为2；以此类推 */
     export function getDigitsCount(num: number): number {
         num = Math.abs(num);

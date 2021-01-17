@@ -192,7 +192,7 @@ namespace TinyWars.MapEditor {
                 prefixArray     : prefixArray.concat(`N??`),
                 warEventFullData: fullData,
                 eventId,
-                nodeId          : -1,
+                nodeId,
                 parentNodeId    : undefined,
             });
         }
@@ -204,7 +204,7 @@ namespace TinyWars.MapEditor {
                 prefixArray     : prefixArray.concat(`A??`),
                 warEventFullData: fullData,
                 eventId,
-                actionId        : -1,
+                actionId        : undefined,
             });
         } else {
             for (const actionId of actionIdArray) {
@@ -388,12 +388,12 @@ namespace TinyWars.MapEditor {
                 content : Lang.getText(Lang.Type.A0171),
                 callback: () => {
                     const eventArray = data.warEventFullData.eventArray;
-                    eventArray.splice(eventArray.findIndex(v => v.eventId === eventId), 1);
+                    Helpers.deleteElementFromArray(eventArray, eventArray.find(v => v.eventId === eventId));
 
                     MeManager.getWar().getWarRuleArray().forEach(v => {
                         const arr = v.warEventIdArray;
                         if (arr) {
-                            arr.splice(arr.indexOf(eventId), 1);
+                            Helpers.deleteElementFromArray(arr, eventId);
                         }
                     });
 
@@ -411,46 +411,37 @@ namespace TinyWars.MapEditor {
         }
         private _onTouchedBtnReplaceNode(e: egret.TouchEvent): void {
             const data = this.data as DataForWarEventDescRenderer;
-            // TODO
-            FloatText.show("TODO");
+            MeWeNodeReplacePanel.show({
+                eventId         : data.eventId,
+                parentNodeId    : data.parentNodeId,
+                nodeId          : data.nodeId,
+                fullData        : data.warEventFullData,
+            });
         }
         private _onTouchedBtnAddSubNode(e: egret.TouchEvent): void {
             const data = this.data as DataForWarEventDescRenderer;
             if (data) {
-                const fullData = data.warEventFullData;
+                const fullData  = data.warEventFullData;
+                const newNodeId = BwWarEventHelper.addNode({ fullData });
+                if (newNodeId == null) {
+                    Logger.error(`MeWePanel._onTouchedBtnAddSubNode() empty newNodeId.`);
+                    return;
+                }
+
                 if (fullData.conditionNodeArray == null) {
                     fullData.conditionNodeArray = [];
                 }
 
-                const nodeArray = fullData.conditionNodeArray;
-                const maxCount  = CommonConstants.WarEventMaxConditionNodesPerMap;
-                if (nodeArray.length >= maxCount) {
-                    FloatText.show(Lang.getText(Lang.Type.A0173));
+                const parentNode = fullData.conditionNodeArray.find(v => v.nodeId === data.nodeId);
+                if (parentNode.subNodeIdArray == null) {
+                    parentNode.subNodeIdArray = [newNodeId];
                 } else {
-                    for (let nodeId = 1; nodeId <= maxCount; ++nodeId) {
-                        if (!nodeArray.some(v => v.nodeId === nodeId)) {
-                            nodeArray.push({
-                                nodeId,
-                                isAnd           : true,
-                                subNodeIdArray  : [],
-                                conditionIdArray: [],
-                            });
-                            nodeArray.sort((v1, v2) => v1.nodeId - v2.nodeId);
-
-                            const parentNode = nodeArray.find(v => v.nodeId === data.nodeId);
-                            if (parentNode.subNodeIdArray == null) {
-                                parentNode.subNodeIdArray = [nodeId];
-                            } else {
-                                const arr = parentNode.subNodeIdArray;
-                                arr.push(nodeId);
-                                arr.sort();
-                            }
-
-                            Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
-                            return;
-                        }
-                    }
+                    const arr = parentNode.subNodeIdArray;
+                    arr.push(newNodeId);
+                    arr.sort();
                 }
+
+                Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
             }
         }
         private _onTouchedBtnAddSubCondition(e: egret.TouchEvent): void {
@@ -461,34 +452,17 @@ namespace TinyWars.MapEditor {
                     fullData.conditionArray = [];
                 }
 
-                const conditionArray    = fullData.conditionArray;
-                const maxCount          = CommonConstants.WarEventMaxConditionsPerMap;
-                if (conditionArray.length >= maxCount) {
-                    FloatText.show(Lang.getText(Lang.Type.A0174));
+                const conditionId   = BwWarEventHelper.addCondition(fullData);
+                const node          = fullData.conditionNodeArray.find(v => v.nodeId === data.nodeId);
+                if (node.conditionIdArray == null) {
+                    node.conditionIdArray = [conditionId];
                 } else {
-                    for (let conditionId = 1; conditionId <= maxCount; ++conditionId) {
-                        if (!conditionArray.some(v => v.WecCommonData.conditionId === conditionId)) {
-                            conditionArray.push({
-                                WecCommonData   : {
-                                    conditionId,
-                                },
-                            });
-                            conditionArray.sort((v1, v2) => v1.WecCommonData.conditionId - v2.WecCommonData.conditionId);
-
-                            const node = fullData.conditionNodeArray.find(v => v.nodeId === data.nodeId);
-                            if (node.conditionIdArray == null) {
-                                node.conditionIdArray = [conditionId];
-                            } else {
-                                const arr = node.conditionIdArray;
-                                arr.push(conditionId);
-                                arr.sort();
-                            }
-
-                            Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
-                            return;
-                        }
-                    }
+                    const arr = node.conditionIdArray;
+                    arr.push(conditionId);
+                    arr.sort();
                 }
+
+                Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
             }
         }
         private _onTouchedBtnDeleteNode(e: egret.TouchEvent): void {
@@ -502,12 +476,12 @@ namespace TinyWars.MapEditor {
                         const fullData  = data.warEventFullData;
                         const nodeArray = fullData.conditionNodeArray;
                         const arr       = nodeArray.find(v => v.nodeId === data.parentNodeId).subNodeIdArray;
-                        arr.splice(arr.indexOf(nodeId), 1);
+                        Helpers.deleteElementFromArray(arr, nodeId);
 
                         if ((!fullData.eventArray.some(v => v.conditionNodeId == nodeId))       &&
                             (!nodeArray.some(v => (v.subNodeIdArray || []).indexOf(nodeId) >= 0))
                         ) {
-                            nodeArray.splice(nodeArray.findIndex(v => v.nodeId === nodeId), 1);
+                            Helpers.deleteElementFromArray(nodeArray, nodeArray.find(v => v.nodeId === nodeId));
                         }
 
                         Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
@@ -530,11 +504,11 @@ namespace TinyWars.MapEditor {
                         const fullData  = data.warEventFullData;
                         const nodeArray = fullData.conditionNodeArray;
                         const arr       = nodeArray.find(v => v.nodeId === data.parentNodeId).conditionIdArray;
-                        arr.splice(arr.indexOf(conditionId), 1);
+                        Helpers.deleteElementFromArray(arr, conditionId);
 
                         if (!nodeArray.some(v => (v.conditionIdArray || []).indexOf(conditionId) >= 0)) {
                             const conditionArray = fullData.conditionArray;
-                            conditionArray.splice(conditionArray.findIndex(v => v.WecCommonData.conditionId === conditionId), 1);
+                            Helpers.deleteElementFromArray(conditionArray, conditionArray.find(v => v.WecCommonData.conditionId === conditionId));
                         }
 
                         Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
@@ -596,11 +570,11 @@ namespace TinyWars.MapEditor {
                         const fullData      = data.warEventFullData;
                         const eventArray    = fullData.eventArray;
                         const arr           = eventArray.find(v => v.eventId === data.eventId).actionIdArray;
-                        arr.splice(arr.indexOf(actionId), 1);
+                        Helpers.deleteElementFromArray(arr, actionId);
 
                         if (!eventArray.some(v => v.actionIdArray.indexOf(actionId) >= 0)) {
                             const actionArray = fullData.actionArray;
-                            actionArray.splice(actionArray.findIndex(v => v.WarEventActionCommonData.actionId === actionId), 1);
+                            Helpers.deleteElementFromArray(actionArray, actionArray.find(v => v.WarEventActionCommonData.actionId === actionId));
                         }
 
                         Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);

@@ -60,6 +60,7 @@
 		"resource/skins/mapEditor/MeWarPanel.exml",
 		"resource/skins/mapEditor/MeWarRulePanel.exml",
 		"resource/skins/mapEditor/MeWeEventRenamePanel.exml",
+		"resource/skins/mapEditor/MeWeNodeReplacePanel.exml",
 		"resource/skins/mapEditor/MeWePanel.exml",
 		"resource/skins/mapManagement/MmAcceptMapPanel.exml",
 		"resource/skins/mapManagement/MmAvailabilityChangePanel.exml",
