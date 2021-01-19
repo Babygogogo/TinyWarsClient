@@ -850,6 +850,34 @@ namespace TinyWars.Utility.Lang {
             `无法替换节点，因为这样做会造成循环引用`,
             `Can't replace the node because of circular reference.`,
         ],
+        [Type.A0180]: [
+            `事件包含的动作太多，请删除一些动作。`,
+            `There are too many actions in this event. Please delete some of them.`,
+        ],
+        [Type.A0181]: [
+            `数值不合法，请修改。`,
+            `The value is illegal. Please modify it.`,
+        ],
+        [Type.A0182]: [
+            `此地图已包含太多事件，请删除一些。`,
+            `The map contains too many events. Please delete some of them.`,
+        ],
+        [Type.A0183]: [
+            `此地图已包含太多条件节点，请删除一些。`,
+            `The map contains too many condition nodes. Please delete some of them.`,
+        ],
+        [Type.A0184]: [
+            `此条件节点在同一事件中重复出现。请删除重复的节点。`,
+            `There are duplicated nodes in the same event. Please remove the duplication.`,
+        ],
+        [Type.A0185]: [
+            `此地图已包含太多条件，请删除一些。`,
+            `The map contains too many conditions. Please delete some of them.`,
+        ],
+        [Type.A0186]: [
+            `此条件在同一事件中重复出现。请删除重复的条件。`,
+            `There are duplicated conditions in the same event. Please remove the duplication.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -2809,6 +2837,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0492]: [
             `引用`,
             `Reference`,
+        ],
+        [Type.B0493]: [
+            `无错误`,
+            `No Error`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

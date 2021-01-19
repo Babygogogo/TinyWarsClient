@@ -224,6 +224,7 @@ namespace TinyWars.Utility.Types {
     export const enum ColorValue {
         Red     = 0xFF0000,
         White   = 0xFFFFFF,
+        Green   = 0x00FF00,
     }
 
     export const UiState = {
@@ -516,5 +517,14 @@ namespace TinyWars.Utility.Types {
         InvalidTiles,
         InvalidWarRuleList,
         InvalidWarEventData,
+    }
+
+    export const enum WarEventDescType {
+        EventName,
+        EventMaxCallCountInPlayerTurn,
+        EventMaxCallCountTotal,
+        ConditionNode,
+        Condition,
+        Action,
     }
 }

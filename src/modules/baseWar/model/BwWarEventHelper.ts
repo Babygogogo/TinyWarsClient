@@ -8,8 +8,9 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
     import FloatText                = Utility.FloatText;
     import ConfigManager            = Utility.ConfigManager;
     import BwSettingsHelper         = BaseWar.BwSettingsHelper;
-    import WarMapModel              = WarMap.WarMapModel;
     import CommonHelpPanel          = Common.CommonHelpPanel;
+    import WarMapModel              = WarMap.WarMapModel;
+    import LanguageType             = Types.LanguageType;
     import WarEvent                 = ProtoTypes.WarEvent;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IMapRawData              = ProtoTypes.Map.IMapRawData;
@@ -17,7 +18,7 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
     import IWarEventAction          = WarEvent.IWarEventAction;
     import IWarEventCondition       = WarEvent.IWarEventCondition;
     import IWarEventConditionNode   = WarEvent.IWarEventConditionNode;
-    import CommonConstants          = Utility.ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // validation
@@ -579,6 +580,80 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // error tips
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export function getErrorTipForEvent(fullData: IWarEventFullData, event: IWarEvent): string | undefined {
+        const eventsCount = (fullData.eventArray || []).length;
+        if (eventsCount > CommonConstants.WarEventMaxEventsPerMap) {
+            return `${Lang.getText(Lang.Type.A0182)} (${eventsCount}/${CommonConstants.WarEventMaxEventsPerMap})`;
+        }
+
+        const actionsCount = (event.actionIdArray || []).length;
+        if (actionsCount < 1) {
+            return Lang.getText(Lang.Type.A0167);
+        }
+        if (actionsCount > CommonConstants.WarEventMaxActionsPerEvent) {
+            return `${Lang.getText(Lang.Type.A0180)} (${actionsCount}/${CommonConstants.WarEventMaxActionsPerEvent})`;
+        }
+
+        if (event.conditionNodeId == null) {
+            return Lang.getText(Lang.Type.A0159);
+        }
+
+        return undefined;
+    }
+
+    export function getErrorTipForEventCallCountInPlayerTurn(event: IWarEvent): string | undefined {
+        const count = event.maxCallCountInPlayerTurn;
+        if ((count == null) || (count < 1) || (count > CommonConstants.WarEventMaxCallCountInPlayerTurn)) {
+            return Lang.getText(Lang.Type.A0181);
+        }
+
+        return undefined;
+    }
+
+    export function getErrorTipForEventCallCountTotal(event: IWarEvent): string | undefined {
+        const count = event.maxCallCountTotal;
+        if ((count == null) || (count < 1) || (count > CommonConstants.WarEventMaxCallCountTotal)) {
+            return Lang.getText(Lang.Type.A0181);
+        }
+
+        return undefined;
+    }
+
+    export function getErrorTipForConditionNode(fullData: IWarEventFullData, node: IWarEventConditionNode, eventId: number): string | undefined {
+        const nodesCount = (fullData.conditionNodeArray || []).length;
+        if (nodesCount > CommonConstants.WarEventMaxConditionNodesPerMap) {
+            return `${Lang.getText(Lang.Type.A0183)} (${nodesCount}/${CommonConstants.WarEventMaxConditionNodesPerMap})`;
+        }
+
+        if (checkIsNodeDuplicatedInEvent(fullData, node.nodeId, eventId)) {
+            return Lang.getText(Lang.Type.A0184);
+        }
+
+        if (((node.subNodeIdArray || []).length) + ((node.conditionIdArray || []).length) <= 0) {
+            return Lang.getText(Lang.Type.A0161);
+        }
+
+        return undefined;
+    }
+
+    export function getErrorTipForCondition(fullData: IWarEventFullData, condition: IWarEventCondition, eventId: number): string | undefined {
+        const conditionsCount = (fullData.conditionArray || []).length;
+        if (conditionsCount > CommonConstants.WarEventMaxConditionsPerMap) {
+            return `${Lang.getText(Lang.Type.A0185)} (${conditionsCount}/${CommonConstants.WarEventMaxConditionsPerMap})`;
+        }
+
+        if (checkIsConditionDuplicatedInEvent(fullData, condition.WecCommonData.conditionId, eventId)) {
+            return Lang.getText(Lang.Type.A0186);
+        }
+
+        // TODO
+
+        return undefined;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     // misc
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function checkIsNodeUsedByEvent(fullData: IWarEventFullData, nodeId: number, eventId: number): boolean {
@@ -607,6 +682,31 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
 
         return false;
     }
+    function checkIsNodeDuplicatedInEvent(fullData: IWarEventFullData, nodeId: number, eventId: number): boolean {
+        const event = (fullData.eventArray || []).find(v => v.eventId === eventId);
+        if (event == null) {
+            return undefined;
+        }
+
+        let isUsed          = event.conditionNodeId === nodeId;
+        const nodeArray     = fullData.conditionNodeArray || [];
+        const nodeIdArray   = [event.conditionNodeId];
+        for (const parentNodeId of nodeIdArray) {
+            const node = nodeArray.find(v => v.nodeId === parentNodeId);
+            for (const subNodeId of node ? node.subNodeIdArray || [] : []) {
+                if (subNodeId === nodeId) {
+                    if (isUsed) {
+                        return true;
+                    } else {
+                        isUsed = true;
+                    }
+                }
+                nodeIdArray.push(subNodeId);
+            }
+        }
+
+        return false;
+    }
     export function getNodeUsedCount(fullData: IWarEventFullData, nodeId: number): number {
         let count = 0;
         for (const event of fullData.eventArray || []) {
@@ -622,6 +722,35 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
             }
         }
         return count;
+    }
+    function checkIsConditionDuplicatedInEvent(fullData: IWarEventFullData, conditionId: number, eventId: number): boolean {
+        const event = (fullData.eventArray || []).find(v => v.eventId === eventId);
+        if (event == null) {
+            return undefined;
+        }
+
+        let isUsed          = false;
+        const nodeArray     = fullData.conditionNodeArray || [];
+        const nodeIdArray   = [event.conditionNodeId];
+        for (const parentNodeId of nodeIdArray) {
+            const node = nodeArray.find(v => v.nodeId === parentNodeId);
+            if (node) {
+                for (const conId of node.conditionIdArray || []) {
+                    if (conId === conditionId) {
+                        if (isUsed) {
+                            return true;
+                        } else {
+                            isUsed = true;
+                        }
+                    }
+                }
+                for (const subNodeId of node.subNodeIdArray || []) {
+                    nodeIdArray.push(subNodeId);
+                }
+            }
+        }
+
+        return false;
     }
 
     export function getAllSubNodesAndConditionsForNode({ fullData, nodeId, ignoreNodeIdSet }: {
@@ -715,6 +844,33 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
         Helpers.deleteElementFromArray(actionArray, action);
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // add/clone
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export function addEvent(fullData: IWarEventFullData): number | undefined {
+        if (fullData.eventArray == null) {
+            fullData.eventArray = [];
+        }
+
+        const eventArray = fullData.eventArray;
+        for (let eventId = 1; ; ++eventId) {
+            if (!eventArray.some(v => v.eventId === eventId)) {
+                eventArray.push({
+                    eventId,
+                    eventNameArray          : [
+                        { languageType: LanguageType.Chinese, text: `${Lang.getText(Lang.Type.B0469, LanguageType.Chinese)} #${eventId}` },
+                        { languageType: LanguageType.English, text: `${Lang.getText(Lang.Type.B0469, LanguageType.English)} #${eventId}` },
+                    ],
+                    maxCallCountInPlayerTurn: 1,
+                    maxCallCountTotal       : 1,
+                    actionIdArray           : [],
+                });
+                eventArray.sort((v1, v2) => v1.eventId - v2.eventId);
+                return eventId;
+            }
+        }
+    }
+
     export function cloneNode(fullData: IWarEventFullData, nodeId: number): number | undefined {
         const nodeArray = fullData.conditionNodeArray;
         if (nodeArray == null) {
@@ -773,5 +929,9 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
                 return conditionId;
             }
         }
+    }
+
+    export function addAction(): void {
+        // TODO
     }
 }
