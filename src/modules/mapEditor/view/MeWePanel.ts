@@ -227,6 +227,7 @@ namespace TinyWars.MapEditor {
     }
     class WarEventDescRenderer extends GameUi.UiListItemRenderer {
         private _btnModify  : GameUi.UiButton;
+        private _labelPrefix: GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
         private _labelError : GameUi.UiLabel;
 
@@ -292,9 +293,9 @@ namespace TinyWars.MapEditor {
                     const labelDesc     = this._labelDesc;
                     const prefixArray   = data.prefixArray;
                     // const prefix        = prefixArray.join(`.`);
-                    const prefix        = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
+                    this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
                     labelDesc.textColor = ColorValue.Red;
-                    labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0166)}`;
+                    labelDesc.text      = `${Lang.getText(Lang.Type.A0166)}`;
                 }
             }
         }
@@ -308,14 +309,13 @@ namespace TinyWars.MapEditor {
                 return;
             }
 
+            const prefixArray       = data.prefixArray;
             const errorTip          = BwWarEventHelper.getErrorTipForEvent(fullData, event);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
-
-            const prefixArray       = data.prefixArray;
-            const prefix            = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
-            this._labelDesc.text    = `${prefix} ${Lang.getLanguageText({ textArray: event.eventNameArray })}`;
+            this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
+            this._labelDesc.text    = `${Lang.getLanguageText({ textArray: event.eventNameArray })}`;
         }
         private _updateForEventCallCountInPlayerTurn(data: DataForWarEventDescRenderer): void { // DONE
             const fullData  = data.warEventFullData;
@@ -327,14 +327,13 @@ namespace TinyWars.MapEditor {
                 return;
             }
 
+            const prefixArray       = data.prefixArray;
             const errorTip          = BwWarEventHelper.getErrorTipForEventCallCountInPlayerTurn(event);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
-
-            const prefixArray       = data.prefixArray;
-            const prefix            = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
-            this._labelDesc.text    = `${prefix} ${Lang.getText(Lang.Type.B0476)}: ${event.maxCallCountInPlayerTurn}`;
+            this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
+            this._labelDesc.text    = `${Lang.getText(Lang.Type.B0476)}: ${event.maxCallCountInPlayerTurn}`;
         }
         private _updateForEventCallCountTotal(data: DataForWarEventDescRenderer): void {        // DONE
             const fullData  = data.warEventFullData;
@@ -346,14 +345,13 @@ namespace TinyWars.MapEditor {
                 return;
             }
 
+            const prefixArray       = data.prefixArray;
             const errorTip          = BwWarEventHelper.getErrorTipForEventCallCountTotal(event);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
-
-            const prefixArray       = data.prefixArray;
-            const prefix            = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
-            this._labelDesc.text    = `${prefix} ${Lang.getText(Lang.Type.B0477)}: ${event.maxCallCountTotal}`;
+            this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
+            this._labelDesc.text    = `${Lang.getText(Lang.Type.B0477)}: ${event.maxCallCountTotal}`;
         }
         private _updateForConditionNode(data: DataForWarEventDescRenderer): void {              // DONE
             const fullData  = data.warEventFullData;
@@ -365,14 +363,13 @@ namespace TinyWars.MapEditor {
                 return;
             }
 
+            const prefixArray       = data.prefixArray;
             const errorTip          = BwWarEventHelper.getErrorTipForConditionNode(fullData, node, data.eventId);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
-
-            const prefixArray       = data.prefixArray;
-            const prefix            = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
-            this._labelDesc.text    = `${prefix} ${node.isAnd ? Lang.getText(Lang.Type.A0162) : Lang.getText(Lang.Type.A0163)}`;
+            this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
+            this._labelDesc.text    = `${node.isAnd ? Lang.getText(Lang.Type.A0162) : Lang.getText(Lang.Type.A0163)}`;
         }
         private _updateForCondition(data: DataForWarEventDescRenderer): void {                  // DONE
             const fullData      = data.warEventFullData;
@@ -384,14 +381,13 @@ namespace TinyWars.MapEditor {
                 return;
             }
 
+            const prefixArray       = data.prefixArray;
             const errorTip          = BwWarEventHelper.getErrorTipForCondition(fullData, condition, data.eventId);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
-
-            const prefixArray       = data.prefixArray;
-            const prefix            = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
-            this._labelDesc.text    = `${prefix} ${BwWarEventHelper.getDescForCondition(condition)}`;
+            this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
+            this._labelDesc.text    = `${BwWarEventHelper.getDescForCondition(condition)}`;
         }
         private _updateForAction(data: DataForWarEventDescRenderer): void {                     // DONE
             const fullData  = data.warEventFullData;
@@ -403,14 +399,13 @@ namespace TinyWars.MapEditor {
                 return;
             }
 
+            const prefixArray       = data.prefixArray;
             const errorTip          = BwWarEventHelper.getErrorTipForAction(fullData, action, (this.data as DataForWarEventDescRenderer).mapRawData);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
-
-            const prefixArray       = data.prefixArray;
-            const prefix            = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
-            this._labelDesc.text    = `${prefix} ${BwWarEventHelper.getDescForAction(action)}`;
+            this._labelPrefix.text  = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
+            this._labelDesc.text    = `${BwWarEventHelper.getDescForAction(action)}`;
         }
     }
 }

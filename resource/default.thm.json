@@ -59,6 +59,7 @@
 		"resource/skins/mapEditor/MeWarMenuPanel.exml",
 		"resource/skins/mapEditor/MeWarPanel.exml",
 		"resource/skins/mapEditor/MeWarRulePanel.exml",
+		"resource/skins/mapEditor/MeWeCommandPanel.exml",
 		"resource/skins/mapEditor/MeWeEventRenamePanel.exml",
 		"resource/skins/mapEditor/MeWeNodeReplacePanel.exml",
 		"resource/skins/mapEditor/MeWePanel.exml",

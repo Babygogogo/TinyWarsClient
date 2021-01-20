@@ -262,6 +262,7 @@ namespace TinyWars.MapEditor {
                             conditionId : 1,
                         },
                         WecTurnPhaseEqualTo : {
+                            isNot       : false,
                             valueEqualTo: Types.TurnPhaseCode.Main,
                         },
                     },
@@ -270,6 +271,7 @@ namespace TinyWars.MapEditor {
                             conditionId: 2,
                         },
                         WecPlayerIndexInTurnEqualTo: {
+                            isNot       : false,
                             valueEqualTo: 2,
                         },
                     },
@@ -278,7 +280,8 @@ namespace TinyWars.MapEditor {
                             conditionId : 3,            // 条件id
                         },
                         WecTurnIndexLessThan: {
-                            valueLessThan: 3,
+                            isNot           : false,
+                            valueLessThan   : 3,
                         },
                     },
                     {
@@ -286,7 +289,8 @@ namespace TinyWars.MapEditor {
                             conditionId : 4,
                         },
                         WecTurnIndexGreaterThan: {
-                            valueGreaterThan   : 5,
+                            isNot               : false,
+                            valueGreaterThan    : 5,
                         },
                     },
                 ],
