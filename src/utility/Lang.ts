@@ -839,8 +839,8 @@ namespace TinyWars.Utility.Lang {
             `Are you sure to delete the action?`,
         ],
         [Type.A0177]: [
-            `动作数量已达上限`,
-            `There are too many actions already.`,
+            `此动作数据出错，请删除`,
+            `There is something wrong with the action. Please delete it.`,
         ],
         [Type.A0178]: [
             `事件中的动作数量已达上限`,
@@ -877,6 +877,14 @@ namespace TinyWars.Utility.Lang {
         [Type.A0186]: [
             `此条件在同一事件中重复出现。请删除重复的条件。`,
             `There are duplicated conditions in the same event. Please remove the duplication.`,
+        ],
+        [Type.A0187]: [
+            `此条件数据出错，请删除`,
+            `There is something wrong with the condition. Please delete it.`,
+        ],
+        [Type.A0188]: [
+            `此地图已包含太多事件动作，请删除一些。`,
+            `The map contains too many actions. Please delete some of them.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2841,6 +2849,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0493]: [
             `无错误`,
             `No Error`,
+        ],
+        [Type.B0494]: [
+            `重置条件节点`,
+            `Reset Node`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

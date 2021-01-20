@@ -6,16 +6,11 @@ namespace TinyWars.MapEditor {
     import Notify                   = Utility.Notify;
     import Types                    = Utility.Types;
     import Logger                   = Utility.Logger;
-    import FloatText                = Utility.FloatText;
-    import ConfigManager            = Utility.ConfigManager;
     import BwWarEventHelper         = BaseWar.BwWarEventHelper;
-    import CommonConfirmPanel       = Common.CommonConfirmPanel;
-    import CommonInputPanel         = Common.CommonInputPanel;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
+    import IMapRawData              = ProtoTypes.Map.IMapRawData;
     import ColorValue               = Types.ColorValue;
     import WarEventDescType         = Types.WarEventDescType;
-    import LanguageType             = Types.LanguageType;
-    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     export class MeWePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -28,8 +23,6 @@ namespace TinyWars.MapEditor {
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoEvent   : GameUi.UiLabel;
         private _listWarEvent   : GameUi.UiScrollList;
-
-        private _eventManager   : BaseWar.BwWarEventManager;
 
         public static show(): void {
             if (!MeWePanel._instance) {
@@ -61,12 +54,9 @@ namespace TinyWars.MapEditor {
             ]);
             this._listWarEvent.setItemRenderer(WarEventDescRenderer);
 
-            this._eventManager = MeManager.getWar().getWarEventManager();
-
             this._updateView();
         }
         protected _onClosed(): void {
-            this._eventManager = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -81,8 +71,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedBtnAddEvent(e: egret.TouchEvent): void {
-            const fullData = this._eventManager.getWarEventFullData();
-            if (BwWarEventHelper.addEvent(fullData) != null) {
+            if (BwWarEventHelper.addEvent(MeManager.getWar().getWarEventManager().getWarEventFullData()) != null) {
                 Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
             }
         }
@@ -105,10 +94,12 @@ namespace TinyWars.MapEditor {
 
         private _updateListWarEventAndLabelNoEvent(): void {
             const dataArray : DataForWarEventDescRenderer[] = [];
-            const fullData  = MeManager.getWar().getWarEventManager().getWarEventFullData();
+            const war       = MeManager.getWar();
+            const fullData  = war.getWarEventManager().getWarEventFullData();
             if (fullData) {
+                const mapRawData = war.serializeForMap();
                 for (const warEvent of (fullData.eventArray || []).concat().sort((v1, v2) => v1.eventId - v2.eventId)) {
-                    dataArray.push(...generateDataArrayForListWarEventDesc(warEvent.eventId, fullData));
+                    dataArray.push(...generateDataArrayForListWarEventDesc(warEvent.eventId, fullData, mapRawData));
                 }
             }
 
@@ -117,9 +108,10 @@ namespace TinyWars.MapEditor {
         }
     }
 
-    function generateDataArrayForListWarEventDesc(eventId: number, fullData: IWarEventFullData): DataForWarEventDescRenderer[] {
+    function generateDataArrayForListWarEventDesc(eventId: number, fullData: IWarEventFullData, mapRawData: IMapRawData): DataForWarEventDescRenderer[] {
         const prefixArray   = [`E${eventId}`];
         const dataArray     : DataForWarEventDescRenderer[] = [{
+            mapRawData,
             descType        : WarEventDescType.EventName,
             prefixArray,
             warEventFullData: fullData,
@@ -137,12 +129,14 @@ namespace TinyWars.MapEditor {
                 prefixArray,
                 warEventFullData: fullData,
                 eventId,
+                mapRawData,
             },
             {
                 descType        : WarEventDescType.EventMaxCallCountTotal,
                 prefixArray,
                 warEventFullData: fullData,
                 eventId,
+                mapRawData,
             },
         );
 
@@ -153,7 +147,8 @@ namespace TinyWars.MapEditor {
                 parentNodeId: undefined,
                 nodeId,
                 fullData,
-                prefixArray : prefixArray.concat(`N${nodeId}`)
+                prefixArray : prefixArray.concat(`N${nodeId}`),
+                mapRawData,
             }));
         }
 
@@ -164,17 +159,19 @@ namespace TinyWars.MapEditor {
                 warEventFullData: fullData,
                 eventId,
                 actionId,
+                mapRawData,
             });
         }
 
         return dataArray;
     }
-    function generateNodeDataArrayForListWarEventDesc({ eventId, parentNodeId, nodeId, fullData, prefixArray }: {
+    function generateNodeDataArrayForListWarEventDesc({ eventId, parentNodeId, nodeId, fullData, prefixArray, mapRawData }: {
         eventId     : number;
         parentNodeId: number | undefined;
         nodeId      : number;
         fullData    : IWarEventFullData;
         prefixArray : string[];
+        mapRawData  : IMapRawData;
     }): DataForWarEventDescRenderer[] {
         const dataArray: DataForWarEventDescRenderer[] = [{
             descType        : WarEventDescType.ConditionNode,
@@ -183,6 +180,7 @@ namespace TinyWars.MapEditor {
             eventId,
             parentNodeId,
             nodeId,
+            mapRawData,
         }];
 
         const node = (fullData.conditionNodeArray || []).find(v => v.nodeId === nodeId);
@@ -198,6 +196,7 @@ namespace TinyWars.MapEditor {
                 eventId,
                 parentNodeId    : nodeId,
                 conditionId,
+                mapRawData,
             });
         }
 
@@ -207,7 +206,8 @@ namespace TinyWars.MapEditor {
                 parentNodeId: nodeId,
                 nodeId      : subNodeId,
                 fullData,
-                prefixArray : prefixArray.concat([`N${subNodeId}`])
+                prefixArray : prefixArray.concat([`N${subNodeId}`]),
+                mapRawData,
             }));
         }
 
@@ -215,6 +215,7 @@ namespace TinyWars.MapEditor {
     }
 
     type DataForWarEventDescRenderer = {
+        mapRawData      : IMapRawData;
         descType        : WarEventDescType;
         prefixArray     : string[];
         warEventFullData: IWarEventFullData;
@@ -243,6 +244,7 @@ namespace TinyWars.MapEditor {
             const data = this.data as DataForWarEventDescRenderer;
             if (data) {
                 MeWeCommandPanel.show({
+                    mapRawData      : data.mapRawData,
                     descType        : data.descType,
                     warEventFullData: data.warEventFullData,
                     eventId         : data.eventId,
@@ -261,16 +263,16 @@ namespace TinyWars.MapEditor {
         protected dataChanged(): void {
             super.dataChanged();
 
-            this._updateLabelDescAndButtons();
+            this._updateLabelDescAndError();
         }
 
         private _updateComponentsForLanguage(): void {
             this._btnModify.label = Lang.getText(Lang.Type.B0317);
 
-            this._updateLabelDescAndButtons();
+            this._updateLabelDescAndError();
         }
 
-        private _updateLabelDescAndButtons(): void {
+        private _updateLabelDescAndError(): void {
             const data = this.data as DataForWarEventDescRenderer;
             if (data) {
                 const descType = data.descType;
@@ -312,7 +314,6 @@ namespace TinyWars.MapEditor {
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
 
             const prefixArray       = data.prefixArray;
-            // const prefix            = prefixArray.join(`.`);
             const prefix            = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
             this._labelDesc.text    = `${prefix} ${Lang.getLanguageText({ textArray: event.eventNameArray })}`;
         }
@@ -377,8 +378,8 @@ namespace TinyWars.MapEditor {
             const fullData      = data.warEventFullData;
             const conditionId   = data.conditionId;
             const condition     = (fullData.conditionArray || []).find(v => v.WecCommonData.conditionId === conditionId);
-            if (conditionId == null) {
-                Logger.error(`MeWePanel.WarEventDescRenderer._updateForCondition() empty conditionId.`);
+            if (condition == null) {
+                Logger.error(`MeWePanel.WarEventDescRenderer._updateForCondition() empty condition.`);
                 this._labelDesc.text = `_updateForCondition() empty condition.`;
                 return;
             }
@@ -392,42 +393,24 @@ namespace TinyWars.MapEditor {
             const prefix            = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
             this._labelDesc.text    = `${prefix} ${BwWarEventHelper.getDescForCondition(condition)}`;
         }
-        private _updateForAction(data: DataForWarEventDescRenderer): void {
-            const group = this._groupBtn;
-            group.removeChildren();
-            group.addChild(this._btnReplaceAction);
-
-            const labelDesc     = this._labelDesc;
-            const prefixArray   = data.prefixArray;
-            // const prefix        = prefixArray.join(`.`);
-            const prefix        = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
-            const fullData      = data.warEventFullData;
-
-            const actionId = data.actionId;
-            if ((actionId == null) || (actionId < 0)) {
-                labelDesc.textColor = ColorValue.Red;
-                labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0167)}`;
-                return;
-            }
-
-            group.addChild(this._btnAddAction);
-            group.addChild(this._btnDeleteAction);
-
-            const action = (fullData.actionArray || []).find(v => v.WarEventActionCommonData.actionId === actionId);
+        private _updateForAction(data: DataForWarEventDescRenderer): void {                     // DONE
+            const fullData  = data.warEventFullData;
+            const actionId  = data.actionId;
+            const action    = (fullData.actionArray || []).find(v => v.WarEventActionCommonData.actionId === actionId);
             if (action == null) {
-                labelDesc.textColor = ColorValue.Red;
-                labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0168)}`;
+                Logger.error(`MeWePanel.WarEventDescRenderer._updateForAction() empty action.`);
+                this._labelDesc.text = `_updateForAction() empty action.`;
                 return;
             }
 
-            const desc = BwWarEventHelper.getDescForAction(action);
-            if (desc) {
-                labelDesc.textColor = ColorValue.White;
-                labelDesc.text      = `${prefix} ${desc}`;
-            } else {
-                labelDesc.textColor = ColorValue.Red;
-                labelDesc.text      = `${prefix} ${Lang.getText(Lang.Type.A0169)}`;
-            }
+            const errorTip          = BwWarEventHelper.getErrorTipForAction(fullData, action, (this.data as DataForWarEventDescRenderer).mapRawData);
+            const labelError        = this._labelError;
+            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
+
+            const prefixArray       = data.prefixArray;
+            const prefix            = `${Helpers.repeatString(`  `, (prefixArray.length - 1) * 2)}${prefixArray[prefixArray.length - 1]}`;
+            this._labelDesc.text    = `${prefix} ${BwWarEventHelper.getDescForAction(action)}`;
         }
     }
 }

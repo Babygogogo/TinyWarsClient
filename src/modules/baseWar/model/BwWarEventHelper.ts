@@ -3,13 +3,8 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
     import ProtoTypes               = Utility.ProtoTypes;
     import Helpers                  = Utility.Helpers;
     import Lang                     = Utility.Lang;
-    import Notify                   = Utility.Notify;
     import Types                    = Utility.Types;
-    import FloatText                = Utility.FloatText;
     import ConfigManager            = Utility.ConfigManager;
-    import BwSettingsHelper         = BaseWar.BwSettingsHelper;
-    import CommonHelpPanel          = Common.CommonHelpPanel;
-    import WarMapModel              = WarMap.WarMapModel;
     import LanguageType             = Types.LanguageType;
     import WarEvent                 = ProtoTypes.WarEvent;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
@@ -262,7 +257,7 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
                     unitData,
                     playersCountUnneutral,
                     configVersion,
-                    mapSize ,
+                    mapSize,
                 })) {
                     return false;
                 }
@@ -571,9 +566,15 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
         if (!data) {
             return undefined;
         } else {
-            const unitNameArray: string[] = [];
+            const unitCountDict = new Map<Types.UnitType, number>();
             for (const unitData of data.unitArray || []) {
-                unitNameArray.push(Lang.getUnitName(unitData.unitData.unitType));
+                const unitType = unitData.unitData.unitType;
+                unitCountDict.set(unitType, (unitCountDict.get(unitType) || 0) + 1);
+            }
+
+            const unitNameArray: string[] = [];
+            for (const [unitType, count] of unitCountDict) {
+                unitNameArray.push(`${Lang.getUnitName(unitType)} * ${count}`);
             }
             return Lang.getFormattedText(Lang.Type.F0059, unitNameArray.join(", "));
         }
@@ -648,7 +649,178 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
             return Lang.getText(Lang.Type.A0186);
         }
 
-        // TODO
+        if (Object.keys(condition).length !== 2) {
+            return Lang.getText(Lang.Type.A0187);
+        }
+
+        // TODO add more tips for the future conditions.
+        if (condition.WecEventCalledCountTotalEqualTo) {
+            return getErrorTipForWecEventCalledCountTotalEqualTo(condition.WecEventCalledCountTotalEqualTo);
+        } else if (condition.WecEventCalledCountTotalGreaterThan) {
+            return getErrorTipForWecEventCalledCountTotalGreaterThan(condition.WecEventCalledCountTotalGreaterThan);
+        } else if (condition.WecEventCalledCountTotalLessThan) {
+            return getErrorTipForWecEventCalledCountTotalLessThan(condition.WecEventCalledCountTotalLessThan);
+        } else if (condition.WecPlayerAliveStateEqualTo) {
+            return getErrorTipForWecPlayerAliveStateEqualTo(condition.WecPlayerAliveStateEqualTo);
+        } else if (condition.WecPlayerIndexInTurnEqualTo) {
+            return getErrorTipForWecPlayerIndexInTurnEqualTo(condition.WecPlayerIndexInTurnEqualTo);
+        } else if (condition.WecPlayerIndexInTurnGreaterThan) {
+            return getErrorTipForWecPlayerIndexInTurnGreaterThan(condition.WecPlayerIndexInTurnGreaterThan);
+        } else if (condition.WecPlayerIndexInTurnLessThan) {
+            return getErrorTipForWecPlayerIndexInTurnLessThan(condition.WecPlayerIndexInTurnLessThan);
+        } else if (condition.WecTurnIndexEqualTo) {
+            return getErrorTipForWecTurnIndexEqualTo(condition.WecTurnIndexEqualTo);
+        } else if (condition.WecTurnIndexGreaterThan) {
+            return getErrorTipForWecTurnIndexGreaterThan(condition.WecTurnIndexGreaterThan);
+        } else if (condition.WecTurnIndexLessThan) {
+            return getErrorTipForWecTurnIndexLessThan(condition.WecTurnIndexLessThan);
+        } else if (condition.WecTurnIndexRemainderEqualTo) {
+            return getErrorTipForWecTurnIndexRemainderEqualTo(condition.WecTurnIndexRemainderEqualTo);
+        } else if (condition.WecTurnPhaseEqualTo) {
+            return getErrorTipForWecTurnPhaseEqualTo(condition.WecTurnPhaseEqualTo);
+        } else {
+            return Lang.getText(Lang.Type.A0187);
+        }
+    }
+    function getErrorTipForWecEventCalledCountTotalEqualTo(data: WarEvent.IWecEventCalledCountTotalEqualTo): string | undefined {
+        if ((data.countEqualTo == null) || (data.eventIdEqualTo == null) || (data.isNot == null)) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+
+        return undefined;
+    }
+    function getErrorTipForWecEventCalledCountTotalGreaterThan(data: WarEvent.IWecEventCalledCountTotalGreaterThan): string | undefined {
+        if ((data.countGreaterThan == null) || (data.eventIdEqualTo == null) || (data.isNot == null)) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+
+        return undefined;
+    }
+    function getErrorTipForWecEventCalledCountTotalLessThan(data: WarEvent.IWecEventCalledCountTotalLessThan): string | undefined {
+        if ((data.countLessThan == null) || (data.eventIdEqualTo == null) || (data.isNot == null)) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+
+        return undefined;
+    }
+    function getErrorTipForWecPlayerAliveStateEqualTo(data: WarEvent.IWecPlayerAliveStateEqualTo): string | undefined {
+        const aliveState = data.aliveStateEqualTo;
+        if ((aliveState == null) || (data.playerIndexEqualTo == null) || (data.isNot == null)) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+        if ((aliveState !== Types.PlayerAliveState.Alive)   &&
+            (aliveState !== Types.PlayerAliveState.Dead)    &&
+            (aliveState !== Types.PlayerAliveState.Dying)
+        ) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+
+        return undefined;
+    }
+    function getErrorTipForWecPlayerIndexInTurnEqualTo(data: WarEvent.IWecPlayerIndexInTurnEqualTo): string | undefined {
+        if ((data.valueEqualTo == null) || (data.isNot == null)) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+
+        return undefined;
+    }
+    function getErrorTipForWecPlayerIndexInTurnGreaterThan(data: WarEvent.IWecPlayerIndexInTurnGreaterThan): string | undefined {
+        if ((data.valueGreaterThan == null) || (data.isNot == null)) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+
+        return undefined;
+    }
+    function getErrorTipForWecPlayerIndexInTurnLessThan(data: WarEvent.IWecPlayerIndexInTurnLessThan): string | undefined {
+        if ((data.valueLessThan == null) || (data.isNot == null)) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+
+        return undefined;
+    }
+    function getErrorTipForWecTurnIndexEqualTo(data: WarEvent.IWecTurnIndexEqualTo): string | undefined {
+        if ((data.valueEqualTo == null) || (data.isNot == null)) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+
+        return undefined;
+    }
+    function getErrorTipForWecTurnIndexGreaterThan(data: WarEvent.IWecTurnIndexGreaterThan): string | undefined {
+        if ((data.valueGreaterThan == null) || (data.isNot == null)) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+
+        return undefined;
+    }
+    function getErrorTipForWecTurnIndexLessThan(data: WarEvent.IWecTurnIndexLessThan): string | undefined {
+        if ((data.valueLessThan == null) || (data.isNot == null)) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+
+        return undefined;
+    }
+    function getErrorTipForWecTurnIndexRemainderEqualTo(data: WarEvent.IWecTurnIndexRemainderEqualTo): string | undefined {
+        const divider   = data.divider;
+        const remainder = data.remainderEqualTo;
+        if ((divider == null)       ||
+            (remainder == null)     ||
+            (data.isNot == null)    ||
+            (divider < 1)           ||
+            (remainder >= divider)
+        ) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+
+        return undefined;
+    }
+    function getErrorTipForWecTurnPhaseEqualTo(data: WarEvent.IWecTurnPhaseEqualTo): string | undefined {
+        const turnPhase = data.valueEqualTo;
+        if ((turnPhase == null) || (data.isNot == null)) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+
+        if ((turnPhase !== Types.TurnPhaseCode.WaitBeginTurn)   &&
+            (turnPhase !== Types.TurnPhaseCode.Main)
+        ) {
+            return Lang.getText(Lang.Type.A0165);
+        }
+
+        return undefined;
+    }
+
+    export function getErrorTipForAction(fullData: IWarEventFullData, action: IWarEventAction, mapRawData: IMapRawData): string | undefined {
+        const actionsCountTotal = (fullData.actionArray || []).length;
+        if (actionsCountTotal > CommonConstants.WarEventMaxActionsPerMap) {
+            return `${Lang.getText(Lang.Type.A0188)} (${actionsCountTotal}/${CommonConstants.WarEventMaxActionsPerMap})`;
+        }
+
+        if (Object.keys(action).length !== 2) {
+            return Lang.getText(Lang.Type.A0177);
+        }
+
+        // TODO add more tips for the future actions.
+        if (action.WarEventActionAddUnit) {
+            return getErrorTipForWeaAddUnit(action.WarEventActionAddUnit, mapRawData);
+        } else {
+            return Lang.getText(Lang.Type.A0177);
+        }
+    }
+    function getErrorTipForWeaAddUnit(data: WarEvent.IWarEventActionAddUnit, mapRawData: IMapRawData): string | undefined {
+        const unitArray = data.unitArray;
+        if ((unitArray == null) || (unitArray.length <= 0)) {
+            return Lang.getText(Lang.Type.A0169);
+        }
+
+        const mapSize       : Types.MapSize = { width: mapRawData.mapWidth, height: mapRawData.mapHeight };
+        const configVersion = ConfigManager.getLatestFormalVersion();
+        if (unitArray.some(v => !BwHelpers.checkIsUnitDataValidIgnoringUnitId({
+            unitData                : v.unitData,
+            mapSize,
+            playersCountUnneutral   : mapRawData.playersCountUnneutral,
+            configVersion,
+        }))) {
+            return Lang.getText(Lang.Type.A0169);
+        }
 
         return undefined;
     }
@@ -871,30 +1043,52 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
         }
     }
 
-    export function cloneNode(fullData: IWarEventFullData, nodeId: number): number | undefined {
-        const nodeArray = fullData.conditionNodeArray;
-        if (nodeArray == null) {
-            return undefined;
-        }
-
-        const node = nodeArray.find(v => v.nodeId === nodeId);
-        if (node == null) {
-            return undefined;
-        }
-
-        return addNode({
-            fullData,
-            isAnd           : node.isAnd,
-            conditionIdArray: (node.conditionIdArray || []).concat(),
-            subNodeIdArray  : (node.subNodeIdArray || []).concat(),
-        });
-    }
-    export function addNode({ fullData, isAnd = true, conditionIdArray = [], subNodeIdArray = [] }: {
+    export function createSubNodeInParentNode({ fullData, parentNodeId, isAnd = true, conditionIdArray = [], subNodeIdArray = [] }: {   // DONE
         fullData            : IWarEventFullData;
-        isAnd?               : boolean;
-        conditionIdArray?    : number[];
-        subNodeIdArray?      : number[];
+        parentNodeId        : number;
+        isAnd?              : boolean;
+        conditionIdArray?   : number[];
+        subNodeIdArray?     : number[];
     }): number | undefined {
+        const nodeArray     = fullData.conditionNodeArray || [];
+        const parentNode    = nodeArray.find(v => v.nodeId === parentNodeId);
+        if (parentNode == null) {
+            return undefined;
+        }
+
+        for (let nodeId = 1; ; ++nodeId) {
+            if (!nodeArray.some(v => v.nodeId === nodeId)) {
+                nodeArray.push({
+                    nodeId,
+                    isAnd,
+                    conditionIdArray,
+                    subNodeIdArray,
+                });
+                nodeArray.sort((v1, v2) => v1.nodeId - v2.nodeId);
+
+                if (parentNode.subNodeIdArray == null) {
+                    parentNode.subNodeIdArray = [nodeId];
+                } else {
+                    parentNode.subNodeIdArray.push(nodeId);
+                    parentNode.subNodeIdArray.sort();
+                }
+
+                return nodeId;
+            }
+        }
+    }
+    export function createAndReplaceSubNodeInEvent({ fullData, eventId, isAnd = true, conditionIdArray = [], subNodeIdArray = [] }: {   // DONE
+        fullData            : IWarEventFullData;
+        eventId             : number;
+        isAnd?              : boolean;
+        conditionIdArray?   : number[];
+        subNodeIdArray?     : number[];
+    }): number | undefined {
+        const event = (fullData.eventArray).find(v => v.eventId === eventId);
+        if (event == null) {
+            return undefined;
+        }
+
         if (fullData.conditionNodeArray == null) {
             fullData.conditionNodeArray = [];
         }
@@ -909,29 +1103,144 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
                     subNodeIdArray,
                 });
                 nodeArray.sort((v1, v2) => v1.nodeId - v2.nodeId);
+
+                const oldNodeId         = event.conditionNodeId;
+                event.conditionNodeId   = nodeId;
+                checkAndDeleteUnusedNode(fullData, oldNodeId);
+
                 return nodeId;
             }
         }
     }
 
-    export function addCondition(fullData: IWarEventFullData): number {
+    export function replaceSubNodeInEvent({ fullData, eventId, newNodeId }: {                       // DONE
+        fullData    : IWarEventFullData;
+        eventId     : number;
+        newNodeId   : number;
+    }): boolean {
+        if ((fullData.conditionNodeArray || []).find(v => v.nodeId === newNodeId) == null) {
+            return false;
+        }
+
+        const event = (fullData.eventArray || []).find(v => v.eventId === eventId);
+        if (event == null) {
+            return false;
+        }
+
+        const oldNodeId = event.conditionNodeId;
+        if (oldNodeId === newNodeId) {
+            return false;
+        }
+
+        event.conditionNodeId = newNodeId;
+        checkAndDeleteUnusedNode(fullData, oldNodeId);
+
+        return true;
+    }
+    export function replaceSubNodeInParentNode({ fullData, parentNodeId, oldNodeId, newNodeId }: {  // DONE
+        fullData    : IWarEventFullData;
+        parentNodeId: number;
+        oldNodeId   : number;
+        newNodeId   : number;
+    }): boolean {
+        if (oldNodeId === newNodeId) {
+            return false;
+        }
+
+        const nodeArray = fullData.conditionNodeArray;
+        if (nodeArray == null) {
+            return false;
+        }
+
+        if (nodeArray.find(v => v.nodeId === newNodeId) == null) {
+            return false;
+        }
+
+        const parentNode = nodeArray.find(v => v.nodeId === parentNodeId);
+        if (parentNode == null) {
+            return false;
+        }
+
+        const nodeIdArray = parentNode.subNodeIdArray;
+        if (nodeIdArray == null) {
+            return false;
+        }
+
+        nodeIdArray.push(newNodeId);
+        nodeIdArray.sort();
+        Helpers.deleteElementFromArray(nodeIdArray, oldNodeId);
+        checkAndDeleteUnusedNode(fullData, oldNodeId);
+
+        return true;
+    }
+
+    export function addCondition(fullData: IWarEventFullData, nodeId: number): number | undefined { // DONE
+        const node = (fullData.conditionNodeArray || []).find(v => v.nodeId === nodeId);
+        if (node == null) {
+            return undefined;
+        }
+
+        if (node.conditionIdArray == null) {
+            node.conditionIdArray = [];
+        }
         if (fullData.conditionArray == null) {
             fullData.conditionArray = [];
         }
 
-        const conditionArray = fullData.conditionArray;
+        const conditionIdArray  = node.conditionIdArray;
+        const conditionArray    = fullData.conditionArray;
         for (let conditionId = 1; ; ++conditionId) {
             if (!conditionArray.some(v => v.WecCommonData.conditionId === conditionId)) {
                 conditionArray.push({
-                    WecCommonData: { conditionId },
+                    WecCommonData               : {
+                        conditionId
+                    },
+                    WecPlayerIndexInTurnEqualTo : {
+                        valueEqualTo    : 1,
+                        isNot           : false,
+                    },
                 });
                 conditionArray.sort((v1, v2) => v1.WecCommonData.conditionId - v2.WecCommonData.conditionId);
+
+                conditionIdArray.push(conditionId);
+                conditionIdArray.sort();
+
                 return conditionId;
             }
         }
     }
 
-    export function addAction(): void {
-        // TODO
+    export function addAction(fullData: IWarEventFullData, eventId: number): number | undefined {   // DONE
+        const event = (fullData.eventArray || []).find(v => v.eventId === eventId);
+        if (event == null) {
+            return undefined;
+        }
+
+        if (fullData.actionArray == null) {
+            fullData.actionArray = [];
+        }
+        if (event.actionIdArray == null) {
+            event.actionIdArray == [];
+        }
+
+        const actionArray           = fullData.actionArray;
+        const eventActionIdArray    = event.actionIdArray;
+        for (let actionId = 1; ; ++actionId) {
+            if (!actionArray.some(v => v.WarEventActionCommonData.actionId === actionId)) {
+                actionArray.push({
+                    WarEventActionCommonData: {
+                        actionId,
+                    },
+                    WarEventActionAddUnit: {
+                        unitArray: [],
+                    },
+                });
+                actionArray.sort((v1, v2) => v1.WarEventActionCommonData.actionId - v2.WarEventActionCommonData.actionId);
+
+                eventActionIdArray.push(actionId);
+
+                return actionId;
+            }
+        }
     }
 }

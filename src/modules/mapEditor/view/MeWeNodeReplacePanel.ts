@@ -25,7 +25,6 @@ namespace TinyWars.MapEditor {
         private _listNode       : GameUi.UiScrollList;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoNode    : GameUi.UiLabel;
-        private _btnAddNode     : GameUi.UiButton;
         private _btnClose       : GameUi.UiButton;
 
         public static show(openData: OpenDataForMeWeNodeReplacePanel): void {
@@ -55,7 +54,6 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnAddNode,     callback: this._onTouchedBtnAddNode },
                 { ui: this._btnClose,       callback: this.close },
             ]);
             this._listNode.setItemRenderer(NodeRenderer);
@@ -65,42 +63,6 @@ namespace TinyWars.MapEditor {
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
-        }
-        private _onTouchedBtnAddNode(e: egret.TouchEvent): void {
-            const data      = this._getOpenData<OpenDataForMeWeNodeReplacePanel>();
-            const fullData  = data.fullData;
-            const newNodeId = BwWarEventHelper.addNode({ fullData });
-            if (newNodeId == null) {
-                Logger.error(`MeWeNodeReplacePanel._onTouchedBtnAddNode() empty newNodeId!`);
-                return;
-            }
-
-            const srcNodeId     = data.nodeId;
-            const eventId       = data.eventId;
-            const parentNodeId  = data.parentNodeId;
-            if (parentNodeId == null) {
-                const event = fullData.eventArray.find(v => v.eventId === eventId);
-                if (event.conditionNodeId !== srcNodeId) {
-                    Logger.error(`MeWeNodeReplacePanel._onTouchedBtnAddNode() invalid srcNodeId!`);
-                    BwWarEventHelper.checkAndDeleteUnusedNode(fullData, newNodeId);
-                    return;
-                }
-                event.conditionNodeId = newNodeId;
-
-                BwWarEventHelper.checkAndDeleteUnusedNode(fullData, srcNodeId);
-                Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
-                this.close();
-
-            } else {
-                const idArray = fullData.conditionNodeArray.find(v => v.nodeId === parentNodeId).subNodeIdArray;
-                Helpers.deleteElementFromArray(idArray, srcNodeId);
-                idArray.push(newNodeId);
-                idArray.sort();
-
-                BwWarEventHelper.checkAndDeleteUnusedNode(fullData, srcNodeId);
-                Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
-                this.close();
-            }
         }
 
         private _updateView(): void {
@@ -113,7 +75,6 @@ namespace TinyWars.MapEditor {
             this._labelTitle.text   = Lang.getText(Lang.Type.B0491);
             this._labelNoNode.text  = Lang.getText(Lang.Type.B0278);
             this._btnClose.label    = Lang.getText(Lang.Type.B0146);
-            this._btnAddNode.label  = Lang.getText(Lang.Type.B0320);
         }
         private _updateListNodeAndLabelNoNode(): void {
             const openData      = this._getOpenData<OpenDataForMeWeNodeReplacePanel>();
@@ -172,105 +133,88 @@ namespace TinyWars.MapEditor {
             this._updateLabelSubCondition();
         }
 
-        private _onTouchedBtnCopy(e: egret.TouchEvent): void {
+        private _onTouchedBtnCopy(e: egret.TouchEvent): void {          // DONE
             const data = this.data as DataForNodeRenderer;
-            if (data) {
-                const srcNodeId         = data.srcNodeId;
-                const candidateNodeId   = data.candidateNodeId;
-                const fullData          = data.fullData;
-                const eventId           = data.eventId;
-                const parentNodeId      = data.parentNodeId;
-                const eventArray        = fullData.eventArray;
-                if (parentNodeId == null) {
-                    const event = eventArray.find(v => v.eventId === eventId);
-                    if (event.conditionNodeId !== srcNodeId) {
-                        Logger.error(`MeWeNodeReplacePanel.NodeRenderer._onTouchedBtnCopy() invalid srcNodeId!`);
-                        return;
-                    }
-
-                    const newNodeId = BwWarEventHelper.cloneNode(fullData, candidateNodeId);
-                    if (newNodeId == null) {
-                        Logger.error(`MeWeNodeReplacePanel.NodeRenderer._onTouchedBtnCopy() empty newNodeId!`);
-                        return;
-                    }
-                    event.conditionNodeId = newNodeId;
-
-                    BwWarEventHelper.checkAndDeleteUnusedNode(fullData, srcNodeId);
-                    Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
-                    MeWeNodeReplacePanel.hide();
-
-                } else {
-                    if (BwWarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: candidateNodeId }).nodeIdSet.has(parentNodeId)) {
-                        FloatText.show(Lang.getText(Lang.Type.A0179));
-                        return;
-                    }
-
-                    const newNodeId = BwWarEventHelper.cloneNode(fullData, candidateNodeId);
-                    if (newNodeId == null) {
-                        Logger.error(`MeWeNodeReplacePanel.NodeRenderer._onTouchedBtnCopy() empty newNodeId 2!`);
-                        return;
-                    }
-
-                    const parentNode = fullData.conditionNodeArray.find(v => v.nodeId === parentNodeId);
-                    if (parentNode.subNodeIdArray == null) {
-                        parentNode.subNodeIdArray = [];
-                    }
-
-                    const idArray = parentNode.subNodeIdArray;
-                    Helpers.deleteElementFromArray(idArray, srcNodeId);
-                    idArray.push(newNodeId);
-                    idArray.sort();
-
-                    BwWarEventHelper.checkAndDeleteUnusedNode(fullData, srcNodeId);
-                    Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
-                    MeWeNodeReplacePanel.hide();
-                }
+            if (data == null) {
+                return;
             }
-        }
-        private _onTouchedBtnSelect(e: egret.TouchEvent): void {
-            const data = this.data as DataForNodeRenderer;
-            if (data) {
-                const srcNodeId         = data.srcNodeId;
-                const candidateNodeId   = data.candidateNodeId;
-                if (srcNodeId == candidateNodeId) {
-                    MeWeNodeReplacePanel.hide();
+
+            const fullData          = data.fullData;
+            const parentNodeId      = data.parentNodeId;
+            const candidateNodeId   = data.candidateNodeId;
+            const candidateNode     = (fullData.conditionNodeArray || []).find(v => v.nodeId === candidateNodeId);
+            if (candidateNode == null) {
+                Logger.error(`MeWeNodeReplacePanel.NodeRenderer._onTouchedBtnCopy() empty candidateNode.`);
+                FloatText.show(`MeWeNodeReplacePanel.NodeRenderer._onTouchedBtnCopy() empty candidateNode.`);
+                return;
+            }
+
+            const isAnd             = candidateNode.isAnd;
+            const conditionIdArray  = (candidateNode.conditionIdArray || []).concat();
+            const subNodeIdArray    = (candidateNode.subNodeIdArray || []).concat();
+            if (parentNodeId == null) {
+                if (BwWarEventHelper.createAndReplaceSubNodeInEvent({
+                    fullData,
+                    eventId         : data.eventId,
+                    isAnd,
+                    conditionIdArray,
+                    subNodeIdArray,
+                }) != null) {
+                    Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
+                }
+            } else {
+                if (BwWarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: candidateNodeId }).nodeIdSet.has(parentNodeId)) {
+                    FloatText.show(Lang.getText(Lang.Type.A0179));
                     return;
                 }
 
-                const fullData      = data.fullData;
-                const eventId       = data.eventId;
-                const parentNodeId  = data.parentNodeId;
-                const eventArray    = fullData.eventArray;
-                if (parentNodeId == null) {
-                    eventArray.find(v => v.eventId === eventId).conditionNodeId = candidateNodeId;
-
-                    BwWarEventHelper.checkAndDeleteUnusedNode(fullData, srcNodeId);
+                if (BwWarEventHelper.createSubNodeInParentNode({
+                    fullData,
+                    parentNodeId,
+                    isAnd,
+                    conditionIdArray,
+                    subNodeIdArray
+                }) != null) {
                     Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
-                    MeWeNodeReplacePanel.hide();
+                }
+            }
 
-                } else {
-                    if (BwWarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: candidateNodeId }).nodeIdSet.has(parentNodeId)) {
-                        FloatText.show(Lang.getText(Lang.Type.A0179));
-                        return;
-                    }
+            MeWeNodeReplacePanel.hide();
+        }
+        private _onTouchedBtnSelect(e: egret.TouchEvent): void {        // DONE
+            const data = this.data as DataForNodeRenderer;
+            if (data == null) {
+                return;
+            }
 
-                    const node = fullData.conditionNodeArray.find(v => v.nodeId === parentNodeId);
-                    if (node.subNodeIdArray == null) {
-                        node.subNodeIdArray = [];
-                    }
-
-                    const idArray = node.subNodeIdArray;
-                    Helpers.deleteElementFromArray(idArray, srcNodeId);
-                    idArray.push(candidateNodeId);
-                    idArray.sort();
-
-                    BwWarEventHelper.checkAndDeleteUnusedNode(fullData, srcNodeId);
+            const parentNodeId  = data.parentNodeId;
+            const fullData      = data.fullData;
+            const newNodeId     = data.candidateNodeId;
+            if (parentNodeId == null) {
+                if (BwWarEventHelper.replaceSubNodeInEvent({
+                    fullData,
+                    eventId     : data.eventId,
+                    newNodeId,
+                })) {
                     Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
-                    MeWeNodeReplacePanel.hide();
+                }
+            } else {
+                if (BwWarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: newNodeId }).nodeIdSet.has(parentNodeId)) {
+                    FloatText.show(Lang.getText(Lang.Type.A0179));
+                    return;
+                }
+
+                if (BwWarEventHelper.replaceSubNodeInParentNode({
+                    fullData,
+                    parentNodeId,
+                    oldNodeId   : data.srcNodeId,
+                    newNodeId,
+                })) {
+                    Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
                 }
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(e: egret.Event): void {        // DONE
             this._updateComponentsForLanguage();
         }
 
