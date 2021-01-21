@@ -84,7 +84,7 @@ namespace TinyWars.Utility.Notify {
         MeMapNameChanged,
         MeWarRuleNameChanged,
         MeWarEventIdArrayChanged,
-        MeWarEventFullDataChanged,
+        WarEventFullDataChanged,
         MeAvailableCoChanged,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,10 +1,11 @@
 
-namespace TinyWars.BaseWar.BwWarEventHelper {
+namespace TinyWars.WarEvent.WarEventHelper {
     import ProtoTypes               = Utility.ProtoTypes;
     import Helpers                  = Utility.Helpers;
     import Lang                     = Utility.Lang;
     import Types                    = Utility.Types;
     import ConfigManager            = Utility.ConfigManager;
+    import BwHelpers                = BaseWar.BwHelpers;
     import LanguageType             = Types.LanguageType;
     import WarEvent                 = ProtoTypes.WarEvent;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
@@ -788,7 +789,7 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
         return undefined;
     }
 
-    export function getErrorTipForAction(fullData: IWarEventFullData, action: IWarEventAction, mapRawData: IMapRawData): string | undefined {
+    export function getErrorTipForAction(fullData: IWarEventFullData, action: IWarEventAction, war: MapEditor.MeWar): string | undefined {
         const actionsCountTotal = (fullData.actionArray || []).length;
         if (actionsCountTotal > CommonConstants.WarEventMaxActionsPerMap) {
             return `${Lang.getText(Lang.Type.A0188)} (${actionsCountTotal}/${CommonConstants.WarEventMaxActionsPerMap})`;
@@ -800,23 +801,24 @@ namespace TinyWars.BaseWar.BwWarEventHelper {
 
         // TODO add more tips for the future actions.
         if (action.WarEventActionAddUnit) {
-            return getErrorTipForWeaAddUnit(action.WarEventActionAddUnit, mapRawData);
+            return getErrorTipForWeaAddUnit(action.WarEventActionAddUnit, war);
         } else {
             return Lang.getText(Lang.Type.A0177);
         }
     }
-    function getErrorTipForWeaAddUnit(data: WarEvent.IWarEventActionAddUnit, mapRawData: IMapRawData): string | undefined {
+    function getErrorTipForWeaAddUnit(data: WarEvent.IWarEventActionAddUnit, war: MapEditor.MeWar): string | undefined {
         const unitArray = data.unitArray;
         if ((unitArray == null) || (unitArray.length <= 0)) {
             return Lang.getText(Lang.Type.A0169);
         }
 
-        const mapSize       : Types.MapSize = { width: mapRawData.mapWidth, height: mapRawData.mapHeight };
-        const configVersion = ConfigManager.getLatestFormalVersion();
+        const mapSize               = war.getTileMap().getMapSize();
+        const configVersion         = war.getConfigVersion();
+        const playersCountUnneutral = (war.getField() as MapEditor.MeField).getMaxPlayerIndex();
         if (unitArray.some(v => !BwHelpers.checkIsUnitDataValidIgnoringUnitId({
             unitData                : v.unitData,
             mapSize,
-            playersCountUnneutral   : mapRawData.playersCountUnneutral,
+            playersCountUnneutral,
             configVersion,
         }))) {
             return Lang.getText(Lang.Type.A0169);

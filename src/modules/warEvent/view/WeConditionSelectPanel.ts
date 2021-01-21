@@ -6,32 +6,32 @@ namespace TinyWars.MapEditor {
     import Notify                   = Utility.Notify;
     import Types                    = Utility.Types;
     import Logger                   = Utility.Logger;
-    import BwWarEventHelper         = BaseWar.BwWarEventHelper;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IMapRawData              = ProtoTypes.Map.IMapRawData;
     import ColorValue               = Types.ColorValue;
     import WarEventDescType         = Types.WarEventDescType;
 
-    type OpenDataForMeWeConditionSelectPanel = {
+    type OpenDataForWeConditionSelectPanel = {
+        war         : BaseWar.BwWar;
         conditionId : number;
     }
-    export class MeWeConditionSelectPanel extends GameUi.UiPanel {
+    export class WeConditionSelectPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: MeWeConditionSelectPanel;
+        private static _instance: WeConditionSelectPanel;
 
         private _listCondition  : GameUi.UiScrollList;
 
-        public static show(openData: OpenDataForMeWeConditionSelectPanel): void {
-            if (!MeWeConditionSelectPanel._instance) {
-                MeWeConditionSelectPanel._instance = new MeWeConditionSelectPanel();
+        public static show(openData: OpenDataForWeConditionSelectPanel): void {
+            if (!WeConditionSelectPanel._instance) {
+                WeConditionSelectPanel._instance = new WeConditionSelectPanel();
             }
-            MeWeConditionSelectPanel._instance.open(openData);
+            WeConditionSelectPanel._instance.open(openData);
         }
         public static hide(): void {
-            if (MeWeConditionSelectPanel._instance) {
-                MeWeConditionSelectPanel._instance.close();
+            if (WeConditionSelectPanel._instance) {
+                WeConditionSelectPanel._instance.close();
             }
         }
 
@@ -41,7 +41,7 @@ namespace TinyWars.MapEditor {
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this._setIsAutoAdjustHeight();
-            this.skinName = "resource/skins/mapEditor/MeWeConditionSelectPanel.exml";
+            this.skinName = "resource/skins/warEvent/WeConditionSelectPanel.exml";
         }
 
         protected _onOpened(): void {

@@ -1,5 +1,5 @@
 
-namespace TinyWars.MapEditor {
+namespace TinyWars.WarEvent {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
@@ -9,14 +9,15 @@ namespace TinyWars.MapEditor {
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    type OpenDataForMeWeEventRenamePanel = {
+    type OpenDataForWeEventRenamePanel = {
+        war         : BaseWar.BwWar;
         warEventId  : number;
     }
-    export class MeWeEventRenamePanel extends GameUi.UiPanel {
+    export class WeEventRenamePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: MeWeEventRenamePanel;
+        private static _instance: WeEventRenamePanel;
 
         private _inputChinese   : GameUi.UiTextInput;
         private _inputEnglish   : GameUi.UiTextInput;
@@ -27,17 +28,17 @@ namespace TinyWars.MapEditor {
         private _btnModify      : GameUi.UiButton;
         private _btnClose       : GameUi.UiButton;
 
-        public static show(openData: OpenDataForMeWeEventRenamePanel): void {
-            if (!MeWeEventRenamePanel._instance) {
-                MeWeEventRenamePanel._instance = new MeWeEventRenamePanel();
+        public static show(openData: OpenDataForWeEventRenamePanel): void {
+            if (!WeEventRenamePanel._instance) {
+                WeEventRenamePanel._instance = new WeEventRenamePanel();
             }
 
-            MeWeEventRenamePanel._instance.open(openData);
+            WeEventRenamePanel._instance.open(openData);
         }
 
         public static hide(): void {
-            if (MeWeEventRenamePanel._instance) {
-                MeWeEventRenamePanel._instance.close();
+            if (WeEventRenamePanel._instance) {
+                WeEventRenamePanel._instance.close();
             }
         }
 
@@ -47,7 +48,7 @@ namespace TinyWars.MapEditor {
             this._setIsAutoAdjustHeight(true);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/mapEditor/MeWeEventRenamePanel.exml";
+            this.skinName = "resource/skins/warEvent/WeEventRenamePanel.exml";
         }
 
         protected _onOpened(): void {
@@ -81,10 +82,10 @@ namespace TinyWars.MapEditor {
             } else if (textList.some(v => v.text.length > CommonConstants.WarEventNameMaxLength)) {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.WarEventNameMaxLength));
             } else {
-                const openData = this._getOpenData<OpenDataForMeWeEventRenamePanel>();
-                MeManager.getWar().getWarEventManager().getWarEvent(openData.warEventId).eventNameArray = textList;
+                const openData = this._getOpenData<OpenDataForWeEventRenamePanel>();
+                openData.war.getWarEventManager().getWarEvent(openData.warEventId).eventNameArray = textList;
 
-                Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
+                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
                 this.close();
             }
         }
@@ -92,8 +93,8 @@ namespace TinyWars.MapEditor {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const openData          = this._getOpenData<OpenDataForMeWeEventRenamePanel>();
-            const nameArray         = MeManager.getWar().getWarEventManager().getWarEvent(openData.warEventId).eventNameArray;
+            const openData          = this._getOpenData<OpenDataForWeEventRenamePanel>();
+            const nameArray         = openData.war.getWarEventManager().getWarEvent(openData.warEventId).eventNameArray;
             this._inputChinese.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.Chinese, useAlternate: false });
             this._inputEnglish.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.English, useAlternate: false });
         }

@@ -9,7 +9,7 @@ namespace TinyWars.MapEditor.MeUtility {
     import BwSettingsHelper         = BaseWar.BwSettingsHelper;
     import BwHelpers                = BaseWar.BwHelpers;
     import BwTile                   = BaseWar.BwTile;
-    import BwWarEventHelper         = BaseWar.BwWarEventHelper;
+    import WarEventHelper           = WarEvent.WarEventHelper;
     import GridIndex                = Types.GridIndex;
     import TileObjectType           = Types.TileObjectType;
     import TileBaseType             = Types.TileBaseType;
@@ -160,7 +160,7 @@ namespace TinyWars.MapEditor.MeUtility {
             return InvalidationType.InvalidTiles;
         } else if (!checkIsWarRuleArrayValid(mapRawData.warRuleArray, mapRawData.playersCountUnneutral, mapRawData.warEventFullData)) {
             return InvalidationType.InvalidWarRuleList;
-        } else if (!BwWarEventHelper.checkIsWarEventFullDataValid(mapRawData)) {
+        } else if (!WarEventHelper.checkIsWarEventFullDataValid(mapRawData)) {
             return InvalidationType.InvalidWarEventData;
         } else {
             return InvalidationType.Valid;

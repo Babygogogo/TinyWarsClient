@@ -1,42 +1,39 @@
 
-namespace TinyWars.MapEditor {
+namespace TinyWars.WarEvent {
     import Notify               = Utility.Notify;
-    import Helpers              = Utility.Helpers;
     import ProtoTypes           = Utility.ProtoTypes;
     import Logger               = Utility.Logger;
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
-    import BwWarEventHelper     = BaseWar.BwWarEventHelper;
-    import WarEvent             = ProtoTypes.WarEvent;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
 
-    type OpenDataForMeWeNodeReplacePanel = {
+    type OpenDataForWeNodeReplacePanel = {
         eventId         : number;
         parentNodeId?   : number;
         nodeId          : number | null | undefined;
         fullData        : IWarEventFullData;
     }
-    export class MeWeNodeReplacePanel extends GameUi.UiPanel {
+    export class WeNodeReplacePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: MeWeNodeReplacePanel;
+        private static _instance: WeNodeReplacePanel;
 
         private _listNode       : GameUi.UiScrollList;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoNode    : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
 
-        public static show(openData: OpenDataForMeWeNodeReplacePanel): void {
-            if (!MeWeNodeReplacePanel._instance) {
-                MeWeNodeReplacePanel._instance = new MeWeNodeReplacePanel();
+        public static show(openData: OpenDataForWeNodeReplacePanel): void {
+            if (!WeNodeReplacePanel._instance) {
+                WeNodeReplacePanel._instance = new WeNodeReplacePanel();
             }
-            MeWeNodeReplacePanel._instance.open(openData);
+            WeNodeReplacePanel._instance.open(openData);
         }
 
         public static hide(): void {
-            if (MeWeNodeReplacePanel._instance) {
-                MeWeNodeReplacePanel._instance.close();
+            if (WeNodeReplacePanel._instance) {
+                WeNodeReplacePanel._instance.close();
             }
         }
 
@@ -46,7 +43,7 @@ namespace TinyWars.MapEditor {
             this._setIsAutoAdjustHeight(true);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/mapEditor/MeWeNodeReplacePanel.exml";
+            this.skinName = "resource/skins/warEvent/WeNodeReplacePanel.exml";
         }
 
         protected _onOpened(): void {
@@ -77,7 +74,7 @@ namespace TinyWars.MapEditor {
             this._btnClose.label    = Lang.getText(Lang.Type.B0146);
         }
         private _updateListNodeAndLabelNoNode(): void {
-            const openData      = this._getOpenData<OpenDataForMeWeNodeReplacePanel>();
+            const openData      = this._getOpenData<OpenDataForWeNodeReplacePanel>();
             const eventId       = openData.eventId;
             const parentNodeId  = openData.parentNodeId;
             const srcNodeId     = openData.nodeId;
@@ -153,33 +150,33 @@ namespace TinyWars.MapEditor {
             const conditionIdArray  = (candidateNode.conditionIdArray || []).concat();
             const subNodeIdArray    = (candidateNode.subNodeIdArray || []).concat();
             if (parentNodeId == null) {
-                if (BwWarEventHelper.createAndReplaceSubNodeInEvent({
+                if (WarEventHelper.createAndReplaceSubNodeInEvent({
                     fullData,
                     eventId         : data.eventId,
                     isAnd,
                     conditionIdArray,
                     subNodeIdArray,
                 }) != null) {
-                    Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
+                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
                 }
             } else {
-                if (BwWarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: candidateNodeId }).nodeIdSet.has(parentNodeId)) {
+                if (WarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: candidateNodeId }).nodeIdSet.has(parentNodeId)) {
                     FloatText.show(Lang.getText(Lang.Type.A0179));
                     return;
                 }
 
-                if (BwWarEventHelper.createSubNodeInParentNode({
+                if (WarEventHelper.createSubNodeInParentNode({
                     fullData,
                     parentNodeId,
                     isAnd,
                     conditionIdArray,
                     subNodeIdArray
                 }) != null) {
-                    Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
+                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
                 }
             }
 
-            MeWeNodeReplacePanel.hide();
+            WeNodeReplacePanel.hide();
         }
         private _onTouchedBtnSelect(e: egret.TouchEvent): void {        // DONE
             const data = this.data as DataForNodeRenderer;
@@ -191,26 +188,26 @@ namespace TinyWars.MapEditor {
             const fullData      = data.fullData;
             const newNodeId     = data.candidateNodeId;
             if (parentNodeId == null) {
-                if (BwWarEventHelper.replaceSubNodeInEvent({
+                if (WarEventHelper.replaceSubNodeInEvent({
                     fullData,
                     eventId     : data.eventId,
                     newNodeId,
                 })) {
-                    Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
+                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
                 }
             } else {
-                if (BwWarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: newNodeId }).nodeIdSet.has(parentNodeId)) {
+                if (WarEventHelper.getAllSubNodesAndConditionsForNode({ fullData, nodeId: newNodeId }).nodeIdSet.has(parentNodeId)) {
                     FloatText.show(Lang.getText(Lang.Type.A0179));
                     return;
                 }
 
-                if (BwWarEventHelper.replaceSubNodeInParentNode({
+                if (WarEventHelper.replaceSubNodeInParentNode({
                     fullData,
                     parentNodeId,
                     oldNodeId   : data.srcNodeId,
                     newNodeId,
                 })) {
-                    Notify.dispatch(Notify.Type.MeWarEventFullDataChanged);
+                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
                 }
             }
         }
