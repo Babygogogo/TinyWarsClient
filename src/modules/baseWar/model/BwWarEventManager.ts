@@ -225,9 +225,9 @@ namespace TinyWars.BaseWar {
                     break;
                 }
 
-                const player = playerManager.getPlayer(unitData.playerIndex);
-                if (player == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty player.`);
+                const playerIndex = unitData.playerIndex;
+                if (playerIndex == null) {
+                    Logger.error(`BwWarEventManager._callActionAddUnit() empty playerIndex.`);
                     break;
                 }
 
@@ -235,13 +235,17 @@ namespace TinyWars.BaseWar {
                     unitData,
                     mapSize,
                     configVersion,
-                    playersCountUnneutral,
+                    playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
                 })) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() invalid unitData.`);
                     break;
                 }
 
-                if (player.getAliveState() !== Types.PlayerAliveState.Alive) {
+                const player = playerManager.getPlayer(playerIndex);
+                if (player == null) {
+                    continue;
+                }
+                if (player.getAliveState() === Types.PlayerAliveState.Dead) {
                     continue;
                 }
 
@@ -264,7 +268,7 @@ namespace TinyWars.BaseWar {
                 const unit = new (unitMap.getUnitClass())().init(revisedUnitData, configVersion);
                 if (unit == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty unit.`);
-                    break;
+                    continue;
                 }
 
                 resultingUnitList.push(revisedUnitData);

@@ -213,11 +213,6 @@ namespace TinyWars.WarEvent.WarEventHelper {
             return false;
         }
 
-        const playersCountUnneutral = mapRawData.playersCountUnneutral;
-        if (playersCountUnneutral == null) {
-            return false;
-        }
-
         const configVersion = ConfigManager.getLatestFormalVersion();
         if (configVersion == null) {
             return false;
@@ -256,7 +251,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
 
                 if (!BwHelpers.checkIsUnitDataValidIgnoringUnitId({
                     unitData,
-                    playersCountUnneutral,
+                    playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
                     configVersion,
                     mapSize,
                 })) {
