@@ -11,47 +11,47 @@
         <e:Group y="40" left="10" right="10">
             <GameUi:UiLabel id="_labelDesc" text="创建战局" size="18" textColor="0xFFFFFF" x="0" y="0" width="740" />
             <GameUi:UiLabel id="_labelError" text="创建战局" size="18" textColor="0xFFFFFF" x="0" y="0" width="740" />
-            <e:Group id="_groupBtn" y="110" horizontalCenter="0" width="660">
-                <GameUi:UiButton id="_btnModifyEventName" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnModifyMaxCallCountPerTurn" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnModifyMaxCallCountTotal" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnInitSubNodeToEvent" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnDeleteEvent" label="Delete" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnSwitchNodeAndOr" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnReplaceNode" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnAddSubNodeToNode" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnAddSubCondition" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnDeleteNode" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnReplaceCondition" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnModifyCondition" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnDeleteCondition" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnModifyAction" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnReplaceAction" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnAddAction" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <GameUi:UiButton id="_btnDeleteAction" label="Modify" width="120"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                <e:layout>
-                    <e:TileLayout orientation="rows" columnAlign="justifyUsingGap" requestedColumnCount="5" />
-                </e:layout>
-            </e:Group>
             <e:layout>
                 <e:VerticalLayout horizontalAlign="center" />
+            </e:layout>
+        </e:Group>
+        <e:Group id="_groupBtn" horizontalCenter="0" width="660" y="150">
+            <GameUi:UiButton id="_btnModifyEventName" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnModifyMaxCallCountPerTurn" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnModifyMaxCallCountTotal" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnInitSubNodeToEvent" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnDeleteEvent" label="Delete" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnSwitchNodeAndOr" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnReplaceNode" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnAddSubNodeToNode" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnAddSubCondition" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnDeleteNode" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnReplaceCondition" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnModifyCondition" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnDeleteCondition" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnModifyAction" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnReplaceAction" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnAddAction" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <GameUi:UiButton id="_btnDeleteAction" label="Modify" width="120"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+            <e:layout>
+                <e:TileLayout orientation="rows" columnAlign="justifyUsingGap" requestedColumnCount="5" />
             </e:layout>
         </e:Group>
     </e:Group>

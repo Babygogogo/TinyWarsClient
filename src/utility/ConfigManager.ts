@@ -1203,7 +1203,7 @@ namespace TinyWars.Utility.ConfigManager {
             for (const cfg of getAvailableCoArray(version)) {
                 tiers.add(cfg.tier);
             }
-            _CO_TIERS.set(version, Array.from(tiers).sort());
+            _CO_TIERS.set(version, Array.from(tiers).sort((v1, v2) => v1 - v2));
         }
         return _CO_TIERS.get(version);
     }

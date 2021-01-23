@@ -236,15 +236,18 @@ namespace TinyWars.Utility.Helpers {
         }
     }
 
-    export function deleteElementFromArray<T>(arr: T[], element: T): void {
-        let index = 0;
-        while (index < arr.length) {
+    export function deleteElementFromArray<T>(arr: T[], element: T, maxDeleteCount = Number.MAX_VALUE): number {
+        let index       = 0;
+        let deleteCount = 0;
+        while ((index < arr.length) && (deleteCount < maxDeleteCount)) {
             if (arr[index] === element) {
                 arr.splice(index, 1);
+                ++deleteCount;
             } else {
                 ++index;
             }
         }
+        return deleteCount;
     }
 
     /** 获取一个整数的位数。不计负数的符号；0-9计为1；10-99计为2；以此类推 */

@@ -81,6 +81,17 @@ namespace TinyWars.Utility.Lang {
         B0480, B0481, B0482, B0483, B0484, B0485, B0486, B0487, B0488, B0489,
         B0490, B0491, B0492, B0493, B0494, B0495, B0496, B0497, B0498, B0499,
 
+        B0500, B0501, B0502, B0503, B0504, B0505, B0506, B0507, B0508, B0509,
+        B0510, B0511, B0512, B0513, B0514, B0515, B0516, B0517, B0518, B0519,
+        B0520, B0521, B0522, B0523, B0524, B0525, B0526, B0527, B0528, B0529,
+        B0530, B0531, B0532, B0533, B0534, B0535, B0536, B0537, B0538, B0539,
+        B0540, B0541, B0542, B0543, B0544, B0545, B0546, B0547, B0548, B0549,
+        B0550, B0551, B0552, B0553, B0554, B0555, B0556, B0557, B0558, B0559,
+        B0560, B0561, B0562, B0563, B0564, B0565, B0566, B0567, B0568, B0569,
+        B0570, B0571, B0572, B0573, B0574, B0575, B0576, B0577, B0578, B0579,
+        B0580, B0581, B0582, B0583, B0584, B0585, B0586, B0587, B0588, B0589,
+        B0590, B0591, B0592, B0593, B0594, B0595, B0596, B0597, B0598, B0599,
+
         B1000, B1001, B1002, B1003, B1004, B1005, B1006, B1007, B1008, B1009,
         B1010, B1011, B1012, B1013, B1014, B1015, B1016, B1017, B1018, B1019,
         B1020, B1021, B1022, B1023, B1024, B1025, B1026, B1027, B1028, B1029,
@@ -867,8 +878,8 @@ namespace TinyWars.Utility.Lang {
             `The map contains too many condition nodes. Please delete some of them.`,
         ],
         [Type.A0184]: [
-            `此条件节点在同一事件中重复出现。请删除重复的节点。`,
-            `There are duplicated nodes in the same event. Please remove the duplication.`,
+            `此地图已包含太多事件动作，请删除一些。`,
+            `The map contains too many actions. Please delete some of them.`,
         ],
         [Type.A0185]: [
             `此地图已包含太多条件，请删除一些。`,
@@ -883,8 +894,8 @@ namespace TinyWars.Utility.Lang {
             `There is something wrong with the condition. Please delete it.`,
         ],
         [Type.A0188]: [
-            `此地图已包含太多事件动作，请删除一些。`,
-            `The map contains too many actions. Please delete some of them.`,
+            `未被引用的条件节点、条件、动作都将被删除。您确定要继续吗？`,
+            `All of the unused condition nodes, conditions and actions will be deleted. Are you sure to continue?`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2854,6 +2865,38 @@ namespace TinyWars.Utility.Lang {
             `重置条件节点`,
             `Reset Node`,
         ],
+        [Type.B0495]: [
+            `修改名称`,
+            `Modify Name`,
+        ],
+        [Type.B0496]: [
+            `新增动作`,
+            `Add Action`,
+        ],
+        [Type.B0497]: [
+            `新增事件`,
+            `Add Event`,
+        ],
+        [Type.B0498]: [
+            `删除多余数据`,
+            `Delete Redundancy`,
+        ],
+        [Type.B0499]: [
+            `删除节点`,
+            `Delete Node`,
+        ],
+        [Type.B0500]: [
+            `替换条件`,
+            `Replace Condition`,
+        ],
+        [Type.B0501]: [
+            `修改条件`,
+            `Modify Condition`,
+        ],
+        [Type.B0502]: [
+            `条件`,
+            `Condition`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3340,6 +3383,22 @@ namespace TinyWars.Utility.Lang {
         [Type.F0059]: [
             `在地图上增加部队: %s`,
             `Add units on map: %s`,
+        ],
+        [Type.F0060]: [
+            `当前正在使用条件节点%s。确定要用新的空节点代替它吗？`,
+            `The condition node %s is being used. Are you sure to replace it by a new empty one?`,
+        ],
+        [Type.F0061]: [
+            `此条件节点中包含了重复的节点%s。请删除重复的节点。`,
+            `There are duplicated sub nodes %s in the node. Please remove the duplication.`,
+        ],
+        [Type.F0062]: [
+            `此条件节点中包含了重复的条件%s。请删除重复的条件。`,
+            `There are duplicated condition %s in the node. Please remove the duplication.`,
+        ],
+        [Type.F0063]: [
+            `已删除%d个节点、%d个条件和%d个动作。`,
+            `%d nodes, %d conditions and %d actions have been deleted.`,
         ],
     };
 

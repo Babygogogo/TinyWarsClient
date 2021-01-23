@@ -59,10 +59,6 @@
 		"resource/skins/mapEditor/MeWarMenuPanel.exml",
 		"resource/skins/mapEditor/MeWarPanel.exml",
 		"resource/skins/mapEditor/MeWarRulePanel.exml",
-		"resource/skins/mapEditor/MeWeCommandPanel.exml",
-		"resource/skins/mapEditor/MeWeEventRenamePanel.exml",
-		"resource/skins/mapEditor/MeWeNodeReplacePanel.exml",
-		"resource/skins/mapEditor/MeWePanel.exml",
 		"resource/skins/mapManagement/MmAcceptMapPanel.exml",
 		"resource/skins/mapManagement/MmAvailabilityChangePanel.exml",
 		"resource/skins/mapManagement/MmAvailabilityListPanel.exml",
@@ -168,6 +164,11 @@
 		"resource/skins/user/UserSetPasswordPanel.exml",
 		"resource/skins/user/UserSetPrivilegePanel.exml",
 		"resource/skins/utility/LoadingUiPanel.exml",
+		"resource/skins/warEvent/WeCommandPanel.exml",
+		"resource/skins/warEvent/WeConditionReplacePanel.exml",
+		"resource/skins/warEvent/WeEventListPanel.exml",
+		"resource/skins/warEvent/WeEventRenamePanel.exml",
+		"resource/skins/warEvent/WeNodeReplacePanel.exml",
 		"resource/skins/warMap/WarMapBuildingListPanel.exml"
 	],
 	"path": "resource/default.thm.json"

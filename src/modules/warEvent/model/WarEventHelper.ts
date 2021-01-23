@@ -593,7 +593,8 @@ namespace TinyWars.WarEvent.WarEventHelper {
             return `${Lang.getText(Lang.Type.A0180)} (${actionsCount}/${CommonConstants.WarEventMaxActionsPerEvent})`;
         }
 
-        if (event.conditionNodeId == null) {
+        const nodeId = event.conditionNodeId;
+        if (nodeId == null) {
             return Lang.getText(Lang.Type.A0159);
         }
 
@@ -618,18 +619,25 @@ namespace TinyWars.WarEvent.WarEventHelper {
         return undefined;
     }
 
-    export function getErrorTipForConditionNode(fullData: IWarEventFullData, node: IWarEventConditionNode, eventId: number): string | undefined {
+    export function getErrorTipForConditionNode(fullData: IWarEventFullData, node: IWarEventConditionNode): string | undefined {
         const nodesCount = (fullData.conditionNodeArray || []).length;
         if (nodesCount > CommonConstants.WarEventMaxConditionNodesPerMap) {
             return `${Lang.getText(Lang.Type.A0183)} (${nodesCount}/${CommonConstants.WarEventMaxConditionNodesPerMap})`;
         }
 
-        if (checkIsNodeDuplicatedInEvent(fullData, node.nodeId, eventId)) {
-            return Lang.getText(Lang.Type.A0184);
-        }
-
         if (((node.subNodeIdArray || []).length) + ((node.conditionIdArray || []).length) <= 0) {
             return Lang.getText(Lang.Type.A0161);
+        }
+
+        const nodeId            = node.nodeId;
+        const duplicatedNodeId  = getDuplicatedSubNodeId(fullData, nodeId);
+        if (duplicatedNodeId != null) {
+            return Lang.getFormattedText(Lang.Type.F0061, `N${duplicatedNodeId}`);
+        }
+
+        const duplicatedConditionId = getDuplicatedConditionId(fullData, nodeId);
+        if (duplicatedConditionId != null) {
+            return Lang.getFormattedText(Lang.Type.F0062, `C${duplicatedConditionId}`);
         }
 
         return undefined;
@@ -639,10 +647,6 @@ namespace TinyWars.WarEvent.WarEventHelper {
         const conditionsCount = (fullData.conditionArray || []).length;
         if (conditionsCount > CommonConstants.WarEventMaxConditionsPerMap) {
             return `${Lang.getText(Lang.Type.A0185)} (${conditionsCount}/${CommonConstants.WarEventMaxConditionsPerMap})`;
-        }
-
-        if (checkIsConditionDuplicatedInEvent(fullData, condition.WecCommonData.conditionId, eventId)) {
-            return Lang.getText(Lang.Type.A0186);
         }
 
         if (Object.keys(condition).length !== 2) {
@@ -787,7 +791,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
     export function getErrorTipForAction(fullData: IWarEventFullData, action: IWarEventAction, war: MapEditor.MeWar): string | undefined {
         const actionsCountTotal = (fullData.actionArray || []).length;
         if (actionsCountTotal > CommonConstants.WarEventMaxActionsPerMap) {
-            return `${Lang.getText(Lang.Type.A0188)} (${actionsCountTotal}/${CommonConstants.WarEventMaxActionsPerMap})`;
+            return `${Lang.getText(Lang.Type.A0184)} (${actionsCountTotal}/${CommonConstants.WarEventMaxActionsPerMap})`;
         }
 
         if (Object.keys(action).length !== 2) {
@@ -825,101 +829,134 @@ namespace TinyWars.WarEvent.WarEventHelper {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // misc
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function checkIsNodeUsedByEvent(fullData: IWarEventFullData, nodeId: number, eventId: number): boolean {
-        const event = (fullData.eventArray || []).find(v => v.eventId === eventId);
-        if (event == null) {
-            return undefined;
-        }
+    // export function checkIsNodeUsedByEvent(fullData: IWarEventFullData, nodeId: number, eventId: number): boolean {
+    //     const event = (fullData.eventArray || []).find(v => v.eventId === eventId);
+    //     if (event == null) {
+    //         return undefined;
+    //     }
 
-        if (event.conditionNodeId === nodeId) {
-            return true;
-        }
+    //     if (event.conditionNodeId === nodeId) {
+    //         return true;
+    //     }
 
+    //     const nodeArray     = fullData.conditionNodeArray || [];
+    //     const nodeIdArray   = [event.conditionNodeId];
+    //     for (const parentNodeId of nodeIdArray) {
+    //         const node = nodeArray.find(v => v.nodeId === parentNodeId);
+    //         for (const subNodeId of node ? node.subNodeIdArray || [] : []) {
+    //             if (subNodeId === nodeId) {
+    //                 return true;
+    //             }
+    //             if (nodeIdArray.indexOf(subNodeId) < 0) {
+    //                 nodeIdArray.push(subNodeId);
+    //             }
+    //         }
+    //     }
+
+    //     return false;
+    // }
+    // function checkIsNodeDuplicatedInEvent(fullData: IWarEventFullData, nodeId: number, eventId: number): boolean {
+    //     const event = (fullData.eventArray || []).find(v => v.eventId === eventId);
+    //     if (event == null) {
+    //         return undefined;
+    //     }
+
+    //     let isUsed          = event.conditionNodeId === nodeId;
+    //     const nodeArray     = fullData.conditionNodeArray || [];
+    //     const nodeIdArray   = [event.conditionNodeId];
+    //     for (const parentNodeId of nodeIdArray) {
+    //         const node = nodeArray.find(v => v.nodeId === parentNodeId);
+    //         for (const subNodeId of node ? node.subNodeIdArray || [] : []) {
+    //             if (subNodeId === nodeId) {
+    //                 if (isUsed) {
+    //                     return true;
+    //                 } else {
+    //                     isUsed = true;
+    //                 }
+    //             }
+    //             nodeIdArray.push(subNodeId);
+    //         }
+    //     }
+
+    //     return false;
+    // }
+    function getDuplicatedSubNodeId(fullData: IWarEventFullData, parentNodeId: number): number | undefined {
         const nodeArray     = fullData.conditionNodeArray || [];
-        const nodeIdArray   = [event.conditionNodeId];
-        for (const parentNodeId of nodeIdArray) {
-            const node = nodeArray.find(v => v.nodeId === parentNodeId);
-            for (const subNodeId of node ? node.subNodeIdArray || [] : []) {
-                if (subNodeId === nodeId) {
-                    return true;
-                }
-                if (nodeIdArray.indexOf(subNodeId) < 0) {
-                    nodeIdArray.push(subNodeId);
-                }
+        const nodeIdArray   = [parentNodeId];
+        const usedNodeIdSet = new Set<number>();
+        for (const nodeId of nodeIdArray) {
+            if (usedNodeIdSet.has(nodeId)) {
+                return nodeId;
             }
-        }
+            usedNodeIdSet.add(nodeId);
 
-        return false;
+            const node = nodeArray.find(v => v.nodeId === nodeId);
+            nodeIdArray.push(...(node ? node.subNodeIdArray || [] : []));
+        }
+        return undefined;
     }
-    function checkIsNodeDuplicatedInEvent(fullData: IWarEventFullData, nodeId: number, eventId: number): boolean {
-        const event = (fullData.eventArray || []).find(v => v.eventId === eventId);
-        if (event == null) {
-            return undefined;
-        }
+    // export function getNodeUsedCount(fullData: IWarEventFullData, nodeId: number): number {
+    //     let count = 0;
+    //     for (const event of fullData.eventArray || []) {
+    //         if (event.conditionNodeId === nodeId) {
+    //             ++count;
+    //         }
+    //     }
+    //     for (const node of fullData.conditionNodeArray || []) {
+    //         for (const subNodeId of node.subNodeIdArray || []) {
+    //             if (subNodeId === nodeId) {
+    //                 ++count;
+    //             }
+    //         }
+    //     }
+    //     return count;
+    // }
+    // function checkIsConditionDuplicatedInEvent(fullData: IWarEventFullData, conditionId: number, eventId: number): boolean {
+    //     const event = (fullData.eventArray || []).find(v => v.eventId === eventId);
+    //     if (event == null) {
+    //         return undefined;
+    //     }
 
-        let isUsed          = event.conditionNodeId === nodeId;
-        const nodeArray     = fullData.conditionNodeArray || [];
-        const nodeIdArray   = [event.conditionNodeId];
-        for (const parentNodeId of nodeIdArray) {
-            const node = nodeArray.find(v => v.nodeId === parentNodeId);
-            for (const subNodeId of node ? node.subNodeIdArray || [] : []) {
-                if (subNodeId === nodeId) {
-                    if (isUsed) {
-                        return true;
-                    } else {
-                        isUsed = true;
-                    }
-                }
-                nodeIdArray.push(subNodeId);
-            }
-        }
+    //     let isUsed          = false;
+    //     const nodeArray     = fullData.conditionNodeArray || [];
+    //     const nodeIdArray   = [event.conditionNodeId];
+    //     for (const parentNodeId of nodeIdArray) {
+    //         const node = nodeArray.find(v => v.nodeId === parentNodeId);
+    //         if (node) {
+    //             for (const conId of node.conditionIdArray || []) {
+    //                 if (conId === conditionId) {
+    //                     if (isUsed) {
+    //                         return true;
+    //                     } else {
+    //                         isUsed = true;
+    //                     }
+    //                 }
+    //             }
+    //             for (const subNodeId of node.subNodeIdArray || []) {
+    //                 nodeIdArray.push(subNodeId);
+    //             }
+    //         }
+    //     }
 
-        return false;
-    }
-    export function getNodeUsedCount(fullData: IWarEventFullData, nodeId: number): number {
-        let count = 0;
-        for (const event of fullData.eventArray || []) {
-            if (event.conditionNodeId === nodeId) {
-                ++count;
-            }
-        }
-        for (const node of fullData.conditionNodeArray || []) {
-            for (const subNodeId of node.subNodeIdArray || []) {
-                if (subNodeId === nodeId) {
-                    ++count;
-                }
-            }
-        }
-        return count;
-    }
-    function checkIsConditionDuplicatedInEvent(fullData: IWarEventFullData, conditionId: number, eventId: number): boolean {
-        const event = (fullData.eventArray || []).find(v => v.eventId === eventId);
-        if (event == null) {
-            return undefined;
-        }
-
-        let isUsed          = false;
-        const nodeArray     = fullData.conditionNodeArray || [];
-        const nodeIdArray   = [event.conditionNodeId];
-        for (const parentNodeId of nodeIdArray) {
-            const node = nodeArray.find(v => v.nodeId === parentNodeId);
+    //     return false;
+    // }
+    function getDuplicatedConditionId(fullData: IWarEventFullData, parentNodeId: number): number | undefined {
+        const nodeArray             = fullData.conditionNodeArray || [];
+        const nodeIdArray           = [parentNodeId];
+        const usedConditionIdSet    = new Set<number>();
+        for (const nodeId of nodeIdArray) {
+            const node = nodeArray.find(v => v.nodeId === nodeId);
             if (node) {
-                for (const conId of node.conditionIdArray || []) {
-                    if (conId === conditionId) {
-                        if (isUsed) {
-                            return true;
-                        } else {
-                            isUsed = true;
-                        }
+                nodeIdArray.push(...(node.subNodeIdArray || []));
+                for (const conditionId of node.conditionIdArray || []) {
+                    if (usedConditionIdSet.has(conditionId)) {
+                        return conditionId;
                     }
-                }
-                for (const subNodeId of node.subNodeIdArray || []) {
-                    nodeIdArray.push(subNodeId);
+                    usedConditionIdSet.add(conditionId);
                 }
             }
         }
-
-        return false;
+        return undefined;
     }
 
     export function getAllSubNodesAndConditionsForNode({ fullData, nodeId, ignoreNodeIdSet }: {
@@ -959,58 +996,94 @@ namespace TinyWars.WarEvent.WarEventHelper {
         };
     }
 
-    export function checkAndDeleteUnusedNode(fullData: IWarEventFullData, nodeId: number): void {
+    export function checkAndDeleteUnusedComponents(fullData: IWarEventFullData): {
+        deletedNodesCount       : number;
+        deletedConditionsCount  : number;
+        deletedActionsCount     : number;
+    } {
+        let deletedNodesCount = 0;
+        for (const node of (fullData.conditionNodeArray || []).concat()) {
+            deletedNodesCount += checkAndDeleteUnusedNode(fullData, node.nodeId, true);
+        }
+
+        let deletedConditionsCount = 0;
+        for (const condition of (fullData.conditionArray || []).concat()) {
+            deletedConditionsCount += checkAndDeleteUnusedCondition(fullData, condition.WecCommonData.conditionId);
+        }
+
+        let deletedActionsCount = 0;
+        for (const action of (fullData.actionArray || []).concat()) {
+            deletedActionsCount += checkAndDeleteUnusedAction(fullData, action.WarEventActionCommonData.actionId);
+        }
+
+        return {
+            deletedNodesCount,
+            deletedConditionsCount,
+            deletedActionsCount,
+        };
+    }
+    function checkAndDeleteUnusedNode(fullData: IWarEventFullData, nodeId: number, isRecursive: boolean): number {
         const nodeArray = fullData.conditionNodeArray;
+        let deleteCount = 0;
         if (nodeArray == null) {
-            return;
+            return deleteCount;
         }
 
         const node = nodeArray.find(v => v.nodeId === nodeId);
         if (node == null) {
-            return;
+            return deleteCount;
         }
 
         if (((fullData.eventArray || []).some(v => v.conditionNodeId === nodeId)) ||
             (nodeArray.some(v => (v.subNodeIdArray || []).indexOf(nodeId) >= 0))
         ) {
-            return;
+            return deleteCount;
         }
 
         Helpers.deleteElementFromArray(nodeArray, node);
+        ++deleteCount;
+
+        if (isRecursive) {
+            for (const subNodeId of node.subNodeIdArray || []) {
+                deleteCount += checkAndDeleteUnusedNode(fullData, subNodeId, true);
+            }
+        }
+
+        return deleteCount;
     }
-    export function checkAndDeleteUnusedCondition(fullData: IWarEventFullData, conditionId: number): void {
+    function checkAndDeleteUnusedCondition(fullData: IWarEventFullData, conditionId: number): number {
         const conditionArray = fullData.conditionArray;
         if (conditionArray == null) {
-            return;
+            return 0;
         }
 
         const condition = conditionArray.find(v => v.WecCommonData.conditionId === conditionId);
         if (condition == null) {
-            return;
+            return 0;
         }
 
         if ((fullData.conditionNodeArray || []).some(v => (v.conditionIdArray || []).indexOf(conditionId) >= 0)) {
-            return;
+            return 0;
         }
 
-        Helpers.deleteElementFromArray(conditionArray, condition);
+        return Helpers.deleteElementFromArray(conditionArray, condition);
     }
-    export function checkAndDeleteUnusedAction(fullData: IWarEventFullData, actionId: number): void {
+    function checkAndDeleteUnusedAction(fullData: IWarEventFullData, actionId: number): number {
         const actionArray = fullData.actionArray;
         if (actionArray == null) {
-            return;
+            return 0;
         }
 
         const action = actionArray.find(v => v.WarEventActionCommonData.actionId === actionId);
         if (action == null) {
-            return;
+            return 0;
         }
 
         if ((fullData.eventArray || []).some(v => (v.actionIdArray || []).indexOf(actionId) >= 0)) {
-            return;
+            return 0;
         }
 
-        Helpers.deleteElementFromArray(actionArray, action);
+        return Helpers.deleteElementFromArray(actionArray, action);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1067,7 +1140,47 @@ namespace TinyWars.WarEvent.WarEventHelper {
                     parentNode.subNodeIdArray = [nodeId];
                 } else {
                     parentNode.subNodeIdArray.push(nodeId);
-                    parentNode.subNodeIdArray.sort();
+                    parentNode.subNodeIdArray.sort((v1, v2) => v1 - v2);
+                }
+
+                return nodeId;
+            }
+        }
+    }
+    export function cloneAndReplaceNodeInParentNode({ fullData, parentNodeId, nodeIdForDelete, nodeIdForClone }: {   // DONE
+        fullData        : IWarEventFullData;
+        parentNodeId    : number;
+        nodeIdForDelete : number;
+        nodeIdForClone  : number;
+    }): number | undefined {
+        const nodeArray = fullData.conditionNodeArray;
+        if (nodeArray == null) {
+            return undefined;
+        }
+
+        const parentNode = nodeArray.find(v => v.nodeId === parentNodeId);
+        if (parentNode == null) {
+            return undefined;
+        }
+
+        const srcNode = nodeArray.find(v => v.nodeId === nodeIdForClone);
+        if (srcNode == null) {
+            return undefined;
+        }
+        const newNode = Helpers.deepClone(srcNode);
+
+        for (let nodeId = 1; ; ++nodeId) {
+            if (!nodeArray.some(v => v.nodeId === nodeId)) {
+                newNode.nodeId = nodeId;
+                nodeArray.push(newNode);
+                nodeArray.sort((v1, v2) => v1.nodeId - v2.nodeId);
+
+                if (parentNode.subNodeIdArray == null) {
+                    parentNode.subNodeIdArray = [nodeId];
+                } else {
+                    Helpers.deleteElementFromArray(parentNode.subNodeIdArray, nodeIdForDelete);
+                    parentNode.subNodeIdArray.push(nodeId);
+                    parentNode.subNodeIdArray.sort((v1, v2) => v1 - v2);
                 }
 
                 return nodeId;
@@ -1101,9 +1214,9 @@ namespace TinyWars.WarEvent.WarEventHelper {
                 });
                 nodeArray.sort((v1, v2) => v1.nodeId - v2.nodeId);
 
-                const oldNodeId         = event.conditionNodeId;
+                // const oldNodeId         = event.conditionNodeId;
                 event.conditionNodeId   = nodeId;
-                checkAndDeleteUnusedNode(fullData, oldNodeId);
+                // checkAndDeleteUnusedNode(fullData, oldNodeId);
 
                 return nodeId;
             }
@@ -1130,7 +1243,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
         }
 
         event.conditionNodeId = newNodeId;
-        checkAndDeleteUnusedNode(fullData, oldNodeId);
+        // checkAndDeleteUnusedNode(fullData, oldNodeId);
 
         return true;
     }
@@ -1163,15 +1276,15 @@ namespace TinyWars.WarEvent.WarEventHelper {
             return false;
         }
 
-        nodeIdArray.push(newNodeId);
-        nodeIdArray.sort();
         Helpers.deleteElementFromArray(nodeIdArray, oldNodeId);
-        checkAndDeleteUnusedNode(fullData, oldNodeId);
+        nodeIdArray.push(newNodeId);
+        nodeIdArray.sort((v1, v2) => v1 - v2);
+        // checkAndDeleteUnusedNode(fullData, oldNodeId);
 
         return true;
     }
 
-    export function addCondition(fullData: IWarEventFullData, nodeId: number): number | undefined { // DONE
+    export function addDefaultCondition(fullData: IWarEventFullData, nodeId: number): number | undefined { // DONE
         const node = (fullData.conditionNodeArray || []).find(v => v.nodeId === nodeId);
         if (node == null) {
             return undefined;
@@ -1200,11 +1313,78 @@ namespace TinyWars.WarEvent.WarEventHelper {
                 conditionArray.sort((v1, v2) => v1.WecCommonData.conditionId - v2.WecCommonData.conditionId);
 
                 conditionIdArray.push(conditionId);
-                conditionIdArray.sort();
+                conditionIdArray.sort((v1, v2) => v1 - v2);
 
                 return conditionId;
             }
         }
+    }
+    export function cloneAndReplaceConditionInParentNode({ fullData, parentNodeId, conditionIdForDelete, conditionIdForClone }: {
+        fullData            : IWarEventFullData;
+        parentNodeId        : number;
+        conditionIdForDelete: number;
+        conditionIdForClone : number;
+    }): number | undefined {
+        const parentNode = (fullData.conditionNodeArray || []).find(v => v.nodeId === parentNodeId);
+        if (parentNodeId == null) {
+            return undefined;
+        }
+
+        const conditionArray = fullData.conditionArray;
+        if (conditionArray == null) {
+            return undefined;
+        }
+
+        const srcCondition = conditionArray.find(v => v.WecCommonData.conditionId === conditionIdForClone);
+        if (srcCondition == null) {
+            return undefined;
+        }
+        const newCondition = Helpers.deepClone(srcCondition);
+
+        if (parentNode.conditionIdArray == null) {
+            parentNode.conditionIdArray = [];
+        }
+
+        const conditionIdArray = parentNode.conditionIdArray;
+        for (let conditionId = 1; ; ++conditionId) {
+            if (!conditionArray.some(v => v.WecCommonData.conditionId === conditionId)) {
+                newCondition.WecCommonData.conditionId = conditionId;
+                conditionArray.push(newCondition);
+                conditionArray.sort((v1, v2) => v1.WecCommonData.conditionId - v2.WecCommonData.conditionId);
+
+                Helpers.deleteElementFromArray(conditionIdArray, conditionIdForDelete);
+                conditionIdArray.push(conditionId);
+                conditionIdArray.sort((v1, v2) => v1 - v2);
+
+                return conditionId;
+            }
+        }
+    }
+    export function replaceConditionInParentNode({ fullData, parentNodeId, oldConditionId, newConditionId }: {
+        fullData        : IWarEventFullData;
+        parentNodeId    : number;
+        oldConditionId  : number;
+        newConditionId  : number;
+    }): boolean {
+        if (oldConditionId === newConditionId) {
+            return false;
+        }
+
+        const parentNode = (fullData.conditionNodeArray || []).find(v => v.nodeId === parentNodeId);
+        if (parentNode == null) {
+            return false;
+        }
+
+        if (parentNode.conditionIdArray == null) {
+            parentNode.conditionIdArray = [];
+        }
+
+        const conditionIdArray = parentNode.conditionIdArray;
+        Helpers.deleteElementFromArray(conditionIdArray, oldConditionId);
+        conditionIdArray.push(newConditionId);
+        conditionIdArray.sort((v1, v2) => v1 - v2);
+
+        return true;
     }
 
     export function addAction(fullData: IWarEventFullData, eventId: number): number | undefined {   // DONE

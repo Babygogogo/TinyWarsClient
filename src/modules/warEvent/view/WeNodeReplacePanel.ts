@@ -165,18 +165,15 @@ namespace TinyWars.WarEvent {
                     return;
                 }
 
-                if (WarEventHelper.createSubNodeInParentNode({
+                if (WarEventHelper.cloneAndReplaceNodeInParentNode({
                     fullData,
                     parentNodeId,
-                    isAnd,
-                    conditionIdArray,
-                    subNodeIdArray
+                    nodeIdForClone  : candidateNodeId,
+                    nodeIdForDelete : data.srcNodeId,
                 }) != null) {
                     Notify.dispatch(Notify.Type.WarEventFullDataChanged);
                 }
             }
-
-            WeNodeReplacePanel.hide();
         }
         private _onTouchedBtnSelect(e: egret.TouchEvent): void {        // DONE
             const data = this.data as DataForNodeRenderer;
@@ -242,7 +239,7 @@ namespace TinyWars.WarEvent {
                 label.text = Lang.getText(Lang.Type.A0160);
             } else {
                 const textArray: string[] = [];
-                for (const subNodeId of (node.subNodeIdArray || []).sort()) {
+                for (const subNodeId of (node.subNodeIdArray || []).sort((v1, v2) => v1 - v2)) {
                     textArray.push(`N${subNodeId}`);
                 }
 
@@ -261,7 +258,7 @@ namespace TinyWars.WarEvent {
                 label.text = undefined;
             } else {
                 const textArray: string[] = [];
-                for (const conditionId of (node.conditionIdArray || []).sort()) {
+                for (const conditionId of (node.conditionIdArray || []).sort((v1, v2) => v1 - v2)) {
                     textArray.push(`C${conditionId}`);
                 }
 

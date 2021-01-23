@@ -1,15 +1,13 @@
 
 namespace TinyWars.WarEvent {
-    import ProtoTypes           = Utility.ProtoTypes;
-    import Helpers              = Utility.Helpers;
-    import Lang                 = Utility.Lang;
-    import Notify               = Utility.Notify;
-    import Types                = Utility.Types;
-    import Logger               = Utility.Logger;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
-    import IMapRawData          = ProtoTypes.Map.IMapRawData;
-    import ColorValue           = Types.ColorValue;
-    import WarEventDescType     = Types.WarEventDescType;
+    import Helpers          = Utility.Helpers;
+    import Lang             = Utility.Lang;
+    import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
+    import FloatText        = Utility.FloatText;
+    import Logger           = Utility.Logger;
+    import ColorValue       = Types.ColorValue;
+    import WarEventDescType = Types.WarEventDescType;
 
     type OpenDataForWeEventListPanel = {
         war: MapEditor.MeWar;
@@ -22,6 +20,7 @@ namespace TinyWars.WarEvent {
 
         private _btnBack        : GameUi.UiButton;
         private _btnAddEvent    : GameUi.UiButton;
+        private _btnClear       : GameUi.UiButton;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoEvent   : GameUi.UiLabel;
         private _listWarEvent   : GameUi.UiScrollList;
@@ -48,6 +47,7 @@ namespace TinyWars.WarEvent {
         protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
                 { ui: this._btnAddEvent,    callback: this._onTouchedBtnAddEvent },
+                { ui: this._btnClear,       callback: this._onTouchedBtnClear },
                 { ui: this._btnBack,        callback: this.close },
             ]);
             this._setNotifyListenerArray([
@@ -79,6 +79,19 @@ namespace TinyWars.WarEvent {
             }
         }
 
+        private _onTouchedBtnClear(e: egret.TouchEvent): void {
+            const openData = this._getOpenData<OpenDataForWeEventListPanel>();
+            Common.CommonConfirmPanel.show({
+                title   : Lang.getText(Lang.Type.B0088),
+                content : Lang.getText(Lang.Type.A0188),
+                callback: () => {
+                    const result = WarEventHelper.checkAndDeleteUnusedComponents(openData.war.getWarEventManager().getWarEventFullData());
+                    FloatText.show(Lang.getFormattedText(Lang.Type.F0063, result.deletedNodesCount, result.deletedConditionsCount, result.deletedActionsCount));
+                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                },
+            });
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
@@ -91,7 +104,8 @@ namespace TinyWars.WarEvent {
         private _updateComponentsForLanguage(): void {
             this._labelNoEvent.text = Lang.getText(Lang.Type.B0278);
             this._labelTitle.text   = Lang.getText(Lang.Type.B0469);
-            this._btnAddEvent.label = Lang.getText(Lang.Type.B0320);
+            this._btnAddEvent.label = Lang.getText(Lang.Type.B0497);
+            this._btnClear.label    = Lang.getText(Lang.Type.B0498);
             this._btnBack.label     = Lang.getText(Lang.Type.B0146);
         }
 
@@ -358,7 +372,7 @@ namespace TinyWars.WarEvent {
             }
 
             const prefixArray       = data.prefixArray;
-            const errorTip          = WarEventHelper.getErrorTipForConditionNode(fullData, node, data.eventId);
+            const errorTip          = WarEventHelper.getErrorTipForConditionNode(fullData, node);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;

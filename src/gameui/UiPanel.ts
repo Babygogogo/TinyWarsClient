@@ -88,6 +88,7 @@ namespace TinyWars.GameUi {
 
                 this._onOpened();
                 this._registerListeners();
+                this.width = Utility.StageManager.getDesignWidth();
                 this._handleAutoAdjustHeight();
                 this._handleTouchMask();
             }
@@ -177,8 +178,8 @@ namespace TinyWars.GameUi {
             } else {
                 if (!this._touchMask) {
                     const newMask        = new eui.Group();
-                    newMask.width        = Utility.StageManager.DESIGN_WIDTH;
-                    newMask.height       = Utility.StageManager.DESIGN_MAX_HEIGHT;
+                    newMask.width        = Utility.StageManager.getDesignWidth();
+                    newMask.height       = Utility.StageManager.getDesignMaxHeight();
                     newMask.touchEnabled = true;
                     newMask.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedTouchMask, this);
                     this._touchMask = newMask;

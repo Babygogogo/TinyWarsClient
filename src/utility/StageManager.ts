@@ -1,87 +1,98 @@
 
-namespace TinyWars.Utility {
-    export namespace StageManager {
-        import LayerType = Types.LayerType;
-        // The game is in landscape mode, which means that its design max height equals its design width, 960.
-        export const DESIGN_WIDTH         = 960;
-        export const DESIGN_MIN_HEIGHT    = 400;
-        export const DESIGN_MAX_HEIGHT    = DESIGN_WIDTH;
-        export const RATIO_FOR_MIN_HEIGHT = DESIGN_WIDTH / DESIGN_MIN_HEIGHT;
+namespace TinyWars.Utility.StageManager {
+    import LayerType = Types.LayerType;
 
-        let   _stage    : egret.Stage;
-        let   _mouseX   : number;
-        let   _mouseY   : number;
-        const _LAYERS   = new Map<LayerType, UiLayer>();
+    // The game is in landscape mode, which means that its design max height equals its design width, 960.
+    const DESIGN_WIDTH         = 960;
+    const DESIGN_MIN_HEIGHT    = 400;
+    const DESIGN_MAX_HEIGHT    = DESIGN_WIDTH;
+    const RATIO_FOR_MIN_HEIGHT = DESIGN_WIDTH / DESIGN_MIN_HEIGHT;
 
-        export function init(stg: egret.Stage): void {
-            _stage = stg;
+    let   _stage    : egret.Stage;
+    let   _mouseX   : number;
+    let   _mouseY   : number;
+    const _LAYERS   = new Map<LayerType, UiLayer>();
 
-            if (!egret.Capabilities.isMobile) {
-                mouse.enable(_stage);
-                mouse.setMouseMoveEnabled(true);
-                _stage.addEventListener(mouse.MouseEvent.MOUSE_MOVE,  _onMouseMove,  StageManager);
-                _stage.addEventListener(mouse.MouseEvent.MOUSE_WHEEL, _onMouseWheel, StageManager);
-            }
-            stg.addEventListener(egret.TouchEvent.TOUCH_BEGIN,  _onTouchBegin,  StageManager);
-            stg.addEventListener(egret.TouchEvent.TOUCH_MOVE,   _onTouchMove,   StageManager);
+    export function init(stg: egret.Stage): void {
+        _stage = stg;
 
-            egret.sys.screenAdapter = new ScreenAdapter();
-            _stage.setContentSize(_stage.stageWidth, _stage.stageHeight);
-
-            _addLayer(LayerType.Bottom);
-            _addLayer(LayerType.Scene);
-            _addLayer(LayerType.Hud0);
-            _addLayer(LayerType.Hud1);
-            _addLayer(LayerType.Hud2);
-            _addLayer(LayerType.Hud3);
-            _addLayer(LayerType.Notify0);
-            _addLayer(LayerType.Notify1);
-            _addLayer(LayerType.Notify2);
-            _addLayer(LayerType.Top);
+        if (!egret.Capabilities.isMobile) {
+            mouse.enable(_stage);
+            mouse.setMouseMoveEnabled(true);
+            _stage.addEventListener(mouse.MouseEvent.MOUSE_MOVE,  _onMouseMove,  StageManager);
+            _stage.addEventListener(mouse.MouseEvent.MOUSE_WHEEL, _onMouseWheel, StageManager);
         }
+        stg.addEventListener(egret.TouchEvent.TOUCH_BEGIN,  _onTouchBegin,  StageManager);
+        stg.addEventListener(egret.TouchEvent.TOUCH_MOVE,   _onTouchMove,   StageManager);
 
-        export function getStage(): egret.Stage {
-            return _stage;
-        }
+        egret.sys.screenAdapter = new ScreenAdapter();
+        _stage.setContentSize(_stage.stageWidth, _stage.stageHeight);
 
-        export function getMouseX(): number {
-            return _mouseX;
-        }
+        _addLayer(LayerType.Bottom);
+        _addLayer(LayerType.Scene);
+        _addLayer(LayerType.Hud0);
+        _addLayer(LayerType.Hud1);
+        _addLayer(LayerType.Hud2);
+        _addLayer(LayerType.Hud3);
+        _addLayer(LayerType.Notify0);
+        _addLayer(LayerType.Notify1);
+        _addLayer(LayerType.Notify2);
+        _addLayer(LayerType.Top);
+    }
 
-        export function getMouseY(): number {
-            return _mouseY;
-        }
+    export function getStage(): egret.Stage {
+        return _stage;
+    }
 
-        export function getLayer(layer: LayerType): UiLayer {
-            return _LAYERS.get(layer);
-        }
+    export function getDesignWidth(): number {
+        return DESIGN_WIDTH;
+    }
+    export function getDesignMinHeight(): number {
+        return DESIGN_MIN_HEIGHT;
+    }
+    export function getDesignMaxHeight(): number {
+        return DESIGN_MAX_HEIGHT;
+    }
+    export function getRatioForMinHeight(): number {
+        return RATIO_FOR_MIN_HEIGHT;
+    }
 
-        export function closeAllPanels(): void {
-            for (const [, layer] of _LAYERS) {
-                layer.closeAllPanels();
-            }
-        }
+    export function getMouseX(): number {
+        return _mouseX;
+    }
+    export function getMouseY(): number {
+        return _mouseY;
+    }
 
-        function _addLayer(layerType: LayerType): void {
-            egret.assert(!_LAYERS.has(layerType), "LayerManager.addLayer() duplicated layer: " + layerType);
-            _LAYERS.set(layerType, new UiLayer());
-            StageManager.getStage().addChild(_LAYERS.get(layerType));
-        }
+    export function getLayer(layer: LayerType): UiLayer {
+        return _LAYERS.get(layer);
+    }
 
-        function _onMouseMove(e: egret.TouchEvent): void {
-            _mouseX = e.stageX;
-            _mouseY = e.stageY;
+    export function closeAllPanels(): void {
+        for (const [, layer] of _LAYERS) {
+            layer.closeAllPanels();
         }
-        function _onMouseWheel(e: egret.Event): void {
-            Notify.dispatch(Notify.Type.MouseWheel, e.data);
-        }
+    }
 
-        function _onTouchBegin(e: egret.TouchEvent): void {
-            Notify.dispatch(Notify.Type.GlobalTouchBegin, e);
-        }
-        function _onTouchMove(e: egret.TouchEvent): void {
-            Notify.dispatch(Notify.Type.GlobalTouchMove, e);
-        }
+    function _addLayer(layerType: LayerType): void {
+        egret.assert(!_LAYERS.has(layerType), "LayerManager.addLayer() duplicated layer: " + layerType);
+        _LAYERS.set(layerType, new UiLayer());
+        StageManager.getStage().addChild(_LAYERS.get(layerType));
+    }
+
+    function _onMouseMove(e: egret.TouchEvent): void {
+        _mouseX = e.stageX;
+        _mouseY = e.stageY;
+    }
+    function _onMouseWheel(e: egret.Event): void {
+        Notify.dispatch(Notify.Type.MouseWheel, e.data);
+    }
+
+    function _onTouchBegin(e: egret.TouchEvent): void {
+        Notify.dispatch(Notify.Type.GlobalTouchBegin, e);
+    }
+    function _onTouchMove(e: egret.TouchEvent): void {
+        Notify.dispatch(Notify.Type.GlobalTouchMove, e);
     }
 
     class UiLayer extends eui.UILayer {
@@ -92,21 +103,25 @@ namespace TinyWars.Utility {
             this.addEventListener(egret.Event.RESIZE, this._onResize, this);
         }
 
-        public closeAllPanels(execpt?: GameUi.UiPanel): void {
+        public closeAllPanels(except?: GameUi.UiPanel): void {
             for (let i = this.numChildren - 1; i >= 0; --i) {
                 const child = this.getChildAt(i);
-                if ((child instanceof GameUi.UiPanel) && (child !== execpt)) {
+                if ((child instanceof GameUi.UiPanel) && (child !== except)) {
                     child.close();
                 }
             }
         }
 
         private _onResize(e: egret.Event): void {
-            const height = this.height;
+            const height    = this.height;
+            const width     = this.width;
             for (let i = 0; i < this.numChildren; ++i) {
                 const child = this.getChildAt(i);
-                if ((child instanceof GameUi.UiPanel) && (child.getIsAutoAdjustHeight())) {
-                    child.height = height;
+                if (child instanceof GameUi.UiPanel) {
+                    child.width = width;
+                    if (child.getIsAutoAdjustHeight()) {
+                        child.height = height;
+                    }
                 }
             }
         }
@@ -115,17 +130,17 @@ namespace TinyWars.Utility {
     class ScreenAdapter implements egret.sys.IScreenAdapter {
         public calculateStageSize(scaleMode: string, screenWidth: number, screenHeight: number, contentWidth: number, contentHeight: number): egret.sys.StageDisplaySize {
             const currRatio = screenWidth / screenHeight;
-            if (currRatio > StageManager.RATIO_FOR_MIN_HEIGHT) {
+            if (currRatio > RATIO_FOR_MIN_HEIGHT) {
                 return {
-                    stageWidth   : StageManager.DESIGN_WIDTH,
-                    stageHeight  : StageManager.DESIGN_MIN_HEIGHT,
-                    displayWidth : screenHeight * StageManager.RATIO_FOR_MIN_HEIGHT,
+                    stageWidth   : DESIGN_WIDTH,
+                    stageHeight  : DESIGN_MIN_HEIGHT,
+                    displayWidth : screenHeight * RATIO_FOR_MIN_HEIGHT,
                     displayHeight: screenHeight,
                 };
             } else {
                 return {
-                    stageWidth   : StageManager.DESIGN_WIDTH,
-                    stageHeight  : screenHeight / screenWidth * StageManager.DESIGN_WIDTH,
+                    stageWidth   : DESIGN_WIDTH,
+                    stageHeight  : screenHeight / screenWidth * DESIGN_WIDTH,
                     displayWidth : screenWidth,
                     displayHeight: screenHeight,
                 };

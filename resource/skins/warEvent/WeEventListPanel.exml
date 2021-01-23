@@ -8,8 +8,15 @@
                         horizontalCenter="0" locked="true" />
         <GameUi:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
                          right="0" top="0" locked="true" />
-        <GameUi:UiButton id="_btnAddEvent" label="新增事件" skinName="Skins.Component.Button.ButtonSelfAdaption001"
-                         width="120" top="0" left="0" locked="true" />
+        <e:Group x="0" y="0">
+            <GameUi:UiButton id="_btnAddEvent" label="新增事件" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                             x="0" y="0" locked="true" />
+            <GameUi:UiButton id="_btnClear" label="Delete Redundancy"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0" y="0" />
+            <e:layout>
+                <e:HorizontalLayout gap="0" />
+            </e:layout>
+        </e:Group>
         <GameUi:UiScrollList id="_listWarEvent" scaleX="1" scaleY="1" width="950" top="40" bottom="5"
                              horizontalCenter="0">
             <e:List>

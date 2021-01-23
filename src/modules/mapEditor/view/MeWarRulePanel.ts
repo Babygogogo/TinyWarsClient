@@ -244,10 +244,10 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedBtnEditWarEvent(e: egret.TouchEvent): void {
-            this.close();
             WarEvent.WeEventListPanel.show({
                 war: this._war,
             });
+            this.close();
         }
 
         private _onTouchedBtnAddWarEvent(e: egret.TouchEvent): void {
