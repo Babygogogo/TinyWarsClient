@@ -527,4 +527,23 @@ namespace TinyWars.Utility.Types {
         Condition,
         Action,
     }
+
+    export const enum WarEventConditionType {
+        WecTurnIndexEqualTo,
+        WecTurnIndexGreaterThan,
+        WecTurnIndexLessThan,
+        WecTurnIndexRemainderEqualTo,
+
+        WecTurnPhaseEqualTo,
+
+        WecPlayerIndexInTurnEqualTo,
+        WecPlayerIndexInTurnGreaterThan,
+        WecPlayerIndexInTurnLessThan,
+
+        WecEventCalledCountTotalEqualTo,
+        WecEventCalledCountTotalGreaterThan,
+        WecEventCalledCountTotalLessThan,
+
+        WecPlayerAliveStateEqualTo,
+    }
 }
