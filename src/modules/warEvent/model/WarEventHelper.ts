@@ -1227,7 +1227,52 @@ namespace TinyWars.WarEvent.WarEventHelper {
                 aliveStateEqualTo   : Types.PlayerAliveState.Alive,
             };
         } else {
+            // TODO handle more condition types.
             Logger.error(`WarEventHelper.resetCondition() invalid conditionType.`);
+        }
+    }
+
+    export function openConditionModifyPanel(condition: IWarEventCondition): void {
+        // TODO handle more condition types.
+        WeConditionModifyPanel1.hide();
+        WeConditionModifyPanel2.hide();
+        WeConditionModifyPanel3.hide();
+        WeConditionModifyPanel4.hide();
+        WeConditionModifyPanel5.hide();
+        WeConditionModifyPanel6.hide();
+        WeConditionModifyPanel7.hide();
+        WeConditionModifyPanel8.hide();
+        WeConditionModifyPanel9.hide();
+        WeConditionModifyPanel10.hide();
+        WeConditionModifyPanel11.hide();
+        WeConditionModifyPanel12.hide();
+
+        if (condition.WecTurnIndexEqualTo) {
+            WeConditionModifyPanel1.show({ condition });
+        } else if (condition.WecTurnIndexGreaterThan) {
+            WeConditionModifyPanel2.show({ condition });
+        } else if (condition.WecTurnIndexLessThan) {
+            WeConditionModifyPanel3.show({ condition });
+        } else if (condition.WecTurnIndexRemainderEqualTo) {
+            WeConditionModifyPanel4.show({ condition });
+        } else if (condition.WecTurnPhaseEqualTo) {
+            WeConditionModifyPanel5.show({ condition });
+        } else if (condition.WecPlayerIndexInTurnEqualTo) {
+            WeConditionModifyPanel6.show({ condition });
+        } else if (condition.WecPlayerIndexInTurnGreaterThan) {
+            WeConditionModifyPanel7.show({ condition });
+        } else if (condition.WecPlayerIndexInTurnLessThan) {
+            WeConditionModifyPanel8.show({ condition });
+        } else if (condition.WecEventCalledCountTotalEqualTo) {
+            WeConditionModifyPanel9.show({ condition });
+        } else if (condition.WecEventCalledCountTotalGreaterThan) {
+            WeConditionModifyPanel10.show({ condition });
+        } else if (condition.WecEventCalledCountTotalLessThan) {
+            WeConditionModifyPanel11.show({ condition });
+        } else if (condition.WecPlayerAliveStateEqualTo) {
+            WeConditionModifyPanel12.show({ condition });
+        } else {
+            Logger.error(`WarEventHelper.openConditionModifyPanel() invalid condition.`);
         }
     }
 

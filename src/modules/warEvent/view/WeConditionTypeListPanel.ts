@@ -6,12 +6,11 @@ namespace TinyWars.WarEvent {
     import Types                = Utility.Types;
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
+    import IWarEventCondition   = ProtoTypes.WarEvent.IWarEventCondition;
     import ConditionType        = Types.WarEventConditionType;
 
     type OpenDataForWeConditionTypeListPanel = {
-        fullData        : IWarEventFullData;
-        conditionId     : number;
+        condition   : IWarEventCondition;
     }
     export class WeConditionTypeListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
@@ -73,13 +72,11 @@ namespace TinyWars.WarEvent {
         }
         private _updateListType(): void {
             const openData  = this._getOpenData<OpenDataForWeConditionTypeListPanel>();
-            const fullData  = openData.fullData;
-            const condition = WarEventHelper.getCondition(fullData, openData.conditionId);
+            const condition = openData.condition;
 
             const dataArray: DataForConditionRenderer[] = [];
             for (const newConditionType of WarEventHelper.getConditionTypeArray()) {
                 dataArray.push({
-                    fullData,
                     newConditionType,
                     condition,
                 });
@@ -89,9 +86,8 @@ namespace TinyWars.WarEvent {
     }
 
     type DataForConditionRenderer = {
-        fullData        : IWarEventFullData;
         newConditionType: ConditionType;
-        condition       : ProtoTypes.WarEvent.IWarEventCondition;
+        condition       : IWarEventCondition;
     }
     class ConditionRenderer extends GameUi.UiListItemRenderer {
         private _labelType  : GameUi.UiLabel;
@@ -121,7 +117,13 @@ namespace TinyWars.WarEvent {
                 return;
             }
 
-            // TODO
+            const conditionType = data.newConditionType;
+            const condition     = data.condition;
+            if (conditionType !== WarEventHelper.getConditionType(condition)) {
+                WarEventHelper.resetCondition(condition, conditionType);
+                WarEventHelper.openConditionModifyPanel(condition);
+                WeConditionTypeListPanel.hide();
+            }
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {        // DONE
             this._updateComponentsForLanguage();
@@ -139,7 +141,7 @@ namespace TinyWars.WarEvent {
             if (data == null) {
                 label.text = undefined;
             } else {
-                // TODO
+                label.text = Lang.getWarEventConditionTypeName(data.newConditionType);
             }
         }
         private _updateLabelUsing(): void {

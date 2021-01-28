@@ -1,7 +1,8 @@
 
 namespace TinyWars.Utility.Lang {
-    import ErrorCode    = Network.NetErrorCode;
-    import LanguageType = Types.LanguageType;
+    import ErrorCode                = Network.NetErrorCode;
+    import LanguageType             = Types.LanguageType;
+    import WarEventConditionType    = Types.WarEventConditionType;
 
     export const enum Type {
         A0000, A0001, A0002, A0003, A0004, A0005, A0006, A0007, A0008, A0009,
@@ -2901,6 +2902,62 @@ namespace TinyWars.Utility.Lang {
             `使用中`,
             `In Use`,
         ],
+        [Type.B0504]: [
+            `当前回合数等于...`,
+            `The current turn equals to ...`,
+        ],
+        [Type.B0505]: [
+            `当前回合数大于...`,
+            `The current turn is greater than ...`,
+        ],
+        [Type.B0506]: [
+            `当前回合数小于...`,
+            `The current turn is less than ...`,
+        ],
+        [Type.B0507]: [
+            `当前回合数的余数等于...`,
+            `The current turn's remainder equals to ...`,
+        ],
+        [Type.B0508]: [
+            `当前的回合阶段是...`,
+            `The current turn phase is ...`,
+        ],
+        [Type.B0509]: [
+            `处于当前回合的玩家序号等于...`,
+            `The current player index equals to ...`,
+        ],
+        [Type.B0510]: [
+            `处于当前回合的玩家序号大于...`,
+            `The current player index is greater than ...`,
+        ],
+        [Type.B0511]: [
+            `处于当前回合的玩家序号小于...`,
+            `The current player index is less than ...`,
+        ],
+        [Type.B0512]: [
+            `事件的发生次数等于...`,
+            `The event occurred times equals to ...`,
+        ],
+        [Type.B0513]: [
+            `事件的发生次数大于...`,
+            `The event occurred times is greater than ...`,
+        ],
+        [Type.B0514]: [
+            `事件的发生次数小于...`,
+            `The event occurred times is less than ...`,
+        ],
+        [Type.B0515]: [
+            `玩家的状态是...`,
+            `The player's state is ...`,
+        ],
+        [Type.B0516]: [
+            `切换类型`,
+            `Change Type`,
+        ],
+        [Type.B0517]: [
+            `取反`,
+            `Is Not`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -4035,6 +4092,24 @@ namespace TinyWars.Utility.Lang {
         return (warRule.ruleId == null)
             ? getText(Type.B0321)
             : getLanguageText({ textArray: warRule.ruleNameArray });
+    }
+
+    export function getWarEventConditionTypeName(type: WarEventConditionType): string | undefined {
+        switch (type) {
+            case WarEventConditionType.WecTurnIndexEqualTo                  : return Lang.getText(Lang.Type.B0504);
+            case WarEventConditionType.WecTurnIndexGreaterThan              : return Lang.getText(Lang.Type.B0505);
+            case WarEventConditionType.WecTurnIndexLessThan                 : return Lang.getText(Lang.Type.B0506);
+            case WarEventConditionType.WecTurnIndexRemainderEqualTo         : return Lang.getText(Lang.Type.B0507);
+            case WarEventConditionType.WecTurnPhaseEqualTo                  : return Lang.getText(Lang.Type.B0508);
+            case WarEventConditionType.WecPlayerIndexInTurnEqualTo          : return Lang.getText(Lang.Type.B0509);
+            case WarEventConditionType.WecPlayerIndexInTurnGreaterThan      : return Lang.getText(Lang.Type.B0510);
+            case WarEventConditionType.WecPlayerIndexInTurnLessThan         : return Lang.getText(Lang.Type.B0511);
+            case WarEventConditionType.WecEventCalledCountTotalEqualTo      : return Lang.getText(Lang.Type.B0512);
+            case WarEventConditionType.WecEventCalledCountTotalGreaterThan  : return Lang.getText(Lang.Type.B0513);
+            case WarEventConditionType.WecEventCalledCountTotalLessThan     : return Lang.getText(Lang.Type.B0514);
+            case WarEventConditionType.WecPlayerAliveStateEqualTo           : return Lang.getText(Lang.Type.B0515);
+            default                                                         : return undefined;
+        }
     }
 
     export function getStringInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {

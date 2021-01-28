@@ -254,8 +254,9 @@ namespace TinyWars.WarEvent {
             });
         }
         private _onTouchedBtnModifyCondition(e: egret.TouchEvent): void {
-            // TODO
-            FloatText.show("TODO");
+            const openData  = this._getOpenData<OpenDataForWeCommandPanel>();
+            const fullData  = openData.war.getWarEventManager().getWarEventFullData();
+            WarEventHelper.openConditionModifyPanel(WarEventHelper.getCondition(fullData, openData.conditionId));
         }
         private _onTouchedBtnReplaceCondition(e: egret.TouchEvent): void {
             const openData = this._getOpenData<OpenDataForWeCommandPanel>();
