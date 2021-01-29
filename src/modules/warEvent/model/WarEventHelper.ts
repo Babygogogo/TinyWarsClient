@@ -680,7 +680,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
         return undefined;
     }
 
-    export function getErrorTipForCondition(fullData: IWarEventFullData, condition: IWarEventCondition, eventId: number): string | undefined {
+    export function getErrorTipForCondition(fullData: IWarEventFullData, condition: IWarEventCondition): string | undefined {
         const conditionsCount = (fullData.conditionArray || []).length;
         if (conditionsCount > CommonConstants.WarEventMaxConditionsPerMap) {
             return `${Lang.getText(Lang.Type.A0185)} (${conditionsCount}/${CommonConstants.WarEventMaxConditionsPerMap})`;
@@ -1232,7 +1232,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
         }
     }
 
-    export function openConditionModifyPanel(condition: IWarEventCondition): void {
+    export function openConditionModifyPanel(fullData: IWarEventFullData, condition: IWarEventCondition): void {
         // TODO handle more condition types.
         WeConditionModifyPanel1.hide();
         WeConditionModifyPanel2.hide();
@@ -1248,31 +1248,45 @@ namespace TinyWars.WarEvent.WarEventHelper {
         WeConditionModifyPanel12.hide();
 
         if (condition.WecTurnIndexEqualTo) {
-            WeConditionModifyPanel1.show({ condition });
+            WeConditionModifyPanel1.show({ fullData, condition });
         } else if (condition.WecTurnIndexGreaterThan) {
-            WeConditionModifyPanel2.show({ condition });
+            WeConditionModifyPanel2.show({ fullData, condition });
         } else if (condition.WecTurnIndexLessThan) {
-            WeConditionModifyPanel3.show({ condition });
+            WeConditionModifyPanel3.show({ fullData, condition });
         } else if (condition.WecTurnIndexRemainderEqualTo) {
-            WeConditionModifyPanel4.show({ condition });
+            WeConditionModifyPanel4.show({ fullData, condition });
         } else if (condition.WecTurnPhaseEqualTo) {
-            WeConditionModifyPanel5.show({ condition });
+            WeConditionModifyPanel5.show({ fullData, condition });
         } else if (condition.WecPlayerIndexInTurnEqualTo) {
-            WeConditionModifyPanel6.show({ condition });
+            WeConditionModifyPanel6.show({ fullData, condition });
         } else if (condition.WecPlayerIndexInTurnGreaterThan) {
-            WeConditionModifyPanel7.show({ condition });
+            WeConditionModifyPanel7.show({ fullData, condition });
         } else if (condition.WecPlayerIndexInTurnLessThan) {
-            WeConditionModifyPanel8.show({ condition });
+            WeConditionModifyPanel8.show({ fullData, condition });
         } else if (condition.WecEventCalledCountTotalEqualTo) {
-            WeConditionModifyPanel9.show({ condition });
+            WeConditionModifyPanel9.show({ fullData, condition });
         } else if (condition.WecEventCalledCountTotalGreaterThan) {
-            WeConditionModifyPanel10.show({ condition });
+            WeConditionModifyPanel10.show({ fullData, condition });
         } else if (condition.WecEventCalledCountTotalLessThan) {
-            WeConditionModifyPanel11.show({ condition });
+            WeConditionModifyPanel11.show({ fullData, condition });
         } else if (condition.WecPlayerAliveStateEqualTo) {
-            WeConditionModifyPanel12.show({ condition });
+            WeConditionModifyPanel12.show({ fullData, condition });
         } else {
             Logger.error(`WarEventHelper.openConditionModifyPanel() invalid condition.`);
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // action types
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export function openActionModifyPanel(fullData: IWarEventFullData, action: IWarEventAction): void {
+        // TODO handle more action types.
+        WeActionModifyPanel1.hide();
+
+        if (action.WarEventActionAddUnit) {
+            WeActionModifyPanel1.show({ fullData, action });
+        } else {
+            Logger.error(`WarEventHelper.openActionModifyPanel() invalid condition.`);
         }
     }
 

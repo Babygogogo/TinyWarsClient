@@ -546,4 +546,8 @@ namespace TinyWars.Utility.Types {
 
         WecPlayerAliveStateEqualTo,
     }
+
+    export const enum WarEventActionType {
+        WarEventActionAddUnit,
+    }
 }

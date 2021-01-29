@@ -312,7 +312,7 @@ namespace TinyWars.WarEvent {
             const eventId   = data.eventId;
             const event     = (fullData.eventArray || []).find(v => v.eventId === eventId);
             if (event == null) {
-                Logger.error(`MeWePanel.WarEventDescRenderer._updateForEvent() empty event.`);
+                Logger.error(`WeEventListPanel.WarEventDescRenderer._updateForEvent() empty event.`);
                 this._labelDesc.text = `_updateForEvent() empty event!`;
                 return;
             }
@@ -330,7 +330,7 @@ namespace TinyWars.WarEvent {
             const eventId   = data.eventId;
             const event     = (fullData.eventArray || []).find(v => v.eventId === eventId);
             if (event == null) {
-                Logger.error(`MeWePanel.WarEventDescRenderer._updateForEventCallCountInPlayerTurn() empty event.`);
+                Logger.error(`WeEventListPanel.WarEventDescRenderer._updateForEventCallCountInPlayerTurn() empty event.`);
                 this._labelDesc.text = `_updateForEventCallCountInPlayerTurn() empty event!`;
                 return;
             }
@@ -348,7 +348,7 @@ namespace TinyWars.WarEvent {
             const eventId   = data.eventId;
             const event     = (fullData.eventArray || []).find(v => v.eventId === eventId);
             if (event == null) {
-                Logger.error(`MeWePanel.WarEventDescRenderer._updateForEventCallCountTotal() empty event.`);
+                Logger.error(`WeEventListPanel.WarEventDescRenderer._updateForEventCallCountTotal() empty event.`);
                 this._labelDesc.text = `_updateForEventCallCountTotal() empty event!`;
                 return;
             }
@@ -366,7 +366,7 @@ namespace TinyWars.WarEvent {
             const nodeId    = data.nodeId;
             const node      = (fullData.conditionNodeArray || []).find(v => v.nodeId === nodeId);
             if (node == null) {
-                Logger.error(`MeWePanel.WarEventDescRenderer._updateForConditionNode() empty node.`);
+                Logger.error(`WeEventListPanel.WarEventDescRenderer._updateForConditionNode() empty node.`);
                 this._labelDesc.text = `_updateForConditionNode() empty node!`;
                 return;
             }
@@ -384,13 +384,13 @@ namespace TinyWars.WarEvent {
             const conditionId   = data.conditionId;
             const condition     = (fullData.conditionArray || []).find(v => v.WecCommonData.conditionId === conditionId);
             if (condition == null) {
-                Logger.error(`MeWePanel.WarEventDescRenderer._updateForCondition() empty condition.`);
+                Logger.error(`WeEventListPanel.WarEventDescRenderer._updateForCondition() empty condition.`);
                 this._labelDesc.text = `_updateForCondition() empty condition.`;
                 return;
             }
 
             const prefixArray       = data.prefixArray;
-            const errorTip          = WarEventHelper.getErrorTipForCondition(fullData, condition, data.eventId);
+            const errorTip          = WarEventHelper.getErrorTipForCondition(fullData, condition);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;
@@ -402,7 +402,7 @@ namespace TinyWars.WarEvent {
             const actionId  = data.actionId;
             const action    = (fullData.actionArray || []).find(v => v.WarEventActionCommonData.actionId === actionId);
             if (action == null) {
-                Logger.error(`MeWePanel.WarEventDescRenderer._updateForAction() empty action.`);
+                Logger.error(`WeEventListPanel.WarEventDescRenderer._updateForAction() empty action.`);
                 this._labelDesc.text = `_updateForAction() empty action.`;
                 return;
             }

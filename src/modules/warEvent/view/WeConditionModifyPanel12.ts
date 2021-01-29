@@ -11,6 +11,7 @@ namespace TinyWars.WarEvent {
     import ConditionType        = Types.WarEventConditionType;
 
     type OpenDataForWeConditionModifyPanel12 = {
+        fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     }
 
@@ -21,10 +22,18 @@ namespace TinyWars.WarEvent {
 
         private static _instance: WeConditionModifyPanel12;
 
-        private _labelTitle : GameUi.UiLabel;
-        private _btnClose   : GameUi.UiButton;
-        private _btnType    : GameUi.UiButton;
-        private _labelDesc  : GameUi.UiLabel;
+        private _labelTitle         : GameUi.UiLabel;
+        private _btnClose           : GameUi.UiButton;
+        private _btnType            : GameUi.UiButton;
+        private _labelDesc          : GameUi.UiLabel;
+        private _labelError         : GameUi.UiLabel;
+        private _groupIsNot         : eui.Group;
+        private _labelIsNot         : GameUi.UiLabel;
+        private _imgIsNot           : GameUi.UiImage;
+        private _labelAliveState    : GameUi.UiLabel;
+        private _btnAliveState      : GameUi.UiButton;
+        private _labelPlayerIndex   : GameUi.UiLabel;
+        private _inputPlayerIndex   : GameUi.UiTextInput;
 
         public static show(openData: OpenDataForWeConditionModifyPanel12): void {
             if (!WeConditionModifyPanel12._instance) {
@@ -53,9 +62,13 @@ namespace TinyWars.WarEvent {
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnClose,   callback: this.close },
-                { ui: this._btnType,    callback: this._onTouchedBtnType },
+                { ui: this._btnClose,           callback: this.close },
+                { ui: this._btnType,            callback: this._onTouchedBtnType },
+                { ui: this._groupIsNot,         callback: this._onTouchedGroupIsNot },
+                { ui: this._btnAliveState,      callback: this._onTouchedBtnAliveState },
+                { ui: this._inputPlayerIndex,   callback: this._onFocusOutInputPlayerIndex, eventType: egret.FocusEvent.FOCUS_OUT },
             ]);
+            this._inputPlayerIndex.restrict = `0-9`;
 
             this._updateView();
         }
@@ -64,25 +77,86 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForLanguage();
         }
         private _onTouchedBtnType(e: egret.TouchEvent): void {
-            WeConditionTypeListPanel.show({ condition: this._getOpenData<OpenDataForWeConditionModifyPanel12>().condition });
+            const openData = this._getOpenData<OpenDataForWeConditionModifyPanel12>();
+            WeConditionTypeListPanel.show({
+                fullData    : openData.fullData,
+                condition   : openData.condition,
+            });
+        }
+        private _onTouchedGroupIsNot(e: egret.TouchEvent): void {
+            const data  = this._getCondition().WecPlayerAliveStateEqualTo;
+            data.isNot  = !data.isNot;
+            this._updateImgIsNot();
+            this._updateLabelDesc();
+        }
+        private _onTouchedBtnAliveState(e: egret.TouchEvent): void {
+            const data              = this._getCondition().WecPlayerAliveStateEqualTo;
+            const currAliveState    = data.aliveStateEqualTo;
+            if (currAliveState === Types.PlayerAliveState.Alive) {
+                data.aliveStateEqualTo = Types.PlayerAliveState.Dying;
+            } else if (currAliveState === Types.PlayerAliveState.Dying) {
+                data.aliveStateEqualTo = Types.PlayerAliveState.Dead;
+            } else {
+                data.aliveStateEqualTo = Types.PlayerAliveState.Alive;
+            }
+            this._updateLabelDesc();
+            this._updateLabelAliveState();
+        }
+        private _onFocusOutInputPlayerIndex(e: egret.FocusEvent): void {
+            const value = parseInt(this._inputPlayerIndex.text);
+            const data  = this._getCondition().WecPlayerAliveStateEqualTo;
+            if (isNaN(value)) {
+                this._updateInputPlayerIndex();
+            } else {
+                data.playerIndexEqualTo = value;
+                this._updateLabelDesc();
+                this._updateInputPlayerIndex();
+            }
         }
 
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
             this._updateLabelDesc();
+            this._updateImgIsNot();
+            this._updateLabelAliveState();
+            this._updateInputPlayerIndex();
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text   = Lang.getText(Lang.Type.B0501);
-            this._btnClose.label    = Lang.getText(Lang.Type.B0146);
-            this._btnType.label     = Lang.getText(Lang.Type.B0516);
+            this._labelTitle.text       = `${Lang.getText(Lang.Type.B0501)} #${this._getCondition().WecCommonData.conditionId}`;
+            this._btnClose.label        = Lang.getText(Lang.Type.B0146);
+            this._btnType.label         = Lang.getText(Lang.Type.B0516);
+            this._labelIsNot.text       = Lang.getText(Lang.Type.B0517);
+            this._btnAliveState.label   = Lang.getText(Lang.Type.B0523);
+            this._labelPlayerIndex.text = Lang.getText(Lang.Type.B0521);
 
             this._updateLabelDesc();
+            this._updateLabelAliveState();
+            this._updateInputPlayerIndex();
         }
 
         private _updateLabelDesc(): void {
-            this._labelDesc.text = WarEventHelper.getDescForCondition(this._getOpenData<OpenDataForWeConditionModifyPanel12>().condition);
+            const openData          = this._getOpenData<OpenDataForWeConditionModifyPanel12>();
+            const condition         = openData.condition;
+            const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition);
+            const labelError        = this._labelError;
+            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition);
+        }
+        private _updateImgIsNot(): void {
+            this._imgIsNot.visible = !!this._getCondition().WecPlayerAliveStateEqualTo.isNot;
+        }
+        private _updateLabelAliveState(): void {
+            this._labelAliveState.text = Lang.getPlayerAliveStateName(this._getCondition().WecPlayerAliveStateEqualTo.aliveStateEqualTo);
+        }
+        private _updateInputPlayerIndex(): void {
+            this._inputPlayerIndex.text = `${this._getCondition().WecPlayerAliveStateEqualTo.playerIndexEqualTo}`;
+        }
+
+        private _getCondition(): IWarEventCondition {
+            return this._getOpenData<OpenDataForWeConditionModifyPanel12>().condition;
         }
     }
 }

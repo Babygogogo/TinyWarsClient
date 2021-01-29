@@ -6,10 +6,12 @@ namespace TinyWars.WarEvent {
     import Types                = Utility.Types;
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
+    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
     import IWarEventCondition   = ProtoTypes.WarEvent.IWarEventCondition;
     import ConditionType        = Types.WarEventConditionType;
 
     type OpenDataForWeConditionTypeListPanel = {
+        fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     }
     export class WeConditionTypeListPanel extends GameUi.UiPanel {
@@ -73,10 +75,12 @@ namespace TinyWars.WarEvent {
         private _updateListType(): void {
             const openData  = this._getOpenData<OpenDataForWeConditionTypeListPanel>();
             const condition = openData.condition;
+            const fullData  = openData.fullData;
 
             const dataArray: DataForConditionRenderer[] = [];
             for (const newConditionType of WarEventHelper.getConditionTypeArray()) {
                 dataArray.push({
+                    fullData,
                     newConditionType,
                     condition,
                 });
@@ -86,6 +90,7 @@ namespace TinyWars.WarEvent {
     }
 
     type DataForConditionRenderer = {
+        fullData        : ProtoTypes.Map.IWarEventFullData;
         newConditionType: ConditionType;
         condition       : IWarEventCondition;
     }
@@ -121,7 +126,7 @@ namespace TinyWars.WarEvent {
             const condition     = data.condition;
             if (conditionType !== WarEventHelper.getConditionType(condition)) {
                 WarEventHelper.resetCondition(condition, conditionType);
-                WarEventHelper.openConditionModifyPanel(condition);
+                WarEventHelper.openConditionModifyPanel(data.fullData, condition);
                 WeConditionTypeListPanel.hide();
             }
         }

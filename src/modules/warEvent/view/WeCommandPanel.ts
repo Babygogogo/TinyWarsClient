@@ -253,10 +253,10 @@ namespace TinyWars.WarEvent {
                 },
             });
         }
-        private _onTouchedBtnModifyCondition(e: egret.TouchEvent): void {
+        private _onTouchedBtnModifyCondition(e: egret.TouchEvent): void {           // DONE
             const openData  = this._getOpenData<OpenDataForWeCommandPanel>();
             const fullData  = openData.war.getWarEventManager().getWarEventFullData();
-            WarEventHelper.openConditionModifyPanel(WarEventHelper.getCondition(fullData, openData.conditionId));
+            WarEventHelper.openConditionModifyPanel(fullData, WarEventHelper.getCondition(fullData, openData.conditionId));
         }
         private _onTouchedBtnReplaceCondition(e: egret.TouchEvent): void {
             const openData = this._getOpenData<OpenDataForWeCommandPanel>();
@@ -282,9 +282,10 @@ namespace TinyWars.WarEvent {
                 },
             });
         }
-        private _onTouchedBtnModifyAction(e: egret.TouchEvent): void {
-            // TODO
-            FloatText.show("TODO");
+        private _onTouchedBtnModifyAction(e: egret.TouchEvent): void {              // DONE
+            const openData  = this._getOpenData<OpenDataForWeCommandPanel>();
+            const fullData  = openData.war.getWarEventManager().getWarEventFullData();
+            WarEventHelper.openActionModifyPanel(fullData, WarEventHelper.getAction(fullData, openData.actionId));
         }
         private _onTouchedBtnReplaceAction(e: egret.TouchEvent): void {
             // TODO
@@ -366,7 +367,7 @@ namespace TinyWars.WarEvent {
             }
         }
 
-        private _updateLabelDescAndButtons(): void {                                            // DONE
+        private _updateLabelDescAndButtons(): void {                                          // DONE
             const data      = this._getOpenData<OpenDataForWeCommandPanel>();
             const descType  = data.descType;
             if (descType === WarEventDescType.EventName) {
@@ -484,7 +485,7 @@ namespace TinyWars.WarEvent {
                 return;
             }
 
-            const errorTip          = WarEventHelper.getErrorTipForCondition(fullData, condition, data.eventId);
+            const errorTip          = WarEventHelper.getErrorTipForCondition(fullData, condition);
             const labelError        = this._labelError;
             labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
             labelError.textColor    = errorTip ? ColorValue.Red : ColorValue.Green;

@@ -11,6 +11,7 @@ namespace TinyWars.WarEvent {
     import ConditionType        = Types.WarEventConditionType;
 
     type OpenDataForWeConditionModifyPanel5 = {
+        fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     }
 
@@ -21,10 +22,16 @@ namespace TinyWars.WarEvent {
 
         private static _instance: WeConditionModifyPanel5;
 
-        private _labelTitle : GameUi.UiLabel;
-        private _btnClose   : GameUi.UiButton;
-        private _btnType    : GameUi.UiButton;
-        private _labelDesc  : GameUi.UiLabel;
+        private _labelTitle     : GameUi.UiLabel;
+        private _btnClose       : GameUi.UiButton;
+        private _btnType        : GameUi.UiButton;
+        private _labelDesc      : GameUi.UiLabel;
+        private _labelError     : GameUi.UiLabel;
+        private _groupIsNot     : eui.Group;
+        private _labelIsNot     : GameUi.UiLabel;
+        private _imgIsNot       : GameUi.UiImage;
+        private _labelTurnPhase : GameUi.UiLabel;
+        private _btnTurnPhase   : GameUi.UiButton;
 
         public static show(openData: OpenDataForWeConditionModifyPanel5): void {
             if (!WeConditionModifyPanel5._instance) {
@@ -53,8 +60,10 @@ namespace TinyWars.WarEvent {
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnClose,   callback: this.close },
-                { ui: this._btnType,    callback: this._onTouchedBtnType },
+                { ui: this._btnClose,       callback: this.close },
+                { ui: this._btnType,        callback: this._onTouchedBtnType },
+                { ui: this._groupIsNot,     callback: this._onTouchedGroupIsNot },
+                { ui: this._btnTurnPhase,   callback: this._onTouchedBtnTurnPhase },
             ]);
 
             this._updateView();
@@ -64,25 +73,67 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForLanguage();
         }
         private _onTouchedBtnType(e: egret.TouchEvent): void {
-            WeConditionTypeListPanel.show({ condition: this._getOpenData<OpenDataForWeConditionModifyPanel5>().condition });
+            const openData = this._getOpenData<OpenDataForWeConditionModifyPanel5>();
+            WeConditionTypeListPanel.show({
+                fullData    : openData.fullData,
+                condition   : openData.condition,
+            });
+        }
+        private _onTouchedGroupIsNot(e: egret.TouchEvent): void {
+            const data  = this._getCondition().WecTurnPhaseEqualTo;
+            data.isNot  = !data.isNot;
+            this._updateImgIsNot();
+            this._updateLabelDescAndLabelError();
+        }
+        private _onTouchedBtnTurnPhase(e: egret.TouchEvent): void {
+            const data          = this._getCondition().WecTurnPhaseEqualTo;
+            const currTurnPhase = data.valueEqualTo;
+            if (currTurnPhase == Types.TurnPhaseCode.WaitBeginTurn) {
+                data.valueEqualTo = Types.TurnPhaseCode.Main;
+            } else {
+                data.valueEqualTo = Types.TurnPhaseCode.WaitBeginTurn;
+            }
+            this._updateLabelDescAndLabelError();
+            this._updateLabelTurnPhase();
         }
 
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            this._updateLabelDesc();
+            this._updateLabelDescAndLabelError();
+            this._updateImgIsNot();
+            this._updateLabelTurnPhase();
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text   = Lang.getText(Lang.Type.B0501);
-            this._btnClose.label    = Lang.getText(Lang.Type.B0146);
-            this._btnType.label     = Lang.getText(Lang.Type.B0516);
+            this._labelTitle.text       = `${Lang.getText(Lang.Type.B0501)} #${this._getCondition().WecCommonData.conditionId}`;
+            this._btnClose.label        = Lang.getText(Lang.Type.B0146);
+            this._btnType.label         = Lang.getText(Lang.Type.B0516);
+            this._labelIsNot.text       = Lang.getText(Lang.Type.B0517);
+            this._btnTurnPhase.label    = Lang.getText(Lang.Type.B0520);
 
-            this._updateLabelDesc();
+            this._updateLabelDescAndLabelError();
+            this._updateLabelTurnPhase();
         }
 
-        private _updateLabelDesc(): void {
-            this._labelDesc.text = WarEventHelper.getDescForCondition(this._getOpenData<OpenDataForWeConditionModifyPanel5>().condition);
+        private _updateLabelDescAndLabelError(): void {
+            const openData          = this._getOpenData<OpenDataForWeConditionModifyPanel5>();
+            const condition         = openData.condition;
+            const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition);
+            const labelError        = this._labelError;
+            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition);
+        }
+        private _updateImgIsNot(): void {
+            this._imgIsNot.visible = !!this._getCondition().WecTurnPhaseEqualTo.isNot;
+        }
+        private _updateLabelTurnPhase(): void {
+            this._labelTurnPhase.text = Lang.getTurnPhaseName(this._getCondition().WecTurnPhaseEqualTo.valueEqualTo);
+        }
+
+        private _getCondition(): IWarEventCondition {
+            return this._getOpenData<OpenDataForWeConditionModifyPanel5>().condition;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace TinyWars.WarEvent {
     import ConditionType        = Types.WarEventConditionType;
 
     type OpenDataForWeConditionModifyPanel3 = {
+        fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     }
 
@@ -25,6 +26,7 @@ namespace TinyWars.WarEvent {
         private _btnClose       : GameUi.UiButton;
         private _btnType        : GameUi.UiButton;
         private _labelDesc      : GameUi.UiLabel;
+        private _labelError     : GameUi.UiLabel;
         private _groupIsNot     : eui.Group;
         private _labelIsNot     : GameUi.UiLabel;
         private _imgIsNot       : GameUi.UiImage;
@@ -72,47 +74,62 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForLanguage();
         }
         private _onTouchedBtnType(e: egret.TouchEvent): void {
-            WeConditionTypeListPanel.show({ condition: this._getCondition() });
+            const openData = this._getOpenData<OpenDataForWeConditionModifyPanel3>();
+            WeConditionTypeListPanel.show({
+                fullData    : openData.fullData,
+                condition   : openData.condition,
+            });
         }
         private _onTouchedGroupIsNot(e: egret.TouchEvent): void {
             const data  = this._getCondition().WecTurnIndexLessThan;
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
-            this._updateLabelDesc();
+            this._updateLabelDescAndLabelError();
         }
         private _onFocusOutInputTurnIndex(e: egret.FocusEvent): void {
             const value = parseInt(this._inputTurnIndex.text);
             const data  = this._getCondition().WecTurnIndexLessThan;
             if (isNaN(value)) {
-                this._inputTurnIndex.text = `${data.valueLessThan}`;
+                this._updateInputTurnIndex();
             } else {
                 data.valueLessThan = value;
-                this._updateLabelDesc();
+                this._updateLabelDescAndLabelError();
+                this._updateInputTurnIndex();
             }
         }
 
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            this._updateLabelDesc();
+            this._updateLabelDescAndLabelError();
             this._updateImgIsNot();
+            this._updateInputTurnIndex();
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = Lang.getText(Lang.Type.B0501);
+            this._labelTitle.text       = `${Lang.getText(Lang.Type.B0501)} #${this._getCondition().WecCommonData.conditionId}`;
             this._btnClose.label        = Lang.getText(Lang.Type.B0146);
             this._btnType.label         = Lang.getText(Lang.Type.B0516);
             this._labelIsNot.text       = Lang.getText(Lang.Type.B0517);
             this._labelTurnIndex.text   = Lang.getText(Lang.Type.B0091);
 
-            this._updateLabelDesc();
+            this._updateLabelDescAndLabelError();
         }
 
-        private _updateLabelDesc(): void {
-            this._labelDesc.text = WarEventHelper.getDescForCondition(this._getCondition());
+        private _updateLabelDescAndLabelError(): void {
+            const openData          = this._getOpenData<OpenDataForWeConditionModifyPanel3>();
+            const condition         = openData.condition;
+            const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition);
+            const labelError        = this._labelError;
+            labelError.text         = errorTip || Lang.getText(Lang.Type.B0493);
+            labelError.textColor    = errorTip ? Types.ColorValue.Red : Types.ColorValue.Green;
+            this._labelDesc.text    = WarEventHelper.getDescForCondition(condition);
         }
         private _updateImgIsNot(): void {
             this._imgIsNot.visible = !!this._getCondition().WecTurnIndexLessThan.isNot;
+        }
+        private _updateInputTurnIndex(): void {
+            this._inputTurnIndex.text = `${this._getCondition().WecTurnIndexLessThan.valueLessThan}`;
         }
 
         private _getCondition(): IWarEventCondition {
