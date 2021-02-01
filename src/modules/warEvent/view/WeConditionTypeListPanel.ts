@@ -53,7 +53,7 @@ namespace TinyWars.WarEvent {
             this._setUiListenerArray([
                 { ui: this._btnClose,       callback: this.close },
             ]);
-            this._listType.setItemRenderer(ConditionRenderer);
+            this._listType.setItemRenderer(TypeRenderer);
 
             this._updateView();
         }
@@ -69,7 +69,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = Lang.getText(Lang.Type.B0500);
+            this._labelTitle.text       = Lang.getText(Lang.Type.B0516);
             this._btnClose.label        = Lang.getText(Lang.Type.B0146);
         }
         private _updateListType(): void {
@@ -77,7 +77,7 @@ namespace TinyWars.WarEvent {
             const condition = openData.condition;
             const fullData  = openData.fullData;
 
-            const dataArray: DataForConditionRenderer[] = [];
+            const dataArray: DataForTypeRenderer[] = [];
             for (const newConditionType of WarEventHelper.getConditionTypeArray()) {
                 dataArray.push({
                     fullData,
@@ -89,14 +89,15 @@ namespace TinyWars.WarEvent {
         }
     }
 
-    type DataForConditionRenderer = {
+    type DataForTypeRenderer = {
         fullData        : ProtoTypes.Map.IWarEventFullData;
         newConditionType: ConditionType;
         condition       : IWarEventCondition;
     }
-    class ConditionRenderer extends GameUi.UiListItemRenderer {
+    class TypeRenderer extends GameUi.UiListItemRenderer {
         private _labelType  : GameUi.UiLabel;
         private _labelUsing : GameUi.UiLabel;
+        private _labelSwitch: GameUi.UiLabel;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -113,11 +114,11 @@ namespace TinyWars.WarEvent {
             super.dataChanged();
 
             this._updateLabelType();
-            this._updateLabelUsing();
+            this._updateLabelUsingAndSwitch();
         }
 
         private _onTouchedSelf(e: egret.TouchEvent): void {
-            const data = this.data as DataForConditionRenderer;
+            const data = this.data as DataForTypeRenderer;
             if (data == null) {
                 return;
             }
@@ -135,13 +136,14 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelUsing.text = Lang.getText(Lang.Type.B0503);
+            this._labelUsing.text   = Lang.getText(Lang.Type.B0503);
+            this._labelSwitch.text  = Lang.getText(Lang.Type.B0520);
 
             this._updateLabelType();
         }
 
         private _updateLabelType(): void {
-            const data  = this.data as DataForConditionRenderer;
+            const data  = this.data as DataForTypeRenderer;
             const label = this._labelType;
             if (data == null) {
                 label.text = undefined;
@@ -149,13 +151,17 @@ namespace TinyWars.WarEvent {
                 label.text = Lang.getWarEventConditionTypeName(data.newConditionType);
             }
         }
-        private _updateLabelUsing(): void {
-            const data  = this.data as DataForConditionRenderer;
-            const label = this._labelUsing;
+        private _updateLabelUsingAndSwitch(): void {
+            const data          = this.data as DataForTypeRenderer;
+            const labelUsing    = this._labelUsing;
+            const labelSwitch   = this._labelSwitch;
             if (data == null) {
-                label.visible = false;
+                labelUsing.visible  = false;
+                labelSwitch.visible = false;
             } else {
-                label.visible = WarEventHelper.getConditionType(data.condition) === data.newConditionType;
+                const isUsing       = WarEventHelper.getConditionType(data.condition) === data.newConditionType;
+                labelUsing.visible  = isUsing;
+                labelSwitch.visible = !isUsing;
             }
         }
     }

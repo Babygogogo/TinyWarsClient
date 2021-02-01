@@ -68,7 +68,8 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = Lang.getText(Lang.Type.B0500);
+            const openData              = this._getOpenData<OpenDataForWeConditionReplacePanel>();
+            this._labelTitle.text       = `${Lang.getText(Lang.Type.B0500)} C${openData.conditionId}`;
             this._labelNoCondition.text = Lang.getText(Lang.Type.B0278);
             this._btnClose.label        = Lang.getText(Lang.Type.B0146);
         }

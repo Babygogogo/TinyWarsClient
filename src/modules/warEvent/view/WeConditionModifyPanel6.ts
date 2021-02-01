@@ -85,6 +85,7 @@ namespace TinyWars.WarEvent {
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
+            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
         }
         private _onFocusOutInputPlayerIndex(e: egret.FocusEvent): void {
             const value = parseInt(this._inputPlayerIndex.text);
@@ -95,6 +96,7 @@ namespace TinyWars.WarEvent {
                 data.valueEqualTo = value;
                 this._updateLabelDescAndLabelError();
                 this._updateInputPlayerIndex();
+                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
 
@@ -107,7 +109,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = `${Lang.getText(Lang.Type.B0501)} #${this._getCondition().WecCommonData.conditionId}`;
+            this._labelTitle.text       = `${Lang.getText(Lang.Type.B0501)} C${this._getCondition().WecCommonData.conditionId}`;
             this._btnClose.label        = Lang.getText(Lang.Type.B0146);
             this._btnType.label         = Lang.getText(Lang.Type.B0516);
             this._labelIsNot.text       = Lang.getText(Lang.Type.B0517);

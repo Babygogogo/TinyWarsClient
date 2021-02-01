@@ -107,7 +107,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text       = `${Lang.getText(Lang.Type.B0501)} #${this._getCondition().WecCommonData.conditionId}`;
+            this._labelTitle.text       = `${Lang.getText(Lang.Type.B0501)} C${this._getCondition().WecCommonData.conditionId}`;
             this._btnClose.label        = Lang.getText(Lang.Type.B0146);
             this._btnType.label         = Lang.getText(Lang.Type.B0516);
             this._labelIsNot.text       = Lang.getText(Lang.Type.B0517);
