@@ -3426,19 +3426,19 @@ namespace TinyWars.Utility.Lang {
             `It's not P%d's turn currently.`
         ],
         [Type.F0045]: [
-            `当前的玩家序号大于%d`,
+            `处于当前回合的玩家序号大于%d`,
             `The player index in the current turn > %d.`,
         ],
         [Type.F0046]: [
-            `当前的玩家序号小于等于%d`,
+            `处于当前回合的玩家序号小于等于%d`,
             `The player index in the current turn <= %d.`,
         ],
         [Type.F0047]: [
-            `当前的玩家序号小于%d`,
+            `处于当前回合的玩家序号小于%d`,
             `The player index in the current turn < %d.`,
         ],
         [Type.F0048]: [
-            `当前的玩家序号大于等于%d`,
+            `处于当前回合的玩家序号大于等于%d`,
             `The player index in the current turn >= %d.`,
         ],
         [Type.F0049]: [
@@ -3446,7 +3446,7 @@ namespace TinyWars.Utility.Lang {
             `The current turn == %d.`,
         ],
         [Type.F0050]: [
-            `当前的回合数等于%d`,
+            `当前的回合等于%d`,
             `The current turn != %d.`,
         ],
         [Type.F0051]: [

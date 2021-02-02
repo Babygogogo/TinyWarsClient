@@ -85,6 +85,7 @@ namespace TinyWars.WarEvent {
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
+            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
         }
         private _onFocusOutInputTurnIndex(e: egret.FocusEvent): void {
             const value = parseInt(this._inputTurnIndex.text);
@@ -95,6 +96,7 @@ namespace TinyWars.WarEvent {
                 data.valueEqualTo = value;
                 this._updateLabelDescAndLabelError();
                 this._updateInputTurnIndex();
+                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
 

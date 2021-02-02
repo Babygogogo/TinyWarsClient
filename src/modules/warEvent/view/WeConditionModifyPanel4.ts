@@ -88,6 +88,7 @@ namespace TinyWars.WarEvent {
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
+            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
         }
         private _onFocusOutInputDivider(e: egret.FocusEvent): void {
             const value = parseInt(this._inputDivider.text);
@@ -98,6 +99,7 @@ namespace TinyWars.WarEvent {
                 data.divider = value;
                 this._updateLabelDescAndLabelError();
                 this._updateInputDivider();
+                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
         private _onFocusOutInputRemainder(e: egret.FocusEvent): void {
@@ -109,6 +111,7 @@ namespace TinyWars.WarEvent {
                 data.remainderEqualTo = value;
                 this._updateLabelDescAndLabelError();
                 this._updateInputRemainder();
+                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
 

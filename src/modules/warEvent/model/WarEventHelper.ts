@@ -853,10 +853,12 @@ namespace TinyWars.WarEvent.WarEventHelper {
         const configVersion         = war.getConfigVersion();
         const playersCountUnneutral = (war.getField() as MapEditor.MeField).getMaxPlayerIndex();
         const validator             = (v: ProtoTypes.WarEvent.WarEventActionAddUnit.IDataForAddUnit) => {
+            const unitData = v.unitData;
             return (v.canBeBlockedByUnit != null)
                 && (v.needMovableTile != null)
+                && (unitData.loaderUnitId == null)
                 && (BwHelpers.checkIsUnitDataValidIgnoringUnitId({
-                    unitData    : v.unitData,
+                    unitData,
                     mapSize,
                     playersCountUnneutral,
                     configVersion,
