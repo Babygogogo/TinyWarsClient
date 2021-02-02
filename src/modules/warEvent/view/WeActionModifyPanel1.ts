@@ -7,9 +7,11 @@ namespace TinyWars.WarEvent {
     import FloatText            = Utility.FloatText;
     import Logger               = Utility.Logger;
     import ProtoTypes           = Utility.ProtoTypes;
+    import ConfigManager        = Utility.ConfigManager;
     import ColorValue           = Types.ColorValue;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
     import IWarEventAction      = ProtoTypes.WarEvent.IWarEventAction;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     type OpenDataForWeActionModifyPanel1 = {
         fullData    : IWarEventFullData;
@@ -25,7 +27,8 @@ namespace TinyWars.WarEvent {
         private _btnAddUnit     : GameUi.UiButton;
         private _btnClear       : GameUi.UiButton;
         private _labelTitle     : GameUi.UiLabel;
-        private _labelNoUnit    : GameUi.UiLabel;
+        private _labelUnitsCount: GameUi.UiLabel;
+        private _labelError     : GameUi.UiLabel;
         private _listUnit       : GameUi.UiScrollList;
 
         public static show(openData: OpenDataForWeActionModifyPanel1): void {
@@ -72,17 +75,29 @@ namespace TinyWars.WarEvent {
         }
 
         private _onNotifyWarEventFullDataChanged(e: egret.Event): void {
-            this._updateListUnitAndLabelNoUnit();
+            this._updateComponentsForUnits();
         }
 
         private _onTouchedBtnAddUnit(e: egret.TouchEvent): void {
-            const openData = this._getOpenData<OpenDataForWeActionModifyPanel1>();
-            // TODO
+            const unitArray = this._getOpenData<OpenDataForWeActionModifyPanel1>().action.WarEventActionAddUnit.unitArray;
+            if (unitArray.length > CommonConstants.WarEventActionAddUnitMaxCount) {
+                FloatText.show(Lang.getText(Lang.Type.A0189));
+            } else {
+                unitArray.push(WarEventHelper.getDefaultAddUnitData());
+                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+            }
         }
 
         private _onTouchedBtnClear(e: egret.TouchEvent): void {
             const openData = this._getOpenData<OpenDataForWeActionModifyPanel1>();
-            // TODO
+            Common.CommonConfirmPanel.show({
+                title   : Lang.getText(Lang.Type.B0088),
+                content : Lang.getText(Lang.Type.A0190),
+                callback: () => {
+                    openData.action.WarEventActionAddUnit.unitArray.length = 0;
+                    Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                }
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -91,18 +106,17 @@ namespace TinyWars.WarEvent {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            this._updateListUnitAndLabelNoUnit();
+            this._updateComponentsForUnits();
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelNoUnit.text  = Lang.getText(Lang.Type.B0278);
             this._labelTitle.text   = Lang.getText(Lang.Type.B0469);
             this._btnAddUnit.label  = Lang.getText(Lang.Type.B0497);
             this._btnClear.label    = Lang.getText(Lang.Type.B0498);
             this._btnBack.label     = Lang.getText(Lang.Type.B0146);
         }
 
-        private _updateListUnitAndLabelNoUnit(): void {
+        private _updateComponentsForUnits(): void {
             const action    = this._getOpenData<OpenDataForWeActionModifyPanel1>().action;
             const dataArray : DataForUnitRenderer[] = [];
             for (const unitData of action.WarEventActionAddUnit.unitArray || []) {
@@ -112,7 +126,7 @@ namespace TinyWars.WarEvent {
                 });
             }
 
-            this._labelNoUnit.visible = !dataArray.length;
+            this._labelUnitsCount.text = `${Lang.getText(Lang.Type.B0524)}: ${dataArray.length}`;
             this._listUnit.bindData(dataArray);
         }
     }
@@ -122,11 +136,25 @@ namespace TinyWars.WarEvent {
         unitData: ProtoTypes.WarEvent.WarEventActionAddUnit.IDataForAddUnit;
     }
     class UnitRenderer extends GameUi.UiListItemRenderer {
-        private _btnModify  : GameUi.UiButton;
+        private _btnDelete  : GameUi.UiButton;
+
+        // Structure.GridIndex gridIndex                   = 1;
+        // uint32              playerIndex                 = 2;
+        // uint32              unitType                    = 3;
+        // uint32              actionState                 = 11;
+        // uint32              primaryWeaponCurrentAmmo    = 12;
+        // uint32              currentHp                   = 13;
+        // bool                isDiving                    = 15;
+        // uint32              flareCurrentAmmo            = 16;
+        // uint32              currentFuel                 = 17;
+        // uint32              currentBuildMaterial        = 18;
+        // uint32              currentProduceMaterial      = 19;
+        // uint32              currentPromotion            = 20;
+        // bool                hasLoadedCo                 = 23;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._btnModify, callback: this._onTouchedBtnModify },
+                { ui: this._btnDelete,  callback: this._onTouchedBtnDelete },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
@@ -134,10 +162,17 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnModify(e: egret.TouchEvent): void {
+        private _onTouchedBtnDelete(e: egret.TouchEvent): void {
             const data = this.data as DataForUnitRenderer;
             if (data) {
-                // TODO
+                Common.CommonConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0029),
+                    callback: () => {
+                        Helpers.deleteElementFromArray(data.action.WarEventActionAddUnit.unitArray, data.unitData);
+                        Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                    },
+                });
             }
         }
 
@@ -152,7 +187,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnModify.label = Lang.getText(Lang.Type.B0317);
+            this._btnDelete.label = Lang.getText(Lang.Type.B0220);
         }
 
         private _updateView(): void {

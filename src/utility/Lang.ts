@@ -819,8 +819,8 @@ namespace TinyWars.Utility.Lang {
             `The action data doesn't exist. Please delete this action.`,
         ],
         [Type.A0169]: [
-            `动作数据不合法，请编辑修正`,
-            `The action data is not valid. Please edit it.`,
+            `动作中部分部队的数据不合法`,
+            `Some of the unit data in the action is not valid.`,
         ],
         [Type.A0170]: [
             `事件数量已达上限`,
@@ -897,6 +897,18 @@ namespace TinyWars.Utility.Lang {
         [Type.A0188]: [
             `未被引用的条件节点、条件、动作都将被删除。您确定要继续吗？`,
             `All of the unused condition nodes, conditions and actions will be deleted. Are you sure to continue?`,
+        ],
+        [Type.A0189]: [
+            `此动作已包含太多部队`,
+            `There are too many units in this action.`,
+        ],
+        [Type.A0190]: [
+            `您确定要清空所有部队吗？`,
+            `Are you sure to delete all the units?`,
+        ],
+        [Type.A0191]: [
+            `此动作包含的部队的数量不合法`,
+            `The total number of the units is invalid.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2981,6 +2993,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0523]: [
             `玩家状态`,
             `Player State`,
+        ],
+        [Type.B0524]: [
+            `部队总数`,
+            `Total number of the units`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

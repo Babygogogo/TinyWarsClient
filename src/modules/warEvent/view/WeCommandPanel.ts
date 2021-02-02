@@ -293,7 +293,7 @@ namespace TinyWars.WarEvent {
         }
         private _onTouchedBtnAddAction(e: egret.TouchEvent): void {                 // DONE
             const data = this._getOpenData<OpenDataForWeCommandPanel>();
-            if (WarEventHelper.addAction(data.war.getWarEventManager().getWarEventFullData(), data.eventId) != null) {
+            if (WarEventHelper.addDefaultAction(data.war.getWarEventManager().getWarEventFullData(), data.eventId) != null) {
                 Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }

@@ -843,20 +843,26 @@ namespace TinyWars.WarEvent.WarEventHelper {
         }
     }
     function getErrorTipForWeaAddUnit(data: WarEvent.IWarEventActionAddUnit, war: MapEditor.MeWar): string | undefined {
-        const unitArray = data.unitArray;
-        if ((unitArray == null) || (unitArray.length <= 0)) {
-            return Lang.getText(Lang.Type.A0169);
+        const unitArray     = data.unitArray || [];
+        const unitsCount    = unitArray.length;
+        if ((unitsCount <= 0) || (unitsCount > CommonConstants.WarEventActionAddUnitMaxCount)) {
+            return `${Lang.getText(Lang.Type.A0191)} (${unitsCount} / ${CommonConstants.WarEventActionAddUnitMaxCount})`;
         }
 
         const mapSize               = war.getTileMap().getMapSize();
         const configVersion         = war.getConfigVersion();
         const playersCountUnneutral = (war.getField() as MapEditor.MeField).getMaxPlayerIndex();
-        if (unitArray.some(v => !BwHelpers.checkIsUnitDataValidIgnoringUnitId({
-            unitData                : v.unitData,
-            mapSize,
-            playersCountUnneutral,
-            configVersion,
-        }))) {
+        const validator             = (v: ProtoTypes.WarEvent.WarEventActionAddUnit.IDataForAddUnit) => {
+            return (v.canBeBlockedByUnit != null)
+                && (v.needMovableTile != null)
+                && (BwHelpers.checkIsUnitDataValidIgnoringUnitId({
+                    unitData    : v.unitData,
+                    mapSize,
+                    playersCountUnneutral,
+                    configVersion,
+                }));
+        };
+        if (!unitArray.every(validator)) {
             return Lang.getText(Lang.Type.A0169);
         }
 
@@ -1591,7 +1597,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
         return true;
     }
 
-    export function addAction(fullData: IWarEventFullData, eventId: number): number | undefined {   // DONE
+    export function addDefaultAction(fullData: IWarEventFullData, eventId: number): number | undefined {   // DONE
         const event = getEvent(fullData, eventId);
         if (event == null) {
             return undefined;
@@ -1623,5 +1629,16 @@ namespace TinyWars.WarEvent.WarEventHelper {
                 return actionId;
             }
         }
+    }
+    export function getDefaultAddUnitData(): ProtoTypes.WarEvent.WarEventActionAddUnit.IDataForAddUnit {
+        return {
+            canBeBlockedByUnit  : true,
+            needMovableTile     : true,
+            unitData            : {
+                gridIndex       : { x: 0, y: 0 },
+                playerIndex     : CommonConstants.WarFirstPlayerIndex,
+                unitType        : Types.UnitType.Infantry,
+            },
+        };
     }
 }
