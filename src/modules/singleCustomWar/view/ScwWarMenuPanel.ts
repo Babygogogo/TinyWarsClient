@@ -97,7 +97,7 @@ namespace TinyWars.SingleCustomWar {
 
             Notify.dispatch(Notify.Type.McwWarMenuPanelOpened);
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._war           = null;
             this._unitMap       = null;
             this._dataForList   = null;

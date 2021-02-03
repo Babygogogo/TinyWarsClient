@@ -99,7 +99,7 @@ namespace TinyWars.MapEditor {
 
             Notify.dispatch(Notify.Type.McwWarMenuPanelOpened);
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._war           = null;
             this._dataForList   = null;
             this._listCommand.clear();

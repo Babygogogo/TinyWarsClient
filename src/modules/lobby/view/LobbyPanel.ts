@@ -58,7 +58,9 @@ namespace TinyWars.Lobby {
             this._updateComponentsForLanguage();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+
             this._listCommand.clear();
         }
 
@@ -103,6 +105,22 @@ namespace TinyWars.Lobby {
             egret.Tween.get(labelTips)
                 .set({ alpha: 0 })
                 .to({ alpha: 1 }, 200);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve, reject) => {
+                const group = this._group;
+                egret.Tween.removeTweens(group);
+                egret.Tween.get(group)
+                    .set({ alpha: 1, right: 0 })
+                    .to({ alpha: 0, right: -40 }, 200);
+
+                const labelTips = this._labelTips;
+                egret.Tween.removeTweens(labelTips);
+                egret.Tween.get(labelTips)
+                    .set({ alpha: 1 })
+                    .to({ alpha: 0 }, 200)
+                    .call(resolve);
+            });
         }
 
         private async _updateComponentsForLanguage(): Promise<void> {

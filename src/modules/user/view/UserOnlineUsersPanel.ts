@@ -61,9 +61,9 @@ namespace TinyWars.User {
             this._updateView();
             this._updateComponentsForLanguage();
         }
-        protected _onClosed(): void {
-            delete this._msg;
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._msg           = null;
+            this._dataForList   = null;
             this._listUser.clear();
         }
 

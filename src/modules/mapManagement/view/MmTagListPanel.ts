@@ -71,7 +71,7 @@ namespace TinyWars.MapManagement {
 
             this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._zoomMap.removeAllContents();
             this._zoomMap.setMouseWheelListenerEnabled(false);
             this._zoomMap.setTouchListenerEnabled(false);

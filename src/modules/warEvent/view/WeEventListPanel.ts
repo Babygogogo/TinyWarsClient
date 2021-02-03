@@ -58,8 +58,6 @@ namespace TinyWars.WarEvent {
 
             this._updateView();
         }
-        protected _onClosed(): void {
-        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.

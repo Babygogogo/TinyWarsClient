@@ -95,10 +95,10 @@ namespace TinyWars.ReplayWar {
 
             Notify.dispatch(Notify.Type.McwWarMenuPanelOpened);
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._unitMap;
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._war           = null;
+            this._unitMap       = null;
+            this._dataForList   = null;
             this._listCommand.clear();
             this._listPlayer.clear();
 

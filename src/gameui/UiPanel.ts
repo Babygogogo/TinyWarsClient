@@ -119,15 +119,15 @@ namespace TinyWars.GameUi {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for close self.
         ////////////////////////////////////////////////////////////////////////////////
-        public close(): void {
-            (this.parent) && (this.parent.removeChild(this));
+        public async close(): Promise<void> {
+            await this._doClose();
 
-            this._doClose();
+            (this.parent) && (this.parent.removeChild(this));
 
             this._setOpenData(undefined);
         }
 
-        private _doClose(): void {
+        private async _doClose(): Promise<void> {
             if (this.getIsOpening()) {
                 this._setIsOpening(false);
 
@@ -135,11 +135,11 @@ namespace TinyWars.GameUi {
                 this._setUiListenerArray(undefined);
                 this._setNotifyListenerArray(undefined);
                 this._setCallbackOnTouchedMask(undefined);
-                this._onClosed();
+                await this._onClosed();
             }
         }
 
-        protected _onClosed(): void {}
+        protected async _onClosed(): Promise<void> {}
 
         ////////////////////////////////////////////////////////////////////////////////
         // Auto adjust height.

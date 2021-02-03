@@ -83,7 +83,7 @@ namespace TinyWars.ReplayWar {
             this._updateView();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._war = null;
         }
 

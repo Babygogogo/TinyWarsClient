@@ -44,7 +44,7 @@ namespace TinyWars.SingleCustomRoom {
             this._listCommand.bindData(this._createDataForListCommand());
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCommand.clear();
         }
 

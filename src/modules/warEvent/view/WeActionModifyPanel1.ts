@@ -64,8 +64,6 @@ namespace TinyWars.WarEvent {
 
             this._updateView();
         }
-        protected _onClosed(): void {
-        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
@@ -137,7 +135,8 @@ namespace TinyWars.WarEvent {
     }
     class UnitRenderer extends GameUi.UiListItemRenderer {
         private _btnDelete  : GameUi.UiButton;
-
+        // return (v.canBeBlockedByUnit != null)
+        // && (v.needMovableTile != null)
         // Structure.GridIndex gridIndex                   = 1;
         // uint32              playerIndex                 = 2;
         // uint32              unitType                    = 3;

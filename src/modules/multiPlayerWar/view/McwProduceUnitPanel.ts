@@ -68,9 +68,9 @@ namespace TinyWars.MultiPlayerWar {
 
             Notify.dispatch(Notify.Type.McwProduceUnitPanelOpened);
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._war           = null;
+            this._dataForList   = null;
             this._listUnit.clear();
 
             Notify.dispatch(Notify.Type.McwProduceUnitPanelClosed);

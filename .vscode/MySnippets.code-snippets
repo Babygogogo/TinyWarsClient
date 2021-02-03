@@ -24,5 +24,16 @@
             "    return undefined;",
             "}",
         ],
-    }
+    },
+    "Show Close Animation": {
+        "scope": "typescript",
+        "prefix": "showclose",
+        "body": [
+            "private _showCloseAnimation(): Promise<void> {",
+            "    return new Promise<void>((resolve, reject) => {",
+            "        ",
+            "    });",
+            "}",
+        ],
+    },
 }

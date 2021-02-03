@@ -114,6 +114,9 @@ namespace TinyWars.User {
 
             this._updateView();
         }
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+        }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
@@ -195,6 +198,16 @@ namespace TinyWars.User {
             egret.Tween.get(group)
                 .set({ alpha: 0, y: 40 })
                 .to({ alpha: 1, y: 0 }, 200);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve, reject) => {
+                const group = this._group;
+                egret.Tween.removeTweens(group);
+                egret.Tween.get(group)
+                    .set({ alpha: 1, y: 0 })
+                    .to({ alpha: 0, y: 40 }, 200)
+                    .call(resolve);
+            });
         }
 
         private async _updateView(): Promise<void> {

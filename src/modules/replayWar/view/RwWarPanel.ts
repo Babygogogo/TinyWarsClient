@@ -30,7 +30,7 @@ namespace TinyWars.ReplayWar {
             this.addChild(RwModel.getWar().getView());
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this.removeChildren();
         }
     }

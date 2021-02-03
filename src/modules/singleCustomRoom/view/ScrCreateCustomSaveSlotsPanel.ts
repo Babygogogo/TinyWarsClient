@@ -58,8 +58,8 @@ namespace TinyWars.SingleCustomRoom {
 
             this._updateView();
         }
-        protected _onClosed(): void {
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._dataForList = null;
             this._srlSaveSlot.clear();
         }
 

@@ -68,11 +68,11 @@ namespace TinyWars.ReplayWar {
             this._playerIndex   = this._war.getPlayerInTurn().getPlayerIndex();
             this._updateView();
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._unitMap;
-            delete this._cursor;
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._war           = null;
+            this._unitMap       = null;
+            this._cursor        = null;
+            this._dataForList   = null;
             this._listUnit.clear();
         }
 

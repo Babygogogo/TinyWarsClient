@@ -91,9 +91,9 @@ namespace TinyWars.MapEditor {
             this._updateView();
         }
 
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._drawer;
+        protected async _onClosed(): Promise<void> {
+            this._war       = null;
+            this._drawer    = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

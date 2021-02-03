@@ -71,11 +71,11 @@ namespace TinyWars.MultiPlayerWar {
             this._playerIndex   = war.getPlayerIndexLoggedIn() || this._turnManager.getNextPlayerIndex(0);
             this._updateView();
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._unitMap;
-            delete this._cursor;
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._war           = null;
+            this._unitMap       = null;
+            this._cursor        = null;
+            this._dataForList   = null;
             this._listUnit.clear();
         }
 

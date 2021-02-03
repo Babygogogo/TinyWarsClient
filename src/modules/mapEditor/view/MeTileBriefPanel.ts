@@ -85,7 +85,7 @@ namespace TinyWars.MapEditor {
 
             this._updateView();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._war       = null;
             this._tileMap   = null;
             this._cursor    = null;

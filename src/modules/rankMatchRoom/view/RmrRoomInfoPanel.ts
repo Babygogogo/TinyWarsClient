@@ -76,7 +76,7 @@ namespace TinyWars.RankMatchRoom {
             }
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._tabSettings.clear();
         }
 

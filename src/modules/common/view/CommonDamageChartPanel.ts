@@ -90,7 +90,9 @@ namespace TinyWars.Common {
             this._updateComponentsForLanguage();
             this.setSelectedIndexAndUpdateView(0);
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+
             this._selectedIndex             = null;
             this._dataForListUnit           = null;
             this._dataForListDamageChart    = null;
@@ -143,11 +145,27 @@ namespace TinyWars.Common {
                 .set({ alpha: 0, left: -40 })
                 .to({ alpha: 1, left: 0 }, 200);
 
-            const _groupInfo = this._groupInfo;
-            egret.Tween.removeTweens(_groupInfo);
-            egret.Tween.get(_groupInfo)
+            const groupInfo = this._groupInfo;
+            egret.Tween.removeTweens(groupInfo);
+            egret.Tween.get(groupInfo)
                 .set({ alpha: 0, right: -40 })
                 .to({ alpha: 1, right: 0 }, 200);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                const groupList = this._groupList;
+                egret.Tween.removeTweens(groupList);
+                egret.Tween.get(groupList)
+                    .set({ alpha: 1, left: 0 })
+                    .to({ alpha: 0, left: -40 }, 200);
+
+                const groupInfo = this._groupInfo;
+                egret.Tween.removeTweens(groupInfo);
+                egret.Tween.get(groupInfo)
+                    .set({ alpha: 1, right: 0 })
+                    .to({ alpha: 0, right: -40 }, 200)
+                    .call(resolve);
+            });
         }
 
         private _updateComponentsForLanguage(): void {

@@ -30,7 +30,7 @@ namespace TinyWars.MapEditor {
             this.addChild(MeManager.getWar().getView());
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this.removeChildren();
         }
     }

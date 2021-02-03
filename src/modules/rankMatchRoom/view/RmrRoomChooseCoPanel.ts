@@ -88,7 +88,7 @@ namespace TinyWars.RankMatchRoom {
             this._initListCo();
             this._updateComponentsForLanguage();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCo.clear();
             this._listPassiveSkill.clear();
             this._listCop.clear();

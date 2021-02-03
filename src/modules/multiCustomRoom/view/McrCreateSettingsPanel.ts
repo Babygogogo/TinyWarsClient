@@ -64,7 +64,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnConfirm.enabled = true;
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._tabSettings.clear();
             this._clearTimeoutForBtnConfirm();
         }

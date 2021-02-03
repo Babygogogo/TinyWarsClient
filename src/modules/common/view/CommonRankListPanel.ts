@@ -58,7 +58,7 @@ namespace TinyWars.Common {
             this._updateView();
             this._updateComponentsForLanguage();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listStd.clear();
             this._listFog.clear();
         }

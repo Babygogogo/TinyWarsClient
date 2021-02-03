@@ -53,6 +53,9 @@ namespace TinyWars.Lobby {
 
             this._updateView();
         }
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+        }
 
         private _onMsgUserLogin(e: egret.Event): void {
             this._updateView();
@@ -102,6 +105,16 @@ namespace TinyWars.Lobby {
             egret.Tween.get(group)
                 .set({ alpha: 0, top: -40 })
                 .to({ alpha: 1, top: 0 }, 200);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve, reject) => {
+                const group = this._group;
+                egret.Tween.removeTweens(group);
+                egret.Tween.get(group)
+                    .set({ alpha: 1, top: 0 })
+                    .to({ alpha: 0, top: -40 }, 200)
+                    .call(resolve);
+            });
         }
 
         private _updateView(): void {

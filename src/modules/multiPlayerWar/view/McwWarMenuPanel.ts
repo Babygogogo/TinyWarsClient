@@ -99,7 +99,9 @@ namespace TinyWars.MultiPlayerWar {
 
             Notify.dispatch(Notify.Type.McwWarMenuPanelOpened);
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+
             this._war           = null;
             this._unitMap       = null;
             this._dataForList   = null;
@@ -182,6 +184,22 @@ namespace TinyWars.MultiPlayerWar {
             egret.Tween.get(groupInfo)
                 .set({ alpha: 0, right: -40 })
                 .to({ alpha: 1, right: 0 }, 200);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve, reject) => {
+                const group = this._group;
+                egret.Tween.removeTweens(group);
+                egret.Tween.get(group)
+                    .set({ alpha: 1, left: 0 })
+                    .to({ alpha: 0, left: -40 }, 200);
+
+                const groupInfo = this._groupInfo;
+                egret.Tween.removeTweens(groupInfo);
+                egret.Tween.get(groupInfo)
+                    .set({ alpha: 1, right: 0 })
+                    .to({ alpha: 0, right: -40 }, 200)
+                    .call(resolve);
+            });
         }
 
         private _updateView(): void {

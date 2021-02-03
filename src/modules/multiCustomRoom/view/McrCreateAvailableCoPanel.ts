@@ -74,7 +74,7 @@ namespace TinyWars.MultiCustomRoom {
             this._initGroupCoNames();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._clearGroupCoTiers();
             this._clearGroupCoNames();
         }

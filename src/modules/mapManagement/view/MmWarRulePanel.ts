@@ -84,7 +84,7 @@ namespace TinyWars.MapManagement {
 
             this._resetView();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listWarRule.clear();
             this._listPlayer.clear();
         }

@@ -58,7 +58,7 @@ namespace TinyWars.MapEditor {
             this._updateListCategory();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCategory.clear();
             this._listRecent.clear();
         }

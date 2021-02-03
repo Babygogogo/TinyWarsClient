@@ -110,7 +110,7 @@ namespace TinyWars.MapEditor {
             this._war = MeManager.getWar();
             this._resetView();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._war = null;
             this._listWarRule.clear();
             this._listWarEvent.clear();

@@ -56,9 +56,9 @@ namespace TinyWars.ReplayWar {
             this._updateView();
             this._updatePosition();
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._actionPlanner;
+        protected async _onClosed(): Promise<void> {
+            this._war           = null;
+            this._actionPlanner = null;
             this._listAction.clear();
         }
 

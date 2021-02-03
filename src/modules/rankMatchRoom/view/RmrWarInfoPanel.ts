@@ -73,7 +73,7 @@ namespace TinyWars.RankMatchRoom {
             this._updateComponentsForLanguage();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._tabSettings.clear();
         }
 

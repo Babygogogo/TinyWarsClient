@@ -87,7 +87,9 @@ namespace TinyWars.Chat {
 
             Notify.dispatch(Notify.Type.ChatPanelOpened);
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+
             this._dataForListChat   = null;
             this._selectedIndex     = null;
             this._listChat.clear();
@@ -220,6 +222,28 @@ namespace TinyWars.Chat {
             egret.Tween.get(groupInput)
                 .set({ alpha: 0, bottom: -40 })
                 .to({ alpha: 1, bottom: 0 }, 200);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve) => {
+                const groupChannel = this._groupChannel;
+                egret.Tween.removeTweens(groupChannel);
+                egret.Tween.get(groupChannel)
+                    .set({ alpha: 1, left: 0 })
+                    .to({ alpha: 0, left: -40 }, 200);
+
+                const groupMessage = this._groupMessage;
+                egret.Tween.removeTweens(groupMessage);
+                egret.Tween.get(groupMessage)
+                    .set({ alpha: 1, right: 0 })
+                    .to({ alpha: 0, right: -40 }, 200);
+
+                const groupInput = this._groupInput;
+                egret.Tween.removeTweens(groupInput);
+                egret.Tween.get(groupInput)
+                    .set({ alpha: 1, bottom: 0 })
+                    .to({ alpha: 0, bottom: -40 }, 200)
+                    .call(resolve);
+            });
         }
 
         private _updateComponentsForLanguage(): void {

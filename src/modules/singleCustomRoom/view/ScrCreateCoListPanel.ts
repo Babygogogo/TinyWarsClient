@@ -80,7 +80,7 @@ namespace TinyWars.SingleCustomRoom {
             this._initListCo();
             this._updateView();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCo.clear();
             this._listPassiveSkill.clear();
             this._listCop.clear();

@@ -30,7 +30,7 @@ namespace TinyWars.SingleCustomWar {
             this.addChild(ScwModel.getWar().getView());
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this.removeChildren();
         }
     }

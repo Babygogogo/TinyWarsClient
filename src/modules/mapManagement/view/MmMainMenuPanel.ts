@@ -50,7 +50,7 @@ namespace TinyWars.MapManagement {
             this._listCommand.bindData(await this._createDataForListCommand());
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCommand.clear();
         }
 

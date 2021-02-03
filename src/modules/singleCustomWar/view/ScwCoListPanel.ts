@@ -100,8 +100,8 @@ namespace TinyWars.SingleCustomWar {
 
             Notify.dispatch(Notify.Type.BwCoListPanelOpened);
         }
-        protected _onClosed(): void {
-            delete this._war;
+        protected async _onClosed(): Promise<void> {
+            this._war = null;
             this._listCo.clear();
             this._listPassiveSkill.clear();
             this._listCop.clear();

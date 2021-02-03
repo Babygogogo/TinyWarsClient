@@ -30,7 +30,7 @@ namespace TinyWars.MultiPlayerWar {
             this.addChild(MpwModel.getWar().getView());
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this.removeChildren();
         }
     }

@@ -246,7 +246,7 @@ namespace TinyWars.BaseWar {
                             Notify.dispatch(Notify.Type.BwCursorDragEnded);
                         }
                     }
-                    delete this._initialGlobalTouchPoint;
+                    this._initialGlobalTouchPoint = null;
                 }
             }
         }

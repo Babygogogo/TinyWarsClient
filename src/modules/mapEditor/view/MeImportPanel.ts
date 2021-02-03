@@ -50,7 +50,7 @@ namespace TinyWars.MapEditor {
             this._updateListMap();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listMap.clear();
         }
 

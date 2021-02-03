@@ -66,6 +66,9 @@ namespace TinyWars.Common {
             this._input.maxChars    = openData.maxChars;
             this._input.restrict    = openData.charRestrict;
         }
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+        }
 
         public getInputText(): string {
             return this._input.text;
@@ -96,6 +99,16 @@ namespace TinyWars.Common {
             egret.Tween.get(group)
                 .set({ alpha: 0, verticalCenter: -40 })
                 .to({ alpha: 1, verticalCenter: 0 }, 200);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                const group = this._group;
+                egret.Tween.removeTweens(group);
+                egret.Tween.get(group)
+                    .set({ alpha: 1, verticalCenter: 0 })
+                    .to({ alpha: 0, verticalCenter: -40 }, 200)
+                    .call(resolve);
+            });
         }
 
         private _updateComponentsForLanguage(): void {

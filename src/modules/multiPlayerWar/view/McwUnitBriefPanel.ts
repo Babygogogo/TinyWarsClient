@@ -68,10 +68,10 @@ namespace TinyWars.MultiPlayerWar {
 
             this._updateView();
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._unitMap;
-            delete this._cursor;
+        protected async _onClosed(): Promise<void> {
+            this._war       = null;
+            this._unitMap   = null;
+            this._cursor    = null;
 
             for (const cell of this._cellList) {
                 this._destroyCell(cell);
