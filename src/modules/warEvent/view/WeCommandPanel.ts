@@ -284,8 +284,9 @@ namespace TinyWars.WarEvent {
         }
         private _onTouchedBtnModifyAction(e: egret.TouchEvent): void {              // DONE
             const openData  = this._getOpenData<OpenDataForWeCommandPanel>();
-            const fullData  = openData.war.getWarEventManager().getWarEventFullData();
-            WarEventHelper.openActionModifyPanel(fullData, WarEventHelper.getAction(fullData, openData.actionId));
+            const war       = openData.war;
+            const fullData  = war.getWarEventManager().getWarEventFullData();
+            WarEventHelper.openActionModifyPanel(war, fullData, WarEventHelper.getAction(fullData, openData.actionId));
         }
         private _onTouchedBtnReplaceAction(e: egret.TouchEvent): void {
             // TODO

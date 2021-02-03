@@ -1287,12 +1287,12 @@ namespace TinyWars.WarEvent.WarEventHelper {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // action types
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function openActionModifyPanel(fullData: IWarEventFullData, action: IWarEventAction): void {
+    export function openActionModifyPanel(war: BaseWar.BwWar, fullData: IWarEventFullData, action: IWarEventAction): void {
         // TODO handle more action types.
         WeActionModifyPanel1.hide();
 
         if (action.WarEventActionAddUnit) {
-            WeActionModifyPanel1.show({ fullData, action });
+            WeActionModifyPanel1.show({ war, fullData, action });
         } else {
             Logger.error(`WarEventHelper.openActionModifyPanel() invalid condition.`);
         }
