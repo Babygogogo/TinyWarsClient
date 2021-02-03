@@ -910,6 +910,26 @@ namespace TinyWars.Utility.Lang {
             `此动作包含的部队的数量不合法`,
             `The total number of the units is invalid.`,
         ],
+        [Type.A0192]: [
+            `未设置是否会被其他部队阻挡`,
+            `'CanBeBlockedByUnit' has not been set.`,
+        ],
+        [Type.A0193]: [
+            `未设置是否自动寻找有效地形`,
+            `'NeedMovableTile' has not been set.`,
+        ],
+        [Type.A0194]: [
+            `部队行动状态不合法`,
+            `The action state is invalid.`,
+        ],
+        [Type.A0195]: [
+            `部队类型不合法`,
+            `The unit type is invalid.`,
+        ],
+        [Type.A0196]: [
+            `建造材料数值不合法`,
+            `The unit's build material is invalid.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
