@@ -85,6 +85,7 @@ namespace TinyWars.WarEvent {
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
+            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
         }
         private _onFocusOutInputPlayerIndex(e: egret.FocusEvent): void {
             const value = parseInt(this._inputPlayerIndex.text);
@@ -95,6 +96,7 @@ namespace TinyWars.WarEvent {
                 data.valueGreaterThan = value;
                 this._updateLabelDescAndLabelError();
                 this._updateInputPlayerIndex();
+                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
 

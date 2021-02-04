@@ -88,6 +88,7 @@ namespace TinyWars.WarEvent {
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
+            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
         }
         private _onTouchedBtnTurnEvent(e: egret.TouchEvent): void {
             const openData              = this._getOpenData<OpenDataForWeConditionModifyPanel11>();
@@ -98,6 +99,7 @@ namespace TinyWars.WarEvent {
 
             this._updateLabelDescAndLabelError();
             this._updateLabelEvent();
+            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
         }
         private _onFocusOutInputCalledCount(e: egret.FocusEvent): void {
             const value = parseInt(this._inputCalledCount.text);
@@ -108,6 +110,7 @@ namespace TinyWars.WarEvent {
                 data.countLessThan = value;
                 this._updateLabelDescAndLabelError();
                 this._updateInputCalledCount();
+                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
 

@@ -912,23 +912,11 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.A0192]: [
             `未设置是否会被其他部队阻挡`,
-            `'CanBeBlockedByUnit' has not been set.`,
+            `'Blockable By Unit' has not been set.`,
         ],
         [Type.A0193]: [
             `未设置是否自动寻找有效地形`,
             `'NeedMovableTile' has not been set.`,
-        ],
-        [Type.A0194]: [
-            `部队行动状态不合法`,
-            `The action state is invalid.`,
-        ],
-        [Type.A0195]: [
-            `部队类型不合法`,
-            `The unit type is invalid.`,
-        ],
-        [Type.A0196]: [
-            `建造材料数值不合法`,
-            `The unit's build material is invalid.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3018,6 +3006,38 @@ namespace TinyWars.Utility.Lang {
             `部队总数`,
             `Total number of the units`,
         ],
+        [Type.B0525]: [
+            `部队类型`,
+            `Unit Type`,
+        ],
+        [Type.B0526]: [
+            `行动状态`,
+            `Action State`,
+        ],
+        [Type.B0527]: [
+            `部队ID`,
+            `Unit ID`,
+        ],
+        [Type.B0528]: [
+            `装载部队ID`,
+            `Loader ID`,
+        ],
+        [Type.B0529]: [
+            `建筑中`,
+            `Building`,
+        ],
+        [Type.B0530]: [
+            `占领中`,
+            `Capturing`,
+        ],
+        [Type.B0531]: [
+            `坐标`,
+            `Coordinate`,
+        ],
+        [Type.B0532]: [
+            `是否会被部队阻挡`,
+            `Blockable By Unit`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3520,6 +3540,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0063]: [
             `已删除%d个节点、%d个条件和%d个动作。`,
             `%d nodes, %d conditions and %d actions have been deleted.`,
+        ],
+        [Type.F0064]: [
+            `%s无效`,
+            `The %s is invalid.`,
         ],
     };
 

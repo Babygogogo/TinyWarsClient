@@ -74,7 +74,7 @@ namespace TinyWars.Utility.GridIndexHelpers {
         return (g1.x === g2.x) && (g1.y === g2.y);
     }
 
-    export function checkIsInsideMap(g: GridIndex, mapSize: MapSize): boolean {
+    export function checkIsInsideMap(g: ProtoTypes.Structure.IGridIndex, mapSize: MapSize): boolean {
         const { x, y } = g;
         return (x >= 0) && (y >= 0) && (x < mapSize.width) && (y < mapSize.height);
     }

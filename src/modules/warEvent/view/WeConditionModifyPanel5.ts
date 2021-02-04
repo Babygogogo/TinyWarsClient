@@ -84,6 +84,7 @@ namespace TinyWars.WarEvent {
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDescAndLabelError();
+            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
         }
         private _onTouchedBtnTurnPhase(e: egret.TouchEvent): void {
             const data          = this._getCondition().WecTurnPhaseEqualTo;
@@ -95,6 +96,7 @@ namespace TinyWars.WarEvent {
             }
             this._updateLabelDescAndLabelError();
             this._updateLabelTurnPhase();
+            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
         }
 
         private _updateView(): void {

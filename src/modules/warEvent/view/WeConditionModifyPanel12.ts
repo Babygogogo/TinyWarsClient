@@ -88,6 +88,7 @@ namespace TinyWars.WarEvent {
             data.isNot  = !data.isNot;
             this._updateImgIsNot();
             this._updateLabelDesc();
+            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
         }
         private _onTouchedBtnAliveState(e: egret.TouchEvent): void {
             const data              = this._getCondition().WecPlayerAliveStateEqualTo;
@@ -101,6 +102,7 @@ namespace TinyWars.WarEvent {
             }
             this._updateLabelDesc();
             this._updateLabelAliveState();
+            Notify.dispatch(Notify.Type.WarEventFullDataChanged);
         }
         private _onFocusOutInputPlayerIndex(e: egret.FocusEvent): void {
             const value = parseInt(this._inputPlayerIndex.text);
@@ -111,6 +113,7 @@ namespace TinyWars.WarEvent {
                 data.playerIndexEqualTo = value;
                 this._updateLabelDesc();
                 this._updateInputPlayerIndex();
+                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
 

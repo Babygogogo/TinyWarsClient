@@ -1007,6 +1007,18 @@ namespace TinyWars.BaseWar.BwHelpers {
             return false;
         }
 
+        if ((unitData.isCapturingTile) && (!cfg.canCaptureTile)) {
+            return false;
+        }
+
+        const actionState = unitData.actionState;
+        if ((actionState != null)                           &&
+            (actionState !== Types.UnitActionState.Idle)    &&
+            (actionState !== Types.UnitActionState.Acted)
+        ) {
+            return false;
+        }
+
         return true;
     }
 }
