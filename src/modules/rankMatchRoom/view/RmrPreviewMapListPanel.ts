@@ -38,9 +38,9 @@ namespace TinyWars.RankMatchRoom {
 
             RmrPreviewMapListPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RmrPreviewMapListPanel._instance) {
-                RmrPreviewMapListPanel._instance.close();
+                await RmrPreviewMapListPanel._instance.close();
             }
         }
         public static getInstance(): RmrPreviewMapListPanel {

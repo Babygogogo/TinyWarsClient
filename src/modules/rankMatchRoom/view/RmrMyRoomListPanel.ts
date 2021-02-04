@@ -36,9 +36,9 @@ namespace TinyWars.RankMatchRoom {
             }
             RmrMyRoomListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RmrMyRoomListPanel._instance) {
-                RmrMyRoomListPanel._instance.close();
+                await RmrMyRoomListPanel._instance.close();
             }
         }
 

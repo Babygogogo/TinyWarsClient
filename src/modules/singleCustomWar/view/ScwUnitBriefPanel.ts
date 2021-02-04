@@ -32,9 +32,9 @@ namespace TinyWars.SingleCustomWar {
             }
             ScwUnitBriefPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScwUnitBriefPanel._instance) {
-                ScwUnitBriefPanel._instance.close();
+                await ScwUnitBriefPanel._instance.close();
             }
         }
         public static getInstance(): ScwUnitBriefPanel {

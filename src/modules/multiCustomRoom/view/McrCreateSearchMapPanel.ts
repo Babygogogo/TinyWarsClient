@@ -39,9 +39,9 @@ namespace TinyWars.MultiCustomRoom {
             }
             McrCreateSearchMapPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrCreateSearchMapPanel._instance) {
-                McrCreateSearchMapPanel._instance.close();
+                await McrCreateSearchMapPanel._instance.close();
             }
         }
 
@@ -68,12 +68,12 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
-            McrCreateSearchMapPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
             McrCreateMapListPanel.getInstance().setMapFilters({});
-            McrCreateSearchMapPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnSearch(e: egret.TouchEvent): void {
@@ -86,7 +86,7 @@ namespace TinyWars.MultiCustomRoom {
                 mapTag      : this._mapTag,
             });
 
-            McrCreateSearchMapPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnTagFog(e: egret.TouchEvent): void {

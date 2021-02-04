@@ -31,9 +31,9 @@ namespace TinyWars.WarEvent {
             WeConditionTypeListPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (WeConditionTypeListPanel._instance) {
-                WeConditionTypeListPanel._instance.close();
+                await WeConditionTypeListPanel._instance.close();
             }
         }
 

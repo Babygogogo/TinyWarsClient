@@ -34,9 +34,9 @@ namespace TinyWars.SingleCustomRoom {
             }
             ScrContinueWarListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScrContinueWarListPanel._instance) {
-                ScrContinueWarListPanel._instance.close();
+                await ScrContinueWarListPanel._instance.close();
             }
         }
 
@@ -115,7 +115,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchTapBtnBack(): void {
-            ScrContinueWarListPanel.hide();
+            this.close();
             SinglePlayerLobby.SinglePlayerLobbyPanel.show();
         }
 

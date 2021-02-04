@@ -37,9 +37,9 @@ namespace TinyWars.RankMatchRoom {
             }
             RmrMyWarListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RmrMyWarListPanel._instance) {
-                RmrMyWarListPanel._instance.close();
+                await RmrMyWarListPanel._instance.close();
             }
         }
 
@@ -242,7 +242,7 @@ namespace TinyWars.RankMatchRoom {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
-            RmrMyWarListPanel.hide();
+            data.panel.close();
             RmrWarInfoPanel.show({ warInfo: data.warInfo });
         }
         private _onTouchedBtnFight(e: egret.Event): void {

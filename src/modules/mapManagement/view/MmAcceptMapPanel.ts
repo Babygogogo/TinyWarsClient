@@ -38,9 +38,9 @@ namespace TinyWars.MapManagement {
             MmAcceptMapPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmAcceptMapPanel._instance) {
-                MmAcceptMapPanel._instance.close();
+                await MmAcceptMapPanel._instance.close();
             }
         }
 
@@ -78,7 +78,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            MmAcceptMapPanel.hide();
+            this.close();
         }
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             const war = MapEditor.MeManager.getWar();

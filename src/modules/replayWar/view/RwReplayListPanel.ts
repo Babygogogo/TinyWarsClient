@@ -45,9 +45,9 @@ namespace TinyWars.ReplayWar {
             }
             RwReplayListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwReplayListPanel._instance) {
-                RwReplayListPanel._instance.close();
+                await RwReplayListPanel._instance.close();
             }
         }
 
@@ -131,7 +131,7 @@ namespace TinyWars.ReplayWar {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            RwReplayListPanel.hide();
+            this.close();
             MultiCustomRoom.McrMainMenuPanel.show();
         }
 

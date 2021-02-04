@@ -25,9 +25,9 @@ namespace TinyWars.User {
             UserChangeDiscordIdPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (UserChangeDiscordIdPanel._instance) {
-                UserChangeDiscordIdPanel._instance.close();
+                await UserChangeDiscordIdPanel._instance.close();
             }
         }
 

@@ -32,9 +32,9 @@ namespace TinyWars.MapEditor {
             MeClearPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeClearPanel._instance) {
-                MeClearPanel._instance.close();
+                await MeClearPanel._instance.close();
             }
         }
 

@@ -25,9 +25,9 @@ namespace TinyWars.Broadcast {
             BroadcastPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (BroadcastPanel._instance) {
-                BroadcastPanel._instance.close();
+                await BroadcastPanel._instance.close();
             }
         }
 

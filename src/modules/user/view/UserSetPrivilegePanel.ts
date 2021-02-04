@@ -43,9 +43,9 @@ namespace TinyWars.User {
             UserSetPrivilegePanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (UserSetPrivilegePanel._instance) {
-                UserSetPrivilegePanel._instance.close();
+                await UserSetPrivilegePanel._instance.close();
             }
         }
 

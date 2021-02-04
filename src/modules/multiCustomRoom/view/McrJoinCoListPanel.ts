@@ -56,9 +56,9 @@ namespace TinyWars.MultiCustomRoom {
 
             McrJoinCoListPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrJoinCoListPanel._instance) {
-                McrJoinCoListPanel._instance.close();
+                await McrJoinCoListPanel._instance.close();
             }
         }
 
@@ -119,7 +119,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McrJoinCoListPanel.hide();
+            this.close();
             McrJoinSettingsPanel.show();
         }
 
@@ -287,9 +287,10 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            McrJoinCoListPanel.hide();
+            const data = this.data as DataForCoRenderer;
+            data.panel.close();
 
-            const cfg = (this.data as DataForCoRenderer).coBasicCfg;
+            const cfg = data.coBasicCfg;
             McrModel.Join.setCoId(cfg ? cfg.coId : null);
             McrJoinSettingsPanel.show();
         }

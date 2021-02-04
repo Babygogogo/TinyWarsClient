@@ -29,9 +29,9 @@ namespace TinyWars.MultiCustomRoom {
             }
             McrWatchMakeRequestDetailPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrWatchMakeRequestDetailPanel._instance) {
-                McrWatchMakeRequestDetailPanel._instance.close();
+                await McrWatchMakeRequestDetailPanel._instance.close();
             }
         }
 

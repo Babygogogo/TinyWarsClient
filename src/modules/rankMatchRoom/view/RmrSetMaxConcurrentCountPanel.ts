@@ -32,9 +32,9 @@ namespace TinyWars.RankMatchRoom {
             RmrSetMaxConcurrentCountPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RmrSetMaxConcurrentCountPanel._instance) {
-                RmrSetMaxConcurrentCountPanel._instance.close();
+                await RmrSetMaxConcurrentCountPanel._instance.close();
             }
         }
 

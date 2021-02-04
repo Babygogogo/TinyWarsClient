@@ -55,9 +55,9 @@ namespace TinyWars.ReplayWar {
 
             RwCoListPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwCoListPanel._instance) {
-                RwCoListPanel._instance.close();
+                await RwCoListPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {

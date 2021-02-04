@@ -21,9 +21,9 @@ namespace TinyWars.MultiCustomRoom {
             McrWatchMainMenuPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrWatchMainMenuPanel._instance) {
-                McrWatchMainMenuPanel._instance.close();
+                await McrWatchMainMenuPanel._instance.close();
             }
         }
 
@@ -55,12 +55,12 @@ namespace TinyWars.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            McrWatchMainMenuPanel.hide();
+            this.close();
             McrMainMenuPanel.show();
         }
 
         private _onMsgUserLogout(e: egret.Event): void {
-            McrWatchMainMenuPanel.hide();
+            this.close();
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateView();
@@ -80,14 +80,14 @@ namespace TinyWars.MultiCustomRoom {
                 {
                     name    : Lang.getText(Lang.Type.B0207),
                     callback: (): void => {
-                        McrWatchMainMenuPanel.hide();
+                        this.close();
                         McrWatchMakeRequestWarsPanel.show();
                     },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0208),
                     callback: (): void => {
-                        McrWatchMainMenuPanel.hide();
+                        this.close();
                         McrWatchHandleRequestWarsPanel.show();
                     },
                     redChecker  : () => {
@@ -98,14 +98,14 @@ namespace TinyWars.MultiCustomRoom {
                 {
                     name    : Lang.getText(Lang.Type.B0219),
                     callback: (): void => {
-                        McrWatchMainMenuPanel.hide();
+                        this.close();
                         McrWatchDeleteWatcherWarsPanel.show();
                     },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0222),
                     callback: (): void => {
-                        McrWatchMainMenuPanel.hide();
+                        this.close();
                         McrWatchOngoingWarsPanel.show();
                     },
                 },

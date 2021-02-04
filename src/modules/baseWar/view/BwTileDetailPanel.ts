@@ -36,9 +36,9 @@ namespace TinyWars.BaseWar {
             }
             BwTileDetailPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (BwTileDetailPanel._instance) {
-                BwTileDetailPanel._instance.close();
+                await BwTileDetailPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {

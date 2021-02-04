@@ -21,9 +21,9 @@ namespace TinyWars.SinglePlayerLobby {
             SinglePlayerLobbyPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (SinglePlayerLobbyPanel._instance) {
-                SinglePlayerLobbyPanel._instance.close();
+                await SinglePlayerLobbyPanel._instance.close();
             }
         }
 
@@ -56,7 +56,7 @@ namespace TinyWars.SinglePlayerLobby {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onMsgUserLogout(e: egret.Event): void {
-            SinglePlayerLobbyPanel.hide();
+            this.close();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

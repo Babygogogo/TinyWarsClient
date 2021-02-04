@@ -32,9 +32,9 @@ namespace TinyWars.MapManagement {
             }
             MmReviewListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmReviewListPanel._instance) {
-                MmReviewListPanel._instance.close();
+                await MmReviewListPanel._instance.close();
             }
         }
 

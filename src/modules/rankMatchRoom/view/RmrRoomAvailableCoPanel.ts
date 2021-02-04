@@ -41,9 +41,9 @@ namespace TinyWars.RankMatchRoom {
             RmrRoomAvailableCoPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RmrRoomAvailableCoPanel._instance) {
-                RmrRoomAvailableCoPanel._instance.close();
+                await RmrRoomAvailableCoPanel._instance.close();
             }
         }
 

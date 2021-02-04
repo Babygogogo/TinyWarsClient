@@ -27,9 +27,9 @@ namespace TinyWars.MapEditor {
             MeAddWarEventToRulePanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeAddWarEventToRulePanel._instance) {
-                MeAddWarEventToRulePanel._instance.close();
+                await MeAddWarEventToRulePanel._instance.close();
             }
         }
 

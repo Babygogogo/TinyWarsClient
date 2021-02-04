@@ -33,9 +33,9 @@ namespace TinyWars.Login {
             LoginPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (LoginPanel._instance) {
-                LoginPanel._instance.close();
+                await LoginPanel._instance.close();
             }
         }
 

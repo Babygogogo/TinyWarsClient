@@ -22,9 +22,9 @@ namespace TinyWars.Login {
             LoginBackgroundPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (LoginBackgroundPanel._instance) {
-                LoginBackgroundPanel._instance.close();
+                await LoginBackgroundPanel._instance.close();
             }
         }
 

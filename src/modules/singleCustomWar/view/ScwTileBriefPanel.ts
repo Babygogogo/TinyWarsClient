@@ -43,9 +43,9 @@ namespace TinyWars.SingleCustomWar {
             }
             ScwTileBriefPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScwTileBriefPanel._instance) {
-                ScwTileBriefPanel._instance.close();
+                await ScwTileBriefPanel._instance.close();
             }
         }
         public static getInstance(): ScwTileBriefPanel {

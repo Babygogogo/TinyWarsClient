@@ -60,7 +60,7 @@ namespace TinyWars.WarEvent {
             WeCommandPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (WeCommandPanel._instance) {
                 WeCommandPanel._instance.close();
             }

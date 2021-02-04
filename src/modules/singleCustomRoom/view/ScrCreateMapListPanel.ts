@@ -44,9 +44,9 @@ namespace TinyWars.SingleCustomRoom {
 
             ScrCreateMapListPanel._instance.open(mapFilters);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScrCreateMapListPanel._instance) {
-                ScrCreateMapListPanel._instance.close();
+                await ScrCreateMapListPanel._instance.close();
             }
         }
         public static getInstance(): ScrCreateMapListPanel {
@@ -239,9 +239,10 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            ScrCreateMapListPanel.hide();
+            const data = this.data as DataForMapNameRenderer;
+            data.panel.close();
 
-            await ScrModel.resetCreateWarDataByMapId((this.data as DataForMapNameRenderer).mapId);
+            await ScrModel.resetCreateWarDataByMapId(data.mapId);
             ScrCreateSettingsPanel.show();
         }
     }

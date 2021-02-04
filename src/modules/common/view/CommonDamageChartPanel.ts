@@ -48,9 +48,9 @@ namespace TinyWars.Common {
             }
             CommonDamageChartPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (CommonDamageChartPanel._instance) {
-                CommonDamageChartPanel._instance.close();
+                await CommonDamageChartPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {

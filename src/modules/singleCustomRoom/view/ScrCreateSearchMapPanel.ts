@@ -34,9 +34,9 @@ namespace TinyWars.SingleCustomRoom {
             }
             ScrCreateSearchMapPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScrCreateSearchMapPanel._instance) {
-                ScrCreateSearchMapPanel._instance.close();
+                await ScrCreateSearchMapPanel._instance.close();
             }
         }
 
@@ -62,7 +62,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
-            ScrCreateSearchMapPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
@@ -79,7 +79,7 @@ namespace TinyWars.SingleCustomRoom {
                 minRating   : Number(this._inputMinRating.text) || null,
             });
 
-            ScrCreateSearchMapPanel.hide();
+            this.close();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

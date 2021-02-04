@@ -30,9 +30,9 @@ namespace TinyWars.Common {
             CommonConfirmPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (CommonConfirmPanel._instance) {
-                CommonConfirmPanel._instance.close();
+                await CommonConfirmPanel._instance.close();
             }
         }
 

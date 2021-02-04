@@ -32,9 +32,9 @@ namespace TinyWars.MapEditor {
             }
             MeUnitBriefPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeUnitBriefPanel._instance) {
-                MeUnitBriefPanel._instance.close();
+                await MeUnitBriefPanel._instance.close();
             }
         }
         public static getInstance(): MeUnitBriefPanel {

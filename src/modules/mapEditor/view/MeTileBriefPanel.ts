@@ -41,9 +41,9 @@ namespace TinyWars.MapEditor {
             }
             MeTileBriefPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeTileBriefPanel._instance) {
-                MeTileBriefPanel._instance.close();
+                await MeTileBriefPanel._instance.close();
             }
         }
         public static getInstance(): MeTileBriefPanel {

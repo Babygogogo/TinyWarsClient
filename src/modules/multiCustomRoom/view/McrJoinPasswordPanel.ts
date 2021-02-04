@@ -29,9 +29,9 @@ namespace TinyWars.MultiCustomRoom {
             }
             McrJoinPasswordPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrJoinPasswordPanel._instance) {
-                McrJoinPasswordPanel._instance.close();
+                await McrJoinPasswordPanel._instance.close();
             }
         }
 
@@ -62,7 +62,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            McrJoinPasswordPanel.hide();
+            this.close();
         }
 
         private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {

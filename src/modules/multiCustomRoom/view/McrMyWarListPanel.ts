@@ -39,9 +39,9 @@ namespace TinyWars.MultiCustomRoom {
             }
             McrMyWarListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrMyWarListPanel._instance) {
-                McrMyWarListPanel._instance.close();
+                await McrMyWarListPanel._instance.close();
             }
         }
 

@@ -46,9 +46,9 @@ namespace TinyWars.BaseWar {
             }
             BwUnitDetailPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (BwUnitDetailPanel._instance) {
-                BwUnitDetailPanel._instance.close();
+                await BwUnitDetailPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {

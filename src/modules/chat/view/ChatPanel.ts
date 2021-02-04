@@ -45,9 +45,9 @@ namespace TinyWars.Chat {
             }
             ChatPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ChatPanel._instance) {
-                ChatPanel._instance.close();
+                await ChatPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {

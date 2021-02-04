@@ -36,9 +36,9 @@ namespace TinyWars.ChangeLog {
             ChangeLogModifyPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ChangeLogModifyPanel._instance) {
-                ChangeLogModifyPanel._instance.close();
+                await ChangeLogModifyPanel._instance.close();
             }
         }
 

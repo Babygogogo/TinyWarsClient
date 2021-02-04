@@ -44,9 +44,9 @@ namespace TinyWars.MapManagement {
             MmAvailabilityChangePanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmAvailabilityChangePanel._instance) {
-                MmAvailabilityChangePanel._instance.close();
+                await MmAvailabilityChangePanel._instance.close();
             }
         }
 

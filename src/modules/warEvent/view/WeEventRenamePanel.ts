@@ -36,9 +36,9 @@ namespace TinyWars.WarEvent {
             WeEventRenamePanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (WeEventRenamePanel._instance) {
-                WeEventRenamePanel._instance.close();
+                await WeEventRenamePanel._instance.close();
             }
         }
 

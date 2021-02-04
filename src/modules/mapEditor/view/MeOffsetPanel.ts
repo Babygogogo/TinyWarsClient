@@ -28,9 +28,9 @@ namespace TinyWars.MapEditor {
             MeOffsetPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeOffsetPanel._instance) {
-                MeOffsetPanel._instance.close();
+                await MeOffsetPanel._instance.close();
             }
         }
 

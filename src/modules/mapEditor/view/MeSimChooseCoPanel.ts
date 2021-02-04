@@ -57,9 +57,9 @@ namespace TinyWars.MapEditor {
 
             MeSimChooseCoPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeSimChooseCoPanel._instance) {
-                MeSimChooseCoPanel._instance.close();
+                await MeSimChooseCoPanel._instance.close();
             }
         }
 

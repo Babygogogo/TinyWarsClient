@@ -33,9 +33,9 @@ namespace TinyWars.ReplayWar {
             }
             RwProduceUnitPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwProduceUnitPanel._instance) {
-                RwProduceUnitPanel._instance.close();
+                await RwProduceUnitPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {

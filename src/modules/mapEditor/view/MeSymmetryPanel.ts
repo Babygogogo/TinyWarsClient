@@ -56,9 +56,9 @@ namespace TinyWars.MapEditor {
             MeSymmetryPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeSymmetryPanel._instance) {
-                MeSymmetryPanel._instance.close();
+                await MeSymmetryPanel._instance.close();
             }
         }
 

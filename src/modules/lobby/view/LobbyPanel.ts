@@ -28,9 +28,9 @@ namespace TinyWars.Lobby {
             LobbyPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (LobbyPanel._instance) {
-                LobbyPanel._instance.close();
+                await LobbyPanel._instance.close();
             }
         }
 
@@ -173,7 +173,7 @@ namespace TinyWars.Lobby {
                 dataList.push({
                     name    : Lang.getText(Lang.Type.B0192),
                     callback: (): void => {
-                        LobbyPanel.hide();
+                        this.close();
                         MapManagement.MmMainMenuPanel.show();
                     },
                 });

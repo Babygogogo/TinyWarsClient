@@ -29,9 +29,9 @@ namespace TinyWars.Common {
             }
             CommonRankListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (CommonRankListPanel._instance) {
-                CommonRankListPanel._instance.close();
+                await CommonRankListPanel._instance.close();
             }
         }
 

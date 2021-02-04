@@ -13,9 +13,9 @@ namespace TinyWars.SingleCustomWar {
             ScwWarPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScwWarPanel._instance) {
-                ScwWarPanel._instance.close();
+                await ScwWarPanel._instance.close();
             }
         }
 

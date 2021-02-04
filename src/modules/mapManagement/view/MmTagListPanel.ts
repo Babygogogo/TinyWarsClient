@@ -37,9 +37,9 @@ namespace TinyWars.MapManagement {
 
             MmTagListPanel._instance.open(mapFilters);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmTagListPanel._instance) {
-                MmTagListPanel._instance.close();
+                await MmTagListPanel._instance.close();
             }
         }
         public static getInstance(): MmTagListPanel {
@@ -122,7 +122,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            MmTagListPanel.hide();
+            this.close();
             MmMainMenuPanel.show();
         }
 

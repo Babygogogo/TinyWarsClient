@@ -58,9 +58,9 @@ namespace TinyWars.SingleCustomWar {
 
             ScwChooseCoPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScwChooseCoPanel._instance) {
-                ScwChooseCoPanel._instance.close();
+                await ScwChooseCoPanel._instance.close();
             }
         }
 

@@ -17,9 +17,11 @@ namespace TinyWars.GameUi {
         private _isSkinLoaded           = false;
         private _isOpening              = false;
 
+        private _isRunningClose         = false;
+        private _cachedOpenFunc         : (() => void) | undefined;
+
         private _uiListenerArray        : UiListener[];
         private _notifyListenerArray    : Utility.Notify.Listener[];
-        private _notifyPriority         = 0;
 
         private _isAutoAdjustHeight     = false;
         private _isTouchMaskEnabled     = false;
@@ -68,6 +70,17 @@ namespace TinyWars.GameUi {
         // Functions for open self.
         ////////////////////////////////////////////////////////////////////////////////
         public open(openData: any): void {
+            if (this.getIsOpening()) {
+                Logger.log(`%cUiPanel.open() is called when it is opening already: ${this.skinName}`, `background:#FFDDDD;`);
+                return;
+            }
+
+            if (this._getIsRunningClose()) {
+                Logger.log(`%cUiPanel.open() is called when it is running close: ${this.skinName}`, `background:#FFDDDD;`);
+                this._setCachedOpenFunc(() => this.open(openData));
+                return;
+            }
+
             this._setOpenData(openData);
 
             const layer = Utility.StageManager.getLayer(this._LAYER_TYPE);
@@ -116,15 +129,41 @@ namespace TinyWars.GameUi {
             this._isOpening = opening;
         }
 
+        private _setCachedOpenFunc(func: (() => void) | undefined): void {
+            this._cachedOpenFunc = func;
+        }
+        private _getCachedOpenFunc(): (() => void) | undefined {
+            return this._cachedOpenFunc;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for close self.
         ////////////////////////////////////////////////////////////////////////////////
         public async close(): Promise<void> {
+            if (!this.getIsOpening()) {
+                return;
+            }
+
+            this._setCachedOpenFunc(undefined);
+
+            if (this._getIsRunningClose()) {
+                return;
+            }
+            this._setIsRunningClose(true);
+
             await this._doClose();
-
             (this.parent) && (this.parent.removeChild(this));
-
             this._setOpenData(undefined);
+
+            this._setIsRunningClose(false);
+
+            const func = this._getCachedOpenFunc();
+            if (func) {
+                this._setCachedOpenFunc(undefined);
+
+                Logger.log(`%cUiPanel.close() calling cached open func: ${this.skinName}`, `background:#FFDDDD;`);
+                func();
+            }
         }
 
         private async _doClose(): Promise<void> {
@@ -140,6 +179,13 @@ namespace TinyWars.GameUi {
         }
 
         protected async _onClosed(): Promise<void> {}
+
+        private _getIsRunningClose(): boolean {
+            return this._isRunningClose;
+        }
+        private _setIsRunningClose(isRunning: boolean): void {
+            this._isRunningClose = isRunning;
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Auto adjust height.

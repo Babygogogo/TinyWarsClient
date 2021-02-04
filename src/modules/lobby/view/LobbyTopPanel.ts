@@ -21,9 +21,9 @@ namespace TinyWars.Lobby {
             LobbyTopPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (LobbyTopPanel._instance) {
-                LobbyTopPanel._instance.close();
+                await LobbyTopPanel._instance.close();
             }
         }
 
@@ -62,7 +62,7 @@ namespace TinyWars.Lobby {
         }
 
         private _onMsgUserLogout(e: egret.Event): void {
-            LobbyTopPanel.hide();
+            this.close();
         }
 
         private _onMsgUserSetNickname(e: egret.Event): void {

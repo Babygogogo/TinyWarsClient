@@ -25,9 +25,9 @@ namespace TinyWars.ChangeLog {
             ChangeLogPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ChangeLogPanel._instance) {
-                ChangeLogPanel._instance.close();
+                await ChangeLogPanel._instance.close();
             }
         }
 

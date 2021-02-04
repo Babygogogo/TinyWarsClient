@@ -28,9 +28,9 @@ namespace TinyWars.User {
             UserSetPasswordPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (UserSetPasswordPanel._instance) {
-                UserSetPasswordPanel._instance.close();
+                await UserSetPasswordPanel._instance.close();
             }
         }
 

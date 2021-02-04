@@ -45,9 +45,9 @@ namespace TinyWars.MapManagement {
 
             MmAvailabilityListPanel._instance.open(mapFilters);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmAvailabilityListPanel._instance) {
-                MmAvailabilityListPanel._instance.close();
+                await MmAvailabilityListPanel._instance.close();
             }
         }
         public static getInstance(): MmAvailabilityListPanel {
@@ -135,7 +135,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            MmAvailabilityListPanel.hide();
+            this.close();
             MmMainMenuPanel.show();
         }
 

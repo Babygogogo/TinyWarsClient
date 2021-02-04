@@ -52,9 +52,9 @@ namespace TinyWars.SingleCustomWar {
             }
             ScwWarMenuPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScwWarMenuPanel._instance) {
-                ScwWarMenuPanel._instance.close();
+                await ScwWarMenuPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -311,7 +311,7 @@ namespace TinyWars.SingleCustomWar {
                 name    : Lang.getText(Lang.Type.B0140),
                 callback: () => {
                     ScwCoListPanel.show({ selectedIndex: this._war.getPlayerIndexInTurn() - 1 });
-                    ScwWarMenuPanel.hide();
+                    this.close();
                 },
             };
         }

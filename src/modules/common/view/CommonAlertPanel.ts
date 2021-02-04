@@ -28,9 +28,9 @@ namespace TinyWars.Common {
             CommonAlertPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (CommonAlertPanel._instance) {
-                CommonAlertPanel._instance.close();
+                await CommonAlertPanel._instance.close();
             }
         }
 

@@ -40,9 +40,9 @@ namespace TinyWars.ReplayWar {
             }
             RwTileBriefPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwTileBriefPanel._instance) {
-                RwTileBriefPanel._instance.close();
+                await RwTileBriefPanel._instance.close();
             }
         }
         public static getInstance(): RwTileBriefPanel {

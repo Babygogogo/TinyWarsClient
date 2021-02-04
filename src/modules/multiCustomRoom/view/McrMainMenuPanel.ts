@@ -21,9 +21,9 @@ namespace TinyWars.MultiCustomRoom {
             McrMainMenuPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrMainMenuPanel._instance) {
-                McrMainMenuPanel._instance.close();
+                await McrMainMenuPanel._instance.close();
             }
         }
 

@@ -27,9 +27,9 @@ namespace TinyWars.MultiCustomRoom {
             }
             McrJoinSettingsPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrJoinSettingsPanel._instance) {
-                McrJoinSettingsPanel._instance.close();
+                await McrJoinSettingsPanel._instance.close();
             }
         }
 
@@ -74,7 +74,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            McrJoinSettingsPanel.hide();
+            this.close();
             McrJoinRoomListPanel.show();
         }
 

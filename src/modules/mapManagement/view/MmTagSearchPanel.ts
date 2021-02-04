@@ -32,9 +32,9 @@ namespace TinyWars.MapManagement {
             }
             MmTagSearchPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmTagSearchPanel._instance) {
-                MmTagSearchPanel._instance.close();
+                await MmTagSearchPanel._instance.close();
             }
         }
 
@@ -62,12 +62,12 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
-            MmTagSearchPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
             MmTagListPanel.getInstance().setMapFilters({});
-            MmTagSearchPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnSearch(e: egret.TouchEvent): void {
@@ -79,7 +79,7 @@ namespace TinyWars.MapManagement {
                 minRating   : Number(this._inputMinRating.text) || null,
             });
 
-            MmTagSearchPanel.hide();
+            this.close();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

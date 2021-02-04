@@ -54,9 +54,9 @@ namespace TinyWars.SingleCustomRoom {
 
             ScrCreateCoListPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScrCreateCoListPanel._instance) {
-                ScrCreateCoListPanel._instance.close();
+                await ScrCreateCoListPanel._instance.close();
             }
         }
 
@@ -289,9 +289,9 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            ScrCreateCoListPanel.hide();
+            const data = this.data as DataForCoRenderer;
+            data.panel.close();
 
-            const data  = this.data as DataForCoRenderer;
             const cfg   = data.coBasicCfg;
             ScrModel.setCreateWarCoId(data.dataIndexForCreateWarPlayerList, cfg ? cfg.coId : null);
             ScrCreateSettingsPanel.show();

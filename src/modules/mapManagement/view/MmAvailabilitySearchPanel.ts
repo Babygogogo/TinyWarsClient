@@ -34,9 +34,9 @@ namespace TinyWars.MapManagement {
             }
             MmAvailabilitySearchPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmAvailabilitySearchPanel._instance) {
-                MmAvailabilitySearchPanel._instance.close();
+                await MmAvailabilitySearchPanel._instance.close();
             }
         }
 
@@ -64,12 +64,12 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
-            MmAvailabilitySearchPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
             MmAvailabilityListPanel.getInstance().setMapFilters({});
-            MmAvailabilitySearchPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnSearch(e: egret.TouchEvent): void {
@@ -81,7 +81,7 @@ namespace TinyWars.MapManagement {
                 minRating   : Number(this._inputMinRating.text) || null,
             });
 
-            MmAvailabilitySearchPanel.hide();
+            this.close();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

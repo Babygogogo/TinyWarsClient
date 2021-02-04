@@ -48,9 +48,9 @@ namespace TinyWars.MultiCustomRoom {
 
             McrCreateMapListPanel._instance.open(mapFilters);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrCreateMapListPanel._instance) {
-                McrCreateMapListPanel._instance.close();
+                await McrCreateMapListPanel._instance.close();
             }
         }
         public static getInstance(): McrCreateMapListPanel {
@@ -135,7 +135,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McrCreateMapListPanel.hide();
+            this.close();
             McrMainMenuPanel.show();
         }
 
@@ -249,9 +249,9 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            McrCreateMapListPanel.hide();
-
-            await McrModel.Create.resetDataByMapId((this.data as DataForMapNameRenderer).mapId);
+            const data = this.data as DataForMapNameRenderer;
+            data.panel.close();
+            await McrModel.Create.resetDataByMapId(data.mapId);
             McrCreateSettingsPanel.show();
         }
     }

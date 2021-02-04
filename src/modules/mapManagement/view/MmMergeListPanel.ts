@@ -38,7 +38,7 @@
 
 //             MmMergeListPanel._instance.open();
 //         }
-//         public static hide(): void {
+//         public static async hide(): Promise<void> {
 //             if (MmMergeListPanel._instance) {
 //                 MmMergeListPanel._instance.close();
 //             }

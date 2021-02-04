@@ -32,9 +32,9 @@ namespace TinyWars.Common {
             CommonInputPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (CommonInputPanel._instance) {
-                CommonInputPanel._instance.close();
+                await CommonInputPanel._instance.close();
             }
         }
 

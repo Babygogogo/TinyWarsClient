@@ -32,9 +32,9 @@ namespace TinyWars.MapManagement {
             MmTagChangePanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmTagChangePanel._instance) {
-                MmTagChangePanel._instance.close();
+                await MmTagChangePanel._instance.close();
             }
         }
 

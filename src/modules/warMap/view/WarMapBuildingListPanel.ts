@@ -28,9 +28,9 @@ namespace TinyWars.WarMap {
             WarMapBuildingListPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (WarMapBuildingListPanel._instance) {
-                WarMapBuildingListPanel._instance.close();
+                await WarMapBuildingListPanel._instance.close();
             }
         }
 

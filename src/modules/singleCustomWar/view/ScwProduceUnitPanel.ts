@@ -33,9 +33,9 @@ namespace TinyWars.SingleCustomWar {
             }
             ScwProduceUnitPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScwProduceUnitPanel._instance) {
-                ScwProduceUnitPanel._instance.close();
+                await ScwProduceUnitPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {

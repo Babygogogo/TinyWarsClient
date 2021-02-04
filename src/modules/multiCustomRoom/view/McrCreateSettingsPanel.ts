@@ -25,9 +25,9 @@ namespace TinyWars.MultiCustomRoom {
             }
             McrCreateSettingsPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrCreateSettingsPanel._instance) {
-                McrCreateSettingsPanel._instance.close();
+                await McrCreateSettingsPanel._instance.close();
             }
         }
 
@@ -70,7 +70,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            McrCreateSettingsPanel.hide();
+            this.close();
             McrCreateMapListPanel.show();
         }
 

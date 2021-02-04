@@ -34,9 +34,9 @@ namespace TinyWars.SingleCustomWar {
             }
             BwUnitListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (BwUnitListPanel._instance) {
-                BwUnitListPanel._instance.close();
+                await BwUnitListPanel._instance.close();
             }
         }
 

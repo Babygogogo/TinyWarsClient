@@ -51,9 +51,9 @@ namespace TinyWars.MapManagement {
             }
             MmWarRulePanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmWarRulePanel._instance) {
-                MmWarRulePanel._instance.close();
+                await MmWarRulePanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {

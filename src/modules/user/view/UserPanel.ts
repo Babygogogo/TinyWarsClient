@@ -65,9 +65,9 @@ namespace TinyWars.User {
             UserPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (UserPanel._instance) {
-                UserPanel._instance.close();
+                await UserPanel._instance.close();
             }
         }
 

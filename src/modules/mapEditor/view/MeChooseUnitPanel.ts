@@ -27,9 +27,9 @@ namespace TinyWars.MapEditor {
             }
             MeChooseUnitPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeChooseUnitPanel._instance) {
-                MeChooseUnitPanel._instance.close();
+                await MeChooseUnitPanel._instance.close();
             }
         }
 

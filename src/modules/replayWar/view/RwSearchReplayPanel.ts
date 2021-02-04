@@ -36,9 +36,9 @@ namespace TinyWars.ReplayWar {
             }
             RwSearchReplayPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwSearchReplayPanel._instance) {
-                RwSearchReplayPanel._instance.close();
+                await RwSearchReplayPanel._instance.close();
             }
         }
 

@@ -38,9 +38,9 @@ namespace TinyWars.MultiCustomRoom {
             }
             McrMyRoomListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrMyRoomListPanel._instance) {
-                McrMyRoomListPanel._instance.close();
+                await McrMyRoomListPanel._instance.close();
             }
         }
 
@@ -135,7 +135,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McrMyRoomListPanel.hide();
+            this.close();
             McrMainMenuPanel.show();
         }
 

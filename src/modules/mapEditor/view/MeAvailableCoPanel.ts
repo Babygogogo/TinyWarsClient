@@ -40,9 +40,9 @@ namespace TinyWars.MapEditor {
             MeAvailableCoPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeAvailableCoPanel._instance) {
-                MeAvailableCoPanel._instance.close();
+                await MeAvailableCoPanel._instance.close();
             }
         }
 

@@ -26,9 +26,9 @@ namespace TinyWars.RankMatchRoom {
             }
             RmrWarInfoPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RmrWarInfoPanel._instance) {
-                RmrWarInfoPanel._instance.close();
+                await RmrWarInfoPanel._instance.close();
             }
         }
 

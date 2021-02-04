@@ -23,9 +23,9 @@ namespace TinyWars.MapEditor {
             }
             MeSimSettingsPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeSimSettingsPanel._instance) {
-                MeSimSettingsPanel._instance.close();
+                await MeSimSettingsPanel._instance.close();
             }
         }
 

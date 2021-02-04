@@ -27,9 +27,9 @@ namespace TinyWars.SingleCustomRoom {
             }
             ScrCreateSettingsPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScrCreateSettingsPanel._instance) {
-                ScrCreateSettingsPanel._instance.close();
+                await ScrCreateSettingsPanel._instance.close();
             }
         }
 

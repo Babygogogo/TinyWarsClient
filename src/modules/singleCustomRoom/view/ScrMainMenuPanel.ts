@@ -19,9 +19,9 @@ namespace TinyWars.SingleCustomRoom {
             ScrMainMenuPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScrMainMenuPanel._instance) {
-                ScrMainMenuPanel._instance.close();
+                await ScrMainMenuPanel._instance.close();
             }
         }
 
@@ -55,7 +55,7 @@ namespace TinyWars.SingleCustomRoom {
             FlowManager.gotoLobby();
         }
         private _onMsgUserLogout(e: egret.Event): void {
-            ScrMainMenuPanel.hide();
+            this.close();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -66,7 +66,7 @@ namespace TinyWars.SingleCustomRoom {
                 {
                     name    : Lang.getText(Lang.Type.B0000),
                     callback: (): void => {
-                        ScrMainMenuPanel.hide();
+                        this.close();
                         SingleCustomRoom.ScrCreateMapListPanel.show();
                     },
                 },

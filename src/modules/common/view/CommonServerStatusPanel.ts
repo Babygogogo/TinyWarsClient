@@ -27,9 +27,9 @@ namespace TinyWars.Common {
             CommonServerStatusPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (CommonServerStatusPanel._instance) {
-                CommonServerStatusPanel._instance.close();
+                await CommonServerStatusPanel._instance.close();
             }
         }
 

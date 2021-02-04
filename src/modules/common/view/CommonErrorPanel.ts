@@ -24,9 +24,9 @@ namespace TinyWars.Common {
             CommonErrorPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (CommonErrorPanel._instance) {
-                CommonErrorPanel._instance.close();
+                await CommonErrorPanel._instance.close();
             }
         }
 

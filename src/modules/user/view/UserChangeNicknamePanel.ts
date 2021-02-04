@@ -25,9 +25,9 @@ namespace TinyWars.User {
             UserChangeNicknamePanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (UserChangeNicknamePanel._instance) {
-                UserChangeNicknamePanel._instance.close();
+                await UserChangeNicknamePanel._instance.close();
             }
         }
 

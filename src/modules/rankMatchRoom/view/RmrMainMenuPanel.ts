@@ -21,9 +21,9 @@ namespace TinyWars.RankMatchRoom {
             RmrMainMenuPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RmrMainMenuPanel._instance) {
-                RmrMainMenuPanel._instance.close();
+                await RmrMainMenuPanel._instance.close();
             }
         }
 
@@ -65,7 +65,7 @@ namespace TinyWars.RankMatchRoom {
             this._updateView();
         }
         private _onMsgUserLogout(e: egret.Event): void {
-            RmrMainMenuPanel.hide();
+            this.close();
         }
         private _onMsgRmrGetRoomPublicInfo(e: egret.Event): void {
             this._listCommand.refresh();

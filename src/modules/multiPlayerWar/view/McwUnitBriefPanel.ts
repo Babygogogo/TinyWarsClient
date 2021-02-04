@@ -31,9 +31,9 @@ namespace TinyWars.MultiPlayerWar {
             }
             McwUnitBriefPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McwUnitBriefPanel._instance) {
-                McwUnitBriefPanel._instance.close();
+                await McwUnitBriefPanel._instance.close();
             }
         }
         public static getInstance(): McwUnitBriefPanel {

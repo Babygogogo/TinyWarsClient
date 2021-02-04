@@ -39,9 +39,9 @@ namespace TinyWars.MultiCustomRoom {
             }
             McrWatchMakeRequestWarsPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrWatchMakeRequestWarsPanel._instance) {
-                McrWatchMakeRequestWarsPanel._instance.close();
+                await McrWatchMakeRequestWarsPanel._instance.close();
             }
         }
 
@@ -129,7 +129,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McrWatchMakeRequestWarsPanel.hide();
+            this.close();
             McrWatchMainMenuPanel.show()
         }
 

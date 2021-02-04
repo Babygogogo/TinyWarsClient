@@ -36,9 +36,9 @@ namespace TinyWars.MapManagement {
             MmWarRuleAvailableCoPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmWarRuleAvailableCoPanel._instance) {
-                MmWarRuleAvailableCoPanel._instance.close();
+                await MmWarRuleAvailableCoPanel._instance.close();
             }
         }
 

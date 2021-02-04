@@ -42,9 +42,9 @@ namespace TinyWars.WarEvent {
             WeConditionModifyPanel12._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (WeConditionModifyPanel12._instance) {
-                WeConditionModifyPanel12._instance.close();
+                await WeConditionModifyPanel12._instance.close();
             }
         }
 

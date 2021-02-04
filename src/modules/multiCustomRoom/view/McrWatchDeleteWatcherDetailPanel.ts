@@ -32,9 +32,9 @@ namespace TinyWars.MultiCustomRoom {
             }
             McrWatchDeleteWatcherDetailPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrWatchDeleteWatcherDetailPanel._instance) {
-                McrWatchDeleteWatcherDetailPanel._instance.close();
+                await McrWatchDeleteWatcherDetailPanel._instance.close();
             }
         }
 

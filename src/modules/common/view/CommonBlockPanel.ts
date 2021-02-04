@@ -21,9 +21,9 @@ namespace TinyWars.Common {
             CommonBlockPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (CommonBlockPanel._instance) {
-                CommonBlockPanel._instance.close();
+                await CommonBlockPanel._instance.close();
             }
         }
 

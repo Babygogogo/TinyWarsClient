@@ -29,9 +29,9 @@ namespace TinyWars.User {
             }
             UserOnlineUsersPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (UserOnlineUsersPanel._instance) {
-                UserOnlineUsersPanel._instance.close();
+                await UserOnlineUsersPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -145,6 +145,7 @@ namespace TinyWars.User {
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
             UserOnlineUsersPanel.hide();
+            UserPanel.hide();
             UserPanel.show({ userId: (this.data as DataForUserRenderer).userId });
         }
 

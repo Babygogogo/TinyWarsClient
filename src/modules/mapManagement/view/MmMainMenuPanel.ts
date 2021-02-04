@@ -22,9 +22,9 @@ namespace TinyWars.MapManagement {
             MmMainMenuPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmMainMenuPanel._instance) {
-                MmMainMenuPanel._instance.close();
+                await MmMainMenuPanel._instance.close();
             }
         }
 
@@ -62,7 +62,7 @@ namespace TinyWars.MapManagement {
             Lobby.LobbyPanel.show();
         }
         private _onMsgUserLogout(e: egret.Event): void {
-            MmMainMenuPanel.hide();
+            this.close();
         }
         private _onMsgMmReloadAllMaps(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0075));

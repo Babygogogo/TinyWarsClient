@@ -42,9 +42,9 @@ namespace TinyWars.MapEditor {
             MeTopPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeTopPanel._instance) {
-                MeTopPanel._instance.close();
+                await MeTopPanel._instance.close();
             }
         }
 

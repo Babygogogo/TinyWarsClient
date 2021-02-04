@@ -36,9 +36,9 @@ namespace TinyWars.MultiCustomRoom {
             McrCreateAvailableCoPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrCreateAvailableCoPanel._instance) {
-                McrCreateAvailableCoPanel._instance.close();
+                await McrCreateAvailableCoPanel._instance.close();
             }
         }
 
