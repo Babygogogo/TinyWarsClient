@@ -278,7 +278,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
                     canBeBlockedByUnit,
                     unitData,
                 } = data;
-                if ((needMovableTile == null) || (canBeBlockedByUnit) || (unitData == null)) {
+                if ((needMovableTile == null) || (canBeBlockedByUnit == null) || (unitData == null)) {
                     return false;
                 }
 
@@ -431,13 +431,9 @@ namespace TinyWars.WarEvent.WarEventHelper {
             }
         }
 
-        const usedConditionIdSet = new Set<number>(conditionIdArray);
-        if (usedConditionIdSet.size !== conditionIdArray.length) {
-            return false;
-        }
-
-        const usedNodeIdArray   = [currNodeId];
-        const usedNodeIdSet     = new Set<number>();
+        const usedNodeIdArray       = [currNodeId];
+        const usedNodeIdSet         = new Set<number>();
+        const usedConditionIdSet    = new Set<number>();
         for (let i = 0; i < usedNodeIdArray.length; ++i) {
             const nodeId = usedNodeIdArray[i];
             if (usedNodeIdSet.has(nodeId)) {
@@ -849,10 +845,9 @@ namespace TinyWars.WarEvent.WarEventHelper {
             return `${Lang.getText(Lang.Type.A0191)} (${unitsCount} / ${CommonConstants.WarEventActionAddUnitMaxCount})`;
         }
 
-        const mapSize               = war.getTileMap().getMapSize();
-        const configVersion         = war.getConfigVersion();
-        const playersCountUnneutral = (war.getField() as MapEditor.MeField).getMaxPlayerIndex();
-        const validator             = (v: ProtoTypes.WarEvent.WarEventActionAddUnit.IDataForAddUnit) => {
+        const mapSize       = war.getTileMap().getMapSize();
+        const configVersion = war.getConfigVersion();
+        const validator     = (v: ProtoTypes.WarEvent.WarEventActionAddUnit.IDataForAddUnit) => {
             const unitData = v.unitData;
             return (v.canBeBlockedByUnit != null)
                 && (v.needMovableTile != null)
@@ -860,7 +855,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
                 && (BwHelpers.checkIsUnitDataValidIgnoringUnitId({
                     unitData,
                     mapSize,
-                    playersCountUnneutral,
+                    playersCountUnneutral: CommonConstants.WarMaxPlayerIndex,
                     configVersion,
                 }));
         };

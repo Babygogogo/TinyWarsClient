@@ -129,6 +129,8 @@ namespace TinyWars.WarEvent {
                 WarEventHelper.resetCondition(condition, conditionType);
                 WarEventHelper.openConditionModifyPanel(data.fullData, condition);
                 WeConditionTypeListPanel.hide();
+
+                Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {        // DONE

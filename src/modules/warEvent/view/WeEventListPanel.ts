@@ -44,7 +44,7 @@ namespace TinyWars.WarEvent {
             this.skinName = "resource/skins/warEvent/WeEventListPanel.exml";
         }
 
-        protected async _onOpened(): Promise<void> {
+        protected _onOpened(): void {
             this._setUiListenerArray([
                 { ui: this._btnAddEvent,    callback: this._onTouchedBtnAddEvent },
                 { ui: this._btnClear,       callback: this._onTouchedBtnClear },
@@ -57,6 +57,9 @@ namespace TinyWars.WarEvent {
             this._listWarEvent.setItemRenderer(WarEventDescRenderer);
 
             this._updateView();
+        }
+        protected async _onClosed(): Promise<void> {
+            this._listWarEvent.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

@@ -3038,6 +3038,18 @@ namespace TinyWars.Utility.Lang {
             `是否会被部队阻挡`,
             `Blockable By Unit`,
         ],
+        [Type.B0533]: [
+            `修改动作`,
+            `Modify Action`,
+        ],
+        [Type.B0534]: [
+            `自动寻找合适的地形`,
+            `Auto Find Suitable Tile`,
+        ],
+        [Type.B0535]: [
+            `新增部队`,
+            `Add Unit`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [

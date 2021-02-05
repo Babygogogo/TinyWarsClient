@@ -12,7 +12,6 @@ namespace TinyWars.WarEvent {
 
     type OpenDataForWeActionAddUnitListPanel = {
         configVersion   : string;
-        fullData        : IWarEventFullData;
         dataForAddUnit  : IDataForAddUnit;
     }
     export class WeActionAddUnitListPanel extends GameUi.UiPanel {
@@ -76,12 +75,10 @@ namespace TinyWars.WarEvent {
         private _updateListType(): void {
             const openData          = this._getOpenData<OpenDataForWeActionAddUnitListPanel>();
             const dataForAddUnit    = openData.dataForAddUnit;
-            const fullData          = openData.fullData;
 
             const dataArray: DataForTypeRenderer[] = [];
             for (const newUnitType of ConfigManager.getUnitTypesByCategory(openData.configVersion, Types.UnitCategory.All)) {
                 dataArray.push({
-                    fullData,
                     newUnitType,
                     dataForAddUnit,
                 });
@@ -91,7 +88,6 @@ namespace TinyWars.WarEvent {
     }
 
     type DataForTypeRenderer = {
-        fullData        : ProtoTypes.Map.IWarEventFullData;
         newUnitType     : Types.UnitType;
         dataForAddUnit  : IDataForAddUnit;
     }

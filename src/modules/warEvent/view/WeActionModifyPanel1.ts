@@ -21,7 +21,7 @@ namespace TinyWars.WarEvent {
         action      : IWarEventAction;
     }
     export class WeActionModifyPanel1 extends GameUi.UiPanel {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
+        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: WeActionModifyPanel1;
@@ -31,7 +31,6 @@ namespace TinyWars.WarEvent {
         private _btnClear       : GameUi.UiButton;
         private _labelTitle     : GameUi.UiLabel;
         private _labelUnitsCount: GameUi.UiLabel;
-        private _labelError     : GameUi.UiLabel;
         private _listUnit       : GameUi.UiScrollList;
 
         public static show(openData: OpenDataForWeActionModifyPanel1): void {
@@ -111,9 +110,9 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text   = Lang.getText(Lang.Type.B0469);
-            this._btnAddUnit.label  = Lang.getText(Lang.Type.B0497);
-            this._btnClear.label    = Lang.getText(Lang.Type.B0498);
+            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0533)} A${this._getOpenData<OpenDataForWeActionModifyPanel1>().action.WarEventActionCommonData.actionId}`;
+            this._btnAddUnit.label  = Lang.getText(Lang.Type.B0535);
+            this._btnClear.label    = Lang.getText(Lang.Type.B0391);
             this._btnBack.label     = Lang.getText(Lang.Type.B0146);
         }
 
@@ -130,8 +129,13 @@ namespace TinyWars.WarEvent {
                 });
             }
 
-            this._labelUnitsCount.text = `${Lang.getText(Lang.Type.B0524)}: ${dataArray.length}`;
             this._listUnit.bindData(dataArray);
+
+            const label     = this._labelUnitsCount;
+            const maxCount  = CommonConstants.WarEventActionAddUnitMaxCount;
+            const currCount = dataArray.length;
+            label.text      = `${Lang.getText(Lang.Type.B0524)}: ${currCount} / ${maxCount}`;
+            label.textColor = ((currCount <= maxCount) && (currCount > 0)) ? ColorValue.White : ColorValue.Red;
         }
     }
 
@@ -271,17 +275,20 @@ namespace TinyWars.WarEvent {
             const data = this.data as DataForUnitRenderer;
             if (data) {
                 const unitData = data.dataForAddUnit.unitData;
-                if (unitData.actionState === Types.UnitActionState.Idle) {
-                    unitData.actionState = Types.UnitActionState.Acted;
+                if (unitData.actionState === Types.UnitActionState.Acted) {
+                    unitData.actionState = undefined;
                 } else {
-                    unitData.actionState = Types.UnitActionState.Idle;
+                    unitData.actionState = Types.UnitActionState.Acted;
                 }
                 Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
         private _onTouchedBtnUnitType(e: egret.TouchEvent): void {
-            // TODO
-            FloatText.show("TODO");
+            const data = this.data as DataForUnitRenderer;
+            WeActionAddUnitListPanel.show({
+                configVersion   : data.war.getConfigVersion(),
+                dataForAddUnit  : data.dataForAddUnit,
+            });
         }
         private _onFocusOutInputGridX(e: FocusEvent): void {
             const data = this.data as DataForUnitRenderer;
@@ -290,7 +297,7 @@ namespace TinyWars.WarEvent {
             }
 
             const gridIndex = data.dataForAddUnit.unitData.gridIndex;
-            const newGridX  = Math.max(0, Math.min(parseInt(this._inputGridX.text) || 0, data.war.getTileMap().getMapSize().width));
+            const newGridX  = Math.max(0, Math.min(parseInt(this._inputGridX.text) || 0, data.war.getTileMap().getMapSize().width - 1));
             if (newGridX !== gridIndex.x) {
                 gridIndex.x = newGridX;
                 Notify.dispatch(Notify.Type.WarEventFullDataChanged);
@@ -303,7 +310,7 @@ namespace TinyWars.WarEvent {
             }
 
             const gridIndex = data.dataForAddUnit.unitData.gridIndex;
-            const newGridY  = Math.max(0, Math.min(parseInt(this._inputGridY.text) || 0, data.war.getTileMap().getMapSize().height));
+            const newGridY  = Math.max(0, Math.min(parseInt(this._inputGridY.text) || 0, data.war.getTileMap().getMapSize().height - 1));
             if (newGridY !== gridIndex.y) {
                 gridIndex.y = newGridY;
                 Notify.dispatch(Notify.Type.WarEventFullDataChanged);
@@ -446,7 +453,7 @@ namespace TinyWars.WarEvent {
         private _updateComponentsForLanguage(): void {
             this._btnDelete.label               = Lang.getText(Lang.Type.B0220);
             this._labelCanBeBlockedByUnit.text  = Lang.getText(Lang.Type.B0532);
-            this._labelNeedMovableTile.text     = Lang.getText(Lang.Type.B0533);
+            this._labelNeedMovableTile.text     = Lang.getText(Lang.Type.B0534);
             this._labelIsDiving.text            = Lang.getText(Lang.Type.B0371);
             this._labelHasLoadedCo.text         = Lang.getText(Lang.Type.B0421);
             this._labelGridIndex.text           = Lang.getText(Lang.Type.B0531);
@@ -458,7 +465,7 @@ namespace TinyWars.WarEvent {
             this._labelFlareAmmo.text           = Lang.getText(Lang.Type.B0349);
             this._labelBuildMaterial.text       = Lang.getText(Lang.Type.B0347);
             this._labelProduceMaterial.text     = Lang.getText(Lang.Type.B0348);
-            this._btnActionState.label          = Lang.getText(Lang.Type.B0523);
+            this._btnActionState.label          = Lang.getText(Lang.Type.B0526);
             this._btnUnitType.label             = Lang.getText(Lang.Type.B0525);
         }
         private _updateComponentsForData(): void {
@@ -523,10 +530,16 @@ namespace TinyWars.WarEvent {
             this._imgHasLoadedCo.visible    = (!!data) && (!!data.dataForAddUnit.unitData.hasLoadedCo);
         }
         private _updateComponentsForActionState(): void {
-            const data = this.data as DataForUnitRenderer;
-            this._labelActionState.text = data
-                ? Lang.getUnitActionStateText(data.dataForAddUnit.unitData.actionState)
-                : undefined;
+            const data  = this.data as DataForUnitRenderer;
+            const label = this._labelActionState;
+            if (!data) {
+                label.text = undefined;
+            } else {
+                const state = data.dataForAddUnit.unitData.actionState;
+                label.text  = state == null
+                    ? Lang.getUnitActionStateText(Types.UnitActionState.Idle)
+                    : Lang.getUnitActionStateText(state);
+            }
         }
         private _updateComponentsForGridIndex(): void {
             const data      = this.data as DataForUnitRenderer;
@@ -694,7 +707,8 @@ namespace TinyWars.WarEvent {
         }
 
         const actionState = unitData.actionState;
-        if ((actionState !== Types.UnitActionState.Acted) &&
+        if ((actionState != null)                           &&
+            (actionState !== Types.UnitActionState.Acted)   &&
             (actionState !== Types.UnitActionState.Idle)
         ) {
             return Lang.getFormattedText(Lang.Type.F0064, Lang.getText(Lang.Type.B0526));

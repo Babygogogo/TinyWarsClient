@@ -422,6 +422,10 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         warEventIdArray.splice(currIndex, 1);
     }
     export function addWarEventId(warRule: IWarRule, warEventId: number): void {
+        if (warRule.warEventIdArray == null) {
+            warRule.warEventIdArray = [];
+        }
+
         const warEventIdArray = warRule.warEventIdArray;
         if (warEventIdArray.indexOf(warEventId) >= 0) {
             Logger.error(`BwSettingsHelper.addWarEventId() the warEventId exists.`);

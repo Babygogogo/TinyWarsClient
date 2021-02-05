@@ -153,7 +153,7 @@ namespace TinyWars.MapEditor {
         private _updateBtnAddAndBtnDelete(): void {
             const data = this.data as DataForMessageRenderer;
             if (data) {
-                const isAdded               = data.warRule.warEventIdArray.indexOf(data.warEventId) >= 0;
+                const isAdded               = (data.warRule.warEventIdArray || []).indexOf(data.warEventId) >= 0;
                 this._btnAdd.visible        = !isAdded;
                 this._btnDelete.visible     = isAdded;
             }
