@@ -71,12 +71,12 @@ namespace TinyWars.GameUi {
         ////////////////////////////////////////////////////////////////////////////////
         public open(openData: any): void {
             if (this.getIsOpening()) {
-                Logger.log(`%cUiPanel.open() is called when it is opening already: ${this.skinName}`, `background:#FFDDDD;`);
-                return;
+                Logger.warn(`%cUiPanel.open() it is opening already: ${this.skinName}`, `background:#FFDDDD;`);
+                this.close();
             }
 
             if (this._getIsRunningClose()) {
-                Logger.log(`%cUiPanel.open() is called when it is running close: ${this.skinName}`, `background:#FFDDDD;`);
+                Logger.warn(`%cUiPanel.open() it is running close: ${this.skinName}`, `background:#FFDDDD;`);
                 this._setCachedOpenFunc(() => this.open(openData));
                 return;
             }
@@ -161,7 +161,7 @@ namespace TinyWars.GameUi {
             if (func) {
                 this._setCachedOpenFunc(undefined);
 
-                Logger.log(`%cUiPanel.close() calling cached open func: ${this.skinName}`, `background:#FFDDDD;`);
+                Logger.warn(`%cUiPanel.close() calling cached open func: ${this.skinName}`, `background:#FFDDDD;`);
                 func();
             }
         }

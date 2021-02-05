@@ -145,7 +145,6 @@ namespace TinyWars.User {
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
             UserOnlineUsersPanel.hide();
-            UserPanel.hide();
             UserPanel.show({ userId: (this.data as DataForUserRenderer).userId });
         }
 

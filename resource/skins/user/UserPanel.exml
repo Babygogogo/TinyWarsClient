@@ -9,7 +9,7 @@
                             locked="true" />
             <GameUi:UiButton id="_btnClose" label="关闭" y="0" right="0" width="160"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-            <e:Scroller left="0" right="0" top="40" bottom="5">
+            <e:Scroller id="_scroller" left="0" right="0" top="40" bottom="5">
                 <e:Group x="20" y="0">
                     <e:Group x="20" y="10">
                         <e:Group x="0" y="0">

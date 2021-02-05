@@ -22,6 +22,7 @@ namespace TinyWars.User {
         private _labelTitle                 : GameUi.UiLabel;
         private _btnClose                   : GameUi.UiButton;
 
+        private _scroller                   : eui.Scroller;
         private _labelStdRankTitle          : GameUi.UiLabel;
         private _labelStdRankScore          : GameUi.UiLabel;
         private _labelFogRankTitle          : GameUi.UiLabel;
@@ -112,6 +113,7 @@ namespace TinyWars.User {
             this._userId    = userId;
             UserProxy.reqUserGetPublicInfo(userId);
 
+            this._scroller.viewport.scrollV = 0;
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
