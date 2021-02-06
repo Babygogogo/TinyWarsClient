@@ -57,7 +57,7 @@ namespace TinyWars.RankMatchRoom.RmrModel {
             });
         }
 
-        new Promise((resolve, reject) => {
+        new Promise<void>((resolve, reject) => {
             const callbackOnSucceed = (e: egret.Event): void => {
                 const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
                 if (data.roomId === roomId) {
@@ -147,8 +147,8 @@ namespace TinyWars.RankMatchRoom.RmrModel {
         if (roomInfo.timeForStartSetSelfSettings != null) {
             return !playerData.isReady;
         } else {
-            const list = roomInfo.settingsForRmw.dataListForBanCo;
-            if ((list == null) || (list.every(v => v.srcPlayerIndex !== playerData.playerIndex))) {
+            const arr = roomInfo.settingsForRmw.dataArrayForBanCo;
+            if ((arr == null) || (arr.every(v => v.srcPlayerIndex !== playerData.playerIndex))) {
                 return true;
             }
         }
@@ -238,9 +238,9 @@ namespace TinyWars.RankMatchRoom.RmrModel {
                 return undefined;
             }
 
-            const dataListForBanCo = settingsForRmw.dataListForBanCo;
-            if (dataListForBanCo == null) {
-                Logger.error(`RmrModel.generateAvailableCoIdList() empty dataListForBanCo.`);
+            const dataArrayForBanCo = settingsForRmw.dataArrayForBanCo;
+            if (dataArrayForBanCo == null) {
+                Logger.error(`RmrModel.generateAvailableCoIdList() empty dataArrayForBanCo.`);
                 return undefined;
             }
 
@@ -250,14 +250,14 @@ namespace TinyWars.RankMatchRoom.RmrModel {
                 return undefined;
             }
 
-            const rawAvailableCoIdList = playerRule.availableCoIdList;
+            const rawAvailableCoIdList = playerRule.availableCoIdArray;
             if (rawAvailableCoIdList == null) {
                 Logger.error(`RmrModel.generateAvailableCoIdList() empty rawAvailableCoIdList.`);
                 return undefined;
             }
 
             const bannedCoIds = new Set<number>();
-            for (const data of dataListForBanCo) {
+            for (const data of dataArrayForBanCo) {
                 for (const coId of data.bannedCoIdList || []) {
                     bannedCoIds.add(coId);
                 }

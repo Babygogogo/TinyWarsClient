@@ -37,12 +37,12 @@ namespace TinyWars.MultiPlayerWar {
             if (!McwTopPanel._instance) {
                 McwTopPanel._instance = new McwTopPanel();
             }
-            McwTopPanel._instance.open();
+            McwTopPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McwTopPanel._instance) {
-                McwTopPanel._instance.close();
+                await McwTopPanel._instance.close();
             }
         }
 
@@ -52,8 +52,8 @@ namespace TinyWars.MultiPlayerWar {
             this.skinName = "resource/skins/multiCustomWar/McwTopPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TimeTick,                       callback: this._onNotifyTimeTick },
                 { type: Notify.Type.BwTurnPhaseCodeChanged,         callback: this._onNotifyMcwTurnPhaseCodeChanged },
@@ -66,8 +66,8 @@ namespace TinyWars.MultiPlayerWar {
                 { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
                 { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
                 { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
@@ -76,16 +76,14 @@ namespace TinyWars.MultiPlayerWar {
                 { ui: this._btnEndTurn,         callback: this._onTouchedBtnEndTurn, },
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
-            ];
-        }
+            ]);
 
-        protected _onOpened(): void {
             this._war = MpwModel.getWar();
             this._updateView();
         }
 
-        protected _onClosed(): void {
-            delete this._war;
+        protected async _onClosed(): Promise<void> {
+            this._war = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,10 +141,10 @@ namespace TinyWars.MultiPlayerWar {
 
         private _onTouchedGroupPlayer(e: egret.TouchEvent): void {
             const userId = this._war.getPlayerInTurn().getUserId();
-            (userId) && (User.UserPanel.show(userId));
+            (userId) && (User.UserPanel.show({ userId }));
         }
         private _onTouchedGroupCo(e: egret.TouchEvent): void {
-            McwCoListPanel.show(Math.max(this._war.getPlayerIndexInTurn() - 1, 0));
+            McwCoListPanel.show({ selectedIndex: Math.max(this._war.getPlayerIndexInTurn() - 1, 0) });
             McwWarMenuPanel.hide();
         }
         private _onTouchedBtnChat(e: egret.TouchEvent): void {

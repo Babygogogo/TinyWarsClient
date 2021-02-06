@@ -9,7 +9,7 @@ namespace TinyWars.ReplayWar {
     import ProtoTypes           = Utility.ProtoTypes;
     import BwHelpers            = BaseWar.BwHelpers;
     import WarType              = Types.WarType;
-    import IActionContainer     = ProtoTypes.WarAction.IActionContainer;
+    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
 
     type CheckPointData = {
@@ -18,7 +18,7 @@ namespace TinyWars.ReplayWar {
     }
 
     export class RwWar extends SinglePlayerWar.SpwWar {
-        private _executedActions                : IActionContainer[];
+        private _executedActions                : IWarActionContainer[];
         private _settingsForMcw                 : ProtoTypes.WarSettings.ISettingsForMcw;
         private _settingsForScw                 : ProtoTypes.WarSettings.ISettingsForScw;
         private _settingsForRmw                 : ProtoTypes.WarSettings.ISettingsForRmw;
@@ -147,6 +147,9 @@ namespace TinyWars.ReplayWar {
         protected _getTurnManagerClass(): new () => RwTurnManager {
             return RwTurnManager;
         }
+        protected _getWarEventManagerClass(): new () => RwWarEventManager {
+            return RwWarEventManager;
+        }
 
         public serializeForCheckPoint(): CheckPointData {
             const seedRandomCurrentState = this._getSeedRandomCurrentState();
@@ -164,6 +167,12 @@ namespace TinyWars.ReplayWar {
             const turnManager = this.getTurnManager();
             if (turnManager == null) {
                 Logger.error(`ReplayWar.serializeForCheckPoint() empty turnManager.`);
+                return undefined;
+            }
+
+            const warEventManager = this.getWarEventManager();
+            if (warEventManager == null) {
+                Logger.error(`RwWar.serializeForCheckPoint() empty warEventManager.`);
                 return undefined;
             }
 
@@ -191,6 +200,12 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
+            const serialWarEventManager = warEventManager.serialize();
+            if (serialWarEventManager == null) {
+                Logger.error(`RwWar.serializeForCheckPoint() empty serialWarEventManager.`);
+                return undefined;
+            }
+
             return {
                 nextActionId    : this.getNextActionId(),
                 warData         : {
@@ -204,6 +219,7 @@ namespace TinyWars.ReplayWar {
                     executedActions             : null,
                     executedActionsCount        : null,
                     remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                    warEventManager             : Helpers.deepClone(serialWarEventManager),
                     playerManager               : serialPlayerManager,
                     turnManager                 : serialTurnManager,
                     field                       : serialField,
@@ -248,6 +264,12 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
+            const warEventManager = this.getWarEventManager();
+            if (warEventManager == null) {
+                Logger.error(`RwWar.serializeForSimulation() empty warEventManager.`);
+                return undefined;
+            }
+
             const field = this.getField();
             if (field == null) {
                 Logger.error(`ReplayWar.serializeForSimulation() empty field.`);
@@ -263,6 +285,12 @@ namespace TinyWars.ReplayWar {
             const serialTurnManager = turnManager.serializeForSimulation();
             if (serialTurnManager == null) {
                 Logger.error(`ReplayWar.serializeForSimulation() empty serialTurnManager.`);
+                return undefined;
+            }
+
+            const serialWarEventManager = warEventManager.serializeForSimulation();
+            if (serialWarEventManager == null) {
+                Logger.error(`RwWar.serializeForSimulation() empty serialWarEventManager.`);
                 return undefined;
             }
 
@@ -285,6 +313,7 @@ namespace TinyWars.ReplayWar {
                 executedActions             : [],
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,
@@ -369,7 +398,7 @@ namespace TinyWars.ReplayWar {
                 await this._loadCheckPoint(checkPointId);
                 await Helpers.checkAndCallLater();
                 this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex() + 1})`);
+                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
 
             } else {
                 this.setIsAutoReplay(false);
@@ -391,7 +420,7 @@ namespace TinyWars.ReplayWar {
                 await this._loadCheckPoint(checkPointId);
                 await Helpers.checkAndCallLater();
                 this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex() + 1})`);
+                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
             }
         }
         public checkIsInBeginning(): boolean {
@@ -405,7 +434,7 @@ namespace TinyWars.ReplayWar {
             await this._loadCheckPoint(this.getCheckPointId(this.getNextActionId()) - 1);
             await Helpers.checkAndCallLater();
             this.startRunning().startRunningView();
-            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex() + 1})`);
+            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
         }
         private async _loadCheckPoint(checkPointId: number): Promise<void> {
             const checkPointData    = this.getCheckPointData(checkPointId);
@@ -414,6 +443,7 @@ namespace TinyWars.ReplayWar {
             this.setNextActionId(checkPointData.nextActionId);
             this.getPlayerManager().fastInit(warData.playerManager);
             this.getTurnManager().fastInit(warData.turnManager);
+            this.getWarEventManager().fastInit(warData.warEventManager);
             await this.getField().fastInit(
                 warData.field,
                 this.getConfigVersion(),
@@ -433,13 +463,13 @@ namespace TinyWars.ReplayWar {
         public getTotalActionsCount(): number {
             return this._getAllExecutedActions().length;
         }
-        public getNextAction(): IActionContainer {
+        public getNextAction(): IWarActionContainer {
             return this._getAllExecutedActions()[this.getNextActionId()];
         }
-        private _setAllExecutedActions(actions: IActionContainer[]): void {
+        private _setAllExecutedActions(actions: IWarActionContainer[]): void {
             this._executedActions = actions;
         }
-        private _getAllExecutedActions(): IActionContainer[] {
+        private _getAllExecutedActions(): IWarActionContainer[] {
             return this._executedActions;
         }
 

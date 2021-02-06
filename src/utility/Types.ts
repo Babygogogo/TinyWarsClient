@@ -4,29 +4,26 @@ namespace TinyWars.Utility.Types {
     // Raw war action types.
     ////////////////////////////////////////////////////////////////////////////////
     export type RawWarActionContainer = {
-        actionId?           : number;
-        PlayerBeginTurn?    : RawWarActionPlayerBeginTurn;
-        PlayerDeleteUnit?   : RawWarActionPlayerDeleteUnit;
-        PlayerEndTurn?      : RawWarActionPlayerEndTurn;
-        PlayerProduceUnit?  : RawWarActionPlayerProduceUnit;
-        UnitAttackUnit?     : RawWarActionUnitAttackUnit;
-        UnitAttackTile?     : RawWarActionUnitAttackTile;
-        UnitBeLoaded?       : RawWarActionUnitBeLoaded;
-        UnitBuildTile?      : RawWarActionUnitBuildTile;
-        UnitCaptureTile?    : RawWarActionUnitCaptureTile;
-        UnitDive?           : RawWarActionUnitDive;
-        UnitDrop?           : RawWarActionUnitDrop;
-        UnitJoin?           : RawWarActionUnitJoin;
-        UnitLaunchFlare?    : RawWarActionUnitLaunchFlare;
-        UnitLaunchSilo?     : RawWarActionUnitLaunchSilo;
-        UnitLoadCo?         : RawWarActionUnitLoadCo;
-        UnitProduceUnit?    : RawWarActionUnitProduceUnit;
-        UnitSupply?         : RawWarActionUnitSupply;
-        UnitSurface?        : RawWarActionUnitSurface;
-        UnitUseCoSkill?     : RawWarActionUnitUseCoSkill;
-        UnitWait?           : RawWarActionUnitWait;
-    }
-    export type RawWarActionPlayerBeginTurn = {
+        actionId?                   : number;
+        PlayerDeleteUnit?           : RawWarActionPlayerDeleteUnit;
+        PlayerEndTurn?              : RawWarActionPlayerEndTurn;
+        PlayerProduceUnit?          : RawWarActionPlayerProduceUnit;
+        UnitAttackUnit?             : RawWarActionUnitAttackUnit;
+        UnitAttackTile?             : RawWarActionUnitAttackTile;
+        UnitBeLoaded?               : RawWarActionUnitBeLoaded;
+        UnitBuildTile?              : RawWarActionUnitBuildTile;
+        UnitCaptureTile?            : RawWarActionUnitCaptureTile;
+        UnitDive?                   : RawWarActionUnitDive;
+        UnitDrop?                   : RawWarActionUnitDrop;
+        UnitJoin?                   : RawWarActionUnitJoin;
+        UnitLaunchFlare?            : RawWarActionUnitLaunchFlare;
+        UnitLaunchSilo?             : RawWarActionUnitLaunchSilo;
+        UnitLoadCo?                 : RawWarActionUnitLoadCo;
+        UnitProduceUnit?            : RawWarActionUnitProduceUnit;
+        UnitSupply?                 : RawWarActionUnitSupply;
+        UnitSurface?                : RawWarActionUnitSurface;
+        UnitUseCoSkill?             : RawWarActionUnitUseCoSkill;
+        UnitWait?                   : RawWarActionUnitWait;
     }
     export type RawWarActionPlayerDeleteUnit = {
         gridIndex: GridIndex;
@@ -224,6 +221,11 @@ namespace TinyWars.Utility.Types {
         Blue,
         White,
     }
+    export const enum ColorValue {
+        Red     = 0xFF0000,
+        White   = 0xFFFFFF,
+        Green   = 0x00FF00,
+    }
 
     export const UiState = {
         Up  : "up",
@@ -318,6 +320,12 @@ namespace TinyWars.Utility.Types {
         Idle,   /* 0 */         Acted,  /* 1 */
     }
 
+    export const enum PlayerAliveState {
+        Alive   = 0,
+        Dying   = 1,
+        Dead    = 2,
+    }
+
     export const enum UnitAnimationType {
         Stand,
         Move,
@@ -343,14 +351,14 @@ namespace TinyWars.Utility.Types {
     }
 
     export const enum TurnPhaseCode {
-        WaitBeginTurn,
+        WaitBeginTurn       = 0,
+        Main                = 1,
         GetFund,
         ConsumeFuel,
         RepairUnitByTile,
         DestroyUnitsOutOfFuel,
         RepairUnitByUnit,
         ActivateMapWeapon,
-        Main,
         ResetUnitState,
         ResetVisionForCurrentPlayer,
         TickTurnAndPlayerIndex,
@@ -508,5 +516,38 @@ namespace TinyWars.Utility.Types {
         InvalidUnits,
         InvalidTiles,
         InvalidWarRuleList,
+        InvalidWarEventData,
+    }
+
+    export const enum WarEventDescType {
+        EventName,
+        EventMaxCallCountInPlayerTurn,
+        EventMaxCallCountTotal,
+        ConditionNode,
+        Condition,
+        Action,
+    }
+
+    export const enum WarEventConditionType {
+        WecTurnIndexEqualTo,
+        WecTurnIndexGreaterThan,
+        WecTurnIndexLessThan,
+        WecTurnIndexRemainderEqualTo,
+
+        WecTurnPhaseEqualTo,
+
+        WecPlayerIndexInTurnEqualTo,
+        WecPlayerIndexInTurnGreaterThan,
+        WecPlayerIndexInTurnLessThan,
+
+        WecEventCalledCountTotalEqualTo,
+        WecEventCalledCountTotalGreaterThan,
+        WecEventCalledCountTotalLessThan,
+
+        WecPlayerAliveStateEqualTo,
+    }
+
+    export const enum WarEventActionType {
+        WarEventActionAddUnit,
     }
 }

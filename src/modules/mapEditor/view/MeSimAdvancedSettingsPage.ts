@@ -20,15 +20,12 @@ namespace TinyWars.MapEditor {
             this.skinName = "resource/skins/mapEditor/MeSimAdvancedSettingsPage.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-
-            this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
-
         protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            ]);
+            this._listPlayer.setItemRenderer(PlayerRenderer);
+
             this._updateComponentsForLanguage();
             this._updateLabelMapName();
             this._updateLabelPlayersCount();
@@ -52,15 +49,15 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.getNameInCurrentLanguage(MeModel.Sim.getMapRawData().mapNameList);
+            this._labelMapName.text = Lang.getLanguageText({ textArray: MeModel.Sim.getMapRawData().mapNameArray });
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + MeModel.Sim.getMapRawData().playersCount;
+            this._labelPlayersCount.text = "" + MeModel.Sim.getMapRawData().playersCountUnneutral;
         }
 
         private _updateListPlayer(): void {
-            const playersCount  = MeModel.Sim.getMapRawData().playersCount;
+            const playersCount  = MeModel.Sim.getMapRawData().playersCountUnneutral;
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -73,7 +70,7 @@ namespace TinyWars.MapEditor {
         playerIndex : number;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _listInfo   : GameUi.UiScrollList;
 
         protected childrenCreated(): void {
@@ -478,7 +475,7 @@ namespace TinyWars.MapEditor {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

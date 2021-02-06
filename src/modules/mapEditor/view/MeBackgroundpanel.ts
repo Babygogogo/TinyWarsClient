@@ -10,19 +10,19 @@ namespace TinyWars.MapEditor {
             if (!MeBackgroundPanel._instance) {
                 MeBackgroundPanel._instance = new MeBackgroundPanel();
             }
-            MeBackgroundPanel._instance.open();
+            MeBackgroundPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeBackgroundPanel._instance) {
-                MeBackgroundPanel._instance.close();
+                await MeBackgroundPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapEditor/MeBackgroundPanel.exml";
         }
     }

@@ -30,36 +30,34 @@ namespace TinyWars.Login {
             if (!LoginPanel._instance) {
                 LoginPanel._instance = new LoginPanel();
             }
-            LoginPanel._instance.open();
+            LoginPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (LoginPanel._instance) {
-                LoginPanel._instance.close();
+                await LoginPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/login/LoginPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserLogin,    callback: this._onMsgUserLogin },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnLogin,               callback: this._onTouchedBtnLogin },
                 { ui: this._btnRegister,            callback: this._onTouchedBtnRegister },
                 { ui: this._btnForgetPassword,      callback: this._onTouchedBtnForgetPassword },
                 { ui: this._groupRememberPassword,  callback: this._onTouchedGroupRememberPassword },
-            ];
-        }
+            ]);
 
-        protected _onOpened(): void {
             const isRememberPassword                = LocalStorage.getIsRememberPassword();
             this._inputAccount.text                 = LocalStorage.getAccount();
             this._inputPassword.text                = isRememberPassword ? LocalStorage.getPassword() : null;
@@ -113,7 +111,7 @@ namespace TinyWars.Login {
         }
 
         private _updateComponentsForLanguage(): void {
-            if (Lang.getLanguageType() === Types.LanguageType.Chinese) {
+            if (Lang.getCurrentLanguageType() === Types.LanguageType.Chinese) {
                 this._imgAccountTitle.source        = "login_text_account_001";
                 this._imgPasswordTitle.source       = "login_text_password_001";
                 this._imgRememberPassword.source    = "login_text_remember_001";

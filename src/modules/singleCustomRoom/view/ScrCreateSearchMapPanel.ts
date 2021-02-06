@@ -32,41 +32,37 @@ namespace TinyWars.SingleCustomRoom {
             if (!ScrCreateSearchMapPanel._instance) {
                 ScrCreateSearchMapPanel._instance = new ScrCreateSearchMapPanel();
             }
-            ScrCreateSearchMapPanel._instance.open();
+            ScrCreateSearchMapPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScrCreateSearchMapPanel._instance) {
-                ScrCreateSearchMapPanel._instance.close();
+                await ScrCreateSearchMapPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/singleCustomRoom/ScrCreateSearchMapPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnClose,  callback: this._onTouchedBtnClose },
                 { ui: this._btnReset,  callback: this._onTouchedBtnReset },
                 { ui: this._btnSearch, callback: this._onTouchedBtnSearch },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-        }
+            ]);
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
-            this._btnReset.enabled  = true;
-            this._btnSearch.enabled = true;
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
-            ScrCreateSearchMapPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
@@ -83,7 +79,7 @@ namespace TinyWars.SingleCustomRoom {
                 minRating   : Number(this._inputMinRating.text) || null,
             });
 
-            ScrCreateSearchMapPanel.hide();
+            this.close();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

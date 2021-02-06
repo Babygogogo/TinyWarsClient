@@ -23,16 +23,13 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrCreateAdvancedSettingsPage.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected async _onOpened(): Promise<void> {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.McrCreateAvailableCoIdListChanged,  callback: this._onNotifyMcrCreateAvailableCoIdListChanged },
-            ];
-
+            ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
 
-        protected async _onOpened(): Promise<void> {
             this._mapRawData = await McrModel.Create.getMapRawData();
 
             this._updateComponentsForLanguage();
@@ -65,11 +62,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapRawData.playersCount;
+            this._labelPlayersCount.text = "" + this._mapRawData.playersCountUnneutral;
         }
 
         private _updateListPlayer(): void {
-            const playersCount  = this._mapRawData.playersCount;
+            const playersCount  = this._mapRawData.playersCountUnneutral;
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -82,7 +79,7 @@ namespace TinyWars.MultiCustomRoom {
         playerIndex : number;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _listInfo   : GameUi.UiScrollList;
 
         protected childrenCreated(): void {
@@ -139,7 +136,7 @@ namespace TinyWars.MultiCustomRoom {
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        McrCreateAvailableCoPanel.show(playerIndex);
+                        McrCreateAvailableCoPanel.show({ playerIndex });
                     });
                 },
             };
@@ -459,7 +456,7 @@ namespace TinyWars.MultiCustomRoom {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

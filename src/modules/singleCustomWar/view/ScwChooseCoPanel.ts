@@ -7,7 +7,7 @@ namespace TinyWars.SingleCustomWar {
     import Notify           = Utility.Notify;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    export type OpenParamForChooseCoPanel = {
+    type OpenDataForScwChooseCoPanel = {
         war         : BaseWar.BwWar;
         playerIndex : number;
     }
@@ -17,8 +17,6 @@ namespace TinyWars.SingleCustomWar {
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: ScwChooseCoPanel;
-
-        private _openParam      : OpenParamForChooseCoPanel;
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
@@ -53,42 +51,40 @@ namespace TinyWars.SingleCustomWar {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(openParam: OpenParamForChooseCoPanel): void {
+        public static show(openData: OpenDataForScwChooseCoPanel): void {
             if (!ScwChooseCoPanel._instance) {
                 ScwChooseCoPanel._instance = new ScwChooseCoPanel();
             }
 
-            ScwChooseCoPanel._instance._openParam = openParam;
-            ScwChooseCoPanel._instance.open();
+            ScwChooseCoPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScwChooseCoPanel._instance) {
-                ScwChooseCoPanel._instance.close();
+                await ScwChooseCoPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/singleCustomWar/ScwChooseCoPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
                 { ui: this._btnBack,    callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listCo.setItemRenderer(CoRenderer);
             this._listPassiveSkill.setItemRenderer(SkillRenderer);
             this._listCop.setItemRenderer(SkillRenderer);
             this._listScop.setItemRenderer(SkillRenderer);
-        }
-        protected _onOpened(): void {
+
             this._initListCo();
             this._updateView();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCo.clear();
             this._listPassiveSkill.clear();
             this._listCop.clear();
@@ -138,8 +134,8 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _initListCo(): void {
-            const openParam     = this._openParam;
-            const selfCoId      = openParam.war.getPlayer(openParam.playerIndex).getCoId();
+            const openData      = this._getOpenData<OpenDataForScwChooseCoPanel>();
+            const selfCoId      = openData.war.getPlayer(openData.playerIndex).getCoId();
             const dataForListCo = this._createDataForListCo();
             this._dataForListCo = dataForListCo;
             this._listCo.bindData(dataForListCo);
@@ -149,12 +145,12 @@ namespace TinyWars.SingleCustomWar {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const data          : DataForCoRenderer[] = [];
-            const openParam     = this._openParam;
-            const war           = openParam.war;
-            const playerIndex   = openParam.playerIndex;
+            const openData      = this._getOpenData<OpenDataForScwChooseCoPanel>();
+            const war           = openData.war;
+            const playerIndex   = openData.playerIndex;
 
             let index = 0;
-            for (const coBasicCfg of ConfigManager.getAvailableCoList(war.getConfigVersion())) {
+            for (const coBasicCfg of ConfigManager.getAvailableCoArray(war.getConfigVersion())) {
                 data.push({
                     war,
                     playerIndex,
@@ -266,7 +262,7 @@ namespace TinyWars.SingleCustomWar {
         panel           : ScwChooseCoPanel;
     }
 
-    class CoRenderer extends eui.ItemRenderer {
+    class CoRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
@@ -315,7 +311,7 @@ namespace TinyWars.SingleCustomWar {
         skillId : number;
     }
 
-    class SkillRenderer extends eui.ItemRenderer {
+    class SkillRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 
@@ -324,7 +320,7 @@ namespace TinyWars.SingleCustomWar {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()];
         }
     }
 }

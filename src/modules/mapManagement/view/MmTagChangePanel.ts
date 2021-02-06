@@ -5,6 +5,9 @@ namespace TinyWars.MapManagement {
     import WarMapModel  = WarMap.WarMapModel;
     import WarMapProxy  = WarMap.WarMapProxy;
 
+    type OpenDataForMmTagChangePanel = {
+        mapId   : number;
+    }
     export class MmTagChangePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -22,44 +25,44 @@ namespace TinyWars.MapManagement {
 
         private _mapId          : number;
 
-        public static show(mapId: number): void {
+        public static show(openData: OpenDataForMmTagChangePanel): void {
             if (!MmTagChangePanel._instance) {
                 MmTagChangePanel._instance = new MmTagChangePanel();
             }
-            MmTagChangePanel._instance._mapId = mapId;
-            MmTagChangePanel._instance.open();
+            MmTagChangePanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmTagChangePanel._instance) {
-                MmTagChangePanel._instance.close();
+                await MmTagChangePanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmTagChangePanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected async _onOpened(): Promise<void> {
+            this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
                 { ui: this._btnWarRule,     callback: this._onTouchedBtnWarRule },
                 { ui: this._groupFog,       callback: this._onTouchedGroupMcw },
-            ];
-        }
+            ]);
 
-        protected async _onOpened(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            const mapTag            = (await WarMapModel.getBriefData(this._mapId)).mapTag || {};
+            const mapId = this._getOpenData<OpenDataForMmTagChangePanel>().mapId;
+            this._mapId = mapId;
+
+            const mapTag            = (await WarMapModel.getBriefData(mapId)).mapTag || {};
             this._imgFog.visible    = !!mapTag.fog;
         }
 

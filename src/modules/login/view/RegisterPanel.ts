@@ -27,35 +27,33 @@ namespace TinyWars.Login {
             if (!RegisterPanel._instance) {
                 RegisterPanel._instance = new RegisterPanel();
             }
-            RegisterPanel._instance.open();
+            RegisterPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RegisterPanel._instance) {
-                RegisterPanel._instance.close();
+                await RegisterPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/login/RegisterPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserLogin,    callback: this._onMsgUserLogin },
                 { type: NotifyType.MsgUserRegister, callback: this._onMsgUserRegister },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnLogin,    callback: this._onTouchedBtnLogin },
                 { ui: this._btnRegister, callback: this._onTouchedBtnRegister },
-            ];
-        }
+            ]);
 
-        protected _onOpened(): void {
             this._updateOnLanguageChanged();
         }
 
@@ -98,7 +96,7 @@ namespace TinyWars.Login {
         }
 
         private _updateOnLanguageChanged(): void {
-            if (Lang.getLanguageType() === Types.LanguageType.Chinese) {
+            if (Lang.getCurrentLanguageType() === Types.LanguageType.Chinese) {
                 this._imgAccountTitle.source    = "login_text_account_001";
                 this._imgPasswordTitle.source   = "login_text_password_001";
                 this._imgNicknameTitle.source   = "login_text_nickname_001";

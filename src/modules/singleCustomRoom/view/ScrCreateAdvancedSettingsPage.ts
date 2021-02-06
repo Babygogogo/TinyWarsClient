@@ -15,7 +15,7 @@ namespace TinyWars.SingleCustomRoom {
         private _labelPlayerList        : GameUi.UiLabel;
         private _listPlayer             : GameUi.UiScrollList;
 
-        protected _mapRawData   : ProtoTypes.Map.IMapRawData;
+        private _mapRawData             : ProtoTypes.Map.IMapRawData;
 
         public constructor() {
             super();
@@ -23,15 +23,12 @@ namespace TinyWars.SingleCustomRoom {
             this.skinName = "resource/skins/singleCustomRoom/ScrCreateAdvancedSettingsPage.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-
-            this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
-
         protected async _onOpened(): Promise<void> {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ]);
+            this._listPlayer.setItemRenderer(PlayerRenderer);
+
             this._mapRawData = await ScrModel.getCreateWarMapRawData();
 
             this._updateComponentsForLanguage();
@@ -61,11 +58,11 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapRawData.playersCount;
+            this._labelPlayersCount.text = "" + this._mapRawData.playersCountUnneutral;
         }
 
         private _updateListPlayer(): void {
-            const playersCount  = this._mapRawData.playersCount;
+            const playersCount  = this._mapRawData.playersCountUnneutral;
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -78,7 +75,7 @@ namespace TinyWars.SingleCustomRoom {
         playerIndex : number;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _listInfo   : GameUi.UiScrollList;
 
         protected childrenCreated(): void {
@@ -407,7 +404,7 @@ namespace TinyWars.SingleCustomRoom {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

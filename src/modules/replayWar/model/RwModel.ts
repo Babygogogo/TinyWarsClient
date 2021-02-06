@@ -38,12 +38,12 @@ namespace TinyWars.ReplayWar.RwModel {
 
         const warData       = ProtoManager.decodeAsSerialWar(encodedWarData);
         const mapRawData    = await WarMapModel.getRawData(warData.settingsForCommon.mapId);
-        const unitDataList  = mapRawData.unitDataList || [];
+        const unitDataArray = mapRawData.unitDataArray || [];
         const field         = warData.field;
-        field.tileMap       = { tiles: mapRawData.tileDataList };
+        field.tileMap       = { tiles: mapRawData.tileDataArray };
         field.unitMap       = {
-            units       : unitDataList,
-            nextUnitId  : unitDataList.length,
+            units       : unitDataArray,
+            nextUnitId  : unitDataArray.length,
         };
 
         _war = (await new RwWar().init(warData)).startRunning().startRunningView() as RwWar;

@@ -29,37 +29,35 @@ namespace TinyWars.MapEditor {
             if (!MeChooseTileBasePanel._instance) {
                 MeChooseTileBasePanel._instance = new MeChooseTileBasePanel();
             }
-            MeChooseTileBasePanel._instance.open();
+            MeChooseTileBasePanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeChooseTileBasePanel._instance) {
-                MeChooseTileBasePanel._instance.close();
+                await MeChooseTileBasePanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/mapEditor/MeChooseTileBasePanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
                 { ui: this._groupFill,  callback: this._onTouchedGroupFill },
-            ];
+            ]);
             this._listCategory.setItemRenderer(CategoryRenderer);
             this._listRecent.setItemRenderer(TileBaseRenderer);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             this._needFill = false;
@@ -68,7 +66,7 @@ namespace TinyWars.MapEditor {
             this._updateListRecent();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCategory.clear();
             this._listRecent.clear();
         }
@@ -181,7 +179,7 @@ namespace TinyWars.MapEditor {
         panel                   : MeChooseTileBasePanel;
     }
 
-    class CategoryRenderer extends eui.ItemRenderer {
+    class CategoryRenderer extends GameUi.UiListItemRenderer {
         private _labelCategory  : GameUi.UiLabel;
         private _listTileBase   : GameUi.UiScrollList;
 
@@ -224,7 +222,7 @@ namespace TinyWars.MapEditor {
         panel               : MeChooseTileBasePanel;
     }
 
-    class TileBaseRenderer extends eui.ItemRenderer {
+    class TileBaseRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
 

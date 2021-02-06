@@ -10,19 +10,19 @@ namespace TinyWars.SingleCustomWar {
             if (!ScwWarPanel._instance) {
                 ScwWarPanel._instance = new ScwWarPanel();
             }
-            ScwWarPanel._instance.open();
+            ScwWarPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScwWarPanel._instance) {
-                ScwWarPanel._instance.close();
+                await ScwWarPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiCustomWar/McwWarPanel.exml";
         }
 
@@ -30,7 +30,7 @@ namespace TinyWars.SingleCustomWar {
             this.addChild(ScwModel.getWar().getView());
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this.removeChildren();
         }
     }

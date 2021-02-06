@@ -11,6 +11,9 @@ namespace TinyWars.MultiPlayerWar {
     import GridIndex        = Types.GridIndex;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
+    type OpenDataForMcwProduceUnitPanel = {
+        gridIndex   : GridIndex;
+    }
     export class McwProduceUnitPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -23,19 +26,17 @@ namespace TinyWars.MultiPlayerWar {
         private _btnDetail  : GameUi.UiButton;
 
         private _war        : MpwWar;
-        private _gridIndex  : GridIndex;
         private _dataForList: DataForUnitRenderer[];
 
-        public static show(gridIndex: GridIndex): void {
+        public static show(openData: OpenDataForMcwProduceUnitPanel): void {
             if (!McwProduceUnitPanel._instance) {
                 McwProduceUnitPanel._instance = new McwProduceUnitPanel();
             }
-            McwProduceUnitPanel._instance._gridIndex = gridIndex;
-            McwProduceUnitPanel._instance.open();
+            McwProduceUnitPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McwProduceUnitPanel._instance) {
-                McwProduceUnitPanel._instance.close();
+                await McwProduceUnitPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -46,31 +47,30 @@ namespace TinyWars.MultiPlayerWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/multiCustomWar/McwProduceUnitPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
                 { ui: this._btnDetail, callback: this._onTouchedBtnDetail },
-            ];
+            ]);
             this._listUnit.setItemRenderer(UnitRenderer);
-        }
-        protected _onOpened(): void {
+
             this._war = MpwModel.getWar();
             this._updateView();
 
             Notify.dispatch(Notify.Type.McwProduceUnitPanelOpened);
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._war           = null;
+            this._dataForList   = null;
             this._listUnit.clear();
 
             Notify.dispatch(Notify.Type.McwProduceUnitPanelClosed);
@@ -98,7 +98,7 @@ namespace TinyWars.MultiPlayerWar {
             this._war.getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnDetail(e: egret.TouchEvent): void {
-            const selectedIndex = (this._listUnit.viewport as eui.List).selectedIndex;
+            const selectedIndex = this._listUnit.getViewList().selectedIndex;
             const data          = selectedIndex != null ? this._dataForList[selectedIndex] : null;
             if (data) {
                 BaseWar.BwUnitDetailPanel.show({
@@ -136,7 +136,7 @@ namespace TinyWars.MultiPlayerWar {
             const playerIndex       = player.getPlayerIndex();
             const configVersion     = war.getConfigVersion();
             const actionPlanner     = war.getActionPlanner() as MpwActionPlanner;
-            const gridIndex         = this._gridIndex;
+            const gridIndex         = this._getOpenData<OpenDataForMcwProduceUnitPanel>().gridIndex;
             const unitClass         = war.getUnitMap().getUnitClass();
             const tile              = war.getTileMap().getTile(gridIndex);
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
@@ -185,7 +185,7 @@ namespace TinyWars.MultiPlayerWar {
         unitProductionSkillCfg  : number[] | null;
     }
 
-    class UnitRenderer extends eui.ItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _imgBg          : GameUi.UiImage;
         private _conUnitView    : eui.Group;

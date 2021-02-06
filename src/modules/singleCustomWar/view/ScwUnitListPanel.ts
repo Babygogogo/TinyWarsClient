@@ -32,35 +32,34 @@ namespace TinyWars.SingleCustomWar {
             if (!BwUnitListPanel._instance) {
                 BwUnitListPanel._instance = new BwUnitListPanel();
             }
-            BwUnitListPanel._instance.open();
+            BwUnitListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (BwUnitListPanel._instance) {
-                BwUnitListPanel._instance.close();
+                await BwUnitListPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/multiCustomWar/McwUnitListPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
                 { type: Notify.Type.McwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnSwitch, callback: this._onTouchedBtnSwitch },
-            ];
+            ]);
             this._listUnit.setItemRenderer(UnitRenderer);
-        }
-        protected _onOpened(): void {
+
             const war           = ScwModel.getWar();
             this._war           = war;
             this._unitMap       = war.getUnitMap() as ScwUnitMap;
@@ -69,11 +68,11 @@ namespace TinyWars.SingleCustomWar {
             this._playerIndex   = this._war.getPlayerIndexInTurn();
             this._updateView();
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._unitMap;
-            delete this._cursor;
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._war           = null;
+            this._unitMap       = null;
+            this._cursor        = null;
+            this._dataForList   = null;
             this._listUnit.clear();
         }
 
@@ -164,7 +163,7 @@ namespace TinyWars.SingleCustomWar {
         cursor  : ScwCursor;
     }
 
-    class UnitRenderer extends eui.ItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _conUnitView    : eui.Group;
         private _labelName      : GameUi.UiLabel;

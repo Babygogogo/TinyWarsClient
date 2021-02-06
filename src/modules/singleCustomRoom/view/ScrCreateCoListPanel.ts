@@ -4,18 +4,15 @@ namespace TinyWars.SingleCustomRoom {
     import Lang         = Utility.Lang;
     import ProtoTypes   = Utility.ProtoTypes;
 
-    type OpenData = {
+    type OpenDataForScrCreateCoListPanel = {
         dataIndex   : number;
         coId        : number | null;
     }
-
     export class ScrCreateCoListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: ScrCreateCoListPanel;
-
-        private _openData   : OpenData;
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
@@ -50,42 +47,40 @@ namespace TinyWars.SingleCustomRoom {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(openData: OpenData): void {
+        public static show(openData: OpenDataForScrCreateCoListPanel): void {
             if (!ScrCreateCoListPanel._instance) {
                 ScrCreateCoListPanel._instance = new ScrCreateCoListPanel();
             }
 
-            ScrCreateCoListPanel._instance._openData = openData;
-            ScrCreateCoListPanel._instance.open();
+            ScrCreateCoListPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScrCreateCoListPanel._instance) {
-                ScrCreateCoListPanel._instance.close();
+                await ScrCreateCoListPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/singleCustomRoom/ScrCreateCoListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
                 { ui: this._btnBack,    callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listCo.setItemRenderer(CoRenderer);
             this._listPassiveSkill.setItemRenderer(SkillRenderer);
             this._listCop.setItemRenderer(SkillRenderer);
             this._listScop.setItemRenderer(SkillRenderer);
-        }
-        protected _onOpened(): void {
+
             this._initListCo();
             this._updateView();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCo.clear();
             this._listPassiveSkill.clear();
             this._listCop.clear();
@@ -140,7 +135,7 @@ namespace TinyWars.SingleCustomRoom {
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
 
-            const coId = this._openData.coId;
+            const coId = this._getOpenData<OpenDataForScrCreateCoListPanel>().coId;
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
                 const cfg = data.coBasicCfg;
                 return cfg ? cfg.coId === coId : coId == null;
@@ -148,10 +143,10 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _createDataForListCo(): DataForCoRenderer[] {
-            const dataIndexForCreateWarPlayerList   = this._openData.dataIndex;
+            const dataIndexForCreateWarPlayerList   = this._getOpenData<OpenDataForScrCreateCoListPanel>().dataIndex;
             const data                              : DataForCoRenderer[] = [];
             let index                               = 0;
-            for (const cfg of Utility.ConfigManager.getAvailableCoList(Utility.ConfigManager.getLatestConfigVersion())) {
+            for (const cfg of Utility.ConfigManager.getAvailableCoArray(Utility.ConfigManager.getLatestFormalVersion())) {
                 data.push({
                     dataIndexForCreateWarPlayerList,
                     coBasicCfg  : cfg,
@@ -267,7 +262,7 @@ namespace TinyWars.SingleCustomRoom {
         panel                           : ScrCreateCoListPanel;
     }
 
-    class CoRenderer extends eui.ItemRenderer {
+    class CoRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
@@ -294,9 +289,9 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            ScrCreateCoListPanel.hide();
+            const data = this.data as DataForCoRenderer;
+            data.panel.close();
 
-            const data  = this.data as DataForCoRenderer;
             const cfg   = data.coBasicCfg;
             ScrModel.setCreateWarCoId(data.dataIndexForCreateWarPlayerList, cfg ? cfg.coId : null);
             ScrCreateSettingsPanel.show();
@@ -308,7 +303,7 @@ namespace TinyWars.SingleCustomRoom {
         skillId : number;
     }
 
-    class SkillRenderer extends eui.ItemRenderer {
+    class SkillRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 
@@ -317,7 +312,7 @@ namespace TinyWars.SingleCustomRoom {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()];
         }
     }
 }

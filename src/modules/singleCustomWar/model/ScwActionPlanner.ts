@@ -37,7 +37,7 @@ namespace TinyWars.SingleCustomWar {
 
             this._setState(State.ChoosingProductionTarget);
             this._updateView();
-            ScwProduceUnitPanel.show(gridIndex);
+            ScwProduceUnitPanel.show({ gridIndex });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,13 +206,6 @@ namespace TinyWars.SingleCustomWar {
 
             const unit = this.getFocusUnitLoaded();
             ScwLocalProxy.reqUnitSupply(this._getWar() as ScwWar, this.getMovePath(), unit ? unit.getUnitId() : undefined);
-        }
-
-        public setStateRequestingPlayerBeginTurn(): void {
-            this._setState(State.RequestingPlayerBeginTurn);
-            this._updateView();
-
-            ScwLocalProxy.reqPlayerBeginTurn(this._getWar() as ScwWar);
         }
 
         public setStateRequestingPlayerEndTurn(): void {

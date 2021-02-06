@@ -53,38 +53,36 @@ namespace TinyWars.MapEditor {
             if (!MeSymmetryPanel._instance) {
                 MeSymmetryPanel._instance = new MeSymmetryPanel();
             }
-            MeSymmetryPanel._instance.open();
+            MeSymmetryPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeSymmetryPanel._instance) {
-                MeSymmetryPanel._instance.close();
+                await MeSymmetryPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask  = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName               = "resource/skins/mapEditor/MeSymmetryPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._groupLeftRightBox,          callback: this._onTouchedGroupLeftRightBox, },
                 { ui: this._groupUpDownBox,             callback: this._onTouchedGroupUpDownBox, },
                 { ui: this._groupRotationalBox,         callback: this._onTouchedGroupRotationalBox },
                 { ui: this._groupUpLeftDownRightBox,    callback: this._onTouchedGroupUpLeftDownRightBox },
                 { ui: this._groupUpRightDownLeftBox,    callback: this._onTouchedGroupUpRightDownLeftBox },
-            ];
-        }
+            ]);
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             this._war                   = MeManager.getWar();

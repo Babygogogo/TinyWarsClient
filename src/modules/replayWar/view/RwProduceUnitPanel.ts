@@ -9,6 +9,9 @@ namespace TinyWars.ReplayWar {
     import GridIndex        = Types.GridIndex;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
+    type OpenDataForRwProduceUnitPanel = {
+        gridIndex: GridIndex;
+    }
     export class RwProduceUnitPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -24,16 +27,15 @@ namespace TinyWars.ReplayWar {
         private _gridIndex  : GridIndex;
         private _dataForList: DataForUnitRenderer[];
 
-        public static show(gridIndex: GridIndex): void {
+        public static show(openData: OpenDataForRwProduceUnitPanel): void {
             if (!RwProduceUnitPanel._instance) {
                 RwProduceUnitPanel._instance = new RwProduceUnitPanel();
             }
-            RwProduceUnitPanel._instance._gridIndex = gridIndex;
-            RwProduceUnitPanel._instance.open();
+            RwProduceUnitPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwProduceUnitPanel._instance) {
-                RwProduceUnitPanel._instance.close();
+                await RwProduceUnitPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -44,31 +46,30 @@ namespace TinyWars.ReplayWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/replayWar/RwProduceUnitPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,   callback: this._onNotifyMcwPlannerStateChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
                 { ui: this._btnDetail, callback: this._onTouchedBtnDetail },
-            ];
+            ]);
             this._listUnit.setItemRenderer(UnitRenderer);
-        }
-        protected _onOpened(): void {
+
             this._war = RwModel.getWar();
             this._updateView();
 
             Notify.dispatch(Notify.Type.McwProduceUnitPanelOpened);
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._war           = null;
+            this._dataForList   = null;
             this._listUnit.clear();
 
             Notify.dispatch(Notify.Type.McwProduceUnitPanelClosed);
@@ -95,7 +96,7 @@ namespace TinyWars.ReplayWar {
             this._war.getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnDetail(e: egret.TouchEvent): void {
-            const selectedIndex = (this._listUnit.viewport as eui.List).selectedIndex;
+            const selectedIndex = this._listUnit.getViewList().selectedIndex;
             const data          = selectedIndex != null ? this._dataForList[selectedIndex] : null;
             if (data) {
                 BaseWar.BwUnitDetailPanel.show({
@@ -134,7 +135,7 @@ namespace TinyWars.ReplayWar {
             const configVersion     = war.getConfigVersion();
             const actionPlanner     = war.getActionPlanner() as RwActionPlanner;
             const unitMap           = war.getUnitMap();
-            const gridIndex         = this._gridIndex;
+            const gridIndex         = this._getOpenData<OpenDataForRwProduceUnitPanel>().gridIndex;
             const tile              = war.getTileMap().getTile(gridIndex);
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
             const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();
@@ -182,7 +183,7 @@ namespace TinyWars.ReplayWar {
         unitProductionSkillCfg  : number[];
     }
 
-    class UnitRenderer extends eui.ItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _imgBg          : GameUi.UiImage;
         private _conUnitView    : eui.Group;

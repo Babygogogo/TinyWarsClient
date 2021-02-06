@@ -21,34 +21,32 @@ namespace TinyWars.MapEditor {
             if (!MeSimSettingsPanel._instance) {
                 MeSimSettingsPanel._instance = new MeSimSettingsPanel();
             }
-            MeSimSettingsPanel._instance.open();
+            MeSimSettingsPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeSimSettingsPanel._instance) {
-                MeSimSettingsPanel._instance.close();
+                await MeSimSettingsPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled(true);
+            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/mapEditor/MeSimSettingsPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgScrCreateCustomWar,  callback: this._onMsgScrCreateCustomWar },
-            ];
+            ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
-        }
 
-        protected _onOpened(): void {
             this._tabSettings.bindData([
                 {
                     tabItemData: { name: Lang.getText(Lang.Type.B0002) },
@@ -64,7 +62,7 @@ namespace TinyWars.MapEditor {
             this._btnConfirm.enabled = true;
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._tabSettings.clear();
         }
 
@@ -111,7 +109,7 @@ namespace TinyWars.MapEditor {
         name: string;
     }
 
-    class TabItemRenderer extends eui.ItemRenderer {
+    class TabItemRenderer extends GameUi.UiListItemRenderer {
         private _labelName: GameUi.UiLabel;
 
         protected dataChanged(): void {

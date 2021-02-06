@@ -22,7 +22,6 @@ namespace TinyWars.SingleCustomRoom {
         private _btnHelp        : GameUi.UiButton;
         private _btnCancel      : GameUi.UiButton;
 
-        private _openData   : OpenDataForScrCreateCustomSaveSlotsPanel;
         private _dataForList: DataForSlotRenderer[];
 
         public static show(openData: OpenDataForScrCreateCustomSaveSlotsPanel): void {
@@ -30,39 +29,37 @@ namespace TinyWars.SingleCustomRoom {
                 ScrCreateCustomSaveSlotsPanel._instance = new ScrCreateCustomSaveSlotsPanel();
             }
 
-            ScrCreateCustomSaveSlotsPanel._instance._openData = openData;
-            ScrCreateCustomSaveSlotsPanel._instance.open();
+            ScrCreateCustomSaveSlotsPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScrCreateCustomSaveSlotsPanel._instance) {
-                ScrCreateCustomSaveSlotsPanel._instance.close();
+                await ScrCreateCustomSaveSlotsPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/singleCustomRoom/ScrCreateCustomSaveSlotsPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
             this._srlSaveSlot.setItemRenderer(SlotRenderer);
-        }
-        protected _onOpened(): void {
+
             this._updateView();
         }
-        protected _onClosed(): void {
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._dataForList = null;
             this._srlSaveSlot.clear();
         }
 
@@ -103,7 +100,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
-            const warData   = this._openData;
+            const warData   = this._getOpenData<OpenDataForScrCreateCustomSaveSlotsPanel>();
             const slotList  = ScrModel.getSaveSlotInfoList() || [];
             for (let i = 0; i < CommonConstants.ScwSaveSlotMaxCount; ++i) {
                 dataList.push({
@@ -123,7 +120,7 @@ namespace TinyWars.SingleCustomRoom {
         warData     : ISerialWar;
     }
 
-    class SlotRenderer extends eui.ItemRenderer {
+    class SlotRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _imgBg          : GameUi.UiImage;
         private _labelSlotIndex : GameUi.UiLabel;

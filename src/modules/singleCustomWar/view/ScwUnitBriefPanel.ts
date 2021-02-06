@@ -30,11 +30,11 @@ namespace TinyWars.SingleCustomWar {
             if (!ScwUnitBriefPanel._instance) {
                 ScwUnitBriefPanel._instance = new ScwUnitBriefPanel();
             }
-            ScwUnitBriefPanel._instance.open();
+            ScwUnitBriefPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScwUnitBriefPanel._instance) {
-                ScwUnitBriefPanel._instance.close();
+                await ScwUnitBriefPanel._instance.close();
             }
         }
         public static getInstance(): ScwUnitBriefPanel {
@@ -44,12 +44,12 @@ namespace TinyWars.SingleCustomWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/multiCustomWar/McwUnitBriefPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyBwCursorGridIndexChanged },
@@ -61,19 +61,18 @@ namespace TinyWars.SingleCustomWar {
                 { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
                 { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-            ];
-        }
-        protected _onOpened(): void {
+            ]);
+
             this._war       = ScwModel.getWar();
             this._unitMap   = this._war.getUnitMap() as ScwUnitMap;
             this._cursor    = this._war.getField().getCursor() as ScwCursor;
 
             this._updateView();
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._unitMap;
-            delete this._cursor;
+        protected async _onClosed(): Promise<void> {
+            this._war       = null;
+            this._unitMap   = null;
+            this._cursor    = null;
 
             for (const cell of this._cellList) {
                 this._destroyCell(cell);

@@ -25,36 +25,34 @@ namespace TinyWars.MapEditor {
             if (!MeOffsetPanel._instance) {
                 MeOffsetPanel._instance = new MeOffsetPanel();
             }
-            MeOffsetPanel._instance.open();
+            MeOffsetPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeOffsetPanel._instance) {
-                MeOffsetPanel._instance.close();
+                await MeOffsetPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapEditor/MeOffsetPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm, },
                 { ui: this._inputOffsetX,   callback: this._onFocusOutInputOffsetX, eventType: egret.Event.FOCUS_OUT },
                 { ui: this._inputOffsetY,   callback: this._onFocusOutInputOffsetY, eventType: egret.Event.FOCUS_OUT },
-            ];
-        }
+            ]);
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             const war               = MeManager.getWar();

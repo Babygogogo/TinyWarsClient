@@ -23,7 +23,7 @@ namespace TinyWars.MapEditor {
 
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
-        private _tileView       : MeTileView;
+        private _tileView       = new MeTileView();
         private _labelName      : GameUi.UiLabel;
         private _labelGridIndex : GameUi.UiLabel;
         private _labelState     : GameUi.UiLabel;
@@ -39,11 +39,11 @@ namespace TinyWars.MapEditor {
             if (!MeTileBriefPanel._instance) {
                 MeTileBriefPanel._instance = new MeTileBriefPanel();
             }
-            MeTileBriefPanel._instance.open();
+            MeTileBriefPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeTileBriefPanel._instance) {
-                MeTileBriefPanel._instance.close();
+                await MeTileBriefPanel._instance.close();
             }
         }
         public static getInstance(): MeTileBriefPanel {
@@ -53,12 +53,12 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/mapEditor/MeTileBriefPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyMcwCursorGridIndexChanged },
@@ -70,16 +70,14 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
                 { type: Notify.Type.MeTileChanged,                  callback: this._onNotifyMeTileChanged },
                 { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this, callback: this._onTouchedThis, },
-            ];
+            ]);
 
-            this._tileView = new MeTileView();
             this._conTileView.addChild(this._tileView.getImgBase());
             this._conTileView.addChild(this._tileView.getImgObject());
-        }
-        protected _onOpened(): void {
+
             const war       = MeManager.getWar();
             this._war       = war;
             this._tileMap   = war.getTileMap() as MeTileMap;
@@ -87,7 +85,7 @@ namespace TinyWars.MapEditor {
 
             this._updateView();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._war       = null;
             this._tileMap   = null;
             this._cursor    = null;

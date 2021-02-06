@@ -10,19 +10,19 @@ namespace TinyWars.MapEditor {
             if (!MeWarPanel._instance) {
                 MeWarPanel._instance = new MeWarPanel();
             }
-            MeWarPanel._instance.open();
+            MeWarPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeWarPanel._instance) {
-                MeWarPanel._instance.close();
+                await MeWarPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapEditor/MeWarPanel.exml";
         }
 
@@ -30,7 +30,7 @@ namespace TinyWars.MapEditor {
             this.addChild(MeManager.getWar().getView());
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this.removeChildren();
         }
     }

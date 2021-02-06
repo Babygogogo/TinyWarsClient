@@ -6,6 +6,9 @@ namespace TinyWars.MultiCustomRoom {
     import Helpers      = Utility.Helpers;
     import Types        = Utility.Types;
 
+    type OpenDataForMcrWatchDeleteWatcherDetailPanel = {
+        watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
+    }
     export class McrWatchDeleteWatcherDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = false;
@@ -21,48 +24,44 @@ namespace TinyWars.MultiCustomRoom {
         private _btnConfirm             : GameUi.UiButton;
         private _btnCancel              : GameUi.UiButton;
 
-        private _openData           : ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
         private _dataForListPlayer  : DataForRequesterRenderer[];
 
-        public static show(warInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo): void {
+        public static show(openData: OpenDataForMcrWatchDeleteWatcherDetailPanel): void {
             if (!McrWatchDeleteWatcherDetailPanel._instance) {
                 McrWatchDeleteWatcherDetailPanel._instance = new McrWatchDeleteWatcherDetailPanel();
             }
-            McrWatchDeleteWatcherDetailPanel._instance._openData = warInfo;
-            McrWatchDeleteWatcherDetailPanel._instance.open();
+            McrWatchDeleteWatcherDetailPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrWatchDeleteWatcherDetailPanel._instance) {
-                McrWatchDeleteWatcherDetailPanel._instance.close();
+                await McrWatchDeleteWatcherDetailPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/multiCustomRoom/McrWatchDeleteWatcherDetailPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
+            ]);
             this._listPlayer.setItemRenderer(RequesterRenderer);
-        }
 
-        protected _onOpened(): void {
             this._dataForListPlayer = this._generateDataForListPlayer();
             this._updateView();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listPlayer.clear();
             this._dataForListPlayer = null;
         }
@@ -89,7 +88,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
             if (deleteUserIds.length) {
-                MultiPlayerWar.MpwProxy.reqWatchDeleteWatcher(this._openData.warInfo.warId, deleteUserIds);
+                MultiPlayerWar.MpwProxy.reqWatchDeleteWatcher(this._getOpenData<OpenDataForMcrWatchDeleteWatcherDetailPanel>().watchInfo.warInfo.warId, deleteUserIds);
             }
             this.close();
         }
@@ -113,11 +112,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _generateDataForListPlayer(): DataForRequesterRenderer[] {
-            const openData          = this._openData;
+            const openData          = this._getOpenData<OpenDataForMcrWatchDeleteWatcherDetailPanel>().watchInfo;
             const warInfo           = openData.warInfo;
             const playerInfoList    = warInfo.playerInfoList;
             const dataList          : DataForRequesterRenderer[] = [];
-            for (const info of this._openData.requesterInfos) {
+            for (const info of openData.requesterInfos) {
                 const userId = info.userId;
                 dataList.push({
                     panel           : this,
@@ -140,7 +139,7 @@ namespace TinyWars.MultiCustomRoom {
         isDelete        : boolean;
     }
 
-    class RequesterRenderer extends eui.ItemRenderer {
+    class RequesterRenderer extends GameUi.UiListItemRenderer {
         private _labelName              : GameUi.UiLabel;
         private _labelIsOpponent        : GameUi.UiLabel;
         private _labelIsWatchingOthers  : GameUi.UiLabel;

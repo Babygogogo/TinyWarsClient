@@ -22,37 +22,36 @@ namespace TinyWars.SingleCustomRoom {
             if (!ScrCreateSaveSlotsPanel._instance) {
                 ScrCreateSaveSlotsPanel._instance = new ScrCreateSaveSlotsPanel();
             }
-            ScrCreateSaveSlotsPanel._instance.open();
+            ScrCreateSaveSlotsPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScrCreateSaveSlotsPanel._instance) {
-                ScrCreateSaveSlotsPanel._instance.close();
+                await ScrCreateSaveSlotsPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/singleCustomRoom/ScrCreateSaveSlotsPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
-                { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
-            ];
-            this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._srlSaveSlot.setItemRenderer(SlotRenderer);
-        }
         protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
+            ]);
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ]);
+            this._srlSaveSlot.setItemRenderer(SlotRenderer);
+
             this._updateView();
         }
-        protected _onClosed(): void {
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._dataForList = null;
             this._srlSaveSlot.clear();
         }
 
@@ -102,7 +101,7 @@ namespace TinyWars.SingleCustomRoom {
         slotInfo    : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo | null;
     }
 
-    class SlotRenderer extends eui.ItemRenderer {
+    class SlotRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _imgBg          : GameUi.UiImage;
         private _labelSlotIndex : GameUi.UiLabel;

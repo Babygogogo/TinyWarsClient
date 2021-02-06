@@ -111,6 +111,12 @@ namespace TinyWars.MultiCustomWar {
                 return undefined;
             }
 
+            const warEventManager = this.getWarEventManager();
+            if (warEventManager == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty warEventManager.`);
+                return undefined;
+            }
+
             const playerManager = this.getPlayerManager();
             if (playerManager == null) {
                 Logger.error(`McwWar.serializeForSimulation() empty playerManager.`);
@@ -126,6 +132,12 @@ namespace TinyWars.MultiCustomWar {
             const field = this.getField();
             if (field == null) {
                 Logger.error(`McwWar.serializeForSimulation() empty field.`);
+                return undefined;
+            }
+
+            const serialWarEventManager = warEventManager.serializeForSimulation();
+            if (serialWarEventManager == null) {
+                Logger.error(`McwWar.serializeForSimulation() empty serialWarEventManager.`);
                 return undefined;
             }
 
@@ -160,6 +172,7 @@ namespace TinyWars.MultiCustomWar {
                 executedActions             : [],
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,

@@ -25,36 +25,34 @@ namespace TinyWars.User {
             if (!UserSetPasswordPanel._instance) {
                 UserSetPasswordPanel._instance = new UserSetPasswordPanel();
             }
-            UserSetPasswordPanel._instance.open();
+            UserSetPasswordPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (UserSetPasswordPanel._instance) {
-                UserSetPasswordPanel._instance.close();
+                await UserSetPasswordPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask  = () => this.close();
-            this.skinName               = "resource/skins/user/UserSetPasswordPanel.exml";
-        }
-
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
-                { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgUserSetPassword,  callback: this._onMsgUserSetPassword },
-            ];
-            this._uiListeners = [
-                { ui: this._btnCancel,  callback: this.close },
-                { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+            this.skinName = "resource/skins/user/UserSetPasswordPanel.exml";
         }
 
         protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: NotifyType.LanguageChanged,     callback: this._onNotifyLanguageChanged },
+                { type: NotifyType.MsgUserSetPassword,  callback: this._onMsgUserSetPassword },
+            ]);
+            this._setUiListenerArray([
+                { ui: this._btnCancel,  callback: this.close },
+                { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
+            ]);
+
             this._updateOnLanguageChanged();
         }
 

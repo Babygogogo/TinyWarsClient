@@ -824,7 +824,7 @@ namespace TinyWars.BaseWar.BwHelpers {
                 return undefined;
             }
 
-            const maxPlayerIndex = mapRawData.playersCount;
+            const maxPlayerIndex = mapRawData.playersCountUnneutral;
             if (maxPlayerIndex == null) {
                 Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty maxPlayerIndex.`);
                 return undefined;
@@ -890,7 +890,7 @@ namespace TinyWars.BaseWar.BwHelpers {
     }
 
     export function getTeamIndexByRuleForPlayers(ruleForPlayers: IRuleForPlayers, playerIndex: number): number | null | undefined {
-        for (const playerRule of ruleForPlayers.playerRuleDataList || []) {
+        for (const playerRule of ruleForPlayers.playerRuleDataArray || []) {
             if (playerRule.playerIndex === playerIndex) {
                 return playerRule.teamIndex;
             }
@@ -898,7 +898,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         return undefined;
     }
 
-    export function getVisibilityListWithMapFromPath(map: Visibility[][], mapSize: MapSize): Visibility[] | undefined {
+    export function getVisibilityArrayWithMapFromPath(map: Visibility[][], mapSize: MapSize): Visibility[] | undefined {
         const { width, height } = mapSize;
         const data              = new Array(width * height);
         let needSerialize       = false;
@@ -913,5 +913,112 @@ namespace TinyWars.BaseWar.BwHelpers {
         }
 
         return needSerialize ? data : undefined;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Other validators.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export function checkIsUnitDataValidIgnoringUnitId({ unitData, mapSize, playersCountUnneutral, configVersion }: {
+        unitData                : ProtoTypes.WarSerialization.ISerialUnit;
+        mapSize                 : Types.MapSize;
+        playersCountUnneutral   : number;
+        configVersion           : string;
+    }): boolean {
+        const gridIndex = convertGridIndex(unitData.gridIndex);
+        if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+            return false;
+        }
+
+        const unitType = unitData.unitType as Types.UnitType;
+        if (unitType == null) {
+            return false;
+        }
+
+        const playerIndex = unitData.playerIndex;
+        if ((playerIndex == null)                               ||
+            (playerIndex < CommonConstants.WarFirstPlayerIndex) ||
+            (playerIndex > playersCountUnneutral)
+        ) {
+            return false;
+        }
+
+        const cfg = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+        if (!cfg) {
+            return false;
+        }
+
+        const currBuildMaterial = unitData.currentBuildMaterial;
+        const maxBuildMaterial  = cfg.maxBuildMaterial;
+        if ((currBuildMaterial != null)                                         &&
+            ((maxBuildMaterial == null) || (currBuildMaterial >= maxBuildMaterial))
+        ) {
+            return false;
+        }
+
+        const currFuel  = unitData.currentFuel;
+        const maxFuel   = cfg.maxFuel;
+        if ((currFuel != null)                          &&
+            ((maxFuel == null) || (currFuel >= maxFuel))
+        ) {
+            return false;
+        }
+
+        const currHp    = unitData.currentHp;
+        const maxHp     = cfg.maxHp;
+        if ((currHp != null)                    &&
+            ((maxHp == null) || (currHp >= maxHp))
+        ) {
+            return false;
+        }
+
+        const currProduceMaterial   = unitData.currentProduceMaterial;
+        const maxProduceMaterial    = cfg.maxProduceMaterial;
+        if ((currProduceMaterial != null)                                               &&
+            ((maxProduceMaterial == null) || (currProduceMaterial >= maxProduceMaterial))
+        ) {
+            return false;
+        }
+
+        const currPromotion = unitData.currentPromotion;
+        const maxPromotion  = ConfigManager.getUnitMaxPromotion(configVersion);
+        if ((currPromotion != null)                                 &&
+            ((maxPromotion == null) || (currPromotion > maxPromotion))
+        ) {
+            return false;
+        }
+
+        const flareCurrentAmmo  = unitData.flareCurrentAmmo;
+        const flareMaxAmmo      = cfg.flareMaxAmmo;
+        if ((flareCurrentAmmo != null)                                  &&
+            ((flareMaxAmmo == null) || (flareCurrentAmmo >= flareMaxAmmo))
+        ) {
+            return false;
+        }
+
+        if ((unitData.isDiving) && (cfg.diveCfgs == null)) {
+            return false;
+        }
+
+        const currAmmo  = unitData.primaryWeaponCurrentAmmo;
+        const maxAmmo   = cfg.primaryWeaponMaxAmmo;
+        if ((currAmmo != null)                          &&
+            ((maxAmmo == null) || (currAmmo >= maxAmmo))
+        ) {
+            return false;
+        }
+
+        if ((unitData.isCapturingTile) && (!cfg.canCaptureTile)) {
+            return false;
+        }
+
+        const actionState = unitData.actionState;
+        if ((actionState != null)                           &&
+            (actionState !== Types.UnitActionState.Idle)    &&
+            (actionState !== Types.UnitActionState.Acted)
+        ) {
+            return false;
+        }
+
+        return true;
     }
 }

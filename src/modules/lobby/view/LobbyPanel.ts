@@ -25,43 +25,42 @@ namespace TinyWars.Lobby {
             if (!LobbyPanel._instance) {
                 LobbyPanel._instance = new LobbyPanel();
             }
-            LobbyPanel._instance.open();
+            LobbyPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (LobbyPanel._instance) {
-                LobbyPanel._instance.close();
+                await LobbyPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/lobby/LobbyPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this, callback: this._onResize, eventType: egret.Event.RESIZE },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
                 { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
                 { type: Notify.Type.MsgRmrGetMyRoomPublicInfoList,  callback: this._onMsgRmrGetMyRoomPublicInfoList },
-            ];
-
+            ]);
             this._listCommand.setItemRenderer(CommandRenderer);
-        }
 
-        protected async _onOpened(): Promise<void> {
             this._showOpenAnimation();
 
             this._updateComponentsForLanguage();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+
             this._listCommand.clear();
         }
 
@@ -106,6 +105,22 @@ namespace TinyWars.Lobby {
             egret.Tween.get(labelTips)
                 .set({ alpha: 0 })
                 .to({ alpha: 1 }, 200);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve, reject) => {
+                const group = this._group;
+                egret.Tween.removeTweens(group);
+                egret.Tween.get(group)
+                    .set({ alpha: 1, right: 0 })
+                    .to({ alpha: 0, right: -40 }, 200);
+
+                const labelTips = this._labelTips;
+                egret.Tween.removeTweens(labelTips);
+                egret.Tween.get(labelTips)
+                    .set({ alpha: 1 })
+                    .to({ alpha: 0 }, 200)
+                    .call(resolve);
+            });
         }
 
         private async _updateComponentsForLanguage(): Promise<void> {
@@ -158,7 +173,7 @@ namespace TinyWars.Lobby {
                 dataList.push({
                     name    : Lang.getText(Lang.Type.B0192),
                     callback: (): void => {
-                        LobbyPanel.hide();
+                        this.close();
                         MapManagement.MmMainMenuPanel.show();
                     },
                 });
@@ -174,7 +189,7 @@ namespace TinyWars.Lobby {
         redChecker? : () => Promise<boolean>;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _labelCommand   : GameUi.UiLabel;
         private _imgRed         : GameUi.UiImage;
 

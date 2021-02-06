@@ -35,7 +35,7 @@ namespace TinyWars.SingleCustomRoom {
             slotIndex           : 0,
             settingsForCommon   : {
                 mapId           : undefined,
-                configVersion   : Utility.ConfigManager.getLatestConfigVersion(),
+                configVersion   : Utility.ConfigManager.getLatestFormalVersion(),
             },
             settingsForScw: {
             },
@@ -67,7 +67,7 @@ namespace TinyWars.SingleCustomRoom {
 
         export async function resetCreateWarDataByMapId(mapId: number): Promise<void> {
             getCreateWarData().settingsForCommon.mapId = mapId;
-            setCreateWarConfigVersion(Utility.ConfigManager.getLatestConfigVersion());
+            setCreateWarConfigVersion(Utility.ConfigManager.getLatestFormalVersion());
             await resetCreateWarDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
             setCreateWarSaveSlotIndex(getAvailableSaveSlot(getSaveSlotInfoList()));
         }
@@ -80,7 +80,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         export async function resetCreateWarDataByPresetWarRuleId(ruleId: number): Promise<void> {
-            const warRule = (await getCreateWarMapRawData()).warRuleList.find(warRule => warRule.ruleId === ruleId);
+            const warRule = (await getCreateWarMapRawData()).warRuleArray.find(warRule => warRule.ruleId === ruleId);
             if (warRule == null) {
                 Logger.error(`ScwModel.setCreateWarPresetWarRuleId() empty warRule.`);
                 return undefined;
@@ -104,12 +104,12 @@ namespace TinyWars.SingleCustomRoom {
             if (currWarRuleId == null) {
                 await resetCreateWarDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
             } else {
-                await resetCreateWarDataByPresetWarRuleId((currWarRuleId + 1) % (await getCreateWarMapRawData()).warRuleList.length);
+                await resetCreateWarDataByPresetWarRuleId((currWarRuleId + 1) % (await getCreateWarMapRawData()).warRuleArray.length);
             }
         }
 
         async function resetCreateWarPlayerInfoList(): Promise<void> {
-            const playersCount      = (await getCreateWarMapRawData()).playersCount;
+            const playersCount      = (await getCreateWarMapRawData()).playersCountUnneutral;
             const settingsForCommon = getCreateWarData().settingsForCommon;
             const list              : ProtoTypes.Structure.IWarPlayerInfo[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
@@ -153,7 +153,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         export function setCreateWarCoId(playerIndex: number, coId: number): void {
-            const availableCoIdList = getCreateWarPlayerRule(playerIndex).availableCoIdList;
+            const availableCoIdList = getCreateWarPlayerRule(playerIndex).availableCoIdArray;
             if (availableCoIdList.indexOf(coId) < 0) {
                 setCreateWarPresetWarRuleId(null);
                 availableCoIdList.push(coId);
@@ -261,7 +261,7 @@ namespace TinyWars.SingleCustomRoom {
 
         export function getCreateWarInvalidParamTips(): string | null{
             const teamSet = new Set<number>();
-            for (const playerRule of getCreateWarData().settingsForCommon.warRule.ruleForPlayers.playerRuleDataList) {
+            for (const playerRule of getCreateWarData().settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray) {
                 teamSet.add(playerRule.teamIndex);
             }
             if (teamSet.size <= 1) {

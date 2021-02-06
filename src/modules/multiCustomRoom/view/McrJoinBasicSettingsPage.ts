@@ -56,8 +56,8 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrJoinBasicSettingsPage.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected async _onOpened(): Promise<void> {
+            this._setUiListenerArray([
                 { ui: this._btnBuildings,           callback: this._onTouchedBtnBuildings },
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
                 { ui: this._btnModifyPlayerIndex,   callback: this._onTouchedBtnModifyPlayerIndex, },
@@ -66,18 +66,16 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnHelpSkinId,          callback: this._onTouchedBtnHelpSkinId, },
                 { ui: this._btnHelpTimeLimit,       callback: this._onTouchedBtnHelpTimeLimit, },
                 { ui: this._btnChangeCo,            callback: this._onTouchedBtnChangeCo, },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._btnModifyPlayerIndex.setTextColor(0x00FF00);
             this._btnModifySkinId.setTextColor(0x00FF00);
             this._btnChangeCo.setTextColor(0x00FF00);
-        }
 
-        protected async _onOpened(): Promise<void> {
             this._mapRawData = await McrModel.Join.getMapRawData();
 
             this._updateComponentsForLanguage();
@@ -164,7 +162,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnChangeCo(e: egret.TouchEvent): void {
             McrJoinSettingsPanel.hide();
-            McrJoinCoListPanel.show(McrModel.Join.getCoId());
+            McrJoinCoListPanel.show({ coId: McrModel.Join.getCoId() });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -198,7 +196,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateLabelMapName(): void {
             WarMapModel.getMapNameInCurrentLanguage(this._mapRawData.mapId).then(v =>
-                this._labelMapName.text = `${v} (${this._mapRawData.playersCount}P)`
+                this._labelMapName.text = `${v} (${this._mapRawData.playersCountUnneutral}P)`
             );
         }
 
@@ -225,7 +223,7 @@ namespace TinyWars.MultiCustomRoom {
             if (coId == null) {
                 this._labelCoName.text = `(${Lang.getText(Lang.Type.B0001)} CO)`;
             } else {
-                const cfg               = Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getLatestConfigVersion(), coId);
+                const cfg               = Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getLatestFormalVersion(), coId);
                 this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
             }
         }
@@ -258,7 +256,7 @@ namespace TinyWars.MultiCustomRoom {
         playerIndex     : number;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex     : GameUi.UiLabel;
         private _labelNickname  : GameUi.UiLabel;
 

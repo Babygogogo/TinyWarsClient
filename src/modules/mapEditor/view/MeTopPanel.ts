@@ -39,12 +39,12 @@ namespace TinyWars.MapEditor {
             if (!MeTopPanel._instance) {
                 MeTopPanel._instance = new MeTopPanel();
             }
-            MeTopPanel._instance.open();
+            MeTopPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeTopPanel._instance) {
-                MeTopPanel._instance.close();
+                await MeTopPanel._instance.close();
             }
         }
 
@@ -54,8 +54,8 @@ namespace TinyWars.MapEditor {
             this.skinName = "resource/skins/mapEditor/MeTopPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
@@ -66,8 +66,8 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
                 { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnModePreview,             callback: this._onTouchedBtnModePreview },
                 { ui: this._btnModeDrawTileBase,        callback: this._onTouchedBtnModeDrawTileBase },
                 { ui: this._btnModeDrawTileObject,      callback: this._onTouchedBtnModeDrawTileObject },
@@ -77,13 +77,12 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnVisibility,              callback: this._onTouchedBtnVisibility },
                 { ui: this._btnSymmetry,                callback: this._onTouchedBtnSymmetry },
                 { ui: this._btnMenu,                    callback: this._onTouchedBtnMenu, },
-            ];
+            ]);
+
             this._conTileView.addChild(this._tileView.getImgBase());
             this._conTileView.addChild(this._tileView.getImgObject());
             this._conUnitView.addChild(this._unitView);
-        }
 
-        protected _onOpened(): void {
             this._war       = MeManager.getWar();
             this._drawer    = this._war.getDrawer();
             this._initTileView();
@@ -92,9 +91,9 @@ namespace TinyWars.MapEditor {
             this._updateView();
         }
 
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._drawer;
+        protected async _onClosed(): Promise<void> {
+            this._war       = null;
+            this._drawer    = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

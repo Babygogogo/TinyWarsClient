@@ -1,11 +1,12 @@
 
 namespace TinyWars.Utility.FlowManager {
-    import UserModel    = User.UserModel;
-    import MpwProxy     = MultiPlayerWar.MpwProxy;
-    import MpwModel     = MultiPlayerWar.MpwModel;
-    import ScwModel     = SingleCustomWar.ScwModel;
-    import RwModel      = ReplayWar.RwModel;
-    import MeManager    = MapEditor.MeManager;
+    import UserModel        = User.UserModel;
+    import MpwProxy         = MultiPlayerWar.MpwProxy;
+    import MpwModel         = MultiPlayerWar.MpwModel;
+    import ScwModel         = SingleCustomWar.ScwModel;
+    import RwModel          = ReplayWar.RwModel;
+    import MeManager        = MapEditor.MeManager;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     const _NET_EVENTS = [
         { msgCode: Network.Codes.MsgCommonServerDisconnect, callback: _onMsgCommonServerDisconnect },
@@ -22,20 +23,26 @@ namespace TinyWars.Utility.FlowManager {
 
     export async function startGame(stage: egret.Stage): Promise<void> {
         window.onerror = (message, filename, row, col, err) => {
+            const content = `${message}\n\n${err ? err.stack : "No available call stack."}`;
             Common.CommonErrorPanel.show({
-                content : `${message}\n\n${err ? err.stack : "No available call stack."}`,
+                content,
             });
+            Chat.ChatProxy.reqChatAddMessage(
+                content.substr(0, CommonConstants.ChatContentMaxLength),
+                Types.ChatMessageToCategory.Private,
+                CommonConstants.AdminUserId,
+            );
         };
 
-        Network.Manager.addListeners(_NET_EVENTS, FlowManager);
+        Network.NetManager.addListeners(_NET_EVENTS, FlowManager);
         Notify.addEventListeners(_NOTIFY_EVENTS, FlowManager);
         Utility.StageManager.init(stage);
         await Promise.all([ResManager.init(), ProtoManager.init()]);
 
         Lang.init();
         NoSleepManager.init();
-        Utility.ConfigManager.init();
-        Network.Manager.init();
+        ConfigManager.init();
+        Network.NetManager.init();
         MpwProxy.init();
         MpwModel.init();
         Time.TimeModel.init();
@@ -57,6 +64,7 @@ namespace TinyWars.Utility.FlowManager {
         Common.CommonProxy.init();
         Common.CommonModel.init();
         Broadcast.BroadcastProxy.init();
+        ChangeLog.ChangeLogProxy.init();
 
         _removeLoadingDom();
         gotoLogin();
@@ -229,7 +237,7 @@ namespace TinyWars.Utility.FlowManager {
         return (!_hasOnceWentToLobby)
             && (User.UserModel.getIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
-            && (Utility.ConfigManager.checkIsConfigLoaded(Utility.ConfigManager.getLatestConfigVersion()))
+            && (ConfigManager.checkIsConfigLoaded(ConfigManager.getLatestFormalVersion()))
     }
 
     function _removeLoadingDom(): void {

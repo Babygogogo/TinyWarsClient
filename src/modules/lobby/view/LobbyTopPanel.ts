@@ -18,12 +18,12 @@ namespace TinyWars.Lobby {
             if (!LobbyTopPanel._instance) {
                 LobbyTopPanel._instance = new LobbyTopPanel();
             }
-            LobbyTopPanel._instance.open();
+            LobbyTopPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (LobbyTopPanel._instance) {
-                LobbyTopPanel._instance.close();
+                await LobbyTopPanel._instance.close();
             }
         }
 
@@ -33,8 +33,8 @@ namespace TinyWars.Lobby {
             this.skinName = "resource/skins/lobby/LobbyTopPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogin,                   callback: this._onMsgUserLogin },
                 { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
@@ -43,17 +43,18 @@ namespace TinyWars.Lobby {
                 { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
                 { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
                 { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessages },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnMyInfo,  callback: this._onTouchedBtnMyInfo },
                 { ui: this._btnChat,    callback: this._onTouchedBtnChat },
-            ];
-        }
+            ]);
 
-        protected _onOpened(): void {
             this._showOpenAnimation();
 
             this._updateView();
+        }
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
         }
 
         private _onMsgUserLogin(e: egret.Event): void {
@@ -61,7 +62,7 @@ namespace TinyWars.Lobby {
         }
 
         private _onMsgUserLogout(e: egret.Event): void {
-            LobbyTopPanel.hide();
+            this.close();
         }
 
         private _onMsgUserSetNickname(e: egret.Event): void {
@@ -87,7 +88,7 @@ namespace TinyWars.Lobby {
         private _onTouchedBtnMyInfo(e: egret.Event): void {
             User.UserOnlineUsersPanel.hide();
             Chat.ChatPanel.hide();
-            User.UserPanel.show(UserModel.getSelfUserId());
+            User.UserPanel.show({ userId: UserModel.getSelfUserId() });
         }
 
         private _onTouchedBtnChat(e: egret.TouchEvent): void {
@@ -104,6 +105,16 @@ namespace TinyWars.Lobby {
             egret.Tween.get(group)
                 .set({ alpha: 0, top: -40 })
                 .to({ alpha: 1, top: 0 }, 200);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve, reject) => {
+                const group = this._group;
+                egret.Tween.removeTweens(group);
+                egret.Tween.get(group)
+                    .set({ alpha: 1, top: 0 })
+                    .to({ alpha: 0, top: -40 }, 200)
+                    .call(resolve);
+            });
         }
 
         private _updateView(): void {

@@ -10,19 +10,19 @@ namespace TinyWars.MultiPlayerWar {
             if (!McwBackgroundPanel._instance) {
                 McwBackgroundPanel._instance = new McwBackgroundPanel();
             }
-            McwBackgroundPanel._instance.open();
+            McwBackgroundPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McwBackgroundPanel._instance) {
-                McwBackgroundPanel._instance.close();
+                await McwBackgroundPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiCustomWar/McwBackgroundPanel.exml";
         }
     }

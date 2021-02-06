@@ -13,10 +13,9 @@ namespace TinyWars.MultiCustomRoom {
     import NetMessage       = ProtoTypes.NetMessage;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export type OpenParamForRoomBasicSettingsPage = {
+    export type OpenDataForMcrRoomBasicSettingsPage = {
         roomId  : number;
     }
-
     export class McrRoomBasicSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle        : TinyWars.GameUi.UiButton;
         private _labelMapName           : TinyWars.GameUi.UiLabel;
@@ -63,8 +62,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
         private _listPlayer             : TinyWars.GameUi.UiScrollList;
 
-        protected _dataForOpen  : OpenParamForRoomBasicSettingsPage;
-        private _roomInfo       : ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
+        private _roomInfo               : ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
 
         public constructor() {
             super();
@@ -72,8 +70,8 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrRoomBasicSettingsPage.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected async _onOpened(): Promise<void> {
+            this._setUiListenerArray([
                 { ui: this._btnBuildings,           callback: this._onTouchedBtnBuildings },
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
                 { ui: this._btnModifyPlayerIndex,   callback: this._onTouchedBtnModifyPlayerIndex, },
@@ -83,21 +81,19 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnHelpSkinId,          callback: this._onTouchedBtnHelpSkinId, },
                 { ui: this._btnHelpTimeLimit,       callback: this._onTouchedBtnHelpTimeLimit, },
                 { ui: this._btnChangeCo,            callback: this._onTouchedBtnChangeCo, },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onMsgMcrGetRoomInfo },
-            ];
+            ]);
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._btnModifyPlayerIndex.setTextColor(0x00FF00);
             this._btnModifySkinId.setTextColor(0x00FF00);
             this._btnChangeCo.setTextColor(0x00FF00);
             this._btnModifyReady.setTextColor(0x00FF00);
-        }
 
-        protected async _onOpened(): Promise<void> {
-            const roomId    = this._dataForOpen.roomId;
+            const roomId    = this._getOpenData<OpenDataForMcrRoomBasicSettingsPage>().roomId;
             this._roomInfo  = await McrModel.getRoomInfo(roomId);
 
             this._updateComponentsForLanguage();
@@ -380,7 +376,7 @@ namespace TinyWars.MultiCustomRoom {
                     group.visible   = true;
                     const coId      = playerData ? playerData.coId : null;
                     if (coId != null) {
-                        this._labelCoName.text = ConfigManager.getCoNameAndTierText(ConfigManager.getLatestConfigVersion(), coId);
+                        this._labelCoName.text = ConfigManager.getCoNameAndTierText(ConfigManager.getLatestFormalVersion(), coId);
                     }
                 }
             }
@@ -434,7 +430,7 @@ namespace TinyWars.MultiCustomRoom {
                 const settingsForCommon = roomInfo.settingsForCommon;
                 const playerDataList    = roomInfo.playerDataList;
                 const playerRules       = settingsForCommon.warRule.ruleForPlayers;
-                const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCount;
+                const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCountUnneutral;
                 for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                     dataList.push({
                         roomInfo,
@@ -456,7 +452,7 @@ namespace TinyWars.MultiCustomRoom {
         playerData      : ProtoTypes.Structure.IDataForPlayerInRoom;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelNickname  : GameUi.UiLabel;
         private _labelIndex     : GameUi.UiLabel;
         private _btnDelete      : GameUi.UiButton;

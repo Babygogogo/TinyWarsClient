@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="semi_transparent" />
+    <e:Group left="200" right="200" height="250" verticalCenter="0">
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                        left="0" top="0" bottom="0" right="0" locked="true" />
+        <GameUi:UiLabel id="_labelTitle" text="创建战局" bold="true" size="22" top="10" textColor="0xffffff"
+                        horizontalCenter="0" locked="true" />
+        <GameUi:UiButton id="_btnType" label="切换类型" skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
+                         top="0" left="0" locked="true" />
+        <GameUi:UiButton id="_btnClose" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
+                         right="0" top="0" locked="true" />
+        <e:Group y="40" left="10" right="10">
+            <GameUi:UiLabel id="_labelDesc" text="创建战局" size="18" textColor="0xFFFFFF" x="0" y="0" width="540" />
+            <GameUi:UiLabel id="_labelError" text="创建战局" size="18" textColor="0xFFFFFF" x="0" y="0" width="540" />
+            <e:layout>
+                <e:VerticalLayout horizontalAlign="center" />
+            </e:layout>
+        </e:Group>
+        <e:Group y="200" horizontalCenter="0">
+            <e:Group id="_groupIsNot" x="0" y="6">
+                <e:Group x="0" y="0" locked="true">
+                    <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="Common0002" />
+                    <GameUi:UiImage id="_imgIsNot" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
+                                    source="Common0004" y="0" />
+                </e:Group>
+                <GameUi:UiLabel id="_labelIsNot" text="取反" size="18" textColor="0xFFFFFF" x="10" y="10" locked="true" />
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
+            </e:Group>
+            <e:Group x="261" y="0">
+                <GameUi:UiLabel id="_labelPlayerIndex" text="玩家序号" size="18" textColor="0xFFFFFF" x="0" y="12"
+                                locked="true" />
+                <GameUi:UiTextInput id="_inputPlayerIndex" width="60" x="58" y="0" anchorOffsetX="0" anchorOffsetY="0"
+                                    maxChars="20" locked="true">
+                    <GameUi:skinName>
+                        <e:Skin width="100" height="30">
+                            <e:Image source="c08_t06_s01_f01" left="0" right="0" y="27" />
+                            <e:EditableText id="textDisplay" size="24" left="0" right="0" height="30"
+                                            textColor="0xffffff" />
+                            <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                     height="30" textColor="0x808080" />
+                        </e:Skin>
+                    </GameUi:skinName>
+                </GameUi:UiTextInput>
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="middle" />
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:HorizontalLayout verticalAlign="middle" gap="120" />
+            </e:layout>
+        </e:Group>
+    </e:Group>
+</e:Skin>

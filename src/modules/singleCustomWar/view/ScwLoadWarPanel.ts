@@ -25,38 +25,37 @@ namespace TinyWars.SingleCustomWar {
                 ScwLoadWarPanel._instance = new ScwLoadWarPanel();
             }
 
-            ScwLoadWarPanel._instance.open();
+            ScwLoadWarPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScwLoadWarPanel._instance) {
-                ScwLoadWarPanel._instance.close();
+                await ScwLoadWarPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/singleCustomWar/ScwLoadWarPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
             this._srlSaveSlot.setItemRenderer(SlotRenderer);
-        }
-        protected _onOpened(): void {
+
             this._updateView();
         }
-        protected _onClosed(): void {
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._dataForList = null;
             this._srlSaveSlot.clear();
         }
 
@@ -114,7 +113,7 @@ namespace TinyWars.SingleCustomWar {
         slotInfo    : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo | null;
     }
 
-    class SlotRenderer extends eui.ItemRenderer {
+    class SlotRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _imgBg          : GameUi.UiImage;
         private _labelSlotIndex : GameUi.UiLabel;

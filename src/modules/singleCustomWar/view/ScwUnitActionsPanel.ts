@@ -18,51 +18,47 @@ namespace TinyWars.SingleCustomWar {
         private _group      : eui.Group;
         private _listAction : GameUi.UiScrollList;
 
-        private _openData       : OpenDataForScwUnitActionsPanel;
         private _war            : ScwWar;
         private _actionPlanner  : ScwActionPlanner;
 
-        public static show(data: OpenDataForScwUnitActionsPanel): void {
+        public static show(openData: OpenDataForScwUnitActionsPanel): void {
             if (!ScwUnitActionsPanel._instance) {
                 ScwUnitActionsPanel._instance = new ScwUnitActionsPanel();
             }
-            ScwUnitActionsPanel._instance._openData = data;
-            ScwUnitActionsPanel._instance.open();
+            ScwUnitActionsPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScwUnitActionsPanel._instance) {
-                ScwUnitActionsPanel._instance.close();
+                await ScwUnitActionsPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/multiCustomWar/McwUnitActionsPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 // { type: Notify.Type.GlobalTouchBegin,           callback: this._onNotifyGlobalTouchBegin },
                 // { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
                 // { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
                 { type: Notify.Type.ZoomableContentsMoved,      callback: this._onNotifyZoomableContentsMoved },
                 { type: Notify.Type.UnitAnimationTick,          callback: this._onNotifyUnitAnimationTick },
-            ];
-
+            ]);
             this._listAction.setItemRenderer(UnitActionRenderer);
-        }
-        protected _onOpened(): void {
+
             this._war           = ScwModel.getWar();
             this._actionPlanner = this._war.getField().getActionPlanner() as ScwActionPlanner;
 
             this._updateView();
             this._updatePosition();
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._actionPlanner;
+        protected async _onClosed(): Promise<void> {
+            this._war           = null;
+            this._actionPlanner = null;
             this._listAction.clear();
         }
 
@@ -95,7 +91,7 @@ namespace TinyWars.SingleCustomWar {
             const war           = ScwModel.getWar();
             const unitMap       = war.getUnitMap();
             const dataForList   = [] as DataForUnitActionRenderer[];
-            for (const data of this._openData.actionList) {
+            for (const data of this._getOpenData<OpenDataForScwUnitActionsPanel>().actionList) {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
                     : (new (unitMap.getUnitClass())).init({
@@ -122,7 +118,7 @@ namespace TinyWars.SingleCustomWar {
         private _updatePosition(): void {
             const container = ScwModel.getWar().getView().getFieldContainer();
             const contents  = container.getContents();
-            const gridIndex = this._openData.destination;
+            const gridIndex = this._getOpenData<OpenDataForScwUnitActionsPanel>().destination;
             const gridSize  = Utility.ConfigManager.getGridSize();
             const stage     = Utility.StageManager.getStage();
             const group     = this._group;
@@ -150,7 +146,7 @@ namespace TinyWars.SingleCustomWar {
         canProduceUnit? : boolean;
     }
 
-    class UnitActionRenderer extends eui.ItemRenderer {
+    class UnitActionRenderer extends GameUi.UiListItemRenderer {
         private _labelAction: GameUi.UiLabel;
         private _labelCost  : GameUi.UiLabel;
         private _conUnitView: eui.Group;

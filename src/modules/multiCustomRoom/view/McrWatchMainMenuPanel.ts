@@ -18,39 +18,36 @@ namespace TinyWars.MultiCustomRoom {
             if (!McrWatchMainMenuPanel._instance) {
                 McrWatchMainMenuPanel._instance = new McrWatchMainMenuPanel();
             }
-            McrWatchMainMenuPanel._instance.open();
+            McrWatchMainMenuPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrWatchMainMenuPanel._instance) {
-                McrWatchMainMenuPanel._instance.close();
+                await McrWatchMainMenuPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiCustomRoom/McrWatchMainMenuPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
-            ];
-
+            ]);
             this._listCommand.setItemRenderer(CommandRenderer);
-        }
 
-        protected _onOpened(): void {
             this._updateView();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCommand.clear();
         }
 
@@ -58,12 +55,12 @@ namespace TinyWars.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            McrWatchMainMenuPanel.hide();
+            this.close();
             McrMainMenuPanel.show();
         }
 
         private _onMsgUserLogout(e: egret.Event): void {
-            McrWatchMainMenuPanel.hide();
+            this.close();
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateView();
@@ -83,14 +80,14 @@ namespace TinyWars.MultiCustomRoom {
                 {
                     name    : Lang.getText(Lang.Type.B0207),
                     callback: (): void => {
-                        McrWatchMainMenuPanel.hide();
+                        this.close();
                         McrWatchMakeRequestWarsPanel.show();
                     },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0208),
                     callback: (): void => {
-                        McrWatchMainMenuPanel.hide();
+                        this.close();
                         McrWatchHandleRequestWarsPanel.show();
                     },
                     redChecker  : () => {
@@ -101,14 +98,14 @@ namespace TinyWars.MultiCustomRoom {
                 {
                     name    : Lang.getText(Lang.Type.B0219),
                     callback: (): void => {
-                        McrWatchMainMenuPanel.hide();
+                        this.close();
                         McrWatchDeleteWatcherWarsPanel.show();
                     },
                 },
                 {
                     name    : Lang.getText(Lang.Type.B0222),
                     callback: (): void => {
-                        McrWatchMainMenuPanel.hide();
+                        this.close();
                         McrWatchOngoingWarsPanel.show();
                     },
                 },
@@ -122,7 +119,7 @@ namespace TinyWars.MultiCustomRoom {
         redChecker? : () => boolean;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _labelCommand   : GameUi.UiLabel;
         private _imgRed         : GameUi.UiImage;
 

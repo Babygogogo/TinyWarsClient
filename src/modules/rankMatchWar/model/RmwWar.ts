@@ -113,6 +113,12 @@ namespace TinyWars.RankMatchWar {
                 return undefined;
             }
 
+            const warEventManager = this.getWarEventManager();
+            if (warEventManager  == null) {
+                Logger.error(`RmwWar.serializeForSimulation() empty warEventManager.`);
+                return undefined;
+            }
+
             const playerManager = this.getPlayerManager();
             if (playerManager == null) {
                 Logger.error(`RmwWar.serializeForSimulation() empty playerManager.`);
@@ -128,6 +134,12 @@ namespace TinyWars.RankMatchWar {
             const field = this.getField();
             if (field == null) {
                 Logger.error(`RmwWar.serializeForSimulation() empty field.`);
+                return undefined;
+            }
+
+            const serialWarEventManager = warEventManager.serializeForSimulation();
+            if (serialWarEventManager == null) {
+                Logger.error(`RmwWar.serializeForSimulation() empty serialWarEventManager.`);
                 return undefined;
             }
 
@@ -162,6 +174,7 @@ namespace TinyWars.RankMatchWar {
                 executedActions             : [],
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,

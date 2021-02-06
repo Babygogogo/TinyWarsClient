@@ -19,33 +19,31 @@ namespace TinyWars.MultiPlayerWar {
             if (!McwBuildingListPanel._instance) {
                 McwBuildingListPanel._instance = new McwBuildingListPanel();
             }
-            McwBuildingListPanel._instance.open();
+            McwBuildingListPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McwBuildingListPanel._instance) {
-                McwBuildingListPanel._instance.close();
+                await McwBuildingListPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/multiCustomWar/McwBuildingListPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => McwBuildingListPanel.hide();
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
-            ];
-
+            ]);
             this._listTile.setItemRenderer(TileRenderer);
-        }
-        protected _onOpened(): void {
+
             this._updateComponentsForLanguage();
             this._updateListTile();
         }
@@ -102,7 +100,7 @@ namespace TinyWars.MultiPlayerWar {
         dict            : Map<number, number>;
     }
 
-    class TileRenderer extends eui.ItemRenderer {
+    class TileRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
         private _labelNum0      : TinyWars.GameUi.UiLabel;

@@ -17,8 +17,6 @@ namespace TinyWars.MapEditor {
 
         private static _instance: MeSimChooseCoPanel;
 
-        private _openData       : OpenDataForSimChooseCoPanel;
-
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
         private _listCo         : GameUi.UiScrollList;
@@ -57,37 +55,35 @@ namespace TinyWars.MapEditor {
                 MeSimChooseCoPanel._instance = new MeSimChooseCoPanel();
             }
 
-            MeSimChooseCoPanel._instance._openData = openData;
-            MeSimChooseCoPanel._instance.open();
+            MeSimChooseCoPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeSimChooseCoPanel._instance) {
-                MeSimChooseCoPanel._instance.close();
+                await MeSimChooseCoPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapEditor/MeSimChooseCoPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
                 { ui: this._btnBack,    callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listCo.setItemRenderer(CoRenderer);
             this._listPassiveSkill.setItemRenderer(SkillRenderer);
             this._listCop.setItemRenderer(SkillRenderer);
             this._listScop.setItemRenderer(SkillRenderer);
-        }
-        protected _onOpened(): void {
+
             this._initListCo();
             this._updateView();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCo.clear();
             this._listPassiveSkill.clear();
             this._listCop.clear();
@@ -141,17 +137,19 @@ namespace TinyWars.MapEditor {
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
+
+            const openData = this._getOpenData<OpenDataForSimChooseCoPanel>();
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
                 const cfg = data.coBasicCfg;
-                return cfg ? cfg.coId === this._openData.coId : this._openData == null;
+                return cfg ? cfg.coId === openData.coId : openData == null;
             }));
         }
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const data          : DataForCoRenderer[] = [];
-            const playerIndex   = this._openData.playerIndex;
+            const playerIndex   = this._getOpenData<OpenDataForSimChooseCoPanel>().playerIndex;
             let index           = 0;
-            for (const cfg of ConfigManager.getAvailableCoList(MeModel.Sim.getWarData().settingsForCommon.configVersion)) {
+            for (const cfg of ConfigManager.getAvailableCoArray(MeModel.Sim.getWarData().settingsForCommon.configVersion)) {
                 data.push({
                     playerIndex,
                     coBasicCfg  : cfg,
@@ -261,7 +259,7 @@ namespace TinyWars.MapEditor {
         panel       : MeSimChooseCoPanel;
     }
 
-    class CoRenderer extends eui.ItemRenderer {
+    class CoRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
@@ -322,7 +320,7 @@ namespace TinyWars.MapEditor {
         skillId : number;
     }
 
-    class SkillRenderer extends eui.ItemRenderer {
+    class SkillRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 
@@ -331,7 +329,7 @@ namespace TinyWars.MapEditor {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()];
         }
     }
 }

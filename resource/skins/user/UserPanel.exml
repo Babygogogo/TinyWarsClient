@@ -9,7 +9,7 @@
                             locked="true" />
             <GameUi:UiButton id="_btnClose" label="关闭" y="0" right="0" width="160"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-            <e:Scroller left="0" right="0" top="40" bottom="5">
+            <e:Scroller id="_scroller" left="0" right="0" top="40" bottom="5">
                 <e:Group x="20" y="0">
                     <e:Group x="20" y="10">
                         <e:Group x="0" y="0">
@@ -134,9 +134,15 @@
                                          skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <GameUi:UiButton id="_btnChat" label="聊天" y="340" x="236" width="200"
                                          skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+                        <GameUi:UiButton id="_btnComplaint" label="意见反馈" y="340" x="236" width="200"
+                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <GameUi:UiButton id="_btnSwitchTexture" label="切换贴图" y="350" x="246" width="200"
                                          skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <GameUi:UiButton id="_btnUnitsInfo" label="部队属性表" y="360" x="256" width="200"
+                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+                        <GameUi:UiButton id="_btnChangeLog" label="更新日志" y="360" x="256" width="200"
+                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+                        <GameUi:UiButton id="_btnSetPrivilege" label="设置权限" y="360" x="256" width="200"
                                          skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <e:layout>
                             <e:TileLayout orientation="rows" requestedColumnCount="4" />

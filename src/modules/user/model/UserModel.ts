@@ -65,7 +65,7 @@ namespace TinyWars.User {
             return _selfPassword;
         }
 
-        async function getSelfPublicInfo(): Promise<IUserPublicInfo> {
+        export async function getSelfPublicInfo(): Promise<IUserPublicInfo> {
             return await getUserPublicInfo(getSelfUserId());
         }
         export async function getIsSelfAdmin(): Promise<boolean> {
@@ -78,6 +78,13 @@ namespace TinyWars.User {
             const privilege = info ? info.userPrivilege : null;
             return privilege ? (!!privilege.isMapCommittee) : false;
         }
+        export async function checkCanSelfEditChangeLog(): Promise<boolean> {
+            const info      = await getSelfPublicInfo();
+            const privilege = info ? info.userPrivilege : null;
+            return (!!privilege)
+                && ((privilege.isAdmin) || (privilege.isChangeLogEditor));
+        }
+
         export async function getSelfNickname(): Promise<string> {
             const info = await getSelfPublicInfo();
             return info ? info.nickname : undefined;
@@ -158,11 +165,11 @@ namespace TinyWars.User {
         }
         export async function getRankScoreData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.IDataForUserRankScore> {
             const info = await getUserPublicInfo(userId);
-            return (info ? info.userRankScore.dataList || [] : []).find(v => (v.warType === warType) && (v.playersCount === playersCount));
+            return (info ? info.userRankScore.dataList || [] : []).find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount));
         }
         export async function getUserWarStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.IDataForUserWarStatistics> {
             const info = await getUserPublicInfo(userId);
-            return (info ? info.userWarStatistics.dataList || [] : []).find(v => (v.warType === warType) && (v.playersCount === playersCount));
+            return (info ? info.userWarStatistics.dataList || [] : []).find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount));
         }
 
         export function setSelfSettings(userSettings: IUserSettings): void {

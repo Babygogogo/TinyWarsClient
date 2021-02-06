@@ -16,38 +16,35 @@ namespace TinyWars.SingleCustomRoom {
             if (!ScrMainMenuPanel._instance) {
                 ScrMainMenuPanel._instance = new ScrMainMenuPanel();
             }
-            ScrMainMenuPanel._instance.open();
+            ScrMainMenuPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScrMainMenuPanel._instance) {
-                ScrMainMenuPanel._instance.close();
+                await ScrMainMenuPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/singleCustomRoom/ScrMainMenuPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
-                { ui: this._btnBack, callback: this._onTouchedBtnBack },
-            ];
-            this._notifyListeners = [
-                { type: Utility.Notify.Type.MsgUserLogout, callback: this._onMsgUserLogout },
-            ];
-
-            this._listCommand.setItemRenderer(CommandRenderer);
-        }
-
         protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnBack, callback: this._onTouchedBtnBack },
+            ]);
+            this._setNotifyListenerArray([
+                { type: Utility.Notify.Type.MsgUserLogout, callback: this._onMsgUserLogout },
+            ]);
+            this._listCommand.setItemRenderer(CommandRenderer);
+
             this._listCommand.bindData(this._createDataForListCommand());
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCommand.clear();
         }
 
@@ -58,7 +55,7 @@ namespace TinyWars.SingleCustomRoom {
             FlowManager.gotoLobby();
         }
         private _onMsgUserLogout(e: egret.Event): void {
-            ScrMainMenuPanel.hide();
+            this.close();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -69,7 +66,7 @@ namespace TinyWars.SingleCustomRoom {
                 {
                     name    : Lang.getText(Lang.Type.B0000),
                     callback: (): void => {
-                        ScrMainMenuPanel.hide();
+                        this.close();
                         SingleCustomRoom.ScrCreateMapListPanel.show();
                     },
                 },
@@ -110,7 +107,7 @@ namespace TinyWars.SingleCustomRoom {
         callback: () => void;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _labelCommand: GameUi.UiLabel;
 
         protected dataChanged(): void {

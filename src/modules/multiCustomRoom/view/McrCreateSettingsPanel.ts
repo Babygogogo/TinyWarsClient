@@ -23,34 +23,32 @@ namespace TinyWars.MultiCustomRoom {
             if (!McrCreateSettingsPanel._instance) {
                 McrCreateSettingsPanel._instance = new McrCreateSettingsPanel();
             }
-            McrCreateSettingsPanel._instance.open();
+            McrCreateSettingsPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrCreateSettingsPanel._instance) {
-                McrCreateSettingsPanel._instance.close();
+                await McrCreateSettingsPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled(true);
+            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/multiCustomRoom/McrCreateSettingsPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this._onTouchedBtnBack },
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.MsgMcrCreateRoom,     callback: this._onNotifySCreateCustomOnlineWar },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
-        }
 
-        protected _onOpened(): void {
             this._tabSettings.bindData([
                 {
                     tabItemData: { name: Lang.getText(Lang.Type.B0002) },
@@ -66,13 +64,13 @@ namespace TinyWars.MultiCustomRoom {
             this._btnConfirm.enabled = true;
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._tabSettings.clear();
             this._clearTimeoutForBtnConfirm();
         }
 
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            McrCreateSettingsPanel.hide();
+            this.close();
             McrCreateMapListPanel.show();
         }
 
@@ -119,7 +117,7 @@ namespace TinyWars.MultiCustomRoom {
         name: string;
     }
 
-    class TabItemRenderer extends eui.ItemRenderer {
+    class TabItemRenderer extends GameUi.UiListItemRenderer {
         private _labelName: GameUi.UiLabel;
 
         protected dataChanged(): void {

@@ -30,33 +30,31 @@ namespace TinyWars.MapManagement {
             if (!MmReviewListPanel._instance) {
                 MmReviewListPanel._instance = new MmReviewListPanel();
             }
-            MmReviewListPanel._instance.open();
+            MmReviewListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmReviewListPanel._instance) {
-                MmReviewListPanel._instance.close();
+                await MmReviewListPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapManagement/MmReviewListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMmGetReviewingMaps,  callback: this._onMsgMmGetReviewingMaps },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listMap.setItemRenderer(MapRenderer);
-        }
 
-        protected _onOpened(): void {
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
 
@@ -67,7 +65,7 @@ namespace TinyWars.MapManagement {
             WarMapProxy.reqMmGetReviewingMaps();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._zoomMap.removeAllContents();
             this._zoomMap.setMouseWheelListenerEnabled(false);
             this._zoomMap.setTouchListenerEnabled(false);
@@ -156,7 +154,7 @@ namespace TinyWars.MapManagement {
             } else {
                 const tileMapView = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapData.mapWidth, mapData.mapHeight);
-                tileMapView.updateWithTileDataList(mapData.tileDataList);
+                tileMapView.updateWithTileDataArray(mapData.tileDataArray);
 
                 const unitMapView = new WarMap.WarMapUnitMapView();
                 unitMapView.initWithMapRawData(mapData);
@@ -178,7 +176,7 @@ namespace TinyWars.MapManagement {
         panel   : MmReviewListPanel;
     }
 
-    class MapRenderer extends eui.ItemRenderer {
+    class MapRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose      : GameUi.UiButton;
         private _labelName      : GameUi.UiLabel;
         private _labelStatus    : GameUi.UiLabel;
@@ -201,7 +199,7 @@ namespace TinyWars.MapManagement {
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelStatus.text      = Lang.getMapReviewStatusText(status);
             this._labelStatus.textColor = getReviewStatusTextColor(status);
-            this._labelName.text        = Lang.getNameInCurrentLanguage(mapRawData ? mapRawData.mapNameList : null) || `(${Lang.getText(Lang.Type.B0277)})`;
+            this._labelName.text        = Lang.getLanguageText({ textArray: mapRawData.mapNameArray }) || `(${Lang.getText(Lang.Type.B0277)})`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

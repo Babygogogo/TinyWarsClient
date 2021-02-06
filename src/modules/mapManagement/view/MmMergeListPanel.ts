@@ -38,7 +38,7 @@
 
 //             MmMergeListPanel._instance.open();
 //         }
-//         public static hide(): void {
+//         public static async hide(): Promise<void> {
 //             if (MmMergeListPanel._instance) {
 //                 MmMergeListPanel._instance.close();
 //             }
@@ -243,7 +243,7 @@
 //         panel       : MmMergeListPanel;
 //     }
 
-//     class MapNameRenderer extends eui.ItemRenderer {
+//     class MapNameRenderer extends GameUi.UiListItemRenderer {
 //         private _btnChoose: GameUi.UiButton;
 //         private _btnNext  : GameUi.UiButton;
 //         private _labelName: GameUi.UiLabel;

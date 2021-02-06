@@ -25,43 +25,41 @@ namespace TinyWars.MapEditor {
             if (!MeChooseUnitPanel._instance) {
                 MeChooseUnitPanel._instance = new MeChooseUnitPanel();
             }
-            MeChooseUnitPanel._instance.open();
+            MeChooseUnitPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeChooseUnitPanel._instance) {
-                MeChooseUnitPanel._instance.close();
+                await MeChooseUnitPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/mapEditor/MeChooseUnitPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
-            ];
+            ]);
             this._listRecent.setItemRenderer(UnitRenderer);
             this._listCategory.setItemRenderer(CategoryRenderer);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             this._updateListCategory();
             this._updateListRecent();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCategory.clear();
             this._listRecent.clear();
         }
@@ -113,7 +111,7 @@ namespace TinyWars.MapEditor {
 
         private _createDataForListUnit(): DataForCategoryRenderer[] {
             const mapping = new Map<number, DataForDrawUnit[]>();
-            for (const unitType of ConfigManager.getUnitTypesByCategory(ConfigManager.getLatestConfigVersion(), Types.UnitCategory.All)) {
+            for (const unitType of ConfigManager.getUnitTypesByCategory(ConfigManager.getLatestFormalVersion(), Types.UnitCategory.All)) {
                 for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                     if (!mapping.has(playerIndex)) {
                         mapping.set(playerIndex, []);
@@ -154,7 +152,7 @@ namespace TinyWars.MapEditor {
         panel               : MeChooseUnitPanel;
     }
 
-    class CategoryRenderer extends eui.ItemRenderer {
+    class CategoryRenderer extends GameUi.UiListItemRenderer {
         private _listUnit: GameUi.UiScrollList;
 
         protected childrenCreated(): void {
@@ -194,7 +192,7 @@ namespace TinyWars.MapEditor {
         panel           : MeChooseUnitPanel;
     }
 
-    class UnitRenderer extends eui.ItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _labelName      : GameUi.UiLabel;
         private _conUnitView    : eui.Group;

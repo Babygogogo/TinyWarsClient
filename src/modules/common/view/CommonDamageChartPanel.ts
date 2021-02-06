@@ -40,17 +40,17 @@ namespace TinyWars.Common {
         private _selectedIndex          : number;
         private _dataForListUnit        : DataForUnitRenderer[];
         private _dataForListDamageChart : DataForDamageRenderer[];
-        private _unitView               : WarMap.WarMapUnitView;
+        private _unitView               = new WarMap.WarMapUnitView();
 
         public static show(): void {
             if (!CommonDamageChartPanel._instance) {
                 CommonDamageChartPanel._instance = new CommonDamageChartPanel();
             }
-            CommonDamageChartPanel._instance.open();
+            CommonDamageChartPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (CommonDamageChartPanel._instance) {
-                CommonDamageChartPanel._instance.close();
+                await CommonDamageChartPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -61,29 +61,26 @@ namespace TinyWars.Common {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/common/CommonDamageChartPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,    callback: this.close },
-            ];
-
+            ]);
             this._listUnit.setItemRenderer(UnitRenderer);
             this._listDamageChart.setItemRenderer(DamageRenderer);
             this._listInfo.setItemRenderer(InfoRenderer);
-            this._unitView = new WarMap.WarMapUnitView();
+
             this._conUnitView.addChild(this._unitView);
-        }
-        protected _onOpened(): void {
             this._showOpenAnimation();
 
             const listUnit          = this._listUnit;
@@ -93,7 +90,9 @@ namespace TinyWars.Common {
             this._updateComponentsForLanguage();
             this.setSelectedIndexAndUpdateView(0);
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+
             this._selectedIndex             = null;
             this._dataForListUnit           = null;
             this._dataForListDamageChart    = null;
@@ -106,7 +105,7 @@ namespace TinyWars.Common {
             const oldIndex      = this._selectedIndex;
             this._selectedIndex = newIndex;
             if (oldIndex !== newIndex) {
-                (this._listUnit.viewport as eui.List).selectedIndex = newIndex;
+                this._listUnit.getViewList().selectedIndex = newIndex;
                 this._updateUnitViewAndLabelName();
                 this._updateListInfo();
                 this._updateListDamageChart();
@@ -146,11 +145,27 @@ namespace TinyWars.Common {
                 .set({ alpha: 0, left: -40 })
                 .to({ alpha: 1, left: 0 }, 200);
 
-            const _groupInfo = this._groupInfo;
-            egret.Tween.removeTweens(_groupInfo);
-            egret.Tween.get(_groupInfo)
+            const groupInfo = this._groupInfo;
+            egret.Tween.removeTweens(groupInfo);
+            egret.Tween.get(groupInfo)
                 .set({ alpha: 0, right: -40 })
                 .to({ alpha: 1, right: 0 }, 200);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                const groupList = this._groupList;
+                egret.Tween.removeTweens(groupList);
+                egret.Tween.get(groupList)
+                    .set({ alpha: 1, left: 0 })
+                    .to({ alpha: 0, left: -40 }, 200);
+
+                const groupInfo = this._groupInfo;
+                egret.Tween.removeTweens(groupInfo);
+                egret.Tween.get(groupInfo)
+                    .set({ alpha: 1, right: 0 })
+                    .to({ alpha: 0, right: -40 }, 200)
+                    .call(resolve);
+            });
         }
 
         private _updateComponentsForLanguage(): void {
@@ -357,7 +372,7 @@ namespace TinyWars.Common {
 
         private _createDataForListUnit(): DataForUnitRenderer[] {
             const data          : DataForUnitRenderer[] = [];
-            const configVersion = ConfigManager.getLatestConfigVersion();
+            const configVersion = ConfigManager.getLatestFormalVersion();
             const unitTypes     = ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All);
             for (let index = 0; index < unitTypes.length; ++index) {
                 data.push({
@@ -383,7 +398,7 @@ namespace TinyWars.Common {
         panel           : CommonDamageChartPanel;
     }
 
-    class UnitRenderer extends eui.ItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer {
         private _imgChoose  : eui.Image;
         private _labelName  : TinyWars.GameUi.UiLabel;
 
@@ -411,7 +426,7 @@ namespace TinyWars.Common {
         valueText   : string;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
@@ -430,7 +445,7 @@ namespace TinyWars.Common {
         targetTileType? : TileType;
     }
 
-    class DamageRenderer extends eui.ItemRenderer {
+    class DamageRenderer extends GameUi.UiListItemRenderer {
         private _group                  : eui.Group;
         private _conView                : eui.Group;
         private _unitView               : WarMap.WarMapUnitView;

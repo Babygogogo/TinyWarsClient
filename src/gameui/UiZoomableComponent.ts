@@ -49,7 +49,7 @@ namespace TinyWars.GameUi {
                 if (this._maskForContents) {
                     this._contents.mask = undefined;
                     this.removeChild(this._maskForContents);
-                    delete this._maskForContents;
+                    this._maskForContents = null;
                 }
             }
         }

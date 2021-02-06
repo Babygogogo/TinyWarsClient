@@ -4,13 +4,14 @@ namespace TinyWars.MultiPlayerWar {
     import Lang     = Utility.Lang;
     import Notify   = Utility.Notify;
 
+    type OpenDataForMcwCoListPanel = {
+        selectedIndex   : number;
+    }
     export class McwCoListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: McwCoListPanel;
-
-        private _openData   : number;
 
         private _groupList  : eui.Group;
         private _listCo     : GameUi.UiScrollList;
@@ -53,17 +54,16 @@ namespace TinyWars.MultiPlayerWar {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(selectedIndex: number): void {
+        public static show(openData: OpenDataForMcwCoListPanel): void {
             if (!McwCoListPanel._instance) {
                 McwCoListPanel._instance = new McwCoListPanel();
             }
 
-            McwCoListPanel._instance._openData = selectedIndex;
-            McwCoListPanel._instance.open();
+            McwCoListPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McwCoListPanel._instance) {
-                McwCoListPanel._instance.close();
+                await McwCoListPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -74,38 +74,39 @@ namespace TinyWars.MultiPlayerWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/multiCustomWar/McwCoListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwPlannerStateChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listCo.setItemRenderer(CoNameRenderer);
             this._listPassiveSkill.setItemRenderer(SkillRenderer);
             this._listCop.setItemRenderer(SkillRenderer);
             this._listScop.setItemRenderer(SkillRenderer);
-        }
-        protected _onOpened(): void {
+
             this._showOpenAnimation();
             this._updateComponentsForLanguage();
 
             this._war           = MpwModel.getWar();
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
-            this.setSelectedIndex(this._openData);
+            this.setSelectedIndex(this._getOpenData<OpenDataForMcwCoListPanel>().selectedIndex);
 
             Notify.dispatch(Notify.Type.BwCoListPanelOpened);
         }
-        protected _onClosed(): void {
-            delete this._war;
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+
+            this._war = null;
             this._listCo.clear();
             this._listPassiveSkill.clear();
             this._listCop.clear();
@@ -171,6 +172,22 @@ namespace TinyWars.MultiPlayerWar {
             egret.Tween.get(_groupInfo)
                 .set({ alpha: 0, right: -40 })
                 .to({ alpha: 1, right: 0 }, 200);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve, reject) => {
+                const group = this._groupList;
+                egret.Tween.removeTweens(group);
+                egret.Tween.get(group)
+                    .set({ alpha: 1, left: 0 })
+                    .to({ alpha: 0, left: -40 }, 200);
+
+                const _groupInfo = this._groupInfo;
+                egret.Tween.removeTweens(_groupInfo);
+                egret.Tween.get(_groupInfo)
+                    .set({ alpha: 1, right: 0 })
+                    .to({ alpha: 0, right: -40 }, 200)
+                    .call(resolve);
+            });
         }
 
         private _createDataForListCo(): DataForCoRenderer[] {
@@ -321,7 +338,7 @@ namespace TinyWars.MultiPlayerWar {
         panel           : McwCoListPanel;
     }
 
-    class CoNameRenderer extends eui.ItemRenderer {
+    class CoNameRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
@@ -360,7 +377,7 @@ namespace TinyWars.MultiPlayerWar {
         skillId : number;
     }
 
-    class SkillRenderer extends eui.ItemRenderer {
+    class SkillRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 
@@ -369,7 +386,7 @@ namespace TinyWars.MultiPlayerWar {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()];
         }
     }
 }

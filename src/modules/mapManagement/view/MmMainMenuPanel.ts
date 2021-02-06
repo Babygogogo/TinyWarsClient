@@ -19,41 +19,38 @@ namespace TinyWars.MapManagement {
             if (!MmMainMenuPanel._instance) {
                 MmMainMenuPanel._instance = new MmMainMenuPanel();
             }
-            MmMainMenuPanel._instance.open();
+            MmMainMenuPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmMainMenuPanel._instance) {
-                MmMainMenuPanel._instance.close();
+                await MmMainMenuPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapManagement/MmMainMenuPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected async _onOpened(): Promise<void> {
+            this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
                 { type: Notify.Type.MsgMmReloadAllMaps, callback: this._onMsgMmReloadAllMaps },
-            ];
-
+            ]);
             this._listCommand.setItemRenderer(CommandRenderer);
-        }
 
-        protected async _onOpened(): Promise<void> {
             this._updateView();
             this._listCommand.bindData(await this._createDataForListCommand());
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCommand.clear();
         }
 
@@ -65,7 +62,7 @@ namespace TinyWars.MapManagement {
             Lobby.LobbyPanel.show();
         }
         private _onMsgUserLogout(e: egret.Event): void {
-            MmMainMenuPanel.hide();
+            this.close();
         }
         private _onMsgMmReloadAllMaps(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0075));
@@ -117,7 +114,7 @@ namespace TinyWars.MapManagement {
         callback: () => void;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _labelCommand: GameUi.UiLabel;
 
         protected dataChanged(): void {

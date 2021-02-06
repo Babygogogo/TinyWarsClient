@@ -1395,17 +1395,6 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Phases.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Phase 0: begin turn.
-    async function _getActionForPhase0(): Promise<WarAction | null> {   // DONE
-        await _checkAndCallLater();
-
-        if (_turnManager.getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) {
-            return { PlayerBeginTurn: { } };
-        } else {
-            return null;
-        }
-    }
-
     // Phase 1a: search for the best action for all units.
     // async function _getActionForPhase1a(): Promise<WarAction | null> {   // DONE
     //     await _checkAndCallLater();
@@ -1555,7 +1544,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const startTime = Date.now();
         _initVariables(war);
 
-        let action = await _getActionForPhase0();
+        let action: Types.RawWarActionContainer;
         // (!action) && (action = await _getActionForPhase1a());
         (!action) && (action = await _getActionForPhase1());
         (!action) && (action = await _getActionForPhase2());

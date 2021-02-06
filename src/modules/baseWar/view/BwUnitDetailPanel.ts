@@ -37,20 +37,18 @@ namespace TinyWars.BaseWar {
         private _labelDefenseMain2  : GameUi.UiLabel;
         private _labelDefenseSub2   : GameUi.UiLabel;
 
-        private _openData   : OpenDataForBwUnitDetailPanel;
         private _dataForList: DataForDamageRenderer[];
-        private _unitView   : WarMap.WarMapUnitView;
+        private _unitView   = new WarMap.WarMapUnitView();
 
-        public static show(data: OpenDataForBwUnitDetailPanel): void {
+        public static show(openData: OpenDataForBwUnitDetailPanel): void {
             if (!BwUnitDetailPanel._instance) {
                 BwUnitDetailPanel._instance = new BwUnitDetailPanel();
             }
-            BwUnitDetailPanel._instance._openData = data;
-            BwUnitDetailPanel._instance.open();
+            BwUnitDetailPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (BwUnitDetailPanel._instance) {
-                BwUnitDetailPanel._instance.close();
+                await BwUnitDetailPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -61,31 +59,29 @@ namespace TinyWars.BaseWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/baseWar/BwUnitDetailPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnUnitsInfo,   callback: this._onTouchedBtnUnitsInfo },
-            ];
+            ]);
 
             this._listDamageChart.setItemRenderer(DamageRenderer);
             this._listInfo.setItemRenderer(InfoRenderer);
-            this._unitView = new WarMap.WarMapUnitView();
             this._conUnitView.addChild(this._unitView);
-        }
-        protected _onOpened(): void {
+
             this._updateView();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listDamageChart.clear();
             this._listInfo.clear();
             this._dataForList = null;
@@ -140,7 +136,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateUnitViewAndLabelName(): void {
-            const unit              = this._openData.unit;
+            const unit              = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
             this._labelName.text    = Lang.getUnitName(unit.getType());
             this._unitView.update({
                 gridIndex       : { x: 0, y: 0},
@@ -151,7 +147,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateListInfo(): void {
-            const unit          = this._openData.unit;
+            const unit          = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
             const configVersion = unit.getConfigVersion();
             const unitType      = unit.getType();
             const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
@@ -577,7 +573,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _createDataForListDamageChart(): DataForDamageRenderer[] {
-            const unit              = this._openData.unit;
+            const unit              = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
             const configVersion     = unit.getConfigVersion();
             const attackUnitType    = unit.getType();
             const playerIndex       = unit.getPlayerIndex();
@@ -613,7 +609,7 @@ namespace TinyWars.BaseWar {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
@@ -645,7 +641,7 @@ namespace TinyWars.BaseWar {
         targetTileType? : TileType;
     }
 
-    class DamageRenderer extends eui.ItemRenderer {
+    class DamageRenderer extends GameUi.UiListItemRenderer {
         private _group                  : eui.Group;
         private _conView                : eui.Group;
         private _unitView               : WarMap.WarMapUnitView;

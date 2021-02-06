@@ -10,11 +10,10 @@ namespace TinyWars.MapEditor {
     import WarRule          = ProtoTypes.WarRule;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    type OpenParam = {
+    type OpenDataForMeAvailableCoPanel = {
         playerRule      : WarRule.IDataForPlayerRule;
         warRule         : WarRule.IWarRule;
         isReviewing     : boolean;
-        callbackOnClose : () => void;
     }
 
     export class MeAvailableCoPanel extends GameUi.UiPanel {
@@ -32,20 +31,18 @@ namespace TinyWars.MapEditor {
         private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
 
-        private _openParam              : OpenParam;
         private _availableCoIdSet       = new Set<number>();
 
-        public static show(openParam: OpenParam): void {
+        public static show(openData: OpenDataForMeAvailableCoPanel): void {
             if (!MeAvailableCoPanel._instance) {
                 MeAvailableCoPanel._instance = new MeAvailableCoPanel();
             }
-            MeAvailableCoPanel._instance._openParam = openParam;
-            MeAvailableCoPanel._instance.open();
+            MeAvailableCoPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeAvailableCoPanel._instance) {
-                MeAvailableCoPanel._instance.close();
+                await MeAvailableCoPanel._instance.close();
             }
         }
 
@@ -53,39 +50,35 @@ namespace TinyWars.MapEditor {
             super();
 
             this.skinName = "resource/skins/mapEditor/MeAvailableCoPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-        }
-
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
-                { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
-                { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
-            this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
         }
 
         protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
+                { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
+            ]);
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ]);
+
             const availableCoIdSet  = this._availableCoIdSet;
-            const openParam         = this._openParam;
+            const openData          = this._getOpenData<OpenDataForMeAvailableCoPanel>();
             availableCoIdSet.clear();
-            for (const coId of openParam.playerRule.availableCoIdList) {
+            for (const coId of openData.playerRule.availableCoIdArray) {
                 availableCoIdSet.add(coId);
             }
 
-            this._btnConfirm.visible = !openParam.isReviewing;
+            this._btnConfirm.visible = !openData.isReviewing;
             this._updateComponentsForLanguage();
             this._initGroupCoTiers();
             this._initGroupCoNames();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._clearGroupCoTiers();
             this._clearGroupCoNames();
-            this._openParam.callbackOnClose();
-            this._openParam = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -107,19 +100,20 @@ namespace TinyWars.MapEditor {
                     content : Lang.getText(Lang.Type.A0130),
                 });
             } else {
-                const openParam = this._openParam;
-                BwSettingsHelper.setAvailableCoIdList(openParam.warRule, openParam.playerRule.playerIndex, availableCoIdSet);
+                const openData = this._getOpenData<OpenDataForMeAvailableCoPanel>();
+                BwSettingsHelper.setAvailableCoIdList(openData.warRule, openData.playerRule.playerIndex, availableCoIdSet);
+                Notify.dispatch(Notify.Type.MeAvailableCoChanged);
                 this.close();
             }
         }
 
         private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {
-            if (!this._openParam.isReviewing) {
+            if (!this._getOpenData<OpenDataForMeAvailableCoPanel>().isReviewing) {
                 const renderer          = e.currentTarget as RendererForCoTier;
                 const availableCoIdSet  = this._availableCoIdSet;
                 const coIdList          = renderer.getIsCustomSwitch()
-                    ? ConfigManager.getAvailableCustomCoIdList(ConfigManager.getLatestConfigVersion())
-                    : ConfigManager.getAvailableCoIdListInTier(ConfigManager.getLatestConfigVersion(), renderer.getCoTier());
+                    ? ConfigManager.getAvailableCustomCoIdList(ConfigManager.getLatestFormalVersion())
+                    : ConfigManager.getAvailableCoIdListInTier(ConfigManager.getLatestFormalVersion(), renderer.getCoTier());
 
                 if (renderer.getState() === CoTierState.Unavailable) {
                     for (const coId of coIdList) {
@@ -139,7 +133,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
-            if (!this._openParam.isReviewing) {
+            if (!this._getOpenData<OpenDataForMeAvailableCoPanel>().isReviewing) {
                 const renderer          = e.currentTarget as RendererForCoName;
                 const coId              = renderer.getCoId();
                 const availableCoIdSet  = this._availableCoIdSet;
@@ -163,11 +157,11 @@ namespace TinyWars.MapEditor {
         private _updateComponentsForLanguage(): void {
             this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
             this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
-            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._openParam.playerRule.playerIndex})`;
+            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._getOpenData<OpenDataForMeAvailableCoPanel>().playerRule.playerIndex})`;
         }
 
         private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestConfigVersion())) {
+            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setState(CoTierState.AllAvailable);
@@ -193,7 +187,7 @@ namespace TinyWars.MapEditor {
 
         private _updateGroupCoTiers(): void {
             const availableCoIdSet  = this._availableCoIdSet;
-            const configVersion     = ConfigManager.getLatestConfigVersion();
+            const configVersion     = ConfigManager.getLatestFormalVersion();
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
                     ? ConfigManager.getAvailableCustomCoIdList(configVersion)
@@ -210,7 +204,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestConfigVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -242,7 +236,7 @@ namespace TinyWars.MapEditor {
         Unavailable,
     }
 
-    class RendererForCoTier extends eui.ItemRenderer {
+    class RendererForCoTier extends GameUi.UiListItemRenderer {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 
@@ -288,7 +282,7 @@ namespace TinyWars.MapEditor {
         }
     }
 
-    class RendererForCoName extends eui.ItemRenderer {
+    class RendererForCoName extends GameUi.UiListItemRenderer {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 
@@ -304,7 +298,7 @@ namespace TinyWars.MapEditor {
         public setCoId(coId: number): void {
             this._coId = coId;
 
-            const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
+            const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
             this._labelName.text    = `${cfg.name} (T${cfg.tier})`;
         }
         public getCoId(): number {

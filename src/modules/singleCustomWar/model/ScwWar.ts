@@ -8,11 +8,11 @@ namespace TinyWars.SingleCustomWar {
     import BwSettingsHelper     = BaseWar.BwSettingsHelper;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForScw      = ProtoTypes.WarSettings.ISettingsForScw;
-    import IActionContainer     = ProtoTypes.WarAction.IActionContainer;
+    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
 
     export class ScwWar extends SinglePlayerWar.SpwWar {
         private _settingsForSinglePlayer    : ISettingsForScw;
-        private _executedActions            : IActionContainer[];
+        private _executedActions            : IWarActionContainer[];
         private _saveSlotIndex              : number;
         private _saveSlotComment            : string;
 
@@ -166,6 +166,12 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
+            const warEventManager = this.getWarEventManager();
+            if (warEventManager == null) {
+                Logger.error(`ScwWar.serialize() empty warEventManager.`);
+                return undefined;
+            }
+
             const serialPlayerManager = playerManager.serialize();
             if (serialPlayerManager == null) {
                 Logger.error(`ScwWar.serialize() empty serialPlayerManager.`);
@@ -184,6 +190,12 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
+            const serialWarEventManager = warEventManager.serialize();
+            if (serialWarEventManager == null) {
+                Logger.error(`ScwWar.serializeForSimulation() empty serialWarEventManager.`);
+                return undefined;
+            }
+
             return {
                 settingsForCommon,
                 settingsForScw,
@@ -194,6 +206,7 @@ namespace TinyWars.SingleCustomWar {
                 executedActions             : isCheating ? [] : this._getAllExecutedActions(),
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,
@@ -237,6 +250,12 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
+            const warEventManager = this.getWarEventManager();
+            if (warEventManager == null) {
+                Logger.error(`ScwWar.serializeForSimulation() empty warEventManager.`);
+                return undefined;
+            }
+
             const serialPlayerManager = playerManager.serializeForSimulation();
             if (serialPlayerManager == null) {
                 Logger.error(`ScwWar.serializeForSimulation() empty serialPlayerManager.`);
@@ -255,6 +274,12 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
+            const serialWarEventManager = warEventManager.serializeForSimulation();
+            if (serialWarEventManager == null) {
+                Logger.error(`ScwWar.serializeForSimulation() empty serialWarEventManager.`);
+                return undefined;
+            }
+
             return {
                 settingsForCommon,
                 settingsForScw,
@@ -268,6 +293,7 @@ namespace TinyWars.SingleCustomWar {
                 executedActions             : [],
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,
@@ -285,6 +311,9 @@ namespace TinyWars.SingleCustomWar {
         }
         protected _getTurnManagerClass(): new () => ScwTurnManager {
             return ScwTurnManager;
+        }
+        protected _getWarEventManagerClass(): new () => ScwWarEventManager {
+            return ScwWarEventManager;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -416,13 +445,13 @@ namespace TinyWars.SingleCustomWar {
             BwSettingsHelper.setLuckUpperLimit(warRule, playerIndex, value);
         }
 
-        private _setAllExecutedActions(actions: IActionContainer[]): void {
+        private _setAllExecutedActions(actions: IWarActionContainer[]): void {
             this._executedActions = actions;
         }
-        private _getAllExecutedActions(): IActionContainer[] | null {
+        private _getAllExecutedActions(): IWarActionContainer[] | null {
             return this._executedActions;
         }
-        public addExecutedAction(action: IActionContainer): void {
+        public addExecutedAction(action: IWarActionContainer): void {
             const executedActions = this._getAllExecutedActions();
             if (executedActions == null) {
                 Logger.error(`ScwWar.addExecutedAction() empty executedActions.`);

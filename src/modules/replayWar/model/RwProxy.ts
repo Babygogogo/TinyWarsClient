@@ -1,6 +1,6 @@
 
 namespace TinyWars.ReplayWar.RwProxy {
-    import NetManager       = Network.Manager;
+    import NetManager       = Network.NetManager;
     import NetMessageCodes  = Network.Codes;
     import ProtoTypes       = Utility.ProtoTypes;
     import Notify           = Utility.Notify;

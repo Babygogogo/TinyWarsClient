@@ -24,43 +24,41 @@ namespace TinyWars.MapEditor {
             if (!MeChooseTileObjectPanel._instance) {
                 MeChooseTileObjectPanel._instance = new MeChooseTileObjectPanel();
             }
-            MeChooseTileObjectPanel._instance.open();
+            MeChooseTileObjectPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeChooseTileObjectPanel._instance) {
-                MeChooseTileObjectPanel._instance.close();
+                await MeChooseTileObjectPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/mapEditor/MeChooseTileObjectPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
-            ];
+            ]);
             this._listRecent.setItemRenderer(TileObjectRenderer);
             this._listCategory.setItemRenderer(CategoryRenderer);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             this._updateListRecent();
             this._updateListCategory();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCategory.clear();
             this._listRecent.clear();
         }
@@ -164,7 +162,7 @@ namespace TinyWars.MapEditor {
         panel                       : MeChooseTileObjectPanel;
     }
 
-    class CategoryRenderer extends eui.ItemRenderer {
+    class CategoryRenderer extends GameUi.UiListItemRenderer {
         private _labelCategory  : GameUi.UiLabel;
         private _listTileObject : GameUi.UiScrollList;
 
@@ -207,7 +205,7 @@ namespace TinyWars.MapEditor {
         panel                   : MeChooseTileObjectPanel;
     }
 
-    class TileObjectRenderer extends eui.ItemRenderer {
+    class TileObjectRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _labelName      : GameUi.UiLabel;
         private _conTileView    : eui.Group;

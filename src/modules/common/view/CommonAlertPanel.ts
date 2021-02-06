@@ -4,7 +4,7 @@ namespace TinyWars.Common {
     import Notify   = Utility.Notify;
     import Types    = Utility.Types;
 
-    export type OpenDataForCommonAlertPanel = {
+    type OpenDataForCommonAlertPanel = {
         title       : string;
         content     : string;
         callback?   : () => any;
@@ -21,50 +21,48 @@ namespace TinyWars.Common {
         private _labelContent   : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
 
-        private _openData: OpenDataForCommonAlertPanel;
-
-        public static show(data: OpenDataForCommonAlertPanel): void {
+        public static show(openData: OpenDataForCommonAlertPanel): void {
             if (!CommonAlertPanel._instance) {
                 CommonAlertPanel._instance = new CommonAlertPanel();
             }
-            CommonAlertPanel._instance._openData = data;
-            CommonAlertPanel._instance.open();
+            CommonAlertPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (CommonAlertPanel._instance) {
-                CommonAlertPanel._instance.close();
+                await CommonAlertPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/common/CommonAlertPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-        }
-
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
-                { ui: this._btnClose, callback: this._onTouchedBtnClose },
-            ];
-            this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
         }
 
         protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnClose, callback: this._onTouchedBtnClose },
+            ]);
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ]);
+
             this._updateComponentsForLanguage();
 
-            this._labelTitle.text = this._openData.title;
-            this._labelContent.setRichText(this._openData.content);
+            const openData          = this._getOpenData<OpenDataForCommonAlertPanel>();
+            this._labelTitle.text   = openData.title;
+            this._labelContent.setRichText(openData.content);
             this._scrContent.viewport.scrollV = 0;
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
+            const openData = this._getOpenData<OpenDataForCommonAlertPanel>();
+            (openData.callback) && (openData.callback());
+
             this.close();
-            (this._openData.callback) && (this._openData.callback());
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -72,7 +70,7 @@ namespace TinyWars.Common {
         }
 
         private _updateComponentsForLanguage(): void {
-            if (Lang.getLanguageType() === Types.LanguageType.Chinese) {
+            if (Lang.getCurrentLanguageType() === Types.LanguageType.Chinese) {
                 this._btnClose.setImgDisplaySource("button_confirm_001");
             } else {
                 this._btnClose.setImgDisplaySource("button_confirm_002");

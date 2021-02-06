@@ -10,19 +10,19 @@ namespace TinyWars.ReplayWar {
             if (!RwBackgroundPanel._instance) {
                 RwBackgroundPanel._instance = new RwBackgroundPanel();
             }
-            RwBackgroundPanel._instance.open();
+            RwBackgroundPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwBackgroundPanel._instance) {
-                RwBackgroundPanel._instance.close();
+                await RwBackgroundPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/replayWar/RwBackgroundPanel.exml";
         }
     }

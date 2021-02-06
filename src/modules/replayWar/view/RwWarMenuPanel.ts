@@ -53,11 +53,11 @@ namespace TinyWars.ReplayWar {
             if (!RwWarMenuPanel._instance) {
                 RwWarMenuPanel._instance = new RwWarMenuPanel();
             }
-            RwWarMenuPanel._instance.open();
+            RwWarMenuPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwWarMenuPanel._instance) {
-                RwWarMenuPanel._instance.close();
+                await RwWarMenuPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -68,25 +68,24 @@ namespace TinyWars.ReplayWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/replayWar/RwWarMenuPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyMcwPlannerStateChanged },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
                 { type: Notify.Type.MsgReplaySetRating,                 callback: this._onMsgReplaySetRating },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
-            ];
+            ]);
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
-        protected _onOpened(): void {
+
             const war           = RwModel.getWar();
             this._war           = war;
             this._unitMap       = war.getUnitMap() as RwUnitMap;
@@ -96,10 +95,10 @@ namespace TinyWars.ReplayWar {
 
             Notify.dispatch(Notify.Type.McwWarMenuPanelOpened);
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._unitMap;
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._war           = null;
+            this._unitMap       = null;
+            this._dataForList   = null;
             this._listCommand.clear();
             this._listPlayer.clear();
 
@@ -192,7 +191,7 @@ namespace TinyWars.ReplayWar {
             this._labelMapName.text                 = await WarMapModel.getMapNameInCurrentLanguage(mapFileName) || "----";
             this._labelMapDesigner.text             = await WarMapModel.getDesignerName(mapFileName) || "----";
             this._labelWarId.text                   = `${war.getReplayId()}`;
-            this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex() + 1}`;
+            this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex()}`;
             this._labelActionId.text                = `${war.getNextActionId()} / ${war.getExecutedActionsCount()}`;
         }
 
@@ -225,7 +224,6 @@ namespace TinyWars.ReplayWar {
 
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return [
-                // this._createCommandOpenCoInfoMenu(),
                 this._createCommandOpenAdvancedMenu(),
                 this._createCommandRate(),
                 // this._createCommandChat(),
@@ -242,16 +240,6 @@ namespace TinyWars.ReplayWar {
                 this._createCommandUseNewTexture(),
                 this._createCommandSetPathMode(),
             ].filter(v => !!v);
-        }
-
-        private _createCommandOpenCoInfoMenu(): DataForCommandRenderer | undefined {
-            return {
-                name    : Lang.getText(Lang.Type.B0140),
-                callback: () => {
-                    RwCoListPanel.show(0);
-                    RwWarMenuPanel.hide();
-                },
-            };
         }
 
         private _createCommandOpenAdvancedMenu(): DataForCommandRenderer | undefined {
@@ -419,7 +407,7 @@ namespace TinyWars.ReplayWar {
         callback: () => void;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
 
@@ -444,7 +432,7 @@ namespace TinyWars.ReplayWar {
         player  : BaseWar.BwPlayer;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
         private _labelForce : GameUi.UiLabel;
@@ -469,7 +457,7 @@ namespace TinyWars.ReplayWar {
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
                 + `  ${player === war.getPlayerInTurn() ? Lang.getText(Lang.Type.B0086) : ""}`;
 
-            if (!player.getIsAlive()) {
+            if (player.getAliveState() !== Types.PlayerAliveState.Alive) {
                 this._labelLost.visible = true;
                 this._listInfo.visible  = false;
             } else {
@@ -728,7 +716,7 @@ namespace TinyWars.ReplayWar {
         infoColor               : number;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

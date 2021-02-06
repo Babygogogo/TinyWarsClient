@@ -9,7 +9,7 @@ namespace TinyWars.MultiCustomRoom {
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export type OpenParamForWarAdvancedSettingsPage = {
+    export type OpenDataForMcrWarAdvancedSettingsPage = {
         warInfo : IMpwWarInfo;
     }
 
@@ -20,8 +20,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
         private _listPlayer         : TinyWars.GameUi.UiScrollList;
 
-        protected _dataForOpen  : OpenParamForWarAdvancedSettingsPage;
-        private _warInfo        : IMpwWarInfo;
+        private _warInfo            : IMpwWarInfo;
 
         public constructor() {
             super();
@@ -29,18 +28,16 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrWarAdvancedSettingsPage.exml";
         }
 
-        public _onFirstOpened(): void {
-            this._uiListeners = [
-                { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
-            ];
-            this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-            this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
-
         protected async _onOpened(): Promise<void> {
-            this._warInfo = this._dataForOpen.warInfo;
+            this._setUiListenerArray([
+                { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
+            ]);
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            ]);
+            this._listPlayer.setItemRenderer(PlayerRenderer);
+
+            this._warInfo = this._getOpenData<OpenDataForMcrWarAdvancedSettingsPage>().warInfo;
 
             this._updateComponentsForLanguage();
         }
@@ -104,7 +101,7 @@ namespace TinyWars.MultiCustomRoom {
         warInfo     : IMpwWarInfo;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _listInfo   : GameUi.UiScrollList;
 
         protected childrenCreated(): void {
@@ -237,7 +234,7 @@ namespace TinyWars.MultiCustomRoom {
         infoColor   : number;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

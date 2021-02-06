@@ -81,6 +81,12 @@ namespace TinyWars.Utility.Notify {
         MeDrawerModeChanged,
         MeUnitChanged,
         MeTileChanged,
+        MeMapNameChanged,
+        MeWarRuleNameChanged,
+        MeWarEventIdArrayChanged,
+        MeAvailableCoChanged,
+
+        WarEventFullDataChanged,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MsgCommonHeartbeat,
@@ -92,6 +98,10 @@ namespace TinyWars.Utility.Notify {
         MsgBroadcastAddMessage,
         MsgBroadcastDeleteMessage,
         MsgBroadcastDoBroadcast,
+
+        MsgChangeLogGetMessageList,
+        MsgChangeLogAddMessage,
+        MsgChangeLogModifyMessage,
 
         MsgUserLogin,
         MsgUserRegister,
@@ -178,7 +188,11 @@ namespace TinyWars.Utility.Notify {
         MsgMpwWatchContinueWar,
         MsgMpwWatchContinueWarFailed,
 
-        MsgMpwActionPlayerBeginTurn,
+        MsgMpwActionSystemBeginTurn,
+        MsgMpwActionSystemCallWarEvent,
+        MsgMpwActionSystemDestroyPlayerForce,
+        MsgMpwActionSystemEndWar,
+
         MsgMpwActionPlayerDeleteUnit,
         MsgMpwActionPlayerEndTurn,
         MsgMpwActionPlayerProduceUnit,

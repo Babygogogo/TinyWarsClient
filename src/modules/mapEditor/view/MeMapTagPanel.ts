@@ -23,35 +23,33 @@ namespace TinyWars.MapEditor {
             if (!MeMapTagPanel._instance) {
                 MeMapTagPanel._instance = new MeMapTagPanel();
             }
-            MeMapTagPanel._instance.open();
+            MeMapTagPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeMapTagPanel._instance) {
-                MeMapTagPanel._instance.close();
+                await MeMapTagPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapEditor/MeMapTagPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
                 { ui: this._groupFog,       callback: this._onTouchedGroupMcw },
-            ];
-        }
+            ]);
 
-        protected async _onOpened(): Promise<void> {
             this._updateComponentsForLanguage();
 
             const war               = MeManager.getWar();

@@ -34,37 +34,35 @@ namespace TinyWars.ReplayWar {
             if (!RwSearchReplayPanel._instance) {
                 RwSearchReplayPanel._instance = new RwSearchReplayPanel();
             }
-            RwSearchReplayPanel._instance.open();
+            RwSearchReplayPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwSearchReplayPanel._instance) {
-                RwSearchReplayPanel._instance.close();
+                await RwSearchReplayPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/replayWar/RwSearchReplayPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnClose,           callback: this.close },
                 { ui: this._btnReset,           callback: this._onTouchedBtnReset },
                 { ui: this._btnSearch,          callback: this._onTouchedBtnSearch },
                 { ui: this._inputGlobalRating,  callback: this._onFocusOutInputGlobalRating,    eventType: egret.Event.FOCUS_OUT },
                 { ui: this._inputMyRating,      callback: this._onFocusOutInputMyRating,        eventType: egret.Event.FOCUS_OUT },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-        }
+            ]);
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
             this._btnReset.enabled  = true;
             this._btnSearch.enabled = true;

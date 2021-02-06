@@ -32,46 +32,44 @@ namespace TinyWars.MapManagement {
             if (!MmAvailabilitySearchPanel._instance) {
                 MmAvailabilitySearchPanel._instance = new MmAvailabilitySearchPanel();
             }
-            MmAvailabilitySearchPanel._instance.open();
+            MmAvailabilitySearchPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmAvailabilitySearchPanel._instance) {
-                MmAvailabilitySearchPanel._instance.close();
+                await MmAvailabilitySearchPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmAvailabilitySearchPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnClose,  callback: this._onTouchedBtnClose },
                 { ui: this._btnReset,  callback: this._onTouchedBtnReset },
                 { ui: this._btnSearch, callback: this._onTouchedBtnSearch },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-        }
+            ]);
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
             this._btnReset.enabled  = true;
             this._btnSearch.enabled = true;
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
-            MmAvailabilitySearchPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
             MmAvailabilityListPanel.getInstance().setMapFilters({});
-            MmAvailabilitySearchPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnSearch(e: egret.TouchEvent): void {
@@ -83,7 +81,7 @@ namespace TinyWars.MapManagement {
                 minRating   : Number(this._inputMinRating.text) || null,
             });
 
-            MmAvailabilitySearchPanel.hide();
+            this.close();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

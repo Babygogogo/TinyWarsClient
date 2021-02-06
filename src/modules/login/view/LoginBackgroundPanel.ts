@@ -19,47 +19,45 @@ namespace TinyWars.Login {
             if (!LoginBackgroundPanel._instance) {
                 LoginBackgroundPanel._instance = new LoginBackgroundPanel();
             }
-            LoginBackgroundPanel._instance.open();
+            LoginBackgroundPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (LoginBackgroundPanel._instance) {
-                LoginBackgroundPanel._instance.close();
+                await LoginBackgroundPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/login/LoginBackgroundPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.MsgCommonLatestConfigVersion,   callback: this._onMsgCommonLatestConfigVersion },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnLanguage01, callback: this._onTouchedBtnLanguage01 },
                 { ui: this._btnLanguage02, callback: this._onTouchedBtnLanguage02 },
-            ];
+            ]);
 
             this._btnLanguage01.setImgDisplaySource("login_button_language_003");
             this._btnLanguage01.setImgExtraSource("login_button_language_001");
-        }
 
-        protected _onOpened(): void {
             this._labelVersion.text = `v.${window.CLIENT_VERSION}`;
             this._updateBtnLanguages();
 
-            if (Utility.ConfigManager.getLatestConfigVersion()) {
+            if (Utility.ConfigManager.getLatestFormalVersion()) {
                 // this._initGroupUnits();
             }
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._clearGroupUnits();
         }
 
@@ -77,20 +75,20 @@ namespace TinyWars.Login {
             // this._initGroupUnits();
         }
         private _onTouchedBtnLanguage01(e: egret.TouchEvent): void {
-            if (Lang.getLanguageType() !== Types.LanguageType.Chinese) {
+            if (Lang.getCurrentLanguageType() !== Types.LanguageType.Chinese) {
                 Lang.setLanguageType(Types.LanguageType.Chinese);
                 Notify.dispatch(Notify.Type.LanguageChanged);
             }
         }
         private _onTouchedBtnLanguage02(e: egret.TouchEvent): void {
-            if (Lang.getLanguageType() !== Types.LanguageType.English) {
+            if (Lang.getCurrentLanguageType() !== Types.LanguageType.English) {
                 Lang.setLanguageType(Types.LanguageType.English);
                 Notify.dispatch(Notify.Type.LanguageChanged);
             }
         }
 
         private _updateBtnLanguages(): void {
-            const languageType = Lang.getLanguageType();
+            const languageType = Lang.getCurrentLanguageType();
             this._btnLanguage01.setImgDisplaySource(languageType === Types.LanguageType.Chinese
                 ? "login_button_language_001"
                 : "login_button_language_003"

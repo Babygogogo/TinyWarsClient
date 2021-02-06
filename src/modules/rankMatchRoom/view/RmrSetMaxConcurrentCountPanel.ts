@@ -29,12 +29,12 @@ namespace TinyWars.RankMatchRoom {
             if (!RmrSetMaxConcurrentCountPanel._instance) {
                 RmrSetMaxConcurrentCountPanel._instance = new RmrSetMaxConcurrentCountPanel();
             }
-            RmrSetMaxConcurrentCountPanel._instance.open();
+            RmrSetMaxConcurrentCountPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RmrSetMaxConcurrentCountPanel._instance) {
-                RmrSetMaxConcurrentCountPanel._instance.close();
+                await RmrSetMaxConcurrentCountPanel._instance.close();
             }
         }
 
@@ -42,30 +42,28 @@ namespace TinyWars.RankMatchRoom {
             super();
 
             this.skinName = "resource/skins/rankMatchRoom/RmrSetMaxConcurrentCountPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgRmrGetMaxConcurrentCount,    callback: this._onMsgRmrGetMaxConcurrentCount },
                 { type: Notify.Type.MsgRmrSetMaxConcurrentCount,    callback: this._onMsgRmrSetMaxConcurrentCount },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnConfirm,         callback: this._onTouchedBtnConfirm },
                 { ui: this._btnModifyHasFog,    callback: this._onTouchedBtnModifyHasFog },
                 { ui: this._btnModifyCount,     callback: this._onTouchedBtnModifyCount },
-            ];
+            ]);
 
             this._btnConfirm.setTextColor(0x00FF00);
             this._btnCancel.setTextColor(0xFF0000);
             this._btnModifyHasFog.setTextColor(0x00FF00);
             this._btnModifyCount.setTextColor(0x00FF00);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             const hasFog    = false;

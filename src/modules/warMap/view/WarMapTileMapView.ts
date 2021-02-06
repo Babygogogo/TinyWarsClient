@@ -41,7 +41,7 @@ namespace TinyWars.WarMap {
             // this._initTest();
         }
 
-        public updateWithTileDataList(dataList: ISerialTile[]): void {
+        public updateWithTileDataArray(dataList: ISerialTile[]): void {
             this._baseLayer.updateWithTileDataList(dataList);
             this._objectLayer.updateWithTileDataList(dataList);
         }

@@ -10,19 +10,19 @@ namespace TinyWars.ReplayWar {
             if (!RwWarPanel._instance) {
                 RwWarPanel._instance = new RwWarPanel();
             }
-            RwWarPanel._instance.open();
+            RwWarPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwWarPanel._instance) {
-                RwWarPanel._instance.close();
+                await RwWarPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/replayWar/RwWarPanel.exml";
         }
 
@@ -30,7 +30,7 @@ namespace TinyWars.ReplayWar {
             this.addChild(RwModel.getWar().getView());
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this.removeChildren();
         }
     }

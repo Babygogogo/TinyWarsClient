@@ -22,7 +22,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
-        private _tileView       : McwTileView;
+        private _tileView       = new McwTileView();
         private _labelName      : GameUi.UiLabel;
         private _labelGridIndex : GameUi.UiLabel;
         private _labelState     : GameUi.UiLabel;
@@ -38,11 +38,11 @@ namespace TinyWars.MultiPlayerWar {
             if (!McwTileBriefPanel._instance) {
                 McwTileBriefPanel._instance = new McwTileBriefPanel();
             }
-            McwTileBriefPanel._instance.open();
+            McwTileBriefPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McwTileBriefPanel._instance) {
-                McwTileBriefPanel._instance.close();
+                await McwTileBriefPanel._instance.close();
             }
         }
         public static getInstance(): McwTileBriefPanel {
@@ -52,12 +52,12 @@ namespace TinyWars.MultiPlayerWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/multiCustomWar/McwTileBriefPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyMcwCursorGridIndexChanged },
@@ -69,24 +69,22 @@ namespace TinyWars.MultiPlayerWar {
                 { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
                 { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
                 { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this, callback: this._onTouchedThis, },
-            ];
+            ]);
 
-            this._tileView = new McwTileView();
             this._conTileView.addChild(this._tileView.getImgBase());
             this._conTileView.addChild(this._tileView.getImgObject());
-        }
-        protected _onOpened(): void {
+
             this._war       = MpwModel.getWar();
             this._tileMap   = this._war.getTileMap() as MpwTileMap;
             this._cursor    = this._war.getField().getCursor() as MpwCursor;
 
             this._updateView();
         }
-        protected _onClosed(): void {
-            delete this._war;
+        protected async _onClosed(): Promise<void> {
+            this._war = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

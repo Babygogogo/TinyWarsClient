@@ -8,8 +8,8 @@ namespace TinyWars.BaseWar {
     import ProtoTypes   = Utility.ProtoTypes;
     import UnitType     = Types.UnitType;
 
-    export type OpenDataForBwTileDetailPanel = {
-        tile    : BwTile | MapEditor.MeTile;
+    type OpenDataForBwTileDetailPanel = {
+        tile    : BwTile;
     }
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
@@ -20,27 +20,25 @@ namespace TinyWars.BaseWar {
 
         private static _instance: BwTileDetailPanel;
 
-        private _group                      : eui.Group;
-        private _labelName                  : GameUi.UiLabel;
-        private _imgTileBase                : GameUi.UiImage;
-        private _imgTileObject              : GameUi.UiImage;
-        private _listInfo                   : GameUi.UiScrollList;
-        private _labelMoveCost              : GameUi.UiLabel;
-        private _listMoveCost               : GameUi.UiScrollList;
+        private _group              : eui.Group;
+        private _labelName          : GameUi.UiLabel;
+        private _imgTileBase        : GameUi.UiImage;
+        private _imgTileObject      : GameUi.UiImage;
+        private _listInfo           : GameUi.UiScrollList;
+        private _labelMoveCost      : GameUi.UiLabel;
+        private _listMoveCost       : GameUi.UiScrollList;
 
-        private _openData   : OpenDataForBwTileDetailPanel;
         private _dataForListMoveCost: DataForMoveRangeRenderer[];
 
-        public static show(data: OpenDataForBwTileDetailPanel): void {
+        public static show(openData: OpenDataForBwTileDetailPanel): void {
             if (!BwTileDetailPanel._instance) {
                 BwTileDetailPanel._instance = new BwTileDetailPanel();
             }
-            BwTileDetailPanel._instance._openData = data;
-            BwTileDetailPanel._instance.open();
+            BwTileDetailPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (BwTileDetailPanel._instance) {
-                BwTileDetailPanel._instance.close();
+                await BwTileDetailPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -51,27 +49,26 @@ namespace TinyWars.BaseWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/baseWar/BwTileDetailPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
-            ];
-
-            this._imgTileObject.anchorOffsetY = GRID_HEIGHT;
+            ]);
             this._listInfo.setItemRenderer(InfoRenderer);
             this._listMoveCost.setItemRenderer(MoveCostRenderer);
-        }
-        protected _onOpened(): void {
+
+            this._imgTileObject.anchorOffsetY = GRID_HEIGHT;
+
             this._updateView();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._dataForListMoveCost = null;
             this._listInfo.clear();
             this._listMoveCost.clear();
@@ -109,7 +106,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateTileViewAndLabelName(): void {
-            const data                  = this._openData;
+            const data                  = this._getOpenData<OpenDataForBwTileDetailPanel>();
             const tile                  = data.tile;
             const version               = User.UserModel.getSelfSettingsTextureVersion();
             const tickCount             = Time.TimeModel.getTileAnimationTickCount();
@@ -134,7 +131,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateListInfo(): void {
-            const data                  = this._openData;
+            const data                  = this._getOpenData<OpenDataForBwTileDetailPanel>();
             const tile                  = data.tile;
             const configVersion         = tile.getConfigVersion();
             const tileType              = tile.getType();
@@ -317,7 +314,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _createDataForListMoveCost(): DataForMoveRangeRenderer[] {
-            const openData          = this._openData;
+            const openData          = this._getOpenData<OpenDataForBwTileDetailPanel>();
             const tile              = openData.tile;
             const configVersion     = tile.getConfigVersion();
             const tileCfg           = Utility.ConfigManager.getTileTemplateCfgByType(configVersion, tile.getType());
@@ -347,7 +344,7 @@ namespace TinyWars.BaseWar {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
@@ -378,7 +375,7 @@ namespace TinyWars.BaseWar {
         playerIndex     : number;
     }
 
-    class MoveCostRenderer extends eui.ItemRenderer {
+    class MoveCostRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _conView        : eui.Group;
         private _unitView       : WarMap.WarMapUnitView;

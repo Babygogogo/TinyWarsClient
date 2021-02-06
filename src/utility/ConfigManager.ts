@@ -57,7 +57,28 @@ namespace TinyWars.Utility.ConfigManager {
     ////////////////////////////////////////////////////////////////////////////////
     // Constants.
     ////////////////////////////////////////////////////////////////////////////////
-    export const COMMON_CONSTANTS           = {
+    export const COMMON_CONSTANTS = {
+        AdminUserId                             : 1000001,
+        NameListMaxLength                       : 5,
+
+        ChangeLogTextMaxLength                  : 200,
+        ChangeLogTextListMaxLength              : 2,
+        ChangeLogMessageListMaxLength           : 100,
+
+        MaxGridsCount                           : 1000,
+        MaxMapNameLength                        : 30,
+        MaxDesignerLength                       : 30,
+
+        WarEventNameMaxLength                   : 150,
+        WarEventMaxEventsPerMap                 : 10,
+        WarEventMaxConditionNodesPerMap         : 50,
+        WarEventMaxConditionsPerMap             : 100,
+        WarEventMaxActionsPerMap                : 100,
+        WarEventMaxActionsPerEvent              : 10,
+        WarEventMaxCallCountTotal               : 100,
+        WarEventMaxCallCountInPlayerTurn        : 10,
+        WarEventActionAddUnitMaxCount           : 50,
+
         MapEditorSlotMaxCountForNormal          : 3,
         MapEditorSlotMaxCountForCommittee       : 100,
         ScwSaveSlotMaxCount                     : 10,
@@ -82,6 +103,7 @@ namespace TinyWars.Utility.ConfigManager {
         WarFirstPlayerIndex                     : 1,
         WarMaxPlayerIndex                       : 4,
         WarFirstTeamIndex                       : 1,
+        WarFirstTurnIndex                       : 1,
 
         ReplayMaxRating                         : 10,
         ReplayMinRating                         : 0,
@@ -836,17 +858,10 @@ namespace TinyWars.Utility.ConfigManager {
     export const SILO_RADIUS                = 2;
     export const SILO_DAMAGE                = 30;
 
-    export const MAP_CONSTANTS              = {
-        MaxGridsCount           : 1000,
-        MaxMapNameLength        : 30,
-        MaxMapNameEnglishLength : 30,
-        MaxDesignerLength       : 30,
-    };
-
     export function init(): void {
     }
 
-    export function getLatestConfigVersion(): string {
+    export function getLatestFormalVersion(): string {
         return _latestFormalVersion;
     }
     export function setLatestConfigVersion(version: string): void {
@@ -1125,7 +1140,7 @@ namespace TinyWars.Utility.ConfigManager {
 
     export function getRankName(version: string, rankScore: number): string {
         const cfg = getPlayerRankCfg(version, rankScore);
-        return cfg ? Lang.getNameInCurrentLanguage(cfg.nameList) : undefined;
+        return cfg ? Lang.getStringInCurrentLanguage(cfg.nameList) : undefined;
     }
     export function getPlayerRankCfg(version: string, rankScore: number): IPlayerRankCfg {
         const cfgs  = _ALL_CONFIGS.get(version)!.PlayerRank;
@@ -1159,7 +1174,7 @@ namespace TinyWars.Utility.ConfigManager {
         return _ALL_CONFIGS.get(version)!.CoSkill[skillId];
     }
 
-    export function getAvailableCoList(version: string): CoBasicCfg[] {
+    export function getAvailableCoArray(version: string): CoBasicCfg[] {
         if (!_AVAILABLE_CO_LIST.has(version)) {
             const list: CoBasicCfg[] = [];
             const cfgs = _ALL_CONFIGS.get(version)!.CoBasic;
@@ -1185,10 +1200,10 @@ namespace TinyWars.Utility.ConfigManager {
     export function getCoTiers(version: string): number[] {
         if (!_CO_TIERS.has(version)) {
             const tiers = new Set<number>();
-            for (const cfg of getAvailableCoList(version)) {
+            for (const cfg of getAvailableCoArray(version)) {
                 tiers.add(cfg.tier);
             }
-            _CO_TIERS.set(version, Array.from(tiers).sort());
+            _CO_TIERS.set(version, Array.from(tiers).sort((v1, v2) => v1 - v2));
         }
         return _CO_TIERS.get(version);
     }
@@ -1201,7 +1216,7 @@ namespace TinyWars.Utility.ConfigManager {
         const cfgs = _CO_ID_LIST_IN_TIER.get(version);
         if (!cfgs.get(tier)) {
             const idList: number[] = [];
-            for (const cfg of getAvailableCoList(version)) {
+            for (const cfg of getAvailableCoArray(version)) {
                 if (cfg.tier === tier) {
                     idList.push(cfg.coId);
                 }
@@ -1214,7 +1229,7 @@ namespace TinyWars.Utility.ConfigManager {
     export function getAvailableCustomCoIdList(version: string): number[] {
         if (!_CUSTOM_CO_ID_LIST.has(version)) {
             const idList: number[] = [];
-            for (const cfg of getAvailableCoList(version)) {
+            for (const cfg of getAvailableCoArray(version)) {
                 if (cfg.designer !== "Intelligent Systems") {
                     idList.push(cfg.coId);
                 }

@@ -18,41 +18,38 @@ namespace TinyWars.RankMatchRoom {
             if (!RmrMainMenuPanel._instance) {
                 RmrMainMenuPanel._instance = new RmrMainMenuPanel();
             }
-            RmrMainMenuPanel._instance.open();
+            RmrMainMenuPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RmrMainMenuPanel._instance) {
-                RmrMainMenuPanel._instance.close();
+                await RmrMainMenuPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/rankMatchRoom/RmrMainMenuPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
                 { type: Notify.Type.MsgRmrGetRoomPublicInfo,        callback: this._onMsgRmrGetRoomPublicInfo },
                 { type: Notify.Type.MsgRmrGetMyRoomPublicInfoList,  callback: this._onMsgRmrGetMyRoomPublicInfoList },
-            ];
-
+            ]);
             this._listCommand.setItemRenderer(CommandRenderer);
-        }
 
-        protected _onOpened(): void {
             this._updateView();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCommand.clear();
         }
 
@@ -68,7 +65,7 @@ namespace TinyWars.RankMatchRoom {
             this._updateView();
         }
         private _onMsgUserLogout(e: egret.Event): void {
-            RmrMainMenuPanel.hide();
+            this.close();
         }
         private _onMsgRmrGetRoomPublicInfo(e: egret.Event): void {
             this._listCommand.refresh();
@@ -126,7 +123,7 @@ namespace TinyWars.RankMatchRoom {
                     name    : Lang.getText(Lang.Type.B0441),
                     callback: () => {
                         this.close();
-                        RmrPreviewMapListPanel.show(false);
+                        RmrPreviewMapListPanel.show({ hasFog: false });
                     },
                     redChecker  : async () => {
                         return false;
@@ -136,7 +133,7 @@ namespace TinyWars.RankMatchRoom {
                     name    : Lang.getText(Lang.Type.B0442),
                     callback: () => {
                         this.close();
-                        RmrPreviewMapListPanel.show(true);
+                        RmrPreviewMapListPanel.show({ hasFog: true });
                     },
                     redChecker  : async () => {
                         return false;
@@ -163,7 +160,7 @@ namespace TinyWars.RankMatchRoom {
         redChecker? : () => Promise<boolean>;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _labelCommand   : GameUi.UiLabel;
         private _imgRed         : GameUi.UiImage;
 

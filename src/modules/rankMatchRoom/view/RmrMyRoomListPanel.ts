@@ -34,36 +34,34 @@ namespace TinyWars.RankMatchRoom {
             if (!RmrMyRoomListPanel._instance) {
                 RmrMyRoomListPanel._instance = new RmrMyRoomListPanel();
             }
-            RmrMyRoomListPanel._instance.open();
+            RmrMyRoomListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RmrMyRoomListPanel._instance) {
-                RmrMyRoomListPanel._instance.close();
+                await RmrMyRoomListPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/rankMatchRoom/RmrMyRoomListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgRmrGetMyRoomPublicInfoList,  callback: this._onMsgRmrGetMyRoomPublicInfoList },
                 { type: Notify.Type.RmrMyRoomAdded,                 callback: this._onNotifyRmrMyRoomAdded },
                 { type: Notify.Type.RmrMyRoomDeleted,               callback: this._onNotifyRmrMyRoomDeleted },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listWar.setItemRenderer(WarRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             this._groupInfo.visible = false;
@@ -72,7 +70,7 @@ namespace TinyWars.RankMatchRoom {
             RmrProxy.reqRmrGetMyRoomPublicInfoList();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._zoomMap.removeAllContents();
             this._zoomMap.setMouseWheelListenerEnabled(false);
             this._zoomMap.setTouchListenerEnabled(false);
@@ -148,7 +146,7 @@ namespace TinyWars.RankMatchRoom {
             const playerDataList    = roomInfo.playerDataList;
             const playerRules       = roomInfo.settingsForCommon.warRule.ruleForPlayers;
             const dataList          : DataForPlayerRenderer[] = [];
-            for (let playerIndex = 1; playerIndex <= mapRawData.playersCount; ++playerIndex) {
+            for (let playerIndex = 1; playerIndex <= mapRawData.playersCountUnneutral; ++playerIndex) {
                 const playerData = playerDataList.find(v => v.playerIndex === playerIndex);
                 dataList.push({
                     playerIndex,
@@ -177,7 +175,7 @@ namespace TinyWars.RankMatchRoom {
 
             const tileMapView = new WarMap.WarMapTileMapView();
             tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-            tileMapView.updateWithTileDataList(mapRawData.tileDataList);
+            tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithMapRawData(mapRawData);
@@ -219,7 +217,7 @@ namespace TinyWars.RankMatchRoom {
         panel   : RmrMyRoomListPanel;
     }
 
-    class WarRenderer extends eui.ItemRenderer {
+    class WarRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
@@ -251,7 +249,7 @@ namespace TinyWars.RankMatchRoom {
             const data      = this.data as DataForWarRenderer;
             const roomInfo  = data.roomInfo;
             RmrModel.SelfSettings.resetData(roomInfo);
-            RmrRoomInfoPanel.show(roomInfo.roomId);
+            RmrRoomInfoPanel.show({ roomId: roomInfo.roomId });
         }
     }
 
@@ -261,7 +259,7 @@ namespace TinyWars.RankMatchRoom {
         teamIndex   : number;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
 

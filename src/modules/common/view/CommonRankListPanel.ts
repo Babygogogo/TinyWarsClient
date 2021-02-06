@@ -27,39 +27,38 @@ namespace TinyWars.Common {
             if (!CommonRankListPanel._instance) {
                 CommonRankListPanel._instance = new CommonRankListPanel();
             }
-            CommonRankListPanel._instance.open();
+            CommonRankListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (CommonRankListPanel._instance) {
-                CommonRankListPanel._instance.close();
+                await CommonRankListPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/common/CommonRankListPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgCommonGetRankList,   callback: this._onMsgCommonGetRankList },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnClose, callback: this.close },
-            ];
+            ]);
             this._listStd.setItemRenderer(UserRenderer);
             this._listFog.setItemRenderer(UserRenderer);
-        }
-        protected _onOpened(): void {
+
             CommonProxy.reqGetRankList();
 
             this._updateView();
             this._updateComponentsForLanguage();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listStd.clear();
             this._listFog.clear();
         }
@@ -97,7 +96,7 @@ namespace TinyWars.Common {
             const warType       = Types.WarType.RmwStd;
             const dataList      : DataForUserRenderer[] = [];
             for (const data of CommonModel.getRankList() || []) {
-                if ((data.playersCount === playersCount) && (data.warType === warType)) {
+                if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     dataList.push({
                         rank    : dataList.length + 1,
                         userId  : data.userId,
@@ -116,7 +115,7 @@ namespace TinyWars.Common {
             const warType       = Types.WarType.RmwFog;
             const dataList      : DataForUserRenderer[] = [];
             for (const data of CommonModel.getRankList() || []) {
-                if ((data.playersCount === playersCount) && (data.warType === warType)) {
+                if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
                     dataList.push({
                         rank    : dataList.length + 1,
                         userId  : data.userId,
@@ -138,7 +137,7 @@ namespace TinyWars.Common {
         warType     : Types.WarType;
     }
 
-    class UserRenderer extends eui.ItemRenderer {
+    class UserRenderer extends GameUi.UiListItemRenderer {
         private _group      : eui.Group;
         private _imgBg      : GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
@@ -158,7 +157,7 @@ namespace TinyWars.Common {
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
             CommonRankListPanel.hide();
-            User.UserPanel.show((this.data as DataForUserRenderer).userId);
+            User.UserPanel.show({ userId: (this.data as DataForUserRenderer).userId });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -171,7 +170,7 @@ namespace TinyWars.Common {
 
             const userInfo = await User.UserModel.getUserPublicInfo(data.userId);
             const rankInfo = userInfo.userRankScore.dataList.find(v => {
-                return (v.playersCount === data.playersCount) && (v.warType === data.warType);
+                return (v.playersCountUnneutral === data.playersCount) && (v.warType === data.warType);
             });
             label.text = `No.${data.rank}  ${rankInfo.currentScore}\n${userInfo.nickname}`;
         }

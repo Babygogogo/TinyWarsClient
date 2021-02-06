@@ -24,31 +24,29 @@ namespace TinyWars.Common {
             if (!CommonServerStatusPanel._instance) {
                 CommonServerStatusPanel._instance = new CommonServerStatusPanel();
             }
-            CommonServerStatusPanel._instance.open();
+            CommonServerStatusPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (CommonServerStatusPanel._instance) {
-                CommonServerStatusPanel._instance.close();
+                await CommonServerStatusPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask  = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName               = "resource/skins/common/CommonServerStatusPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
-                { type: Notify.Type.MsgCommonGetServerStatus, callback: this._onMsgCommonGetServerStatus },
-            ];
-        }
-
         protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.MsgCommonGetServerStatus, callback: this._onMsgCommonGetServerStatus },
+            ]);
+
             this._updateComponentsForLanguage();
 
             CommonProxy.reqCommonGetServerStatus();

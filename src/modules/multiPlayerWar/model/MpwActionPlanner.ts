@@ -37,7 +37,7 @@ namespace TinyWars.MultiPlayerWar {
 
             this._setState(State.ChoosingProductionTarget);
             this._updateView();
-            McwProduceUnitPanel.show(gridIndex);
+            McwProduceUnitPanel.show({ gridIndex });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -212,13 +212,6 @@ namespace TinyWars.MultiPlayerWar {
             MpwProxy.reqMcwUnitSupply(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitSupply);
-            this._updateView();
-        }
-
-        public setStateRequestingPlayerBeginTurn(): void {
-            MpwProxy.reqMcwPlayerBeginTurn(this._getWar());
-
-            this._setState(State.RequestingPlayerBeginTurn);
             this._updateView();
         }
 

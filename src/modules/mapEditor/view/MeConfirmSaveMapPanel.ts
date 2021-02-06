@@ -29,12 +29,12 @@ namespace TinyWars.MapEditor {
             if (!MeConfirmSaveMapPanel._instance) {
                 MeConfirmSaveMapPanel._instance = new MeConfirmSaveMapPanel();
             }
-            MeConfirmSaveMapPanel._instance.open();
+            MeConfirmSaveMapPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeConfirmSaveMapPanel._instance) {
-                MeConfirmSaveMapPanel._instance.close();
+                await MeConfirmSaveMapPanel._instance.close();
             }
         }
 
@@ -42,22 +42,20 @@ namespace TinyWars.MapEditor {
             super();
 
             this.skinName = "resource/skins/mapEditor/MeConfirmSaveMapPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-        }
-
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
-                { ui: this._btnCancel,          callback: this._onTouchedBtnCancel, },
-                { ui: this._btnConfirm,         callback: this._onTouchedBtnConfirm, },
-                { ui: this._groupNeedReview,    callback: this._onTouchedGroupNeedReview },
-            ];
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
         }
 
         protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ]);
+            this._setUiListenerArray([
+                { ui: this._btnCancel,          callback: this._onTouchedBtnCancel, },
+                { ui: this._btnConfirm,         callback: this._onTouchedBtnConfirm, },
+                { ui: this._groupNeedReview,    callback: this._onTouchedGroupNeedReview },
+            ]);
+
             this._updateComponentsForLanguage();
             this._needReview = false;
             this._updateImgNeedReview();

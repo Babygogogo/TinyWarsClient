@@ -43,36 +43,35 @@ namespace TinyWars.ReplayWar {
             if (!RwReplayListPanel._instance) {
                 RwReplayListPanel._instance = new RwReplayListPanel();
             }
-            RwReplayListPanel._instance.open();
+            RwReplayListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwReplayListPanel._instance) {
-                RwReplayListPanel._instance.close();
+                await RwReplayListPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/replayWar/RwReplayListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.MsgReplayGetInfoList,       callback: this._onNotifySMcrGetReplayInfos },
                 { type: Notify.Type.MsgReplayGetData,           callback: this._onNotifySMcrGetReplayData },
                 { type: Notify.Type.MsgReplayGetDataFailed,    callback: this._onNotifySMcrGetReplayDataFailed },
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listMap.setItemRenderer(ReplayRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
-        protected _onOpened(): void {
+
             RwProxy.reqReplayInfos(null);
 
             this._groupInfo.visible = false;
@@ -81,7 +80,7 @@ namespace TinyWars.ReplayWar {
 
             this._updateView();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._zoomMap.removeAllContents();
             this._zoomMap.setMouseWheelListenerEnabled(false);
             this._zoomMap.setTouchListenerEnabled(false);
@@ -132,7 +131,7 @@ namespace TinyWars.ReplayWar {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            RwReplayListPanel.hide();
+            this.close();
             MultiCustomRoom.McrMainMenuPanel.show();
         }
 
@@ -206,7 +205,7 @@ namespace TinyWars.ReplayWar {
                 const mapRawData    = await WarMapModel.getRawData(data.info.replayBriefInfo.mapId);
                 const tileMapView   = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-                tileMapView.updateWithTileDataList(mapRawData.tileDataList);
+                tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
 
                 const unitMapView = new WarMap.WarMapUnitMapView();
                 unitMapView.initWithMapRawData(mapRawData);
@@ -261,7 +260,7 @@ namespace TinyWars.ReplayWar {
         panel       : RwReplayListPanel;
     }
 
-    class ReplayRenderer extends eui.ItemRenderer {
+    class ReplayRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _labelTurnIndex : GameUi.UiLabel;
@@ -309,7 +308,7 @@ namespace TinyWars.ReplayWar {
         playerInfo      : ProtoTypes.Structure.IWarPlayerInfo;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
 

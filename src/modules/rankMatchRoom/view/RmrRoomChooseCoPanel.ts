@@ -7,7 +7,7 @@ namespace TinyWars.RankMatchRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    export type OpenParamForRmrRoomChooseCoPanel = {
+    type OpenDataForRmrRoomChooseCoPanel = {
         roomInfo    : ProtoTypes.RankMatchRoom.IRmrRoomInfo;
         playerIndex : number;
     }
@@ -17,8 +17,6 @@ namespace TinyWars.RankMatchRoom {
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: RmrRoomChooseCoPanel;
-
-        private _openParam      : OpenParamForRmrRoomChooseCoPanel;
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
@@ -53,46 +51,44 @@ namespace TinyWars.RankMatchRoom {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(openParam: OpenParamForRmrRoomChooseCoPanel): void {
+        public static show(openData: OpenDataForRmrRoomChooseCoPanel): void {
             if (!RmrRoomChooseCoPanel._instance) {
                 RmrRoomChooseCoPanel._instance = new RmrRoomChooseCoPanel();
             }
 
-            RmrRoomChooseCoPanel._instance._openParam = openParam;
-            RmrRoomChooseCoPanel._instance.open();
+            RmrRoomChooseCoPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RmrRoomChooseCoPanel._instance) {
-                RmrRoomChooseCoPanel._instance.close();
+                await RmrRoomChooseCoPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/rankMatchRoom/RmrRoomChooseCoPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgRmrDeleteRoom,   callback: this._onMsgRmrDeleteRoom },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
                 { ui: this._btnBack,    callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listCo.setItemRenderer(CoRenderer);
             this._listPassiveSkill.setItemRenderer(SkillRenderer);
             this._listCop.setItemRenderer(SkillRenderer);
             this._listScop.setItemRenderer(SkillRenderer);
-        }
-        protected _onOpened(): void {
+
             this._initListCo();
             this._updateComponentsForLanguage();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCo.clear();
             this._listPassiveSkill.clear();
             this._listCop.clear();
@@ -127,7 +123,7 @@ namespace TinyWars.RankMatchRoom {
 
         private _onMsgRmrDeleteRoom(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgRmrDeleteRoom.IS;
-            if (data.roomId === this._openParam.roomInfo.roomId) {
+            if (data.roomId === this._getOpenData<OpenDataForRmrRoomChooseCoPanel>().roomInfo.roomId) {
                 this.close();
                 RmrMyRoomListPanel.show();
             }
@@ -142,7 +138,7 @@ namespace TinyWars.RankMatchRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            RmrRoomInfoPanel.show(this._openParam.roomInfo.roomId);
+            RmrRoomInfoPanel.show({ roomId: this._getOpenData<OpenDataForRmrRoomChooseCoPanel>().roomInfo.roomId });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -165,12 +161,12 @@ namespace TinyWars.RankMatchRoom {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const dataList          : DataForCoRenderer[] = [];
-            const openParam         = this._openParam;
-            const roomInfo          = openParam.roomInfo;
-            const availableCoIdList = RmrModel.SelfSettings.generateAvailableCoIdList(roomInfo, openParam.playerIndex);
+            const openData          = this._getOpenData<OpenDataForRmrRoomChooseCoPanel>();
+            const roomInfo          = openData.roomInfo;
+            const availableCoIdList = RmrModel.SelfSettings.generateAvailableCoIdList(roomInfo, openData.playerIndex);
 
             let index = 0;
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestConfigVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
                 if (availableCoIdList.indexOf(cfg.coId) >= 0) {
                     dataList.push({
                         roomInfo,
@@ -282,7 +278,7 @@ namespace TinyWars.RankMatchRoom {
         panel       : RmrRoomChooseCoPanel;
     }
 
-    class CoRenderer extends eui.ItemRenderer {
+    class CoRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
@@ -311,7 +307,7 @@ namespace TinyWars.RankMatchRoom {
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data  = this.data as DataForCoRenderer;
             RmrModel.SelfSettings.setCoId(data.coBasicCfg.coId);
-            RmrRoomInfoPanel.show(data.roomInfo.roomId);
+            RmrRoomInfoPanel.show({ roomId: data.roomInfo.roomId });
             data.panel.close();
         }
     }
@@ -321,7 +317,7 @@ namespace TinyWars.RankMatchRoom {
         skillId : number;
     }
 
-    class SkillRenderer extends eui.ItemRenderer {
+    class SkillRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 
@@ -330,7 +326,7 @@ namespace TinyWars.RankMatchRoom {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()];
         }
     }
 }

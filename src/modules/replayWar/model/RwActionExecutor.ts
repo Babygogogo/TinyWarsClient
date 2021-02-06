@@ -19,107 +19,106 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;
     import IDataForUseCoSkill   = ProtoTypes.Structure.IDataForUseCoSkill;
-    import IActionContainer     = ProtoTypes.WarAction.IActionContainer;
+    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
-    const _EXECUTORS = new Map<WarActionCodes, (war: RwWar, data: IActionContainer) => Promise<void>>([
-        [WarActionCodes.ActionPlayerBeginTurn,      _exePlayerBeginTurn],
-        [WarActionCodes.ActionPlayerDeleteUnit,     _exePlayerDeleteUnit],
-        [WarActionCodes.ActionPlayerEndTurn,        _exePlayerEndTurn],
-        [WarActionCodes.ActionPlayerProduceUnit,    _exePlayerProduceUnit],
-        [WarActionCodes.ActionPlayerSurrender,      _exePlayerSurrender],
-        [WarActionCodes.ActionPlayerVoteForDraw,    _exePlayerVoteForDraw],
-        [WarActionCodes.ActionUnitAttackUnit,       _exeUnitAttackUnit],
-        [WarActionCodes.ActionUnitAttackTile,       _exeUnitAttackTile],
-        [WarActionCodes.ActionUnitBeLoaded,         _exeUnitBeLoaded],
-        [WarActionCodes.ActionUnitBuildTile,        _exeUnitBuildTile],
-        [WarActionCodes.ActionUnitCaptureTile,      _exeUnitCaptureTile],
-        [WarActionCodes.ActionUnitDive,             _exeUnitDive],
-        [WarActionCodes.ActionUnitDropUnit,         _exeUnitDropUnit],
-        [WarActionCodes.ActionUnitJoinUnit,         _exeUnitJoinUnit],
-        [WarActionCodes.ActionUnitLaunchFlare,      _exeUnitLaunchFlare],
-        [WarActionCodes.ActionUnitLaunchSilo,       _exeUnitLaunchSilo],
-        [WarActionCodes.ActionUnitLoadCo,           _exeUnitLoadCo],
-        [WarActionCodes.ActionUnitProduceUnit,      _exeUnitProduceUnit],
-        [WarActionCodes.ActionUnitSupplyUnit,       _exeUnitSupplyUnit],
-        [WarActionCodes.ActionUnitSurface,          _exeUnitSurface],
-        [WarActionCodes.ActionUnitUseCoSkill,       _exeUnitUseCoSkill],
-        [WarActionCodes.ActionUnitWait,             _exeUnitWait],
+    const _EXECUTORS = new Map<WarActionCodes, (war: RwWar, data: IWarActionContainer) => Promise<void>>([
+        [WarActionCodes.WarActionSystemBeginTurn,           _exeSystemBeginTurn],
+        [WarActionCodes.WarActionSystemCallWarEvent,        _exeSystemCallWarEvent],
+        [WarActionCodes.WarActionSystemDestroyPlayerForce,  _exeSystemDestroyPlayerForce],
+        [WarActionCodes.WarActionSystemEndWar,              _exeSystemEndWar],
+        [WarActionCodes.WarActionPlayerDeleteUnit,          _exePlayerDeleteUnit],
+        [WarActionCodes.WarActionPlayerEndTurn,             _exePlayerEndTurn],
+        [WarActionCodes.WarActionPlayerProduceUnit,         _exePlayerProduceUnit],
+        [WarActionCodes.WarActionPlayerSurrender,           _exePlayerSurrender],
+        [WarActionCodes.WarActionPlayerVoteForDraw,         _exePlayerVoteForDraw],
+        [WarActionCodes.WarActionUnitAttackUnit,            _exeUnitAttackUnit],
+        [WarActionCodes.WarActionUnitAttackTile,            _exeUnitAttackTile],
+        [WarActionCodes.WarActionUnitBeLoaded,              _exeUnitBeLoaded],
+        [WarActionCodes.WarActionUnitBuildTile,             _exeUnitBuildTile],
+        [WarActionCodes.WarActionUnitCaptureTile,           _exeUnitCaptureTile],
+        [WarActionCodes.WarActionUnitDive,                  _exeUnitDive],
+        [WarActionCodes.WarActionUnitDropUnit,              _exeUnitDropUnit],
+        [WarActionCodes.WarActionUnitJoinUnit,              _exeUnitJoinUnit],
+        [WarActionCodes.WarActionUnitLaunchFlare,           _exeUnitLaunchFlare],
+        [WarActionCodes.WarActionUnitLaunchSilo,            _exeUnitLaunchSilo],
+        [WarActionCodes.WarActionUnitLoadCo,                _exeUnitLoadCo],
+        [WarActionCodes.WarActionUnitProduceUnit,           _exeUnitProduceUnit],
+        [WarActionCodes.WarActionUnitSupplyUnit,            _exeUnitSupplyUnit],
+        [WarActionCodes.WarActionUnitSurface,               _exeUnitSurface],
+        [WarActionCodes.WarActionUnitUseCoSkill,            _exeUnitUseCoSkill],
+        [WarActionCodes.WarActionUnitWait,                  _exeUnitWait],
     ]);
-    const _FAST_EXECUTORS = new Map<WarActionCodes, (war: RwWar, data: IActionContainer) => Promise<void>>([
-        [WarActionCodes.ActionPlayerBeginTurn,      _fastExePlayerBeginTurn],
-        [WarActionCodes.ActionPlayerDeleteUnit,     _fastExePlayerDeleteUnit],
-        [WarActionCodes.ActionPlayerEndTurn,        _fastExePlayerEndTurn],
-        [WarActionCodes.ActionPlayerProduceUnit,    _fastExePlayerProduceUnit],
-        [WarActionCodes.ActionPlayerSurrender,      _fastExePlayerSurrender],
-        [WarActionCodes.ActionPlayerVoteForDraw,    _fastExePlayerVoteForDraw],
-        [WarActionCodes.ActionUnitAttackUnit,       _fastExeUnitAttackUnit],
-        [WarActionCodes.ActionUnitAttackTile,       _fastExeUnitAttackTile],
-        [WarActionCodes.ActionUnitBeLoaded,         _fastExeUnitBeLoaded],
-        [WarActionCodes.ActionUnitBuildTile,        _fastExeUnitBuildTile],
-        [WarActionCodes.ActionUnitCaptureTile,      _fastExeUnitCaptureTile],
-        [WarActionCodes.ActionUnitDive,             _fastExeUnitDive],
-        [WarActionCodes.ActionUnitDropUnit,         _fastExeUnitDropUnit],
-        [WarActionCodes.ActionUnitJoinUnit,         _fastExeUnitJoinUnit],
-        [WarActionCodes.ActionUnitLaunchFlare,      _fastExeUnitLaunchFlare],
-        [WarActionCodes.ActionUnitLaunchSilo,       _fastExeUnitLaunchSilo],
-        [WarActionCodes.ActionUnitLoadCo,           _fastExeUnitLoadCo],
-        [WarActionCodes.ActionUnitProduceUnit,      _fastExeUnitProduceUnit],
-        [WarActionCodes.ActionUnitSupplyUnit,       _fastExeUnitSupplyUnit],
-        [WarActionCodes.ActionUnitSurface,          _fastExeUnitSurface],
-        [WarActionCodes.ActionUnitUseCoSkill,       _fastExeUnitUseCoSkill],
-        [WarActionCodes.ActionUnitWait,             _fastExeUnitWait],
+    const _FAST_EXECUTORS = new Map<WarActionCodes, (war: RwWar, data: IWarActionContainer) => Promise<void>>([
+        [WarActionCodes.WarActionSystemBeginTurn,           _fastExeSystemBeginTurn],
+        [WarActionCodes.WarActionSystemCallWarEvent,        _fastExeSystemCallWarEvent],
+        [WarActionCodes.WarActionSystemDestroyPlayerForce,  _fastExeSystemDestroyPlayerForce],
+        [WarActionCodes.WarActionSystemEndWar,              _fastExeSystemEndWar],
+        [WarActionCodes.WarActionPlayerDeleteUnit,          _fastExePlayerDeleteUnit],
+        [WarActionCodes.WarActionPlayerEndTurn,             _fastExePlayerEndTurn],
+        [WarActionCodes.WarActionPlayerProduceUnit,         _fastExePlayerProduceUnit],
+        [WarActionCodes.WarActionPlayerSurrender,           _fastExePlayerSurrender],
+        [WarActionCodes.WarActionPlayerVoteForDraw,         _fastExePlayerVoteForDraw],
+        [WarActionCodes.WarActionUnitAttackUnit,            _fastExeUnitAttackUnit],
+        [WarActionCodes.WarActionUnitAttackTile,            _fastExeUnitAttackTile],
+        [WarActionCodes.WarActionUnitBeLoaded,              _fastExeUnitBeLoaded],
+        [WarActionCodes.WarActionUnitBuildTile,             _fastExeUnitBuildTile],
+        [WarActionCodes.WarActionUnitCaptureTile,           _fastExeUnitCaptureTile],
+        [WarActionCodes.WarActionUnitDive,                  _fastExeUnitDive],
+        [WarActionCodes.WarActionUnitDropUnit,              _fastExeUnitDropUnit],
+        [WarActionCodes.WarActionUnitJoinUnit,              _fastExeUnitJoinUnit],
+        [WarActionCodes.WarActionUnitLaunchFlare,           _fastExeUnitLaunchFlare],
+        [WarActionCodes.WarActionUnitLaunchSilo,            _fastExeUnitLaunchSilo],
+        [WarActionCodes.WarActionUnitLoadCo,                _fastExeUnitLoadCo],
+        [WarActionCodes.WarActionUnitProduceUnit,           _fastExeUnitProduceUnit],
+        [WarActionCodes.WarActionUnitSupplyUnit,            _fastExeUnitSupplyUnit],
+        [WarActionCodes.WarActionUnitSurface,               _fastExeUnitSurface],
+        [WarActionCodes.WarActionUnitUseCoSkill,            _fastExeUnitUseCoSkill],
+        [WarActionCodes.WarActionUnitWait,                  _fastExeUnitWait],
     ]);
 
-    export function executeNextAction(war: RwWar, isFastExecute: boolean): Promise<void> | void {
+    export async function executeNextAction(war: RwWar, isFastExecute: boolean): Promise<void> {
         const action = war.getNextAction();
-        if ((action)                    &&
-            (war.getIsRunning())        &&
-            (!war.checkIsInEnd())       &&
-            (!war.getIsExecutingAction())
+        if ((action == null)            ||
+            (!war.getIsRunning())       ||
+            (war.checkIsInEnd())        ||
+            (war.getIsExecutingAction())
         ) {
-            return _executeAction(war, action, isFastExecute);
-        } else {
             FloatText.show(Lang.getText(Lang.Type.B0110));
-            return;
+        } else {
+            await _executeAction(war, action, isFastExecute);
         }
     }
 
-    async function _executeAction(war: RwWar, container: IActionContainer, isFastExecute: boolean): Promise<void> {
+    async function _executeAction(war: RwWar, container: IWarActionContainer, isFastExecute: boolean): Promise<void> {
         war.setIsExecutingAction(true);
         war.setNextActionId(war.getNextActionId() + 1);
-
-        const actionId = war.getNextActionId();
-        if (war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) {
-            if (war.getCheckPointId(actionId) == null) {
-                war.setCheckPointId(actionId, war.getCheckPointId(actionId - 1) + 1);
-            }
-        } else {
-            if (war.getCheckPointId(actionId) == null) {
-                war.setCheckPointId(actionId, war.getCheckPointId(actionId - 1));
-            }
-        }
-
         if (isFastExecute) {
             await _FAST_EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
         } else {
             await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
         }
-
-        if (war.getNextActionId() >= war.getTotalActionsCount()) {
-            war.setIsAutoReplay(false);
-            FloatText.show(`${Lang.getText(Lang.Type.B0093)} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1}`);
-        }
         war.setIsExecutingAction(false);
 
-        if ((war.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn) || (war.checkIsInEnd())) {
-            const checkPointId = war.getCheckPointId(actionId);
-            if (war.getCheckPointData(checkPointId) == null) {
-                war.setCheckPointData(checkPointId, war.serializeForCheckPoint());
-            }
+        const isInEnd = war.checkIsInEnd();
+        if (isInEnd) {
+            war.setIsAutoReplay(false);
         }
 
-        if ((!war.checkIsInEnd()) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction()) && (war.getIsRunning())) {
+        const actionId          = war.getNextActionId();
+        const turnManager       = war.getTurnManager();
+        const prevCheckPointId  = war.getCheckPointId(actionId - 1);
+        const prevTurnData      = war.getCheckPointData(prevCheckPointId).warData.turnManager;
+        const isNewCheckPoint   = (isInEnd) || (turnManager.getTurnIndex() !== prevTurnData.turnIndex) || (turnManager.getPlayerIndexInTurn() !== prevTurnData.playerIndex);
+        const checkPointId      = isNewCheckPoint ? prevCheckPointId + 1 : prevCheckPointId;
+        if (war.getCheckPointId(actionId) == null) {
+            war.setCheckPointId(actionId, checkPointId);
+        }
+        if (war.getCheckPointData(checkPointId) == null) {
+            war.setCheckPointData(checkPointId, war.serializeForCheckPoint());
+        }
+
+        if ((!isInEnd) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction()) && (war.getIsRunning())) {
             egret.setTimeout(() => {
                 if ((!war.checkIsInEnd()) && (war.getIsAutoReplay()) && (!war.getIsExecutingAction()) && (war.getIsRunning())) {
                     _executeAction(war, war.getNextAction(), isFastExecute);
@@ -131,22 +130,57 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The 'true' executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _exePlayerBeginTurn(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeSystemBeginTurn(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${await war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0094)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${await war.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0094)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        war.getTurnManager().endPhaseWaitBeginTurn(data.ActionPlayerBeginTurn);
+        war.getTurnManager().endPhaseWaitBeginTurn(data.WarActionSystemBeginTurn);
 
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerDeleteUnit(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeSystemCallWarEvent(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0081)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0451)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action    = data.ActionPlayerDeleteUnit;
+        const warEventManager   = war.getWarEventManager();
+        const warEventId        = data.WarActionSystemCallWarEvent.warEventId;
+        warEventManager.updateWarEventCalledCountOnCall(warEventId)
+        await warEventManager.callWarEvent(warEventId, false);
+
+        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
+    }
+
+    async function _exeSystemDestroyPlayerForce(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${await war.getPlayerInTurn().getNickname()}${Lang.getText(Lang.Type.B0450)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
+
+        DestructionHelpers.destroyPlayerForce(war, data.WarActionSystemDestroyPlayerForce.targetPlayerIndex, true);
+
+        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        actionPlanner.setStateIdle();
+    }
+
+    async function _exeSystemEndWar(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0087)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
+
+        // Nothing to do.
+
+        actionPlanner.setStateIdle();
+    }
+
+    async function _exePlayerDeleteUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+        FloatText.show(`${Lang.getText(Lang.Type.B0081)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
+
+        const action    = data.WarActionPlayerDeleteUnit;
         const gridIndex = action.gridIndex as GridIndex;
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit == null) {
@@ -161,22 +195,22 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerEndTurn(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerEndTurn(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0036)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0036)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        war.getTurnManager().endPhaseMain(data.ActionPlayerEndTurn);
+        war.getTurnManager().endPhaseMain(data.WarActionPlayerEndTurn);
 
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerProduceUnit(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerProduceUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
-        const action        = data.ActionPlayerProduceUnit;
+        const action        = data.WarActionPlayerProduceUnit;
         const unitType      = action.unitType;
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(unitType)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(unitType)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
         const gridIndex     = action.gridIndex as GridIndex;
         const unitHp        = action.unitHp;
@@ -206,25 +240,28 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerSurrender(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerSurrender(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const player        = war.getPlayerInTurn();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${await player.getNickname()} ${Lang.getText(data.ActionPlayerSurrender.isBoot ? Lang.Type.B0396: Lang.Type.B0055)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(
+            `${await player.getNickname()} ${Lang.getText(data.WarActionPlayerSurrender.isBoot ? Lang.Type.B0396: Lang.Type.B0055)} ` +
+            `(${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`
+        );
 
-        DestructionHelpers.destroyPlayerForce(war, player.getPlayerIndex(), true);
+        player.setAliveState(Types.PlayerAliveState.Dying);
 
         RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerVoteForDraw(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exePlayerVoteForDraw(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
-        const action        = data.ActionPlayerVoteForDraw;
+        const action        = data.WarActionPlayerVoteForDraw;
         actionPlanner.setStateExecutingAction();
         FloatText.show(
             `${await war.getPlayerInTurn().getNickname()} ${action.isAgree ? Lang.getText(Lang.Type.B0096) : Lang.getText(Lang.Type.B0085)}` +
-            `(${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`
+            `(${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`
         );
 
         const playerInTurn = war.getPlayerInTurn();
@@ -246,12 +283,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitAttackUnit(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitAttackUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action        = data.ActionUnitAttackUnit;
+        const action        = data.WarActionUnitAttackUnit;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -414,15 +451,11 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
                 DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, true);
             }
 
-            const lostPlayerIndex = ((isTargetDestroyed) && (!unitMap.checkHasUnit(targetPlayerIndex)))
-                ? (targetPlayerIndex)
-                : (((isAttackerDestroyed) && (!unitMap.checkHasUnit(attackerPlayerIndex)))
-                    ? (attackerPlayerIndex)
-                    : (undefined)
-                );
-            if (lostPlayerIndex) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0015, await war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
-                DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
+            if ((isTargetDestroyed) && (!unitMap.checkHasUnit(targetPlayerIndex))) {
+                targetPlayer.setAliveState(Types.PlayerAliveState.Dying);
+            }
+            if ((isAttackerDestroyed) && (!unitMap.checkHasUnit(attackerPlayerIndex))) {
+                attackerPlayer.setAliveState(Types.PlayerAliveState.Dying);
             }
 
             RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
@@ -430,12 +463,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _exeUnitAttackTile(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitAttackTile(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0097)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action        = data.ActionUnitAttackTile;
+        const action        = data.WarActionUnitAttackTile;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -496,12 +529,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _exeUnitBeLoaded(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitBeLoaded(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0098)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0098)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action        = data.ActionUnitBeLoaded;
+        const action        = data.WarActionUnitBeLoaded;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -530,12 +563,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _exeUnitBuildTile(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitBuildTile(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0099)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0099)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action        = data.ActionUnitBuildTile;
+        const action        = data.WarActionUnitBuildTile;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -576,12 +609,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitCaptureTile(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitCaptureTile(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0100)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0100)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action        = data.ActionUnitCaptureTile;
+        const action        = data.WarActionUnitCaptureTile;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -598,11 +631,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             actionPlanner.setStateIdle();
 
         } else {
-            const destination           = pathNodes[pathNodes.length - 1];
-            const tile                  = war.getTileMap().getTile(destination);
-            const restCapturePoint      = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount();
-            const previousPlayerIndex   = tile.getPlayerIndex();
-            const lostPlayerIndex       = ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) ? previousPlayerIndex : undefined;
+            const destination       = pathNodes[pathNodes.length - 1];
+            const tile              = war.getTileMap().getTile(destination);
+            const restCapturePoint  = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount();
+            if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
+                tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
+            }
 
             if (restCapturePoint > 0) {
                 focusUnit.setIsCapturingTile(true);
@@ -616,31 +650,20 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
                 );
             }
 
-            if (lostPlayerIndex == null) {
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
-                focusUnit.updateView();
-                tile.flushDataToView();
-                RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
-                actionPlanner.setStateIdle();
-
-            } else {
-                await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
-                focusUnit.updateView();
-                tile.flushDataToView();
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0016, await war.getPlayerManager().getPlayer(lostPlayerIndex).getNickname()));
-                DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, true);
-                RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
-                actionPlanner.setStateIdle();
-            }
+            await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
+            focusUnit.updateView();
+            tile.flushDataToView();
+            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            actionPlanner.setStateIdle();
         }
     }
 
-    async function _exeUnitDive(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitDive(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0101)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0101)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action        = data.ActionUnitDive;
+        const action        = data.WarActionUnitDive;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -662,12 +685,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitDropUnit(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitDropUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0102)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0102)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action            = data.ActionUnitDropUnit;
+        const action            = data.WarActionUnitDropUnit;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -720,12 +743,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitJoinUnit(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitJoinUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0103)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0103)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action            = data.ActionUnitJoinUnit;
+        const action            = data.WarActionUnitJoinUnit;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -809,12 +832,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _exeUnitLaunchFlare(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitLaunchFlare(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0104)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0104)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action        = data.ActionUnitLaunchFlare;
+        const action        = data.WarActionUnitLaunchFlare;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
@@ -845,12 +868,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitLaunchSilo(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitLaunchSilo(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0105)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0105)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action        = data.ActionUnitLaunchSilo;
+        const action        = data.WarActionUnitLaunchSilo;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const launchUnitId  = action.launchUnitId;
@@ -899,12 +922,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _exeUnitLoadCo(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitLoadCo(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0139)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0139)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action        = data.ActionUnitLoadCo;
+        const action        = data.WarActionUnitLoadCo;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -940,12 +963,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitProduceUnit(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitProduceUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0106)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0106)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action        = data.ActionUnitProduceUnit;
+        const action        = data.WarActionUnitProduceUnit;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
@@ -987,12 +1010,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _exeUnitSupplyUnit(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitSupplyUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0107)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0107)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action        = data.ActionUnitSupplyUnit;
+        const action        = data.WarActionUnitSupplyUnit;
         const revisedPath   = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = revisedPath.nodes;
@@ -1040,12 +1063,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _exeUnitSurface(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitSurface(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0108)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0108)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action    = data.ActionUnitSurface;
+        const action    = data.WarActionUnitSurface;
         const unitMap   = war.getUnitMap();
         if (unitMap == null) {
             Logger.error(`ReplayModel._exeUnitSurface() empty unitMap.`);
@@ -1073,12 +1096,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitUseCoSkill(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitUseCoSkill(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0142)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0142)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action    = data.ActionUnitUseCoSkill;
+        const action    = data.WarActionUnitUseCoSkill;
         const skillType = action.skillType;
         if (skillType == null) {
             Logger.error(`ReplayModel._exeUnitUseCoSkill() empty skillType.`);
@@ -1202,12 +1225,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _exeUnitWait(war: RwWar, data: IActionContainer): Promise<void> {
+    async function _exeUnitWait(war: RwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${Lang.getText(Lang.Type.B0109)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex() + 1})`);
+        FloatText.show(`${Lang.getText(Lang.Type.B0109)} (${war.getNextActionId()} / ${war.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${war.getTurnManager().getTurnIndex()})`);
 
-        const action    = data.ActionUnitWait;
+        const action    = data.WarActionUnitWait;
         const unitMap   = war.getUnitMap();
         if (unitMap == null) {
             Logger.error(`ReplayModel._exeUnitWait() empty unitMap.`);
@@ -1231,12 +1254,42 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The fast executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _fastExePlayerBeginTurn(war: RwWar, data: IActionContainer): Promise<void> {
-        war.getTurnManager().endPhaseWaitBeginTurn(data.ActionPlayerBeginTurn);
+    async function _fastExeSystemBeginTurn(war: RwWar, data: IWarActionContainer): Promise<void> {
+        war.getTurnManager().endPhaseWaitBeginTurn(data.WarActionSystemBeginTurn);
     }
 
-    async function _fastExePlayerDeleteUnit(war: RwWar, data: IActionContainer): Promise<void> {
-        const action    = data.ActionPlayerDeleteUnit;
+    async function _fastExeSystemCallWarEvent(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        const warEventManager   = war.getWarEventManager();
+        const warEventId        = data.WarActionSystemCallWarEvent.warEventId;
+        warEventManager.updateWarEventCalledCountOnCall(warEventId)
+        await warEventManager.callWarEvent(warEventId, true);
+
+        actionPlanner.setStateIdle();
+    }
+
+    async function _fastExeSystemDestroyPlayerForce(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        DestructionHelpers.destroyPlayerForce(war, data.WarActionSystemDestroyPlayerForce.targetPlayerIndex, false);
+
+        actionPlanner.setStateIdle();
+    }
+
+    async function _fastExeSystemEndWar(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const actionPlanner = war.getActionPlanner();
+        actionPlanner.setStateExecutingAction();
+
+        // Nothing to do.
+
+        actionPlanner.setStateIdle();
+    }
+
+    async function _fastExePlayerDeleteUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action    = data.WarActionPlayerDeleteUnit;
         const gridIndex = action.gridIndex as GridIndex;
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit == null) {
@@ -1248,12 +1301,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         DestructionHelpers.destroyUnitOnMap(war, gridIndex, false);
     }
 
-    async function _fastExePlayerEndTurn(war: RwWar, data: IActionContainer): Promise<void> {
-        war.getTurnManager().endPhaseMain(data.ActionPlayerEndTurn);
+    async function _fastExePlayerEndTurn(war: RwWar, data: IWarActionContainer): Promise<void> {
+        war.getTurnManager().endPhaseMain(data.WarActionPlayerEndTurn);
     }
 
-    async function _fastExePlayerProduceUnit(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionPlayerProduceUnit;
+    async function _fastExePlayerProduceUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action        = data.WarActionPlayerProduceUnit;
         const unitType      = action.unitType;
         const gridIndex     = action.gridIndex as GridIndex;
         const unitHp        = action.unitHp;
@@ -1280,12 +1333,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         playerInTurn.setFund(playerInTurn.getFund() - cost);
     }
 
-    async function _fastExePlayerSurrender(war: RwWar, data: IActionContainer): Promise<void> {
-        DestructionHelpers.destroyPlayerForce(war, war.getPlayerIndexInTurn(), false);
+    async function _fastExePlayerSurrender(war: RwWar, data: IWarActionContainer): Promise<void> {
+        war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
     }
 
-    async function _fastExePlayerVoteForDraw(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionPlayerVoteForDraw;
+    async function _fastExePlayerVoteForDraw(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action        = data.WarActionPlayerVoteForDraw;
         const playerInTurn  = war.getPlayerInTurn();
         playerInTurn.setHasVotedForDraw(true);
 
@@ -1296,8 +1349,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitAttackUnit(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionUnitAttackUnit;
+    async function _fastExeUnitAttackUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action        = data.WarActionUnitAttackUnit;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -1439,25 +1492,21 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             if (isAttackerDestroyed) {
                 DestructionHelpers.destroyUnitOnMap(war, attackerGridIndex, false);
             }
-
             if (isTargetDestroyed) {
                 DestructionHelpers.destroyUnitOnMap(war, targetGridIndex, false);
             }
 
-            const lostPlayerIndex = ((isTargetDestroyed) && (!unitMap.checkHasUnit(targetPlayerIndex)))
-                ? (targetPlayerIndex)
-                : (((isAttackerDestroyed) && (!unitMap.checkHasUnit(attackerPlayerIndex)))
-                    ? (attackerPlayerIndex)
-                    : (undefined)
-                );
-            if (lostPlayerIndex) {
-                DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, false);
+            if ((isTargetDestroyed) && (!unitMap.checkHasUnit(targetPlayerIndex))) {
+                targetPlayer.setAliveState(Types.PlayerAliveState.Dying);
+            }
+            if ((isAttackerDestroyed) && (!unitMap.checkHasUnit(attackerPlayerIndex))) {
+                attackerPlayer.setAliveState(Types.PlayerAliveState.Dying);
             }
         }
     }
 
-    async function _fastExeUnitAttackTile(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionUnitAttackTile;
+    async function _fastExeUnitAttackTile(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action        = data.WarActionUnitAttackTile;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -1500,8 +1549,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitBeLoaded(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionUnitBeLoaded;
+    async function _fastExeUnitBeLoaded(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action        = data.WarActionUnitBeLoaded;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -1518,8 +1567,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitBuildTile(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionUnitBuildTile;
+    async function _fastExeUnitBuildTile(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action        = data.WarActionUnitBuildTile;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -1557,8 +1606,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitCaptureTile(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionUnitCaptureTile;
+    async function _fastExeUnitCaptureTile(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action        = data.WarActionUnitCaptureTile;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -1570,11 +1619,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
         if (path.isBlocked) {
         } else {
-            const destination           = pathNodes[pathNodes.length - 1];
-            const tile                  = war.getTileMap().getTile(destination);
-            const restCapturePoint      = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount();
-            const previousPlayerIndex   = tile.getPlayerIndex();
-            const lostPlayerIndex       = ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) ? previousPlayerIndex : undefined;
+            const destination       = pathNodes[pathNodes.length - 1];
+            const tile              = war.getTileMap().getTile(destination);
+            const restCapturePoint  = tile.getCurrentCapturePoint() - focusUnit.getCaptureAmount();
+            if ((restCapturePoint <= 0) && (tile.checkIsDefeatOnCapture())) {
+                tile.getPlayer().setAliveState(Types.PlayerAliveState.Dying);
+            }
 
             if (restCapturePoint > 0) {
                 focusUnit.setIsCapturingTile(true);
@@ -1589,16 +1639,11 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
                     playerIndex     : focusUnit.getPlayerIndex(),
                 });
             }
-
-            if (lostPlayerIndex == null) {
-            } else {
-                DestructionHelpers.destroyPlayerForce(war, lostPlayerIndex, false);
-            }
         }
     }
 
-    async function _fastExeUnitDive(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionUnitDive;
+    async function _fastExeUnitDive(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action        = data.WarActionUnitDive;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -1611,8 +1656,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         (isSuccessful) && (focusUnit.setIsDiving(true));
     }
 
-    async function _fastExeUnitDropUnit(war: RwWar, data: IActionContainer): Promise<void> {
-        const action            = data.ActionUnitDropUnit;
+    async function _fastExeUnitDropUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action            = data.WarActionUnitDropUnit;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -1644,8 +1689,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitJoinUnit(war: RwWar, data: IActionContainer): Promise<void> {
-        const action            = data.ActionUnitJoinUnit;
+    async function _fastExeUnitJoinUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action            = data.WarActionUnitJoinUnit;
         const path              = action.path as MovePath;
         const launchUnitId      = action.launchUnitId;
         const pathNodes         = path.nodes;
@@ -1718,8 +1763,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitLaunchFlare(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionUnitLaunchFlare;
+    async function _fastExeUnitLaunchFlare(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action        = data.WarActionUnitLaunchFlare;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
@@ -1738,8 +1783,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitLaunchSilo(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionUnitLaunchSilo;
+    async function _fastExeUnitLaunchSilo(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action        = data.WarActionUnitLaunchSilo;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const launchUnitId  = action.launchUnitId;
@@ -1772,8 +1817,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitLoadCo(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionUnitLoadCo;
+    async function _fastExeUnitLoadCo(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action        = data.WarActionUnitLoadCo;
         const path          = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = path.nodes;
@@ -1804,8 +1849,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitProduceUnit(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionUnitProduceUnit;
+    async function _fastExeUnitProduceUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action        = data.WarActionUnitProduceUnit;
         const path          = action.path as MovePath;
         const pathNodes     = path.nodes;
         const unitMap       = war.getUnitMap();
@@ -1838,8 +1883,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitSupplyUnit(war: RwWar, data: IActionContainer): Promise<void> {
-        const action        = data.ActionUnitSupplyUnit;
+    async function _fastExeUnitSupplyUnit(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action        = data.WarActionUnitSupplyUnit;
         const revisedPath   = action.path as MovePath;
         const launchUnitId  = action.launchUnitId;
         const pathNodes     = revisedPath.nodes;
@@ -1871,8 +1916,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitSurface(war: RwWar, data: IActionContainer): Promise<void> {
-        const action    = data.ActionUnitSurface;
+    async function _fastExeUnitSurface(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action    = data.WarActionUnitSurface;
         const unitMap   = war.getUnitMap();
         if (unitMap == null) {
             Logger.error(`ReplayModel._exeUnitSurface() empty unitMap.`);
@@ -1890,8 +1935,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         (isSuccessful) && (focusUnit.setIsDiving(false));
     }
 
-    async function _fastExeUnitUseCoSkill(war: RwWar, data: IActionContainer): Promise<void> {
-        const action    = data.ActionUnitUseCoSkill;
+    async function _fastExeUnitUseCoSkill(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action    = data.WarActionUnitUseCoSkill;
         const skillType = action.skillType;
         if (skillType == null) {
             Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty skillType.`);
@@ -1980,8 +2025,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
     }
 
-    async function _fastExeUnitWait(war: RwWar, data: IActionContainer): Promise<void> {
-        const action    = data.ActionUnitWait;
+    async function _fastExeUnitWait(war: RwWar, data: IWarActionContainer): Promise<void> {
+        const action    = data.WarActionUnitWait;
         const unitMap   = war.getUnitMap();
         if (unitMap == null) {
             Logger.error(`ReplayModel._exeUnitWait() empty unitMap.`);

@@ -1087,7 +1087,7 @@ namespace TinyWars.BaseWar {
             this._focusUnitOnMap = unit;
         }
         protected _clearFocusUnitOnMap(): void {
-            delete this._focusUnitOnMap;
+            this._focusUnitOnMap = null;
         }
 
         public getFocusUnitLoaded(): BwUnit | undefined {
@@ -1097,7 +1097,7 @@ namespace TinyWars.BaseWar {
             this._focusUnitLoaded = unit;
         }
         protected _clearFocusUnitLoaded(): void {
-            delete this._focusUnitLoaded;
+            this._focusUnitLoaded = null;
         }
 
         public getAvailableDropDestinations(): GridIndex[] | undefined {
@@ -1107,7 +1107,7 @@ namespace TinyWars.BaseWar {
             this._availableDropDestinations = destinations;
         }
         protected _clearAvailableDropDestinations(): void {
-            delete this._availableDropDestinations;
+            this._availableDropDestinations = null;
         }
 
         public getChoosingUnitForDrop(): BwUnit | undefined {
@@ -1117,7 +1117,7 @@ namespace TinyWars.BaseWar {
             this._choosingUnitForDrop = unit;
         }
         protected _clearChoosingUnitForDrop(): void {
-            delete this._choosingUnitForDrop;
+            this._choosingUnitForDrop = null;
         }
 
         public getChosenUnitsForDrop(): ChosenUnitForDrop[] {
@@ -1335,8 +1335,8 @@ namespace TinyWars.BaseWar {
             return this._areaForPreviewMove;
         }
         protected _clearDataForPreviewingMovableArea(): void {
-            delete this._unitForPreviewMove;
-            delete this._areaForPreviewMove;
+            this._unitForPreviewMove = null;
+            this._areaForPreviewMove = null;
         }
         private _setUnitForPreviewingMovableArea(unit: BwUnit): void {
             this._unitForPreviewMove = unit;

@@ -15,7 +15,7 @@ namespace TinyWars.MapEditor {
                 players.push({
                     fund                        : 0,
                     hasVotedForDraw             : false,
-                    isAlive                     : true,
+                    aliveState                  : Types.PlayerAliveState.Alive,
                     playerIndex,
                     teamIndex                   : playerIndex,
                     userId                      : playerIndex > 0 ? selfUserId : null,
@@ -23,8 +23,8 @@ namespace TinyWars.MapEditor {
                     coCurrentEnergy             : null,
                     coUsingSkillType            : Types.CoSkillType.Passive,
                     coIsDestroyedInTurn         : false,
-                    watchRequestSrcUserIdList   : [],
-                    watchOngoingSrcUserIdList   : [],
+                    watchRequestSrcUserIdArray  : [],
+                    watchOngoingSrcUserIdArray  : [],
                     restTimeToBoot              : 0,
                     unitAndTileSkinId           : playerIndex,
                 });

@@ -6,6 +6,9 @@ namespace TinyWars.RankMatchRoom {
     import ProtoTypes   = Utility.ProtoTypes;
     import NetMessage   = ProtoTypes.NetMessage;
 
+    type OpenDataForRmrRoomInfoPanel = {
+        roomId  : number;
+    }
     export class RmrRoomInfoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
@@ -16,45 +19,40 @@ namespace TinyWars.RankMatchRoom {
         private _labelMenuTitle : TinyWars.GameUi.UiLabel;
         private _btnBack        : TinyWars.GameUi.UiButton;
 
-        private _roomId     : number;
-
-        public static show(roomId: number): void {
+        public static show(openData: OpenDataForRmrRoomInfoPanel): void {
             if (!RmrRoomInfoPanel._instance) {
                 RmrRoomInfoPanel._instance = new RmrRoomInfoPanel();
             }
-            RmrRoomInfoPanel._instance._roomId = roomId;
-            RmrRoomInfoPanel._instance.open();
+            RmrRoomInfoPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RmrRoomInfoPanel._instance) {
-                RmrRoomInfoPanel._instance.close();
+                await RmrRoomInfoPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled(true);
+            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/rankMatchRoom/RmrRoomInfoPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected async _onOpened(): Promise<void> {
+            this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgRmrDeleteRoom,   callback: this._onMsgRmrDeleteRoom },
-            ];
+            ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
             this._btnBack.setTextColor(0x00FF00);
-        }
 
-        protected async _onOpened(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            const roomId = this._roomId;
+            const roomId = this._getOpenData<OpenDataForRmrRoomInfoPanel>().roomId;
             if ((await RmrModel.getRoomInfo(roomId)) == null) {
                 this.close();
                 RmrMyRoomListPanel.show();
@@ -65,20 +63,20 @@ namespace TinyWars.RankMatchRoom {
                         pageClass   : RmrRoomBasicSettingsPage,
                         pageData    : {
                             roomId
-                        } as OpenParamForRoomBasicSettingsPage,
+                        } as OpenDataForRmrRoomBasicSettingsPage,
                     },
                     {
                         tabItemData: { name: Lang.getText(Lang.Type.B0003) },
                         pageClass  : RmrRoomAdvancedSettingsPage,
                         pageData    : {
                             roomId
-                        } as OpenParamForRoomAdvancedSettingsPage,
+                        } as OpenDataForRmrRoomAdvancedSettingsPage,
                     },
                 ]);
             }
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._tabSettings.clear();
         }
 
@@ -96,7 +94,7 @@ namespace TinyWars.RankMatchRoom {
 
         private _onMsgRmrDeleteRoom(e: egret.Event): void {
             const data = e.data as NetMessage.MsgRmrDeleteRoom.IS;
-            if (data.roomId === this._roomId) {
+            if (data.roomId === this._getOpenData<OpenDataForRmrRoomInfoPanel>().roomId) {
                 FloatText.show(Lang.getText(Lang.Type.A0019));
                 this.close();
                 RmrMyRoomListPanel.show();
@@ -116,7 +114,7 @@ namespace TinyWars.RankMatchRoom {
         name: string;
     }
 
-    class TabItemRenderer extends eui.ItemRenderer {
+    class TabItemRenderer extends GameUi.UiListItemRenderer {
         private _labelName: GameUi.UiLabel;
 
         protected dataChanged(): void {

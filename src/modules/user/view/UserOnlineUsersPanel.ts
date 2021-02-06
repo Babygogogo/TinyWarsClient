@@ -27,11 +27,11 @@ namespace TinyWars.User {
             if (!UserOnlineUsersPanel._instance) {
                 UserOnlineUsersPanel._instance = new UserOnlineUsersPanel();
             }
-            UserOnlineUsersPanel._instance.open();
+            UserOnlineUsersPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (UserOnlineUsersPanel._instance) {
-                UserOnlineUsersPanel._instance.close();
+                await UserOnlineUsersPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -42,29 +42,28 @@ namespace TinyWars.User {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/user/UserOnlineUsersPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgUserGetOnlineUsers,    callback: this._onNotifySUserGetOnlineUsers },
-            ];
-            this._uiListeners = [
-                { ui: this._btnClose, callback: this.close },
-            ];
-            this._listUser.setItemRenderer(UserRenderer);
-        }
         protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgUserGetOnlineUsers,  callback: this._onNotifySUserGetOnlineUsers },
+            ]);
+            this._setUiListenerArray([
+                { ui: this._btnClose, callback: this.close },
+            ]);
+            this._listUser.setItemRenderer(UserRenderer);
+
             UserProxy.reqUserGetOnlineUsers();
 
             this._updateView();
             this._updateComponentsForLanguage();
         }
-        protected _onClosed(): void {
-            delete this._msg;
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._msg           = null;
+            this._dataForList   = null;
             this._listUser.clear();
         }
 
@@ -126,7 +125,7 @@ namespace TinyWars.User {
         nickname    : string;
     }
 
-    class UserRenderer extends eui.ItemRenderer {
+    class UserRenderer extends GameUi.UiListItemRenderer {
         private _group      : eui.Group;
         private _imgBg      : GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
@@ -146,7 +145,7 @@ namespace TinyWars.User {
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
             UserOnlineUsersPanel.hide();
-            UserPanel.show((this.data as DataForUserRenderer).userId);
+            UserPanel.show({ userId: (this.data as DataForUserRenderer).userId });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

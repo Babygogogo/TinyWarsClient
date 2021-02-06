@@ -30,36 +30,34 @@ namespace TinyWars.MapEditor {
             if (!MeResizePanel._instance) {
                 MeResizePanel._instance = new MeResizePanel();
             }
-            MeResizePanel._instance.open();
+            MeResizePanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeResizePanel._instance) {
-                MeResizePanel._instance.close();
+                await MeResizePanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapEditor/MeResizePanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm,         callback: this._onTouchedBtnConfirm, },
                 { ui: this._inputNewWidth,      callback: this._onFocusOutInputNewWidth,    eventType: egret.Event.FOCUS_OUT },
                 { ui: this._inputNewHeight,     callback: this._onFocusOutInputNewHeight,   eventType: egret.Event.FOCUS_OUT },
-            ];
-        }
+            ]);
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             const war                   = MeManager.getWar();
@@ -132,7 +130,7 @@ namespace TinyWars.MapEditor {
             this._labelCurrSizeTitle.text   = Lang.getText(Lang.Type.B0291);
             this._labelNewSizeTitle.text    = Lang.getText(Lang.Type.B0292);
             this._labelTips1.text           = Lang.getText(Lang.Type.A0086);
-            this._labelTips2.text           = Lang.getFormattedText(Lang.Type.F0023, Utility.ConfigManager.MAP_CONSTANTS.MaxGridsCount);
+            this._labelTips2.text           = Lang.getFormattedText(Lang.Type.F0023, Utility.ConfigManager.COMMON_CONSTANTS.MaxGridsCount);
         }
     }
 }

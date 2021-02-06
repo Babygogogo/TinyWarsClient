@@ -22,35 +22,34 @@ namespace TinyWars.User {
             if (!UserChangeDiscordIdPanel._instance) {
                 UserChangeDiscordIdPanel._instance = new UserChangeDiscordIdPanel();
             }
-            UserChangeDiscordIdPanel._instance.open();
+            UserChangeDiscordIdPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (UserChangeDiscordIdPanel._instance) {
-                UserChangeDiscordIdPanel._instance.close();
+                await UserChangeDiscordIdPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/user/UserChangeDiscordIdPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected async _onOpened(): Promise<void> {
+            this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserSetDiscordId,         callback: this._onMsgUserSetDiscordId },
                 { type: NotifyType.MsgUserSetDiscordIdFailed,   callback: this._onMsgUserSetDiscordIdFailed },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
-        }
-        protected async _onOpened(): Promise<void> {
+            ]);
+
             this._isRequesting          = false;
             this._inputDiscordId.text   = await UserModel.getSelfDiscordId();
             this._updateComponentsForLanguage();

@@ -26,36 +26,34 @@ namespace TinyWars.MapEditor {
             if (!MeVisibilityPanel._instance) {
                 MeVisibilityPanel._instance = new MeVisibilityPanel();
             }
-            MeVisibilityPanel._instance.open();
+            MeVisibilityPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeVisibilityPanel._instance) {
-                MeVisibilityPanel._instance.close();
+                await MeVisibilityPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask  = () => this.close();
-            this.skinName               = "resource/skins/mapEditor/MeVisibilityPanel.exml";
-        }
-
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
-                { ui: this._groupTileBase,      callback: this._onTouchedGroupTileBase, },
-                { ui: this._groupTileObject,    callback: this._onTouchedGroupTileObject, },
-                { ui: this._groupUnit,          callback: this._onTouchedGroupUnit },
-            ];
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
+            this.skinName = "resource/skins/mapEditor/MeVisibilityPanel.exml";
         }
 
         protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ]);
+            this._setUiListenerArray([
+                { ui: this._groupTileBase,      callback: this._onTouchedGroupTileBase, },
+                { ui: this._groupTileObject,    callback: this._onTouchedGroupTileObject, },
+                { ui: this._groupUnit,          callback: this._onTouchedGroupUnit },
+            ]);
+
             this._updateComponentsForLanguage();
 
             this._war = MeManager.getWar();

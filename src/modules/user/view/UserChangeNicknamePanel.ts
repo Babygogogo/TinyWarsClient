@@ -22,35 +22,34 @@ namespace TinyWars.User {
             if (!UserChangeNicknamePanel._instance) {
                 UserChangeNicknamePanel._instance = new UserChangeNicknamePanel();
             }
-            UserChangeNicknamePanel._instance.open();
+            UserChangeNicknamePanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (UserChangeNicknamePanel._instance) {
-                UserChangeNicknamePanel._instance.close();
+                await UserChangeNicknamePanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/user/UserChangeNicknamePanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected async _onOpened(): Promise<void> {
+            this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged,             callback: this._onNotifyLanguageChanged },
                 { type: NotifyType.MsgUserSetNickname,          callback: this._onMsgUserSetNickname },
                 { type: NotifyType.MsgUserSetNicknameFailed,    callback: this._onMsgUserSetNicknameFailed },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
-        }
-        protected async _onOpened(): Promise<void> {
+            ]);
+
             this._isRequesting          = false;
             this._inputNickname.text    = await UserModel.getSelfNickname();
             this._updateComponentsForLanguage();

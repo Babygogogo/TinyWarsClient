@@ -5,6 +5,9 @@ namespace TinyWars.MapManagement {
     import WarMapModel  = WarMap.WarMapModel;
     import WarMapProxy  = WarMap.WarMapProxy;
 
+    type OpenDataForMmAvailabilityChangePanel = {
+        mapId   : number;
+    }
     export class MmAvailabilityChangePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -34,33 +37,32 @@ namespace TinyWars.MapManagement {
 
         private _mapId          : number;
 
-        public static show(mapId: number): void {
+        public static show(openData: OpenDataForMmAvailabilityChangePanel): void {
             if (!MmAvailabilityChangePanel._instance) {
                 MmAvailabilityChangePanel._instance = new MmAvailabilityChangePanel();
             }
-            MmAvailabilityChangePanel._instance._mapId = mapId;
-            MmAvailabilityChangePanel._instance.open();
+            MmAvailabilityChangePanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmAvailabilityChangePanel._instance) {
-                MmAvailabilityChangePanel._instance.close();
+                await MmAvailabilityChangePanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmAvailabilityChangePanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected async _onOpened(): Promise<void> {
+            this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm },
                 { ui: this._btnDelete,      callback: this._onTouchedBtnDelete },
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
@@ -69,15 +71,15 @@ namespace TinyWars.MapManagement {
                 { ui: this._groupScw,       callback: this._onTouchedGroupScw },
                 { ui: this._groupRank,      callback: this._onTouchedGroupRank },
                 { ui: this._groupRankFog,   callback: this._onTouchedGroupRankFog },
-            ];
+            ]);
 
             this._btnDelete.setTextColor(0xFF0000);
-        }
-
-        protected async _onOpened(): Promise<void> {
             this._updateComponentsForLanguage();
 
-            const availability          = (await WarMapModel.getBriefData(this._mapId)).mapExtraData.mapComplexInfo.availability;
+            const mapId = this._getOpenData<OpenDataForMmAvailabilityChangePanel>().mapId;
+            this._mapId = mapId;
+
+            const availability          = (await WarMapModel.getBriefData(mapId)).mapExtraData.mapComplexInfo.availability;
             this._imgMcw.visible        = !!availability.canMcw;
             this._imgScw.visible        = !!availability.canScw;
             this._imgRank.visible       = !!availability.canRank;

@@ -35,12 +35,11 @@ namespace TinyWars.MapManagement {
                 MmTagListPanel._instance = new MmTagListPanel();
             }
 
-            (mapFilters) && (MmTagListPanel._instance._mapFilters = mapFilters);
-            MmTagListPanel._instance.open();
+            MmTagListPanel._instance.open(mapFilters);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmTagListPanel._instance) {
-                MmTagListPanel._instance.close();
+                await MmTagListPanel._instance.close();
             }
         }
         public static getInstance(): MmTagListPanel {
@@ -50,30 +49,29 @@ namespace TinyWars.MapManagement {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapManagement/MmTagListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMmSetMapTag,     callback: this._onMsgMmSetMapTag },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listMap.setItemRenderer(MapNameRenderer);
-        }
-        protected _onOpened(): void {
+
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
-            this.setMapFilters(this._mapFilters);
+            this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._zoomMap.removeAllContents();
             this._zoomMap.setMouseWheelListenerEnabled(false);
             this._zoomMap.setTouchListenerEnabled(false);
@@ -124,7 +122,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            MmTagListPanel.hide();
+            this.close();
             MmMainMenuPanel.show();
         }
 
@@ -148,11 +146,11 @@ namespace TinyWars.MapManagement {
             (mapDesigner)       && (mapDesigner = mapDesigner.toLowerCase());
 
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
-                const mapName = Lang.getNameInCurrentLanguage(mapBriefData.mapNameList);
+                const mapName = Lang.getLanguageText({ textArray: mapBriefData.mapNameArray });
                 if ((!mapBriefData.mapExtraData.isEnabled)                                                                  ||
                     ((mapNameForFilter) && (mapName.toLowerCase().indexOf(mapNameForFilter) < 0))                           ||
                     ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))                   ||
-                    ((playersCount) && (mapBriefData.playersCount !== playersCount))                                        ||
+                    ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                               ||
                     ((playedTimes != null) && ((await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)) < playedTimes))    ||
                     ((minRating != null) && ((await WarMapModel.getAverageRating(mapId)) < minRating))
                 ) {
@@ -173,7 +171,7 @@ namespace TinyWars.MapManagement {
             const rating                    = await WarMapModel.getAverageRating(mapId);
             this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-            this._labelPlayersCount.text    = Lang.getFormattedText(Lang.Type.F0002, mapRawData.playersCount);
+            this._labelPlayersCount.text    = Lang.getFormattedText(Lang.Type.F0002, mapRawData.playersCountUnneutral);
             this._labelRating.text          = Lang.getFormattedText(Lang.Type.F0003, rating != null ? rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
             this._labelPlayedTimes.text     = Lang.getFormattedText(Lang.Type.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
             this._groupInfo.visible         = true;
@@ -183,7 +181,7 @@ namespace TinyWars.MapManagement {
 
             const tileMapView = new WarMap.WarMapTileMapView();
             tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-            tileMapView.updateWithTileDataList(mapRawData.tileDataList);
+            tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithMapRawData(mapRawData);
@@ -204,7 +202,7 @@ namespace TinyWars.MapManagement {
         panel   : MmTagListPanel;
     }
 
-    class MapNameRenderer extends eui.ItemRenderer {
+    class MapNameRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose  : GameUi.UiButton;
         private _btnNext    : GameUi.UiButton;
         private _labelId    : GameUi.UiLabel;
@@ -235,7 +233,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            MmTagChangePanel.show((this.data as DataForMapNameRenderer).mapId);
+            MmTagChangePanel.show({ mapId: (this.data as DataForMapNameRenderer).mapId });
         }
     }
 }

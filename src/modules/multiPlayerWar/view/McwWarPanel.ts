@@ -10,19 +10,19 @@ namespace TinyWars.MultiPlayerWar {
             if (!McwWarPanel._instance) {
                 McwWarPanel._instance = new McwWarPanel();
             }
-            McwWarPanel._instance.open();
+            McwWarPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McwWarPanel._instance) {
-                McwWarPanel._instance.close();
+                await McwWarPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiCustomWar/McwWarPanel.exml";
         }
 
@@ -30,7 +30,7 @@ namespace TinyWars.MultiPlayerWar {
             this.addChild(MpwModel.getWar().getView());
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this.removeChildren();
         }
     }

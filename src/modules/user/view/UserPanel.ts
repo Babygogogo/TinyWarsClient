@@ -1,16 +1,17 @@
 
 namespace TinyWars.User {
-    import Lang                         = Utility.Lang;
-    import Helpers                      = Utility.Helpers;
-    import Notify                       = Utility.Notify;
-    import Types                        = Utility.Types;
-    import LocalStorage                 = Utility.LocalStorage;
-    import ProtoTypes                   = Utility.ProtoTypes;
-    import ConfigManager                = Utility.ConfigManager;
-    import WarType                      = Types.WarType;
-    import IDataForUserWarStatistics    = ProtoTypes.User.IDataForUserWarStatistics;
-    import CommonConstants              = ConfigManager.COMMON_CONSTANTS;
+    import Lang             = Utility.Lang;
+    import Helpers          = Utility.Helpers;
+    import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
+    import LocalStorage     = Utility.LocalStorage;
+    import ConfigManager    = Utility.ConfigManager;
+    import WarType          = Types.WarType;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
+    type OpenDataForUserPanel = {
+        userId  : number;
+    }
     export class UserPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -18,74 +19,77 @@ namespace TinyWars.User {
         private static _instance: UserPanel;
 
         private _group                      : eui.Group;
-        private _labelTitle                 : TinyWars.GameUi.UiLabel;
-        private _btnClose                   : TinyWars.GameUi.UiButton;
+        private _labelTitle                 : GameUi.UiLabel;
+        private _btnClose                   : GameUi.UiButton;
 
-        private _labelStdRankTitle          : TinyWars.GameUi.UiLabel;
-        private _labelStdRankScore          : TinyWars.GameUi.UiLabel;
-        private _labelFogRankTitle          : TinyWars.GameUi.UiLabel;
-        private _labelFogRankScore          : TinyWars.GameUi.UiLabel;
+        private _scroller                   : eui.Scroller;
+        private _labelStdRankTitle          : GameUi.UiLabel;
+        private _labelStdRankScore          : GameUi.UiLabel;
+        private _labelFogRankTitle          : GameUi.UiLabel;
+        private _labelFogRankScore          : GameUi.UiLabel;
 
-        private _labelRegisterTimeTitle     : TinyWars.GameUi.UiLabel;
-        private _labelRegisterTime          : TinyWars.GameUi.UiLabel;
-        private _labelLastLoginTimeTitle    : TinyWars.GameUi.UiLabel;
-        private _labelLastLoginTime         : TinyWars.GameUi.UiLabel;
-        private _labelOnlineTimeTitle       : TinyWars.GameUi.UiLabel;
-        private _labelOnlineTime            : TinyWars.GameUi.UiLabel;
-        private _labelLoginCountTitle       : TinyWars.GameUi.UiLabel;
-        private _labelLoginCount            : TinyWars.GameUi.UiLabel;
-        private _labelUserId                : TinyWars.GameUi.UiLabel;
-        private _labelDiscordId             : TinyWars.GameUi.UiLabel;
+        private _labelRegisterTimeTitle     : GameUi.UiLabel;
+        private _labelRegisterTime          : GameUi.UiLabel;
+        private _labelLastLoginTimeTitle    : GameUi.UiLabel;
+        private _labelLastLoginTime         : GameUi.UiLabel;
+        private _labelOnlineTimeTitle       : GameUi.UiLabel;
+        private _labelOnlineTime            : GameUi.UiLabel;
+        private _labelLoginCountTitle       : GameUi.UiLabel;
+        private _labelLoginCount            : GameUi.UiLabel;
+        private _labelUserId                : GameUi.UiLabel;
+        private _labelDiscordId             : GameUi.UiLabel;
 
-        private _labelHistoryTitle          : TinyWars.GameUi.UiLabel;
-        private _sclHistory                 : TinyWars.GameUi.UiScrollList;
+        private _labelHistoryTitle          : GameUi.UiLabel;
+        private _sclHistory                 : GameUi.UiScrollList;
 
         private _groupButtons               : eui.Group;
-        private _btnChangeNickname          : TinyWars.GameUi.UiButton;
-        private _btnChangePassword          : TinyWars.GameUi.UiButton;
-        private _btnChangeDiscordId         : TinyWars.GameUi.UiButton;
+        private _btnChangeNickname          : GameUi.UiButton;
+        private _btnChangePassword          : GameUi.UiButton;
+        private _btnChangeDiscordId         : GameUi.UiButton;
         private _btnRankList                : GameUi.UiButton;
-        private _btnShowOnlineUsers         : TinyWars.GameUi.UiButton;
-        private _btnChangeLanguage          : TinyWars.GameUi.UiButton;
-        private _btnServerStatus            : TinyWars.GameUi.UiButton;
-        private _btnChat                    : TinyWars.GameUi.UiButton;
-        private _btnSwitchTexture           : TinyWars.GameUi.UiButton;
+        private _btnShowOnlineUsers         : GameUi.UiButton;
+        private _btnChangeLanguage          : GameUi.UiButton;
+        private _btnServerStatus            : GameUi.UiButton;
+        private _btnChat                    : GameUi.UiButton;
+        private _btnComplaint               : GameUi.UiButton;
+        private _btnSwitchTexture           : GameUi.UiButton;
         private _btnUnitsInfo               : GameUi.UiButton;
+        private _btnChangeLog               : GameUi.UiButton;
+        private _btnSetPrivilege            : GameUi.UiButton;
 
         private _userId: number;
 
-        public static show(userId: number): void {
+        public static show(openData: OpenDataForUserPanel): void {
             if (!UserPanel._instance) {
                 UserPanel._instance = new UserPanel();
             }
-            UserPanel._instance._userId = userId;
-            UserPanel._instance.open();
+            UserPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (UserPanel._instance) {
-                UserPanel._instance.close();
+                await UserPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/user/UserPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: Notify.Type.MsgUserGetPublicInfo,               callback: this._onMsgUserGetPublicInfo },
                 { type: Notify.Type.MsgUserSetNickname,                 callback: this._onMsgUserSetNickname },
                 { type: Notify.Type.MsgUserSetDiscordId,                callback: this._onMsgUserSetDiscordId },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnChangeNickname,  callback: this._onTouchedBtnChangeNickname },
                 { ui: this._btnChangePassword,  callback: this._onTouchedBtnChangePassword },
                 { ui: this._btnChangeDiscordId, callback: this._onTouchedBtnChangeDiscordId },
@@ -94,17 +98,26 @@ namespace TinyWars.User {
                 { ui: this._btnChangeLanguage,  callback: this._onTouchedBtnChangeLanguage },
                 { ui: this._btnServerStatus,    callback: this._onTouchedBtnServerStatus },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
+                { ui: this._btnComplaint,       callback: this._onTouchedBtnComplaint },
                 { ui: this._btnSwitchTexture,   callback: this._onTouchedBtnSwitchTexture },
                 { ui: this._btnUnitsInfo,       callback: this._onTouchedBtnUnitsInfo },
+                { ui: this._btnChangeLog,       callback: this._onTouchedBtnChangeLog },
+                { ui: this._btnSetPrivilege,    callback: this._onTouchedBtnSetPrivilege },
                 { ui: this._btnClose,           callback: this.close },
-            ];
+            ]);
             this._sclHistory.setItemRenderer(HistoryRenderer);
-        }
-        protected _onOpened(): void {
-            this._showOpenAnimation();
-            UserProxy.reqUserGetPublicInfo(this._userId);
 
+            this._showOpenAnimation();
+
+            const userId    = this._getOpenData<OpenDataForUserPanel>().userId;
+            this._userId    = userId;
+            UserProxy.reqUserGetPublicInfo(userId);
+
+            this._scroller.viewport.scrollV = 0;
             this._updateView();
+        }
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -144,7 +157,7 @@ namespace TinyWars.User {
             UserOnlineUsersPanel.show();
         }
         private _onTouchedBtnChangeLanguage(e: egret.TouchEvent): void {
-            const languageType = Lang.getLanguageType() === Types.LanguageType.Chinese
+            const languageType = Lang.getCurrentLanguageType() === Types.LanguageType.Chinese
                 ? Types.LanguageType.English
                 : Types.LanguageType.Chinese;
             Lang.setLanguageType(languageType);
@@ -160,6 +173,10 @@ namespace TinyWars.User {
             this.close();
             Chat.ChatPanel.show({ toUserId: userId });
         }
+        private _onTouchedBtnComplaint(e: egret.TouchEvent): void {
+            this.close();
+            Chat.ChatPanel.show({ toUserId: CommonConstants.AdminUserId });
+        }
         private _onTouchedBtnSwitchTexture(e: egret.TouchEvent): void {
             User.UserProxy.reqUserSetSettings({
                 unitAndTileTextureVersion   : User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0
@@ -170,6 +187,12 @@ namespace TinyWars.User {
         private _onTouchedBtnUnitsInfo(e: egret.TouchEvent): void {
             Common.CommonDamageChartPanel.show();
         }
+        private _onTouchedBtnChangeLog(e: egret.TouchEvent): void {
+            ChangeLog.ChangeLogPanel.show();
+        }
+        private _onTouchedBtnSetPrivilege(e: egret.TouchEvent): void {
+            UserSetPrivilegePanel.show({ userId: this._userId });
+        }
 
         private _showOpenAnimation(): void {
             const group = this._group;
@@ -177,6 +200,16 @@ namespace TinyWars.User {
             egret.Tween.get(group)
                 .set({ alpha: 0, y: 40 })
                 .to({ alpha: 1, y: 0 }, 200);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve, reject) => {
+                const group = this._group;
+                egret.Tween.removeTweens(group);
+                egret.Tween.get(group)
+                    .set({ alpha: 1, y: 0 })
+                    .to({ alpha: 0, y: 40 }, 200)
+                    .call(resolve);
+            });
         }
 
         private async _updateView(): Promise<void> {
@@ -195,13 +228,14 @@ namespace TinyWars.User {
             this._updateGroupButtons();
         }
 
-        private _updateGroupButtons(): void {
+        private async _updateGroupButtons(): Promise<void> {
             const group = this._groupButtons;
             group.removeChildren();
             if (this._userId === UserModel.getSelfUserId()) {
                 group.addChild(this._btnChangePassword);
                 group.addChild(this._btnChangeNickname);
                 group.addChild(this._btnChangeDiscordId);
+                group.addChild(this._btnComplaint);
             } else {
                 group.addChild(this._btnChat);
             }
@@ -210,7 +244,11 @@ namespace TinyWars.User {
             group.addChild(this._btnChangeLanguage);
             group.addChild(this._btnSwitchTexture);
             group.addChild(this._btnUnitsInfo);
+            group.addChild(this._btnChangeLog);
             group.addChild(this._btnServerStatus);
+            if (await UserModel.getIsSelfAdmin()) {
+                group.addChild(this._btnSetPrivilege);
+            }
         }
 
         private _updateComponentsForLanguage(): void {
@@ -235,8 +273,11 @@ namespace TinyWars.User {
             this._updateBtnChangeLanguage();
             this._updateBtnSwitchTexture();
             this._updateBtnUnitsInfo();
+            this._updateBtnChangeLog();
+            this._updateBtnSetPrivilege();
             this._updateBtnServerStatus();
             this._updateBtnChat();
+            this._updateBtnComplaint();
         }
 
         private async _updateLabelTitle(): Promise<void> {
@@ -249,7 +290,7 @@ namespace TinyWars.User {
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rank                      = data ? data.currentRank : null;
             const rankText                  = `(${rank == null ? Lang.getText(Lang.Type.B0435) : `No.${rank}`})`;
-            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
+            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestFormalVersion(), score)})`;
             this._labelStdRankScore.text    = `${score} ${rankText} ${rankName}`;
         }
         private async _updateLabelFogRankScore(): Promise<void> {
@@ -258,7 +299,7 @@ namespace TinyWars.User {
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rank                      = data ? data.currentRank : null;
             const rankText                  = `(${rank == null ? Lang.getText(Lang.Type.B0435) : `No.${rank}`})`;
-            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestConfigVersion(), score)})`;
+            const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestFormalVersion(), score)})`;
             this._labelFogRankScore.text    = `${score} ${rankText} ${rankName}`;
         }
         private async _updateSclHistory(): Promise<void> {
@@ -308,9 +349,9 @@ namespace TinyWars.User {
             this._btnShowOnlineUsers.label = Lang.getText(Lang.Type.B0151);
         }
         private _updateBtnChangeLanguage(): void {
-            this._btnChangeLanguage.label = Lang.getLanguageType() === Types.LanguageType.Chinese
-                ? Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.English)
-                : Lang.getTextWithLanguage(Lang.Type.B0148, Types.LanguageType.Chinese);
+            this._btnChangeLanguage.label = Lang.getCurrentLanguageType() === Types.LanguageType.Chinese
+                ? Lang.getText(Lang.Type.B0148, Types.LanguageType.English)
+                : Lang.getText(Lang.Type.B0148, Types.LanguageType.Chinese);
         }
         private _updateBtnSwitchTexture(): void {
             this._btnSwitchTexture.label = User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0
@@ -320,11 +361,20 @@ namespace TinyWars.User {
         private _updateBtnUnitsInfo(): void {
             this._btnUnitsInfo.label = Lang.getText(Lang.Type.B0440);
         }
+        private _updateBtnChangeLog(): void {
+            this._btnChangeLog.label = Lang.getText(Lang.Type.B0457);
+        }
+        private _updateBtnSetPrivilege(): void {
+            this._btnSetPrivilege.label = Lang.getText(Lang.Type.B0460);
+        }
         private _updateBtnServerStatus(): void {
             this._btnServerStatus.label = Lang.getText(Lang.Type.B0327);
         }
         private _updateBtnChat(): void {
             this._btnChat.label = Lang.getText(Lang.Type.B0383);
+        }
+        private _updateBtnComplaint(): void {
+            this._btnComplaint.label = Lang.getText(Lang.Type.B0453);
         }
     }
 
@@ -334,7 +384,7 @@ namespace TinyWars.User {
         playersCount: number;
     }
 
-    class HistoryRenderer extends eui.ItemRenderer {
+    class HistoryRenderer extends GameUi.UiListItemRenderer {
         private _labelType  : TinyWars.GameUi.UiLabel;
         private _labelCount : TinyWars.GameUi.UiLabel;
 

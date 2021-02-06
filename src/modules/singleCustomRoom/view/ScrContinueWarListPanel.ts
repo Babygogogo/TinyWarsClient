@@ -32,34 +32,32 @@ namespace TinyWars.SingleCustomRoom {
             if (!ScrContinueWarListPanel._instance) {
                 ScrContinueWarListPanel._instance = new ScrContinueWarListPanel();
             }
-            ScrContinueWarListPanel._instance.open();
+            ScrContinueWarListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScrContinueWarListPanel._instance) {
-                ScrContinueWarListPanel._instance.close();
+                await ScrContinueWarListPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/singleCustomRoom/ScrContinueWarListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgScrContinueWarFailed,    callback: this._onMsgScrContinueWarFailed },
                 { type: Notify.Type.MsgScrContinueWar,          callback: this._onMsgScrContinueWar },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listWar.setItemRenderer(WarRenderer);
-        }
 
-        protected _onOpened(): void {
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
@@ -67,7 +65,7 @@ namespace TinyWars.SingleCustomRoom {
             this._updateListWar();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._zoomMap.removeAllContents();
             this._zoomMap.setMouseWheelListenerEnabled(false);
             this._zoomMap.setTouchListenerEnabled(false);
@@ -117,7 +115,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchTapBtnBack(): void {
-            ScrContinueWarListPanel.hide();
+            this.close();
             SinglePlayerLobby.SinglePlayerLobbyPanel.show();
         }
 
@@ -183,7 +181,7 @@ namespace TinyWars.SingleCustomRoom {
 
                 const tileMapView = new WarMap.WarMapTileMapView();
                 tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-                tileMapView.updateWithTileDataList(mapRawData.tileDataList);
+                tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
 
                 const unitMapView = new WarMap.WarMapUnitMapView();
                 unitMapView.initWithMapRawData(mapRawData);
@@ -204,7 +202,7 @@ namespace TinyWars.SingleCustomRoom {
         panel       : ScrContinueWarListPanel;
     }
 
-    class WarRenderer extends eui.ItemRenderer {
+    class WarRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _labelSlotIndex : GameUi.UiLabel;

@@ -1,7 +1,8 @@
 
 namespace TinyWars.Utility.Lang {
-    import ErrorCode    = Network.NetErrorCode;
-    import LanguageType = Types.LanguageType;
+    import ErrorCode                = Network.NetErrorCode;
+    import LanguageType             = Types.LanguageType;
+    import WarEventConditionType    = Types.WarEventConditionType;
 
     export const enum Type {
         A0000, A0001, A0002, A0003, A0004, A0005, A0006, A0007, A0008, A0009,
@@ -80,6 +81,17 @@ namespace TinyWars.Utility.Lang {
         B0470, B0471, B0472, B0473, B0474, B0475, B0476, B0477, B0478, B0479,
         B0480, B0481, B0482, B0483, B0484, B0485, B0486, B0487, B0488, B0489,
         B0490, B0491, B0492, B0493, B0494, B0495, B0496, B0497, B0498, B0499,
+
+        B0500, B0501, B0502, B0503, B0504, B0505, B0506, B0507, B0508, B0509,
+        B0510, B0511, B0512, B0513, B0514, B0515, B0516, B0517, B0518, B0519,
+        B0520, B0521, B0522, B0523, B0524, B0525, B0526, B0527, B0528, B0529,
+        B0530, B0531, B0532, B0533, B0534, B0535, B0536, B0537, B0538, B0539,
+        B0540, B0541, B0542, B0543, B0544, B0545, B0546, B0547, B0548, B0549,
+        B0550, B0551, B0552, B0553, B0554, B0555, B0556, B0557, B0558, B0559,
+        B0560, B0561, B0562, B0563, B0564, B0565, B0566, B0567, B0568, B0569,
+        B0570, B0571, B0572, B0573, B0574, B0575, B0576, B0577, B0578, B0579,
+        B0580, B0581, B0582, B0583, B0584, B0585, B0586, B0587, B0588, B0589,
+        B0590, B0591, B0592, B0593, B0594, B0595, B0596, B0597, B0598, B0599,
 
         B1000, B1001, B1002, B1003, B1004, B1005, B1006, B1007, B1008, B1009,
         B1010, B1011, B1012, B1013, B1014, B1015, B1016, B1017, B1018, B1019,
@@ -335,7 +347,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.A0056]: [
             `未知错误，请拖动截图发给作者，谢谢`,
-            `Error! Please make a screenshot and send it to the game maker`,
+            `Error! Please make a screenshot and send it to the developing group.`,
         ],
         [Type.A0057]: [
             `禁用此项会清空您当前选择的CO（您可以重新选择一个）。确定要禁用吗？`,
@@ -738,6 +750,174 @@ namespace TinyWars.Utility.Lang {
             `已成功修改地图标签`,
             `The map tag has been updated successfully.`,
         ],
+        [Type.A0152]: [
+            `您正在观战的玩家已被击败。\n即将回到大厅…`,
+            `The player that you are watching has lost.`,
+        ],
+        [Type.A0153]: [
+            `请把错误码告知开发组`,
+            `Please notify the developing group.`,
+        ],
+        [Type.A0154]: [
+            `已成功提交更新日志。`,
+            `The change log has been updated successfully.`,
+        ],
+        [Type.A0155]: [
+            `输入内容太短，请检查`,
+            `The texts are too short.`,
+        ],
+        [Type.A0156]: [
+            `您最少需要填写一种语言的内容`,
+            `You have to write down at least one of the text.`,
+        ],
+        [Type.A0157]: [
+            `已成功修改用户权限`,
+            `The user privilege has been updated successfully.`,
+        ],
+        [Type.A0158]: [
+            `事件数据不存在，请删除本事件`,
+            `The event data doesn't exist. Please delete it.`,
+        ],
+        [Type.A0159]: [
+            `此事件尚未设定条件节点`,
+            `The event contains no condition node.`,
+        ],
+        [Type.A0160]: [
+            `条件节点的数据不存在。请删除此条件节点。`,
+            `The condition node data doesn't exist. Please delete it.`,
+        ],
+        [Type.A0161]: [
+            `此条件节点不包含任何子条件和子条件节点。`,
+            `The condition node contains no condition nor sub node.`,
+        ],
+        [Type.A0162]: [
+            `所有子条件和子节点都成立时，此节点成立。`,
+            `The condition node is true if ALL of the sub conditions and/or sub nodes are true.`,
+        ],
+        [Type.A0163]: [
+            `任意子条件或子节点成立时，此节点成立。`,
+            `The condition node is true if ANY of the sub conditions and/or sub nodes is true.`,
+        ],
+        [Type.A0164]: [
+            `条件数据不存在，请删除本条件`,
+            `The condition data doesn't exist. Please delete it.`,
+        ],
+        [Type.A0165]: [
+            `条件数据不合法，请编辑修正`,
+            `The condition data is not valid. Please edit it.`,
+        ],
+        [Type.A0166]: [
+            `数据出错，请删除本项`,
+            `Error. Please delete this line.`,
+        ],
+        [Type.A0167]: [
+            `此事件尚未设定动作。请至少设定一个动作。`,
+            `The event contains no action. Please add at least one action.`,
+        ],
+        [Type.A0168]: [
+            `动作数据不存在，请删除本动作`,
+            `The action data doesn't exist. Please delete this action.`,
+        ],
+        [Type.A0169]: [
+            `动作中部分部队的数据不合法`,
+            `Some of the unit data in the action is not valid.`,
+        ],
+        [Type.A0170]: [
+            `事件数量已达上限`,
+            `There are too many events already.`,
+        ],
+        [Type.A0171]: [
+            `您确定要删除事件吗？`,
+            `Are you sure to delete this event?`,
+        ],
+        [Type.A0172]: [
+            `您确定要删除该条件节点吗？`,
+            `Are you sure to delete the condition node?`,
+        ],
+        [Type.A0173]: [
+            `条件节点数量已达上限`,
+            `There are too many condition nodes already.`,
+        ],
+        [Type.A0174]: [
+            `条件数量已达上限`,
+            `There are too many conditions already.`,
+        ],
+        [Type.A0175]: [
+            `您确定要删除该条件吗？`,
+            `Are you sure to delete the condition?`,
+        ],
+        [Type.A0176]: [
+            `您确定要删除该动作吗？`,
+            `Are you sure to delete the action?`,
+        ],
+        [Type.A0177]: [
+            `此动作数据出错，请删除`,
+            `There is something wrong with the action. Please delete it.`,
+        ],
+        [Type.A0178]: [
+            `事件中的动作数量已达上限`,
+            `There are too many actions in the event already.`,
+        ],
+        [Type.A0179]: [
+            `无法替换节点，因为这样做会造成循环引用`,
+            `Can't replace the node because of circular reference.`,
+        ],
+        [Type.A0180]: [
+            `事件包含的动作太多，请删除一些动作。`,
+            `There are too many actions in this event. Please delete some of them.`,
+        ],
+        [Type.A0181]: [
+            `数值不合法，请修改。`,
+            `The value is illegal. Please modify it.`,
+        ],
+        [Type.A0182]: [
+            `此地图已包含太多事件，请删除一些。`,
+            `The map contains too many events. Please delete some of them.`,
+        ],
+        [Type.A0183]: [
+            `此地图已包含太多条件节点，请删除一些。`,
+            `The map contains too many condition nodes. Please delete some of them.`,
+        ],
+        [Type.A0184]: [
+            `此地图已包含太多事件动作，请删除一些。`,
+            `The map contains too many actions. Please delete some of them.`,
+        ],
+        [Type.A0185]: [
+            `此地图已包含太多条件，请删除一些。`,
+            `The map contains too many conditions. Please delete some of them.`,
+        ],
+        [Type.A0186]: [
+            `此条件在同一事件中重复出现。请删除重复的条件。`,
+            `There are duplicated conditions in the same event. Please remove the duplication.`,
+        ],
+        [Type.A0187]: [
+            `此条件数据出错，请删除`,
+            `There is something wrong with the condition. Please delete it.`,
+        ],
+        [Type.A0188]: [
+            `未被引用的条件节点、条件、动作都将被删除。您确定要继续吗？`,
+            `All of the unused condition nodes, conditions and actions will be deleted. Are you sure to continue?`,
+        ],
+        [Type.A0189]: [
+            `此动作已包含太多部队`,
+            `There are too many units in this action.`,
+        ],
+        [Type.A0190]: [
+            `您确定要清空所有部队吗？`,
+            `Are you sure to delete all the units?`,
+        ],
+        [Type.A0191]: [
+            `此动作包含的部队的数量不合法`,
+            `The total number of the units is invalid.`,
+        ],
+        [Type.A0192]: [
+            `未设置是否会被其他部队阻挡`,
+            `'Blockable By Unit' has not been set.`,
+        ],
+        [Type.A0193]: [
+            `未设置是否自动寻找有效地形`,
+            `'NeedMovableTile' has not been set.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -1068,7 +1248,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0081]: [
             `删除部队`,
-            `Delete`,
+            `Delete Unit`,
         ],
         [Type.B0082]: [
             `和局`,
@@ -2526,6 +2706,350 @@ namespace TinyWars.Utility.Lang {
             `输入密码`,
             `Input Password`,
         ],
+        [Type.B0450]: [
+            `势力被摧毁`,
+            `'s force is destroyed`,
+        ],
+        [Type.B0451]: [
+            `触发事件`,
+            `An event is triggered.`,
+        ],
+        [Type.B0452]: [
+            `错误码`,
+            `Error`,
+        ],
+        [Type.B0453]: [
+            `意见反馈`,
+            `Complaint`,
+        ],
+        [Type.B0454]: [
+            `新增日志`,
+            `Add Log`,
+        ],
+        [Type.B0455]: [
+            `中文`,
+            `In Chinese`,
+        ],
+        [Type.B0456]: [
+            `英文`,
+            `In English`,
+        ],
+        [Type.B0457]: [
+            `更新日志`,
+            `Change Log`,
+        ],
+        [Type.B0458]: [
+            `设定地图名称`,
+            `Edit Map Name`,
+        ],
+        [Type.B0459]: [
+            `设定规则名称`,
+            `Edit Rule Name`,
+        ],
+        [Type.B0460]: [
+            `设置权限`,
+            `Set Privilege`,
+        ],
+        [Type.B0461]: [
+            `战局事件列表`,
+            `War Event List`,
+        ],
+        [Type.B0462]: [
+            `战局事件ID`,
+            `War Event ID`,
+        ],
+        [Type.B0463]: [
+            `上移`,
+            `Up`,
+        ],
+        [Type.B0464]: [
+            `下移`,
+            `Down`,
+        ],
+        [Type.B0465]: [
+            `编辑`,
+            `Edit`,
+        ],
+        [Type.B0466]: [
+            `已添加`,
+            `Added`,
+        ],
+        [Type.B0467]: [
+            `添加`,
+            `Add`,
+        ],
+        [Type.B0468]: [
+            `添加事件到规则`,
+            `Add War Event To Rule`,
+        ],
+        [Type.B0469]: [
+            `战局事件`,
+            `War Event`,
+        ],
+        [Type.B0470]: [
+            `事件列表`,
+            `Event List`,
+        ],
+        [Type.B0471]: [
+            `存活`,
+            `Alive`,
+        ],
+        [Type.B0472]: [
+            `已战败`,
+            `Defeated`,
+        ],
+        [Type.B0473]: [
+            `即将战败`,
+            `Being Defeated`,
+        ],
+        [Type.B0474]: [
+            `准备阶段`,
+            `Standby Phase`,
+        ],
+        [Type.B0475]: [
+            `主要阶段`,
+            `Main Phase`,
+        ],
+        [Type.B0476]: [
+            `事件在每个玩家回合的触发次数上限`,
+            `Upper limit of trigger times per player's turn`,
+        ],
+        [Type.B0477]: [
+            `事件在整局游戏中的触发次数上限`,
+            `Upper limit of trigger times per game`,
+        ],
+        [Type.B0478]: [
+            `修改事件名称`,
+            `Edit Event Name`,
+        ],
+        [Type.B0479]: [
+            `删除事件`,
+            `Delete Event`,
+        ],
+        [Type.B0480]: [
+            `替换`,
+            `Replace`,
+        ],
+        [Type.B0481]: [
+            `删除条件节点`,
+            `Delete Condition Node`,
+        ],
+        [Type.B0482]: [
+            `切换与/或`,
+            `ALL/ANY`,
+        ],
+        [Type.B0483]: [
+            `+子条件`,
+            `Sub Cond.`,
+        ],
+        [Type.B0484]: [
+            `+子节点`,
+            `Sub Node`,
+        ],
+        [Type.B0485]: [
+            `删除条件`,
+            `Delete Condition`,
+        ],
+        [Type.B0486]: [
+            `删除动作`,
+            `Delete Action`,
+        ],
+        [Type.B0487]: [
+            `克隆`,
+            `Clone`,
+        ],
+        [Type.B0488]: [
+            `条件节点`,
+            `Condition Node`,
+        ],
+        [Type.B0489]: [
+            `子节点`,
+            `Sub Node`,
+        ],
+        [Type.B0490]: [
+            `子条件`,
+            `Sub Condition`,
+        ],
+        [Type.B0491]: [
+            `替换条件节点`,
+            `Replace Condition Node`,
+        ],
+        [Type.B0492]: [
+            `引用`,
+            `Reference`,
+        ],
+        [Type.B0493]: [
+            `无错误`,
+            `No Error`,
+        ],
+        [Type.B0494]: [
+            `重置条件节点`,
+            `Reset Node`,
+        ],
+        [Type.B0495]: [
+            `修改名称`,
+            `Modify Name`,
+        ],
+        [Type.B0496]: [
+            `新增动作`,
+            `Add Action`,
+        ],
+        [Type.B0497]: [
+            `新增事件`,
+            `Add Event`,
+        ],
+        [Type.B0498]: [
+            `删除多余数据`,
+            `Delete Redundancy`,
+        ],
+        [Type.B0499]: [
+            `删除节点`,
+            `Delete Node`,
+        ],
+        [Type.B0500]: [
+            `替换条件`,
+            `Replace Condition`,
+        ],
+        [Type.B0501]: [
+            `修改条件`,
+            `Modify Condition`,
+        ],
+        [Type.B0502]: [
+            `条件`,
+            `Condition`,
+        ],
+        [Type.B0503]: [
+            `使用中`,
+            `In Use`,
+        ],
+        [Type.B0504]: [
+            `当前回合数等于...`,
+            `The current turn equals to ...`,
+        ],
+        [Type.B0505]: [
+            `当前回合数大于...`,
+            `The current turn is greater than ...`,
+        ],
+        [Type.B0506]: [
+            `当前回合数小于...`,
+            `The current turn is less than ...`,
+        ],
+        [Type.B0507]: [
+            `当前回合数的余数等于...`,
+            `The current turn's remainder equals to ...`,
+        ],
+        [Type.B0508]: [
+            `当前的回合阶段是...`,
+            `The current turn phase is ...`,
+        ],
+        [Type.B0509]: [
+            `处于当前回合的玩家序号等于...`,
+            `The current player index equals to ...`,
+        ],
+        [Type.B0510]: [
+            `处于当前回合的玩家序号大于...`,
+            `The current player index is greater than ...`,
+        ],
+        [Type.B0511]: [
+            `处于当前回合的玩家序号小于...`,
+            `The current player index is less than ...`,
+        ],
+        [Type.B0512]: [
+            `事件的发生次数等于...`,
+            `The event occurred times equals to ...`,
+        ],
+        [Type.B0513]: [
+            `事件的发生次数大于...`,
+            `The event occurred times is greater than ...`,
+        ],
+        [Type.B0514]: [
+            `事件的发生次数小于...`,
+            `The event occurred times is less than ...`,
+        ],
+        [Type.B0515]: [
+            `玩家的状态是...`,
+            `The player's state is ...`,
+        ],
+        [Type.B0516]: [
+            `切换类型`,
+            `Change Type`,
+        ],
+        [Type.B0517]: [
+            `取反`,
+            `Is Not`,
+        ],
+        [Type.B0518]: [
+            `除数`,
+            `Divider`,
+        ],
+        [Type.B0519]: [
+            `余数`,
+            `Remainder`,
+        ],
+        [Type.B0520]: [
+            `切换`,
+            `Switch`,
+        ],
+        [Type.B0521]: [
+            `玩家序号`,
+            `Player Index`,
+        ],
+        [Type.B0522]: [
+            `次数`,
+            `Times`,
+        ],
+        [Type.B0523]: [
+            `玩家状态`,
+            `Player State`,
+        ],
+        [Type.B0524]: [
+            `部队总数`,
+            `Total number of the units`,
+        ],
+        [Type.B0525]: [
+            `部队类型`,
+            `Unit Type`,
+        ],
+        [Type.B0526]: [
+            `行动状态`,
+            `Action State`,
+        ],
+        [Type.B0527]: [
+            `部队ID`,
+            `Unit ID`,
+        ],
+        [Type.B0528]: [
+            `装载部队ID`,
+            `Loader ID`,
+        ],
+        [Type.B0529]: [
+            `建筑中`,
+            `Building`,
+        ],
+        [Type.B0530]: [
+            `占领中`,
+            `Capturing`,
+        ],
+        [Type.B0531]: [
+            `坐标`,
+            `Coordinate`,
+        ],
+        [Type.B0532]: [
+            `是否会被部队阻挡`,
+            `Blockable By Unit`,
+        ],
+        [Type.B0533]: [
+            `修改动作`,
+            `Modify Action`,
+        ],
+        [Type.B0534]: [
+            `自动寻找合适的地形`,
+            `Auto Find Suitable Tile`,
+        ],
+        [Type.B0535]: [
+            `新增部队`,
+            `Add Unit`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -2910,8 +3434,128 @@ namespace TinyWars.Utility.Lang {
             `While the Set Path mode is enabled, you have to double click (or touch) a tile in order to make the unit action panel appear when you are moving units. This mode can be useful especially in FoW.\nAre you sure to enable it? \n(Current status: %s)`,
         ],
         [Type.F0034]: [
-            `服务器内部错误，请通知作者，错误码: %d`,
-            `Server internal error, code: %d`,
+            `最多输入%d个字符，请检查`,
+            `Please limit the text length to %d characters.`,
+        ],
+        [Type.F0035]: [
+            `事件#%d发生次数等于%d`,
+            `Event #%d occurred times == %d`,
+        ],
+        [Type.F0036]: [
+            `事件#%d发生次数不等于%d`,
+            `Event #%d occurred times != %d`,
+        ],
+        [Type.F0037]: [
+            `事件#%d发生次数大于%d`,
+            `Event #%d occurred times > %d`,
+        ],
+        [Type.F0038]: [
+            `事件#%d发生次数小于等于%d`,
+            `Event #%d occurred times <= %d`,
+        ],
+        [Type.F0039]: [
+            `事件#%d发生次数小于%d`,
+            `Event #%d occurred times < %d`,
+        ],
+        [Type.F0040]: [
+            `事件#%d发生次数大于等于%d`,
+            `Event #%d occurred times >= %d`,
+        ],
+        [Type.F0041]: [
+            `玩家P%d的当前状态 == %s`,
+            `The state of the player P%d == %s`,
+        ],
+        [Type.F0042]: [
+            `玩家P%d的当前状态 != %s`,
+            `The state of the player P%d != %s`,
+        ],
+        [Type.F0043]: [
+            `当前是玩家P%d的回合`,
+            `It's P%d's turn currently.`,
+        ],
+        [Type.F0044]: [
+            `当前不是玩家P%d的回合`,
+            `It's not P%d's turn currently.`
+        ],
+        [Type.F0045]: [
+            `处于当前回合的玩家序号大于%d`,
+            `The player index in the current turn > %d.`,
+        ],
+        [Type.F0046]: [
+            `处于当前回合的玩家序号小于等于%d`,
+            `The player index in the current turn <= %d.`,
+        ],
+        [Type.F0047]: [
+            `处于当前回合的玩家序号小于%d`,
+            `The player index in the current turn < %d.`,
+        ],
+        [Type.F0048]: [
+            `处于当前回合的玩家序号大于等于%d`,
+            `The player index in the current turn >= %d.`,
+        ],
+        [Type.F0049]: [
+            `当前的回合数等于%d`,
+            `The current turn == %d.`,
+        ],
+        [Type.F0050]: [
+            `当前的回合等于%d`,
+            `The current turn != %d.`,
+        ],
+        [Type.F0051]: [
+            `当前的回合数大于%d`,
+            `The current turn > %d.`,
+        ],
+        [Type.F0052]: [
+            `当前的回合数小于等于%d`,
+            `The current turn <= %d.`,
+        ],
+        [Type.F0053]: [
+            `当前的回合数小于%d`,
+            `The current turn < %d.`,
+        ],
+        [Type.F0054]: [
+            `当前的回合数大于等于%d`,
+            `The current turn >= %d.`,
+        ],
+        [Type.F0055]: [
+            `当前的回合数除以 %d 的余数 == %d`,
+            `The current turn mod %d == %d.`,
+        ],
+        [Type.F0056]: [
+            `当前的回合数除以 %d 的余数 != %d`,
+            `The current turn mod %d != %d.`,
+        ],
+        [Type.F0057]: [
+            `当前的回合阶段 == %s`,
+            `The current turn phase == %s.`,
+        ],
+        [Type.F0058]: [
+            `当前的回合阶段 != %s`,
+            `The current turn phase != %s.`,
+        ],
+        [Type.F0059]: [
+            `在地图上增加部队: %s`,
+            `Add units on map: %s`,
+        ],
+        [Type.F0060]: [
+            `当前正在使用条件节点%s。确定要用新的空节点代替它吗？`,
+            `The condition node %s is being used. Are you sure to replace it by a new empty one?`,
+        ],
+        [Type.F0061]: [
+            `此条件节点中包含了重复的节点%s。请删除重复的节点。`,
+            `There are duplicated sub nodes %s in the node. Please remove the duplication.`,
+        ],
+        [Type.F0062]: [
+            `此条件节点中包含了重复的条件%s。请删除重复的条件。`,
+            `There are duplicated condition %s in the node. Please remove the duplication.`,
+        ],
+        [Type.F0063]: [
+            `已删除%d个节点、%d个条件和%d个动作。`,
+            `%d nodes, %d conditions and %d actions have been deleted.`,
+        ],
+        [Type.F0064]: [
+            `%s无效`,
+            `The %s is invalid.`,
         ],
     };
 
@@ -2920,159 +3564,135 @@ namespace TinyWars.Utility.Lang {
             "",
             "",
         ],
-        [ErrorCode.InternalError]: [
-            "服务器内部错误，请通知作者",
-            "Server internal errors.",
-        ],
-        [ErrorCode.IllegalRequest]: [
+        [ErrorCode.IllegalRequest0000]: [
             "非法请求",
             "Illegal request.",
         ],
-        [ErrorCode.User0000]: [
-            `登录失败，可能是服务器内部错误。请尝试刷新游戏，并通知作者。`,
-            `Failed to login. Please refresh the game.`,
+        [ErrorCode.MsgUserLogin0001]: [
+            "账号不合法，请检查后重试",
+            "Invalid account.",
         ],
-        [ErrorCode.User0001]: [
-            "账号或密码不正确，请检查后重试",
-            "Invalid account and/or password.",
-        ],
-        [ErrorCode.User0002]: [
+        [ErrorCode.MsgUserLogin0002]: [
             "您已处于登陆状态，不可再次登陆",
             "You have logged in already.",
         ],
-        [ErrorCode.Register_InvalidAccount]: [
+        [ErrorCode.MsgUserLogin0003]: [
+            "密码不合法，请检查后重试",
+            "Invalid password.",
+        ],
+        [ErrorCode.MsgUserLogin0005]: [
+            "账号不存在，请检查后重试",
+            "The account doesn't exist.",
+        ],
+        [ErrorCode.MsgUserLogin0006]: [
+            "账号或密码不正确，请检查后重试",
+            "Incorrect account and/or password.",
+        ],
+        [ErrorCode.MsgUserRegister0000]: [
             "账号不符合要求，请检查后重试",
             "Invalid account.",
         ],
-        [ErrorCode.Register_UsedAccount]: [
+        [ErrorCode.MsgUserRegister0001]: [
             "该账号已被注册，请修改后再试",
             "The account has been registered.",
         ],
-        [ErrorCode.Register_AlreadyLoggedIn]: [
+        [ErrorCode.MsgUserRegister0002]: [
             "您已处于登陆状态，不可注册账号",
             "You have logged in already.",
         ],
-        [ErrorCode.Register_InvalidPassword]: [
+        [ErrorCode.MsgUserRegister0003]: [
             "密码不符合要求，请检查后重试",
             "Invalid password.",
         ],
-        [ErrorCode.Register_InvalidNickname]: [
+        [ErrorCode.MsgUserRegister0004]: [
             "昵称不符合要求，请检查后重试",
             "Invalid nickname.",
         ],
-        [ErrorCode.Register_UsedNickname]: [
+        [ErrorCode.MsgUserRegister0005]: [
             "该昵称已被使用，请修改后再试",
             "The nickname has been used.",
         ],
-        [ErrorCode.MmMergeMap_SameSrcAndDst]: [
-            "",
-            "",
+        [ErrorCode.MsgUserSetNickname0000]: [
+            "昵称不符合要求，请检查后重试",
+            "Invalid nickname.",
         ],
-        [ErrorCode.MmMergeMap_NoSrcStatisticsData]: [
-            "",
-            "",
+        [ErrorCode.MsgUserSetNickname0001]: [
+            "该昵称已被使用，请修改后再试",
+            "The nickname has been used.",
         ],
-        [ErrorCode.MmMergeMap_NoDstStatisticsData]: [
-            "",
-            "",
+        [ErrorCode.MsgMcrCreateRoom0007]: [
+            "您已加入了许多未开战的房间，请退出部分后重试",
+            "You have joined too many rooms.",
         ],
-        [ErrorCode.Mcr0000]: [
-            "您已参与了许多未开始的战局，请退出部分后重试",
-            "You have joined too many wars.",
-        ],
-        [ErrorCode.CreateMultiCustomWar_TooManyCreatedRooms]: [
+        [ErrorCode.MsgMcrCreateRoom0008]: [
             "您已创建了许多未开始的房间，请退出部分后重试",
             "You have created too many rooms simultaneously.",
         ],
-        [ErrorCode.CreateMultiCustomWar_InvalidParams]: [
-            "部分设定不符合规则，请检查后重试",
-            "Invalid settings.",
+        [ErrorCode.MsgMcrExitRoom0002]: [
+            "房间不存在",
+            "The room doesn't exist.",
         ],
-        [ErrorCode.ExitMultiCustomWar_WarInfoNotExist]: [
-            "战局不存在",
-            "The game doesn't exist.",
-        ],
-        [ErrorCode.ExitMultiCustomWar_NotJoined]: [
+        [ErrorCode.MsgMcrExitRoom0004]: [
             "您并未参加该战局",
             "You haven't joined the game.",
         ],
-        [ErrorCode.JoinMultiCustomWar_TooManyJoinedWars]: [
+        [ErrorCode.MsgMcrJoinRoom0004]: [
             "您已参与了许多未开始的战局，请退出部分后重试",
             "You have joined too many wars.",
         ],
-        [ErrorCode.JoinMultiCustomWar_InvalidParams]: [
-            "部分设定不符合规则，请检查后重试",
-            "Invalid settings.",
-        ],
-        [ErrorCode.JoinMultiCustomWar_WarInfoNotExist]: [
+        [ErrorCode.MsgMcrJoinRoom0006]: [
             "房间不存在",
-            "The game doesn't exist.",
+            "The room doesn't exist.",
         ],
-        [ErrorCode.JoinMultiCustomWar_AlreadyJoined]: [
+        [ErrorCode.MsgMcrJoinRoom0013]: [
             "您已加入了该房间。",
-            "You have already joined the game.",
+            "You have already joined the room.",
         ],
-        [ErrorCode.GetMapDynamicInfo_NoSuchMap]: [
-            "地图不存在，获取dynamic info失败。",
-            "The map doesn't exist thus fail to get its dynamic info.",
-        ],
-        [ErrorCode.GetMapRawData_NoSuchMap]: [
+        [ErrorCode.MsgMapGetRawData0001]: [
             "地图不存在，获取raw data失败。",
             "The map doesn't exist thus fail to get its raw data.",
         ],
-        [ErrorCode.GetUserPublicInfo_NoSuchUser]: [
+        [ErrorCode.MsgUserGetPublicInfo0001]: [
             "用户不存在，获取user public info失败。",
             "The user doesn't exist thus fail to get its public info.",
         ],
-        [ErrorCode.McrContinueWar_NoSuchWar]: [
+        [ErrorCode.MsgMpwCommonContinueWar0001]: [
             `战局不存在`,
             `The game doesn't exist.`,
         ],
-        [ErrorCode.McrContinueWar_DefeatedOrNotJoined]: [
+        [ErrorCode.MsgMpwCommonContinueWar0003]: [
             `您未参与该战局，或已经被击败`,
             `You have not joined the game, or you have been defeated.`,
         ],
-        [ErrorCode.McwBeginTurn_NoSuchWar]: [
+        [ErrorCode.MsgMpwActionPlayerEndTurn0003]: [
             `战局不存在`,
             `The game doesn't exist.`,
         ],
-        [ErrorCode.McwBeginTurn_InvalidActionId]: [
+        [ErrorCode.MsgMpwActionPlayerEndTurn0004]: [
             `战局数据不同步，请刷新`,
             `The local data is out of synchronization. Please refresh.`,
         ],
-        [ErrorCode.McwBeginTurn_NotInTurn]: [
-            `当前无法开始您的回合`,
-            `Unable to begin turn.`,
-        ],
-        [ErrorCode.McwEndTurn_NoSuchWar]: [
-            `战局不存在`,
-            `The game doesn't exist.`,
-        ],
-        [ErrorCode.McwEndTurn_InvalidActionId]: [
-            `战局数据不同步，请刷新`,
-            `The local data is out of synchronization. Please refresh.`,
-        ],
-        [ErrorCode.McwEndTurn_NotInTurn]: [
+        [ErrorCode.MsgMpwActionPlayerEndTurn0006]: [
             `当前无法结束您的回合`,
             `Unable to end turn.`,
         ],
-        [ErrorCode.McwEndTurn_NotVotedForDraw]: [
+        [ErrorCode.MsgMpwActionPlayerEndTurn0009]: [
             `您尚未完成关于和局的投票`,
             `You haven't voted for the draw of game.`,
         ],
-        [ErrorCode.McwWatchRequestWatcher_TargetPlayerLost]: [
+        [ErrorCode.MsgMpwWatchMakeRequest0005]: [
             `该玩家已战败，无法观战`,
             `The target player has been defeated in the game.`
         ],
-        [ErrorCode.McwWatchRequestWatcher_AlreadyRequested]: [
+        [ErrorCode.MsgMpwWatchMakeRequest0006]: [
             `已请求观战该玩家`,
             `You have already requested to watch the player.`,
         ],
-        [ErrorCode.McwWatchRequestWatcher_AlreadyAccepted]: [
+        [ErrorCode.MsgMpwWatchMakeRequest0007]: [
             `观战请求已被接受`,
             `The request has already been accepted.`,
         ],
-        [ErrorCode.ServerDisconnect_ServerMaintenance]: [
+        [ErrorCode.ServerDisconnect0001]: [
             `服务器维护中`,
             `The server is under maintenance.`,
         ],
@@ -3279,18 +3899,15 @@ namespace TinyWars.Utility.Lang {
         setLanguageType(LocalStorage.getLanguageType());
     }
 
-    export function getLanguageType(): LanguageType {
+    export function getCurrentLanguageType(): LanguageType {
         return _languageType;
     }
     export function setLanguageType(language: LanguageType): void {
         _languageType = language;
     }
 
-    export function getText(t: Type): string {
-        return getTextWithLanguage(t, _languageType);
-    }
-    export function getTextWithLanguage(t: Type, language: LanguageType): string {
-        return _LANG_DATA[t][language];
+    export function getText(t: Type, languageType = getCurrentLanguageType()): string {
+        return _LANG_DATA[t][languageType];
     }
 
     export function getFormattedText(t: Type, ...params: any[]): string {
@@ -3298,12 +3915,9 @@ namespace TinyWars.Utility.Lang {
     }
 
     export function getNetErrorText(code: ErrorCode): string {
-        const texts = NET_ERROR_TEXT[code];
-        if (texts) {
-            return texts[_languageType];
-        } else {
-            return getFormattedText(Type.F0034, code);
-        }
+        const textList  = NET_ERROR_TEXT[code];
+        const text      = textList ? textList[_languageType] : undefined;
+        return `${getText(Type.B0452)} ${code}: ${text || getText(Type.A0153)}`;
     }
 
     export function getRichText(richType: RichType): string {
@@ -3553,25 +4167,77 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined {
-        if (warRule.ruleId == null) {
-            return getText(Type.B0321);
-        } else {
-            const list = warRule.ruleNameList;
-            return getLanguageType() === LanguageType.Chinese
-                ? list[0]
-                : list[1] || list[0];
+    export function getPlayerAliveStateName(state: Types.PlayerAliveState): string | undefined {
+        switch (state) {
+            case Types.PlayerAliveState.Alive   : return getText(Type.B0471);
+            case Types.PlayerAliveState.Dead    : return getText(Type.B0472);
+            case Types.PlayerAliveState.Dying   : return getText(Type.B0473);
+            default                             : return undefined;
         }
     }
 
-    export function getNameInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {
+    export function getTurnPhaseName(phaseCode: Types.TurnPhaseCode): string | undefined {
+        switch (phaseCode) {
+            case Types.TurnPhaseCode.WaitBeginTurn  : return getText(Type.B0474);
+            case Types.TurnPhaseCode.Main           : return getText(Type.B0475);
+            default                                 : return undefined;
+        }
+    }
+
+    export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined {
+        return (warRule.ruleId == null)
+            ? getText(Type.B0321)
+            : getLanguageText({ textArray: warRule.ruleNameArray });
+    }
+
+    export function getWarEventConditionTypeName(type: WarEventConditionType): string | undefined {
+        switch (type) {
+            case WarEventConditionType.WecTurnIndexEqualTo                  : return Lang.getText(Lang.Type.B0504);
+            case WarEventConditionType.WecTurnIndexGreaterThan              : return Lang.getText(Lang.Type.B0505);
+            case WarEventConditionType.WecTurnIndexLessThan                 : return Lang.getText(Lang.Type.B0506);
+            case WarEventConditionType.WecTurnIndexRemainderEqualTo         : return Lang.getText(Lang.Type.B0507);
+            case WarEventConditionType.WecTurnPhaseEqualTo                  : return Lang.getText(Lang.Type.B0508);
+            case WarEventConditionType.WecPlayerIndexInTurnEqualTo          : return Lang.getText(Lang.Type.B0509);
+            case WarEventConditionType.WecPlayerIndexInTurnGreaterThan      : return Lang.getText(Lang.Type.B0510);
+            case WarEventConditionType.WecPlayerIndexInTurnLessThan         : return Lang.getText(Lang.Type.B0511);
+            case WarEventConditionType.WecEventCalledCountTotalEqualTo      : return Lang.getText(Lang.Type.B0512);
+            case WarEventConditionType.WecEventCalledCountTotalGreaterThan  : return Lang.getText(Lang.Type.B0513);
+            case WarEventConditionType.WecEventCalledCountTotalLessThan     : return Lang.getText(Lang.Type.B0514);
+            case WarEventConditionType.WecPlayerAliveStateEqualTo           : return Lang.getText(Lang.Type.B0515);
+            default                                                         : return undefined;
+        }
+    }
+
+    export function getStringInCurrentLanguage(nameList: string[] | null | undefined): string | undefined {
         if (!nameList) {
             return undefined;
         } else {
-            return getLanguageType() === LanguageType.Chinese
+            return getCurrentLanguageType() === LanguageType.Chinese
                 ? nameList[0]
                 : nameList[1] || nameList[0];
         }
+    }
+    export function getLanguageText({ textArray, languageType = getCurrentLanguageType(), useAlternate = true }: {
+        textArray       : ProtoTypes.Structure.ILanguageText[];
+        languageType?   : LanguageType;
+        useAlternate?   : boolean;
+    }): string | undefined {
+        const data = (textArray || []).find(v => v.languageType === languageType);
+        if (data) {
+            return data.text;
+        } else {
+            return useAlternate
+                ? getLanguageText({ textArray, languageType: LanguageType.English, useAlternate: false })
+                    || getLanguageText({ textArray, languageType: LanguageType.Chinese, useAlternate: false })
+                : undefined;
+        }
+    }
+    export function concatLanguageTextList(textList: ProtoTypes.Structure.ILanguageText[]): string {
+        const strList: string[] = [];
+        for (const data of textList || []) {
+            strList.push(data.text);
+        }
+        return strList.join(`, `);
     }
 
     export function getBootTimerTypeName(type: Types.BootTimerType): string {

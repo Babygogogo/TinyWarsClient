@@ -38,12 +38,12 @@ namespace TinyWars.ReplayWar {
             if (!RwTopPanel._instance) {
                 RwTopPanel._instance = new RwTopPanel();
             }
-            RwTopPanel._instance.open();
+            RwTopPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwTopPanel._instance) {
-                RwTopPanel._instance.close();
+                await RwTopPanel._instance.close();
             }
         }
 
@@ -53,8 +53,8 @@ namespace TinyWars.ReplayWar {
             this.skinName = "resource/skins/replayWar/RwTopPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
                 { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
@@ -66,8 +66,8 @@ namespace TinyWars.ReplayWar {
                 { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
                 { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
                 { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessage },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._groupPlayer,        callback: this._onTouchedGroupPlayer },
                 { ui: this._groupCo,            callback: this._onTouchedGroupCo },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
@@ -77,15 +77,13 @@ namespace TinyWars.ReplayWar {
                 { ui: this._btnPause,           callback: this._onTouchedBtnPause, },
                 { ui: this._btnUnitList,        callback: this._onTouchedBtnUnitList, },
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
-            ];
-        }
+            ]);
 
-        protected _onOpened(): void {
             this._war = RwModel.getWar();
             this._updateView();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._war = null;
         }
 
@@ -128,10 +126,10 @@ namespace TinyWars.ReplayWar {
 
         private _onTouchedGroupPlayer(e: egret.TouchEvent): void {
             const userId = this._war.getPlayerInTurn().getUserId();
-            (userId) && (User.UserPanel.show(userId));
+            (userId) && (User.UserPanel.show({ userId }));
         }
         private _onTouchedGroupCo(e: egret.TouchEvent): void {
-            RwCoListPanel.show(Math.max(this._war.getPlayerIndexInTurn() - 1, 0));
+            RwCoListPanel.show({ selectedIndex: Math.max(this._war.getPlayerIndexInTurn() - 1, 0) });
             RwWarMenuPanel.hide();
         }
         private _onTouchedBtnChat(e: egret.TouchEvent): void {
@@ -217,7 +215,7 @@ namespace TinyWars.ReplayWar {
 
         private _updateLabelTurn(): void {
             const war               = this._war;
-            this._labelTurn.text    = `${war.getTurnManager().getTurnIndex() + 1}`;
+            this._labelTurn.text    = `${war.getTurnManager().getTurnIndex()}`;
         }
 
         private _updateLabelAction(): void {

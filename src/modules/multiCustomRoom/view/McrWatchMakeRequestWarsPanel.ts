@@ -37,35 +37,33 @@ namespace TinyWars.MultiCustomRoom {
             if (!McrWatchMakeRequestWarsPanel._instance) {
                 McrWatchMakeRequestWarsPanel._instance = new McrWatchMakeRequestWarsPanel();
             }
-            McrWatchMakeRequestWarsPanel._instance.open();
+            McrWatchMakeRequestWarsPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrWatchMakeRequestWarsPanel._instance) {
-                McrWatchMakeRequestWarsPanel._instance.close();
+                await McrWatchMakeRequestWarsPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiCustomRoom/McrWatchMakeRequestWarsPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMpwWatchGetUnwatchedWarInfos,  callback: this._onNotifySMcwWatchGetUnwatchedWarInfos },
                 { type: Notify.Type.MsgMpwWatchMakeRequest,           callback: this._onNotifySMcwWatchMakeRequest },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listWar.setItemRenderer(WarRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
 
-        protected _onOpened(): void {
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
@@ -74,7 +72,7 @@ namespace TinyWars.MultiCustomRoom {
             MultiPlayerWar.MpwProxy.reqUnwatchedWarInfos();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._zoomMap.removeAllContents();
             this._zoomMap.setMouseWheelListenerEnabled(false);
             this._zoomMap.setTouchListenerEnabled(false);
@@ -131,7 +129,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McrWatchMakeRequestWarsPanel.hide();
+            this.close();
             McrWatchMainMenuPanel.show()
         }
 
@@ -177,7 +175,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
             this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0001));
             this._labelWarComment.text  = (settingsForMcw ? settingsForMcw.warComment : null) || "----";
-            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCount));
+            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
 
             this._groupInfo.visible      = true;
             this._groupInfo.alpha        = 1;
@@ -186,7 +184,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const tileMapView = new WarMap.WarMapTileMapView();
             tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-            tileMapView.updateWithTileDataList(mapRawData.tileDataList);
+            tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithMapRawData(mapRawData);
@@ -215,7 +213,7 @@ namespace TinyWars.MultiCustomRoom {
         panel   : McrWatchMakeRequestWarsPanel;
     }
 
-    class WarRenderer extends eui.ItemRenderer {
+    class WarRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _labelName      : GameUi.UiLabel;
@@ -251,7 +249,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            McrWatchMakeRequestDetailPanel.show((this.data as DataForWarRenderer).info);
+            McrWatchMakeRequestDetailPanel.show({ watchInfo: (this.data as DataForWarRenderer).info });
         }
     }
 
@@ -260,7 +258,7 @@ namespace TinyWars.MultiCustomRoom {
         configVersion   : string;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
         private _labelTeam : GameUi.UiLabel;

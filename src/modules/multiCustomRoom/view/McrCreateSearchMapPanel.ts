@@ -37,45 +37,43 @@ namespace TinyWars.MultiCustomRoom {
             if (!McrCreateSearchMapPanel._instance) {
                 McrCreateSearchMapPanel._instance = new McrCreateSearchMapPanel();
             }
-            McrCreateSearchMapPanel._instance.open();
+            McrCreateSearchMapPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrCreateSearchMapPanel._instance) {
-                McrCreateSearchMapPanel._instance.close();
+                await McrCreateSearchMapPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/multiCustomRoom/McrCreateSearchMapPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnClose,   callback: this._onTouchedBtnClose },
                 { ui: this._btnReset,   callback: this._onTouchedBtnReset },
                 { ui: this._btnSearch,  callback: this._onTouchedBtnSearch },
                 { ui: this._btnTagFog,  callback: this._onTouchedBtnTagFog },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-        }
+            ]);
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
-            McrCreateSearchMapPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
             McrCreateMapListPanel.getInstance().setMapFilters({});
-            McrCreateSearchMapPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnSearch(e: egret.TouchEvent): void {
@@ -88,7 +86,7 @@ namespace TinyWars.MultiCustomRoom {
                 mapTag      : this._mapTag,
             });
 
-            McrCreateSearchMapPanel.hide();
+            this.close();
         }
 
         private _onTouchedBtnTagFog(e: egret.TouchEvent): void {

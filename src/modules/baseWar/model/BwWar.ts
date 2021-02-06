@@ -1,7 +1,6 @@
 
 namespace TinyWars.BaseWar {
     import Logger                   = Utility.Logger;
-    import Notify                   = Utility.Notify;
     import Types                    = Utility.Types;
     import ProtoTypes               = Utility.ProtoTypes;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
@@ -17,18 +16,20 @@ namespace TinyWars.BaseWar {
         private _playerManager              : BwPlayerManager;
         private _field                      : BwField;
         private _turnManager                : BwTurnManager;
+        private _warEventManager            : BwWarEventManager;
 
         private _view                   : BwWarView;
         private _isRunning              = false;
         private _isExecutingAction      = false;
 
-        public async abstract init(data: ISerialWar): Promise<BwWar>;
+        public abstract init(data: ISerialWar): Promise<BwWar>;
         public abstract serializeForSimulation(): ISerialWar | undefined;
         public abstract getWarType(): Types.WarType;
         protected abstract _getPlayerManagerClass(): new () => BwPlayerManager;
         protected abstract _getTurnManagerClass(): new () => BwTurnManager;
         protected abstract _getFieldClass(): new () => BwField;
         protected abstract _getViewClass(): new () => BwWarView;
+        protected abstract _getWarEventManagerClass(): new () => BwWarEventManager;
 
         protected _baseInit(data: ISerialWar): BwWar {
             const settingsForCommon = data.settingsForCommon;
@@ -43,9 +44,22 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
+            const dataForWarEventManager = data.warEventManager;
+            if (dataForWarEventManager == null) {
+                Logger.error(`BwWar._baseInit() empty dataForWarEventManager.`);
+                return undefined;
+            }
+
+            const warEventManager = (this.getWarEventManager() || new (this._getWarEventManagerClass())()).init(dataForWarEventManager);
+            if (warEventManager == null) {
+                Logger.error(`BwWar._baseInit() empty warEventManager.`);
+                return undefined;
+            }
+
             this._setWarId(data.warId);
             this._setSettingsForCommon(settingsForCommon);
             this.setExecutedActionsCount(executedActionsCount);
+            this._setWarEventManager(warEventManager);
             this.setRemainingVotesForDraw(data.remainingVotesForDraw);
 
             return this;
@@ -63,11 +77,12 @@ namespace TinyWars.BaseWar {
         }
 
         public startRunning(): BwWar {
+            this.getWarEventManager().startRunning(this);
             this.getTurnManager().startRunning(this);
             this.getPlayerManager().startRunning(this);
             this.getField().startRunning(this);
 
-            this.setIsRunning(true);
+            this._setIsRunning(true);
 
             return this;
         }
@@ -81,12 +96,12 @@ namespace TinyWars.BaseWar {
             this.getField().stopRunning();
             this.getView().stopRunning();
 
-            this.setIsRunning(false);
+            this._setIsRunning(false);
 
             return this;
         }
 
-        public setIsRunning(isRunning: boolean): void {
+        private _setIsRunning(isRunning: boolean): void {
             this._isRunning = isRunning;
         }
         public getIsRunning(): boolean {
@@ -290,6 +305,13 @@ namespace TinyWars.BaseWar {
         }
         public getEnterTurnTime(): number {
             return this.getTurnManager().getEnterTurnTime();
+        }
+
+        private _setWarEventManager(manager: BwWarEventManager): void {
+            this._warEventManager = manager;
+        }
+        public getWarEventManager(): BwWarEventManager | undefined {
+            return this._warEventManager;
         }
 
         public getWatcherTeamIndexes(watcherUserId: number): Set<number> {

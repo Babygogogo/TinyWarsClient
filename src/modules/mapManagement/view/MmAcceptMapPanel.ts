@@ -35,12 +35,12 @@ namespace TinyWars.MapManagement {
             if (!MmAcceptMapPanel._instance) {
                 MmAcceptMapPanel._instance = new MmAcceptMapPanel();
             }
-            MmAcceptMapPanel._instance.open();
+            MmAcceptMapPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmAcceptMapPanel._instance) {
-                MmAcceptMapPanel._instance.close();
+                await MmAcceptMapPanel._instance.close();
             }
         }
 
@@ -48,25 +48,23 @@ namespace TinyWars.MapManagement {
             super();
 
             this.skinName = "resource/skins/mapManagement/MmAcceptMapPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm, },
                 { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
                 { ui: this._groupScw,       callback: this._onTouchedGroupScw },
                 { ui: this._groupRank,      callback: this._onTouchedGroupRank },
                 { ui: this._groupRankFog,   callback: this._onTouchedGroupRankFog },
-            ];
-        }
+            ]);
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             this._imgMcw.visible        = false;
@@ -80,7 +78,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            MmAcceptMapPanel.hide();
+            this.close();
         }
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             const war = MapEditor.MeManager.getWar();

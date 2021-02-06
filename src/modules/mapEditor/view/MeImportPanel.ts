@@ -18,41 +18,39 @@ namespace TinyWars.MapEditor {
             if (!MeImportPanel._instance) {
                 MeImportPanel._instance = new MeImportPanel();
             }
-            MeImportPanel._instance.open();
+            MeImportPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MeImportPanel._instance) {
-                MeImportPanel._instance.close();
+                await MeImportPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/mapEditor/MeImportPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
-            ];
+            ]);
             this._listMap.setItemRenderer(MapRenderer);
             this._listMap.scrollPolicyH = eui.ScrollPolicy.OFF;
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
 
             this._updateListMap();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listMap.clear();
         }
 
@@ -94,7 +92,7 @@ namespace TinyWars.MapEditor {
         panel   : MeImportPanel;
     }
 
-    class MapRenderer extends eui.ItemRenderer {
+    class MapRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _labelName      : GameUi.UiLabel;
 

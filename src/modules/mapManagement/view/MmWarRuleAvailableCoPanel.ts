@@ -8,10 +8,9 @@ namespace TinyWars.MapManagement {
     import ProtoTypes       = Utility.ProtoTypes;
     import WarRule          = ProtoTypes.WarRule;
 
-    type OpenParam = {
+    type OpenDataForMmWarRuleAvailableCoPanel = {
         playerRule      : WarRule.IDataForPlayerRule;
         warRule         : WarRule.IWarRule;
-        callbackOnClose : () => void;
     }
 
     export class MmWarRuleAvailableCoPanel extends GameUi.UiPanel {
@@ -28,20 +27,18 @@ namespace TinyWars.MapManagement {
         private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
 
-        private _openParam              : OpenParam;
         private _availableCoIdSet       = new Set<number>();
 
-        public static show(openParam: OpenParam): void {
+        public static show(openData: OpenDataForMmWarRuleAvailableCoPanel): void {
             if (!MmWarRuleAvailableCoPanel._instance) {
                 MmWarRuleAvailableCoPanel._instance = new MmWarRuleAvailableCoPanel();
             }
-            MmWarRuleAvailableCoPanel._instance._openParam = openParam;
-            MmWarRuleAvailableCoPanel._instance.open();
+            MmWarRuleAvailableCoPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmWarRuleAvailableCoPanel._instance) {
-                MmWarRuleAvailableCoPanel._instance.close();
+                await MmWarRuleAvailableCoPanel._instance.close();
             }
         }
 
@@ -49,24 +46,22 @@ namespace TinyWars.MapManagement {
             super();
 
             this.skinName = "resource/skins/mapManagement/MmWarRuleAvailableCoPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-        }
-
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
-                { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
-            ];
-            this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
         }
 
         protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
+            ]);
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ]);
+
             const availableCoIdSet  = this._availableCoIdSet;
-            const openParam         = this._openParam;
+            const openData          = this._getOpenData<OpenDataForMmWarRuleAvailableCoPanel>();
             availableCoIdSet.clear();
-            for (const coId of openParam.playerRule.availableCoIdList) {
+            for (const coId of openData.playerRule.availableCoIdArray) {
                 availableCoIdSet.add(coId);
             }
 
@@ -75,11 +70,9 @@ namespace TinyWars.MapManagement {
             this._initGroupCoNames();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._clearGroupCoTiers();
             this._clearGroupCoNames();
-            this._openParam.callbackOnClose();
-            this._openParam = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -98,11 +91,11 @@ namespace TinyWars.MapManagement {
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
-            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._openParam.playerRule.playerIndex})`;
+            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._getOpenData<OpenDataForMmWarRuleAvailableCoPanel>().playerRule.playerIndex})`;
         }
 
         private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestConfigVersion())) {
+            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setState(CoTierState.AllAvailable);
@@ -126,7 +119,7 @@ namespace TinyWars.MapManagement {
 
         private _updateGroupCoTiers(): void {
             const availableCoIdSet  = this._availableCoIdSet;
-            const configVersion     = ConfigManager.getLatestConfigVersion();
+            const configVersion     = ConfigManager.getLatestFormalVersion();
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
                     ? ConfigManager.getAvailableCustomCoIdList(configVersion)
@@ -143,7 +136,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestConfigVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -174,7 +167,7 @@ namespace TinyWars.MapManagement {
         Unavailable,
     }
 
-    class RendererForCoTier extends eui.ItemRenderer {
+    class RendererForCoTier extends GameUi.UiListItemRenderer {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 
@@ -220,7 +213,7 @@ namespace TinyWars.MapManagement {
         }
     }
 
-    class RendererForCoName extends eui.ItemRenderer {
+    class RendererForCoName extends GameUi.UiListItemRenderer {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 
@@ -236,7 +229,7 @@ namespace TinyWars.MapManagement {
         public setCoId(coId: number): void {
             this._coId = coId;
 
-            this._labelName.text = `${ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId).name}`;
+            this._labelName.text = `${ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId).name}`;
         }
         public getCoId(): number {
             return this._coId;

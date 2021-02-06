@@ -2,8 +2,9 @@
 namespace TinyWars.Utility.Helpers {
     import ColorType            = Types.ColorType;
     import MessageCodes         = Network.Codes;
+    import ILanguageText        = ProtoTypes.Structure.ILanguageText;
     import IMessageContainer    = ProtoTypes.NetMessage.IMessageContainer;
-    import IActionContainer     = ProtoTypes.WarAction.IActionContainer;
+    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
 
     const COLOR_MATRIX_FILTERS = {
         [ColorType.Gray]: new egret.ColorMatrixFilter([
@@ -121,11 +122,11 @@ namespace TinyWars.Utility.Helpers {
         return undefined;
     }
 
-    export function getWarActionCode(container: IActionContainer): WarActionCodes | null {
+    export function getWarActionCode(container: IWarActionContainer): WarActionCodes | null {
         const name = getWarActionName(container);
         return name == null ? null : WarActionCodes[name];
     }
-    export function getWarActionName(container: IActionContainer): string | null {
+    export function getWarActionName(container: IWarActionContainer): string | null {
         for (const k in container) {
             if (k !== "actionId") {
                 return k;
@@ -164,6 +165,61 @@ namespace TinyWars.Utility.Helpers {
         return value === +value;
     }
 
+    export function checkIsValidLanguageType(t: number | null | undefined): boolean {
+        return (t === Types.LanguageType.Chinese)
+            || (t === Types.LanguageType.English);
+    }
+    export function checkIsValidLanguageText({ data, minLength, maxLength }: {
+        data        : ILanguageText;
+        minLength   : number;
+        maxLength   : number;
+    }): boolean {
+        if (!checkIsValidLanguageType(data.languageType)) {
+            return false;
+        }
+
+        const text = data.text;
+        if (text == null) {
+            return false;
+        }
+
+        const length = text.length;
+        return (length >= minLength) && (length <= maxLength);
+    }
+    export function checkIsValidLanguageTextArray({ list, minTextLength, maxTextLength }: {
+        list            : ILanguageText[];
+        minTextLength   : number;
+        maxTextLength   : number;
+    }): boolean {
+        if (list.length <= 0) {
+            return false;
+        }
+
+        const languageTypeSet = new Set<number>();
+        for (const data of list) {
+            const languageType = data.languageType;
+            if ((languageType == null)                      ||
+                (!checkIsValidLanguageType(languageType))   ||
+                (languageTypeSet.has(languageType))
+            ) {
+                return false;
+            }
+            languageTypeSet.add(languageType);
+
+            const text = data.text;
+            if (text == null) {
+                return false;
+            }
+
+            const length = text.length;
+            if ((length > maxTextLength) || (length < minTextLength)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     export function getObjectKeysCount(obj: { [key: string]: any }): number {
         let count = 0;
         for (const k in obj) {
@@ -178,6 +234,20 @@ namespace TinyWars.Utility.Helpers {
         } else {
             return list[Math.floor(Math.random() * list.length)];
         }
+    }
+
+    export function deleteElementFromArray<T>(arr: T[], element: T, maxDeleteCount = Number.MAX_VALUE): number {
+        let index       = 0;
+        let deleteCount = 0;
+        while ((index < arr.length) && (deleteCount < maxDeleteCount)) {
+            if (arr[index] === element) {
+                arr.splice(index, 1);
+                ++deleteCount;
+            } else {
+                ++index;
+            }
+        }
+        return deleteCount;
     }
 
     /** 获取一个整数的位数。不计负数的符号；0-9计为1；10-99计为2；以此类推 */

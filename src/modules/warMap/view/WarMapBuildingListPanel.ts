@@ -21,19 +21,16 @@ namespace TinyWars.WarMap {
         public _labelTitle  : GameUi.UiLabel;
         public _listTile    : GameUi.UiScrollList;
 
-        private _openData   : OpenDataForBuildingListPanel;
-
         public static show(openData: OpenDataForBuildingListPanel): void {
             if (!WarMapBuildingListPanel._instance) {
                 WarMapBuildingListPanel._instance = new WarMapBuildingListPanel();
             }
-            WarMapBuildingListPanel._instance._openData = openData;
-            WarMapBuildingListPanel._instance.open();
+            WarMapBuildingListPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (WarMapBuildingListPanel._instance) {
-                WarMapBuildingListPanel._instance.close();
+                await WarMapBuildingListPanel._instance.close();
             }
         }
 
@@ -41,20 +38,18 @@ namespace TinyWars.WarMap {
             super();
 
             this.skinName = "resource/skins/warMap/WarMapBuildingListPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
-            ];
-
+            ]);
             this._listTile.setItemRenderer(TileRenderer);
-        }
-        protected _onOpened(): void {
+
             this._updateComponentsForLanguage();
             this._updateListTile();
         }
@@ -75,11 +70,11 @@ namespace TinyWars.WarMap {
         }
 
         private _updateListTile(): void {
-            const openData      = this._openData;
+            const openData      = this._getOpenData<OpenDataForBuildingListPanel>();
             const mapRawData    = openData.mapRawData;
             const configVersion = openData.configVersion;
             const dict          = new Map<number, Map<number, number>>();
-            for (const tileData of mapRawData.tileDataList) {
+            for (const tileData of mapRawData.tileDataArray) {
                 const template = ConfigManager.getTileTemplateCfg(configVersion, Types.TileBaseType.Plain, tileData.objectType);
                 if ((template) && (template.maxCapturePoint != null)) {
                     const tileType = template.type;
@@ -94,7 +89,7 @@ namespace TinyWars.WarMap {
             }
 
             const dataList          : DataForTileRenderer[] = [];
-            const maxPlayerIndex    = mapRawData.playersCount;
+            const maxPlayerIndex    = mapRawData.playersCountUnneutral;
             for (const [tileType, subDict] of dict) {
                 dataList.push({
                     configVersion,
@@ -114,7 +109,7 @@ namespace TinyWars.WarMap {
         dict            : Map<number, number>;
     }
 
-    class TileRenderer extends eui.ItemRenderer {
+    class TileRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
         private _labelNum0      : TinyWars.GameUi.UiLabel;

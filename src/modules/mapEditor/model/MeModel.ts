@@ -99,12 +99,12 @@ namespace TinyWars.MapEditor.MeModel {
         function resetDataByPresetWarRuleId(ruleId: number | null): void {
             const settingsForCommon = getWarData().settingsForCommon;
             const mapRawData        = getMapRawData();
-            const playersCount      = mapRawData.playersCount;
+            const playersCount      = mapRawData.playersCountUnneutral;
 
             if (ruleId == null) {
                 settingsForCommon.warRule = BwSettingsHelper.createDefaultWarRule(ruleId, playersCount);
             } else {
-                const warRule = mapRawData.warRuleList.find(warRule => warRule.ruleId === ruleId);
+                const warRule = mapRawData.warRuleArray.find(warRule => warRule.ruleId === ruleId);
                 if (warRule == null) {
                     Logger.error(`McwModel.resetDataByPresetWarRuleId() empty warRule.`);
                     return undefined;
@@ -127,11 +127,11 @@ namespace TinyWars.MapEditor.MeModel {
         }
         export function tickPresetWarRuleId(): void {
             const currWarRuleId = getPresetWarRuleId();
-            const warRuleList   = getMapRawData().warRuleList;
+            const warRuleArray  = getMapRawData().warRuleArray;
             if (currWarRuleId == null) {
                 resetDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
             } else {
-                resetDataByPresetWarRuleId((currWarRuleId + 1) % warRuleList.length);
+                resetDataByPresetWarRuleId((currWarRuleId + 1) % warRuleArray.length);
             }
         }
 

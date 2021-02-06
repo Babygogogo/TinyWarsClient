@@ -10,6 +10,7 @@ namespace TinyWars.MapManagement {
     import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
     import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
+    type OpenDataForMmWarRulePanel = ProtoTypes.Map.IMapRawData;
     export class MmWarRulePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -40,22 +41,19 @@ namespace TinyWars.MapManagement {
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
         private _listPlayer         : TinyWars.GameUi.UiScrollList;
 
-        private _mapRawData         : ProtoTypes.Map.IMapRawData;
         private _dataForListWarRule : DataForWarRuleNameRenderer[] = [];
         private _selectedIndex      : number;
         private _selectedRule       : IWarRule;
 
-        public static show(mapRawData: ProtoTypes.Map.IMapRawData): void {
+        public static show(openData: OpenDataForMmWarRulePanel): void {
             if (!MmWarRulePanel._instance) {
                 MmWarRulePanel._instance = new MmWarRulePanel();
             }
-            const instance          = MmWarRulePanel._instance;
-            instance._mapRawData    = mapRawData;
-            instance.open();
+            MmWarRulePanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (MmWarRulePanel._instance) {
-                MmWarRulePanel._instance.close();
+                await MmWarRulePanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -66,29 +64,27 @@ namespace TinyWars.MapManagement {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmWarRulePanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
-            ];
+            ]);
             this._listWarRule.setItemRenderer(WarRuleNameRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
-        protected _onOpened(): void {
+
             this._updateComponentsForLanguage();
 
             this._resetView();
         }
-        protected _onClosed(): void {
-            this._mapRawData = null;
+        protected async _onClosed(): Promise<void> {
             this._listWarRule.clear();
             this._listPlayer.clear();
         }
@@ -159,7 +155,7 @@ namespace TinyWars.MapManagement {
         private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
             const data  : DataForWarRuleNameRenderer[] = [];
             let index   = 0;
-            for (const rule of this._mapRawData.warRuleList || []) {
+            for (const rule of this._getOpenData<OpenDataForMmWarRulePanel>().warRuleArray || []) {
                 data.push({
                     index,
                     rule,
@@ -183,7 +179,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _updateLabelRuleName(rule: IWarRule): void {
-            this._labelRuleName.text = (rule ? rule.ruleNameList || [] : []).join(",");
+            this._labelRuleName.text = (rule ? rule.ruleNameArray || [] : []).join(",");
         }
         private _updateImgHasFog(rule: IWarRule): void {
             this._imgHasFog.visible = rule ? rule.ruleForGlobalParams.hasFogByDefault : false;
@@ -201,7 +197,7 @@ namespace TinyWars.MapManagement {
             this._imgAvailabilityWr.visible = rule ? rule.ruleAvailability.canWr : false;
         }
         public updateListPlayerRule(rule: IWarRule): void {
-            const playerRuleDataList    = rule ? rule.ruleForPlayers.playerRuleDataList : null;
+            const playerRuleDataList    = rule ? rule.ruleForPlayers.playerRuleDataArray : null;
             const listPlayer            = this._listPlayer;
             if ((!playerRuleDataList) || (!playerRuleDataList.length)) {
                 listPlayer.clear();
@@ -229,7 +225,7 @@ namespace TinyWars.MapManagement {
         panel   : MmWarRulePanel;
     }
 
-    class WarRuleNameRenderer extends eui.ItemRenderer {
+    class WarRuleNameRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
@@ -262,7 +258,7 @@ namespace TinyWars.MapManagement {
         panel       : MmWarRulePanel;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _listInfo   : GameUi.UiScrollList;
 
         protected childrenCreated(): void {
@@ -320,15 +316,12 @@ namespace TinyWars.MapManagement {
         private _createDataAvailableCoIdList(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0403),
-                infoText                : `${playerRule.availableCoIdList.length}`,
+                infoText                : `${playerRule.availableCoIdArray.length}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     MmWarRuleAvailableCoPanel.show({
                         warRule,
                         playerRule,
-                        callbackOnClose : () => {
-                            this._updateView();
-                        },
                     });
                 },
             };
@@ -423,7 +416,7 @@ namespace TinyWars.MapManagement {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

@@ -9,6 +9,7 @@ namespace TinyWars.MapEditor {
     import IWarRule         = ProtoTypes.WarRule.IWarRule;
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
     import IDataForMapTag   = ProtoTypes.Map.IDataForMapTag;
+    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
 
     export class MeWar extends BaseWar.BwWar {
         private _drawer             : MeDrawer;
@@ -16,7 +17,7 @@ namespace TinyWars.MapEditor {
         private _mapSlotIndex       : number;
         private _mapDesignerUserId  : number;
         private _mapDesignerName    : string;
-        private _mapNameList        : string[];
+        private _mapNameList        : ILanguageText[];
         private _isReviewingMap     = false;
         private _warRuleList        : IWarRule[] = [];
         private _isMapModified      = false;
@@ -100,8 +101,8 @@ namespace TinyWars.MapEditor {
             this.setMapModifiedTime(mapRawData.modifiedTime);
             this.setMapDesignerUserId(mapRawData.designerUserId);
             this.setMapDesignerName(mapRawData.designerName);
-            this.setMapNameList(mapRawData.mapNameList);
-            this.setWarRuleList(mapRawData.warRuleList || [warData.settingsForCommon.warRule]);
+            this.setMapNameArray(mapRawData.mapNameArray);
+            this.setWarRuleArray(mapRawData.warRuleArray || [warData.settingsForCommon.warRule]);
             this.setMapTag(mapRawData.mapTag);
         }
 
@@ -133,6 +134,12 @@ namespace TinyWars.MapEditor {
                 return undefined;
             }
 
+            const warEventManager = this.getWarEventManager();
+            if (warEventManager == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty warEventManager.`);
+                return undefined;
+            }
+
             const playerManager = this.getPlayerManager();
             if (playerManager == null) {
                 Logger.error(`MeWar.serializeForSimulation() empty playerManager.`);
@@ -148,6 +155,12 @@ namespace TinyWars.MapEditor {
             const field = this.getField();
             if (field == null) {
                 Logger.error(`MeWar.serializeForSimulation() empty field.`);
+                return undefined;
+            }
+
+            const serialWarEventManager = warEventManager.serializeForSimulation();
+            if (serialWarEventManager == null) {
+                Logger.error(`MeWar.serializeForSimulation() empty serialWarEventManager.`);
                 return undefined;
             }
 
@@ -182,6 +195,7 @@ namespace TinyWars.MapEditor {
                 executedActions             : [],
                 executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
                 field                       : serialField,
@@ -189,23 +203,23 @@ namespace TinyWars.MapEditor {
         }
 
         public serializeForMap(): IMapRawData {
-            const tileMap   = this.getTileMap();
-            const mapSize   = tileMap.getMapSize();
             const unitMap   = this.getUnitMap() as MeUnitMap;
+            const mapSize   = unitMap.getMapSize();
             unitMap.reviseAllUnitIds();
 
             return {
-                designerName    : this.getMapDesignerName(),
-                designerUserId  : this.getMapDesignerUserId(),
-                mapNameList     : this.getMapNameList(),
-                mapWidth        : mapSize.width,
-                mapHeight       : mapSize.height,
-                playersCount    : (this.getField() as MeField).getMaxPlayerIndex(),
-                modifiedTime    : Time.TimeModel.getServerTimestamp(),
-                tileDataList    : tileMap.serialize().tiles,
-                unitDataList    : unitMap.serialize().units,
-                warRuleList     : this.getWarRuleList(),
-                mapTag          : this.getMapTag(),
+                designerName            : this.getMapDesignerName(),
+                designerUserId          : this.getMapDesignerUserId(),
+                mapNameArray            : this.getMapNameArray(),
+                mapWidth                : mapSize.width,
+                mapHeight               : mapSize.height,
+                playersCountUnneutral   : (this.getField() as MeField).getMaxPlayerIndex(),
+                modifiedTime            : Time.TimeModel.getServerTimestamp(),
+                tileDataArray           : this.getTileMap().serialize().tiles,
+                unitDataArray           : unitMap.serialize().units,
+                warRuleArray            : this.getWarRuleArray(),
+                mapTag                  : this.getMapTag(),
+                warEventFullData        : this.getWarEventManager().getWarEventFullData(),
             };
         }
 
@@ -224,6 +238,9 @@ namespace TinyWars.MapEditor {
         }
         protected _getTurnManagerClass(): new () => MeTurnManager {
             return MeTurnManager;
+        }
+        protected _getWarEventManagerClass(): new () => MeWarEventManager {
+            return MeWarEventManager;
         }
 
         private _setDrawer(drawer: MeDrawer): void {
@@ -261,18 +278,11 @@ namespace TinyWars.MapEditor {
             this._mapDesignerName = value;
         }
 
-        public getMapNameList(): string[] {
+        public getMapNameArray(): ILanguageText[] {
             return this._mapNameList;
         }
-        public setMapNameList(value: string[]) {
+        public setMapNameArray(value: ILanguageText[]) {
             this._mapNameList = value;
-        }
-
-        public getWarRuleList(): IWarRule[] {
-            return this._warRuleList;
-        }
-        public setWarRuleList(value: IWarRule[]) {
-            this._warRuleList = value;
         }
 
         public getIsReviewingMap(): boolean {
@@ -289,8 +299,18 @@ namespace TinyWars.MapEditor {
             this._isMapModified = hasSubmitted;
         }
 
+        public getWarRuleArray(): IWarRule[] {
+            return this._warRuleList;
+        }
+        public setWarRuleArray(value: IWarRule[]) {
+            this._warRuleList = value;
+        }
+        public getWarRuleByRuleId(ruleId: number): IWarRule {
+            return this.getWarRuleArray().find(v => v.ruleId === ruleId);
+        }
+
         public reviseWarRuleList(): void {
-            const ruleList = this.getWarRuleList();
+            const ruleList = this.getWarRuleArray();
             if (!ruleList.length) {
                 this.addWarRule();
             } else {
@@ -301,17 +321,23 @@ namespace TinyWars.MapEditor {
             }
         }
         public addWarRule(): void {
-            const ruleList = this.getWarRuleList();
+            const ruleList = this.getWarRuleArray();
             ruleList.push(BwSettingsHelper.createDefaultWarRule(ruleList.length, (this.getField() as MeField).getMaxPlayerIndex()));
         }
         public deleteWarRule(ruleId: number): void {
-            const ruleList  = this.getWarRuleList();
+            const ruleList  = this.getWarRuleArray();
             const ruleIndex = ruleList.findIndex(v => v.ruleId === ruleId);
             if (ruleIndex >= 0) {
                 ruleList.splice(ruleIndex, 1);
                 for (let index = ruleIndex; index < ruleList.length; ++index) {
                     --ruleList[index].ruleId;
                 }
+            }
+        }
+        public setWarRuleNameList(ruleId: number, nameArray: ILanguageText[]): void {
+            const rule = this.getWarRuleByRuleId(ruleId);
+            if (rule) {
+                rule.ruleNameArray = nameArray;
             }
         }
 

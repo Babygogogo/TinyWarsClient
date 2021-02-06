@@ -34,7 +34,7 @@ namespace TinyWars.WarMap {
             this._reviseZOrderForAllUnits();
         }
         public initWithMapRawData(mapRawData: ProtoTypes.Map.IMapRawData): void {
-            this.initWithDataList(_createUnitViewDataList(mapRawData.unitDataList));
+            this.initWithDataList(_createUnitViewDataList(mapRawData.unitDataArray));
         }
 
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
@@ -74,7 +74,7 @@ namespace TinyWars.WarMap {
             const view     = new WarMapUnitView(data, tickCount);
             this._unitViews.push(view);
 
-            const configVersion = ConfigManager.getLatestConfigVersion();
+            const configVersion = ConfigManager.getLatestFormalVersion();
             if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Air)) {
                 this._airLayer.addChild(view);
             } else if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Ground)) {

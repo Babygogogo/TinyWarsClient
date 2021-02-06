@@ -7,7 +7,7 @@ namespace TinyWars.MultiCustomRoom {
     import BwSettingsHelper = BaseWar.BwSettingsHelper;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    export type OpenParamForMcrRoomChooseCoPanel = {
+    type OpenDataForMcrRoomChooseCoPanel = {
         roomInfo        : ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
         selfPlayerData  : ProtoTypes.Structure.IDataForPlayerInRoom;
     }
@@ -17,8 +17,6 @@ namespace TinyWars.MultiCustomRoom {
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: McrRoomChooseCoPanel;
-
-        private _openParam      : OpenParamForMcrRoomChooseCoPanel;
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
@@ -53,42 +51,40 @@ namespace TinyWars.MultiCustomRoom {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(openParam: OpenParamForMcrRoomChooseCoPanel): void {
+        public static show(openData: OpenDataForMcrRoomChooseCoPanel): void {
             if (!McrRoomChooseCoPanel._instance) {
                 McrRoomChooseCoPanel._instance = new McrRoomChooseCoPanel();
             }
 
-            McrRoomChooseCoPanel._instance._openParam = openParam;
-            McrRoomChooseCoPanel._instance.open();
+            McrRoomChooseCoPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrRoomChooseCoPanel._instance) {
-                McrRoomChooseCoPanel._instance.close();
+                await McrRoomChooseCoPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiCustomRoom/McrRoomChooseCoPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
                 { ui: this._btnBack,    callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listCo.setItemRenderer(CoRenderer);
             this._listPassiveSkill.setItemRenderer(SkillRenderer);
             this._listCop.setItemRenderer(SkillRenderer);
             this._listScop.setItemRenderer(SkillRenderer);
-        }
-        protected _onOpened(): void {
+
             this._initListCo();
             this._updateView();
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listCo.clear();
             this._listPassiveSkill.clear();
             this._listCop.clear();
@@ -126,7 +122,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            McrRoomInfoPanel.show(this._openParam.roomInfo.roomId);
+            McrRoomInfoPanel.show({ roomId: this._getOpenData<OpenDataForMcrRoomChooseCoPanel>().roomInfo.roomId });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -139,7 +135,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initListCo(): void {
-            const selfCoId      = this._openParam.selfPlayerData.coId;
+            const selfCoId      = this._getOpenData<OpenDataForMcrRoomChooseCoPanel>().selfPlayerData.coId;
             const dataForListCo = this._createDataForListCo();
             this._dataForListCo = dataForListCo;
             this._listCo.bindData(dataForListCo);
@@ -149,13 +145,13 @@ namespace TinyWars.MultiCustomRoom {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const data              : DataForCoRenderer[] = [];
-            const openParam         = this._openParam;
-            const roomInfo          = openParam.roomInfo;
-            const selfPlayerData    = openParam.selfPlayerData;
+            const openData          = this._getOpenData<OpenDataForMcrRoomChooseCoPanel>();
+            const roomInfo          = openData.roomInfo;
+            const selfPlayerData    = openData.selfPlayerData;
             const availableCoIdList = BwSettingsHelper.getAvailableCoIdList(roomInfo.settingsForCommon.warRule, selfPlayerData.playerIndex);
 
             let index = 0;
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestConfigVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
                 if (availableCoIdList.indexOf(cfg.coId) >= 0) {
                     data.push({
                         roomInfo,
@@ -269,7 +265,7 @@ namespace TinyWars.MultiCustomRoom {
         panel           : McrRoomChooseCoPanel;
     }
 
-    class CoRenderer extends eui.ItemRenderer {
+    class CoRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
@@ -309,7 +305,7 @@ namespace TinyWars.MultiCustomRoom {
                 });
             }
             data.panel.close();
-            McrRoomInfoPanel.show(roomId);
+            McrRoomInfoPanel.show({ roomId });
         }
     }
 
@@ -318,7 +314,7 @@ namespace TinyWars.MultiCustomRoom {
         skillId : number;
     }
 
-    class SkillRenderer extends eui.ItemRenderer {
+    class SkillRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 
@@ -327,7 +323,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()];
         }
     }
 }

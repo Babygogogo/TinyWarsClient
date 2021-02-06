@@ -12,7 +12,7 @@ namespace TinyWars.MultiCustomRoom {
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import IWarPlayerInfo   = ProtoTypes.Structure.IWarPlayerInfo;
 
-    export type OpenParamForWarBasicSettingsPage = {
+    export type OpenDataForMcrWarBasicSettingsPage = {
         warInfo  : IMpwWarInfo;
     }
 
@@ -55,8 +55,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
         private _listPlayer             : TinyWars.GameUi.UiScrollList;
 
-        protected _dataForOpen  : OpenParamForWarBasicSettingsPage;
-        private _warInfo        : IMpwWarInfo;
+        private _warInfo                : IMpwWarInfo;
 
         public constructor() {
             super();
@@ -64,23 +63,20 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrWarBasicSettingsPage.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnBuildings,           callback: this._onTouchedBtnBuildings },
                 { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
                 { ui: this._btnHelpPlayerIndex,     callback: this._onTouchedBtnHelpPlayerIndex, },
                 { ui: this._btnHelpSkinId,          callback: this._onTouchedBtnHelpSkinId, },
                 { ui: this._btnHelpTimeLimit,       callback: this._onTouchedBtnHelpTimeLimit, },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
-
+            ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
 
-        protected _onOpened(): void {
-            this._warInfo = this._dataForOpen.warInfo;
+            this._warInfo = this._getOpenData<OpenDataForMcrWarBasicSettingsPage>().warInfo;
 
             this._updateComponentsForLanguage();
             this._updateComponentsForWarInfo();
@@ -240,7 +236,7 @@ namespace TinyWars.MultiCustomRoom {
                 const playerData    = warInfo.playerInfoList.find(v => v.userId === selfUserId);
                 const coId          = playerData ? playerData.coId : null;
                 if (coId != null) {
-                    const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
+                    const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
                     this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
                 }
             }
@@ -270,7 +266,7 @@ namespace TinyWars.MultiCustomRoom {
                 const playerInfoList    = warInfo.playerInfoList;
                 const playerRules       = settingsForCommon.warRule.ruleForPlayers;
                 const configVersion     = settingsForCommon.configVersion;
-                const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCount;
+                const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCountUnneutral;
                 for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                     dataList.push({
                         configVersion,
@@ -292,7 +288,7 @@ namespace TinyWars.MultiCustomRoom {
         playerInfo      : IWarPlayerInfo;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelNickname  : GameUi.UiLabel;
         private _labelIndex     : GameUi.UiLabel;
         private _labelTeam      : GameUi.UiLabel;

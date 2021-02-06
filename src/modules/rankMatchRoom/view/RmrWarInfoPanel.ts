@@ -6,6 +6,9 @@ namespace TinyWars.RankMatchRoom {
     import MpwProxy     = MultiPlayerWar.MpwProxy;
     import IMpwWarInfo  = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
 
+    type OpenDataForRmrWarInfoPanel = {
+        warInfo : IMpwWarInfo;
+    }
     export class RmrWarInfoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
@@ -17,65 +20,60 @@ namespace TinyWars.RankMatchRoom {
         private _btnContinueWar : TinyWars.GameUi.UiButton;
         private _btnBack        : TinyWars.GameUi.UiButton;
 
-        private _warInfo        : IMpwWarInfo;
-
-        public static show(warInfo: IMpwWarInfo): void {
+        public static show(openData: OpenDataForRmrWarInfoPanel): void {
             if (!RmrWarInfoPanel._instance) {
                 RmrWarInfoPanel._instance = new RmrWarInfoPanel();
             }
-            RmrWarInfoPanel._instance._warInfo = warInfo;
-            RmrWarInfoPanel._instance.open();
+            RmrWarInfoPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RmrWarInfoPanel._instance) {
-                RmrWarInfoPanel._instance.close();
+                await RmrWarInfoPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled(true);
+            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/rankMatchRoom/RmrWarInfoPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnContinueWar, callback: this._onTouchedBtnContinueWar },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
             this._btnBack.setTextColor(0x00FF00);
             this._btnContinueWar.setTextColor(0x00FF00);
-        }
 
-        protected _onOpened(): void {
-            const warInfo = this._warInfo;
+            const warInfo = this._getOpenData<OpenDataForRmrWarInfoPanel>().warInfo;
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0002) },
                     pageClass   : RmrWarBasicSettingsPage,
                     pageData    : {
                         warInfo
-                    } as OpenParamForWarBasicSettingsPage,
+                    } as OpenDataForRmrWarBasicSettingsPage,
                 },
                 {
                     tabItemData: { name: Lang.getText(Lang.Type.B0003) },
                     pageClass  : RmrWarAdvancedSettingsPage,
                     pageData    : {
                         warInfo
-                    } as OpenParamForWarAdvancedSettingsPage,
+                    } as OpenDataForWarAdvancedSettingsPage,
                 },
             ]);
 
             this._updateComponentsForLanguage();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._tabSettings.clear();
         }
 
@@ -88,7 +86,7 @@ namespace TinyWars.RankMatchRoom {
         }
 
         private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
-            const warInfo = this._warInfo;
+            const warInfo = this._getOpenData<OpenDataForRmrWarInfoPanel>().warInfo;
             if (warInfo) {
                 MpwProxy.reqMcwCommonContinueWar(warInfo.warId);
             }
@@ -112,7 +110,7 @@ namespace TinyWars.RankMatchRoom {
         name: string;
     }
 
-    class TabItemRenderer extends eui.ItemRenderer {
+    class TabItemRenderer extends GameUi.UiListItemRenderer {
         private _labelName: GameUi.UiLabel;
 
         protected dataChanged(): void {

@@ -1,6 +1,6 @@
 
 namespace TinyWars.Common {
-    export type OpenDataForCommonHelpPanel = {
+    type OpenDataForCommonHelpPanel = {
         title  : string;
         content: string;
     }
@@ -14,19 +14,16 @@ namespace TinyWars.Common {
         private _labelTitle  : GameUi.UiLabel;
         private _labelContent: GameUi.UiLabel;
 
-        private _openData: OpenDataForCommonHelpPanel;
-
-        public static show(data: OpenDataForCommonHelpPanel): void {
+        public static show(openData: OpenDataForCommonHelpPanel): void {
             if (!CommonHelpPanel._instance) {
                 CommonHelpPanel._instance = new CommonHelpPanel();
             }
-            CommonHelpPanel._instance._openData = data;
-            CommonHelpPanel._instance.open();
+            CommonHelpPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (CommonHelpPanel._instance) {
-                CommonHelpPanel._instance.close();
+                await CommonHelpPanel._instance.close();
             }
         }
 
@@ -34,14 +31,15 @@ namespace TinyWars.Common {
             super();
 
             this.skinName = "resource/skins/common/CommonHelpPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => CommonHelpPanel.hide();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
         }
 
         protected _onOpened(): void {
-            this._labelTitle.text = this._openData.title;
-            this._labelContent.setRichText(this._openData.content);
+            const openData = this._getOpenData<OpenDataForCommonHelpPanel>();
+            this._labelTitle.text = openData.title;
+            this._labelContent.setRichText(openData.content);
         }
     }
 }

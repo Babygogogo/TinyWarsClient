@@ -10,6 +10,9 @@ namespace TinyWars.SingleCustomWar {
     import GridIndex        = Types.GridIndex;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
+    type OpenDataForScwProduceUnitPanel = {
+        gridIndex   : GridIndex;
+    }
     export class ScwProduceUnitPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -22,19 +25,17 @@ namespace TinyWars.SingleCustomWar {
         private _btnDetail  : GameUi.UiButton;
 
         private _war        : ScwWar;
-        private _gridIndex  : GridIndex;
         private _dataForList: DataForUnitRenderer[];
 
-        public static show(gridIndex: GridIndex): void {
+        public static show(openData: OpenDataForScwProduceUnitPanel): void {
             if (!ScwProduceUnitPanel._instance) {
                 ScwProduceUnitPanel._instance = new ScwProduceUnitPanel();
             }
-            ScwProduceUnitPanel._instance._gridIndex = gridIndex;
-            ScwProduceUnitPanel._instance.open();
+            ScwProduceUnitPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScwProduceUnitPanel._instance) {
-                ScwProduceUnitPanel._instance.close();
+                await ScwProduceUnitPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -45,30 +46,29 @@ namespace TinyWars.SingleCustomWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/multiCustomWar/McwProduceUnitPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyScwPlannerStateChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
                 { ui: this._btnDetail, callback: this._onTouchedBtnDetail },
-            ];
+            ]);
             this._listUnit.setItemRenderer(UnitRenderer);
-        }
-        protected _onOpened(): void {
+
             this._war = ScwModel.getWar();
             this._updateView();
 
             Notify.dispatch(Notify.Type.McwProduceUnitPanelOpened);
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._dataForList;
+        protected async _onClosed(): Promise<void> {
+            this._war           = null;
+            this._dataForList   = null;
             this._listUnit.clear();
 
             Notify.dispatch(Notify.Type.McwProduceUnitPanelClosed);
@@ -92,7 +92,7 @@ namespace TinyWars.SingleCustomWar {
             this._war.getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnDetail(e: egret.TouchEvent): void {
-            const selectedIndex = (this._listUnit.viewport as eui.List).selectedIndex;
+            const selectedIndex = this._listUnit.getViewList().selectedIndex;
             const data          = selectedIndex != null ? this._dataForList[selectedIndex] : null;
             if (data) {
                 BaseWar.BwUnitDetailPanel.show({
@@ -118,7 +118,7 @@ namespace TinyWars.SingleCustomWar {
             const configVersion     = war.getConfigVersion();
             const actionPlanner     = war.getActionPlanner() as ScwActionPlanner;
             const unitMap           = war.getUnitMap();
-            const gridIndex         = this._gridIndex;
+            const gridIndex         = this._getOpenData<OpenDataForScwProduceUnitPanel>().gridIndex;
             const tile              = war.getTileMap().getTile(gridIndex);
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
             const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();
@@ -166,7 +166,7 @@ namespace TinyWars.SingleCustomWar {
         unitProductionSkillCfg  : number[] | null;
     }
 
-    class UnitRenderer extends eui.ItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _imgBg          : GameUi.UiImage;
         private _conUnitView    : eui.Group;

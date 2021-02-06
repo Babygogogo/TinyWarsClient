@@ -29,11 +29,11 @@ namespace TinyWars.ReplayWar {
             if (!RwUnitBriefPanel._instance) {
                 RwUnitBriefPanel._instance = new RwUnitBriefPanel();
             }
-            RwUnitBriefPanel._instance.open();
+            RwUnitBriefPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwUnitBriefPanel._instance) {
-                RwUnitBriefPanel._instance.close();
+                await RwUnitBriefPanel._instance.close();
             }
         }
         public static getInstance(): RwUnitBriefPanel {
@@ -43,12 +43,12 @@ namespace TinyWars.ReplayWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/replayWar/RwUnitBriefPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
                 { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyMcwCursorGridIndexChanged },
@@ -60,19 +60,18 @@ namespace TinyWars.ReplayWar {
                 { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
                 { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-            ];
-        }
-        protected _onOpened(): void {
+            ]);
+
             this._war       = RwModel.getWar();
             this._unitMap   = this._war.getUnitMap() as RwUnitMap;
             this._cursor    = this._war.getField().getCursor() as RwCursor;
 
             this._updateView();
         }
-        protected _onClosed(): void {
-            delete this._war;
-            delete this._unitMap;
-            delete this._cursor;
+        protected async _onClosed(): Promise<void> {
+            this._war       = null;
+            this._unitMap   = null;
+            this._cursor    = null;
 
             for (const cell of this._cellList) {
                 this._destroyCell(cell);

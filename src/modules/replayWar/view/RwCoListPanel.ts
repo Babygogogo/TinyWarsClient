@@ -4,13 +4,14 @@ namespace TinyWars.ReplayWar {
     import Lang     = Utility.Lang;
     import Notify   = Utility.Notify;
 
+    type OpenDataForRwCoListPanel = {
+        selectedIndex   : number;
+    }
     export class RwCoListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: RwCoListPanel;
-
-        private _openData   : number;
 
         private _listCo     : GameUi.UiScrollList;
         private _btnBack    : GameUi.UiButton;
@@ -47,17 +48,16 @@ namespace TinyWars.ReplayWar {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(selectedIndex: number): void {
+        public static show(openData: OpenDataForRwCoListPanel): void {
             if (!RwCoListPanel._instance) {
                 RwCoListPanel._instance = new RwCoListPanel();
             }
 
-            RwCoListPanel._instance._openData = selectedIndex;
-            RwCoListPanel._instance.open();
+            RwCoListPanel._instance.open(openData);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (RwCoListPanel._instance) {
-                RwCoListPanel._instance.close();
+                await RwCoListPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -68,37 +68,36 @@ namespace TinyWars.ReplayWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/replayWar/RwCoListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listCo.setItemRenderer(CoNameRenderer);
             this._listPassiveSkill.setItemRenderer(SkillRenderer);
             this._listCop.setItemRenderer(SkillRenderer);
             this._listScop.setItemRenderer(SkillRenderer);
-        }
-        protected _onOpened(): void {
+
             this._updateComponentsForLanguage();
 
             this._war           = RwModel.getWar();
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
-            this.setSelectedIndex(this._openData);
+            this.setSelectedIndex(this._getOpenData<OpenDataForRwCoListPanel>().selectedIndex);
 
             Notify.dispatch(Notify.Type.BwCoListPanelOpened);
         }
-        protected _onClosed(): void {
-            delete this._war;
+        protected async _onClosed(): Promise<void> {
+            this._war = null;
             this._listCo.clear();
             this._listPassiveSkill.clear();
             this._listCop.clear();
@@ -270,7 +269,7 @@ namespace TinyWars.ReplayWar {
         panel           : RwCoListPanel;
     }
 
-    class CoNameRenderer extends eui.ItemRenderer {
+    class CoNameRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose: GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
@@ -301,7 +300,7 @@ namespace TinyWars.ReplayWar {
         skillId : number;
     }
 
-    class SkillRenderer extends eui.ItemRenderer {
+    class SkillRenderer extends GameUi.UiListItemRenderer {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 
@@ -310,7 +309,7 @@ namespace TinyWars.ReplayWar {
 
             const data              = this.data as DataForSkillRenderer;
             this._labelIndex.text   = `${data.index}.`;
-            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestConfigVersion(), data.skillId).desc[Lang.getLanguageType()];
+            this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()];
         }
     }
 }

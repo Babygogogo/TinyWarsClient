@@ -22,34 +22,32 @@ namespace TinyWars.Broadcast {
             if (!BroadcastPanel._instance) {
                 BroadcastPanel._instance = new BroadcastPanel();
             }
-            BroadcastPanel._instance.open();
+            BroadcastPanel._instance.open(undefined);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (BroadcastPanel._instance) {
-                BroadcastPanel._instance.close();
+                await BroadcastPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled(true);
+            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/broadcast/BroadcastPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.TimeTick,                   callback: this._onNotifyTimeTick },
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgBroadcastGetMessageList, callback: this._onMsgBroadcastGetMessageList },
-            ];
+            ]);
 
             this.touchEnabled   = false;
             this.touchChildren  = false;
-        }
 
-        protected _onOpened(): void {
             this._resetView();
         }
 
@@ -82,7 +80,7 @@ namespace TinyWars.Broadcast {
             const textList: string[] = [];
             for (const message of messageList) {
                 ongoingSet.add(message.messageId);
-                textList.push(Lang.getNameInCurrentLanguage(message.textList));
+                textList.push(Lang.getLanguageText({ textArray: message.textList }));
             }
 
             const group = this._groupLamp;

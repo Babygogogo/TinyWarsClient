@@ -22,22 +22,20 @@ namespace TinyWars.MapEditor {
             this.skinName = "resource/skins/mapEditor/MeSimBasicSettingsPage.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
+        protected _onOpened(): void {
+            this._setUiListenerArray([
                 { ui: this._btnModifyWarRule,           callback: this._onTouchedBtnModifyWarRule },
                 { ui: this._btnModifyHasFog,            callback: this._onTouchedBtnModifyHasFog, },
                 { ui: this._btnHelpHasFog,              callback: this._onTouchedBtnHelpHasFog, },
                 { ui: this._btnBuildings,               callback: this._onTouchedBtnBuildings },
-            ];
-            this._notifyListeners = [
+            ]);
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
+            ]);
 
             this._btnModifyHasFog.setTextColor(0x00FF00);
             this._btnModifyWarRule.setTextColor(0x00FF00);
-        }
 
-        protected _onOpened(): void {
             this._updateComponentsForLanguage();
             this._updateComponentsForWarRule();
             this._updateLabelMapName();
@@ -105,7 +103,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.getNameInCurrentLanguage(MeModel.Sim.getMapRawData().mapNameList);
+            this._labelMapName.text = Lang.getLanguageText({ textArray: MeModel.Sim.getMapRawData().mapNameArray });
         }
 
         private async _updateLabelWarRule(): Promise<void> {

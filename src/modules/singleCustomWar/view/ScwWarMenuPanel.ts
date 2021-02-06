@@ -50,11 +50,11 @@ namespace TinyWars.SingleCustomWar {
             if (!ScwWarMenuPanel._instance) {
                 ScwWarMenuPanel._instance = new ScwWarMenuPanel();
             }
-            ScwWarMenuPanel._instance.open();
+            ScwWarMenuPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (ScwWarMenuPanel._instance) {
-                ScwWarMenuPanel._instance.close();
+                await ScwWarMenuPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -65,12 +65,12 @@ namespace TinyWars.SingleCustomWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/singleCustomWar/ScwWarMenuPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
                 { type: Notify.Type.BwCoIdChanged,                      callback: this._onNotifyBwCoIdChanged },
@@ -79,15 +79,14 @@ namespace TinyWars.SingleCustomWar {
                 { type: Notify.Type.MsgScrSaveWar,                      callback: this._onMsgScrSaveWar },
                 { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
                 { type: Notify.Type.MsgScrDeleteWar,                    callback: this._onMsgScrDeleteWar },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
-            ];
+            ]);
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._listWarInfo.setItemRenderer(InfoRenderer);
-        }
-        protected _onOpened(): void {
+
             const war           = ScwModel.getWar();
             this._war           = war;
             this._unitMap       = war.getUnitMap() as ScwUnitMap;
@@ -98,7 +97,7 @@ namespace TinyWars.SingleCustomWar {
 
             Notify.dispatch(Notify.Type.McwWarMenuPanelOpened);
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._war           = null;
             this._unitMap       = null;
             this._dataForList   = null;
@@ -241,7 +240,7 @@ namespace TinyWars.SingleCustomWar {
             const war = this._war;
             return {
                 titleText               : Lang.getText(Lang.Type.B0091),
-                infoText                : `${war.getTurnManager().getTurnIndex() + 1} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionsCount() + 1})`,
+                infoText                : `${war.getTurnManager().getTurnIndex()} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionsCount() + 1})`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
             };
@@ -311,8 +310,8 @@ namespace TinyWars.SingleCustomWar {
             return {
                 name    : Lang.getText(Lang.Type.B0140),
                 callback: () => {
-                    ScwCoListPanel.show(this._war.getPlayerIndexInTurn() - 1);
-                    ScwWarMenuPanel.hide();
+                    ScwCoListPanel.show({ selectedIndex: this._war.getPlayerIndexInTurn() - 1 });
+                    this.close();
                 },
             };
         }
@@ -562,7 +561,7 @@ namespace TinyWars.SingleCustomWar {
         callback: () => void;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
 
@@ -588,7 +587,7 @@ namespace TinyWars.SingleCustomWar {
         panel       : ScwWarMenuPanel;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _btnName        : GameUi.UiButton;
         private _labelForce     : GameUi.UiLabel;
@@ -623,7 +622,7 @@ namespace TinyWars.SingleCustomWar {
                             player.setUserId(User.UserModel.getSelfUserId());
                         } else {
                             player.setUserId(null);
-                            ScwModel.checkAndRequestBeginTurnOrRunRobot(war);
+                            ScwModel.checkAndHandleAutoActionsAndRobot();
                         }
                         this._updateView();
                     },
@@ -644,7 +643,7 @@ namespace TinyWars.SingleCustomWar {
                 + `  ${isPlayerInTurn ? Lang.getText(Lang.Type.B0086) : ""}`;
             this._btnName.setTextColor(war.getIsSinglePlayerCheating() ? 0x00FF00 : 0xFFFFFF);
 
-            if (!player.getIsAlive()) {
+            if (player.getAliveState() !== Types.PlayerAliveState.Alive) {
                 this._labelLost.visible = true;
                 this._listInfo.visible  = false;
             } else {
@@ -1181,7 +1180,7 @@ namespace TinyWars.SingleCustomWar {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

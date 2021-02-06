@@ -8,6 +8,9 @@ namespace TinyWars.MultiCustomRoom {
     import ConfirmPanel     = Common.CommonConfirmPanel;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
+    type OpenDataForMcrCreateAvailableCoPanel = {
+        playerIndex : number;
+    }
     export class McrCreateAvailableCoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = true;
@@ -26,17 +29,16 @@ namespace TinyWars.MultiCustomRoom {
         private _playerIndex            : number;
         private _availableCoIdSet       = new Set<number>();
 
-        public static show(playerIndex: number): void {
+        public static show(openData: OpenDataForMcrCreateAvailableCoPanel): void {
             if (!McrCreateAvailableCoPanel._instance) {
                 McrCreateAvailableCoPanel._instance = new McrCreateAvailableCoPanel();
             }
-            McrCreateAvailableCoPanel._instance._playerIndex = playerIndex;
-            McrCreateAvailableCoPanel._instance.open();
+            McrCreateAvailableCoPanel._instance.open(openData);
         }
 
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrCreateAvailableCoPanel._instance) {
-                McrCreateAvailableCoPanel._instance.close();
+                await McrCreateAvailableCoPanel._instance.close();
             }
         }
 
@@ -44,22 +46,23 @@ namespace TinyWars.MultiCustomRoom {
             super();
 
             this.skinName = "resource/skins/multiCustomRoom/McrCreateAvailableCoPanel.exml";
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
-        }
-
-        protected _onFirstOpened(): void {
-            this._uiListeners = [
-                { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
-                { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
-            ];
-            this._notifyListeners = [
-                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
-            ];
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
         }
 
         protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnCancel,  callback: this._onTouchedBtnCancel },
+                { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
+            ]);
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
+            ]);
+
+            const playerIndex = this._getOpenData<OpenDataForMcrCreateAvailableCoPanel>().playerIndex;
+            this._playerIndex = playerIndex;
+
             const availableCoIdSet = this._availableCoIdSet;
             availableCoIdSet.clear();
             for (const coId of McrModel.Create.getAvailableCoIdList(this._playerIndex)) {
@@ -71,7 +74,7 @@ namespace TinyWars.MultiCustomRoom {
             this._initGroupCoNames();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._clearGroupCoTiers();
             this._clearGroupCoNames();
         }
@@ -122,8 +125,8 @@ namespace TinyWars.MultiCustomRoom {
             const renderer          = e.currentTarget as RendererForCoTier;
             const availableCoIdSet  = this._availableCoIdSet;
             const coIdList          = renderer.getIsCustomSwitch()
-                ? ConfigManager.getAvailableCustomCoIdList(ConfigManager.getLatestConfigVersion())
-                : ConfigManager.getAvailableCoIdListInTier(ConfigManager.getLatestConfigVersion(), renderer.getCoTier());
+                ? ConfigManager.getAvailableCustomCoIdList(ConfigManager.getLatestFormalVersion())
+                : ConfigManager.getAvailableCoIdListInTier(ConfigManager.getLatestFormalVersion(), renderer.getCoTier());
 
             if (renderer.getState() === CoTierState.Unavailable) {
                 for (const coId of coIdList) {
@@ -196,7 +199,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestConfigVersion())) {
+            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoTier();
                 renderer.setCoTier(tier);
                 renderer.setState(CoTierState.AllAvailable);
@@ -239,7 +242,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getAvailableCoList(ConfigManager.getLatestConfigVersion())) {
+            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -271,7 +274,7 @@ namespace TinyWars.MultiCustomRoom {
         Unavailable,
     }
 
-    class RendererForCoTier extends eui.ItemRenderer {
+    class RendererForCoTier extends GameUi.UiListItemRenderer {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 
@@ -317,7 +320,7 @@ namespace TinyWars.MultiCustomRoom {
         }
     }
 
-    class RendererForCoName extends eui.ItemRenderer {
+    class RendererForCoName extends GameUi.UiListItemRenderer {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 
@@ -333,7 +336,7 @@ namespace TinyWars.MultiCustomRoom {
         public setCoId(coId: number): void {
             this._coId = coId;
 
-            const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestConfigVersion(), coId);
+            const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
             this._labelName.text    = `${cfg.name} (T${cfg.tier})`;
         }
         public getCoId(): number {

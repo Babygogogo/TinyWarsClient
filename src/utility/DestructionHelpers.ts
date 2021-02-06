@@ -76,7 +76,7 @@ namespace TinyWars.Utility.DestructionHelpers {
         war.getFogMap().resetAllMapsForPlayer(playerIndex);
 
         const player = war.getPlayer(playerIndex)!;
-        player.setIsAlive(false);
+        player.setAliveState(Types.PlayerAliveState.Dead);
         player.setCoIsDestroyedInTurn(true);
         player.setCoCurrentEnergy(undefined);
         player.setCoUsingSkillType(Types.CoSkillType.Passive);

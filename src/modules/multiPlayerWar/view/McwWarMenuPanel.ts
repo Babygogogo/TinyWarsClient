@@ -50,11 +50,11 @@ namespace TinyWars.MultiPlayerWar {
             if (!McwWarMenuPanel._instance) {
                 McwWarMenuPanel._instance = new McwWarMenuPanel();
             }
-            McwWarMenuPanel._instance.open();
+            McwWarMenuPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McwWarMenuPanel._instance) {
-                McwWarMenuPanel._instance.close();
+                await McwWarMenuPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
@@ -65,29 +65,28 @@ namespace TinyWars.MultiPlayerWar {
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
-            this._setTouchMaskEnabled();
-            this._callbackForTouchMask = () => this.close();
+            this._setIsAutoAdjustHeight();
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/multiCustomWar/McwWarMenuPanel.exml`;
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyMcwPlannerStateChanged },
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
                 { ui: this._btnHome,        callback: this._onTouchedBtnHome },
                 { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
-            ];
+            ]);
             this._listCommand.setItemRenderer(CommandRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._listWarInfo.setItemRenderer(InfoRenderer);
-        }
-        protected _onOpened(): void {
+
             this._showOpenAnimation();
 
             const war           = MpwModel.getWar();
@@ -100,7 +99,9 @@ namespace TinyWars.MultiPlayerWar {
 
             Notify.dispatch(Notify.Type.McwWarMenuPanelOpened);
         }
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+
             this._war           = null;
             this._unitMap       = null;
             this._dataForList   = null;
@@ -184,6 +185,22 @@ namespace TinyWars.MultiPlayerWar {
                 .set({ alpha: 0, right: -40 })
                 .to({ alpha: 1, right: 0 }, 200);
         }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve, reject) => {
+                const group = this._group;
+                egret.Tween.removeTweens(group);
+                egret.Tween.get(group)
+                    .set({ alpha: 1, left: 0 })
+                    .to({ alpha: 0, left: -40 }, 200);
+
+                const groupInfo = this._groupInfo;
+                egret.Tween.removeTweens(groupInfo);
+                egret.Tween.get(groupInfo)
+                    .set({ alpha: 1, right: 0 })
+                    .to({ alpha: 0, right: -40 }, 200)
+                    .call(resolve);
+            });
+        }
 
         private _updateView(): void {
             this._updateComponentsForLanguage();
@@ -228,7 +245,7 @@ namespace TinyWars.MultiPlayerWar {
                 },
                 {
                     titleText   : Lang.getText(Lang.Type.B0091),
-                    infoText    : `${war.getTurnManager().getTurnIndex() + 1} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionsCount() + 1})`,
+                    infoText    : `${war.getTurnManager().getTurnIndex()} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionsCount() + 1})`,
                     infoColor   : 0xFFFFFF,
                 },
             ];
@@ -551,7 +568,7 @@ namespace TinyWars.MultiPlayerWar {
         callback: () => void;
     }
 
-    class CommandRenderer extends eui.ItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
 
@@ -576,7 +593,7 @@ namespace TinyWars.MultiPlayerWar {
         player  : MpwPlayer;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _group          : eui.Group;
         private _labelName      : GameUi.UiLabel;
         private _labelForce     : GameUi.UiLabel;
@@ -601,7 +618,7 @@ namespace TinyWars.MultiPlayerWar {
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
                 + `  ${player === war.getPlayerInTurn() ? Lang.getText(Lang.Type.B0086) : ""}`;
 
-            if (!player.getIsAlive()) {
+            if (player.getAliveState() !== Types.PlayerAliveState.Alive) {
                 this._labelLost.visible = true;
                 this._listInfo.visible  = false;
             } else {
@@ -675,7 +692,7 @@ namespace TinyWars.MultiPlayerWar {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const coId  = player.getCoId();
-            const cfg   = coId == null ? null : Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getLatestConfigVersion(), coId);
+            const cfg   = coId == null ? null : Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getLatestFormalVersion(), coId);
             return {
                 titleText   : `CO`,
                 infoText    : !cfg ? `(${Lang.getText(Lang.Type.B0001)})` : `${cfg.name}`,
@@ -870,7 +887,7 @@ namespace TinyWars.MultiPlayerWar {
         infoColor   : number;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

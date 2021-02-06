@@ -23,14 +23,12 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrJoinAdvancedSettingsPage.exml";
         }
 
-        public _onFirstOpened(): void {
-            this._uiListeners = [
-                { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
-            ];
-            this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
-
         protected async _onOpened(): Promise<void> {
+            this._setUiListenerArray([
+                { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
+            ]);
+            this._listPlayer.setItemRenderer(PlayerRenderer);
+
             this._mapRawData = await McrModel.Join.getMapRawData();
 
             this._updateComponentsForLanguage();
@@ -60,7 +58,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateListPlayer(): void {
-            const playersCount  = this._mapRawData.playersCount;
+            const playersCount  = this._mapRawData.playersCountUnneutral;
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -78,7 +76,7 @@ namespace TinyWars.MultiCustomRoom {
         playerIndex : number;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _listInfo   : GameUi.UiScrollList;
 
         protected childrenCreated(): void {
@@ -211,7 +209,7 @@ namespace TinyWars.MultiCustomRoom {
         infoColor   : number;
     }
 
-    class InfoRenderer extends eui.ItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 

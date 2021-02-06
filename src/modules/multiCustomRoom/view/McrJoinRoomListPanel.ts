@@ -38,35 +38,33 @@ namespace TinyWars.MultiCustomRoom {
             if (!McrJoinRoomListPanel._instance) {
                 McrJoinRoomListPanel._instance = new McrJoinRoomListPanel();
             }
-            McrJoinRoomListPanel._instance.open();
+            McrJoinRoomListPanel._instance.open(undefined);
         }
-        public static hide(): void {
+        public static async hide(): Promise<void> {
             if (McrJoinRoomListPanel._instance) {
-                McrJoinRoomListPanel._instance.close();
+                await McrJoinRoomListPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this._setAutoAdjustHeightEnabled();
+            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiCustomRoom/McrJoinRoomListPanel.exml";
         }
 
-        protected _onFirstOpened(): void {
-            this._notifyListeners = [
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMcrGetJoinableRoomInfoList,  callback: this._onMsgMcrGetJoinableRoomInfoList },
                 { type: Notify.Type.MsgMcrJoinRoom,                 callback: this._onMsgMcrJoinRoom },
-            ];
-            this._uiListeners = [
+            ]);
+            this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ];
+            ]);
             this._listWar.setItemRenderer(WarRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-        }
 
-        protected _onOpened(): void {
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
@@ -75,7 +73,7 @@ namespace TinyWars.MultiCustomRoom {
             McrProxy.reqMcrGetJoinableRoomInfoList();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._zoomMap.removeAllContents();
             this._zoomMap.setMouseWheelListenerEnabled(false);
             this._zoomMap.setTouchListenerEnabled(false);
@@ -125,7 +123,7 @@ namespace TinyWars.MultiCustomRoom {
         private _onMsgMcrJoinRoom(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMcrJoinRoom.IS;
             this.close();
-            McrRoomInfoPanel.show(data.roomId);
+            McrRoomInfoPanel.show({ roomId: data.roomId });
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -133,7 +131,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            McrJoinRoomListPanel.hide();
+            this.close();
             McrMainMenuPanel.show()
         }
 
@@ -192,7 +190,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelHasFog.text      = Lang.getText(hasFog ? Lang.Type.B0012 : Lang.Type.B0001);
             this._labelHasFog.textColor = hasFog ? 0xFF0000 : 0x00FF00;
             this._labelWarComment.text  = roomInfo.settingsForMcw.warComment || "----";
-            this._listPlayer.bindData(this._createDataForListPlayer(roomInfo, mapRawData.playersCount));
+            this._listPlayer.bindData(this._createDataForListPlayer(roomInfo, mapRawData.playersCountUnneutral));
 
             this._groupInfo.visible      = true;
             this._groupInfo.alpha        = 1;
@@ -201,7 +199,7 @@ namespace TinyWars.MultiCustomRoom {
 
             const tileMapView = new WarMap.WarMapTileMapView();
             tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-            tileMapView.updateWithTileDataList(mapRawData.tileDataList);
+            tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
 
             const unitMapView = new WarMap.WarMapUnitMapView();
             unitMapView.initWithMapRawData(mapRawData);
@@ -222,7 +220,7 @@ namespace TinyWars.MultiCustomRoom {
         panel   : McrJoinRoomListPanel;
     }
 
-    class WarRenderer extends eui.ItemRenderer {
+    class WarRenderer extends GameUi.UiListItemRenderer {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _labelName      : GameUi.UiLabel;
@@ -261,7 +259,7 @@ namespace TinyWars.MultiCustomRoom {
             const data      = this.data as DataForWarRenderer;
             const roomInfo  = data.roomInfo;
             if (roomInfo.settingsForMcw.warPassword) {
-                McrJoinPasswordPanel.show(roomInfo);
+                McrJoinPasswordPanel.show({ roomInfo });
             } else {
                 const joinData = McrModel.Join.getFastJoinData(roomInfo);
                 if (joinData) {
@@ -281,7 +279,7 @@ namespace TinyWars.MultiCustomRoom {
         playerData      : ProtoTypes.Structure.IDataForPlayerInRoom | null;
     }
 
-    class PlayerRenderer extends eui.ItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
 

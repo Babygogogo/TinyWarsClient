@@ -1,5 +1,7 @@
 
 namespace TinyWars.GameUi {
+    import Logger = Utility.Logger;
+
     type UiListener = {
         ui         : egret.DisplayObject,
         callback   : (e: egret.Event) => void,
@@ -7,28 +9,27 @@ namespace TinyWars.GameUi {
         thisObject?: any,
     }
 
-    import Logger = Utility.Logger;
-
     export abstract class UiPanel extends eui.Component {
         protected abstract readonly _LAYER_TYPE  : Utility.Types.LayerType;
         protected abstract readonly _IS_EXCLUSIVE: boolean;
 
-        protected _uiListeners    : UiListener[];
-        protected _notifyListeners: Utility.Notify.Listener[];
-        protected _notifyPriority = 0;
+        private _isChildrenCreated      = false;
+        private _isSkinLoaded           = false;
+        private _isOpening              = false;
 
-        private _isChildrenCreated  = false;
-        private _isSkinLoaded       = false;
-        private _isCalledOpen       = false;
+        private _isRunningClose         = false;
+        private _cachedOpenFunc         : (() => void) | undefined;
 
-        private _isEverOpened       = false;
-        private _isOpening          = false;
+        private _uiListenerArray        : UiListener[];
+        private _notifyListenerArray    : Utility.Notify.Listener[];
 
-        private _isAutoAdjustHeight = false;
-        private _isTouchMaskEnabled = false;
-        protected _callbackForTouchMask: () => void;
+        private _isAutoAdjustHeight     = false;
+        private _isTouchMaskEnabled     = false;
+        private _isCloseOnTouchedMask   = false;
+        private _callbackOnTouchedMask  : () => void;
+        private _touchMask              : eui.Group;
 
-        private _touchMask: eui.Group;
+        private _openData               : any;
 
         protected constructor() {
             super();
@@ -45,6 +46,12 @@ namespace TinyWars.GameUi {
             this._doOpen();
         }
 
+        private _onSkinLoaded(e: egret.Event): void {
+            this._isSkinLoaded = true;
+
+            this._doOpen();
+        }
+
         private _onAddedToStage(e: egret.Event): void {
             this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
@@ -52,62 +59,67 @@ namespace TinyWars.GameUi {
             this._doOpen();
         }
 
-        private _onSkinLoaded(e: egret.Event): void {
-            this._isSkinLoaded = true;
-
-            this._doOpen();
-        }
-
         private _onRemovedFromStage(e: egret.Event): void {
             this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+
+            this._doClose();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for open self.
         ////////////////////////////////////////////////////////////////////////////////
-        public open(): void {
+        public open(openData: any): void {
+            if (this.getIsOpening()) {
+                Logger.warn(`%cUiPanel.open() it is opening already: ${this.skinName}`, `background:#FFDDDD;`);
+                this.close();
+            }
+
+            if (this._getIsRunningClose()) {
+                Logger.warn(`%cUiPanel.open() it is running close: ${this.skinName}`, `background:#FFDDDD;`);
+                this._setCachedOpenFunc(() => this.open(openData));
+                return;
+            }
+
+            this._setOpenData(openData);
+
             const layer = Utility.StageManager.getLayer(this._LAYER_TYPE);
             (this._IS_EXCLUSIVE) && (layer.closeAllPanels(this));
             (!this.parent) && (layer.addChild(this));
 
-            this._isCalledOpen = true;
             this._doOpen();
         }
 
         private _doOpen(): void {
-            if (this._checkIsReadyForOpen()) {
+            if (!this._checkIsReadyForOpen()) {
+                return;
+            }
+
+            if (!this.getIsOpening()) {
+                this._setIsOpening(true);
                 Logger.warn("Panel opened: " + this.skinName);
-                this._isCalledOpen = false;
-
-                this._setAutoAdjustHeightEnabled(this._isAutoAdjustHeight);
-                this._setTouchMaskEnabled(this._isTouchMaskEnabled);
-
-                if (!this._isEverOpened) {
-                    this._isEverOpened = true;
-                    this._onFirstOpened();
-                }
-
-                if (!this.getIsOpening()) {
-                    this._setIsOpening(true);
-                    this._registerListeners();
-                }
 
                 this._onOpened();
+                this._registerListeners();
+                this.width = Utility.StageManager.getDesignWidth();
+                this._handleAutoAdjustHeight();
+                this._handleTouchMask();
             }
         }
 
-        protected _onFirstOpened(): void {
-        }
-
-        protected _onOpened(): void {
-        }
+        protected _onOpened(): void {}
 
         private _checkIsReadyForOpen(): boolean {
             return (this.stage != null)
                 && (this._isChildrenCreated)
-                && (this._isSkinLoaded)
-                && (this._isCalledOpen);
+                && (this._isSkinLoaded);
+        }
+
+        private _setOpenData(data: any): void {
+            this._openData = data;
+        }
+        protected _getOpenData<T>(): T {
+            return this._openData;
         }
 
         public getIsOpening(): boolean {
@@ -117,54 +129,103 @@ namespace TinyWars.GameUi {
             this._isOpening = opening;
         }
 
+        private _setCachedOpenFunc(func: (() => void) | undefined): void {
+            this._cachedOpenFunc = func;
+        }
+        private _getCachedOpenFunc(): (() => void) | undefined {
+            return this._cachedOpenFunc;
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for close self.
         ////////////////////////////////////////////////////////////////////////////////
-        public close(): void {
-            if (this.getIsOpening()) {
-                this._doClose();
+        public async close(): Promise<void> {
+            if (!this.getIsOpening()) {
+                return;
+            }
+
+            this._setCachedOpenFunc(undefined);
+
+            if (this._getIsRunningClose()) {
+                return;
+            }
+            this._setIsRunningClose(true);
+
+            await this._doClose();
+            (this.parent) && (this.parent.removeChild(this));
+            this._setOpenData(undefined);
+
+            this._setIsRunningClose(false);
+
+            const func = this._getCachedOpenFunc();
+            if (func) {
+                this._setCachedOpenFunc(undefined);
+
+                Logger.warn(`%cUiPanel.close() calling cached open func: ${this.skinName}`, `background:#FFDDDD;`);
+                func();
             }
         }
 
-        private _doClose(): void {
-            (this.parent) && (this.parent.removeChild(this));
-
+        private async _doClose(): Promise<void> {
             if (this.getIsOpening()) {
                 this._setIsOpening(false);
+
                 this._unregisterListeners();
+                this._setUiListenerArray(undefined);
+                this._setNotifyListenerArray(undefined);
+                this._setCallbackOnTouchedMask(undefined);
+                await this._onClosed();
             }
-
-            this._onClosed();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {}
+
+        private _getIsRunningClose(): boolean {
+            return this._isRunningClose;
+        }
+        private _setIsRunningClose(isRunning: boolean): void {
+            this._isRunningClose = isRunning;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
-        // Other functions.
+        // Auto adjust height.
         ////////////////////////////////////////////////////////////////////////////////
-        public checkIsAutoAdjustHeight(): boolean {
+        public getIsAutoAdjustHeight(): boolean {
             return this._isAutoAdjustHeight;
         }
-
-        protected _setAutoAdjustHeightEnabled(enabled = true): void {
+        protected _setIsAutoAdjustHeight(enabled = true): void {
             this._isAutoAdjustHeight = enabled;
-
-            if (enabled) {
+            this._handleAutoAdjustHeight();
+        }
+        private _handleAutoAdjustHeight(): void {
+            if (this.getIsAutoAdjustHeight()) {
                 this.height = Utility.StageManager.getStage().stageHeight;
             }
         }
 
-        protected _setTouchMaskEnabled(enabled = true): void {
+        ////////////////////////////////////////////////////////////////////////////////
+        // Touch mask.
+        ////////////////////////////////////////////////////////////////////////////////
+        protected _setIsTouchMaskEnabled(enabled = true): void {
             this._isTouchMaskEnabled = enabled;
+            this._handleTouchMask();
+        }
+        protected _getIsTouchMaskEnabled(): boolean {
+            return this._isTouchMaskEnabled;
+        }
+        private _handleTouchMask(): void {
+            if (!this._getIsTouchMaskEnabled()) {
+                const mask = this._touchMask;
+                if (mask) {
+                    mask.removeEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedTouchMask, this);
+                    (mask.parent) && (mask.parent.removeChild(mask));
+                }
 
-            if (!enabled) {
-                (this._touchMask) && (this._touchMask.parent) && (this._touchMask.parent.removeChild(this._touchMask));
             } else {
                 if (!this._touchMask) {
                     const newMask        = new eui.Group();
-                    newMask.width        = Utility.StageManager.DESIGN_WIDTH;
-                    newMask.height       = Utility.StageManager.DESIGN_MAX_HEIGHT;
+                    newMask.width        = Utility.StageManager.getDesignWidth();
+                    newMask.height       = Utility.StageManager.getDesignMaxHeight();
                     newMask.touchEnabled = true;
                     newMask.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedTouchMask, this);
                     this._touchMask = newMask;
@@ -173,27 +234,67 @@ namespace TinyWars.GameUi {
             }
         }
 
+        protected _setIsCloseOnTouchedMask(isClose = true): void {
+            this._isCloseOnTouchedMask = isClose;
+        }
+        protected _getIsCloseOnTouchedMask(): boolean {
+            return this._isCloseOnTouchedMask;
+        }
+        protected _setCallbackOnTouchedMask(callback: (() => void) | undefined): void {
+            this._callbackOnTouchedMask = callback;
+        }
+        protected _getCallbackOnTouchedMask(): (() => void) | undefined {
+            return this._callbackOnTouchedMask;
+        }
         private _onTouchedTouchMask(e: egret.TouchEvent): void {
-            this._callbackForTouchMask && this._callbackForTouchMask();
+            const callback = this._getCallbackOnTouchedMask();
+            if (callback) {
+                callback();
+            }
+
+            if (this._getIsCloseOnTouchedMask()) {
+                this.close();
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+        // UI / notify listeners.
+        ////////////////////////////////////////////////////////////////////////////////
+        protected _setUiListenerArray(array: UiListener[]): void {
+            this._uiListenerArray = array;
+        }
+        protected _getUiListenerArray(): UiListener[] | undefined {
+            return this._uiListenerArray;
+        }
+        protected _setNotifyListenerArray(array: Utility.Notify.Listener[]): void {
+            this._notifyListenerArray = array;
+        }
+        protected _getNotifyListenerArray(): Utility.Notify.Listener[] | undefined {
+            return this._notifyListenerArray;
         }
 
         private _registerListeners(): void {
-            if (this._notifyListeners) {
-                Utility.Notify.addEventListeners(this._notifyListeners, this);
+            const notifyListenerArray = this._getNotifyListenerArray();
+            if (notifyListenerArray) {
+                Utility.Notify.addEventListeners(notifyListenerArray, this);
             }
-            if (this._uiListeners) {
-                for (const l of this._uiListeners) {
+
+            const uiListenerArray = this._getUiListenerArray();
+            if (uiListenerArray) {
+                for (const l of uiListenerArray) {
                     l.ui.addEventListener(l.eventType || egret.TouchEvent.TOUCH_TAP, l.callback, l.thisObject || this);
                 }
             }
         }
-
         private _unregisterListeners(): void {
-            if (this._notifyListeners) {
-                Utility.Notify.removeEventListeners(this._notifyListeners, this);
+            const notifyListenerArray = this._getNotifyListenerArray();
+            if (notifyListenerArray) {
+                Utility.Notify.removeEventListeners(notifyListenerArray, this);
             }
-            if (this._uiListeners) {
-                for (const l of this._uiListeners) {
+
+            const uiListenerArray = this._getUiListenerArray();
+            if (uiListenerArray) {
+                for (const l of uiListenerArray) {
                     l.ui.removeEventListener(l.eventType || egret.TouchEvent.TOUCH_TAP, l.callback, l.thisObject || this);
                 }
             }
