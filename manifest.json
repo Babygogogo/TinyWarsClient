@@ -135,7 +135,7 @@
 		"bin-debug/modules/mapEditor/view/MeActionPlannerView.js",
 		"bin-debug/modules/mapEditor/view/MeAddWarEventToRulePanel.js",
 		"bin-debug/modules/mapEditor/view/MeAvailableCoPanel.js",
-		"bin-debug/modules/mapEditor/view/MeBackgroundpanel.js",
+		"bin-debug/modules/mapEditor/view/MeBackgroundPanel.js",
 		"bin-debug/modules/mapEditor/view/MeChooseTileBasePanel.js",
 		"bin-debug/modules/mapEditor/view/MeChooseTileObjectPanel.js",
 		"bin-debug/modules/mapEditor/view/MeChooseUnitPanel.js",
