@@ -494,11 +494,12 @@ namespace TinyWars.WarEvent {
                 return;
             }
 
-            const errorTips = getErrorTipsForAddUnit({
-                dataForAddUnit  : data.dataForAddUnit,
+            const dataForAddUnit    = data.dataForAddUnit;
+            const errorTips         = getErrorTipsForAddUnit({
+                dataForAddUnit,
                 war             : data.war,
             });
-            label.text      = errorTips || Lang.getText(Lang.Type.B0493);
+            label.text      = `${data.action.WarEventActionAddUnit.unitArray.indexOf(dataForAddUnit) + 1}. ${errorTips || Lang.getText(Lang.Type.B0493)}`;
             label.textColor = errorTips ? ColorValue.Red : ColorValue.Green;
         }
         private _updateComponentsForCanBeBlockedByUnit(): void {
