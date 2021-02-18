@@ -94,7 +94,6 @@ namespace TinyWars.MapEditor.MeUtility {
             seedRandomInitialState  : new Math.seedrandom(null, { state: true }).state(),
             seedRandomCurrentState  : null,
             executedActions         : null,
-            executedActionsCount    : 0,
             remainingVotesForDraw   : null,
             warEventManager         : {
                 warEventFullData    : mapRawData.warEventFullData,

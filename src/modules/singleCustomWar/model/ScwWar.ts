@@ -12,7 +12,6 @@ namespace TinyWars.SingleCustomWar {
 
     export class ScwWar extends SinglePlayerWar.SpwWar {
         private _settingsForSinglePlayer    : ISettingsForScw;
-        private _executedActions            : IWarActionContainer[];
         private _saveSlotIndex              : number;
         private _saveSlotComment            : string;
 
@@ -42,20 +41,13 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
-            const executedActionsCount  = data.executedActionsCount;
-            const executedActions       = data.executedActions || [];
-            if ((!settingsForScw.isCheating) && (executedActionsCount !== executedActions.length)) {
-                Logger.error(`ScwWar.init() nextActionId !== executedActions.length! nextActionId: ${executedActionsCount}`);
-                return undefined;
-            }
-
             const seedRandomInitialState = data.seedRandomInitialState;
             if ((!settingsForScw.isCheating) && (seedRandomInitialState == null)) {
                 Logger.error(`ScwWar.init() empty seedRandomInitialState.`);
                 return undefined;
             }
 
-            const seedRandomCurrentState = executedActionsCount === 0 ? seedRandomInitialState : data.seedRandomCurrentState;
+            const seedRandomCurrentState = (data.executedActions || []).length === 0 ? seedRandomInitialState : data.seedRandomCurrentState;
             if (seedRandomCurrentState == null) {
                 Logger.error(`ScwWar.init() empty seedRandomCurrentState.`);
                 return undefined;
@@ -105,7 +97,6 @@ namespace TinyWars.SingleCustomWar {
 
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: seedRandomCurrentState }));
             this._setSeedRandomInitialState(seedRandomInitialState);
-            this._setAllExecutedActions(executedActions);
             this._setSettingsForSinglePlayer(settingsForScw);
             this._setPlayerManager(playerManager);
             this._setTurnManager(turnManager);
@@ -139,12 +130,6 @@ namespace TinyWars.SingleCustomWar {
             const settingsForScw = this.getSettingsForScw();
             if (settingsForScw == null) {
                 Logger.error(`ScwWar.serialize() empty settingsForScw.`);
-                return undefined;
-            }
-
-            const executedActionsCount = this.getExecutedActionsCount();
-            if (executedActionsCount == null) {
-                Logger.error(`ScwWar.serialize() empty executedActionsCount.`);
                 return undefined;
             }
 
@@ -203,8 +188,7 @@ namespace TinyWars.SingleCustomWar {
                 warId                       : this.getWarId(),
                 seedRandomInitialState,
                 seedRandomCurrentState,
-                executedActions             : isCheating ? [] : this._getAllExecutedActions(),
-                executedActionsCount,
+                executedActions             : this._getAllExecutedActions(),
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
                 warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
@@ -223,12 +207,6 @@ namespace TinyWars.SingleCustomWar {
             const settingsForScw = this.getSettingsForScw();
             if (settingsForScw == null) {
                 Logger.error(`ScwWar.serializeForSimulation() empty settingsForScw.`);
-                return undefined;
-            }
-
-            const executedActionsCount = this.getExecutedActionsCount();
-            if (executedActionsCount == null) {
-                Logger.error(`ScwWar.serializeForSimulation() empty executedActionsCount.`);
                 return undefined;
             }
 
@@ -291,7 +269,6 @@ namespace TinyWars.SingleCustomWar {
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),
                 executedActions             : [],
-                executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
                 warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
@@ -443,33 +420,6 @@ namespace TinyWars.SingleCustomWar {
             }
 
             BwSettingsHelper.setLuckUpperLimit(warRule, playerIndex, value);
-        }
-
-        private _setAllExecutedActions(actions: IWarActionContainer[]): void {
-            this._executedActions = actions;
-        }
-        private _getAllExecutedActions(): IWarActionContainer[] | null {
-            return this._executedActions;
-        }
-        public addExecutedAction(action: IWarActionContainer): void {
-            const executedActions = this._getAllExecutedActions();
-            if (executedActions == null) {
-                Logger.error(`ScwWar.addExecutedAction() empty executedActions.`);
-                return undefined;
-            }
-
-            const executedActionsCount = this.getExecutedActionsCount();
-            if (executedActionsCount !== executedActions.length) {
-                Logger.error(`ScwWar.addExecutedAction() invalid executedActionsCount!`);
-                return undefined;
-            }
-            if (executedActionsCount !== action.actionId) {
-                Logger.error(`ScwWar.addExecutedAction() invalid actionId!`);
-                return undefined;
-            }
-
-            executedActions.push(Helpers.deepClone(action));
-            this.setExecutedActionsCount(executedActionsCount + 1);
         }
 
         private _setSettingsForSinglePlayer(settings: ISettingsForScw): void {

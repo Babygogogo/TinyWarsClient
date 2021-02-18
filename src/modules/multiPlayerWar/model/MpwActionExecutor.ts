@@ -64,7 +64,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         }
 
         war.setIsExecutingAction(true);
-        war.setExecutedActionsCount(war.getExecutedActionsCount() + 1);
+        war.addEmptyExecutedAction();
         await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
         war.setIsExecutingAction(false);
 

@@ -128,12 +128,6 @@ namespace TinyWars.MapEditor {
                 return undefined;
             }
 
-            const executedActionsCount = this.getExecutedActionsCount();
-            if (executedActionsCount == null) {
-                Logger.error(`MeWar.serializeForSimulation() empty executedActionsCount.`);
-                return undefined;
-            }
-
             const warEventManager = this.getWarEventManager();
             if (warEventManager == null) {
                 Logger.error(`MeWar.serializeForSimulation() empty warEventManager.`);
@@ -193,7 +187,6 @@ namespace TinyWars.MapEditor {
                 seedRandomInitialState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),
                 seedRandomCurrentState      : null,
                 executedActions             : [],
-                executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
                 warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,

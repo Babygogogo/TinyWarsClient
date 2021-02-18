@@ -18,7 +18,6 @@ namespace TinyWars.ReplayWar {
     }
 
     export class RwWar extends SinglePlayerWar.SpwWar {
-        private _executedActions                : IWarActionContainer[];
         private _settingsForMcw                 : ProtoTypes.WarSettings.ISettingsForMcw;
         private _settingsForScw                 : ProtoTypes.WarSettings.ISettingsForScw;
         private _settingsForRmw                 : ProtoTypes.WarSettings.ISettingsForRmw;
@@ -45,12 +44,6 @@ namespace TinyWars.ReplayWar {
             const configVersion = settingsForCommon.configVersion;
             if (configVersion == null) {
                 Logger.error(`ReplayWar.init() empty configVersion.`);
-                return undefined;
-            }
-
-            const executedActions = warData.executedActions;
-            if (executedActions == null) {
-                Logger.error(`ReplayWar.executedActions() empty executedActions.`);
                 return undefined;
             }
 
@@ -114,7 +107,6 @@ namespace TinyWars.ReplayWar {
             this._settingsForRmw = warData.settingsForRmw;
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: seedRandomCurrentState }));
             this._setSeedRandomInitialState(seedRandomInitialState);
-            this._setAllExecutedActions(executedActions);
             this.setNextActionId(0);
             this._setPlayerManager(playerManager);
             this._setTurnManager(turnManager);
@@ -217,7 +209,6 @@ namespace TinyWars.ReplayWar {
                     seedRandomInitialState      : null,
                     seedRandomCurrentState,
                     executedActions             : null,
-                    executedActionsCount        : null,
                     remainingVotesForDraw       : this.getRemainingVotesForDraw(),
                     warEventManager             : Helpers.deepClone(serialWarEventManager),
                     playerManager               : serialPlayerManager,
@@ -237,12 +228,6 @@ namespace TinyWars.ReplayWar {
             const seedRandomCurrentState = this._getSeedRandomCurrentState();
             if (seedRandomCurrentState == null) {
                 Logger.error(`ReplayWar.serializeForSimulation() empty seedRandomCurrentState.`);
-                return undefined;
-            }
-
-            const executedActionsCount = this.getExecutedActionsCount();
-            if (executedActionsCount == null) {
-                Logger.error(`ReplayWar.serializeForSimulation() empty executedActionsCount`);
                 return undefined;
             }
 
@@ -311,7 +296,6 @@ namespace TinyWars.ReplayWar {
                 seedRandomInitialState      : null,
                 seedRandomCurrentState,
                 executedActions             : [],
-                executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
                 warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
@@ -461,16 +445,10 @@ namespace TinyWars.ReplayWar {
         }
 
         public getTotalActionsCount(): number {
-            return this._getAllExecutedActions().length;
+            return this.getExecutedActionsCount();
         }
         public getNextAction(): IWarActionContainer {
-            return this._getAllExecutedActions()[this.getNextActionId()];
-        }
-        private _setAllExecutedActions(actions: IWarActionContainer[]): void {
-            this._executedActions = actions;
-        }
-        private _getAllExecutedActions(): IWarActionContainer[] {
-            return this._executedActions;
+            return this.getExecutedAction(this.getNextActionId());
         }
 
         public getRandomNumber(): number | undefined {

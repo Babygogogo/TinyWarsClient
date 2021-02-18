@@ -3,15 +3,17 @@ namespace TinyWars.BaseWar {
     import Logger                   = Utility.Logger;
     import Types                    = Utility.Types;
     import ProtoTypes               = Utility.ProtoTypes;
+    import Helpers                  = Utility.Helpers;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import IWarSettingsForCommon    = ProtoTypes.WarSettings.ISettingsForCommon;
+    import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
 
     export abstract class BwWar {
         private _settingsForCommon          : IWarSettingsForCommon;
 
         private _warId                      : number;
-        private _executedActionsCount       : number;
         private _remainingVotesForDraw      : number | null | undefined;
+        private _executedActions            : IWarActionContainer[];
 
         private _playerManager              : BwPlayerManager;
         private _field                      : BwField;
@@ -38,12 +40,6 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const executedActionsCount = data.executedActionsCount;
-            if (executedActionsCount == null) {
-                Logger.error(`BwWar._baseInit() empty executedActionsCount.`);
-                return undefined;
-            }
-
             const dataForWarEventManager = data.warEventManager;
             if (dataForWarEventManager == null) {
                 Logger.error(`BwWar._baseInit() empty dataForWarEventManager.`);
@@ -58,7 +54,7 @@ namespace TinyWars.BaseWar {
 
             this._setWarId(data.warId);
             this._setSettingsForCommon(settingsForCommon);
-            this.setExecutedActionsCount(executedActionsCount);
+            this._setAllExecutedActions(data.executedActions || []);
             this._setWarEventManager(warEventManager);
             this.setRemainingVotesForDraw(data.remainingVotesForDraw);
 
@@ -252,10 +248,27 @@ namespace TinyWars.BaseWar {
         }
 
         public getExecutedActionsCount(): number {
-            return this._executedActionsCount;
+            return this._getAllExecutedActions().length;
         }
-        public setExecutedActionsCount(count: number): void {
-            this._executedActionsCount = count;
+        private _setAllExecutedActions(actions: IWarActionContainer[]): void {
+            this._executedActions = actions;
+        }
+        protected _getAllExecutedActions(): IWarActionContainer[] | null {
+            return this._executedActions;
+        }
+        public addExecutedAction(action: IWarActionContainer): void {
+            if (this.getExecutedActionsCount() !== action.actionId) {
+                Logger.error(`BwWar.addExecutedAction() invalid actionId.`);
+                return;
+            }
+
+            this._getAllExecutedActions().push(Helpers.deepClone(action));
+        }
+        public addEmptyExecutedAction(): void {
+            this._getAllExecutedActions().push({});
+        }
+        public getExecutedAction(actionId: number): IWarActionContainer | undefined {
+            return this._getAllExecutedActions()[actionId];
         }
 
         protected _setPlayerManager(manager: BwPlayerManager): void {

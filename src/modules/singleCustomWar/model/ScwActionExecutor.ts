@@ -57,7 +57,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
         war.setIsExecutingAction(true);
         if (war.getIsSinglePlayerCheating()) {
-            war.setExecutedActionsCount(war.getExecutedActionsCount() + 1);
+            war.addEmptyExecutedAction();
         } else {
             war.addExecutedAction(container);
         }

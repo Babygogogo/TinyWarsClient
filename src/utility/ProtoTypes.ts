@@ -8109,9 +8109,6 @@ export declare namespace WarSerialization {
         /** SerialWar executedActions */
         executedActions?: (WarAction.IWarActionContainer[]|null);
 
-        /** SerialWar executedActionsCount */
-        executedActionsCount?: (number|null);
-
         /** SerialWar remainingVotesForDraw */
         remainingVotesForDraw?: (number|null);
 
@@ -8163,9 +8160,6 @@ export declare namespace WarSerialization {
 
         /** SerialWar executedActions. */
         public executedActions: WarAction.IWarActionContainer[];
-
-        /** SerialWar executedActionsCount. */
-        public executedActionsCount: number;
 
         /** SerialWar remainingVotesForDraw. */
         public remainingVotesForDraw: number;
