@@ -42,7 +42,7 @@ namespace TinyWars.Utility.FlowManager {
         WarMap.WarMapProxy.init();
         WarMap.WarMapModel.init();
         MultiCustomRoom.McrProxy.init();
-        RankMatchRoom.RmrProxy.init();
+        MultiRankRoom.MrrProxy.init();
         ReplayWar.RwProxy.init();
         RwModel.init();
         SingleCustomRoom.ScrProxy.init();
@@ -146,14 +146,14 @@ namespace TinyWars.Utility.FlowManager {
         Broadcast.BroadcastPanel.show();
     }
 
-    export function gotoRmrMyWarListPanel(): void {
+    export function gotoMrrMyWarListPanel(): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
         Lobby.LobbyTopPanel.show();
-        RankMatchRoom.RmrMyWarListPanel.show();
+        MultiRankRoom.MrrMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
     }
     export function gotoMcrMyWarListPanel(): void {

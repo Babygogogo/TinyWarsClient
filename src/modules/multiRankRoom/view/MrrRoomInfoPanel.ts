@@ -1,34 +1,33 @@
 
-namespace TinyWars.RankMatchRoom {
+namespace TinyWars.MultiRankRoom {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
+    import FloatText    = Utility.FloatText;
     import ProtoTypes   = Utility.ProtoTypes;
-    import MpwProxy     = MultiPlayerWar.MpwProxy;
-    import IMpwWarInfo  = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
+    import NetMessage   = ProtoTypes.NetMessage;
 
-    type OpenDataForRmrWarInfoPanel = {
-        warInfo : IMpwWarInfo;
+    type OpenDataForMrrRoomInfoPanel = {
+        roomId  : number;
     }
-    export class RmrWarInfoPanel extends GameUi.UiPanel {
+    export class MrrRoomInfoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: RmrWarInfoPanel;
+        private static _instance: MrrRoomInfoPanel;
 
         private _tabSettings    : TinyWars.GameUi.UiTab;
         private _labelMenuTitle : TinyWars.GameUi.UiLabel;
-        private _btnContinueWar : TinyWars.GameUi.UiButton;
         private _btnBack        : TinyWars.GameUi.UiButton;
 
-        public static show(openData: OpenDataForRmrWarInfoPanel): void {
-            if (!RmrWarInfoPanel._instance) {
-                RmrWarInfoPanel._instance = new RmrWarInfoPanel();
+        public static show(openData: OpenDataForMrrRoomInfoPanel): void {
+            if (!MrrRoomInfoPanel._instance) {
+                MrrRoomInfoPanel._instance = new MrrRoomInfoPanel();
             }
-            RmrWarInfoPanel._instance.open(openData);
+            MrrRoomInfoPanel._instance.open(openData);
         }
         public static async hide(): Promise<void> {
-            if (RmrWarInfoPanel._instance) {
-                await RmrWarInfoPanel._instance.close();
+            if (MrrRoomInfoPanel._instance) {
+                await MrrRoomInfoPanel._instance.close();
             }
         }
 
@@ -36,41 +35,45 @@ namespace TinyWars.RankMatchRoom {
             super();
 
             this._setIsAutoAdjustHeight(true);
-            this.skinName = "resource/skins/rankMatchRoom/RmrWarInfoPanel.exml";
+            this.skinName = "resource/skins/multiRankRoom/MrrRoomInfoPanel.exml";
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
-                { ui: this._btnContinueWar, callback: this._onTouchedBtnContinueWar },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgMrrDeleteRoom,   callback: this._onMsgMrrDeleteRoom },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
             this._btnBack.setTextColor(0x00FF00);
-            this._btnContinueWar.setTextColor(0x00FF00);
-
-            const warInfo = this._getOpenData<OpenDataForRmrWarInfoPanel>().warInfo;
-            this._tabSettings.bindData([
-                {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass   : RmrWarBasicSettingsPage,
-                    pageData    : {
-                        warInfo
-                    } as OpenDataForRmrWarBasicSettingsPage,
-                },
-                {
-                    tabItemData: { name: Lang.getText(Lang.Type.B0003) },
-                    pageClass  : RmrWarAdvancedSettingsPage,
-                    pageData    : {
-                        warInfo
-                    } as OpenDataForWarAdvancedSettingsPage,
-                },
-            ]);
 
             this._updateComponentsForLanguage();
+
+            const roomId = this._getOpenData<OpenDataForMrrRoomInfoPanel>().roomId;
+            if ((await MrrModel.getRoomInfo(roomId)) == null) {
+                this.close();
+                MrrMyRoomListPanel.show();
+            } else {
+                this._tabSettings.bindData([
+                    {
+                        tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                        pageClass   : MrrRoomBasicSettingsPage,
+                        pageData    : {
+                            roomId
+                        } as OpenDataForMrrRoomBasicSettingsPage,
+                    },
+                    {
+                        tabItemData: { name: Lang.getText(Lang.Type.B0003) },
+                        pageClass  : MrrRoomAdvancedSettingsPage,
+                        pageData    : {
+                            roomId
+                        } as OpenDataForMrrRoomAdvancedSettingsPage,
+                    },
+                ]);
+            }
         }
 
         protected async _onClosed(): Promise<void> {
@@ -82,27 +85,28 @@ namespace TinyWars.RankMatchRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             this.close();
-            RmrMyWarListPanel.show();
-        }
-
-        private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
-            const warInfo = this._getOpenData<OpenDataForRmrWarInfoPanel>().warInfo;
-            if (warInfo) {
-                MpwProxy.reqMcwCommonContinueWar(warInfo.warId);
-            }
+            MrrMyRoomListPanel.show();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }
 
+        private _onMsgMrrDeleteRoom(e: egret.Event): void {
+            const data = e.data as NetMessage.MsgMrrDeleteRoom.IS;
+            if (data.roomId === this._getOpenData<OpenDataForMrrRoomInfoPanel>().roomId) {
+                FloatText.show(Lang.getText(Lang.Type.A0019));
+                this.close();
+                MrrMyRoomListPanel.show();
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0024);
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0398);
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-            this._btnContinueWar.label  = Lang.getText(Lang.Type.B0401);
         }
     }
 

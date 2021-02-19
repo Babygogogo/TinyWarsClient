@@ -1,18 +1,18 @@
 
-namespace TinyWars.RankMatchRoom {
+namespace TinyWars.MultiRankRoom {
     import Notify       = Utility.Notify;
     import Types        = Utility.Types;
     import Lang         = Utility.Lang;
     import WarMapModel  = WarMap.WarMapModel;
 
-    type OpenDataForRmrPreviewMapListPanel = {
+    type OpenDataForMrrPreviewMapListPanel = {
         hasFog  : boolean;
     }
-    export class RmrPreviewMapListPanel extends GameUi.UiPanel {
+    export class MrrPreviewMapListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: RmrPreviewMapListPanel;
+        private static _instance: MrrPreviewMapListPanel;
 
         private _listMap        : GameUi.UiScrollList;
         private _zoomMap        : GameUi.UiZoomableComponent;
@@ -31,27 +31,27 @@ namespace TinyWars.RankMatchRoom {
         private _dataForList        : DataForMapNameRenderer[] = [];
         private _selectedMapId      : number;
 
-        public static show(openData: OpenDataForRmrPreviewMapListPanel): void {
-            if (!RmrPreviewMapListPanel._instance) {
-                RmrPreviewMapListPanel._instance = new RmrPreviewMapListPanel();
+        public static show(openData: OpenDataForMrrPreviewMapListPanel): void {
+            if (!MrrPreviewMapListPanel._instance) {
+                MrrPreviewMapListPanel._instance = new MrrPreviewMapListPanel();
             }
 
-            RmrPreviewMapListPanel._instance.open(openData);
+            MrrPreviewMapListPanel._instance.open(openData);
         }
         public static async hide(): Promise<void> {
-            if (RmrPreviewMapListPanel._instance) {
-                await RmrPreviewMapListPanel._instance.close();
+            if (MrrPreviewMapListPanel._instance) {
+                await MrrPreviewMapListPanel._instance.close();
             }
         }
-        public static getInstance(): RmrPreviewMapListPanel {
-            return RmrPreviewMapListPanel._instance;
+        public static getInstance(): MrrPreviewMapListPanel {
+            return MrrPreviewMapListPanel._instance;
         }
 
         public constructor() {
             super();
 
             this._setIsAutoAdjustHeight();
-            this.skinName = "resource/skins/rankMatchRoom/RmrPreviewMapListPanel.exml";
+            this.skinName = "resource/skins/multiRankRoom/MrrPreviewMapListPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -119,7 +119,7 @@ namespace TinyWars.RankMatchRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            RmrMainMenuPanel.show();
+            MrrMainMenuPanel.show();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -137,7 +137,7 @@ namespace TinyWars.RankMatchRoom {
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
             const data      : DataForMapNameRenderer[] = [];
-            const hasFog    = this._getOpenData<OpenDataForRmrPreviewMapListPanel>().hasFog;
+            const hasFog    = this._getOpenData<OpenDataForMrrPreviewMapListPanel>().hasFog;
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
                 const mapExtraData      = mapBriefData.mapExtraData;
                 const mapAvailability   = mapExtraData.mapComplexInfo.availability;
@@ -195,7 +195,7 @@ namespace TinyWars.RankMatchRoom {
     type DataForMapNameRenderer = {
         mapId   : number;
         mapName : string;
-        panel   : RmrPreviewMapListPanel;
+        panel   : MrrPreviewMapListPanel;
     }
 
     class MapNameRenderer extends GameUi.UiListItemRenderer {

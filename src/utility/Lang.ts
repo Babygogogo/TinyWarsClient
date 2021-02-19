@@ -4101,8 +4101,8 @@ namespace TinyWars.Utility.Lang {
             case Types.WarType.McwStd   : return getText(Type.B0417);
             case Types.WarType.McwFog   : return getText(Type.B0418);
             case Types.WarType.Me       : return getText(Type.B0419);
-            case Types.WarType.RmwStd   : return getText(Type.B0415);
-            case Types.WarType.RmwFog   : return getText(Type.B0416);
+            case Types.WarType.MrwStd   : return getText(Type.B0415);
+            case Types.WarType.MrwFog   : return getText(Type.B0416);
             case Types.WarType.Scw      : return getText(Type.B0254);
             case Types.WarType.Wrw      : return getText(Type.B0257);
             default                     : return null;

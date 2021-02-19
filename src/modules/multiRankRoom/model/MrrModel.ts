@@ -1,18 +1,18 @@
 
-namespace TinyWars.RankMatchRoom.RmrModel {
+namespace TinyWars.MultiRankRoom.MrrModel {
     import ProtoTypes       = Utility.ProtoTypes;
     import Notify           = Utility.Notify;
     import Logger           = Utility.Logger;
     import ConfigManager    = Utility.ConfigManager;
     import BwSettingsHelper = BaseWar.BwSettingsHelper;
     import NetMessage       = ProtoTypes.NetMessage;
-    import IRmrRoomInfo     = ProtoTypes.RankMatchRoom.IRmrRoomInfo;
+    import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     let _maxConcurrentCountForStd   = 0;
     let _maxConcurrentCountForFog   = 0;
-    const _allRoomDict              = new Map<number, IRmrRoomInfo>();
-    const _roomInfoRequests         = new Map<number, ((info: NetMessage.MsgRmrGetRoomPublicInfo.IS | undefined | null) => void)[]>();
+    const _allRoomDict              = new Map<number, IMrrRoomInfo>();
+    const _roomInfoRequests         = new Map<number, ((info: NetMessage.MsgMrrGetRoomPublicInfo.IS | undefined | null) => void)[]>();
 
     export function setMaxConcurrentCount(hasFog: boolean, count: number): void {
         if (hasFog) {
@@ -25,7 +25,7 @@ namespace TinyWars.RankMatchRoom.RmrModel {
         return hasFog ? _maxConcurrentCountForFog : _maxConcurrentCountForStd;
     }
 
-    export function setRoomInfo(roomInfo: IRmrRoomInfo, needNotify: boolean): void {
+    export function setRoomInfo(roomInfo: IMrrRoomInfo, needNotify: boolean): void {
         const roomId        = roomInfo.roomId;
         const oldRoomInfo   = _allRoomDict.get(roomId);
         _allRoomDict.set(roomId, roomInfo);
@@ -34,14 +34,14 @@ namespace TinyWars.RankMatchRoom.RmrModel {
             const isMyOldRoom = (oldRoomInfo != null) && (checkIsMyRoom(oldRoomInfo));
             const isMyNewRoom = checkIsMyRoom(roomInfo);
             if ((!isMyOldRoom) && (isMyNewRoom)) {
-                Notify.dispatch(Notify.Type.RmrMyRoomAdded);
+                Notify.dispatch(Notify.Type.MrrMyRoomAdded);
             }
             if ((isMyOldRoom) && (!isMyNewRoom)) {
-                Notify.dispatch(Notify.Type.RmrMyRoomDeleted);
+                Notify.dispatch(Notify.Type.MrrMyRoomDeleted);
             }
         }
     }
-    export function getRoomInfo(roomId: number): Promise<IRmrRoomInfo | undefined | null> {
+    export function getRoomInfo(roomId: number): Promise<IMrrRoomInfo | undefined | null> {
         if (roomId == null) {
             return new Promise((resolve, reject) => resolve(null));
         }
@@ -61,8 +61,8 @@ namespace TinyWars.RankMatchRoom.RmrModel {
             const callbackOnSucceed = (e: egret.Event): void => {
                 const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
                 if (data.roomId === roomId) {
-                    Notify.removeEventListener(Notify.Type.MsgRmrGetRoomPublicInfo,         callbackOnSucceed);
-                    Notify.removeEventListener(Notify.Type.MsgRmrGetRoomPublicInfoFailed,   callbackOnFailed);
+                    Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
+                    Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
 
                     for (const cb of _roomInfoRequests.get(roomId)) {
                         cb(data);
@@ -75,8 +75,8 @@ namespace TinyWars.RankMatchRoom.RmrModel {
             const callbackOnFailed = (e: egret.Event): void => {
                 const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
                 if (data.roomId === roomId) {
-                    Notify.removeEventListener(Notify.Type.MsgRmrGetRoomPublicInfo,         callbackOnSucceed);
-                    Notify.removeEventListener(Notify.Type.MsgRmrGetRoomPublicInfoFailed,   callbackOnFailed);
+                    Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
+                    Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
 
                     for (const cb of _roomInfoRequests.get(roomId)) {
                         cb(data);
@@ -87,10 +87,10 @@ namespace TinyWars.RankMatchRoom.RmrModel {
                 }
             };
 
-            Notify.addEventListener(Notify.Type.MsgRmrGetRoomPublicInfo,        callbackOnSucceed);
-            Notify.addEventListener(Notify.Type.MsgRmrGetRoomPublicInfoFailed,  callbackOnFailed);
+            Notify.addEventListener(Notify.Type.MsgMrrGetRoomPublicInfo,        callbackOnSucceed);
+            Notify.addEventListener(Notify.Type.MsgMrrGetRoomPublicInfoFailed,  callbackOnFailed);
 
-            RmrProxy.reqRmrGetRoomPublicInfo(roomId);
+            MrrProxy.reqMrrGetRoomPublicInfo(roomId);
         });
 
         return new Promise((resolve, reject) => {
@@ -102,20 +102,20 @@ namespace TinyWars.RankMatchRoom.RmrModel {
         _allRoomDict.delete(roomId);
 
         if ((roomInfo) && (checkIsMyRoom(roomInfo))) {
-            Notify.dispatch(Notify.Type.RmrMyRoomDeleted);
+            Notify.dispatch(Notify.Type.MrrMyRoomDeleted);
         }
     }
 
-    export function updateWithMyRoomInfoList(roomList: IRmrRoomInfo[]): void {
+    export function updateWithMyRoomInfoList(roomList: IMrrRoomInfo[]): void {
         for (const roomInfo of roomList || []) {
             setRoomInfo(roomInfo, false);
         }
     }
-    export function getAllRoomInfoDict(): Map<number, IRmrRoomInfo> {
+    export function getAllRoomInfoDict(): Map<number, IMrrRoomInfo> {
         return _allRoomDict;
     }
-    export function getMyRoomInfoList(): IRmrRoomInfo[] {
-        const list: IRmrRoomInfo[] = [];
+    export function getMyRoomInfoList(): IMrrRoomInfo[] {
+        const list: IMrrRoomInfo[] = [];
         for (const [, roomInfo] of _allRoomDict) {
             if (checkIsMyRoom(roomInfo)) {
                 list.push(roomInfo);
@@ -147,7 +147,7 @@ namespace TinyWars.RankMatchRoom.RmrModel {
         if (roomInfo.timeForStartSetSelfSettings != null) {
             return !playerData.isReady;
         } else {
-            const arr = roomInfo.settingsForRmw.dataArrayForBanCo;
+            const arr = roomInfo.settingsForMrw.dataArrayForBanCo;
             if ((arr == null) || (arr.every(v => v.srcPlayerIndex !== playerData.playerIndex))) {
                 return true;
             }
@@ -158,7 +158,7 @@ namespace TinyWars.RankMatchRoom.RmrModel {
         let _coId               : number | null | undefined;
         let _unitAndTileSkinId  : number | null | undefined;
 
-        export function resetData(roomInfo: IRmrRoomInfo): void {
+        export function resetData(roomInfo: IMrrRoomInfo): void {
             if (roomInfo.timeForStartSetSelfSettings == null) {
                 setCoId(null);
                 setUnitAndTileSkinId(null);
@@ -179,13 +179,13 @@ namespace TinyWars.RankMatchRoom.RmrModel {
                     const selfPlayerIndex   = selfPlayerData.playerIndex;
                     const availableCoIdList = generateAvailableCoIdList(roomInfo, selfPlayerIndex);
                     if ((availableCoIdList == null) || (!availableCoIdList.length)) {
-                        Logger.error(`RmrModel.SelfSettings.resetData() empty availableCoIdList.`);
+                        Logger.error(`MrrModel.SelfSettings.resetData() empty availableCoIdList.`);
                         return undefined;
                     }
 
                     const availableSkinIdList = generateAvailableSkinIdList(roomInfo);
                     if ((availableSkinIdList == null) || (!availableSkinIdList.length)) {
-                        Logger.error(`RmrModel.SelfSettings.resetData() empty availableSkinIdList.`);
+                        Logger.error(`MrrModel.SelfSettings.resetData() empty availableSkinIdList.`);
                         return undefined;
                     }
 
@@ -208,10 +208,10 @@ namespace TinyWars.RankMatchRoom.RmrModel {
         export function getUnitAndTileSkinId(): number | null | undefined {
             return _unitAndTileSkinId;
         }
-        export function tickUnitAndTileSkinId(roomInfo: IRmrRoomInfo): void {
+        export function tickUnitAndTileSkinId(roomInfo: IMrrRoomInfo): void {
             const availableSkinIdList = generateAvailableSkinIdList(roomInfo);
             if ((availableSkinIdList == null) || (!availableSkinIdList.length)) {
-                Logger.error(`RmrModel.SelfSettings.tickUnitAndTileSkinId() empty availableSkinIdList.`);
+                Logger.error(`MrrModel.SelfSettings.tickUnitAndTileSkinId() empty availableSkinIdList.`);
                 return;
             }
 
@@ -219,40 +219,40 @@ namespace TinyWars.RankMatchRoom.RmrModel {
             setUnitAndTileSkinId(availableSkinIdList[(index + 1) % availableSkinIdList.length]);
         }
 
-        export function generateAvailableCoIdList(roomInfo: IRmrRoomInfo, playerIndex: number): number[] | undefined {
+        export function generateAvailableCoIdList(roomInfo: IMrrRoomInfo, playerIndex: number): number[] | undefined {
             const settingsForCommon = roomInfo.settingsForCommon;
             if (settingsForCommon == null) {
-                Logger.error(`RmrModel.generateAvailableCoIdList() empty settingsForCommon.`);
+                Logger.error(`MrrModel.generateAvailableCoIdList() empty settingsForCommon.`);
                 return undefined;
             }
 
             const configVersion = settingsForCommon.configVersion;
             if (configVersion == null) {
-                Logger.error(`RmrModel.generateAvailableCoIdList() empty configVersion.`);
+                Logger.error(`MrrModel.generateAvailableCoIdList() empty configVersion.`);
                 return undefined;
             }
 
-            const settingsForRmw = roomInfo.settingsForRmw;
-            if (settingsForRmw == null) {
-                Logger.error(`RmrModel.generateAvailableCoIdList() empty settingsForRmw.`);
+            const settingsForMrw = roomInfo.settingsForMrw;
+            if (settingsForMrw == null) {
+                Logger.error(`MrrModel.generateAvailableCoIdList() empty settingsForMrw.`);
                 return undefined;
             }
 
-            const dataArrayForBanCo = settingsForRmw.dataArrayForBanCo;
+            const dataArrayForBanCo = settingsForMrw.dataArrayForBanCo;
             if (dataArrayForBanCo == null) {
-                Logger.error(`RmrModel.generateAvailableCoIdList() empty dataArrayForBanCo.`);
+                Logger.error(`MrrModel.generateAvailableCoIdList() empty dataArrayForBanCo.`);
                 return undefined;
             }
 
             const playerRule = BwSettingsHelper.getPlayerRule(settingsForCommon.warRule, playerIndex);
             if (playerRule == null) {
-                Logger.error(`RmrModel.generateAvailableCoIdList() empty playerRule.`);
+                Logger.error(`MrrModel.generateAvailableCoIdList() empty playerRule.`);
                 return undefined;
             }
 
             const rawAvailableCoIdList = playerRule.availableCoIdArray;
             if (rawAvailableCoIdList == null) {
-                Logger.error(`RmrModel.generateAvailableCoIdList() empty rawAvailableCoIdList.`);
+                Logger.error(`MrrModel.generateAvailableCoIdList() empty rawAvailableCoIdList.`);
                 return undefined;
             }
 
@@ -272,10 +272,10 @@ namespace TinyWars.RankMatchRoom.RmrModel {
             }
             return availableCoIdList;
         }
-        function generateAvailableSkinIdList(roomInfo: IRmrRoomInfo): number[] | undefined {
+        function generateAvailableSkinIdList(roomInfo: IMrrRoomInfo): number[] | undefined {
             const playerDataList = roomInfo.playerDataList;
             if (playerDataList == null) {
-                Logger.error(`RmrModel.SelfSettings.generateAvailableSkinIdList() empty playerDataList.`);
+                Logger.error(`MrrModel.SelfSettings.generateAvailableSkinIdList() empty playerDataList.`);
                 return undefined;
             }
 
@@ -284,7 +284,7 @@ namespace TinyWars.RankMatchRoom.RmrModel {
                 if (playerData.isReady) {
                     const skinId = playerData.unitAndTileSkinId;
                     if (usedSkinIds.has(skinId)) {
-                        Logger.error(`RmrModel.SelfSettings.generateAvailableSkinIdList() duplicated skinId!`);
+                        Logger.error(`MrrModel.SelfSettings.generateAvailableSkinIdList() duplicated skinId!`);
                         return undefined;
                     }
 
@@ -302,7 +302,7 @@ namespace TinyWars.RankMatchRoom.RmrModel {
         }
     }
 
-    function checkIsMyRoom(roomInfo: IRmrRoomInfo): boolean {
+    function checkIsMyRoom(roomInfo: IMrrRoomInfo): boolean {
         const selfUserId = User.UserModel.getSelfUserId();
         return roomInfo.playerDataList.some(v => v.userId === selfUserId);
     }

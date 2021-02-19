@@ -156,7 +156,7 @@ namespace TinyWars.MultiCustomWar {
             return {
                 settingsForCommon,
                 settingsForMcw              : null,
-                settingsForRmw              : null,
+                settingsForMrw              : null,
                 settingsForScw              : { isCheating: true },
                 settingsForWrw              : null,
 

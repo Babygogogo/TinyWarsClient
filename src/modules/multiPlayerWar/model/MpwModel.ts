@@ -30,8 +30,8 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     export function getMyMcwWarInfoList(): IMpwWarInfo[] {
         return getAllMyWarInfoList().filter(v => v.settingsForMcw != null);
     }
-    export function getMyRmwWarInfoList(): IMpwWarInfo[] {
-        return getAllMyWarInfoList().filter(v => v.settingsForRmw != null);
+    export function getMyMrwWarInfoList(): IMpwWarInfo[] {
+        return getAllMyWarInfoList().filter(v => v.settingsForMrw != null);
     }
 
     export function checkIsRedForMyMcwWars(): boolean {
@@ -40,9 +40,9 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
             return warInfo.playerInfoList.some(v => (v.playerIndex === warInfo.playerIndexInTurn) && (v.userId === selfUserId));
         });
     }
-    export function checkIsRedForMyRmwWars(): boolean {
+    export function checkIsRedForMyMrwWars(): boolean {
         const selfUserId = User.UserModel.getSelfUserId();
-        return getMyRmwWarInfoList().some(warInfo => {
+        return getMyMrwWarInfoList().some(warInfo => {
             return warInfo.playerInfoList.some(v => (v.playerIndex === warInfo.playerIndexInTurn) && (v.userId === selfUserId));
         });
     }
@@ -86,7 +86,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
 
         const war = data.settingsForMcw
             ? (await new MultiCustomWar.McwWar().init(data)).startRunning().startRunningView() as MpwWar
-            : (await new RankMatchWar.RmwWar().init(data)).startRunning().startRunningView() as MpwWar;
+            : (await new MultiRankWar.MrwWar().init(data)).startRunning().startRunningView() as MpwWar;
         _setWar(war);
 
         return war;
@@ -120,8 +120,8 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0023),
                     callback: () => {
-                        if (war instanceof RankMatchWar.RmwWar) {
-                            Utility.FlowManager.gotoRmrMyWarListPanel();
+                        if (war instanceof MultiRankWar.MrwWar) {
+                            Utility.FlowManager.gotoMrrMyWarListPanel();
                         } else {
                             Utility.FlowManager.gotoMcrMyWarListPanel();
                         }
@@ -134,8 +134,8 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0035),
                     callback: () => {
-                        if (war instanceof RankMatchWar.RmwWar) {
-                            Utility.FlowManager.gotoRmrMyWarListPanel();
+                        if (war instanceof MultiRankWar.MrwWar) {
+                            Utility.FlowManager.gotoMrrMyWarListPanel();
                         } else {
                             Utility.FlowManager.gotoMcrMyWarListPanel();
                         }

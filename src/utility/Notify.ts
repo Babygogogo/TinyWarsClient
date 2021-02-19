@@ -29,8 +29,8 @@ namespace TinyWars.Utility.Notify {
         ChatPanelClosed,
 
         McrCreateAvailableCoIdListChanged,
-        RmrMyRoomAdded,
-        RmrMyRoomDeleted,
+        MrrMyRoomAdded,
+        MrrMyRoomDeleted,
 
         BroadcastOngoingMessagesChanged,
 
@@ -157,14 +157,14 @@ namespace TinyWars.Utility.Notify {
         MsgMcrSetSelfSettings,
         MsgMcrStartWar,
 
-        MsgRmrGetMaxConcurrentCount,
-        MsgRmrSetMaxConcurrentCount,
-        MsgRmrGetRoomPublicInfo,
-        MsgRmrGetRoomPublicInfoFailed,
-        MsgRmrGetMyRoomPublicInfoList,
-        MsgRmrSetBannedCoIdList,
-        MsgRmrSetSelfSettings,
-        MsgRmrDeleteRoom,
+        MsgMrrGetMaxConcurrentCount,
+        MsgMrrSetMaxConcurrentCount,
+        MsgMrrGetRoomPublicInfo,
+        MsgMrrGetRoomPublicInfoFailed,
+        MsgMrrGetMyRoomPublicInfoList,
+        MsgMrrSetBannedCoIdList,
+        MsgMrrSetSelfSettings,
+        MsgMrrDeleteRoom,
 
         MsgReplayGetInfoList,
         MsgReplayGetData,

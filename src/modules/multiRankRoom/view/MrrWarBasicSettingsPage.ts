@@ -1,5 +1,5 @@
 
-namespace TinyWars.RankMatchRoom {
+namespace TinyWars.MultiRankRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
@@ -14,11 +14,11 @@ namespace TinyWars.RankMatchRoom {
     import IWarPlayerInfo   = ProtoTypes.Structure.IWarPlayerInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export type OpenDataForRmrWarBasicSettingsPage = {
+    export type OpenDataForMrrWarBasicSettingsPage = {
         warInfo  : IMpwWarInfo;
     }
 
-    export class RmrWarBasicSettingsPage extends GameUi.UiTabPage {
+    export class MrrWarBasicSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle        : TinyWars.GameUi.UiButton;
         private _labelMapName           : TinyWars.GameUi.UiLabel;
         private _btnBuildings           : TinyWars.GameUi.UiButton;
@@ -53,7 +53,7 @@ namespace TinyWars.RankMatchRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/rankMatchRoom/RmrWarBasicSettingsPage.exml";
+            this.skinName = "resource/skins/multiRankRoom/MrrWarBasicSettingsPage.exml";
         }
 
         protected _onOpened(): void {
@@ -69,7 +69,7 @@ namespace TinyWars.RankMatchRoom {
             ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            this._warInfo = this._getOpenData<OpenDataForRmrWarBasicSettingsPage>().warInfo;
+            this._warInfo = this._getOpenData<OpenDataForMrrWarBasicSettingsPage>().warInfo;
 
             this._updateComponentsForLanguage();
             this._updateComponentsForWarInfo();

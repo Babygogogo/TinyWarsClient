@@ -137,8 +137,8 @@ namespace TinyWars.WarMap {
             for (const info of complexInfo ? complexInfo.warStatisticsArray || [] : []) {
                 if ((info.warType === WarType.McwFog) ||
                     (info.warType === WarType.McwStd) ||
-                    (info.warType === WarType.RmwFog) ||
-                    (info.warType === WarType.RmwStd)
+                    (info.warType === WarType.MrwFog) ||
+                    (info.warType === WarType.MrwStd)
                 ) {
                     totalTimes += info.totalPlayedTimes || 0;
                 }

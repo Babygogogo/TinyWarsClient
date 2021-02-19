@@ -1,5 +1,5 @@
 
-namespace TinyWars.RankMatchRoom {
+namespace TinyWars.MultiRankRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
@@ -14,11 +14,11 @@ namespace TinyWars.RankMatchRoom {
     import NetMessage       = ProtoTypes.NetMessage;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export type OpenDataForRmrRoomBasicSettingsPage = {
+    export type OpenDataForMrrRoomBasicSettingsPage = {
         roomId  : number;
     }
 
-    export class RmrRoomBasicSettingsPage extends GameUi.UiTabPage {
+    export class MrrRoomBasicSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle        : TinyWars.GameUi.UiButton;
         private _labelMapName           : TinyWars.GameUi.UiLabel;
         private _btnBuildings           : TinyWars.GameUi.UiButton;
@@ -63,12 +63,12 @@ namespace TinyWars.RankMatchRoom {
         private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
         private _listPlayer             : TinyWars.GameUi.UiScrollList;
 
-        private _roomInfo               : ProtoTypes.RankMatchRoom.IRmrRoomInfo;
+        private _roomInfo               : ProtoTypes.MultiRankRoom.IMrrRoomInfo;
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/rankMatchRoom/RmrRoomBasicSettingsPage.exml";
+            this.skinName = "resource/skins/multiRankRoom/MrrRoomBasicSettingsPage.exml";
         }
 
         protected async _onOpened(): Promise<void> {
@@ -85,12 +85,12 @@ namespace TinyWars.RankMatchRoom {
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgRmrGetRoomPublicInfo,    callback: this._onMsgRmrGetRoomPublicInfo },
+                { type: Notify.Type.MsgMrrGetRoomPublicInfo,    callback: this._onMsgMrrGetRoomPublicInfo },
             ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            const roomId    = this._getOpenData<OpenDataForRmrRoomBasicSettingsPage>().roomId;
-            this._roomInfo  = await RmrModel.getRoomInfo(roomId);
+            const roomId    = this._getOpenData<OpenDataForMrrRoomBasicSettingsPage>().roomId;
+            this._roomInfo  = await MrrModel.getRoomInfo(roomId);
 
             this._updateComponentsForLanguage();
             this._updateComponentsForRoomInfo();
@@ -108,12 +108,12 @@ namespace TinyWars.RankMatchRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onMsgRmrGetRoomPublicInfo(e: egret.Event): void {
-            const data          = e.data as NetMessage.MsgRmrGetRoomPublicInfo.IS;
+        private _onMsgMrrGetRoomPublicInfo(e: egret.Event): void {
+            const data          = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
             const currRoomInfo  = this._roomInfo;
             const newRoomInfo   = data.roomInfo;
             if ((currRoomInfo) && (newRoomInfo.roomId === currRoomInfo.roomId)) {
-                RmrModel.SelfSettings.resetData(newRoomInfo)
+                MrrModel.SelfSettings.resetData(newRoomInfo)
                 this._roomInfo = newRoomInfo;
                 this._updateComponentsForRoomInfo();
             }
@@ -151,11 +151,11 @@ namespace TinyWars.RankMatchRoom {
                 const playerDataList    = roomInfo.playerDataList;
                 const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
                 if ((selfPlayerData != null) && (!selfPlayerData.isReady)) {
-                    RmrRoomChooseCoPanel.show({
+                    MrrRoomChooseCoPanel.show({
                         roomInfo,
                         playerIndex: selfPlayerData.playerIndex,
                     });
-                    RmrRoomInfoPanel.hide();
+                    MrrRoomInfoPanel.hide();
                 }
             }
         }
@@ -167,9 +167,9 @@ namespace TinyWars.RankMatchRoom {
                 const playerDataList    = roomInfo.playerDataList;
                 const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
                 if ((selfPlayerData != null) && (!selfPlayerData.isReady)) {
-                    const currSkinId = RmrModel.SelfSettings.getUnitAndTileSkinId();
-                    RmrModel.SelfSettings.tickUnitAndTileSkinId(roomInfo);
-                    if (currSkinId === RmrModel.SelfSettings.getUnitAndTileSkinId()) {
+                    const currSkinId = MrrModel.SelfSettings.getUnitAndTileSkinId();
+                    MrrModel.SelfSettings.tickUnitAndTileSkinId(roomInfo);
+                    if (currSkinId === MrrModel.SelfSettings.getUnitAndTileSkinId()) {
                         FloatText.show(Lang.getText(Lang.Type.B0332));
                     } else {
                         this._updateGroupSkinId();
@@ -189,10 +189,10 @@ namespace TinyWars.RankMatchRoom {
                         title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0137),
                         callback: () => {
-                            RmrProxy.reqRmrSetSelfSettings(
+                            MrrProxy.reqMrrSetSelfSettings(
                                 roomInfo.roomId,
-                                RmrModel.SelfSettings.getCoId(),
-                                RmrModel.SelfSettings.getUnitAndTileSkinId(),
+                                MrrModel.SelfSettings.getCoId(),
+                                MrrModel.SelfSettings.getUnitAndTileSkinId(),
                             );
                         }
                     });
@@ -220,9 +220,9 @@ namespace TinyWars.RankMatchRoom {
                 const selfUserId        = User.UserModel.getSelfUserId();
                 const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
                 if ((selfPlayerData != null)                                                                                            &&
-                    ((roomInfo.settingsForRmw.dataArrayForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex) == null)
+                    ((roomInfo.settingsForMrw.dataArrayForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex) == null)
                 ) {
-                    RmrRoomAvailableCoPanel.show({ roomInfo, srcPlayerIndex: selfPlayerData.playerIndex });
+                    MrrRoomAvailableCoPanel.show({ roomInfo, srcPlayerIndex: selfPlayerData.playerIndex });
                 }
             }
         }
@@ -331,7 +331,7 @@ namespace TinyWars.RankMatchRoom {
 
             (!group.parent) && (this._groupSelfInfo.addChild(group));
 
-            const dataForBanCo  = (roomInfo.settingsForRmw.dataArrayForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex);
+            const dataForBanCo  = (roomInfo.settingsForMrw.dataArrayForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex);
             const label         = this._labelBanCo;
             const btn           = this._btnBanCo;
             if (dataForBanCo) {
@@ -363,7 +363,7 @@ namespace TinyWars.RankMatchRoom {
             (!group.parent) && (this._groupSelfInfo.addChild(group));
 
             const btn               = this._btnChangeCo;
-            this._labelCoName.text  = ConfigManager.getCoNameAndTierText(roomInfo.settingsForCommon.configVersion, RmrModel.SelfSettings.getCoId());
+            this._labelCoName.text  = ConfigManager.getCoNameAndTierText(roomInfo.settingsForCommon.configVersion, MrrModel.SelfSettings.getCoId());
             if (selfPlayerData.isReady) {
                 btn.setTextColor(0xFFFFFF);
                 btn.setRedVisible(false);
@@ -391,7 +391,7 @@ namespace TinyWars.RankMatchRoom {
             (!group.parent) && (this._groupSelfInfo.addChild(group));
 
             const btn               = this._btnModifySkinId;
-            this._labelSkinId.text  = Lang.getUnitAndTileSkinName(RmrModel.SelfSettings.getUnitAndTileSkinId());
+            this._labelSkinId.text  = Lang.getUnitAndTileSkinName(MrrModel.SelfSettings.getUnitAndTileSkinId());
             if (selfPlayerData.isReady) {
                 btn.setTextColor(0xFFFFFF);
                 btn.setRedVisible(false);
@@ -458,7 +458,7 @@ namespace TinyWars.RankMatchRoom {
     }
 
     type DataForPlayerRenderer = {
-        roomInfo        : ProtoTypes.RankMatchRoom.IRmrRoomInfo;
+        roomInfo        : ProtoTypes.MultiRankRoom.IMrrRoomInfo;
         playerIndex     : number;
         teamIndex       : number;
         playerData      : ProtoTypes.Structure.IDataForPlayerInRoom;

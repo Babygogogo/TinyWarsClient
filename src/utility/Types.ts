@@ -453,8 +453,8 @@ namespace TinyWars.Utility.Types {
     export const enum WarType {
         McwStd      = 1,
         McwFog      = 2,
-        RmwStd      = 3,
-        RmwFog      = 4,
+        MrwStd      = 3,
+        MrwFog      = 4,
         Scw         = 5,
         Wrw         = 6,
         Me          = 7,

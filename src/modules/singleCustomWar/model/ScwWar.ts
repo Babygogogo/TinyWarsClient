@@ -262,7 +262,7 @@ namespace TinyWars.SingleCustomWar {
                 settingsForCommon,
                 settingsForScw,
                 settingsForMcw              : null,
-                settingsForRmw              : null,
+                settingsForMrw              : null,
                 settingsForWrw              : null,
 
                 warId                       : this.getWarId(),

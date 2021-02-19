@@ -1,5 +1,5 @@
 
-namespace TinyWars.RankMatchRoom {
+namespace TinyWars.MultiRankRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import Helpers          = Utility.Helpers;
@@ -9,11 +9,11 @@ namespace TinyWars.RankMatchRoom {
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import IWarPlayerInfo   = ProtoTypes.Structure.IWarPlayerInfo;
 
-    export class RmrMyWarListPanel extends GameUi.UiPanel {
+    export class MrrMyWarListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: RmrMyWarListPanel;
+        private static _instance: MrrMyWarListPanel;
 
         private _labelMenuTitle : GameUi.UiLabel;
         private _listWar        : GameUi.UiScrollList;
@@ -32,14 +32,14 @@ namespace TinyWars.RankMatchRoom {
         private _selectedWarIndex   : number;
 
         public static show(): void {
-            if (!RmrMyWarListPanel._instance) {
-                RmrMyWarListPanel._instance = new RmrMyWarListPanel();
+            if (!MrrMyWarListPanel._instance) {
+                MrrMyWarListPanel._instance = new MrrMyWarListPanel();
             }
-            RmrMyWarListPanel._instance.open(undefined);
+            MrrMyWarListPanel._instance.open(undefined);
         }
         public static async hide(): Promise<void> {
-            if (RmrMyWarListPanel._instance) {
-                await RmrMyWarListPanel._instance.close();
+            if (MrrMyWarListPanel._instance) {
+                await MrrMyWarListPanel._instance.close();
             }
         }
 
@@ -47,7 +47,7 @@ namespace TinyWars.RankMatchRoom {
             super();
 
             this._setIsAutoAdjustHeight();
-            this.skinName = "resource/skins/rankMatchRoom/RmrMyWarListPanel.exml";
+            this.skinName = "resource/skins/multiRankRoom/MrrMyWarListPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -103,7 +103,7 @@ namespace TinyWars.RankMatchRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
-            const newData        = this._createDataForListWar(MultiPlayerWar.MpwModel.getMyRmwWarInfoList());
+            const newData        = this._createDataForListWar(MultiPlayerWar.MpwModel.getMyMrwWarInfoList());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -122,7 +122,7 @@ namespace TinyWars.RankMatchRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            RmrMainMenuPanel.show();
+            MrrMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -201,7 +201,7 @@ namespace TinyWars.RankMatchRoom {
     type DataForWarRenderer = {
         warInfo : IMpwWarInfo;
         index   : number;
-        panel   : RmrMyWarListPanel;
+        panel   : MrrMyWarListPanel;
     }
 
     class WarRenderer extends GameUi.UiListItemRenderer {
@@ -243,7 +243,7 @@ namespace TinyWars.RankMatchRoom {
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = this.data as DataForWarRenderer;
             data.panel.close();
-            RmrWarInfoPanel.show({ warInfo: data.warInfo });
+            MrrWarInfoPanel.show({ warInfo: data.warInfo });
         }
         private _onTouchedBtnFight(e: egret.Event): void {
             const data = this.data as DataForWarRenderer;

@@ -93,7 +93,7 @@ namespace TinyWars.Common {
 
         private _updateComponentsForStd(): void {
             const playersCount  = 2;
-            const warType       = Types.WarType.RmwStd;
+            const warType       = Types.WarType.MrwStd;
             const dataList      : DataForUserRenderer[] = [];
             for (const data of CommonModel.getRankList() || []) {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
@@ -112,7 +112,7 @@ namespace TinyWars.Common {
 
         private _updateComponentsForFog(): void {
             const playersCount  = 2;
-            const warType       = Types.WarType.RmwFog;
+            const warType       = Types.WarType.MrwFog;
             const dataList      : DataForUserRenderer[] = [];
             for (const data of CommonModel.getRankList() || []) {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {

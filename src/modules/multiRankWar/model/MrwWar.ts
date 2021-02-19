@@ -1,84 +1,84 @@
 
-namespace TinyWars.RankMatchWar {
+namespace TinyWars.MultiRankWar {
     import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
     import Types            = Utility.Types;
     import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
-    import ISettingsForRmw  = ProtoTypes.WarSettings.ISettingsForRmw;
+    import ISettingsForMrw  = ProtoTypes.WarSettings.ISettingsForMrw;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export class RmwWar extends MultiPlayerWar.MpwWar {
-        private _settingsForRmw?: ISettingsForRmw;
+    export class MrwWar extends MultiPlayerWar.MpwWar {
+        private _settingsForMrw?: ISettingsForMrw;
 
-        public async init(data: ISerialWar): Promise<RmwWar> {
+        public async init(data: ISerialWar): Promise<MrwWar> {
             if (!this._baseInit(data)) {
-                Logger.error(`RmwWar.init() failed this._baseInit().`);
+                Logger.error(`MrwWar.init() failed this._baseInit().`);
                 return undefined;
             }
 
-            const settingsForRmw = data.settingsForRmw;
-            if (!settingsForRmw) {
-                Logger.error(`RmwWar.init() invalid settingsForRmw! ${JSON.stringify(data)}`);
+            const settingsForMrw = data.settingsForMrw;
+            if (!settingsForMrw) {
+                Logger.error(`MrwWar.init() invalid settingsForMrw! ${JSON.stringify(data)}`);
                 return undefined;
             }
 
             const mapSizeAndMaxPlayerIndex = await BwHelpers.getMapSizeAndMaxPlayerIndex(data);
             if (!mapSizeAndMaxPlayerIndex) {
-                Logger.error(`RmwWar.init() invalid war data! ${JSON.stringify(data)}`);
+                Logger.error(`MrwWar.init() invalid war data! ${JSON.stringify(data)}`);
                 return undefined;
             }
 
             const settingsForCommon = data.settingsForCommon;
             if (!settingsForCommon) {
-                Logger.error(`RmwWar.init() empty settingsForCommon! ${JSON.stringify(data)}`);
+                Logger.error(`MrwWar.init() empty settingsForCommon! ${JSON.stringify(data)}`);
                 return undefined;
             }
 
             const configVersion = settingsForCommon.configVersion;
             if (configVersion == null) {
-                Logger.error(`RmwWar.init() empty configVersion.`);
+                Logger.error(`MrwWar.init() empty configVersion.`);
                 return undefined;
             }
 
             const dataForPlayerManager = data.playerManager;
             if (dataForPlayerManager == null) {
-                Logger.error(`RmwWar.init() empty dataForPlayerManager.`);
+                Logger.error(`MrwWar.init() empty dataForPlayerManager.`);
                 return undefined;
             }
 
             const dataForTurnManager = data.turnManager;
             if (dataForTurnManager == null) {
-                Logger.error(`RmwWar.init() empty dataForTurnManager.`);
+                Logger.error(`MrwWar.init() empty dataForTurnManager.`);
                 return undefined;
             }
 
             const dataForField = data.field;
             if (dataForField == null) {
-                Logger.error(`RmwWar.init() empty dataForField.`);
+                Logger.error(`MrwWar.init() empty dataForField.`);
                 return undefined;
             }
 
             const playerManager = (this.getPlayerManager() || new (this._getPlayerManagerClass())()).init(dataForPlayerManager);
             if (playerManager == null) {
-                Logger.error(`RmwWar.init() empty playerManager.`);
+                Logger.error(`MrwWar.init() empty playerManager.`);
                 return undefined;
             }
 
             const turnManager = (this.getTurnManager() || new (this._getTurnManagerClass())()).init(dataForTurnManager);
             if (turnManager == null) {
-                Logger.error(`RmwWar.init() empty turnManager.`);
+                Logger.error(`MrwWar.init() empty turnManager.`);
                 return undefined;
             }
 
             const field = await (this.getField() || new (this._getFieldClass())()).init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
             if (field == null) {
-                Logger.error(`RmwWar.init() empty field.`);
+                Logger.error(`MrwWar.init() empty field.`);
                 return undefined;
             }
 
-            this._setSettingsForRmw(settingsForRmw);
+            this._setSettingsForMrw(settingsForMrw);
             this._setPlayerManager(playerManager);
             this._setTurnManager(turnManager);
             this._setField(field);
@@ -91,73 +91,73 @@ namespace TinyWars.RankMatchWar {
         public serializeForSimulation(): ISerialWar | undefined {
             const warId = this.getWarId();
             if (warId == null) {
-                Logger.error(`RmwWar.serializeForSimulation() empty warId.`);
+                Logger.error(`MrwWar.serializeForSimulation() empty warId.`);
                 return undefined;
             }
 
             const settingsForCommon = this.getSettingsForCommon();
             if (settingsForCommon == null) {
-                Logger.error(`RmwWar.serializeForSimulation() empty settingsForCommon.`);
+                Logger.error(`MrwWar.serializeForSimulation() empty settingsForCommon.`);
                 return undefined;
             }
 
-            const settingsForRmw = this.getSettingsForRmw();
-            if (settingsForRmw == null) {
-                Logger.error(`RmwWar.serializeForSimulation() empty settingsForRmw.`);
+            const settingsForMrw = this.getSettingsForMrw();
+            if (settingsForMrw == null) {
+                Logger.error(`MrwWar.serializeForSimulation() empty settingsForMrw.`);
                 return undefined;
             }
 
             const warEventManager = this.getWarEventManager();
             if (warEventManager  == null) {
-                Logger.error(`RmwWar.serializeForSimulation() empty warEventManager.`);
+                Logger.error(`MrwWar.serializeForSimulation() empty warEventManager.`);
                 return undefined;
             }
 
             const playerManager = this.getPlayerManager();
             if (playerManager == null) {
-                Logger.error(`RmwWar.serializeForSimulation() empty playerManager.`);
+                Logger.error(`MrwWar.serializeForSimulation() empty playerManager.`);
                 return undefined;
             }
 
             const turnManager = this.getTurnManager();
             if (turnManager == null) {
-                Logger.error(`RmwWar.serializeForSimulation() empty turnManager.`);
+                Logger.error(`MrwWar.serializeForSimulation() empty turnManager.`);
                 return undefined;
             }
 
             const field = this.getField();
             if (field == null) {
-                Logger.error(`RmwWar.serializeForSimulation() empty field.`);
+                Logger.error(`MrwWar.serializeForSimulation() empty field.`);
                 return undefined;
             }
 
             const serialWarEventManager = warEventManager.serializeForSimulation();
             if (serialWarEventManager == null) {
-                Logger.error(`RmwWar.serializeForSimulation() empty serialWarEventManager.`);
+                Logger.error(`MrwWar.serializeForSimulation() empty serialWarEventManager.`);
                 return undefined;
             }
 
             const serialPlayerManager = playerManager.serializeForSimulation();
             if (serialPlayerManager == null) {
-                Logger.error(`RmwWar.serializeForSimulation() empty serialPlayerManager.`);
+                Logger.error(`MrwWar.serializeForSimulation() empty serialPlayerManager.`);
                 return undefined;
             }
 
             const serialTurnManager = turnManager.serializeForSimulation();
             if (serialTurnManager == null) {
-                Logger.error(`RmwWar.serializeForSimulation() empty serialTurnManager.`);
+                Logger.error(`MrwWar.serializeForSimulation() empty serialTurnManager.`);
                 return undefined;
             }
 
             const serialField = field.serializeForSimulation();
             if (serialField == null) {
-                Logger.error(`RmwWar.serializeForSimulation() empty serialField.`);
+                Logger.error(`MrwWar.serializeForSimulation() empty serialField.`);
                 return undefined;
             }
 
             return {
                 settingsForCommon,
-                settingsForRmw              : null,
+                settingsForMrw              : null,
                 settingsForMcw              : null,
                 settingsForWrw              : null,
                 settingsForScw              : { isCheating: true },
@@ -176,15 +176,15 @@ namespace TinyWars.RankMatchWar {
 
         public getWarType(): Types.WarType {
             return this.getSettingsHasFogByDefault()
-                ? Types.WarType.RmwFog
-                : Types.WarType.RmwStd;
+                ? Types.WarType.MrwFog
+                : Types.WarType.MrwStd;
         }
 
-        private _setSettingsForRmw(settings: ISettingsForRmw): void {
-            this._settingsForRmw = settings;
+        private _setSettingsForMrw(settings: ISettingsForMrw): void {
+            this._settingsForMrw = settings;
         }
-        public getSettingsForRmw(): ISettingsForRmw | null | undefined {
-            return this._settingsForRmw;
+        public getSettingsForMrw(): ISettingsForMrw | null | undefined {
+            return this._settingsForMrw;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

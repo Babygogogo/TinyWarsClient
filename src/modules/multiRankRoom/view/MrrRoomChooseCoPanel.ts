@@ -1,5 +1,5 @@
 
-namespace TinyWars.RankMatchRoom {
+namespace TinyWars.MultiRankRoom {
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
@@ -7,16 +7,16 @@ namespace TinyWars.RankMatchRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    type OpenDataForRmrRoomChooseCoPanel = {
-        roomInfo    : ProtoTypes.RankMatchRoom.IRmrRoomInfo;
+    type OpenDataForMrrRoomChooseCoPanel = {
+        roomInfo    : ProtoTypes.MultiRankRoom.IMrrRoomInfo;
         playerIndex : number;
     }
 
-    export class RmrRoomChooseCoPanel extends GameUi.UiPanel {
+    export class MrrRoomChooseCoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: RmrRoomChooseCoPanel;
+        private static _instance: MrrRoomChooseCoPanel;
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
@@ -51,16 +51,16 @@ namespace TinyWars.RankMatchRoom {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(openData: OpenDataForRmrRoomChooseCoPanel): void {
-            if (!RmrRoomChooseCoPanel._instance) {
-                RmrRoomChooseCoPanel._instance = new RmrRoomChooseCoPanel();
+        public static show(openData: OpenDataForMrrRoomChooseCoPanel): void {
+            if (!MrrRoomChooseCoPanel._instance) {
+                MrrRoomChooseCoPanel._instance = new MrrRoomChooseCoPanel();
             }
 
-            RmrRoomChooseCoPanel._instance.open(openData);
+            MrrRoomChooseCoPanel._instance.open(openData);
         }
         public static async hide(): Promise<void> {
-            if (RmrRoomChooseCoPanel._instance) {
-                await RmrRoomChooseCoPanel._instance.close();
+            if (MrrRoomChooseCoPanel._instance) {
+                await MrrRoomChooseCoPanel._instance.close();
             }
         }
 
@@ -68,13 +68,13 @@ namespace TinyWars.RankMatchRoom {
             super();
 
             this._setIsAutoAdjustHeight();
-            this.skinName = "resource/skins/rankMatchRoom/RmrRoomChooseCoPanel.exml";
+            this.skinName = "resource/skins/multiRankRoom/MrrRoomChooseCoPanel.exml";
         }
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgRmrDeleteRoom,   callback: this._onMsgRmrDeleteRoom },
+                { type: Notify.Type.MsgMrrDeleteRoom,   callback: this._onMsgMrrDeleteRoom },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
@@ -121,11 +121,11 @@ namespace TinyWars.RankMatchRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onMsgRmrDeleteRoom(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgRmrDeleteRoom.IS;
-            if (data.roomId === this._getOpenData<OpenDataForRmrRoomChooseCoPanel>().roomInfo.roomId) {
+        private _onMsgMrrDeleteRoom(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMrrDeleteRoom.IS;
+            if (data.roomId === this._getOpenData<OpenDataForMrrRoomChooseCoPanel>().roomInfo.roomId) {
                 this.close();
-                RmrMyRoomListPanel.show();
+                MrrMyRoomListPanel.show();
             }
         }
 
@@ -138,7 +138,7 @@ namespace TinyWars.RankMatchRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            RmrRoomInfoPanel.show({ roomId: this._getOpenData<OpenDataForRmrRoomChooseCoPanel>().roomInfo.roomId });
+            MrrRoomInfoPanel.show({ roomId: this._getOpenData<OpenDataForMrrRoomChooseCoPanel>().roomInfo.roomId });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -151,7 +151,7 @@ namespace TinyWars.RankMatchRoom {
         }
 
         private _initListCo(): void {
-            const selfCoId      = RmrModel.SelfSettings.getCoId();
+            const selfCoId      = MrrModel.SelfSettings.getCoId();
             const dataForListCo = this._createDataForListCo();
             this._dataForListCo = dataForListCo;
             this._listCo.bindData(dataForListCo);
@@ -161,9 +161,9 @@ namespace TinyWars.RankMatchRoom {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const dataList          : DataForCoRenderer[] = [];
-            const openData          = this._getOpenData<OpenDataForRmrRoomChooseCoPanel>();
+            const openData          = this._getOpenData<OpenDataForMrrRoomChooseCoPanel>();
             const roomInfo          = openData.roomInfo;
-            const availableCoIdList = RmrModel.SelfSettings.generateAvailableCoIdList(roomInfo, openData.playerIndex);
+            const availableCoIdList = MrrModel.SelfSettings.generateAvailableCoIdList(roomInfo, openData.playerIndex);
 
             let index = 0;
             for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
@@ -272,10 +272,10 @@ namespace TinyWars.RankMatchRoom {
     }
 
     type DataForCoRenderer = {
-        roomInfo    : ProtoTypes.RankMatchRoom.IRmrRoomInfo;
+        roomInfo    : ProtoTypes.MultiRankRoom.IMrrRoomInfo;
         coBasicCfg  : ProtoTypes.Config.ICoBasicCfg;
         index       : number;
-        panel       : RmrRoomChooseCoPanel;
+        panel       : MrrRoomChooseCoPanel;
     }
 
     class CoRenderer extends GameUi.UiListItemRenderer {
@@ -306,8 +306,8 @@ namespace TinyWars.RankMatchRoom {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data  = this.data as DataForCoRenderer;
-            RmrModel.SelfSettings.setCoId(data.coBasicCfg.coId);
-            RmrRoomInfoPanel.show({ roomId: data.roomInfo.roomId });
+            MrrModel.SelfSettings.setCoId(data.coBasicCfg.coId);
+            MrrRoomInfoPanel.show({ roomId: data.roomInfo.roomId });
             data.panel.close();
         }
     }

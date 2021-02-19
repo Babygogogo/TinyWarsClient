@@ -20,7 +20,7 @@ namespace TinyWars.ReplayWar {
     export class RwWar extends SinglePlayerWar.SpwWar {
         private _settingsForMcw                 : ProtoTypes.WarSettings.ISettingsForMcw;
         private _settingsForScw                 : ProtoTypes.WarSettings.ISettingsForScw;
-        private _settingsForRmw                 : ProtoTypes.WarSettings.ISettingsForRmw;
+        private _settingsForMrw                 : ProtoTypes.WarSettings.ISettingsForMrw;
         private _settingsForWrw                 : ProtoTypes.WarSettings.ISettingsForWrw;
 
         private _replayId                           : number;
@@ -104,7 +104,7 @@ namespace TinyWars.ReplayWar {
             this._settingsForMcw = warData.settingsForMcw;
             this._settingsForScw = warData.settingsForScw;
             this._settingsForWrw = warData.settingsForMcw;
-            this._settingsForRmw = warData.settingsForRmw;
+            this._settingsForMrw = warData.settingsForMrw;
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: seedRandomCurrentState }));
             this._setSeedRandomInitialState(seedRandomInitialState);
             this.setNextActionId(0);
@@ -289,7 +289,7 @@ namespace TinyWars.ReplayWar {
                 settingsForCommon,
                 settingsForMcw              : null,
                 settingsForScw              : { isCheating: true },
-                settingsForRmw              : null,
+                settingsForMrw              : null,
                 settingsForWrw              : null,
 
                 warId,
@@ -308,8 +308,8 @@ namespace TinyWars.ReplayWar {
             const hasFog = this.getSettingsHasFogByDefault();
             if (this._settingsForMcw) {
                 return hasFog ? WarType.McwFog : WarType.McwStd;
-            } else if (this._settingsForRmw) {
-                return hasFog ? WarType.RmwFog : WarType.RmwStd;
+            } else if (this._settingsForMrw) {
+                return hasFog ? WarType.MrwFog : WarType.MrwStd;
             } else if (this._settingsForScw) {
                 return WarType.Scw;
             } else if (this._settingsForWrw) {

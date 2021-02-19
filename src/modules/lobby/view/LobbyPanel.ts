@@ -49,7 +49,7 @@ namespace TinyWars.Lobby {
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
                 { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
-                { type: Notify.Type.MsgRmrGetMyRoomPublicInfoList,  callback: this._onMsgRmrGetMyRoomPublicInfoList },
+                { type: Notify.Type.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
             ]);
             this._listCommand.setItemRenderer(CommandRenderer);
 
@@ -82,7 +82,7 @@ namespace TinyWars.Lobby {
             this._listCommand.refresh();
         }
 
-        private _onMsgRmrGetMyRoomPublicInfoList(e: egret.Event): void {
+        private _onMsgMrrGetMyRoomPublicInfoList(e: egret.Event): void {
             this._listCommand.refresh();
         }
 
@@ -146,11 +146,11 @@ namespace TinyWars.Lobby {
                     name        : Lang.getText(Lang.Type.B0404),
                     callback    : () => {
                         this.close();
-                        RankMatchRoom.RmrMainMenuPanel.show();
+                        MultiRankRoom.MrrMainMenuPanel.show();
                     },
                     redChecker  : async () => {
-                        return (MultiPlayerWar.MpwModel.checkIsRedForMyRmwWars())
-                            || (await RankMatchRoom.RmrModel.checkIsRed());
+                        return (MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars())
+                            || (await MultiRankRoom.MrrModel.checkIsRed());
                     }
                 },
                 {

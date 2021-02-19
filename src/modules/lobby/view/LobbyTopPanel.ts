@@ -96,6 +96,8 @@ namespace TinyWars.Lobby {
             User.UserPanel.hide();
             if (!Chat.ChatPanel.getIsOpening()) {
                 Chat.ChatPanel.show({ toUserId: null });
+            } else {
+                Chat.ChatPanel.hide();
             }
         }
 
