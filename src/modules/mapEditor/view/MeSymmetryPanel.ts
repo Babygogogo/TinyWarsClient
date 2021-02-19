@@ -85,7 +85,7 @@ namespace TinyWars.MapEditor {
 
             this._updateComponentsForLanguage();
 
-            this._war                   = MeManager.getWar();
+            this._war                   = MeModel.getWar();
             this._asymmetricalCounters  = MeUtility.getAsymmetricalCounters(this._war);
 
             this._updateGroupLeftRight();

@@ -107,7 +107,7 @@ namespace TinyWars.MapEditor {
 
             this._updateComponentsForLanguage();
 
-            this._war = MeManager.getWar();
+            this._war = MeModel.getWar();
             this._resetView();
         }
         protected async _onClosed(): Promise<void> {

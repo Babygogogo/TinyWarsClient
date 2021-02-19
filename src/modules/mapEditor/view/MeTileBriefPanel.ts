@@ -78,7 +78,7 @@ namespace TinyWars.MapEditor {
             this._conTileView.addChild(this._tileView.getImgBase());
             this._conTileView.addChild(this._tileView.getImgObject());
 
-            const war       = MeManager.getWar();
+            const war       = MeModel.getWar();
             this._war       = war;
             this._tileMap   = war.getTileMap() as MeTileMap;
             this._cursor    = war.getField().getCursor() as MeCursor;

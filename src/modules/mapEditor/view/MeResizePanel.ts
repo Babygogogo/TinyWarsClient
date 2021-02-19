@@ -60,7 +60,7 @@ namespace TinyWars.MapEditor {
 
             this._updateComponentsForLanguage();
 
-            const war                   = MeManager.getWar();
+            const war                   = MeModel.getWar();
             const { width, height }     = war.getTileMap().getMapSize();
             this._labelCurrHeight.text  = "" + height;
             this._labelCurrWidth.text   = "" + width;
@@ -81,7 +81,7 @@ namespace TinyWars.MapEditor {
             if ((!gridsCount) || (gridsCount <= 0)) {
                 FloatText.show(Lang.getText(Lang.Type.A0087));
             } else {
-                const war       = MeManager.getWar();
+                const war       = MeModel.getWar();
                 const currSize  = war.getTileMap().getMapSize();
                 if ((width !== currSize.width) || (height !== currSize.height)) {
                     war.stopRunning();
@@ -103,7 +103,7 @@ namespace TinyWars.MapEditor {
             const input = this._inputNewWidth;
             let width = Number(input.text);
             if ((isNaN(width)) || (width <= 0)) {
-                width = MeManager.getWar().getTileMap().getMapSize().width;
+                width = MeModel.getWar().getTileMap().getMapSize().width;
             }
             this._newWidth  = width;
             input.text      = "" + width;
@@ -113,7 +113,7 @@ namespace TinyWars.MapEditor {
             const input = this._inputNewHeight;
             let width = Number(input.text);
             if ((isNaN(width)) || (width <= 0)) {
-                width = MeManager.getWar().getTileMap().getMapSize().height;
+                width = MeModel.getWar().getTileMap().getMapSize().height;
             }
             this._newHeight = width;
             input.text      = "" + width;

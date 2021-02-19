@@ -56,7 +56,7 @@ namespace TinyWars.MapEditor {
 
             this._updateComponentsForLanguage();
 
-            this._war = MeManager.getWar();
+            this._war = MeModel.getWar();
             this._updateGroupUnit();
             this._updateGroupTileBase();
             this._updateGroupTileObject();

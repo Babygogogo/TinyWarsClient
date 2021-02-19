@@ -63,7 +63,7 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
             ]);
 
-            const war       = MeManager.getWar();
+            const war       = MeModel.getWar();
             this._war       = war;
             this._unitMap   = war.getUnitMap() as MeUnitMap;
             this._cursor    = war.getField().getCursor() as MeCursor;

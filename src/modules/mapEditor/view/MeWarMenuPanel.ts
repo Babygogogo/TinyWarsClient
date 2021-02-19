@@ -91,7 +91,7 @@ namespace TinyWars.MapEditor {
             this._listTile.setItemRenderer(TileRenderer);
             this._listUnit.setItemRenderer(UnitRenderer);
 
-            const war           = MeManager.getWar();
+            const war           = MeModel.getWar();
             this._war           = war;
             this._menuType      = MenuType.Main;
 
@@ -787,7 +787,7 @@ namespace TinyWars.MapEditor {
             const dataForDrawUnit   = data.dataForDrawUnit;
             this._labelNum.text    = "" + data.count;
 
-            const war   = MeManager.getWar();
+            const war   = MeModel.getWar();
             const unit  = new MeUnit().init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
@@ -804,7 +804,7 @@ namespace TinyWars.MapEditor {
         public onItemTapEvent(): void {
             const data = this.data as DataForUnitRenderer;
             MeChooseUnitPanel.hide();
-            MeManager.getWar().getDrawer().setModeDrawUnit(data.dataForDrawUnit);
+            MeModel.getWar().getDrawer().setModeDrawUnit(data.dataForDrawUnit);
         }
     }
 }

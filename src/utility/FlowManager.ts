@@ -5,7 +5,7 @@ namespace TinyWars.Utility.FlowManager {
     import MpwModel         = MultiPlayerWar.MpwModel;
     import ScwModel         = SingleCustomWar.ScwModel;
     import RwModel          = ReplayWar.RwModel;
-    import MeManager        = MapEditor.MeManager;
+    import MeModel          = MapEditor.MeModel;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     const _NET_EVENTS = [
@@ -58,8 +58,7 @@ namespace TinyWars.Utility.FlowManager {
         SingleCustomRoom.ScrModel.init();
         ScwModel.init();
         MapEditor.MeProxy.init();
-        MapEditor.MeModel.init();
-        MeManager.init();
+        MeModel.init();
         Chat.ChatProxy.init();
         Common.CommonProxy.init();
         Common.CommonModel.init();
@@ -77,7 +76,7 @@ namespace TinyWars.Utility.FlowManager {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         StageManager.closeAllPanels();
         Login.LoginBackgroundPanel.show();
         Login.LoginPanel.show();
@@ -89,7 +88,7 @@ namespace TinyWars.Utility.FlowManager {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         StageManager.closeAllPanels();
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
@@ -98,7 +97,7 @@ namespace TinyWars.Utility.FlowManager {
     export async function gotoMultiCustomWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
         RwModel.unloadWar();
         ScwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         await MpwModel.loadWar(data);
 
         StageManager.closeAllPanels();
@@ -112,7 +111,7 @@ namespace TinyWars.Utility.FlowManager {
     export async function gotoReplay(warData: Uint8Array, replayId: number): Promise<void> {
         MpwModel.unloadWar();
         ScwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         await RwModel.loadWar(warData, replayId);
 
         StageManager.closeAllPanels();
@@ -130,7 +129,7 @@ namespace TinyWars.Utility.FlowManager {
     }): Promise<void> {
         MpwModel.unloadWar();
         RwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         await ScwModel.loadWar({ warData, slotIndex, slotComment });
 
         StageManager.closeAllPanels();
@@ -145,7 +144,7 @@ namespace TinyWars.Utility.FlowManager {
         MpwModel.unloadWar();
         ScwModel.unloadWar();
         RwModel.unloadWar();
-        await MeManager.loadWar(mapRawData, slotIndex, isReview);
+        await MeModel.loadWar(mapRawData, slotIndex, isReview);
 
         StageManager.closeAllPanels();
         MapEditor.MeBackgroundPanel.show();
@@ -160,7 +159,7 @@ namespace TinyWars.Utility.FlowManager {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         StageManager.closeAllPanels();
         Lobby.LobbyTopPanel.show();
         RankMatchRoom.RmrMyWarListPanel.show();
@@ -170,7 +169,7 @@ namespace TinyWars.Utility.FlowManager {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         StageManager.closeAllPanels();
         Lobby.LobbyTopPanel.show();
         MultiCustomRoom.McrMyWarListPanel.show();

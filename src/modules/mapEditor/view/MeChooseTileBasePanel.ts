@@ -261,13 +261,13 @@ namespace TinyWars.MapEditor {
             if (!panel.getNeedFill()) {
                 panel.updateOnChooseTileBase(dataForDrawTileBase);
                 panel.close();
-                MeManager.getWar().getDrawer().setModeDrawTileBase(dataForDrawTileBase);
+                MeModel.getWar().getDrawer().setModeDrawTileBase(dataForDrawTileBase);
             } else {
                 Common.CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0089),
                     callback: () => {
-                        const war           = MeManager.getWar();
+                        const war           = MeModel.getWar();
                         const configVersion = war.getConfigVersion();
                         war.getTileMap().forEachTile(tile => {
                             tile.init({

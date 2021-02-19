@@ -107,7 +107,7 @@ namespace TinyWars.MapEditor {
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0095) + `\n"${data.mapName}"`,
                 callback: async () => {
-                    const war = MeManager.getWar();
+                    const war = MeModel.getWar();
                     war.stopRunning();
                     await war.initWithMapEditorData({
                         mapRawData  : await WarMap.WarMapModel.getRawData(data.mapId),
