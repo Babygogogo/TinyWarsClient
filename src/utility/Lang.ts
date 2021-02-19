@@ -918,6 +918,10 @@ namespace TinyWars.Utility.Lang {
             `未设置是否自动寻找有效地形`,
             `'NeedMovableTile' has not been set.`,
         ],
+        [Type.A0194]: [
+            `再次点击返回将退出游戏`,
+            `Click the go back button again to exit the game.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
