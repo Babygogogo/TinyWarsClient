@@ -159,7 +159,6 @@ namespace TinyWars.MultiRankWar {
                 settingsForCommon,
                 settingsForMrw              : null,
                 settingsForMcw              : null,
-                settingsForWrw              : null,
                 settingsForScw              : { isCheating: true },
 
                 warId,

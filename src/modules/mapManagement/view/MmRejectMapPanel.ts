@@ -61,10 +61,9 @@ namespace TinyWars.MapManagement {
                 reviewComment   : this._inputReason.text,
                 availability    : {
                     canMcw      : false,
-                    canRank     : false,
-                    canRankFog  : false,
+                    canMrwStd   : false,
+                    canMrwFog   : false,
                     canScw      : false,
-                    canWr       : false,
                 },
             });
             this.close();

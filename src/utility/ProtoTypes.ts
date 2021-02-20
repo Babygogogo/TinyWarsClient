@@ -2277,14 +2277,11 @@ export declare namespace Map {
         /** DataForMapAvailability canScw */
         canScw?: (boolean|null);
 
-        /** DataForMapAvailability canRank */
-        canRank?: (boolean|null);
+        /** DataForMapAvailability canMrwStd */
+        canMrwStd?: (boolean|null);
 
-        /** DataForMapAvailability canRankFog */
-        canRankFog?: (boolean|null);
-
-        /** DataForMapAvailability canWr */
-        canWr?: (boolean|null);
+        /** DataForMapAvailability canMrwFog */
+        canMrwFog?: (boolean|null);
     }
 
     /** Represents a DataForMapAvailability. */
@@ -2302,14 +2299,11 @@ export declare namespace Map {
         /** DataForMapAvailability canScw. */
         public canScw: boolean;
 
-        /** DataForMapAvailability canRank. */
-        public canRank: boolean;
+        /** DataForMapAvailability canMrwStd. */
+        public canMrwStd: boolean;
 
-        /** DataForMapAvailability canRankFog. */
-        public canRankFog: boolean;
-
-        /** DataForMapAvailability canWr. */
-        public canWr: boolean;
+        /** DataForMapAvailability canMrwFog. */
+        public canMrwFog: boolean;
 
         /**
          * Creates a new DataForMapAvailability instance using the specified properties.
@@ -5556,11 +5550,8 @@ export declare namespace WarRule {
         /** DataForWarRuleAvailability canScw */
         canScw?: (boolean|null);
 
-        /** DataForWarRuleAvailability canRank */
-        canRank?: (boolean|null);
-
-        /** DataForWarRuleAvailability canWr */
-        canWr?: (boolean|null);
+        /** DataForWarRuleAvailability canMrw */
+        canMrw?: (boolean|null);
     }
 
     /** Represents a DataForWarRuleAvailability. */
@@ -5578,11 +5569,8 @@ export declare namespace WarRule {
         /** DataForWarRuleAvailability canScw. */
         public canScw: boolean;
 
-        /** DataForWarRuleAvailability canRank. */
-        public canRank: boolean;
-
-        /** DataForWarRuleAvailability canWr. */
-        public canWr: boolean;
+        /** DataForWarRuleAvailability canMrw. */
+        public canMrw: boolean;
 
         /**
          * Creates a new DataForWarRuleAvailability instance using the specified properties.
@@ -6523,90 +6511,6 @@ export declare namespace WarSettings {
 
         /**
          * Converts this SettingsForScw to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    /** Properties of a SettingsForWrw. */
-    interface ISettingsForWrw {
-    }
-
-    /** Represents a SettingsForWrw. */
-    class SettingsForWrw implements ISettingsForWrw {
-
-        /**
-         * Constructs a new SettingsForWrw.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: WarSettings.ISettingsForWrw);
-
-        /**
-         * Creates a new SettingsForWrw instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns SettingsForWrw instance
-         */
-        public static create(properties?: WarSettings.ISettingsForWrw): WarSettings.SettingsForWrw;
-
-        /**
-         * Encodes the specified SettingsForWrw message. Does not implicitly {@link WarSettings.SettingsForWrw.verify|verify} messages.
-         * @param message SettingsForWrw message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: WarSettings.ISettingsForWrw, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified SettingsForWrw message, length delimited. Does not implicitly {@link WarSettings.SettingsForWrw.verify|verify} messages.
-         * @param message SettingsForWrw message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: WarSettings.ISettingsForWrw, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a SettingsForWrw message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns SettingsForWrw
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSettings.SettingsForWrw;
-
-        /**
-         * Decodes a SettingsForWrw message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns SettingsForWrw
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSettings.SettingsForWrw;
-
-        /**
-         * Verifies a SettingsForWrw message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a SettingsForWrw message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns SettingsForWrw
-         */
-        public static fromObject(object: { [k: string]: any }): WarSettings.SettingsForWrw;
-
-        /**
-         * Creates a plain object from a SettingsForWrw message. Also converts values to other types if specified.
-         * @param message SettingsForWrw
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: WarSettings.SettingsForWrw, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this SettingsForWrw to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -8094,9 +7998,6 @@ export declare namespace WarSerialization {
         /** SerialWar settingsForMrw */
         settingsForMrw?: (WarSettings.ISettingsForMrw|null);
 
-        /** SerialWar settingsForWrw */
-        settingsForWrw?: (WarSettings.ISettingsForWrw|null);
-
         /** SerialWar warId */
         warId?: (number|null);
 
@@ -8145,9 +8046,6 @@ export declare namespace WarSerialization {
 
         /** SerialWar settingsForMrw. */
         public settingsForMrw?: (WarSettings.ISettingsForMrw|null);
-
-        /** SerialWar settingsForWrw. */
-        public settingsForWrw?: (WarSettings.ISettingsForWrw|null);
 
         /** SerialWar warId. */
         public warId: number;

@@ -158,7 +158,6 @@ namespace TinyWars.MultiCustomWar {
                 settingsForMcw              : null,
                 settingsForMrw              : null,
                 settingsForScw              : { isCheating: true },
-                settingsForWrw              : null,
 
                 warId,
                 seedRandomInitialState      : null,

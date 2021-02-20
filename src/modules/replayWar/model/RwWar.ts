@@ -21,7 +21,6 @@ namespace TinyWars.ReplayWar {
         private _settingsForMcw                 : ProtoTypes.WarSettings.ISettingsForMcw;
         private _settingsForScw                 : ProtoTypes.WarSettings.ISettingsForScw;
         private _settingsForMrw                 : ProtoTypes.WarSettings.ISettingsForMrw;
-        private _settingsForWrw                 : ProtoTypes.WarSettings.ISettingsForWrw;
 
         private _replayId                           : number;
         private _isAutoReplay                       = false;
@@ -103,7 +102,6 @@ namespace TinyWars.ReplayWar {
 
             this._settingsForMcw = warData.settingsForMcw;
             this._settingsForScw = warData.settingsForScw;
-            this._settingsForWrw = warData.settingsForMcw;
             this._settingsForMrw = warData.settingsForMrw;
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: seedRandomCurrentState }));
             this._setSeedRandomInitialState(seedRandomInitialState);
@@ -290,7 +288,6 @@ namespace TinyWars.ReplayWar {
                 settingsForMcw              : null,
                 settingsForScw              : { isCheating: true },
                 settingsForMrw              : null,
-                settingsForWrw              : null,
 
                 warId,
                 seedRandomInitialState      : null,
@@ -311,9 +308,7 @@ namespace TinyWars.ReplayWar {
             } else if (this._settingsForMrw) {
                 return hasFog ? WarType.MrwFog : WarType.MrwStd;
             } else if (this._settingsForScw) {
-                return WarType.Scw;
-            } else if (this._settingsForWrw) {
-                return WarType.Wrw;
+                return hasFog ? WarType.ScwFog : WarType.ScwStd;
             } else {
                 Logger.error(`RwWar.getWarType() unknown warType.`);
                 return undefined;

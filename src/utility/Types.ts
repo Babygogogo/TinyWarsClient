@@ -455,8 +455,8 @@ namespace TinyWars.Utility.Types {
         McwFog      = 2,
         MrwStd      = 3,
         MrwFog      = 4,
-        Scw         = 5,
-        Wrw         = 6,
+        ScwStd      = 5,
+        ScwFog      = 6,
         Me          = 7,
     }
 

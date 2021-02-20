@@ -33,10 +33,8 @@ namespace TinyWars.MapManagement {
         private _imgAvailabilityMcw : TinyWars.GameUi.UiImage;
         private _btnAvailabilityScw : TinyWars.GameUi.UiButton;
         private _imgAvailabilityScw : TinyWars.GameUi.UiImage;
-        private _btnAvailabilityRank: TinyWars.GameUi.UiButton;
-        private _imgAvailabilityRank: TinyWars.GameUi.UiImage;
-        private _btnAvailabilityWr  : TinyWars.GameUi.UiButton;
-        private _imgAvailabilityWr  : TinyWars.GameUi.UiImage;
+        private _btnAvailabilityMrw : TinyWars.GameUi.UiButton;
+        private _imgAvailabilityMrw : TinyWars.GameUi.UiImage;
 
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
         private _listPlayer         : TinyWars.GameUi.UiScrollList;
@@ -140,16 +138,15 @@ namespace TinyWars.MapManagement {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text           = Lang.getText(Lang.Type.B0314);
-            this._labelAvailability.text        = Lang.getText(Lang.Type.B0406);
-            this._labelPlayerList.text          = Lang.getText(Lang.Type.B0407);
-            this._btnAvailabilityMcw.label      = Lang.getText(Lang.Type.B0137);
-            this._btnAvailabilityScw.label      = Lang.getText(Lang.Type.B0138);
-            this._btnAvailabilityRank.label     = Lang.getText(Lang.Type.B0404);
-            this._btnAvailabilityWr.label       = Lang.getText(Lang.Type.B0257);
-            this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
-            this._btnModifyRuleName.label       = Lang.getText(Lang.Type.B0315);
-            this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
+            this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0314);
+            this._labelAvailability.text    = Lang.getText(Lang.Type.B0406);
+            this._labelPlayerList.text      = Lang.getText(Lang.Type.B0407);
+            this._btnAvailabilityMcw.label  = Lang.getText(Lang.Type.B0137);
+            this._btnAvailabilityScw.label  = Lang.getText(Lang.Type.B0138);
+            this._btnAvailabilityMrw.label  = Lang.getText(Lang.Type.B0404);
+            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+            this._btnModifyRuleName.label   = Lang.getText(Lang.Type.B0315);
+            this._btnModifyHasFog.label     = Lang.getText(Lang.Type.B0020);
         }
 
         private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
@@ -173,8 +170,7 @@ namespace TinyWars.MapManagement {
             this._updateImgHasFog(rule);
             this._updateImgAvailabilityMcw(rule);
             this._updateImgAvailabilityScw(rule);
-            this._updateImgAvailabilityRank(rule);
-            this._updateImgAvailabilityWr(rule);
+            this._updateImgAvailabilityMrw(rule);
             this.updateListPlayerRule(rule);
         }
 
@@ -190,11 +186,8 @@ namespace TinyWars.MapManagement {
         private _updateImgAvailabilityScw(rule: IWarRule): void {
             this._imgAvailabilityScw.visible = rule ? rule.ruleAvailability.canScw : false;
         }
-        private _updateImgAvailabilityRank(rule: IWarRule): void {
-            this._imgAvailabilityRank.visible = rule ? rule.ruleAvailability.canRank : false;
-        }
-        private _updateImgAvailabilityWr(rule: IWarRule): void {
-            this._imgAvailabilityWr.visible = rule ? rule.ruleAvailability.canWr : false;
+        private _updateImgAvailabilityMrw(rule: IWarRule): void {
+            this._imgAvailabilityMrw.visible = rule ? rule.ruleAvailability.canMrw : false;
         }
         public updateListPlayerRule(rule: IWarRule): void {
             const playerRuleDataList    = rule ? rule.ruleForPlayers.playerRuleDataArray : null;

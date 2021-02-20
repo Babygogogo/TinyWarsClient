@@ -181,7 +181,6 @@ namespace TinyWars.MapEditor {
                 settingsForMcw              : null,
                 settingsForMrw              : null,
                 settingsForScw              : { isCheating: true },
-                settingsForWrw              : null,
 
                 warId                       : this.getWarId(),
                 seedRandomInitialState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),

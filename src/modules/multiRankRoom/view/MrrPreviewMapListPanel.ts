@@ -142,10 +142,10 @@ namespace TinyWars.MultiRankRoom {
                 const mapExtraData      = mapBriefData.mapExtraData;
                 const mapAvailability   = mapExtraData.mapComplexInfo.availability;
                 if ((!mapExtraData.isEnabled)                                       ||
-                    ((hasFog) && (!mapAvailability.canRankFog))                     ||
-                    ((!hasFog) && (!mapAvailability.canRank))                       ||
+                    ((hasFog) && (!mapAvailability.canMrwFog))                      ||
+                    ((!hasFog) && (!mapAvailability.canMrwStd))                     ||
                     (!(await WarMapModel.getRawData(mapId)).warRuleArray.some(v => {
-                        return (v.ruleAvailability.canRank)
+                        return (v.ruleAvailability.canMrw)
                             && (hasFog === v.ruleForGlobalParams.hasFogByDefault);
                     }))
                 ) {

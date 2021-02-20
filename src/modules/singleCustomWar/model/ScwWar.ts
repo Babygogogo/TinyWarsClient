@@ -263,7 +263,6 @@ namespace TinyWars.SingleCustomWar {
                 settingsForScw,
                 settingsForMcw              : null,
                 settingsForMrw              : null,
-                settingsForWrw              : null,
 
                 warId                       : this.getWarId(),
                 seedRandomInitialState      : null,
@@ -318,7 +317,9 @@ namespace TinyWars.SingleCustomWar {
         }
 
         public getWarType(): Types.WarType {
-            return Types.WarType.Scw;
+            return this.getSettingsForCommon().warRule.ruleForGlobalParams.hasFogByDefault
+                ? Types.WarType.ScwFog
+                : Types.WarType.ScwStd;
         }
 
         public setIsSinglePlayerCheating(isCheating: boolean): void {

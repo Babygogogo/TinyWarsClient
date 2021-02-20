@@ -1943,7 +1943,7 @@ namespace TinyWars.Utility.Lang {
             `Rating`,
         ],
         [Type.B0254]: [
-            `自由战斗`,
+            `单人明战`,
             `Free Battle`,
         ],
         [Type.B0255]: [
@@ -3054,6 +3054,10 @@ namespace TinyWars.Utility.Lang {
             `新增部队`,
             `Add Unit`,
         ],
+        [Type.B0536]: [
+            `单人雾战`,
+            `Free Battle`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -4103,8 +4107,8 @@ namespace TinyWars.Utility.Lang {
             case Types.WarType.Me       : return getText(Type.B0419);
             case Types.WarType.MrwStd   : return getText(Type.B0415);
             case Types.WarType.MrwFog   : return getText(Type.B0416);
-            case Types.WarType.Scw      : return getText(Type.B0254);
-            case Types.WarType.Wrw      : return getText(Type.B0257);
+            case Types.WarType.ScwStd   : return getText(Type.B0254);
+            case Types.WarType.ScwFog   : return getText(Type.B0536);
             default                     : return null;
         }
     }

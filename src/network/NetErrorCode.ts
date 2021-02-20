@@ -22,6 +22,7 @@ export const enum NetErrorCode {
     StoreForReplay0003,
 
     StoreForScwOngoingWar0000,
+    StoreForScwOngoingWar0001,
 
     User0000,
     User0001,
