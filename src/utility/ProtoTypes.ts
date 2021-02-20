@@ -2676,6 +2676,9 @@ export declare namespace Map {
         /** MapRawData mapId */
         mapId?: (number|null);
 
+        /** MapRawData mapCategory */
+        mapCategory?: (number|null);
+
         /** MapRawData designerName */
         designerName?: (string|null);
 
@@ -2724,6 +2727,9 @@ export declare namespace Map {
 
         /** MapRawData mapId. */
         public mapId: number;
+
+        /** MapRawData mapCategory. */
+        public mapCategory: number;
 
         /** MapRawData designerName. */
         public designerName: string;
@@ -2838,6 +2844,9 @@ export declare namespace Map {
         /** MapExtraData mapId */
         mapId?: (number|null);
 
+        /** MapExtraData mapCategory */
+        mapCategory?: (number|null);
+
         /** MapExtraData isEnabled */
         isEnabled?: (boolean|null);
 
@@ -2862,6 +2871,9 @@ export declare namespace Map {
 
         /** MapExtraData mapId. */
         public mapId: number;
+
+        /** MapExtraData mapCategory. */
+        public mapCategory: number;
 
         /** MapExtraData isEnabled. */
         public isEnabled: boolean;
@@ -6129,6 +6141,9 @@ export declare namespace WarSettings {
         /** SettingsForCommon mapId */
         mapId?: (number|null);
 
+        /** SettingsForCommon mapCategory */
+        mapCategory?: (number|null);
+
         /** SettingsForCommon presetWarRuleId */
         presetWarRuleId?: (number|null);
 
@@ -6150,6 +6165,9 @@ export declare namespace WarSettings {
 
         /** SettingsForCommon mapId. */
         public mapId: number;
+
+        /** SettingsForCommon mapCategory. */
+        public mapCategory: number;
 
         /** SettingsForCommon presetWarRuleId. */
         public presetWarRuleId: number;
@@ -14715,6 +14733,9 @@ export declare namespace Structure {
         /** DataForReviewWarRule mapId */
         mapId?: (number|null);
 
+        /** DataForReviewWarRule mapCategory */
+        mapCategory?: (number|null);
+
         /** DataForReviewWarRule submitterUserId */
         submitterUserId?: (number|null);
 
@@ -14742,6 +14763,9 @@ export declare namespace Structure {
 
         /** DataForReviewWarRule mapId. */
         public mapId: number;
+
+        /** DataForReviewWarRule mapCategory. */
+        public mapCategory: number;
 
         /** DataForReviewWarRule submitterUserId. */
         public submitterUserId: number;
@@ -16386,6 +16410,9 @@ export declare namespace SingleCustomRoom {
         /** ScrSaveSlotInfo mapId */
         mapId?: (number|null);
 
+        /** ScrSaveSlotInfo mapCategory */
+        mapCategory?: (number|null);
+
         /** ScrSaveSlotInfo warType */
         warType?: (number|null);
 
@@ -16410,6 +16437,9 @@ export declare namespace SingleCustomRoom {
 
         /** ScrSaveSlotInfo mapId. */
         public mapId: number;
+
+        /** ScrSaveSlotInfo mapCategory. */
+        public mapCategory: number;
 
         /** ScrSaveSlotInfo warType. */
         public warType: number;
@@ -16809,6 +16839,9 @@ export declare namespace Replay {
         /** ReplayBriefInfo mapId */
         mapId?: (number|null);
 
+        /** ReplayBriefInfo mapCategory */
+        mapCategory?: (number|null);
+
         /** ReplayBriefInfo hasFog */
         hasFog?: (boolean|null);
 
@@ -16851,6 +16884,9 @@ export declare namespace Replay {
 
         /** ReplayBriefInfo mapId. */
         public mapId: number;
+
+        /** ReplayBriefInfo mapCategory. */
+        public mapCategory: number;
 
         /** ReplayBriefInfo hasFog. */
         public hasFog: boolean;
@@ -18597,8 +18633,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMmSetMapAvailability */
         MsgMmSetMapAvailability?: (NetMessage.IMsgMmSetMapAvailability|null);
 
-        /** MessageContainer MsgMmDeleteMap */
-        MsgMmDeleteMap?: (NetMessage.IMsgMmDeleteMap|null);
+        /** MessageContainer MsgMmSetMapEnabled */
+        MsgMmSetMapEnabled?: (NetMessage.IMsgMmSetMapEnabled|null);
 
         /** MessageContainer MsgMmGetReviewingMaps */
         MsgMmGetReviewingMaps?: (NetMessage.IMsgMmGetReviewingMaps|null);
@@ -18937,8 +18973,8 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMmSetMapAvailability. */
         public MsgMmSetMapAvailability?: (NetMessage.IMsgMmSetMapAvailability|null);
 
-        /** MessageContainer MsgMmDeleteMap. */
-        public MsgMmDeleteMap?: (NetMessage.IMsgMmDeleteMap|null);
+        /** MessageContainer MsgMmSetMapEnabled. */
+        public MsgMmSetMapEnabled?: (NetMessage.IMsgMmSetMapEnabled|null);
 
         /** MessageContainer MsgMmGetReviewingMaps. */
         public MsgMmGetReviewingMaps?: (NetMessage.IMsgMmGetReviewingMaps|null);
@@ -26464,6 +26500,9 @@ export declare namespace NetMessage {
 
             /** C mapId */
             mapId?: (number|null);
+
+            /** C mapCategory */
+            mapCategory?: (number|null);
         }
 
         /** Represents a C. */
@@ -26477,6 +26516,9 @@ export declare namespace NetMessage {
 
             /** C mapId. */
             public mapId: number;
+
+            /** C mapCategory. */
+            public mapCategory: number;
 
             /**
              * Creates a new C instance using the specified properties.
@@ -26558,6 +26600,9 @@ export declare namespace NetMessage {
             /** S mapId */
             mapId?: (number|null);
 
+            /** S mapCategory */
+            mapCategory?: (number|null);
+
             /** S mapBriefData */
             mapBriefData?: (Map.IMapBriefData|null);
         }
@@ -26576,6 +26621,9 @@ export declare namespace NetMessage {
 
             /** S mapId. */
             public mapId: number;
+
+            /** S mapCategory. */
+            public mapCategory: number;
 
             /** S mapBriefData. */
             public mapBriefData?: (Map.IMapBriefData|null);
@@ -26755,6 +26803,9 @@ export declare namespace NetMessage {
 
             /** C mapId */
             mapId?: (number|null);
+
+            /** C mapCategory */
+            mapCategory?: (number|null);
         }
 
         /** Represents a C. */
@@ -26768,6 +26819,9 @@ export declare namespace NetMessage {
 
             /** C mapId. */
             public mapId: number;
+
+            /** C mapCategory. */
+            public mapCategory: number;
 
             /**
              * Creates a new C instance using the specified properties.
@@ -26849,6 +26903,9 @@ export declare namespace NetMessage {
             /** S mapId */
             mapId?: (number|null);
 
+            /** S mapCategory */
+            mapCategory?: (number|null);
+
             /** S mapRawData */
             mapRawData?: (Map.IMapRawData|null);
         }
@@ -26867,6 +26924,9 @@ export declare namespace NetMessage {
 
             /** S mapId. */
             public mapId: number;
+
+            /** S mapCategory. */
+            public mapCategory: number;
 
             /** S mapRawData. */
             public mapRawData?: (Map.IMapRawData|null);
@@ -27914,6 +27974,9 @@ export declare namespace NetMessage {
             /** C mapId */
             mapId?: (number|null);
 
+            /** C mapCategory */
+            mapCategory?: (number|null);
+
             /** C warRuleList */
             warRuleList?: (WarRule.IWarRule[]|null);
         }
@@ -27929,6 +27992,9 @@ export declare namespace NetMessage {
 
             /** C mapId. */
             public mapId: number;
+
+            /** C mapCategory. */
+            public mapCategory: number;
 
             /** C warRuleList. */
             public warRuleList: WarRule.IWarRule[];
@@ -29618,6 +29684,9 @@ export declare namespace NetMessage {
             /** C mapId */
             mapId?: (number|null);
 
+            /** C mapCategory */
+            mapCategory?: (number|null);
+
             /** C availability */
             availability?: (Map.IDataForMapAvailability|null);
         }
@@ -29633,6 +29702,9 @@ export declare namespace NetMessage {
 
             /** C mapId. */
             public mapId: number;
+
+            /** C mapCategory. */
+            public mapCategory: number;
 
             /** C availability. */
             public availability?: (Map.IDataForMapAvailability|null);
@@ -29717,6 +29789,9 @@ export declare namespace NetMessage {
             /** S mapId */
             mapId?: (number|null);
 
+            /** S mapCategory */
+            mapCategory?: (number|null);
+
             /** S availability */
             availability?: (Map.IDataForMapAvailability|null);
         }
@@ -29735,6 +29810,9 @@ export declare namespace NetMessage {
 
             /** S mapId. */
             public mapId: number;
+
+            /** S mapCategory. */
+            public mapCategory: number;
 
             /** S availability. */
             public availability?: (Map.IDataForMapAvailability|null);
@@ -30084,109 +30162,115 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgMmDeleteMap. */
-    interface IMsgMmDeleteMap {
+    /** Properties of a MsgMmSetMapEnabled. */
+    interface IMsgMmSetMapEnabled {
 
-        /** MsgMmDeleteMap c */
-        c?: (NetMessage.MsgMmDeleteMap.IC|null);
+        /** MsgMmSetMapEnabled c */
+        c?: (NetMessage.MsgMmSetMapEnabled.IC|null);
 
-        /** MsgMmDeleteMap s */
-        s?: (NetMessage.MsgMmDeleteMap.IS|null);
+        /** MsgMmSetMapEnabled s */
+        s?: (NetMessage.MsgMmSetMapEnabled.IS|null);
     }
 
-    /** Represents a MsgMmDeleteMap. */
-    class MsgMmDeleteMap implements IMsgMmDeleteMap {
+    /** Represents a MsgMmSetMapEnabled. */
+    class MsgMmSetMapEnabled implements IMsgMmSetMapEnabled {
 
         /**
-         * Constructs a new MsgMmDeleteMap.
+         * Constructs a new MsgMmSetMapEnabled.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgMmDeleteMap);
+        constructor(properties?: NetMessage.IMsgMmSetMapEnabled);
 
-        /** MsgMmDeleteMap c. */
-        public c?: (NetMessage.MsgMmDeleteMap.IC|null);
+        /** MsgMmSetMapEnabled c. */
+        public c?: (NetMessage.MsgMmSetMapEnabled.IC|null);
 
-        /** MsgMmDeleteMap s. */
-        public s?: (NetMessage.MsgMmDeleteMap.IS|null);
+        /** MsgMmSetMapEnabled s. */
+        public s?: (NetMessage.MsgMmSetMapEnabled.IS|null);
 
         /**
-         * Creates a new MsgMmDeleteMap instance using the specified properties.
+         * Creates a new MsgMmSetMapEnabled instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgMmDeleteMap instance
+         * @returns MsgMmSetMapEnabled instance
          */
-        public static create(properties?: NetMessage.IMsgMmDeleteMap): NetMessage.MsgMmDeleteMap;
+        public static create(properties?: NetMessage.IMsgMmSetMapEnabled): NetMessage.MsgMmSetMapEnabled;
 
         /**
-         * Encodes the specified MsgMmDeleteMap message. Does not implicitly {@link NetMessage.MsgMmDeleteMap.verify|verify} messages.
-         * @param message MsgMmDeleteMap message or plain object to encode
+         * Encodes the specified MsgMmSetMapEnabled message. Does not implicitly {@link NetMessage.MsgMmSetMapEnabled.verify|verify} messages.
+         * @param message MsgMmSetMapEnabled message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgMmDeleteMap, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgMmSetMapEnabled, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgMmDeleteMap message, length delimited. Does not implicitly {@link NetMessage.MsgMmDeleteMap.verify|verify} messages.
-         * @param message MsgMmDeleteMap message or plain object to encode
+         * Encodes the specified MsgMmSetMapEnabled message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapEnabled.verify|verify} messages.
+         * @param message MsgMmSetMapEnabled message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgMmDeleteMap, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgMmSetMapEnabled, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgMmDeleteMap message from the specified reader or buffer.
+         * Decodes a MsgMmSetMapEnabled message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgMmDeleteMap
+         * @returns MsgMmSetMapEnabled
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmDeleteMap;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapEnabled;
 
         /**
-         * Decodes a MsgMmDeleteMap message from the specified reader or buffer, length delimited.
+         * Decodes a MsgMmSetMapEnabled message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgMmDeleteMap
+         * @returns MsgMmSetMapEnabled
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmDeleteMap;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapEnabled;
 
         /**
-         * Verifies a MsgMmDeleteMap message.
+         * Verifies a MsgMmSetMapEnabled message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgMmDeleteMap message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgMmSetMapEnabled message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgMmDeleteMap
+         * @returns MsgMmSetMapEnabled
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmDeleteMap;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapEnabled;
 
         /**
-         * Creates a plain object from a MsgMmDeleteMap message. Also converts values to other types if specified.
-         * @param message MsgMmDeleteMap
+         * Creates a plain object from a MsgMmSetMapEnabled message. Also converts values to other types if specified.
+         * @param message MsgMmSetMapEnabled
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgMmDeleteMap, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgMmSetMapEnabled, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgMmDeleteMap to JSON.
+         * Converts this MsgMmSetMapEnabled to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgMmDeleteMap {
+    namespace MsgMmSetMapEnabled {
 
         /** Properties of a C. */
         interface IC {
 
             /** C mapId */
             mapId?: (number|null);
+
+            /** C mapCategory */
+            mapCategory?: (number|null);
+
+            /** C isEnabled */
+            isEnabled?: (boolean|null);
         }
 
         /** Represents a C. */
@@ -30196,33 +30280,39 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMmDeleteMap.IC);
+            constructor(properties?: NetMessage.MsgMmSetMapEnabled.IC);
 
             /** C mapId. */
             public mapId: number;
+
+            /** C mapCategory. */
+            public mapCategory: number;
+
+            /** C isEnabled. */
+            public isEnabled: boolean;
 
             /**
              * Creates a new C instance using the specified properties.
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgMmDeleteMap.IC): NetMessage.MsgMmDeleteMap.C;
+            public static create(properties?: NetMessage.MsgMmSetMapEnabled.IC): NetMessage.MsgMmSetMapEnabled.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMmDeleteMap.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMmSetMapEnabled.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMmDeleteMap.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMmSetMapEnabled.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMmDeleteMap.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapEnabled.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMmDeleteMap.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMmSetMapEnabled.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -30232,7 +30322,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmDeleteMap.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapEnabled.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -30241,7 +30331,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmDeleteMap.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapEnabled.C;
 
             /**
              * Verifies a C message.
@@ -30255,7 +30345,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmDeleteMap.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapEnabled.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -30263,7 +30353,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMmDeleteMap.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMmSetMapEnabled.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -30280,6 +30370,12 @@ export declare namespace NetMessage {
 
             /** S mapId */
             mapId?: (number|null);
+
+            /** S mapCategory */
+            mapCategory?: (number|null);
+
+            /** S isEnabled */
+            isEnabled?: (boolean|null);
         }
 
         /** Represents a S. */
@@ -30289,7 +30385,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMmDeleteMap.IS);
+            constructor(properties?: NetMessage.MsgMmSetMapEnabled.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -30297,28 +30393,34 @@ export declare namespace NetMessage {
             /** S mapId. */
             public mapId: number;
 
+            /** S mapCategory. */
+            public mapCategory: number;
+
+            /** S isEnabled. */
+            public isEnabled: boolean;
+
             /**
              * Creates a new S instance using the specified properties.
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgMmDeleteMap.IS): NetMessage.MsgMmDeleteMap.S;
+            public static create(properties?: NetMessage.MsgMmSetMapEnabled.IS): NetMessage.MsgMmSetMapEnabled.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMmDeleteMap.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMmSetMapEnabled.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMmDeleteMap.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMmSetMapEnabled.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMmDeleteMap.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMmSetMapEnabled.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMmDeleteMap.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMmSetMapEnabled.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -30328,7 +30430,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmDeleteMap.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMmSetMapEnabled.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -30337,7 +30439,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmDeleteMap.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMmSetMapEnabled.S;
 
             /**
              * Verifies a S message.
@@ -30351,7 +30453,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmDeleteMap.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMmSetMapEnabled.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -30359,7 +30461,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMmDeleteMap.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMmSetMapEnabled.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -31649,6 +31751,9 @@ export declare namespace NetMessage {
             /** C mapId */
             mapId?: (number|null);
 
+            /** C mapCategory */
+            mapCategory?: (number|null);
+
             /** C mapTag */
             mapTag?: (Map.IDataForMapTag|null);
         }
@@ -31664,6 +31769,9 @@ export declare namespace NetMessage {
 
             /** C mapId. */
             public mapId: number;
+
+            /** C mapCategory. */
+            public mapCategory: number;
 
             /** C mapTag. */
             public mapTag?: (Map.IDataForMapTag|null);
@@ -37145,6 +37253,9 @@ export declare namespace NetMessage {
             /** S mapId */
             mapId?: (number|null);
 
+            /** S mapCategory */
+            mapCategory?: (number|null);
+
             /** S mcrRoomId */
             mcrRoomId?: (number|null);
 
@@ -37169,6 +37280,9 @@ export declare namespace NetMessage {
 
             /** S mapId. */
             public mapId: number;
+
+            /** S mapCategory. */
+            public mapCategory: number;
 
             /** S mcrRoomId. */
             public mcrRoomId: number;

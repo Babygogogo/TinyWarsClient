@@ -137,7 +137,7 @@ namespace TinyWars.Utility.Notify {
 
         MsgMmSetMapAvailability,
         MsgMmReloadAllMaps,
-        MsgMmDeleteMap,
+        MsgMmSetMapEnabled,
         MsgMmGetReviewingMaps,
         MsgMmReviewMap,
         MsgMmSetMapTag,

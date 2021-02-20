@@ -105,7 +105,7 @@ namespace TinyWars.MapManagement {
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0080),
                 callback: () => {
-                    WarMapProxy.reqMmDeleteMap(this._mapId);
+                    WarMapProxy.reqMmSetMapEnabled(this._mapId, false);
                     this.close();
                 },
             });

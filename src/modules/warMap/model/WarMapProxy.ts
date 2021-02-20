@@ -13,7 +13,7 @@ namespace TinyWars.WarMap.WarMapProxy {
             { msgCode: MsgCode.MsgMapGetBriefData,              callback: _onMsgMapGetBriefData },
             { msgCode: MsgCode.MsgMapGetRawData,                callback: _onMsgMapGetRawData },
             { msgCode: MsgCode.MsgMmSetMapAvailability,         callback: _onMsgMmSetMapAvailability },
-            { msgCode: MsgCode.MsgMmDeleteMap,                  callback: _onMsgMmDeleteMap },
+            { msgCode: MsgCode.MsgMmSetMapEnabled,              callback: _onMsgMmSetMapEnabled },
             { msgCode: MsgCode.MsgMmGetReviewingMaps,           callback: _onMsgMmGetReviewingMaps },
             { msgCode: MsgCode.MsgMmReviewMap,                  callback: _onMsgMmReviewMap },
             { msgCode: MsgCode.MsgMmSetMapTag,                  callback: _onMsgMmSetMapTag },
@@ -85,18 +85,19 @@ namespace TinyWars.WarMap.WarMapProxy {
         }
     }
 
-    export function reqMmDeleteMap(mapId: number): void {
+    export function reqMmSetMapEnabled(mapId: number, isEnabled: boolean): void {
         NetManager.send({
-            MsgMmDeleteMap: { c: {
+            MsgMmSetMapEnabled: { c: {
                 mapId,
+                isEnabled,
             }, }
         });
     }
-    function _onMsgMmDeleteMap(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMmDeleteMap.IS;
+    function _onMsgMmSetMapEnabled(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMmSetMapEnabled.IS;
         if (!data.errorCode) {
-            WarMapModel.deleteBriefData(data.mapId);
-            Notify.dispatch(Notify.Type.MsgMmDeleteMap, data);
+            WarMapModel.updateOnSetMapEnabled(data);
+            Notify.dispatch(Notify.Type.MsgMmSetMapEnabled, data);
         }
     }
 

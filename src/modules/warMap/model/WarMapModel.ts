@@ -92,8 +92,10 @@ namespace TinyWars.WarMap {
                 _briefDataRequests.set(mapId, [info => resolve(info.mapBriefData)]);
             });
         }
-        export function deleteBriefData(mapId: number): void {
-            _BRIEF_DATA_DICT.delete(mapId);
+        export function updateOnSetMapEnabled(data: ProtoTypes.NetMessage.MsgMmSetMapEnabled.IS): void {
+            if (!data.isEnabled) {
+                _BRIEF_DATA_DICT.delete(data.mapId);
+            }
         }
 
         export async function getMapNameInCurrentLanguage(mapId: number): Promise<string | null> {
