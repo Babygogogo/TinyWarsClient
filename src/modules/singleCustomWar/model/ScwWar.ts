@@ -3,12 +3,10 @@ namespace TinyWars.SingleCustomWar {
     import Types                = Utility.Types;
     import ProtoTypes           = Utility.ProtoTypes;
     import Logger               = Utility.Logger;
-    import Helpers              = Utility.Helpers;
     import BwHelpers            = BaseWar.BwHelpers;
     import BwSettingsHelper     = BaseWar.BwSettingsHelper;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForScw      = ProtoTypes.WarSettings.ISettingsForScw;
-    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
 
     export class ScwWar extends SinglePlayerWar.SpwWar {
         private _settingsForSinglePlayer    : ISettingsForScw;
@@ -320,6 +318,11 @@ namespace TinyWars.SingleCustomWar {
             return this.getSettingsForCommon().warRule.ruleForGlobalParams.hasFogByDefault
                 ? Types.WarType.ScwFog
                 : Types.WarType.ScwStd;
+        }
+
+        public getMapId(): number | undefined {
+            const settingsForScw = this.getSettingsForScw();
+            return settingsForScw ? settingsForScw.mapId : undefined;
         }
 
         public setIsSinglePlayerCheating(isCheating: boolean): void {

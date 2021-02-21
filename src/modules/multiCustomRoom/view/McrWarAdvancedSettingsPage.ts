@@ -49,10 +49,9 @@ namespace TinyWars.MultiCustomRoom {
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             const warInfo = this._warInfo;
             if (warInfo) {
-                const settingsForCommon = warInfo.settingsForCommon;
                 WarMap.WarMapBuildingListPanel.show({
-                    configVersion   : settingsForCommon.configVersion,
-                    mapRawData      : await WarMapModel.getRawData(settingsForCommon.mapId),
+                    configVersion   : warInfo.settingsForCommon.configVersion,
+                    mapRawData      : await WarMapModel.getRawData(warInfo.settingsForMcw.mapId),
                 });
             }
         }
@@ -90,7 +89,7 @@ namespace TinyWars.MultiCustomRoom {
         private async _updateLabelMapName(): Promise<void> {
             const warInfo = this._warInfo;
             if (warInfo) {
-                const mapId             = warInfo.settingsForCommon.mapId;
+                const mapId             = warInfo.settingsForMcw.mapId;
                 this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapId) || "----"})`;
             }
         }

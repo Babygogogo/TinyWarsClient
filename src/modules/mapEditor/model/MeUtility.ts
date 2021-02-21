@@ -84,7 +84,6 @@ namespace TinyWars.MapEditor.MeUtility {
         return {
             settingsForCommon   : {
                 configVersion   : ConfigManager.getLatestFormalVersion(),
-                mapId           : data.mapRawData.mapId,
                 presetWarRuleId : warRule.ruleId,
                 warRule,
             },

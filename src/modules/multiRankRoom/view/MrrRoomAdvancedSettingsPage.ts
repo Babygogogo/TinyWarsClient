@@ -52,10 +52,9 @@ namespace TinyWars.MultiRankRoom {
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
-                const settingsForCommon = roomInfo.settingsForCommon;
                 WarMap.WarMapBuildingListPanel.show({
-                    configVersion   : settingsForCommon.configVersion,
-                    mapRawData      : await WarMapModel.getRawData(settingsForCommon.mapId),
+                    configVersion   : roomInfo.settingsForCommon.configVersion,
+                    mapRawData      : await WarMapModel.getRawData(roomInfo.settingsForMrw.mapId),
                 });
             }
         }
@@ -102,7 +101,7 @@ namespace TinyWars.MultiRankRoom {
         private async _updateLabelMapName(): Promise<void> {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
-                const mapId             = roomInfo.settingsForCommon.mapId;
+                const mapId             = roomInfo.settingsForMrw.mapId;
                 this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapId) || "----"})`;
             }
         }

@@ -16,7 +16,7 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
         ], ScrProxy);
     }
 
-    export function reqScrCreateWar(param: DataForCreateWar): void {
+    export function reqScrCreateWar(param: ScrModel.DataForCreateWar): void {
         NetManager.send({
             MsgScrCreateWar: { c: param },
         });

@@ -18,9 +18,9 @@ namespace TinyWars.ReplayWar {
     }
 
     export class RwWar extends SinglePlayerWar.SpwWar {
-        private _settingsForMcw                 : ProtoTypes.WarSettings.ISettingsForMcw;
-        private _settingsForScw                 : ProtoTypes.WarSettings.ISettingsForScw;
-        private _settingsForMrw                 : ProtoTypes.WarSettings.ISettingsForMrw;
+        private _settingsForMcw: ProtoTypes.WarSettings.ISettingsForMcw;
+        private _settingsForScw: ProtoTypes.WarSettings.ISettingsForScw;
+        private _settingsForMrw: ProtoTypes.WarSettings.ISettingsForMrw;
 
         private _replayId                           : number;
         private _isAutoReplay                       = false;
@@ -100,9 +100,9 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
-            this._settingsForMcw = warData.settingsForMcw;
-            this._settingsForScw = warData.settingsForScw;
-            this._settingsForMrw = warData.settingsForMrw;
+            this._setSettingsForMcw(warData.settingsForMcw);
+            this._setSettingsForScw(warData.settingsForScw);
+            this._setSettingsForMrw(warData.settingsForMrw);
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: seedRandomCurrentState }));
             this._setSeedRandomInitialState(seedRandomInitialState);
             this.setNextActionId(0);
@@ -303,16 +303,54 @@ namespace TinyWars.ReplayWar {
 
         public getWarType(): WarType {
             const hasFog = this.getSettingsHasFogByDefault();
-            if (this._settingsForMcw) {
+            if (this._getSettingsForMcw()) {
                 return hasFog ? WarType.McwFog : WarType.McwStd;
-            } else if (this._settingsForMrw) {
+            } else if (this._getSettingsForMrw()) {
                 return hasFog ? WarType.MrwFog : WarType.MrwStd;
-            } else if (this._settingsForScw) {
+            } else if (this._getSettingsForScw()) {
                 return hasFog ? WarType.ScwFog : WarType.ScwStd;
             } else {
                 Logger.error(`RwWar.getWarType() unknown warType.`);
                 return undefined;
             }
+        }
+
+        public getMapId(): number | undefined {
+            const settingsForMcw = this._getSettingsForMcw();
+            if (settingsForMcw) {
+                return settingsForMcw.mapId;
+            }
+
+            const settingsForMrw = this._getSettingsForMrw();
+            if (settingsForMrw) {
+                return settingsForMrw.mapId;
+            }
+
+            const settingsForScw = this._getSettingsForScw();
+            if (settingsForScw) {
+                return settingsForScw.mapId;
+            }
+
+            return undefined;
+        }
+
+        private _getSettingsForMcw(): ProtoTypes.WarSettings.ISettingsForMcw {
+            return this._settingsForMcw;
+        }
+        private _setSettingsForMcw(value: ProtoTypes.WarSettings.ISettingsForMcw) {
+            this._settingsForMcw = value;
+        }
+        private _getSettingsForScw(): ProtoTypes.WarSettings.ISettingsForScw {
+            return this._settingsForScw;
+        }
+        private _setSettingsForScw(value: ProtoTypes.WarSettings.ISettingsForScw) {
+            this._settingsForScw = value;
+        }
+        private _getSettingsForMrw(): ProtoTypes.WarSettings.ISettingsForMrw {
+            return this._settingsForMrw;
+        }
+        private _setSettingsForMrw(value: ProtoTypes.WarSettings.ISettingsForMrw) {
+            this._settingsForMrw = value;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

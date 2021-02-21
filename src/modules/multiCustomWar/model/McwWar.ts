@@ -177,6 +177,11 @@ namespace TinyWars.MultiCustomWar {
                 : Types.WarType.McwStd;
         }
 
+        public getMapId(): number | undefined {
+            const settingsForMcw = this.getSettingsForMcw();
+            return settingsForMcw ? settingsForMcw.mapId : undefined;
+        }
+
         private _setSettingsForMcw(settings: ISettingsForMcw): void {
             this._settingsForMcw = settings;
         }

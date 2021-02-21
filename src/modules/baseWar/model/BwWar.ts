@@ -27,6 +27,7 @@ namespace TinyWars.BaseWar {
         public abstract init(data: ISerialWar): Promise<BwWar>;
         public abstract serializeForSimulation(): ISerialWar | undefined;
         public abstract getWarType(): Types.WarType;
+        public abstract getMapId(): number | undefined;
         protected abstract _getPlayerManagerClass(): new () => BwPlayerManager;
         protected abstract _getTurnManagerClass(): new () => BwTurnManager;
         protected abstract _getFieldClass(): new () => BwField;
@@ -142,11 +143,6 @@ namespace TinyWars.BaseWar {
             }
 
             return settingsForCommon.warRule;
-        }
-
-        public getMapId(): number {
-            const settingsForCommon = this.getSettingsForCommon();
-            return settingsForCommon ? settingsForCommon.mapId : undefined;
         }
 
         public getSettingsHasFogByDefault(): boolean | null | undefined {

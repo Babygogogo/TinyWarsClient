@@ -12,6 +12,8 @@ export const enum NetErrorCode {
     ReplayManager0000,
 
     StoreForMapExtraData0000,
+    StoreForMapExtraData0001,
+    StoreForMapExtraData0002,
 
     StoreForMpwOngoingWar0000,
     StoreForMpwOngoingWar0001,
@@ -51,6 +53,13 @@ export const enum NetErrorCode {
     MapManager0008,
     MapManager0009,
     MapManager0010,
+    MapManager0011,
+    MapManager0012,
+    MapManager0013,
+    MapManager0014,
+    MapManager0015,
+    MapManager0016,
+    MapManager0017,
 
     McrManager0000,
     McrManager0001,
@@ -121,11 +130,14 @@ export const enum NetErrorCode {
     MsgMapGetBriefData0002,
 
     MsgMapGetEnabledBriefDataList0000,
+    MsgMapGetEnabledBriefDataList0001,
 
     MsgMapGetEnabledRawDataList0000,
+    MsgMapGetEnabledRawDataList0001,
 
     MsgMapGetRawData0000,
     MsgMapGetRawData0001,
+    MsgMapGetRawData0002,
 
     MsgMeGetMapData0000,
     MsgMeGetMapData0001,
@@ -149,6 +161,8 @@ export const enum NetErrorCode {
     MsgMeSubmitWarRule0004,
     MsgMeSubmitWarRule0005,
     MsgMeSubmitWarRule0006,
+    MsgMeSubmitWarRule0007,
+    MsgMeSubmitWarRule0008,
 
     MsgMmSetMapEnabled0000,
     MsgMmSetMapEnabled0001,
@@ -157,6 +171,8 @@ export const enum NetErrorCode {
     MsgMmSetMapEnabled0004,
     MsgMmSetMapEnabled0005,
     MsgMmSetMapEnabled0006,
+    MsgMmSetMapEnabled0007,
+    MsgMmSetMapEnabled0008,
 
     MsgMmGetReviewingMaps0000,
     MsgMmGetReviewingMaps0001,
@@ -176,6 +192,8 @@ export const enum NetErrorCode {
     MsgMmReviewMap0005,
     MsgMmReviewMap0006,
     MsgMmReviewMap0007,
+    MsgMmReviewMap0008,
+    MsgMmReviewMap0009,
 
     MsgMmReviewWarRule0000,
     MsgMmReviewWarRule0001,
@@ -187,6 +205,8 @@ export const enum NetErrorCode {
     MsgMmReviewWarRule0007,
     MsgMmReviewWarRule0008,
     MsgMmReviewWarRule0009,
+    MsgMmReviewWarRule0010,
+    MsgMmReviewWarRule0011,
 
     MsgMmSetMapAvailability0000,
     MsgMmSetMapAvailability0001,
@@ -196,6 +216,8 @@ export const enum NetErrorCode {
     MsgMmSetMapAvailability0005,
     MsgMmSetMapAvailability0006,
     MsgMmSetMapAvailability0007,
+    MsgMmSetMapAvailability0008,
+    MsgMmSetMapAvailability0009,
 
     MsgMmSetMapTag0000,
     MsgMmSetMapTag0001,
@@ -203,6 +225,8 @@ export const enum NetErrorCode {
     MsgMmSetMapTag0003,
     MsgMmSetMapTag0004,
     MsgMmSetMapTag0005,
+    MsgMmSetMapTag0006,
+    MsgMmSetMapTag0007,
 
     MsgMcrCreateRoom0000,
     MsgMcrCreateRoom0001,
@@ -223,6 +247,7 @@ export const enum NetErrorCode {
     MsgMcrCreateRoom0016,
     MsgMcrCreateRoom0017,
     MsgMcrCreateRoom0018,
+    MsgMcrCreateRoom0019,
 
     MsgMcrDeletePlayer0000,
     MsgMcrDeletePlayer0001,
@@ -267,6 +292,7 @@ export const enum NetErrorCode {
     MsgMcrJoinRoom0017,
     MsgMcrJoinRoom0018,
     MsgMcrJoinRoom0019,
+    MsgMcrJoinRoom0020,
 
     MsgMcrSetReady0000,
     MsgMcrSetReady0001,
@@ -309,6 +335,7 @@ export const enum NetErrorCode {
     MsgMcrSetWarRule0013,
     MsgMcrSetWarRule0014,
     MsgMcrSetWarRule0015,
+    MsgMcrSetWarRule0016,
 
     MsgMcrStartWar0000,
     MsgMcrStartWar0001,
@@ -683,6 +710,7 @@ export const enum NetErrorCode {
     MsgMrrSetBannedCoIdList0014,
     MsgMrrSetBannedCoIdList0015,
     MsgMrrSetBannedCoIdList0016,
+    MsgMrrSetBannedCoIdList0017,
 
     MsgMrrSetMaxConcurrentCount0000,
     MsgMrrSetMaxConcurrentCount0001,
@@ -703,6 +731,7 @@ export const enum NetErrorCode {
     MsgMrrSetSelfSettings0012,
     MsgMrrSetSelfSettings0013,
     MsgMrrSetSelfSettings0014,
+    MsgMrrSetSelfSettings0015,
 
     MsgReplayGetData0000,
     MsgReplayGetData0001,
@@ -738,6 +767,7 @@ export const enum NetErrorCode {
     MsgScrCreateWar0015,
     MsgScrCreateWar0016,
     MsgScrCreateWar0017,
+    MsgScrCreateWar0018,
 
     MsgScrDeleteWar0000,
 

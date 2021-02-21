@@ -49,7 +49,7 @@ namespace TinyWars.MultiCustomRoom {
                 });
             }
 
-            new Promise((resolve, reject) => {
+            new Promise<void>((resolve, reject) => {
                 const callbackOnSucceed = (e: egret.Event): void => {
                     const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
                     if (data.roomId === roomId) {
@@ -203,10 +203,10 @@ namespace TinyWars.MultiCustomRoom {
             }
 
             export function getMapId(): number {
-                return getData().settingsForCommon.mapId;
+                return getData().settingsForMcw.mapId;
             }
             function setMapId(mapId: number): void {
-                getData().settingsForCommon.mapId = mapId;
+                getData().settingsForMcw.mapId = mapId;
             }
 
             function setConfigVersion(version: string): void {
@@ -483,7 +483,7 @@ namespace TinyWars.MultiCustomRoom {
             }
             export async function getMapId(): Promise<number> {
                 const info = await getRoomInfo();
-                return info ? info.settingsForCommon.mapId : null;
+                return info ? info.settingsForMcw.mapId : null;
             }
             export async function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
                 return await WarMapModel.getRawData(await getMapId());

@@ -122,10 +122,9 @@ namespace TinyWars.MultiRankRoom {
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
-                const settingsForCommon = roomInfo.settingsForCommon;
                 WarMap.WarMapBuildingListPanel.show({
-                    configVersion   : settingsForCommon.configVersion,
-                    mapRawData      : await WarMapModel.getRawData(settingsForCommon.mapId),
+                    configVersion   : roomInfo.settingsForCommon.configVersion,
+                    mapRawData      : await WarMapModel.getRawData(roomInfo.settingsForMrw.mapId),
                 });
             }
         }
@@ -272,9 +271,8 @@ namespace TinyWars.MultiRankRoom {
         private _updateLabelMapName(): void {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
-                const settingsForCommon = roomInfo.settingsForCommon;
-                WarMapModel.getMapNameInCurrentLanguage(settingsForCommon.mapId).then(v =>
-                    this._labelMapName.text = `${v} (${BwSettingsHelper.getPlayersCount(settingsForCommon.warRule)}P)`
+                WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForMrw.mapId).then(v =>
+                    this._labelMapName.text = `${v} (${BwSettingsHelper.getPlayersCount(roomInfo.settingsForCommon.warRule)}P)`
                 );
             }
         }
@@ -439,10 +437,9 @@ namespace TinyWars.MultiRankRoom {
             const dataList  : DataForPlayerRenderer[] = [];
             const roomInfo  = this._roomInfo;
             if (roomInfo) {
-                const settingsForCommon = roomInfo.settingsForCommon;
                 const playerDataList    = roomInfo.playerDataList;
-                const playerRules       = settingsForCommon.warRule.ruleForPlayers;
-                const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCountUnneutral;
+                const playerRules       = roomInfo.settingsForCommon.warRule.ruleForPlayers;
+                const playersCount      = (await WarMapModel.getRawData(roomInfo.settingsForMrw.mapId)).playersCountUnneutral;
                 for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                     dataList.push({
                         roomInfo,

@@ -2676,9 +2676,6 @@ export declare namespace Map {
         /** MapRawData mapId */
         mapId?: (number|null);
 
-        /** MapRawData mapCategory */
-        mapCategory?: (number|null);
-
         /** MapRawData designerName */
         designerName?: (string|null);
 
@@ -2727,9 +2724,6 @@ export declare namespace Map {
 
         /** MapRawData mapId. */
         public mapId: number;
-
-        /** MapRawData mapCategory. */
-        public mapCategory: number;
 
         /** MapRawData designerName. */
         public designerName: string;
@@ -2844,9 +2838,6 @@ export declare namespace Map {
         /** MapExtraData mapId */
         mapId?: (number|null);
 
-        /** MapExtraData mapCategory */
-        mapCategory?: (number|null);
-
         /** MapExtraData isEnabled */
         isEnabled?: (boolean|null);
 
@@ -2871,9 +2862,6 @@ export declare namespace Map {
 
         /** MapExtraData mapId. */
         public mapId: number;
-
-        /** MapExtraData mapCategory. */
-        public mapCategory: number;
 
         /** MapExtraData isEnabled. */
         public isEnabled: boolean;
@@ -6138,12 +6126,6 @@ export declare namespace WarSettings {
         /** SettingsForCommon configVersion */
         configVersion?: (string|null);
 
-        /** SettingsForCommon mapId */
-        mapId?: (number|null);
-
-        /** SettingsForCommon mapCategory */
-        mapCategory?: (number|null);
-
         /** SettingsForCommon presetWarRuleId */
         presetWarRuleId?: (number|null);
 
@@ -6162,12 +6144,6 @@ export declare namespace WarSettings {
 
         /** SettingsForCommon configVersion. */
         public configVersion: string;
-
-        /** SettingsForCommon mapId. */
-        public mapId: number;
-
-        /** SettingsForCommon mapCategory. */
-        public mapCategory: number;
 
         /** SettingsForCommon presetWarRuleId. */
         public presetWarRuleId: number;
@@ -6249,6 +6225,9 @@ export declare namespace WarSettings {
     /** Properties of a SettingsForMcw. */
     interface ISettingsForMcw {
 
+        /** SettingsForMcw mapId */
+        mapId?: (number|null);
+
         /** SettingsForMcw warName */
         warName?: (string|null);
 
@@ -6270,6 +6249,9 @@ export declare namespace WarSettings {
          * @param [properties] Properties to set
          */
         constructor(properties?: WarSettings.ISettingsForMcw);
+
+        /** SettingsForMcw mapId. */
+        public mapId: number;
 
         /** SettingsForMcw warName. */
         public warName: string;
@@ -6357,6 +6339,9 @@ export declare namespace WarSettings {
     /** Properties of a SettingsForMrw. */
     interface ISettingsForMrw {
 
+        /** SettingsForMrw mapId */
+        mapId?: (number|null);
+
         /** SettingsForMrw dataArrayForBanCo */
         dataArrayForBanCo?: (Structure.IDataForPlayerBanCo[]|null);
     }
@@ -6369,6 +6354,9 @@ export declare namespace WarSettings {
          * @param [properties] Properties to set
          */
         constructor(properties?: WarSettings.ISettingsForMrw);
+
+        /** SettingsForMrw mapId. */
+        public mapId: number;
 
         /** SettingsForMrw dataArrayForBanCo. */
         public dataArrayForBanCo: Structure.IDataForPlayerBanCo[];
@@ -6447,6 +6435,9 @@ export declare namespace WarSettings {
     /** Properties of a SettingsForScw. */
     interface ISettingsForScw {
 
+        /** SettingsForScw mapId */
+        mapId?: (number|null);
+
         /** SettingsForScw isCheating */
         isCheating?: (boolean|null);
     }
@@ -6459,6 +6450,9 @@ export declare namespace WarSettings {
          * @param [properties] Properties to set
          */
         constructor(properties?: WarSettings.ISettingsForScw);
+
+        /** SettingsForScw mapId. */
+        public mapId: number;
 
         /** SettingsForScw isCheating. */
         public isCheating: boolean;
@@ -14733,9 +14727,6 @@ export declare namespace Structure {
         /** DataForReviewWarRule mapId */
         mapId?: (number|null);
 
-        /** DataForReviewWarRule mapCategory */
-        mapCategory?: (number|null);
-
         /** DataForReviewWarRule submitterUserId */
         submitterUserId?: (number|null);
 
@@ -14763,9 +14754,6 @@ export declare namespace Structure {
 
         /** DataForReviewWarRule mapId. */
         public mapId: number;
-
-        /** DataForReviewWarRule mapCategory. */
-        public mapCategory: number;
 
         /** DataForReviewWarRule submitterUserId. */
         public submitterUserId: number;
@@ -16410,9 +16398,6 @@ export declare namespace SingleCustomRoom {
         /** ScrSaveSlotInfo mapId */
         mapId?: (number|null);
 
-        /** ScrSaveSlotInfo mapCategory */
-        mapCategory?: (number|null);
-
         /** ScrSaveSlotInfo warType */
         warType?: (number|null);
 
@@ -16437,9 +16422,6 @@ export declare namespace SingleCustomRoom {
 
         /** ScrSaveSlotInfo mapId. */
         public mapId: number;
-
-        /** ScrSaveSlotInfo mapCategory. */
-        public mapCategory: number;
 
         /** ScrSaveSlotInfo warType. */
         public warType: number;
@@ -16839,9 +16821,6 @@ export declare namespace Replay {
         /** ReplayBriefInfo mapId */
         mapId?: (number|null);
 
-        /** ReplayBriefInfo mapCategory */
-        mapCategory?: (number|null);
-
         /** ReplayBriefInfo hasFog */
         hasFog?: (boolean|null);
 
@@ -16884,9 +16863,6 @@ export declare namespace Replay {
 
         /** ReplayBriefInfo mapId. */
         public mapId: number;
-
-        /** ReplayBriefInfo mapCategory. */
-        public mapCategory: number;
 
         /** ReplayBriefInfo hasFog. */
         public hasFog: boolean;
@@ -26500,9 +26476,6 @@ export declare namespace NetMessage {
 
             /** C mapId */
             mapId?: (number|null);
-
-            /** C mapCategory */
-            mapCategory?: (number|null);
         }
 
         /** Represents a C. */
@@ -26516,9 +26489,6 @@ export declare namespace NetMessage {
 
             /** C mapId. */
             public mapId: number;
-
-            /** C mapCategory. */
-            public mapCategory: number;
 
             /**
              * Creates a new C instance using the specified properties.
@@ -26600,9 +26570,6 @@ export declare namespace NetMessage {
             /** S mapId */
             mapId?: (number|null);
 
-            /** S mapCategory */
-            mapCategory?: (number|null);
-
             /** S mapBriefData */
             mapBriefData?: (Map.IMapBriefData|null);
         }
@@ -26621,9 +26588,6 @@ export declare namespace NetMessage {
 
             /** S mapId. */
             public mapId: number;
-
-            /** S mapCategory. */
-            public mapCategory: number;
 
             /** S mapBriefData. */
             public mapBriefData?: (Map.IMapBriefData|null);
@@ -26803,9 +26767,6 @@ export declare namespace NetMessage {
 
             /** C mapId */
             mapId?: (number|null);
-
-            /** C mapCategory */
-            mapCategory?: (number|null);
         }
 
         /** Represents a C. */
@@ -26819,9 +26780,6 @@ export declare namespace NetMessage {
 
             /** C mapId. */
             public mapId: number;
-
-            /** C mapCategory. */
-            public mapCategory: number;
 
             /**
              * Creates a new C instance using the specified properties.
@@ -26903,9 +26861,6 @@ export declare namespace NetMessage {
             /** S mapId */
             mapId?: (number|null);
 
-            /** S mapCategory */
-            mapCategory?: (number|null);
-
             /** S mapRawData */
             mapRawData?: (Map.IMapRawData|null);
         }
@@ -26924,9 +26879,6 @@ export declare namespace NetMessage {
 
             /** S mapId. */
             public mapId: number;
-
-            /** S mapCategory. */
-            public mapCategory: number;
 
             /** S mapRawData. */
             public mapRawData?: (Map.IMapRawData|null);
@@ -27974,9 +27926,6 @@ export declare namespace NetMessage {
             /** C mapId */
             mapId?: (number|null);
 
-            /** C mapCategory */
-            mapCategory?: (number|null);
-
             /** C warRuleList */
             warRuleList?: (WarRule.IWarRule[]|null);
         }
@@ -27992,9 +27941,6 @@ export declare namespace NetMessage {
 
             /** C mapId. */
             public mapId: number;
-
-            /** C mapCategory. */
-            public mapCategory: number;
 
             /** C warRuleList. */
             public warRuleList: WarRule.IWarRule[];
@@ -29684,9 +29630,6 @@ export declare namespace NetMessage {
             /** C mapId */
             mapId?: (number|null);
 
-            /** C mapCategory */
-            mapCategory?: (number|null);
-
             /** C availability */
             availability?: (Map.IDataForMapAvailability|null);
         }
@@ -29702,9 +29645,6 @@ export declare namespace NetMessage {
 
             /** C mapId. */
             public mapId: number;
-
-            /** C mapCategory. */
-            public mapCategory: number;
 
             /** C availability. */
             public availability?: (Map.IDataForMapAvailability|null);
@@ -29789,9 +29729,6 @@ export declare namespace NetMessage {
             /** S mapId */
             mapId?: (number|null);
 
-            /** S mapCategory */
-            mapCategory?: (number|null);
-
             /** S availability */
             availability?: (Map.IDataForMapAvailability|null);
         }
@@ -29810,9 +29747,6 @@ export declare namespace NetMessage {
 
             /** S mapId. */
             public mapId: number;
-
-            /** S mapCategory. */
-            public mapCategory: number;
 
             /** S availability. */
             public availability?: (Map.IDataForMapAvailability|null);
@@ -30266,9 +30200,6 @@ export declare namespace NetMessage {
             /** C mapId */
             mapId?: (number|null);
 
-            /** C mapCategory */
-            mapCategory?: (number|null);
-
             /** C isEnabled */
             isEnabled?: (boolean|null);
         }
@@ -30284,9 +30215,6 @@ export declare namespace NetMessage {
 
             /** C mapId. */
             public mapId: number;
-
-            /** C mapCategory. */
-            public mapCategory: number;
 
             /** C isEnabled. */
             public isEnabled: boolean;
@@ -30371,9 +30299,6 @@ export declare namespace NetMessage {
             /** S mapId */
             mapId?: (number|null);
 
-            /** S mapCategory */
-            mapCategory?: (number|null);
-
             /** S isEnabled */
             isEnabled?: (boolean|null);
         }
@@ -30392,9 +30317,6 @@ export declare namespace NetMessage {
 
             /** S mapId. */
             public mapId: number;
-
-            /** S mapCategory. */
-            public mapCategory: number;
 
             /** S isEnabled. */
             public isEnabled: boolean;
@@ -31751,9 +31673,6 @@ export declare namespace NetMessage {
             /** C mapId */
             mapId?: (number|null);
 
-            /** C mapCategory */
-            mapCategory?: (number|null);
-
             /** C mapTag */
             mapTag?: (Map.IDataForMapTag|null);
         }
@@ -31769,9 +31688,6 @@ export declare namespace NetMessage {
 
             /** C mapId. */
             public mapId: number;
-
-            /** C mapCategory. */
-            public mapCategory: number;
 
             /** C mapTag. */
             public mapTag?: (Map.IDataForMapTag|null);
@@ -37253,9 +37169,6 @@ export declare namespace NetMessage {
             /** S mapId */
             mapId?: (number|null);
 
-            /** S mapCategory */
-            mapCategory?: (number|null);
-
             /** S mcrRoomId */
             mcrRoomId?: (number|null);
 
@@ -37280,9 +37193,6 @@ export declare namespace NetMessage {
 
             /** S mapId. */
             public mapId: number;
-
-            /** S mapCategory. */
-            public mapCategory: number;
 
             /** S mcrRoomId. */
             public mcrRoomId: number;

@@ -168,12 +168,11 @@ namespace TinyWars.MultiRankRoom {
 
         private async _showMap(index: number): Promise<void> {
             const warInfo               = this._dataForListWar[index].warInfo;
-            const settingsForCommon     = warInfo.settingsForCommon;
-            const mapId                 = settingsForCommon.mapId;
+            const mapId                 = warInfo.settingsForMrw.mapId;
             const mapRawData            = await WarMapModel.getRawData(mapId);
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0013));
+            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(warInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0013));
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, (await WarMapModel.getBriefData(mapId)).mapExtraData));
 
             this._groupInfo.visible      = true;
@@ -232,7 +231,7 @@ namespace TinyWars.MultiRankRoom {
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelInTurn.text  = this._checkIsInTurn(warInfo) ? Lang.getText(Lang.Type.B0231) : "";
             labelName.text          = "";
-            WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForCommon.mapId).then(v => labelName.text = v);
+            WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForMrw.mapId).then(v => labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

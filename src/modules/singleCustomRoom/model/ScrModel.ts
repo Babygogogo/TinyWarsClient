@@ -1,5 +1,5 @@
 
-namespace TinyWars.SingleCustomRoom {
+namespace TinyWars.SingleCustomRoom.ScrModel {
     import Lang                     = Utility.Lang;
     import ProtoTypes               = Utility.ProtoTypes;
     import Notify                   = Utility.Notify;
@@ -30,272 +30,270 @@ namespace TinyWars.SingleCustomRoom {
 
     export type DataForCreateWar = ProtoTypes.NetMessage.MsgScrCreateWar.IC;
 
-    export namespace ScrModel {
-        const _dataForCreateWar: DataForCreateWar = {
-            slotIndex           : 0,
-            settingsForCommon   : {
-                mapId           : undefined,
-                configVersion   : Utility.ConfigManager.getLatestFormalVersion(),
-            },
-            settingsForScw: {
-            },
+    const _dataForCreateWar: DataForCreateWar = {
+        slotIndex           : 0,
+        settingsForCommon   : {
+            configVersion   : Utility.ConfigManager.getLatestFormalVersion(),
+        },
+        settingsForScw: {
+            mapId           : undefined,
+        },
 
-            playerInfoList  : [],
-        };
+        playerInfoList  : [],
+    };
 
-        let _saveSlotInfoList   : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[];
+    let _saveSlotInfoList   : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[];
 
-        export function init(): void {
+    export function init(): void {
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for creating wars.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export function getCreateWarMapBriefData(): Promise<ProtoTypes.Map.IMapBriefData> {
+        return WarMapModel.getBriefData(getCreateWarData().settingsForScw.mapId);
+    }
+    export function getCreateWarMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
+        return WarMapModel.getRawData(getCreateWarData().settingsForScw.mapId);
+    }
+
+    export function getCreateWarPlayerRule(playerIndex: number): IDataForPlayerRule {
+        return BwSettingsHelper.getPlayerRule(getCreateWarData().settingsForCommon.warRule, playerIndex);
+    }
+    export function getCreateWarPlayerInfo(playerIndex: number): IDataForPlayerInRoom {
+        return getCreateWarData().playerInfoList.find(v => v.playerIndex === playerIndex);
+    }
+
+    export async function resetCreateWarDataByMapId(mapId: number): Promise<void> {
+        getCreateWarData().settingsForScw.mapId = mapId;
+        setCreateWarConfigVersion(Utility.ConfigManager.getLatestFormalVersion());
+        await resetCreateWarDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
+        setCreateWarSaveSlotIndex(getAvailableSaveSlot(getSaveSlotInfoList()));
+    }
+    export function getCreateWarData(): DataForCreateWar {
+        return _dataForCreateWar;
+    }
+
+    function setCreateWarConfigVersion(version: string): void {
+        getCreateWarData().settingsForCommon.configVersion = version;
+    }
+
+    export async function resetCreateWarDataByPresetWarRuleId(ruleId: number): Promise<void> {
+        const warRule = (await getCreateWarMapRawData()).warRuleArray.find(warRule => warRule.ruleId === ruleId);
+        if (warRule == null) {
+            Logger.error(`ScwModel.setCreateWarPresetWarRuleId() empty warRule.`);
+            return undefined;
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for creating wars.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function getCreateWarMapBriefData(): Promise<ProtoTypes.Map.IMapBriefData> {
-            return WarMapModel.getBriefData(getCreateWarData().settingsForCommon.mapId);
-        }
-        export function getCreateWarMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
-            return WarMapModel.getRawData(getCreateWarData().settingsForCommon.mapId);
-        }
+        getCreateWarData().settingsForCommon.warRule = Helpers.deepClone(warRule);
+        setCreateWarPresetWarRuleId(ruleId);
 
-        export function getCreateWarPlayerRule(playerIndex: number): IDataForPlayerRule {
-            return BwSettingsHelper.getPlayerRule(getCreateWarData().settingsForCommon.warRule, playerIndex);
-        }
-        export function getCreateWarPlayerInfo(playerIndex: number): IDataForPlayerInRoom {
-            return getCreateWarData().playerInfoList.find(v => v.playerIndex === playerIndex);
-        }
-
-        export async function resetCreateWarDataByMapId(mapId: number): Promise<void> {
-            getCreateWarData().settingsForCommon.mapId = mapId;
-            setCreateWarConfigVersion(Utility.ConfigManager.getLatestFormalVersion());
+        await resetCreateWarPlayerInfoList();
+    }
+    function setCreateWarPresetWarRuleId(ruleId: number | null | undefined): void {
+        const settingsForCommon             = getCreateWarData().settingsForCommon;
+        settingsForCommon.warRule.ruleId    = ruleId;
+        settingsForCommon.presetWarRuleId   = ruleId;
+    }
+    export function getCreateWarPresetWarRuleId(): number | undefined {
+        return getCreateWarData().settingsForCommon.presetWarRuleId;
+    }
+    export async function tickCreateWarPresetWarRuleId(): Promise<void> {
+        const currWarRuleId = getCreateWarPresetWarRuleId();
+        if (currWarRuleId == null) {
             await resetCreateWarDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
-            setCreateWarSaveSlotIndex(getAvailableSaveSlot(getSaveSlotInfoList()));
+        } else {
+            await resetCreateWarDataByPresetWarRuleId((currWarRuleId + 1) % (await getCreateWarMapRawData()).warRuleArray.length);
         }
-        export function getCreateWarData(): DataForCreateWar {
-            return _dataForCreateWar;
+    }
+
+    async function resetCreateWarPlayerInfoList(): Promise<void> {
+        const playersCount      = (await getCreateWarMapRawData()).playersCountUnneutral;
+        const settingsForCommon = getCreateWarData().settingsForCommon;
+        const list              : ProtoTypes.Structure.IWarPlayerInfo[] = [];
+        for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
+            list.push({
+                playerIndex,
+                userId      : playerIndex === 1 ? User.UserModel.getSelfUserId() : null,
+                coId        : BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, playerIndex),
+            });
         }
 
-        function setCreateWarConfigVersion(version: string): void {
-            getCreateWarData().settingsForCommon.configVersion = version;
-        }
+        getCreateWarData().playerInfoList = list;
+    }
 
-        export async function resetCreateWarDataByPresetWarRuleId(ruleId: number): Promise<void> {
-            const warRule = (await getCreateWarMapRawData()).warRuleArray.find(warRule => warRule.ruleId === ruleId);
-            if (warRule == null) {
-                Logger.error(`ScwModel.setCreateWarPresetWarRuleId() empty warRule.`);
-                return undefined;
-            }
+    export function setCreateWarSaveSlotIndex(slotIndex: number): void {
+        const data = getCreateWarData();
+        if (data.slotIndex !== slotIndex) {
+            data.slotIndex = slotIndex;
+            Notify.dispatch(Notify.Type.ScrCreateWarSaveSlotChanged);
+        }
+    }
+    export function getCreateWarSaveSlotIndex(): number {
+        return getCreateWarData().slotIndex;
+    }
 
-            getCreateWarData().settingsForCommon.warRule = Helpers.deepClone(warRule);
-            setCreateWarPresetWarRuleId(ruleId);
+    export function tickCreateWarUserId(playerIndex: number): void {
+        const playerInfo    = getCreateWarPlayerInfo(playerIndex);
+        playerInfo.userId   = playerInfo.userId ? null : User.UserModel.getSelfUserId();
+        Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
+    }
 
-            await resetCreateWarPlayerInfoList();
-        }
-        function setCreateWarPresetWarRuleId(ruleId: number | null | undefined): void {
-            const settingsForCommon             = getCreateWarData().settingsForCommon;
-            settingsForCommon.warRule.ruleId    = ruleId;
-            settingsForCommon.presetWarRuleId   = ruleId;
-        }
-        export function getCreateWarPresetWarRuleId(): number | undefined {
-            return getCreateWarData().settingsForCommon.presetWarRuleId;
-        }
-        export async function tickCreateWarPresetWarRuleId(): Promise<void> {
-            const currWarRuleId = getCreateWarPresetWarRuleId();
-            if (currWarRuleId == null) {
-                await resetCreateWarDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
-            } else {
-                await resetCreateWarDataByPresetWarRuleId((currWarRuleId + 1) % (await getCreateWarMapRawData()).warRuleArray.length);
-            }
-        }
+    export function getCreateWarTeamIndex(playerIndex: number): number {
+        return getCreateWarPlayerRule(playerIndex).teamIndex;
+    }
+    export function tickCreateWarTeamIndex(playerIndex: number): void {
+        setCreateWarPresetWarRuleId(null);
 
-        async function resetCreateWarPlayerInfoList(): Promise<void> {
-            const playersCount      = (await getCreateWarMapRawData()).playersCountUnneutral;
-            const settingsForCommon = getCreateWarData().settingsForCommon;
-            const list              : ProtoTypes.Structure.IWarPlayerInfo[] = [];
-            for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
-                list.push({
-                    playerIndex,
-                    userId      : playerIndex === 1 ? User.UserModel.getSelfUserId() : null,
-                    coId        : BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, playerIndex),
-                });
-            }
+        const playerRule        = getCreateWarPlayerRule(playerIndex);
+        playerRule.teamIndex    = playerRule.teamIndex % (BwSettingsHelper.getPlayersCount(getCreateWarData().settingsForCommon.warRule)) + 1;
 
-            getCreateWarData().playerInfoList = list;
-        }
+        Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
+    }
 
-        export function setCreateWarSaveSlotIndex(slotIndex: number): void {
-            const data = getCreateWarData();
-            if (data.slotIndex !== slotIndex) {
-                data.slotIndex = slotIndex;
-                Notify.dispatch(Notify.Type.ScrCreateWarSaveSlotChanged);
-            }
-        }
-        export function getCreateWarSaveSlotIndex(): number {
-            return getCreateWarData().slotIndex;
-        }
-
-        export function tickCreateWarUserId(playerIndex: number): void {
-            const playerInfo    = getCreateWarPlayerInfo(playerIndex);
-            playerInfo.userId   = playerInfo.userId ? null : User.UserModel.getSelfUserId();
-            Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
-        }
-
-        export function getCreateWarTeamIndex(playerIndex: number): number {
-            return getCreateWarPlayerRule(playerIndex).teamIndex;
-        }
-        export function tickCreateWarTeamIndex(playerIndex: number): void {
+    export function setCreateWarCoId(playerIndex: number, coId: number): void {
+        const availableCoIdList = getCreateWarPlayerRule(playerIndex).availableCoIdArray;
+        if (availableCoIdList.indexOf(coId) < 0) {
             setCreateWarPresetWarRuleId(null);
-
-            const playerRule        = getCreateWarPlayerRule(playerIndex);
-            playerRule.teamIndex    = playerRule.teamIndex % (BwSettingsHelper.getPlayersCount(getCreateWarData().settingsForCommon.warRule)) + 1;
-
-            Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
+            availableCoIdList.push(coId);
         }
 
-        export function setCreateWarCoId(playerIndex: number, coId: number): void {
-            const availableCoIdList = getCreateWarPlayerRule(playerIndex).availableCoIdArray;
-            if (availableCoIdList.indexOf(coId) < 0) {
-                setCreateWarPresetWarRuleId(null);
-                availableCoIdList.push(coId);
-            }
+        getCreateWarPlayerInfo(playerIndex).coId = coId;
+        Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
+    }
 
-            getCreateWarPlayerInfo(playerIndex).coId = coId;
-            Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
-        }
+    export function getCreateWarHasFog(): boolean {
+        return getCreateWarData().settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
+    }
+    export function setCreateWarHasFog(hasFog: boolean): void {
+        setCreateWarPresetWarRuleId(null);
 
-        export function getCreateWarHasFog(): boolean {
-            return getCreateWarData().settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
-        }
-        export function setCreateWarHasFog(hasFog: boolean): void {
-            setCreateWarPresetWarRuleId(null);
+        getCreateWarData().settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault = hasFog;
+    }
+    export function setCreateWarPrevHasFog(): void {
+        setCreateWarHasFog(!getCreateWarHasFog());
+    }
+    export function setCreateWarNextHasFog(): void {
+        setCreateWarHasFog(!getCreateWarHasFog());
+    }
 
-            getCreateWarData().settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault = hasFog;
-        }
-        export function setCreateWarPrevHasFog(): void {
-            setCreateWarHasFog(!getCreateWarHasFog());
-        }
-        export function setCreateWarNextHasFog(): void {
-            setCreateWarHasFog(!getCreateWarHasFog());
-        }
+    export function setCreateWarInitialFund(playerIndex: number, initialFund: number): void {
+        setCreateWarPresetWarRuleId(null);
 
-        export function setCreateWarInitialFund(playerIndex: number, initialFund: number): void {
-            setCreateWarPresetWarRuleId(null);
+        getCreateWarPlayerRule(playerIndex).initialFund = initialFund;
+    }
+    export function getCreateWarInitialFund(playerIndex: number): number {
+        return getCreateWarPlayerRule(playerIndex).initialFund;
+    }
 
-            getCreateWarPlayerRule(playerIndex).initialFund = initialFund;
+    export function setCreateWarIncomeMultiplier(playerIndex: number, multiplier: number): void {
+        setCreateWarPresetWarRuleId(null);
+
+        getCreateWarPlayerRule(playerIndex).incomeMultiplier = multiplier;
+    }
+    export function getCreateWarIncomeMultiplier(playerIndex: number): number {
+        return getCreateWarPlayerRule(playerIndex).incomeMultiplier;
+    }
+
+    export function setCreateWarInitialEnergyPercentage(playerIndex: number, percentage: number): void {
+        setCreateWarPresetWarRuleId(null);
+
+        getCreateWarPlayerRule(playerIndex).initialEnergyPercentage = percentage;
+    }
+    export function getCreateWarInitialEnergyPercentage(playerIndex: number): number {
+        return getCreateWarPlayerRule(playerIndex).initialEnergyPercentage;
+    }
+
+    export function setCreateWarEnergyGrowthMultiplier(playerIndex: number, multiplier: number): void {
+        setCreateWarPresetWarRuleId(null);
+
+        getCreateWarPlayerRule(playerIndex).energyGrowthMultiplier = multiplier;
+    }
+    export function getCreateWarEnergyGrowthMultiplier(playerIndex: number): number {
+        return getCreateWarPlayerRule(playerIndex).energyGrowthMultiplier;
+    }
+
+    export function setCreateWarMoveRangeModifier(playerIndex: number, modifier: number): void {
+        setCreateWarPresetWarRuleId(null);
+
+        getCreateWarPlayerRule(playerIndex).moveRangeModifier = modifier;
+    }
+    export function getCreateWarMoveRangeModifier(playerIndex: number): number {
+        return getCreateWarPlayerRule(playerIndex).moveRangeModifier;
+    }
+
+    export function setCreateWarAttackPowerModifier(playerIndex: number, modifier: number): void {
+        setCreateWarPresetWarRuleId(null);
+
+        getCreateWarPlayerRule(playerIndex).attackPowerModifier = modifier;
+    }
+    export function getCreateWarAttackPowerModifier(playerIndex: number): number {
+        return getCreateWarPlayerRule(playerIndex).attackPowerModifier;
+    }
+
+    export function setCreateWarVisionRangeModifier(playerIndex: number, modifier: number): void {
+        setCreateWarPresetWarRuleId(null);
+
+        getCreateWarPlayerRule(playerIndex).visionRangeModifier = modifier;
+    }
+    export function getCreateWarVisionRangeModifier(playerIndex: number): number {
+        return getCreateWarPlayerRule(playerIndex).visionRangeModifier;
+    }
+
+    export function setCreateWarLuckLowerLimit(playerIndex: number, limit: number): void {
+        setCreateWarPresetWarRuleId(null);
+
+        getCreateWarPlayerRule(playerIndex).luckLowerLimit = limit;
+    }
+    export function getCreateWarLuckLowerLimit(playerIndex: number): number {
+        return getCreateWarPlayerRule(playerIndex).luckLowerLimit;
+    }
+
+    export function setCreateWarLuckUpperLimit(playerIndex: number, limit: number): void {
+        setCreateWarPresetWarRuleId(null);
+
+        getCreateWarPlayerRule(playerIndex).luckUpperLimit = limit;
+    }
+    export function getCreateWarLuckUpperLimit(playerIndex: number): number {
+        return getCreateWarPlayerRule(playerIndex).luckUpperLimit;
+    }
+
+    export function getCreateWarInvalidParamTips(): string | null{
+        const teamSet = new Set<number>();
+        for (const playerRule of getCreateWarData().settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray) {
+            teamSet.add(playerRule.teamIndex);
         }
-        export function getCreateWarInitialFund(playerIndex: number): number {
-            return getCreateWarPlayerRule(playerIndex).initialFund;
-        }
-
-        export function setCreateWarIncomeMultiplier(playerIndex: number, multiplier: number): void {
-            setCreateWarPresetWarRuleId(null);
-
-            getCreateWarPlayerRule(playerIndex).incomeMultiplier = multiplier;
-        }
-        export function getCreateWarIncomeMultiplier(playerIndex: number): number {
-            return getCreateWarPlayerRule(playerIndex).incomeMultiplier;
-        }
-
-        export function setCreateWarInitialEnergyPercentage(playerIndex: number, percentage: number): void {
-            setCreateWarPresetWarRuleId(null);
-
-            getCreateWarPlayerRule(playerIndex).initialEnergyPercentage = percentage;
-        }
-        export function getCreateWarInitialEnergyPercentage(playerIndex: number): number {
-            return getCreateWarPlayerRule(playerIndex).initialEnergyPercentage;
-        }
-
-        export function setCreateWarEnergyGrowthMultiplier(playerIndex: number, multiplier: number): void {
-            setCreateWarPresetWarRuleId(null);
-
-            getCreateWarPlayerRule(playerIndex).energyGrowthMultiplier = multiplier;
-        }
-        export function getCreateWarEnergyGrowthMultiplier(playerIndex: number): number {
-            return getCreateWarPlayerRule(playerIndex).energyGrowthMultiplier;
-        }
-
-        export function setCreateWarMoveRangeModifier(playerIndex: number, modifier: number): void {
-            setCreateWarPresetWarRuleId(null);
-
-            getCreateWarPlayerRule(playerIndex).moveRangeModifier = modifier;
-        }
-        export function getCreateWarMoveRangeModifier(playerIndex: number): number {
-            return getCreateWarPlayerRule(playerIndex).moveRangeModifier;
-        }
-
-        export function setCreateWarAttackPowerModifier(playerIndex: number, modifier: number): void {
-            setCreateWarPresetWarRuleId(null);
-
-            getCreateWarPlayerRule(playerIndex).attackPowerModifier = modifier;
-        }
-        export function getCreateWarAttackPowerModifier(playerIndex: number): number {
-            return getCreateWarPlayerRule(playerIndex).attackPowerModifier;
-        }
-
-        export function setCreateWarVisionRangeModifier(playerIndex: number, modifier: number): void {
-            setCreateWarPresetWarRuleId(null);
-
-            getCreateWarPlayerRule(playerIndex).visionRangeModifier = modifier;
-        }
-        export function getCreateWarVisionRangeModifier(playerIndex: number): number {
-            return getCreateWarPlayerRule(playerIndex).visionRangeModifier;
-        }
-
-        export function setCreateWarLuckLowerLimit(playerIndex: number, limit: number): void {
-            setCreateWarPresetWarRuleId(null);
-
-            getCreateWarPlayerRule(playerIndex).luckLowerLimit = limit;
-        }
-        export function getCreateWarLuckLowerLimit(playerIndex: number): number {
-            return getCreateWarPlayerRule(playerIndex).luckLowerLimit;
-        }
-
-        export function setCreateWarLuckUpperLimit(playerIndex: number, limit: number): void {
-            setCreateWarPresetWarRuleId(null);
-
-            getCreateWarPlayerRule(playerIndex).luckUpperLimit = limit;
-        }
-        export function getCreateWarLuckUpperLimit(playerIndex: number): number {
-            return getCreateWarPlayerRule(playerIndex).luckUpperLimit;
-        }
-
-        export function getCreateWarInvalidParamTips(): string | null{
-            const teamSet = new Set<number>();
-            for (const playerRule of getCreateWarData().settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray) {
-                teamSet.add(playerRule.teamIndex);
-            }
-            if (teamSet.size <= 1) {
-                return Lang.getText(Lang.Type.A0069);
-            }
-
-            return null;
+        if (teamSet.size <= 1) {
+            return Lang.getText(Lang.Type.A0069);
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for save slots.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export function setSaveSlotInfoList(infoList: ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[]): void {
-            _saveSlotInfoList = infoList;
-        }
-        export function getSaveSlotInfoList(): ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[] | null {
-            return _saveSlotInfoList;
-        }
-        export function deleteSaveSlot(slotIndex: number): void {
-            if (_saveSlotInfoList) {
-                for (let i = 0; i < _saveSlotInfoList.length; ++i) {
-                    if (_saveSlotInfoList[i].slotIndex === slotIndex) {
-                        _saveSlotInfoList.splice(i, 1);
-                        return;
-                    }
+        return null;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for save slots.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export function setSaveSlotInfoList(infoList: ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[]): void {
+        _saveSlotInfoList = infoList;
+    }
+    export function getSaveSlotInfoList(): ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[] | null {
+        return _saveSlotInfoList;
+    }
+    export function deleteSaveSlot(slotIndex: number): void {
+        if (_saveSlotInfoList) {
+            for (let i = 0; i < _saveSlotInfoList.length; ++i) {
+                if (_saveSlotInfoList[i].slotIndex === slotIndex) {
+                    _saveSlotInfoList.splice(i, 1);
+                    return;
                 }
             }
         }
-        export function checkIsSaveSlotEmpty(slotIndex: number): boolean {
-            if (!_saveSlotInfoList) {
-                return true;
-            } else {
-                return _saveSlotInfoList.every(v => v.slotIndex !== slotIndex);
-            }
+    }
+    export function checkIsSaveSlotEmpty(slotIndex: number): boolean {
+        if (!_saveSlotInfoList) {
+            return true;
+        } else {
+            return _saveSlotInfoList.every(v => v.slotIndex !== slotIndex);
         }
     }
 

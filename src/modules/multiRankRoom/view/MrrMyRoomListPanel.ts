@@ -160,12 +160,11 @@ namespace TinyWars.MultiRankRoom {
 
         private async _showMap(index: number): Promise<void> {
             const roomInfo              = this._dataForListWar[index].roomInfo;
-            const settingsForCommon     = roomInfo.settingsForCommon;
-            const mapId                 = settingsForCommon.mapId;
+            const mapId                 = roomInfo.settingsForMrw.mapId;
             const mapRawData            = await WarMapModel.getRawData(mapId);
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0013));
+            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(roomInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0013));
             this._listPlayer.bindData(this._createDataForListPlayer(roomInfo, mapRawData));
 
             this._groupInfo.visible      = true;
@@ -237,7 +236,7 @@ namespace TinyWars.MultiRankRoom {
             const labelName     = this._labelName;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             labelName.text      = "";
-            WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForCommon.mapId).then(v => labelName.text = v);
+            WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForMrw.mapId).then(v => labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {

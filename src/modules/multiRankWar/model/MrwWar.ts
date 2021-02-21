@@ -179,6 +179,11 @@ namespace TinyWars.MultiRankWar {
                 : Types.WarType.MrwStd;
         }
 
+        public getMapId(): number | undefined {
+            const settingsForMrw = this.getSettingsForMrw();
+            return settingsForMrw ? settingsForMrw.mapId : undefined;
+        }
+
         private _setSettingsForMrw(settings: ISettingsForMrw): void {
             this._settingsForMrw = settings;
         }

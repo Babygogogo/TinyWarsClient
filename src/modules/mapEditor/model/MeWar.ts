@@ -219,6 +219,10 @@ namespace TinyWars.MapEditor {
             return Types.WarType.Me;
         }
 
+        public getMapId(): number | undefined {
+            return undefined;
+        }
+
         protected _getViewClass(): new () => MeWarView {
             return MeWarView;
         }
