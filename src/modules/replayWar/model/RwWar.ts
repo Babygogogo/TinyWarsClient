@@ -399,56 +399,44 @@ namespace TinyWars.ReplayWar {
             this._checkPointDataListForCheckPointId.set(checkPointId, data);
         }
 
-        public checkIsInEnd(): boolean {
-            return this.getNextActionId() >= this.getTotalActionsCount();
-        }
-        public async loadNextCheckPoint(): Promise<void> {
-            const nextActionId      = this.getNextActionId();
-            const isWaitBeginTurn   = this.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn;
-            const checkPointId      = isWaitBeginTurn ? this.getCheckPointId(nextActionId) + 1 : this.getCheckPointId(nextActionId);
-
-            if (this.getCheckPointData(checkPointId)) {
-                this.setIsAutoReplay(false);
-                this.stopRunning();
-
-                await Helpers.checkAndCallLater();
-                await this._loadCheckPoint(checkPointId);
-                await Helpers.checkAndCallLater();
-                this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
-
-            } else {
-                this.setIsAutoReplay(false);
-
-                if (!isWaitBeginTurn) {
-                    this.stopRunning();
-                    await Helpers.checkAndCallLater();
-                    await this._loadCheckPoint(checkPointId - 1);
-                    await Helpers.checkAndCallLater();
-                    this.startRunning();
-                }
-                while (!this.getCheckPointData(checkPointId)) {
-                    // await Helpers.checkAndCallLater();
-                    await RwActionExecutor.executeNextAction(this, true);
-                }
-
-                this.stopRunning();
-                await Helpers.checkAndCallLater();
-                await this._loadCheckPoint(checkPointId);
-                await Helpers.checkAndCallLater();
-                this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
-            }
-        }
         public checkIsInBeginning(): boolean {
             return this.getNextActionId() <= 0;
         }
-        public async loadPreviousCheckPoint(): Promise<void> {
-            this.setIsAutoReplay(false);
-            this.stopRunning();
+        public checkIsInEnd(): boolean {
+            return this.getNextActionId() >= this.getTotalActionsCount();
+        }
 
+        public async loadNextCheckPoint(): Promise<void> {
+            if (this.checkIsInEnd()) {
+                return;
+            }
+
+            const checkPointId = this.getCheckPointId(this.getNextActionId()) + 1;
+            this.setIsAutoReplay(false);
+
+            while (!this.getCheckPointData(checkPointId)) {
+                await Helpers.checkAndCallLater();
+                await RwActionExecutor.executeNextAction(this, true);
+            }
+            this.stopRunning();
             await Helpers.checkAndCallLater();
-            await this._loadCheckPoint(this.getCheckPointId(this.getNextActionId()) - 1);
+            await this._loadCheckPoint(checkPointId);
+            await Helpers.checkAndCallLater();
+            this.startRunning().startRunningView();
+            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+        }
+        public async loadPreviousCheckPoint(): Promise<void> {
+            if (this.checkIsInBeginning()) {
+                return;
+            }
+
+            const nextActionId = this.getNextActionId();
+            const checkPointId = Math.min(this.getCheckPointId(nextActionId), this.getCheckPointId(nextActionId - 1));
+            this.setIsAutoReplay(false);
+
+            this.stopRunning();
+            await Helpers.checkAndCallLater();
+            await this._loadCheckPoint(checkPointId);
             await Helpers.checkAndCallLater();
             this.startRunning().startRunningView();
             FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);

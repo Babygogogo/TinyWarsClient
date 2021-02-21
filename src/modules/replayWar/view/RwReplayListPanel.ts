@@ -281,7 +281,7 @@ namespace TinyWars.ReplayWar {
             const info                  = data.info.replayBriefInfo;
             const warType               = info.warType;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelTurnIndex.text   = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex + 1}`;
+            this._labelTurnIndex.text   = `${Lang.getText(Lang.Type.B0091)}: ${info.turnIndex}`;
             this._labelReplayId.text    = `ID: ${info.replayId}${warType === Types.WarType.MrwStd || warType === Types.WarType.MrwFog ? ` RANK` : ``}`;
             WarMapModel.getMapNameInCurrentLanguage(info.mapId).then(v => this._labelName.text = v);
         }
