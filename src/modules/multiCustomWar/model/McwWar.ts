@@ -105,12 +105,6 @@ namespace TinyWars.MultiCustomWar {
                 return undefined;
             }
 
-            const executedActionsCount = this.getExecutedActionsCount();
-            if (executedActionsCount == null) {
-                Logger.error(`McwWar.serializeForSimulation() empty executedActionsCount.`);
-                return undefined;
-            }
-
             const warEventManager = this.getWarEventManager();
             if (warEventManager == null) {
                 Logger.error(`McwWar.serializeForSimulation() empty warEventManager.`);
@@ -162,15 +156,13 @@ namespace TinyWars.MultiCustomWar {
             return {
                 settingsForCommon,
                 settingsForMcw              : null,
-                settingsForRmw              : null,
+                settingsForMrw              : null,
                 settingsForScw              : { isCheating: true },
-                settingsForWrw              : null,
 
                 warId,
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),
                 executedActions             : [],
-                executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
                 warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
@@ -183,6 +175,11 @@ namespace TinyWars.MultiCustomWar {
             return this.getSettingsHasFogByDefault()
                 ? Types.WarType.McwFog
                 : Types.WarType.McwStd;
+        }
+
+        public getMapId(): number | undefined {
+            const settingsForMcw = this.getSettingsForMcw();
+            return settingsForMcw ? settingsForMcw.mapId : undefined;
         }
 
         private _setSettingsForMcw(settings: ISettingsForMcw): void {

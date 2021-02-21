@@ -27,7 +27,7 @@ namespace TinyWars.MapEditor {
         }
 
         protected _onOpened(): void {
-            this.addChild(MeManager.getWar().getView());
+            this.addChild(MeModel.getWar().getView());
         }
 
         protected async _onClosed(): Promise<void> {

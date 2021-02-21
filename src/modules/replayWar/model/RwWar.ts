@@ -18,11 +18,9 @@ namespace TinyWars.ReplayWar {
     }
 
     export class RwWar extends SinglePlayerWar.SpwWar {
-        private _executedActions                : IWarActionContainer[];
-        private _settingsForMcw                 : ProtoTypes.WarSettings.ISettingsForMcw;
-        private _settingsForScw                 : ProtoTypes.WarSettings.ISettingsForScw;
-        private _settingsForRmw                 : ProtoTypes.WarSettings.ISettingsForRmw;
-        private _settingsForWrw                 : ProtoTypes.WarSettings.ISettingsForWrw;
+        private _settingsForMcw: ProtoTypes.WarSettings.ISettingsForMcw;
+        private _settingsForScw: ProtoTypes.WarSettings.ISettingsForScw;
+        private _settingsForMrw: ProtoTypes.WarSettings.ISettingsForMrw;
 
         private _replayId                           : number;
         private _isAutoReplay                       = false;
@@ -45,12 +43,6 @@ namespace TinyWars.ReplayWar {
             const configVersion = settingsForCommon.configVersion;
             if (configVersion == null) {
                 Logger.error(`ReplayWar.init() empty configVersion.`);
-                return undefined;
-            }
-
-            const executedActions = warData.executedActions;
-            if (executedActions == null) {
-                Logger.error(`ReplayWar.executedActions() empty executedActions.`);
                 return undefined;
             }
 
@@ -108,13 +100,11 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
-            this._settingsForMcw = warData.settingsForMcw;
-            this._settingsForScw = warData.settingsForScw;
-            this._settingsForWrw = warData.settingsForMcw;
-            this._settingsForRmw = warData.settingsForRmw;
+            this._setSettingsForMcw(warData.settingsForMcw);
+            this._setSettingsForScw(warData.settingsForScw);
+            this._setSettingsForMrw(warData.settingsForMrw);
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: seedRandomCurrentState }));
             this._setSeedRandomInitialState(seedRandomInitialState);
-            this._setAllExecutedActions(executedActions);
             this.setNextActionId(0);
             this._setPlayerManager(playerManager);
             this._setTurnManager(turnManager);
@@ -217,7 +207,6 @@ namespace TinyWars.ReplayWar {
                     seedRandomInitialState      : null,
                     seedRandomCurrentState,
                     executedActions             : null,
-                    executedActionsCount        : null,
                     remainingVotesForDraw       : this.getRemainingVotesForDraw(),
                     warEventManager             : Helpers.deepClone(serialWarEventManager),
                     playerManager               : serialPlayerManager,
@@ -237,12 +226,6 @@ namespace TinyWars.ReplayWar {
             const seedRandomCurrentState = this._getSeedRandomCurrentState();
             if (seedRandomCurrentState == null) {
                 Logger.error(`ReplayWar.serializeForSimulation() empty seedRandomCurrentState.`);
-                return undefined;
-            }
-
-            const executedActionsCount = this.getExecutedActionsCount();
-            if (executedActionsCount == null) {
-                Logger.error(`ReplayWar.serializeForSimulation() empty executedActionsCount`);
                 return undefined;
             }
 
@@ -304,14 +287,12 @@ namespace TinyWars.ReplayWar {
                 settingsForCommon,
                 settingsForMcw              : null,
                 settingsForScw              : { isCheating: true },
-                settingsForRmw              : null,
-                settingsForWrw              : null,
+                settingsForMrw              : null,
 
                 warId,
                 seedRandomInitialState      : null,
                 seedRandomCurrentState,
                 executedActions             : [],
-                executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
                 warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
@@ -322,18 +303,54 @@ namespace TinyWars.ReplayWar {
 
         public getWarType(): WarType {
             const hasFog = this.getSettingsHasFogByDefault();
-            if (this._settingsForMcw) {
+            if (this._getSettingsForMcw()) {
                 return hasFog ? WarType.McwFog : WarType.McwStd;
-            } else if (this._settingsForRmw) {
-                return hasFog ? WarType.RmwFog : WarType.RmwStd;
-            } else if (this._settingsForScw) {
-                return WarType.Scw;
-            } else if (this._settingsForWrw) {
-                return WarType.Wrw;
+            } else if (this._getSettingsForMrw()) {
+                return hasFog ? WarType.MrwFog : WarType.MrwStd;
+            } else if (this._getSettingsForScw()) {
+                return hasFog ? WarType.ScwFog : WarType.ScwStd;
             } else {
                 Logger.error(`RwWar.getWarType() unknown warType.`);
                 return undefined;
             }
+        }
+
+        public getMapId(): number | undefined {
+            const settingsForMcw = this._getSettingsForMcw();
+            if (settingsForMcw) {
+                return settingsForMcw.mapId;
+            }
+
+            const settingsForMrw = this._getSettingsForMrw();
+            if (settingsForMrw) {
+                return settingsForMrw.mapId;
+            }
+
+            const settingsForScw = this._getSettingsForScw();
+            if (settingsForScw) {
+                return settingsForScw.mapId;
+            }
+
+            return undefined;
+        }
+
+        private _getSettingsForMcw(): ProtoTypes.WarSettings.ISettingsForMcw {
+            return this._settingsForMcw;
+        }
+        private _setSettingsForMcw(value: ProtoTypes.WarSettings.ISettingsForMcw) {
+            this._settingsForMcw = value;
+        }
+        private _getSettingsForScw(): ProtoTypes.WarSettings.ISettingsForScw {
+            return this._settingsForScw;
+        }
+        private _setSettingsForScw(value: ProtoTypes.WarSettings.ISettingsForScw) {
+            this._settingsForScw = value;
+        }
+        private _getSettingsForMrw(): ProtoTypes.WarSettings.ISettingsForMrw {
+            return this._settingsForMrw;
+        }
+        private _setSettingsForMrw(value: ProtoTypes.WarSettings.ISettingsForMrw) {
+            this._settingsForMrw = value;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -382,56 +399,44 @@ namespace TinyWars.ReplayWar {
             this._checkPointDataListForCheckPointId.set(checkPointId, data);
         }
 
-        public checkIsInEnd(): boolean {
-            return this.getNextActionId() >= this.getTotalActionsCount();
-        }
-        public async loadNextCheckPoint(): Promise<void> {
-            const nextActionId      = this.getNextActionId();
-            const isWaitBeginTurn   = this.getTurnManager().getPhaseCode() === Types.TurnPhaseCode.WaitBeginTurn;
-            const checkPointId      = isWaitBeginTurn ? this.getCheckPointId(nextActionId) + 1 : this.getCheckPointId(nextActionId);
-
-            if (this.getCheckPointData(checkPointId)) {
-                this.setIsAutoReplay(false);
-                this.stopRunning();
-
-                await Helpers.checkAndCallLater();
-                await this._loadCheckPoint(checkPointId);
-                await Helpers.checkAndCallLater();
-                this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
-
-            } else {
-                this.setIsAutoReplay(false);
-
-                if (!isWaitBeginTurn) {
-                    this.stopRunning();
-                    await Helpers.checkAndCallLater();
-                    await this._loadCheckPoint(checkPointId - 1);
-                    await Helpers.checkAndCallLater();
-                    this.startRunning();
-                }
-                while (!this.getCheckPointData(checkPointId)) {
-                    // await Helpers.checkAndCallLater();
-                    await RwActionExecutor.executeNextAction(this, true);
-                }
-
-                this.stopRunning();
-                await Helpers.checkAndCallLater();
-                await this._loadCheckPoint(checkPointId);
-                await Helpers.checkAndCallLater();
-                this.startRunning().startRunningView();
-                FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
-            }
-        }
         public checkIsInBeginning(): boolean {
             return this.getNextActionId() <= 0;
         }
-        public async loadPreviousCheckPoint(): Promise<void> {
-            this.setIsAutoReplay(false);
-            this.stopRunning();
+        public checkIsInEnd(): boolean {
+            return this.getNextActionId() >= this.getTotalActionsCount();
+        }
 
+        public async loadNextCheckPoint(): Promise<void> {
+            if (this.checkIsInEnd()) {
+                return;
+            }
+
+            const checkPointId = this.getCheckPointId(this.getNextActionId()) + 1;
+            this.setIsAutoReplay(false);
+
+            while (!this.getCheckPointData(checkPointId)) {
+                await Helpers.checkAndCallLater();
+                await RwActionExecutor.executeNextAction(this, true);
+            }
+            this.stopRunning();
             await Helpers.checkAndCallLater();
-            await this._loadCheckPoint(this.getCheckPointId(this.getNextActionId()) - 1);
+            await this._loadCheckPoint(checkPointId);
+            await Helpers.checkAndCallLater();
+            this.startRunning().startRunningView();
+            FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
+        }
+        public async loadPreviousCheckPoint(): Promise<void> {
+            if (this.checkIsInBeginning()) {
+                return;
+            }
+
+            const nextActionId = this.getNextActionId();
+            const checkPointId = Math.min(this.getCheckPointId(nextActionId), this.getCheckPointId(nextActionId - 1));
+            this.setIsAutoReplay(false);
+
+            this.stopRunning();
+            await Helpers.checkAndCallLater();
+            await this._loadCheckPoint(checkPointId);
             await Helpers.checkAndCallLater();
             this.startRunning().startRunningView();
             FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
@@ -461,16 +466,10 @@ namespace TinyWars.ReplayWar {
         }
 
         public getTotalActionsCount(): number {
-            return this._getAllExecutedActions().length;
+            return this.getExecutedActionsCount();
         }
         public getNextAction(): IWarActionContainer {
-            return this._getAllExecutedActions()[this.getNextActionId()];
-        }
-        private _setAllExecutedActions(actions: IWarActionContainer[]): void {
-            this._executedActions = actions;
-        }
-        private _getAllExecutedActions(): IWarActionContainer[] {
-            return this._executedActions;
+            return this.getExecutedAction(this.getNextActionId());
         }
 
         public getRandomNumber(): number | undefined {

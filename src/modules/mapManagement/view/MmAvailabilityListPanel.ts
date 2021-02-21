@@ -63,9 +63,9 @@ namespace TinyWars.MapManagement {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMmSetMapAvailability,  callback: this._onNotifySMmChangeAvailability },
-                { type: Notify.Type.MsgMmDeleteMap,           callback: this._onNotifySMmDeleteMap },
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgMmSetMapAvailability,    callback: this._onNotifyMsgMmSetMapAvailability },
+                { type: Notify.Type.MsgMmSetMapEnabled,         callback: this._onNotifyMsgMmSetMapEnabled },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
@@ -121,11 +121,11 @@ namespace TinyWars.MapManagement {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifySMmChangeAvailability(e: egret.Event): void {
+        private _onNotifyMsgMmSetMapAvailability(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0059));
         }
 
-        private _onNotifySMmDeleteMap(e: egret.Event): void {
+        private _onNotifyMsgMmSetMapEnabled(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0081));
             this.setMapFilters(this._mapFilters);
         }

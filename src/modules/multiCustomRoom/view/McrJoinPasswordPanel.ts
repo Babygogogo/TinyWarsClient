@@ -90,7 +90,7 @@ namespace TinyWars.MultiCustomRoom {
                 labelWarName.text = warName;
             } else {
                 labelWarName.text = "";
-                WarMapModel.getMapNameInCurrentLanguage(info.settingsForCommon.mapId).then(v => labelWarName.text = v);
+                WarMapModel.getMapNameInCurrentLanguage(info.settingsForMcw.mapId).then(v => labelWarName.text = v);
             }
 
             this._labelTitle.text           = Lang.getText(Lang.Type.B0449);

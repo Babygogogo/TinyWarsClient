@@ -215,7 +215,7 @@ namespace TinyWars.MapEditor {
             const data              = this.data as DataForUnitRenderer;
             const dataForDrawUnit   = data.dataForDrawUnit;
             const unitType          = dataForDrawUnit.unitType;
-            const war               = MeManager.getWar();
+            const war               = MeModel.getWar();
             this._labelName.text    = Lang.getUnitName(unitType);
 
             const unitView  = this._unitView;
@@ -236,7 +236,7 @@ namespace TinyWars.MapEditor {
             const dataForDrawUnit   = data.dataForDrawUnit;
             panel.updateOnChooseUnit(dataForDrawUnit);
             panel.close();
-            MeManager.getWar().getDrawer().setModeDrawUnit(dataForDrawUnit);
+            MeModel.getWar().getDrawer().setModeDrawUnit(dataForDrawUnit);
         }
     }
 }

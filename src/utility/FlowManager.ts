@@ -5,7 +5,7 @@ namespace TinyWars.Utility.FlowManager {
     import MpwModel         = MultiPlayerWar.MpwModel;
     import ScwModel         = SingleCustomWar.ScwModel;
     import RwModel          = ReplayWar.RwModel;
-    import MeManager        = MapEditor.MeManager;
+    import MeModel          = MapEditor.MeModel;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     const _NET_EVENTS = [
@@ -22,17 +22,8 @@ namespace TinyWars.Utility.FlowManager {
     let _hasOnceWentToLobby = false;
 
     export async function startGame(stage: egret.Stage): Promise<void> {
-        window.onerror = (message, filename, row, col, err) => {
-            const content = `${message}\n\n${err ? err.stack : "No available call stack."}`;
-            Common.CommonErrorPanel.show({
-                content,
-            });
-            Chat.ChatProxy.reqChatAddMessage(
-                content.substr(0, CommonConstants.ChatContentMaxLength),
-                Types.ChatMessageToCategory.Private,
-                CommonConstants.AdminUserId,
-            );
-        };
+        _registerWindowOnError();
+        _preventBrowserBack();
 
         Network.NetManager.addListeners(_NET_EVENTS, FlowManager);
         Notify.addEventListeners(_NOTIFY_EVENTS, FlowManager);
@@ -51,15 +42,14 @@ namespace TinyWars.Utility.FlowManager {
         WarMap.WarMapProxy.init();
         WarMap.WarMapModel.init();
         MultiCustomRoom.McrProxy.init();
-        RankMatchRoom.RmrProxy.init();
+        MultiRankRoom.MrrProxy.init();
         ReplayWar.RwProxy.init();
         RwModel.init();
         SingleCustomRoom.ScrProxy.init();
         SingleCustomRoom.ScrModel.init();
         ScwModel.init();
         MapEditor.MeProxy.init();
-        MapEditor.MeModel.init();
-        MeManager.init();
+        MeModel.init();
         Chat.ChatProxy.init();
         Common.CommonProxy.init();
         Common.CommonModel.init();
@@ -77,7 +67,7 @@ namespace TinyWars.Utility.FlowManager {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         StageManager.closeAllPanels();
         Login.LoginBackgroundPanel.show();
         Login.LoginPanel.show();
@@ -89,7 +79,7 @@ namespace TinyWars.Utility.FlowManager {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         StageManager.closeAllPanels();
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
@@ -98,7 +88,7 @@ namespace TinyWars.Utility.FlowManager {
     export async function gotoMultiCustomWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
         RwModel.unloadWar();
         ScwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         await MpwModel.loadWar(data);
 
         StageManager.closeAllPanels();
@@ -112,7 +102,7 @@ namespace TinyWars.Utility.FlowManager {
     export async function gotoReplay(warData: Uint8Array, replayId: number): Promise<void> {
         MpwModel.unloadWar();
         ScwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         await RwModel.loadWar(warData, replayId);
 
         StageManager.closeAllPanels();
@@ -130,7 +120,7 @@ namespace TinyWars.Utility.FlowManager {
     }): Promise<void> {
         MpwModel.unloadWar();
         RwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         await ScwModel.loadWar({ warData, slotIndex, slotComment });
 
         StageManager.closeAllPanels();
@@ -145,7 +135,7 @@ namespace TinyWars.Utility.FlowManager {
         MpwModel.unloadWar();
         ScwModel.unloadWar();
         RwModel.unloadWar();
-        await MeManager.loadWar(mapRawData, slotIndex, isReview);
+        await MeModel.loadWar(mapRawData, slotIndex, isReview);
 
         StageManager.closeAllPanels();
         MapEditor.MeBackgroundPanel.show();
@@ -156,21 +146,21 @@ namespace TinyWars.Utility.FlowManager {
         Broadcast.BroadcastPanel.show();
     }
 
-    export function gotoRmrMyWarListPanel(): void {
+    export function gotoMrrMyWarListPanel(): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         StageManager.closeAllPanels();
         Lobby.LobbyTopPanel.show();
-        RankMatchRoom.RmrMyWarListPanel.show();
+        MultiRankRoom.MrrMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
     }
     export function gotoMcrMyWarListPanel(): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
-        MeManager.unloadWar();
+        MeModel.unloadWar();
         StageManager.closeAllPanels();
         Lobby.LobbyTopPanel.show();
         MultiCustomRoom.McrMyWarListPanel.show();
@@ -245,6 +235,39 @@ namespace TinyWars.Utility.FlowManager {
         if (document) {
             const outLoadingLayer = document.getElementById("outLoadingLayer");
             (outLoadingLayer) && (document.body.removeChild(outLoadingLayer));
+        }
+    }
+
+    function _registerWindowOnError(): void {
+        window.onerror = (message, filename, row, col, err) => {
+            const content = `${message}\n\n${err ? err.stack : "No available call stack."}`;
+            Common.CommonErrorPanel.show({
+                content,
+            });
+            Chat.ChatProxy.reqChatAddMessage(
+                content.substr(0, CommonConstants.ChatContentMaxLength),
+                Types.ChatMessageToCategory.Private,
+                CommonConstants.AdminUserId,
+            );
+        };
+    }
+
+    function _preventBrowserBack(): void {
+        const state = {
+            url: window.location.href,
+        };
+        try {
+            if (window.history) {
+                window.history.pushState(state, "", window.location.href);
+            }
+        } catch (e) {
+            Logger.error(e);
+        }
+
+        if (window.addEventListener) {
+            window.addEventListener("popstate", (e) => {
+                FloatText.show(Lang.getText(Lang.Type.A0194));
+            }, false);
         }
     }
 }

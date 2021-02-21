@@ -22,13 +22,13 @@ namespace TinyWars.MapManagement {
         private _labelScw       : GameUi.UiLabel;
         private _imgScw         : GameUi.UiImage;
 
-        private _groupRank      : eui.Group;
-        private _labelRank      : GameUi.UiLabel;
-        private _imgRank        : GameUi.UiImage;
+        private _groupMrwStd    : eui.Group;
+        private _labelMrwStd    : GameUi.UiLabel;
+        private _imgMrwStd      : GameUi.UiImage;
 
-        private _groupRankFog   : eui.Group;
-        private _labelRankFog   : GameUi.UiLabel;
-        private _imgRankFog     : GameUi.UiImage;
+        private _groupMrwFog    : eui.Group;
+        private _labelMrwFog    : GameUi.UiLabel;
+        private _imgMrwFog      : GameUi.UiImage;
 
         private _btnDelete      : GameUi.UiButton;
         private _btnWarRule     : GameUi.UiButton;
@@ -69,8 +69,8 @@ namespace TinyWars.MapManagement {
                 { ui: this._btnWarRule,     callback: this._onTouchedBtnWarRule },
                 { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
                 { ui: this._groupScw,       callback: this._onTouchedGroupScw },
-                { ui: this._groupRank,      callback: this._onTouchedGroupRank },
-                { ui: this._groupRankFog,   callback: this._onTouchedGroupRankFog },
+                { ui: this._groupMrwStd,      callback: this._onTouchedGroupMrwStd },
+                { ui: this._groupMrwFog,   callback: this._onTouchedGroupMrwFog },
             ]);
 
             this._btnDelete.setTextColor(0xFF0000);
@@ -82,8 +82,8 @@ namespace TinyWars.MapManagement {
             const availability          = (await WarMapModel.getBriefData(mapId)).mapExtraData.mapComplexInfo.availability;
             this._imgMcw.visible        = !!availability.canMcw;
             this._imgScw.visible        = !!availability.canScw;
-            this._imgRank.visible       = !!availability.canRank;
-            this._imgRankFog.visible    = !!availability.canRankFog;
+            this._imgMrwStd.visible     = !!availability.canMrwStd;
+            this._imgMrwFog.visible     = !!availability.canMrwFog;
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -93,10 +93,9 @@ namespace TinyWars.MapManagement {
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             WarMapProxy.reqMmSetMapAvailability(this._mapId, {
                 canMcw      : this._imgMcw.visible,
-                canWr       : false,
                 canScw      : this._imgScw.visible,
-                canRank     : this._imgRank.visible,
-                canRankFog  : this._imgRankFog.visible,
+                canMrwStd   : this._imgMrwStd.visible,
+                canMrwFog   : this._imgMrwFog.visible,
             });
             this.close();
         }
@@ -106,7 +105,7 @@ namespace TinyWars.MapManagement {
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0080),
                 callback: () => {
-                    WarMapProxy.reqMmDeleteMap(this._mapId);
+                    WarMapProxy.reqMmSetMapEnabled(this._mapId, false);
                     this.close();
                 },
             });
@@ -127,11 +126,11 @@ namespace TinyWars.MapManagement {
         private _onTouchedGroupScw(e: egret.TouchEvent): void {
             this._imgScw.visible = !this._imgScw.visible;
         }
-        private _onTouchedGroupRank(e: egret.TouchEvent): void {
-            this._imgRank.visible = !this._imgRank.visible;
+        private _onTouchedGroupMrwStd(e: egret.TouchEvent): void {
+            this._imgMrwStd.visible = !this._imgMrwStd.visible;
         }
-        private _onTouchedGroupRankFog(e: egret.TouchEvent): void {
-            this._imgRankFog.visible = !this._imgRankFog.visible;
+        private _onTouchedGroupMrwFog(e: egret.TouchEvent): void {
+            this._imgMrwFog.visible = !this._imgMrwFog.visible;
         }
 
         private _updateComponentsForLanguage(): void {
@@ -140,8 +139,8 @@ namespace TinyWars.MapManagement {
             this._btnDelete.label   = Lang.getText(Lang.Type.B0270);
             this._btnWarRule.label  = Lang.getText(Lang.Type.B0314);
             this._labelMcw.text     = Lang.getText(Lang.Type.B0200);
-            this._labelRank.text    = Lang.getText(Lang.Type.B0404);
-            this._labelRankFog.text = Lang.getText(Lang.Type.B0408);
+            this._labelMrwStd.text  = Lang.getText(Lang.Type.B0404);
+            this._labelMrwFog.text  = Lang.getText(Lang.Type.B0408);
             this._labelScw.text     = Lang.getText(Lang.Type.B0409);
         }
     }

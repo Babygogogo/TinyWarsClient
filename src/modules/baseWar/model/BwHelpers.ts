@@ -802,91 +802,56 @@ namespace TinyWars.BaseWar.BwHelpers {
         return null;
     }
 
-    export async function getMapSizeAndMaxPlayerIndex(data: ISerialWar): Promise<Types.MapSizeAndMaxPlayerIndex | null> {
-        const settingsForCommon = data.settingsForCommon;
-        const mapId             = settingsForCommon ? settingsForCommon.mapId : null;
-        if (mapId != null) {
-            const mapRawData = await WarMap.WarMapModel.getRawData(mapId);
-            if (mapRawData == null) {
-                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty mapRawData.`);
-                return undefined;
-            }
-
-            const mapWidth = mapRawData.mapWidth;
-            if (mapWidth == null) {
-                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty mapWidth.`);
-                return undefined;
-            }
-
-            const mapHeight = mapRawData.mapHeight;
-            if (mapHeight == null) {
-                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty mapHeight.`);
-                return undefined;
-            }
-
-            const maxPlayerIndex = mapRawData.playersCountUnneutral;
-            if (maxPlayerIndex == null) {
-                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty maxPlayerIndex.`);
-                return undefined;
-            }
-
-            return {
-                mapWidth,
-                mapHeight,
-                maxPlayerIndex,
-            };
-
-        } else {
-            const fieldData     = data.field;
-            const tileMapData   = fieldData ? fieldData.tileMap : null;
-            const tiles         = tileMapData ? tileMapData.tiles : null;
-            if (tiles == null) {
-                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty tiles.`);
-                return undefined;
-            }
-
-            const playerManagerData             = data.playerManager;
-            const playersData                   = playerManagerData ? playerManagerData.players : null;
-            const playersCountIncludingNeutral  = playersData ? playersData.length : null;
-            if (playersCountIncludingNeutral == null) {
-                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty playersCountIncludingNeutral.`);
-                return undefined;
-            }
-
-            const maxPlayerIndex = playersCountIncludingNeutral - 1;
-            if (maxPlayerIndex <= 1) {
-                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() invalid maxPlayerIndex: ${maxPlayerIndex}`);
-                return undefined;
-            }
-
-            let mapWidth   = 0;
-            let mapHeight  = 0;
-            for (const tile of tiles) {
-                const gridIndex = convertGridIndex(tile.gridIndex);
-                if (gridIndex == null) {
-                    Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty gridIndex.`);
-                    return undefined;
-                }
-
-                mapWidth   = Math.max(mapWidth, gridIndex.x + 1);
-                mapHeight  = Math.max(mapHeight, gridIndex.y + 1);
-            }
-
-            if (mapWidth <= 0) {
-                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() mapWidth <= 0: ${mapWidth}`);
-                return undefined;
-            }
-            if (mapHeight <= 0) {
-                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() mapHeight <= 0: ${mapHeight}`);
-                return undefined;
-            }
-
-            return {
-                mapWidth,
-                mapHeight,
-                maxPlayerIndex,
-            };
+    export function getMapSizeAndMaxPlayerIndex(data: ISerialWar): Types.MapSizeAndMaxPlayerIndex | null | undefined {
+        const fieldData     = data.field;
+        const tileMapData   = fieldData ? fieldData.tileMap : null;
+        const tiles         = tileMapData ? tileMapData.tiles : null;
+        if (tiles == null) {
+            Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty tiles.`);
+            return undefined;
         }
+
+        const playerManagerData             = data.playerManager;
+        const playersData                   = playerManagerData ? playerManagerData.players : null;
+        const playersCountIncludingNeutral  = playersData ? playersData.length : null;
+        if (playersCountIncludingNeutral == null) {
+            Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty playersCountIncludingNeutral.`);
+            return undefined;
+        }
+
+        const maxPlayerIndex = playersCountIncludingNeutral - 1;
+        if (maxPlayerIndex <= 1) {
+            Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() invalid maxPlayerIndex: ${maxPlayerIndex}`);
+            return undefined;
+        }
+
+        let mapWidth   = 0;
+        let mapHeight  = 0;
+        for (const tile of tiles) {
+            const gridIndex = convertGridIndex(tile.gridIndex);
+            if (gridIndex == null) {
+                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty gridIndex.`);
+                return undefined;
+            }
+
+            mapWidth   = Math.max(mapWidth, gridIndex.x + 1);
+            mapHeight  = Math.max(mapHeight, gridIndex.y + 1);
+        }
+
+        if (mapWidth <= 0) {
+            Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() mapWidth <= 0: ${mapWidth}`);
+            return undefined;
+        }
+        if (mapHeight <= 0) {
+            Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() mapHeight <= 0: ${mapHeight}`);
+            return undefined;
+        }
+
+        return {
+            mapWidth,
+            mapHeight,
+            maxPlayerIndex,
+        };
     }
 
     export function getTeamIndexByRuleForPlayers(ruleForPlayers: IRuleForPlayers, playerIndex: number): number | null | undefined {
@@ -913,6 +878,18 @@ namespace TinyWars.BaseWar.BwHelpers {
         }
 
         return needSerialize ? data : undefined;
+    }
+
+    export function getMapId(warData: ProtoTypes.WarSerialization.ISerialWar): number | undefined {
+        if (warData.settingsForMcw) {
+            return warData.settingsForMcw.mapId;
+        } else if (warData.settingsForMrw) {
+            return warData.settingsForMrw.mapId;
+        } else if (warData.settingsForScw) {
+            return warData.settingsForScw.mapId;
+        } else {
+            return undefined;
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

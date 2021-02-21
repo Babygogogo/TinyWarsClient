@@ -1,18 +1,18 @@
 
-namespace TinyWars.RankMatchRoom {
+namespace TinyWars.MultiRankRoom {
     import Notify       = Utility.Notify;
     import Types        = Utility.Types;
     import Lang         = Utility.Lang;
     import ProtoTypes   = Utility.ProtoTypes;
     import BwHelpers    = BaseWar.BwHelpers;
     import WarMapModel  = WarMap.WarMapModel;
-    import IRmrRoomInfo = ProtoTypes.RankMatchRoom.IRmrRoomInfo;
+    import IMrrRoomInfo = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
 
-    export class RmrMyRoomListPanel extends GameUi.UiPanel {
+    export class MrrMyRoomListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: RmrMyRoomListPanel;
+        private static _instance: MrrMyRoomListPanel;
 
         private _labelMenuTitle : GameUi.UiLabel;
         private _listWar        : GameUi.UiScrollList;
@@ -31,14 +31,14 @@ namespace TinyWars.RankMatchRoom {
         private _selectedWarIndex   : number;
 
         public static show(): void {
-            if (!RmrMyRoomListPanel._instance) {
-                RmrMyRoomListPanel._instance = new RmrMyRoomListPanel();
+            if (!MrrMyRoomListPanel._instance) {
+                MrrMyRoomListPanel._instance = new MrrMyRoomListPanel();
             }
-            RmrMyRoomListPanel._instance.open(undefined);
+            MrrMyRoomListPanel._instance.open(undefined);
         }
         public static async hide(): Promise<void> {
-            if (RmrMyRoomListPanel._instance) {
-                await RmrMyRoomListPanel._instance.close();
+            if (MrrMyRoomListPanel._instance) {
+                await MrrMyRoomListPanel._instance.close();
             }
         }
 
@@ -46,15 +46,15 @@ namespace TinyWars.RankMatchRoom {
             super();
 
             this._setIsAutoAdjustHeight();
-            this.skinName = "resource/skins/rankMatchRoom/RmrMyRoomListPanel.exml";
+            this.skinName = "resource/skins/multiRankRoom/MrrMyRoomListPanel.exml";
         }
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgRmrGetMyRoomPublicInfoList,  callback: this._onMsgRmrGetMyRoomPublicInfoList },
-                { type: Notify.Type.RmrMyRoomAdded,                 callback: this._onNotifyRmrMyRoomAdded },
-                { type: Notify.Type.RmrMyRoomDeleted,               callback: this._onNotifyRmrMyRoomDeleted },
+                { type: Notify.Type.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
+                { type: Notify.Type.MrrMyRoomAdded,                 callback: this._onNotifyMrrMyRoomAdded },
+                { type: Notify.Type.MrrMyRoomDeleted,               callback: this._onNotifyMrrMyRoomDeleted },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -67,7 +67,7 @@ namespace TinyWars.RankMatchRoom {
             this._groupInfo.visible = false;
             this._zoomMap.setMouseWheelListenerEnabled(true);
             this._zoomMap.setTouchListenerEnabled(true);
-            RmrProxy.reqRmrGetMyRoomPublicInfoList();
+            MrrProxy.reqMrrGetMyRoomPublicInfoList();
         }
 
         protected async _onClosed(): Promise<void> {
@@ -107,27 +107,27 @@ namespace TinyWars.RankMatchRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onMsgRmrGetMyRoomPublicInfoList(e: egret.Event): void {
+        private _onMsgMrrGetMyRoomPublicInfoList(e: egret.Event): void {
             this._updateComponentsForRoomList();
         }
 
-        private _onNotifyRmrMyRoomAdded(e: egret.Event): void {
+        private _onNotifyMrrMyRoomAdded(e: egret.Event): void {
             this._updateComponentsForRoomList();
         }
 
-        private _onNotifyRmrMyRoomDeleted(e: egret.Event): void {
+        private _onNotifyMrrMyRoomDeleted(e: egret.Event): void {
             this._updateComponentsForRoomList();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            RmrMainMenuPanel.show();
+            MrrMainMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _createDataForListWar(infoList: IRmrRoomInfo[]): DataForWarRenderer[] {
+        private _createDataForListWar(infoList: IMrrRoomInfo[]): DataForWarRenderer[] {
             const data: DataForWarRenderer[] = [];
             let index = 0;
             for (const roomInfo of infoList) {
@@ -142,7 +142,7 @@ namespace TinyWars.RankMatchRoom {
             return data;
         }
 
-        private _createDataForListPlayer(roomInfo: IRmrRoomInfo, mapRawData: ProtoTypes.Map.IMapRawData): DataForPlayerRenderer[] {
+        private _createDataForListPlayer(roomInfo: IMrrRoomInfo, mapRawData: ProtoTypes.Map.IMapRawData): DataForPlayerRenderer[] {
             const playerDataList    = roomInfo.playerDataList;
             const playerRules       = roomInfo.settingsForCommon.warRule.ruleForPlayers;
             const dataList          : DataForPlayerRenderer[] = [];
@@ -160,12 +160,11 @@ namespace TinyWars.RankMatchRoom {
 
         private async _showMap(index: number): Promise<void> {
             const roomInfo              = this._dataForListWar[index].roomInfo;
-            const settingsForCommon     = roomInfo.settingsForCommon;
-            const mapId                 = settingsForCommon.mapId;
+            const mapId                 = roomInfo.settingsForMrw.mapId;
             const mapRawData            = await WarMapModel.getRawData(mapId);
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0013));
+            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(roomInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0013));
             this._listPlayer.bindData(this._createDataForListPlayer(roomInfo, mapRawData));
 
             this._groupInfo.visible      = true;
@@ -197,7 +196,7 @@ namespace TinyWars.RankMatchRoom {
         }
 
         private async _updateComponentsForRoomList(): Promise<void> {
-            const newData        = this._createDataForListWar(RmrModel.getMyRoomInfoList());
+            const newData        = this._createDataForListWar(MrrModel.getMyRoomInfoList());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {
@@ -212,9 +211,9 @@ namespace TinyWars.RankMatchRoom {
     }
 
     type DataForWarRenderer = {
-        roomInfo: IRmrRoomInfo;
+        roomInfo: IMrrRoomInfo;
         index   : number;
-        panel   : RmrMyRoomListPanel;
+        panel   : MrrMyRoomListPanel;
     }
 
     class WarRenderer extends GameUi.UiListItemRenderer {
@@ -237,7 +236,7 @@ namespace TinyWars.RankMatchRoom {
             const labelName     = this._labelName;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             labelName.text      = "";
-            WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForCommon.mapId).then(v => labelName.text = v);
+            WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForMrw.mapId).then(v => labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
@@ -248,8 +247,8 @@ namespace TinyWars.RankMatchRoom {
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data      = this.data as DataForWarRenderer;
             const roomInfo  = data.roomInfo;
-            RmrModel.SelfSettings.resetData(roomInfo);
-            RmrRoomInfoPanel.show({ roomId: roomInfo.roomId });
+            MrrModel.SelfSettings.resetData(roomInfo);
+            MrrRoomInfoPanel.show({ roomId: roomInfo.roomId });
         }
     }
 

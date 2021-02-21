@@ -83,7 +83,7 @@ namespace TinyWars.MapEditor {
             this._conTileView.addChild(this._tileView.getImgObject());
             this._conUnitView.addChild(this._unitView);
 
-            this._war       = MeManager.getWar();
+            this._war       = MeModel.getWar();
             this._drawer    = this._war.getDrawer();
             this._initTileView();
             this._initUnitView();

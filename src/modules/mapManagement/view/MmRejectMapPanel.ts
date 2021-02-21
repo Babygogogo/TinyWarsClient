@@ -52,7 +52,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const war = MapEditor.MeManager.getWar();
+            const war = MapEditor.MeModel.getWar();
             WarMap.WarMapProxy.reqMmReviewMap({
                 designerUserId  : war.getMapDesignerUserId(),
                 slotIndex       : war.getMapSlotIndex(),
@@ -61,10 +61,9 @@ namespace TinyWars.MapManagement {
                 reviewComment   : this._inputReason.text,
                 availability    : {
                     canMcw      : false,
-                    canRank     : false,
-                    canRankFog  : false,
+                    canMrwStd   : false,
+                    canMrwFog   : false,
                     canScw      : false,
-                    canWr       : false,
                 },
             });
             this.close();

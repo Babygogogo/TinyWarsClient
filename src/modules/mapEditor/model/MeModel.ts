@@ -12,7 +12,8 @@ namespace TinyWars.MapEditor.MeModel {
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    const MAP_DICT = new Map<number, IMapEditorData>();
+    const MAP_DICT  = new Map<number, IMapEditorData>();
+    let _war        : MeWar;
 
     export function init(): void {
     }
@@ -59,6 +60,40 @@ namespace TinyWars.MapEditor.MeModel {
             }
         }
         return false;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for managing war.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export async function loadWar(mapRawData: ProtoTypes.Map.IMapRawData | null, slotIndex: number, isReview: boolean): Promise<MeWar> {
+        if (_war) {
+            Logger.warn(`MeManager.loadWar() another war has been loaded already!`);
+            unloadWar();
+        }
+
+        mapRawData = mapRawData || await MeUtility.createDefaultMapRawData(slotIndex);
+        _war = new MeWar();
+        await _war.initWithMapEditorData({
+            mapRawData,
+            slotIndex
+        });
+        _war.setIsMapModified(false);
+        _war.setIsReviewingMap(isReview);
+        _war.startRunning()
+            .startRunningView();
+
+        return _war;
+    }
+
+    export function unloadWar(): void {
+        if (_war) {
+            _war.stopRunning();
+            _war = undefined;
+        }
+    }
+
+    export function getWar(): MeWar | undefined {
+        return _war;
     }
 
     export namespace Sim {

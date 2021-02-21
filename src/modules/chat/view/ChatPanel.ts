@@ -518,7 +518,7 @@ namespace TinyWars.Chat {
                     if (warName) {
                         labelName.text = warName;
                     } else {
-                        labelName.text = await WarMap.WarMapModel.getMapNameInCurrentLanguage(v.settingsForCommon.mapId);
+                        labelName.text = await WarMap.WarMapModel.getMapNameInCurrentLanguage(v.settingsForMcw.mapId);
                     }
                 });
 

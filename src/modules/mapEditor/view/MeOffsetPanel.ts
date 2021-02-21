@@ -55,7 +55,7 @@ namespace TinyWars.MapEditor {
 
             this._updateComponentsForLanguage();
 
-            const war               = MeManager.getWar();
+            const war               = MeModel.getWar();
             this._inputOffsetY.text = "" + 0;
             this._inputOffsetX.text = "" + 0;
             this._offsetX           = 0;
@@ -69,7 +69,7 @@ namespace TinyWars.MapEditor {
         private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
             const offsetX   = this._offsetX;
             const offsetY   = this._offsetY;
-            const war       = MeManager.getWar();
+            const war       = MeModel.getWar();
             if ((offsetX !== 0) || (offsetY !== 0)) {
                 war.stopRunning();
                 await war.initWithMapEditorData({

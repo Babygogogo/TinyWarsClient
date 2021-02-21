@@ -181,10 +181,9 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _showMap(index: number): Promise<void> {
             const roomInfo              = this._dataForListWar[index].roomInfo;
-            const settingsForCommon     = roomInfo.settingsForCommon;
-            const mapId                 = settingsForCommon.mapId;
+            const mapId                 = roomInfo.settingsForMcw.mapId;
             const mapRawData            = await WarMapModel.getRawData(mapId);
-            const hasFog                = settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
+            const hasFog                = roomInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
             this._labelHasFog.text      = Lang.getText(hasFog ? Lang.Type.B0012 : Lang.Type.B0001);
@@ -246,7 +245,7 @@ namespace TinyWars.MultiCustomRoom {
             if (warName) {
                 this._labelName.text = warName;
             } else {
-                WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForCommon.mapId).then(v => this._labelName.text = v);
+                WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForMcw.mapId).then(v => this._labelName.text = v);
             }
         }
 

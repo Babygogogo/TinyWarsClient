@@ -84,7 +84,6 @@ namespace TinyWars.MapEditor.MeUtility {
         return {
             settingsForCommon   : {
                 configVersion   : ConfigManager.getLatestFormalVersion(),
-                mapId           : data.mapRawData.mapId,
                 presetWarRuleId : warRule.ruleId,
                 warRule,
             },
@@ -94,7 +93,6 @@ namespace TinyWars.MapEditor.MeUtility {
             seedRandomInitialState  : new Math.seedrandom(null, { state: true }).state(),
             seedRandomCurrentState  : null,
             executedActions         : null,
-            executedActionsCount    : 0,
             remainingVotesForDraw   : null,
             warEventManager         : {
                 warEventFullData    : mapRawData.warEventFullData,

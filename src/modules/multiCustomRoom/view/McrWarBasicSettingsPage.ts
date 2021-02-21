@@ -97,10 +97,9 @@ namespace TinyWars.MultiCustomRoom {
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             const warInfo = this._warInfo;
             if (warInfo) {
-                const settingsForCommon = warInfo.settingsForCommon;
                 WarMap.WarMapBuildingListPanel.show({
-                    configVersion   : settingsForCommon.configVersion,
-                    mapRawData      : await WarMapModel.getRawData(settingsForCommon.mapId),
+                    configVersion   : warInfo.settingsForCommon.configVersion,
+                    mapRawData      : await WarMapModel.getRawData(warInfo.settingsForMcw.mapId),
                 });
             }
         }
@@ -188,9 +187,8 @@ namespace TinyWars.MultiCustomRoom {
         private _updateLabelMapName(): void {
             const warInfo = this._warInfo;
             if (warInfo) {
-                const settingsForCommon = warInfo.settingsForCommon;
-                WarMapModel.getMapNameInCurrentLanguage(settingsForCommon.mapId).then(v =>
-                    this._labelMapName.text = `${v} (${BwSettingsHelper.getPlayersCount(settingsForCommon.warRule)}P)`
+                WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForMcw.mapId).then(v =>
+                    this._labelMapName.text = `${v} (${BwSettingsHelper.getPlayersCount(warInfo.settingsForCommon.warRule)}P)`
                 );
             }
         }
@@ -266,7 +264,7 @@ namespace TinyWars.MultiCustomRoom {
                 const playerInfoList    = warInfo.playerInfoList;
                 const playerRules       = settingsForCommon.warRule.ruleForPlayers;
                 const configVersion     = settingsForCommon.configVersion;
-                const playersCount      = (await WarMapModel.getRawData(settingsForCommon.mapId)).playersCountUnneutral;
+                const playersCount      = (await WarMapModel.getRawData(warInfo.settingsForMcw.mapId)).playersCountUnneutral;
                 for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                     dataList.push({
                         configVersion,

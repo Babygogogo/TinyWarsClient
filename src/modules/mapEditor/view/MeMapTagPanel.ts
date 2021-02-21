@@ -52,7 +52,7 @@ namespace TinyWars.MapEditor {
 
             this._updateComponentsForLanguage();
 
-            const war               = MeManager.getWar();
+            const war               = MeModel.getWar();
             const mapTag            = war.getMapTag() || {};
             this._war               = war;
             this._imgFog.visible    = !!mapTag.fog;

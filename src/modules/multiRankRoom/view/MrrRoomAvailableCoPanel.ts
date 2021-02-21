@@ -1,5 +1,5 @@
 
-namespace TinyWars.RankMatchRoom {
+namespace TinyWars.MultiRankRoom {
     import Types            = Utility.Types;
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
@@ -7,18 +7,18 @@ namespace TinyWars.RankMatchRoom {
     import ConfigManager    = Utility.ConfigManager;
     import ProtoTypes       = Utility.ProtoTypes;
     import Logger           = Utility.Logger;
-    import IRmrRoomInfo     = ProtoTypes.RankMatchRoom.IRmrRoomInfo;
+    import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    type OpenDataForRmrRoomAvailableCoPanel = {
-        roomInfo        : IRmrRoomInfo;
+    type OpenDataForMrrRoomAvailableCoPanel = {
+        roomInfo        : IMrrRoomInfo;
         srcPlayerIndex  : number;
     }
-    export class RmrRoomAvailableCoPanel extends GameUi.UiPanel {
+    export class MrrRoomAvailableCoPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: RmrRoomAvailableCoPanel;
+        private static _instance: MrrRoomAvailableCoPanel;
 
         private _labelAvailableCoTitle  : TinyWars.GameUi.UiLabel;
         private _groupCoTiers           : eui.Group;
@@ -29,28 +29,28 @@ namespace TinyWars.RankMatchRoom {
         private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
 
-        private _roomInfo               : IRmrRoomInfo;
+        private _roomInfo               : IMrrRoomInfo;
         private _srcPlayerIndex         : number;
         private _availableCoIdSet       = new Set<number>();
         private _allCoIdSet             = new Set<number>();
 
-        public static show(openData: OpenDataForRmrRoomAvailableCoPanel): void {
-            if (!RmrRoomAvailableCoPanel._instance) {
-                RmrRoomAvailableCoPanel._instance = new RmrRoomAvailableCoPanel();
+        public static show(openData: OpenDataForMrrRoomAvailableCoPanel): void {
+            if (!MrrRoomAvailableCoPanel._instance) {
+                MrrRoomAvailableCoPanel._instance = new MrrRoomAvailableCoPanel();
             }
-            RmrRoomAvailableCoPanel._instance.open(openData);
+            MrrRoomAvailableCoPanel._instance.open(openData);
         }
 
         public static async hide(): Promise<void> {
-            if (RmrRoomAvailableCoPanel._instance) {
-                await RmrRoomAvailableCoPanel._instance.close();
+            if (MrrRoomAvailableCoPanel._instance) {
+                await MrrRoomAvailableCoPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/rankMatchRoom/RmrRoomAvailableCoPanel.exml";
+            this.skinName = "resource/skins/multiRankRoom/MrrRoomAvailableCoPanel.exml";
             this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
@@ -63,10 +63,10 @@ namespace TinyWars.RankMatchRoom {
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgRmrDeleteRoom,   callback: this._onMsgRmrDeleteRoom },
+                { type: Notify.Type.MsgMrrDeleteRoom,   callback: this._onMsgMrrDeleteRoom },
             ]);
 
-            const openData          = this._getOpenData<OpenDataForRmrRoomAvailableCoPanel>();
+            const openData          = this._getOpenData<OpenDataForMrrRoomAvailableCoPanel>();
             const roomInfo          = openData.roomInfo;
             const srcPlayerIndex    = openData.srcPlayerIndex;
             const availableCoIdSet  = this._availableCoIdSet;
@@ -97,8 +97,8 @@ namespace TinyWars.RankMatchRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onMsgRmrDeleteRoom(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgRmrDeleteRoom.IS;
+        private _onMsgMrrDeleteRoom(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMrrDeleteRoom.IS;
             if (data.roomId === this._roomInfo.roomId) {
                 this.close();
             }
@@ -141,7 +141,7 @@ namespace TinyWars.RankMatchRoom {
                     ? Lang.getText(Lang.Type.A0138) + `\n${generateCoNameList(roomInfo.settingsForCommon.configVersion, bannedCoIdList)}`
                     : Lang.getText(Lang.Type.A0139),
                 callback: () => {
-                    RmrProxy.reqRmrSetBannedCoIdList(roomInfo.roomId, bannedCoIdList);
+                    MrrProxy.reqMrrSetBannedCoIdList(roomInfo.roomId, bannedCoIdList);
                     this.close();
                 },
             });
@@ -365,7 +365,7 @@ namespace TinyWars.RankMatchRoom {
         }
     }
 
-    function generateAvailableCoIdList(roomInfo: IRmrRoomInfo, srcPlayerIndex: number): Set<number> {
+    function generateAvailableCoIdList(roomInfo: IMrrRoomInfo, srcPlayerIndex: number): Set<number> {
         const coIds = new Set<number>();
         for (const playerRule of roomInfo.settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray) {
             if (playerRule.playerIndex !== srcPlayerIndex) {
@@ -382,7 +382,7 @@ namespace TinyWars.RankMatchRoom {
         for (const coId of coIdList) {
             const name = ConfigManager.getCoNameAndTierText(configVersion, coId);
             if (name == null) {
-                Logger.error(`RmrRoomAvailableCoPanel.generateCoNameList() invalid coId.`);
+                Logger.error(`MrrRoomAvailableCoPanel.generateCoNameList() invalid coId.`);
                 return undefined;
             }
 

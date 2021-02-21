@@ -1,15 +1,15 @@
 
-namespace TinyWars.RankMatchRoom {
+namespace TinyWars.MultiRankRoom {
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
     import ConfigManager    = Utility.ConfigManager;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    export class RmrSetMaxConcurrentCountPanel extends GameUi.UiPanel {
+    export class MrrSetMaxConcurrentCountPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: RmrSetMaxConcurrentCountPanel;
+        private static _instance: MrrSetMaxConcurrentCountPanel;
 
         private _labelTitle     : GameUi.UiLabel;
         private _labelTips      : GameUi.UiLabel;
@@ -26,22 +26,22 @@ namespace TinyWars.RankMatchRoom {
         private _maxCount   : number;
 
         public static show(): void {
-            if (!RmrSetMaxConcurrentCountPanel._instance) {
-                RmrSetMaxConcurrentCountPanel._instance = new RmrSetMaxConcurrentCountPanel();
+            if (!MrrSetMaxConcurrentCountPanel._instance) {
+                MrrSetMaxConcurrentCountPanel._instance = new MrrSetMaxConcurrentCountPanel();
             }
-            RmrSetMaxConcurrentCountPanel._instance.open(undefined);
+            MrrSetMaxConcurrentCountPanel._instance.open(undefined);
         }
 
         public static async hide(): Promise<void> {
-            if (RmrSetMaxConcurrentCountPanel._instance) {
-                await RmrSetMaxConcurrentCountPanel._instance.close();
+            if (MrrSetMaxConcurrentCountPanel._instance) {
+                await MrrSetMaxConcurrentCountPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/rankMatchRoom/RmrSetMaxConcurrentCountPanel.exml";
+            this.skinName = "resource/skins/multiRankRoom/MrrSetMaxConcurrentCountPanel.exml";
             this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
         }
@@ -49,8 +49,8 @@ namespace TinyWars.RankMatchRoom {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgRmrGetMaxConcurrentCount,    callback: this._onMsgRmrGetMaxConcurrentCount },
-                { type: Notify.Type.MsgRmrSetMaxConcurrentCount,    callback: this._onMsgRmrSetMaxConcurrentCount },
+                { type: Notify.Type.MsgMrrGetMaxConcurrentCount,    callback: this._onMsgMrrGetMaxConcurrentCount },
+                { type: Notify.Type.MsgMrrSetMaxConcurrentCount,    callback: this._onMsgMrrSetMaxConcurrentCount },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
@@ -68,7 +68,7 @@ namespace TinyWars.RankMatchRoom {
 
             const hasFog    = false;
             this._hasFog    = hasFog;
-            this._maxCount  = RmrModel.getMaxConcurrentCount(hasFog);
+            this._maxCount  = MrrModel.getMaxConcurrentCount(hasFog);
             this._updateImgHasFog();
             this._updateLabelCount();
         }
@@ -76,12 +76,12 @@ namespace TinyWars.RankMatchRoom {
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }
-        private _onMsgRmrGetMaxConcurrentCount(e: egret.Event): void {
-            this._maxCount = RmrModel.getMaxConcurrentCount(this._hasFog);
+        private _onMsgMrrGetMaxConcurrentCount(e: egret.Event): void {
+            this._maxCount = MrrModel.getMaxConcurrentCount(this._hasFog);
             this._updateLabelCount();
         }
-        private _onMsgRmrSetMaxConcurrentCount(e: egret.Event): void {
-            this._maxCount = RmrModel.getMaxConcurrentCount(this._hasFog);
+        private _onMsgMrrSetMaxConcurrentCount(e: egret.Event): void {
+            this._maxCount = MrrModel.getMaxConcurrentCount(this._hasFog);
             this._updateLabelCount();
         }
 
@@ -91,8 +91,8 @@ namespace TinyWars.RankMatchRoom {
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             const maxCount  = this._maxCount;
             const hasFog    = this._hasFog;
-            if (maxCount !== RmrModel.getMaxConcurrentCount(hasFog)) {
-                RmrProxy.reqRmrSetMaxConcurrentCount(hasFog, maxCount);
+            if (maxCount !== MrrModel.getMaxConcurrentCount(hasFog)) {
+                MrrProxy.reqMrrSetMaxConcurrentCount(hasFog, maxCount);
             }
             this.close();
         }
@@ -103,7 +103,7 @@ namespace TinyWars.RankMatchRoom {
         private _onTouchedBtnModifyHasFog(e: egret.TouchEvent): void {
             const hasFog    = !this._hasFog;
             this._hasFog    = hasFog;
-            this._maxCount  = RmrModel.getMaxConcurrentCount(hasFog);
+            this._maxCount  = MrrModel.getMaxConcurrentCount(hasFog);
             this._updateImgHasFog();
             this._updateLabelCount();
         }

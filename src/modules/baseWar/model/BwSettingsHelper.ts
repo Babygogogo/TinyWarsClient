@@ -464,8 +464,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             ruleAvailability: {
                 canMcw  : true,
                 canScw  : true,
-                canRank : false,
-                canWr   : false,
+                canMrw  : false,
             },
             ruleForGlobalParams : {
                 hasFogByDefault : false,
@@ -642,12 +641,11 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
     }
     function checkIsValidWarRuleAvailability(availability: WarRule.IDataForWarRuleAvailability): boolean {
         const {
-            canMcw,     canScw,     canRank,    canWr,
+            canMcw,     canScw,     canMrw,
         } = availability;
         return (!!canMcw)
             || (!!canScw)
-            || (!!canRank)
-            || (!!canWr);
+            || (!!canMrw);
     }
     function checkIsValidRuleForGlobalParams(rule: WarRule.IRuleForGlobalParams): boolean | undefined {
         const configVersion = ConfigManager.getLatestFormalVersion();

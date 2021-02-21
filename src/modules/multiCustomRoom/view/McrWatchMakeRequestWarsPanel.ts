@@ -167,13 +167,12 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _showMap(index: number): Promise<void> {
             const warInfo               = this._dataForListWar[index].info.warInfo;
-            const settingsForCommon     = warInfo.settingsForCommon;
             const settingsForMcw        = warInfo.settingsForMcw;
-            const mapId                 = settingsForCommon.mapId;
+            const mapId                 = warInfo.settingsForMcw.mapId;
             const mapRawData            = await WarMapModel.getRawData(mapId);
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0001));
+            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(warInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0001));
             this._labelWarComment.text  = (settingsForMcw ? settingsForMcw.warComment : null) || "----";
             this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
 
@@ -239,7 +238,7 @@ namespace TinyWars.MultiCustomRoom {
                 labelName.text = warName;
             } else {
                 labelName.text = "";
-                WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForCommon.mapId).then(v => labelName.text = v);
+                WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForMcw.mapId).then(v => labelName.text = v);
             }
         }
 

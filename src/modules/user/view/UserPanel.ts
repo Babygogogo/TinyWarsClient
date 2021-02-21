@@ -285,7 +285,7 @@ namespace TinyWars.User {
             this._labelTitle.text   = Lang.getFormattedText(Lang.Type.F0009, nickname);
         }
         private async _updateLabelStdRankScore(): Promise<void> {
-            const data                      = await UserModel.getRankScoreData(this._userId, WarType.RmwStd, 2);
+            const data                      = await UserModel.getRankScoreData(this._userId, WarType.MrwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rank                      = data ? data.currentRank : null;
@@ -294,7 +294,7 @@ namespace TinyWars.User {
             this._labelStdRankScore.text    = `${score} ${rankText} ${rankName}`;
         }
         private async _updateLabelFogRankScore(): Promise<void> {
-            const data                      = await UserModel.getRankScoreData(this._userId, WarType.RmwFog, 2);
+            const data                      = await UserModel.getRankScoreData(this._userId, WarType.MrwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rank                      = data ? data.currentRank : null;
@@ -307,12 +307,12 @@ namespace TinyWars.User {
             const dataList  : DataForHistoryRenderer[] = [
                 {
                     userId,
-                    warType     : WarType.RmwStd,
+                    warType     : WarType.MrwStd,
                     playersCount: 2,
                 },
                 {
                     userId,
-                    warType     : WarType.RmwFog,
+                    warType     : WarType.MrwFog,
                     playersCount: 2,
                 },
             ];

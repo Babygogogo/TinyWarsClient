@@ -78,7 +78,7 @@ namespace TinyWars.MapEditor {
             } else if (textList.some(v => v.text.length > CommonConstants.MaxMapNameLength)) {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.MaxMapNameLength));
             } else {
-                MeManager.getWar().setMapNameArray(textList);
+                MeModel.getWar().setMapNameArray(textList);
                 Notify.dispatch(Notify.Type.MeMapNameChanged);
                 this.close();
             }
@@ -87,7 +87,7 @@ namespace TinyWars.MapEditor {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const textList          = MeManager.getWar().getMapNameArray() || [];
+            const textList          = MeModel.getWar().getMapNameArray() || [];
             this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.Chinese });
             this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.English });
         }

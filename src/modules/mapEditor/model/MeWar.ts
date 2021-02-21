@@ -128,12 +128,6 @@ namespace TinyWars.MapEditor {
                 return undefined;
             }
 
-            const executedActionsCount = this.getExecutedActionsCount();
-            if (executedActionsCount == null) {
-                Logger.error(`MeWar.serializeForSimulation() empty executedActionsCount.`);
-                return undefined;
-            }
-
             const warEventManager = this.getWarEventManager();
             if (warEventManager == null) {
                 Logger.error(`MeWar.serializeForSimulation() empty warEventManager.`);
@@ -185,15 +179,13 @@ namespace TinyWars.MapEditor {
             return {
                 settingsForCommon,
                 settingsForMcw              : null,
-                settingsForRmw              : null,
+                settingsForMrw              : null,
                 settingsForScw              : { isCheating: true },
-                settingsForWrw              : null,
 
                 warId                       : this.getWarId(),
                 seedRandomInitialState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),
                 seedRandomCurrentState      : null,
                 executedActions             : [],
-                executedActionsCount,
                 remainingVotesForDraw       : this.getRemainingVotesForDraw(),
                 warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
@@ -225,6 +217,10 @@ namespace TinyWars.MapEditor {
 
         public getWarType(): Types.WarType {
             return Types.WarType.Me;
+        }
+
+        public getMapId(): number | undefined {
+            return undefined;
         }
 
         protected _getViewClass(): new () => MeWarView {

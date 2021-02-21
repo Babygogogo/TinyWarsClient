@@ -8,7 +8,7 @@ class Main extends egret.DisplayObjectContainer {
     public constructor() {
         super();
 
-        this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+        this.once(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
     }
 
     private _onAddedToStage(event: egret.Event): void {

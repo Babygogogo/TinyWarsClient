@@ -23,13 +23,13 @@ namespace TinyWars.MapManagement {
         private _labelScw       : GameUi.UiLabel;
         private _imgScw         : GameUi.UiImage;
 
-        private _groupRank      : eui.Group;
-        private _labelRank      : GameUi.UiLabel;
-        private _imgRank        : GameUi.UiImage;
+        private _groupMrwStd    : eui.Group;
+        private _labelMrwStd    : GameUi.UiLabel;
+        private _imgMrwStd      : GameUi.UiImage;
 
-        private _groupRankFog   : eui.Group;
-        private _labelRankFog   : GameUi.UiLabel;
-        private _imgRankFog     : GameUi.UiImage;
+        private _groupMrwFog    : eui.Group;
+        private _labelMrwFog    : GameUi.UiLabel;
+        private _imgMrwFog      : GameUi.UiImage;
 
         public static show(): void {
             if (!MmAcceptMapPanel._instance) {
@@ -61,16 +61,16 @@ namespace TinyWars.MapManagement {
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm, },
                 { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
                 { ui: this._groupScw,       callback: this._onTouchedGroupScw },
-                { ui: this._groupRank,      callback: this._onTouchedGroupRank },
-                { ui: this._groupRankFog,   callback: this._onTouchedGroupRankFog },
+                { ui: this._groupMrwStd,      callback: this._onTouchedGroupMrwStd },
+                { ui: this._groupMrwFog,   callback: this._onTouchedGroupMrwFog },
             ]);
 
             this._updateComponentsForLanguage();
 
-            this._imgMcw.visible        = false;
-            this._imgScw.visible        = false;
-            this._imgRank.visible       = false;
-            this._imgRankFog.visible    = false;
+            this._imgMcw.visible    = false;
+            this._imgScw.visible    = false;
+            this._imgMrwStd.visible = false;
+            this._imgMrwFog.visible = false;
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -81,7 +81,7 @@ namespace TinyWars.MapManagement {
             this.close();
         }
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const war = MapEditor.MeManager.getWar();
+            const war = MapEditor.MeModel.getWar();
             WarMap.WarMapProxy.reqMmReviewMap({
                 designerUserId  : war.getMapDesignerUserId(),
                 slotIndex       : war.getMapSlotIndex(),
@@ -90,10 +90,9 @@ namespace TinyWars.MapManagement {
                 reviewComment   : this._inputReason.text,
                 availability    : {
                     canMcw      : this._imgMcw.visible,
-                    canWr       : false,
                     canScw      : this._imgScw.visible,
-                    canRank     : this._imgRank.visible,
-                    canRankFog  : this._imgRankFog.visible,
+                    canMrwStd   : this._imgMrwStd.visible,
+                    canMrwFog   : this._imgMrwFog.visible,
                 },
             });
             this.close();
@@ -104,11 +103,11 @@ namespace TinyWars.MapManagement {
         private _onTouchedGroupScw(e: egret.TouchEvent): void {
             this._imgScw.visible = !this._imgScw.visible;
         }
-        private _onTouchedGroupRank(e: egret.TouchEvent): void {
-            this._imgRank.visible = !this._imgRank.visible;
+        private _onTouchedGroupMrwStd(e: egret.TouchEvent): void {
+            this._imgMrwStd.visible = !this._imgMrwStd.visible;
         }
-        private _onTouchedGroupRankFog(e: egret.TouchEvent): void {
-            this._imgRankFog.visible = !this._imgRankFog.visible;
+        private _onTouchedGroupMrwFog(e: egret.TouchEvent): void {
+            this._imgMrwFog.visible = !this._imgMrwFog.visible;
         }
 
         private _updateComponentsForLanguage(): void {
@@ -117,8 +116,8 @@ namespace TinyWars.MapManagement {
             this._labelTitle.text   = Lang.getText(Lang.Type.B0296);
             this._labelTips.text    = Lang.getText(Lang.Type.A0105);
             this._labelMcw.text     = Lang.getText(Lang.Type.B0200);
-            this._labelRank.text    = Lang.getText(Lang.Type.B0404);
-            this._labelRankFog.text = Lang.getText(Lang.Type.B0408);
+            this._labelMrwStd.text  = Lang.getText(Lang.Type.B0404);
+            this._labelMrwFog.text  = Lang.getText(Lang.Type.B0408);
             this._labelScw.text     = Lang.getText(Lang.Type.B0409);
         }
     }

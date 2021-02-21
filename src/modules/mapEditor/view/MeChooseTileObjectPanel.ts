@@ -246,7 +246,7 @@ namespace TinyWars.MapEditor {
             const dataForDrawTileObject = data.dataForDrawTileObject;
             panel.updateOnChooseTileObject(dataForDrawTileObject);
             panel.close();
-            MeManager.getWar().getDrawer().setModeDrawTileObject(dataForDrawTileObject);
+            MeModel.getWar().getDrawer().setModeDrawTileObject(dataForDrawTileObject);
         }
     }
 }
