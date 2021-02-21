@@ -45,7 +45,7 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
-            const seedRandomCurrentState = (data.executedActions || []).length === 0 ? seedRandomInitialState : data.seedRandomCurrentState;
+            const seedRandomCurrentState = data.seedRandomCurrentState || seedRandomInitialState;
             if (seedRandomCurrentState == null) {
                 Logger.error(`ScwWar.init() empty seedRandomCurrentState.`);
                 return undefined;
