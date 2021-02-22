@@ -13,7 +13,7 @@ namespace TinyWars.MapManagement {
         private static _instance: MmTagListPanel;
 
         private _listMap        : GameUi.UiScrollList;
-        private _zoomMap        : GameUi.UiZoomableComponent;
+        private _zoomMap        : GameUi.UiZoomableMap;
         private _labelMenuTitle : GameUi.UiLabel;
         private _btnSearch      : GameUi.UiButton;
         private _btnBack        : GameUi.UiButton;
@@ -65,16 +65,12 @@ namespace TinyWars.MapManagement {
             this._listMap.setItemRenderer(MapNameRenderer);
 
             this._groupInfo.visible = false;
-            this._zoomMap.setMouseWheelListenerEnabled(true);
-            this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
 
             this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
         protected async _onClosed(): Promise<void> {
-            this._zoomMap.removeAllContents();
-            this._zoomMap.setMouseWheelListenerEnabled(false);
-            this._zoomMap.setTouchListenerEnabled(false);
+            this._zoomMap.clearMap();
             this._listMap.clear();
             egret.Tween.removeTweens(this._groupInfo);
         }
@@ -178,21 +174,7 @@ namespace TinyWars.MapManagement {
             this._groupInfo.alpha           = 1;
             egret.Tween.removeTweens(this._groupInfo);
             egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
-
-            const tileMapView = new WarMap.WarMapTileMapView();
-            tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-            tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
-
-            const unitMapView = new WarMap.WarMapUnitMapView();
-            unitMapView.initWithMapRawData(mapRawData);
-
-            const gridSize = Utility.ConfigManager.getGridSize();
-            this._zoomMap.removeAllContents();
-            this._zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
-            this._zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
-            this._zoomMap.addContent(tileMapView);
-            this._zoomMap.addContent(unitMapView);
-            this._zoomMap.setContentScale(0, true);
+            this._zoomMap.showMap(mapRawData);
         }
     }
 

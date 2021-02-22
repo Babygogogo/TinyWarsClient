@@ -12,7 +12,7 @@ namespace TinyWars.WarMap {
     import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
     export class WarMapView extends egret.DisplayObjectContainer {
         private readonly _tileMapView   = new TileMapView();
@@ -26,7 +26,14 @@ namespace TinyWars.WarMap {
         }
 
         public showMap(mapRawData: IMapRawData): void {
-            this._tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
+            this.width  = GRID_WIDTH  * mapRawData.mapWidth;
+            this.height = GRID_HEIGHT * mapRawData.mapHeight;
+            this._tileMapView.showTileMap(mapRawData.tileDataArray);
+            this._unitMapView.showUnitMap(mapRawData);
+        }
+        public clear(): void {
+            this._tileMapView.clear();
+            this._unitMapView.clear();
         }
     }
 
@@ -40,16 +47,19 @@ namespace TinyWars.WarMap {
         public constructor() {
             super();
 
-            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.addChild(this._baseLayer);
             this.addChild(this._objectLayer);
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
 
             // this._initTest();
         }
 
-        public updateWithTileDataArray(dataList: ISerialTile[]): void {
+        public showTileMap(dataList: ISerialTile[]): void {
             this._baseLayer.updateWithTileDataList(dataList);
             this._objectLayer.updateWithTileDataList(dataList);
+        }
+        public clear(): void {
+            this.showTileMap([]);
         }
 
         private _onAddedToStage(e: egret.Event): void {
@@ -64,7 +74,6 @@ namespace TinyWars.WarMap {
 
             Notify.removeEventListeners(this._notifyListenerArray, this);
         }
-
         private _onNotifyTileAnimationTick(e: egret.Event): void {
             this._baseLayer.updateViewOnTick();
             this._objectLayer.updateViewOnTick();
@@ -91,9 +100,7 @@ namespace TinyWars.WarMap {
         private readonly _imageMap      : UiImage[][] = [];
 
         public updateWithTileDataList(tileDataArray: ISerialTile[]): void {
-            const mapSize   = getMapSize(tileDataArray);
-            this.width      = _GRID_WIDTH  * mapSize.width;
-            this.height     = _GRID_HEIGHT * mapSize.height;
+            const mapSize = getMapSize(tileDataArray);
             this._resetTileDataMap(mapSize, tileDataArray);
             this._resetImageMap(mapSize);
 
@@ -159,7 +166,7 @@ namespace TinyWars.WarMap {
                 for (let y = 0; y < height; ++y) {
                     if (column[y] == null) {
                         const img   = new UiImage();
-                        img.x       = _GRID_WIDTH * x;
+                        img.x       = GRID_WIDTH * x;
                         img.y       = this._getImageY(y);
                         column[y]   = img;
                         this.addChild(img);
@@ -187,7 +194,7 @@ namespace TinyWars.WarMap {
         }
 
         protected _getImageY(gridY: number): number {
-            return _GRID_HEIGHT * gridY;
+            return GRID_HEIGHT * gridY;
         }
     }
 
@@ -206,15 +213,18 @@ namespace TinyWars.WarMap {
         }
 
         protected _getImageY(gridY: number): number {
-            return _GRID_HEIGHT * (gridY - 1);
+            return GRID_HEIGHT * (gridY - 1);
         }
     }
 
     class UnitMapView extends egret.DisplayObjectContainer {
-        private _unitViews  : WarMapUnitView[] = [];
-        private _airLayer   : egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
-        private _groundLayer: egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
-        private _seaLayer   : egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
+        private readonly _unitViews             : UnitView[] = [];
+        private readonly _airLayer              = new egret.DisplayObjectContainer();
+        private readonly _groundLayer           = new egret.DisplayObjectContainer();
+        private readonly _seaLayer              = new egret.DisplayObjectContainer();
+        private readonly _notifyListenerArray   : Notify.Listener[] = [
+            { type: Notify.Type.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick }
+        ];
 
         public constructor() {
             super();
@@ -222,14 +232,14 @@ namespace TinyWars.WarMap {
             this.addChild(this._seaLayer);
             this.addChild(this._groundLayer);
             this.addChild(this._airLayer);
-
-            Notify.addEventListeners([
-                { type: Notify.Type.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick }
-            ], this);
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
-            this._clearUnits();
+        public showUnitMap(mapRawData: ProtoTypes.Map.IMapRawData): void {
+            this._initWithDataList(_createUnitViewDataList(mapRawData.unitDataArray));
+        }
+        private _initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
+            this.clear();
 
             const tickCount = TimeModel.getUnitAnimationTickCount();
             for (const data of dataList) {
@@ -237,10 +247,25 @@ namespace TinyWars.WarMap {
             }
             this._reviseZOrderForAllUnits();
         }
-        public initWithMapRawData(mapRawData: ProtoTypes.Map.IMapRawData): void {
-            this.initWithDataList(_createUnitViewDataList(mapRawData.unitDataArray));
+        public clear(): void {
+            for (const view of this._unitViews) {
+                (view.parent) && (view.parent.removeChild(view));
+            }
+            this._unitViews.length = 0;
         }
 
+        private _onAddedToStage(e: egret.Event): void {
+            this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+            this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
+
+            Notify.addEventListeners(this._notifyListenerArray, this);
+        }
+        private _onRemovedFromStage(e: egret.Event): void {
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+            this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
+
+            Notify.removeEventListeners(this._notifyListenerArray, this);
+        }
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             const tickCount = TimeModel.getUnitAnimationTickCount();
             for (const view of this._unitViews) {
@@ -253,12 +278,11 @@ namespace TinyWars.WarMap {
             this._reviseZOrderForSingleLayer(this._groundLayer);
             this._reviseZOrderForSingleLayer(this._seaLayer);
         }
-
         private _reviseZOrderForSingleLayer(layer: egret.DisplayObjectContainer): void {
             const unitsCount = layer.numChildren;
-            const unitViews: WarMapUnitView[] = [];
+            const unitViews: UnitView[] = [];
             for (let i = 0; i < unitsCount; ++i) {
-                unitViews.push(layer.getChildAt(i) as WarMapUnitView);
+                unitViews.push(layer.getChildAt(i) as UnitView);
             }
             unitViews.sort((v1, v2): number => {
                 const g1 = v1.getData().gridIndex;
@@ -275,7 +299,7 @@ namespace TinyWars.WarMap {
 
         private _addUnit(data: Types.WarMapUnitViewData, tickCount: number): void {
             const unitType = data.unitType;
-            const view     = new WarMapUnitView(data, tickCount);
+            const view     = new UnitView(data, tickCount);
             this._unitViews.push(view);
 
             const configVersion = ConfigManager.getLatestFormalVersion();
@@ -287,12 +311,48 @@ namespace TinyWars.WarMap {
                 this._seaLayer.addChild(view);
             }
         }
+    }
 
-        private _clearUnits(): void {
-            for (const view of this._unitViews) {
-                (view.parent) && (view.parent.removeChild(view));
+    class UnitView extends egret.DisplayObjectContainer {
+        private _unitImage: UiImage;
+
+        private _data   : Types.WarMapUnitViewData;
+
+        public constructor(data?: Types.WarMapUnitViewData, tickCount?: number) {
+            super();
+
+            const unitImage  = new UiImage();
+            unitImage.bottom = -GRID_HEIGHT;
+            this._unitImage  = unitImage;
+            this.addChild(unitImage);
+
+            (data) && (this.update(data, tickCount));
+        }
+
+        public update(data: Types.WarMapUnitViewData, tickCount?: number): void {
+            const gridIndex = data.gridIndex;
+            this._data = data;
+            this.updateOnAnimationTick(tickCount || TimeModel.getUnitAnimationTickCount());
+            this.x = gridIndex.x * GRID_WIDTH - GRID_WIDTH / 4;
+            this.y = gridIndex.y * GRID_HEIGHT - GRID_HEIGHT / 2;
+        }
+
+        public getData(): Types.WarMapUnitViewData {
+            return this._data;
+        }
+
+        public updateOnAnimationTick(tickCount: number): void {
+            const data = this._data;
+            if (data) {
+                this._unitImage.source = CommonModel.getCachedUnitImageSource({
+                    version     : User.UserModel.getSelfSettingsTextureVersion(),
+                    skinId      : data.skinId,
+                    unitType    : data.unitType,
+                    isMoving    : false,
+                    isDark      : data.unitActionState === Types.UnitActionState.Acted,
+                    tickCount,
+                });
             }
-            this._unitViews.length = 0;
         }
     }
 
@@ -319,8 +379,8 @@ namespace TinyWars.WarMap {
         let height  = 0;
         for (const tile of tileDataArray) {
             const gridIndex = tile.gridIndex;
-            width           = Math.max(gridIndex.x, width);
-            height          = Math.max(gridIndex.y, height);
+            width           = Math.max(gridIndex.x + 1, width);
+            height          = Math.max(gridIndex.y + 1, height);
         }
 
         return { width, height };

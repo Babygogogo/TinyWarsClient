@@ -16,7 +16,7 @@ namespace TinyWars.MapManagement {
 
         private static _instance: MmReviewListPanel;
 
-        private _zoomMap        : GameUi.UiZoomableComponent;
+        private _zoomMap        : GameUi.UiZoomableMap;
         private _labelNoData    : GameUi.UiLabel;
         private _labelMenuTitle : GameUi.UiLabel;
         private _labelLoading   : GameUi.UiLabel;
@@ -55,9 +55,6 @@ namespace TinyWars.MapManagement {
             ]);
             this._listMap.setItemRenderer(MapRenderer);
 
-            this._zoomMap.setMouseWheelListenerEnabled(true);
-            this._zoomMap.setTouchListenerEnabled(true);
-
             this._updateComponentsForLanguage();
             this._labelLoading.visible  = true;
             this._labelNoData.visible   = false;
@@ -66,10 +63,7 @@ namespace TinyWars.MapManagement {
         }
 
         protected async _onClosed(): Promise<void> {
-            this._zoomMap.removeAllContents();
-            this._zoomMap.setMouseWheelListenerEnabled(false);
-            this._zoomMap.setTouchListenerEnabled(false);
-
+            this._zoomMap.clearMap();
             this._listMap.clear();
         }
 
@@ -86,7 +80,7 @@ namespace TinyWars.MapManagement {
                 this._listMap.updateSingleData(newIndex, dataList[newIndex]);
                 await this._showMap(newIndex);
             } else {
-                this._zoomMap.removeAllContents();
+                this._zoomMap.clearMap();
             }
         }
         public getSelectedIndex(): number {
@@ -149,23 +143,9 @@ namespace TinyWars.MapManagement {
         private async _showMap(index: number): Promise<void> {
             const mapData = this._dataForListMap[index].mapEditorData.mapRawData;
             if (!mapData) {
-                this._zoomMap.removeAllContents();
-
+                this._zoomMap.clearMap();
             } else {
-                const tileMapView = new WarMap.WarMapTileMapView();
-                tileMapView.init(mapData.mapWidth, mapData.mapHeight);
-                tileMapView.updateWithTileDataArray(mapData.tileDataArray);
-
-                const unitMapView = new WarMap.WarMapUnitMapView();
-                unitMapView.initWithMapRawData(mapData);
-
-                const gridSize = Utility.ConfigManager.getGridSize();
-                this._zoomMap.removeAllContents();
-                this._zoomMap.setContentWidth(mapData.mapWidth * gridSize.width);
-                this._zoomMap.setContentHeight(mapData.mapHeight * gridSize.height);
-                this._zoomMap.addContent(tileMapView);
-                this._zoomMap.addContent(unitMapView);
-                this._zoomMap.setContentScale(0, true);
+                this._zoomMap.showMap(mapData);
             }
         }
     }

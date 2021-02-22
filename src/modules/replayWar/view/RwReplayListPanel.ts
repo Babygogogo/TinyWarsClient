@@ -19,7 +19,7 @@ namespace TinyWars.ReplayWar {
         private _labelMenuTitle : GameUi.UiLabel;
         private _labelNoReplay  : GameUi.UiLabel;
         private _listMap        : GameUi.UiScrollList;
-        private _zoomMap        : GameUi.UiZoomableComponent;
+        private _zoomMap        : GameUi.UiZoomableMap;
         private _btnSearch      : GameUi.UiButton;
         private _btnBack        : GameUi.UiButton;
 
@@ -75,15 +75,10 @@ namespace TinyWars.ReplayWar {
             RwProxy.reqReplayInfos(null);
 
             this._groupInfo.visible = false;
-            this._zoomMap.setMouseWheelListenerEnabled(true);
-            this._zoomMap.setTouchListenerEnabled(true);
-
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            this._zoomMap.removeAllContents();
-            this._zoomMap.setMouseWheelListenerEnabled(false);
-            this._zoomMap.setTouchListenerEnabled(false);
+            this._zoomMap.clearMap();
             this._listMap.clear();
             this._listPlayer.clear();
             egret.Tween.removeTweens(this._groupInfo);
@@ -201,22 +196,7 @@ namespace TinyWars.ReplayWar {
                 this._zoomMap.visible = false;
             } else {
                 this._zoomMap.visible = true;
-
-                const mapRawData    = await WarMapModel.getRawData(data.info.replayBriefInfo.mapId);
-                const tileMapView   = new WarMap.WarMapTileMapView();
-                tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-                tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
-
-                const unitMapView = new WarMap.WarMapUnitMapView();
-                unitMapView.initWithMapRawData(mapRawData);
-
-                const gridSize = Utility.ConfigManager.getGridSize();
-                this._zoomMap.removeAllContents();
-                this._zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
-                this._zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
-                this._zoomMap.addContent(tileMapView);
-                this._zoomMap.addContent(unitMapView);
-                this._zoomMap.setContentScale(0, true);
+                this._zoomMap.showMap(await WarMapModel.getRawData(data.info.replayBriefInfo.mapId));
             }
         }
 

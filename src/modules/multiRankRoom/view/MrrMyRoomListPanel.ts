@@ -17,7 +17,7 @@ namespace TinyWars.MultiRankRoom {
         private _labelMenuTitle : GameUi.UiLabel;
         private _listWar        : GameUi.UiScrollList;
         private _labelNoWar     : GameUi.UiLabel;
-        private _zoomMap        : GameUi.UiZoomableComponent;
+        private _zoomMap        : GameUi.UiZoomableMap;
         private _btnBack        : GameUi.UiButton;
 
         private _groupInfo          : eui.Group;
@@ -65,15 +65,11 @@ namespace TinyWars.MultiRankRoom {
             this._updateComponentsForLanguage();
 
             this._groupInfo.visible = false;
-            this._zoomMap.setMouseWheelListenerEnabled(true);
-            this._zoomMap.setTouchListenerEnabled(true);
             MrrProxy.reqMrrGetMyRoomPublicInfoList();
         }
 
         protected async _onClosed(): Promise<void> {
-            this._zoomMap.removeAllContents();
-            this._zoomMap.setMouseWheelListenerEnabled(false);
-            this._zoomMap.setTouchListenerEnabled(false);
+            this._zoomMap.clearMap();
             this._listWar.clear();
             this._listPlayer.clear();
             egret.Tween.removeTweens(this._groupInfo);
@@ -92,7 +88,7 @@ namespace TinyWars.MultiRankRoom {
                 this._listWar.updateSingleData(newIndex, dataList[newIndex]);
                 await this._showMap(newIndex);
             } else {
-                this._zoomMap.removeAllContents();
+                this._zoomMap.clearMap();
                 this._groupInfo.visible = false;
             }
         }
@@ -171,21 +167,7 @@ namespace TinyWars.MultiRankRoom {
             this._groupInfo.alpha        = 1;
             egret.Tween.removeTweens(this._groupInfo);
             egret.Tween.get(this._groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
-
-            const tileMapView = new WarMap.WarMapTileMapView();
-            tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-            tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
-
-            const unitMapView = new WarMap.WarMapUnitMapView();
-            unitMapView.initWithMapRawData(mapRawData);
-
-            const gridSize = Utility.ConfigManager.getGridSize();
-            this._zoomMap.removeAllContents();
-            this._zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
-            this._zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
-            this._zoomMap.addContent(tileMapView);
-            this._zoomMap.addContent(unitMapView);
-            this._zoomMap.setContentScale(0, true);
+            this._zoomMap.showMap(mapRawData);
         }
 
         private _updateComponentsForLanguage(): void {
