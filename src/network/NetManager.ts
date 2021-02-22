@@ -13,17 +13,16 @@ namespace TinyWars.Network.NetManager {
     ////////////////////////////////////////////////////////////////////////////////
     const PROTOCOL  = window.location.protocol.indexOf("http:") === 0 ? "ws" : "wss";
     const HOST_NAME = window.location.hostname;
-    const PORT      = 3001;
-    const FULL_URL  = `${PROTOCOL}://${HOST_NAME}:${PORT}`;
-    // const FULL_URL  = "wss://www.tinywars.online:3001";
+    const FULL_URL  = `${PROTOCOL}://${HOST_NAME}:${window.GAME_SERVER_PORT}`;
+    // const FULL_URL  = `wss://www.tinywars.online:${window.GAME_SERVER_PORT}`;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Type definitions.
     ////////////////////////////////////////////////////////////////////////////////
     export type MsgListener = {
-        msgCode   : Codes;
-        callback     : (e: egret.Event) => void;
-        thisObject  ?: any;
+        msgCode     : Codes;
+        callback    : (e: egret.Event) => void;
+        thisObject? : any;
     }
 
     class NetMessageDispatcherCls extends egret.EventDispatcher {

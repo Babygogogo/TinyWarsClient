@@ -1,6 +1,7 @@
 
 declare interface Window {
     CLIENT_VERSION  : string;
+    GAME_SERVER_PORT: number;
     Main            : typeof egret.DisplayObject;
 }
 
