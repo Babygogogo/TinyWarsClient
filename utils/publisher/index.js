@@ -1,6 +1,7 @@
 
-const fs        = require("fs");
-const execSync  = require('child_process').execSync;
+const fs            = require("fs");
+const execSync      = require('child_process').execSync;
+const PublishConfig = require("../../../TinyWarsExternals/utils/Publisher/PublishConfig");
 
 const INDEX_PATH            = "bin-release/web/twc/index.html";
 const TSCONFIG_PATH         = "tsconfig.json";
@@ -27,6 +28,12 @@ const TSCONFIG_FOR_PUBLISH  = {
     ]
 }
 
+const publishConfig = PublishConfig[process.argv[2]];
+if (publishConfig == null) {
+    console.error(`Publisher index.js empty publishConfig!!`);
+    return;
+}
+
 const currConfig = fs.readFileSync(TSCONFIG_PATH, "utf8");
 fs.writeFileSync(TSCONFIG_PATH, JSON.stringify(TSCONFIG_FOR_PUBLISH), { encoding: "utf8", flag: "w+" });
 console.log(execSync(`egret publish --version twc`, {encoding: "utf8"}));
@@ -34,13 +41,14 @@ fs.writeFileSync(TSCONFIG_PATH, currConfig, { encoding: "utf8", flag: "w+" });
 
 fs.writeFileSync(
     INDEX_PATH,
-    fs.readFileSync("bin-release/web/twc/index.html", "utf8")
-        .replace(/window.CLIENT_VERSION.*/, `window.CLIENT_VERSION = ${getVersion()}`)
+    fs.readFileSync(INDEX_PATH, "utf8")
+        .replace(/window\.CLIENT_VERSION.*/,    `window.CLIENT_VERSION = ${getVersion()};`)
+        .replace(/window\.GAME_SERVER_PORT.*/,  `window.GAME_SERVER_PORT = ${publishConfig.gameServerPort};`)
 );
 
 function getVersion() {
     const d = new Date();
-    return `"${d.getFullYear() % 100}.${getNumText(d.getMonth() + 1)}${getNumText(d.getDate())}.${getNumText(d.getHours())}${getNumText(d.getMinutes())}";`;
+    return `"${d.getFullYear() % 100}.${getNumText(d.getMonth() + 1)}${getNumText(d.getDate())}.${getNumText(d.getHours())}${getNumText(d.getMinutes())}"`;
 }
 
 function repeatString(str, times) {
