@@ -163,8 +163,8 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _showMap(index: number): Promise<void> {
             const warInfo               = this._dataForListWar[index].info.warInfo;
-            const mapId                 = warInfo.settingsForMcw.mapId;
             const settingsForMcw        = warInfo.settingsForMcw;
+            const mapId                 = settingsForMcw ? settingsForMcw.mapId : warInfo.settingsForMrw.mapId;
             const mapRawData            = await WarMapModel.getRawData(mapId);
             this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
             this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
@@ -220,7 +220,7 @@ namespace TinyWars.MultiCustomRoom {
                 labelName.text = warName;
             } else {
                 labelName.text = "";
-                WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForMcw.mapId).then(v => labelName.text = v);
+                WarMapModel.getMapNameInCurrentLanguage(settingsForMcw ? settingsForMcw.mapId : warInfo.settingsForMrw.mapId).then(v => labelName.text = v);
             }
         }
 
