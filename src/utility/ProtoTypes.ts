@@ -7266,9 +7266,6 @@ export declare namespace WarSerialization {
         /** SerialPlayer playerIndex */
         playerIndex?: (number|null);
 
-        /** SerialPlayer teamIndex */
-        teamIndex?: (number|null);
-
         /** SerialPlayer userId */
         userId?: (number|null);
 
@@ -7317,9 +7314,6 @@ export declare namespace WarSerialization {
 
         /** SerialPlayer playerIndex. */
         public playerIndex: number;
-
-        /** SerialPlayer teamIndex. */
-        public teamIndex: number;
 
         /** SerialPlayer userId. */
         public userId: number;

@@ -22,6 +22,7 @@ namespace TinyWars.MapEditor.MeUtility {
     import WarSerialization         = ProtoTypes.WarSerialization;
     import ISerialTile              = WarSerialization.ISerialTile;
     import ISerialUnit              = WarSerialization.ISerialUnit;
+    import ISerialPlayer            = WarSerialization.ISerialPlayer;
     import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
 
     export type AsymmetricalCounters = {
@@ -123,25 +124,27 @@ namespace TinyWars.MapEditor.MeUtility {
     function createISerialPlayerManager(): WarSerialization.ISerialPlayerManager {
         const players: WarSerialization.ISerialPlayer[] = [];
         for (let playerIndex = CommonConstants.WarNeutralPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
-            players.push({
-                fund                        : 0,
-                hasVotedForDraw             : false,
-                aliveState                  : Types.PlayerAliveState.Alive,
-                playerIndex,
-                teamIndex                   : playerIndex,
-                userId                      : null,
-                coId                        : 0,
-                coCurrentEnergy             : null,
-                coUsingSkillType            : Types.CoSkillType.Passive,
-                coIsDestroyedInTurn         : false,
-                watchOngoingSrcUserIdArray  : null,
-                watchRequestSrcUserIdArray  : null,
-                restTimeToBoot              : 0,
-                unitAndTileSkinId           : playerIndex,
-            });
+            players.push(createDefaultISerialPlayer(playerIndex));
         }
 
         return { players };
+    }
+    export function createDefaultISerialPlayer(playerIndex: number): ISerialPlayer {
+        return {
+            fund                        : 0,
+            hasVotedForDraw             : false,
+            aliveState                  : Types.PlayerAliveState.Alive,
+            playerIndex,
+            userId                      : playerIndex > 0 ? User.UserModel.getSelfUserId() : null,
+            coId                        : 0,
+            coCurrentEnergy             : null,
+            coUsingSkillType            : Types.CoSkillType.Passive,
+            coIsDestroyedInTurn         : false,
+            watchRequestSrcUserIdArray  : [],
+            watchOngoingSrcUserIdArray  : [],
+            restTimeToBoot              : 0,
+            unitAndTileSkinId           : playerIndex,
+        };
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
