@@ -26,6 +26,7 @@
 		"resource/skins/component/button/ButtonMenu001.exml",
 		"resource/skins/component/CheckBox1.exml",
 		"resource/skins/component/input/Input001.exml",
+		"resource/skins/lobby/LobbyBackgroundPanel.exml",
 		"resource/skins/lobby/LobbyPanel.exml",
 		"resource/skins/lobby/LobbyTopPanel.exml",
 		"resource/skins/login/LoginBackgroundPanel.exml",

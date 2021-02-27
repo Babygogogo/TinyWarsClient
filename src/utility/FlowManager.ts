@@ -81,6 +81,7 @@ namespace TinyWars.Utility.FlowManager {
         ScwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
+        Lobby.LobbyBackgroundPanel.show();
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
         Broadcast.BroadcastPanel.show();
