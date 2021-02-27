@@ -1,7 +1,6 @@
 
 namespace TinyWars.Lobby {
     import Lang         = Utility.Lang;
-    import FloatText    = Utility.FloatText;
     import Notify       = Utility.Notify;
     import UserModel    = User.UserModel;
 
@@ -11,15 +10,26 @@ namespace TinyWars.Lobby {
 
         private static _instance: LobbyPanel;
 
-        private _group1: eui.Group;
-        private _group2: eui.Group;
-        private _group3: eui.Group;
-        private _group4: eui.Group;
+        private _groupTips      : eui.Group;
+        private _labelTips0     : GameUi.UiLabel;
+        private _labelTips1     : GameUi.UiLabel;
+        private _labelTips2     : GameUi.UiLabel;
+        private _labelTips3     : GameUi.UiLabel;
+        private _labelTips4     : GameUi.UiLabel;
+        private _labelTips5     : GameUi.UiLabel;
+        private _labelTips6     : GameUi.UiLabel;
+        private _labelTips7     : GameUi.UiLabel;
 
         private _group          : eui.Group;
-        private _labelTips      : GameUi.UiLabel;
-        private _labelMenuTitle : GameUi.UiLabel;
-        private _listCommand    : GameUi.UiScrollList;
+        private _btnSinglePlayer: GameUi.UiButton;
+        private _btnMultiPlayer : GameUi.UiButton;
+        private _btnRanking     : GameUi.UiButton;
+
+        private _groupBottom    : eui.Group;
+        private _groupMyInfo    : eui.Group;
+        private _groupChat      : eui.Group;
+        private _groupMapEditor : eui.Group;
+        private _groupGameData  : eui.Group;
 
         public static show(): void {
             if (!LobbyPanel._instance) {
@@ -43,7 +53,13 @@ namespace TinyWars.Lobby {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this, callback: this._onResize, eventType: egret.Event.RESIZE },
+                { ui: this._groupMyInfo,        callback: this._onTouchedGroupMyInfo },
+                { ui: this._groupChat,          callback: this._onTouchedGroupChat },
+                { ui: this._groupMapEditor,     callback: this._onTouchedGroupMapEditor },
+                { ui: this._groupGameData,      callback: this._onTouchedGroupGameData },
+                { ui: this._btnMultiPlayer,     callback: this._onTouchedBtnMultiPlayer },
+                { ui: this._btnSinglePlayer,    callback: this._onTouchedBtnSinglePlayer },
+                { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
@@ -51,27 +67,59 @@ namespace TinyWars.Lobby {
                 { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
                 { type: Notify.Type.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
             ]);
-            this._listCommand.setItemRenderer(CommandRenderer);
 
             this._showOpenAnimation();
 
             this._updateComponentsForLanguage();
+            this._updateBtnMultiPlayer();
+            this._updateBtnRanking();
         }
 
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
-
-            this._listCommand.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onResize(e: egret.Event): void {
-            this._group1.height = (this.height - 40 - 90) / 2;
-            this._group2.height = (this.height - 40 - 90) / 2;
-            this._group3.height = (this.height - 40 - 90) / 2;
-            this._group4.height = (this.height - 40 - 90) / 2;
+        private _onTouchedGroupMyInfo(e: egret.TouchEvent): void {
+            User.UserOnlineUsersPanel.hide();
+            Chat.ChatPanel.hide();
+            User.UserPanel.show({ userId: UserModel.getSelfUserId() });
+        }
+
+        private _onTouchedGroupChat(e: egret.TouchEvent): void {
+            User.UserOnlineUsersPanel.hide();
+            User.UserPanel.hide();
+            if (!Chat.ChatPanel.getIsOpening()) {
+                Chat.ChatPanel.show({ toUserId: null });
+            } else {
+                Chat.ChatPanel.hide();
+            }
+        }
+
+        private _onTouchedGroupMapEditor(e: egret.TouchEvent): void {
+            this.close();
+            MapEditor.MeMapListPanel.show();
+        }
+
+        private _onTouchedGroupGameData(e: egret.TouchEvent): void {
+            Common.CommonDamageChartPanel.show();
+        }
+
+        private _onTouchedBtnMultiPlayer(e: egret.TouchEvent): void {
+            this.close();
+            MultiCustomRoom.McrMainMenuPanel.show();
+        }
+
+        private _onTouchedBtnSinglePlayer(e: egret.TouchEvent): void {
+            this.close();
+            SinglePlayerLobby.SinglePlayerLobbyPanel.show();
+        }
+
+        private _onTouchedBtnRanking(e: egret.TouchEvent): void {
+            this.close();
+            MultiRankRoom.MrrMainMenuPanel.show();
         }
 
         private _onMsgUserLogout(e: egret.Event): void {
@@ -79,11 +127,11 @@ namespace TinyWars.Lobby {
         }
 
         private _onMsgMcrGetJoinedRoomInfoList(e: egret.Event): void {
-            this._listCommand.refresh();
+            this._updateBtnMultiPlayer();
         }
 
         private _onMsgMrrGetMyRoomPublicInfoList(e: egret.Event): void {
-            this._listCommand.refresh();
+            this._updateBtnRanking();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -97,89 +145,67 @@ namespace TinyWars.Lobby {
             const group = this._group;
             egret.Tween.removeTweens(group);
             egret.Tween.get(group)
-                .set({ alpha: 0, right: -40 })
-                .to({ alpha: 1, right: 0 }, 200);
+                .set({ alpha: 0, right: 20 })
+                .to({ alpha: 1, right: 60 }, 200);
 
-            const labelTips = this._labelTips;
-            egret.Tween.removeTweens(labelTips);
-            egret.Tween.get(labelTips)
-                .set({ alpha: 0 })
-                .to({ alpha: 1 }, 200);
+            const groupBottom = this._groupBottom;
+            egret.Tween.removeTweens(groupBottom);
+            egret.Tween.get(groupBottom)
+                .set({ alpha: 0, bottom: -40 })
+                .to({ alpha: 1, bottom: 0 }, 200);
+
+            const groupTips = this._groupTips;
+            egret.Tween.removeTweens(groupTips);
+            egret.Tween.get(groupTips)
+                .set({ alpha: 0, left: 20 })
+                .to({ alpha: 1, left: 60 }, 200);
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
                 const group = this._group;
                 egret.Tween.removeTweens(group);
                 egret.Tween.get(group)
-                    .set({ alpha: 1, right: 0 })
-                    .to({ alpha: 0, right: -40 }, 200);
+                    .set({ alpha: 1, right: 60 })
+                    .to({ alpha: 0, right: 20 }, 200);
 
-                const labelTips = this._labelTips;
-                egret.Tween.removeTweens(labelTips);
-                egret.Tween.get(labelTips)
-                    .set({ alpha: 1 })
-                    .to({ alpha: 0 }, 200)
+                const groupBottom = this._groupBottom;
+                egret.Tween.removeTweens(groupBottom);
+                egret.Tween.get(groupBottom)
+                    .set({ alpha: 1, bottom: 0 })
+                    .to({ alpha: 0, bottom: -40 }, 200);
+
+                const groupTips = this._groupTips;
+                egret.Tween.removeTweens(groupTips);
+                egret.Tween.get(groupTips)
+                    .set({ alpha: 1, left: 60 })
+                    .to({ alpha: 0, left: 20 }, 200)
                     .call(resolve);
             });
         }
 
         private async _updateComponentsForLanguage(): Promise<void> {
-            this._labelTips.text        = Lang.getRichText(Lang.RichType.R0007),
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0155);
-            this._listCommand.bindData(await this._createDataForListCommand());
+            this._labelTips0.text   = Lang.getText(Lang.Type.A0195);
+            this._labelTips1.text   = ``;
+            this._labelTips2.text   = `${Lang.getText(Lang.Type.B0537)}:`;
+            this._labelTips3.text   = `368142455`;
+            this._labelTips4.text   = `${Lang.getText(Lang.Type.B0538)}:`;
+            this._labelTips5.text   = `https://discord.gg/jdtRpY9`;
+            this._labelTips6.text   = `${Lang.getText(Lang.Type.B0539)}:`;
+            this._labelTips7.text   = `https://github.com/Babygogogo/TinyWarsClient`;
         }
 
-        private async _createDataForListCommand(): Promise<DataForCommandRenderer[]> {
-            const dataList: DataForCommandRenderer[] = [
-                {
-                    name    : Lang.getText(Lang.Type.B0137),
-                    callback: (): void => {
-                        this.close();
-                        MultiCustomRoom.McrMainMenuPanel.show();
-                    },
-                    redChecker  : async () => {
-                        return (MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars())
-                            || (await MultiCustomRoom.McrModel.checkIsRed());
-                    },
-                },
-                {
-                    name        : Lang.getText(Lang.Type.B0404),
-                    callback    : () => {
-                        this.close();
-                        MultiRankRoom.MrrMainMenuPanel.show();
-                    },
-                    redChecker  : async () => {
-                        return (MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars())
-                            || (await MultiRankRoom.MrrModel.checkIsRed());
-                    }
-                },
-                {
-                    name    : Lang.getText(Lang.Type.B0138),
-                    callback: (): void => {
-                        this.close();
-                        SinglePlayerLobby.SinglePlayerLobbyPanel.show();
-                    },
-                },
-                {
-                    name    : Lang.getText(Lang.Type.B0271),
-                    callback: (): void => {
-                        this.close();
-                        MapEditor.MeMapListPanel.show();
-                    },
-                }
-            ];
+        private async _updateBtnMultiPlayer(): Promise<void> {
+            this._btnMultiPlayer.setRedVisible(
+                (MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars()) ||
+                (await MultiCustomRoom.McrModel.checkIsRed())
+            );
+        }
 
-            if ((await UserModel.getIsSelfAdmin()) || (await UserModel.getIsSelfMapCommittee())) {
-                dataList.push({
-                    name    : Lang.getText(Lang.Type.B0192),
-                    callback: (): void => {
-                        this.close();
-                        MapManagement.MmMainMenuPanel.show();
-                    },
-                });
-            }
-
-            return dataList;
+        private async _updateBtnRanking(): Promise<void> {
+            this._btnRanking.setRedVisible(
+                (MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MultiRankRoom.MrrModel.checkIsRed())
+            );
         }
     }
 

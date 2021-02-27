@@ -922,6 +922,10 @@ namespace TinyWars.Utility.Lang {
             `再次点击返回将退出游戏`,
             `Click the go back button again to exit the game.`,
         ],
+        [Type.A0195]: [
+            `感谢您游玩Tiny Wars!`,
+            `Thank you for playing Tiny Wars!`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3058,6 +3062,18 @@ namespace TinyWars.Utility.Lang {
             `单人雾战`,
             `Free Battle`,
         ],
+        [Type.B0537]: [
+            `QQ群`,
+            `QQ Group`,
+        ],
+        [Type.B0538]: [
+            `Discord`,
+            `Discord`,
+        ],
+        [Type.B0539]: [
+            `GitHub`,
+            `GitHub`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3877,27 +3893,6 @@ namespace TinyWars.Utility.Lang {
                 `In this mode the game rule works normally. For example, you may end your turn and the fund will be added as usual.`,
                 ``,
                 `Sandbox Mode (where you can set unit HP for a better planning purpose) is now under development, and it may be online SOOOON.`,
-            ].join("\n"),
-        ],
-
-        [RichType.R0007]: [
-            [
-                `感谢您游玩Tiny Wars!`,
-                `请点击/触摸右方的滚动列表以开始游戏。`,
-                ``,
-                `QQ群: 368142455`,
-                `Discord: https://discord.gg/jdtRpY9`,
-                ``,
-                `GitHub: https://github.com/Babygogogo/TinyWarsClient`,
-            ].join("\n"),
-            [
-                `Thank you for playing Tiny Wars!`,
-                `To start, touch the scroll list to the right.`,
-                ``,
-                `Discord: https://discord.gg/jdtRpY9`,
-                `QQ group: 368142455`,
-                ``,
-                `GitHub: https://github.com/Babygogogo/TinyWarsClient`,
             ].join("\n"),
         ],
     };

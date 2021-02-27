@@ -56,6 +56,7 @@ namespace TinyWars.User {
         private _btnUnitsInfo               : GameUi.UiButton;
         private _btnChangeLog               : GameUi.UiButton;
         private _btnSetPrivilege            : GameUi.UiButton;
+        private _btnMapManagement           : GameUi.UiButton;
 
         private _userId: number;
 
@@ -103,6 +104,7 @@ namespace TinyWars.User {
                 { ui: this._btnUnitsInfo,       callback: this._onTouchedBtnUnitsInfo },
                 { ui: this._btnChangeLog,       callback: this._onTouchedBtnChangeLog },
                 { ui: this._btnSetPrivilege,    callback: this._onTouchedBtnSetPrivilege },
+                { ui: this._btnMapManagement,   callback: this._onTouchedBtnMapManagement },
                 { ui: this._btnClose,           callback: this.close },
             ]);
             this._sclHistory.setItemRenderer(HistoryRenderer);
@@ -193,6 +195,11 @@ namespace TinyWars.User {
         private _onTouchedBtnSetPrivilege(e: egret.TouchEvent): void {
             UserSetPrivilegePanel.show({ userId: this._userId });
         }
+        private _onTouchedBtnMapManagement(e: egret.TouchEvent): void {
+            this.close();
+            Lobby.LobbyPanel.hide();
+            MapManagement.MmMainMenuPanel.show();
+        }
 
         private _showOpenAnimation(): void {
             const group = this._group;
@@ -249,6 +256,9 @@ namespace TinyWars.User {
             if (await UserModel.getIsSelfAdmin()) {
                 group.addChild(this._btnSetPrivilege);
             }
+            if ((await UserModel.getIsSelfAdmin()) || (await UserModel.getIsSelfMapCommittee())) {
+                group.addChild(this._btnMapManagement);
+            }
         }
 
         private _updateComponentsForLanguage(): void {
@@ -278,6 +288,7 @@ namespace TinyWars.User {
             this._updateBtnServerStatus();
             this._updateBtnChat();
             this._updateBtnComplaint();
+            this._updateBtnMapManagement();
         }
 
         private async _updateLabelTitle(): Promise<void> {
@@ -375,6 +386,9 @@ namespace TinyWars.User {
         }
         private _updateBtnComplaint(): void {
             this._btnComplaint.label = Lang.getText(Lang.Type.B0453);
+        }
+        private _updateBtnMapManagement(): void {
+            this._btnMapManagement.label = Lang.getText(Lang.Type.B0192);
         }
     }
 
