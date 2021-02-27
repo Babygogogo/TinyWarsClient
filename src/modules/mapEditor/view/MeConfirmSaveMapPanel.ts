@@ -60,9 +60,7 @@ namespace TinyWars.MapEditor {
             this._needReview = false;
             this._updateImgNeedReview();
 
-            const war = MeModel.getWar();
-            (war.getUnitMap() as MeUnitMap).reviseAllUnitIds();
-
+            const war                       = MeModel.getWar();
             const mapRawData                = war.serializeForMap();
             const invalidationType          = MeUtility.getMapInvalidationType(mapRawData);
             this._mapRawData                = mapRawData;

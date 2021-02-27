@@ -124,7 +124,7 @@ namespace TinyWars.MapEditor.MeModel {
             for (const player of _warData.settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray) {
                 teamIndexSet.add(player.teamIndex);
             }
-            return teamIndexSet.size > 2;
+            return teamIndexSet.size > 1;
         }
 
         export function getWarRule(): ProtoTypes.WarRule.IWarRule {

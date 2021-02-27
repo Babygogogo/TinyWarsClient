@@ -102,6 +102,7 @@ namespace TinyWars.Utility.ConfigManager {
         WarNeutralPlayerIndex                   : 0,
         WarFirstPlayerIndex                     : 1,
         WarMaxPlayerIndex                       : 4,
+        WarNeutralTeamIndex                     : 0,
         WarFirstTeamIndex                       : 1,
         WarFirstTurnIndex                       : 1,
 
