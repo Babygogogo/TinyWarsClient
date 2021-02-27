@@ -121,10 +121,10 @@ namespace TinyWars.MapEditor.MeModel {
 
         export function checkIsValidWarData(): boolean {
             const teamIndexSet = new Set<number>();
-            for (const player of _warData.playerManager.players) {
+            for (const player of _warData.settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray) {
                 teamIndexSet.add(player.teamIndex);
             }
-            return teamIndexSet.size > 0;
+            return teamIndexSet.size > 1;
         }
 
         export function getWarRule(): ProtoTypes.WarRule.IWarRule {
@@ -213,7 +213,6 @@ namespace TinyWars.MapEditor.MeModel {
 
         export function tickTeamIndex(playerIndex: number): void {
             BwSettingsHelper.tickTeamIndex(getWarRule(), playerIndex);
-            getPlayer(playerIndex).teamIndex = getTeamIndex(playerIndex);
         }
         export function getTeamIndex(playerIndex: number): number {
             return BwSettingsHelper.getTeamIndex(getWarRule(), playerIndex);

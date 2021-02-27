@@ -390,7 +390,7 @@ namespace TinyWars.MapEditor {
             this._labelPlayerList.text          = Lang.getText(Lang.Type.B0407);
             this._btnAvailabilityMcw.label      = Lang.getText(Lang.Type.B0137);
             this._btnAvailabilityScw.label      = Lang.getText(Lang.Type.B0138);
-            this._btnAvailabilityMrw.label     = Lang.getText(Lang.Type.B0404);
+            this._btnAvailabilityMrw.label      = Lang.getText(Lang.Type.B0404);
             this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
             this._btnDelete.label               = Lang.getText(Lang.Type.B0220);
             this._btnAddRule.label              = Lang.getText(Lang.Type.B0320);
@@ -462,17 +462,20 @@ namespace TinyWars.MapEditor {
             if ((!playerRuleDataList) || (!playerRuleDataList.length)) {
                 listPlayer.clear();
             } else {
-                const dataList  : DataForPlayerRenderer[] = [];
+                const dataList              : DataForPlayerRenderer[] = [];
+                const playersCountUnneutral = (this._war.getField() as MeField).getMaxPlayerIndex();
                 let index       = 0;
                 for (const playerRule of playerRuleDataList) {
-                    dataList.push({
-                        index,
-                        playerRule,
-                        warRule     : rule,
-                        isReviewing : this._war.getIsReviewingMap(),
-                        panel       : this,
-                    });
-                    ++index;
+                    if (playerRule.playerIndex <= playersCountUnneutral) {
+                        dataList.push({
+                            index,
+                            playerRule,
+                            warRule     : rule,
+                            isReviewing : this._war.getIsReviewingMap(),
+                            panel       : this,
+                        });
+                        ++index;
+                    }
                 }
                 listPlayer.bindData(dataList);
             }

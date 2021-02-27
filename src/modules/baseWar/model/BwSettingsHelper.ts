@@ -330,6 +330,10 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
     }
 
     export function getTeamIndex(warRule: IWarRule, playerIndex: number): number {
+        if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+            return CommonConstants.WarNeutralTeamIndex;
+        }
+
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
             Logger.error(`BwSettingsHelper.getTeamIndex() empty playerRule.`);
@@ -481,7 +485,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
         }
         return playerRuleDataList;
     }
-    function createDefaultPlayerRule(playerIndex: number): IDataForPlayerRule {
+    export function createDefaultPlayerRule(playerIndex: number): IDataForPlayerRule {
         return {
             playerIndex,
             teamIndex               : playerIndex,

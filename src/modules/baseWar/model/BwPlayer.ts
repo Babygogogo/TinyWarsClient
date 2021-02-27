@@ -10,7 +10,6 @@ namespace TinyWars.BaseWar {
 
     export abstract class BwPlayer {
         private _playerIndex            : number;
-        private _teamIndex              : number;
         private _fund                   : number;
         private _hasVotedForDraw        : boolean;
         private _aliveState             : Types.PlayerAliveState;
@@ -51,12 +50,6 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const teamIndex = data.teamIndex;
-            if (teamIndex == null) {
-                Logger.error(`BwPlayer.init() empty teamIndex.`);
-                return undefined;
-            }
-
             const restTimeToBoot = data.restTimeToBoot;
             if (restTimeToBoot == null) {
                 Logger.error(`BwPlayer.init() empty restTimeToBoot.`);
@@ -94,7 +87,6 @@ namespace TinyWars.BaseWar {
             this.setHasVotedForDraw(hasVotedForDraw);
             this.setAliveState(aliveState);
             this._setPlayerIndex(playerIndex);
-            this._setTeamIndex(teamIndex);
             this.setRestTimeToBoot(restTimeToBoot);
             this.setCoUsingSkillType(coUsingSkillType);
             this.setCoIsDestroyedInTurn(coIsDestroyedInTurn);
@@ -137,12 +129,6 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const teamIndex = this.getTeamIndex();
-            if (teamIndex == null) {
-                Logger.error(`BwPlayer.serialize() empty teamIndex.`);
-                return undefined;
-            }
-
             const restTimeToBoot = this.getRestTimeToBoot();
             if (restTimeToBoot == null) {
                 Logger.error(`BwPlayer.serialize() empty restTimeToBoo.`);
@@ -175,7 +161,6 @@ namespace TinyWars.BaseWar {
 
             return {
                 playerIndex,
-                teamIndex,
                 fund,
                 hasVotedForDraw,
                 aliveState,
@@ -215,12 +200,6 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const teamIndex = this.getTeamIndex();
-            if (teamIndex == null) {
-                Logger.error(`BwPlayer.serializeForSimulation() empty teamIndex.`);
-                return undefined;
-            }
-
             const restTimeToBoot = this.getRestTimeToBoot();
             if (restTimeToBoot == null) {
                 Logger.error(`BwPlayer.serializeForSimulation() empty restTimeToBoo.`);
@@ -255,7 +234,6 @@ namespace TinyWars.BaseWar {
             const shouldShowFund    = (!war.getFogMap().checkHasFogCurrently()) || (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(this.getTeamIndex()));
             return {
                 playerIndex,
-                teamIndex,
                 fund                        : shouldShowFund ? fund : 0,
                 hasVotedForDraw,
                 aliveState,
@@ -312,11 +290,20 @@ namespace TinyWars.BaseWar {
             return this.getPlayerIndex() === 0;
         }
 
-        private _setTeamIndex(index: number): void {
-            this._teamIndex = index;
-        }
         public getTeamIndex(): number {
-            return this._teamIndex;
+            const playerIndex = this.getPlayerIndex();
+            if (playerIndex == null) {
+                Logger.error(`BwPlayer.getTeamIndex() empty playerIndex.`);
+                return undefined;
+            }
+
+            const war = this._getWar();
+            if (war == null) {
+                Logger.error(`BwPlayer.getTeamIndex() empty war.`);
+                return undefined;
+            }
+
+            return war.getSettingsTeamIndex(playerIndex);
         }
 
         public setRestTimeToBoot(seconds: number): void {

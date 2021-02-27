@@ -175,7 +175,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _updateLabelRuleName(rule: IWarRule): void {
-            this._labelRuleName.text = (rule ? rule.ruleNameArray || [] : []).join(",");
+            this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameArray : undefined) || Lang.getText(Lang.Type.B0001);
         }
         private _updateImgHasFog(rule: IWarRule): void {
             this._imgHasFog.visible = rule ? rule.ruleForGlobalParams.hasFogByDefault : false;

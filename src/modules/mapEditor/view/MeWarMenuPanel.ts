@@ -463,7 +463,6 @@ namespace TinyWars.MapEditor {
                 callback: () => {
                     const war = this._war;
                     if (!war.getIsReviewingMap()) {
-                        war.reviseWarRuleList();
                         MeWarRulePanel.show();
                         this.close();
                     } else {
@@ -560,7 +559,6 @@ namespace TinyWars.MapEditor {
                     }
 
                     const cb = () => {
-                        war.reviseWarRuleList();
                         MeModel.Sim.resetData(war.serializeForMap(), war.serializeForSimulation());
                         MeSimSettingsPanel.show();
                         this.close();

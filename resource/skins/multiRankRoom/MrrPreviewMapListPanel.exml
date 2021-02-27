@@ -5,7 +5,7 @@
     <e:Group left="0" top="40" bottom="0" right="200">
         <GameUi:UiLabel id="_labelLoading" text="正在加载图片\n请耐心等候" size="20" textColor="0xFFFFFF" horizontalCenter="0"
                         textAlign="center" verticalCenter="0" />
-        <GameUi:UiZoomableComponent id="_zoomMap" left="20" right="20" top="20" bottom="20" />
+        <GameUi:UiZoomableMap id="_zoomMap" left="20" right="20" top="20" bottom="20" />
         <e:Group id="_groupInfo" x="8" y="10" touchThrough="true" touchEnabled="false" touchChildren="false">
             <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1" />
             <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="25" stroke="2" size="20" scaleX="1" scaleY="1" />

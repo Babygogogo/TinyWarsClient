@@ -1,8 +1,10 @@
 
 namespace TinyWars.MapEditor {
+    import Helpers          = Utility.Helpers;
     import Types            = Utility.Types;
     import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
+    import ConfigManager    = Utility.ConfigManager;
     import BwSettingsHelper = BaseWar.BwSettingsHelper;
     import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
@@ -10,6 +12,7 @@ namespace TinyWars.MapEditor {
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
     import IDataForMapTag   = ProtoTypes.Map.IDataForMapTag;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class MeWar extends BaseWar.BwWar {
         private _drawer             : MeDrawer;
@@ -122,7 +125,7 @@ namespace TinyWars.MapEditor {
         }
 
         public serializeForSimulation(): ISerialWar | undefined {
-            const settingsForCommon = this.getSettingsForCommon();
+            const settingsForCommon = Helpers.deepClone(this.getSettingsForCommon());
             if (settingsForCommon == null) {
                 Logger.error(`MeWar.serializeForSimulation() empty settingsForCommon.`);
                 return undefined;
@@ -176,6 +179,14 @@ namespace TinyWars.MapEditor {
                 return undefined;
             }
 
+            const playerRules           = settingsForCommon.warRule.ruleForPlayers;
+            const playersCountUnneutral = (field as MeField).getMaxPlayerIndex();
+            playerRules.playerRuleDataArray = playerRules.playerRuleDataArray.filter(v => {
+                const playerIndex = v.playerIndex;
+                return (playerIndex <= playersCountUnneutral)
+                    && (playerIndex >= CommonConstants.WarFirstPlayerIndex);
+            }).sort((v1, v2) => v1.playerIndex - v2.playerIndex);
+
             return {
                 settingsForCommon,
                 settingsForMcw              : null,
@@ -195,8 +206,9 @@ namespace TinyWars.MapEditor {
         }
 
         public serializeForMap(): IMapRawData {
-            const unitMap   = this.getUnitMap() as MeUnitMap;
-            const mapSize   = unitMap.getMapSize();
+            const unitMap               = this.getUnitMap() as MeUnitMap;
+            const mapSize               = unitMap.getMapSize();
+            const playersCountUnneutral = (this.getField() as MeField).getMaxPlayerIndex();
             unitMap.reviseAllUnitIds();
 
             return {
@@ -205,11 +217,11 @@ namespace TinyWars.MapEditor {
                 mapNameArray            : this.getMapNameArray(),
                 mapWidth                : mapSize.width,
                 mapHeight               : mapSize.height,
-                playersCountUnneutral   : (this.getField() as MeField).getMaxPlayerIndex(),
+                playersCountUnneutral,
                 modifiedTime            : Time.TimeModel.getServerTimestamp(),
                 tileDataArray           : this.getTileMap().serialize().tiles,
                 unitDataArray           : unitMap.serialize().units,
-                warRuleArray            : this.getWarRuleArray(),
+                warRuleArray            : this._getRevisedWarRuleArray(playersCountUnneutral),
                 mapTag                  : this.getMapTag(),
                 warEventFullData        : this.getWarEventManager().getWarEventFullData(),
             };
@@ -304,21 +316,25 @@ namespace TinyWars.MapEditor {
         public getWarRuleByRuleId(ruleId: number): IWarRule {
             return this.getWarRuleArray().find(v => v.ruleId === ruleId);
         }
-
-        public reviseWarRuleList(): void {
-            const ruleList = this.getWarRuleArray();
-            if (!ruleList.length) {
-                this.addWarRule();
-            } else {
-                const playersCount = (this.getField() as MeField).getMaxPlayerIndex();
-                for (const rule of ruleList) {
-                    BwSettingsHelper.reviseWarRule(rule, playersCount);
-                }
+        private _getRevisedWarRuleArray(playersCountUnneutral: number): IWarRule[] {
+            const ruleArray: IWarRule[] = [];
+            for (const rule of this.getWarRuleArray() || []) {
+                const revisedRule = Helpers.deepClone(rule);
+                const playerRules = revisedRule.ruleForPlayers;
+                playerRules.playerRuleDataArray = playerRules.playerRuleDataArray.filter(v => {
+                    const playerIndex = v.playerIndex;
+                    return (playerIndex <= playersCountUnneutral)
+                        && (playerIndex >= CommonConstants.WarFirstPlayerIndex);
+                }).sort((v1, v2) => v1.playerIndex - v2.playerIndex);
+                ruleArray.push(revisedRule);
             }
+
+            return ruleArray;
         }
+
         public addWarRule(): void {
             const ruleList = this.getWarRuleArray();
-            ruleList.push(BwSettingsHelper.createDefaultWarRule(ruleList.length, (this.getField() as MeField).getMaxPlayerIndex()));
+            ruleList.push(BwSettingsHelper.createDefaultWarRule(ruleList.length, CommonConstants.WarMaxPlayerIndex));
         }
         public deleteWarRule(ruleId: number): void {
             const ruleList  = this.getWarRuleArray();

@@ -235,6 +235,15 @@ namespace TinyWars.BaseWar {
 
             return BwSettingsHelper.getLuckUpperLimit(warRule, playerIndex);
         }
+        public getSettingsTeamIndex(playerIndex: number): number | null | undefined {
+            const warRule = this.getWarRule();
+            if (warRule == null) {
+                Logger.error(`BwWar.getSettingsTeamIndex() empty warRule.`);
+                return undefined;
+            }
+
+            return BwSettingsHelper.getTeamIndex(warRule, playerIndex);
+        }
 
         public setRemainingVotesForDraw(votes: number | undefined): void {
             this._remainingVotesForDraw = votes;

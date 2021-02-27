@@ -17,7 +17,7 @@ namespace TinyWars.SingleCustomRoom {
         private _labelMenuTitle : GameUi.UiLabel;
         private _listWar        : GameUi.UiScrollList;
         private _labelNoWar     : GameUi.UiLabel;
-        private _zoomMap        : GameUi.UiZoomableComponent;
+        private _zoomMap        : GameUi.UiZoomableMap;
         private _btnBack        : GameUi.UiButton;
 
         private _groupInfo          : eui.Group;
@@ -59,16 +59,12 @@ namespace TinyWars.SingleCustomRoom {
             this._listWar.setItemRenderer(WarRenderer);
 
             this._groupInfo.visible = false;
-            this._zoomMap.setMouseWheelListenerEnabled(true);
-            this._zoomMap.setTouchListenerEnabled(true);
             this._updateComponentsForLanguage();
             this._updateListWar();
         }
 
         protected async _onClosed(): Promise<void> {
-            this._zoomMap.removeAllContents();
-            this._zoomMap.setMouseWheelListenerEnabled(false);
-            this._zoomMap.setTouchListenerEnabled(false);
+            this._zoomMap.clearMap();
             this._listWar.clear();
             egret.Tween.removeTweens(this._groupInfo);
         }
@@ -86,7 +82,7 @@ namespace TinyWars.SingleCustomRoom {
                 this._listWar.updateSingleData(newIndex, dataList[newIndex]);
                 await this._showMap(newIndex);
             } else {
-                this._zoomMap.removeAllContents();
+                this._zoomMap.clearMap();
                 this._groupInfo.visible = false;
             }
         }
@@ -163,7 +159,7 @@ namespace TinyWars.SingleCustomRoom {
             const mapId     = slotInfo.mapId;
             const zoomMap   = this._zoomMap;
             const groupInfo = this._groupInfo;
-            zoomMap.removeAllContents();
+            zoomMap.clearMap();
 
             if (!mapId) {
                 this._labelNoPreview.text   = Lang.getText(Lang.Type.B0324);
@@ -178,20 +174,7 @@ namespace TinyWars.SingleCustomRoom {
                 groupInfo.alpha     = 1;
                 egret.Tween.removeTweens(groupInfo);
                 egret.Tween.get(groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {groupInfo.visible = false; groupInfo.alpha = 1});
-
-                const tileMapView = new WarMap.WarMapTileMapView();
-                tileMapView.init(mapRawData.mapWidth, mapRawData.mapHeight);
-                tileMapView.updateWithTileDataArray(mapRawData.tileDataArray);
-
-                const unitMapView = new WarMap.WarMapUnitMapView();
-                unitMapView.initWithMapRawData(mapRawData);
-
-                const gridSize = Utility.ConfigManager.getGridSize();
-                zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
-                zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
-                zoomMap.addContent(tileMapView);
-                zoomMap.addContent(unitMapView);
-                zoomMap.setContentScale(0, true);
+                zoomMap.showMap(mapRawData);
             }
         }
     }
