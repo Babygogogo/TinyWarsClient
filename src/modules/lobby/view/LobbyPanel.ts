@@ -340,6 +340,6 @@ namespace TinyWars.Lobby {
         Tween.get(obj)
             .set(beginProps)
             .wait(waitTime)
-            .to(endProps, tweenTime);
+            .to(endProps, tweenTime, egret.Ease.sineOut);
     }
 }
