@@ -78,14 +78,19 @@ namespace TinyWars.MapEditor.MeUtility {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function createISerialWar(data: ProtoTypes.Map.IMapEditorData): WarSerialization.ISerialWar {
-        const mapRawData    = data.mapRawData;
-        const warRuleArray  = mapRawData.warRuleArray;
-        const unitDataArray = mapRawData.unitDataArray || [];
-        const warRule       = (warRuleArray ? warRuleArray[0] : null) || BwSettingsHelper.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
-        const playerRules   = warRule.ruleForPlayers.playerRuleDataArray;
-        for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
-            if (playerRules.find(v => v.playerIndex === playerIndex) == null) {
-                playerRules.push(BwSettingsHelper.createDefaultPlayerRule(playerIndex));
+        const mapRawData        = data.mapRawData;
+        const warRuleArray      = mapRawData.warRuleArray;
+        const unitDataArray     = mapRawData.unitDataArray || [];
+        const warRule           = (warRuleArray ? warRuleArray[0] : null) || BwSettingsHelper.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
+        const ruleForPlayers    = warRule.ruleForPlayers;
+        if (ruleForPlayers.playerRuleDataArray == null) {
+            ruleForPlayers.playerRuleDataArray = BwSettingsHelper.createDefaultPlayerRuleList(CommonConstants.WarMaxPlayerIndex);
+        } else {
+            const playerRules = ruleForPlayers.playerRuleDataArray;
+            for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
+                if (playerRules.find(v => v.playerIndex === playerIndex) == null) {
+                    playerRules.push(BwSettingsHelper.createDefaultPlayerRule(playerIndex));
+                }
             }
         }
 

@@ -478,7 +478,7 @@ namespace TinyWars.BaseWar.BwSettingsHelper {
             },
         }
     }
-    function createDefaultPlayerRuleList(playersCount: number): IDataForPlayerRule[] {
+    export function createDefaultPlayerRuleList(playersCount: number): IDataForPlayerRule[] {
         const playerRuleDataList: IDataForPlayerRule[] = [];
         for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
             playerRuleDataList.push(createDefaultPlayerRule(playerIndex));
