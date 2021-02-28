@@ -3,6 +3,7 @@ namespace TinyWars.Lobby {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import UserModel    = User.UserModel;
+    import Tween        = egret.Tween;
 
     const DISCORD_URL   = `https://discord.gg/jdtRpY9`;
     const GITHUB_URL    = `https://github.com/Babygogogo/TinyWarsClient`;
@@ -14,8 +15,10 @@ namespace TinyWars.Lobby {
         private static _instance: LobbyPanel;
 
         private _groupTips      : eui.Group;
+        private _groupWelcome   : eui.Group;
         private _labelTips0     : GameUi.UiLabel;
         private _labelTips1     : GameUi.UiLabel;
+        private _groupQq        : eui.Group;
         private _labelTips2     : GameUi.UiLabel;
         private _labelTips3     : GameUi.UiLabel;
         private _groupDiscord   : eui.Group;
@@ -173,41 +176,127 @@ namespace TinyWars.Lobby {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _showOpenAnimation(): void {
+            // const group = this._group;
+            // Tween.removeTweens(group);
+            // Tween.get(group)
+            //     .set({ alpha: 0, right: 20 })
+            //     .to({ alpha: 1, right: 60 }, 200);
             const group = this._group;
-            egret.Tween.removeTweens(group);
-            egret.Tween.get(group)
-                .set({ alpha: 0, right: 20 })
-                .to({ alpha: 1, right: 60 }, 200);
+            group.alpha = 1;
+            group.right = 60;
+
+            resetTween({
+                obj         : this._btnMultiPlayer,
+                beginProps  : { alpha: 0, right: -40 },
+                waitTime    : 0,
+                endProps    : { alpha: 1, right: 0 },
+                tweenTime   : 200,
+            });
+            resetTween({
+                obj         : this._btnRanking,
+                beginProps  : { alpha: 0, right: -40 },
+                waitTime    : 100,
+                endProps    : { alpha: 1, right: 0 },
+                tweenTime   : 200,
+            });
+            resetTween({
+                obj         : this._btnSinglePlayer,
+                beginProps  : { alpha: 0, right: -40 },
+                waitTime    : 200,
+                endProps    : { alpha: 1, right: 0 },
+                tweenTime   : 200,
+            });
 
             const groupBottom = this._groupBottom;
-            egret.Tween.removeTweens(groupBottom);
-            egret.Tween.get(groupBottom)
+            Tween.removeTweens(groupBottom);
+            Tween.get(groupBottom)
                 .set({ alpha: 0, bottom: -40 })
                 .to({ alpha: 1, bottom: 0 }, 200);
 
+            // const groupTips = this._groupTips;
+            // Tween.removeTweens(groupTips);
+            // Tween.get(groupTips)
+            //     .set({ alpha: 0, left: 20 })
+            //     .to({ alpha: 1, left: 60 }, 200);
             const groupTips = this._groupTips;
-            egret.Tween.removeTweens(groupTips);
-            egret.Tween.get(groupTips)
-                .set({ alpha: 0, left: 20 })
-                .to({ alpha: 1, left: 60 }, 200);
+            groupTips.alpha = 1;
+            groupTips.left  = 60;
+
+            resetTween({
+                obj         : this._groupWelcome,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 0,
+                endProps    : { alpha: 1, left: 0 },
+                tweenTime   : 200,
+            });
+            resetTween({
+                obj         : this._groupQq,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 66,
+                endProps    : { alpha: 1, left: 0 },
+                tweenTime   : 200,
+            });
+            resetTween({
+                obj         : this._groupDiscord,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 132,
+                endProps    : { alpha: 1, left: 0 },
+                tweenTime   : 200,
+            });
+            resetTween({
+                obj         : this._groupGithub,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 200,
+                endProps    : { alpha: 1, left: 0 },
+                tweenTime   : 200,
+            });
+
+            resetTween({
+                obj         : this._groupMyInfo,
+                beginProps  : { alpha: 0, top: 40 },
+                waitTime    : 0,
+                endProps    : { alpha: 1, top: 0 },
+                tweenTime   : 200,
+            });
+            resetTween({
+                obj         : this._groupChat,
+                beginProps  : { alpha: 0, top: 40 },
+                waitTime    : 66,
+                endProps    : { alpha: 1, top: 0 },
+                tweenTime   : 200,
+            });
+            resetTween({
+                obj         : this._groupMapEditor,
+                beginProps  : { alpha: 0, top: 40 },
+                waitTime    : 132,
+                endProps    : { alpha: 1, top: 0 },
+                tweenTime   : 200,
+            });
+            resetTween({
+                obj         : this._groupGameData,
+                beginProps  : { alpha: 0, top: 40 },
+                waitTime    : 200,
+                endProps    : { alpha: 1, top: 0 },
+                tweenTime   : 200,
+            });
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
                 const group = this._group;
-                egret.Tween.removeTweens(group);
-                egret.Tween.get(group)
+                Tween.removeTweens(group);
+                Tween.get(group)
                     .set({ alpha: 1, right: 60 })
                     .to({ alpha: 0, right: 20 }, 200);
 
                 const groupBottom = this._groupBottom;
-                egret.Tween.removeTweens(groupBottom);
-                egret.Tween.get(groupBottom)
+                Tween.removeTweens(groupBottom);
+                Tween.get(groupBottom)
                     .set({ alpha: 1, bottom: 0 })
                     .to({ alpha: 0, bottom: -40 }, 200);
 
                 const groupTips = this._groupTips;
-                egret.Tween.removeTweens(groupTips);
-                egret.Tween.get(groupTips)
+                Tween.removeTweens(groupTips);
+                Tween.get(groupTips)
                     .set({ alpha: 1, left: 60 })
                     .to({ alpha: 0, left: 20 }, 200)
                     .call(resolve);
@@ -216,7 +305,7 @@ namespace TinyWars.Lobby {
 
         private async _updateComponentsForLanguage(): Promise<void> {
             this._labelTips0.text   = Lang.getText(Lang.Type.A0195);
-            this._labelTips1.text   = ``;
+            this._labelTips1.text   = ` `;
             this._labelTips2.text   = `${Lang.getText(Lang.Type.B0537)}:`;
             this._labelTips3.text   = `368142455`;
             this._labelTips4.text   = `${Lang.getText(Lang.Type.B0538)}:`;
@@ -240,26 +329,17 @@ namespace TinyWars.Lobby {
         }
     }
 
-    type DataForCommandRenderer = {
-        name        : string;
-        callback    : () => void;
-        redChecker? : () => Promise<boolean>;
-    }
-
-    class CommandRenderer extends GameUi.UiListItemRenderer {
-        private _labelCommand   : GameUi.UiLabel;
-        private _imgRed         : GameUi.UiImage;
-
-        protected async dataChanged(): Promise<void> {
-            super.dataChanged();
-
-            const data              = this.data as DataForCommandRenderer;
-            this._labelCommand.text = data.name;
-            this._imgRed.visible    = (data.redChecker != null) && (await data.redChecker());
-        }
-
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data as DataForCommandRenderer).callback();
-        }
+    function resetTween({ obj, beginProps, waitTime, endProps, tweenTime }: {
+        obj         : egret.DisplayObject;
+        beginProps  : any;
+        waitTime    : number;
+        endProps    : any;
+        tweenTime   : number;
+    }): void {
+        Tween.removeTweens(obj);
+        Tween.get(obj)
+            .set(beginProps)
+            .wait(waitTime)
+            .to(endProps, tweenTime);
     }
 }
