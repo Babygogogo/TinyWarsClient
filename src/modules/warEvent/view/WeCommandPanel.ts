@@ -244,8 +244,14 @@ namespace TinyWars.WarEvent {
                 title   : `${Lang.getText(Lang.Type.B0481)} N${nodeId}`,
                 content : Lang.getText(Lang.Type.A0172),
                 callback: () => {
-                    const fullData = data.war.getWarEventManager().getWarEventFullData();
-                    Helpers.deleteElementFromArray(fullData.conditionNodeArray.find(v => v.nodeId === data.parentNodeId).subNodeIdArray, nodeId);
+                    const fullData      = data.war.getWarEventManager().getWarEventFullData();
+                    const parentNodeId  = data.parentNodeId;
+                    if (parentNodeId != null) {
+                        Helpers.deleteElementFromArray(fullData.conditionNodeArray.find(v => v.nodeId === data.parentNodeId).subNodeIdArray, nodeId);
+                    } else {
+                        fullData.eventArray.find(v => v.eventId === data.eventId).conditionNodeId = null;
+                    }
+
                     // WarEventHelper.checkAndDeleteUnusedNode(fullData, nodeId);
 
                     this.close();
