@@ -4,6 +4,9 @@ namespace TinyWars.Lobby {
     import Notify       = Utility.Notify;
     import UserModel    = User.UserModel;
 
+    const DISCORD_URL   = `https://discord.gg/jdtRpY9`;
+    const GITHUB_URL    = `https://github.com/Babygogogo/TinyWarsClient`;
+
     export class LobbyPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
@@ -15,8 +18,10 @@ namespace TinyWars.Lobby {
         private _labelTips1     : GameUi.UiLabel;
         private _labelTips2     : GameUi.UiLabel;
         private _labelTips3     : GameUi.UiLabel;
+        private _groupDiscord   : eui.Group;
         private _labelTips4     : GameUi.UiLabel;
         private _labelTips5     : GameUi.UiLabel;
+        private _groupGithub    : eui.Group;
         private _labelTips6     : GameUi.UiLabel;
         private _labelTips7     : GameUi.UiLabel;
 
@@ -57,6 +62,8 @@ namespace TinyWars.Lobby {
                 { ui: this._groupChat,          callback: this._onTouchedGroupChat },
                 { ui: this._groupMapEditor,     callback: this._onTouchedGroupMapEditor },
                 { ui: this._groupGameData,      callback: this._onTouchedGroupGameData },
+                { ui: this._groupDiscord,       callback: this._onTouchedGroupDiscord },
+                { ui: this._groupGithub,        callback: this._onTouchedGroupGithub },
                 { ui: this._btnMultiPlayer,     callback: this._onTouchedBtnMultiPlayer },
                 { ui: this._btnSinglePlayer,    callback: this._onTouchedBtnSinglePlayer },
                 { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
@@ -105,6 +112,30 @@ namespace TinyWars.Lobby {
 
         private _onTouchedGroupGameData(e: egret.TouchEvent): void {
             Common.CommonDamageChartPanel.show();
+        }
+
+        private _onTouchedGroupDiscord(e: egret.TouchEvent): void {
+            if ((window) && (window.open)) {
+                Common.CommonConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getFormattedText(Lang.Type.F0065, `Discord`),
+                    callback: () => {
+                        window.open(DISCORD_URL);
+                    },
+                })
+            }
+        }
+
+        private _onTouchedGroupGithub(e: egret.TouchEvent): void {
+            if ((window) && (window.open)) {
+                Common.CommonConfirmPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getFormattedText(Lang.Type.F0065, `GitHub`),
+                    callback: () => {
+                        window.open(GITHUB_URL);
+                    },
+                })
+            }
         }
 
         private _onTouchedBtnMultiPlayer(e: egret.TouchEvent): void {
@@ -189,9 +220,9 @@ namespace TinyWars.Lobby {
             this._labelTips2.text   = `${Lang.getText(Lang.Type.B0537)}:`;
             this._labelTips3.text   = `368142455`;
             this._labelTips4.text   = `${Lang.getText(Lang.Type.B0538)}:`;
-            this._labelTips5.text   = `https://discord.gg/jdtRpY9`;
+            this._labelTips5.text   = DISCORD_URL;
             this._labelTips6.text   = `${Lang.getText(Lang.Type.B0539)}:`;
-            this._labelTips7.text   = `https://github.com/Babygogogo/TinyWarsClient`;
+            this._labelTips7.text   = GITHUB_URL;
         }
 
         private async _updateBtnMultiPlayer(): Promise<void> {

@@ -3581,6 +3581,10 @@ namespace TinyWars.Utility.Lang {
             `%s无效`,
             `The %s is invalid.`,
         ],
+        [Type.F0065]: [
+            `您是否希望前往 %s 网站?`,
+            `Do you want to go to the %s website?`,
+        ],
     };
 
     const NET_ERROR_TEXT: { [netErrorCode: number]: string[] } = {

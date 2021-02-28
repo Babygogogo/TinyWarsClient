@@ -153,6 +153,7 @@ namespace TinyWars.Utility.FlowManager {
         ScwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
+        Lobby.LobbyBackgroundPanel.show();
         Lobby.LobbyTopPanel.show();
         MultiRankRoom.MrrMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
@@ -163,6 +164,7 @@ namespace TinyWars.Utility.FlowManager {
         ScwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
+        Lobby.LobbyBackgroundPanel.show();
         Lobby.LobbyTopPanel.show();
         MultiCustomRoom.McrMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
