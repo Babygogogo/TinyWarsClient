@@ -197,7 +197,7 @@ namespace TinyWars.MapEditor {
                 seedRandomInitialState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),
                 seedRandomCurrentState      : null,
                 executedActions             : [],
-                remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,

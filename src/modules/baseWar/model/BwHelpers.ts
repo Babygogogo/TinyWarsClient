@@ -998,4 +998,14 @@ namespace TinyWars.BaseWar.BwHelpers {
 
         return true;
     }
+
+    export function checkCanVoteForDraw({ playerIndex, aliveState }: {
+        playerIndex : number | null | undefined;
+        aliveState  : Types.PlayerAliveState | null | undefined;
+    }) {
+        return (playerIndex != null)
+            && (playerIndex !== CommonConstants.WarNeutralPlayerIndex)
+            && (aliveState != null)
+            && (aliveState !== Types.PlayerAliveState.Dead);
+    }
 }

@@ -165,7 +165,7 @@ namespace TinyWars.MultiRankWar {
                 seedRandomInitialState      : null,
                 seedRandomCurrentState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),
                 executedActions             : [],
-                remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,

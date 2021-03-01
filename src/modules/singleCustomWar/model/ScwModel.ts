@@ -97,7 +97,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             return false;
         } else {
             const callback = () => Utility.FlowManager.gotoLobby();
-            if (war.getRemainingVotesForDraw() === 0) {
+            if (war.getDrawVoteManager().checkIsDraw()) {
                 CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0030),
@@ -150,7 +150,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             Logger.error(`ScwModel.checkAndHandleAutoActions() empty playerManager.`);
             return false;
         }
-        if ((war.getRemainingVotesForDraw() === 0)              ||
+        if ((war.getDrawVoteManager().checkIsDraw())            ||
             (playerManager.getAliveOrDyingTeamsCount(false) <= 1)
         ) {
             await handleSystemEndWar(war);

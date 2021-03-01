@@ -272,6 +272,12 @@ namespace TinyWars.BaseWar {
         public getHasVotedForDraw(): boolean {
             return this._hasVotedForDraw;
         }
+        public checkCanVoteForDraw(): boolean {
+            return BwHelpers.checkCanVoteForDraw({
+                playerIndex : this.getPlayerIndex(),
+                aliveState  : this.getAliveState(),
+            });
+        }
 
         public setAliveState(alive: Types.PlayerAliveState): void {
             this._aliveState = alive;

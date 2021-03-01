@@ -178,7 +178,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _onTouchedBtnEndTurn(e: egret.TouchEvent): void {
             const war = this._war;
-            if ((war.getRemainingVotesForDraw()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
+            if ((war.getDrawVoteManager().getRemainingVotes()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
                 FloatText.show(Lang.getText(Lang.Type.A0034));
             } else {
                 Common.CommonConfirmPanel.show({

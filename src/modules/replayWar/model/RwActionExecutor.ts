@@ -267,17 +267,18 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const playerInTurn = war.getPlayerInTurn();
         playerInTurn.setHasVotedForDraw(true);
 
+        const drawVoteManager = war.getDrawVoteManager();
         if (!action.isAgree) {
             FloatText.show(Lang.getFormattedText(Lang.Type.F0017, await playerInTurn.getNickname()));
-            war.setRemainingVotesForDraw(undefined);
+            drawVoteManager.setRemainingVotes(undefined);
         } else {
-            const remainingVotes = war.getRemainingVotesForDraw();
+            const remainingVotes = drawVoteManager.getRemainingVotes();
             if (remainingVotes) {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0018, await playerInTurn.getNickname()));
             } else {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0019, await playerInTurn.getNickname()));
             }
-            war.setRemainingVotesForDraw((remainingVotes || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
+            drawVoteManager.setRemainingVotes((remainingVotes || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
         }
 
         actionPlanner.setStateIdle();
@@ -1342,10 +1343,11 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const playerInTurn  = war.getPlayerInTurn();
         playerInTurn.setHasVotedForDraw(true);
 
+        const drawVoteManager = war.getDrawVoteManager();
         if (!action.isAgree) {
-            war.setRemainingVotesForDraw(undefined);
+            drawVoteManager.setRemainingVotes(undefined);
         } else {
-            war.setRemainingVotesForDraw((war.getRemainingVotesForDraw() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
+            drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
         }
     }
 

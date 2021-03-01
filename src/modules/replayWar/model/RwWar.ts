@@ -207,7 +207,7 @@ namespace TinyWars.ReplayWar {
                     seedRandomInitialState      : null,
                     seedRandomCurrentState,
                     executedActions             : null,
-                    remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                    remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                     warEventManager             : Helpers.deepClone(serialWarEventManager),
                     playerManager               : serialPlayerManager,
                     turnManager                 : serialTurnManager,
@@ -293,7 +293,7 @@ namespace TinyWars.ReplayWar {
                 seedRandomInitialState      : null,
                 seedRandomCurrentState,
                 executedActions             : [],
-                remainingVotesForDraw       : this.getRemainingVotesForDraw(),
+                remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
                 turnManager                 : serialTurnManager,
@@ -458,7 +458,7 @@ namespace TinyWars.ReplayWar {
                     maxPlayerIndex  : this.getPlayerManager().getTotalPlayersCount(false),
                 }
             );
-            this.setRemainingVotesForDraw(warData.remainingVotesForDraw);
+            this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw);
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: warData.seedRandomCurrentState }));
 
             await Helpers.checkAndCallLater();

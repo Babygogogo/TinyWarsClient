@@ -81,7 +81,7 @@ namespace TinyWars.Utility.DestructionHelpers {
         player.setCoCurrentEnergy(undefined);
         player.setCoUsingSkillType(Types.CoSkillType.Passive);
 
-        war.setRemainingVotesForDraw(undefined);
+        war.getDrawVoteManager().setRemainingVotes(undefined);
     }
 
     export function removeUnitOnMap(war: BwWar, gridIndex: GridIndex): void {

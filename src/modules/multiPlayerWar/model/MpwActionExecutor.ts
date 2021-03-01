@@ -69,7 +69,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         war.setIsExecutingAction(false);
 
         const playerManager     = war.getPlayerManager();
-        const remainingVotes    = war.getRemainingVotesForDraw();
+        const remainingVotes    = war.getDrawVoteManager().getRemainingVotes();
         const selfPlayer        = playerManager.getPlayerByUserId(User.UserModel.getSelfUserId());
         const callbackForGoBack = () => {
             if (war instanceof MultiRankWar.MrwWar) {
@@ -261,16 +261,17 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         const nickname      = await playerInTurn.getNickname();
         playerInTurn.setHasVotedForDraw(true);
 
+        const drawVoteManager = war.getDrawVoteManager();
         if (!action.isAgree) {
             FloatText.show(Lang.getFormattedText(Lang.Type.F0017, nickname));
-            war.setRemainingVotesForDraw(undefined);
+            drawVoteManager.setRemainingVotes(undefined);
         } else {
-            if (war.getRemainingVotesForDraw()) {
+            if (drawVoteManager.getRemainingVotes()) {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0018, nickname));
             } else {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0019, nickname));
             }
-            war.setRemainingVotesForDraw((war.getRemainingVotesForDraw() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
+            drawVoteManager.setRemainingVotes((drawVoteManager.getRemainingVotes() || war.getPlayerManager().getAlivePlayersCount(false)) - 1);
         }
 
         actionPlanner.setStateIdle();

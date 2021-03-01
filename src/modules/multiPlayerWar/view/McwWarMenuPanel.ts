@@ -393,13 +393,14 @@ namespace TinyWars.MultiPlayerWar {
             ) {
                 return undefined;
             } else {
-                const title = war.getRemainingVotesForDraw() == null ? Lang.getText(Lang.Type.B0083) : Lang.getText(Lang.Type.B0084);
+                const drawVoteManager   = war.getDrawVoteManager();
+                const title             = drawVoteManager.getRemainingVotes() == null ? Lang.getText(Lang.Type.B0083) : Lang.getText(Lang.Type.B0084);
                 return {
                     name    : title,
                     callback: () => {
                         CommonConfirmPanel.show({
                             title,
-                            content : war.getRemainingVotesForDraw() == null ? Lang.getText(Lang.Type.A0031) : Lang.getText(Lang.Type.A0032),
+                            content : drawVoteManager.getRemainingVotes() == null ? Lang.getText(Lang.Type.A0031) : Lang.getText(Lang.Type.A0032),
                             callback: () => this._actionPlanner.setStateRequestingPlayerVoteForDraw(true),
                         });
                     },
@@ -410,11 +411,11 @@ namespace TinyWars.MultiPlayerWar {
         private _createCommandPlayerDeclineDraw(): DataForCommandRenderer | undefined {
             const war       = this._war;
             const player    = war.getPlayerInTurn();
-            if ((player !== war.getPlayerLoggedIn())                                    ||
-                (player.getHasVotedForDraw())                                           ||
-                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)      ||
-                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)   ||
-                (!war.getRemainingVotesForDraw())
+            if ((player !== war.getPlayerLoggedIn())                                ||
+                (player.getHasVotedForDraw())                                       ||
+                (war.getTurnManager().getPhaseCode() !== Types.TurnPhaseCode.Main)  ||
+                (this._actionPlanner.getState() !== Types.ActionPlannerState.Idle)  ||
+                (!war.getDrawVoteManager().getRemainingVotes())
             ) {
                 return undefined;
             } else {

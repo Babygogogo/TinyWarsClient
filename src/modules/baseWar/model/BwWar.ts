@@ -4,6 +4,7 @@ namespace TinyWars.BaseWar {
     import Types                    = Utility.Types;
     import ProtoTypes               = Utility.ProtoTypes;
     import Helpers                  = Utility.Helpers;
+    import ClientErrorCode          = Utility.ClientErrorCode;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import IWarSettingsForCommon    = ProtoTypes.WarSettings.ISettingsForCommon;
     import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
@@ -12,13 +13,13 @@ namespace TinyWars.BaseWar {
         private _settingsForCommon          : IWarSettingsForCommon;
 
         private _warId                      : number;
-        private _remainingVotesForDraw      : number | null | undefined;
         private _executedActions            : IWarActionContainer[];
 
         private _playerManager              : BwPlayerManager;
         private _field                      : BwField;
         private _turnManager                : BwTurnManager;
         private _warEventManager            : BwWarEventManager;
+        private readonly _drawVoteManager       = new BwDrawVoteManager();
 
         private _view                   : BwWarView;
         private _isRunning              = false;
@@ -34,11 +35,16 @@ namespace TinyWars.BaseWar {
         protected abstract _getViewClass(): new () => BwWarView;
         protected abstract _getWarEventManagerClass(): new () => BwWarEventManager;
 
-        protected _baseInit(data: ISerialWar): BwWar {
+        protected _baseInit(data: ISerialWar): ClientErrorCode {
             const settingsForCommon = data.settingsForCommon;
             if (settingsForCommon == null) {
                 Logger.error(`BwWar._baseInit() empty settingsForCommon.`);
                 return undefined;
+            }
+
+            const drawVoteManagerError = this.getDrawVoteManager().init(data.playerManager, data.remainingVotesForDraw);
+            if (drawVoteManagerError) {
+                return drawVoteManagerError;
             }
 
             const dataForWarEventManager = data.warEventManager;
@@ -57,9 +63,8 @@ namespace TinyWars.BaseWar {
             this._setSettingsForCommon(settingsForCommon);
             this._setAllExecutedActions(data.executedActions || []);
             this._setWarEventManager(warEventManager);
-            this.setRemainingVotesForDraw(data.remainingVotesForDraw);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         protected _initView(): void {
@@ -245,13 +250,6 @@ namespace TinyWars.BaseWar {
             return BwSettingsHelper.getTeamIndex(warRule, playerIndex);
         }
 
-        public setRemainingVotesForDraw(votes: number | undefined): void {
-            this._remainingVotesForDraw = votes;
-        }
-        public getRemainingVotesForDraw(): number | undefined {
-            return this._remainingVotesForDraw;
-        }
-
         public getExecutedActionsCount(): number {
             return this._getAllExecutedActions().length;
         }
@@ -334,6 +332,10 @@ namespace TinyWars.BaseWar {
 
         public getWatcherTeamIndexes(watcherUserId: number): Set<number> {
             return this.getPlayerManager().getAliveWatcherTeamIndexes(watcherUserId);
+        }
+
+        public getDrawVoteManager(): BwDrawVoteManager {
+            return this._drawVoteManager;
         }
     }
 }
