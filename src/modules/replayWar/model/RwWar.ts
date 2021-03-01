@@ -29,7 +29,7 @@ namespace TinyWars.ReplayWar {
         private _checkPointDataListForCheckPointId  = new Map<number, CheckPointData>();
 
         public async init(warData: ISerialWar): Promise<RwWar> {
-            if (!this._baseInit(warData)) {
+            if (this._baseInit(warData)) {
                 Logger.error(`ReplayWar.init() failed this._baseInit().`);
                 return undefined;
             }

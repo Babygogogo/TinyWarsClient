@@ -16,7 +16,7 @@ namespace TinyWars.SingleCustomWar {
         private _isEnded                    = false;
 
         public async init(data: ISerialWar): Promise<ScwWar | undefined> {
-            if (!this._baseInit(data)) {
+            if (this._baseInit(data)) {
                 Logger.error(`ScwWar.init() failed this._baseInit().`);
                 return undefined;
             }

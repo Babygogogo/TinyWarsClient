@@ -13,7 +13,6 @@ namespace TinyWars.Utility.FlowManager {
     ];
     const _NOTIFY_EVENTS = [
         { type: Notify.Type.NetworkConnected,           callback: _onNotifyNetworkConnected, },
-        { type: Notify.Type.ConfigLoaded,               callback: _onNotifyConfigLoaded },
         { type: Notify.Type.MsgUserLogin,               callback: _onMsgUserLogin },
         { type: Notify.Type.MsgUserLogout,              callback: _onMsgUserLogout },
         { type: Notify.Type.MsgMpwCommonContinueWar,    callback: _onMsgMpwCommonContinueWar },
@@ -197,10 +196,6 @@ namespace TinyWars.Utility.FlowManager {
         });
     }
 
-    function _onNotifyConfigLoaded(e: egret.Event): void {
-        (_checkCanFirstGoToLobby()) && (gotoLobby());
-    }
-
     function _onMsgUserLogin(e: egret.Event): void {
         if (_checkCanFirstGoToLobby()) {
             gotoLobby();
@@ -229,8 +224,7 @@ namespace TinyWars.Utility.FlowManager {
     function _checkCanFirstGoToLobby(): boolean {
         return (!_hasOnceWentToLobby)
             && (User.UserModel.getIsLoggedIn())
-            && (ResManager.checkIsLoadedMainResource())
-            && (ConfigManager.checkIsConfigLoaded(ConfigManager.getLatestFormalVersion()))
+            && (ResManager.checkIsLoadedMainResource());
     }
 
     function _removeLoadingDom(): void {

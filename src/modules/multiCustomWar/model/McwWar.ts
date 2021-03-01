@@ -11,7 +11,7 @@ namespace TinyWars.MultiCustomWar {
         private _settingsForMcw?: ISettingsForMcw;
 
         public async init(data: ISerialWar): Promise<McwWar> {
-            if (!this._baseInit(data)) {
+            if (this._baseInit(data)) {
                 Logger.error(`McwWar.init() failed this._baseInit().`);
                 return undefined;
             }

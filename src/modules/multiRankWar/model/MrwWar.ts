@@ -13,7 +13,7 @@ namespace TinyWars.MultiRankWar {
         private _settingsForMrw?: ISettingsForMrw;
 
         public async init(data: ISerialWar): Promise<MrwWar> {
-            if (!this._baseInit(data)) {
+            if (this._baseInit(data)) {
                 Logger.error(`MrwWar.init() failed this._baseInit().`);
                 return undefined;
             }

@@ -39,7 +39,7 @@ namespace TinyWars.Common.CommonProxy {
     function _onMsgCommonLatestConfigVersion(e: egret.Event): void {
         const data      = e.data as ProtoTypes.NetMessage.MsgCommonLatestConfigVersion.IS;
         const version   = data.version;
-        ConfigManager.setLatestConfigVersion(version);
+        ConfigManager.setLatestFormalVersion(version);
         ConfigManager.loadConfig(version);
         Notify.dispatch(Notify.Type.MsgCommonLatestConfigVersion, data);
     }

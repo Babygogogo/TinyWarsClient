@@ -27,7 +27,7 @@ namespace TinyWars.MapEditor {
         private _mapTag             : IDataForMapTag;
 
         public async init(data: ISerialWar): Promise<MeWar> {
-            if (!this._baseInit(data)) {
+            if (this._baseInit(data)) {
                 Logger.error(`MeWar.init() failed this._baseInit().`);
                 return undefined;
             }
