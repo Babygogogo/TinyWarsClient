@@ -56,11 +56,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
 
         war.setIsExecutingAction(true);
-        if (war.getIsSinglePlayerCheating()) {
-            war.addEmptyExecutedAction();
-        } else {
-            war.addExecutedAction(container);
-        }
+        war.getExecutedActionManager().addExecutedAction(container);
         await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
         war.setIsExecutingAction(false);
     }

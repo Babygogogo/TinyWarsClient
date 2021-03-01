@@ -3,21 +3,19 @@ namespace TinyWars.BaseWar {
     import Logger                   = Utility.Logger;
     import Types                    = Utility.Types;
     import ProtoTypes               = Utility.ProtoTypes;
-    import Helpers                  = Utility.Helpers;
     import ClientErrorCode          = Utility.ClientErrorCode;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
     import IWarSettingsForCommon    = ProtoTypes.WarSettings.ISettingsForCommon;
-    import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
 
     export abstract class BwWar {
         private _settingsForCommon          : IWarSettingsForCommon;
 
         private _warId                      : number;
-        private _executedActions            : IWarActionContainer[];
 
         private _playerManager              : BwPlayerManager;
         private _field                      : BwField;
         private _turnManager                : BwTurnManager;
+        private readonly _executedActionManager = new BwExecutedActionManager();
         private readonly _warEventManager       = new (this._getWarEventManagerClass())();
         private readonly _drawVoteManager       = new BwDrawVoteManager();
 
@@ -29,6 +27,7 @@ namespace TinyWars.BaseWar {
         public abstract serializeForSimulation(): ISerialWar | undefined;
         public abstract getWarType(): Types.WarType;
         public abstract getMapId(): number | undefined;
+        public abstract getIsNeedReplay(): boolean;
         protected abstract _getPlayerManagerClass(): new () => BwPlayerManager;
         protected abstract _getTurnManagerClass(): new () => BwTurnManager;
         protected abstract _getFieldClass(): new () => BwField;
@@ -52,7 +51,8 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const warEventManager = this.getWarEventManager().init(dataForWarEventManager);
+            const isNeedReplay      = this.getIsNeedReplay();
+            const warEventManager   = this.getWarEventManager().init(dataForWarEventManager);
             if (warEventManager == null) {
                 Logger.error(`BwWar._baseInit() empty warEventManager.`);
                 return undefined;
@@ -60,7 +60,7 @@ namespace TinyWars.BaseWar {
 
             this._setWarId(data.warId);
             this._setSettingsForCommon(settingsForCommon);
-            this._setAllExecutedActions(data.executedActions || []);
+            this.getExecutedActionManager().init(isNeedReplay, data.executedActions || []);
 
             return ClientErrorCode.NoError;
         }
@@ -77,7 +77,7 @@ namespace TinyWars.BaseWar {
         }
 
         protected _getWarEventManagerClass(): new () => BwWarEventManager {
-            return BwWarEventManager
+            return BwWarEventManager;
         }
 
         public startRunning(): BwWar {
@@ -252,30 +252,6 @@ namespace TinyWars.BaseWar {
             return BwSettingsHelper.getTeamIndex(warRule, playerIndex);
         }
 
-        public getExecutedActionsCount(): number {
-            return this._getAllExecutedActions().length;
-        }
-        private _setAllExecutedActions(actions: IWarActionContainer[]): void {
-            this._executedActions = actions;
-        }
-        protected _getAllExecutedActions(): IWarActionContainer[] | null {
-            return this._executedActions;
-        }
-        public addExecutedAction(action: IWarActionContainer): void {
-            if (this.getExecutedActionsCount() !== action.actionId) {
-                Logger.error(`BwWar.addExecutedAction() invalid actionId.`);
-                return;
-            }
-
-            this._getAllExecutedActions().push(Helpers.deepClone(action));
-        }
-        public addEmptyExecutedAction(): void {
-            this._getAllExecutedActions().push({});
-        }
-        public getExecutedAction(actionId: number): IWarActionContainer | undefined {
-            return this._getAllExecutedActions()[actionId];
-        }
-
         protected _setPlayerManager(manager: BwPlayerManager): void {
             this._playerManager = manager;
         }
@@ -329,11 +305,14 @@ namespace TinyWars.BaseWar {
             return this.getPlayerManager().getAliveWatcherTeamIndexes(watcherUserId);
         }
 
-        public getWarEventManager(): BwWarEventManager | undefined {
+        public getWarEventManager(): BwWarEventManager {
             return this._warEventManager;
         }
         public getDrawVoteManager(): BwDrawVoteManager {
             return this._drawVoteManager;
+        }
+        public getExecutedActionManager(): BwExecutedActionManager {
+            return this._executedActionManager;
         }
     }
 }

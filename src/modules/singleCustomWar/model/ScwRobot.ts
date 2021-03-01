@@ -1555,7 +1555,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         (!action) && (action = await _getActionForPhase7());
         (!action) && (action = await _getActionForPhase8());
         (!action) && (action = await _getActionForPhase9());
-        action.actionId = _war.getExecutedActionsCount();
+        action.actionId = _war.getExecutedActionManager().getExecutedActionsCount();
 
         _clearVariables();
 

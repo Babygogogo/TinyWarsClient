@@ -192,7 +192,7 @@ namespace TinyWars.ReplayWar {
             this._labelMapDesigner.text             = await WarMapModel.getDesignerName(mapFileName) || "----";
             this._labelWarId.text                   = `${war.getReplayId()}`;
             this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex()}`;
-            this._labelActionId.text                = `${war.getNextActionId()} / ${war.getExecutedActionsCount()}`;
+            this._labelActionId.text                = `${war.getNextActionId()} / ${war.getExecutedActionManager().getExecutedActionsCount()}`;
         }
 
         private _updateListPlayer(): void {

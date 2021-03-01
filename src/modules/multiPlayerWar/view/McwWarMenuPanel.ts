@@ -245,7 +245,7 @@ namespace TinyWars.MultiPlayerWar {
                 },
                 {
                     titleText   : Lang.getText(Lang.Type.B0091),
-                    infoText    : `${war.getTurnManager().getTurnIndex()} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionsCount() + 1})`,
+                    infoText    : `${war.getTurnManager().getTurnIndex()} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionManager().getExecutedActionsCount()})`,
                     infoColor   : 0xFFFFFF,
                 },
             ];

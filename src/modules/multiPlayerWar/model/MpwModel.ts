@@ -151,7 +151,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
 
                 } else {
                     const cachedActionsCount = _cachedActions.length;
-                    if (data.executedActionsCount !== war.getExecutedActionsCount() + cachedActionsCount) {
+                    if (data.executedActionsCount !== war.getExecutedActionManager().getExecutedActionsCount() + cachedActionsCount) {
                         war.setIsEnded(true);
                         await Utility.FlowManager.gotoMultiCustomWar(data.war);
                         FloatText.show(Lang.getText(Lang.Type.A0036));
@@ -204,7 +204,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     export function updateByActionContainer(container: IWarActionContainer, warId: number): void {
         const war = getWar();
         if ((war) && (war.getWarId() === warId)) {
-            if (container.actionId !== war.getExecutedActionsCount() + _cachedActions.length) {
+            if (container.actionId !== war.getExecutedActionManager().getExecutedActionsCount() + _cachedActions.length) {
                 MpwProxy.reqMcwCommonSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
             } else {
                 _cachedActions.push(container);

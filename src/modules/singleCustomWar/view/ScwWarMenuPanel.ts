@@ -237,10 +237,12 @@ namespace TinyWars.SingleCustomWar {
         // War info data creators.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _createWarInfoTurnIndex(): DataForInfoRenderer {
-            const war = this._war;
+            const war                   = this._war;
+            const turnIndex             = war.getTurnManager().getTurnIndex();
+            const executedActionsCount  = war.getExecutedActionManager().getExecutedActionsCount();
             return {
                 titleText               : Lang.getText(Lang.Type.B0091),
-                infoText                : `${war.getTurnManager().getTurnIndex()} (${Lang.getText(Lang.Type.B0090)}: ${war.getExecutedActionsCount() + 1})`,
+                infoText                : `${turnIndex} (${Lang.getText(Lang.Type.B0090)}: ${executedActionsCount})`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : null,
             };

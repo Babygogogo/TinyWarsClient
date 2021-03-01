@@ -102,7 +102,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwCommonSyncWar: { c: {
                 warId               : war.getWarId(),
-                executedActionsCount: war.getExecutedActionsCount(),
+                executedActionsCount: war.getExecutedActionManager().getExecutedActionsCount(),
                 requestType,
             }, }
         });
@@ -283,7 +283,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionPlayerDeleteUnit: { c: {
                 warId   : war.getWarId(),
-                actionId: war.getExecutedActionsCount(),
+                actionId: war.getExecutedActionManager().getExecutedActionsCount(),
                 gridIndex,
             }, }
         });
@@ -300,7 +300,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionPlayerEndTurn: { c: {
                 warId   : war.getWarId(),
-                actionId: war.getExecutedActionsCount(),
+                actionId: war.getExecutedActionManager().getExecutedActionsCount(),
             }, }
         });
     }
@@ -316,7 +316,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionPlayerProduceUnit: { c: {
                 warId   : war.getWarId(),
-                actionId: war.getExecutedActionsCount(),
+                actionId: war.getExecutedActionManager().getExecutedActionsCount(),
                 gridIndex,
                 unitType,
                 unitHp,
@@ -335,7 +335,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionPlayerSurrender: { c: {
                 warId   : war.getWarId(),
-                actionId: war.getExecutedActionsCount(),
+                actionId: war.getExecutedActionManager().getExecutedActionsCount(),
                 isBoot  : false,
             }, }
         })
@@ -352,7 +352,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionPlayerVoteForDraw: { c: {
                 warId   : war.getWarId(),
-                actionId: war.getExecutedActionsCount(),
+                actionId: war.getExecutedActionManager().getExecutedActionsCount(),
                 isAgree,
             }, }
         });
@@ -369,7 +369,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitAttackUnit: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
                 targetGridIndex,
@@ -388,7 +388,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitAttackTile: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
                 targetGridIndex,
@@ -407,7 +407,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitBeLoaded: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
             }, }
@@ -425,7 +425,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitBuildTile: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
             }, }
@@ -443,7 +443,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitCaptureTile: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
             }, }
@@ -461,7 +461,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitDive: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
             }, }
@@ -479,7 +479,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitDropUnit: { c: {
                 warId   : war.getWarId(),
-                actionId: war.getExecutedActionsCount(),
+                actionId: war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
                 dropDestinations,
@@ -498,7 +498,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitJoinUnit: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
             }, }
@@ -516,7 +516,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitLaunchFlare: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
                 targetGridIndex,
@@ -535,7 +535,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitLaunchSilo: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
                 targetGridIndex,
@@ -554,7 +554,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitLoadCo: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
             }, }
@@ -572,7 +572,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitProduceUnit: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
             }, }
@@ -590,7 +590,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitSupplyUnit: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
             }, }
@@ -608,7 +608,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitSurface: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
             }, }
@@ -626,7 +626,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitUseCoSkill: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 skillType,
                 path,
                 launchUnitId,
@@ -645,7 +645,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwActionUnitWait: { c: {
                 warId       : war.getWarId(),
-                actionId    : war.getExecutedActionsCount(),
+                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
                 path,
                 launchUnitId,
             }, }

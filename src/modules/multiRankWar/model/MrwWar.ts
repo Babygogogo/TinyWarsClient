@@ -178,7 +178,9 @@ namespace TinyWars.MultiRankWar {
                 ? Types.WarType.MrwFog
                 : Types.WarType.MrwStd;
         }
-
+        public getIsNeedReplay(): boolean {
+            return false;
+        }
         public getMapId(): number | undefined {
             const settingsForMrw = this.getSettingsForMrw();
             return settingsForMrw ? settingsForMrw.mapId : undefined;

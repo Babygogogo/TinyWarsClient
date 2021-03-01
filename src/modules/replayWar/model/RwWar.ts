@@ -311,7 +311,9 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
         }
-
+        public getIsNeedReplay(): boolean {
+            return false;
+        }
         public getMapId(): number | undefined {
             const settingsForMcw = this._getSettingsForMcw();
             if (settingsForMcw) {
@@ -463,10 +465,10 @@ namespace TinyWars.ReplayWar {
         }
 
         public getTotalActionsCount(): number {
-            return this.getExecutedActionsCount();
+            return this.getExecutedActionManager().getExecutedActionsCount();
         }
         public getNextAction(): IWarActionContainer {
-            return this.getExecutedAction(this.getNextActionId());
+            return this.getExecutedActionManager().getExecutedAction(this.getNextActionId());
         }
 
         public getRandomNumber(): number | undefined {

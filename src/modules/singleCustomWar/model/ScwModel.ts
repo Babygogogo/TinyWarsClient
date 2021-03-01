@@ -82,7 +82,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
             return;
         }
 
-        playerAction.actionId = war.getExecutedActionsCount();
+        playerAction.actionId = war.getExecutedActionManager().getExecutedActionsCount();
         await ScwActionExecutor.checkAndExecute(war, playerAction);
         if (checkAndEndWar(war)) {
             return;
@@ -228,14 +228,14 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     }
     async function handleSystemBeginTurn(war: ScwWar): Promise<void> {
         await ScwActionExecutor.checkAndExecute(war, {
-            actionId                    : war.getExecutedActionsCount(),
+            actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemBeginTurn    : {
             },
         })
     }
     async function handleSystemCallWarEvent(war: ScwWar, warEventId: number): Promise<void> {
         await ScwActionExecutor.checkAndExecute(war, {
-            actionId                    : war.getExecutedActionsCount(),
+            actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemCallWarEvent : {
                 warEventId,
             },
@@ -243,7 +243,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     }
     async function handleSystemDestroyPlayerForce(war: ScwWar, playerIndex: number): Promise<void> {
         await ScwActionExecutor.checkAndExecute(war, {
-            actionId                            : war.getExecutedActionsCount(),
+            actionId                            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemDestroyPlayerForce   : {
                 targetPlayerIndex           : playerIndex,
             },
@@ -251,14 +251,14 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     }
     async function handleSystemEndWar(war: ScwWar): Promise<void> {
         await ScwActionExecutor.checkAndExecute(war, {
-            actionId                : war.getExecutedActionsCount(),
+            actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemEndWar   : {
             },
         });
     }
     async function handlePlayerEndTurn(war: ScwWar): Promise<void> {
         await ScwActionExecutor.checkAndExecute(war, {
-            actionId                : war.getExecutedActionsCount(),
+            actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerEndTurn  : {
             },
         });

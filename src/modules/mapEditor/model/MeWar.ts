@@ -230,7 +230,9 @@ namespace TinyWars.MapEditor {
         public getWarType(): Types.WarType {
             return Types.WarType.Me;
         }
-
+        public getIsNeedReplay(): boolean {
+            return false;
+        }
         public getMapId(): number | undefined {
             return undefined;
         }

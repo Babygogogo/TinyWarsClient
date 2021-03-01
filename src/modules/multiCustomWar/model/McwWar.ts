@@ -176,7 +176,9 @@ namespace TinyWars.MultiCustomWar {
                 ? Types.WarType.McwFog
                 : Types.WarType.McwStd;
         }
-
+        public getIsNeedReplay(): boolean {
+            return false;
+        }
         public getMapId(): number | undefined {
             const settingsForMcw = this.getSettingsForMcw();
             return settingsForMcw ? settingsForMcw.mapId : undefined;

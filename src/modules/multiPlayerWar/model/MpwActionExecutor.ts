@@ -19,7 +19,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
     import UnitActionState      = Types.UnitActionState;
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;
-    import IWarActionContainer     = ProtoTypes.WarAction.IWarActionContainer;
+    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     const _EXECUTORS = new Map<WarActionCodes, (war: MpwWar, data: IWarActionContainer) => Promise<void>>([
@@ -64,7 +64,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         }
 
         war.setIsExecutingAction(true);
-        war.addEmptyExecutedAction();
+        war.getExecutedActionManager().addExecutedAction(container);
         await _EXECUTORS.get(Helpers.getWarActionCode(container))(war, container);
         war.setIsExecutingAction(false);
 

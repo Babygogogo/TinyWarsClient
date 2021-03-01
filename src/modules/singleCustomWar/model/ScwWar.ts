@@ -186,7 +186,7 @@ namespace TinyWars.SingleCustomWar {
                 warId                       : this.getWarId(),
                 seedRandomInitialState,
                 seedRandomCurrentState,
-                executedActions             : this._getAllExecutedActions(),
+                executedActions             : this.getExecutedActionManager().getAllExecutedActions(),
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 warEventManager             : serialWarEventManager,
                 playerManager               : serialPlayerManager,
@@ -274,6 +274,9 @@ namespace TinyWars.SingleCustomWar {
             };
         }
 
+        public getIsNeedReplay(): boolean {
+            return false;
+        }
         protected _getViewClass(): new () => ScwWarView {
             return ScwWarView;
         }
