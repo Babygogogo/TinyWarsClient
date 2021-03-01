@@ -13,7 +13,6 @@ namespace TinyWars.BaseWar {
         private _players        = new Map<number, BwPlayer>();
         private _war            : BwWar;
 
-        protected abstract _getPlayerClass(): new () => BwPlayer;
         public abstract getAliveWatcherTeamIndexesForSelf(): Set<number>;
 
         public init(data: ISerialPlayerManager): BwPlayerManager | undefined {
@@ -33,7 +32,7 @@ namespace TinyWars.BaseWar {
                     return undefined;
                 }
 
-                const player = (new (this._getPlayerClass())()).init(d);
+                const player = (new BwPlayer()).init(d);
                 if (player == null) {
                     Logger.error(`BwPlayerManager.init() empty player.`);
                     return undefined;

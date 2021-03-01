@@ -1,18 +1,14 @@
 
 namespace TinyWars.SingleCustomWar {
     export class ScwPlayerManager extends BaseWar.BwPlayerManager {
-        protected _getPlayerClass(): new () => BaseWar.BwPlayer {
-            return ScwPlayer;
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getHumanPlayers(): ScwPlayer[] {
-            const players: ScwPlayer[] = [];
+        public getHumanPlayers(): BaseWar.BwPlayer[] {
+            const players: BaseWar.BwPlayer[] = [];
             for (const [, player] of this._getPlayersMap()) {
                 if (player.getUserId() != null) {
-                    players.push(player as ScwPlayer);
+                    players.push(player);
                 }
             }
             return players;

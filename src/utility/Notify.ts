@@ -231,8 +231,8 @@ namespace TinyWars.Utility.Notify {
     export namespace Data {
         export type ConfigLoaded                = number;
         export type McwPlayerIndexInTurnChanged = number;
-        export type McwPlayerFundChanged        = MultiPlayerWar.MpwPlayer;
-        export type McwPlayerEnergyChanged      = MultiPlayerWar.MpwPlayer;
+        export type McwPlayerFundChanged        = BaseWar.BwPlayer;
+        export type McwPlayerEnergyChanged      = BaseWar.BwPlayer;
         export type BwCursorTapped              = { current: GridIndex, tappedOn: GridIndex };
         export type BwCursorDragged             = { current: GridIndex, draggedTo: GridIndex };
         export type BwFieldZoomed               = { previous: TouchPoints, current: TouchPoints };

@@ -1,20 +1,17 @@
 
 namespace TinyWars.MultiPlayerWar {
     export class MpwPlayerManager extends BaseWar.BwPlayerManager {
-        private _loggedInPlayer : MpwPlayer;
+        private _loggedInPlayer : BaseWar.BwPlayer;
 
-        protected _getPlayerClass(): new () => BaseWar.BwPlayer {
-            return MpwPlayer;
-        }
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////
-        public getPlayerLoggedIn(): MpwPlayer | undefined {
+        public getPlayerLoggedIn(): BaseWar.BwPlayer | undefined {
             if (!this._loggedInPlayer) {
                 const userId = User.UserModel.getSelfUserId();
                 for (const [, player] of this._getPlayersMap()) {
                     if (player.getUserId() === userId) {
-                        this._loggedInPlayer = player as MpwPlayer;
+                        this._loggedInPlayer = player;
                         break;
                     }
                 }

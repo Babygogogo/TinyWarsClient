@@ -162,7 +162,7 @@ namespace TinyWars.SingleCustomWar {
             const configVersion = war.getConfigVersion();
 
             for (let i = 1; i <= playerManager.getTotalPlayersCount(false); ++i) {
-                const player = playerManager.getPlayer(i) as ScwPlayer;
+                const player = playerManager.getPlayer(i);
                 data.push({
                     configVersion,
                     player,
@@ -298,7 +298,7 @@ namespace TinyWars.SingleCustomWar {
 
     type DataForCoRenderer = {
         configVersion   : string;
-        player          : ScwPlayer;
+        player          : BaseWar.BwPlayer;
         index           : number;
         panel           : ScwCoListPanel;
     }

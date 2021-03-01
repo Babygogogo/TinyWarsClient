@@ -255,7 +255,7 @@ namespace TinyWars.MultiPlayerWar {
         private _updateListPlayer(): void {
             const war   = this._war;
             const data  = [] as DataForPlayerRenderer[];
-            war.getPlayerManager().forEachPlayer(false, (player: MpwPlayer) => {
+            war.getPlayerManager().forEachPlayer(false, (player) => {
                 data.push({
                     war,
                     player,
@@ -591,7 +591,7 @@ namespace TinyWars.MultiPlayerWar {
 
     type DataForPlayerRenderer = {
         war     : MpwWar;
-        player  : MpwPlayer;
+        player  : BaseWar.BwPlayer;
     }
 
     class PlayerRenderer extends GameUi.UiListItemRenderer {
@@ -655,7 +655,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataColor(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             return {
@@ -666,7 +666,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataFund(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             return {
@@ -677,7 +677,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataBuildings(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const info = this._getTilesCountAndIncome(war, player.getPlayerIndex());
@@ -689,7 +689,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataCoName(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const coId  = player.getCoId();
@@ -702,7 +702,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataEnergy(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const currValue         = player.getCoCurrentEnergy();
@@ -720,7 +720,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataUnitAndValue(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const unitsCountAndValue = this._getUnitsCountAndValue(war, player.getPlayerIndex());
@@ -732,7 +732,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataInitialFund(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
@@ -745,7 +745,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataIncomeMultiplier(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
@@ -758,7 +758,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataInitialEnergy(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
@@ -771,7 +771,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataEnergyGrowthMultiplier(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
@@ -784,7 +784,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataMoveRangeModifier(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
@@ -797,7 +797,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataAttackPowerModifier(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
@@ -810,7 +810,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataVisionRangeModifier(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
@@ -823,7 +823,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataLuckLowerLimit(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
@@ -836,7 +836,7 @@ namespace TinyWars.MultiPlayerWar {
         }
         private _createDataLuckUpperLimit(
             war         : MpwWar,
-            player      : MpwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();

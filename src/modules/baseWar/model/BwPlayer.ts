@@ -8,7 +8,7 @@ namespace TinyWars.BaseWar {
     import GridIndex        = Types.GridIndex;
     import ISerialPlayer    = ProtoTypes.WarSerialization.ISerialPlayer;
 
-    export abstract class BwPlayer {
+    export class BwPlayer {
         private _playerIndex            : number;
         private _fund                   : number;
         private _hasVotedForDraw        : boolean;

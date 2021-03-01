@@ -223,7 +223,7 @@ namespace TinyWars.SingleCustomWar {
         public updateListPlayer(): void {
             const war   = this._war;
             const data  = [] as DataForPlayerRenderer[];
-            war.getPlayerManager().forEachPlayer(false, (player: ScwPlayer) => {
+            war.getPlayerManager().forEachPlayer(false, (player: BaseWar.BwPlayer) => {
                 data.push({
                     war,
                     playerIndex : player.getPlayerIndex(),
@@ -660,7 +660,7 @@ namespace TinyWars.SingleCustomWar {
             const war           = data.war;
             const playerIndex   = data.playerIndex;
             const panel         = data.panel;
-            const player        = war.getPlayer(playerIndex) as ScwPlayer;
+            const player        = war.getPlayer(playerIndex);
             const isInfoKnown   = (!war.getFogMap().checkHasFogCurrently()) || ((war.getPlayerManager() as ScwPlayerManager).getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()));
             return [
                 this._createDataColor(war, player, isInfoKnown, panel),
@@ -682,7 +682,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataColor(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -695,7 +695,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataFund(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -732,7 +732,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataBuildings(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -746,7 +746,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataCoName(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -767,7 +767,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataEnergy(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -816,7 +816,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataUnitAndValue(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel
         ): DataForInfoRenderer {
@@ -830,7 +830,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataInitialFund(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -867,7 +867,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataIncomeMultiplier(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -904,7 +904,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataInitialEnergy(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -941,7 +941,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataEnergyGrowthMultiplier(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -978,7 +978,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataMoveRangeModifier(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -1015,7 +1015,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataAttackPowerModifier(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -1052,7 +1052,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataVisionRangeModifier(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -1089,7 +1089,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataLuckLowerLimit(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
@@ -1132,7 +1132,7 @@ namespace TinyWars.SingleCustomWar {
         }
         private _createDataLuckUpperLimit(
             war         : ScwWar,
-            player      : ScwPlayer,
+            player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {

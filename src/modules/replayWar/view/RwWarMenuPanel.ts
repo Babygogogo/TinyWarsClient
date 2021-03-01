@@ -493,7 +493,7 @@ namespace TinyWars.ReplayWar {
         private _createDataColor(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(Lang.Type.B0397),
@@ -504,7 +504,7 @@ namespace TinyWars.ReplayWar {
         private _createDataFund(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0032),
@@ -515,7 +515,7 @@ namespace TinyWars.ReplayWar {
         private _createDataBuildings(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const info = this._getTilesCountAndIncome(war, playerIndex);
             return {
@@ -527,7 +527,7 @@ namespace TinyWars.ReplayWar {
         private _createDataCoName(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const cfg = Utility.ConfigManager.getCoBasicCfg(war.getConfigVersion(), player.getCoId());
             return {
@@ -541,7 +541,7 @@ namespace TinyWars.ReplayWar {
         private _createDataEnergy(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue         = player.getCoCurrentEnergy();
             const powerEnergy       = player.getCoPowerEnergy();
@@ -561,7 +561,7 @@ namespace TinyWars.ReplayWar {
         private _createDataUnitAndValue(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const unitsCountAndValue = this._getUnitsCountAndValue(war, playerIndex);
             return {
@@ -573,7 +573,7 @@ namespace TinyWars.ReplayWar {
         private _createDataInitialFund(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getSettingsInitialFund(playerIndex);
             return {
@@ -585,7 +585,7 @@ namespace TinyWars.ReplayWar {
         private _createDataIncomeMultiplier(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getSettingsIncomeMultiplier(playerIndex);
             return {
@@ -597,7 +597,7 @@ namespace TinyWars.ReplayWar {
         private _createDataInitialEnergyPercentage(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getSettingsInitialEnergyPercentage(playerIndex);
             return {
@@ -609,7 +609,7 @@ namespace TinyWars.ReplayWar {
         private _createDataEnergyGrowthMultiplier(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getSettingsEnergyGrowthMultiplier(playerIndex);
             return {
@@ -621,7 +621,7 @@ namespace TinyWars.ReplayWar {
         private _createDataMoveRangeModifier(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getSettingsMoveRangeModifier(playerIndex);
             return {
@@ -633,7 +633,7 @@ namespace TinyWars.ReplayWar {
         private _createDataAttackPowerModifier(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getSettingsAttackPowerModifier(playerIndex);
             return {
@@ -645,7 +645,7 @@ namespace TinyWars.ReplayWar {
         private _createDataVisionRangeModifier(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getSettingsVisionRangeModifier(playerIndex);
             return {
@@ -657,7 +657,7 @@ namespace TinyWars.ReplayWar {
         private _createDataLuckLowerLimit(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getSettingsLuckLowerLimit(playerIndex);
             return {
@@ -669,7 +669,7 @@ namespace TinyWars.ReplayWar {
         private _createDataLuckUpperLimit(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue = war.getSettingsLuckUpperLimit(playerIndex);
             return {

@@ -18,10 +18,6 @@ namespace TinyWars.MapEditor {
             };
         }
 
-        protected _getPlayerClass(): new () => BaseWar.BwPlayer {
-            return MePlayer;
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////

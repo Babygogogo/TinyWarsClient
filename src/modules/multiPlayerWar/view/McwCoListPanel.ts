@@ -197,7 +197,7 @@ namespace TinyWars.MultiPlayerWar {
             const configVersion = war.getConfigVersion();
 
             for (let i = 1; i <= playerManager.getTotalPlayersCount(false); ++i) {
-                const player = playerManager.getPlayer(i) as MpwPlayer;
+                const player = playerManager.getPlayer(i);
                 data.push({
                     configVersion,
                     player,
@@ -333,7 +333,7 @@ namespace TinyWars.MultiPlayerWar {
 
     type DataForCoRenderer = {
         configVersion   : string;
-        player          : MpwPlayer;
+        player          : BaseWar.BwPlayer;
         index           : number;
         panel           : McwCoListPanel;
     }

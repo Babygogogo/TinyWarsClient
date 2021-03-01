@@ -50,7 +50,7 @@ namespace TinyWars.MultiPlayerWar {
         public getPlayerIndexLoggedIn(): number | undefined {
             return (this.getPlayerManager() as MpwPlayerManager).getPlayerIndexLoggedIn();
         }
-        public getPlayerLoggedIn(): MpwPlayer {
+        public getPlayerLoggedIn(): BaseWar.BwPlayer {
             return (this.getPlayerManager() as MpwPlayerManager).getPlayerLoggedIn();
         }
     }

@@ -446,7 +446,7 @@ namespace TinyWars.SingleCustomWar {
         public getHumanPlayerIndexes(): number[] {
             return (this.getPlayerManager() as ScwPlayerManager).getHumanPlayerIndexes();
         }
-        public getHumanPlayers(): ScwPlayer[] {
+        public getHumanPlayers(): BaseWar.BwPlayer[] {
             return (this.getPlayerManager() as ScwPlayerManager).getHumanPlayers();
         }
         public checkIsHumanInTurn(): boolean {
