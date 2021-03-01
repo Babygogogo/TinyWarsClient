@@ -18,8 +18,8 @@ namespace TinyWars.BaseWar {
         private readonly _executedActionManager = new BwExecutedActionManager();
         private readonly _warEventManager       = new (this._getWarEventManagerClass())();
         private readonly _drawVoteManager       = new BwDrawVoteManager();
+        private readonly _view                  = new BwWarView();
 
-        private _view                   : BwWarView;
         private _isRunning              = false;
         private _isExecutingAction      = false;
 
@@ -31,7 +31,6 @@ namespace TinyWars.BaseWar {
         protected abstract _getPlayerManagerClass(): new () => BwPlayerManager;
         protected abstract _getTurnManagerClass(): new () => BwTurnManager;
         protected abstract _getFieldClass(): new () => BwField;
-        protected abstract _getViewClass(): new () => BwWarView;
 
         protected _baseInit(data: ISerialWar): ClientErrorCode {
             const settingsForCommon = data.settingsForCommon;
@@ -66,8 +65,7 @@ namespace TinyWars.BaseWar {
         }
 
         protected _initView(): void {
-            this._view = this._view || new (this._getViewClass());
-            this._view.init(this);
+            this.getView().init(this);
         }
         protected _fastInitView(): void {
             this.getView().fastInit(this);

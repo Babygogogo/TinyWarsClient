@@ -7,9 +7,6 @@ namespace TinyWars.MultiPlayerWar {
 
         public abstract getSettingsBootTimerParams(): number[];
 
-        protected _getViewClass(): new () => McwWarView {
-            return McwWarView;
-        }
         protected _getFieldClass(): new () => MpwField {
             return MpwField;
         }

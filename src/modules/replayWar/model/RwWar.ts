@@ -125,9 +125,6 @@ namespace TinyWars.ReplayWar {
             return this;
         }
 
-        protected _getViewClass(): new () => RwWarView {
-            return RwWarView;
-        }
         protected _getFieldClass(): new () => RwField {
             return RwField;
         }

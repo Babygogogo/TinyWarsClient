@@ -237,9 +237,6 @@ namespace TinyWars.MapEditor {
             return undefined;
         }
 
-        protected _getViewClass(): new () => MeWarView {
-            return MeWarView;
-        }
         protected _getFieldClass(): new () => MeField {
             return MeField;
         }

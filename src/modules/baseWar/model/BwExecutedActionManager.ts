@@ -26,7 +26,8 @@ namespace TinyWars.BaseWar {
         }
 
         public getExecutedActionsCount(): number | undefined {
-            return this.getAllExecutedActions()?.length;
+            const actions = this.getAllExecutedActions();
+            return actions ? actions.length : undefined;
         }
 
         private _setAllExecutedActions(actions: IWarActionContainer[]): void {

@@ -7,7 +7,7 @@ namespace TinyWars.BaseWar {
     const PADDING_HORIZONTAL    = 150;
     const PADDING_VERTICAL      = 50;
 
-    export abstract class BwWarView extends eui.Group {
+    export class BwWarView extends eui.Group {
         private _fieldContainer     = new GameUi.UiZoomableComponent();
         private _war                : BwWar;
 

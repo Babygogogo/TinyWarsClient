@@ -277,9 +277,6 @@ namespace TinyWars.SingleCustomWar {
         public getIsNeedReplay(): boolean {
             return false;
         }
-        protected _getViewClass(): new () => ScwWarView {
-            return ScwWarView;
-        }
         protected _getFieldClass(): new () => ScwField {
             return ScwField;
         }
