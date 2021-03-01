@@ -354,7 +354,10 @@ namespace TinyWars.MapEditor {
                 ],
             };
 
-            this._war.getWarEventManager().setWarEventFullData(testData);
+            this._war.getWarEventManager().init({
+                warEventFullData: testData,
+                calledCountList : undefined,
+            });
             this._selectedRule.warEventIdArray = [1, 2];
             this._updateListWarEvent();
         }
@@ -933,7 +936,7 @@ namespace TinyWars.MapEditor {
 
     type DataForWarEventRenderer = {
         panel           : MeWarRulePanel;
-        warEventManager : MeWarEventManager;
+        warEventManager : BaseWar.BwWarEventManager;
         warEventId      : number;
         warRule         : IWarRule;
     };

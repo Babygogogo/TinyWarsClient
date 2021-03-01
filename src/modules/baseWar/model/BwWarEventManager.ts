@@ -6,6 +6,7 @@ namespace TinyWars.BaseWar {
     import Helpers                          = Utility.Helpers;
     import ProtoTypes                       = Utility.ProtoTypes;
     import Logger                           = Utility.Logger;
+    import ClientErrorCode                  = Utility.ClientErrorCode;
     import ISerialWarEventManager           = ProtoTypes.WarSerialization.ISerialWarEventManager;
     import IDataForWarEventCalledCount      = ProtoTypes.WarSerialization.IDataForWarEventCalledCount;
     import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
@@ -13,22 +14,22 @@ namespace TinyWars.BaseWar {
     import IExtraDataForSystemCallWarEvent  = ProtoTypes.WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent;
     import CommonConstants                  = ConfigManager.COMMON_CONSTANTS;
 
-    export abstract class BwWarEventManager {
+    export class BwWarEventManager {
         private _war?               : BwWar;
         private _warEventFullData?  : IWarEventFullData | null | undefined;
         private _calledCountList?   : IDataForWarEventCalledCount[] | null | undefined;
 
         public init(data: ISerialWarEventManager): BwWarEventManager | undefined {
-            this.setWarEventFullData(data.warEventFullData || {});
+            this._setWarEventFullData(data.warEventFullData || {});
             this._setCalledCountList(data.calledCountList);
 
             return this;
         }
-        public fastInit(data: ISerialWarEventManager): BwWarEventManager {
-            this.setWarEventFullData(Helpers.deepClone(data.warEventFullData || {}));
+        public fastInit(data: ISerialWarEventManager): ClientErrorCode {
+            this._setWarEventFullData(Helpers.deepClone(data.warEventFullData || {}));
             this._setCalledCountList(Helpers.deepClone(data.calledCountList));
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public serialize(): ISerialWarEventManager | undefined {
@@ -55,7 +56,7 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
-        public setWarEventFullData(data: IWarEventFullData): void {
+        private _setWarEventFullData(data: IWarEventFullData): void {
             this._warEventFullData = data;
 
             if (data.actionArray == null) {

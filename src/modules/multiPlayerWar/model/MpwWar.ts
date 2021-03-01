@@ -19,9 +19,6 @@ namespace TinyWars.MultiPlayerWar {
         protected _getTurnManagerClass(): new () => MpwTurnManager {
             return MpwTurnManager;
         }
-        protected _getWarEventManagerClass(): new () => MpwWarEventManager {
-            return MpwWarEventManager;
-        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.

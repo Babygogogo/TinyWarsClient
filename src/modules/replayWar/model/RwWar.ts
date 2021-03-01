@@ -137,9 +137,6 @@ namespace TinyWars.ReplayWar {
         protected _getTurnManagerClass(): new () => RwTurnManager {
             return RwTurnManager;
         }
-        protected _getWarEventManagerClass(): new () => RwWarEventManager {
-            return RwWarEventManager;
-        }
 
         public serializeForCheckPoint(): CheckPointData {
             const seedRandomCurrentState = this._getSeedRandomCurrentState();

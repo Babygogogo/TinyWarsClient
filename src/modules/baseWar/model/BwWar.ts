@@ -18,7 +18,7 @@ namespace TinyWars.BaseWar {
         private _playerManager              : BwPlayerManager;
         private _field                      : BwField;
         private _turnManager                : BwTurnManager;
-        private _warEventManager            : BwWarEventManager;
+        private readonly _warEventManager       = new (this._getWarEventManagerClass())();
         private readonly _drawVoteManager       = new BwDrawVoteManager();
 
         private _view                   : BwWarView;
@@ -33,7 +33,6 @@ namespace TinyWars.BaseWar {
         protected abstract _getTurnManagerClass(): new () => BwTurnManager;
         protected abstract _getFieldClass(): new () => BwField;
         protected abstract _getViewClass(): new () => BwWarView;
-        protected abstract _getWarEventManagerClass(): new () => BwWarEventManager;
 
         protected _baseInit(data: ISerialWar): ClientErrorCode {
             const settingsForCommon = data.settingsForCommon;
@@ -53,7 +52,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const warEventManager = (this.getWarEventManager() || new (this._getWarEventManagerClass())()).init(dataForWarEventManager);
+            const warEventManager = this.getWarEventManager().init(dataForWarEventManager);
             if (warEventManager == null) {
                 Logger.error(`BwWar._baseInit() empty warEventManager.`);
                 return undefined;
@@ -62,7 +61,6 @@ namespace TinyWars.BaseWar {
             this._setWarId(data.warId);
             this._setSettingsForCommon(settingsForCommon);
             this._setAllExecutedActions(data.executedActions || []);
-            this._setWarEventManager(warEventManager);
 
             return ClientErrorCode.NoError;
         }
@@ -76,6 +74,10 @@ namespace TinyWars.BaseWar {
         }
         public getView(): BwWarView {
             return this._view;
+        }
+
+        protected _getWarEventManagerClass(): new () => BwWarEventManager {
+            return BwWarEventManager
         }
 
         public startRunning(): BwWar {
@@ -323,17 +325,13 @@ namespace TinyWars.BaseWar {
             return this.getTurnManager().getEnterTurnTime();
         }
 
-        private _setWarEventManager(manager: BwWarEventManager): void {
-            this._warEventManager = manager;
-        }
-        public getWarEventManager(): BwWarEventManager | undefined {
-            return this._warEventManager;
-        }
-
         public getWatcherTeamIndexes(watcherUserId: number): Set<number> {
             return this.getPlayerManager().getAliveWatcherTeamIndexes(watcherUserId);
         }
 
+        public getWarEventManager(): BwWarEventManager | undefined {
+            return this._warEventManager;
+        }
         public getDrawVoteManager(): BwDrawVoteManager {
             return this._drawVoteManager;
         }

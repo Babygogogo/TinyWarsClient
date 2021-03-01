@@ -14,7 +14,7 @@ namespace TinyWars.BaseWar {
                 this.setRemainingVotes(remainingVotes);
             } else {
                 let maxVotes = 0;
-                for (const playerData of playerManagerData?.players || []) {
+                for (const playerData of playerManagerData ? playerManagerData.players || [] : []) {
                     if (BwHelpers.checkCanVoteForDraw({
                         playerIndex : playerData.playerIndex,
                         aliveState  : playerData.aliveState,

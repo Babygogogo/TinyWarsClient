@@ -241,14 +241,14 @@ namespace TinyWars.MapEditor {
         protected _getFieldClass(): new () => MeField {
             return MeField;
         }
+        protected _getWarEventManagerClass(): new () => BaseWar.BwWarEventManager {
+            return MeWarEventManager;
+        }
         protected _getPlayerManagerClass(): new () => MePlayerManager {
             return MePlayerManager;
         }
         protected _getTurnManagerClass(): new () => MeTurnManager {
             return MeTurnManager;
-        }
-        protected _getWarEventManagerClass(): new () => MeWarEventManager {
-            return MeWarEventManager;
         }
 
         private _setDrawer(drawer: MeDrawer): void {

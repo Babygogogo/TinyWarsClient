@@ -286,9 +286,6 @@ namespace TinyWars.SingleCustomWar {
         protected _getTurnManagerClass(): new () => ScwTurnManager {
             return ScwTurnManager;
         }
-        protected _getWarEventManagerClass(): new () => ScwWarEventManager {
-            return ScwWarEventManager;
-        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
