@@ -1,6 +1,5 @@
 
 namespace TinyWars.Utility.Lang {
-    import ErrorCode                = Network.NetErrorCode;
     import LanguageType             = Types.LanguageType;
     import WarEventConditionType    = Types.WarEventConditionType;
 
@@ -3587,140 +3586,140 @@ namespace TinyWars.Utility.Lang {
         ],
     };
 
-    const NET_ERROR_TEXT: { [netErrorCode: number]: string[] } = {
-        [ErrorCode.NoError]: [
+    const ERROR_TEXT: { [errorCode: number]: string[] } = {
+        [ServerErrorCode.NoError]: [
             "",
             "",
         ],
-        [ErrorCode.IllegalRequest0000]: [
+        [ServerErrorCode.IllegalRequest0000]: [
             "非法请求",
             "Illegal request.",
         ],
-        [ErrorCode.MsgUserLogin0001]: [
+        [ServerErrorCode.MsgUserLogin0001]: [
             "账号不合法，请检查后重试",
             "Invalid account.",
         ],
-        [ErrorCode.MsgUserLogin0002]: [
+        [ServerErrorCode.MsgUserLogin0002]: [
             "您已处于登陆状态，不可再次登陆",
             "You have logged in already.",
         ],
-        [ErrorCode.MsgUserLogin0003]: [
+        [ServerErrorCode.MsgUserLogin0003]: [
             "密码不合法，请检查后重试",
             "Invalid password.",
         ],
-        [ErrorCode.MsgUserLogin0005]: [
+        [ServerErrorCode.MsgUserLogin0005]: [
             "账号不存在，请检查后重试",
             "The account doesn't exist.",
         ],
-        [ErrorCode.MsgUserLogin0006]: [
+        [ServerErrorCode.MsgUserLogin0006]: [
             "账号或密码不正确，请检查后重试",
             "Incorrect account and/or password.",
         ],
-        [ErrorCode.MsgUserRegister0000]: [
+        [ServerErrorCode.MsgUserRegister0000]: [
             "账号不符合要求，请检查后重试",
             "Invalid account.",
         ],
-        [ErrorCode.MsgUserRegister0001]: [
+        [ServerErrorCode.MsgUserRegister0001]: [
             "该账号已被注册，请修改后再试",
             "The account has been registered.",
         ],
-        [ErrorCode.MsgUserRegister0002]: [
+        [ServerErrorCode.MsgUserRegister0002]: [
             "您已处于登陆状态，不可注册账号",
             "You have logged in already.",
         ],
-        [ErrorCode.MsgUserRegister0003]: [
+        [ServerErrorCode.MsgUserRegister0003]: [
             "密码不符合要求，请检查后重试",
             "Invalid password.",
         ],
-        [ErrorCode.MsgUserRegister0004]: [
+        [ServerErrorCode.MsgUserRegister0004]: [
             "昵称不符合要求，请检查后重试",
             "Invalid nickname.",
         ],
-        [ErrorCode.MsgUserRegister0005]: [
+        [ServerErrorCode.MsgUserRegister0005]: [
             "该昵称已被使用，请修改后再试",
             "The nickname has been used.",
         ],
-        [ErrorCode.MsgUserSetNickname0000]: [
+        [ServerErrorCode.MsgUserSetNickname0000]: [
             "昵称不符合要求，请检查后重试",
             "Invalid nickname.",
         ],
-        [ErrorCode.MsgUserSetNickname0001]: [
+        [ServerErrorCode.MsgUserSetNickname0001]: [
             "该昵称已被使用，请修改后再试",
             "The nickname has been used.",
         ],
-        [ErrorCode.MsgMcrCreateRoom0007]: [
+        [ServerErrorCode.MsgMcrCreateRoom0007]: [
             "您已加入了许多未开战的房间，请退出部分后重试",
             "You have joined too many rooms.",
         ],
-        [ErrorCode.MsgMcrCreateRoom0008]: [
+        [ServerErrorCode.MsgMcrCreateRoom0008]: [
             "您已创建了许多未开始的房间，请退出部分后重试",
             "You have created too many rooms simultaneously.",
         ],
-        [ErrorCode.MsgMcrExitRoom0002]: [
+        [ServerErrorCode.MsgMcrExitRoom0002]: [
             "房间不存在",
             "The room doesn't exist.",
         ],
-        [ErrorCode.MsgMcrExitRoom0004]: [
+        [ServerErrorCode.MsgMcrExitRoom0004]: [
             "您并未参加该战局",
             "You haven't joined the game.",
         ],
-        [ErrorCode.MsgMcrJoinRoom0004]: [
+        [ServerErrorCode.MsgMcrJoinRoom0004]: [
             "您已参与了许多未开始的战局，请退出部分后重试",
             "You have joined too many wars.",
         ],
-        [ErrorCode.MsgMcrJoinRoom0006]: [
+        [ServerErrorCode.MsgMcrJoinRoom0006]: [
             "房间不存在",
             "The room doesn't exist.",
         ],
-        [ErrorCode.MsgMcrJoinRoom0013]: [
+        [ServerErrorCode.MsgMcrJoinRoom0013]: [
             "您已加入了该房间。",
             "You have already joined the room.",
         ],
-        [ErrorCode.MsgMapGetRawData0001]: [
+        [ServerErrorCode.MsgMapGetRawData0001]: [
             "地图不存在，获取raw data失败。",
             "The map doesn't exist thus fail to get its raw data.",
         ],
-        [ErrorCode.MsgUserGetPublicInfo0001]: [
+        [ServerErrorCode.MsgUserGetPublicInfo0001]: [
             "用户不存在，获取user public info失败。",
             "The user doesn't exist thus fail to get its public info.",
         ],
-        [ErrorCode.MsgMpwCommonContinueWar0001]: [
+        [ServerErrorCode.MsgMpwCommonContinueWar0001]: [
             `战局不存在`,
             `The game doesn't exist.`,
         ],
-        [ErrorCode.MsgMpwCommonContinueWar0003]: [
+        [ServerErrorCode.MsgMpwCommonContinueWar0003]: [
             `您未参与该战局，或已经被击败`,
             `You have not joined the game, or you have been defeated.`,
         ],
-        [ErrorCode.MsgMpwActionPlayerEndTurn0003]: [
+        [ServerErrorCode.MsgMpwActionPlayerEndTurn0003]: [
             `战局不存在`,
             `The game doesn't exist.`,
         ],
-        [ErrorCode.MsgMpwActionPlayerEndTurn0004]: [
+        [ServerErrorCode.MsgMpwActionPlayerEndTurn0004]: [
             `战局数据不同步，请刷新`,
             `The local data is out of synchronization. Please refresh.`,
         ],
-        [ErrorCode.MsgMpwActionPlayerEndTurn0006]: [
+        [ServerErrorCode.MsgMpwActionPlayerEndTurn0006]: [
             `当前无法结束您的回合`,
             `Unable to end turn.`,
         ],
-        [ErrorCode.MsgMpwActionPlayerEndTurn0009]: [
+        [ServerErrorCode.MsgMpwActionPlayerEndTurn0009]: [
             `您尚未完成关于和局的投票`,
             `You haven't voted for the draw of game.`,
         ],
-        [ErrorCode.MsgMpwWatchMakeRequest0005]: [
+        [ServerErrorCode.MsgMpwWatchMakeRequest0005]: [
             `该玩家已战败，无法观战`,
             `The target player has been defeated in the game.`
         ],
-        [ErrorCode.MsgMpwWatchMakeRequest0006]: [
+        [ServerErrorCode.MsgMpwWatchMakeRequest0006]: [
             `已请求观战该玩家`,
             `You have already requested to watch the player.`,
         ],
-        [ErrorCode.MsgMpwWatchMakeRequest0007]: [
+        [ServerErrorCode.MsgMpwWatchMakeRequest0007]: [
             `观战请求已被接受`,
             `The request has already been accepted.`,
         ],
-        [ErrorCode.ServerDisconnect0001]: [
+        [ServerErrorCode.ServerDisconnect0001]: [
             `服务器维护中`,
             `The server is under maintenance.`,
         ],
@@ -3921,8 +3920,8 @@ namespace TinyWars.Utility.Lang {
         return Helpers.formatString(getText(t), ...params);
     }
 
-    export function getNetErrorText(code: ErrorCode): string {
-        const textList  = NET_ERROR_TEXT[code];
+    export function getNetErrorText(code: ServerErrorCode): string {
+        const textList  = ERROR_TEXT[code];
         const text      = textList ? textList[_languageType] : undefined;
         return `${getText(Type.B0452)} ${code}: ${text || getText(Type.A0153)}`;
     }

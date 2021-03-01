@@ -1,6 +1,6 @@
 
-namespace TinyWars.Network {
-export const enum NetErrorCode {
+namespace TinyWars.Utility {
+export const enum ServerErrorCode {
     NoError = 0,
 
     ServerDisconnect0001,               // 服务器维护
