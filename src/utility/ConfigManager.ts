@@ -911,6 +911,7 @@ namespace TinyWars.Utility.ConfigManager {
             secondaryWeaponFlag : _getSecondaryWeaponFlags(damageChartCfg),
         };
         setCachedConfig(version, fullCfg);
+        Notify.dispatch(Notify.Type.ConfigLoaded);
 
         return fullCfg;
     }

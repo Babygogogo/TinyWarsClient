@@ -21,6 +21,7 @@ namespace TinyWars.Utility.Notify {
         GlobalTouchMove,
         ZoomableContentsMoved,
 
+        ConfigLoaded,
         TileModelUpdated,
         LanguageChanged,
 

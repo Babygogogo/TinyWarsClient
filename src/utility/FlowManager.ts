@@ -12,6 +12,7 @@ namespace TinyWars.Utility.FlowManager {
         { msgCode: Network.Codes.MsgCommonServerDisconnect, callback: _onMsgCommonServerDisconnect },
     ];
     const _NOTIFY_EVENTS = [
+        { type: Notify.Type.ConfigLoaded,               callback: _onNotifyConfigLoaded },
         { type: Notify.Type.NetworkConnected,           callback: _onNotifyNetworkConnected, },
         { type: Notify.Type.MsgUserLogin,               callback: _onMsgUserLogin },
         { type: Notify.Type.MsgUserLogout,              callback: _onMsgUserLogout },
@@ -172,6 +173,12 @@ namespace TinyWars.Utility.FlowManager {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Callbacks.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    function _onNotifyConfigLoaded(e: egret.Event): void {
+        if (_checkCanFirstGoToLobby()) {
+            gotoLobby();
+        }
+    }
+
     function _onNotifyNetworkConnected(e: egret.Event): void {
         const account   = UserModel.getSelfAccount();
         const password  = UserModel.getSelfPassword();
@@ -224,7 +231,8 @@ namespace TinyWars.Utility.FlowManager {
     function _checkCanFirstGoToLobby(): boolean {
         return (!_hasOnceWentToLobby)
             && (User.UserModel.getIsLoggedIn())
-            && (ResManager.checkIsLoadedMainResource());
+            && (ResManager.checkIsLoadedMainResource())
+            && (!!ConfigManager.getCachedConfig(ConfigManager.getLatestFormalVersion()));
     }
 
     function _removeLoadingDom(): void {
