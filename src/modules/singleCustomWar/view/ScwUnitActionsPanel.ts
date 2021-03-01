@@ -151,12 +151,12 @@ namespace TinyWars.SingleCustomWar {
         private _labelCost  : GameUi.UiLabel;
         private _conUnitView: eui.Group;
 
-        private _unitView   : ScwUnitView;
+        private _unitView   : BaseWar.BwUnitView;
 
         protected childrenCreated(): void {
             super.childrenCreated();
 
-            this._unitView = new ScwUnitView();
+            this._unitView = new BaseWar.BwUnitView();
             this._conUnitView.addChild(this._unitView);
         }
 

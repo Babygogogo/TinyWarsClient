@@ -230,7 +230,7 @@ namespace TinyWars.ReplayWar {
         private _imgHp          : GameUi.UiImage;
         private _imgFuel        : GameUi.UiImage;
         private _imgState       : GameUi.UiImage;
-        private _unitView       : RwUnitView;
+        private _unitView       : BaseWar.BwUnitView;
 
         private _unit               : RwUnit;
         private _isChildrenCreated  = false;
@@ -248,7 +248,7 @@ namespace TinyWars.ReplayWar {
 
             this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
             this._imgFuel.source    = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
-            this._unitView          = new RwUnitView();
+            this._unitView          = new BaseWar.BwUnitView();
             this._conUnitView.addChild(this._unitView);
             this._updateView();
         }

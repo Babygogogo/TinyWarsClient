@@ -137,8 +137,6 @@ namespace TinyWars.BaseWar {
             return this._conForUnits;
         }
 
-        protected abstract _getUnitViewClass(): new () => BwUnitView;
-
         private _initConForMovableGrids(): void {
             this._conForMovableGrids.removeChildren();
             this._conForMovableGrids.alpha = ALPHA_FOR_MOVABLE_GRIDS;
@@ -628,7 +626,7 @@ namespace TinyWars.BaseWar {
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _addUnitView(unit: BwUnit, gridIndex: GridIndex, alpha = 1): void {
-            const view = new (this._getUnitViewClass())().init(unit).startRunningView();
+            const view = new BwUnitView().init(unit).startRunningView();
             // view.alpha = alpha;
             _resetUnitViewXy(view, gridIndex);
             view.showUnitAnimation(Types.UnitAnimationType.Move);

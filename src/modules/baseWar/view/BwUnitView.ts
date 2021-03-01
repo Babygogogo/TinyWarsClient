@@ -16,7 +16,7 @@ namespace TinyWars.BaseWar {
     const _IMG_UNIT_STATE_WIDTH                         = 28;
     const _IMG_UNIT_STATE_HEIGHT                        = 36;
 
-    export abstract class BwUnitView extends egret.DisplayObjectContainer {
+    export class BwUnitView extends egret.DisplayObjectContainer {
         private _imgHp      = new GameUi.UiImage();
         private _imgState   = new GameUi.UiImage();
         private _imgUnit    = new GameUi.UiImage();

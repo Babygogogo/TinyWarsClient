@@ -197,7 +197,7 @@ namespace TinyWars.MapEditor {
         private _labelName      : GameUi.UiLabel;
         private _conUnitView    : eui.Group;
 
-        private _unitView   = new MeUnitView();
+        private _unitView   = new BaseWar.BwUnitView();
 
         protected childrenCreated(): void {
             super.childrenCreated();

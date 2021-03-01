@@ -231,7 +231,7 @@ namespace TinyWars.MapEditor {
         private _imgHp          : GameUi.UiImage;
         private _imgFuel        : GameUi.UiImage;
         private _imgState       : GameUi.UiImage;
-        private _unitView       : MeUnitView;
+        private _unitView       : BaseWar.BwUnitView;
 
         private _unit               : MeUnit;
         private _isChildrenCreated  = false;
@@ -249,7 +249,7 @@ namespace TinyWars.MapEditor {
 
             this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
             this._imgFuel.source    = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
-            this._unitView          = new MeUnitView();
+            this._unitView          = new BaseWar.BwUnitView();
             this._conUnitView.addChild(this._unitView);
             this._updateView();
         }

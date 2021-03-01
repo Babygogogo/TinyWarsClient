@@ -247,7 +247,7 @@ namespace TinyWars.SingleCustomWar {
         private _imgHp          : GameUi.UiImage;
         private _imgFuel        : GameUi.UiImage;
         private _imgState       : GameUi.UiImage;
-        private _unitView       : ScwUnitView;
+        private _unitView       : BaseWar.BwUnitView;
 
         private _unit               : ScwUnit;
         private _isChildrenCreated  = false;
@@ -265,7 +265,7 @@ namespace TinyWars.SingleCustomWar {
 
             this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
             this._imgFuel.source    = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
-            this._unitView          = new ScwUnitView();
+            this._unitView          = new BaseWar.BwUnitView();
             this._conUnitView.addChild(this._unitView);
             this._updateView();
         }

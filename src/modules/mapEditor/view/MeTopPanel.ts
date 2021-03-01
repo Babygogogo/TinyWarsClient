@@ -29,7 +29,7 @@ namespace TinyWars.MapEditor {
         private _btnSymmetry            : GameUi.UiButton;
         private _btnMenu                : GameUi.UiButton;
 
-        private _unitView   = new MeUnitView();
+        private _unitView   = new BaseWar.BwUnitView();
         private _tileView   = new MeTileSimpleView();
 
         private _war    : MeWar;

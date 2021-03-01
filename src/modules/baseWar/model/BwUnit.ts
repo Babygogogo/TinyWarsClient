@@ -45,14 +45,12 @@ namespace TinyWars.BaseWar {
         private _loaderUnitId               : number;
         private _primaryWeaponCurrentAmmo   : number;
 
-        private _war    : BwWar;
-        private _view   : BwUnitView;
+        private _war            : BwWar;
+        private readonly _view  = new BwUnitView();
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected abstract _getViewClass(): new () => BwUnitView;
-
         public init(data: ISerialUnit, configVersion: string): BwUnit {
             const playerIndex = data.playerIndex;
             if (playerIndex == null) {
@@ -113,9 +111,7 @@ namespace TinyWars.BaseWar {
             this.setIsBuildingTile(          data.isBuildingTile           != null ? data.isBuildingTile           : false);
             this.setCurrentBuildMaterial(    data.currentBuildMaterial     != null ? data.currentBuildMaterial     : this.getMaxBuildMaterial());
 
-            const view = this.getView() || new (this._getViewClass())();
-            view.init(this);
-            this._setView(view);
+            this.getView().init(this);
 
             return this;
         }
@@ -252,9 +248,6 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
-        private _setView(view: BwUnitView): void {
-            this._view = view;
-        }
         public getView(): BwUnitView {
             return this._view;
         }

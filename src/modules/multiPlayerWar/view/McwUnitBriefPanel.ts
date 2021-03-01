@@ -235,7 +235,7 @@ namespace TinyWars.MultiPlayerWar {
         private _imgHp          : GameUi.UiImage;
         private _imgFuel        : GameUi.UiImage;
         private _imgState       : GameUi.UiImage;
-        private _unitView       : McwUnitView;
+        private _unitView       : BaseWar.BwUnitView;
 
         private _unit               : MpwUnit;
         private _isChildrenCreated  = false;
@@ -253,7 +253,7 @@ namespace TinyWars.MultiPlayerWar {
 
             this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
             this._imgFuel.source    = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
-            this._unitView          = new McwUnitView();
+            this._unitView          = new BaseWar.BwUnitView();
             this._conUnitView.addChild(this._unitView);
             this._updateView();
         }

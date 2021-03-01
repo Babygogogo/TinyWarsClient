@@ -190,7 +190,7 @@ namespace TinyWars.ReplayWar {
         private _labelName      : GameUi.UiLabel;
         private _labelCost      : GameUi.UiLabel;
         private _labelProduce   : GameUi.UiLabel;
-        private _unitView       : RwUnitView;
+        private _unitView       : BaseWar.BwUnitView;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -198,7 +198,7 @@ namespace TinyWars.ReplayWar {
             this._imgBg.touchEnabled = true;
             this._imgBg.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedImgBg, this);
 
-            this._unitView = new RwUnitView();
+            this._unitView = new BaseWar.BwUnitView();
             this._conUnitView.addChild(this._unitView);
         }
 

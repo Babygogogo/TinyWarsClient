@@ -192,7 +192,7 @@ namespace TinyWars.MultiPlayerWar {
         private _labelName      : GameUi.UiLabel;
         private _labelCost      : GameUi.UiLabel;
         private _labelProduce   : GameUi.UiLabel;
-        private _unitView       : McwUnitView;
+        private _unitView       : BaseWar.BwUnitView;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -200,7 +200,7 @@ namespace TinyWars.MultiPlayerWar {
             this._imgBg.touchEnabled = true;
             this._imgBg.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedImgBg, this);
 
-            this._unitView = new McwUnitView();
+            this._unitView = new BaseWar.BwUnitView();
             this._conUnitView.addChild(this._unitView);
         }
 
