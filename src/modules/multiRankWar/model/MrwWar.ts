@@ -13,7 +13,7 @@ namespace TinyWars.MultiRankWar {
         private _settingsForMrw?: ISettingsForMrw;
 
         public async init(data: ISerialWar): Promise<MrwWar> {
-            if (this._baseInit(data)) {
+            if (await this._baseInit(data)) {
                 Logger.error(`MrwWar.init() failed this._baseInit().`);
                 return undefined;
             }
@@ -95,7 +95,7 @@ namespace TinyWars.MultiRankWar {
                 return undefined;
             }
 
-            const settingsForCommon = this.getSettingsForCommon();
+            const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
             if (settingsForCommon == null) {
                 Logger.error(`MrwWar.serializeForSimulation() empty settingsForCommon.`);
                 return undefined;
@@ -174,7 +174,7 @@ namespace TinyWars.MultiRankWar {
         }
 
         public getWarType(): Types.WarType {
-            return this.getSettingsHasFogByDefault()
+            return this.getCommonSettingManager().getSettingsHasFogByDefault()
                 ? Types.WarType.MrwFog
                 : Types.WarType.MrwStd;
         }

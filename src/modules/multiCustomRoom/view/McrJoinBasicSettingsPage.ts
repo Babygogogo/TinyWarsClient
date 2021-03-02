@@ -6,7 +6,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import FloatText        = Utility.FloatText;
     import CommonHelpPanel  = Common.CommonHelpPanel;
-    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import WarMapModel      = WarMap.WarMapModel;
 
     export class McrJoinBasicSettingsPage extends GameUi.UiTabPage {
@@ -206,7 +206,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _updateLabelPlayerIndex(): Promise<void> {
             const playerIndex           = McrModel.Join.getPlayerIndex();
-            const playerRule            = BwSettingsHelper.getPlayerRule((await McrModel.Join.getRoomInfo()).settingsForCommon.warRule, playerIndex);
+            const playerRule            = BwWarRuleHelper.getPlayerRule((await McrModel.Join.getRoomInfo()).settingsForCommon.warRule, playerIndex);
             this._labelPlayerIndex.text = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(playerRule.teamIndex)})`;
         }
 
@@ -238,7 +238,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
             const roomInfo          = await McrModel.Join.getRoomInfo();
-            const playersCount      = BwSettingsHelper.getPlayersCount(roomInfo.settingsForCommon.warRule);
+            const playersCount      = BwWarRuleHelper.getPlayersCount(roomInfo.settingsForCommon.warRule);
             const dataList          : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({
@@ -268,7 +268,7 @@ namespace TinyWars.MultiCustomRoom {
             const roomInfo          = data.roomInfo;
             const labelIndex        = this._labelIndex;
             const playerData        = roomInfo.playerDataList.find(v => v.playerIndex === playerIndex);
-            labelIndex.text         = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(BwSettingsHelper.getTeamIndex(roomInfo.settingsForCommon.warRule, playerIndex))})`;
+            labelIndex.text         = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(BwWarRuleHelper.getTeamIndex(roomInfo.settingsForCommon.warRule, playerIndex))})`;
             labelIndex.textColor    = (playerData && playerData.isReady) ? 0x00FF00 : 0xFFFFFF;
 
             const lbNickname        = this._labelNickname;

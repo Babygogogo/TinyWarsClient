@@ -5,7 +5,7 @@ namespace TinyWars.MapEditor {
     import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
-    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import IWarRule         = ProtoTypes.WarRule.IWarRule;
@@ -27,7 +27,7 @@ namespace TinyWars.MapEditor {
         private _mapTag             : IDataForMapTag;
 
         public async init(data: ISerialWar): Promise<MeWar> {
-            if (this._baseInit(data)) {
+            if (await this._baseInit(data)) {
                 Logger.error(`MeWar.init() failed this._baseInit().`);
                 return undefined;
             }
@@ -105,7 +105,7 @@ namespace TinyWars.MapEditor {
             this.setMapDesignerUserId(mapRawData.designerUserId);
             this.setMapDesignerName(mapRawData.designerName);
             this.setMapNameArray(mapRawData.mapNameArray);
-            this.setWarRuleArray(mapRawData.warRuleArray || [warData.settingsForCommon.warRule]);
+            this._setWarRuleArray(mapRawData.warRuleArray || [warData.settingsForCommon.warRule]);
             this.setMapTag(mapRawData.mapTag);
         }
 
@@ -125,7 +125,7 @@ namespace TinyWars.MapEditor {
         }
 
         public serializeForSimulation(): ISerialWar | undefined {
-            const settingsForCommon = Helpers.deepClone(this.getSettingsForCommon());
+            const settingsForCommon = Helpers.deepClone(this.getCommonSettingManager().getSettingsForCommon());
             if (settingsForCommon == null) {
                 Logger.error(`MeWar.serializeForSimulation() empty settingsForCommon.`);
                 return undefined;
@@ -240,8 +240,11 @@ namespace TinyWars.MapEditor {
         protected _getFieldClass(): new () => MeField {
             return MeField;
         }
-        protected _getWarEventManagerClass(): new () => BaseWar.BwWarEventManager {
+        protected _getWarEventManagerClass(): new () => MeWarEventManager {
             return MeWarEventManager;
+        }
+        protected _getCommonSettingManagerClass(): new () => MeCommonSettingManager {
+            return MeCommonSettingManager;
         }
         protected _getPlayerManagerClass(): new () => MePlayerManager {
             return MePlayerManager;
@@ -309,7 +312,7 @@ namespace TinyWars.MapEditor {
         public getWarRuleArray(): IWarRule[] {
             return this._warRuleList;
         }
-        public setWarRuleArray(value: IWarRule[]) {
+        private _setWarRuleArray(value: IWarRule[]): void {
             this._warRuleList = value;
         }
         public getWarRuleByRuleId(ruleId: number): IWarRule {
@@ -333,7 +336,7 @@ namespace TinyWars.MapEditor {
 
         public addWarRule(): void {
             const ruleList = this.getWarRuleArray();
-            ruleList.push(BwSettingsHelper.createDefaultWarRule(ruleList.length, CommonConstants.WarMaxPlayerIndex));
+            ruleList.push(BwWarRuleHelper.createDefaultWarRule(ruleList.length, CommonConstants.WarMaxPlayerIndex));
         }
         public deleteWarRule(ruleId: number): void {
             const ruleList  = this.getWarRuleArray();

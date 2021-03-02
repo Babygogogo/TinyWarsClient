@@ -37,7 +37,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function getHasFogByDefault(warRule: IWarRule): boolean | null | undefined {
         const ruleForGlobalParams = warRule.ruleForGlobalParams;
         if (ruleForGlobalParams == null) {
-            Logger.error(`BwSettingsHelper.getHasFogByDefault() empty ruleForGlobalParams.`);
+            Logger.error(`BwWarRuleHelper.getHasFogByDefault() empty ruleForGlobalParams.`);
             return undefined;
         }
 
@@ -46,7 +46,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function setHasFogByDefault(warRule: IWarRule, hasFog: boolean): void {
         const ruleForGlobalParams = warRule.ruleForGlobalParams;
         if (ruleForGlobalParams == null) {
-            Logger.error(`BwSettingsHelper.setHasFogByDefault() empty ruleForGlobalParams.`);
+            Logger.error(`BwWarRuleHelper.setHasFogByDefault() empty ruleForGlobalParams.`);
             return undefined;
         }
 
@@ -56,13 +56,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function getIncomeMultiplier(warRule: IWarRule, playerIndex: number): number | null | undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.getIncomeMultiplier() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getIncomeMultiplier() empty playerRule.`);
             return undefined;
         }
 
         const incomeMultiplier = playerRule.incomeMultiplier;
         if (incomeMultiplier == null) {
-            Logger.error(`BwSettingsHelper.getIncomeMultiplier() empty incomeMultiplier.`);
+            Logger.error(`BwWarRuleHelper.getIncomeMultiplier() empty incomeMultiplier.`);
             return undefined;
         }
 
@@ -71,7 +71,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function setIncomeMultiplier(warRule: IWarRule, playerIndex: number, value: number): void {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.setIncomeMultiplier() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.setIncomeMultiplier() empty playerRule.`);
             return undefined;
         }
 
@@ -81,13 +81,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function getEnergyGrowthMultiplier(warRule: IWarRule, playerIndex: number): number | null | undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.getEnergyGrowthMultiplier() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getEnergyGrowthMultiplier() empty playerRule.`);
             return undefined;
         }
 
         const energyGrowthMultiplier = playerRule.energyGrowthMultiplier;
         if (energyGrowthMultiplier == null) {
-            Logger.error(`BwSettingsHelper.getEnergyGrowthMultiplier() empty energyGrowthMultiplier.`);
+            Logger.error(`BwWarRuleHelper.getEnergyGrowthMultiplier() empty energyGrowthMultiplier.`);
             return undefined;
         }
 
@@ -96,7 +96,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function setEnergyGrowthMultiplier(warRule: IWarRule, playerIndex: number, value: number): undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.setEnergyGrowthMultiplier() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.setEnergyGrowthMultiplier() empty playerRule.`);
             return undefined;
         }
 
@@ -106,13 +106,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function getAttackPowerModifier(warRule: IWarRule, playerIndex: number): number | null | undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.getAttackPowerModifier() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getAttackPowerModifier() empty playerRule.`);
             return undefined;
         }
 
         const attackPowerModifier = playerRule.attackPowerModifier;
         if (attackPowerModifier == null) {
-            Logger.error(`BwSettingsHelper.getAttackPowerModifier() empty attackPowerModifier.`);
+            Logger.error(`BwWarRuleHelper.getAttackPowerModifier() empty attackPowerModifier.`);
             return undefined;
         }
 
@@ -121,7 +121,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function setAttackPowerModifier(warRule: IWarRule, playerIndex: number, value: number): undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.setAttackPowerModifier() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.setAttackPowerModifier() empty playerRule.`);
             return undefined;
         }
 
@@ -131,13 +131,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function getMoveRangeModifier(warRule: IWarRule, playerIndex: number): number | null | undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.getMoveRangeModifier() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getMoveRangeModifier() empty playerRule.`);
             return undefined;
         }
 
         const moveRangeModifier = playerRule.moveRangeModifier;
         if (moveRangeModifier == null) {
-            Logger.error(`BwSettingsHelper.getMoveRangeModifier() empty moveRangeModifier.`);
+            Logger.error(`BwWarRuleHelper.getMoveRangeModifier() empty moveRangeModifier.`);
             return undefined;
         }
 
@@ -146,7 +146,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function setMoveRangeModifier(warRule: IWarRule, playerIndex: number, value: number): undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.setMoveRangeModifier() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.setMoveRangeModifier() empty playerRule.`);
             return undefined;
         }
 
@@ -156,13 +156,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function getVisionRangeModifier(warRule: IWarRule, playerIndex: number): number | null | undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.getVisionRangeModifier() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getVisionRangeModifier() empty playerRule.`);
             return undefined;
         }
 
         const visionRangeModifier = playerRule.visionRangeModifier;
         if (visionRangeModifier == null) {
-            Logger.error(`BwSettingsHelper.getVisionRangeModifier() empty visionRangeModifier.`);
+            Logger.error(`BwWarRuleHelper.getVisionRangeModifier() empty visionRangeModifier.`);
             return undefined;
         }
 
@@ -171,7 +171,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function setVisionRangeModifier(warRule: IWarRule, playerIndex: number, value: number): undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.setVisionRangeModifier() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.setVisionRangeModifier() empty playerRule.`);
             return undefined;
         }
 
@@ -181,13 +181,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function getInitialFund(warRule: IWarRule, playerIndex: number): number | null | undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.getInitialFund() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getInitialFund() empty playerRule.`);
             return undefined;
         }
 
         const initialFund = playerRule.initialFund;
         if (initialFund == null) {
-            Logger.error(`BwSettingsHelper.getInitialFund() empty initialFund.`);
+            Logger.error(`BwWarRuleHelper.getInitialFund() empty initialFund.`);
             return undefined;
         }
 
@@ -196,7 +196,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function setInitialFund(warRule: IWarRule, playerIndex: number, value: number): undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.setInitialFund() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.setInitialFund() empty playerRule.`);
             return undefined;
         }
 
@@ -206,13 +206,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function getInitialEnergyPercentage(warRule: IWarRule, playerIndex: number): number | null | undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.getInitialEnergyPercentage() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getInitialEnergyPercentage() empty playerRule.`);
             return undefined;
         }
 
         const initialEnergyPercentage = playerRule.initialEnergyPercentage;
         if (initialEnergyPercentage == null) {
-            Logger.error(`BwSettingsHelper.getInitialEnergyPercentage() empty initialEnergyPercentage.`);
+            Logger.error(`BwWarRuleHelper.getInitialEnergyPercentage() empty initialEnergyPercentage.`);
             return undefined;
         }
 
@@ -221,7 +221,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function setInitialEnergyPercentage(warRule: IWarRule, playerIndex: number, value: number): undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.setInitialEnergyPercentage() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.setInitialEnergyPercentage() empty playerRule.`);
             return undefined;
         }
 
@@ -231,13 +231,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function getLuckLowerLimit(warRule: IWarRule, playerIndex: number): number | null | undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.getLuckLowerLimit() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getLuckLowerLimit() empty playerRule.`);
             return undefined;
         }
 
         const luckLowerLimit = playerRule.luckLowerLimit;
         if (luckLowerLimit == null) {
-            Logger.error(`BwSettingsHelper.getLuckLowerLimit() empty luckLowerLimit.`);
+            Logger.error(`BwWarRuleHelper.getLuckLowerLimit() empty luckLowerLimit.`);
             return undefined;
         }
 
@@ -246,7 +246,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function setLuckLowerLimit(warRule: IWarRule, playerIndex: number, value: number): undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.setLuckLowerLimit() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.setLuckLowerLimit() empty playerRule.`);
             return undefined;
         }
 
@@ -256,13 +256,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function getLuckUpperLimit(warRule: IWarRule, playerIndex: number): number | null | undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.getLuckUpperLimit() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getLuckUpperLimit() empty playerRule.`);
             return undefined;
         }
 
         const luckUpperLimit = playerRule.luckUpperLimit;
         if (luckUpperLimit == null) {
-            Logger.error(`BwSettingsHelper.getLuckUpperLimit() empty luckUpperLimit.`);
+            Logger.error(`BwWarRuleHelper.getLuckUpperLimit() empty luckUpperLimit.`);
             return undefined;
         }
 
@@ -271,7 +271,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function setLuckUpperLimit(warRule: IWarRule, playerIndex: number, value: number): undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.setLuckUpperLimit() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.setLuckUpperLimit() empty playerRule.`);
             return undefined;
         }
 
@@ -281,13 +281,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function getAvailableCoIdList(warRule: IWarRule, playerIndex: number): number[] {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.getAvailableCoIdList() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getAvailableCoIdList() empty playerRule.`);
             return undefined;
         }
 
         const coIdArray = playerRule.availableCoIdArray;
         if ((coIdArray == null) || (!coIdArray.length)) {
-            Logger.error(`BwSettingsHelper.getAvailableCoIdList() empty coIdList.`);
+            Logger.error(`BwWarRuleHelper.getAvailableCoIdList() empty coIdList.`);
             return undefined;
         }
 
@@ -296,7 +296,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function addAvailableCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
         const coIdList = getAvailableCoIdList(warRule, playerIndex);
         if (coIdList == null) {
-            Logger.error(`BwSettingsHelper.addAvailableCoId() empty coIdList.`);
+            Logger.error(`BwWarRuleHelper.addAvailableCoId() empty coIdList.`);
             return undefined;
         }
 
@@ -307,7 +307,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function removeAvailableCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
         const coIdList = getAvailableCoIdList(warRule, playerIndex);
         if (coIdList == null) {
-            Logger.error(`BwSettingsHelper.removeAvailableCoId() empty coIdList.`);
+            Logger.error(`BwWarRuleHelper.removeAvailableCoId() empty coIdList.`);
             return undefined;
         }
 
@@ -323,7 +323,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function setAvailableCoIdList(warRule: IWarRule, playerIndex: number, coIdSet: Set<number>): void {
         const coIdList = getAvailableCoIdList(warRule, playerIndex);
         if (coIdList == null) {
-            Logger.error(`BwSettingsHelper.setAvailableCoIdList() empty coIdList.`);
+            Logger.error(`BwWarRuleHelper.setAvailableCoIdList() empty coIdList.`);
             return undefined;
         }
 
@@ -340,13 +340,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
 
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.getTeamIndex() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getTeamIndex() empty playerRule.`);
             return undefined;
         }
 
         const teamIndex = playerRule.teamIndex;
         if (teamIndex == null) {
-            Logger.error(`BwSettingsHelper.getTeamIndex() empty teamIndex.`);
+            Logger.error(`BwWarRuleHelper.getTeamIndex() empty teamIndex.`);
             return undefined;
         }
 
@@ -355,7 +355,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function setTeamIndex(warRule: IWarRule, playerIndex: number, teamIndex: number): void {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwSettingsHelper.getTeamIndex() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getTeamIndex() empty playerRule.`);
             return undefined;
         }
 
@@ -376,13 +376,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
 
         const ruleForPlayers = warRule.ruleForPlayers;
         if (ruleForPlayers == null) {
-            Logger.error(`BwSettingsHelper.getPlayerRule() empty ruleForPlayers.`);
+            Logger.error(`BwWarRuleHelper.getPlayerRule() empty ruleForPlayers.`);
             return undefined;
         }
 
         const playerRuleDataArray = ruleForPlayers.playerRuleDataArray;
         if (playerRuleDataArray == null) {
-            Logger.error(`BwSettingsHelper.getPlayerRule() empty playerRuleDataArray.`);
+            Logger.error(`BwWarRuleHelper.getPlayerRule() empty playerRuleDataArray.`);
             return undefined;
         }
 
@@ -392,13 +392,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function getPlayersCount(warRule: IWarRule): number {
         const ruleForPlayers = warRule.ruleForPlayers;
         if (ruleForPlayers == null) {
-            Logger.error(`BwSettingsHelper.getPlayersCount() empty ruleForPlayers.`);
+            Logger.error(`BwWarRuleHelper.getPlayersCount() empty ruleForPlayers.`);
             return undefined;
         }
 
         const playerRuleDataArray = ruleForPlayers.playerRuleDataArray;
         if (playerRuleDataArray == null) {
-            Logger.error(`BwSettingsHelper.getPlayersCount() empty playerRuleDataArray.`);
+            Logger.error(`BwWarRuleHelper.getPlayersCount() empty playerRuleDataArray.`);
             return undefined;
         }
 
@@ -409,7 +409,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         const warEventIdArray   = warRule.warEventIdArray;
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
-            Logger.error(`BwSettingsHelper.moveWarEventId() invalid currIndex.`);
+            Logger.error(`BwWarRuleHelper.moveWarEventId() invalid currIndex.`);
             return;
         }
 
@@ -423,7 +423,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         const warEventIdArray   = warRule.warEventIdArray;
         const currIndex         = warEventIdArray.findIndex(v => v === warEventId);
         if (currIndex < 0) {
-            Logger.error(`BwSettingsHelper.deleteWarEventId() invalid currIndex.`);
+            Logger.error(`BwWarRuleHelper.deleteWarEventId() invalid currIndex.`);
             return;
         }
 
@@ -436,7 +436,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
 
         const warEventIdArray = warRule.warEventIdArray;
         if (warEventIdArray.indexOf(warEventId) >= 0) {
-            Logger.error(`BwSettingsHelper.addWarEventId() the warEventId exists.`);
+            Logger.error(`BwWarRuleHelper.addWarEventId() the warEventId exists.`);
             return;
         }
 
@@ -572,7 +572,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     export function checkIsValidRuleForPlayers(ruleForPlayers: WarRule.IRuleForPlayers): boolean | undefined {
         const configVersion = ConfigManager.getLatestFormalVersion();
         if (configVersion == null) {
-            Logger.error(`BwSettingsHelper.checkIsValidRuleForPlayers() empty configVersion.`);
+            Logger.error(`BwWarRuleHelper.checkIsValidRuleForPlayers() empty configVersion.`);
             return undefined;
         }
 
@@ -651,7 +651,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     function checkIsValidRuleForGlobalParams(rule: WarRule.IRuleForGlobalParams): boolean | undefined {
         const configVersion = ConfigManager.getLatestFormalVersion();
         if (configVersion == null) {
-            Logger.error(`BwSettingsHelper.checkIsValidRuleForGlobalParams() empty configVersion.`);
+            Logger.error(`BwWarRuleHelper.checkIsValidRuleForGlobalParams() empty configVersion.`);
             return undefined;
         }
 

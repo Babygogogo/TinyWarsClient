@@ -6,7 +6,7 @@ namespace TinyWars.MapEditor {
     import ProtoTypes           = Utility.ProtoTypes;
     import FloatText            = Utility.FloatText;
     import ConfigManager        = Utility.ConfigManager;
-    import BwSettingsHelper     = BaseWar.BwWarRuleHelper;
+    import BwWarRuleHelper      = BaseWar.BwWarRuleHelper;
     import CommonConfirmPanel   = Common.CommonConfirmPanel;
     import CommonHelpPanel      = Common.CommonHelpPanel;
     import IWarRule             = ProtoTypes.WarRule.IWarRule;
@@ -196,7 +196,7 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnModifyHasFog(e: egret.TouchEvent): void {
             const rule = this._selectedRule;
             if ((rule) && (!this._war.getIsReviewingMap())) {
-                BwSettingsHelper.setHasFogByDefault(rule, !BwSettingsHelper.getHasFogByDefault(rule));
+                BwWarRuleHelper.setHasFogByDefault(rule, !BwWarRuleHelper.getHasFogByDefault(rule));
                 this._updateImgHasFog(rule);
             }
         }
@@ -584,7 +584,7 @@ namespace TinyWars.MapEditor {
                 callbackOnTouchedTitle  : isReviewing
                     ? null
                     : () => {
-                        BwSettingsHelper.tickTeamIndex(warRule, playerRule.playerIndex);
+                        BwWarRuleHelper.tickTeamIndex(warRule, playerRule.playerIndex);
                         this._updateView();
                     },
             };
@@ -628,7 +628,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setInitialFund(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setInitialFund(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -659,7 +659,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setIncomeMultiplier(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setIncomeMultiplier(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -690,7 +690,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setInitialEnergyPercentage(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setInitialEnergyPercentage(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -721,7 +721,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setEnergyGrowthMultiplier(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setEnergyGrowthMultiplier(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -752,7 +752,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setMoveRangeModifier(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setMoveRangeModifier(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -783,7 +783,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setAttackPowerModifier(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setAttackPowerModifier(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -814,7 +814,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setVisionRangeModifier(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setVisionRangeModifier(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -846,12 +846,12 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    const upperLimit = BwSettingsHelper.getLuckUpperLimit(warRule, playerIndex);
+                                    const upperLimit = BwWarRuleHelper.getLuckUpperLimit(warRule, playerIndex);
                                     if (value <= upperLimit) {
-                                        BwSettingsHelper.setLuckLowerLimit(warRule, playerIndex, value);
+                                        BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, value);
                                     } else {
-                                        BwSettingsHelper.setLuckUpperLimit(warRule, playerIndex, value);
-                                        BwSettingsHelper.setLuckLowerLimit(warRule, playerIndex, upperLimit);
+                                        BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, value);
+                                        BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, upperLimit);
                                     }
                                     this._updateView();
                                 }
@@ -884,12 +884,12 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    const lowerLimit = BwSettingsHelper.getLuckLowerLimit(warRule, playerIndex);
+                                    const lowerLimit = BwWarRuleHelper.getLuckLowerLimit(warRule, playerIndex);
                                     if (value >= lowerLimit) {
-                                        BwSettingsHelper.setLuckUpperLimit(warRule, playerIndex, value);
+                                        BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, value);
                                     } else {
-                                        BwSettingsHelper.setLuckLowerLimit(warRule, playerIndex, value);
-                                        BwSettingsHelper.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
+                                        BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, value);
+                                        BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
                                     }
                                     this._updateView();
                                 }
@@ -964,21 +964,21 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnUp(e: egret.TouchEvent): void {
             const data = this.data as DataForWarEventRenderer;
             if (data) {
-                BwSettingsHelper.moveWarEventId(data.warRule, data.warEventId, -1);
+                BwWarRuleHelper.moveWarEventId(data.warRule, data.warEventId, -1);
                 Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDown(e: egret.TouchEvent): void {
             const data = this.data as DataForWarEventRenderer;
             if (data) {
-                BwSettingsHelper.moveWarEventId(data.warRule, data.warEventId, 1);
+                BwWarRuleHelper.moveWarEventId(data.warRule, data.warEventId, 1);
                 Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDelete(e: egret.TouchEvent): void {
             const data = this.data as DataForWarEventRenderer;
             if (data) {
-                BwSettingsHelper.deleteWarEventId(data.warRule, data.warEventId);
+                BwWarRuleHelper.deleteWarEventId(data.warRule, data.warEventId);
                 Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
             }
         }

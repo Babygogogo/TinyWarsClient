@@ -1,12 +1,11 @@
 
 namespace TinyWars.SingleCustomWar {
-    import Types                = Utility.Types;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import Logger               = Utility.Logger;
-    import BwHelpers            = BaseWar.BwHelpers;
-    import BwSettingsHelper     = BaseWar.BwWarRuleHelper;
-    import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
-    import ISettingsForScw      = ProtoTypes.WarSettings.ISettingsForScw;
+    import Types            = Utility.Types;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Logger           = Utility.Logger;
+    import BwHelpers        = BaseWar.BwHelpers;
+    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
+    import ISettingsForScw  = ProtoTypes.WarSettings.ISettingsForScw;
 
     export class ScwWar extends SinglePlayerWar.SpwWar {
         private _settingsForSinglePlayer    : ISettingsForScw;
@@ -16,7 +15,7 @@ namespace TinyWars.SingleCustomWar {
         private _isEnded                    = false;
 
         public async init(data: ISerialWar): Promise<ScwWar | undefined> {
-            if (this._baseInit(data)) {
+            if (await this._baseInit(data)) {
                 Logger.error(`ScwWar.init() failed this._baseInit().`);
                 return undefined;
             }
@@ -119,7 +118,7 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
-            const settingsForCommon = this.getSettingsForCommon();
+            const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
             if (settingsForCommon == null) {
                 Logger.error(`ScwWar.serialize() empty settingsForCommon.`);
                 return undefined;
@@ -196,7 +195,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         public serializeForSimulation(): ISerialWar {
-            const settingsForCommon = this.getSettingsForCommon();
+            const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
             if (settingsForCommon == null) {
                 Logger.error(`ScwWar.serializeForSimulation() empty settingsForCommon.`);
                 return undefined;
@@ -312,7 +311,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         public getWarType(): Types.WarType {
-            return this.getSettingsForCommon().warRule.ruleForGlobalParams.hasFogByDefault
+            return this.getCommonSettingManager().getSettingsHasFogByDefault()
                 ? Types.WarType.ScwFog
                 : Types.WarType.ScwStd;
         }
@@ -339,88 +338,6 @@ namespace TinyWars.SingleCustomWar {
             }
 
             return settingsForSinglePlayer.isCheating;
-        }
-
-        public setSettingsIncomeMultiplier(playerIndex: number, value: number): void {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.setSettingsIncomeMultiplier() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            BwSettingsHelper.setIncomeMultiplier(warRule, playerIndex, value);
-        }
-        public setSettingsEnergyGrowthMultiplier(playerIndex: number, value: number): void {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.setSettingsEnergyGrowthMultiplier() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            BwSettingsHelper.setEnergyGrowthMultiplier(warRule, playerIndex, value);
-        }
-        public setSettingsAttackPowerModifier(playerIndex: number, value: number): void {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.setSettingsAttackPowerModifier() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            BwSettingsHelper.setAttackPowerModifier(warRule, playerIndex, value);
-        }
-        public setSettingsMoveRangeModifier(playerIndex: number, value: number): void {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.setSettingsMoveRangeModifier() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            BwSettingsHelper.setMoveRangeModifier(warRule, playerIndex, value);
-        }
-        public setSettingsVisionRangeModifier(playerIndex: number, value: number): void {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.setSettingsVisionRangeModifier() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            BwSettingsHelper.setVisionRangeModifier(warRule, playerIndex, value);
-        }
-        public setSettingsInitialFund(playerIndex: number, value: number): void {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.setSettingsInitialFund() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            BwSettingsHelper.setInitialFund(warRule, playerIndex, value);
-        }
-        public setSettingsInitialEnergyPercentage(playerIndex: number, value: number): void {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.setSettingsInitialEnergyPercentage() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            BwSettingsHelper.setInitialEnergyPercentage(warRule, playerIndex, value);
-        }
-        public setSettingsLuckLowerLimit(playerIndex: number, value: number): void {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.setSettingsLuckLowerLimit() empty warRule.`);
-                return undefined;
-            }
-
-            BwSettingsHelper.setLuckLowerLimit(warRule, playerIndex, value);
-        }
-        public setSettingsLuckUpperLimit(playerIndex: number, value: number): void {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.setSettingsLuckUpperLimit() empty warRule.`);
-                return undefined;
-            }
-
-            BwSettingsHelper.setLuckUpperLimit(warRule, playerIndex, value);
         }
 
         private _setSettingsForSinglePlayer(settings: ISettingsForScw): void {

@@ -407,8 +407,9 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             // Handle co energy.
             const attackerEnergy                = attackerPlayer.getCoCurrentEnergy();
             const targetEnergy                  = targetPlayer.getCoCurrentEnergy();
-            const multiplierForAttacker         = war.getSettingsEnergyGrowthMultiplier(attackerPlayerIndex);
-            const multiplierForTarget           = war.getSettingsEnergyGrowthMultiplier(targetPlayerIndex);
+            const commonSettingManager          = war.getCommonSettingManager();
+            const multiplierForAttacker         = commonSettingManager.getSettingsEnergyGrowthMultiplier(attackerPlayerIndex);
+            const multiplierForTarget           = commonSettingManager.getSettingsEnergyGrowthMultiplier(targetPlayerIndex);
             const isAttackerInAttackerCoZone    = (attackerUnit.getHasLoadedCo()) || (attackerPlayer.checkIsInCoZone(attackerGridIndex, attackerCoGridIndexListOnMap));
             const isAttackerInTargetCoZone      = targetPlayer.checkIsInCoZone(attackerGridIndex, targetCoGridIndexListOnMap);
             if ((targetLostNormalizedHp > 0)                    &&
@@ -941,7 +942,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             focusUnit.setActionState(UnitActionState.Acted);
         } else {
             const playerIndex               = focusUnit.getPlayerIndex();
-            const initialEnergyPercentage   = war.getSettingsInitialEnergyPercentage(playerIndex);
+            const initialEnergyPercentage   = war.getCommonSettingManager().getSettingsInitialEnergyPercentage(playerIndex);
             if (initialEnergyPercentage == null) {
                 Logger.error(`ReplayModel._exeUnitLoadCo() empty initialEnergyPercentage.`);
                 return undefined;
@@ -1464,8 +1465,9 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             // Handle co energy.
             const attackerEnergy                = attackerPlayer.getCoCurrentEnergy();
             const targetEnergy                  = targetPlayer.getCoCurrentEnergy();
-            const multiplierForAttacker         = war.getSettingsEnergyGrowthMultiplier(attackerPlayerIndex);
-            const multiplierForTarget           = war.getSettingsEnergyGrowthMultiplier(targetPlayerIndex);
+            const commonSettingManager          = war.getCommonSettingManager();
+            const multiplierForAttacker         = commonSettingManager.getSettingsEnergyGrowthMultiplier(attackerPlayerIndex);
+            const multiplierForTarget           = commonSettingManager.getSettingsEnergyGrowthMultiplier(targetPlayerIndex);
             const isAttackerInAttackerCoZone    = (attackerUnit.getHasLoadedCo()) || (attackerPlayer.checkIsInCoZone(attackerGridIndex, attackerCoGridIndexListOnMap));
             const isAttackerInTargetCoZone      = targetPlayer.checkIsInCoZone(attackerGridIndex, targetCoGridIndexListOnMap);
             if ((targetLostNormalizedHp > 0)                    &&
@@ -1833,7 +1835,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             focusUnit.setActionState(UnitActionState.Acted);
         } else {
             const playerIndex               = focusUnit.getPlayerIndex();
-            const initialEnergyPercentage   = war.getSettingsInitialEnergyPercentage(playerIndex);
+            const initialEnergyPercentage   = war.getCommonSettingManager().getSettingsInitialEnergyPercentage(playerIndex);
             if (initialEnergyPercentage == null) {
                 Logger.error(`ReplayModel._fastExeUnitLoadCo() empty initialEnergyPercentage.`);
                 return undefined;

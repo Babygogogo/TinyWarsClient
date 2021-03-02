@@ -992,7 +992,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const modifierBySettings = war.getSettingsMoveRangeModifier(playerIndex);
+            const modifierBySettings = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
             if (modifierBySettings == null) {
                 Logger.error(`BwUnit.getFinalMoveRange() empty modifierBySettings.`);
                 return undefined;
@@ -1387,7 +1387,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const modifierBySettings = war.getSettingsVisionRangeModifier(playerIndex);
+            const modifierBySettings = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
             if (modifierBySettings == null) {
                 Logger.error(`BwUnit.getVisionRangeForPlayer() empty modifierBySettings.`);
                 return undefined;

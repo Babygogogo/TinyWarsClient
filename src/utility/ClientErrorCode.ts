@@ -12,6 +12,10 @@ namespace TinyWars.Utility {
         BwCommonSettingManagerInit01,
         BwCommonSettingManagerInit02,
 
+        MeCommonSettingManagerInit00,
+        MeCommonSettingManagerInit01,
+        MeCommonSettingManagerInit02,
+
         WarRuleValidation00,
         WarRuleValidation01,
         WarRuleValidation02,

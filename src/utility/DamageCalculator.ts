@@ -33,13 +33,13 @@ namespace TinyWars.Utility.DamageCalculator {
             return undefined;
         }
 
-        const lowerLimit = war.getSettingsLuckLowerLimit(playerIndex);
+        const lowerLimit = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
         if (lowerLimit == null) {
             Logger.error(`DamageCalculator.getLuckValue() empty lowerLimit.`);
             return undefined;
         }
 
-        const upperLimit = war.getSettingsLuckUpperLimit(playerIndex);
+        const upperLimit = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
         if (upperLimit == null) {
             Logger.error(`DamageCalculator.getLuckValue() empty upperLimit.`);
             return undefined;
@@ -79,7 +79,7 @@ namespace TinyWars.Utility.DamageCalculator {
             return undefined;
         }
 
-        const settingsModifier = war.getSettingsAttackPowerModifier(playerIndex);
+        const settingsModifier = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
         if (settingsModifier == null) {
             Logger.error(`DamageCalculator.getAttackBonusMultiplier() empty settingsModifier.`);
             return undefined;

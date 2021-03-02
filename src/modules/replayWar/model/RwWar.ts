@@ -29,7 +29,7 @@ namespace TinyWars.ReplayWar {
         private _checkPointDataListForCheckPointId  = new Map<number, CheckPointData>();
 
         public async init(warData: ISerialWar): Promise<RwWar> {
-            if (this._baseInit(warData)) {
+            if (await this._baseInit(warData)) {
                 Logger.error(`ReplayWar.init() failed this._baseInit().`);
                 return undefined;
             }
@@ -211,7 +211,7 @@ namespace TinyWars.ReplayWar {
         }
 
         public serializeForSimulation(): ISerialWar {
-            const settingsForCommon = this.getSettingsForCommon();
+            const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
             if (settingsForCommon == null) {
                 Logger.error(`Replay.serializeForSimulation() empty settingsForCommon.`);
                 return undefined;
@@ -296,7 +296,7 @@ namespace TinyWars.ReplayWar {
         }
 
         public getWarType(): WarType {
-            const hasFog = this.getSettingsHasFogByDefault();
+            const hasFog = this.getCommonSettingManager().getSettingsHasFogByDefault();
             if (this._getSettingsForMcw()) {
                 return hasFog ? WarType.McwFog : WarType.McwStd;
             } else if (this._getSettingsForMrw()) {

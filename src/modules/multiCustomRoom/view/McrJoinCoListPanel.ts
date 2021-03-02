@@ -4,7 +4,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
     import ProtoTypes       = Utility.ProtoTypes;
-    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
     type OpenDataForMcrJoinCoListPanel = {
@@ -149,7 +149,7 @@ namespace TinyWars.MultiCustomRoom {
             const playerIndex   = McrModel.Join.getPlayerIndex();
             const configVersion = ConfigManager.getLatestFormalVersion();
             let index           = 0;
-            for (const coId of BwSettingsHelper.getPlayerRule((await McrModel.Join.getRoomInfo()).settingsForCommon.warRule, playerIndex).availableCoIdArray) {
+            for (const coId of BwWarRuleHelper.getPlayerRule((await McrModel.Join.getRoomInfo()).settingsForCommon.warRule, playerIndex).availableCoIdArray) {
                 const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
                 if ((cfg) && (cfg.isEnabled)) {
                     dataList.push({

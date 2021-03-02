@@ -3,7 +3,7 @@ namespace TinyWars.MapEditor {
     import Notify           = Utility.Notify;
     import ProtoTypes       = Utility.ProtoTypes;
     import Lang             = Utility.Lang;
-    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
 
     type OpenDataForMeAddWarEventId = {
         warRule     : ProtoTypes.WarRule.IWarRule;
@@ -115,14 +115,14 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnAdd(e: egret.TouchEvent): void {
             const data = this.data as DataForMessageRenderer;
             if (data) {
-                BwSettingsHelper.addWarEventId(data.warRule, data.warEventId);
+                BwWarRuleHelper.addWarEventId(data.warRule, data.warEventId);
                 Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDelete(e: egret.TouchEvent): void {
             const data = this.data as DataForMessageRenderer;
             if (data) {
-                BwSettingsHelper.deleteWarEventId(data.warRule, data.warEventId);
+                BwWarRuleHelper.deleteWarEventId(data.warRule, data.warEventId);
                 Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
             }
         }

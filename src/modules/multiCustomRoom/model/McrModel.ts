@@ -7,7 +7,7 @@ namespace TinyWars.MultiCustomRoom {
     import Helpers          = Utility.Helpers;
     import ConfigManager    = Utility.ConfigManager;
     import WarMapModel      = WarMap.WarMapModel;
-    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import BootTimerType    = Types.BootTimerType;
     import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
     import NetMessage       = ProtoTypes.NetMessage;
@@ -155,7 +155,7 @@ namespace TinyWars.MultiCustomRoom {
                     return true;
                 }
 
-                if ((playerDataList.length === BwSettingsHelper.getPlayersCount(roomInfo.settingsForCommon.warRule))    &&
+                if ((playerDataList.length === BwWarRuleHelper.getPlayersCount(roomInfo.settingsForCommon.warRule))    &&
                     (playerDataList.every(v => (v.isReady) && (v.userId != null)))                                      &&
                     (selfPlayerData)                                                                                    &&
                     (roomInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
@@ -217,9 +217,9 @@ namespace TinyWars.MultiCustomRoom {
                 const mapRawData        = await getMapRawData();
                 const settingsForCommon = getData().settingsForCommon;
                 if (ruleId == null) {
-                    settingsForCommon.warRule = BwSettingsHelper.createDefaultWarRule(ruleId, mapRawData.playersCountUnneutral);
+                    settingsForCommon.warRule = BwWarRuleHelper.createDefaultWarRule(ruleId, mapRawData.playersCountUnneutral);
                     setPresetWarRuleId(ruleId);
-                    setSelfCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
+                    setSelfCoId(BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
 
                 } else {
                     const warRule = mapRawData.warRuleArray.find(warRule => warRule.ruleId === ruleId);
@@ -230,7 +230,7 @@ namespace TinyWars.MultiCustomRoom {
 
                     settingsForCommon.warRule = Helpers.deepClone(warRule);
                     setPresetWarRuleId(ruleId);
-                    setSelfCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
+                    setSelfCoId(BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
                 }
             }
             export function setPresetWarRuleId(ruleId: number | null | undefined): void {
@@ -289,7 +289,7 @@ namespace TinyWars.MultiCustomRoom {
                 getData().selfPlayerIndex = playerIndex;
             }
             export async function tickSelfPlayerIndex(): Promise<void> {
-                setSelfPlayerIndex(getSelfPlayerIndex() % BwSettingsHelper.getPlayersCount(getWarRule()) + 1);
+                setSelfPlayerIndex(getSelfPlayerIndex() % BwWarRuleHelper.getPlayersCount(getWarRule()) + 1);
             }
             export function getSelfPlayerIndex(): number {
                 return getData().selfPlayerIndex;
@@ -355,86 +355,86 @@ namespace TinyWars.MultiCustomRoom {
             }
 
             export function tickTeamIndex(playerIndex: number): void {
-                BwSettingsHelper.tickTeamIndex(getWarRule(), playerIndex);
+                BwWarRuleHelper.tickTeamIndex(getWarRule(), playerIndex);
             }
             export function getTeamIndex(playerIndex: number): number {
-                return BwSettingsHelper.getTeamIndex(getWarRule(), playerIndex);
+                return BwWarRuleHelper.getTeamIndex(getWarRule(), playerIndex);
             }
 
             export function setInitialFund(playerIndex, fund: number): void {
-                BwSettingsHelper.setInitialFund(getWarRule(), playerIndex, fund);
+                BwWarRuleHelper.setInitialFund(getWarRule(), playerIndex, fund);
             }
             export function getInitialFund(playerIndex: number): number {
-                return BwSettingsHelper.getInitialFund(getWarRule(), playerIndex);
+                return BwWarRuleHelper.getInitialFund(getWarRule(), playerIndex);
             }
 
             export function setIncomeMultiplier(playerIndex: number, multiplier: number): void {
-                BwSettingsHelper.setIncomeMultiplier(getWarRule(), playerIndex, multiplier);
+                BwWarRuleHelper.setIncomeMultiplier(getWarRule(), playerIndex, multiplier);
             }
             export function getIncomeMultiplier(playerIndex: number): number {
-                return BwSettingsHelper.getIncomeMultiplier(getWarRule(), playerIndex);
+                return BwWarRuleHelper.getIncomeMultiplier(getWarRule(), playerIndex);
             }
 
             export function setInitialEnergyPercentage(playerIndex: number, percentage: number): void {
-                BwSettingsHelper.setInitialEnergyPercentage(getWarRule(), playerIndex, percentage);
+                BwWarRuleHelper.setInitialEnergyPercentage(getWarRule(), playerIndex, percentage);
             }
             export function getInitialEnergyPercentage(playerIndex: number): number {
-                return BwSettingsHelper.getInitialEnergyPercentage(getWarRule(), playerIndex);
+                return BwWarRuleHelper.getInitialEnergyPercentage(getWarRule(), playerIndex);
             }
 
             export function setEnergyGrowthMultiplier(playerIndex: number, multiplier: number): void {
-                BwSettingsHelper.setEnergyGrowthMultiplier(getWarRule(), playerIndex, multiplier);
+                BwWarRuleHelper.setEnergyGrowthMultiplier(getWarRule(), playerIndex, multiplier);
             }
             export function getEnergyGrowthMultiplier(playerIndex: number): number {
-                return BwSettingsHelper.getEnergyGrowthMultiplier(getWarRule(), playerIndex);
+                return BwWarRuleHelper.getEnergyGrowthMultiplier(getWarRule(), playerIndex);
             }
 
             export function getAvailableCoIdList(playerIndex: number): number[] {
-                return BwSettingsHelper.getAvailableCoIdList(getWarRule(), playerIndex);
+                return BwWarRuleHelper.getAvailableCoIdList(getWarRule(), playerIndex);
             }
             export function addAvailableCoId(playerIndex: number, coId: number): void {
-                BwSettingsHelper.addAvailableCoId(getWarRule(), playerIndex, coId);
+                BwWarRuleHelper.addAvailableCoId(getWarRule(), playerIndex, coId);
             }
             export function removeAvailableCoId(playerIndex: number, coId: number): void {
-                BwSettingsHelper.removeAvailableCoId(getWarRule(), playerIndex, coId);
+                BwWarRuleHelper.removeAvailableCoId(getWarRule(), playerIndex, coId);
             }
             export function setAvailableCoIdList(playerIndex: number, coIdSet: Set<number>): void {
-                BwSettingsHelper.setAvailableCoIdList(getWarRule(), playerIndex, coIdSet);
+                BwWarRuleHelper.setAvailableCoIdList(getWarRule(), playerIndex, coIdSet);
             }
 
             export function setLuckLowerLimit(playerIndex: number, limit: number): void {
-                BwSettingsHelper.setLuckLowerLimit(getWarRule(), playerIndex, limit);
+                BwWarRuleHelper.setLuckLowerLimit(getWarRule(), playerIndex, limit);
             }
             export function getLuckLowerLimit(playerIndex: number): number {
-                return BwSettingsHelper.getLuckLowerLimit(getWarRule(), playerIndex);
+                return BwWarRuleHelper.getLuckLowerLimit(getWarRule(), playerIndex);
             }
 
             export function setLuckUpperLimit(playerIndex: number, limit: number): void {
-                BwSettingsHelper.setLuckUpperLimit(getWarRule(), playerIndex, limit);
+                BwWarRuleHelper.setLuckUpperLimit(getWarRule(), playerIndex, limit);
             }
             export function getLuckUpperLimit(playerIndex: number): number {
-                return BwSettingsHelper.getLuckUpperLimit(getWarRule(), playerIndex);
+                return BwWarRuleHelper.getLuckUpperLimit(getWarRule(), playerIndex);
             }
 
             export function setMoveRangeModifier(playerIndex: number, modifier: number): void {
-                BwSettingsHelper.setMoveRangeModifier(getWarRule(), playerIndex, modifier);
+                BwWarRuleHelper.setMoveRangeModifier(getWarRule(), playerIndex, modifier);
             }
             export function getMoveRangeModifier(playerIndex: number): number {
-                return BwSettingsHelper.getMoveRangeModifier(getWarRule(), playerIndex);
+                return BwWarRuleHelper.getMoveRangeModifier(getWarRule(), playerIndex);
             }
 
             export function setAttackPowerModifier(playerIndex: number, modifier: number): void {
-                BwSettingsHelper.setAttackPowerModifier(getWarRule(), playerIndex, modifier);
+                BwWarRuleHelper.setAttackPowerModifier(getWarRule(), playerIndex, modifier);
             }
             export function getAttackPowerModifier(playerIndex: number): number {
-                return BwSettingsHelper.getAttackPowerModifier(getWarRule(), playerIndex);
+                return BwWarRuleHelper.getAttackPowerModifier(getWarRule(), playerIndex);
             }
 
             export function setVisionRangeModifier(playerIndex: number, modifier: number): void {
-                BwSettingsHelper.setVisionRangeModifier(getWarRule(), playerIndex, modifier);
+                BwWarRuleHelper.setVisionRangeModifier(getWarRule(), playerIndex, modifier);
             }
             export function getVisionRangeModifier(playerIndex: number): number {
-                return BwSettingsHelper.getVisionRangeModifier(getWarRule(), playerIndex);
+                return BwWarRuleHelper.getVisionRangeModifier(getWarRule(), playerIndex);
             }
         }
 
@@ -464,7 +464,7 @@ namespace TinyWars.MultiCustomRoom {
                     return {
                         roomId          : roomInfo.roomId,
                         isReady         : false,
-                        coId            : BwSettingsHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex),
+                        coId            : BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex),
                         playerIndex,
                         unitAndTileSkinId,
                     };
@@ -489,7 +489,7 @@ namespace TinyWars.MultiCustomRoom {
                 return await WarMapModel.getRawData(await getMapId());
             }
             export async function getTeamIndex(): Promise<number> {
-                return BwSettingsHelper.getPlayerRule((await McrModel.getRoomInfo(getRoomId())).settingsForCommon.warRule, getPlayerIndex()).teamIndex;
+                return BwWarRuleHelper.getPlayerRule((await McrModel.getRoomInfo(getRoomId())).settingsForCommon.warRule, getPlayerIndex()).teamIndex;
             }
 
             export function resetData(roomInfo: IMcrRoomInfo): void {
@@ -504,7 +504,7 @@ namespace TinyWars.MultiCustomRoom {
                 setIsReady(true);
                 setCoId(playerIndex == null
                     ? CommonConstants.CoEmptyId
-                    : BwSettingsHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex)
+                    : BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex)
                 );
             }
             export function clearData(): void {
@@ -530,7 +530,7 @@ namespace TinyWars.MultiCustomRoom {
                 if (list.length > 1) {
                     const playerIndex = list[(list.indexOf(getPlayerIndex()) + 1) % list.length];
                     setPlayerIndex(playerIndex);
-                    setCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon((await getRoomInfo()).settingsForCommon, playerIndex));
+                    setCoId(BwWarRuleHelper.getRandomCoIdWithSettingsForCommon((await getRoomInfo()).settingsForCommon, playerIndex));
                 }
             }
             export function getPlayerIndex(): number {
@@ -585,7 +585,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     function generateAvailablePlayerIndexList(info: IMcrRoomInfo): number[] {
-        const playersCount      = BwSettingsHelper.getPlayersCount(info.settingsForCommon.warRule);
+        const playersCount      = BwWarRuleHelper.getPlayersCount(info.settingsForCommon.warRule);
         const playerInfoList    = info.playerDataList;
         const indexes           : number[] = [];
         for (let i = 1; i <= playersCount; ++i) {

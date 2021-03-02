@@ -421,7 +421,7 @@ namespace TinyWars.BaseWar {
             if ((baseIncome == null) || (this.getPlayerIndex() !== playerIndex)) {
                 return 0;
             } else {
-                return Math.floor(baseIncome * this.getWar().getSettingsIncomeMultiplier(playerIndex) / 100);
+                return Math.floor(baseIncome * this.getWar().getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex) / 100);
             }
         }
 
@@ -657,7 +657,7 @@ namespace TinyWars.BaseWar {
             if ((!this.checkIsVisionEnabledForAllPlayers()) && (this.getPlayerIndex() !== playerIndex)) {
                 return null;
             } else {
-                return Math.max(0, this.getCfgVisionRange() + this.getWar().getSettingsVisionRangeModifier(playerIndex));
+                return Math.max(0, this.getCfgVisionRange() + this.getWar().getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex));
             }
         }
         public getVisionRangeForTeamIndexes(teamIndexes: Set<number>): number | null {
@@ -668,7 +668,7 @@ namespace TinyWars.BaseWar {
                     if ((player.getAliveState() === Types.PlayerAliveState.Alive) &&
                         (teamIndexes.has(player.getTeamIndex()))
                     ) {
-                        maxModifier = Math.max(maxModifier, war.getSettingsVisionRangeModifier(player.getPlayerIndex()));
+                        maxModifier = Math.max(maxModifier, war.getCommonSettingManager().getSettingsVisionRangeModifier(player.getPlayerIndex()));
                     }
                 });
 
@@ -676,7 +676,7 @@ namespace TinyWars.BaseWar {
             }
 
             if (teamIndexes.has(this.getTeamIndex())) {
-                return Math.max(0, this.getCfgVisionRange() + this.getWar().getSettingsVisionRangeModifier(this.getPlayerIndex()));
+                return Math.max(0, this.getCfgVisionRange() + this.getWar().getCommonSettingManager().getSettingsVisionRangeModifier(this.getPlayerIndex()));
             }
 
             return null;

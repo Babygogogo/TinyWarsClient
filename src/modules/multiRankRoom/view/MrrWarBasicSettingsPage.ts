@@ -7,7 +7,7 @@ namespace TinyWars.MultiRankRoom {
     import ConfigManager    = Utility.ConfigManager;
     import CommonHelpPanel  = Common.CommonHelpPanel;
     import BwHelpers        = BaseWar.BwHelpers;
-    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import WarMapModel      = WarMap.WarMapModel;
     import UserModel        = User.UserModel;
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
@@ -154,7 +154,7 @@ namespace TinyWars.MultiRankRoom {
             const warInfo = this._warInfo;
             if (warInfo) {
                 WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForMrw.mapId).then(v =>
-                    this._labelMapName.text = `${v} (${BwSettingsHelper.getPlayersCount(warInfo.settingsForCommon.warRule)}P)`
+                    this._labelMapName.text = `${v} (${BwWarRuleHelper.getPlayersCount(warInfo.settingsForCommon.warRule)}P)`
                 );
             }
         }
@@ -173,7 +173,7 @@ namespace TinyWars.MultiRankRoom {
                 const playerData = warInfo.playerInfoList.find(v => v.userId === selfUserId);
                 if (playerData) {
                     const playerIndex           = playerData.playerIndex;
-                    const playerRule            = BwSettingsHelper.getPlayerRule(warInfo.settingsForCommon.warRule, playerIndex);
+                    const playerRule            = BwWarRuleHelper.getPlayerRule(warInfo.settingsForCommon.warRule, playerIndex);
                     this._labelPlayerIndex.text = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(playerRule.teamIndex)})`;
                 }
             }

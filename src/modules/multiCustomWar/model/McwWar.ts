@@ -11,7 +11,7 @@ namespace TinyWars.MultiCustomWar {
         private _settingsForMcw?: ISettingsForMcw;
 
         public async init(data: ISerialWar): Promise<McwWar> {
-            if (this._baseInit(data)) {
+            if (await this._baseInit(data)) {
                 Logger.error(`McwWar.init() failed this._baseInit().`);
                 return undefined;
             }
@@ -93,7 +93,7 @@ namespace TinyWars.MultiCustomWar {
                 return undefined;
             }
 
-            const settingsForCommon = this.getSettingsForCommon();
+            const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
             if (settingsForCommon == null) {
                 Logger.error(`McwWar.serializeForSimulation() empty settingsForCommon.`);
                 return undefined;
@@ -172,7 +172,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         public getWarType(): Types.WarType {
-            return this.getSettingsHasFogByDefault()
+            return this.getCommonSettingManager().getSettingsHasFogByDefault()
                 ? Types.WarType.McwFog
                 : Types.WarType.McwStd;
         }

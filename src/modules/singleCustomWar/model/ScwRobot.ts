@@ -480,10 +480,11 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     // Damage map generators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _getAttackBonusForAllPlayers(): Map<number, number> {  // DONE
-        const bonuses = new Map<number, number>();
+        const bonuses               = new Map<number, number>();
+        const commonSettingManager  = _war.getCommonSettingManager();
         _playerManager.forEachPlayer(false, player => {
             const playerIndex = player.getPlayerIndex();
-            bonuses.set(playerIndex, _war.getSettingsAttackPowerModifier(playerIndex));
+            bonuses.set(playerIndex, commonSettingManager.getSettingsAttackPowerModifier(playerIndex));
         });
 
         _tileMap.forEachTile(tile => {
@@ -512,7 +513,8 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     function _getAttackInfo(attacker: BaseWar.BwUnit, target: BaseWar.BwUnit): AttackInfo {   // DONE
         const gridIndex             = attacker.getGridIndex();
         const attackerPlayerIndex   = attacker.getPlayerIndex();
-        const luckValue             = (_war.getSettingsLuckLowerLimit(attackerPlayerIndex) + _war.getSettingsLuckUpperLimit(attackerPlayerIndex)) / 2;
+        const commonSettingManager  = _war.getCommonSettingManager();
+        const luckValue             = (commonSettingManager.getSettingsLuckLowerLimit(attackerPlayerIndex) + commonSettingManager.getSettingsLuckUpperLimit(attackerPlayerIndex)) / 2;
         const targetArmorType       = target.getArmorType();
         const baseDamageWithAmmo    =  attacker.getCfgBaseDamage(targetArmorType, attacker.checkHasPrimaryWeapon() ? WeaponType.Primary : WeaponType.Secondary);
 

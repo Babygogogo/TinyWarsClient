@@ -4,7 +4,7 @@ namespace TinyWars.MultiRankRoom.MrrModel {
     import Notify           = Utility.Notify;
     import Logger           = Utility.Logger;
     import ConfigManager    = Utility.ConfigManager;
-    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import NetMessage       = ProtoTypes.NetMessage;
     import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
@@ -189,7 +189,7 @@ namespace TinyWars.MultiRankRoom.MrrModel {
                         return undefined;
                     }
 
-                    setCoId(BwSettingsHelper.getRandomCoIdWithCoIdList(availableCoIdList));
+                    setCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(availableCoIdList));
                     setUnitAndTileSkinId(availableSkinIdList.indexOf(selfPlayerIndex) >= 0 ? selfPlayerIndex : availableSkinIdList[0]);
                 }
             }
@@ -244,7 +244,7 @@ namespace TinyWars.MultiRankRoom.MrrModel {
                 return undefined;
             }
 
-            const playerRule = BwSettingsHelper.getPlayerRule(settingsForCommon.warRule, playerIndex);
+            const playerRule = BwWarRuleHelper.getPlayerRule(settingsForCommon.warRule, playerIndex);
             if (playerRule == null) {
                 Logger.error(`MrrModel.generateAvailableCoIdList() empty playerRule.`);
                 return undefined;

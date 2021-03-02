@@ -4,8 +4,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
     import Notify           = Utility.Notify;
-    import FloatText        = Utility.FloatText;
-    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import WarMapModel      = WarMap.WarMapModel;
     import NetMessage       = ProtoTypes.NetMessage;
     import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
@@ -93,7 +92,7 @@ namespace TinyWars.MultiCustomRoom {
         private _updateListPlayer(): void {
             const roomInfo = this._roomInfo;
             if (roomInfo) {
-                const playersCount  = BwSettingsHelper.getPlayersCount(roomInfo.settingsForCommon.warRule);
+                const playersCount  = BwWarRuleHelper.getPlayersCount(roomInfo.settingsForCommon.warRule);
                 const dataList      : DataForPlayerRenderer[] = [];
                 for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                     dataList.push({
@@ -156,7 +155,7 @@ namespace TinyWars.MultiCustomRoom {
             ];
         }
         private _createDataPlayerIndex(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
+            const playerRule = BwWarRuleHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
             return {
                 titleText   : Lang.getText(Lang.Type.B0018),
                 infoText    : `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(playerRule.teamIndex)})`,
@@ -164,7 +163,7 @@ namespace TinyWars.MultiCustomRoom {
             };
         }
         private _createDataInitialFund(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
+            const playerRule    = BwWarRuleHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
             const currValue     = playerRule.initialFund;
             return {
                 titleText       : Lang.getText(Lang.Type.B0178),
@@ -173,7 +172,7 @@ namespace TinyWars.MultiCustomRoom {
             };
         }
         private _createDataIncomeMultiplier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
+            const playerRule    = BwWarRuleHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
             const currValue     = playerRule.incomeMultiplier;
             return {
                 titleText       : Lang.getText(Lang.Type.B0179),
@@ -182,7 +181,7 @@ namespace TinyWars.MultiCustomRoom {
             };
         }
         private _createDataInitialEnergyPercentage(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
+            const playerRule    = BwWarRuleHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
             const currValue     = playerRule.initialEnergyPercentage;
             return {
                 titleText       : Lang.getText(Lang.Type.B0180),
@@ -191,7 +190,7 @@ namespace TinyWars.MultiCustomRoom {
             };
         }
         private _createDataEnergyGrowthMultiplier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
+            const playerRule    = BwWarRuleHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
             const currValue     = playerRule.energyGrowthMultiplier;
             return {
                 titleText       : Lang.getText(Lang.Type.B0181),
@@ -200,7 +199,7 @@ namespace TinyWars.MultiCustomRoom {
             };
         }
         private _createDataMoveRangeModifier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
+            const playerRule    = BwWarRuleHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
             const currValue     = playerRule.moveRangeModifier;
             return {
                 titleText       : Lang.getText(Lang.Type.B0182),
@@ -209,7 +208,7 @@ namespace TinyWars.MultiCustomRoom {
             };
         }
         private _createDataAttackPowerModifier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
+            const playerRule    = BwWarRuleHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
             const currValue     = playerRule.attackPowerModifier;
             return {
                 titleText       : Lang.getText(Lang.Type.B0183),
@@ -218,7 +217,7 @@ namespace TinyWars.MultiCustomRoom {
             };
         }
         private _createDataVisionRangeModifier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
+            const playerRule    = BwWarRuleHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
             const currValue     = playerRule.visionRangeModifier;
             return {
                 titleText       : Lang.getText(Lang.Type.B0184),
@@ -227,7 +226,7 @@ namespace TinyWars.MultiCustomRoom {
             };
         }
         private _createDataLuckLowerLimit(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
+            const playerRule    = BwWarRuleHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
             const currValue     = playerRule.luckLowerLimit;
             return {
                 titleText       : Lang.getText(Lang.Type.B0189),
@@ -236,7 +235,7 @@ namespace TinyWars.MultiCustomRoom {
             };
         }
         private _createDataLuckUpperLimit(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
+            const playerRule    = BwWarRuleHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
             const currValue     = playerRule.luckUpperLimit;
             return {
                 titleText       : Lang.getText(Lang.Type.B0190),

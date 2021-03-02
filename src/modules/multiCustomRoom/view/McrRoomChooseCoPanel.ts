@@ -4,7 +4,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
     import ProtoTypes       = Utility.ProtoTypes;
-    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
     type OpenDataForMcrRoomChooseCoPanel = {
@@ -148,7 +148,7 @@ namespace TinyWars.MultiCustomRoom {
             const openData          = this._getOpenData<OpenDataForMcrRoomChooseCoPanel>();
             const roomInfo          = openData.roomInfo;
             const selfPlayerData    = openData.selfPlayerData;
-            const availableCoIdList = BwSettingsHelper.getAvailableCoIdList(roomInfo.settingsForCommon.warRule, selfPlayerData.playerIndex);
+            const availableCoIdList = BwWarRuleHelper.getAvailableCoIdList(roomInfo.settingsForCommon.warRule, selfPlayerData.playerIndex);
 
             let index = 0;
             for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {

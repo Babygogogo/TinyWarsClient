@@ -1,20 +1,18 @@
 
 namespace TinyWars.BaseWar {
-    import Logger                   = Utility.Logger;
-    import Types                    = Utility.Types;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import ClientErrorCode          = Utility.ClientErrorCode;
-    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
-    import IWarSettingsForCommon    = ProtoTypes.WarSettings.ISettingsForCommon;
+    import Logger           = Utility.Logger;
+    import Types            = Utility.Types;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ClientErrorCode  = Utility.ClientErrorCode;
+    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
 
     export abstract class BwWar {
-        private _settingsForCommon          : IWarSettingsForCommon;
-
         private _warId                      : number;
 
         private _playerManager              : BwPlayerManager;
         private _field                      : BwField;
         private _turnManager                : BwTurnManager;
+        private readonly _commonSettingManager  = new (this._getCommonSettingManagerClass())();
         private readonly _executedActionManager = new BwExecutedActionManager();
         private readonly _warEventManager       = new (this._getWarEventManagerClass())();
         private readonly _drawVoteManager       = new BwDrawVoteManager();
@@ -32,19 +30,22 @@ namespace TinyWars.BaseWar {
         protected abstract _getTurnManagerClass(): new () => BwTurnManager;
         protected abstract _getFieldClass(): new () => BwField;
 
-        protected _baseInit(data: ISerialWar): ClientErrorCode {
-            const settingsForCommon = data.settingsForCommon;
-            if (settingsForCommon == null) {
-                Logger.error(`BwWar._baseInit() empty settingsForCommon.`);
-                return undefined;
-            }
-
+        protected async _baseInit(data: ISerialWar): Promise<ClientErrorCode> {
             const drawVoteManagerError = this.getDrawVoteManager().init(data.playerManager, data.remainingVotesForDraw);
             if (drawVoteManagerError) {
                 return drawVoteManagerError;
             }
 
-            const dataForWarEventManager = data.warEventManager;
+            const dataForWarEventManager    = data.warEventManager;
+            const commonSettingManagerError = await this.getCommonSettingManager().init({
+                settings                : data.settingsForCommon,
+                allWarEventIdArray      : WarEvent.WarEventHelper.getAllWarEventIdArray(dataForWarEventManager ? dataForWarEventManager.warEventFullData : undefined),
+                playersCountUnneutral   : BwHelpers.getPlayersCountUnneutral(data.playerManager),
+            });
+            if (commonSettingManagerError) {
+                return commonSettingManagerError;
+            }
+
             if (dataForWarEventManager == null) {
                 Logger.error(`BwWar._baseInit() empty dataForWarEventManager.`);
                 return undefined;
@@ -58,7 +59,6 @@ namespace TinyWars.BaseWar {
             }
 
             this._setWarId(data.warId);
-            this._setSettingsForCommon(settingsForCommon);
             this.getExecutedActionManager().init(isNeedReplay, data.executedActions || []);
 
             return ClientErrorCode.NoError;
@@ -76,6 +76,9 @@ namespace TinyWars.BaseWar {
 
         protected _getWarEventManagerClass(): new () => BwWarEventManager {
             return BwWarEventManager;
+        }
+        protected _getCommonSettingManagerClass(): new () => BwCommonSettingManager {
+            return BwCommonSettingManager;
         }
 
         public startRunning(): BwWar {
@@ -124,130 +127,17 @@ namespace TinyWars.BaseWar {
         }
 
         public getConfigVersion(): string {
-            const settingsForCommon = this.getSettingsForCommon();
-            if (settingsForCommon == null) {
-                Logger.error(`BwWar.getConfigVersion() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            return settingsForCommon.configVersion;
-        }
-
-        private _setSettingsForCommon(settings: IWarSettingsForCommon): void {
-            this._settingsForCommon = settings;
-        }
-        public getSettingsForCommon(): IWarSettingsForCommon | undefined {
-            return this._settingsForCommon;
+            return this.getCommonSettingManager().getConfigVersion();
         }
 
         public getWarRule(): ProtoTypes.WarRule.IWarRule {
-            const settingsForCommon = this.getSettingsForCommon();
+            const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
             if (settingsForCommon == null) {
                 Logger.error(`BwWar.getWarRule() empty settingsForCommon.`);
                 return undefined;
             }
 
             return settingsForCommon.warRule;
-        }
-
-        public getSettingsHasFogByDefault(): boolean | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsHasFogByDefault() empty warRule.`);
-                return undefined;
-            }
-
-            return BwWarRuleHelper.getHasFogByDefault(warRule);
-        }
-        public getSettingsIncomeMultiplier(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsIncomeMultiplier() empty warRule.`);
-                return undefined;
-            }
-
-            return BwWarRuleHelper.getIncomeMultiplier(warRule, playerIndex);
-        }
-        public getSettingsEnergyGrowthMultiplier(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsEnergyGrowthMultiplier() empty warRule.`);
-                return undefined;
-            }
-
-            return BwWarRuleHelper.getEnergyGrowthMultiplier(warRule, playerIndex);
-        }
-        public getSettingsAttackPowerModifier(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsAttackPowerModifier() empty warRule.`);
-                return undefined;
-            }
-
-            return BwWarRuleHelper.getAttackPowerModifier(warRule, playerIndex);
-        }
-        public getSettingsMoveRangeModifier(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsMoveRangeModifier() empty warRule.`);
-                return undefined;
-            }
-
-            return BwWarRuleHelper.getMoveRangeModifier(warRule, playerIndex);
-        }
-        public getSettingsVisionRangeModifier(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsVisionRangeModifier() empty warRule.`);
-                return undefined;
-            }
-
-            return BwWarRuleHelper.getVisionRangeModifier(warRule, playerIndex);
-        }
-        public getSettingsInitialFund(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsInitialFund() empty warRule.`);
-                return undefined;
-            }
-
-            return BwWarRuleHelper.getInitialFund(warRule, playerIndex);
-        }
-        public getSettingsInitialEnergyPercentage(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsInitialEnergyPercentage() empty warRule.`);
-                return undefined;
-            }
-
-            return BwWarRuleHelper.getInitialEnergyPercentage(warRule, playerIndex);
-        }
-        public getSettingsLuckLowerLimit(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsLuckLowerLimit() empty warRule.`);
-                return undefined;
-            }
-
-            return BwWarRuleHelper.getLuckLowerLimit(warRule, playerIndex);
-        }
-        public getSettingsLuckUpperLimit(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsLuckUpperLimit() empty warRule.`);
-                return undefined;
-            }
-
-            return BwWarRuleHelper.getLuckUpperLimit(warRule, playerIndex);
-        }
-        public getSettingsTeamIndex(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsTeamIndex() empty warRule.`);
-                return undefined;
-            }
-
-            return BwWarRuleHelper.getTeamIndex(warRule, playerIndex);
         }
 
         protected _setPlayerManager(manager: BwPlayerManager): void {
@@ -311,6 +201,9 @@ namespace TinyWars.BaseWar {
         }
         public getExecutedActionManager(): BwExecutedActionManager {
             return this._executedActionManager;
+        }
+        public getCommonSettingManager(): BwCommonSettingManager {
+            return this._commonSettingManager;
         }
     }
 }

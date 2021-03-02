@@ -167,7 +167,7 @@ namespace TinyWars.BaseWar {
         }
 
         public checkHasFogByDefault(): boolean {
-            return this._getWar().getSettingsHasFogByDefault();
+            return this._getWar().getCommonSettingManager().getSettingsHasFogByDefault();
         }
         public checkHasFogCurrently(): boolean {
             const fogCode = this.getForceFogCode();

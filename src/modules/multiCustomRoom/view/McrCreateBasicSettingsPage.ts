@@ -7,7 +7,7 @@ namespace TinyWars.MultiCustomRoom {
     import Types            = Utility.Types;
     import FloatText        = Utility.FloatText;
     import ConfigManager    = Utility.ConfigManager;
-    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import WarMapModel      = WarMap.WarMapModel;
     import CommonHelpPanel  = Common.CommonHelpPanel;
     import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
@@ -166,7 +166,7 @@ namespace TinyWars.MultiCustomRoom {
         private async _onTouchedBtnModifyPlayerIndex(e: egret.TouchEvent): Promise<void> {
             const creator = McrModel.Create;
             await creator.tickSelfPlayerIndex();
-            creator.setSelfCoId(BwSettingsHelper.getRandomCoIdWithSettingsForCommon(creator.getData().settingsForCommon, creator.getSelfPlayerIndex()));
+            creator.setSelfCoId(BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(creator.getData().settingsForCommon, creator.getSelfPlayerIndex()));
             this._updateLabelPlayerIndex();
             this._updateLabelCoName();
         }
@@ -342,7 +342,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateLabelPlayerIndex(): void {
             const playerIndex           = McrModel.Create.getSelfPlayerIndex();
-            const teamIndex             = BwSettingsHelper.getTeamIndex(McrModel.Create.getData().settingsForCommon.warRule, playerIndex);
+            const teamIndex             = BwWarRuleHelper.getTeamIndex(McrModel.Create.getData().settingsForCommon.warRule, playerIndex);
             this._labelPlayerIndex.text = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(teamIndex)})`;
         }
 

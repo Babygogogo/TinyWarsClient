@@ -53,6 +53,17 @@ namespace TinyWars.WarEvent.WarEventHelper {
         return (fullData.actionArray || []).find(v => v.WarEventActionCommonData.actionId === actionId);
     }
 
+    export function getAllWarEventIdArray(fullData: IWarEventFullData | null | undefined): number[] {
+        const idArray: number[] = [];
+        for (const event of fullData ? fullData.eventArray || [] : []) {
+            const eventId = event.eventId;
+            if (eventId != null) {
+                idArray.push(eventId);
+            }
+        }
+        return idArray;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // validation
     ////////////////////////////////////////////////////////////////////////////////////////////////////

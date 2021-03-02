@@ -1,16 +1,16 @@
 
 namespace TinyWars.SingleCustomRoom.ScrModel {
-    import Lang                     = Utility.Lang;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import Notify                   = Utility.Notify;
-    import ConfigManager            = Utility.ConfigManager;
-    import Logger                   = Utility.Logger;
-    import Helpers                  = Utility.Helpers;
-    import WarMapModel              = WarMap.WarMapModel;
-    import BwSettingsHelper         = BaseWar.BwWarRuleHelper;
-    import IDataForPlayerRule       = ProtoTypes.WarRule.IDataForPlayerRule;
-    import IDataForPlayerInRoom     = ProtoTypes.Structure.IDataForPlayerInRoom;
-    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
+    import Lang                 = Utility.Lang;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import Notify               = Utility.Notify;
+    import ConfigManager        = Utility.ConfigManager;
+    import Logger               = Utility.Logger;
+    import Helpers              = Utility.Helpers;
+    import WarMapModel          = WarMap.WarMapModel;
+    import BwWarRuleHelper      = BaseWar.BwWarRuleHelper;
+    import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
+    import IDataForPlayerInRoom = ProtoTypes.Structure.IDataForPlayerInRoom;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     export const MAX_INITIAL_FUND     = 1000000;
     export const MIN_INITIAL_FUND     = 0;
@@ -58,7 +58,7 @@ namespace TinyWars.SingleCustomRoom.ScrModel {
     }
 
     export function getCreateWarPlayerRule(playerIndex: number): IDataForPlayerRule {
-        return BwSettingsHelper.getPlayerRule(getCreateWarData().settingsForCommon.warRule, playerIndex);
+        return BwWarRuleHelper.getPlayerRule(getCreateWarData().settingsForCommon.warRule, playerIndex);
     }
     export function getCreateWarPlayerInfo(playerIndex: number): IDataForPlayerInRoom {
         return getCreateWarData().playerInfoList.find(v => v.playerIndex === playerIndex);
@@ -115,7 +115,7 @@ namespace TinyWars.SingleCustomRoom.ScrModel {
             list.push({
                 playerIndex,
                 userId      : playerIndex === 1 ? User.UserModel.getSelfUserId() : null,
-                coId        : BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, playerIndex),
+                coId        : BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, playerIndex),
             });
         }
 
@@ -146,7 +146,7 @@ namespace TinyWars.SingleCustomRoom.ScrModel {
         setCreateWarPresetWarRuleId(null);
 
         const playerRule        = getCreateWarPlayerRule(playerIndex);
-        playerRule.teamIndex    = playerRule.teamIndex % (BwSettingsHelper.getPlayersCount(getCreateWarData().settingsForCommon.warRule)) + 1;
+        playerRule.teamIndex    = playerRule.teamIndex % (BwWarRuleHelper.getPlayersCount(getCreateWarData().settingsForCommon.warRule)) + 1;
 
         Notify.dispatch(Notify.Type.ScrCreateWarPlayerInfoListChanged);
     }

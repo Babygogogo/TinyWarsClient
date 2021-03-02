@@ -309,7 +309,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return war.getSettingsTeamIndex(playerIndex);
+            return war.getCommonSettingManager().getTeamIndex(playerIndex);
         }
 
         public setRestTimeToBoot(seconds: number): void {

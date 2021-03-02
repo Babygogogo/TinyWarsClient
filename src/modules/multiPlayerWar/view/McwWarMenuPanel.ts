@@ -736,7 +736,7 @@ namespace TinyWars.MultiPlayerWar {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsInitialFund(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0178),
                 infoText                : `${currValue}`,
@@ -749,7 +749,7 @@ namespace TinyWars.MultiPlayerWar {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsIncomeMultiplier(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0179),
                 infoText                : `${currValue}%`,
@@ -762,7 +762,7 @@ namespace TinyWars.MultiPlayerWar {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsInitialEnergyPercentage(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsInitialEnergyPercentage(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
@@ -775,7 +775,7 @@ namespace TinyWars.MultiPlayerWar {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsEnergyGrowthMultiplier(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsEnergyGrowthMultiplier(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0181),
                 infoText                : `${currValue}%`,
@@ -788,7 +788,7 @@ namespace TinyWars.MultiPlayerWar {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsMoveRangeModifier(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0182),
                 infoText                : `${currValue}`,
@@ -801,7 +801,7 @@ namespace TinyWars.MultiPlayerWar {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsAttackPowerModifier(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0183),
                 infoText                : `${currValue}%`,
@@ -814,7 +814,7 @@ namespace TinyWars.MultiPlayerWar {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsVisionRangeModifier(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0184),
                 infoText                : `${currValue}`,
@@ -827,7 +827,7 @@ namespace TinyWars.MultiPlayerWar {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsLuckLowerLimit(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0189),
                 infoText                : `${currValue}%`,
@@ -840,7 +840,7 @@ namespace TinyWars.MultiPlayerWar {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsLuckUpperLimit(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0190),
                 infoText                : `${currValue}%`,

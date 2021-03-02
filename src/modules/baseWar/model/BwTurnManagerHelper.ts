@@ -102,7 +102,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
             }
 
             if (turnManager.getTurnIndex() === CommonConstants.WarFirstTurnIndex) {
-                const initialFund = war.getSettingsInitialFund(playerIndex);
+                const initialFund = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
                 if (initialFund == null) {
                     Logger.error(`BwTurnManagerHelper.runPhaseGetFundWithoutExtraData() empty initialFund.`);
                     return undefined;

@@ -1,6 +1,9 @@
 
 namespace TinyWars.SingleCustomWar {
     import CommonConfirmPanel   = Common.CommonConfirmPanel;
+    import TimeModel            = Time.TimeModel;
+    import BwWarRuleHelper      = BaseWar.BwWarRuleHelper;
+    import WarMapModel          = WarMap.WarMapModel;
     import Notify               = Utility.Notify;
     import Lang                 = Utility.Lang;
     import Types                = Utility.Types;
@@ -10,8 +13,6 @@ namespace TinyWars.SingleCustomWar {
     import LocalStorage         = Utility.LocalStorage;
     import ProtoManager         = Utility.ProtoManager;
     import ProtoTypes           = Utility.ProtoTypes;
-    import WarMapModel          = WarMap.WarMapModel;
-    import TimeModel            = Time.TimeModel;
     import CommonConstants      = Utility.ConfigManager.COMMON_CONSTANTS;
 
     const enum MenuType {
@@ -835,7 +836,7 @@ namespace TinyWars.SingleCustomWar {
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsInitialFund(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0178),
                 infoText                : `${currValue}`,
@@ -857,7 +858,7 @@ namespace TinyWars.SingleCustomWar {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    war.setSettingsInitialFund(playerIndex, value);
+                                    BwWarRuleHelper.setInitialFund(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -872,7 +873,7 @@ namespace TinyWars.SingleCustomWar {
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsIncomeMultiplier(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
             const maxValue      = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
             const minValue      = CommonConstants.WarRuleIncomeMultiplierMinLimit;
             return {
@@ -894,7 +895,7 @@ namespace TinyWars.SingleCustomWar {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    war.setSettingsIncomeMultiplier(playerIndex, value);
+                                    BwWarRuleHelper.setIncomeMultiplier(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -909,7 +910,7 @@ namespace TinyWars.SingleCustomWar {
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsInitialEnergyPercentage(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsInitialEnergyPercentage(playerIndex);
             const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
             const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
             return {
@@ -931,7 +932,7 @@ namespace TinyWars.SingleCustomWar {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    war.setSettingsInitialEnergyPercentage(playerIndex, value);
+                                    BwWarRuleHelper.setInitialEnergyPercentage(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -946,7 +947,7 @@ namespace TinyWars.SingleCustomWar {
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsEnergyGrowthMultiplier(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsEnergyGrowthMultiplier(playerIndex);
             const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
             const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
             return {
@@ -968,7 +969,7 @@ namespace TinyWars.SingleCustomWar {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    war.setSettingsEnergyGrowthMultiplier(playerIndex, value);
+                                    BwWarRuleHelper.setEnergyGrowthMultiplier(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -983,7 +984,7 @@ namespace TinyWars.SingleCustomWar {
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsMoveRangeModifier(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
             return {
@@ -1005,7 +1006,7 @@ namespace TinyWars.SingleCustomWar {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    war.setSettingsMoveRangeModifier(playerIndex, value);
+                                    BwWarRuleHelper.setMoveRangeModifier(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -1020,7 +1021,7 @@ namespace TinyWars.SingleCustomWar {
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsAttackPowerModifier(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
             const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
             return {
@@ -1042,7 +1043,7 @@ namespace TinyWars.SingleCustomWar {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    war.setSettingsAttackPowerModifier(playerIndex, value);
+                                    BwWarRuleHelper.setAttackPowerModifier(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -1057,7 +1058,7 @@ namespace TinyWars.SingleCustomWar {
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsVisionRangeModifier(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
             return {
@@ -1079,7 +1080,7 @@ namespace TinyWars.SingleCustomWar {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    war.setSettingsVisionRangeModifier(playerIndex, value);
+                                    BwWarRuleHelper.setVisionRangeModifier(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -1094,7 +1095,7 @@ namespace TinyWars.SingleCustomWar {
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsLuckLowerLimit(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
@@ -1116,12 +1117,13 @@ namespace TinyWars.SingleCustomWar {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    const upperLimit = war.getSettingsLuckUpperLimit(playerIndex);
+                                    const upperLimit    = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
+                                    const warRule       = war.getWarRule();
                                     if (value <= upperLimit) {
-                                        war.setSettingsLuckLowerLimit(playerIndex, value);
+                                        BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, value);
                                     } else {
-                                        war.setSettingsLuckUpperLimit(playerIndex, value);
-                                        war.setSettingsLuckLowerLimit(playerIndex, upperLimit);
+                                        BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, value);
+                                        BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, upperLimit);
                                     }
                                     this._updateView();
                                 }
@@ -1137,7 +1139,7 @@ namespace TinyWars.SingleCustomWar {
             menuPanel   : ScwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getSettingsLuckUpperLimit(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
@@ -1159,12 +1161,13 @@ namespace TinyWars.SingleCustomWar {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    const lowerLimit = war.getSettingsLuckLowerLimit(playerIndex);
+                                    const lowerLimit    = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
+                                    const warRule       = war.getWarRule();
                                     if (value >= lowerLimit) {
-                                        war.setSettingsLuckUpperLimit(playerIndex, value);
+                                        BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, value);
                                     } else {
-                                        war.setSettingsLuckLowerLimit(playerIndex, value);
-                                        war.setSettingsLuckUpperLimit(playerIndex, lowerLimit);
+                                        BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, value);
+                                        BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
                                     }
                                     this._updateView();
                                 }

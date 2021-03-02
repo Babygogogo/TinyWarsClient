@@ -890,6 +890,17 @@ namespace TinyWars.BaseWar.BwHelpers {
         }
     }
 
+    export function getPlayersCountUnneutral(playerManagerData: WarSerialization.ISerialPlayerManager | null | undefined): number {
+        const playerIndexSet = new Set<number>();
+        for (const playerData of playerManagerData ? playerManagerData.players || [] : []) {
+            const playerIndex = playerData.playerIndex;
+            if ((playerIndex != null) && (playerIndex >= CommonConstants.WarFirstPlayerIndex)) {
+                playerIndexSet.add(playerIndex);
+            }
+        }
+        return playerIndexSet.size;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Other validators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////

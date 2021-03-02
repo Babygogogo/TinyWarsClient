@@ -6,7 +6,7 @@ namespace TinyWars.MapEditor {
     import Notify           = Utility.Notify;
     import ConfigManager    = Utility.ConfigManager;
     import ProtoTypes       = Utility.ProtoTypes;
-    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import WarRule          = ProtoTypes.WarRule;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
@@ -101,7 +101,7 @@ namespace TinyWars.MapEditor {
                 });
             } else {
                 const openData = this._getOpenData<OpenDataForMeAvailableCoPanel>();
-                BwSettingsHelper.setAvailableCoIdList(openData.warRule, openData.playerRule.playerIndex, availableCoIdSet);
+                BwWarRuleHelper.setAvailableCoIdList(openData.warRule, openData.playerRule.playerIndex, availableCoIdSet);
                 Notify.dispatch(Notify.Type.MeAvailableCoChanged);
                 this.close();
             }

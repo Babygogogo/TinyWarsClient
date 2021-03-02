@@ -1,29 +1,29 @@
 
 namespace TinyWars.MapEditor.MeUtility {
-    import ProtoTypes               = Utility.ProtoTypes;
-    import Types                    = Utility.Types;
-    import Lang                     = Utility.Lang;
-    import Helpers                  = Utility.Helpers;
-    import ConfigManager            = Utility.ConfigManager;
-    import GridIndexHelpers         = Utility.GridIndexHelpers;
-    import BwSettingsHelper         = BaseWar.BwWarRuleHelper;
-    import BwHelpers                = BaseWar.BwHelpers;
-    import BwTile                   = BaseWar.BwTile;
-    import WarEventHelper           = WarEvent.WarEventHelper;
-    import GridIndex                = Types.GridIndex;
-    import TileObjectType           = Types.TileObjectType;
-    import TileBaseType             = Types.TileBaseType;
-    import SymmetryType             = Types.SymmetryType;
-    import LanguageType             = Types.LanguageType;
-    import InvalidationType         = Types.CustomMapInvalidationType;
-    import IMapRawData              = ProtoTypes.Map.IMapRawData;
-    import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
-    import IWarRule                 = ProtoTypes.WarRule.IWarRule;
-    import WarSerialization         = ProtoTypes.WarSerialization;
-    import ISerialTile              = WarSerialization.ISerialTile;
-    import ISerialUnit              = WarSerialization.ISerialUnit;
-    import ISerialPlayer            = WarSerialization.ISerialPlayer;
-    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import Types                = Utility.Types;
+    import Lang                 = Utility.Lang;
+    import Helpers              = Utility.Helpers;
+    import ConfigManager        = Utility.ConfigManager;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import BwWarRuleHelper      = BaseWar.BwWarRuleHelper;
+    import BwHelpers            = BaseWar.BwHelpers;
+    import BwTile               = BaseWar.BwTile;
+    import WarEventHelper       = WarEvent.WarEventHelper;
+    import GridIndex            = Types.GridIndex;
+    import TileObjectType       = Types.TileObjectType;
+    import TileBaseType         = Types.TileBaseType;
+    import SymmetryType         = Types.SymmetryType;
+    import LanguageType         = Types.LanguageType;
+    import InvalidationType     = Types.CustomMapInvalidationType;
+    import IMapRawData          = ProtoTypes.Map.IMapRawData;
+    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
+    import IWarRule             = ProtoTypes.WarRule.IWarRule;
+    import WarSerialization     = ProtoTypes.WarSerialization;
+    import ISerialTile          = WarSerialization.ISerialTile;
+    import ISerialUnit          = WarSerialization.ISerialUnit;
+    import ISerialPlayer        = WarSerialization.ISerialPlayer;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     export type AsymmetricalCounters = {
         UpToDown            : number | null;
@@ -81,15 +81,15 @@ namespace TinyWars.MapEditor.MeUtility {
         const mapRawData        = data.mapRawData;
         const warRuleArray      = mapRawData.warRuleArray;
         const unitDataArray     = mapRawData.unitDataArray || [];
-        const warRule           = (warRuleArray ? warRuleArray[0] : null) || BwSettingsHelper.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
+        const warRule           = (warRuleArray ? warRuleArray[0] : null) || BwWarRuleHelper.createDefaultWarRule(0, CommonConstants.WarMaxPlayerIndex);
         const ruleForPlayers    = warRule.ruleForPlayers;
         if (ruleForPlayers.playerRuleDataArray == null) {
-            ruleForPlayers.playerRuleDataArray = BwSettingsHelper.createDefaultPlayerRuleList(CommonConstants.WarMaxPlayerIndex);
+            ruleForPlayers.playerRuleDataArray = BwWarRuleHelper.createDefaultPlayerRuleList(CommonConstants.WarMaxPlayerIndex);
         } else {
             const playerRules = ruleForPlayers.playerRuleDataArray;
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= CommonConstants.WarMaxPlayerIndex; ++playerIndex) {
                 if (playerRules.find(v => v.playerIndex === playerIndex) == null) {
-                    playerRules.push(BwSettingsHelper.createDefaultPlayerRule(playerIndex));
+                    playerRules.push(BwWarRuleHelper.createDefaultPlayerRule(playerIndex));
                 }
             }
         }
@@ -434,8 +434,8 @@ namespace TinyWars.MapEditor.MeUtility {
             }
             ruleIdSet.add(ruleId);
 
-            if ((!BwSettingsHelper.checkIsValidWarRule(rule, warEventData)) ||
-                (BwSettingsHelper.getPlayersCount(rule) !== playersCount)
+            if ((!BwWarRuleHelper.checkIsValidWarRule(rule, warEventData)) ||
+                (BwWarRuleHelper.getPlayersCount(rule) !== playersCount)
             ) {
                 return false;
             }
