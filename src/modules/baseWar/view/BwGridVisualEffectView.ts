@@ -21,8 +21,8 @@ namespace TinyWars.BaseWar {
     const SKILL_ACTIVATION_OFFSET_X = - (336 -_GRID_WIDTH) / 2;
     const SKILL_ACTIVATION_OFFSET_Y = - (336 -_GRID_HEIGHT) / 2;
 
-    export abstract class BwGridVisionEffectView extends egret.DisplayObjectContainer {
-        private _gridVisionEffect: BwGridVisionEffect;
+    export class BwGridVisualEffectView extends egret.DisplayObjectContainer {
+        private _gridVisionEffect: BwGridVisualEffect;
 
         private _layerForBlock              = new egret.DisplayObjectContainer();
         private _layerForDive               = new egret.DisplayObjectContainer();
@@ -48,10 +48,10 @@ namespace TinyWars.BaseWar {
             this.addChild(this._layerForSkillActivation);
         }
 
-        public init(gridVisionEffect: BwGridVisionEffect): void {
+        public init(gridVisionEffect: BwGridVisualEffect): void {
             this._gridVisionEffect = gridVisionEffect;
         }
-        public fastInit(gridVisionEffect: BwGridVisionEffect): void {
+        public fastInit(gridVisionEffect: BwGridVisualEffect): void {
             this._gridVisionEffect = gridVisionEffect;
         }
 

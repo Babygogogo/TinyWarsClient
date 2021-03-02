@@ -13,9 +13,6 @@ namespace TinyWars.SingleCustomWar {
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return ScwActionPlanner;
         }
-        protected _getGridVisionEffectClass(): new () => BaseWar.BwGridVisionEffect {
-            return ScwGridVisionEffect;
-        }
         protected _getViewClass(): new () => BaseWar.BwFieldView {
             return ScwFieldView;
         }

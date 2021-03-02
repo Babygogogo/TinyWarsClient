@@ -13,9 +13,6 @@ namespace TinyWars.ReplayWar {
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return RwActionPlanner;
         }
-        protected _getGridVisionEffectClass(): new () => BaseWar.BwGridVisionEffect {
-            return RwGridVisionEffect;
-        }
         protected _getViewClass(): new () => BaseWar.BwFieldView {
             return RwFieldView;
         }

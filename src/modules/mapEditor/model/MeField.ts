@@ -13,9 +13,6 @@ namespace TinyWars.MapEditor {
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return MeActionPlanner;
         }
-        protected _getGridVisionEffectClass(): new () => BaseWar.BwGridVisionEffect {
-            return MeGridVisionEffect;
-        }
         protected _getViewClass(): new () => BaseWar.BwFieldView {
             return MeFieldView;
         }

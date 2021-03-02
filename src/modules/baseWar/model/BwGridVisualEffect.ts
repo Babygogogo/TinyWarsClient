@@ -4,8 +4,8 @@ namespace TinyWars.BaseWar {
     import Types        = Utility.Types;
     import GridIndex    = Types.GridIndex;
 
-    export abstract class BwGridVisionEffect {
-        private _view: BwGridVisionEffectView;
+    export class BwGridVisualEffect {
+        private readonly _view = new BwGridVisualEffectView();
 
         private _war: BwWar;
 
@@ -19,17 +19,16 @@ namespace TinyWars.BaseWar {
             { type: Notify.Type.BwSiloExploded,     callback: this._onNotifyBwSiloExploded },
         ];
 
-        public init(): BwGridVisionEffect {
-            this._view = this._view || new (this._getViewClass());
-            this._view.init(this);
+        public init(): BwGridVisualEffect {
+            this.getView().init(this);
 
             return this;
         }
-        public fastInit(): BwGridVisionEffect {
+        public fastInit(): BwGridVisualEffect {
             this.getView().fastInit(this);
+
             return this;
         }
-        protected abstract _getViewClass(): new () => BwGridVisionEffectView;
 
         public startRunning(war: BwWar): void {
             Notify.addEventListeners(this._notifyListeners, this, undefined, 1);
@@ -45,7 +44,7 @@ namespace TinyWars.BaseWar {
             this.getView().stopRunningView();
         }
 
-        public getView(): BwGridVisionEffectView {
+        public getView(): BwGridVisualEffectView {
             return this._view;
         }
 

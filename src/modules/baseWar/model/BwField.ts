@@ -7,19 +7,18 @@ namespace TinyWars.BaseWar {
     import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
 
     export abstract class BwField {
-        private _unitMap            : BwUnitMap;
-        private _tileMap            : BwTileMap;
-        private _fogMap             : BwFogMap;
-        private readonly _cursor    = new BwCursor();
-        private _actionPlanner      : BwActionPlanner;
-        private _gridVisionEffect   : BwGridVisionEffect;
-        private _view               : BwFieldView;
+        private _unitMap                    : BwUnitMap;
+        private _tileMap                    : BwTileMap;
+        private _fogMap                     : BwFogMap;
+        private readonly _cursor            = new BwCursor();
+        private _actionPlanner              : BwActionPlanner;
+        private readonly _gridVisualEffect  = new BwGridVisualEffect();
+        private _view                       : BwFieldView;
 
         protected abstract _getFogMapClass(): new () => BwFogMap;
         protected abstract _getTileMapClass(): new () => BwTileMap;
         protected abstract _getUnitMapClass(): new () => BwUnitMap;
         protected abstract _getActionPlannerClass(): new () => BwActionPlanner;
-        protected abstract _getGridVisionEffectClass(): new () => BwGridVisionEffect;
         protected abstract _getViewClass(): new () => BwFieldView;
 
         public async init(
@@ -190,19 +189,14 @@ namespace TinyWars.BaseWar {
             return this._actionPlanner;
         }
 
-        private async _initGridVisionEffect(): Promise<void> {
-            const effect = this.getGridVisionEffect() || new (this._getGridVisionEffectClass())();
-            await effect.init();
-            this._setGridVisionEffect(effect);
+        private _initGridVisionEffect(): void {
+            this.getGridVisionEffect().init();
         }
-        private async _fastInitGridVisionEffect(): Promise<void> {
-            await this.getGridVisionEffect().fastInit();
+        private _fastInitGridVisionEffect(): void {
+            this.getGridVisionEffect().fastInit();
         }
-        private _setGridVisionEffect(gridVisionEffect: BwGridVisionEffect): void {
-            this._gridVisionEffect = gridVisionEffect;
-        }
-        public getGridVisionEffect(): BwGridVisionEffect {
-            return this._gridVisionEffect;
+        public getGridVisionEffect(): BwGridVisualEffect {
+            return this._gridVisualEffect;
         }
     }
 }

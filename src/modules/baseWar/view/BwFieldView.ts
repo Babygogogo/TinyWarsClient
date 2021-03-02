@@ -6,7 +6,7 @@ namespace TinyWars.BaseWar {
         private _actionPlannerView      : BwActionPlannerView;
         private _unitMapView            : BwUnitMapView;
         private _cursorView             : BwCursorView;
-        private _gridVisionEffectView   : BwGridVisionEffectView;
+        private _gridVisionEffectView   : BwGridVisualEffectView;
 
         public init(field: BwField): void {
             if (!this._field) {

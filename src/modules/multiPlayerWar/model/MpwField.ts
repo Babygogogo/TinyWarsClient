@@ -13,9 +13,6 @@ namespace TinyWars.MultiPlayerWar {
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return MpwActionPlanner;
         }
-        protected _getGridVisionEffectClass(): new () => BaseWar.BwGridVisionEffect {
-            return MpwGridVisionEffect;
-        }
         protected _getViewClass(): new () => BaseWar.BwFieldView {
             return McwFieldView;
         }

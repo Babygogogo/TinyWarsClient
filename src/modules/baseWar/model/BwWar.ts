@@ -285,7 +285,7 @@ namespace TinyWars.BaseWar {
         public getActionPlanner(): BwActionPlanner {
             return this.getField().getActionPlanner();
         }
-        public getGridVisionEffect(): BwGridVisionEffect {
+        public getGridVisionEffect(): BwGridVisualEffect {
             return this.getField().getGridVisionEffect();
         }
 
