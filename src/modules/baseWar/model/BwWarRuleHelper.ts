@@ -940,12 +940,18 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
             return undefined;
         }
 
-        const coIdList = (warRule.ruleForPlayers?.playerRuleDataArray?.find(v => v.playerIndex === playerIndex)?.availableCoIdArray);
+        const ruleForPlayers        = warRule.ruleForPlayers;
+        const playerRuleDataArray   = ruleForPlayers ? ruleForPlayers.playerRuleDataArray : undefined;
+        const playerRule            = (playerRuleDataArray || []).find(v => v.playerIndex === playerIndex);
+        const coIdList              = playerRule ? playerRule.availableCoIdArray : undefined;
         if ((coIdList == null) || (!coIdList.length)) {
             Logger.error(`BwHelpers.getAvailableCoIdListByWarRule() empty coIdList.`);
             return undefined;
         }
 
-        return coIdList.filter(coId => !!ConfigManager.getCoBasicCfg(configVersion, coId)?.isEnabled);
+        return coIdList.filter(coId => {
+            const config = ConfigManager.getCoBasicCfg(configVersion, coId);
+            return config ? (!!config.isEnabled) : false;
+        });
     }
 }

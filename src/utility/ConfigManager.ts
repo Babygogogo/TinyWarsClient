@@ -883,31 +883,37 @@ namespace TinyWars.Utility.ConfigManager {
             return undefined;
         }
 
-        const configBin = await RES.getResByUrl(
-            `resource/config/FullConfig${version}.bin`,
-            undefined,
-            undefined,
-            RES.ResourceItem.TYPE_BIN
-        );
-        const data = configBin ? Utility.ProtoManager.decodeAsFullConfig(configBin) : undefined;
-        if (data == null) {
+        let configBin: any;
+        let rawConfig: ProtoTypes.Config.IFullConfig;
+        try {
+            configBin = await RES.getResByUrl(
+                `resource/config/FullConfig${version}.bin`,
+                undefined,
+                undefined,
+                RES.ResourceItem.TYPE_BIN
+            );
+            rawConfig = configBin ? Utility.ProtoManager.decodeAsFullConfig(configBin) : undefined;
+        } catch (e) {
+        }
+
+        if (rawConfig == null) {
             _INVALID_CONFIGS.add(version);
             return undefined;
         }
 
-        const unitPromotionCfg  = _destructUnitPromotionCfg(data.UnitPromotion);
-        const damageChartCfg    = _destructDamageChartCfg(data.DamageChart);
+        const unitPromotionCfg  = _destructUnitPromotionCfg(rawConfig.UnitPromotion);
+        const damageChartCfg    = _destructDamageChartCfg(rawConfig.DamageChart);
         const fullCfg           : ExtendedFullConfig = {
-            TileCategory        : _destructTileCategoryCfg(data.TileCategory),
-            UnitCategory        : _destructUnitCategoryCfg(data.UnitCategory),
-            TileTemplate        : _destructTileTemplateCfg(data.TileTemplate),
-            UnitTemplate        : _destructUnitTemplateCfg(data.UnitTemplate),
-            MoveCost            : _destructMoveCostCfg(data.MoveCost),
-            VisionBonus         : _destructVisionBonusCfg(data.VisionBonus),
-            BuildableTile       : _destructBuildableTileCfg(data.BuildableTile),
-            PlayerRank          : _destructPlayerRankCfg(data.PlayerRank),
-            CoBasic             : _destructCoBasicCfg(data.CoBasic),
-            CoSkill             : _destructCoSkillCfg(data.CoSkill),
+            TileCategory        : _destructTileCategoryCfg(rawConfig.TileCategory),
+            UnitCategory        : _destructUnitCategoryCfg(rawConfig.UnitCategory),
+            TileTemplate        : _destructTileTemplateCfg(rawConfig.TileTemplate),
+            UnitTemplate        : _destructUnitTemplateCfg(rawConfig.UnitTemplate),
+            MoveCost            : _destructMoveCostCfg(rawConfig.MoveCost),
+            VisionBonus         : _destructVisionBonusCfg(rawConfig.VisionBonus),
+            BuildableTile       : _destructBuildableTileCfg(rawConfig.BuildableTile),
+            PlayerRank          : _destructPlayerRankCfg(rawConfig.PlayerRank),
+            CoBasic             : _destructCoBasicCfg(rawConfig.CoBasic),
+            CoSkill             : _destructCoSkillCfg(rawConfig.CoSkill),
             DamageChart         : damageChartCfg,
             UnitPromotion       : unitPromotionCfg,
             maxUnitPromotion    : _getMaxUnitPromotion(unitPromotionCfg),
