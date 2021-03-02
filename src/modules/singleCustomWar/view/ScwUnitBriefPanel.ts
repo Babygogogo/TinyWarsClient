@@ -23,7 +23,7 @@ namespace TinyWars.SingleCustomWar {
         private _war        : ScwWar;
         private _cursor     : BaseWar.BwCursor;
         private _unitMap    : ScwUnitMap;
-        private _unitList   : ScwUnit[] = [];
+        private _unitList   : BaseWar.BwUnit[] = [];
         private _isLeftSide = true;
 
         public static show(): void {
@@ -147,7 +147,7 @@ namespace TinyWars.SingleCustomWar {
                 unitList.length = 0;
 
                 const gridIndex     = this._cursor.getGridIndex();
-                const unitOnMap     = this._unitMap.getUnitOnMap(gridIndex) as ScwUnit;
+                const unitOnMap     = this._unitMap.getUnitOnMap(gridIndex);
                 const war           = this._war;
                 const teamIndexes   = (war.getPlayerManager() as ScwPlayerManager).getAliveWatcherTeamIndexesForSelf();
 
@@ -167,7 +167,7 @@ namespace TinyWars.SingleCustomWar {
                         (teamIndexes.has(unitOnMap.getTeamIndex()))
                     ) {
                         for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
-                            unitList.push(loadedUnit as ScwUnit);
+                            unitList.push(loadedUnit);
                         }
                     }
                 }
@@ -249,7 +249,7 @@ namespace TinyWars.SingleCustomWar {
         private _imgState       : GameUi.UiImage;
         private _unitView       : BaseWar.BwUnitView;
 
-        private _unit               : ScwUnit;
+        private _unit               : BaseWar.BwUnit;
         private _isChildrenCreated  = false;
 
         public constructor() {
@@ -270,7 +270,7 @@ namespace TinyWars.SingleCustomWar {
             this._updateView();
         }
 
-        public setUnit(unit: ScwUnit): void {
+        public setUnit(unit: BaseWar.BwUnit): void {
             this._unit = unit;
             this._updateView();
         }

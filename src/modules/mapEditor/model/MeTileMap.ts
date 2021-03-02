@@ -4,8 +4,5 @@ namespace TinyWars.MapEditor {
         protected _getBwTileClass(): new () => BaseWar.BwTile {
             return MeTile;
         }
-        protected _getViewClass(): new () => BaseWar.BwTileMapView {
-            return MeTileMapView;
-        }
     }
 }

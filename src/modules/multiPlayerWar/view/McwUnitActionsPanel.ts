@@ -89,12 +89,11 @@ namespace TinyWars.MultiPlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             const war           = MpwModel.getWar();
-            const unitClass     = war.getUnitMap().getUnitClass();
             const dataForList   = [] as DataForUnitActionRenderer[];
             for (const data of this._getOpenData<OpenDataForMcwUnitActionsPanel>().actionList) {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
-                    : new unitClass().init({
+                    : new BaseWar.BwUnit().init({
                         gridIndex   : { x: -1, y: -1 },
                         unitId      : -1,
                         unitType    : data.produceUnitType,

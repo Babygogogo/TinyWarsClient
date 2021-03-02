@@ -4,8 +4,5 @@ namespace TinyWars.MultiPlayerWar {
         protected _getBwTileClass(): new () => BaseWar.BwTile {
             return MpwTile;
         }
-        protected _getViewClass(): new () => BaseWar.BwTileMapView {
-            return McwTileMapView;
-        }
     }
 }

@@ -1,13 +1,6 @@
 
 namespace TinyWars.MapEditor {
     export class MeUnitMap extends BaseWar.BwUnitMap {
-        protected _getViewClass(): new () => BaseWar.BwUnitMapView {
-            return MeUnitMapView;
-        }
-        public getUnitClass(): new () => BaseWar.BwUnit {
-            return MeUnit;
-        }
-
         public reviseAllUnitIds(): void {
             const allUnits  = new Map<number, { unit: BaseWar.BwUnit, newUnitId: number }>();
             let nextUnitId  = 0;

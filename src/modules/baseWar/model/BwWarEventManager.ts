@@ -266,7 +266,7 @@ namespace TinyWars.BaseWar {
                 revisedUnitData.gridIndex   = gridIndex;
                 revisedUnitData.unitId      = unitId;
 
-                const unit = new (unitMap.getUnitClass())().init(revisedUnitData, configVersion);
+                const unit = new BaseWar.BwUnit().init(revisedUnitData, configVersion);
                 if (unit == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty unit.`);
                     continue;

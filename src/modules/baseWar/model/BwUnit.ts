@@ -20,7 +20,7 @@ namespace TinyWars.BaseWar {
     import Config               = ProtoTypes.Config;
     import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
-    export abstract class BwUnit {
+    export class BwUnit {
         private _configVersion      : string;
         private _templateCfg        : Config.IUnitTemplateCfg;
         private _damageChartCfg     : { [armorType: number]: { [weaponType: number]: Config.IDamageChartCfg } };

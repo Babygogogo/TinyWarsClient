@@ -94,12 +94,12 @@ namespace TinyWars.ReplayWar {
             for (const data of this._getOpenData<OpenDataForReplayUnitActionsPanel>().actionList) {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
-                    : (new (unitMap.getUnitClass())).init({
+                    : (new BaseWar.BwUnit()).init({
                         gridIndex   : { x: -1, y: -1 },
                         unitId      : -1,
                         unitType    : data.produceUnitType,
                         playerIndex : war.getPlayerIndexInTurn(),
-                    }, war.getConfigVersion()) as RwUnit;
+                    }, war.getConfigVersion());
                 if (unitForProduce) {
                     unitForProduce.startRunning(war);
                 }

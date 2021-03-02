@@ -22,7 +22,7 @@ namespace TinyWars.ReplayWar {
         private _war        : RwWar;
         private _cursor     : BaseWar.BwCursor;
         private _unitMap    : RwUnitMap;
-        private _unitList   : RwUnit[] = [];
+        private _unitList   : BaseWar.BwUnit[] = [];
         private _isLeftSide = true;
 
         public static show(): void {
@@ -146,11 +146,11 @@ namespace TinyWars.ReplayWar {
                 unitList.length = 0;
 
                 const gridIndex = this._cursor.getGridIndex();
-                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex) as RwUnit;
+                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex);
                 if (unitOnMap) {
                     unitList.push(unitOnMap);
 
-                    for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true) as RwUnit[]) {
+                    for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
                         unitList.push(loadedUnit);
                     }
                 }
@@ -232,7 +232,7 @@ namespace TinyWars.ReplayWar {
         private _imgState       : GameUi.UiImage;
         private _unitView       : BaseWar.BwUnitView;
 
-        private _unit               : RwUnit;
+        private _unit               : BaseWar.BwUnit;
         private _isChildrenCreated  = false;
 
         public constructor() {
@@ -253,7 +253,7 @@ namespace TinyWars.ReplayWar {
             this._updateView();
         }
 
-        public setUnit(unit: RwUnit): void {
+        public setUnit(unit: BaseWar.BwUnit): void {
             this._unit = unit;
             this._updateView();
         }

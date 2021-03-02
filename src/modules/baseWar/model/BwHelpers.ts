@@ -384,11 +384,9 @@ namespace TinyWars.BaseWar.BwHelpers {
         if ((unitsData) && (unitsData.length)) {
             const unitMap       = war.getUnitMap();
             const configVersion = war.getConfigVersion();
-            const unitClass     = unitMap.getUnitClass();
-
             for (const unitData of unitsData) {
                 if (!unitMap.getUnitById(unitData.unitId)) {
-                    const unit      = new unitClass().init(unitData, configVersion);
+                    const unit      = new BaseWar.BwUnit().init(unitData, configVersion);
                     const isOnMap   = unit.getLoaderUnitId() == null;
                     if (isOnMap) {
                         unitMap.setUnitOnMap(unit);

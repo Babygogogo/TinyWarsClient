@@ -20,10 +20,7 @@ namespace TinyWars.BaseWar {
         private _mapSize        : Types.MapSize;
         private _loadedUnits    : Map<number, BwUnit>;
 
-        private _view   : BwUnitMapView;
-
-        protected abstract _getViewClass(): new () => BwUnitMapView;
-        public abstract getUnitClass(): new () => BwUnit;
+        private readonly _view  = new BwUnitMapView();
 
         public init(
             data                    : ISerialUnitMap,
@@ -40,7 +37,7 @@ namespace TinyWars.BaseWar {
             const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
             const loadedUnits               = new Map<number, BwUnit>();
             for (const unitData of data.units || []) {
-                const unit = new (this.getUnitClass())().init(unitData, configVersion);
+                const unit = new BwUnit().init(unitData, configVersion);
                 if (!unit) {
                     Logger.error(`BwUnitMap.init() failed to create a unit! unitData: ${JSON.stringify(unitData)}`);
                     return undefined;
@@ -70,9 +67,7 @@ namespace TinyWars.BaseWar {
             this._setMapSize(mapWidth, mapHeight);
             this.setNextUnitId(nextUnitId);
 
-            const view = this.getView() || new (this._getViewClass())();
-            view.init(this);
-            this._setView(view);
+            this.getView().init(this);
 
             return this;
         }
@@ -158,9 +153,6 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _setView(view: BwUnitMapView): void {
-            this._view = view;
-        }
         public getView(): BwUnitMapView {
             return this._view;
         }

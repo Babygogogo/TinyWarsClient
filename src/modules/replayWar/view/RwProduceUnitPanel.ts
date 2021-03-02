@@ -142,12 +142,12 @@ namespace TinyWars.ReplayWar {
             const minNormalizedHp   = skillCfg ? BwHelpers.getNormalizedHp(skillCfg[3]) : BwHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
             for (const unitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
-                const unit = (new (unitMap.getUnitClass())).init({
+                const unit = (new BaseWar.BwUnit()).init({
                     gridIndex   : { x: -1, y: -1 },
                     unitId      : -1,
                     unitType,
                     playerIndex,
-                }, configVersion) as RwUnit;
+                }, configVersion);
                 unit.startRunning(war);
                 const cfgCost = Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
                 dataList.push({
@@ -174,7 +174,7 @@ namespace TinyWars.ReplayWar {
 
     type DataForUnitRenderer = {
         unitType                : UnitType;
-        unit                    : RwUnit;
+        unit                    : BaseWar.BwUnit;
         cfgCost                 : number;
         minCost                 : number;
         currentFund             : number;

@@ -145,7 +145,7 @@ namespace TinyWars.MultiPlayerWar {
                 if (unit.getPlayerIndex() === playerIndex) {
                     dataList.push({
                         cursor  : this._cursor,
-                        unit    : unit as MpwUnit,
+                        unit    : unit,
                     });
                 }
             });
@@ -174,7 +174,7 @@ namespace TinyWars.MultiPlayerWar {
     const _IMAGE_SOURCE_FLARE       = `c03_t99_s02_f02`;
 
     type DataForUnitRenderer = {
-        unit    : MpwUnit;
+        unit    : BaseWar.BwUnit;
         cursor  : BaseWar.BwCursor;
     }
 

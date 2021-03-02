@@ -124,17 +124,17 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
-            const datas         = [] as DataForUnitRenderer[];
+            const dataArray     = [] as DataForUnitRenderer[];
             const playerIndex   = this._playerIndex;
             this._unitMap.forEachUnit(unit => {
                 if (unit.getPlayerIndex() === playerIndex) {
-                    datas.push({
+                    dataArray.push({
                         cursor  : this._cursor,
-                        unit    : unit as ScwUnit,
+                        unit    : unit,
                     });
                 }
             });
-            return datas.sort(sorterForDataForList);
+            return dataArray.sort(sorterForDataForList);
         }
     }
 
@@ -159,7 +159,7 @@ namespace TinyWars.SingleCustomWar {
     const _IMAGE_SOURCE_FLARE       = `c03_t99_s02_f02`;
 
     type DataForUnitRenderer = {
-        unit    : ScwUnit;
+        unit    : BaseWar.BwUnit;
         cursor  : BaseWar.BwCursor;
     }
 

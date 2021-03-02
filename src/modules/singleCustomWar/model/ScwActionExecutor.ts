@@ -158,7 +158,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
         const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
         const cost          = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * BwHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
-        const unit          = (new (unitMap.getUnitClass())).init({
+        const unit          = (new BaseWar.BwUnit()).init({
             gridIndex,
             playerIndex,
             unitType,
@@ -641,9 +641,9 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
         const shouldUpdateFogMap    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(focusUnit.getTeamIndex());
         const fogMap                = war.getFogMap();
-        const unitsForDrop          = [] as ScwUnit[];
+        const unitsForDrop          = [] as BaseWar.BwUnit[];
         for (const { unitId, gridIndex } of (action.dropDestinations || []) as Types.DropDestination[]) {
-            const unitForDrop = unitMap.getUnitLoadedById(unitId) as ScwUnit;
+            const unitForDrop = unitMap.getUnitLoadedById(unitId);
             unitMap.setUnitUnloaded(unitId, gridIndex);
             for (const unit of unitMap.getUnitsLoadedByLoader(unitForDrop, true)) {
                 unit.setGridIndex(gridIndex);
@@ -834,9 +834,9 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             });
 
             const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, Utility.ConfigManager.SILO_RADIUS, unitMap.getMapSize());
-            const targetUnits   = [] as ScwUnit[];
+            const targetUnits   = [] as BaseWar.BwUnit[];
             for (const grid of targetGrids) {
-                const unit = unitMap.getUnitOnMap(grid) as ScwUnit;
+                const unit = unitMap.getUnitOnMap(grid);
                 if (unit) {
                     targetUnits.push(unit);
                     unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - Utility.ConfigManager.SILO_DAMAGE));
@@ -922,7 +922,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         } else {
             const gridIndex         = focusUnit.getGridIndex();
             const producedUnitId    = unitMap.getNextUnitId();
-            const producedUnit      = (new (unitMap.getUnitClass())).init({
+            const producedUnit      = (new BaseWar.BwUnit()).init({
                 gridIndex,
                 playerIndex : focusUnit.getPlayerIndex(),
                 unitType    : focusUnit.getProduceUnitType(),
@@ -967,10 +967,10 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             actionPlanner.setStateIdle();
 
         } else {
-            const suppliedUnits = [] as ScwUnit[];
+            const suppliedUnits = [] as BaseWar.BwUnit[];
             const playerIndex   = focusUnit.getPlayerIndex();
             for (const gridIndex of GridIndexHelpers.getAdjacentGrids(pathNodes[pathNodes.length - 1], unitMap.getMapSize())) {
-                const unit = unitMap.getUnitOnMap(gridIndex) as ScwUnit;
+                const unit = unitMap.getUnitOnMap(gridIndex);
                 if ((unit) && (unit !== focusUnit) && (unit.getPlayerIndex() === playerIndex) && (unit.checkCanBeSupplied())) {
                     const maxFlareAmmo          = unit.getFlareMaxAmmo();
                     const maxPrimaryWeaponAmmo  = unit.getPrimaryWeaponMaxAmmo();

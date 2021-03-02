@@ -130,7 +130,7 @@ namespace TinyWars.ReplayWar {
                 if (unit.getPlayerIndex() === playerIndex) {
                     datas.push({
                         cursor  : this._cursor,
-                        unit    : unit as RwUnit,
+                        unit    : unit,
                     });
                 }
             });
@@ -159,7 +159,7 @@ namespace TinyWars.ReplayWar {
     const _IMAGE_SOURCE_FLARE       = `c03_t99_s02_f02`;
 
     type DataForUnitRenderer = {
-        unit    : RwUnit;
+        unit    : BaseWar.BwUnit;
         cursor  : BaseWar.BwCursor;
     }
 

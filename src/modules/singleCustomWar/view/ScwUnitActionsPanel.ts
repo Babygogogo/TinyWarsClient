@@ -94,7 +94,7 @@ namespace TinyWars.SingleCustomWar {
             for (const data of this._getOpenData<OpenDataForScwUnitActionsPanel>().actionList) {
                 const unitForProduce = data.produceUnitType == null
                     ? undefined
-                    : (new (unitMap.getUnitClass())).init({
+                    : (new BaseWar.BwUnit()).init({
                         gridIndex   : { x: -1, y: -1 },
                         unitId      : -1,
                         unitType    : data.produceUnitType,

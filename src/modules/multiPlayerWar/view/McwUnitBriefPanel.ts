@@ -22,7 +22,7 @@ namespace TinyWars.MultiPlayerWar {
         private _war        : MpwWar;
         private _cursor     : BaseWar.BwCursor;
         private _unitMap    : MpwUnitMap;
-        private _unitList   : MpwUnit[] = [];
+        private _unitList   : BaseWar.BwUnit[] = [];
         private _isLeftSide = true;
 
         public static show(): void {
@@ -146,7 +146,7 @@ namespace TinyWars.MultiPlayerWar {
                 unitList.length = 0;
 
                 const gridIndex = this._cursor.getGridIndex();
-                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex) as MpwUnit;
+                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex);
                 if (unitOnMap) {
                     unitList.push(unitOnMap);
 
@@ -155,7 +155,7 @@ namespace TinyWars.MultiPlayerWar {
                         (war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(unitOnMap.getTeamIndex()))
                     ) {
                         for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
-                            unitList.push(loadedUnit as MpwUnit);
+                            unitList.push(loadedUnit);
                         }
                     }
                 }
@@ -237,7 +237,7 @@ namespace TinyWars.MultiPlayerWar {
         private _imgState       : GameUi.UiImage;
         private _unitView       : BaseWar.BwUnitView;
 
-        private _unit               : MpwUnit;
+        private _unit               : BaseWar.BwUnit;
         private _isChildrenCreated  = false;
 
         public constructor() {
@@ -258,7 +258,7 @@ namespace TinyWars.MultiPlayerWar {
             this._updateView();
         }
 
-        public setUnit(unit: MpwUnit): void {
+        public setUnit(unit: BaseWar.BwUnit): void {
             this._unit = unit;
             this._updateView();
         }

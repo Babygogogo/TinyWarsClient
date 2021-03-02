@@ -786,7 +786,7 @@ namespace TinyWars.MapEditor {
             this._labelNum.text    = "" + data.count;
 
             const war   = MeModel.getWar();
-            const unit  = new MeUnit().init({
+            const unit  = new BaseWar.BwUnit().init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : dataForDrawUnit.unitType,

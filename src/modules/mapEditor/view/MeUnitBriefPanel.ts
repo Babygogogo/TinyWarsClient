@@ -23,7 +23,7 @@ namespace TinyWars.MapEditor {
         private _war        : MeWar;
         private _cursor     : BaseWar.BwCursor;
         private _unitMap    : MeUnitMap;
-        private _unitList   : MeUnit[] = [];
+        private _unitList   : BaseWar.BwUnit[] = [];
         private _isLeftSide = true;
 
         public static show(): void {
@@ -146,13 +146,13 @@ namespace TinyWars.MapEditor {
                 unitList.length = 0;
 
                 const gridIndex = this._cursor.getGridIndex();
-                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex) as MeUnit;
+                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex);
                 if (unitOnMap) {
                     unitList.push(unitOnMap);
 
                     const war = this._war;
                     for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
-                        unitList.push(loadedUnit as MeUnit);
+                        unitList.push(loadedUnit);
                     }
                 }
 
@@ -233,7 +233,7 @@ namespace TinyWars.MapEditor {
         private _imgState       : GameUi.UiImage;
         private _unitView       : BaseWar.BwUnitView;
 
-        private _unit               : MeUnit;
+        private _unit               : BaseWar.BwUnit;
         private _isChildrenCreated  = false;
 
         public constructor() {
@@ -254,7 +254,7 @@ namespace TinyWars.MapEditor {
             this._updateView();
         }
 
-        public setUnit(unit: MeUnit): void {
+        public setUnit(unit: BaseWar.BwUnit): void {
             this._unit = unit;
             this._updateView();
         }

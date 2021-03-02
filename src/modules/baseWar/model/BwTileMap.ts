@@ -15,10 +15,9 @@ namespace TinyWars.BaseWar {
         private _mapSize    : MapSize;
         private _war        : BwWar;
 
-        private _view   : BwTileMapView;
+        private readonly _view  = new BwTileMapView();
 
         protected abstract _getBwTileClass(): new () => BwTile;
-        protected abstract _getViewClass(): new () => BwTileMapView;
 
         public init(
             data                    : ISerialTileMap,
@@ -61,9 +60,7 @@ namespace TinyWars.BaseWar {
             this._setMap(map);
             this._setMapSize(mapWidth, mapHeight);
 
-            const view = this.getView() || new (this._getViewClass())();
-            view.init(this);
-            this._setView(view);
+            this.getView().init(this);
 
             return this;
         }
@@ -169,9 +166,6 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _setView(view: BwTileMapView): void {
-            this._view = view;
-        }
         public getView(): BwTileMapView {
             return this._view;
         }

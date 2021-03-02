@@ -137,14 +137,13 @@ namespace TinyWars.MultiPlayerWar {
             const configVersion     = war.getConfigVersion();
             const actionPlanner     = war.getActionPlanner() as MpwActionPlanner;
             const gridIndex         = this._getOpenData<OpenDataForMcwProduceUnitPanel>().gridIndex;
-            const unitClass         = war.getUnitMap().getUnitClass();
             const tile              = war.getTileMap().getTile(gridIndex);
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
             const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();
             const minNormalizedHp   = skillCfg ? BwHelpers.getNormalizedHp(skillCfg[3]) : BwHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
             for (const unitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
-                const unit = new unitClass().init({
+                const unit = new BaseWar.BwUnit().init({
                     gridIndex   : { x: -1, y: -1 },
                     unitId      : -1,
                     unitType,

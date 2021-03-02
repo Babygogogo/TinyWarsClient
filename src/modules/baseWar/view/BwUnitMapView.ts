@@ -8,10 +8,10 @@ namespace TinyWars.BaseWar {
 
     const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
 
-    export abstract class BwUnitMapView extends egret.DisplayObjectContainer {
-        private _layerForNaval  = new egret.DisplayObjectContainer();
-        private _layerForGround = new egret.DisplayObjectContainer();
-        private _layerForAir    = new egret.DisplayObjectContainer();
+    export class BwUnitMapView extends egret.DisplayObjectContainer {
+        private readonly _layerForNaval     = new egret.DisplayObjectContainer();
+        private readonly _layerForGround    = new egret.DisplayObjectContainer();
+        private readonly _layerForAir       = new egret.DisplayObjectContainer();
 
         private _unitMap        : BwUnitMap;
         private _actionPlanner  : BwActionPlanner;

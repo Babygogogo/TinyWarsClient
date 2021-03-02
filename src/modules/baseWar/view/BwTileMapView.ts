@@ -9,12 +9,12 @@ namespace TinyWars.BaseWar {
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
 
-    export abstract class BwTileMapView extends egret.DisplayObjectContainer {
-        private _tileViews          = new Array<BwTileView>();
-        private _baseLayer          = new egret.DisplayObjectContainer();
-        private _objectLayer        = new egret.DisplayObjectContainer();
-        private _coZoneContainer    = new egret.DisplayObjectContainer();
-        private _coZoneImageDict    = new Map<number, GameUi.UiImage[][]>();
+    export class BwTileMapView extends egret.DisplayObjectContainer {
+        private readonly _tileViews         = new Array<BwTileView>();
+        private readonly _baseLayer         = new egret.DisplayObjectContainer();
+        private readonly _objectLayer       = new egret.DisplayObjectContainer();
+        private readonly _coZoneContainer   = new egret.DisplayObjectContainer();
+        private readonly _coZoneImageDict   = new Map<number, GameUi.UiImage[][]>();
 
         private _tileMap            : BwTileMap;
 

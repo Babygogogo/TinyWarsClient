@@ -4,8 +4,5 @@ namespace TinyWars.SingleCustomWar {
         protected _getBwTileClass(): new () => BaseWar.BwTile {
             return ScwTile;
         }
-        protected _getViewClass(): new () => BaseWar.BwTileMapView {
-            return ScwTileMapView;
-        }
     }
 }
