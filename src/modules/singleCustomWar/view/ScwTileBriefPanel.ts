@@ -34,7 +34,7 @@ namespace TinyWars.SingleCustomWar {
         private _imgState       : GameUi.UiImage;
 
         private _war        : ScwWar;
-        private _cursor     : ScwCursor;
+        private _cursor     : BaseWar.BwCursor;
         private _tileMap    : ScwTileMap;
 
         public static show(): void {
@@ -82,7 +82,7 @@ namespace TinyWars.SingleCustomWar {
 
             this._war       = ScwModel.getWar();
             this._tileMap   = this._war.getTileMap() as ScwTileMap;
-            this._cursor    = this._war.getField().getCursor() as ScwCursor;
+            this._cursor    = this._war.getField().getCursor();
 
             this._updateView();
         }

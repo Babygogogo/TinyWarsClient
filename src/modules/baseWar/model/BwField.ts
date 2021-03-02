@@ -10,7 +10,7 @@ namespace TinyWars.BaseWar {
         private _unitMap            : BwUnitMap;
         private _tileMap            : BwTileMap;
         private _fogMap             : BwFogMap;
-        private _cursor             : BwCursor;
+        private readonly _cursor    = new BwCursor();
         private _actionPlanner      : BwActionPlanner;
         private _gridVisionEffect   : BwGridVisionEffect;
         private _view               : BwFieldView;
@@ -18,7 +18,6 @@ namespace TinyWars.BaseWar {
         protected abstract _getFogMapClass(): new () => BwFogMap;
         protected abstract _getTileMapClass(): new () => BwTileMap;
         protected abstract _getUnitMapClass(): new () => BwUnitMap;
-        protected abstract _getCursorClass(): new () => BwCursor;
         protected abstract _getActionPlannerClass(): new () => BwActionPlanner;
         protected abstract _getGridVisionEffectClass(): new () => BwGridVisionEffect;
         protected abstract _getViewClass(): new () => BwFieldView;
@@ -167,15 +166,10 @@ namespace TinyWars.BaseWar {
         }
 
         private async _initCursor(mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex): Promise<void> {
-            const cursor = this.getCursor() || new (this._getCursorClass())();
-            await cursor.init(mapSizeAndMaxPlayerIndex);
-            this._setCursor(cursor);
+            await this.getCursor().init(mapSizeAndMaxPlayerIndex);
         }
         private async _fastInitCursor(mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex): Promise<void> {
             await this.getCursor().fastInit(mapSizeAndMaxPlayerIndex);
-        }
-        private _setCursor(cursor: BwCursor): void {
-            this._cursor = cursor;
         }
         public getCursor(): BwCursor {
             return this._cursor;

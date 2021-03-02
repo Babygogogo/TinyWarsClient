@@ -10,9 +10,6 @@ namespace TinyWars.MapEditor {
         protected _getUnitMapClass(): new () => BaseWar.BwUnitMap {
             return MeUnitMap;
         }
-        protected _getCursorClass(): new () => BaseWar.BwCursor {
-            return MeCursor;
-        }
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return MeActionPlanner;
         }

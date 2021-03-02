@@ -31,7 +31,7 @@ namespace TinyWars.MultiPlayerWar {
         private _imgState       : GameUi.UiImage;
 
         private _war        : MpwWar;
-        private _cursor     : MpwCursor;
+        private _cursor     : BaseWar.BwCursor;
         private _tileMap    : MpwTileMap;
 
         public static show(): void {
@@ -79,7 +79,7 @@ namespace TinyWars.MultiPlayerWar {
 
             this._war       = MpwModel.getWar();
             this._tileMap   = this._war.getTileMap() as MpwTileMap;
-            this._cursor    = this._war.getField().getCursor() as MpwCursor;
+            this._cursor    = this._war.getField().getCursor();
 
             this._updateView();
         }

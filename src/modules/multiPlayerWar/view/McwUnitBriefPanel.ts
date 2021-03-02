@@ -20,7 +20,7 @@ namespace TinyWars.MultiPlayerWar {
         private _cellList   : McwUnitBriefCell[] = [];
 
         private _war        : MpwWar;
-        private _cursor     : MpwCursor;
+        private _cursor     : BaseWar.BwCursor;
         private _unitMap    : MpwUnitMap;
         private _unitList   : MpwUnit[] = [];
         private _isLeftSide = true;
@@ -64,7 +64,7 @@ namespace TinyWars.MultiPlayerWar {
 
             this._war       = MpwModel.getWar();
             this._unitMap   = this._war.getUnitMap() as MpwUnitMap;
-            this._cursor    = this._war.getField().getCursor() as MpwCursor;
+            this._cursor    = this._war.getField().getCursor();
 
             this._updateView();
         }

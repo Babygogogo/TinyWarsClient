@@ -20,7 +20,7 @@ namespace TinyWars.ReplayWar {
         private _cellList   : McwUnitBriefCell[] = [];
 
         private _war        : RwWar;
-        private _cursor     : RwCursor;
+        private _cursor     : BaseWar.BwCursor;
         private _unitMap    : RwUnitMap;
         private _unitList   : RwUnit[] = [];
         private _isLeftSide = true;
@@ -64,7 +64,7 @@ namespace TinyWars.ReplayWar {
 
             this._war       = RwModel.getWar();
             this._unitMap   = this._war.getUnitMap() as RwUnitMap;
-            this._cursor    = this._war.getField().getCursor() as RwCursor;
+            this._cursor    = this._war.getField().getCursor();
 
             this._updateView();
         }

@@ -24,7 +24,7 @@ namespace TinyWars.MultiPlayerWar {
         private _btnSwitch      : GameUi.UiButton;
 
         private _war        : MpwWar;
-        private _cursor     : MpwCursor;
+        private _cursor     : BaseWar.BwCursor;
         private _unitMap    : MpwUnitMap;
         private _turnManager: MpwTurnManager;
         private _dataForList: DataForUnitRenderer[];
@@ -67,7 +67,7 @@ namespace TinyWars.MultiPlayerWar {
             this._war           = war;
             this._unitMap       = war.getUnitMap() as MpwUnitMap;
             this._turnManager   = war.getTurnManager() as MpwTurnManager;
-            this._cursor        = war.getField().getCursor() as MpwCursor;
+            this._cursor        = war.getField().getCursor();
             this._playerIndex   = war.getPlayerIndexLoggedIn() || this._turnManager.getNextPlayerIndex(0);
             this._updateView();
         }
@@ -175,7 +175,7 @@ namespace TinyWars.MultiPlayerWar {
 
     type DataForUnitRenderer = {
         unit    : MpwUnit;
-        cursor  : MpwCursor;
+        cursor  : BaseWar.BwCursor;
     }
 
     class UnitRenderer extends GameUi.UiListItemRenderer {

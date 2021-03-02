@@ -10,9 +10,6 @@ namespace TinyWars.ReplayWar {
         protected _getUnitMapClass(): new () => BaseWar.BwUnitMap {
             return RwUnitMap;
         }
-        protected _getCursorClass(): new () => BaseWar.BwCursor {
-            return RwCursor;
-        }
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return RwActionPlanner;
         }

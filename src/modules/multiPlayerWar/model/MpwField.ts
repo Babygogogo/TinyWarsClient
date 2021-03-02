@@ -10,9 +10,6 @@ namespace TinyWars.MultiPlayerWar {
         protected _getUnitMapClass(): new () => BaseWar.BwUnitMap {
             return MpwUnitMap;
         }
-        protected _getCursorClass(): new () => BaseWar.BwCursor {
-            return MpwCursor;
-        }
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return MpwActionPlanner;
         }

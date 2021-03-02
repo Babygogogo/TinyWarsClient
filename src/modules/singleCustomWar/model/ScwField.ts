@@ -10,9 +10,6 @@ namespace TinyWars.SingleCustomWar {
         protected _getUnitMapClass(): new () => BaseWar.BwUnitMap {
             return ScwUnitMap;
         }
-        protected _getCursorClass(): new () => BaseWar.BwCursor {
-            return ScwCursor;
-        }
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return ScwActionPlanner;
         }

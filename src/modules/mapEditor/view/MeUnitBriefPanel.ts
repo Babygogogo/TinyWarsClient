@@ -21,7 +21,7 @@ namespace TinyWars.MapEditor {
         private _cellList   : McwUnitBriefCell[] = [];
 
         private _war        : MeWar;
-        private _cursor     : MeCursor;
+        private _cursor     : BaseWar.BwCursor;
         private _unitMap    : MeUnitMap;
         private _unitList   : MeUnit[] = [];
         private _isLeftSide = true;
@@ -66,7 +66,7 @@ namespace TinyWars.MapEditor {
             const war       = MeModel.getWar();
             this._war       = war;
             this._unitMap   = war.getUnitMap() as MeUnitMap;
-            this._cursor    = war.getField().getCursor() as MeCursor;
+            this._cursor    = war.getField().getCursor();
 
             this._updateView();
         }

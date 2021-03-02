@@ -2,16 +2,15 @@
 namespace TinyWars.BaseWar {
     import Types        = Utility.Types;
     import Notify       = Utility.Notify;
-    import WarMapModel  = WarMap.WarMapModel;
     import GridIndex    = Types.GridIndex;
 
-    export abstract class BwCursor {
+    export class BwCursor {
         private _gridX              = 0;
         private _gridY              = 0;
         private _previousGridIndex  : GridIndex;
         private _mapSize            : Types.MapSize;
         private _isMovableByTouches = true;
-        private _view               : BwCursorView;
+        private readonly _view      = new BwCursorView();
 
         private _war    : BwWar;
 
@@ -21,14 +20,11 @@ namespace TinyWars.BaseWar {
             { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
-        protected abstract _getViewClass(): new () => BwCursorView;
-
         public async init(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwCursor> {
             this._setMapSize({ width: mapSizeAndMaxPlayerIndex.mapWidth, height: mapSizeAndMaxPlayerIndex.mapHeight });
             this.setGridIndex({ x: 0, y: 0 });
 
-            this._view = this._view || new (this._getViewClass())();
-            this._view.init(this);
+            this.getView().init(this);
 
             return this;
         }

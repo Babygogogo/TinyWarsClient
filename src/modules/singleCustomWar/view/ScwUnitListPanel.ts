@@ -21,7 +21,7 @@ namespace TinyWars.SingleCustomWar {
         private _btnSwitch  : GameUi.UiButton;
 
         private _war        : ScwWar;
-        private _cursor     : ScwCursor;
+        private _cursor     : BaseWar.BwCursor;
         private _unitMap    : ScwUnitMap;
         private _turnManager: ScwTurnManager;
         private _dataForList: DataForUnitRenderer[];
@@ -64,7 +64,7 @@ namespace TinyWars.SingleCustomWar {
             this._war           = war;
             this._unitMap       = war.getUnitMap() as ScwUnitMap;
             this._turnManager   = war.getTurnManager() as ScwTurnManager;
-            this._cursor        = war.getField().getCursor() as ScwCursor;
+            this._cursor        = war.getField().getCursor();
             this._playerIndex   = this._war.getPlayerIndexInTurn();
             this._updateView();
         }
@@ -160,7 +160,7 @@ namespace TinyWars.SingleCustomWar {
 
     type DataForUnitRenderer = {
         unit    : ScwUnit;
-        cursor  : ScwCursor;
+        cursor  : BaseWar.BwCursor;
     }
 
     class UnitRenderer extends GameUi.UiListItemRenderer {

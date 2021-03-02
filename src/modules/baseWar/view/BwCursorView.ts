@@ -4,6 +4,8 @@ namespace TinyWars.BaseWar {
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import Helpers              = Utility.Helpers;
     import Notify               = Utility.Notify;
+    import Lang                 = Utility.Lang;
+    import DamageCalculator     = Utility.DamageCalculator;
     import GridIndex            = Types.GridIndex;
     import ActionPlannerState   = Types.ActionPlannerState;
 
@@ -41,7 +43,7 @@ namespace TinyWars.BaseWar {
     const _DAMAGE_CON_WIDTH     = 140;
     const _DAMAGE_CON_HEIGHT    = 60;
 
-    export abstract class BwCursorView extends eui.Group {
+    export class BwCursorView extends eui.Group {
         private _cursor                 : BwCursor;
         private _mapSize                : Types.MapSize;
         private _actionPlanner          : BwActionPlanner;
@@ -394,7 +396,87 @@ namespace TinyWars.BaseWar {
                 }
             }
         }
-        protected abstract _updateConForDamage(): void;
+        private _updateConForDamage(): void {
+            const actionPlanner = this._getActionPlanner();
+            const con           = this._getConForDamage();
+            if (!actionPlanner) {
+                con.visible = false;
+            } else {
+                const cursor        = this._getCursor();
+                const gridIndex     = cursor.getGridIndex();
+                const labelDamage   = this._getLabelDamage();
+                const state         = actionPlanner.getState();
+
+                if (state === ActionPlannerState.Idle) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.ExecutingAction) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.MakingMovePath) {
+                    const war                           = cursor.getWar();
+                    const focusUnitLoaded               = actionPlanner.getFocusUnitLoaded();
+                    const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
+                        war,
+                        actionPlanner.getMovePath(),
+                        focusUnitLoaded ? focusUnitLoaded.getUnitId() : undefined,
+                        gridIndex
+                    );
+                    if (attackDamage == null) {
+                        con.visible = false;
+                    } else {
+                        con.visible = true;
+                        const target = war.getUnitMap().getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
+                        labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${target.getCurrentHp()}\n`
+                            + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${(actionPlanner.getFocusUnit()).getCurrentHp()}`;
+                        this._updatePositionForConForDamage();
+                    }
+
+                } else if (state === ActionPlannerState.ChoosingAction) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.ChoosingAttackTarget) {
+                    const war                           = cursor.getWar();
+                    const focusUnitLoaded               = actionPlanner.getFocusUnitLoaded();
+                    const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
+                        war,
+                        actionPlanner.getMovePath(),
+                        focusUnitLoaded ? focusUnitLoaded.getUnitId() : undefined,
+                        gridIndex
+                    );
+                    if (attackDamage == null) {
+                        con.visible = false;
+                    } else {
+                        con.visible         = true;
+                        const target        = war.getUnitMap().getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
+                        labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${target.getCurrentHp()}\n`
+                            + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${(actionPlanner.getFocusUnit()).getCurrentHp()}`;
+                        this._updatePositionForConForDamage();
+                    }
+
+                } else if (state === ActionPlannerState.ChoosingDropDestination) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.ChoosingFlareDestination) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.ChoosingSiloDestination) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.ChoosingProductionTarget) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.PreviewingAttackableArea) {
+                    con.visible = false;
+
+                } else if (state === ActionPlannerState.PreviewingMovableArea) {
+                    con.visible = false;
+
+                } else {
+                    // TODO
+                }
+            }
+        }
 
         private _initConForNormal(): void {
             this._imgUpperLeftCorner.x = _UPPER_LEFT_CORNER_OUTER_X;

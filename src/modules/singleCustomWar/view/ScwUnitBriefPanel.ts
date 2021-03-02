@@ -21,7 +21,7 @@ namespace TinyWars.SingleCustomWar {
         private _cellList   : ScwUnitBriefCell[] = [];
 
         private _war        : ScwWar;
-        private _cursor     : ScwCursor;
+        private _cursor     : BaseWar.BwCursor;
         private _unitMap    : ScwUnitMap;
         private _unitList   : ScwUnit[] = [];
         private _isLeftSide = true;
@@ -65,7 +65,7 @@ namespace TinyWars.SingleCustomWar {
 
             this._war       = ScwModel.getWar();
             this._unitMap   = this._war.getUnitMap() as ScwUnitMap;
-            this._cursor    = this._war.getField().getCursor() as ScwCursor;
+            this._cursor    = this._war.getField().getCursor();
 
             this._updateView();
         }

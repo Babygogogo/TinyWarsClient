@@ -21,7 +21,7 @@ namespace TinyWars.ReplayWar {
         private _btnSwitch  : GameUi.UiButton;
 
         private _war        : RwWar;
-        private _cursor     : RwCursor;
+        private _cursor     : BaseWar.BwCursor;
         private _unitMap    : RwUnitMap;
         private _turnManager: RwTurnManager;
         private _dataForList: DataForUnitRenderer[];
@@ -64,7 +64,7 @@ namespace TinyWars.ReplayWar {
             this._war           = war;
             this._unitMap       = war.getUnitMap() as RwUnitMap;
             this._turnManager   = war.getTurnManager() as RwTurnManager;
-            this._cursor        = war.getField().getCursor() as RwCursor;
+            this._cursor        = war.getField().getCursor();
             this._playerIndex   = this._war.getPlayerInTurn().getPlayerIndex();
             this._updateView();
         }
@@ -160,7 +160,7 @@ namespace TinyWars.ReplayWar {
 
     type DataForUnitRenderer = {
         unit    : RwUnit;
-        cursor  : RwCursor;
+        cursor  : BaseWar.BwCursor;
     }
 
     class UnitRenderer extends GameUi.UiListItemRenderer {

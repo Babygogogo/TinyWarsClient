@@ -32,7 +32,7 @@ namespace TinyWars.MapEditor {
         private _imgState       : GameUi.UiImage;
 
         private _war        : MeWar;
-        private _cursor     : MeCursor;
+        private _cursor     : BaseWar.BwCursor;
         private _tileMap    : MeTileMap;
 
         public static show(): void {
@@ -81,7 +81,7 @@ namespace TinyWars.MapEditor {
             const war       = MeModel.getWar();
             this._war       = war;
             this._tileMap   = war.getTileMap() as MeTileMap;
-            this._cursor    = war.getField().getCursor() as MeCursor;
+            this._cursor    = war.getField().getCursor();
 
             this._updateView();
         }

@@ -31,7 +31,7 @@ namespace TinyWars.ReplayWar {
         private _imgState       : GameUi.UiImage;
 
         private _war        : RwWar;
-        private _cursor     : RwCursor;
+        private _cursor     : BaseWar.BwCursor;
         private _tileMap    : RwTileMap;
 
         public static show(): void {
@@ -78,7 +78,7 @@ namespace TinyWars.ReplayWar {
 
             this._war       = RwModel.getWar();
             this._tileMap   = this._war.getTileMap() as RwTileMap;
-            this._cursor    = this._war.getField().getCursor() as RwCursor;
+            this._cursor    = this._war.getField().getCursor();
 
             this._updateView();
         }
