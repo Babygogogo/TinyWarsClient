@@ -5,7 +5,7 @@ namespace TinyWars.MapEditor {
     import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
     import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import IWarRule         = ProtoTypes.WarRule.IWarRule;

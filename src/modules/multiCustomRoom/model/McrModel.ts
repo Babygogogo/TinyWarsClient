@@ -7,7 +7,7 @@ namespace TinyWars.MultiCustomRoom {
     import Helpers          = Utility.Helpers;
     import ConfigManager    = Utility.ConfigManager;
     import WarMapModel      = WarMap.WarMapModel;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
     import BootTimerType    = Types.BootTimerType;
     import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
     import NetMessage       = ProtoTypes.NetMessage;

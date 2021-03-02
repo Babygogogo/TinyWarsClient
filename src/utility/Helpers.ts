@@ -186,11 +186,16 @@ namespace TinyWars.Utility.Helpers {
         const length = text.length;
         return (length >= minLength) && (length <= maxLength);
     }
-    export function checkIsValidLanguageTextArray({ list, minTextLength, maxTextLength }: {
+    export function checkIsValidLanguageTextArray({ list, minTextLength, maxTextLength, minTextCount }: {
         list            : ILanguageText[];
         minTextLength   : number;
         maxTextLength   : number;
+        minTextCount    : number;
     }): boolean {
+        if (list == null) {
+            return minTextCount <= 0;
+        }
+
         if (list.length <= 0) {
             return false;
         }

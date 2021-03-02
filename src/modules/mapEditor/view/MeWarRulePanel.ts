@@ -6,7 +6,7 @@ namespace TinyWars.MapEditor {
     import ProtoTypes           = Utility.ProtoTypes;
     import FloatText            = Utility.FloatText;
     import ConfigManager        = Utility.ConfigManager;
-    import BwSettingsHelper     = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper     = BaseWar.BwWarRuleHelper;
     import CommonConfirmPanel   = Common.CommonConfirmPanel;
     import CommonHelpPanel      = Common.CommonHelpPanel;
     import IWarRule             = ProtoTypes.WarRule.IWarRule;

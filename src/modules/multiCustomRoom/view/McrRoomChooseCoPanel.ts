@@ -4,7 +4,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
     import ProtoTypes       = Utility.ProtoTypes;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
     type OpenDataForMcrRoomChooseCoPanel = {

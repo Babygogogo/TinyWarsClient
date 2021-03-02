@@ -471,7 +471,8 @@ namespace TinyWars.WarEvent.WarEventHelper {
             (!Helpers.checkIsValidLanguageTextArray({
                 list            : eventNameArray,
                 maxTextLength   : CommonConstants.WarEventNameMaxLength,
-                minTextLength   : 1
+                minTextLength   : 1,
+                minTextCount    : 1,
             }))
         ) {
             return false;

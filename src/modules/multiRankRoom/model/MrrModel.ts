@@ -4,7 +4,7 @@ namespace TinyWars.MultiRankRoom.MrrModel {
     import Notify           = Utility.Notify;
     import Logger           = Utility.Logger;
     import ConfigManager    = Utility.ConfigManager;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
     import NetMessage       = ProtoTypes.NetMessage;
     import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;

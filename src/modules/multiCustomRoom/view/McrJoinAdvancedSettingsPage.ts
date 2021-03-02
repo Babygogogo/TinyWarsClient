@@ -4,7 +4,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
     import WarMapModel      = WarMap.WarMapModel;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
     import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 

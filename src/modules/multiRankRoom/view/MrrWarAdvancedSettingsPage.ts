@@ -5,7 +5,7 @@ namespace TinyWars.MultiRankRoom {
     import ConfigManager    = Utility.ConfigManager;
     import Notify           = Utility.Notify;
     import WarMapModel      = WarMap.WarMapModel;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 

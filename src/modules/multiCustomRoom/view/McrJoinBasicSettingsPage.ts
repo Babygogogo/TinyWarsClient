@@ -6,7 +6,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import FloatText        = Utility.FloatText;
     import CommonHelpPanel  = Common.CommonHelpPanel;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
     import WarMapModel      = WarMap.WarMapModel;
 
     export class McrJoinBasicSettingsPage extends GameUi.UiTabPage {

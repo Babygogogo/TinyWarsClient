@@ -6,7 +6,7 @@ namespace TinyWars.MultiCustomRoom {
     import ConfigManager    = Utility.ConfigManager;
     import CommonHelpPanel  = Common.CommonHelpPanel;
     import BwHelpers        = BaseWar.BwHelpers;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
     import WarMapModel      = WarMap.WarMapModel;
     import UserModel        = User.UserModel;
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;

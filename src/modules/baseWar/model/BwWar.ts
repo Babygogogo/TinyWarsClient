@@ -157,7 +157,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwSettingsHelper.getHasFogByDefault(warRule);
+            return BwWarRuleHelper.getHasFogByDefault(warRule);
         }
         public getSettingsIncomeMultiplier(playerIndex: number): number | null | undefined {
             const warRule = this.getWarRule();
@@ -166,7 +166,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwSettingsHelper.getIncomeMultiplier(warRule, playerIndex);
+            return BwWarRuleHelper.getIncomeMultiplier(warRule, playerIndex);
         }
         public getSettingsEnergyGrowthMultiplier(playerIndex: number): number | null | undefined {
             const warRule = this.getWarRule();
@@ -175,7 +175,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwSettingsHelper.getEnergyGrowthMultiplier(warRule, playerIndex);
+            return BwWarRuleHelper.getEnergyGrowthMultiplier(warRule, playerIndex);
         }
         public getSettingsAttackPowerModifier(playerIndex: number): number | null | undefined {
             const warRule = this.getWarRule();
@@ -184,7 +184,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwSettingsHelper.getAttackPowerModifier(warRule, playerIndex);
+            return BwWarRuleHelper.getAttackPowerModifier(warRule, playerIndex);
         }
         public getSettingsMoveRangeModifier(playerIndex: number): number | null | undefined {
             const warRule = this.getWarRule();
@@ -193,7 +193,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwSettingsHelper.getMoveRangeModifier(warRule, playerIndex);
+            return BwWarRuleHelper.getMoveRangeModifier(warRule, playerIndex);
         }
         public getSettingsVisionRangeModifier(playerIndex: number): number | null | undefined {
             const warRule = this.getWarRule();
@@ -202,7 +202,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwSettingsHelper.getVisionRangeModifier(warRule, playerIndex);
+            return BwWarRuleHelper.getVisionRangeModifier(warRule, playerIndex);
         }
         public getSettingsInitialFund(playerIndex: number): number | null | undefined {
             const warRule = this.getWarRule();
@@ -211,7 +211,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwSettingsHelper.getInitialFund(warRule, playerIndex);
+            return BwWarRuleHelper.getInitialFund(warRule, playerIndex);
         }
         public getSettingsInitialEnergyPercentage(playerIndex: number): number | null | undefined {
             const warRule = this.getWarRule();
@@ -220,7 +220,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwSettingsHelper.getInitialEnergyPercentage(warRule, playerIndex);
+            return BwWarRuleHelper.getInitialEnergyPercentage(warRule, playerIndex);
         }
         public getSettingsLuckLowerLimit(playerIndex: number): number | null | undefined {
             const warRule = this.getWarRule();
@@ -229,7 +229,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwSettingsHelper.getLuckLowerLimit(warRule, playerIndex);
+            return BwWarRuleHelper.getLuckLowerLimit(warRule, playerIndex);
         }
         public getSettingsLuckUpperLimit(playerIndex: number): number | null | undefined {
             const warRule = this.getWarRule();
@@ -238,7 +238,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwSettingsHelper.getLuckUpperLimit(warRule, playerIndex);
+            return BwWarRuleHelper.getLuckUpperLimit(warRule, playerIndex);
         }
         public getSettingsTeamIndex(playerIndex: number): number | null | undefined {
             const warRule = this.getWarRule();
@@ -247,7 +247,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return BwSettingsHelper.getTeamIndex(warRule, playerIndex);
+            return BwWarRuleHelper.getTeamIndex(warRule, playerIndex);
         }
 
         protected _setPlayerManager(manager: BwPlayerManager): void {

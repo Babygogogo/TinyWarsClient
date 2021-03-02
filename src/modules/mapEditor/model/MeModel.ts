@@ -5,7 +5,7 @@ namespace TinyWars.MapEditor.MeModel {
     import ConfigManager    = Utility.ConfigManager;
     import Logger           = Utility.Logger;
     import Helpers          = Utility.Helpers;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
     import MapReviewStatus  = Types.MapReviewStatus;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import IMapEditorData   = ProtoTypes.Map.IMapEditorData;

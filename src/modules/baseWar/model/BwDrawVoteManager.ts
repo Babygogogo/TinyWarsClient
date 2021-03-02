@@ -23,7 +23,7 @@ namespace TinyWars.BaseWar {
                     }
                 }
                 if (remainingVotes >= maxVotes) {
-                    return ClientErrorCode.BwDrawVoteManagerInit000;
+                    return ClientErrorCode.BwDrawVoteManagerInit00;
                 }
             }
 

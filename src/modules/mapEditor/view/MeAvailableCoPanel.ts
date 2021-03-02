@@ -6,7 +6,7 @@ namespace TinyWars.MapEditor {
     import Notify           = Utility.Notify;
     import ConfigManager    = Utility.ConfigManager;
     import ProtoTypes       = Utility.ProtoTypes;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
     import WarRule          = ProtoTypes.WarRule;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 

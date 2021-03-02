@@ -4,7 +4,7 @@ namespace TinyWars.MultiRankRoom {
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
     import Notify           = Utility.Notify;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
     import WarMapModel      = WarMap.WarMapModel;
     import NetMessage       = ProtoTypes.NetMessage;
     import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;

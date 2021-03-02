@@ -869,6 +869,9 @@ namespace TinyWars.Utility.ConfigManager {
     export function setLatestFormalVersion(version: string): void {
         _latestFormalVersion = version;
     }
+    export async function checkIsVersionValid(version: string): Promise<boolean> {
+        return (await loadConfig(version)) != null;
+    }
 
     export async function loadConfig(version: string): Promise<ExtendedFullConfig | undefined> {
         const cachedConfig = getCachedConfig(version);

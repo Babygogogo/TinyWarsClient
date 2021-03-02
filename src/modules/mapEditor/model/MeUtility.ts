@@ -6,7 +6,7 @@ namespace TinyWars.MapEditor.MeUtility {
     import Helpers                  = Utility.Helpers;
     import ConfigManager            = Utility.ConfigManager;
     import GridIndexHelpers         = Utility.GridIndexHelpers;
-    import BwSettingsHelper         = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper         = BaseWar.BwWarRuleHelper;
     import BwHelpers                = BaseWar.BwHelpers;
     import BwTile                   = BaseWar.BwTile;
     import WarEventHelper           = WarEvent.WarEventHelper;
@@ -190,6 +190,7 @@ namespace TinyWars.MapEditor.MeUtility {
                 list            : mapNameList,
                 minTextLength   : 1,
                 maxTextLength   : CommonConstants.MaxMapNameLength,
+                minTextCount    : 1,
             }));
     }
     function checkIsPlayersCountValid(mapRawData: IMapRawData): boolean {

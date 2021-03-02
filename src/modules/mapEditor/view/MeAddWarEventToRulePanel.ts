@@ -3,7 +3,7 @@ namespace TinyWars.MapEditor {
     import Notify           = Utility.Notify;
     import ProtoTypes       = Utility.ProtoTypes;
     import Lang             = Utility.Lang;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper = BaseWar.BwWarRuleHelper;
 
     type OpenDataForMeAddWarEventId = {
         warRule     : ProtoTypes.WarRule.IWarRule;

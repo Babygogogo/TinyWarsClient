@@ -4,7 +4,7 @@ namespace TinyWars.SingleCustomWar {
     import ProtoTypes           = Utility.ProtoTypes;
     import Logger               = Utility.Logger;
     import BwHelpers            = BaseWar.BwHelpers;
-    import BwSettingsHelper     = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper     = BaseWar.BwWarRuleHelper;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForScw      = ProtoTypes.WarSettings.ISettingsForScw;
 

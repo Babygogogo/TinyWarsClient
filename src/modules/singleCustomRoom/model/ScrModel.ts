@@ -7,7 +7,7 @@ namespace TinyWars.SingleCustomRoom.ScrModel {
     import Logger                   = Utility.Logger;
     import Helpers                  = Utility.Helpers;
     import WarMapModel              = WarMap.WarMapModel;
-    import BwSettingsHelper         = BaseWar.BwSettingsHelper;
+    import BwSettingsHelper         = BaseWar.BwWarRuleHelper;
     import IDataForPlayerRule       = ProtoTypes.WarRule.IDataForPlayerRule;
     import IDataForPlayerInRoom     = ProtoTypes.Structure.IDataForPlayerInRoom;
     import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
