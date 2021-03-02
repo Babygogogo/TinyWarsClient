@@ -80,13 +80,18 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function loadWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<MpwWar> {
         if (getWar()) {
-            Logger.warn(`McwModel.loadWar() another war has been loaded already!`);
+            Logger.warn(`MpwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
-        const war = data.settingsForMcw
-            ? (await new MultiCustomWar.McwWar().init(data)).startRunning().startRunningView() as MpwWar
-            : (await new MultiRankWar.MrwWar().init(data)).startRunning().startRunningView() as MpwWar;
+        const war       = data.settingsForMcw ? new MultiCustomWar.McwWar() : new MultiRankWar.MrwWar();
+        const initError = await war.init(data);
+        if (initError) {
+            Logger.error(`MpwModel.loadWar() initError: ${initError}`);
+            return undefined;
+        }
+
+        war.startRunning().startRunningView();
         _setWar(war);
 
         return war;

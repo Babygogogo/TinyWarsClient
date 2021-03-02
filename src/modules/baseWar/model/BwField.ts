@@ -2,6 +2,7 @@
 namespace TinyWars.BaseWar {
     import Types                    = Utility.Types;
     import Logger                   = Utility.Logger;
+    import ClientErrorCode          = Utility.ClientErrorCode;
     import ProtoTypes               = Utility.ProtoTypes;
     import ISerialField             = ProtoTypes.WarSerialization.ISerialField;
     import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
@@ -11,7 +12,7 @@ namespace TinyWars.BaseWar {
         private _tileMap                    : BwTileMap;
         private _fogMap                     : BwFogMap;
         private readonly _cursor            = new BwCursor();
-        private _actionPlanner              : BwActionPlanner;
+        private readonly _actionPlanner     = new (this._getActionPlannerClass())();
         private readonly _gridVisualEffect  = new BwGridVisualEffect();
         private readonly _view              = new BwFieldView();
 
@@ -24,7 +25,7 @@ namespace TinyWars.BaseWar {
             data                    : ISerialField,
             configVersion           : string,
             mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex
-        ): Promise<BwField | undefined> {
+        ): Promise<ClientErrorCode> {
             const fogMapData = data.fogMap;
             if (fogMapData == null) {
                 Logger.error(`BwField.init() empty fogMapData.`);
@@ -61,17 +62,21 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
+            const actionPlannerError = this.getActionPlanner().init(mapSizeAndMaxPlayerIndex);
+            if (actionPlannerError) {
+                return actionPlannerError;
+            }
+
             this._setFogMap(fogMap);
             this._setTileMap(tileMap);
             this._setUnitMap(unitMap);
 
             await this._initCursor(mapSizeAndMaxPlayerIndex);
-            await this._initActionPlanner(mapSizeAndMaxPlayerIndex);
             this._initGridVisionEffect();
 
             this.getView().init(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
         public async fastInit(
             data                    : ISerialField,
@@ -168,16 +173,8 @@ namespace TinyWars.BaseWar {
             return this._cursor;
         }
 
-        private async _initActionPlanner(mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex): Promise<void> {
-            const actionPlanner = this.getActionPlanner() || new (this._getActionPlannerClass())();
-            await actionPlanner.init(mapSizeAndMaxPlayerIndex);
-            this._setActionPlanner(actionPlanner);
-        }
         private async _fastInitActionPlanner(mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex): Promise<void> {
             await this.getActionPlanner().fastInit(mapSizeAndMaxPlayerIndex);
-        }
-        private _setActionPlanner(actionPlanner: BwActionPlanner): void {
-            this._actionPlanner = actionPlanner;
         }
         public getActionPlanner(): BwActionPlanner {
             return this._actionPlanner;

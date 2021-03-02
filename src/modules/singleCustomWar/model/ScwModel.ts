@@ -23,15 +23,23 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         slotComment : string;
     }): Promise<ScwWar> {
         if (_war) {
-            Logger.warn(`McwModel.loadWar() another war has been loaded already!`);
+            Logger.warn(`ScwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
-        _war = (await new SingleCustomWar.ScwWar().init(warData)).startRunning().startRunningView() as ScwWar;
-        _war.setSaveSlotIndex(slotIndex);
-        _war.setSaveSlotComment(slotComment);
+        const war       = new ScwWar();
+        const initError = await war.init(warData);
+        if (initError) {
+            Logger.warn(`ScwModel.loadWar() initError: ${initError}`);
+            return undefined;
+        }
+
+        war.startRunning().startRunningView();
+        war.setSaveSlotIndex(slotIndex);
+        war.setSaveSlotComment(slotComment);
+        _war = war;
         await checkAndHandleAutoActionsAndRobot();
-        await checkAndHandleAutoActions(_war);
+        await checkAndHandleAutoActions(war);
 
         return _war;
     }

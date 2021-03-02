@@ -3,6 +3,7 @@ namespace TinyWars.MultiCustomWar {
     import Logger           = Utility.Logger;
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
+    import ClientErrorCode  = Utility.ClientErrorCode;
     import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForMcw  = ProtoTypes.WarSettings.ISettingsForMcw;
@@ -10,10 +11,10 @@ namespace TinyWars.MultiCustomWar {
     export class McwWar extends MultiPlayerWar.MpwWar {
         private _settingsForMcw?: ISettingsForMcw;
 
-        public async init(data: ISerialWar): Promise<McwWar> {
-            if (await this._baseInit(data)) {
-                Logger.error(`McwWar.init() failed this._baseInit().`);
-                return undefined;
+        public async init(data: ISerialWar): Promise<ClientErrorCode> {
+            const baseInitError = await this._baseInit(data);
+            if (baseInitError) {
+                return baseInitError;
             }
 
             const settingsForMcw = data.settingsForMcw;
@@ -70,20 +71,18 @@ namespace TinyWars.MultiCustomWar {
                 return undefined;
             }
 
-            const field = await (this.getField() || new (this._getFieldClass())()).init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
-            if (field == null) {
-                Logger.error(`McwWar.init() empty field.`);
-                return undefined;
+            const fieldError = await this.getField().init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
+            if (fieldError) {
+                return fieldError;
             }
 
             this._setSettingsForMcw(settingsForMcw);
             this._setPlayerManager(playerManager);
             this._setTurnManager(turnManager);
-            this._setField(field);
 
             this._initView();
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public serializeForSimulation(): ISerialWar | undefined {

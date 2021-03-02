@@ -4,6 +4,7 @@ namespace TinyWars.MultiRankWar {
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
     import Types            = Utility.Types;
+    import ClientErrorCode  = Utility.ClientErrorCode;
     import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForMrw  = ProtoTypes.WarSettings.ISettingsForMrw;
@@ -12,10 +13,10 @@ namespace TinyWars.MultiRankWar {
     export class MrwWar extends MultiPlayerWar.MpwWar {
         private _settingsForMrw?: ISettingsForMrw;
 
-        public async init(data: ISerialWar): Promise<MrwWar> {
-            if (await this._baseInit(data)) {
-                Logger.error(`MrwWar.init() failed this._baseInit().`);
-                return undefined;
+        public async init(data: ISerialWar): Promise<ClientErrorCode> {
+            const baseInitError = await this._baseInit(data);
+            if (baseInitError) {
+                return baseInitError;
             }
 
             const settingsForMrw = data.settingsForMrw;
@@ -72,20 +73,18 @@ namespace TinyWars.MultiRankWar {
                 return undefined;
             }
 
-            const field = await (this.getField() || new (this._getFieldClass())()).init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
-            if (field == null) {
-                Logger.error(`MrwWar.init() empty field.`);
-                return undefined;
+            const fieldError = await this.getField().init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
+            if (fieldError) {
+                return fieldError;
             }
 
             this._setSettingsForMrw(settingsForMrw);
             this._setPlayerManager(playerManager);
             this._setTurnManager(turnManager);
-            this._setField(field);
 
             this._initView();
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public serializeForSimulation(): ISerialWar | undefined {

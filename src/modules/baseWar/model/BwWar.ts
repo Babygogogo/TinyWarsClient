@@ -10,8 +10,8 @@ namespace TinyWars.BaseWar {
         private _warId                      : number;
 
         private _playerManager              : BwPlayerManager;
-        private _field                      : BwField;
         private _turnManager                : BwTurnManager;
+        private readonly _field                 = new (this._getFieldClass())();
         private readonly _commonSettingManager  = new (this._getCommonSettingManagerClass())();
         private readonly _executedActionManager = new BwExecutedActionManager();
         private readonly _warEventManager       = new (this._getWarEventManagerClass())();
@@ -21,7 +21,7 @@ namespace TinyWars.BaseWar {
         private _isRunning              = false;
         private _isExecutingAction      = false;
 
-        public abstract init(data: ISerialWar): Promise<BwWar>;
+        public abstract init(data: ISerialWar): Promise<ClientErrorCode>;
         public abstract serializeForSimulation(): ISerialWar | undefined;
         public abstract getWarType(): Types.WarType;
         public abstract getMapId(): number | undefined;
@@ -156,13 +156,9 @@ namespace TinyWars.BaseWar {
             return this.getTurnManager().getPlayerIndexInTurn();
         }
 
-        protected _setField(field: BwField): void {
-            this._field = field;
-        }
         public getField(): BwField {
             return this._field;
         }
-
         public getFogMap(): BwFogMap {
             return this.getField().getFogMap();
         }

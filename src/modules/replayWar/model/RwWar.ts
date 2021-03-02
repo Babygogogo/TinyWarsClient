@@ -6,6 +6,7 @@ namespace TinyWars.ReplayWar {
     import Lang                 = Utility.Lang;
     import Helpers              = Utility.Helpers;
     import Logger               = Utility.Logger;
+    import ClientErrorCode      = Utility.ClientErrorCode;
     import ProtoTypes           = Utility.ProtoTypes;
     import BwHelpers            = BaseWar.BwHelpers;
     import WarType              = Types.WarType;
@@ -28,10 +29,10 @@ namespace TinyWars.ReplayWar {
         private _checkPointIdsForNextActionId       = new Map<number, number>();
         private _checkPointDataListForCheckPointId  = new Map<number, CheckPointData>();
 
-        public async init(warData: ISerialWar): Promise<RwWar> {
-            if (await this._baseInit(warData)) {
-                Logger.error(`ReplayWar.init() failed this._baseInit().`);
-                return undefined;
+        public async init(warData: ISerialWar): Promise<ClientErrorCode> {
+            const baseInitError = await this._baseInit(warData);
+            if (baseInitError) {
+                return baseInitError;
             }
 
             const settingsForCommon = warData.settingsForCommon;
@@ -94,10 +95,9 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
-            const field = await (this.getField() || new (this._getFieldClass())()).init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
-            if (field == null) {
-                Logger.error(`ReplayWar.init() empty field.`);
-                return undefined;
+            const fieldError = await this.getField().init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
+            if (fieldError) {
+                return fieldError;
             }
 
             this._setSettingsForMcw(warData.settingsForMcw);
@@ -108,7 +108,6 @@ namespace TinyWars.ReplayWar {
             this.setNextActionId(0);
             this._setPlayerManager(playerManager);
             this._setTurnManager(turnManager);
-            this._setField(field);
 
             const warDataForCheckPoint                  = Helpers.deepClone(warData);
             warDataForCheckPoint.seedRandomCurrentState = warDataForCheckPoint.seedRandomInitialState;
@@ -122,7 +121,7 @@ namespace TinyWars.ReplayWar {
 
             this._initView();
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         protected _getFieldClass(): new () => RwField {

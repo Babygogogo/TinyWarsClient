@@ -33,7 +33,7 @@ namespace TinyWars.ReplayWar.RwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function loadWar(encodedWarData: Uint8Array, replayId: number): Promise<RwWar> {
         if (_war) {
-            Logger.warn(`ReplayModel.loadWar() another war has been loaded already!`);
+            Logger.warn(`RwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
@@ -47,8 +47,16 @@ namespace TinyWars.ReplayWar.RwModel {
             nextUnitId  : unitDataArray.length,
         };
 
-        _war = (await new RwWar().init(warData)).startRunning().startRunningView() as RwWar;
-        _war.setReplayId(replayId);
+        const war       = new RwWar();
+        const initError = await war.init(warData);
+        if (initError) {
+            Logger.error(`RwModel.loadWar() initError: ${initError}`);
+            return undefined;
+        }
+
+        war.startRunning().startRunningView();
+        war.setReplayId(replayId);
+        _war = war;
         return _war;
     }
 

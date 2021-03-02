@@ -1,6 +1,7 @@
 
 namespace TinyWars.SingleCustomWar {
     import Types            = Utility.Types;
+    import ClientErrorCode  = Utility.ClientErrorCode;
     import ProtoTypes       = Utility.ProtoTypes;
     import Logger           = Utility.Logger;
     import BwHelpers        = BaseWar.BwHelpers;
@@ -14,10 +15,10 @@ namespace TinyWars.SingleCustomWar {
 
         private _isEnded                    = false;
 
-        public async init(data: ISerialWar): Promise<ScwWar | undefined> {
-            if (await this._baseInit(data)) {
-                Logger.error(`ScwWar.init() failed this._baseInit().`);
-                return undefined;
+        public async init(data: ISerialWar): Promise<ClientErrorCode> {
+            const baseInitError = await this._baseInit(data);
+            if (baseInitError) {
+                return baseInitError;
             }
 
             const settingsForScw = data.settingsForScw;
@@ -86,10 +87,9 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
-            const field = await (this.getField() || new (this._getFieldClass())()).init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
-            if (field == null) {
-                Logger.error(`ScwWar.init() empty field.`);
-                return undefined;
+            const fieldError = await this.getField().init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
+            if (fieldError) {
+                return fieldError;
             }
 
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: seedRandomCurrentState }));
@@ -97,11 +97,10 @@ namespace TinyWars.SingleCustomWar {
             this._setSettingsForSinglePlayer(settingsForScw);
             this._setPlayerManager(playerManager);
             this._setTurnManager(turnManager);
-            this._setField(field);
 
             this._initView();
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public serialize(): ISerialWar {

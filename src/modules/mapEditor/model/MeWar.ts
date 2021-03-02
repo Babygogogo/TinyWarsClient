@@ -5,6 +5,7 @@ namespace TinyWars.MapEditor {
     import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
+    import ClientErrorCode  = Utility.ClientErrorCode;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
@@ -26,13 +27,13 @@ namespace TinyWars.MapEditor {
         private _isMapModified      = false;
         private _mapTag             : IDataForMapTag;
 
-        public async init(data: ISerialWar): Promise<MeWar> {
-            if (await this._baseInit(data)) {
-                Logger.error(`MeWar.init() failed this._baseInit().`);
-                return undefined;
+        public async init(data: ISerialWar): Promise<ClientErrorCode> {
+            const baseInitError = await this._baseInit(data);
+            if (baseInitError) {
+                return baseInitError;
             }
 
-            const mapSizeAndMaxPlayerIndex = await BwHelpers.getMapSizeAndMaxPlayerIndex(data);
+            const mapSizeAndMaxPlayerIndex = BwHelpers.getMapSizeAndMaxPlayerIndex(data);
             if (!mapSizeAndMaxPlayerIndex) {
                 Logger.error(`MeWar.init() invalid war data! ${JSON.stringify(data)}`);
                 return undefined;
@@ -80,20 +81,18 @@ namespace TinyWars.MapEditor {
                 return undefined;
             }
 
-            const field = await (this.getField() || new (this._getFieldClass())()).init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
-            if (field == null) {
-                Logger.error(`MeWar.init() empty field.`);
-                return undefined;
+            const fieldError = await this.getField().init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
+            if (fieldError) {
+                return fieldError;
             }
 
             this._setPlayerManager(playerManager);
             this._setTurnManager(turnManager);
-            this._setField(field);
             this._setDrawer((this.getDrawer() || new MeDrawer()).init());
 
             this._initView();
 
-            return this;
+            return ClientErrorCode.NoError;
         }
         public async initWithMapEditorData(data: ProtoTypes.Map.IMapEditorData): Promise<void> {
             const warData = MeUtility.createISerialWar(data);
