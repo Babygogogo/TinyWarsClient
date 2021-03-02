@@ -5,10 +5,6 @@ namespace TinyWars.MapEditor {
     import State                = Types.ActionPlannerState;
 
     export class MeActionPlanner extends BaseWar.BwActionPlanner {
-        protected _getViewClass(): new () => BaseWar.BwActionPlannerView {
-            return MeActionPlannerView;
-        }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting common state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -8,10 +8,6 @@ namespace TinyWars.MultiPlayerWar {
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class MpwTile extends BaseWar.BwTile {
-        protected _getViewClass(): new () => BaseWar.BwTileView {
-            return McwTileView;
-        }
-
         public serializeForSimulation(): ISerialTile | null {
             return this.serialize();
         }

@@ -31,7 +31,8 @@ namespace TinyWars.BaseWar {
     }
 
     export abstract class BwActionPlanner {
-        private _view       : BwActionPlannerView;
+        private readonly _view  = new BwActionPlannerView();
+
         private _war        : BwWar;
         private _mapSize    : Types.MapSize;
 
@@ -62,8 +63,7 @@ namespace TinyWars.BaseWar {
         public async init(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwActionPlanner> {
             this._setMapSize({ width: mapSizeAndMaxPlayerIndex.mapWidth, height: mapSizeAndMaxPlayerIndex.mapHeight });
 
-            this._view = this._view || new (this._getViewClass())();
-            this._view.init(this);
+            this.getView().init(this);
 
             return this;
         }
@@ -106,7 +106,6 @@ namespace TinyWars.BaseWar {
         protected _getMapSize(): Types.MapSize {
             return this._mapSize;
         }
-        protected abstract _getViewClass(): new () => BwActionPlannerView;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.

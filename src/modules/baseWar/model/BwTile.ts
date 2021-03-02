@@ -27,11 +27,10 @@ namespace TinyWars.BaseWar {
         private _currentBuildPoint  : number | undefined;
         private _currentCapturePoint: number | undefined;
 
-        private _war        : BwWar;
-        private _view       : BwTileView;
-        private _hasFog     = false;
+        private _war            : BwWar;
+        private readonly _view  = new BwTileView();
+        private _hasFog         = false;
 
-        protected abstract _getViewClass(): new () => BwTileView;
         public abstract serializeForSimulation(): ISerialTile;
 
         public init(data: ISerialTile, configVersion: string): BwTile | undefined {
@@ -40,8 +39,6 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
             this.setHasFog(false);
-
-            this._setView(this.getView() || new (this._getViewClass())());
 
             return this;
         }
@@ -189,9 +186,6 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
-        private _setView(view: BwTileView): void {
-            this._view = view;
-        }
         public getView(): BwTileView {
             return this._view;
         }

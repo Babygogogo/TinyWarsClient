@@ -13,13 +13,12 @@ namespace TinyWars.BaseWar {
         private readonly _cursor            = new BwCursor();
         private _actionPlanner              : BwActionPlanner;
         private readonly _gridVisualEffect  = new BwGridVisualEffect();
-        private _view                       : BwFieldView;
+        private readonly _view              = new BwFieldView();
 
         protected abstract _getFogMapClass(): new () => BwFogMap;
         protected abstract _getTileMapClass(): new () => BwTileMap;
         protected abstract _getUnitMapClass(): new () => BwUnitMap;
         protected abstract _getActionPlannerClass(): new () => BwActionPlanner;
-        protected abstract _getViewClass(): new () => BwFieldView;
 
         public async init(
             data                    : ISerialField,
@@ -68,11 +67,9 @@ namespace TinyWars.BaseWar {
 
             await this._initCursor(mapSizeAndMaxPlayerIndex);
             await this._initActionPlanner(mapSizeAndMaxPlayerIndex);
-            await this._initGridVisionEffect();
+            this._initGridVisionEffect();
 
-            const view = this.getView() || new (this._getViewClass())();
-            view.init(this);
-            this._setView(view);
+            this.getView().init(this);
 
             return this;
         }
@@ -99,7 +96,7 @@ namespace TinyWars.BaseWar {
             this.getFogMap().startRunning(war);
             this.getCursor().startRunning(war);
             this.getActionPlanner().startRunning(war);
-            this.getGridVisionEffect().startRunning(war);
+            this.getGridVisualEffect().startRunning(war);
         }
         public startRunningView(): void {
             this.getView().startRunningView();
@@ -107,7 +104,7 @@ namespace TinyWars.BaseWar {
             this.getUnitMap().startRunningView();
             this.getCursor().startRunningView();
             this.getActionPlanner().startRunningView();
-            this.getGridVisionEffect().startRunningView();
+            this.getGridVisualEffect().startRunningView();
         }
         public stopRunning(): void {
             this.getView().stopRunningView();
@@ -115,7 +112,7 @@ namespace TinyWars.BaseWar {
             this.getUnitMap().stopRunning();
             this.getCursor().stopRunning();
             this.getActionPlanner().stopRunning();
-            this.getGridVisionEffect().stopRunning();
+            this.getGridVisualEffect().stopRunning();
         }
 
         public serialize(): ISerialField {
@@ -136,9 +133,6 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _setView(view: BwFieldView): void {
-            this._view = view;
-        }
         public getView(): BwFieldView {
             return this._view;
         }
@@ -190,12 +184,12 @@ namespace TinyWars.BaseWar {
         }
 
         private _initGridVisionEffect(): void {
-            this.getGridVisionEffect().init();
+            this.getGridVisualEffect().init();
         }
         private _fastInitGridVisionEffect(): void {
-            this.getGridVisionEffect().fastInit();
+            this.getGridVisualEffect().fastInit();
         }
-        public getGridVisionEffect(): BwGridVisualEffect {
+        public getGridVisualEffect(): BwGridVisualEffect {
             return this._gridVisualEffect;
         }
     }

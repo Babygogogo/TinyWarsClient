@@ -75,7 +75,7 @@ namespace TinyWars.BaseWar {
     const ALPHA_FOR_ATTACKABLE_GRIDS_NORMAL = 0.6;
     const ALPHA_FOR_ATTACKABLE_GRIDS_SILO   = 0.15;
 
-    export abstract class BwActionPlannerView extends egret.DisplayObjectContainer {
+    export class BwActionPlannerView extends egret.DisplayObjectContainer {
         private _actionPlanner  : BwActionPlanner;
         private _mapSize        : Types.MapSize;
 

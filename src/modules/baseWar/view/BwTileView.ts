@@ -19,7 +19,7 @@ namespace TinyWars.BaseWar {
         skinId      : number;
     }
 
-    export abstract class BwTileView {
+    export class BwTileView {
         private _imgBase    = new GameUi.UiImage();
         private _imgObject  = new GameUi.UiImage();
 

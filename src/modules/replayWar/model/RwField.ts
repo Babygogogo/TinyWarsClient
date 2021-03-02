@@ -13,8 +13,5 @@ namespace TinyWars.ReplayWar {
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return RwActionPlanner;
         }
-        protected _getViewClass(): new () => BaseWar.BwFieldView {
-            return RwFieldView;
-        }
     }
 }

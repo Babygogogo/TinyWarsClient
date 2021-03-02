@@ -13,9 +13,6 @@ namespace TinyWars.MapEditor {
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return MeActionPlanner;
         }
-        protected _getViewClass(): new () => BaseWar.BwFieldView {
-            return MeFieldView;
-        }
 
         public getMaxPlayerIndex(): number {
             let maxPlayerIndex = 0;

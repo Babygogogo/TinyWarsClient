@@ -19,10 +19,6 @@ namespace TinyWars.SingleCustomWar {
             return (this._getWar() as ScwWar).getPlayerIndexInTurn();
         }
 
-        protected _getViewClass(): new () => BaseWar.BwActionPlannerView {
-            return ScwActionPlannerView;
-        }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting common state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

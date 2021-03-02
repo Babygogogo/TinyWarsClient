@@ -13,8 +13,5 @@ namespace TinyWars.SingleCustomWar {
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return ScwActionPlanner;
         }
-        protected _getViewClass(): new () => BaseWar.BwFieldView {
-            return ScwFieldView;
-        }
     }
 }

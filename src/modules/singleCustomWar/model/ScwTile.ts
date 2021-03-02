@@ -9,10 +9,6 @@ namespace TinyWars.SingleCustomWar {
     import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     export class ScwTile extends BaseWar.BwTile {
-        protected _getViewClass(): new () => BaseWar.BwTileView {
-            return ScwTileView;
-        }
-
         public serializeForSimulation(): ISerialTile | null {
             const war = this.getWar();
             if (VisibilityHelpers.checkIsTileVisibleToTeams(war, this.getGridIndex(), war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {

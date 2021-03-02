@@ -13,10 +13,6 @@ namespace TinyWars.ReplayWar {
     import BwHelpers        = BaseWar.BwHelpers;
 
     export class RwActionPlanner extends BaseWar.BwActionPlanner {
-        protected _getViewClass(): new () => BaseWar.BwActionPlannerView {
-            return RwActionPlannerView;
-        }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting common state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

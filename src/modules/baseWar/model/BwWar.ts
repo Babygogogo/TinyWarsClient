@@ -286,7 +286,7 @@ namespace TinyWars.BaseWar {
             return this.getField().getActionPlanner();
         }
         public getGridVisionEffect(): BwGridVisualEffect {
-            return this.getField().getGridVisionEffect();
+            return this.getField().getGridVisualEffect();
         }
 
         protected _setTurnManager(manager: BwTurnManager): void {

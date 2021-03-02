@@ -19,10 +19,6 @@ namespace TinyWars.MultiPlayerWar {
             return (this._getWar() as MpwWar).getPlayerIndexLoggedIn();
         }
 
-        protected _getViewClass(): new () => BaseWar.BwActionPlannerView {
-            return McwActionPlannerView;
-        }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting common state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

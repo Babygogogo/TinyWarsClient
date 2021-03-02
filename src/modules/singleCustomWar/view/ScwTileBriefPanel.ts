@@ -23,15 +23,15 @@ namespace TinyWars.SingleCustomWar {
 
         private static _instance: ScwTileBriefPanel;
 
-        private _group          : eui.Group;
-        private _conTileView    : eui.Group;
-        private _tileView       = new ScwTileView();
-        private _labelName      : GameUi.UiLabel;
-        private _labelGridIndex : GameUi.UiLabel;
-        private _labelState     : GameUi.UiLabel;
-        private _labelDefense   : GameUi.UiLabel;
-        private _imgDefense     : GameUi.UiImage;
-        private _imgState       : GameUi.UiImage;
+        private _group              : eui.Group;
+        private _conTileView        : eui.Group;
+        private readonly _tileView  = new BaseWar.BwTileView();
+        private _labelName          : GameUi.UiLabel;
+        private _labelGridIndex     : GameUi.UiLabel;
+        private _labelState         : GameUi.UiLabel;
+        private _labelDefense       : GameUi.UiLabel;
+        private _imgDefense         : GameUi.UiImage;
+        private _imgState           : GameUi.UiImage;
 
         private _war        : ScwWar;
         private _cursor     : BaseWar.BwCursor;
