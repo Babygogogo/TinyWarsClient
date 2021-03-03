@@ -123,7 +123,8 @@ namespace TinyWars.MapEditor {
 
         public setModeDrawUnit(data: DataForDrawUnit): void {
             const war   = this._getWar();
-            const unit  = new BaseWar.BwUnit().init({
+            const unit  = new BaseWar.BwUnit();
+            unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : data.unitType,
@@ -249,7 +250,8 @@ namespace TinyWars.MapEditor {
             const unitMap       = this._unitMap;
             const unitId        = unitMap.getNextUnitId();
             const targetUnit    = this._drawTargetUnit;
-            const unit          = new BaseWar.BwUnit().init({
+            const unit          = new BaseWar.BwUnit();
+            unit.init({
                 gridIndex,
                 playerIndex : targetUnit.getPlayerIndex(),
                 unitType    : targetUnit.getType(),

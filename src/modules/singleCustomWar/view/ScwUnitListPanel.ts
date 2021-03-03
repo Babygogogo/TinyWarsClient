@@ -22,7 +22,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _war        : ScwWar;
         private _cursor     : BaseWar.BwCursor;
-        private _unitMap    : ScwUnitMap;
+        private _unitMap    : BaseWar.BwUnitMap;
         private _turnManager: ScwTurnManager;
         private _dataForList: DataForUnitRenderer[];
         private _playerIndex: number;
@@ -62,7 +62,7 @@ namespace TinyWars.SingleCustomWar {
 
             const war           = ScwModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap() as ScwUnitMap;
+            this._unitMap       = war.getUnitMap();
             this._turnManager   = war.getTurnManager() as ScwTurnManager;
             this._cursor        = war.getField().getCursor();
             this._playerIndex   = this._war.getPlayerIndexInTurn();

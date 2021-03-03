@@ -22,7 +22,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _war        : ScwWar;
         private _cursor     : BaseWar.BwCursor;
-        private _unitMap    : ScwUnitMap;
+        private _unitMap    : BaseWar.BwUnitMap;
         private _unitList   : BaseWar.BwUnit[] = [];
         private _isLeftSide = true;
 
@@ -64,7 +64,7 @@ namespace TinyWars.SingleCustomWar {
             ]);
 
             this._war       = ScwModel.getWar();
-            this._unitMap   = this._war.getUnitMap() as ScwUnitMap;
+            this._unitMap   = this._war.getUnitMap();
             this._cursor    = this._war.getField().getCursor();
 
             this._updateView();

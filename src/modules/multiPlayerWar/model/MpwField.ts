@@ -7,9 +7,6 @@ namespace TinyWars.MultiPlayerWar {
         protected _getTileMapClass(): new () => BaseWar.BwTileMap {
             return MpwTileMap;
         }
-        protected _getUnitMapClass(): new () => BaseWar.BwUnitMap {
-            return MpwUnitMap;
-        }
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return MpwActionPlanner;
         }

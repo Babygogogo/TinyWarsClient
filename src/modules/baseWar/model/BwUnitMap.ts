@@ -4,6 +4,7 @@ namespace TinyWars.BaseWar {
     import Helpers                  = Utility.Helpers;
     import GridIndexHelpers         = Utility.GridIndexHelpers;
     import Logger                   = Utility.Logger;
+    import ClientErrorCode          = Utility.ClientErrorCode;
     import ProtoTypes               = Utility.ProtoTypes;
     import VisibilityHelpers        = Utility.VisibilityHelpers;
     import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
@@ -12,9 +13,8 @@ namespace TinyWars.BaseWar {
     import ISerialUnitMap           = WarSerialization.ISerialUnitMap;
     import ISerialUnit              = WarSerialization.ISerialUnit;
 
-    export abstract class BwUnitMap {
+    export class BwUnitMap {
         private _war            : BwWar;
-        private _configVersion  : string;
         private _nextUnitId     : number;
         private _map            : (BwUnit | undefined)[][];
         private _mapSize        : Types.MapSize;
@@ -26,27 +26,29 @@ namespace TinyWars.BaseWar {
             data                    : ISerialUnitMap,
             configVersion           : string,
             mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
-        ): BwUnitMap | undefined {
+        ): ClientErrorCode {
+            if (data == null) {
+                return ClientErrorCode.BwUnitMapInit00;
+            }
+
             const nextUnitId = data.nextUnitId;
             if (nextUnitId == null) {
-                Logger.error(`BwUnitMap.init() empty nextUnitId.`);
-                return undefined;
+                return ClientErrorCode.BwUnitMapInit01;
             }
 
             const { mapWidth, mapHeight }   = mapSizeAndMaxPlayerIndex;
             const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
             const loadedUnits               = new Map<number, BwUnit>();
             for (const unitData of data.units || []) {
-                const unit = new BwUnit().init(unitData, configVersion);
-                if (!unit) {
-                    Logger.error(`BwUnitMap.init() failed to create a unit! unitData: ${JSON.stringify(unitData)}`);
-                    return undefined;
+                const unit      = new BwUnit();
+                const unitError = unit.init(unitData, configVersion);
+                if (unitError) {
+                    return unitError;
                 }
 
                 const gridIndex = unit.getGridIndex();
                 if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, { width: mapWidth, height: mapHeight }))) {
-                    Logger.error(`BwUnitMap.init() invalid gridIndex: ${JSON.stringify(gridIndex)}`);
-                    return undefined;
+                    return ClientErrorCode.BwUnitMapInit02;
                 }
 
                 if (unit.getLoaderUnitId() == null) {
@@ -61,7 +63,6 @@ namespace TinyWars.BaseWar {
                 }
             }
 
-            this._setConfigVersion(configVersion);
             this._setMap(map);
             this._setLoadedUnits(loadedUnits);
             this._setMapSize(mapWidth, mapHeight);
@@ -69,13 +70,13 @@ namespace TinyWars.BaseWar {
 
             this.getView().init(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
-        public async fastInit(
+        public fastInit(
             data                    : ISerialUnitMap | null | undefined,
             configVersion           : string,
             mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
-        ): Promise<BwUnitMap> {
+        ): ClientErrorCode {
             return this.init(data, configVersion, mapSizeAndMaxPlayerIndex);
         }
 
@@ -162,13 +163,6 @@ namespace TinyWars.BaseWar {
         }
         public getWar(): BwWar {
             return this._war;
-        }
-
-        private _setConfigVersion(configVersion: string): void {
-            this._configVersion = configVersion;
-        }
-        public getConfigVersion(): string {
-            return this._configVersion;
         }
 
         private _setMapSize(width: number, height: number): void {

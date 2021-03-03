@@ -7,9 +7,6 @@ namespace TinyWars.ReplayWar {
         protected _getTileMapClass(): new () => BaseWar.BwTileMap {
             return RwTileMap;
         }
-        protected _getUnitMapClass(): new () => BaseWar.BwUnitMap {
-            return RwUnitMap;
-        }
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return RwActionPlanner;
         }

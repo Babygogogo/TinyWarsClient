@@ -89,31 +89,37 @@ namespace TinyWars.ReplayWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
             const war       = RwModel.getWar();
-            const unitMap   = war.getUnitMap();
-            const dataList  : DataForUnitActionRenderer[] = [];
+            const dataArray : DataForUnitActionRenderer[] = [];
             for (const data of this._getOpenData<OpenDataForReplayUnitActionsPanel>().actionList) {
-                const unitForProduce = data.produceUnitType == null
-                    ? undefined
-                    : (new BaseWar.BwUnit()).init({
+                const produceUnitType = data.produceUnitType;
+                if (produceUnitType == null) {
+                    dataArray.push({
+                        actionType      : data.actionType,
+                        callback        : data.callback,
+                        unit            : data.unitForDrop || data.unitForLaunch,
+                        canProduceUnit  : data.canProduceUnit,
+                    });
+                } else {
+                    const unitForProduce = new BaseWar.BwUnit();
+                    unitForProduce.init({
                         gridIndex   : { x: -1, y: -1 },
                         unitId      : -1,
-                        unitType    : data.produceUnitType,
+                        unitType    : produceUnitType,
                         playerIndex : war.getPlayerIndexInTurn(),
                     }, war.getConfigVersion());
-                if (unitForProduce) {
                     unitForProduce.startRunning(war);
-                }
 
-                dataList.push({
-                    actionType      : data.actionType,
-                    callback        : data.callback,
-                    unit            : data.unitForDrop || data.unitForLaunch || unitForProduce,
-                    canProduceUnit  : data.canProduceUnit,
-                });
+                    dataArray.push({
+                        actionType      : data.actionType,
+                        callback        : data.callback,
+                        unit            : unitForProduce,
+                        canProduceUnit  : data.canProduceUnit,
+                    });
+                }
             }
 
-            this._listAction.bindData(dataList);
-            this._group.height = Math.min(300, (dataList.length || 1) * 60);
+            this._listAction.bindData(dataArray);
+            this._group.height = Math.min(300, (dataArray.length || 1) * 60);
         }
 
         private _updatePosition(): void {

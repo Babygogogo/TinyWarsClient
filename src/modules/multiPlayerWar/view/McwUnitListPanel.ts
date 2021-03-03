@@ -25,7 +25,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _war        : MpwWar;
         private _cursor     : BaseWar.BwCursor;
-        private _unitMap    : MpwUnitMap;
+        private _unitMap    : BaseWar.BwUnitMap;
         private _turnManager: MpwTurnManager;
         private _dataForList: DataForUnitRenderer[];
         private _playerIndex: number;
@@ -65,7 +65,7 @@ namespace TinyWars.MultiPlayerWar {
 
             const war           = MpwModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap() as MpwUnitMap;
+            this._unitMap       = war.getUnitMap();
             this._turnManager   = war.getTurnManager() as MpwTurnManager;
             this._cursor        = war.getField().getCursor();
             this._playerIndex   = war.getPlayerIndexLoggedIn() || this._turnManager.getNextPlayerIndex(0);

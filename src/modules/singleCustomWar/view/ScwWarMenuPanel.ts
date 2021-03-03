@@ -42,7 +42,7 @@ namespace TinyWars.SingleCustomWar {
         private _listPlayer             : GameUi.UiScrollList;
 
         private _war            : ScwWar;
-        private _unitMap        : ScwUnitMap;
+        private _unitMap        : BaseWar.BwUnitMap;
         private _actionPlanner  : ScwActionPlanner;
         private _dataForList    : DataForCommandRenderer[];
         private _menuType       = MenuType.Main;
@@ -90,7 +90,7 @@ namespace TinyWars.SingleCustomWar {
 
             const war           = ScwModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap() as ScwUnitMap;
+            this._unitMap       = war.getUnitMap();
             this._actionPlanner = war.getActionPlanner() as ScwActionPlanner;
             this._menuType      = MenuType.Main;
 

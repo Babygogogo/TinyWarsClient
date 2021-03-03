@@ -58,8 +58,12 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
+            const executedActionManagerError = this.getExecutedActionManager().init(isNeedReplay, data.executedActions || []);
+            if (executedActionManagerError) {
+                return executedActionManagerError;
+            }
+
             this._setWarId(data.warId);
-            this.getExecutedActionManager().init(isNeedReplay, data.executedActions || []);
 
             return ClientErrorCode.NoError;
         }

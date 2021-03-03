@@ -219,7 +219,8 @@ namespace TinyWars.MapEditor {
             this._labelName.text    = Lang.getUnitName(unitType);
 
             const unitView  = this._unitView;
-            const unit      = new BaseWar.BwUnit().init({
+            const unit      = new BaseWar.BwUnit();
+            unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType,

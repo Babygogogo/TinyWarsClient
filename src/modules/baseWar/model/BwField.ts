@@ -8,9 +8,9 @@ namespace TinyWars.BaseWar {
     import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
 
     export abstract class BwField {
-        private _unitMap                    : BwUnitMap;
         private _tileMap                    : BwTileMap;
         private _fogMap                     : BwFogMap;
+        private readonly _unitMap           = new (this._getUnitMapClass())();
         private readonly _cursor            = new BwCursor();
         private readonly _actionPlanner     = new (this._getActionPlannerClass())();
         private readonly _gridVisualEffect  = new BwGridVisualEffect();
@@ -18,7 +18,9 @@ namespace TinyWars.BaseWar {
 
         protected abstract _getFogMapClass(): new () => BwFogMap;
         protected abstract _getTileMapClass(): new () => BwTileMap;
-        protected abstract _getUnitMapClass(): new () => BwUnitMap;
+        protected _getUnitMapClass(): new () => BwUnitMap {
+            return BwUnitMap;
+        }
         protected abstract _getActionPlannerClass(): new () => BwActionPlanner;
 
         public async init(
@@ -56,10 +58,9 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const unitMap = await (this.getUnitMap() || new (this._getUnitMapClass())()).init(unitMapData, configVersion, mapSizeAndMaxPlayerIndex);
-            if (unitMap == null) {
-                Logger.error(`BwField.init() empty unitMap.`);
-                return undefined;
+            const unitMapError = this.getUnitMap().init(unitMapData, configVersion, mapSizeAndMaxPlayerIndex);
+            if (unitMapError) {
+                return unitMapError;
             }
 
             const actionPlannerError = this.getActionPlanner().init(mapSizeAndMaxPlayerIndex);
@@ -69,7 +70,6 @@ namespace TinyWars.BaseWar {
 
             this._setFogMap(fogMap);
             this._setTileMap(tileMap);
-            this._setUnitMap(unitMap);
 
             await this._initCursor(mapSizeAndMaxPlayerIndex);
             this._initGridVisionEffect();
@@ -156,9 +156,6 @@ namespace TinyWars.BaseWar {
             return this._tileMap;
         }
 
-        private _setUnitMap(map: BwUnitMap): void {
-            this._unitMap = map;
-        }
         public getUnitMap(): BwUnitMap {
             return this._unitMap;
         }

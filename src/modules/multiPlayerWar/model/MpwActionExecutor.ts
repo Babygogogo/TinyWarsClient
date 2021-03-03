@@ -147,7 +147,8 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
             const warEventAction = warEventManager.getWarEventAction(actionIdArray[index]);
             if (warEventAction.WarEventActionAddUnit) {
                 for (const unitData of extraDataList.find(v => v.indexForActionIdList === index).ExtraDataForWeaAddUnit.unitList || []) {
-                    const unit = new BaseWar.BwUnit().init(unitData, configVersion);
+                    const unit = new BaseWar.BwUnit();
+                    unit.init(unitData, configVersion);
                     unit.startRunning(war);
                     unit.startRunningView();
                     unitMap.setUnitOnMap(unit);
@@ -227,7 +228,8 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
             return undefined;
         }
 
-        const unit = (new BaseWar.BwUnit()).init(unitData, war.getConfigVersion());
+        const unit = new BaseWar.BwUnit();
+        unit.init(unitData, war.getConfigVersion());
         unit.startRunning(war);
         unit.startRunningView();
         unitMap.setUnitOnMap(unit);
@@ -886,7 +888,8 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         } else {
             const gridIndex         = focusUnit.getGridIndex();
             const producedUnitId    = unitMap.getNextUnitId();
-            const producedUnit      = (new BaseWar.BwUnit()).init({
+            const producedUnit      = new BaseWar.BwUnit();
+            producedUnit.init({
                 gridIndex,
                 playerIndex : focusUnit.getPlayerIndex(),
                 unitType    : focusUnit.getProduceUnitType(),

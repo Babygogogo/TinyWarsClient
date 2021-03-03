@@ -307,7 +307,8 @@ namespace TinyWars.MapEditor {
         }
         private _initUnitView(): void {
             const war   = this._war;
-            const unit  = new BaseWar.BwUnit().init({
+            const unit  = new BaseWar.BwUnit();
+            unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : Types.UnitType.Infantry,

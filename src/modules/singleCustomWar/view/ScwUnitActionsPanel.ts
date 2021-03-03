@@ -88,31 +88,38 @@ namespace TinyWars.SingleCustomWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const war           = ScwModel.getWar();
-            const unitMap       = war.getUnitMap();
-            const dataForList   = [] as DataForUnitActionRenderer[];
+            const war       = ScwModel.getWar();
+            const dataArray = [] as DataForUnitActionRenderer[];
             for (const data of this._getOpenData<OpenDataForScwUnitActionsPanel>().actionList) {
-                const unitForProduce = data.produceUnitType == null
-                    ? undefined
-                    : (new BaseWar.BwUnit()).init({
+                const produceUnitType = data.produceUnitType;
+                if (produceUnitType == null) {
+                    dataArray.push({
+                        actionType      : data.actionType,
+                        callback        : data.callback,
+                        unit            : data.unitForDrop || data.unitForLaunch,
+                        canProduceUnit  : data.canProduceUnit,
+                    });
+                } else {
+                    const unitForProduce = new BaseWar.BwUnit();
+                    unitForProduce.init({
                         gridIndex   : { x: -1, y: -1 },
                         unitId      : -1,
-                        unitType    : data.produceUnitType,
+                        unitType    : produceUnitType,
                         playerIndex : war.getPlayerIndexInTurn(),
                     }, war.getConfigVersion());
-                if (unitForProduce) {
                     unitForProduce.startRunning(war);
+
+                    dataArray.push({
+                        actionType      : data.actionType,
+                        callback        : data.callback,
+                        unit            : unitForProduce,
+                        canProduceUnit  : data.canProduceUnit,
+                    });
                 }
-                dataForList.push({
-                    actionType      : data.actionType,
-                    callback        : data.callback,
-                    unit            : data.unitForDrop || data.unitForLaunch || unitForProduce,
-                    canProduceUnit  : data.canProduceUnit,
-                });
             }
 
-            this._listAction.bindData(dataForList);
-            this._group.height = Math.min(300, (dataForList.length || 1) * 60);
+            this._listAction.bindData(dataArray);
+            this._group.height = Math.min(300, (dataArray.length || 1) * 60);
         }
 
         private _updatePosition(): void {

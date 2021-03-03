@@ -41,7 +41,7 @@ namespace TinyWars.MultiPlayerWar {
         private _listPlayer             : GameUi.UiScrollList;
 
         private _war            : MpwWar;
-        private _unitMap        : MpwUnitMap;
+        private _unitMap        : BaseWar.BwUnitMap;
         private _actionPlanner  : MpwActionPlanner;
         private _dataForList    : DataForCommandRenderer[];
         private _menuType       = MenuType.Main;
@@ -91,7 +91,7 @@ namespace TinyWars.MultiPlayerWar {
 
             const war           = MpwModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap() as MpwUnitMap;
+            this._unitMap       = war.getUnitMap();
             this._actionPlanner = war.getActionPlanner() as MpwActionPlanner;
             this._menuType      = MenuType.Main;
 

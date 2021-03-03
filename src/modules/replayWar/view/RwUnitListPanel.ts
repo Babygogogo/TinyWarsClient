@@ -22,7 +22,7 @@ namespace TinyWars.ReplayWar {
 
         private _war        : RwWar;
         private _cursor     : BaseWar.BwCursor;
-        private _unitMap    : RwUnitMap;
+        private _unitMap    : BaseWar.BwUnitMap;
         private _turnManager: RwTurnManager;
         private _dataForList: DataForUnitRenderer[];
         private _playerIndex: number;
@@ -62,7 +62,7 @@ namespace TinyWars.ReplayWar {
 
             const war           = RwModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap() as RwUnitMap;
+            this._unitMap       = war.getUnitMap();
             this._turnManager   = war.getTurnManager() as RwTurnManager;
             this._cursor        = war.getField().getCursor();
             this._playerIndex   = this._war.getPlayerInTurn().getPlayerIndex();

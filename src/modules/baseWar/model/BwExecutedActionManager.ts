@@ -3,19 +3,22 @@ namespace TinyWars.BaseWar {
     import Helpers              = Utility.Helpers;
     import Logger               = Utility.Logger;
     import ProtoTypes           = Utility.ProtoTypes;
+    import ClientErrorCode      = Utility.ClientErrorCode;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
 
     export class BwExecutedActionManager {
         private _isNeedReplay?      : boolean;
         private _executedActions?   : IWarActionContainer[];
 
-        public init(isNeedReplay: boolean, executedActions: IWarActionContainer[]): void {
+        public init(isNeedReplay: boolean, executedActions: IWarActionContainer[]): ClientErrorCode {
             this._setIsNeedReplay(isNeedReplay);
             if (isNeedReplay) {
                 this._setAllExecutedActions(executedActions);
             } else {
                 this._setAllExecutedActions(new Array(executedActions.length).fill({}));
             }
+
+            return ClientErrorCode.NoError;
         }
 
         private _setIsNeedReplay(isNeedReplay: boolean): void {

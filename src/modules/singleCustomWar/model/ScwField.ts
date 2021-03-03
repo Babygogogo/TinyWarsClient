@@ -7,9 +7,6 @@ namespace TinyWars.SingleCustomWar {
         protected _getTileMapClass(): new () => BaseWar.BwTileMap {
             return ScwTileMap;
         }
-        protected _getUnitMapClass(): new () => BaseWar.BwUnitMap {
-            return ScwUnitMap;
-        }
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
             return ScwActionPlanner;
         }

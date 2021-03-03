@@ -45,7 +45,7 @@ namespace TinyWars.ReplayWar {
         private _listPlayer             : GameUi.UiScrollList;
 
         private _war        : RwWar;
-        private _unitMap    : RwUnitMap;
+        private _unitMap    : BaseWar.BwUnitMap;
         private _dataForList: DataForCommandRenderer[];
         private _menuType   = MenuType.Main;
 
@@ -88,7 +88,7 @@ namespace TinyWars.ReplayWar {
 
             const war           = RwModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap() as RwUnitMap;
+            this._unitMap       = war.getUnitMap();
             this._menuType      = MenuType.Main;
 
             this._updateView();

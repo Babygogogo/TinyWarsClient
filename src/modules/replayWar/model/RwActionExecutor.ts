@@ -222,7 +222,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
         const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
         const cost          = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * BwHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
-        const unit          = (new BaseWar.BwUnit()).init({
+        const unit          = new BaseWar.BwUnit();
+        unit.init({
             gridIndex,
             playerIndex,
             unitType,
@@ -989,7 +990,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         } else {
             const gridIndex         = focusUnit.getGridIndex();
             const producedUnitId    = unitMap.getNextUnitId();
-            const producedUnit      = (new BaseWar.BwUnit()).init({
+            const producedUnit      = new BaseWar.BwUnit();
+            producedUnit.init({
                 gridIndex,
                 playerIndex : focusUnit.getPlayerIndex(),
                 unitType    : focusUnit.getProduceUnitType(),
@@ -1320,7 +1322,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const skillCfg      = war.getTileMap().getTile(gridIndex).getEffectiveSelfUnitProductionSkillCfg(playerIndex);
         const cfgCost       = ConfigManager.getUnitTemplateCfg(configVersion, unitType).productionCost;
         const cost          = Math.floor(cfgCost * (skillCfg ? skillCfg[5] : 100) / 100 * BwHelpers.getNormalizedHp(unitHp) / CommonConstants.UnitHpNormalizer);
-        const unit          = (new BaseWar.BwUnit()).init({
+        const unit          = new BaseWar.BwUnit();
+        unit.init({
             gridIndex,
             playerIndex,
             unitType,
@@ -1869,7 +1872,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         } else {
             const gridIndex         = focusUnit.getGridIndex();
             const producedUnitId    = unitMap.getNextUnitId();
-            const producedUnit      = (new BaseWar.BwUnit()).init({
+            const producedUnit      = new BaseWar.BwUnit();
+            producedUnit.init({
                 gridIndex,
                 playerIndex : focusUnit.getPlayerIndex(),
                 unitType    : focusUnit.getProduceUnitType(),

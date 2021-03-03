@@ -4,6 +4,7 @@ namespace TinyWars.BaseWar {
     import Logger               = Utility.Logger;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import ProtoTypes           = Utility.ProtoTypes;
+    import ClientErrorCode      = Utility.ClientErrorCode;
     import ConfigManager        = Utility.ConfigManager;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import UnitActionState      = Types.UnitActionState;
@@ -51,41 +52,35 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public init(data: ISerialUnit, configVersion: string): BwUnit {
+        public init(data: ISerialUnit, configVersion: string): ClientErrorCode {
             const playerIndex = data.playerIndex;
             if (playerIndex == null) {
-                Logger.error(`BwUnit.init() empty playerIndex.`);
-                return undefined;
+                return ClientErrorCode.BwUnitInit00;
             }
 
             const unitType = data.unitType as UnitType;
             if (unitType == null) {
-                Logger.error(`BwUnit.init() empty unitType.`);
-                return undefined;
+                return ClientErrorCode.BwUnitInit01;
             }
 
             const unitId = data.unitId;
             if (unitId == null) {
-                Logger.error(`BwUnit.init() empty unitId.`);
-                return undefined;
+                return ClientErrorCode.BwUnitInit02;
             }
 
             const gridIndex = BwHelpers.convertGridIndex(data.gridIndex);
             if (gridIndex == null) {
-                Logger.error(`BwUnit.init() empty gridIndex.`);
-                return undefined;
+                return ClientErrorCode.BwUnitInit03;
             }
 
             const unitTemplateCfg = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
             if (!unitTemplateCfg) {
-                Logger.error(`BwUnit.init() failed to get the unit template cfg! configVersion: ${configVersion}, unitType: ${unitType}`);
-                return undefined;
+                return ClientErrorCode.BwUnitInit04;
             }
 
             const damageChartCfg = ConfigManager.getDamageChartCfgs(configVersion, unitType);
             if (!damageChartCfg) {
-                Logger.error(`BwUnit.init() failed to get the unit damage cfg! configVersion: ${configVersion}, unitType: ${unitType}`);
-                return undefined;
+                return ClientErrorCode.BwUnitInit05;
             }
 
             this._setConfigVersion(configVersion);
@@ -113,7 +108,7 @@ namespace TinyWars.BaseWar {
 
             this.getView().init(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

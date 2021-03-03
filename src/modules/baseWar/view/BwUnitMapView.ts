@@ -181,7 +181,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _getLayerByUnitType(unitType: Types.UnitType): egret.DisplayObjectContainer | undefined {
-            const version = this._unitMap.getConfigVersion();
+            const version = this._unitMap.getWar().getConfigVersion();
             if (Utility.ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Air)) {
                 return this._layerForAir;
             } else if (Utility.ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Ground)) {

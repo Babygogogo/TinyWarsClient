@@ -143,7 +143,8 @@ namespace TinyWars.MultiPlayerWar {
             const minNormalizedHp   = skillCfg ? BwHelpers.getNormalizedHp(skillCfg[3]) : BwHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
 
             for (const unitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, unitCategory)) {
-                const unit = new BaseWar.BwUnit().init({
+                const unit = new BaseWar.BwUnit();
+                unit.init({
                     gridIndex   : { x: -1, y: -1 },
                     unitId      : -1,
                     unitType,
