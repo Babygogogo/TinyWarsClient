@@ -79,7 +79,7 @@ namespace TinyWars.BaseWar {
                 isMoving    : this._animationType === UnitAnimationType.Move,
                 tickCount   : Time.TimeModel.getUnitAnimationTickCount(),
                 skinId      : unit.getSkinId(),
-                unitType    : unit.getType(),
+                unitType    : unit.getUnitType(),
             });
         }
 
@@ -139,7 +139,7 @@ namespace TinyWars.BaseWar {
             const war                   = unit.getWar();
             const playerIndex           = unit.getPlayerIndex();
             const skinIdMod             = unit.getSkinId() % 2;
-            const unitType              = unit.getType();
+            const unitType              = unit.getUnitType();
             const watcherTeamIndexes    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const isAlwaysVisible       = watcherTeamIndexes.has(unit.getTeamIndex());
             const tween                 = egret.Tween.get(this);

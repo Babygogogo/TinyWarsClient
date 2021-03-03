@@ -117,7 +117,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
                         visibilityFromUnits[x][y],
                     );
                     if ((visibility === Visibility.TrueVision)                                                  ||
-                        ((visibility === Visibility.InsideVision) && (!tile.checkCanHideUnit(unit.getType())))
+                        ((visibility === Visibility.InsideVision) && (!tile.checkCanHideUnit(unit.getUnitType())))
                     ) {
                         units.add(unit);
                     }

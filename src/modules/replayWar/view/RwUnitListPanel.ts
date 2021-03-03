@@ -148,7 +148,7 @@ namespace TinyWars.ReplayWar {
         } else if ((stateA !== Types.UnitActionState.Idle) && (stateB === Types.UnitActionState.Idle)) {
             return 1;
         } else {
-            return unitA.getType() - unitB.getType();
+            return unitA.getUnitType() - unitB.getUnitType();
         }
     }
 
@@ -212,7 +212,7 @@ namespace TinyWars.ReplayWar {
             this._unitView.init(unit).startRunningView();
             this._labelHp.text          = `${unit.getCurrentHp()}`;
             this._labelFuel.text        = `${unit.getCurrentFuel()}`;
-            this._labelName.text        = Lang.getUnitName(unit.getType());
+            this._labelName.text        = Lang.getUnitName(unit.getUnitType());
             this._labelGridIndex.text   = `x${unit.getGridX()} y${unit.getGridY()}`;
 
             if (unit.getCurrentBuildMaterial() != null) {

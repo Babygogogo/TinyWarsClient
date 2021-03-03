@@ -329,7 +329,7 @@ namespace TinyWars.BaseWar {
             return this._templateCfg.defenseUnitCategory;
         }
         public checkCanDefendUnit(unit: BwUnit): boolean {
-            return Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), this.getDefenseUnitCategory());
+            return Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getUnitType(), this.getDefenseUnitCategory());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -472,7 +472,7 @@ namespace TinyWars.BaseWar {
             const tileType = this.getType();
             if (((tileType === TileType.Seaport) || (tileType === TileType.TempSeaport))    &&
                 (this.getTeamIndex() !== unit.getTeamIndex())                               &&
-                (Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), Types.UnitCategory.LargeNaval))) {
+                (Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getUnitType(), Types.UnitCategory.LargeNaval))) {
                 return undefined;
             } else {
                 return this.getMoveCostByMoveType(unit.getMoveType());
@@ -495,14 +495,14 @@ namespace TinyWars.BaseWar {
             return (category != null)
                 && ((attributes.hp < unit.getMaxHp()) || (unit.checkCanBeSupplied(attributes)))
                 && (unit.getTeamIndex() === this.getTeamIndex())
-                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), category));
+                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getUnitType(), category));
         }
         public checkCanSupplyUnit(unit: BwUnit): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
                 && (unit.checkCanBeSupplied())
                 && (unit.getTeamIndex() === this.getTeamIndex())
-                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), category));
+                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getUnitType(), category));
         }
 
         public getRepairHpAndCostForUnit(

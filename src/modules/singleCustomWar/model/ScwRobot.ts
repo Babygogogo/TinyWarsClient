@@ -757,7 +757,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             if ((unit.getPlayerIndex() === playerIndexInturn)                                                   &&
                 (unit.getActionState() === UnitActionState.Idle)                                                &&
                 (unit.getMinAttackRange())                                                                      &&
-                (ConfigManager.checkIsUnitTypeInCategory(_configVersion, unit.getType(), Types.UnitCategory.Air))
+                (ConfigManager.checkIsUnitTypeInCategory(_configVersion, unit.getUnitType(), Types.UnitCategory.Air))
             ) {
                 units.push(unit);
             }
@@ -941,10 +941,10 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
             return Math.min(attackDamage, targetTile.getCurrentHp());                                   // ADJUSTABLE
         }
 
-        const attackerType  = unit.getType();
+        const attackerType  = unit.getUnitType();
         const targetUnit    = _unitMap.getUnitOnMap(targetGridIndex);
         const targetHp      = targetUnit.getCurrentHp();
-        const targetType    = targetUnit.getType();
+        const targetType    = targetUnit.getUnitType();
         attackDamage        = Math.min(attackDamage, targetHp);
         let score           = (attackDamage + (attackDamage >= targetHp ? 20 : 0))
             * targetUnit.getProductionFinalCost() / 3000 * Math.max(1, _unitValueRatio)
@@ -1058,7 +1058,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         const teamIndex = targetUnit.getTeamIndex();
         _unitMap.forEachUnit(unit => {
             if (unit.getTeamIndex() === teamIndex) {
-                if (unit.getType() === unitType) {
+                if (unit.getUnitType() === unitType) {
                     score += -unit.getCurrentHp() * productionCost / 3000 / 1.5;                                                        // ADJUSTABLE
                 }
             } else {

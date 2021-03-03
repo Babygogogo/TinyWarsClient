@@ -65,7 +65,7 @@ namespace TinyWars.BaseWar {
             view.y = _GRID_HEIGHT * model.getGridY();
             (model.getLoaderUnitId() != null) && (view.visible = false);
 
-            const layer = this._getLayerByUnitType(model.getType());
+            const layer = this._getLayerByUnitType(model.getUnitType());
             layer.addChild(view);
             (needResetZOrder) && (this._resetZOrderForLayer(layer));
         }

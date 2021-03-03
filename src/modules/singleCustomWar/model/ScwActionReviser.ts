@@ -478,7 +478,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
                             if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                                 war,
                                 gridIndex,
-                                unitType            : existingUnit.getType(),
+                                unitType            : existingUnit.getUnitType(),
                                 isDiving            : existingUnit.getIsDiving(),
                                 unitPlayerIndex     : existingUnit.getPlayerIndex(),
                                 observerTeamIndex   : teamIndexInTurn,

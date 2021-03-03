@@ -254,7 +254,7 @@ namespace TinyWars.MapEditor {
             unit.init({
                 gridIndex,
                 playerIndex : targetUnit.getPlayerIndex(),
-                unitType    : targetUnit.getType(),
+                unitType    : targetUnit.getUnitType(),
                 unitId,
             }, this._configVersion);
             unit.startRunning(this._getWar());

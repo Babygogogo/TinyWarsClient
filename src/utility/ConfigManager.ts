@@ -8,15 +8,15 @@ namespace TinyWars.Utility.ConfigManager {
     import UnitCategory     = Types.UnitCategory;
     import TileCategory     = Types.TileCategory;
     import WeaponType       = Types.WeaponType;
+    import UnitTemplateCfg  = Types.UnitTemplateCfg;
+    import DamageChartCfg   = Types.DamageChartCfg;
+    import BuildableTileCfg = Types.BuildableTileCfg;
+    import VisionBonusCfg   = Types.VisionBonusCfg;
     import ITileCategoryCfg = ProtoTypes.Config.ITileCategoryCfg;
     import UnitCategoryCfg  = ProtoTypes.Config.IUnitCategoryCfg;
     import TileTemplateCfg  = ProtoTypes.Config.ITileTemplateCfg;
-    import UnitTemplateCfg  = ProtoTypes.Config.IUnitTemplateCfg;
-    import DamageChartCfg   = ProtoTypes.Config.IDamageChartCfg;
     import MoveCostCfg      = ProtoTypes.Config.IMoveCostCfg;
     import UnitPromotionCfg = ProtoTypes.Config.IUnitPromotionCfg;
-    import VisionBonusCfg   = ProtoTypes.Config.IVisionBonusCfg;
-    import BuildableTileCfg = ProtoTypes.Config.IBuildableTileCfg;
     import IPlayerRankCfg   = ProtoTypes.Config.IPlayerRankCfg;
     import CoBasicCfg       = ProtoTypes.Config.ICoBasicCfg;
     import CoSkillCfg       = ProtoTypes.Config.ICoSkillCfg;
@@ -884,7 +884,7 @@ namespace TinyWars.Utility.ConfigManager {
         }
 
         let configBin: any;
-        let rawConfig: ProtoTypes.Config.IFullConfig;
+        let rawConfig: Types.FullConfig;
         try {
             configBin = await RES.getResByUrl(
                 `resource/config/FullConfig${version}.bin`,
@@ -892,7 +892,7 @@ namespace TinyWars.Utility.ConfigManager {
                 undefined,
                 RES.ResourceItem.TYPE_BIN
             );
-            rawConfig = configBin ? Utility.ProtoManager.decodeAsFullConfig(configBin) : undefined;
+            rawConfig = configBin ? Utility.ProtoManager.decodeAsFullConfig(configBin) as Types.FullConfig : undefined;
         } catch (e) {
         }
 

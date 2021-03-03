@@ -349,8 +349,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             const targetPlayerIndex             = targetUnit.getPlayerIndex();
             const attackerLostNormalizedHp      = counterDamage == null ? undefined : BwHelpers.getNormalizedHp(attackerOldHp) - BwHelpers.getNormalizedHp(attackerNewHp);
             const targetLostNormalizedHp        = BwHelpers.getNormalizedHp(targetOldHp) - BwHelpers.getNormalizedHp(targetNewHp);
-            const attackerUnitType              = attackerUnit.getType();
-            const targetUnitType                = targetUnit.getType();
+            const attackerUnitType              = attackerUnit.getUnitType();
+            const targetUnitType                = targetUnit.getUnitType();
             const attackerCoGridIndexListOnMap  = unitMap.getCoGridIndexListOnMap(attackerPlayerIndex);
             const targetCoGridIndexListOnMap    = unitMap.getCoGridIndexListOnMap(targetPlayerIndex);
             const isAttackerDestroyed           = attackerNewHp <= 0;
@@ -1409,8 +1409,8 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             const targetPlayerIndex             = targetUnit.getPlayerIndex();
             const attackerLostNormalizedHp      = counterDamage == null ? undefined : BwHelpers.getNormalizedHp(attackerOldHp) - BwHelpers.getNormalizedHp(attackerNewHp);
             const targetLostNormalizedHp        = BwHelpers.getNormalizedHp(targetOldHp) - BwHelpers.getNormalizedHp(targetNewHp);
-            const attackerUnitType              = attackerUnit.getType();
-            const targetUnitType                = targetUnit.getType();
+            const attackerUnitType              = attackerUnit.getUnitType();
+            const targetUnitType                = targetUnit.getUnitType();
             const attackerCoGridIndexListOnMap  = unitMap.getCoGridIndexListOnMap(attackerPlayerIndex);
             const targetCoGridIndexListOnMap    = unitMap.getCoGridIndexListOnMap(targetPlayerIndex);
             const isAttackerDestroyed           = attackerNewHp <= 0;

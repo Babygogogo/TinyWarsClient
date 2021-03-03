@@ -162,7 +162,7 @@ namespace TinyWars.BaseWar {
                             && (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                                 war,
                                 gridIndex,
-                                unitType: unit.getType(),
+                                unitType: unit.getUnitType(),
                                 isDiving: unit.getIsDiving(),
                                 unitPlayerIndex: playerIndex,
                                 observerTeamIndexes: watcherTeamIndexes

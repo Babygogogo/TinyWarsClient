@@ -566,7 +566,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
             const endingGridIndex = pathNodes[pathNodes.length - 1];
             if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                 war,
-                unitType            : focusUnit.getType(),
+                unitType            : focusUnit.getUnitType(),
                 unitPlayerIndex     : focusUnit.getPlayerIndex(),
                 gridIndex           : endingGridIndex,
                 observerTeamIndexes : war.getPlayerManager().getAliveWatcherTeamIndexesForSelf(),
@@ -990,7 +990,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
             const endingGridIndex = pathNodes[pathNodes.length - 1];
             if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
                 war,
-                unitType            : focusUnit.getType(),
+                unitType            : focusUnit.getUnitType(),
                 unitPlayerIndex     : focusUnit.getPlayerIndex(),
                 gridIndex           : endingGridIndex,
                 observerTeamIndexes : war.getPlayerManager().getAliveWatcherTeamIndexesForSelf(),

@@ -486,7 +486,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
                     const recoverCfg    = skillCfg.selfHpRecovery;
                     const targetUnits   : BwUnit[] = [];
                     unitMap.forEachUnit(unit => {
-                        const unitType = unit.getType();
+                        const unitType = unit.getUnitType();
                         if (unitType == null) {
                             Logger.error(`BwTurnManager._runPhaseRecoverUnitByCo() empty unitType.`);
                             return;
@@ -567,7 +567,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
                 if (skillCfg.selfFuelRecovery) {
                     const recoverCfg = skillCfg.selfFuelRecovery;
                     unitMap.forEachUnit(unit => {
-                        const unitType = unit.getType();
+                        const unitType = unit.getUnitType();
                         if (unitType == null) {
                             Logger.error(`BwTurnManager._runPhaseRecoverUnitByCo() empty unitType.`);
                             return;
@@ -617,7 +617,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
                 if (skillCfg.selfPrimaryAmmoRecovery) {
                     const recoverCfg = skillCfg.selfPrimaryAmmoRecovery;
                     unitMap.forEachUnit(unit => {
-                        const unitType = unit.getType();
+                        const unitType = unit.getUnitType();
                         if (unitType == null) {
                             Logger.error(`BwTurnManager._runPhaseRecoverUnitByCo() empty unitType.`);
                             return;

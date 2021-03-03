@@ -137,11 +137,11 @@ namespace TinyWars.BaseWar {
 
         private _updateUnitViewAndLabelName(): void {
             const unit              = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
-            this._labelName.text    = Lang.getUnitName(unit.getType());
+            this._labelName.text    = Lang.getUnitName(unit.getUnitType());
             this._unitView.update({
                 gridIndex       : { x: 0, y: 0},
                 skinId          : unit.getSkinId(),
-                unitType        : unit.getType(),
+                unitType        : unit.getUnitType(),
                 unitActionState : unit.getActionState(),
             }, Time.TimeModel.getUnitAnimationTickCount());
         }
@@ -149,7 +149,7 @@ namespace TinyWars.BaseWar {
         private _updateListInfo(): void {
             const unit          = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
             const configVersion = unit.getConfigVersion();
-            const unitType      = unit.getType();
+            const unitType      = unit.getUnitType();
             const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
             const war           = unit.getWar();
             const isCheating    = (war instanceof MapEditor.MeWar)
@@ -575,7 +575,7 @@ namespace TinyWars.BaseWar {
         private _createDataForListDamageChart(): DataForDamageRenderer[] {
             const unit              = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
             const configVersion     = unit.getConfigVersion();
-            const attackUnitType    = unit.getType();
+            const attackUnitType    = unit.getUnitType();
             const playerIndex       = unit.getPlayerIndex();
 
             const dataList = [] as DataForDamageRenderer[];

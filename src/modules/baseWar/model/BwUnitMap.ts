@@ -227,7 +227,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const unitType = unit.getType();
+            const unitType = unit.getUnitType();
             if (unitType == null) {
                 Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty unitType.`);
                 return undefined;

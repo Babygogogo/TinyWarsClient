@@ -16,22 +16,19 @@ namespace TinyWars.BaseWar {
     import MoveType             = Types.MoveType;
     import GridIndex            = Types.GridIndex;
     import MovePathNode         = Types.MovePathNode;
+    import UnitTemplateCfg      = Types.UnitTemplateCfg;
     import ISerialUnit          = ProtoTypes.WarSerialization.ISerialUnit;
     import IWarUnitRepairData   = ProtoTypes.Structure.IDataForModifyUnit;
     import Config               = ProtoTypes.Config;
     import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     export class BwUnit {
-        private _configVersion      : string;
-        private _templateCfg        : Config.IUnitTemplateCfg;
-        private _damageChartCfg     : { [armorType: number]: { [weaponType: number]: Config.IDamageChartCfg } };
-        private _buildableTileCfg   : { [srcBaseType: number]: { [srcObjectType: number]: Config.IBuildableTileCfg } };
-        private _visionBonusCfg     : { [tileType: number]: Config.IVisionBonusCfg };
-        private _playerIndex        : number;
-
+        private _playerIndex                : number;
+        private _unitType                   : UnitType;
         private _gridX                      : number;
         private _gridY                      : number;
         private _unitId                     : number;
+
         private _actionState                : UnitActionState;
         private _currentHp                  : number;
         private _currentFuel                : number;
@@ -46,29 +43,39 @@ namespace TinyWars.BaseWar {
         private _loaderUnitId               : number;
         private _primaryWeaponCurrentAmmo   : number;
 
-        private _war            : BwWar;
-        private readonly _view  = new BwUnitView();
+        private _war                        : BwWar;
+        private readonly _view              = new BwUnitView();
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers and serializers.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public init(data: ISerialUnit, configVersion: string): ClientErrorCode {
-            const playerIndex = data.playerIndex;
+        public init(unitData: ISerialUnit, configVersion: string): ClientErrorCode {
+            const validationError = BwHelpers.getErrorCodeForUnitDataIgnoringUnitId({
+                unitData,
+                configVersion,
+                mapSize                 : undefined,
+                playersCountUnneutral   : undefined,
+            });
+            if (validationError) {
+                return validationError;
+            }
+
+            const playerIndex = unitData.playerIndex;
             if (playerIndex == null) {
                 return ClientErrorCode.BwUnitInit00;
             }
 
-            const unitType = data.unitType as UnitType;
+            const unitType = unitData.unitType as UnitType;
             if (unitType == null) {
                 return ClientErrorCode.BwUnitInit01;
             }
 
-            const unitId = data.unitId;
+            const unitId = unitData.unitId;
             if (unitId == null) {
                 return ClientErrorCode.BwUnitInit02;
             }
 
-            const gridIndex = BwHelpers.convertGridIndex(data.gridIndex);
+            const gridIndex = BwHelpers.convertGridIndex(unitData.gridIndex);
             if (gridIndex == null) {
                 return ClientErrorCode.BwUnitInit03;
             }
@@ -78,33 +85,29 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwUnitInit04;
             }
 
-            const damageChartCfg = ConfigManager.getDamageChartCfgs(configVersion, unitType);
-            if (!damageChartCfg) {
+            if (!ConfigManager.getDamageChartCfgs(configVersion, unitType)) {
                 return ClientErrorCode.BwUnitInit05;
             }
 
-            this._setConfigVersion(configVersion);
             this.setGridIndex(gridIndex);
-            this._setTemplateCfg(unitTemplateCfg);
-            this._setDamageChartCfg(damageChartCfg);
-            this._setBuildableTileCfg(ConfigManager.getBuildableTileCfgs(configVersion, unitType));
-            this._setVisionBonusCfg(ConfigManager.getVisionBonusCfg(configVersion, unitType));
             this.setUnitId(unitId);
+            this._setUnitType(unitType);
             this._setPlayerIndex(playerIndex);
+
             this._setWar(undefined);
-            this.setIsDiving(data.isDiving || ConfigManager.checkIsUnitDivingByDefaultWithTemplateCfg(unitTemplateCfg));
-            this.setHasLoadedCo(data.hasLoadedCo || false);
-            this.setLoaderUnitId(data.loaderUnitId);
-            this.setActionState(             data.actionState              != null ? data.actionState              : UnitActionState.Idle);
-            this.setCurrentHp(               data.currentHp                != null ? data.currentHp                : unitTemplateCfg.maxHp);
-            this.setPrimaryWeaponCurrentAmmo(data.primaryWeaponCurrentAmmo != null ? data.primaryWeaponCurrentAmmo : this.getPrimaryWeaponMaxAmmo());
-            this.setIsCapturingTile(         data.isCapturingTile          != null ? data.isCapturingTile          : false);
-            this.setCurrentFuel(             data.currentFuel              != null ? data.currentFuel              : unitTemplateCfg.maxFuel);
-            this.setFlareCurrentAmmo(        data.flareCurrentAmmo         != null ? data.flareCurrentAmmo         : this.getFlareMaxAmmo());
-            this.setCurrentProduceMaterial(  data.currentProduceMaterial   != null ? data.currentProduceMaterial   : this.getMaxProduceMaterial());
-            this.setCurrentPromotion(        data.currentPromotion         != null ? data.currentPromotion         : 0);
-            this.setIsBuildingTile(          data.isBuildingTile           != null ? data.isBuildingTile           : false);
-            this.setCurrentBuildMaterial(    data.currentBuildMaterial     != null ? data.currentBuildMaterial     : this.getMaxBuildMaterial());
+            this.setLoaderUnitId(unitData.loaderUnitId);
+            this.setHasLoadedCo(getRevisedHasLoadedCo(unitData.hasLoadedCo));
+            this.setIsCapturingTile(getRevisedIsCapturingTile(unitData.isCapturingTile));
+            this.setCurrentPromotion(getRevisedCurrentPromotion(unitData.currentPromotion));
+            this.setIsBuildingTile(getRevisedIsBuildingTile(unitData.isBuildingTile));
+            this.setActionState(getRevisedActionState(unitData.actionState));
+            this.setIsDiving(getRevisedIsDiving(unitData.isDiving, unitTemplateCfg));
+            this.setCurrentHp(getRevisedCurrentHp(unitData.currentHp, unitTemplateCfg));
+            this.setPrimaryWeaponCurrentAmmo(getRevisedPrimaryAmmo(unitData.primaryWeaponCurrentAmmo, unitTemplateCfg));
+            this.setCurrentFuel(getRevisedCurrentFuel(unitData.currentFuel, unitTemplateCfg));
+            this.setFlareCurrentAmmo(getRevisedFlareAmmo(unitData.flareCurrentAmmo, unitTemplateCfg));
+            this.setCurrentProduceMaterial(getRevisedProduceMaterial(unitData.currentProduceMaterial, unitTemplateCfg));
+            this.setCurrentBuildMaterial(getRevisedBuildMaterial(unitData.currentBuildMaterial, unitTemplateCfg));
 
             this.getView().init(this);
 
@@ -133,7 +136,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const unitType = this.getType();
+            const unitType = this.getUnitType();
             if (unitType == null) {
                 Logger.error(`BwHelpers.serializeUnit() empty unitType.`);
                 return undefined;
@@ -210,11 +213,68 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
-        private _setConfigVersion(version: string): void {
-            this._configVersion = version;
+        public getConfigVersion(): string | null | undefined {
+            return this.getWar()?.getConfigVersion();
         }
-        public getConfigVersion(): string {
-            return this._configVersion;
+        private _getTemplateCfg(): UnitTemplateCfg | undefined {
+            const configVersion = this.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwUnit._getTemplateCfg() empty configVersion.`);
+                return undefined;
+            }
+
+            const unitType = this.getUnitType();
+            if (unitType == null) {
+                Logger.error(`BwUnit._getTemplateCfg() empty unitType.`);
+                return undefined;
+            }
+
+            return ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+        }
+        private _getDamageChartCfg(): { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } } | undefined {
+            const configVersion = this.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwUnit._getDamageChartCfg() empty configVersion.`);
+                return undefined;
+            }
+
+            const unitType = this.getUnitType();
+            if (unitType == null) {
+                Logger.error(`BwUnit._getDamageChartCfg() empty unitType.`);
+                return undefined;
+            }
+
+            return ConfigManager.getDamageChartCfgs(configVersion, unitType);
+        }
+        private _getBuildableTileCfg(): { [srcBaseType: number]: { [srcObjectType: number]: Types.BuildableTileCfg } } | undefined {
+            const configVersion = this.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwUnit._getBuildableTileCfg() empty configVersion.`);
+                return undefined;
+            }
+
+            const unitType = this.getUnitType();
+            if (unitType == null) {
+                Logger.error(`BwUnit._getBuildableTileCfg() empty unitType.`);
+                return undefined;
+            }
+
+            return ConfigManager.getBuildableTileCfgs(configVersion, unitType);
+        }
+        private _getVisionBonusCfg(): { [tileType: number]: Types.VisionBonusCfg } | undefined {
+            const configVersion = this.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwUnit._getVisionBonusCfg() empty configVersion.`);
+                return undefined;
+            }
+
+            const unitType = this.getUnitType();
+            if (unitType == null) {
+                Logger.error(`BwUnit._getVisionBonusCfg() empty unitType.`);
+                return undefined;
+            }
+
+            return ConfigManager.getVisionBonusCfg(configVersion, unitType);
         }
 
         public getPlayer(): BwPlayer {
@@ -224,20 +284,6 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
             return war.getPlayer(this.getPlayerIndex());
-        }
-
-        private _setTemplateCfg(templateCfg: Config.IUnitTemplateCfg): void {
-            this._templateCfg = templateCfg;
-        }
-        private _getTemplateCfg(): Config.IUnitTemplateCfg | undefined {
-            return this._templateCfg;
-        }
-
-        private _setBuildableTileCfg(buildableTileCfg: { [srcBaseType: number]: { [srcObjectType: number]: Config.IBuildableTileCfg } } | undefined): void {
-            this._buildableTileCfg = buildableTileCfg;
-        }
-        private _getBuildableTileCfg(): { [srcBaseType: number]: { [srcObjectType: number]: Config.IBuildableTileCfg } } | undefined {
-            return this._buildableTileCfg;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -268,8 +314,11 @@ namespace TinyWars.BaseWar {
             this._unitId = id;
         }
 
-        public getType(): UnitType {
-            return this._templateCfg.type;
+        private _setUnitType(unitType: UnitType): void {
+            this._unitType = unitType;
+        }
+        public getUnitType(): UnitType {
+            return this._unitType;
         }
 
         public getAttributes(): Types.UnitAttributes {
@@ -325,7 +374,7 @@ namespace TinyWars.BaseWar {
         // Functions for hp and armor.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxHp(): number {
-            return this._templateCfg.maxHp;
+            return this._getTemplateCfg().maxHp;
         }
         public getNormalizedMaxHp(): number {
             return BwHelpers.getNormalizedHp(this.getMaxHp());
@@ -348,11 +397,11 @@ namespace TinyWars.BaseWar {
         }
 
         public getArmorType(): ArmorType {
-            return this._templateCfg.armorType;
+            return this._getTemplateCfg().armorType;
         }
 
         public checkIsArmorAffectByLuck(): boolean {
-            return this._templateCfg.isAffectedByLuck === 1;
+            return this._getTemplateCfg().isAffectedByLuck === 1;
         }
 
         public updateByRepairData(data: IWarUnitRepairData): void {
@@ -378,11 +427,11 @@ namespace TinyWars.BaseWar {
         }
 
         public checkHasPrimaryWeapon(): boolean {
-            return this._templateCfg.primaryWeaponMaxAmmo != null;
+            return this._getTemplateCfg().primaryWeaponMaxAmmo != null;
         }
 
         public getPrimaryWeaponMaxAmmo(): number | undefined {
-            return this._templateCfg.primaryWeaponMaxAmmo;
+            return this._getTemplateCfg().primaryWeaponMaxAmmo;
         }
 
         public getPrimaryWeaponCurrentAmmo(): number | undefined{
@@ -422,7 +471,7 @@ namespace TinyWars.BaseWar {
         public getCfgPrimaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
             return armorType == null
                 ? undefined
-                : this._damageChartCfg[armorType][Types.WeaponType.Primary].damage;
+                : this._getTemplateCfg()[armorType][Types.WeaponType.Primary].damage;
         }
         public getPrimaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
             return this.getPrimaryWeaponCurrentAmmo()
@@ -443,7 +492,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const unitType = this.getType();
+            const unitType = this.getUnitType();
             if (unitType == null) {
                 Logger.error(`BwUnit.getAttackModifierByCo() unitType is empty.`);
                 return undefined;
@@ -508,7 +557,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const unitType = this.getType();
+            const unitType = this.getUnitType();
             if (unitType == null) {
                 Logger.error(`BwUnit.getDefenseModifierByCo() unitType is empty.`);
                 return undefined;
@@ -561,13 +610,13 @@ namespace TinyWars.BaseWar {
         }
 
         public checkHasSecondaryWeapon(): boolean {
-            return Utility.ConfigManager.checkHasSecondaryWeapon(this.getConfigVersion(), this.getType());
+            return Utility.ConfigManager.checkHasSecondaryWeapon(this.getConfigVersion(), this.getUnitType());
         }
 
         public getCfgSecondaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
             return armorType == null
                 ? undefined
-                : this._damageChartCfg[armorType][Types.WeaponType.Secondary].damage;
+                : this._getTemplateCfg()[armorType][Types.WeaponType.Secondary].damage;
         }
         public getSecondaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
             return this.checkHasSecondaryWeapon()
@@ -575,12 +624,6 @@ namespace TinyWars.BaseWar {
                 : undefined;
         }
 
-        private _setDamageChartCfg(damageChartCfg: { [armorType: number]: { [weaponType: number]: Config.IDamageChartCfg } }): void {
-            this._damageChartCfg = damageChartCfg;
-        }
-        private _getDamageChartCfg(): { [armorType: number]: { [weaponType: number]: Config.IDamageChartCfg } } | undefined {
-            return this._damageChartCfg;
-        }
         public getCfgBaseDamage(targetArmorType: Types.ArmorType, weaponType: Types.WeaponType): number | null | undefined {
             const cfgs  = this._getDamageChartCfg();
             const cfg   = cfgs ? cfgs[targetArmorType] : undefined;
@@ -592,10 +635,10 @@ namespace TinyWars.BaseWar {
         }
 
         public getMinAttackRange(): number | undefined {
-            return this._templateCfg.minAttackRange;
+            return this._getTemplateCfg().minAttackRange;
         }
         public getCfgMaxAttackRange(): number | undefined {
-            return this._templateCfg.maxAttackRange;
+            return this._getTemplateCfg().maxAttackRange;
         }
         public getFinalMaxAttackRange(): number | undefined {
             const cfgRange = this.getCfgMaxAttackRange();
@@ -616,7 +659,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const unitType = this.getType();
+            const unitType = this.getUnitType();
             if (unitType == null) {
                 Logger.error(`BwUnit._getMaxAttackRangeModifierByCo() unitType is empty.`);
                 return undefined;
@@ -659,10 +702,10 @@ namespace TinyWars.BaseWar {
         }
 
         public checkCanAttackAfterMove(): boolean {
-            return this._templateCfg.canAttackAfterMove === 1;
+            return this._getTemplateCfg().canAttackAfterMove === 1;
         }
         public checkCanAttackDivingUnits(): boolean {
-            return this._templateCfg.canAttackDivingUnits === 1;
+            return this._getTemplateCfg().canAttackDivingUnits === 1;
         }
 
         public checkCanAttackTargetAfterMovePath(movePath: MovePathNode[], targetGridIndex: GridIndex): boolean {
@@ -683,7 +726,7 @@ namespace TinyWars.BaseWar {
             const teamIndex         = this.getTeamIndex();
             const unitOnDestination = unitMap.getUnitOnMap(destination);
             if ((pathLength > 1) && (unitOnDestination)) {
-                const unitType = unitOnDestination.getType();
+                const unitType = unitOnDestination.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwUnit.checkCanAttackTargetAfterMovePath() empty unitType.`);
                     return undefined;
@@ -739,7 +782,7 @@ namespace TinyWars.BaseWar {
         }
 
         public checkIsCapturer(): boolean {
-            return this._templateCfg.canCaptureTile === 1;
+            return this._getTemplateCfg().canCaptureTile === 1;
         }
         public checkCanCaptureTile(tile: BwTile): boolean {
             return (this.checkIsCapturer())
@@ -805,7 +848,7 @@ namespace TinyWars.BaseWar {
         }
 
         public getMaxFuel(): number {
-            return this._templateCfg.maxFuel;
+            return this._getTemplateCfg().maxFuel;
         }
 
         public getUsedFuel(): number | undefined {
@@ -844,7 +887,7 @@ namespace TinyWars.BaseWar {
         }
 
         public checkIsDestroyedOnOutOfFuel(): boolean {
-            return this._templateCfg.isDestroyedOnOutOfFuel === 1;
+            return this._getTemplateCfg().isDestroyedOnOutOfFuel === 1;
         }
 
         public checkIsFuelInShort(): boolean {
@@ -855,15 +898,15 @@ namespace TinyWars.BaseWar {
         // Functions for flare.
         ////////////////////////////////////////////////////////////////////////////////
         public getFlareRadius(): number | undefined {
-            return this._templateCfg.flareRadius;
+            return this._getTemplateCfg().flareRadius;
         }
 
         public getFlareMaxRange(): number | undefined {
-            return this._templateCfg.flareMaxRange;
+            return this._getTemplateCfg().flareMaxRange;
         }
 
         public getFlareMaxAmmo(): number | undefined {
-            return this._templateCfg.flareMaxAmmo;
+            return this._getTemplateCfg().flareMaxAmmo;
         }
 
         public getFlareCurrentAmmo(): number | undefined {
@@ -929,7 +972,7 @@ namespace TinyWars.BaseWar {
         // Functions for produce unit.
         ////////////////////////////////////////////////////////////////////////////////
         public getProduceUnitType(): UnitType | undefined {
-            return this._templateCfg.produceUnitType;
+            return this._getTemplateCfg().produceUnitType;
         }
 
         public getProduceUnitCost(): number | undefined {
@@ -942,7 +985,7 @@ namespace TinyWars.BaseWar {
         }
 
         public getMaxProduceMaterial(): number | undefined {
-            return this._templateCfg.maxProduceMaterial;
+            return this._getTemplateCfg().maxProduceMaterial;
         }
 
         public getCurrentProduceMaterial(): number | undefined {
@@ -970,7 +1013,7 @@ namespace TinyWars.BaseWar {
         // Functions for move.
         ////////////////////////////////////////////////////////////////////////////////
         public getCfgMoveRange(): number {
-            return this._templateCfg.moveRange;
+            return this._getTemplateCfg().moveRange;
         }
         public getFinalMoveRange(): number {
             const war           = this.getWar();
@@ -1024,7 +1067,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const unitType = this.getType();
+            const unitType = this.getUnitType();
             if (unitType == null) {
                 Logger.error(`BwUnit._getMoveRangeModifierByCo() unitType is empty.`);
                 return undefined;
@@ -1067,14 +1110,14 @@ namespace TinyWars.BaseWar {
         }
 
         public getMoveType(): MoveType {
-            return this._templateCfg.moveType;
+            return this._getTemplateCfg().moveType;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for produce self.
         ////////////////////////////////////////////////////////////////////////////////
         public getProductionBaseCost(): number {
-            return this._templateCfg.productionCost;
+            return this._getTemplateCfg().productionCost;
         }
         public getProductionFinalCost(): number {
             return this.getProductionBaseCost();
@@ -1110,7 +1153,7 @@ namespace TinyWars.BaseWar {
         // Functions for launch silo.
         ////////////////////////////////////////////////////////////////////////////////
         public checkCanLaunchSiloOnTile(tile: BwTile): boolean {
-            return (this._templateCfg.canLaunchSilo === 1) && (tile.getType() === TileType.Silo);
+            return (this._getTemplateCfg().canLaunchSilo === 1) && (tile.getType() === TileType.Silo);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -1159,7 +1202,7 @@ namespace TinyWars.BaseWar {
         }
 
         public getMaxBuildMaterial(): number | undefined {
-            return this._templateCfg.maxBuildMaterial;
+            return this._getTemplateCfg().maxBuildMaterial;
         }
 
         public getCurrentBuildMaterial(): number | undefined {
@@ -1187,7 +1230,7 @@ namespace TinyWars.BaseWar {
         // Functions for load unit.
         ////////////////////////////////////////////////////////////////////////////////
         public getMaxLoadUnitsCount(): number | undefined | null {
-            return this._templateCfg.maxLoadUnitsCount;
+            return this._getTemplateCfg().maxLoadUnitsCount;
         }
         public getLoadedUnitsCount(): number {
             return this.getLoadedUnits()!.length;
@@ -1206,7 +1249,7 @@ namespace TinyWars.BaseWar {
         }
 
         public checkCanLoadUnit(unit: BwUnit): boolean {
-            const cfg                   = this._templateCfg;
+            const cfg                   = this._getTemplateCfg();
             const loadUnitCategory      = cfg.loadUnitCategory;
             const loadableTileCategory  = cfg.loadableTileCategory;
             const maxLoadUnitsCount     = this.getMaxLoadUnitsCount();
@@ -1214,22 +1257,22 @@ namespace TinyWars.BaseWar {
                 && (loadableTileCategory != null)
                 && (maxLoadUnitsCount != null)
                 && (Utility.ConfigManager.checkIsTileTypeInCategory(this.getConfigVersion(), this.getWar().getTileMap().getTile(this.getGridIndex()).getType(), loadableTileCategory))
-                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getType(), loadUnitCategory))
+                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), loadUnitCategory))
                 && (this.getPlayerIndex() === unit.getPlayerIndex())
                 && (this.getLoadedUnitsCount() < maxLoadUnitsCount);
         }
         public checkCanDropLoadedUnit(tileType: TileType): boolean {
-            const cfg       = this._templateCfg;
+            const cfg       = this._getTemplateCfg();
             const category  = cfg.loadableTileCategory;
             return (cfg.canDropLoadedUnits === 1)
                 && (category != null)
                 && (Utility.ConfigManager.checkIsTileTypeInCategory(this.getConfigVersion(), tileType, category));
         }
         public checkCanLaunchLoadedUnit(): boolean {
-            return this._templateCfg.canLaunchLoadedUnits === 1;
+            return this._getTemplateCfg().canLaunchLoadedUnits === 1;
         }
         public checkCanSupplyLoadedUnit(): boolean {
-            return this._templateCfg.canSupplyLoadedUnits === 1;
+            return this._getTemplateCfg().canSupplyLoadedUnits === 1;
         }
         private _checkCanRepairLoadedUnit(unit: BwUnit): boolean {
             return (this.getNormalizedRepairHpForLoadedUnit() != null)
@@ -1237,7 +1280,7 @@ namespace TinyWars.BaseWar {
                 && ((!unit.checkIsFullHp()) || (unit.checkCanBeSupplied()));
         }
         public getNormalizedRepairHpForLoadedUnit(): number | undefined | null {
-            return this._templateCfg.repairAmountForLoadedUnits;
+            return this._getTemplateCfg().repairAmountForLoadedUnits;
         }
 
         public setLoaderUnitId(id: number | undefined): void {
@@ -1298,7 +1341,7 @@ namespace TinyWars.BaseWar {
         // Functions for supply unit.
         ////////////////////////////////////////////////////////////////////////////////
         public checkIsAdjacentUnitSupplier(): boolean {
-            return this._templateCfg.canSupplyAdjacentUnits === 1;
+            return this._getTemplateCfg().canSupplyAdjacentUnits === 1;
         }
         public checkCanSupplyAdjacentUnit(unit: BwUnit, attributes = unit.getAttributes()): boolean {
             return (this.checkIsAdjacentUnitSupplier())
@@ -1329,15 +1372,8 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for vision.
         ////////////////////////////////////////////////////////////////////////////////
-        private _setVisionBonusCfg(cfg: { [tileType: number]: Config.IVisionBonusCfg } | undefined): void {
-            this._visionBonusCfg = cfg;
-        }
-        private _getVisionBonusCfg(): { [tileType: number]: Config.IVisionBonusCfg } | undefined {
-            return this._visionBonusCfg;
-        }
-
         public getCfgVisionRange(): number {
-            return this._templateCfg.visionRange;
+            return this._getTemplateCfg().visionRange;
         }
         public getVisionRangeBonusOnTile(tileType: TileType): number {
             const cfgs  = this._getVisionBonusCfg();
@@ -1416,7 +1452,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const unitType = this.getType();
+            const unitType = this.getUnitType();
             if (unitType == null) {
                 Logger.error(`BwUnit._getVisionRangeModifierByCo() empty unitType.`);
                 return undefined;
@@ -1460,7 +1496,7 @@ namespace TinyWars.BaseWar {
                 return false;
             }
 
-            const unitType = this.getType();
+            const unitType = this.getUnitType();
             if (unitType == null) {
                 Logger.error(`BwUnit.checkIsTrueVision() unitType is empty.`);
                 return false;
@@ -1506,7 +1542,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         public checkCanJoinUnit(unit: BwUnit): boolean {
             return (this !== unit)
-                && (this.getType() === unit.getType())
+                && (this.getUnitType() === unit.getUnitType())
                 && (this.getPlayerIndex() === unit.getPlayerIndex())
                 && (unit.getNormalizedCurrentHp()! < unit.getNormalizedMaxHp()!)
                 && (this.getLoadedUnitsCount() === 0)
@@ -1560,7 +1596,7 @@ namespace TinyWars.BaseWar {
                 return false;
             }
 
-            const unitType = this.getType();
+            const unitType = this.getUnitType();
             if (unitType == null) {
                 Logger.error(`BwUnit.checkCanLoadCoAfterMovePath() unitType is empty.`);
                 return false;
@@ -1668,5 +1704,58 @@ namespace TinyWars.BaseWar {
                 ? null
                 : Math.floor(Utility.ConfigManager.getCoBasicCfg(this.getConfigVersion(), coId).boardCostPercentage * this.getProductionBaseCost() / 100);
         }
+    }
+
+    function getRevisedHasLoadedCo(hasLoadedCo: boolean | null | undefined): boolean {
+        return hasLoadedCo || false;
+    }
+    function getRevisedIsCapturingTile(isCapturingTile: boolean | null | undefined): boolean {
+        return isCapturingTile || false;
+    }
+    function getRevisedCurrentPromotion(currentPromotion: number | null | undefined): number {
+        return currentPromotion || 0;
+    }
+    function getRevisedIsBuildingTile(isBuildingTile: boolean | null | undefined): boolean {
+        return isBuildingTile || false;
+    }
+    function getRevisedIsDiving(isDiving: boolean | null | undefined, unitTemplateCfg: UnitTemplateCfg): boolean {
+        return isDiving != null
+            ? isDiving
+            : ConfigManager.checkIsUnitDivingByDefaultWithTemplateCfg(unitTemplateCfg);
+    }
+    function getRevisedActionState(actionState: UnitActionState | null | undefined): UnitActionState {
+        return actionState != null
+            ? actionState
+            : UnitActionState.Idle;
+    }
+    function getRevisedCurrentHp(currentHp: number | null | undefined, unitTemplateCfg: UnitTemplateCfg): number {
+        return currentHp != null
+            ? currentHp
+            : unitTemplateCfg.maxHp;
+    }
+    function getRevisedPrimaryAmmo(primaryAmmo: number | null | undefined, unitTemplateCfg: UnitTemplateCfg): number | null | undefined {
+        return primaryAmmo != null
+            ? primaryAmmo
+            : unitTemplateCfg.primaryWeaponMaxAmmo;
+    }
+    function getRevisedCurrentFuel(currentFuel: number | null | undefined, unitTemplateCfg: UnitTemplateCfg): number {
+        return currentFuel != null
+            ? currentFuel
+            : unitTemplateCfg.maxFuel;
+    }
+    function getRevisedFlareAmmo(flareAmmo: number | null | undefined, unitTemplateCfg: UnitTemplateCfg): number | null | undefined {
+        return flareAmmo != null
+            ? flareAmmo
+            : unitTemplateCfg.flareMaxAmmo;
+    }
+    function getRevisedProduceMaterial(produceMaterial: number | null | undefined, unitTemplateCfg: UnitTemplateCfg): number | null | undefined {
+        return produceMaterial != null
+            ? produceMaterial
+            : unitTemplateCfg.maxProduceMaterial;
+    }
+    function getRevisedBuildMaterial(buildMaterial: number | null | undefined, unitTemplateCfg: UnitTemplateCfg): number | null | undefined {
+        return buildMaterial != null
+            ? buildMaterial
+            : unitTemplateCfg.maxBuildMaterial;
     }
 }

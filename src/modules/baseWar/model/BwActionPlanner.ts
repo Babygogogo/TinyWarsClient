@@ -1723,7 +1723,7 @@ namespace TinyWars.BaseWar {
                     (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                         war                 : this._war,
                         gridIndex           : targetGridIndex,
-                        unitType            : existingUnit.getType(),
+                        unitType            : existingUnit.getUnitType(),
                         isDiving            : existingUnit.getIsDiving(),
                         unitPlayerIndex     : existingUnit.getPlayerIndex(),
                         observerTeamIndex   : teamIndex,

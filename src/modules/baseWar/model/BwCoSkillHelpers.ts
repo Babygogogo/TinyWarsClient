@@ -88,7 +88,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
             const category  = cfg[1];
             const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
             unitMap.forEachUnit(unit => {
-                const unitType = unit.getType();
+                const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeSelfHpGain() empty unitType.`);
                     return undefined;
@@ -152,7 +152,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
             const category  = cfg[1];
             const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
             unitMap.forEachUnit(unit => {
-                const unitType = unit.getType();
+                const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeEnemyHpGain() empty unitType.`);
                     return undefined;
@@ -216,7 +216,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
             const category  = cfg[1];
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
-                const unitType = unit.getType();
+                const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeSelfFuelGain() empty unitType.`);
                     return undefined;
@@ -284,7 +284,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
             const category  = cfg[1];
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
-                const unitType = unit.getType();
+                const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeEnemyFuelGain() empty unitType.`);
                     return undefined;
@@ -358,7 +358,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
                     return;
                 }
 
-                const unitType = unit.getType();
+                const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeSelfMaterialGain() empty unitType.`);
                     return undefined;
@@ -448,7 +448,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
                     return;
                 }
 
-                const unitType = unit.getType();
+                const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeEnemyMaterialGain() empty unitType.`);
                     return undefined;
@@ -537,7 +537,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
                     return;
                 }
 
-                const unitType = unit.getType();
+                const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeSelfPrimaryAmmoGain() empty unitType.`);
                     return undefined;
@@ -604,7 +604,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
                     return;
                 }
 
-                const unitType = unit.getType();
+                const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeEnemyPrimaryAmmoGain() empty unitType.`);
                     return undefined;
@@ -710,7 +710,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
             const category  = cfg[1];
             const modifier  = cfg[2];
             unitMap.forEachUnit(unit => {
-                const unitType = unit.getType();
+                const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeSelfPromotionGain() empty unitType.`);
                     return undefined;

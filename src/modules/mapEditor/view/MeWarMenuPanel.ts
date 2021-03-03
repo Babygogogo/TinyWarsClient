@@ -321,7 +321,7 @@ namespace TinyWars.MapEditor {
         private _updateListUnit(): void {
             const dict = new Map<UnitType, Map<number, DataForUnitRenderer>>();
             this._war.getUnitMap().forEachUnit(unit => {
-                const unitType = unit.getType();
+                const unitType = unit.getUnitType();
                 if (!dict.has(unitType)) {
                     dict.set(unitType, new Map());
                 }
