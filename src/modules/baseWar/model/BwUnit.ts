@@ -23,8 +23,8 @@ namespace TinyWars.BaseWar {
     import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     export class BwUnit {
+        private _templateCfg                : UnitTemplateCfg;
         private _playerIndex                : number;
-        private _unitType                   : UnitType;
         private _gridX                      : number;
         private _gridY                      : number;
         private _unitId                     : number;
@@ -91,7 +91,7 @@ namespace TinyWars.BaseWar {
 
             this.setGridIndex(gridIndex);
             this.setUnitId(unitId);
-            this._setUnitType(unitType);
+            this._setTemplateCfg(unitTemplateCfg);
             this._setPlayerIndex(playerIndex);
 
             this._setWar(undefined);
@@ -213,23 +213,20 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
-        public getConfigVersion(): string | null | undefined {
-            return this.getWar()?.getConfigVersion();
+        private _setTemplateCfg(cfg: UnitTemplateCfg): void {
+            this._templateCfg = cfg;
         }
         private _getTemplateCfg(): UnitTemplateCfg | undefined {
-            const configVersion = this.getConfigVersion();
-            if (configVersion == null) {
-                Logger.error(`BwUnit._getTemplateCfg() empty configVersion.`);
-                return undefined;
-            }
+            return this._templateCfg;
+        }
 
-            const unitType = this.getUnitType();
-            if (unitType == null) {
-                Logger.error(`BwUnit._getTemplateCfg() empty unitType.`);
-                return undefined;
-            }
-
-            return ConfigManager.getUnitTemplateCfg(configVersion, unitType);
+        public getConfigVersion(): string | null | undefined {
+            const war = this.getWar();
+            return war ? war.getConfigVersion() : undefined;
+        }
+        public getUnitType(): UnitType {
+            const cfg = this._getTemplateCfg();
+            return cfg ? cfg.type : undefined;
         }
         private _getDamageChartCfg(): { [armorType: number]: { [weaponType: number]: Types.DamageChartCfg } } | undefined {
             const configVersion = this.getConfigVersion();
@@ -312,13 +309,6 @@ namespace TinyWars.BaseWar {
         }
         public setUnitId(id: number): void {
             this._unitId = id;
-        }
-
-        private _setUnitType(unitType: UnitType): void {
-            this._unitType = unitType;
-        }
-        public getUnitType(): UnitType {
-            return this._unitType;
         }
 
         public getAttributes(): Types.UnitAttributes {

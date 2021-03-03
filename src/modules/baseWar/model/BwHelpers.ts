@@ -1014,6 +1014,11 @@ namespace TinyWars.BaseWar.BwHelpers {
             return ClientErrorCode.UnitDataValidation15;
         }
 
+        const loaderUnitId = unitData.loaderUnitId;
+        if ((loaderUnitId != null) && (loaderUnitId === unitData.unitId)) {
+            return ClientErrorCode.UnitDataValidation16;
+        }
+
         return ClientErrorCode.NoError;
     }
 

@@ -70,5 +70,6 @@ namespace TinyWars.Utility {
         UnitDataValidation13,
         UnitDataValidation14,
         UnitDataValidation15,
+        UnitDataValidation16,
     }
 }
