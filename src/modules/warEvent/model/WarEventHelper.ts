@@ -297,7 +297,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
                     return false;
                 }
 
-                if (!BwHelpers.checkIsUnitDataValidIgnoringUnitId({
+                if (BwHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
                     configVersion,
@@ -864,7 +864,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
             return (v.canBeBlockedByUnit != null)
                 && (v.needMovableTile != null)
                 && (unitData.loaderUnitId == null)
-                && (BwHelpers.checkIsUnitDataValidIgnoringUnitId({
+                && (!BwHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
                     playersCountUnneutral: CommonConstants.WarMaxPlayerIndex,

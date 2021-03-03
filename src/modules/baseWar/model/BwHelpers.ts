@@ -6,6 +6,7 @@ namespace TinyWars.BaseWar.BwHelpers {
     import Logger                   = Utility.Logger;
     import Helpers                  = Utility.Helpers;
     import ConfigManager            = Utility.ConfigManager;
+    import ClientErrorCode          = Utility.ClientErrorCode;
     import GridIndex                = Types.GridIndex;
     import MovableArea              = Types.MovableArea;
     import AttackableArea           = Types.AttackableArea;
@@ -906,33 +907,39 @@ namespace TinyWars.BaseWar.BwHelpers {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Other validators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function checkIsUnitDataValidIgnoringUnitId({ unitData, mapSize, playersCountUnneutral, configVersion }: {
+    export function getErrorCodeForUnitDataIgnoringUnitId({ unitData, mapSize, playersCountUnneutral, configVersion }: {
         unitData                : ProtoTypes.WarSerialization.ISerialUnit;
-        mapSize                 : Types.MapSize;
-        playersCountUnneutral   : number;
         configVersion           : string;
-    }): boolean {
+        mapSize                 : Types.MapSize | null | undefined;
+        playersCountUnneutral   : number | null | undefined;
+    }): ClientErrorCode {
         const gridIndex = convertGridIndex(unitData.gridIndex);
-        if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
-            return false;
+        if (gridIndex == null) {
+            return ClientErrorCode.UnitDataValidation00;
+        }
+        if ((mapSize) && (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+            return ClientErrorCode.UnitDataValidation01;
         }
 
         const unitType = unitData.unitType as Types.UnitType;
         if (unitType == null) {
-            return false;
+            return ClientErrorCode.UnitDataValidation02;
         }
 
         const playerIndex = unitData.playerIndex;
         if ((playerIndex == null)                               ||
             (playerIndex < CommonConstants.WarFirstPlayerIndex) ||
-            (playerIndex > playersCountUnneutral)
+            (playerIndex > CommonConstants.WarMaxPlayerIndex)
         ) {
-            return false;
+            return ClientErrorCode.UnitDataValidation03;
+        }
+        if ((playersCountUnneutral != null) && (playerIndex > playersCountUnneutral)) {
+            return ClientErrorCode.UnitDataValidation04;
         }
 
         const cfg = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
-        if (!cfg) {
-            return false;
+        if (cfg == null) {
+            return ClientErrorCode.UnitDataValidation05;
         }
 
         const currBuildMaterial = unitData.currentBuildMaterial;
@@ -940,7 +947,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if ((currBuildMaterial != null)                                         &&
             ((maxBuildMaterial == null) || (currBuildMaterial >= maxBuildMaterial))
         ) {
-            return false;
+            return ClientErrorCode.UnitDataValidation06;
         }
 
         const currFuel  = unitData.currentFuel;
@@ -948,7 +955,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if ((currFuel != null)                          &&
             ((maxFuel == null) || (currFuel >= maxFuel))
         ) {
-            return false;
+            return ClientErrorCode.UnitDataValidation07;
         }
 
         const currHp    = unitData.currentHp;
@@ -956,7 +963,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if ((currHp != null)                    &&
             ((maxHp == null) || (currHp >= maxHp))
         ) {
-            return false;
+            return ClientErrorCode.UnitDataValidation08;
         }
 
         const currProduceMaterial   = unitData.currentProduceMaterial;
@@ -964,7 +971,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if ((currProduceMaterial != null)                                               &&
             ((maxProduceMaterial == null) || (currProduceMaterial >= maxProduceMaterial))
         ) {
-            return false;
+            return ClientErrorCode.UnitDataValidation09;
         }
 
         const currPromotion = unitData.currentPromotion;
@@ -972,7 +979,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         if ((currPromotion != null)                                 &&
             ((maxPromotion == null) || (currPromotion > maxPromotion))
         ) {
-            return false;
+            return ClientErrorCode.UnitDataValidation10;
         }
 
         const flareCurrentAmmo  = unitData.flareCurrentAmmo;
@@ -980,11 +987,11 @@ namespace TinyWars.BaseWar.BwHelpers {
         if ((flareCurrentAmmo != null)                                  &&
             ((flareMaxAmmo == null) || (flareCurrentAmmo >= flareMaxAmmo))
         ) {
-            return false;
+            return ClientErrorCode.UnitDataValidation11;
         }
 
         if ((unitData.isDiving) && (cfg.diveCfgs == null)) {
-            return false;
+            return ClientErrorCode.UnitDataValidation12;
         }
 
         const currAmmo  = unitData.primaryWeaponCurrentAmmo;
@@ -992,11 +999,11 @@ namespace TinyWars.BaseWar.BwHelpers {
         if ((currAmmo != null)                          &&
             ((maxAmmo == null) || (currAmmo >= maxAmmo))
         ) {
-            return false;
+            return ClientErrorCode.UnitDataValidation13;
         }
 
         if ((unitData.isCapturingTile) && (!cfg.canCaptureTile)) {
-            return false;
+            return ClientErrorCode.UnitDataValidation14;
         }
 
         const actionState = unitData.actionState;
@@ -1004,10 +1011,10 @@ namespace TinyWars.BaseWar.BwHelpers {
             (actionState !== Types.UnitActionState.Idle)    &&
             (actionState !== Types.UnitActionState.Acted)
         ) {
-            return false;
+            return ClientErrorCode.UnitDataValidation15;
         }
 
-        return true;
+        return ClientErrorCode.NoError;
     }
 
     export function checkCanVoteForDraw({ playerIndex, aliveState }: {

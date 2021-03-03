@@ -180,66 +180,66 @@ namespace TinyWars.BaseWar {
                 const { canBeBlockedByUnit, needMovableTile, unitData } = data;
                 if (canBeBlockedByUnit == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty canBeBlockedByUnit.`);
-                    break;
+                    continue;
                 }
                 if (needMovableTile == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty needMovableTile.`);
-                    break;
+                    continue;
                 }
                 if (unitData == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty unitData.`);
-                    break;
+                    continue;
                 }
 
                 if (unitData.loaderUnitId != null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() invalid unitData.loaderUnitId.`);
-                    break;
+                    continue;
                 }
 
                 const unitId = unitMap.getNextUnitId();
                 if (unitId == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty unitId.`);
-                    break;
+                    continue;
                 }
 
                 const unitType = unitData.unitType;
                 if (unitType == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty unitType.`);
-                    break;
+                    continue;
                 }
 
                 const unitCfg = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
                 if (unitCfg == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty unitCfg.`);
-                    break;
+                    continue;
                 }
 
                 const moveType = unitCfg.moveType;
                 if (moveType == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty moveType.`);
-                    break;
+                    continue;
                 }
 
                 const rawGridIndex = BwHelpers.convertGridIndex(unitData.gridIndex);
                 if (rawGridIndex == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty rawGridIndex.`);
-                    break;
+                    continue;
                 }
 
                 const playerIndex = unitData.playerIndex;
                 if (playerIndex == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty playerIndex.`);
-                    break;
+                    continue;
                 }
 
-                if (!BwHelpers.checkIsUnitDataValidIgnoringUnitId({
+                if (BwHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
                     configVersion,
                     playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
                 })) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() invalid unitData.`);
-                    break;
+                    continue;
                 }
 
                 const player = playerManager.getPlayer(playerIndex);
@@ -266,10 +266,10 @@ namespace TinyWars.BaseWar {
                 revisedUnitData.gridIndex   = gridIndex;
                 revisedUnitData.unitId      = unitId;
 
-                const unit      = new BaseWar.BwUnit();
+                const unit      = new BwUnit();
                 const unitError = unit.init(revisedUnitData, configVersion);
                 if (unitError) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty unit.`);
+                    Logger.error(`BwWarEventManager._callActionAddUnit() unitError: ${unitError}`);
                     continue;
                 }
 

@@ -53,5 +53,22 @@ namespace TinyWars.Utility {
         PlayerRuleValidation14,
 
         WarRuleGlobalParamsValidation00,
+
+        UnitDataValidation00,
+        UnitDataValidation01,
+        UnitDataValidation02,
+        UnitDataValidation03,
+        UnitDataValidation04,
+        UnitDataValidation05,
+        UnitDataValidation06,
+        UnitDataValidation07,
+        UnitDataValidation08,
+        UnitDataValidation09,
+        UnitDataValidation10,
+        UnitDataValidation11,
+        UnitDataValidation12,
+        UnitDataValidation13,
+        UnitDataValidation14,
+        UnitDataValidation15,
     }
 }
