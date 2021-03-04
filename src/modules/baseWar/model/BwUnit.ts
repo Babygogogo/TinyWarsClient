@@ -115,6 +115,11 @@ namespace TinyWars.BaseWar {
         }
 
         public startRunning(war: BwWar): void {
+            if (war.getConfigVersion() !== this.getConfigVersion()) {
+                Logger.error(`BwUnit.startRunning() invalid configVersion.`);
+                return;
+            }
+
             this._setWar(war);
         }
         public startRunningView(): void {
@@ -1227,6 +1232,10 @@ namespace TinyWars.BaseWar {
         }
         public getLoadedUnits(): BwUnit[] {
             return this.getWar().getUnitMap().getUnitsLoadedByLoader(this, false);
+        }
+
+        public getLoadUnitCategory(): Types.UnitCategory | undefined | null {
+            return this._getTemplateCfg()?.loadUnitCategory;
         }
 
         public checkHasLoadUnitId(id: number): boolean {

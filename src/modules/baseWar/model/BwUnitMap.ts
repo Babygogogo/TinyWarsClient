@@ -7,6 +7,7 @@ namespace TinyWars.BaseWar {
     import ClientErrorCode          = Utility.ClientErrorCode;
     import ProtoTypes               = Utility.ProtoTypes;
     import VisibilityHelpers        = Utility.VisibilityHelpers;
+    import ConfigManager            = Utility.ConfigManager;
     import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
     import GridIndex                = Types.GridIndex;
     import WarSerialization         = ProtoTypes.WarSerialization;
@@ -36,9 +37,14 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwUnitMapInit01;
             }
 
-            const { mapWidth, mapHeight }   = mapSizeAndMaxPlayerIndex;
-            const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
-            const loadedUnits               = new Map<number, BwUnit>();
+            const mapWidth          = mapSizeAndMaxPlayerIndex.mapWidth;
+            const mapHeight         = mapSizeAndMaxPlayerIndex.mapHeight;
+            const maxPlayerIndex    = mapSizeAndMaxPlayerIndex.maxPlayerIndex;
+            const map               = Helpers.createEmptyMap<BwUnit>(mapWidth);
+            const mapSize           : Types.MapSize = { width: mapWidth, height: mapHeight };
+            const loadedUnits       = new Map<number, BwUnit>();
+            const allUnits          = new Map<number, BwUnit>();
+
             for (const unitData of data.units || []) {
                 const unit      = new BwUnit();
                 const unitError = unit.init(unitData, configVersion);
@@ -47,19 +53,71 @@ namespace TinyWars.BaseWar {
                 }
 
                 const gridIndex = unit.getGridIndex();
-                if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, { width: mapWidth, height: mapHeight }))) {
+                if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
                     return ClientErrorCode.BwUnitMapInit02;
                 }
 
-                if (unit.getLoaderUnitId() == null) {
-                    map[gridIndex.x][gridIndex.y] = unit;
-                } else {
-                    const unitId = unit.getUnitId();
-                    if (unitId == null) {
-                        Logger.error(`BwUnitMap.init() empty unitId! unitData: ${JSON.stringify(unitData)}`);
-                        return;
-                    }
+                const unitId = unit.getUnitId();
+                if (unitId == null) {
+                    return ClientErrorCode.BwUnitMapInit03;
+                }
+                if (allUnits.has(unitId)) {
+                    return ClientErrorCode.BwUnitMapInit04;
+                }
+                if (unitId >= nextUnitId) {
+                    return ClientErrorCode.BwUnitMapInit05;
+                }
+                allUnits.set(unitId, unit);
+
+                const playerIndex = unit.getPlayerIndex();
+                if ((playerIndex == null) || (playerIndex > maxPlayerIndex)) {
+                    return ClientErrorCode.BwUnitMapInit06;
+                }
+
+                if (unit.getLoaderUnitId() != null) {
                     loadedUnits.set(unitId, unit);
+                } else {
+                    const { x, y } = gridIndex;
+                    if (map[x][y]) {
+                        return ClientErrorCode.BwUnitMapInit07;
+                    }
+
+                    map[x][y] = unit;
+                }
+            }
+
+            const loadUnitCounts = new Map<number, number>();
+            for (const [, loadedUnit] of loadedUnits) {
+                const loaderId = loadedUnit.getLoaderUnitId();
+                if (loaderId == null) {
+                    return ClientErrorCode.BwUnitMapInit08;
+                }
+
+                const loader = allUnits.get(loaderId);
+                if (loader == null) {
+                    return ClientErrorCode.BwUnitMapInit09;
+                }
+                if (loader.getPlayerIndex() !== loadedUnit.getPlayerIndex()) {
+                    return ClientErrorCode.BwUnitMapInit10;
+                }
+
+                const maxLoadCount  = loader.getMaxLoadUnitsCount();
+                const loadCount     = (loadUnitCounts.get(loaderId) || 0) + 1;
+                if ((maxLoadCount == null) || (loadCount > maxLoadCount)) {
+                    return ClientErrorCode.BwUnitMapInit11;
+                }
+                loadUnitCounts.set(loaderId, loadCount);
+
+                const unitType = loadedUnit.getUnitType();
+                if (unitType == null) {
+                    return ClientErrorCode.BwUnitMapInit12;
+                }
+
+                const loadUnitCategory = loader.getLoadUnitCategory();
+                if ((loadUnitCategory == null)                                                          ||
+                    (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, loadUnitCategory))
+                ) {
+                    return ClientErrorCode.BwUnitMapInit13;
                 }
             }
 
