@@ -9,12 +9,12 @@ namespace TinyWars.Utility.ConfigManager {
     import TileCategory     = Types.TileCategory;
     import WeaponType       = Types.WeaponType;
     import UnitTemplateCfg  = Types.UnitTemplateCfg;
+    import TileTemplateCfg  = Types.TileTemplateCfg;
     import DamageChartCfg   = Types.DamageChartCfg;
     import BuildableTileCfg = Types.BuildableTileCfg;
     import VisionBonusCfg   = Types.VisionBonusCfg;
     import ITileCategoryCfg = ProtoTypes.Config.ITileCategoryCfg;
     import UnitCategoryCfg  = ProtoTypes.Config.IUnitCategoryCfg;
-    import TileTemplateCfg  = ProtoTypes.Config.ITileTemplateCfg;
     import MoveCostCfg      = ProtoTypes.Config.IMoveCostCfg;
     import UnitPromotionCfg = ProtoTypes.Config.IUnitPromotionCfg;
     import IPlayerRankCfg   = ProtoTypes.Config.IPlayerRankCfg;
@@ -737,10 +737,11 @@ namespace TinyWars.Utility.ConfigManager {
         }
         return dst;
     }
-    function _destructTileTemplateCfg(data: TileTemplateCfg[]): { [tileType: number]: TileTemplateCfg } {
+    function _destructTileTemplateCfg(data: TileTemplateCfg[], version: string): { [tileType: number]: TileTemplateCfg } {
         const dst: { [category: number]: TileTemplateCfg } = {};
         for (const d of data) {
-            dst[d.type!] = d;
+            d.version       = version;
+            dst[d.type!]    = d;
         }
         return dst;
     }
@@ -907,7 +908,7 @@ namespace TinyWars.Utility.ConfigManager {
         const fullCfg           : ExtendedFullConfig = {
             TileCategory        : _destructTileCategoryCfg(rawConfig.TileCategory),
             UnitCategory        : _destructUnitCategoryCfg(rawConfig.UnitCategory),
-            TileTemplate        : _destructTileTemplateCfg(rawConfig.TileTemplate),
+            TileTemplate        : _destructTileTemplateCfg(rawConfig.TileTemplate, version),
             UnitTemplate        : _destructUnitTemplateCfg(rawConfig.UnitTemplate, version),
             MoveCost            : _destructMoveCostCfg(rawConfig.MoveCost),
             VisionBonus         : _destructVisionBonusCfg(rawConfig.VisionBonus),

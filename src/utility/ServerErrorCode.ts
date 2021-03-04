@@ -69,6 +69,7 @@ export const enum ServerErrorCode {
     BwTileDeserialize0003,
     BwTileDeserialize0004,
     BwTileDeserialize0005,
+    BwTileDeserialize0006,
 
     BwPlayerInit0000,
     BwPlayerInit0001,

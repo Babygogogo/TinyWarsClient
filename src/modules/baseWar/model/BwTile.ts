@@ -7,14 +7,13 @@ namespace TinyWars.BaseWar {
     import TileType         = Types.TileType;
     import TileObjectType   = Types.TileObjectType;
     import TileBaseType     = Types.TileBaseType;
+    import TileTemplateCfg  = Types.TileTemplateCfg;
+    import UnitCategory     = Types.UnitCategory;
     import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
     import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export abstract class BwTile {
-        private _configVersion  : string;
-        private _templateCfg    : ProtoTypes.Config.ITileTemplateCfg;
-        private _moveCostCfg    : { [moveType: number]: ProtoTypes.Config.IMoveCostCfg };
-
+        private _templateCfg    : TileTemplateCfg;
         private _gridX          : number;
         private _gridY          : number;
         private _playerIndex    : number;
@@ -84,21 +83,18 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const moveCostCfg = ConfigManager.getMoveCostCfg(configVersion, baseType, objectType);
-            if (moveCostCfg == null) {
+            if (ConfigManager.getMoveCostCfg(configVersion, baseType, objectType) == null) {
                 Logger.error(`BwTile.deserialize() no moveCostCfg.`)
                 return undefined;
             }
 
+            this._setTemplateCfg(templateCfg);
             this._setGridX(gridIndex.x);
             this._setGridY(gridIndex.y);
             this._setBaseType(baseType);
             this._setObjectType(objectType);
             this._setPlayerIndex(playerIndex);
 
-            this._setConfigVersion(configVersion);
-            this._setTemplateCfg(templateCfg);
-            this._setMoveCosts(moveCostCfg);
             this.setBaseShapeId(data.baseShapeId);
             this.setObjectShapeId(data.objectShapeId);
             this.setCurrentHp(          data.currentHp           != null ? data.currentHp           : this.getMaxHp());
@@ -164,17 +160,15 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
-        private _setConfigVersion(configVersion: string): void {
-            this._configVersion = configVersion;
-        }
         public getConfigVersion(): string | undefined {
-            return this._configVersion;
+            const cfg = this._getTemplateCfg();
+            return cfg ? cfg.version : undefined;
         }
 
-        private _setTemplateCfg(cfg: ProtoTypes.Config.ITileTemplateCfg): void {
+        private _setTemplateCfg(cfg: TileTemplateCfg): void {
             this._templateCfg = cfg;
         }
-        private _getTemplateCfg(): ProtoTypes.Config.ITileTemplateCfg | undefined {
+        private _getTemplateCfg(): TileTemplateCfg | undefined {
             return this._templateCfg;
         }
 
@@ -325,11 +319,11 @@ namespace TinyWars.BaseWar {
             return this.checkCanDefendUnit(unit) ? this.getDefenseAmount() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp() : 0;
         }
 
-        public getDefenseUnitCategory(): Types.UnitCategory {
+        public getDefenseUnitCategory(): UnitCategory {
             return this._templateCfg.defenseUnitCategory;
         }
         public checkCanDefendUnit(unit: BwUnit): boolean {
-            return Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getUnitType(), this.getDefenseUnitCategory());
+            return Utility.ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), this.getDefenseUnitCategory());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -458,21 +452,37 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for move cost.
         ////////////////////////////////////////////////////////////////////////////////
-        private _setMoveCosts(cfg: { [moveType: number]: ProtoTypes.Config.IMoveCostCfg }): void {
-            this._moveCostCfg = cfg;
-        }
-        public getMoveCosts(): { [moveType: number]: ProtoTypes.Config.IMoveCostCfg } | undefined {
-            return this._moveCostCfg;
+        private _getMoveCostCfg(): { [moveType: number]: ProtoTypes.Config.IMoveCostCfg } | undefined {
+            const configVersion = this.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwTile._getMoveCostCfg() empty configVersion.`);
+                return undefined;
+            }
+
+            const baseType = this.getBaseType();
+            if (baseType == null) {
+                Logger.error(`BwTile._getMoveCostCfg() empty baseType.`);
+                return undefined;
+            }
+
+            const objectType = this.getObjectType();
+            if (objectType == null) {
+                Logger.error(`BwTile._getMoveCostCfg() empty objectType.`);
+                return undefined;
+            }
+
+            return ConfigManager.getMoveCostCfg(configVersion, baseType, objectType);
         }
 
         public getMoveCostByMoveType(moveType: Types.MoveType): number | undefined | null {
-            return this.getMoveCosts()[moveType].cost;
+            return this._getMoveCostCfg()[moveType].cost;
         }
         public getMoveCostByUnit(unit: BwUnit): number | undefined | null {
             const tileType = this.getType();
             if (((tileType === TileType.Seaport) || (tileType === TileType.TempSeaport))    &&
                 (this.getTeamIndex() !== unit.getTeamIndex())                               &&
-                (Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getUnitType(), Types.UnitCategory.LargeNaval))) {
+                (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), UnitCategory.LargeNaval))
+            ) {
                 return undefined;
             } else {
                 return this.getMoveCostByMoveType(unit.getMoveType());
@@ -482,7 +492,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for repair/supply unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getRepairUnitCategory(): Types.UnitCategory | undefined {
+        public getRepairUnitCategory(): UnitCategory | undefined {
             return this._templateCfg.repairUnitCategory;
         }
 
@@ -495,14 +505,14 @@ namespace TinyWars.BaseWar {
             return (category != null)
                 && ((attributes.hp < unit.getMaxHp()) || (unit.checkCanBeSupplied(attributes)))
                 && (unit.getTeamIndex() === this.getTeamIndex())
-                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getUnitType(), category));
+                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
         }
         public checkCanSupplyUnit(unit: BwUnit): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
                 && (unit.checkCanBeSupplied())
                 && (unit.getTeamIndex() === this.getTeamIndex())
-                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getUnitType(), category));
+                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
         }
 
         public getRepairHpAndCostForUnit(
@@ -536,7 +546,7 @@ namespace TinyWars.BaseWar {
             const category = this._templateCfg.hideUnitCategory;
             return category == null
                 ? false
-                : Utility.ConfigManager.getUnitTypesByCategory(this._configVersion, category).indexOf(unitType) >= 0;
+                : Utility.ConfigManager.getUnitTypesByCategory(this.getConfigVersion(), category).indexOf(unitType) >= 0;
         }
 
         public checkIsUnitHider(): boolean {

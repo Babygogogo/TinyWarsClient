@@ -10,6 +10,7 @@ namespace TinyWars.Utility.Types {
         category: UnitCategory;
     }
     export interface TileTemplateCfg extends ProtoTypes.Config.ITileTemplateCfg {
+        version             : string;
         type                : TileType;
         defenseAmount       : number;
         defenseUnitCategory : UnitCategory;
