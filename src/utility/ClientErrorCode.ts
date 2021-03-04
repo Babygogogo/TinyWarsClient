@@ -16,6 +16,8 @@ namespace TinyWars.Utility {
         MeCommonSettingManagerInit01,
         MeCommonSettingManagerInit02,
 
+        BwFieldInit00,
+
         BwUnitMapInit00,
         BwUnitMapInit01,
         BwUnitMapInit02,
@@ -30,6 +32,7 @@ namespace TinyWars.Utility {
         BwUnitMapInit11,
         BwUnitMapInit12,
         BwUnitMapInit13,
+        BwUnitMapInit14,
 
         BwUnitInit00,
         BwUnitInit01,

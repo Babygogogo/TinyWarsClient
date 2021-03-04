@@ -5,6 +5,7 @@ namespace TinyWars.BaseWar {
     import Helpers                  = Utility.Helpers;
     import GridIndexHelpers         = Utility.GridIndexHelpers;
     import ProtoTypes               = Utility.ProtoTypes;
+    import ClientErrorCode          = Utility.ClientErrorCode;
     import ForceFogCode             = Types.ForceFogCode;
     import GridIndex                = Types.GridIndex;
     import MapSize                  = Types.MapSize;
@@ -23,15 +24,18 @@ namespace TinyWars.BaseWar {
 
         public abstract startRunning(war: BwWar): void;
 
-        public async init(data: ISerialFogMap, mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwFogMap | undefined> {
+        public init({ data, mapSize, playersCountUnneutral }: {
+            data                    : ISerialFogMap;
+            mapSize                 : MapSize;
+            playersCountUnneutral   : number;
+        }): ClientErrorCode {
             const forceFogCode = data.forceFogCode;
             if (forceFogCode == null) {
                 Logger.error(`BwFogMap.init() empty forceFogCode.`);
                 return undefined;
             }
 
-            const mapSize           : MapSize = { width: mapSizeAndMaxPlayerIndex.mapWidth, height: mapSizeAndMaxPlayerIndex.mapHeight };
-            const allMapsFromPath   = createEmptyMaps<Visibility>(mapSize, mapSizeAndMaxPlayerIndex.maxPlayerIndex);
+            const allMapsFromPath = createEmptyMaps<Visibility>(mapSize, playersCountUnneutral);
             for (const d of data.mapsFromPath || []) {
                 const playerIndex = d.playerIndex;
                 if (playerIndex == null) {
@@ -54,10 +58,18 @@ namespace TinyWars.BaseWar {
             this.setForceExpirePlayerIndex(data.forceExpirePlayerIndex);
             this.setForceExpireTurnIndex(data.forceExpireTurnIndex);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
-        public async fastInit(data: ISerialFogMap, mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwFogMap> {
-            return this.init(data, mapSizeAndMaxPlayerIndex);
+        public fastInit({ data, mapSize, playersCountUnneutral }: {
+            data                    : ISerialFogMap;
+            mapSize                 : Types.MapSize;
+            playersCountUnneutral   : number;
+        }): ClientErrorCode {
+            return this.init({
+                data,
+                mapSize,
+                playersCountUnneutral
+            });
         }
 
         public serialize(): ISerialFogMap | undefined {

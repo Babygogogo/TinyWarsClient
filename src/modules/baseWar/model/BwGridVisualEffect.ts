@@ -1,8 +1,9 @@
 
 namespace TinyWars.BaseWar {
-    import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
-    import GridIndex    = Types.GridIndex;
+    import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
+    import ClientErrorCode  = Utility.ClientErrorCode;
+    import GridIndex        = Types.GridIndex;
 
     export class BwGridVisualEffect {
         private readonly _view = new BwGridVisualEffectView();
@@ -19,15 +20,15 @@ namespace TinyWars.BaseWar {
             { type: Notify.Type.BwSiloExploded,     callback: this._onNotifyBwSiloExploded },
         ];
 
-        public init(): BwGridVisualEffect {
+        public init(): ClientErrorCode {
             this.getView().init(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
-        public fastInit(): BwGridVisualEffect {
+        public fastInit(): ClientErrorCode {
             this.getView().fastInit(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

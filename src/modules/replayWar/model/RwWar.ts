@@ -77,13 +77,8 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
-            const mapSizeAndMaxPlayerIndex = await BwHelpers.getMapSizeAndMaxPlayerIndex(warData);
-            if (!mapSizeAndMaxPlayerIndex) {
-                Logger.error(`ReplayWar.init() invalid war data! ${JSON.stringify(warData)}`);
-                return undefined;
-            }
-
-            const playerManager = (this.getPlayerManager() || new (this._getPlayerManagerClass())()).init(dataForPlayerManager);
+            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
+            const playerManager         = (this.getPlayerManager() || new (this._getPlayerManagerClass())()).init(dataForPlayerManager);
             if (playerManager == null) {
                 Logger.error(`ReplayWar.init() empty playerManager.`);
                 return undefined;
@@ -95,7 +90,11 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
-            const fieldError = await this.getField().init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
+            const fieldError = await this.getField().init({
+                data                : dataForField,
+                configVersion,
+                playersCountUnneutral,
+            });
             if (fieldError) {
                 return fieldError;
             }
@@ -444,15 +443,11 @@ namespace TinyWars.ReplayWar {
             this.getPlayerManager().fastInit(warData.playerManager);
             this.getTurnManager().fastInit(warData.turnManager);
             this.getWarEventManager().fastInit(warData.warEventManager);
-            await this.getField().fastInit(
-                warData.field,
-                this.getConfigVersion(),
-                {
-                    mapHeight       : mapSize.height,
-                    mapWidth        : mapSize.width,
-                    maxPlayerIndex  : this.getPlayerManager().getTotalPlayersCount(false),
-                }
-            );
+            await this.getField().fastInit({
+                data                    : warData.field,
+                configVersion           : this.getConfigVersion(),
+                playersCountUnneutral   : this.getPlayerManager().getTotalPlayersCount(false),
+            });
             this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw);
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: warData.seedRandomCurrentState }));
 

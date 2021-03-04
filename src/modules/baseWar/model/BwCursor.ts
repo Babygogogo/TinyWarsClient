@@ -1,8 +1,10 @@
 
 namespace TinyWars.BaseWar {
-    import Types        = Utility.Types;
-    import Notify       = Utility.Notify;
-    import GridIndex    = Types.GridIndex;
+    import Types            = Utility.Types;
+    import Notify           = Utility.Notify;
+    import Helpers          = Utility.Helpers;
+    import ClientErrorCode  = Utility.ClientErrorCode;
+    import GridIndex        = Types.GridIndex;
 
     export class BwCursor {
         private _gridX              = 0;
@@ -20,18 +22,18 @@ namespace TinyWars.BaseWar {
             { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
-        public async init(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwCursor> {
-            this._setMapSize({ width: mapSizeAndMaxPlayerIndex.mapWidth, height: mapSizeAndMaxPlayerIndex.mapHeight });
+        public init(mapSize: Types.MapSize): ClientErrorCode {
+            this._setMapSize(Helpers.deepClone(mapSize));
             this.setGridIndex({ x: 0, y: 0 });
 
             this.getView().init(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
-        public async fastInit(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwCursor> {
+        public fastInit(mapSize: Types.MapSize): ClientErrorCode {
             this.getView().fastInit(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

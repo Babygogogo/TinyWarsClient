@@ -260,6 +260,19 @@ namespace TinyWars.BaseWar.BwHelpers {
         return Math.ceil(hp / CommonConstants.UnitHpNormalizer);
     }
 
+    export function getMapSize(data: WarSerialization.ISerialTileMap | null | undefined): Types.MapSize {
+        let width   = 0;
+        let height  = 0;
+
+        for (const tile of data?.tiles || []) {
+            const gridIndex = tile.gridIndex;
+            width           = Math.max(width, (gridIndex?.x || 0) + 1);
+            height          = Math.max(height, (gridIndex?.y || 0) + 1);
+        }
+
+        return { width, height };
+    }
+
     export function checkIsStateRequesting(state: Types.ActionPlannerState): boolean {
         return (state === Types.ActionPlannerState.RequestingPlayerActivateSkill)
             || (state === Types.ActionPlannerState.RequestingPlayerBeginTurn)
@@ -801,58 +814,6 @@ namespace TinyWars.BaseWar.BwHelpers {
         }
 
         return null;
-    }
-
-    export function getMapSizeAndMaxPlayerIndex(data: ISerialWar): Types.MapSizeAndMaxPlayerIndex | null | undefined {
-        const fieldData     = data.field;
-        const tileMapData   = fieldData ? fieldData.tileMap : null;
-        const tiles         = tileMapData ? tileMapData.tiles : null;
-        if (tiles == null) {
-            Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty tiles.`);
-            return undefined;
-        }
-
-        const playerManagerData             = data.playerManager;
-        const playersData                   = playerManagerData ? playerManagerData.players : null;
-        const playersCountIncludingNeutral  = playersData ? playersData.length : null;
-        if (playersCountIncludingNeutral == null) {
-            Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty playersCountIncludingNeutral.`);
-            return undefined;
-        }
-
-        const maxPlayerIndex = playersCountIncludingNeutral - 1;
-        if (maxPlayerIndex <= 1) {
-            Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() invalid maxPlayerIndex: ${maxPlayerIndex}`);
-            return undefined;
-        }
-
-        let mapWidth   = 0;
-        let mapHeight  = 0;
-        for (const tile of tiles) {
-            const gridIndex = convertGridIndex(tile.gridIndex);
-            if (gridIndex == null) {
-                Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() empty gridIndex.`);
-                return undefined;
-            }
-
-            mapWidth   = Math.max(mapWidth, gridIndex.x + 1);
-            mapHeight  = Math.max(mapHeight, gridIndex.y + 1);
-        }
-
-        if (mapWidth <= 0) {
-            Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() mapWidth <= 0: ${mapWidth}`);
-            return undefined;
-        }
-        if (mapHeight <= 0) {
-            Logger.error(`BwHelpers.getMapSizeAndMaxPlayerIndex() mapHeight <= 0: ${mapHeight}`);
-            return undefined;
-        }
-
-        return {
-            mapWidth,
-            mapHeight,
-            maxPlayerIndex,
-        };
     }
 
     export function getTeamIndexByRuleForPlayers(ruleForPlayers: IRuleForPlayers, playerIndex: number): number | null | undefined {

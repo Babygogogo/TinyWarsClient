@@ -4,6 +4,7 @@ namespace TinyWars.BaseWar {
     import Notify               = Utility.Notify;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import Logger               = Utility.Logger;
+    import Helpers              = Utility.Helpers;
     import ClientErrorCode      = Utility.ClientErrorCode;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import UnitState            = Types.UnitActionState;
@@ -61,17 +62,17 @@ namespace TinyWars.BaseWar {
             { type: Notify.Type.BwCursorDragEnded, callback: this._onNotifyBwCursorDragEnded },
         ];
 
-        public init(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): ClientErrorCode {
-            this._setMapSize({ width: mapSizeAndMaxPlayerIndex.mapWidth, height: mapSizeAndMaxPlayerIndex.mapHeight });
+        public init(mapSize: Types.MapSize): ClientErrorCode {
+            this._setMapSize(Helpers.deepClone(mapSize));
 
             this.getView().init(this);
 
             return ClientErrorCode.NoError;
         }
-        public async fastInit(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwActionPlanner> {
+        public fastInit(mapSize: Types.MapSize): ClientErrorCode {
             this.getView().fastInit(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

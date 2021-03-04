@@ -1,15 +1,14 @@
 
 namespace TinyWars.BaseWar {
-    import Types                    = Utility.Types;
-    import Logger                   = Utility.Logger;
-    import ClientErrorCode          = Utility.ClientErrorCode;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import ISerialField             = ProtoTypes.WarSerialization.ISerialField;
-    import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
+    import Types            = Utility.Types;
+    import Logger           = Utility.Logger;
+    import ClientErrorCode  = Utility.ClientErrorCode;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ISerialField     = ProtoTypes.WarSerialization.ISerialField;
 
     export abstract class BwField {
-        private _tileMap                    : BwTileMap;
-        private _fogMap                     : BwFogMap;
+        private readonly _fogMap            = new (this._getFogMapClass())();
+        private readonly _tileMap           = new (this._getTileMapClass())();
         private readonly _unitMap           = new (this._getUnitMapClass())();
         private readonly _cursor            = new BwCursor();
         private readonly _actionPlanner     = new (this._getActionPlannerClass())();
@@ -23,76 +22,117 @@ namespace TinyWars.BaseWar {
         }
         protected abstract _getActionPlannerClass(): new () => BwActionPlanner;
 
-        public async init(
-            data                    : ISerialField,
-            configVersion           : string,
-            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex
-        ): Promise<ClientErrorCode> {
-            const fogMapData = data.fogMap;
-            if (fogMapData == null) {
-                Logger.error(`BwField.init() empty fogMapData.`);
-                return undefined;
+        public init({ data, configVersion, playersCountUnneutral }: {
+            data                    : ISerialField;
+            configVersion           : string;
+            playersCountUnneutral   : number;
+        }): ClientErrorCode {
+            if (data == null) {
+                return ClientErrorCode.BwFieldInit00;
             }
 
-            const tileMapData = data.tileMap;
-            if (tileMapData == null) {
-                Logger.error(`BwField.init() empty tileMapData.`);
-                return undefined;
+            const mapSize       = BwHelpers.getMapSize(data.tileMap);
+            const fogMapError   = this.getFogMap().init({
+                data                : data.fogMap,
+                mapSize,
+                playersCountUnneutral
+            });
+            if (fogMapError) {
+                return fogMapError;
             }
 
-            const unitMapData = data.unitMap;
-            if (unitMapData == null) {
-                Logger.error(`BwField.init() empty unitMapData.`);
-                return undefined;
+            const tileMapError = this.getTileMap().init({
+                data                : data.tileMap,
+                configVersion,
+                mapSize,
+                playersCountUnneutral
+            });
+            if (tileMapError) {
+                return tileMapError;
             }
 
-            const fogMap = await (this.getFogMap() || new (this._getFogMapClass())()).init(fogMapData, mapSizeAndMaxPlayerIndex);
-            if (fogMap == null) {
-                Logger.error(`BwField.init() empty fogMap.`);
-                return undefined;
-            }
-
-            const tileMap = await (this.getTileMap() || new (this._getTileMapClass())()).init(tileMapData, configVersion, mapSizeAndMaxPlayerIndex);
-            if (tileMap == null) {
-                Logger.error(`BwField.init() empty tileMap.`);
-                return undefined;
-            }
-
-            const unitMapError = this.getUnitMap().init(unitMapData, configVersion, mapSizeAndMaxPlayerIndex);
+            const unitMapError = this.getUnitMap().init({
+                data                : data.unitMap,
+                configVersion,
+                mapSize,
+                playersCountUnneutral
+            });
             if (unitMapError) {
                 return unitMapError;
             }
 
-            const actionPlannerError = this.getActionPlanner().init(mapSizeAndMaxPlayerIndex);
+            const actionPlannerError = this.getActionPlanner().init(mapSize);
             if (actionPlannerError) {
                 return actionPlannerError;
             }
 
-            this._setFogMap(fogMap);
-            this._setTileMap(tileMap);
+            const cursorError = this.getCursor().init(mapSize);
+            if (cursorError) {
+                return cursorError;
+            }
 
-            await this._initCursor(mapSizeAndMaxPlayerIndex);
-            this._initGridVisionEffect();
+            const gridVisualEffectError = this.getGridVisualEffect().init();
+            if (gridVisualEffectError) {
+                return gridVisualEffectError;
+            }
 
             this.getView().init(this);
 
             return ClientErrorCode.NoError;
         }
-        public async fastInit(
-            data                    : ISerialField,
-            configVersion           : string,
-            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex
-        ): Promise<BwField> {
-            await this.getFogMap().fastInit(data.fogMap, mapSizeAndMaxPlayerIndex);
-            await this.getTileMap().fastInit(data.tileMap, configVersion, mapSizeAndMaxPlayerIndex);
-            await this.getUnitMap().fastInit(data.unitMap, configVersion, mapSizeAndMaxPlayerIndex);
-            await this._fastInitCursor(mapSizeAndMaxPlayerIndex);
-            await this._fastInitActionPlanner(mapSizeAndMaxPlayerIndex);
-            await this._fastInitGridVisionEffect();
+        public fastInit({ data, configVersion, playersCountUnneutral }: {
+            data                    : ISerialField;
+            configVersion           : string;
+            playersCountUnneutral   : number;
+        }): ClientErrorCode {
+            const mapSize       = BwHelpers.getMapSize(data.tileMap);
+            const fogMapError   = this.getFogMap().fastInit({
+                data                : data.fogMap,
+                mapSize,
+                playersCountUnneutral
+            });
+            if (fogMapError) {
+                return fogMapError;
+            }
+
+            const tileMapError = this.getTileMap().fastInit({
+                data                : data.tileMap,
+                configVersion,
+                mapSize,
+                playersCountUnneutral,
+            });
+            if (tileMapError) {
+                return tileMapError;
+            }
+
+            const unitMapError = this.getUnitMap().fastInit({
+                data                : data.unitMap,
+                configVersion,
+                mapSize,
+                playersCountUnneutral,
+            });
+            if (unitMapError) {
+                return unitMapError;
+            }
+
+            const cursorError = this.getCursor().fastInit(mapSize);
+            if (cursorError) {
+                return cursorError;
+            }
+
+            const actionPlannerError = this.getActionPlanner().fastInit(mapSize);
+            if (actionPlannerError) {
+                return actionPlannerError;
+            }
+
+            const gridVisualEffectError = this.getGridVisualEffect().fastInit();
+            if (gridVisualEffectError) {
+                return gridVisualEffectError;
+            }
 
             this.getView().fastInit(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {
@@ -142,16 +182,10 @@ namespace TinyWars.BaseWar {
             return this._view;
         }
 
-        private _setFogMap(map: BwFogMap): void {
-            this._fogMap = map;
-        }
         public getFogMap(): BwFogMap {
             return this._fogMap;
         }
 
-        private _setTileMap(map: BwTileMap): void {
-            this._tileMap = map;
-        }
         public getTileMap(): BwTileMap {
             return this._tileMap;
         }
@@ -160,29 +194,14 @@ namespace TinyWars.BaseWar {
             return this._unitMap;
         }
 
-        private async _initCursor(mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex): Promise<void> {
-            await this.getCursor().init(mapSizeAndMaxPlayerIndex);
-        }
-        private async _fastInitCursor(mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex): Promise<void> {
-            await this.getCursor().fastInit(mapSizeAndMaxPlayerIndex);
-        }
         public getCursor(): BwCursor {
             return this._cursor;
         }
 
-        private async _fastInitActionPlanner(mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex): Promise<void> {
-            await this.getActionPlanner().fastInit(mapSizeAndMaxPlayerIndex);
-        }
         public getActionPlanner(): BwActionPlanner {
             return this._actionPlanner;
         }
 
-        private _initGridVisionEffect(): void {
-            this.getGridVisualEffect().init();
-        }
-        private _fastInitGridVisionEffect(): void {
-            this.getGridVisualEffect().fastInit();
-        }
         public getGridVisualEffect(): BwGridVisualEffect {
             return this._gridVisualEffect;
         }

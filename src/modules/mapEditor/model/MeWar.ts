@@ -33,12 +33,6 @@ namespace TinyWars.MapEditor {
                 return baseInitError;
             }
 
-            const mapSizeAndMaxPlayerIndex = BwHelpers.getMapSizeAndMaxPlayerIndex(data);
-            if (!mapSizeAndMaxPlayerIndex) {
-                Logger.error(`MeWar.init() invalid war data! ${JSON.stringify(data)}`);
-                return undefined;
-            }
-
             const settingsForCommon = data.settingsForCommon;
             if (!settingsForCommon) {
                 Logger.error(`MeWar.init() empty settingsForCommon! ${JSON.stringify(data)}`);
@@ -69,6 +63,7 @@ namespace TinyWars.MapEditor {
                 return undefined;
             }
 
+            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
             const playerManager = (this.getPlayerManager() || new (this._getPlayerManagerClass())()).init(dataForPlayerManager);
             if (playerManager == null) {
                 Logger.error(`MeWar.init() empty playerManager.`);
@@ -81,7 +76,11 @@ namespace TinyWars.MapEditor {
                 return undefined;
             }
 
-            const fieldError = await this.getField().init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
+            const fieldError = await this.getField().init({
+                data                : dataForField,
+                configVersion,
+                playersCountUnneutral
+            });
             if (fieldError) {
                 return fieldError;
             }

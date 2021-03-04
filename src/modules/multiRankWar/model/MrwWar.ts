@@ -25,12 +25,6 @@ namespace TinyWars.MultiRankWar {
                 return undefined;
             }
 
-            const mapSizeAndMaxPlayerIndex = await BwHelpers.getMapSizeAndMaxPlayerIndex(data);
-            if (!mapSizeAndMaxPlayerIndex) {
-                Logger.error(`MrwWar.init() invalid war data! ${JSON.stringify(data)}`);
-                return undefined;
-            }
-
             const settingsForCommon = data.settingsForCommon;
             if (!settingsForCommon) {
                 Logger.error(`MrwWar.init() empty settingsForCommon! ${JSON.stringify(data)}`);
@@ -61,7 +55,8 @@ namespace TinyWars.MultiRankWar {
                 return undefined;
             }
 
-            const playerManager = (this.getPlayerManager() || new (this._getPlayerManagerClass())()).init(dataForPlayerManager);
+            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
+            const playerManager = this.getPlayerManager().init(dataForPlayerManager);
             if (playerManager == null) {
                 Logger.error(`MrwWar.init() empty playerManager.`);
                 return undefined;
@@ -73,7 +68,11 @@ namespace TinyWars.MultiRankWar {
                 return undefined;
             }
 
-            const fieldError = await this.getField().init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
+            const fieldError = await this.getField().init({
+                data                : dataForField,
+                configVersion,
+                playersCountUnneutral
+            });
             if (fieldError) {
                 return fieldError;
             }

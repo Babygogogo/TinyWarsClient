@@ -1,18 +1,17 @@
 
 namespace TinyWars.BaseWar {
-    import Types                    = Utility.Types;
-    import Helpers                  = Utility.Helpers;
-    import GridIndexHelpers         = Utility.GridIndexHelpers;
-    import Logger                   = Utility.Logger;
-    import ClientErrorCode          = Utility.ClientErrorCode;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import VisibilityHelpers        = Utility.VisibilityHelpers;
-    import ConfigManager            = Utility.ConfigManager;
-    import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
-    import GridIndex                = Types.GridIndex;
-    import WarSerialization         = ProtoTypes.WarSerialization;
-    import ISerialUnitMap           = WarSerialization.ISerialUnitMap;
-    import ISerialUnit              = WarSerialization.ISerialUnit;
+    import Types                = Utility.Types;
+    import Helpers              = Utility.Helpers;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import Logger               = Utility.Logger;
+    import ClientErrorCode      = Utility.ClientErrorCode;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import ConfigManager        = Utility.ConfigManager;
+    import GridIndex            = Types.GridIndex;
+    import WarSerialization     = ProtoTypes.WarSerialization;
+    import ISerialUnitMap       = WarSerialization.ISerialUnitMap;
+    import ISerialUnit          = WarSerialization.ISerialUnit;
 
     export class BwUnitMap {
         private _war            : BwWar;
@@ -23,11 +22,12 @@ namespace TinyWars.BaseWar {
 
         private readonly _view  = new BwUnitMapView();
 
-        public init(
-            data                    : ISerialUnitMap,
-            configVersion           : string,
-            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
-        ): ClientErrorCode {
+        public init({ data, configVersion, mapSize, playersCountUnneutral }: {
+            data                    : ISerialUnitMap;
+            configVersion           : string;
+            mapSize                 : Types.MapSize;
+            playersCountUnneutral   : number;
+        }): ClientErrorCode {
             if (data == null) {
                 return ClientErrorCode.BwUnitMapInit00;
             }
@@ -37,13 +37,10 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwUnitMapInit01;
             }
 
-            const mapWidth          = mapSizeAndMaxPlayerIndex.mapWidth;
-            const mapHeight         = mapSizeAndMaxPlayerIndex.mapHeight;
-            const maxPlayerIndex    = mapSizeAndMaxPlayerIndex.maxPlayerIndex;
-            const map               = Helpers.createEmptyMap<BwUnit>(mapWidth);
-            const mapSize           : Types.MapSize = { width: mapWidth, height: mapHeight };
-            const loadedUnits       = new Map<number, BwUnit>();
-            const allUnits          = new Map<number, BwUnit>();
+            const mapWidth      = mapSize.width;
+            const map           = Helpers.createEmptyMap<BwUnit>(mapWidth);
+            const loadedUnits   = new Map<number, BwUnit>();
+            const allUnits      = new Map<number, BwUnit>();
 
             for (const unitData of data.units || []) {
                 const unit      = new BwUnit();
@@ -70,7 +67,7 @@ namespace TinyWars.BaseWar {
                 allUnits.set(unitId, unit);
 
                 const playerIndex = unit.getPlayerIndex();
-                if ((playerIndex == null) || (playerIndex > maxPlayerIndex)) {
+                if ((playerIndex == null) || (playerIndex > playersCountUnneutral)) {
                     return ClientErrorCode.BwUnitMapInit06;
                 }
 
@@ -101,41 +98,48 @@ namespace TinyWars.BaseWar {
                     return ClientErrorCode.BwUnitMapInit10;
                 }
 
+                const gridIndex1 = loader.getGridIndex();
+                const gridIndex2 = loadedUnit.getGridIndex();
+                if ((!gridIndex1) || (!gridIndex2) || (!GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2))) {
+                    return ClientErrorCode.BwUnitMapInit11;
+                }
+
                 const maxLoadCount  = loader.getMaxLoadUnitsCount();
                 const loadCount     = (loadUnitCounts.get(loaderId) || 0) + 1;
                 if ((maxLoadCount == null) || (loadCount > maxLoadCount)) {
-                    return ClientErrorCode.BwUnitMapInit11;
+                    return ClientErrorCode.BwUnitMapInit12;
                 }
                 loadUnitCounts.set(loaderId, loadCount);
 
                 const unitType = loadedUnit.getUnitType();
                 if (unitType == null) {
-                    return ClientErrorCode.BwUnitMapInit12;
+                    return ClientErrorCode.BwUnitMapInit13;
                 }
 
                 const loadUnitCategory = loader.getLoadUnitCategory();
                 if ((loadUnitCategory == null)                                                          ||
                     (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, loadUnitCategory))
                 ) {
-                    return ClientErrorCode.BwUnitMapInit13;
+                    return ClientErrorCode.BwUnitMapInit14;
                 }
             }
 
             this._setMap(map);
             this._setLoadedUnits(loadedUnits);
-            this._setMapSize(mapWidth, mapHeight);
+            this._setMapSize(mapWidth, mapSize.height);
             this.setNextUnitId(nextUnitId);
 
             this.getView().init(this);
 
             return ClientErrorCode.NoError;
         }
-        public fastInit(
-            data                    : ISerialUnitMap | null | undefined,
-            configVersion           : string,
-            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
-        ): ClientErrorCode {
-            return this.init(data, configVersion, mapSizeAndMaxPlayerIndex);
+        public fastInit({ data, configVersion, mapSize, playersCountUnneutral }: {
+            data                    : ISerialUnitMap | null | undefined;
+            configVersion           : string;
+            mapSize                 : Types.MapSize;
+            playersCountUnneutral   : number;
+        }): ClientErrorCode {
+            return this.init({ data, configVersion, mapSize, playersCountUnneutral });
         }
 
         public startRunning(war: BwWar): void {

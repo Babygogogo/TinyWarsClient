@@ -274,12 +274,6 @@ namespace TinyWars.Utility.Types {
         flareAmmo   : number | null;
     }
 
-    export type MapSizeAndMaxPlayerIndex = {
-        mapWidth        : number;
-        mapHeight       : number;
-        maxPlayerIndex  : number;
-    }
-
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.
     ////////////////////////////////////////////////////////////////////////////////

@@ -69,12 +69,7 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
-            const mapSizeAndMaxPlayerIndex = await BwHelpers.getMapSizeAndMaxPlayerIndex(data);
-            if (!mapSizeAndMaxPlayerIndex) {
-                Logger.error(`ScwWar.init() invalid war data! ${JSON.stringify(data)}`);
-                return undefined;
-            }
-
+            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
             const playerManager = (this.getPlayerManager() || new (this._getPlayerManagerClass())()).init(dataForPlayerManager);
             if (playerManager == null) {
                 Logger.error(`ScwWar.init() empty playerManager.`);
@@ -87,7 +82,11 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
-            const fieldError = await this.getField().init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
+            const fieldError = await this.getField().init({
+                data                : dataForField,
+                configVersion,
+                playersCountUnneutral,
+            });
             if (fieldError) {
                 return fieldError;
             }
