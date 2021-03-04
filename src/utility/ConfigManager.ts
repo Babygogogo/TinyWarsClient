@@ -744,10 +744,11 @@ namespace TinyWars.Utility.ConfigManager {
         }
         return dst;
     }
-    function _destructUnitTemplateCfg(data: UnitTemplateCfg[]): { [unitType: number]: UnitTemplateCfg } {
+    function _destructUnitTemplateCfg(data: UnitTemplateCfg[], version: string): { [unitType: number]: UnitTemplateCfg } {
         const dst: { [category: number]: UnitTemplateCfg } = {};
         for (const d of data) {
-            dst[d.type!] = d;
+            d.version       = version;
+            dst[d.type!]    = d;
         }
         return dst;
     }
@@ -907,7 +908,7 @@ namespace TinyWars.Utility.ConfigManager {
             TileCategory        : _destructTileCategoryCfg(rawConfig.TileCategory),
             UnitCategory        : _destructUnitCategoryCfg(rawConfig.UnitCategory),
             TileTemplate        : _destructTileTemplateCfg(rawConfig.TileTemplate),
-            UnitTemplate        : _destructUnitTemplateCfg(rawConfig.UnitTemplate),
+            UnitTemplate        : _destructUnitTemplateCfg(rawConfig.UnitTemplate, version),
             MoveCost            : _destructMoveCostCfg(rawConfig.MoveCost),
             VisionBonus         : _destructVisionBonusCfg(rawConfig.VisionBonus),
             BuildableTile       : _destructBuildableTileCfg(rawConfig.BuildableTile),

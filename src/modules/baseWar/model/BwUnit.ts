@@ -221,8 +221,8 @@ namespace TinyWars.BaseWar {
         }
 
         public getConfigVersion(): string | null | undefined {
-            const war = this.getWar();
-            return war ? war.getConfigVersion() : undefined;
+            const cfg = this._getTemplateCfg();
+            return cfg ? cfg.version : undefined;
         }
         public getUnitType(): UnitType {
             const cfg = this._getTemplateCfg();

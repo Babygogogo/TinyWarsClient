@@ -16,6 +16,7 @@ namespace TinyWars.Utility.Types {
         visionRange         : number;
     }
     export interface UnitTemplateCfg extends ProtoTypes.Config.IUnitTemplateCfg {
+        version                 : string;
         type                    : UnitType;
         maxHp                   : number;
         armorType               : ArmorType;
