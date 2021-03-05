@@ -8,7 +8,7 @@ namespace TinyWars.MultiRankWar {
     import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForMrw  = ProtoTypes.WarSettings.ISettingsForMrw;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export class MrwWar extends MultiPlayerWar.MpwWar {
         private _settingsForMrw?: ISettingsForMrw;

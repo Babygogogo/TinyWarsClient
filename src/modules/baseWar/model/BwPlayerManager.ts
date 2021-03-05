@@ -7,7 +7,7 @@ namespace TinyWars.BaseWar {
     import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
     import PlayerAliveState     = Types.PlayerAliveState;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     export abstract class BwPlayerManager {
         private _players        = new Map<number, BwPlayer>();

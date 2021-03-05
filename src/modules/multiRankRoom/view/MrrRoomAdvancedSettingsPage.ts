@@ -8,7 +8,7 @@ namespace TinyWars.MultiRankRoom {
     import WarMapModel      = WarMap.WarMapModel;
     import NetMessage       = ProtoTypes.NetMessage;
     import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export type OpenDataForMrrRoomAdvancedSettingsPage = {
         roomId  : number;

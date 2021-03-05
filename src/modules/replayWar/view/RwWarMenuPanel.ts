@@ -8,9 +8,9 @@ namespace TinyWars.ReplayWar {
     import LocalStorage     = Utility.LocalStorage;
     import FloatText        = Utility.FloatText;
     import ProtoTypes       = Utility.ProtoTypes;
+    import CommonConstants  = Utility.CommonConstants;
     import TimeModel        = Time.TimeModel;
     import WarMapModel      = WarMap.WarMapModel;
-    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     const enum MenuType {
         Main,

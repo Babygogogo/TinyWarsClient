@@ -14,7 +14,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     import TileType         = Types.TileType;
     import UnitType         = Types.UnitType;
     import UnitActionState  = Types.UnitActionState;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     type AttackInfo = {
         baseDamage      : number;
@@ -1000,7 +1000,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         await _checkAndCallLater();
 
         let score = 10000;                                                                                                          // ADJUSTABLE
-        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, ConfigManager.SILO_RADIUS, _mapSize)) {
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, _mapSize)) {
             score += unitValueMap[gridIndex.x][gridIndex.y] || 0;                                                                   // ADJUSTABLE
         }
         return score;

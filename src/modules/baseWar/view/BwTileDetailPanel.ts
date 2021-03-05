@@ -12,7 +12,7 @@ namespace TinyWars.BaseWar {
         tile    : BwTile;
     }
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.CommonConstants.GridSize;
 
     export class BwTileDetailPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;

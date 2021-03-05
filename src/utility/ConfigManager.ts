@@ -1,6 +1,5 @@
 
 namespace TinyWars.Utility.ConfigManager {
-    import GridSize         = Types.Size;
     import TileBaseType     = Types.TileBaseType;
     import TileObjectType   = Types.TileObjectType;
     import TileType         = Types.TileType;
@@ -40,685 +39,6 @@ namespace TinyWars.Utility.ConfigManager {
         maxUnitPromotion?       : number;
         secondaryWeaponFlag?    : { [unitType: number]: boolean };
     }
-
-    type FrameCfg = {
-        framesCount     : number;
-        ticksPerFrame   : number;
-    }
-    type TileObjectShapeCfg = {
-        minPlayerIndex  : number;
-        maxPlayerIndex  : number;
-        shapesCount     : number;
-    }
-    type TileBaseShapeCfg = {
-        shapesCount     : number;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    // Constants.
-    ////////////////////////////////////////////////////////////////////////////////
-    export const COMMON_CONSTANTS = {
-        AdminUserId                             : 1000001,
-        NameListMaxLength                       : 5,
-
-        ChangeLogTextMaxLength                  : 200,
-        ChangeLogTextListMaxLength              : 2,
-        ChangeLogMessageListMaxLength           : 100,
-
-        MapMaxGridsCount                           : 1000,
-        MaxMapNameLength                        : 30,
-        MaxDesignerLength                       : 30,
-
-        WarEventNameMaxLength                   : 150,
-        WarEventMaxEventsPerMap                 : 10,
-        WarEventMaxConditionNodesPerMap         : 50,
-        WarEventMaxConditionsPerMap             : 100,
-        WarEventMaxActionsPerMap                : 100,
-        WarEventMaxActionsPerEvent              : 10,
-        WarEventMaxCallCountTotal               : 100,
-        WarEventMaxCallCountInPlayerTurn        : 10,
-        WarEventActionAddUnitMaxCount           : 50,
-
-        MapEditorSlotMaxCountForNormal          : 3,
-        MapEditorSlotMaxCountForCommittee       : 100,
-        ScwSaveSlotMaxCount                     : 10,
-        ScwSaveSlotCommentMaxLength             : 15,
-
-        RankInitialScore                        : 1200,
-        RankMaxConcurrentCount                  : 5,
-        RankMaxBanCoCount                       : 3,
-
-        ChatContentMaxLength                    : 200,
-        ChatTeamDivider                         : 100,
-
-        UnitHpNormalizer                        : 10,
-        UnitMaxHp                               : 100,
-        UnitAndTileMinSkinId                    : 1,
-        UnitAndTileMaxSkinId                    : 4,
-        UnitAndTileNeutralSkinId                : 0,
-
-        CoEmptyId                               : 0,
-
-        WarNeutralPlayerIndex                   : 0,
-        WarFirstPlayerIndex                     : 1,
-        WarMaxPlayerIndex                       : 4,
-        WarNeutralTeamIndex                     : 0,
-        WarFirstTeamIndex                       : 1,
-        WarFirstTurnIndex                       : 1,
-
-        ReplayMaxRating                         : 10,
-        ReplayMinRating                         : 0,
-
-        WarNameMaxLength                        : 20,
-        WarCommentMaxLength                     : 50,
-        WarPasswordMaxLength                    : 4,
-        WarBootTimerRegularMaxLimit             : 3600 * 24 * 7,
-        WarBootTimerRegularDefaultValue         : 3600 * 24 * 3,
-        WarBootTimerIncrementalMaxLimit         : 3600 * 24,
-
-        WarRuleFirstId                          : 0,
-        WarRuleNameMaxLength                    : 15,
-        WarRuleOffenseBonusMinLimit             : -100,
-        WarRuleOffenseBonusMaxLimit             : 10000,
-        WarRuleOffenseBonusDefault              : 0,
-        WarRuleEnergyGrowthMultiplierMinLimit   : 0,
-        WarRuleEnergyGrowthMultiplierMaxLimit   : 10000,
-        WarRuleEnergyGrowthMultiplierDefault    : 100,
-        WarRuleIncomeMultiplierMinLimit         : 0,
-        WarRuleIncomeMultiplierMaxLimit         : 10000,
-        WarRuleIncomeMultiplierDefault          : 100,
-        WarRuleInitialEnergyPercentageMinLimit  : 0,
-        WarRuleInitialEnergyPercentageMaxLimit  : 100,
-        WarRuleInitialEnergyPercentageDefault   : 0,
-        WarRuleInitialFundMinLimit              : 0,
-        WarRuleInitialFundMaxLimit              : 1000000,
-        WarRuleInitialFundDefault               : 0,
-        WarRuleLuckMinLimit                     : -100,
-        WarRuleLuckMaxLimit                     : 100,
-        WarRuleLuckDefaultLowerLimit            : 0,
-        WarRuleLuckDefaultUpperLimit            : 10,
-        WarRuleMoveRangeModifierMinLimit        : -10,
-        WarRuleMoveRangeModifierMaxLimit        : 10,
-        WarRuleMoveRangeModifierDefault         : 0,
-        WarRuleVisionRangeModifierMinLimit      : -10,
-        WarRuleVisionRangeModifierMaxLimit      : 10,
-        WarRuleVisionRangeModifierDefault       : 0,
-        WarRuleMaxCount                         : 5,
-    };
-
-    const _GRID_SIZE: GridSize = {
-        width: 72,
-        height: 72
-    };
-
-    const _TILE_TYPE_MAPPING = new Map<TileBaseType, Map<TileObjectType, TileType>>([
-        [TileBaseType.Beach, new Map([
-            [TileObjectType.Empty,          TileType.Beach],
-            [TileObjectType.Road,           TileType.Road],
-            [TileObjectType.Bridge,         TileType.BridgeOnBeach],
-            [TileObjectType.Wood,           TileType.Wood],
-            [TileObjectType.Mountain,       TileType.Mountain],
-            [TileObjectType.Wasteland,      TileType.Wasteland],
-            [TileObjectType.Ruins,          TileType.Ruins],
-            [TileObjectType.Fire,           TileType.Fire],
-            [TileObjectType.Rough,          TileType.Rough],
-            [TileObjectType.Mist,           TileType.MistOnBeach],
-            [TileObjectType.Reef,           TileType.Reef],
-            [TileObjectType.Plasma,         TileType.Plasma],
-            [TileObjectType.Meteor,         TileType.Meteor],
-            [TileObjectType.Silo,           TileType.Silo],
-            [TileObjectType.EmptySilo,      TileType.EmptySilo],
-            [TileObjectType.Headquarters,   TileType.Headquarters],
-            [TileObjectType.City,           TileType.City],
-            [TileObjectType.CommandTower,   TileType.CommandTower],
-            [TileObjectType.Radar,          TileType.Radar],
-            [TileObjectType.Factory,        TileType.Factory],
-            [TileObjectType.Airport,        TileType.Airport],
-            [TileObjectType.Seaport,        TileType.Seaport],
-            [TileObjectType.TempAirport,    TileType.TempAirport],
-            [TileObjectType.TempSeaport,    TileType.TempSeaport],
-            [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
-        ])],
-        [TileBaseType.Plain, new Map([
-            [TileObjectType.Empty,          TileType.Plain],
-            [TileObjectType.Road,           TileType.Road],
-            [TileObjectType.Bridge,         TileType.BridgeOnPlain],
-            [TileObjectType.Wood,           TileType.Wood],
-            [TileObjectType.Mountain,       TileType.Mountain],
-            [TileObjectType.Wasteland,      TileType.Wasteland],
-            [TileObjectType.Ruins,          TileType.Ruins],
-            [TileObjectType.Fire,           TileType.Fire],
-            [TileObjectType.Rough,          TileType.Rough],
-            [TileObjectType.Mist,           TileType.MistOnPlain],
-            [TileObjectType.Reef,           TileType.Reef],
-            [TileObjectType.Plasma,         TileType.Plasma],
-            [TileObjectType.Meteor,         TileType.Meteor],
-            [TileObjectType.Silo,           TileType.Silo],
-            [TileObjectType.EmptySilo,      TileType.EmptySilo],
-            [TileObjectType.Headquarters,   TileType.Headquarters],
-            [TileObjectType.City,           TileType.City],
-            [TileObjectType.CommandTower,   TileType.CommandTower],
-            [TileObjectType.Radar,          TileType.Radar],
-            [TileObjectType.Factory,        TileType.Factory],
-            [TileObjectType.Airport,        TileType.Airport],
-            [TileObjectType.Seaport,        TileType.Seaport],
-            [TileObjectType.TempAirport,    TileType.TempAirport],
-            [TileObjectType.TempSeaport,    TileType.TempSeaport],
-            [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
-        ])],
-        [TileBaseType.River, new Map([
-            [TileObjectType.Empty,          TileType.River],
-            [TileObjectType.Road,           TileType.Road],
-            [TileObjectType.Bridge,         TileType.BridgeOnRiver],
-            [TileObjectType.Wood,           TileType.Wood],
-            [TileObjectType.Mountain,       TileType.Mountain],
-            [TileObjectType.Wasteland,      TileType.Wasteland],
-            [TileObjectType.Ruins,          TileType.Ruins],
-            [TileObjectType.Fire,           TileType.Fire],
-            [TileObjectType.Rough,          TileType.Rough],
-            [TileObjectType.Mist,           TileType.MistOnRiver],
-            [TileObjectType.Reef,           TileType.Reef],
-            [TileObjectType.Plasma,         TileType.Plasma],
-            [TileObjectType.Meteor,         TileType.Meteor],
-            [TileObjectType.Silo,           TileType.Silo],
-            [TileObjectType.EmptySilo,      TileType.EmptySilo],
-            [TileObjectType.Headquarters,   TileType.Headquarters],
-            [TileObjectType.City,           TileType.City],
-            [TileObjectType.CommandTower,   TileType.CommandTower],
-            [TileObjectType.Radar,          TileType.Radar],
-            [TileObjectType.Factory,        TileType.Factory],
-            [TileObjectType.Airport,        TileType.Airport],
-            [TileObjectType.Seaport,        TileType.Seaport],
-            [TileObjectType.TempAirport,    TileType.TempAirport],
-            [TileObjectType.TempSeaport,    TileType.TempSeaport],
-            [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
-        ])],
-        [TileBaseType.Sea, new Map([
-            [TileObjectType.Empty,          TileType.Sea],
-            [TileObjectType.Road,           TileType.Road],
-            [TileObjectType.Bridge,         TileType.BridgeOnSea],
-            [TileObjectType.Wood,           TileType.Wood],
-            [TileObjectType.Mountain,       TileType.Mountain],
-            [TileObjectType.Wasteland,      TileType.Wasteland],
-            [TileObjectType.Ruins,          TileType.Ruins],
-            [TileObjectType.Fire,           TileType.Fire],
-            [TileObjectType.Rough,          TileType.Rough],
-            [TileObjectType.Mist,           TileType.MistOnSea],
-            [TileObjectType.Reef,           TileType.Reef],
-            [TileObjectType.Plasma,         TileType.Plasma],
-            [TileObjectType.Meteor,         TileType.Meteor],
-            [TileObjectType.Silo,           TileType.Silo],
-            [TileObjectType.EmptySilo,      TileType.EmptySilo],
-            [TileObjectType.Headquarters,   TileType.Headquarters],
-            [TileObjectType.City,           TileType.City],
-            [TileObjectType.CommandTower,   TileType.CommandTower],
-            [TileObjectType.Radar,          TileType.Radar],
-            [TileObjectType.Factory,        TileType.Factory],
-            [TileObjectType.Airport,        TileType.Airport],
-            [TileObjectType.Seaport,        TileType.Seaport],
-            [TileObjectType.TempAirport,    TileType.TempAirport],
-            [TileObjectType.TempSeaport,    TileType.TempSeaport],
-            [TileObjectType.GreenPlasma,    TileType.GreenPlasma],
-        ])],
-    ]);
-
-    const _TILE_TYPE_TO_TILE_OBJECT_TYPE = new Map<TileType, TileObjectType>([
-        [TileType.Airport,          TileObjectType.Airport],
-        [TileType.Beach,            TileObjectType.Empty],
-        [TileType.BridgeOnBeach,    TileObjectType.Bridge],
-        [TileType.BridgeOnPlain,    TileObjectType.Bridge],
-        [TileType.BridgeOnRiver,    TileObjectType.Bridge],
-        [TileType.BridgeOnSea,      TileObjectType.Bridge],
-        [TileType.City,             TileObjectType.City],
-        [TileType.CommandTower,     TileObjectType.CommandTower],
-        [TileType.EmptySilo,        TileObjectType.EmptySilo],
-        [TileType.Factory,          TileObjectType.Factory],
-        [TileType.Fire,             TileObjectType.Fire],
-        [TileType.GreenPlasma,      TileObjectType.GreenPlasma],
-        [TileType.Headquarters,     TileObjectType.Headquarters],
-        [TileType.Meteor,           TileObjectType.Meteor],
-        [TileType.MistOnBeach,      TileObjectType.Mist],
-        [TileType.MistOnPlain,      TileObjectType.Mist],
-        [TileType.MistOnRiver,      TileObjectType.Mist],
-        [TileType.MistOnSea,        TileObjectType.Mist],
-        [TileType.Mountain,         TileObjectType.Mountain],
-        [TileType.Plain,            TileObjectType.Empty],
-        [TileType.Plasma,           TileObjectType.Plasma],
-        [TileType.Radar,            TileObjectType.Radar],
-        [TileType.Reef,             TileObjectType.Reef],
-        [TileType.River,            TileObjectType.Empty],
-        [TileType.Road,             TileObjectType.Road],
-        [TileType.Rough,            TileObjectType.Rough],
-        [TileType.Ruins,            TileObjectType.Ruins],
-        [TileType.Sea,              TileObjectType.Empty],
-        [TileType.Seaport,          TileObjectType.Seaport],
-        [TileType.Silo,             TileObjectType.Silo],
-        [TileType.TempAirport,      TileObjectType.TempAirport],
-        [TileType.TempSeaport,      TileObjectType.TempSeaport],
-        [TileType.Wasteland,        TileObjectType.Wasteland],
-        [TileType.Wood,             TileObjectType.Wood],
-    ]);
-
-    const _TILE_BASE_FRAME_CFGS = new Map([
-        [
-            Types.UnitAndTileTextureVersion.V0,
-            new Map<TileBaseType, FrameCfg >([
-                [ TileBaseType.Beach,   { framesCount: 6,   ticksPerFrame: 1                }],
-                [ TileBaseType.Plain,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileBaseType.River,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileBaseType.Sea,     { framesCount: 6,   ticksPerFrame: 1                }],
-            ]),
-        ],
-        [
-            Types.UnitAndTileTextureVersion.V1,
-            new Map<TileBaseType, FrameCfg >([
-                [ TileBaseType.Beach,   { framesCount: 6,   ticksPerFrame: 1                }],
-                [ TileBaseType.Plain,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileBaseType.River,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileBaseType.Sea,     { framesCount: 6,   ticksPerFrame: 1                }],
-            ]),
-        ],
-    ]);
-    const _TILE_BASE_SHAPE_CFGS = new Map<TileBaseType, TileBaseShapeCfg>([
-        [ TileBaseType.Beach,   { shapesCount: 36,  }],
-        [ TileBaseType.Plain,   { shapesCount: 1,   }],
-        [ TileBaseType.River,   { shapesCount: 16,  }],
-        [ TileBaseType.Sea,     { shapesCount: 47,  }],
-    ]);
-    const _TILE_OBJECT_FRAME_CFGS = new Map([
-        [
-            Types.UnitAndTileTextureVersion.V0,
-            new Map<TileObjectType, FrameCfg>([
-                [ TileObjectType.Airport,       { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.Bridge,        { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.City,          { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.CommandTower,  { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.EmptySilo,     { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Factory,       { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.Fire,          { framesCount: 5,   ticksPerFrame: 1                }],
-                [ TileObjectType.GreenPlasma,   { framesCount: 3,   ticksPerFrame: 1                }],
-                [ TileObjectType.Headquarters,  { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.Meteor,        { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Mist,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Mountain,      { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Plasma,        { framesCount: 3,   ticksPerFrame: 1                }],
-                [ TileObjectType.Radar,         { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.Reef,          { framesCount: 6,   ticksPerFrame: 1                }],
-                [ TileObjectType.Road,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Rough,         { framesCount: 6,   ticksPerFrame: 1                }],
-                [ TileObjectType.Ruins,         { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Seaport,       { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.Silo,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.TempAirport,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.TempSeaport,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Wasteland,     { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Wood,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-            ]),
-        ],
-        [
-            Types.UnitAndTileTextureVersion.V1,
-            new Map<TileObjectType, FrameCfg >([
-                [ TileObjectType.Airport,       { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.Bridge,        { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.City,          { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.CommandTower,  { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.EmptySilo,     { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Factory,       { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.Fire,          { framesCount: 5,   ticksPerFrame: 1                }],
-                [ TileObjectType.GreenPlasma,   { framesCount: 3,   ticksPerFrame: 1                }],
-                [ TileObjectType.Headquarters,  { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.Meteor,        { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Mist,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Mountain,      { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Plasma,        { framesCount: 3,   ticksPerFrame: 1                }],
-                [ TileObjectType.Radar,         { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.Reef,          { framesCount: 6,   ticksPerFrame: 1                }],
-                [ TileObjectType.Road,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Rough,         { framesCount: 6,   ticksPerFrame: 1                }],
-                [ TileObjectType.Ruins,         { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Seaport,       { framesCount: 2,   ticksPerFrame: 3                }],
-                [ TileObjectType.Silo,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.TempAirport,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.TempSeaport,   { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Wasteland,     { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-                [ TileObjectType.Wood,          { framesCount: 1,   ticksPerFrame: Number.MAX_VALUE }],
-            ]),
-        ],
-    ]);
-    const _TILE_OBJECT_SHAPE_CFGS = new Map<TileObjectType, TileObjectShapeCfg>([
-        [ TileObjectType.Road,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 11,    }],
-        [ TileObjectType.Bridge,        { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 11,    }],
-        [ TileObjectType.Wood,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Mountain,      { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Ruins,         { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Wasteland,     { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Mist,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Fire,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Reef,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Rough,         { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Silo,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.EmptySilo,     { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Plasma,        { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 16,    }],
-        [ TileObjectType.GreenPlasma,   { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 16,    }],
-        [ TileObjectType.Meteor,        { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex, shapesCount: 1,     }],
-        [ TileObjectType.Headquarters,  { minPlayerIndex: COMMON_CONSTANTS.WarFirstPlayerIndex,     maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.City,          { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.Factory,       { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.Airport,       { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.Seaport,       { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.CommandTower,  { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.Radar,         { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.TempAirport,   { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
-        [ TileObjectType.TempSeaport,   { minPlayerIndex: COMMON_CONSTANTS.WarNeutralPlayerIndex,   maxPlayerIndex: COMMON_CONSTANTS.WarMaxPlayerIndex,     shapesCount: 1,     }],
-    ]);
-
-    const _TILE_BASE_SYMMETRY = new Map<TileBaseType, Map<number, number[]>>([
-        //          上下对称 左下右上 左右对称 左上右下 旋转对称    // 对称方式
-        // 原图     上下翻转 左下右上 左右翻转 左上右下 逆时针180  // 图块变换
-        ////////// plain: 1 (1 total) //////////
-        [TileBaseType.Plain, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileBaseType.River, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-            [   1,  [   1,      3,      2,      4,      2,  ]],
-            [   2,  [   2,      4,      1,      3,      1,  ]],
-            [   3,  [   4,      1,      3,      2,      4,  ]],
-            [   4,  [   3,      2,      4,      1,      3,  ]],
-            [   5,  [   5,      10,     5,      10,     5,  ]],
-            [   6,  [   8,      6,      7,      9,      9,  ]],
-            [   7,  [   9,      8,      6,      7,      8,  ]],
-            [   8,  [   6,      7,      9,      8,      7,  ]],
-            [   9,  [   7,      9,      8,      6,      6,  ]],
-            [   10, [   10,     5,      10,     5,      10, ]],
-            [   11, [   12,     13,     11,     14,     12, ]],
-            [   12, [   11,     14,     12,     13,     11, ]],
-            [   13, [   13,     11,     14,     12,     14, ]],
-            [   14, [   14,     12,     13,     11,     13, ]],
-            [   15, [   15,     15,     15,     15,     15, ]],
-        ])],
-        [TileBaseType.Sea, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-            [   1,  [   2,      1,      4,      8,      8,  ]],
-            [   2,  [   1,      4,      8,      2,      4,  ]],
-            [   3,  [   3,      5,      12,     10,     12, ]],
-            [   4,  [   8,      2,      1,      4,      2,  ]],
-            [   5,  [   10,     3,      5,      12,     10, ]],
-            [   6,  [   9,      6,      9,      6,      6,  ]],
-            [   7,  [   11,     7,      13,     14,     14, ]],
-            [   8,  [   4,      8,      2,      1,      1,  ]],
-            [   9,  [   6,      9,      6,      9,      9,  ]],
-            [   10, [   5,      12,     10,     3,      5,  ]],
-            [   11, [   7,      13,     14,     11,     13, ]],
-            [   12, [   12,     10,     3,      5,      3,  ]],
-            [   13, [   14,     11,     7,      13,     11, ]],
-            [   14, [   13,     14,     11,     7,      7,  ]],
-            [   15, [   15,     15,     15,     15,     15, ]],
-            [   16, [   16,     25,     20,     34,     20, ]],
-            [   17, [   18,     26,     21,     36,     22, ]],
-            [   18, [   17,     27,     22,     35,     21, ]],
-            [   19, [   19,     28,     23,     37,     23, ]],
-            [   20, [   20,     34,     16,     25,     16, ]],
-            [   21, [   22,     35,     17,     27,     18, ]],
-            [   22, [   21,     36,     18,     26,     17, ]],
-            [   23, [   23,     37,     19,     28,     19, ]],
-            [   24, [   24,     43,     24,     43,     24, ]],
-            [   25, [   34,     16,     25,     20,     34, ]],
-            [   26, [   35,     17,     27,     22,     36, ]],
-            [   27, [   36,     18,     26,     21,     35, ]],
-            [   28, [   37,     19,     28,     23,     37, ]],
-            [   29, [   38,     29,     31,     40,     40, ]],
-            [   30, [   39,     30,     32,     41,     41, ]],
-            [   31, [   40,     38,     29,     31,     38, ]],
-            [   32, [   41,     39,     30,     32,     39, ]],
-            [   33, [   42,     44,     33,     45,     42, ]],
-            [   34, [   25,     20,     34,     16,     25, ]],
-            [   35, [   26,     21,     36,     18,     27, ]],
-            [   36, [   27,     22,     35,     17,     26, ]],
-            [   37, [   28,     23,     37,     19,     28, ]],
-            [   38, [   29,     31,     40,     38,     31, ]],
-            [   39, [   30,     32,     41,     39,     32, ]],
-            [   40, [   31,     40,     38,     29,     29, ]],
-            [   41, [   32,     41,     39,     30,     30, ]],
-            [   42, [   33,     45,     42,     44,     33, ]],
-            [   43, [   43,     24,     43,     24,     43, ]],
-            [   44, [   44,     33,     45,     42,     45, ]],
-            [   45, [   45,     42,     44,     33,     44, ]],
-            [   46, [   46,     46,     46,     46,     46, ]],
-        ])],
-        [TileBaseType.Beach, new Map([
-            [   0,  [   1,      2,      0,      3,      1,  ]],
-            [   1,  [   0,      3,      1,      2,      0,  ]],
-            [   2,  [   2,      0,      3,      1,      3,  ]],
-            [   3,  [   3,      1,      2,      0,      2,  ]],
-            [   4,  [   5,      6,      4,      7,      5,  ]],
-            [   5,  [   4,      7,      5,      6,      4,  ]],
-            [   6,  [   6,      4,      7,      5,      7,  ]],
-            [   7,  [   7,      5,      6,      4,      6,  ]],
-            [   8,  [   13,     14,     12,     15,     9,  ]],
-            [   9,  [   12,     15,     13,     14,     8,  ]],
-            [   10, [   14,     12,     15,     13,     11, ]],
-            [   11, [   15,     13,     14,     12,     10, ]],
-            [   12, [   9,      10,     8,      11,     13, ]],
-            [   13, [   8,      11,     9,      10,     12, ]],
-            [   14, [   10,     8,      11,     9,      15, ]],
-            [   15, [   11,     9,      10,     8,      14, ]],
-            [   16, [   19,     16,     17,     18,     18, ]],
-            [   17, [   18,     19,     16,     17,     19, ]],
-            [   18, [   17,     18,     19,     16,     16, ]],
-            [   19, [   16,     17,     18,     19,     17, ]],
-            [   20, [   23,     20,     21,     22,     22, ]],
-            [   21, [   22,     23,     20,     21,     23, ]],
-            [   22, [   21,     22,     23,     20,     20, ]],
-            [   23, [   20,     21,     22,     23,     21, ]],
-            [   24, [   31,     28,     29,     30,     26, ]],
-            [   25, [   30,     31,     28,     29,     27, ]],
-            [   26, [   29,     30,     31,     28,     24, ]],
-            [   27, [   28,     29,     30,     31,     25, ]],
-            [   28, [   27,     24,     25,     26,     30, ]],
-            [   29, [   26,     27,     24,     25,     31, ]],
-            [   30, [   25,     26,     27,     24,     28, ]],
-            [   31, [   24,     25,     26,     27,     29, ]],
-            [   32, [   33,     34,     32,     35,     33, ]],
-            [   33, [   32,     35,     33,     34,     32, ]],
-            [   34, [   34,     32,     35,     33,     35, ]],
-            [   35, [   35,     33,     34,     32,     34, ]],
-        ])],
-    ]);
-
-    const _TILE_OBJECT_SYMMETRY = new Map<TileObjectType, Map<number, number[]>>([
-        // 原图     上下翻转 左下右上 左右翻转 左上右下 逆时针180  // 图块变换
-        [TileObjectType.Empty, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Road, new Map([
-            [   0,  [   0,      1,      0,      1,      0,  ]],
-            [   1,  [   1,      0,      1,      0,      1,  ]],
-            [   2,  [   4,      2,      3,      5,      5,  ]],
-            [   3,  [   5,      4,      2,      3,      4,  ]],
-            [   4,  [   2,      3,      5,      4,      3,  ]],
-            [   5,  [   3,      5,      4,      2,      2,  ]],
-            [   6,  [   7,      8,      6,      9,      7,  ]],
-            [   7,  [   6,      9,      7,      8,      6,  ]],
-            [   8,  [   8,      6,      9,      7,      9,  ]],
-            [   9,  [   9,      7,      8,      6,      8,  ]],
-            [   10, [   10,     10,     10,     10,     10, ]],
-        ])],
-        [TileObjectType.Bridge, new Map([
-            [   0,  [   0,      1,      0,      1,      0,  ]],
-            [   1,  [   1,      0,      1,      0,      1,  ]],
-            [   2,  [   4,      2,      3,      5,      5,  ]],
-            [   3,  [   5,      4,      2,      3,      4,  ]],
-            [   4,  [   2,      3,      5,      4,      3,  ]],
-            [   5,  [   3,      5,      4,      2,      2,  ]],
-            [   6,  [   7,      8,      6,      9,      7,  ]],
-            [   7,  [   6,      9,      7,      8,      6,  ]],
-            [   8,  [   8,      6,      9,      7,      9,  ]],
-            [   9,  [   9,      7,      8,      6,      8,  ]],
-            [   10, [   10,     10,     10,     10,     10, ]],
-        ])],
-        [TileObjectType.Wood, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Mountain, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Wasteland, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Ruins, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Fire, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Rough, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Mist, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Reef, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Plasma, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-            [   1,  [   3,      2,      1,      4,      3,  ]],
-            [   2,  [   2,      1,      4,      3,      4,  ]],
-            [   3,  [   1,      4,      3,      2,      1,  ]],
-            [   4,  [   4,      3,      2,      1,      2,  ]],
-            [   5,  [   7,      6,      5,      8,      7,  ]],
-            [   6,  [   6,      5,      8,      7,      8,  ]],
-            [   7,  [   5,      8,      7,      6,      5,  ]],
-            [   8,  [   8,      7,      6,      5,      6,  ]],
-            [   9,  [   10,     9,      12,     11,     11, ]],
-            [   10, [   9,      12,     11,     10,     12, ]],
-            [   11, [   12,     11,     10,     9,      9,  ]],
-            [   12, [   11,     10,     9,      12,     10, ]],
-            [   13, [   13,     13,     13,     13,     13, ]],
-            [   14, [   14,     15,     14,     15,     14, ]],
-            [   15, [   15,     14,     15,     14,     15, ]],
-        ])],
-        [TileObjectType.Meteor, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Silo, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.EmptySilo, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Headquarters, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.City, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.CommandTower, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Radar, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Factory, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Airport, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.Seaport, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.TempAirport, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.TempSeaport, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-        ])],
-        [TileObjectType.GreenPlasma, new Map([
-            [   0,  [   0,      0,      0,      0,      0,  ]],
-            [   1,  [   3,      2,      1,      4,      3,  ]],
-            [   2,  [   2,      1,      4,      3,      4,  ]],
-            [   3,  [   1,      4,      3,      2,      1,  ]],
-            [   4,  [   4,      3,      2,      1,      2,  ]],
-            [   5,  [   7,      6,      5,      8,      7,  ]],
-            [   6,  [   6,      5,      8,      7,      8,  ]],
-            [   7,  [   5,      8,      7,      6,      5,  ]],
-            [   8,  [   8,      7,      6,      5,      6,  ]],
-            [   9,  [   10,     9,      12,     11,     11, ]],
-            [   10, [   9,      12,     11,     10,     12, ]],
-            [   11, [   12,     11,     10,     9,      9,  ]],
-            [   12, [   11,     10,     9,      12,     10, ]],
-            [   13, [   13,     13,     13,     13,     13, ]],
-            [   14, [   14,     15,     14,     15,     14, ]],
-            [   15, [   15,     14,     15,     14,     15, ]],
-        ])],
-    ]);
-
-    const _UNIT_IMAGE_CFGS = new Map([
-        [
-            Types.UnitAndTileTextureVersion.V0,
-            new Map<UnitType, { idle: FrameCfg, moving: FrameCfg }>([
-                [ UnitType.Infantry,        { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.Mech,            { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.Bike,            { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Recon,           { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Flare,           { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.AntiAir,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Tank,            { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.MediumTank,      { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.WarTank,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Artillery,       { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.AntiTank,        { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Rockets,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Missiles,        { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Rig,             { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Fighter,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Bomber,          { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Duster,          { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.BattleCopter,    { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.TransportCopter, { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Seaplane,        { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Battleship,      { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Carrier,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Submarine,       { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Cruiser,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Lander,          { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-                [ UnitType.Gunboat,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 3,   ticksPerFrame: 1 } } ],
-            ]),
-        ],
-        [
-            Types.UnitAndTileTextureVersion.V1,
-            new Map<UnitType, { idle: FrameCfg, moving: FrameCfg }>([
-                [ UnitType.Infantry,        { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.Mech,            { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.Bike,            { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.Recon,           { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.Flare,           { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.AntiAir,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.Tank,            { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.MediumTank,      { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.WarTank,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.Artillery,       { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.AntiTank,        { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.Rockets,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.Missiles,        { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.Rig,             { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 4,   ticksPerFrame: 1 } } ],
-                [ UnitType.Fighter,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 2,   ticksPerFrame: 1 } } ],
-                [ UnitType.Bomber,          { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 2,   ticksPerFrame: 1 } } ],
-                [ UnitType.Duster,          { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 2,   ticksPerFrame: 1 } } ],
-                [ UnitType.BattleCopter,    { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 2,   ticksPerFrame: 1 } } ],
-                [ UnitType.TransportCopter, { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 2,   ticksPerFrame: 1 } } ],
-                [ UnitType.Seaplane,        { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 2,   ticksPerFrame: 1 } } ],
-                [ UnitType.Battleship,      { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 2,   ticksPerFrame: 1 } } ],
-                [ UnitType.Carrier,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 2,   ticksPerFrame: 1 } } ],
-                [ UnitType.Submarine,       { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 2,   ticksPerFrame: 1 } } ],
-                [ UnitType.Cruiser,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 2,   ticksPerFrame: 1 } } ],
-                [ UnitType.Lander,          { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 2,   ticksPerFrame: 1 } } ],
-                [ UnitType.Gunboat,         { idle: { framesCount: 4,   ticksPerFrame: 3 },     moving: { framesCount: 2,   ticksPerFrame: 1 } } ],
-            ]),
-        ],
-    ]);
 
     ////////////////////////////////////////////////////////////////////////////////
     // Initializers.
@@ -859,9 +179,6 @@ namespace TinyWars.Utility.ConfigManager {
     ////////////////////////////////////////////////////////////////////////////////
     // Exports.
     ////////////////////////////////////////////////////////////////////////////////
-    export const SILO_RADIUS                = 2;
-    export const SILO_DAMAGE                = 30;
-
     export function init(): void {
     }
 
@@ -933,12 +250,8 @@ namespace TinyWars.Utility.ConfigManager {
         _CACHED_CONFIGS.set(version, config);
     }
 
-    export function getGridSize(): GridSize {
-        return _GRID_SIZE;
-    }
-
     export function getTileType(baseType: TileBaseType, objectType: TileObjectType): TileType {
-        return _TILE_TYPE_MAPPING.get(baseType)!.get(objectType)!;
+        return CommonConstants.TileTypeMapping.get(baseType)!.get(objectType)!;
     }
 
     export function getTileTemplateCfg(version: string, baseType: TileBaseType, objectType: TileObjectType): TileTemplateCfg {
@@ -953,8 +266,8 @@ namespace TinyWars.Utility.ConfigManager {
     }
 
     export function checkIsValidPlayerIndexForTile(playerIndex: number, baseType: TileBaseType, objectType: TileObjectType): boolean {
-        const neutralPlayerIndex = COMMON_CONSTANTS.WarNeutralPlayerIndex;
-        if ((playerIndex < neutralPlayerIndex) || (playerIndex > COMMON_CONSTANTS.WarMaxPlayerIndex)) {
+        const neutralPlayerIndex = CommonConstants.WarNeutralPlayerIndex;
+        if ((playerIndex < neutralPlayerIndex) || (playerIndex > CommonConstants.WarMaxPlayerIndex)) {
             return false;
         }
 
@@ -1067,7 +380,7 @@ namespace TinyWars.Utility.ConfigManager {
     }
 
     export function getTileObjectTypeByTileType(type: TileType): TileObjectType {
-        return _TILE_TYPE_TO_TILE_OBJECT_TYPE.get(type)!;
+        return CommonConstants.TileTypeToTileObjectType.get(type)!;
     }
 
     export function getTileBaseImageSource(
@@ -1085,7 +398,7 @@ namespace TinyWars.Utility.ConfigManager {
             return undefined;
         }
 
-        const cfgForVersion = _TILE_BASE_FRAME_CFGS.get(version);
+        const cfgForVersion = CommonConstants.TileBaseFrameConfigs.get(version);
         const cfgForFrame   = cfgForVersion ? cfgForVersion.get(baseType) : undefined;
         if (cfgForFrame == null) {
             return undefined;
@@ -1117,7 +430,7 @@ namespace TinyWars.Utility.ConfigManager {
             return undefined;
         }
 
-        const cfgForVersion = _TILE_OBJECT_FRAME_CFGS.get(version);
+        const cfgForVersion = CommonConstants.TileObjectFrameConfigs.get(version);
         const cfgForFrame   = cfgForVersion ? cfgForVersion.get(objectType) : undefined;
         if (cfgForFrame == null) {
             return undefined;
@@ -1149,7 +462,7 @@ namespace TinyWars.Utility.ConfigManager {
             tickCount   : number;
         },
     ): string | undefined {
-        const cfgForVersion = _UNIT_IMAGE_CFGS.get(version);
+        const cfgForVersion = CommonConstants.UnitImageConfigs.get(version);
         const cfgForUnit    = cfgForVersion ? cfgForVersion.get(unitType) : undefined;
         const cfgForFrame   = cfgForUnit
             ? (isMoving ? cfgForUnit.moving : cfgForUnit.idle)
@@ -1282,34 +595,28 @@ namespace TinyWars.Utility.ConfigManager {
         return (diveCfgs != null) && (!!diveCfgs[1]);
     }
 
-    export function getTileObjectShapeCfgs(): Map<TileObjectType, TileObjectShapeCfg> {
-        return _TILE_OBJECT_SHAPE_CFGS;
-    }
-    export function getTileBaseShapeCfgs(): Map<TileBaseType, TileBaseShapeCfg> {
-        return _TILE_BASE_SHAPE_CFGS;
-    }
     export function checkIsValidTileObjectShapeId(tileObjectType: TileObjectType, shapeId: number): boolean {
         if (tileObjectType === TileObjectType.Empty) {
             return !shapeId;
         } else {
-            const cfg = getTileObjectShapeCfgs().get(tileObjectType);
+            const cfg = CommonConstants.TileObjectShapeConfigs.get(tileObjectType);
             return (!!cfg)
                 && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
         }
     }
     export function checkIsValidTileBaseShapeId(tileBaseType: TileBaseType, shapeId: number): boolean {
-        const cfg = getTileBaseShapeCfgs().get(tileBaseType);
+        const cfg = CommonConstants.TileBaseShapeConfigs.get(tileBaseType);
         return (!!cfg)
             && ((shapeId == null) || ((shapeId >= 0) && (shapeId < cfg.shapesCount)));
     }
 
     export function getSymmetricalTileBaseShapeId(baseType: TileBaseType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
-        const cfg           = _TILE_BASE_SYMMETRY.get(baseType);
+        const cfg           = CommonConstants.TileBaseSymmetry.get(baseType);
         const shapeIdList   = cfg ? cfg.get(shapeId || 0) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
     }
     export function getSymmetricalTileObjectShapeId(objectType: TileObjectType, shapeId: number, symmetryType: Types.SymmetryType): number | null {
-        const cfg           = _TILE_OBJECT_SYMMETRY.get(objectType);
+        const cfg           = CommonConstants.TileObjectSymmetry.get(objectType);
         const shapeIdList   = cfg ? cfg.get(shapeId || 0) : null;
         return shapeIdList ? shapeIdList[symmetryType] : null;
     }

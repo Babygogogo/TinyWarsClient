@@ -7,7 +7,7 @@ namespace TinyWars.MultiRankRoom {
     import WarMapModel      = WarMap.WarMapModel;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export type OpenDataForWarAdvancedSettingsPage = {
         warInfo : IMpwWarInfo;

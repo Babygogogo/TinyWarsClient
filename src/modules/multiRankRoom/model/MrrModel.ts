@@ -7,7 +7,7 @@ namespace TinyWars.MultiRankRoom.MrrModel {
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import NetMessage       = ProtoTypes.NetMessage;
     import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     let _maxConcurrentCountForStd   = 0;
     let _maxConcurrentCountForFog   = 0;

@@ -8,7 +8,7 @@ namespace TinyWars.MapManagement {
     import CommonHelpPanel      = Common.CommonHelpPanel;
     import IWarRule             = ProtoTypes.WarRule.IWarRule;
     import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     type OpenDataForMmWarRulePanel = ProtoTypes.Map.IMapRawData;
     export class MmWarRulePanel extends GameUi.UiPanel {

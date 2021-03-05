@@ -12,7 +12,7 @@ namespace TinyWars.MultiRankRoom {
     import UserModel        = User.UserModel;
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import IWarPlayerInfo   = ProtoTypes.Structure.IWarPlayerInfo;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export type OpenDataForMrrWarBasicSettingsPage = {
         warInfo  : IMpwWarInfo;

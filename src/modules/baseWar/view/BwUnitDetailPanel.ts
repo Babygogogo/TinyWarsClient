@@ -8,7 +8,7 @@ namespace TinyWars.BaseWar {
     import ProtoTypes       = Utility.ProtoTypes;
     import UnitType         = Types.UnitType;
     import TileType         = Types.TileType;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export type OpenDataForBwUnitDetailPanel = {
         unit: BwUnit;

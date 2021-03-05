@@ -37,7 +37,7 @@ namespace TinyWars.BaseWar {
         public init(war: BwWar): void {
             this._war = war;
 
-            const gridSize  = Utility.ConfigManager.getGridSize();
+            const gridSize  = Utility.CommonConstants.GridSize;
             const mapSize   = war.getTileMap().getMapSize();
             this._fieldContainer.removeAllContents();
             this._fieldContainer.setContentWidth(mapSize.width * gridSize.width);
@@ -72,7 +72,7 @@ namespace TinyWars.BaseWar {
 
         public tweenGridToCentralArea(gridIndex: GridIndex): void {
             const stage     = Utility.StageManager.getStage();
-            const gridSize  = Utility.ConfigManager.getGridSize();
+            const gridSize  = Utility.CommonConstants.GridSize;
             const container = this._fieldContainer;
             const currPoint = container.getContents().localToGlobal(
                 (gridIndex.x + 0.5) * gridSize.width,
@@ -100,7 +100,7 @@ namespace TinyWars.BaseWar {
             container.setContentY(point.y, false);
         }
         private _getRevisedContentPointForMoveGrid(gridIndex: GridIndex, x: number, y: number): Point {
-            const gridSize  = Utility.ConfigManager.getGridSize();
+            const gridSize  = Utility.CommonConstants.GridSize;
             const container = this._fieldContainer;
             const contents  = container.getContents();
             const point1    = contents.localToGlobal(

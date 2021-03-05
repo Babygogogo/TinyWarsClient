@@ -17,7 +17,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     import IRuleForPlayers      = WarRule.IRuleForPlayers;
     import IDataForPlayerRule   = WarRule.IDataForPlayerRule;
     import IWarRule             = WarRule.IWarRule;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     const DEFAULT_PLAYER_RULE: ProtoTypes.WarRule.IDataForPlayerRule = {
         playerIndex             : CommonConstants.WarNeutralPlayerIndex,

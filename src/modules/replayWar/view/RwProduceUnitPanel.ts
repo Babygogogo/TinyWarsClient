@@ -7,7 +7,7 @@ namespace TinyWars.ReplayWar {
     import BwHelpers        = BaseWar.BwHelpers;
     import UnitType         = Types.UnitType;
     import GridIndex        = Types.GridIndex;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     type OpenDataForRwProduceUnitPanel = {
         gridIndex: GridIndex;

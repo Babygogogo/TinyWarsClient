@@ -7,10 +7,10 @@ namespace TinyWars.MultiCustomRoom {
     import Types            = Utility.Types;
     import FloatText        = Utility.FloatText;
     import ConfigManager    = Utility.ConfigManager;
+    import CommonConstants  = Utility.CommonConstants;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import WarMapModel      = WarMap.WarMapModel;
     import CommonHelpPanel  = Common.CommonHelpPanel;
-    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     export class McrCreateBasicSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle            : TinyWars.GameUi.UiButton;

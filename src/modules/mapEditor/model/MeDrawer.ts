@@ -12,7 +12,7 @@ namespace TinyWars.MapEditor {
     import UnitType             = Types.UnitType;
     import TileBaseType         = Types.TileBaseType;
     import TileObjectType       = Types.TileObjectType;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     export type DataForDrawTileObject = {
         objectType  : TileObjectType;

@@ -6,7 +6,7 @@ namespace TinyWars.SingleCustomWar {
     import ProtoTypes           = Utility.ProtoTypes;
     import ConfigManager        = Utility.ConfigManager;
     import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     export class ScwTile extends BaseWar.BwTile {
         public serializeForSimulation(): ISerialTile | null {

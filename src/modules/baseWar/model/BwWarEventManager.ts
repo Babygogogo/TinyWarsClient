@@ -12,7 +12,7 @@ namespace TinyWars.BaseWar {
     import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
     import WarEvent                         = ProtoTypes.WarEvent;
     import IExtraDataForSystemCallWarEvent  = ProtoTypes.WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent;
-    import CommonConstants                  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants                  = Utility.CommonConstants;
 
     export class BwWarEventManager {
         private _war?               : BwWar;

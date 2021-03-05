@@ -4,7 +4,7 @@ namespace TinyWars.MapEditor {
     import Lang             = Utility.Lang;
     import Types            = Utility.Types;
     import ConfigManager    = Utility.ConfigManager;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     const MAX_RECENT_COUNT = 10;
 
@@ -138,7 +138,7 @@ namespace TinyWars.MapEditor {
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
             const typeMap = new Map<number, DataForDrawTileBase[]>();
-            for (const [baseType, cfg] of ConfigManager.getTileBaseShapeCfgs()) {
+            for (const [baseType, cfg] of Utility.CommonConstants.TileBaseShapeConfigs) {
                 if (!typeMap.has(baseType)) {
                     typeMap.set(baseType, []);
                 }

@@ -3,7 +3,7 @@ namespace TinyWars.MultiRankRoom {
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
     import ConfigManager    = Utility.ConfigManager;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export class MrrSetMaxConcurrentCountPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;

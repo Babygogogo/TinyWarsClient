@@ -6,7 +6,7 @@ namespace TinyWars.Utility.FlowManager {
     import ScwModel         = SingleCustomWar.ScwModel;
     import RwModel          = ReplayWar.RwModel;
     import MeModel          = MapEditor.MeModel;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     const _NET_EVENTS = [
         { msgCode: Network.Codes.MsgCommonServerDisconnect, callback: _onMsgCommonServerDisconnect },

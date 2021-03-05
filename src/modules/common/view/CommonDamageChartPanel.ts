@@ -7,7 +7,7 @@ namespace TinyWars.Common {
     import ProtoTypes       = Utility.ProtoTypes;
     import UnitType         = Types.UnitType;
     import TileType         = Types.TileType;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
     import IUnitTemplateCfg = ProtoTypes.Config.IUnitTemplateCfg;
 
     export class CommonDamageChartPanel extends GameUi.UiPanel {

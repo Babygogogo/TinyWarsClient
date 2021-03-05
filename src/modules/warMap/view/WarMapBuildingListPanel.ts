@@ -5,7 +5,7 @@ namespace TinyWars.WarMap {
     import Types            = Utility.Types;
     import ConfigManager    = Utility.ConfigManager;
     import ProtoTypes       = Utility.ProtoTypes;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     type OpenDataForBuildingListPanel = {
         configVersion   : string;

@@ -22,7 +22,7 @@ namespace TinyWars.BaseWar.BwHelpers {
     import ISerialWar               = WarSerialization.ISerialWar;
     import IGridIndex               = ProtoTypes.Structure.IGridIndex;
     import IRuleForPlayers          = ProtoTypes.WarRule.IRuleForPlayers;
-    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants          = Utility.CommonConstants;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;

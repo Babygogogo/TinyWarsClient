@@ -11,7 +11,7 @@ namespace TinyWars.Chat {
     import ChatCategory     = Types.ChatMessageToCategory;
     import ChatChannel      = Types.ChatChannel;
     import NetMessage       = ProtoTypes.NetMessage;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     type OpenDataForChatPanel = {
         toUserId?   : number;

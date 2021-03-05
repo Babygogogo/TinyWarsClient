@@ -12,7 +12,7 @@ namespace TinyWars.MultiRankRoom {
     import WarMapModel      = WarMap.WarMapModel;
     import UserModel        = User.UserModel;
     import NetMessage       = ProtoTypes.NetMessage;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export type OpenDataForMrrRoomBasicSettingsPage = {
         roomId  : number;

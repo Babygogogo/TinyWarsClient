@@ -8,7 +8,7 @@ namespace TinyWars.MapEditor {
     import ProtoTypes       = Utility.ProtoTypes;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import WarRule          = ProtoTypes.WarRule;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     type OpenDataForMeAvailableCoPanel = {
         playerRule      : WarRule.IDataForPlayerRule;

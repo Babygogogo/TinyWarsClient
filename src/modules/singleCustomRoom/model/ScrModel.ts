@@ -10,7 +10,7 @@ namespace TinyWars.SingleCustomRoom.ScrModel {
     import BwWarRuleHelper      = BaseWar.BwWarRuleHelper;
     import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
     import IDataForPlayerInRoom = ProtoTypes.Structure.IDataForPlayerInRoom;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     export const MAX_INITIAL_FUND     = 1000000;
     export const MIN_INITIAL_FUND     = 0;

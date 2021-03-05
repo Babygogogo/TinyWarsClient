@@ -12,6 +12,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
     import WarActionCodes       = Utility.WarActionCodes;
     import ConfigManager        = Utility.ConfigManager;
     import DamageCalculator     = Utility.DamageCalculator;
+    import CommonConstants      = Utility.CommonConstants;
     import BwHelpers            = BaseWar.BwHelpers;
     import BwCoSkillHelper      = BaseWar.BwCoSkillHelper;
     import GridIndex            = Types.GridIndex;
@@ -20,7 +21,6 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
     import TileType             = Types.TileType;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import IDataForUseCoSkill   = ProtoTypes.Structure.IDataForUseCoSkill;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     const _EXECUTORS = new Map<WarActionCodes, (war: ScwWar, data: IWarActionContainer) => Promise<void>>([
         [WarActionCodes.WarActionSystemBeginTurn,           _exeSystemBeginTurn],
@@ -835,13 +835,13 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
                 playerIndex     : CommonConstants.WarNeutralPlayerIndex,
             });
 
-            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, Utility.ConfigManager.SILO_RADIUS, unitMap.getMapSize());
+            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, unitMap.getMapSize());
             const targetUnits   = [] as BaseWar.BwUnit[];
             for (const grid of targetGrids) {
                 const unit = unitMap.getUnitOnMap(grid);
                 if (unit) {
                     targetUnits.push(unit);
-                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - Utility.ConfigManager.SILO_DAMAGE));
+                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - CommonConstants.SiloDamage));
                 }
             }
 

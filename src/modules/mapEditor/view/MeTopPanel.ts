@@ -5,7 +5,7 @@ namespace TinyWars.MapEditor {
     import Types            = Utility.Types;
     import ConfigManager    = Utility.ConfigManager;
     import DrawerMode       = Types.MapEditorDrawerMode;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export class MeTopPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;

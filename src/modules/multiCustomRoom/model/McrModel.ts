@@ -11,7 +11,7 @@ namespace TinyWars.MultiCustomRoom {
     import BootTimerType    = Types.BootTimerType;
     import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
     import NetMessage       = ProtoTypes.NetMessage;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     const REGULAR_TIME_LIMITS = [
         60 * 60 * 24 * 1,   // 1 day

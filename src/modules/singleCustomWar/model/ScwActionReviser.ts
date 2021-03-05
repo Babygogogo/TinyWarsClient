@@ -19,7 +19,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     import Structure                = ProtoTypes.Structure;
     import IWarUseCoSkillExtraData  = Structure.IDataForUseCoSkill;
     import IGridIndex               = Structure.IGridIndex;
-    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants          = Utility.CommonConstants;
 
     type DamageMaps = {
         hpMap   : number[][];

@@ -3,7 +3,7 @@ namespace TinyWars.Utility.DestructionHelpers {
     import BwWar            = BaseWar.BwWar;
     import GridIndex        = Types.GridIndex;
     import TileObjectType   = Types.TileObjectType;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): void {
         const unitMap           = war.getUnitMap();

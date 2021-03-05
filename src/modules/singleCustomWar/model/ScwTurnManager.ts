@@ -6,7 +6,7 @@ namespace TinyWars.SingleCustomWar {
     import BwTurnManagerHelper          = BaseWar.BwTurnManagerHelper;
     import IWarActionSystemBeginTurn    = ProtoTypes.WarAction.IWarActionSystemBeginTurn;
     import IWarActionPlayerEndTurn      = ProtoTypes.WarAction.IWarActionPlayerEndTurn;
-    import CommonConstants              = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants              = Utility.CommonConstants;
 
     export class ScwTurnManager extends BaseWar.BwTurnManager {
         protected _runPhaseGetFund(data: IWarActionSystemBeginTurn): void {

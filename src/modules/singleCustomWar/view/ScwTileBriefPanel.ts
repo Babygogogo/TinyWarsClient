@@ -6,7 +6,7 @@ namespace TinyWars.SingleCustomWar {
     import Types                = Utility.Types;
     import ConfigManager        = Utility.ConfigManager;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     const _IMAGE_SOURCE_HP      = `c04_t10_s00_f00`;
     const _IMAGE_SOURCE_FUEL    = `c04_t10_s01_f00`;

@@ -5,7 +5,7 @@ namespace TinyWars.BaseWar {
     import Helpers          = Utility.Helpers;
     import GridIndex        = Types.GridIndex;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.CommonConstants.GridSize;
     const BLOCK_OFFSET_X            = Math.floor(_GRID_WIDTH * 0.3);
     const BLOCK_OFFSET_Y            = Math.floor(_GRID_HEIGHT * 0.3);
     const DIVE_OFFSET_X             = -_GRID_WIDTH;

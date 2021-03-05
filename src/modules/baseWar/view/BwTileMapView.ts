@@ -5,9 +5,9 @@ namespace TinyWars.BaseWar {
     import ConfigManager        = Utility.ConfigManager;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
     export class BwTileMapView extends egret.DisplayObjectContainer {
         private readonly _tileViews         = new Array<BwTileView>();

@@ -16,7 +16,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
     import IWarEventCondition       = WarEvent.IWarEventCondition;
     import IWarEventConditionNode   = WarEvent.IWarEventConditionNode;
     import ConditionType            = Types.WarEventConditionType;
-    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants          = Utility.CommonConstants;
 
     const CONDITION_TYPE_ARRAY = [
         ConditionType.WecTurnIndexEqualTo,

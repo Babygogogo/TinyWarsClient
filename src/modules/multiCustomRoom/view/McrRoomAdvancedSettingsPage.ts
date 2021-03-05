@@ -8,7 +8,7 @@ namespace TinyWars.MultiCustomRoom {
     import WarMapModel      = WarMap.WarMapModel;
     import NetMessage       = ProtoTypes.NetMessage;
     import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export type OpenDataForMcrRoomAdvancedSettingsPage = {
         roomId  : number;

@@ -5,7 +5,7 @@ namespace TinyWars.MultiPlayerWar {
     import ConfigManager    = Utility.ConfigManager;
     import TileType         = Types.TileType;
     import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export class MpwTile extends BaseWar.BwTile {
         public serializeForSimulation(): ISerialTile | null {

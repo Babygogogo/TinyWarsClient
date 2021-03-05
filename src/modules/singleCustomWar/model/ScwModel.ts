@@ -8,7 +8,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     import WarSerialization     = ProtoTypes.WarSerialization;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import CommonAlertPanel     = Common.CommonAlertPanel;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     let _war: ScwWar;
     export function init(): void {

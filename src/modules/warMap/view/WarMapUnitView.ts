@@ -1,11 +1,12 @@
 
 namespace TinyWars.WarMap {
-    import UiImage      = GameUi.UiImage;
-    import Types        = Utility.Types
-    import TimeModel    = Time.TimeModel;
-    import CommonModel  = Common.CommonModel;
+    import UiImage          = GameUi.UiImage;
+    import Types            = Utility.Types
+    import CommonConstants  = Utility.CommonConstants;
+    import TimeModel        = Time.TimeModel;
+    import CommonModel      = Common.CommonModel;
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
     export class WarMapUnitView extends egret.DisplayObjectContainer {
         private _unitImage: UiImage;

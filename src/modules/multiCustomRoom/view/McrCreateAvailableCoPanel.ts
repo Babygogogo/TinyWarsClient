@@ -6,7 +6,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import ConfigManager    = Utility.ConfigManager;
     import ConfirmPanel     = Common.CommonConfirmPanel;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     type OpenDataForMcrCreateAvailableCoPanel = {
         playerIndex : number;

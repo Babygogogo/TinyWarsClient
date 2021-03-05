@@ -23,7 +23,7 @@ namespace TinyWars.MapEditor.MeUtility {
     import ISerialTile          = WarSerialization.ISerialTile;
     import ISerialUnit          = WarSerialization.ISerialUnit;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     export type AsymmetricalCounters = {
         UpToDown            : number | null;

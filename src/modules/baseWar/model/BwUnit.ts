@@ -20,7 +20,7 @@ namespace TinyWars.BaseWar {
     import ISerialUnit          = ProtoTypes.WarSerialization.ISerialUnit;
     import IWarUnitRepairData   = ProtoTypes.Structure.IDataForModifyUnit;
     import Config               = ProtoTypes.Config;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     export class BwUnit {
         private _templateCfg                : UnitTemplateCfg;

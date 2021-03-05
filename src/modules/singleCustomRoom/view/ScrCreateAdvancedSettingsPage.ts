@@ -5,7 +5,7 @@ namespace TinyWars.SingleCustomRoom {
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
     import WarMapModel      = WarMap.WarMapModel;
-    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export class ScrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
         private _labelMapNameTitle      : GameUi.UiLabel;

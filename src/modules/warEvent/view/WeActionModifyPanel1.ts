@@ -12,7 +12,7 @@ namespace TinyWars.WarEvent {
     import ColorValue           = Types.ColorValue;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
     import IWarEventAction      = ProtoTypes.WarEvent.IWarEventAction;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
     import FocusEvent           = egret.FocusEvent;
 
     type OpenDataForWeActionModifyPanel1 = {

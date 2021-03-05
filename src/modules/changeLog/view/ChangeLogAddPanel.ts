@@ -7,7 +7,7 @@ namespace TinyWars.ChangeLog {
     import ProtoTypes       = Utility.ProtoTypes;
     import Types            = Utility.Types;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export class ChangeLogAddPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;

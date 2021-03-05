@@ -9,7 +9,7 @@ namespace TinyWars.BaseWar {
     import GridIndex            = Types.GridIndex;
     import ActionPlannerState   = Types.ActionPlannerState;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.CommonConstants.GridSize;
     const _PULSE_IN_DURATION                    = 150;
     const _PULSE_OUT_DURATION                   = 150;
     const _PULSE_INTERVAL_DURATION              = 300;

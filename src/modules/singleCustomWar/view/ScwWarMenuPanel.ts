@@ -13,7 +13,7 @@ namespace TinyWars.SingleCustomWar {
     import LocalStorage         = Utility.LocalStorage;
     import ProtoManager         = Utility.ProtoManager;
     import ProtoTypes           = Utility.ProtoTypes;
-    import CommonConstants      = Utility.ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     const enum MenuType {
         Main,

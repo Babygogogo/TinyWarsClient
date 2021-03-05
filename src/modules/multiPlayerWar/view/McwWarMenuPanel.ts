@@ -8,10 +8,10 @@ namespace TinyWars.MultiPlayerWar {
     import Logger               = Utility.Logger;
     import FloatText            = Utility.FloatText;
     import LocalStorage         = Utility.LocalStorage;
+    import CommonConstants      = Utility.CommonConstants;
     import ProtoTypes           = Utility.ProtoTypes;
     import WarMapModel          = WarMap.WarMapModel;
     import TimeModel            = Time.TimeModel;
-    import CommonConstants      = Utility.ConfigManager.COMMON_CONSTANTS;
 
     const enum MenuType {
         Main,

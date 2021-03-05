@@ -126,7 +126,7 @@ namespace TinyWars.SingleCustomWar {
             const container = ScwModel.getWar().getView().getFieldContainer();
             const contents  = container.getContents();
             const gridIndex = this._getOpenData<OpenDataForScwUnitActionsPanel>().destination;
-            const gridSize  = Utility.ConfigManager.getGridSize();
+            const gridSize  = Utility.CommonConstants.GridSize;
             const stage     = Utility.StageManager.getStage();
             const group     = this._group;
             const point     = contents.localToGlobal(

@@ -4,7 +4,7 @@ namespace TinyWars.ReplayWar {
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
     import Helpers          = Utility.Helpers;
-    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export class RwSearchReplayPanel extends GameUi.UiPanel {
         protected _IS_EXCLUSIVE = false;

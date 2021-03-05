@@ -201,7 +201,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0163),
                     tips            : null,
                     currentValue    : war.getMapDesignerName(),
-                    maxChars        : Utility.ConfigManager.COMMON_CONSTANTS.MaxDesignerLength,
+                    maxChars        : Utility.CommonConstants.MaxDesignerLength,
                     charRestrict    : null,
                     callback        : (panel) => {
                         war.setMapDesignerName(panel.getInputText());

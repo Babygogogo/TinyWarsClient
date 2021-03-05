@@ -7,7 +7,7 @@ namespace TinyWars.User {
     import LocalStorage     = Utility.LocalStorage;
     import ConfigManager    = Utility.ConfigManager;
     import WarType          = Types.WarType;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     type OpenDataForUserPanel = {
         userId  : number;

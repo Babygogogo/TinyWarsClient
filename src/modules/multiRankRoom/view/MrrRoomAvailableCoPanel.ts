@@ -8,7 +8,7 @@ namespace TinyWars.MultiRankRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Logger           = Utility.Logger;
     import IMrrRoomInfo     = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     type OpenDataForMrrRoomAvailableCoPanel = {
         roomInfo        : IMrrRoomInfo;

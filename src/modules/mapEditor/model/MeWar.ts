@@ -13,7 +13,7 @@ namespace TinyWars.MapEditor {
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
     import IDataForMapTag   = ProtoTypes.Map.IDataForMapTag;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export class MeWar extends BaseWar.BwWar {
         private _drawer             : MeDrawer;

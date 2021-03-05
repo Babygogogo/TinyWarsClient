@@ -11,7 +11,7 @@ namespace TinyWars.MapEditor {
     import CommonHelpPanel      = Common.CommonHelpPanel;
     import IWarRule             = ProtoTypes.WarRule.IWarRule;
     import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     export class MeWarRulePanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;

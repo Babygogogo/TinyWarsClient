@@ -5,7 +5,7 @@ namespace TinyWars.SingleCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export type OpenDataForScrCreateCustomSaveSlotsPanel = ISerialWar;
 

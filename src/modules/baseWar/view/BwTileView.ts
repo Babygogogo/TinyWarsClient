@@ -4,14 +4,13 @@ namespace TinyWars.BaseWar {
     import TimeModel        = Time.TimeModel;
     import Types            = Utility.Types;
     import Logger           = Utility.Logger;
-    import ConfigManager    = Utility.ConfigManager;
+    import CommonConstants  = Utility.CommonConstants;
     import ProtoTypes       = Utility.ProtoTypes;
     import TileObjectType   = Types.TileObjectType;
     import TileBaseType     = Types.TileBaseType;
     import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
     export type DataForTileView = {
         tileData    : ISerialTile;

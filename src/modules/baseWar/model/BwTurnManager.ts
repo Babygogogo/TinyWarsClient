@@ -11,7 +11,7 @@ namespace TinyWars.BaseWar {
     import WarAction                    = ProtoTypes.WarAction;
     import IWarActionSystemBeginTurn    = WarAction.IWarActionSystemBeginTurn;
     import IWarActionPlayerEndTurn      = WarAction.IWarActionPlayerEndTurn;
-    import CommonConstants              = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants              = Utility.CommonConstants;
 
     export abstract class BwTurnManager {
         private _turnIndex          : number;

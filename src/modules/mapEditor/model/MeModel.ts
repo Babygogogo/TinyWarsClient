@@ -10,7 +10,7 @@ namespace TinyWars.MapEditor.MeModel {
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     const MAP_DICT  = new Map<number, IMapEditorData>();
     let _war        : MeWar;

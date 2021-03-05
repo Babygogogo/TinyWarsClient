@@ -117,7 +117,7 @@ namespace TinyWars.MapEditor {
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
             const mapping = new Map<number, DataForDrawTileObject[]>();
-            for (const [objectType, cfg] of ConfigManager.getTileObjectShapeCfgs()) {
+            for (const [objectType, cfg] of Utility.CommonConstants.TileObjectShapeConfigs) {
                 for (let playerIndex = cfg.minPlayerIndex; playerIndex <= cfg.maxPlayerIndex; ++playerIndex) {
                     if (!mapping.has(playerIndex)) {
                         mapping.set(playerIndex, []);

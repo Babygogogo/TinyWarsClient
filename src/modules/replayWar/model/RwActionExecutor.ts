@@ -20,7 +20,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
     import TileType             = Types.TileType;
     import IDataForUseCoSkill   = ProtoTypes.Structure.IDataForUseCoSkill;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     const _EXECUTORS = new Map<WarActionCodes, (war: RwWar, data: IWarActionContainer) => Promise<void>>([
         [WarActionCodes.WarActionSystemBeginTurn,           _exeSystemBeginTurn],
@@ -899,13 +899,13 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
                 { baseType: tile.getBaseType(), objectType: Types.TileObjectType.EmptySilo, playerIndex: CommonConstants.WarNeutralPlayerIndex },
             );
 
-            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, Utility.ConfigManager.SILO_RADIUS, unitMap.getMapSize());
+            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, unitMap.getMapSize());
             const targetUnits   : BwUnit[] = [];
             for (const grid of targetGrids) {
                 const unit = unitMap.getUnitOnMap(grid);
                 if (unit) {
                     targetUnits.push(unit);
-                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - Utility.ConfigManager.SILO_DAMAGE));
+                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - CommonConstants.SiloDamage));
                 }
             }
 
@@ -1812,13 +1812,13 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
                 playerIndex     : CommonConstants.WarNeutralPlayerIndex,
             });
 
-            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, Utility.ConfigManager.SILO_RADIUS, unitMap.getMapSize());
+            const targetGrids   = GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, unitMap.getMapSize());
             const targetUnits   : BwUnit[] = [];
             for (const grid of targetGrids) {
                 const unit = unitMap.getUnitOnMap(grid);
                 if (unit) {
                     targetUnits.push(unit);
-                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - Utility.ConfigManager.SILO_DAMAGE));
+                    unit.setCurrentHp(Math.max(1, unit.getCurrentHp() - CommonConstants.SiloDamage));
                 }
             }
         }

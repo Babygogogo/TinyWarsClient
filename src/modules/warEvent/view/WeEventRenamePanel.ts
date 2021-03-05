@@ -7,7 +7,7 @@ namespace TinyWars.WarEvent {
     import ProtoTypes       = Utility.ProtoTypes;
     import Types            = Utility.Types;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     type OpenDataForWeEventRenamePanel = {
         war         : BaseWar.BwWar;

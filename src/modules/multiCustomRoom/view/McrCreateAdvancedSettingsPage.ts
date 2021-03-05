@@ -3,9 +3,9 @@ namespace TinyWars.MultiCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
+    import CommonConstants  = Utility.CommonConstants;
     import Notify           = Utility.Notify;
     import WarMapModel      = WarMap.WarMapModel;
-    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
         private _labelMapNameTitle      : GameUi.UiLabel;

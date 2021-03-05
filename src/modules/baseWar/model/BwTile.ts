@@ -11,7 +11,7 @@ namespace TinyWars.BaseWar {
     import TileTemplateCfg  = Types.TileTemplateCfg;
     import UnitCategory     = Types.UnitCategory;
     import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export abstract class BwTile {
         private _templateCfg    : TileTemplateCfg;

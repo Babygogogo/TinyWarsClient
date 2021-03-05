@@ -4,7 +4,7 @@ namespace TinyWars.MapEditor {
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
     import ConfigManager    = Utility.ConfigManager;
-    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export class MeSimAdvancedSettingsPage extends GameUi.UiTabPage {
         private _labelMapNameTitle      : GameUi.UiLabel;

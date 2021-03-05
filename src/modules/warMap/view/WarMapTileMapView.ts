@@ -2,14 +2,13 @@
 namespace TinyWars.WarMap {
     import Notify           = Utility.Notify;
     import ProtoTypes       = Utility.ProtoTypes;
-    import ConfigManager    = Utility.ConfigManager;
+    import CommonConstants  = Utility.CommonConstants;
     import UiImage          = GameUi.UiImage;
     import TimeModel        = Time.TimeModel;
     import CommonModel      = Common.CommonModel;
     import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
 
     export class WarMapTileMapView extends egret.DisplayObjectContainer {
         private _isInitialized: boolean;

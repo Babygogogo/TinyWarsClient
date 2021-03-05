@@ -11,7 +11,7 @@ namespace TinyWars.BaseWar {
     import WarSerialization     = ProtoTypes.WarSerialization;
     import ISerialTileMap       = WarSerialization.ISerialTileMap;
     import ISerialTile          = WarSerialization.ISerialTile;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     export abstract class BwTileMap {
         private _map        : BwTile[][];

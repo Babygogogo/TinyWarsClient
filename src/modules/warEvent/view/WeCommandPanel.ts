@@ -11,7 +11,7 @@ namespace TinyWars.WarEvent {
     import CommonInputPanel     = Common.CommonInputPanel;
     import ColorValue           = Types.ColorValue;
     import WarEventDescType     = Types.WarEventDescType;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     type OpenDataForWeCommandPanel = {
         war             : MapEditor.MeWar;

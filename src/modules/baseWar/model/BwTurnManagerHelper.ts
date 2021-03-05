@@ -10,7 +10,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
     import WarAction                    = ProtoTypes.WarAction;
     import IWarActionSystemBeginTurn   = WarAction.IWarActionSystemBeginTurn;
     import IWarActionPlayerEndTurn     = WarAction.IWarActionPlayerEndTurn;
-    import CommonConstants              = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants              = Utility.CommonConstants;
 
     export function runPhaseGetFundWithExtraData(turnManager: BwTurnManager, data: IWarActionSystemBeginTurn): void {
         const war = turnManager.getWar();

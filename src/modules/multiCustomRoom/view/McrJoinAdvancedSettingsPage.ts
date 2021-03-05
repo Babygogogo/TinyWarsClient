@@ -6,7 +6,7 @@ namespace TinyWars.MultiCustomRoom {
     import WarMapModel      = WarMap.WarMapModel;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export class McrJoinAdvancedSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle    : TinyWars.GameUi.UiButton;

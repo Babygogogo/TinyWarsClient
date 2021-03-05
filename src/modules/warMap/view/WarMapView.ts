@@ -10,9 +10,9 @@ namespace TinyWars.WarMap {
     import MapSize          = Types.MapSize;
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
     import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
     export class WarMapView extends egret.DisplayObjectContainer {
         private readonly _tileMapView   = new TileMapView();

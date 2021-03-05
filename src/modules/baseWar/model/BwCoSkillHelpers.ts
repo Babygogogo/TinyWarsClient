@@ -9,7 +9,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
     import GridIndex                = Types.GridIndex;
     import Structure                = ProtoTypes.Structure;
     import IDataForUseCoSkill       = Structure.IDataForUseCoSkill;
-    import CommonConstants          = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants          = Utility.CommonConstants;
 
     type DamageMaps = {
         hpMap   : number[][];

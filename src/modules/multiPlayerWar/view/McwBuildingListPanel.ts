@@ -4,7 +4,7 @@ namespace TinyWars.MultiPlayerWar {
     import Lang             = Utility.Lang;
     import Types            = Utility.Types;
     import ConfigManager    = Utility.ConfigManager;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export class McwBuildingListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
