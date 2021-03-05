@@ -272,6 +272,13 @@ namespace TinyWars.BaseWar.BwHelpers {
 
         return { width, height };
     }
+    export function checkIsValidMapSize(mapSize: Types.MapSize): boolean {
+        const mapWidth  = mapSize.width;
+        const mapHeight = mapSize.height;
+        return (mapWidth > 0)
+            && (mapHeight > 0)
+            && (mapWidth * mapHeight <= CommonConstants.MapMaxGridsCount);
+    }
 
     export function checkIsStateRequesting(state: Types.ActionPlannerState): boolean {
         return (state === Types.ActionPlannerState.RequestingPlayerActivateSkill)

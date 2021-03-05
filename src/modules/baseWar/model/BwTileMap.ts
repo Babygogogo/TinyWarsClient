@@ -37,14 +37,10 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwTileMapInit01;
             }
 
-            const mapWidth      = mapSize.width;
-            const mapHeight     = mapSize.height;
-            const gridsCount    = mapWidth * mapHeight;
-            if ((mapWidth <= 0)                                 ||
-                (mapHeight <= 0)                                ||
-                (gridsCount <= 0)                               ||
-                (gridsCount > CommonConstants.MapMaxGridsCount) ||
-                (gridsCount !== tiles.length)
+            const mapWidth  = mapSize.width;
+            const mapHeight = mapSize.height;
+            if ((!BwHelpers.checkIsValidMapSize(mapSize)) ||
+                (mapWidth * mapHeight !== tiles.length)
             ) {
                 return ClientErrorCode.BwTileMapInit02;
             }

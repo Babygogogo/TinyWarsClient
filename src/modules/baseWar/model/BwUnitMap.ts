@@ -37,6 +37,10 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwUnitMapInit01;
             }
 
+            if (!BwHelpers.checkIsValidMapSize(mapSize)) {
+                return ClientErrorCode.BwUnitMapInit02;
+            }
+
             const mapWidth      = mapSize.width;
             const map           = Helpers.createEmptyMap<BwUnit>(mapWidth);
             const loadedUnits   = new Map<number, BwUnit>();
@@ -51,24 +55,24 @@ namespace TinyWars.BaseWar {
 
                 const gridIndex = unit.getGridIndex();
                 if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
-                    return ClientErrorCode.BwUnitMapInit02;
+                    return ClientErrorCode.BwUnitMapInit03;
                 }
 
                 const unitId = unit.getUnitId();
                 if (unitId == null) {
-                    return ClientErrorCode.BwUnitMapInit03;
-                }
-                if (allUnits.has(unitId)) {
                     return ClientErrorCode.BwUnitMapInit04;
                 }
-                if (unitId >= nextUnitId) {
+                if (allUnits.has(unitId)) {
                     return ClientErrorCode.BwUnitMapInit05;
+                }
+                if (unitId >= nextUnitId) {
+                    return ClientErrorCode.BwUnitMapInit06;
                 }
                 allUnits.set(unitId, unit);
 
                 const playerIndex = unit.getPlayerIndex();
                 if ((playerIndex == null) || (playerIndex > playersCountUnneutral)) {
-                    return ClientErrorCode.BwUnitMapInit06;
+                    return ClientErrorCode.BwUnitMapInit07;
                 }
 
                 if (unit.getLoaderUnitId() != null) {
@@ -76,7 +80,7 @@ namespace TinyWars.BaseWar {
                 } else {
                     const { x, y } = gridIndex;
                     if (map[x][y]) {
-                        return ClientErrorCode.BwUnitMapInit07;
+                        return ClientErrorCode.BwUnitMapInit08;
                     }
 
                     map[x][y] = unit;
@@ -87,40 +91,40 @@ namespace TinyWars.BaseWar {
             for (const [, loadedUnit] of loadedUnits) {
                 const loaderId = loadedUnit.getLoaderUnitId();
                 if (loaderId == null) {
-                    return ClientErrorCode.BwUnitMapInit08;
+                    return ClientErrorCode.BwUnitMapInit09;
                 }
 
                 const loader = allUnits.get(loaderId);
                 if (loader == null) {
-                    return ClientErrorCode.BwUnitMapInit09;
+                    return ClientErrorCode.BwUnitMapInit10;
                 }
                 if (loader.getPlayerIndex() !== loadedUnit.getPlayerIndex()) {
-                    return ClientErrorCode.BwUnitMapInit10;
+                    return ClientErrorCode.BwUnitMapInit11;
                 }
 
                 const gridIndex1 = loader.getGridIndex();
                 const gridIndex2 = loadedUnit.getGridIndex();
                 if ((!gridIndex1) || (!gridIndex2) || (!GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2))) {
-                    return ClientErrorCode.BwUnitMapInit11;
+                    return ClientErrorCode.BwUnitMapInit12;
                 }
 
                 const maxLoadCount  = loader.getMaxLoadUnitsCount();
                 const loadCount     = (loadUnitCounts.get(loaderId) || 0) + 1;
                 if ((maxLoadCount == null) || (loadCount > maxLoadCount)) {
-                    return ClientErrorCode.BwUnitMapInit12;
+                    return ClientErrorCode.BwUnitMapInit13;
                 }
                 loadUnitCounts.set(loaderId, loadCount);
 
                 const unitType = loadedUnit.getUnitType();
                 if (unitType == null) {
-                    return ClientErrorCode.BwUnitMapInit13;
+                    return ClientErrorCode.BwUnitMapInit14;
                 }
 
                 const loadUnitCategory = loader.getLoadUnitCategory();
                 if ((loadUnitCategory == null)                                                          ||
                     (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, loadUnitCategory))
                 ) {
-                    return ClientErrorCode.BwUnitMapInit14;
+                    return ClientErrorCode.BwUnitMapInit15;
                 }
             }
 

@@ -17,6 +17,7 @@ namespace TinyWars.Utility {
         MeCommonSettingManagerInit02,
 
         BwFieldInit00,
+        BwFieldInit01,
 
         BwUnitMapInit00,
         BwUnitMapInit01,
@@ -33,6 +34,7 @@ namespace TinyWars.Utility {
         BwUnitMapInit12,
         BwUnitMapInit13,
         BwUnitMapInit14,
+        BwUnitMapInit15,
 
         BwUnitInit00,
         BwUnitInit01,
@@ -72,6 +74,7 @@ namespace TinyWars.Utility {
         BwFogMapInit04,
         BwFogMapInit05,
         BwFogMapInit06,
+        BwFogMapInit07,
 
         BwFogMapResetMapFromPath00,
         BwFogMapResetMapFromPath01,

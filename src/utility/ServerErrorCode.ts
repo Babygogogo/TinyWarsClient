@@ -35,6 +35,7 @@ export const enum ServerErrorCode {
     BwFogMapInit0004,
     BwFogMapInit0005,
     BwFogMapInit0006,
+    BwFogMapInit0007,
 
     BwFogMapResetMapFromPath0000,
     BwFogMapResetMapFromPath0001,
@@ -66,6 +67,7 @@ export const enum ServerErrorCode {
     BwUnitMapInit0014,
     BwUnitMapInit0015,
     BwUnitMapInit0016,
+    BwUnitMapInit0017,
 
     BwUnitInit0000,
     BwUnitInit0001,
@@ -102,6 +104,7 @@ export const enum ServerErrorCode {
     BwPlayerInit0009,
 
     BwFieldInit0000,
+    BwFieldInit0001,
 
     BwCommonSettingManagerInit0000,
     BwCommonSettingManagerInit0001,

@@ -31,8 +31,12 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwFieldInit00;
             }
 
-            const mapSize       = BwHelpers.getMapSize(data.tileMap);
-            const fogMapError   = this.getFogMap().init({
+            const mapSize = BwHelpers.getMapSize(data.tileMap);
+            if (!BwHelpers.checkIsValidMapSize(mapSize)) {
+                return ClientErrorCode.BwFieldInit01;
+            }
+
+            const fogMapError = this.getFogMap().init({
                 data                : data.fogMap,
                 mapSize,
                 playersCountUnneutral

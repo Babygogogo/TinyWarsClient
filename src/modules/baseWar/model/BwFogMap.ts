@@ -56,21 +56,25 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwFogMapInit03;
             }
 
+            if (!BwHelpers.checkIsValidMapSize(mapSize)) {
+                return ClientErrorCode.BwFogMapInit04;
+            }
+
             const allMapsFromPath   = createEmptyMaps<Visibility>(mapSize, playersCountUnneutral);
             const playerIndexSet    = new Set<number>();
             for (const d of data.mapsFromPath || []) {
                 const playerIndex = d.playerIndex;
                 if (playerIndex == null) {
-                    return ClientErrorCode.BwFogMapInit04;
+                    return ClientErrorCode.BwFogMapInit05;
                 }
                 if (playerIndexSet.has(playerIndex)) {
-                    return ClientErrorCode.BwFogMapInit05;
+                    return ClientErrorCode.BwFogMapInit06;
                 }
                 playerIndexSet.add(playerIndex);
 
                 const mapFromPath = allMapsFromPath.get(playerIndex);
                 if (mapFromPath == null) {
-                    return ClientErrorCode.BwFogMapInit06;
+                    return ClientErrorCode.BwFogMapInit07;
                 }
 
                 const resetMapError = resetMapFromPath(mapFromPath, mapSize, d.visibilityArray);
