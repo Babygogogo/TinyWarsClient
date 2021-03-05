@@ -65,6 +65,19 @@ namespace TinyWars.Utility {
         BwTileDeserialize13,
         BwTileDeserialize14,
 
+        BwFogMapInit00,
+        BwFogMapInit01,
+        BwFogMapInit02,
+        BwFogMapInit03,
+        BwFogMapInit04,
+        BwFogMapInit05,
+        BwFogMapInit06,
+
+        BwFogMapResetMapFromPath00,
+        BwFogMapResetMapFromPath01,
+        BwFogMapResetMapFromPath02,
+        BwFogMapResetMapFromPath03,
+
         WarRuleValidation00,
         WarRuleValidation01,
         WarRuleValidation02,

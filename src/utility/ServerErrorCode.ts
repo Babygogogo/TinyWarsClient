@@ -32,6 +32,14 @@ export const enum ServerErrorCode {
     BwFogMapInit0001,
     BwFogMapInit0002,
     BwFogMapInit0003,
+    BwFogMapInit0004,
+    BwFogMapInit0005,
+    BwFogMapInit0006,
+
+    BwFogMapResetMapFromPath0000,
+    BwFogMapResetMapFromPath0001,
+    BwFogMapResetMapFromPath0002,
+    BwFogMapResetMapFromPath0003,
 
     BwTileMapInit0000,
     BwTileMapInit0001,

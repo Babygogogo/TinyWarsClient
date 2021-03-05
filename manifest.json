@@ -13,14 +13,15 @@
 		"libs/modules/mouse/mouse.js"
 	],
 	"game": [
-		"bin-debug/utility/ProtoTypes.js",
 		"bin-debug/utility/Types.js",
 		"bin-debug/network/NetMessageCodes.js",
-		"bin-debug/utility/ConfigManager.js",
+		"bin-debug/utility/CommonConstants.js",
 		"bin-debug/utility/Logger.js",
+		"bin-debug/utility/ProtoTypes.js",
 		"bin-debug/Main.js",
 		"bin-debug/gameui/UiPanel.js",
 		"bin-debug/utility/ClientErrorCode.js",
+		"bin-debug/utility/ConfigManager.js",
 		"bin-debug/utility/FloatText.js",
 		"bin-debug/utility/GridIndexHelpers.js",
 		"bin-debug/utility/Helpers.js",
