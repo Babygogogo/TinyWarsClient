@@ -18,6 +18,8 @@ namespace TinyWars.Utility {
 
         BwFieldInit00,
         BwFieldInit01,
+        BwFieldInit02,
+        BwFieldInit03,
 
         BwUnitMapInit00,
         BwUnitMapInit01,

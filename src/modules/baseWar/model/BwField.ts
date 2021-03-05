@@ -1,7 +1,5 @@
 
 namespace TinyWars.BaseWar {
-    import Types            = Utility.Types;
-    import Logger           = Utility.Logger;
     import ClientErrorCode  = Utility.ClientErrorCode;
     import ProtoTypes       = Utility.ProtoTypes;
     import ISerialField     = ProtoTypes.WarSerialization.ISerialField;
@@ -45,7 +43,8 @@ namespace TinyWars.BaseWar {
                 return fogMapError;
             }
 
-            const tileMapError = this.getTileMap().init({
+            const tileMap       = this.getTileMap();
+            const tileMapError  = tileMap.init({
                 data                : data.tileMap,
                 configVersion,
                 mapSize,
@@ -55,7 +54,8 @@ namespace TinyWars.BaseWar {
                 return tileMapError;
             }
 
-            const unitMapError = this.getUnitMap().init({
+            const unitMap       = this.getUnitMap();
+            const unitMapError  = unitMap.init({
                 data                : data.unitMap,
                 configVersion,
                 mapSize,
@@ -63,6 +63,21 @@ namespace TinyWars.BaseWar {
             });
             if (unitMapError) {
                 return unitMapError;
+            }
+
+            const { width, height } = mapSize;
+            for (let x = 0; x < width; ++x) {
+                for (let y = 0; y < height; ++y) {
+                    const gridIndex = { x, y };
+                    const tile      = tileMap.getTile(gridIndex);
+                    if (tile == null) {
+                        return ClientErrorCode.BwFieldInit02;
+                    }
+
+                    if ((tile.getMaxHp() != null) && (unitMap.getUnitOnMap(gridIndex))) {
+                        return ClientErrorCode.BwFieldInit03;
+                    }
+                }
             }
 
             const actionPlannerError = this.getActionPlanner().init(mapSize);

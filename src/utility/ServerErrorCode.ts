@@ -105,6 +105,8 @@ export const enum ServerErrorCode {
 
     BwFieldInit0000,
     BwFieldInit0001,
+    BwFieldInit0002,
+    BwFieldInit0003,
 
     BwCommonSettingManagerInit0000,
     BwCommonSettingManagerInit0001,

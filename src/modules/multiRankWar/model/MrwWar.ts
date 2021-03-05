@@ -68,7 +68,7 @@ namespace TinyWars.MultiRankWar {
                 return undefined;
             }
 
-            const fieldError = await this.getField().init({
+            const fieldError = this.getField().init({
                 data                : dataForField,
                 configVersion,
                 playersCountUnneutral
