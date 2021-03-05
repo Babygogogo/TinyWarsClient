@@ -264,10 +264,10 @@ namespace TinyWars.BaseWar.BwHelpers {
         let width   = 0;
         let height  = 0;
 
-        for (const tile of data?.tiles || []) {
+        for (const tile of data ? data.tiles || [] : []) {
             const gridIndex = tile.gridIndex;
-            width           = Math.max(width, (gridIndex?.x || 0) + 1);
-            height          = Math.max(height, (gridIndex?.y || 0) + 1);
+            width           = Math.max(width, (gridIndex ? gridIndex.x || 0 : 0) + 1);
+            height          = Math.max(height, (gridIndex ? gridIndex.y || 0 : 0) + 1);
         }
 
         return { width, height };

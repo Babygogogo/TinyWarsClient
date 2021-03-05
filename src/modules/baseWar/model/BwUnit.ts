@@ -1235,7 +1235,8 @@ namespace TinyWars.BaseWar {
         }
 
         public getLoadUnitCategory(): Types.UnitCategory | undefined | null {
-            return this._getTemplateCfg()?.loadUnitCategory;
+            const cfg = this._getTemplateCfg();
+            return cfg ? cfg.loadUnitCategory : undefined;
         }
 
         public checkHasLoadUnitId(id: number): boolean {

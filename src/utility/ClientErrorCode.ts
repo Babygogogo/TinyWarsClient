@@ -41,6 +41,14 @@ namespace TinyWars.Utility {
         BwUnitInit04,
         BwUnitInit05,
 
+        BwTileMapInit00,
+        BwTileMapInit01,
+        BwTileMapInit02,
+        BwTileMapInit03,
+        BwTileMapInit04,
+        BwTileMapInit05,
+        BwTileMapInit06,
+
         BwTileDeserialize00,
         BwTileDeserialize01,
         BwTileDeserialize02,

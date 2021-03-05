@@ -37,6 +37,9 @@ export const enum ServerErrorCode {
     BwTileMapInit0001,
     BwTileMapInit0002,
     BwTileMapInit0003,
+    BwTileMapInit0004,
+    BwTileMapInit0005,
+    BwTileMapInit0006,
 
     BwUnitMapInit0000,
     BwUnitMapInit0001,

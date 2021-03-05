@@ -6,10 +6,12 @@ namespace TinyWars.BaseWar {
     import ProtoTypes           = Utility.ProtoTypes;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import ClientErrorCode      = Utility.ClientErrorCode;
+    import ConfigManager        = Utility.ConfigManager;
     import MapSize              = Types.MapSize;
     import WarSerialization     = ProtoTypes.WarSerialization;
     import ISerialTileMap       = WarSerialization.ISerialTileMap;
     import ISerialTile          = WarSerialization.ISerialTile;
+    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     export abstract class BwTileMap {
         private _map        : BwTile[][];
@@ -26,25 +28,42 @@ namespace TinyWars.BaseWar {
             mapSize                 : MapSize;
             playersCountUnneutral   : number;
         }): ClientErrorCode {
-            const tiles = data.tiles;
-            if (tiles == null) {
-                Logger.error(`BwTileMap.init() empty tiles.`);
-                return undefined;
+            if (data == null) {
+                return ClientErrorCode.BwTileMapInit00;
             }
 
-            const mapWidth  = mapSize.width;
-            const mapHeight = mapSize.height;
-            const map       = Helpers.createEmptyMap<BwTile>(mapWidth);
+            const tiles = data.tiles;
+            if (tiles == null) {
+                return ClientErrorCode.BwTileMapInit01;
+            }
+
+            const mapWidth      = mapSize.width;
+            const mapHeight     = mapSize.height;
+            const gridsCount    = mapWidth * mapHeight;
+            if ((mapWidth <= 0)                                 ||
+                (mapHeight <= 0)                                ||
+                (gridsCount <= 0)                               ||
+                (gridsCount > CommonConstants.MapMaxGridsCount) ||
+                (gridsCount !== tiles.length)
+            ) {
+                return ClientErrorCode.BwTileMapInit02;
+            }
+
+            const map = Helpers.createEmptyMap<BwTile>(mapWidth, mapHeight);
             for (const tileData of tiles) {
                 const gridIndex = BwHelpers.convertGridIndex(tileData.gridIndex);
                 if (gridIndex == null) {
-                    Logger.error(`BwTileMap.init() empty gridIndex.`);
-                    return undefined;
+                    return ClientErrorCode.BwTileMapInit03;
                 }
 
                 if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
-                    Logger.error(`BwTileMap.init() invalid gridIndex.`);
-                    return undefined;
+                    return ClientErrorCode.BwTileMapInit04;
+                }
+
+                const gridX = gridIndex.x;
+                const gridY = gridIndex.y;
+                if (map[gridX][gridY]) {
+                    return ClientErrorCode.BwTileMapInit05;
                 }
 
                 const tile      = new (this._getBwTileClass())();
@@ -52,7 +71,16 @@ namespace TinyWars.BaseWar {
                 if (tileError) {
                     return tileError;
                 }
-                map[gridIndex.x][gridIndex.y] = tile;
+
+                const playerIndex = tile.getPlayerIndex();
+                if ((playerIndex == null)                                   ||
+                    (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                    (playerIndex > playersCountUnneutral)
+                ) {
+                    return ClientErrorCode.BwTileMapInit06;
+                }
+
+                map[gridX][gridY] = tile;
             }
 
             this._setMap(map);
