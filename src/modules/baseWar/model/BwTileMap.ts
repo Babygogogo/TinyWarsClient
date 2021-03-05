@@ -47,10 +47,10 @@ namespace TinyWars.BaseWar {
                     return undefined;
                 }
 
-                const tile = new (this._getBwTileClass())().init(tileData, configVersion);
-                if (tile == null) {
-                    Logger.error(`BwTileMap.init() empty tile.`);
-                    return undefined;
+                const tile      = new (this._getBwTileClass())();
+                const tileError = tile.init(tileData, configVersion);
+                if (tileError) {
+                    return tileError;
                 }
                 map[gridIndex.x][gridIndex.y] = tile;
             }

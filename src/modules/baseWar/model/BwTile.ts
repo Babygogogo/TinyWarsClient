@@ -4,6 +4,7 @@ namespace TinyWars.BaseWar {
     import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
+    import ClientErrorCode  = Utility.ClientErrorCode;
     import TileType         = Types.TileType;
     import TileObjectType   = Types.TileObjectType;
     import TileBaseType     = Types.TileBaseType;
@@ -32,16 +33,17 @@ namespace TinyWars.BaseWar {
 
         public abstract serializeForSimulation(): ISerialTile;
 
-        public init(data: ISerialTile, configVersion: string): BwTile | undefined {
-            if (!this.deserialize(data, configVersion)) {
-                Logger.error(`BwTile.init() fail deserialize!`);
-                return undefined;
+        public init(data: ISerialTile, configVersion: string): ClientErrorCode {
+            const deserializeError = this.deserialize(data, configVersion);
+            if (deserializeError) {
+                return deserializeError;
             }
+
             this.setHasFog(false);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
-        public fastInit(data: ISerialTile, configVersion: string): BwTile {
+        public fastInit(data: ISerialTile, configVersion: string): ClientErrorCode {
             return this.init(data, configVersion);
         }
 
@@ -52,56 +54,114 @@ namespace TinyWars.BaseWar {
             this.flushDataToView();
         }
 
-        public deserialize(data: ISerialTile, configVersion: string): BwTile | undefined {
+        public deserialize(data: ISerialTile, configVersion: string): ClientErrorCode {
             const gridIndex = BwHelpers.convertGridIndex(data.gridIndex);
             if (gridIndex == null) {
-                Logger.error(`BwTile.deserialize() empty gridIndex.`);
-                return undefined;
+                return ClientErrorCode.BwTileDeserialize00;
+            }
+
+            const gridX = gridIndex.x;
+            const gridY = gridIndex.y;
+            if ((gridX < 0)                                                 ||
+                (gridY < 0)                                                 ||
+                ((gridX + 1) * (gridY + 1) > CommonConstants.MapMaxGridsCount)
+            ) {
+                return ClientErrorCode.BwTileDeserialize01;
             }
 
             const objectType = data.objectType as TileObjectType;
             if (objectType == null) {
-                Logger.error(`BwTile.deserialize() empty objectType.`);
-                return undefined;
+                return ClientErrorCode.BwTileDeserialize02;
             }
 
             const baseType = data.baseType as TileBaseType;
             if (baseType == null) {
-                Logger.error(`BwTile.deserialize() empty baseType.`);
-                return undefined;
+                return ClientErrorCode.BwTileDeserialize03;
             }
 
             const playerIndex = data.playerIndex;
-            if (playerIndex == null) {
-                Logger.error(`BwTile.deserialize() empty playerIndex.`);
-                return undefined;
+            if ((playerIndex == null)                                   ||
+                (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                (playerIndex > CommonConstants.WarMaxPlayerIndex)
+            ) {
+                return ClientErrorCode.BwTileDeserialize04;
             }
 
             const templateCfg = ConfigManager.getTileTemplateCfg(configVersion, baseType, objectType);
             if (templateCfg == null) {
-                Logger.error(`BwTile.deserialize() no templateCfg.`);
-                return undefined;
+                return ClientErrorCode.BwTileDeserialize05;
             }
 
             if (ConfigManager.getMoveCostCfg(configVersion, baseType, objectType) == null) {
-                Logger.error(`BwTile.deserialize() no moveCostCfg.`)
-                return undefined;
+                return ClientErrorCode.BwTileDeserialize06;
+            }
+
+            const maxBuildPoint     = templateCfg.maxBuildPoint;
+            const currentBuildPoint = data.currentBuildPoint;
+            if (maxBuildPoint == null) {
+                if (currentBuildPoint != null) {
+                    return ClientErrorCode.BwTileDeserialize07;
+                }
+            } else {
+                if ((currentBuildPoint != null)                                     &&
+                    ((currentBuildPoint > maxBuildPoint) || (currentBuildPoint < 0))
+                ) {
+                    return ClientErrorCode.BwTileDeserialize08;
+                }
+            }
+
+            const maxCapturePoint       = templateCfg.maxCapturePoint;
+            const currentCapturePoint   = data.currentCapturePoint;
+            if (maxCapturePoint == null) {
+                if (currentCapturePoint != null) {
+                    return ClientErrorCode.BwTileDeserialize09;
+                }
+            } else {
+                if ((currentCapturePoint != null)                                       &&
+                    ((currentCapturePoint > maxCapturePoint) || (currentCapturePoint < 0))
+                ) {
+                    return ClientErrorCode.BwTileDeserialize10;
+                }
+            }
+
+            const maxHp     = templateCfg.maxHp;
+            const currentHp = data.currentHp;
+            if (maxHp == null) {
+                if (currentHp != null) {
+                    return ClientErrorCode.BwTileDeserialize11;
+                }
+            } else {
+                if ((currentHp != null)                     &&
+                    ((currentHp > maxHp) || (currentHp < 0))
+                ) {
+                    return ClientErrorCode.BwTileDeserialize12;
+                }
+            }
+
+            const baseShapeId = data.baseShapeId;
+            if (!ConfigManager.checkIsValidTileBaseShapeId(baseType, baseShapeId)) {
+                return ClientErrorCode.BwTileDeserialize13;
+            }
+
+            const objectShapeId = data.objectShapeId;
+            if (!ConfigManager.checkIsValidTileObjectShapeId(objectType, objectShapeId)) {
+                return ClientErrorCode.BwTileDeserialize14;
             }
 
             this._setTemplateCfg(templateCfg);
-            this._setGridX(gridIndex.x);
-            this._setGridY(gridIndex.y);
+            this._setGridX(gridX);
+            this._setGridY(gridY);
             this._setBaseType(baseType);
             this._setObjectType(objectType);
             this._setPlayerIndex(playerIndex);
 
-            this.setBaseShapeId(data.baseShapeId);
-            this.setObjectShapeId(data.objectShapeId);
-            this.setCurrentHp(          data.currentHp           != null ? data.currentHp           : this.getMaxHp());
-            this.setCurrentBuildPoint(  data.currentBuildPoint   != null ? data.currentBuildPoint   : this.getMaxBuildPoint());
-            this.setCurrentCapturePoint(data.currentCapturePoint != null ? data.currentCapturePoint : this.getMaxCapturePoint());
+            this._setBaseShapeId(baseShapeId);
+            this._setObjectShapeId(objectShapeId);
+            this.setCurrentHp(getRevisedCurrentHp(currentHp, templateCfg));
+            this.setCurrentBuildPoint(getRevisedCurrentBuildPoint(currentBuildPoint, templateCfg));
+            this.setCurrentCapturePoint(getRevisedCurrentCapturePoint(currentCapturePoint, templateCfg));
 
-            return this;
+            return ClientErrorCode.NoError;
         }
         public serialize(): ISerialTile | undefined {
             const gridIndex = this.getGridIndex();
@@ -207,14 +267,14 @@ namespace TinyWars.BaseWar {
             return this._objectType;
         }
 
-        public setBaseShapeId(id: number | null | undefined): void {
+        private _setBaseShapeId(id: number | null | undefined): void {
             this._baseShapeId = id;
         }
         public getBaseShapeId(): number {
             return this._baseShapeId || 0;
         }
 
-        public setObjectShapeId(id: number | null | undefined): void {
+        private _setObjectShapeId(id: number | null | undefined): void {
             this._objectShapeId = id;
         }
         public getObjectShapeId(): number {
@@ -382,7 +442,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (!this.init({
+            if (this.init({
                 gridIndex,
                 objectType,
                 baseType,
@@ -718,5 +778,21 @@ namespace TinyWars.BaseWar {
         public getLoadCoUnitCategory(): Types.UnitCategory | null {
             return this._templateCfg.loadCoUnitCategory;
         }
+    }
+
+    function getRevisedCurrentHp(currentHp: number | null | undefined, templateCfg: TileTemplateCfg): number | null | undefined {
+        return currentHp != null
+            ? currentHp
+            : templateCfg.maxHp;
+    }
+    function getRevisedCurrentBuildPoint(currentBuildPoint: number | null | undefined, templateCfg: TileTemplateCfg): number | null | undefined {
+        return currentBuildPoint != null
+            ? currentBuildPoint
+            : templateCfg.maxBuildPoint;
+    }
+    function getRevisedCurrentCapturePoint(currentCapturePoint: number | null | undefined, templateCfg: TileTemplateCfg): number | null | undefined {
+        return currentCapturePoint != null
+            ? currentCapturePoint
+            : templateCfg.maxCapturePoint;
     }
 }

@@ -224,7 +224,7 @@ namespace TinyWars.MapEditor.MeUtility {
             return false;
         }
         const gridsCount = mapWidth * mapHeight;
-        if (gridsCount > CommonConstants.MaxGridsCount) {
+        if (gridsCount > CommonConstants.MapMaxGridsCount) {
             return false;
         }
 
@@ -345,7 +345,7 @@ namespace TinyWars.MapEditor.MeUtility {
             return false;
         }
         const gridsCount = mapWidth * mapHeight;
-        if (gridsCount > CommonConstants.MaxGridsCount) {
+        if (gridsCount > CommonConstants.MapMaxGridsCount) {
             return false;
         }
 

@@ -65,7 +65,7 @@ namespace TinyWars.Utility.ConfigManager {
         ChangeLogTextListMaxLength              : 2,
         ChangeLogMessageListMaxLength           : 100,
 
-        MaxGridsCount                           : 1000,
+        MapMaxGridsCount                           : 1000,
         MaxMapNameLength                        : 30,
         MaxDesignerLength                       : 30,
 
