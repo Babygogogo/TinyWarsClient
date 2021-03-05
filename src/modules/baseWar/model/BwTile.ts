@@ -80,9 +80,8 @@ namespace TinyWars.BaseWar {
             }
 
             const playerIndex = data.playerIndex;
-            if ((playerIndex == null)                                   ||
-                (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
-                (playerIndex > CommonConstants.WarMaxPlayerIndex)
+            if ((playerIndex == null)                                                           ||
+                (!ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType))
             ) {
                 return ClientErrorCode.BwTileDeserialize04;
             }
