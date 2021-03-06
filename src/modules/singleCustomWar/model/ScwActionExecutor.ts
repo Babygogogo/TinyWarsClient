@@ -100,9 +100,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
     async function _exeSystemDestroyPlayerForce(war: ScwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${await war.getPlayerInTurn().getNickname()}${Lang.getText(Lang.Type.B0450)}`);
 
-        DestructionHelpers.destroyPlayerForce(war, data.WarActionSystemDestroyPlayerForce.targetPlayerIndex, true);
+        const playerIndex = data.WarActionSystemDestroyPlayerForce.targetPlayerIndex;
+        FloatText.show(`${await war.getPlayer(playerIndex).getNickname()}${Lang.getText(Lang.Type.B0450)}`);
+
+        DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
 
         ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();

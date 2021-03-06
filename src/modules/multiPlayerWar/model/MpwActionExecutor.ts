@@ -167,9 +167,11 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
     async function _exeSystemDestroyPlayerForce(war: MpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
-        FloatText.show(`${await war.getPlayerInTurn().getNickname()}${Lang.getText(Lang.Type.B0450)}`);
 
-        DestructionHelpers.destroyPlayerForce(war, data.WarActionSystemDestroyPlayerForce.targetPlayerIndex, true);
+        const playerIndex = data.WarActionSystemDestroyPlayerForce.targetPlayerIndex;
+        FloatText.show(`${await war.getPlayer(playerIndex).getNickname()}${Lang.getText(Lang.Type.B0450)}`);
+
+        DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
 
         MpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
