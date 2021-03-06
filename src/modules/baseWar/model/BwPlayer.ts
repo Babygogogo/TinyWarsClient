@@ -104,8 +104,12 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwPlayerInit11;
             }
 
-            if ((playerIndex === CommonConstants.WarNeutralPlayerIndex) && (aliveState !== PlayerAliveState.Alive)) {
-                return ClientErrorCode.BwPlayerInit12;
+            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+                if ((aliveState !== PlayerAliveState.Alive) ||
+                    (coCurrentEnergy != null)
+                ) {
+                    return ClientErrorCode.BwPlayerInit12;
+                }
             }
 
             this.setFund(fund);

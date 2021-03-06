@@ -27,6 +27,7 @@ export const enum ServerErrorCode {
     BwPlayerManagerInit0003,
     BwPlayerManagerInit0004,
     BwPlayerManagerInit0005,
+    BwPlayerManagerInit0006,
 
     BwFogMapInit0000,
     BwFogMapInit0001,

@@ -56,6 +56,9 @@ namespace TinyWars.BaseWar {
                     return ClientErrorCode.BwPlayerManagerInit05;
                 }
             }
+            if ((newPlayerMap.size < 3) || (newPlayerMap.size > CommonConstants.WarMaxPlayerIndex + 1)) {
+                return ClientErrorCode.BwPlayerManagerInit06;
+            }
 
             const playerMap = this._getPlayersMap();
             playerMap.clear();

@@ -103,6 +103,7 @@ namespace TinyWars.Utility {
         BwPlayerManagerInit03,
         BwPlayerManagerInit04,
         BwPlayerManagerInit05,
+        BwPlayerManagerInit06,
 
         BwTurnManagerInit00,
         BwTurnManagerInit01,
