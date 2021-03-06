@@ -12,12 +12,12 @@ namespace TinyWars.Utility.ConfigManager {
     import DamageChartCfg   = Types.DamageChartCfg;
     import BuildableTileCfg = Types.BuildableTileCfg;
     import VisionBonusCfg   = Types.VisionBonusCfg;
+    import CoBasicCfg       = Types.CoBasicCfg;
     import ITileCategoryCfg = ProtoTypes.Config.ITileCategoryCfg;
     import UnitCategoryCfg  = ProtoTypes.Config.IUnitCategoryCfg;
     import MoveCostCfg      = ProtoTypes.Config.IMoveCostCfg;
     import UnitPromotionCfg = ProtoTypes.Config.IUnitPromotionCfg;
     import IPlayerRankCfg   = ProtoTypes.Config.IPlayerRankCfg;
-    import CoBasicCfg       = ProtoTypes.Config.ICoBasicCfg;
     import CoSkillCfg       = ProtoTypes.Config.ICoSkillCfg;
 
     ////////////////////////////////////////////////////////////////////////////////

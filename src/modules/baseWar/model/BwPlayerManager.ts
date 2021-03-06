@@ -1,13 +1,13 @@
 
 namespace TinyWars.BaseWar {
     import Types                = Utility.Types;
-    import ConfigManager        = Utility.ConfigManager;
+    import ClientErrorCode      = Utility.ClientErrorCode;
     import Logger               = Utility.Logger;
+    import CommonConstants      = Utility.CommonConstants;
     import WarSerialization     = Utility.ProtoTypes.WarSerialization;
     import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
     import PlayerAliveState     = Types.PlayerAliveState;
-    import CommonConstants      = Utility.CommonConstants;
 
     export abstract class BwPlayerManager {
         private _players        = new Map<number, BwPlayer>();
@@ -15,39 +15,58 @@ namespace TinyWars.BaseWar {
 
         public abstract getAliveWatcherTeamIndexesForSelf(): Set<number>;
 
-        public init(data: ISerialPlayerManager): BwPlayerManager | undefined {
-            const playersMap = this._getPlayersMap();
-            playersMap.clear();
-
-            const playerList = data.players;
-            if ((!playerList) || (!playerList.length)) {
-                Logger.error(`BwPlayerManager.init() empty players! data: ${JSON.stringify(data)}`);
-                return undefined;
+        public init(data: ISerialPlayerManager, configVersion: string): ClientErrorCode {
+            if (data == null) {
+                return ClientErrorCode.BwPlayerManagerInit00;
             }
 
-            for (const d of playerList) {
-                const playerIndex = d.playerIndex;
+            const playerArray = data.players;
+            if ((!playerArray) || (!playerArray.length)) {
+                return ClientErrorCode.BwPlayerManagerInit01;
+            }
+
+            const newPlayerMap = new Map<number, BwPlayer>();
+            for (const playerData of playerArray) {
+                const playerIndex = playerData.playerIndex;
                 if (playerIndex == null) {
-                    Logger.error(`BwPlayerManager.init() empty playerIndex.`);
-                    return undefined;
+                    return ClientErrorCode.BwPlayerManagerInit02;
                 }
 
-                const player = (new BwPlayer()).init(d);
-                if (player == null) {
-                    Logger.error(`BwPlayerManager.init() empty player.`);
-                    return undefined;
+                if (newPlayerMap.has(playerIndex)) {
+                    return ClientErrorCode.BwPlayerManagerInit03;
                 }
 
-                playersMap.set(playerIndex, player);
+                const player        = new BwPlayer();
+                const playerError   = player.init(playerData, configVersion);
+                if (playerError) {
+                    return playerError;
+                }
+
+                newPlayerMap.set(playerIndex, player);
             }
 
-            return this;
+            if (!newPlayerMap.has(CommonConstants.WarNeutralPlayerIndex)) {
+                return ClientErrorCode.BwPlayerManagerInit04;
+            }
+            for (const [playerIndex] of newPlayerMap) {
+                if ((playerIndex > CommonConstants.WarNeutralPlayerIndex) && (!newPlayerMap.has(playerIndex - 1))) {
+                    return ClientErrorCode.BwPlayerManagerInit05;
+                }
+            }
+
+            const playerMap = this._getPlayersMap();
+            playerMap.clear();
+            for (const [playerIndex, player] of newPlayerMap) {
+                playerMap.set(playerIndex, player);
+            }
+
+            return ClientErrorCode.NoError;
         }
-        public fastInit(data: ISerialPlayerManager): BwPlayerManager {
+        public fastInit(data: ISerialPlayerManager, configVersion: string): ClientErrorCode {
             for (const d of data.players) {
-                this.getPlayer(d.playerIndex).init(d);
+                this.getPlayer(d.playerIndex).init(d, configVersion);
             }
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

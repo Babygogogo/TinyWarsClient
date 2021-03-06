@@ -55,11 +55,9 @@ namespace TinyWars.MultiRankWar {
                 return undefined;
             }
 
-            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
-            const playerManager = this.getPlayerManager().init(dataForPlayerManager);
-            if (playerManager == null) {
-                Logger.error(`MrwWar.init() empty playerManager.`);
-                return undefined;
+            const playerManagerError = this.getPlayerManager().init(dataForPlayerManager, configVersion);
+            if (playerManagerError) {
+                return playerManagerError;
             }
 
             const turnManager = (this.getTurnManager() || new (this._getTurnManagerClass())()).init(dataForTurnManager);
@@ -68,6 +66,7 @@ namespace TinyWars.MultiRankWar {
                 return undefined;
             }
 
+            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
             const fieldError = this.getField().init({
                 data                : dataForField,
                 configVersion,
@@ -78,8 +77,6 @@ namespace TinyWars.MultiRankWar {
             }
 
             this._setSettingsForMrw(settingsForMrw);
-            this._setPlayerManager(playerManager);
-            this._setTurnManager(turnManager);
 
             this._initView();
 

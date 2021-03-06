@@ -9,12 +9,12 @@ namespace TinyWars.BaseWar {
     export abstract class BwWar {
         private _warId                      : number;
 
-        private _playerManager              : BwPlayerManager;
-        private _turnManager                : BwTurnManager;
+        private readonly _playerManager         = new (this._getPlayerManagerClass())();
+        private readonly _turnManager           = new (this._getTurnManagerClass());
         private readonly _field                 = new (this._getFieldClass())();
         private readonly _commonSettingManager  = new (this._getCommonSettingManagerClass())();
-        private readonly _executedActionManager = new BwExecutedActionManager();
         private readonly _warEventManager       = new (this._getWarEventManagerClass())();
+        private readonly _executedActionManager = new BwExecutedActionManager();
         private readonly _drawVoteManager       = new BwDrawVoteManager();
         private readonly _view                  = new BwWarView();
 
@@ -144,9 +144,6 @@ namespace TinyWars.BaseWar {
             return settingsForCommon.warRule;
         }
 
-        protected _setPlayerManager(manager: BwPlayerManager): void {
-            this._playerManager = manager;
-        }
         public getPlayerManager(): BwPlayerManager {
             return this._playerManager;
         }
@@ -179,9 +176,6 @@ namespace TinyWars.BaseWar {
             return this.getField().getGridVisualEffect();
         }
 
-        protected _setTurnManager(manager: BwTurnManager): void {
-            this._turnManager = manager;
-        }
         public getTurnManager(): BwTurnManager {
             return this._turnManager;
         }

@@ -3,9 +3,14 @@ namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
     import Notify           = Utility.Notify;
     import Logger           = Utility.Logger;
+    import ConfigManager    = Utility.ConfigManager;
+    import ClientErrorCode  = Utility.ClientErrorCode;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import ProtoTypes       = Utility.ProtoTypes;
+    import CommonConstants  = Utility.CommonConstants;
     import GridIndex        = Types.GridIndex;
+    import PlayerAliveState = Types.PlayerAliveState;
+    import CoSkillType      = Types.CoSkillType;
     import ISerialPlayer    = ProtoTypes.WarSerialization.ISerialPlayer;
 
     export class BwPlayer {
@@ -25,62 +30,78 @@ namespace TinyWars.BaseWar {
 
         private _war                    : BwWar;
 
-        public init(data: ISerialPlayer): BwPlayer | undefined {
+        public init(data: ISerialPlayer, configVersion: string): ClientErrorCode {
             const fund = data.fund;
             if (fund == null) {
-                Logger.error(`BwPlayer.init() empty fund.`);
-                return undefined;
+                return ClientErrorCode.BwPlayerInit00;
             }
 
             const hasVotedForDraw = data.hasVotedForDraw;
             if (hasVotedForDraw == null) {
-                Logger.error(`BwPlayer.init() empty hasVotedForDraw.`);
-                return undefined;
+                return ClientErrorCode.BwPlayerInit01;
             }
 
-            const aliveState = data.aliveState;
-            if (aliveState == null) {
-                Logger.error(`BwPlayer.init() empty aliveState.`);
-                return undefined;
+            const aliveState = data.aliveState as PlayerAliveState;
+            if ((aliveState !== PlayerAliveState.Alive) &&
+                (aliveState !== PlayerAliveState.Dead)  &&
+                (aliveState !== PlayerAliveState.Dying)
+            ) {
+                return ClientErrorCode.BwPlayerInit02;
             }
 
             const playerIndex = data.playerIndex;
-            if (playerIndex == null) {
-                Logger.error(`BwPlayer.init() empty playerIndex.`);
-                return undefined;
+            if ((playerIndex == null)                               ||
+                (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
+                (playerIndex < CommonConstants.WarNeutralPlayerIndex)
+            ) {
+                return ClientErrorCode.BwPlayerInit03;
             }
 
             const restTimeToBoot = data.restTimeToBoot;
             if (restTimeToBoot == null) {
-                Logger.error(`BwPlayer.init() empty restTimeToBoot.`);
-                return undefined;
-            }
-
-            const coUsingSkillType = data.coUsingSkillType;
-            if (coUsingSkillType == null) {
-                Logger.error(`BwPlayer.init() empty coUsingSkillType.`);
-                return undefined;
+                return ClientErrorCode.BwPlayerInit04;
             }
 
             const coIsDestroyedInTurn = data.coIsDestroyedInTurn;
             if (coIsDestroyedInTurn == null) {
-                Logger.error(`BwPlayer.init() empty coIsDestroyedInTurn.`);
-                return undefined;
+                return ClientErrorCode.BwPlayerInit05;
             }
 
             const unitAndTileSkinId = data.unitAndTileSkinId;
-            if ((unitAndTileSkinId == null)                         ||
-                ((unitAndTileSkinId === 0) && (playerIndex !== 0))  ||
-                ((unitAndTileSkinId !== 0) && (playerIndex === 0))
+            if ((unitAndTileSkinId == null)                                                             ||
+                ((unitAndTileSkinId === 0) && (playerIndex !== CommonConstants.WarNeutralPlayerIndex))  ||
+                ((unitAndTileSkinId !== 0) && (playerIndex === CommonConstants.WarNeutralPlayerIndex))
             ) {
-                Logger.error(`BwPlayer.init() invalid unitAndTileSkinId.`);
-                return undefined;
+                return ClientErrorCode.BwPlayerInit06;
             }
 
             const coId = data.coId;
             if (coId == null) {
-                Logger.error(`BwPlayer.init() empty coId.`);
-                return undefined;
+                return ClientErrorCode.BwPlayerInit07;
+            }
+
+            const coConfig = ConfigManager.getCoBasicCfg(configVersion, coId);
+            if (coConfig == null) {
+                return ClientErrorCode.BwPlayerInit08;
+            }
+
+            const coUsingSkillType = data.coUsingSkillType as CoSkillType;
+            if ((coUsingSkillType !== CoSkillType.Passive)  &&
+                (coUsingSkillType !== CoSkillType.Power)    &&
+                (coUsingSkillType !== CoSkillType.SuperPower)
+            ) {
+                return ClientErrorCode.BwPlayerInit09;
+            }
+
+            if (((coUsingSkillType === CoSkillType.Power)       && (!coConfig.powerSkills?.length))     ||
+                ((coUsingSkillType === CoSkillType.SuperPower)  && (!coConfig.superPowerSkills?.length))
+            ) {
+                return ClientErrorCode.BwPlayerInit10;
+            }
+
+            const coCurrentEnergy = data.coCurrentEnergy;
+            if ((coCurrentEnergy != null) && (coCurrentEnergy > BwHelpers.getCoMaxEnergy(coConfig))) {
+                return ClientErrorCode.BwPlayerInit11;
             }
 
             this.setFund(fund);
@@ -93,11 +114,11 @@ namespace TinyWars.BaseWar {
             this.setUserId(data.userId);
             this._setUnitAndTileSkinId(unitAndTileSkinId);
             this.setCoId(coId);
-            this.setCoCurrentEnergy(data.coCurrentEnergy);
+            this.setCoCurrentEnergy(coCurrentEnergy);
             this._setWatchOngoingSrcUserIds(data.watchOngoingSrcUserIdArray || []);
             this._setWatchRequestSrcUserIds(data.watchRequestSrcUserIdArray || []);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {
@@ -390,11 +411,8 @@ namespace TinyWars.BaseWar {
             return this._coCurrentEnergy;
         }
         public getCoMaxEnergy(): number | null | undefined {
-            const energyList = this.getCoZoneExpansionEnergyList();
-            return Math.max(
-                energyList ? energyList[energyList.length - 1] : 0,
-                this.getCoSuperPowerEnergy() || 0,
-            );
+            const config = this._getCoBasicCfg();
+            return config ? BwHelpers.getCoMaxEnergy(config) : 0;
         }
         public getCoZoneExpansionEnergyList(): number[] | null | undefined {
             const cfg = this._getCoBasicCfg();

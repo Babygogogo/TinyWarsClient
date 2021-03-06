@@ -77,11 +77,9 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
-            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
-            const playerManager         = (this.getPlayerManager() || new (this._getPlayerManagerClass())()).init(dataForPlayerManager);
-            if (playerManager == null) {
-                Logger.error(`ReplayWar.init() empty playerManager.`);
-                return undefined;
+            const playerManagerError = this.getPlayerManager().init(dataForPlayerManager, configVersion);
+            if (playerManagerError) {
+                return playerManagerError;
             }
 
             const turnManager = (this.getTurnManager() || new (this._getTurnManagerClass())()).init(dataForTurnManager);
@@ -90,6 +88,7 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
 
+            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
             const fieldError = this.getField().init({
                 data                : dataForField,
                 configVersion,
@@ -105,8 +104,6 @@ namespace TinyWars.ReplayWar {
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: seedRandomCurrentState }));
             this._setSeedRandomInitialState(seedRandomInitialState);
             this.setNextActionId(0);
-            this._setPlayerManager(playerManager);
-            this._setTurnManager(turnManager);
 
             const warDataForCheckPoint                  = Helpers.deepClone(warData);
             warDataForCheckPoint.seedRandomCurrentState = warDataForCheckPoint.seedRandomInitialState;
@@ -438,14 +435,15 @@ namespace TinyWars.ReplayWar {
         private async _loadCheckPoint(checkPointId: number): Promise<void> {
             const checkPointData    = this.getCheckPointData(checkPointId);
             const warData           = checkPointData.warData;
-            const mapSize           = this.getTileMap().getMapSize();
+            const configVersion     = this.getConfigVersion();
+
             this.setNextActionId(checkPointData.nextActionId);
-            this.getPlayerManager().fastInit(warData.playerManager);
+            this.getPlayerManager().fastInit(warData.playerManager, configVersion);
             this.getTurnManager().fastInit(warData.turnManager);
             this.getWarEventManager().fastInit(warData.warEventManager);
-            await this.getField().fastInit({
+            this.getField().fastInit({
                 data                    : warData.field,
-                configVersion           : this.getConfigVersion(),
+                configVersion,
                 playersCountUnneutral   : this.getPlayerManager().getTotalPlayersCount(false),
             });
             this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw);

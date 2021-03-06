@@ -872,6 +872,14 @@ namespace TinyWars.BaseWar.BwHelpers {
         return playerIndexSet.size;
     }
 
+    export function getCoMaxEnergy(coConfig: ProtoTypes.Config.ICoBasicCfg): number {
+        const expansionArray = coConfig.zoneExpansionEnergyList || [];
+        return Math.max(
+            expansionArray[expansionArray.length - 1] || 0,
+            (coConfig.powerEnergyList || [])[1] || 0,
+        );
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Other validators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
