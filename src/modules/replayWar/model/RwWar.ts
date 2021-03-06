@@ -82,13 +82,12 @@ namespace TinyWars.ReplayWar {
                 return playerManagerError;
             }
 
-            const turnManager = (this.getTurnManager() || new (this._getTurnManagerClass())()).init(dataForTurnManager);
-            if (turnManager == null) {
-                Logger.error(`ReplayWar.init() empty turnManager.`);
-                return undefined;
+            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
+            const turnManagerError = this.getTurnManager().init(dataForTurnManager, playersCountUnneutral);
+            if (turnManagerError) {
+                return turnManagerError;
             }
 
-            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
             const fieldError = this.getField().init({
                 data                : dataForField,
                 configVersion,
@@ -433,18 +432,19 @@ namespace TinyWars.ReplayWar {
             FloatText.show(`${Lang.getText(Lang.Type.A0045)} (${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`);
         }
         private async _loadCheckPoint(checkPointId: number): Promise<void> {
-            const checkPointData    = this.getCheckPointData(checkPointId);
-            const warData           = checkPointData.warData;
-            const configVersion     = this.getConfigVersion();
+            const checkPointData        = this.getCheckPointData(checkPointId);
+            const warData               = checkPointData.warData;
+            const configVersion         = this.getConfigVersion();
+            const playersCountUnneutral = this.getPlayerManager().getTotalPlayersCount(false);
 
             this.setNextActionId(checkPointData.nextActionId);
             this.getPlayerManager().fastInit(warData.playerManager, configVersion);
-            this.getTurnManager().fastInit(warData.turnManager);
+            this.getTurnManager().fastInit(warData.turnManager, playersCountUnneutral);
             this.getWarEventManager().fastInit(warData.warEventManager);
             this.getField().fastInit({
                 data                    : warData.field,
                 configVersion,
-                playersCountUnneutral   : this.getPlayerManager().getTotalPlayersCount(false),
+                playersCountUnneutral,
             });
             this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw);
             this._setRandomNumberGenerator(new Math.seedrandom("", { state: warData.seedRandomCurrentState }));

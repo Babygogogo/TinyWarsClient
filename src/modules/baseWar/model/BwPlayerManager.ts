@@ -21,7 +21,10 @@ namespace TinyWars.BaseWar {
             }
 
             const playerArray = data.players;
-            if ((!playerArray) || (!playerArray.length)) {
+            if ((!playerArray)                                              ||
+                (playerArray.length < 3)                                    ||
+                (playerArray.length > CommonConstants.WarMaxPlayerIndex + 1)
+            ) {
                 return ClientErrorCode.BwPlayerManagerInit01;
             }
 

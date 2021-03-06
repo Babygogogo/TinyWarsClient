@@ -102,6 +102,10 @@ export const enum ServerErrorCode {
     BwPlayerInit0007,
     BwPlayerInit0008,
     BwPlayerInit0009,
+    BwPlayerInit0010,
+    BwPlayerInit0011,
+    BwPlayerInit0012,
+    BwPlayerInit0013,
 
     BwFieldInit0000,
     BwFieldInit0001,

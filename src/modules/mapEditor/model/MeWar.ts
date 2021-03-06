@@ -51,32 +51,19 @@ namespace TinyWars.MapEditor {
                 return undefined;
             }
 
-            const dataForTurnManager = data.turnManager;
-            if (dataForTurnManager == null) {
-                Logger.error(`MeWar.init() empty dataForTurnManager.`);
-                return undefined;
-            }
-
-            const dataForField = data.field;
-            if (dataForField == null) {
-                Logger.error(`MeWar.init() empty dataForField.`);
-                return undefined;
-            }
-
             const playerManagerError = this.getPlayerManager().init(dataForPlayerManager, configVersion);
             if (playerManagerError) {
                 return playerManagerError;
             }
 
-            const turnManager = (this.getTurnManager() || new (this._getTurnManagerClass())()).init(dataForTurnManager);
-            if (turnManager == null) {
-                Logger.error(`MeWar.init() empty turnManager.`);
-                return undefined;
+            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
+            const turnManagerError = this.getTurnManager().init(data.turnManager, playersCountUnneutral);
+            if (turnManagerError) {
+                return turnManagerError;
             }
 
-            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
             const fieldError = this.getField().init({
-                data                : dataForField,
+                data                : data.field,
                 configVersion,
                 playersCountUnneutral
             });

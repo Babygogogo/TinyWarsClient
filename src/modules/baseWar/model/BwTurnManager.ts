@@ -5,13 +5,13 @@ namespace TinyWars.BaseWar {
     import Logger                       = Utility.Logger;
     import Notify                       = Utility.Notify;
     import ProtoTypes                   = Utility.ProtoTypes;
-    import ConfigManager                = Utility.ConfigManager;
+    import ClientErrorCode              = Utility.ClientErrorCode;
+    import CommonConstants              = Utility.CommonConstants;
     import TurnPhaseCode                = Types.TurnPhaseCode;
     import ISerialTurnManager           = ProtoTypes.WarSerialization.ISerialTurnManager;
     import WarAction                    = ProtoTypes.WarAction;
     import IWarActionSystemBeginTurn    = WarAction.IWarActionSystemBeginTurn;
     import IWarActionPlayerEndTurn      = WarAction.IWarActionPlayerEndTurn;
-    import CommonConstants              = Utility.CommonConstants;
 
     export abstract class BwTurnManager {
         private _turnIndex          : number;
@@ -31,16 +31,45 @@ namespace TinyWars.BaseWar {
         protected abstract _runPhaseTickTurnAndPlayerIndex(data: IWarActionPlayerEndTurn): void;
         protected abstract _runPhaseResetVisionForNextPlayer(): void;
 
-        public init(data: ISerialTurnManager): BwTurnManager {
-            this.setTurnIndex(data.turnIndex);
-            this.setPlayerIndexInTurn(data.playerIndex);
-            this._setPhaseCode(data.turnPhaseCode);
-            this.setEnterTurnTime(data.enterTurnTime);
+        public init(data: ISerialTurnManager, playersCountUnneutral: number): ClientErrorCode {
+            if (data == null) {
+                return ClientErrorCode.BwTurnManagerInit00;
+            }
 
-            return this;
+            const turnIndex = data.turnIndex;
+            if (turnIndex == null) {
+                return ClientErrorCode.BwTurnManagerInit01;
+            }
+
+            const playerIndex = data.playerIndex;
+            if ((playerIndex == null)                                   ||
+                (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                (playerIndex > playersCountUnneutral)
+            ) {
+                return ClientErrorCode.BwTurnManagerInit02;
+            }
+
+            const turnPhaseCode = data.turnPhaseCode as TurnPhaseCode;
+            if ((turnPhaseCode !== TurnPhaseCode.Main)          &&
+                (turnPhaseCode !== TurnPhaseCode.WaitBeginTurn)
+            ) {
+                return ClientErrorCode.BwTurnManagerInit03;
+            }
+
+            const enterTurnTime = data.enterTurnTime;
+            if (enterTurnTime == null) {
+                return ClientErrorCode.BwTurnManagerInit04;
+            }
+
+            this.setTurnIndex(turnIndex);
+            this.setPlayerIndexInTurn(playerIndex);
+            this._setPhaseCode(turnPhaseCode);
+            this.setEnterTurnTime(enterTurnTime);
+
+            return ClientErrorCode.NoError;
         }
-        public fastInit(data: ISerialTurnManager): BwTurnManager {
-            return this.init(data);
+        public fastInit(data: ISerialTurnManager, playersCountUnneutral: number): ClientErrorCode {
+            return this.init(data, playersCountUnneutral);
         }
 
         public startRunning(war: BwWar): void {

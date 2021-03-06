@@ -58,13 +58,12 @@ namespace TinyWars.MultiCustomWar {
                 return playerManagerError;
             }
 
-            const turnManager = (this.getTurnManager() || new (this._getTurnManagerClass())()).init(dataForTurnManager);
-            if (turnManager == null) {
-                Logger.error(`McwWar.init() empty turnManager.`);
-                return undefined;
+            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
+            const turnManagerError = this.getTurnManager().init(dataForTurnManager, playersCountUnneutral);
+            if (turnManagerError) {
+                return turnManagerError;
             }
 
-            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
             const fieldError = this.getField().init({
                 data                : dataForField,
                 configVersion,

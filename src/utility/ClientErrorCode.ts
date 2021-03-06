@@ -104,6 +104,12 @@ namespace TinyWars.Utility {
         BwPlayerManagerInit04,
         BwPlayerManagerInit05,
 
+        BwTurnManagerInit00,
+        BwTurnManagerInit01,
+        BwTurnManagerInit02,
+        BwTurnManagerInit03,
+        BwTurnManagerInit04,
+
         WarRuleValidation00,
         WarRuleValidation01,
         WarRuleValidation02,
