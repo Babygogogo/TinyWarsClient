@@ -18,7 +18,7 @@ namespace TinyWars.ReplayWar {
         nextActionId: number;
     }
 
-    export class RwWar extends SinglePlayerWar.SpwWar {
+    export class RwWar extends BaseWar.BwWar {
         private _settingsForMcw: ProtoTypes.WarSettings.ISettingsForMcw;
         private _settingsForScw: ProtoTypes.WarSettings.ISettingsForScw;
         private _settingsForMrw: ProtoTypes.WarSettings.ISettingsForMrw;
@@ -44,18 +44,6 @@ namespace TinyWars.ReplayWar {
             const configVersion = settingsForCommon.configVersion;
             if (configVersion == null) {
                 Logger.error(`ReplayWar.init() empty configVersion.`);
-                return undefined;
-            }
-
-            const seedRandomInitialState = warData.seedRandomInitialState;
-            if (seedRandomInitialState == null) {
-                Logger.error(`RwWar.init() empty seedRandomInitialState.`);
-                return undefined;
-            }
-
-            const seedRandomCurrentState = seedRandomInitialState;
-            if (seedRandomCurrentState == null) {
-                Logger.error(`RwWar.init() empty seedRandomCurrentState.`);
                 return undefined;
             }
 
@@ -100,16 +88,12 @@ namespace TinyWars.ReplayWar {
             this._setSettingsForMcw(warData.settingsForMcw);
             this._setSettingsForScw(warData.settingsForScw);
             this._setSettingsForMrw(warData.settingsForMrw);
-            this._setRandomNumberGenerator(new Math.seedrandom("", { state: seedRandomCurrentState }));
-            this._setSeedRandomInitialState(seedRandomInitialState);
             this.setNextActionId(0);
 
-            const warDataForCheckPoint                  = Helpers.deepClone(warData);
-            warDataForCheckPoint.seedRandomCurrentState = warDataForCheckPoint.seedRandomInitialState;
             this.setCheckPointId(0, 0);
             this.setCheckPointData(0, {
                 nextActionId    : 0,
-                warData         : warDataForCheckPoint,
+                warData         : Helpers.deepClone(warData),
             });
 
             // await Helpers.checkAndCallLater();
@@ -130,9 +114,16 @@ namespace TinyWars.ReplayWar {
         }
 
         public serializeForCheckPoint(): CheckPointData {
-            const seedRandomCurrentState = this._getSeedRandomCurrentState();
+            const randomNumberManager       = this.getRandomNumberManager();
+            const seedRandomCurrentState    = randomNumberManager.getSeedRandomCurrentState();
             if (seedRandomCurrentState == null) {
                 Logger.error(`ReplayWar.serializeForCheckPoint() empty seedRandomCurrentState.`);
+                return undefined;
+            }
+
+            const seedRandomInitialState = randomNumberManager.getSeedRandomInitialState();
+            if (seedRandomInitialState == null) {
+                Logger.error(`ReplayWar.serializeForCheckPoint() empty seedRandomInitialState.`);
                 return undefined;
             }
 
@@ -192,7 +183,7 @@ namespace TinyWars.ReplayWar {
                     settingsForScw              : null,
 
                     warId                       : null,
-                    seedRandomInitialState      : null,
+                    seedRandomInitialState,
                     seedRandomCurrentState,
                     executedActions             : null,
                     remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
@@ -208,12 +199,6 @@ namespace TinyWars.ReplayWar {
             const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
             if (settingsForCommon == null) {
                 Logger.error(`Replay.serializeForSimulation() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            const seedRandomCurrentState = this._getSeedRandomCurrentState();
-            if (seedRandomCurrentState == null) {
-                Logger.error(`ReplayWar.serializeForSimulation() empty seedRandomCurrentState.`);
                 return undefined;
             }
 
@@ -279,7 +264,7 @@ namespace TinyWars.ReplayWar {
 
                 warId,
                 seedRandomInitialState      : null,
-                seedRandomCurrentState,
+                seedRandomCurrentState      : null,
                 executedActions             : [],
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 warEventManager             : serialWarEventManager,
@@ -303,7 +288,7 @@ namespace TinyWars.ReplayWar {
             }
         }
         public getIsNeedReplay(): boolean {
-            return false;
+            return true;
         }
         public getMapId(): number | undefined {
             const settingsForMcw = this._getSettingsForMcw();
@@ -447,7 +432,11 @@ namespace TinyWars.ReplayWar {
                 playersCountUnneutral,
             });
             this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw);
-            this._setRandomNumberGenerator(new Math.seedrandom("", { state: warData.seedRandomCurrentState }));
+            this.getRandomNumberManager().init({
+                isNeedReplay    : this.getIsNeedReplay(),
+                initialState    : warData.seedRandomInitialState,
+                currentState    : warData.seedRandomCurrentState,
+            });
 
             await Helpers.checkAndCallLater();
             this._fastInitView();
@@ -458,15 +447,6 @@ namespace TinyWars.ReplayWar {
         }
         public getNextAction(): IWarActionContainer {
             return this.getExecutedActionManager().getExecutedAction(this.getNextActionId());
-        }
-
-        public getRandomNumber(): number | undefined {
-            const generator = this._getRandomNumberGenerator();
-            if (generator == null) {
-                Logger.error(`RwWar.getRandomNumber() empty generator.`);
-                return undefined;
-            }
-            return generator();
         }
     }
 }

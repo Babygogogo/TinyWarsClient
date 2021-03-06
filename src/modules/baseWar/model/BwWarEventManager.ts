@@ -19,17 +19,24 @@ namespace TinyWars.BaseWar {
         private _warEventFullData?  : IWarEventFullData | null | undefined;
         private _calledCountList?   : IDataForWarEventCalledCount[] | null | undefined;
 
-        public init(data: ISerialWarEventManager): BwWarEventManager | undefined {
-            this._setWarEventFullData(data.warEventFullData || {});
-            this._setCalledCountList(data.calledCountList);
+        public init(data: ISerialWarEventManager): ClientErrorCode {
+            if (!data) {
+                this._setWarEventFullData(null);
+                this._setCalledCountList(null);
+            } else {
+                // TODO: validate the data.
+                const warEventFullData = data.warEventFullData;
 
-            return this;
-        }
-        public fastInit(data: ISerialWarEventManager): ClientErrorCode {
-            this._setWarEventFullData(Helpers.deepClone(data.warEventFullData || {}));
-            this._setCalledCountList(Helpers.deepClone(data.calledCountList));
+
+
+                this._setWarEventFullData(data.warEventFullData);
+                this._setCalledCountList(data.calledCountList);
+            }
 
             return ClientErrorCode.NoError;
+        }
+        public fastInit(data: ISerialWarEventManager): ClientErrorCode {
+            return this.init(data);
         }
 
         public serialize(): ISerialWarEventManager | undefined {
@@ -56,44 +63,14 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
-        private _setWarEventFullData(data: IWarEventFullData): void {
+        protected _setWarEventFullData(data: IWarEventFullData): void {
             this._warEventFullData = data;
-
-            if (data.actionArray == null) {
-                data.actionArray = [];
-            }
-            if (data.conditionArray == null) {
-                data.conditionArray = [];
-            }
-            if (data.conditionNodeArray == null) {
-                data.conditionNodeArray = [];
-            }
-            if (data.eventArray == null) {
-                data.eventArray = [];
-            }
-
-            for (const node of data.conditionNodeArray) {
-                if (node.subNodeIdArray == null) {
-                    node.subNodeIdArray = [];
-                }
-                if (node.conditionIdArray == null) {
-                    node.conditionIdArray = [];
-                }
-            }
-            for (const event of data.eventArray) {
-                if (event.actionIdArray == null) {
-                    event.actionIdArray = [];
-                }
-                if (event.eventNameArray == null) {
-                    event.eventNameArray = [];
-                }
-            }
         }
         public getWarEventFullData(): IWarEventFullData | undefined | null {
             return this._warEventFullData;
         }
 
-        private _setCalledCountList(list: IDataForWarEventCalledCount[] | null | undefined): void {
+        protected _setCalledCountList(list: IDataForWarEventCalledCount[] | null | undefined): void {
             this._calledCountList = list;
         }
         private _getCalledCountList(): IDataForWarEventCalledCount[] | null | undefined {

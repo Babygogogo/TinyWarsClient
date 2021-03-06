@@ -176,7 +176,7 @@ namespace TinyWars.MapEditor {
                 settingsForScw              : { isCheating: true },
 
                 warId                       : this.getWarId(),
-                seedRandomInitialState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),
+                seedRandomInitialState      : null,
                 seedRandomCurrentState      : null,
                 executedActions             : [],
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),

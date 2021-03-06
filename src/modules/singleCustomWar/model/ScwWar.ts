@@ -39,18 +39,6 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
-            const seedRandomInitialState = data.seedRandomInitialState;
-            if ((!settingsForScw.isCheating) && (seedRandomInitialState == null)) {
-                Logger.error(`ScwWar.init() empty seedRandomInitialState.`);
-                return undefined;
-            }
-
-            const seedRandomCurrentState = data.seedRandomCurrentState || seedRandomInitialState;
-            if (seedRandomCurrentState == null) {
-                Logger.error(`ScwWar.init() empty seedRandomCurrentState.`);
-                return undefined;
-            }
-
             const dataForPlayerManager = data.playerManager;
             if (dataForPlayerManager == null) {
                 Logger.error(`ScwWar.init() empty dataForPlayerManager.`);
@@ -89,8 +77,6 @@ namespace TinyWars.SingleCustomWar {
                 return fieldError;
             }
 
-            this._setRandomNumberGenerator(new Math.seedrandom("", { state: seedRandomCurrentState }));
-            this._setSeedRandomInitialState(seedRandomInitialState);
             this._setSettingsForSinglePlayer(settingsForScw);
 
             this._initView();
@@ -99,19 +85,6 @@ namespace TinyWars.SingleCustomWar {
         }
 
         public serialize(): ISerialWar {
-            const isCheating                = this.getIsSinglePlayerCheating();
-            const seedRandomCurrentState    = this._getSeedRandomCurrentState();
-            if (seedRandomCurrentState == null) {
-                Logger.error(`ScwWar.serialize() empty seedRandomCurrentState.`);
-                return undefined;
-            }
-
-            const seedRandomInitialState = this._getSeedRandomInitialState();
-            if ((!isCheating) && (seedRandomInitialState == null)) {
-                Logger.error(`ScwWar.serialize() empty seedRandomInitialState.`);
-                return undefined;
-            }
-
             const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
             if (settingsForCommon == null) {
                 Logger.error(`ScwWar.serialize() empty settingsForCommon.`);
@@ -172,13 +145,14 @@ namespace TinyWars.SingleCustomWar {
                 return undefined;
             }
 
+            const randomNumberManager = this.getRandomNumberManager();
             return {
                 settingsForCommon,
                 settingsForScw,
 
                 warId                       : this.getWarId(),
-                seedRandomInitialState,
-                seedRandomCurrentState,
+                seedRandomInitialState      : randomNumberManager.getSeedRandomInitialState(),
+                seedRandomCurrentState      : randomNumberManager.getSeedRandomCurrentState(),
                 executedActions             : this.getExecutedActionManager().getAllExecutedActions(),
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 warEventManager             : serialWarEventManager,
@@ -257,7 +231,7 @@ namespace TinyWars.SingleCustomWar {
 
                 warId                       : this.getWarId(),
                 seedRandomInitialState      : null,
-                seedRandomCurrentState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),
+                seedRandomCurrentState      : null,
                 executedActions             : [],
                 remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
                 warEventManager             : serialWarEventManager,
@@ -339,19 +313,6 @@ namespace TinyWars.SingleCustomWar {
         }
         public getSettingsForScw(): ISettingsForScw | null | undefined {
             return this._settingsForSinglePlayer;
-        }
-
-        public getRandomNumber(): number | undefined {
-            if (this.getIsSinglePlayerCheating()) {
-                return Math.random();
-            } else {
-                const generator = this._getRandomNumberGenerator();
-                if (generator == null) {
-                    Logger.error(`ScwWar.getRandomNumber() empty generator.`);
-                    return undefined;
-                }
-                return generator();
-            }
         }
 
         public getHumanPlayerIndexes(): number[] {

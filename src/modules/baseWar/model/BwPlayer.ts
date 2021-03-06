@@ -93,8 +93,8 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwPlayerInit09;
             }
 
-            if (((coUsingSkillType === CoSkillType.Power)       && (!coConfig.powerSkills?.length))     ||
-                ((coUsingSkillType === CoSkillType.SuperPower)  && (!coConfig.superPowerSkills?.length))
+            if (((coUsingSkillType === CoSkillType.Power)       && (!(coConfig.powerSkills || []).length))      ||
+                ((coUsingSkillType === CoSkillType.SuperPower)  && (!(coConfig.superPowerSkills || []).length))
             ) {
                 return ClientErrorCode.BwPlayerInit10;
             }

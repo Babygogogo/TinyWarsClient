@@ -103,7 +103,7 @@ namespace TinyWars.MapEditor.MeUtility {
             settingsForMcw          : null,
             settingsForScw          : null,
             warId                   : null,
-            seedRandomInitialState  : new Math.seedrandom(null, { state: true }).state(),
+            seedRandomInitialState  : null,
             seedRandomCurrentState  : null,
             executedActions         : null,
             remainingVotesForDraw   : null,

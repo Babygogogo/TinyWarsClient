@@ -111,6 +111,9 @@ namespace TinyWars.Utility {
         BwTurnManagerInit03,
         BwTurnManagerInit04,
 
+        BwRandomNumberManager00,
+        BwRandomNumberManager01,
+
         WarRuleValidation00,
         WarRuleValidation01,
         WarRuleValidation02,

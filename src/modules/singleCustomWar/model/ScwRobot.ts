@@ -410,7 +410,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         if (!length) {
             return null;
         } else {
-            return arr.splice(Math.floor(_war.getRandomNumber() * length), 1)[0];
+            return arr.splice(Math.floor(_war.getRandomNumberManager().getRandomNumber() * length), 1)[0];
         }
     }
 

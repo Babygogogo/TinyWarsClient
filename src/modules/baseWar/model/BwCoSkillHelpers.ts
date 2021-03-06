@@ -819,7 +819,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
             return getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
 
         } else if (targetType === 3) {  // random: HP or fund
-            const randomNumber = war.getRandomNumber();
+            const randomNumber = war.getRandomNumberManager().getRandomNumber();
             if (randomNumber == null) {
                 Logger.error(`BwHelpers.getIndiscriminateAreaDamageCenter() empty randomNumber.`);
                 return undefined;

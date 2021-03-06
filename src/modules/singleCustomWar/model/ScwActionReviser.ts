@@ -578,7 +578,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
             return getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
 
         } else if (targetType === 3) {  // random: HP or fund
-            return war.getRandomNumber() < 0.5
+            return war.getRandomNumberManager().getRandomNumber() < 0.5
                 ? getIndiscriminateAreaDamageCenterForType1(valueMaps, radius, hpDamage)
                 : getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
 

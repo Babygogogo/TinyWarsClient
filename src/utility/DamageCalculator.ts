@@ -22,12 +22,7 @@ namespace TinyWars.Utility.DamageCalculator {
     }
 
     function getLuckValue(war: BwWar, playerIndex: number): number | undefined {
-        if (!(war instanceof SpwWar)) {
-            Logger.error(`DamageCalculator.getLuckValue() war is not SpwWar!`);
-            return undefined;
-        }
-
-        const randomNumber = war.getRandomNumber();
+        const randomNumber = war.getRandomNumberManager().getRandomNumber();
         if (randomNumber == null) {
             Logger.error(`DamageCalculator.getLuckValue() empty randomNumber.`);
             return undefined;

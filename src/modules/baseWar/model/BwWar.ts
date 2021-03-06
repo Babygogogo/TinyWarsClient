@@ -3,6 +3,7 @@ namespace TinyWars.BaseWar {
     import Logger           = Utility.Logger;
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
+    import Helpers          = Utility.Helpers;
     import ClientErrorCode  = Utility.ClientErrorCode;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
 
@@ -15,6 +16,7 @@ namespace TinyWars.BaseWar {
         private readonly _commonSettingManager  = new (this._getCommonSettingManagerClass())();
         private readonly _warEventManager       = new (this._getWarEventManagerClass())();
         private readonly _executedActionManager = new BwExecutedActionManager();
+        private readonly _randomNumberManager   = new BwRandomNumberManager();
         private readonly _drawVoteManager       = new BwDrawVoteManager();
         private readonly _view                  = new BwWarView();
 
@@ -46,16 +48,19 @@ namespace TinyWars.BaseWar {
                 return commonSettingManagerError;
             }
 
-            if (dataForWarEventManager == null) {
-                Logger.error(`BwWar._baseInit() empty dataForWarEventManager.`);
-                return undefined;
+            const isNeedReplay          = this.getIsNeedReplay();
+            const warEventManagerError  = this.getWarEventManager().init(dataForWarEventManager);
+            if (warEventManagerError) {
+                return warEventManagerError;
             }
 
-            const isNeedReplay      = this.getIsNeedReplay();
-            const warEventManager   = this.getWarEventManager().init(dataForWarEventManager);
-            if (warEventManager == null) {
-                Logger.error(`BwWar._baseInit() empty warEventManager.`);
-                return undefined;
+            const randomNumberManagerError = this.getRandomNumberManager().init({
+                isNeedReplay,
+                initialState: data.seedRandomInitialState,
+                currentState: data.seedRandomCurrentState || Helpers.deepClone(data.seedRandomInitialState),
+            });
+            if (randomNumberManagerError) {
+                return randomNumberManagerError;
             }
 
             const executedActionManagerError = this.getExecutedActionManager().init(isNeedReplay, data.executedActions || []);
@@ -192,6 +197,9 @@ namespace TinyWars.BaseWar {
         }
         public getDrawVoteManager(): BwDrawVoteManager {
             return this._drawVoteManager;
+        }
+        public getRandomNumberManager(): BwRandomNumberManager {
+            return this._randomNumberManager;
         }
         public getExecutedActionManager(): BwExecutedActionManager {
             return this._executedActionManager;
