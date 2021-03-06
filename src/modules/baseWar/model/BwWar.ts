@@ -4,6 +4,7 @@ namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import Helpers          = Utility.Helpers;
+    import ConfigManager    = Utility.ConfigManager;
     import ClientErrorCode  = Utility.ClientErrorCode;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
 
@@ -33,6 +34,16 @@ namespace TinyWars.BaseWar {
         protected abstract _getFieldClass(): new () => BwField;
 
         protected async _baseInit(data: ISerialWar): Promise<ClientErrorCode> {
+            const settingsForCommon = data.settingsForCommon;
+            if (!settingsForCommon) {
+                return ClientErrorCode.BwWarBaseInit00;
+            }
+
+            const configVersion = settingsForCommon.configVersion;
+            if ((configVersion == null) || (!await ConfigManager.checkIsVersionValid(configVersion))) {
+                return ClientErrorCode.BwWarBaseInit01;
+            }
+
             const drawVoteManagerError = this.getDrawVoteManager().init(data.playerManager, data.remainingVotesForDraw);
             if (drawVoteManagerError) {
                 return drawVoteManagerError;
@@ -57,7 +68,7 @@ namespace TinyWars.BaseWar {
             const randomNumberManagerError = this.getRandomNumberManager().init({
                 isNeedReplay,
                 initialState: data.seedRandomInitialState,
-                currentState: data.seedRandomCurrentState || Helpers.deepClone(data.seedRandomInitialState),
+                currentState: data.seedRandomCurrentState,
             });
             if (randomNumberManagerError) {
                 return randomNumberManagerError;
@@ -66,6 +77,28 @@ namespace TinyWars.BaseWar {
             const executedActionManagerError = this.getExecutedActionManager().init(isNeedReplay, data.executedActions || []);
             if (executedActionManagerError) {
                 return executedActionManagerError;
+            }
+
+            const playerManager         = this.getPlayerManager();
+            const playerManagerError    = playerManager.init(data.playerManager, configVersion);
+            if (playerManagerError) {
+                return playerManagerError;
+            }
+
+            const playersCountUnneutral = playerManager.getTotalPlayersCount(false);
+            const turnManagerError      = this.getTurnManager().init(data.turnManager, playersCountUnneutral);
+            if (turnManagerError) {
+                return turnManagerError;
+            }
+
+            const field         = this.getField();
+            const fieldError    = field.init({
+                data                : data.field,
+                configVersion,
+                playersCountUnneutral,
+            });
+            if (fieldError) {
+                return fieldError;
             }
 
             this._setWarId(data.warId);

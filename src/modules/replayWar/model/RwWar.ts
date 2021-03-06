@@ -35,56 +35,6 @@ namespace TinyWars.ReplayWar {
                 return baseInitError;
             }
 
-            const settingsForCommon = warData.settingsForCommon;
-            if (!settingsForCommon) {
-                Logger.error(`ReplayWar.init() empty settingsForCommon! ${JSON.stringify(warData)}`);
-                return undefined;
-            }
-
-            const configVersion = settingsForCommon.configVersion;
-            if (configVersion == null) {
-                Logger.error(`ReplayWar.init() empty configVersion.`);
-                return undefined;
-            }
-
-            const dataForPlayerManager = warData.playerManager;
-            if (dataForPlayerManager == null) {
-                Logger.error(`ReplayWar.init() empty dataForPlayerManager.`);
-                return undefined;
-            }
-
-            const dataForTurnManager = warData.turnManager;
-            if (dataForTurnManager == null) {
-                Logger.error(`ReplayWar.init() empty dataForTurnManager.`);
-                return undefined;
-            }
-
-            const dataForField = warData.field;
-            if (dataForField == null) {
-                Logger.error(`ReplayWar.init() empty dataForField.`);
-                return undefined;
-            }
-
-            const playerManagerError = this.getPlayerManager().init(dataForPlayerManager, configVersion);
-            if (playerManagerError) {
-                return playerManagerError;
-            }
-
-            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
-            const turnManagerError = this.getTurnManager().init(dataForTurnManager, playersCountUnneutral);
-            if (turnManagerError) {
-                return turnManagerError;
-            }
-
-            const fieldError = this.getField().init({
-                data                : dataForField,
-                configVersion,
-                playersCountUnneutral,
-            });
-            if (fieldError) {
-                return fieldError;
-            }
-
             this._setSettingsForMcw(warData.settingsForMcw);
             this._setSettingsForScw(warData.settingsForScw);
             this._setSettingsForMrw(warData.settingsForMrw);

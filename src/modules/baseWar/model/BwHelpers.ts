@@ -921,7 +921,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         const currBuildMaterial = unitData.currentBuildMaterial;
         const maxBuildMaterial  = cfg.maxBuildMaterial;
         if ((currBuildMaterial != null)                                         &&
-            ((maxBuildMaterial == null) || (currBuildMaterial >= maxBuildMaterial))
+            ((maxBuildMaterial == null) || (currBuildMaterial > maxBuildMaterial))
         ) {
             return ClientErrorCode.UnitDataValidation06;
         }
@@ -929,7 +929,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         const currFuel  = unitData.currentFuel;
         const maxFuel   = cfg.maxFuel;
         if ((currFuel != null)                          &&
-            ((maxFuel == null) || (currFuel >= maxFuel))
+            ((maxFuel == null) || (currFuel > maxFuel))
         ) {
             return ClientErrorCode.UnitDataValidation07;
         }
@@ -937,7 +937,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         const currHp    = unitData.currentHp;
         const maxHp     = cfg.maxHp;
         if ((currHp != null)                    &&
-            ((maxHp == null) || (currHp >= maxHp))
+            ((maxHp == null) || (currHp > maxHp))
         ) {
             return ClientErrorCode.UnitDataValidation08;
         }
@@ -945,7 +945,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         const currProduceMaterial   = unitData.currentProduceMaterial;
         const maxProduceMaterial    = cfg.maxProduceMaterial;
         if ((currProduceMaterial != null)                                               &&
-            ((maxProduceMaterial == null) || (currProduceMaterial >= maxProduceMaterial))
+            ((maxProduceMaterial == null) || (currProduceMaterial > maxProduceMaterial))
         ) {
             return ClientErrorCode.UnitDataValidation09;
         }
@@ -961,7 +961,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         const flareCurrentAmmo  = unitData.flareCurrentAmmo;
         const flareMaxAmmo      = cfg.flareMaxAmmo;
         if ((flareCurrentAmmo != null)                                  &&
-            ((flareMaxAmmo == null) || (flareCurrentAmmo >= flareMaxAmmo))
+            ((flareMaxAmmo == null) || (flareCurrentAmmo > flareMaxAmmo))
         ) {
             return ClientErrorCode.UnitDataValidation11;
         }
@@ -973,7 +973,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         const currAmmo  = unitData.primaryWeaponCurrentAmmo;
         const maxAmmo   = cfg.primaryWeaponMaxAmmo;
         if ((currAmmo != null)                          &&
-            ((maxAmmo == null) || (currAmmo >= maxAmmo))
+            ((maxAmmo == null) || (currAmmo > maxAmmo))
         ) {
             return ClientErrorCode.UnitDataValidation13;
         }

@@ -4,10 +4,8 @@ namespace TinyWars.MapEditor {
     import Types            = Utility.Types;
     import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
-    import ConfigManager    = Utility.ConfigManager;
     import ClientErrorCode  = Utility.ClientErrorCode;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
-    import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import IWarRule         = ProtoTypes.WarRule.IWarRule;
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
@@ -16,7 +14,7 @@ namespace TinyWars.MapEditor {
     import CommonConstants  = Utility.CommonConstants;
 
     export class MeWar extends BaseWar.BwWar {
-        private _drawer             : MeDrawer;
+        private readonly _drawer    = new MeDrawer();
         private _mapModifiedTime    : number;
         private _mapSlotIndex       : number;
         private _mapDesignerUserId  : number;
@@ -33,45 +31,7 @@ namespace TinyWars.MapEditor {
                 return baseInitError;
             }
 
-            const settingsForCommon = data.settingsForCommon;
-            if (!settingsForCommon) {
-                Logger.error(`MeWar.init() empty settingsForCommon! ${JSON.stringify(data)}`);
-                return undefined;
-            }
-
-            const configVersion = settingsForCommon.configVersion;
-            if (configVersion == null) {
-                Logger.error(`MeWar.init() empty configVersion.`);
-                return undefined;
-            }
-
-            const dataForPlayerManager = data.playerManager;
-            if (dataForPlayerManager == null) {
-                Logger.error(`MeWar.init() empty dataForPlayerManager.`);
-                return undefined;
-            }
-
-            const playerManagerError = this.getPlayerManager().init(dataForPlayerManager, configVersion);
-            if (playerManagerError) {
-                return playerManagerError;
-            }
-
-            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
-            const turnManagerError = this.getTurnManager().init(data.turnManager, playersCountUnneutral);
-            if (turnManagerError) {
-                return turnManagerError;
-            }
-
-            const fieldError = this.getField().init({
-                data                : data.field,
-                configVersion,
-                playersCountUnneutral
-            });
-            if (fieldError) {
-                return fieldError;
-            }
-
-            this._setDrawer((this.getDrawer() || new MeDrawer()).init());
+            this.getDrawer().init();
 
             this._initView();
 
@@ -235,9 +195,6 @@ namespace TinyWars.MapEditor {
             return MeTurnManager;
         }
 
-        private _setDrawer(drawer: MeDrawer): void {
-            this._drawer = drawer;
-        }
         public getDrawer(): MeDrawer {
             return this._drawer;
         }

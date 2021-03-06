@@ -4,7 +4,6 @@ namespace TinyWars.SingleCustomWar {
     import ClientErrorCode  = Utility.ClientErrorCode;
     import ProtoTypes       = Utility.ProtoTypes;
     import Logger           = Utility.Logger;
-    import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForScw  = ProtoTypes.WarSettings.ISettingsForScw;
 
@@ -23,61 +22,10 @@ namespace TinyWars.SingleCustomWar {
 
             const settingsForScw = data.settingsForScw;
             if (settingsForScw == null) {
-                Logger.error(`ScwWar.init() empty settingsForScw.`);
-                return undefined;
+                return ClientErrorCode.ScwWarInit00;
             }
 
-            const settingsForCommon = data.settingsForCommon;
-            if (!settingsForCommon) {
-                Logger.error(`ScwWar.init() empty settingsForCommon! ${JSON.stringify(data)}`);
-                return undefined;
-            }
-
-            const configVersion = settingsForCommon.configVersion;
-            if (configVersion == null) {
-                Logger.error(`ScwWar.init() empty configVersion.`);
-                return undefined;
-            }
-
-            const dataForPlayerManager = data.playerManager;
-            if (dataForPlayerManager == null) {
-                Logger.error(`ScwWar.init() empty dataForPlayerManager.`);
-                return undefined;
-            }
-
-            const dataForTurnManager = data.turnManager;
-            if (dataForTurnManager == null) {
-                Logger.error(`ScwWar.init() empty dataForTurnManager.`);
-                return undefined;
-            }
-
-            const dataForField = data.field;
-            if (dataForField == null) {
-                Logger.error(`ScwWar.init() empty dataForField.`);
-                return undefined;
-            }
-
-            const playerManagerError = this.getPlayerManager().init(dataForPlayerManager, configVersion);
-            if (playerManagerError) {
-                return playerManagerError;
-            }
-
-            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
-            const turnManagerError = this.getTurnManager().init(dataForTurnManager, playersCountUnneutral);
-            if (turnManagerError) {
-                return turnManagerError;
-            }
-
-            const fieldError = this.getField().init({
-                data                : dataForField,
-                configVersion,
-                playersCountUnneutral,
-            });
-            if (fieldError) {
-                return fieldError;
-            }
-
-            this._setSettingsForSinglePlayer(settingsForScw);
+            this._setSettingsForScw(settingsForScw);
 
             this._initView();
 
@@ -308,7 +256,7 @@ namespace TinyWars.SingleCustomWar {
             return settingsForSinglePlayer.isCheating;
         }
 
-        private _setSettingsForSinglePlayer(settings: ISettingsForScw): void {
+        private _setSettingsForScw(settings: ISettingsForScw): void {
             this._settingsForSinglePlayer = settings;
         }
         public getSettingsForScw(): ISettingsForScw | null | undefined {

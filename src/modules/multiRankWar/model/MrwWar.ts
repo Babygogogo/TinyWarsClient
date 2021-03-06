@@ -2,10 +2,8 @@
 namespace TinyWars.MultiRankWar {
     import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
-    import ConfigManager    = Utility.ConfigManager;
     import Types            = Utility.Types;
     import ClientErrorCode  = Utility.ClientErrorCode;
-    import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForMrw  = ProtoTypes.WarSettings.ISettingsForMrw;
     import CommonConstants  = Utility.CommonConstants;
@@ -20,59 +18,8 @@ namespace TinyWars.MultiRankWar {
             }
 
             const settingsForMrw = data.settingsForMrw;
-            if (!settingsForMrw) {
-                Logger.error(`MrwWar.init() invalid settingsForMrw! ${JSON.stringify(data)}`);
-                return undefined;
-            }
-
-            const settingsForCommon = data.settingsForCommon;
-            if (!settingsForCommon) {
-                Logger.error(`MrwWar.init() empty settingsForCommon! ${JSON.stringify(data)}`);
-                return undefined;
-            }
-
-            const configVersion = settingsForCommon.configVersion;
-            if (configVersion == null) {
-                Logger.error(`MrwWar.init() empty configVersion.`);
-                return undefined;
-            }
-
-            const dataForPlayerManager = data.playerManager;
-            if (dataForPlayerManager == null) {
-                Logger.error(`MrwWar.init() empty dataForPlayerManager.`);
-                return undefined;
-            }
-
-            const dataForTurnManager = data.turnManager;
-            if (dataForTurnManager == null) {
-                Logger.error(`MrwWar.init() empty dataForTurnManager.`);
-                return undefined;
-            }
-
-            const dataForField = data.field;
-            if (dataForField == null) {
-                Logger.error(`MrwWar.init() empty dataForField.`);
-                return undefined;
-            }
-
-            const playerManagerError = this.getPlayerManager().init(dataForPlayerManager, configVersion);
-            if (playerManagerError) {
-                return playerManagerError;
-            }
-
-            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
-            const turnManagerError = this.getTurnManager().init(dataForTurnManager, playersCountUnneutral);
-            if (turnManagerError) {
-                return turnManagerError;
-            }
-
-            const fieldError = this.getField().init({
-                data                : dataForField,
-                configVersion,
-                playersCountUnneutral
-            });
-            if (fieldError) {
-                return fieldError;
+            if (settingsForMrw == null) {
+                return ClientErrorCode.MrwWarInit00;
             }
 
             this._setSettingsForMrw(settingsForMrw);

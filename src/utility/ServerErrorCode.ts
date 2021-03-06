@@ -207,6 +207,9 @@ export const enum ServerErrorCode {
 
     BwWarBaseInit0000,
     BwWarBaseInit0001,
+    BwWarBaseInit0002,
+    BwWarBaseInit0003,
+    BwWarBaseInit0004,
 
     MrwWarInit0000,
     MrwWarInit0001,

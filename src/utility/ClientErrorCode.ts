@@ -6,6 +6,12 @@ namespace TinyWars.Utility {
         BwWarBaseInit00    = 1000000,
         BwWarBaseInit01,
 
+        ScwWarInit00,
+
+        McwWarInit00,
+
+        MrwWarInit00,
+
         BwDrawVoteManagerInit00,
 
         BwCommonSettingManagerInit00,

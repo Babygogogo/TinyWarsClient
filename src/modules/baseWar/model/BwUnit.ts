@@ -466,7 +466,7 @@ namespace TinyWars.BaseWar {
         public getCfgPrimaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
             return armorType == null
                 ? undefined
-                : this._getTemplateCfg()[armorType][Types.WeaponType.Primary].damage;
+                : this._getDamageChartCfg()[armorType][Types.WeaponType.Primary].damage;
         }
         public getPrimaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
             return this.getPrimaryWeaponCurrentAmmo()
@@ -611,7 +611,7 @@ namespace TinyWars.BaseWar {
         public getCfgSecondaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
             return armorType == null
                 ? undefined
-                : this._getTemplateCfg()[armorType][Types.WeaponType.Secondary].damage;
+                : this._getDamageChartCfg()[armorType][Types.WeaponType.Secondary].damage;
         }
         public getSecondaryWeaponBaseDamage(armorType: ArmorType | null | undefined): number | undefined | null {
             return this.checkHasSecondaryWeapon()

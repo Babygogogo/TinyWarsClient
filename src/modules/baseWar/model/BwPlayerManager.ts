@@ -171,7 +171,7 @@ namespace TinyWars.BaseWar {
         public getAlivePlayersCount(includeNeutral: boolean): number {
             let count = 0;
             for (const [playerIndex, player] of this._players) {
-                if ((player.getAliveState() === PlayerAliveState.Alive)                         &&
+                if ((player.getAliveState() !== PlayerAliveState.Dead)                          &&
                     ((includeNeutral) || (playerIndex !== CommonConstants.WarNeutralPlayerIndex))
                 ) {
                     ++count;
@@ -196,7 +196,7 @@ namespace TinyWars.BaseWar {
         public getAliveTeamIndexes(includeNeutral: boolean, ignoredPlayerIndex?: number): Set<number> {
             const indexes = new Set<number>();
             for (const [playerIndex, player] of this._players) {
-                if ((player.getAliveState() === PlayerAliveState.Alive) &&
+                if ((player.getAliveState() !== PlayerAliveState.Dead)  &&
                     (playerIndex !== ignoredPlayerIndex)                &&
                     ((includeNeutral) || (playerIndex !== 0))
                 ) {
@@ -221,7 +221,7 @@ namespace TinyWars.BaseWar {
         public getAliveWatcherTeamIndexes(watcherUserId: number): Set<number> {
             const indexes = new Set<number>();
             this.forEachPlayer(false, player => {
-                if (player.getAliveState() === PlayerAliveState.Alive) {
+                if (player.getAliveState() !== PlayerAliveState.Dead) {
                     if ((player.getUserId() === watcherUserId)                  ||
                         (player.getWatchOngoingSrcUserIds().has(watcherUserId))
                     ) {
@@ -234,7 +234,7 @@ namespace TinyWars.BaseWar {
         public checkHasAliveWatcherTeam(watcherUserId: number): boolean {
             for (const [playerIndex, player] of this._players) {
                 if ((playerIndex !== CommonConstants.WarNeutralPlayerIndex) &&
-                    (player.getAliveState() === PlayerAliveState.Alive)
+                    (player.getAliveState() !== PlayerAliveState.Dead)
                 ) {
                     if ((player.getUserId() === watcherUserId) || (player.getWatchOngoingSrcUserIds().has(watcherUserId))) {
                         return true;

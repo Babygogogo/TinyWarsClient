@@ -4,7 +4,6 @@ namespace TinyWars.MultiCustomWar {
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import ClientErrorCode  = Utility.ClientErrorCode;
-    import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISettingsForMcw  = ProtoTypes.WarSettings.ISettingsForMcw;
 
@@ -18,59 +17,8 @@ namespace TinyWars.MultiCustomWar {
             }
 
             const settingsForMcw = data.settingsForMcw;
-            if (!settingsForMcw) {
-                Logger.error(`McwWar.init() invalid settingsForMcw! ${JSON.stringify(data)}`);
-                return undefined;
-            }
-
-            const settingsForCommon = data.settingsForCommon;
-            if (!settingsForCommon) {
-                Logger.error(`McwWar.init() empty settingsForCommon! ${JSON.stringify(data)}`);
-                return undefined;
-            }
-
-            const configVersion = settingsForCommon.configVersion;
-            if (configVersion == null) {
-                Logger.error(`McwWar.init() empty configVersion.`);
-                return undefined;
-            }
-
-            const dataForPlayerManager = data.playerManager;
-            if (dataForPlayerManager == null) {
-                Logger.error(`McwWar.init() empty dataForPlayerManager.`);
-                return undefined;
-            }
-
-            const dataForTurnManager = data.turnManager;
-            if (dataForTurnManager == null) {
-                Logger.error(`McwWar.init() empty dataForTurnManager.`);
-                return undefined;
-            }
-
-            const dataForField = data.field;
-            if (dataForField == null) {
-                Logger.error(`McwWar.init() empty dataForField.`);
-                return undefined;
-            }
-
-            const playerManagerError = this.getPlayerManager().init(dataForPlayerManager, configVersion);
-            if (playerManagerError) {
-                return playerManagerError;
-            }
-
-            const playersCountUnneutral = BwHelpers.getPlayersCountUnneutral(dataForPlayerManager);
-            const turnManagerError = this.getTurnManager().init(dataForTurnManager, playersCountUnneutral);
-            if (turnManagerError) {
-                return turnManagerError;
-            }
-
-            const fieldError = this.getField().init({
-                data                : dataForField,
-                configVersion,
-                playersCountUnneutral
-            });
-            if (fieldError) {
-                return fieldError;
+            if (settingsForMcw == null) {
+                return ClientErrorCode.McwWarInit00;
             }
 
             this._setSettingsForMcw(settingsForMcw);
