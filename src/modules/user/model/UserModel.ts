@@ -115,7 +115,7 @@ namespace TinyWars.User {
                 });
             }
 
-            new Promise((resolve, reject) => {
+            new Promise<void>((resolve, reject) => {
                 const callbackOnSucceed = (e: egret.Event): void => {
                     const data = e.data as NetMessage.MsgUserGetPublicInfo.IS;
                     if (data.userId === userId) {

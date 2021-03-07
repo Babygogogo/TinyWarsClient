@@ -1,9 +1,10 @@
 
 namespace TinyWars.Lobby {
+    import Tween        = egret.Tween;
     import Lang         = Utility.Lang;
+    import Helpers      = Utility.Helpers;
     import Notify       = Utility.Notify;
     import UserModel    = User.UserModel;
-    import Tween        = egret.Tween;
 
     const DISCORD_URL   = `https://discord.gg/jdtRpY9`;
     const GITHUB_URL    = `https://github.com/Babygogogo/TinyWarsClient`;
@@ -185,21 +186,21 @@ namespace TinyWars.Lobby {
             group.alpha = 1;
             group.right = 60;
 
-            resetTween({
+            Helpers.resetTween({
                 obj         : this._btnMultiPlayer,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 0,
                 endProps    : { alpha: 1, right: 0 },
                 tweenTime   : 200,
             });
-            resetTween({
+            Helpers.resetTween({
                 obj         : this._btnRanking,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, right: 0 },
                 tweenTime   : 200,
             });
-            resetTween({
+            Helpers.resetTween({
                 obj         : this._btnSinglePlayer,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 200,
@@ -222,28 +223,28 @@ namespace TinyWars.Lobby {
             groupTips.alpha = 1;
             groupTips.left  = 60;
 
-            resetTween({
+            Helpers.resetTween({
                 obj         : this._groupWelcome,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 0,
                 endProps    : { alpha: 1, left: 0 },
                 tweenTime   : 200,
             });
-            resetTween({
+            Helpers.resetTween({
                 obj         : this._groupQq,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 66,
                 endProps    : { alpha: 1, left: 0 },
                 tweenTime   : 200,
             });
-            resetTween({
+            Helpers.resetTween({
                 obj         : this._groupDiscord,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 132,
                 endProps    : { alpha: 1, left: 0 },
                 tweenTime   : 200,
             });
-            resetTween({
+            Helpers.resetTween({
                 obj         : this._groupGithub,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200,
@@ -251,28 +252,28 @@ namespace TinyWars.Lobby {
                 tweenTime   : 200,
             });
 
-            resetTween({
+            Helpers.resetTween({
                 obj         : this._groupMyInfo,
                 beginProps  : { alpha: 0, top: 40 },
                 waitTime    : 0,
                 endProps    : { alpha: 1, top: 0 },
                 tweenTime   : 200,
             });
-            resetTween({
+            Helpers.resetTween({
                 obj         : this._groupChat,
                 beginProps  : { alpha: 0, top: 40 },
                 waitTime    : 66,
                 endProps    : { alpha: 1, top: 0 },
                 tweenTime   : 200,
             });
-            resetTween({
+            Helpers.resetTween({
                 obj         : this._groupMapEditor,
                 beginProps  : { alpha: 0, top: 40 },
                 waitTime    : 132,
                 endProps    : { alpha: 1, top: 0 },
                 tweenTime   : 200,
             });
-            resetTween({
+            Helpers.resetTween({
                 obj         : this._groupGameData,
                 beginProps  : { alpha: 0, top: 40 },
                 waitTime    : 200,
@@ -327,19 +328,5 @@ namespace TinyWars.Lobby {
                 (await MultiRankRoom.MrrModel.checkIsRed())
             );
         }
-    }
-
-    function resetTween({ obj, beginProps, waitTime, endProps, tweenTime }: {
-        obj         : egret.DisplayObject;
-        beginProps  : any;
-        waitTime    : number;
-        endProps    : any;
-        tweenTime   : number;
-    }): void {
-        Tween.removeTweens(obj);
-        Tween.get(obj)
-            .set(beginProps)
-            .wait(waitTime)
-            .to(endProps, tweenTime, egret.Ease.sineOut);
     }
 }

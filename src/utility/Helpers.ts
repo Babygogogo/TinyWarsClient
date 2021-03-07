@@ -415,6 +415,20 @@ namespace TinyWars.Utility.Helpers {
         }
     }
 
+    export function resetTween({ obj, beginProps, waitTime, endProps, tweenTime }: {
+        obj         : egret.DisplayObject;
+        beginProps  : any;
+        waitTime    : number;
+        endProps    : any;
+        tweenTime   : number;
+    }): void {
+        egret.Tween.removeTweens(obj);
+        egret.Tween.get(obj)
+            .set(beginProps)
+            .wait(waitTime)
+            .to(endProps, tweenTime, egret.Ease.sineOut);
+    }
+
     export namespace Sha1Generator {
         /*
         * A JavaScript implementation of the Secure Hash Algorithm, SHA-1, as defined

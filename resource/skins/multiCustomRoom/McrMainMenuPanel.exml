@@ -1,24 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group top="40" bottom="0" width="200" right="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelMenuTitle" text="多人对战" y="12" textColor="0xffffff" horizontalCenter="0" size="25"
-                        bold="true" />
-        <GameUi:UiScrollList id="_listCommand" left="0" right="0" bottom="40" top="50">
-            <e:List>
-                <e:itemRendererSkinName>
-                    <e:Skin width="200" height="40">
-                        <GameUi:UiLabel id="_labelCommand" anchorOffsetX="0" anchorOffsetY="0" text="氪金"
-                                        textAlign="center" textColor="0xffffff" horizontalCenter="0" verticalCenter="0"
-                                        size="20" />
-                        <GameUi:UiImage id="_imgRed" width="20" height="20" source="c04_t01_s01_f01" right="10" top="0" />
+    <e:Group id="_group" right="60" verticalCenter="0" scaleX="0.9" scaleY="0.9">
+        <e:Group x="168" y="43">
+            <GameUi:UiButton id="_btnMultiPlayer" label="" scaleX="1" scaleY="1" top="0" right="0">
+                <GameUi:skinName>
+                    <e:Skin states="up,down,disabled">
+                        <e:Image source="lobby0009" />
+                        <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
+                        <e:Image id="_imgRed" source="common0000" right="0" top="0" />
                     </e:Skin>
-                </e:itemRendererSkinName>
-            </e:List>
-        </GameUi:UiScrollList>
-        <GameUi:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" bottom="0" left="0"
-                         right="0"></GameUi:UiButton>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
+        <e:Group x="142" y="211">
+            <GameUi:UiButton id="_btnRanking" label="" scaleX="1" scaleY="1" right="0" top="0">
+                <GameUi:skinName>
+                    <e:Skin states="up,down,disabled">
+                        <e:Image source="lobby0012" source.down="lobby0011" />
+                        <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
+                        <e:Image id="_imgRed" source="common0000" right="0" top="0" />
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
+        <e:Group x="102" y="202">
+            <GameUi:UiButton id="_btnSinglePlayer" label="" scaleX="1" scaleY="1" right="0" top="0">
+                <GameUi:skinName>
+                    <e:Skin states="up,down,disabled">
+                        <e:Image source="lobby0008" source.down="lobby0007" />
+                        <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
+                        <e:Image id="_imgRed" source="common0000" right="0" top="0" />
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
+        <e:layout>
+            <e:VerticalLayout gap="15" horizontalAlign="right" />
+        </e:layout>
     </e:Group>
+    <e:Group id="_groupLeft" verticalCenter="0" scaleX="0.9" scaleY="0.9" left="0">
+        <e:Group x="168" y="43">
+            <GameUi:UiButton id="_btnCreateRoom" label="" scaleX="1" scaleY="1" top="0" left="0">
+                <GameUi:skinName>
+                    <e:Skin>
+                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
+                            <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0004" />
+                            <GameUi:UiImage id="_imgRed" right="14" source="common0000" verticalCenter="0" />
+                            <e:Group verticalCenter="0" right="40">
+                                <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="Create Rooms" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" y="2" x="-172"
+                                                textColor="0xaaaaaa" />
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" scaleX="1" scaleY="1" text="创建房间"
+                                                textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
+                                                x="-162" />
+                                <e:layout>
+                                    <e:HorizontalLayout verticalAlign="bottom" gap="10" />
+                                </e:layout>
+                            </e:Group>
+                        </e:Group>
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
+        <e:Group x="142" y="211">
+            <GameUi:UiButton id="_btnJoinRoom" label="" scaleX="1" scaleY="1" top="0" left="0">
+                <GameUi:skinName>
+                    <e:Skin>
+                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
+                            <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0004" />
+                            <GameUi:UiImage id="_imgRed" right="14" source="common0000" verticalCenter="0" />
+                            <e:Group verticalCenter="0" right="40">
+                                <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="Join Rooms" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" y="2" x="-172"
+                                                textColor="0xaaaaaa" />
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" scaleX="1" scaleY="1" text="加入房间"
+                                                textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
+                                                x="-162" />
+                                <e:layout>
+                                    <e:HorizontalLayout verticalAlign="bottom" gap="10" />
+                                </e:layout>
+                            </e:Group>
+                        </e:Group>
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
+        <e:Group x="102" y="202">
+            <GameUi:UiButton id="_btnMyRoom" label="" scaleX="1" scaleY="1" top="0" left="0">
+                <GameUi:skinName>
+                    <e:Skin>
+                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
+                            <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0004" />
+                            <GameUi:UiImage id="_imgRed" right="14" source="common0000" verticalCenter="0" />
+                            <e:Group verticalCenter="0" right="40">
+                                <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="My Rooms" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" y="2" x="-172"
+                                                textColor="0xaaaaaa" />
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" scaleX="1" scaleY="1" text="我的房间"
+                                                textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
+                                                x="-162" />
+                                <e:layout>
+                                    <e:HorizontalLayout verticalAlign="bottom" gap="10" />
+                                </e:layout>
+                            </e:Group>
+                        </e:Group>
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
+        <e:Group x="112" y="212">
+            <GameUi:UiButton id="_btnContinueWar" label="" scaleX="1" scaleY="1" top="0" left="0">
+                <GameUi:skinName>
+                    <e:Skin>
+                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
+                            <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0002" />
+                            <GameUi:UiImage id="_imgRed" right="14" source="common0000" verticalCenter="0" />
+                            <e:Group verticalCenter="0" right="40">
+                                <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="Continue Wars" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" y="2" x="-172"
+                                                textColor="0xaaaaaa" />
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" scaleX="1" scaleY="1" text="继续战斗"
+                                                textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
+                                                x="-162" />
+                                <e:layout>
+                                    <e:HorizontalLayout verticalAlign="bottom" gap="10" />
+                                </e:layout>
+                            </e:Group>
+                        </e:Group>
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
+        <e:Group x="122" y="222">
+            <GameUi:UiButton id="_btnWatchWar" label="" scaleX="1" scaleY="1" top="0" left="0">
+                <GameUi:skinName>
+                    <e:Skin>
+                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
+                            <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0003" />
+                            <GameUi:UiImage id="_imgRed" right="14" source="common0000" verticalCenter="0" />
+                            <e:Group verticalCenter="0" right="40">
+                                <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="Watching Wars" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" y="2" x="-172"
+                                                textColor="0xaaaaaa" />
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" scaleX="1" scaleY="1" text="观战"
+                                                textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
+                                                x="-162" />
+                                <e:layout>
+                                    <e:HorizontalLayout verticalAlign="bottom" gap="10" />
+                                </e:layout>
+                            </e:Group>
+                        </e:Group>
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
+        <e:Group x="132" y="232">
+            <GameUi:UiButton id="_btnReplayWar" label="" scaleX="1" scaleY="1" top="0" left="0">
+                <GameUi:skinName>
+                    <e:Skin>
+                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
+                            <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0003" />
+                            <GameUi:UiImage id="_imgRed" right="14" source="common0000" verticalCenter="0" />
+                            <e:Group verticalCenter="0" right="40">
+                                <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="Replays" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" y="2" x="-172"
+                                                textColor="0xaaaaaa" />
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" scaleX="1" scaleY="1" text="观看回放"
+                                                textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
+                                                x="-162" />
+                                <e:layout>
+                                    <e:HorizontalLayout verticalAlign="bottom" gap="10" />
+                                </e:layout>
+                            </e:Group>
+                        </e:Group>
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
+        <e:layout>
+            <e:VerticalLayout gap="15" horizontalAlign="left" />
+        </e:layout>
+    </e:Group>
+    <GameUi:UiButton id="_btnBack" label="返回" scaleX="1" scaleY="1" bottom="40" right="60">
+        <GameUi:skinName>
+            <e:Skin states="up,down,disabled">
+                <e:Image width="100%" height="100%" source="common0001" />
+                <e:Label id="labelDisplay" verticalCenter="0" x="30" textColor="0x000000" size="22" text="Back"
+                         bold="true" />
+            </e:Skin>
+        </GameUi:skinName>
+    </GameUi:UiButton>
 </e:Skin>

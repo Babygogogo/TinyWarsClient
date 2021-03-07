@@ -1,8 +1,10 @@
 
 namespace TinyWars.SinglePlayerLobby {
+    import Tween        = egret.Tween;
     import Lang         = Utility.Lang;
     import FloatText    = Utility.FloatText;
     import Notify       = Utility.Notify;
+    import Helpers      = Utility.Helpers;
 
     export class SinglePlayerLobbyPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -10,9 +12,17 @@ namespace TinyWars.SinglePlayerLobby {
 
         private static _instance: SinglePlayerLobbyPanel;
 
-        private _btnBack        : GameUi.UiButton;
-        private _labelMenuTitle : GameUi.UiLabel;
-        private _listCommand    : GameUi.UiScrollList;
+        private readonly _groupLeft         : eui.Group;
+        private readonly _btnCampaign       : TinyWars.GameUi.UiButton;
+        private readonly _btnContinueWar    : TinyWars.GameUi.UiButton;
+
+        private readonly _group             : eui.Group;
+        private readonly _btnMultiPlayer    : TinyWars.GameUi.UiButton;
+        private readonly _btnRanking        : TinyWars.GameUi.UiButton;
+        private readonly _btnSinglePlayer   : TinyWars.GameUi.UiButton;
+
+        private readonly _btnBack           : TinyWars.GameUi.UiButton;
+
 
         public static show(): void {
             if (!SinglePlayerLobbyPanel._instance) {
@@ -36,20 +46,24 @@ namespace TinyWars.SinglePlayerLobby {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._btnBack,    callback: this._onTouchedBtnBack },
+                { ui: this._btnMultiPlayer, callback: this._onTouchedBtnMultiPlayer },
+                { ui: this._btnRanking,     callback: this._onTouchedBtnRanking },
+                { ui: this._btnCampaign,    callback: this._onTouchedBtnCampaign },
+                { ui: this._btnContinueWar, callback: this._onTouchedBtnContinueWar },
+                { ui: this._btnBack,        callback: this._onTouchedBtnBack },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
             ]);
-            this._listCommand.setItemRenderer(CommandRenderer);
+
+            this._showOpenAnimation();
 
             this._updateComponentsForLanguage();
-            this._listCommand.bindData(this._createDataForListCommand());
         }
 
         protected async _onClosed(): Promise<void> {
-            this._listCommand.clear();
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -63,6 +77,21 @@ namespace TinyWars.SinglePlayerLobby {
             this._updateComponentsForLanguage();
         }
 
+        private _onTouchedBtnMultiPlayer(e: egret.TouchEvent): void {
+            this.close();
+            MultiCustomRoom.McrMainMenuPanel.show();
+        }
+        private _onTouchedBtnRanking(e: egret.TouchEvent): void {
+            this.close();
+            MultiRankRoom.MrrMainMenuPanel.show();
+        }
+        private _onTouchedBtnCampaign(e: egret.TouchEvent): void {
+            FloatText.show(Lang.getText(Lang.Type.A0053));
+        }
+        private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
+            this.close();
+            SingleCustomRoom.ScrContinueWarListPanel.show();
+        }
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             this.close();
             Lobby.LobbyPanel.show();
@@ -72,48 +101,88 @@ namespace TinyWars.SinglePlayerLobby {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0138);
-            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+            this._btnBack.label = Lang.getText(Lang.Type.B0146);
         }
 
-        private _createDataForListCommand(): DataForCommandRenderer[] {
-            return [
-                // TODO enable creating new wars.
-                // {
-                //     name    : Lang.getText(Lang.Type.B0254),
-                //     callback: (): void => {
-                //         this.close();
-                //         SingleCustomRoom.ScrCreateMapListPanel.show();
-                //     },
-                // },
-                {
-                    name    : Lang.getText(Lang.Type.B0261),
-                    callback: (): void => {
-                        this.close();
-                        SingleCustomRoom.ScrContinueWarListPanel.show();
-                    },
-                },
-            ];
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 0, bottom: -20 },
+                waitTime    : 0,
+                endProps    : { alpha: 1, bottom: 20 },
+                tweenTime   : 200,
+            });
+
+            const group = this._group;
+            Tween.removeTweens(group);
+            group.right = 60;
+            group.alpha = 1;
+
+            Helpers.resetTween({
+                obj         : this._btnMultiPlayer,
+                beginProps  : { alpha: 0, right: -40 },
+                waitTime    : 0,
+                endProps    : { alpha: 1, right: 0 },
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
+                obj         : this._btnRanking,
+                beginProps  : { alpha: 0, right: -40 },
+                waitTime    : 100,
+                endProps    : { alpha: 1, right: 0 },
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
+                obj         : this._btnSinglePlayer,
+                beginProps  : { alpha: 0, right: -40 },
+                waitTime    : 200,
+                endProps    : { alpha: 1, right: 0 },
+                tweenTime   : 200,
+            });
+
+            const groupLeft = this._groupLeft;
+            Tween.removeTweens(groupLeft);
+            groupLeft.left  = 0;
+            groupLeft.alpha = 1;
+
+            Helpers.resetTween({
+                obj         : this._btnCampaign,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 0,
+                endProps    : { alpha: 1, left: 0 },
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
+                obj         : this._btnContinueWar,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 100,
+                endProps    : { alpha: 1, left: 0 },
+                tweenTime   : 200,
+            });
         }
-    }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve, reject) => {
+                Helpers.resetTween({
+                    obj         : this._btnBack,
+                    beginProps  : { alpha: 1, bottom: 20 },
+                    waitTime    : 0,
+                    endProps    : { alpha: 0, bottom: -20 },
+                    tweenTime   : 200,
+                });
 
-    type DataForCommandRenderer = {
-        name    : string;
-        callback: () => void;
-    }
+                const group = this._group;
+                Tween.removeTweens(group);
+                Tween.get(group)
+                    .set({ alpha: 1, right: 60 })
+                    .to({ alpha: 0, right: 20 }, 200);
 
-    class CommandRenderer extends GameUi.UiListItemRenderer {
-        private _labelCommand: GameUi.UiLabel;
-
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data = this.data as DataForCommandRenderer;
-            this._labelCommand.text = data.name;
-        }
-
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data as DataForCommandRenderer).callback();
+                const groupLeft = this._groupLeft;
+                Tween.removeTweens(groupLeft);
+                Tween.get(groupLeft)
+                    .set({ alpha: 1, left: 0 })
+                    .to({ alpha: 0, left: -40 }, 200)
+                    .call(resolve);
+            });
         }
     }
 }
