@@ -42,7 +42,6 @@ namespace TinyWars.Login {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/login/LoginPanel.exml";
         }
 

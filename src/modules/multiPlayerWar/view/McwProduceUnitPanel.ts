@@ -47,7 +47,6 @@ namespace TinyWars.MultiPlayerWar {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/multiCustomWar/McwProduceUnitPanel.exml`;
         }
 

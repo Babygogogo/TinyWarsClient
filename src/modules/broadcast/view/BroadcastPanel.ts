@@ -34,7 +34,6 @@ namespace TinyWars.Broadcast {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/broadcast/BroadcastPanel.exml";
         }
 

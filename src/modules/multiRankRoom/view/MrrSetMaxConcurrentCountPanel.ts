@@ -42,7 +42,6 @@ namespace TinyWars.MultiRankRoom {
             super();
 
             this.skinName = "resource/skins/multiRankRoom/MrrSetMaxConcurrentCountPanel.exml";
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
         }
 

@@ -32,7 +32,6 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/mapEditor/MeSimSettingsPanel.exml";
         }
 

@@ -37,7 +37,6 @@ namespace TinyWars.SinglePlayerLobby {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/singlePlayerLobby/SinglePlayerLobbyPanel.exml";
         }
 

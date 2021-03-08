@@ -35,7 +35,6 @@ namespace TinyWars.MapEditor {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapEditor/MeMapTagPanel.exml";
         }

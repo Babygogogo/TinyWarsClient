@@ -42,7 +42,6 @@ namespace TinyWars.MapEditor {
             super();
 
             this.skinName = "resource/skins/mapEditor/MeConfirmSaveMapPanel.exml";
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
         }
 

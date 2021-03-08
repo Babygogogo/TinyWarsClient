@@ -53,7 +53,6 @@ namespace TinyWars.User {
             super();
 
             this._setIsTouchMaskEnabled(true);
-            this._setIsAutoAdjustHeight(true);
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/user/UserSetPrivilegePanel.exml";
         }

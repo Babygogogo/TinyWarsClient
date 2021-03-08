@@ -68,7 +68,6 @@ namespace TinyWars.ReplayWar {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/replayWar/RwWarMenuPanel.exml`;
         }
 

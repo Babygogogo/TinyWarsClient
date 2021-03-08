@@ -41,7 +41,6 @@ namespace TinyWars.MapManagement {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapManagement/MmReviewListPanel.exml";
         }
 

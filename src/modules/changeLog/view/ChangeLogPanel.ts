@@ -34,7 +34,6 @@ namespace TinyWars.ChangeLog {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/changeLog/ChangeLogPanel.exml";

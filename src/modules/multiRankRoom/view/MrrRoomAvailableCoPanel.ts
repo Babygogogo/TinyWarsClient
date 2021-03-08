@@ -51,7 +51,6 @@ namespace TinyWars.MultiRankRoom {
             super();
 
             this.skinName = "resource/skins/multiRankRoom/MrrRoomAvailableCoPanel.exml";
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
         }

@@ -28,7 +28,6 @@ namespace TinyWars.SingleCustomRoom {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/singleCustomRoom/ScrMainMenuPanel.exml";
         }
 

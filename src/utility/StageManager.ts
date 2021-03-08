@@ -4,7 +4,7 @@ namespace TinyWars.Utility.StageManager {
 
     // The game is in landscape mode, which means that its design max height equals its design width, 960.
     const DESIGN_WIDTH         = 960;
-    const DESIGN_MIN_HEIGHT    = 400;
+    const DESIGN_MIN_HEIGHT    = 540;
     const DESIGN_MAX_HEIGHT    = DESIGN_WIDTH;
     const RATIO_FOR_MIN_HEIGHT = DESIGN_WIDTH / DESIGN_MIN_HEIGHT;
 
@@ -25,6 +25,9 @@ namespace TinyWars.Utility.StageManager {
         stg.addEventListener(egret.TouchEvent.TOUCH_BEGIN,  _onTouchBegin,  StageManager);
         stg.addEventListener(egret.TouchEvent.TOUCH_MOVE,   _onTouchMove,   StageManager);
 
+        if (!egret.Capabilities.isMobile) {
+            stg.orientation = egret.OrientationMode.AUTO;
+        }
         egret.sys.screenAdapter = new ScreenAdapter();
         _stage.setContentSize(_stage.stageWidth, _stage.stageHeight);
 
@@ -118,10 +121,7 @@ namespace TinyWars.Utility.StageManager {
             for (let i = 0; i < this.numChildren; ++i) {
                 const child = this.getChildAt(i);
                 if (child instanceof GameUi.UiPanel) {
-                    child.width = width;
-                    if (child.getIsAutoAdjustHeight()) {
-                        child.height = height;
-                    }
+                    child.resize(width, height);
                 }
             }
         }
@@ -129,22 +129,46 @@ namespace TinyWars.Utility.StageManager {
 
     class ScreenAdapter implements egret.sys.IScreenAdapter {
         public calculateStageSize(scaleMode: string, screenWidth: number, screenHeight: number, contentWidth: number, contentHeight: number): egret.sys.StageDisplaySize {
-            const currRatio = screenWidth / screenHeight;
-            if (currRatio > RATIO_FOR_MIN_HEIGHT) {
+            // const currRatio = screenWidth / screenHeight;
+            // if (currRatio > RATIO_FOR_MIN_HEIGHT) {
+            //     return {
+            //         stageWidth   : DESIGN_WIDTH,
+            //         stageHeight  : DESIGN_MIN_HEIGHT,
+            //         displayWidth : screenHeight * RATIO_FOR_MIN_HEIGHT,
+            //         displayHeight: screenHeight,
+            //     };
+            // } else {
+            //     return {
+            //         stageWidth   : DESIGN_WIDTH,
+            //         stageHeight  : screenHeight / screenWidth * DESIGN_WIDTH,
+            //         displayWidth : screenWidth,
+            //         displayHeight: screenHeight,
+            //     };
+            // }
+
+            if (screenWidth / screenHeight > RATIO_FOR_MIN_HEIGHT) {
+                // 屏幕高度不足
                 return {
-                    stageWidth   : DESIGN_WIDTH,
-                    stageHeight  : DESIGN_MIN_HEIGHT,
-                    displayWidth : screenHeight * RATIO_FOR_MIN_HEIGHT,
-                    displayHeight: screenHeight,
+                    stageWidth      : reviseStageDisplaySize(DESIGN_MIN_HEIGHT * screenWidth / screenHeight),
+                    stageHeight     : reviseStageDisplaySize(DESIGN_MIN_HEIGHT),
+                    displayWidth    : reviseStageDisplaySize(screenWidth),
+                    displayHeight   : reviseStageDisplaySize(screenHeight),
                 };
             } else {
+                // 屏幕高度充足
                 return {
-                    stageWidth   : DESIGN_WIDTH,
-                    stageHeight  : screenHeight / screenWidth * DESIGN_WIDTH,
-                    displayWidth : screenWidth,
-                    displayHeight: screenHeight,
+                    stageWidth      : reviseStageDisplaySize(contentWidth),
+                    stageHeight     : reviseStageDisplaySize(contentWidth * screenHeight / screenWidth),
+                    displayWidth    : reviseStageDisplaySize(screenWidth),
+                    displayHeight   : reviseStageDisplaySize(screenHeight),
                 };
             }
         }
+    }
+
+    function reviseStageDisplaySize(num: number): number {
+        // 宽高不是2的整数倍会导致图片绘制出现问题
+        num = Math.floor(num);
+        return (num % 2 === 0) ? num : num + 1;
     }
 }

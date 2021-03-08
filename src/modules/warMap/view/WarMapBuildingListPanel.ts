@@ -38,7 +38,6 @@ namespace TinyWars.WarMap {
             super();
 
             this.skinName = "resource/skins/warMap/WarMapBuildingListPanel.exml";
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
         }

@@ -46,7 +46,6 @@ namespace TinyWars.MultiCustomRoom {
             super();
 
             this.skinName = "resource/skins/multiCustomRoom/McrCreateAvailableCoPanel.exml";
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
         }

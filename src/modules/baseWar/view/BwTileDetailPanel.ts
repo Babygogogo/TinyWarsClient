@@ -49,7 +49,6 @@ namespace TinyWars.BaseWar {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/baseWar/BwTileDetailPanel.exml`;

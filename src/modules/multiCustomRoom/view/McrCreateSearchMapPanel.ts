@@ -48,7 +48,6 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/multiCustomRoom/McrCreateSearchMapPanel.exml";
         }

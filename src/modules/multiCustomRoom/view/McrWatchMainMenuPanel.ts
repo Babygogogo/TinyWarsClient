@@ -30,7 +30,6 @@ namespace TinyWars.MultiCustomRoom {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiCustomRoom/McrWatchMainMenuPanel.exml";
         }
 

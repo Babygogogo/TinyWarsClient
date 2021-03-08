@@ -40,7 +40,6 @@ namespace TinyWars.WarEvent {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/warEvent/WeEventListPanel.exml";
         }
 

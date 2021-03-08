@@ -50,7 +50,6 @@ namespace TinyWars.MapEditor {
             super();
 
             this.skinName = "resource/skins/mapEditor/MeAvailableCoPanel.exml";
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
         }
 

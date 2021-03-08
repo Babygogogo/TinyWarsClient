@@ -42,7 +42,6 @@ namespace TinyWars.User {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/user/UserOnlineUsersPanel.exml`;
         }
 

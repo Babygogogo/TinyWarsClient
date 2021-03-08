@@ -65,7 +65,6 @@ namespace TinyWars.MultiPlayerWar {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/multiCustomWar/McwWarMenuPanel.exml`;

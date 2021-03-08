@@ -31,7 +31,6 @@ namespace TinyWars.MapManagement {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapManagement/MmMainMenuPanel.exml";
         }
 

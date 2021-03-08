@@ -36,7 +36,6 @@ namespace TinyWars.Common {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName               = "resource/skins/common/CommonServerStatusPanel.exml";

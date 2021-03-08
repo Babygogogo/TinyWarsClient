@@ -35,7 +35,6 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/multiCustomRoom/McrWarInfoPanel.exml";
         }
 

@@ -53,7 +53,6 @@ namespace TinyWars.MapManagement {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmAvailabilityChangePanel.exml";
         }

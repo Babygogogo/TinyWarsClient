@@ -22,7 +22,6 @@ namespace TinyWars.MapEditor {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapEditor/MeBackgroundPanel.exml";
         }
     }

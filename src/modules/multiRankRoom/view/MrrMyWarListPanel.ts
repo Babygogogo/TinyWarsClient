@@ -46,7 +46,6 @@ namespace TinyWars.MultiRankRoom {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiRankRoom/MrrMyWarListPanel.exml";
         }
 

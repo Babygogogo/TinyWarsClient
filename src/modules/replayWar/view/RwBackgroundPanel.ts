@@ -22,7 +22,6 @@ namespace TinyWars.ReplayWar {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/replayWar/RwBackgroundPanel.exml";
         }
     }

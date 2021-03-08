@@ -40,7 +40,6 @@ namespace TinyWars.Common {
             super();
 
             this.skinName = "resource/skins/common/CommonConfirmPanel.exml";
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
         }
 

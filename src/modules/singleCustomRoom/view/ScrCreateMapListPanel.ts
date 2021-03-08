@@ -56,7 +56,6 @@ namespace TinyWars.SingleCustomRoom {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/singleCustomRoom/ScrCreateMapListPanel.exml";
         }
 

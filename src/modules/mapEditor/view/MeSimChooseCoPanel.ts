@@ -66,7 +66,6 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapEditor/MeSimChooseCoPanel.exml";
         }
 

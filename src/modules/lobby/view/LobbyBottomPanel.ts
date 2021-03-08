@@ -34,7 +34,6 @@ namespace TinyWars.Lobby {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/lobby/LobbyBottomPanel.exml";
         }
 

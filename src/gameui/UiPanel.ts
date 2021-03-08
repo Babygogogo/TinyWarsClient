@@ -23,7 +23,6 @@ namespace TinyWars.GameUi {
         private _uiListenerArray        : UiListener[];
         private _notifyListenerArray    : Utility.Notify.Listener[];
 
-        private _isAutoAdjustHeight     = false;
         private _isTouchMaskEnabled     = false;
         private _isCloseOnTouchedMask   = false;
         private _callbackOnTouchedMask  : () => void;
@@ -99,10 +98,10 @@ namespace TinyWars.GameUi {
                 this._setIsOpening(true);
                 Logger.warn("Panel opened: " + this.skinName);
 
+                const stage = Utility.StageManager.getStage();
                 this._onOpened();
                 this._registerListeners();
-                this.width = Utility.StageManager.getDesignWidth();
-                this._handleAutoAdjustHeight();
+                this.resize(stage.stageWidth, stage.stageHeight);
                 this._handleTouchMask();
             }
         }
@@ -188,18 +187,16 @@ namespace TinyWars.GameUi {
         }
 
         ////////////////////////////////////////////////////////////////////////////////
-        // Auto adjust height.
+        // Auto resize.
         ////////////////////////////////////////////////////////////////////////////////
-        public getIsAutoAdjustHeight(): boolean {
-            return this._isAutoAdjustHeight;
-        }
-        protected _setIsAutoAdjustHeight(enabled = true): void {
-            this._isAutoAdjustHeight = enabled;
-            this._handleAutoAdjustHeight();
-        }
-        private _handleAutoAdjustHeight(): void {
-            if (this.getIsAutoAdjustHeight()) {
-                this.height = Utility.StageManager.getStage().stageHeight;
+        public resize(stageWidth: number, stageHeight: number): void {
+            this.width  = stageWidth;
+            this.height = stageHeight;
+
+            const mask = this._touchMask;
+            if (mask) {
+                mask.width  = stageWidth;
+                mask.height = stageHeight;
             }
         }
 
@@ -223,10 +220,11 @@ namespace TinyWars.GameUi {
 
             } else {
                 if (!this._touchMask) {
-                    const newMask        = new eui.Group();
-                    newMask.width        = Utility.StageManager.getDesignWidth();
-                    newMask.height       = Utility.StageManager.getDesignMaxHeight();
-                    newMask.touchEnabled = true;
+                    const newMask           = new eui.Group();
+                    const stage             = Utility.StageManager.getStage();
+                    newMask.width           = stage.stageWidth;
+                    newMask.height          = stage.stageHeight;
+                    newMask.touchEnabled    = true;
                     newMask.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedTouchMask, this);
                     this._touchMask = newMask;
                 }
