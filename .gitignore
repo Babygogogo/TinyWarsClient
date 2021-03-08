@@ -1,5 +1,6 @@
 
 bin-debug/
 bin-release/
-*.lua
 utils/tinify/
+node_modules/
+*.lua
