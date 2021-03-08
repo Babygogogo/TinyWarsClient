@@ -1,94 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group id="_groupChannel" top="40" bottom="0" width="160" left="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelChatTitle" text="聊天列表" y="10" bold="true" size="20" textColor="0xffffff"
-                        horizontalCenter="0" />
-        <GameUi:UiScrollList id="_listChat" left="0" right="0" bottom="40" top="40">
-            <e:List>
-                <e:itemRendererSkinName>
-                    <e:Skin width="160" height="50" currentState="up" states="down,up">
-                        <e:Group left="0" right="0" top="0" bottom="0">
-                            <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
-                                            anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
-                                            visible.up="false" />
-                            <GameUi:UiLabel id="_labelType" text="聊天类型" size="12" textColor="0xFFFFFF"
-                                            maxTextWidth="150" x="10" y="8" />
-                            <GameUi:UiLabel id="_labelName" text="聊天名称" size="18" textColor="0xffffff"
-                                            maxTextWidth="150" x="10" y="24" />
-                            <GameUi:UiImage id="_imgRed" width="20" height="20" source="c04_t01_s01_f01" right="2"
-                                            top="2" />
+    <e:Group top="40" bottom="0" width="960" horizontalCenter="0">
+        <e:Group id="_groupChannel" width="160" top="0" bottom="0" left="0">
+            <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                            alpha="0.8" left="0" right="0" top="0" bottom="0" />
+            <GameUi:UiLabel id="_labelChatTitle" text="聊天列表" y="10" bold="true" size="20" textColor="0xffffff"
+                            horizontalCenter="0" />
+            <GameUi:UiScrollList id="_listChat" left="0" right="0" bottom="40" top="40">
+                <e:List>
+                    <e:itemRendererSkinName>
+                        <e:Skin width="160" height="50" currentState="up" states="down,up">
+                            <e:Group left="0" right="0" top="0" bottom="0">
+                                <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
+                                                anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
+                                                visible.up="false" />
+                                <GameUi:UiLabel id="_labelType" text="聊天类型" size="12" textColor="0xFFFFFF"
+                                                maxTextWidth="150" x="10" y="8" />
+                                <GameUi:UiLabel id="_labelName" text="聊天名称" size="18" textColor="0xffffff"
+                                                maxTextWidth="150" x="10" y="24" />
+                                <GameUi:UiImage id="_imgRed" width="20" height="20" source="c04_t01_s01_f01" right="2"
+                                                top="2" />
+                            </e:Group>
+                        </e:Skin>
+                    </e:itemRendererSkinName>
+                </e:List>
+            </GameUi:UiScrollList>
+            <GameUi:UiButton id="_btnRefresh" label="" width="50" height="40" bottom="0" right="0">
+                <GameUi:skinName>
+                    <e:Skin states="up,down,disabled">
+                        <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
+                        <e:Image source="icon_switch_001" scaleX="0.8" scaleY="0.8" horizontalCenter="0"
+                                 verticalCenter="0" />
+                        <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
+                                        horizontalCenter="0" maxTextWidth="70" />
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+            <GameUi:UiButton id="_btnBack" label="" width="50" height="40" bottom="0" left="0"
+                             skinName="Skins.Component.Button.ButtonClose002" />
+        </e:Group>
+        <e:Group id="_groupMessage" width="800" top="0" bottom="50" right="0">
+            <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                            alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
+            <GameUi:UiLabel id="_labelNoMessage" text="无信息" bold="true" size="30" textColor="0xFFFFFF"
+                            horizontalCenter="0" verticalCenter="0" locked="true" />
+            <GameUi:UiScrollList id="_listMessage" left="0" right="0" bottom="8" top="8">
+                <e:List>
+                    <e:itemRendererSkinName>
+                        <e:Skin currentState="up" states="down,up">
+                            <e:Group left="0" right="0" top="0" bottom="0">
+                                <GameUi:UiLabel id="_labelName" text="" size="12" textColor="0xffffff" x="10" scaleX="1"
+                                                scaleY="1" />
+                                <GameUi:UiLabel id="_labelContent" text="" size="16" textColor="0xFFFFFF" y="16"
+                                                wordWrap="true" scaleX="1" scaleY="1" x="10" maxWidth="780" />
+                            </e:Group>
+                        </e:Skin>
+                    </e:itemRendererSkinName>
+                    <e:layout>
+                        <e:VerticalLayout paddingTop="4" gap="14" />
+                    </e:layout>
+                </e:List>
+            </GameUi:UiScrollList>
+        </e:Group>
+        <e:Group id="_groupInput" height="50" width="800" bottom="0" right="0">
+            <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
+                            alpha="0.8" left="0" right="0" top="0" bottom="0" locked="true" />
+            <GameUi:UiTextInput id="_inputMessage" maxChars="200" left="10" right="90" bottom="4">
+                <GameUi:skinName>
+                    <e:Skin width="100" height="30">
+                        <e:Image source="c08_t06_s01_f01" left="0" right="0" bottom="0" />
+                        <e:EditableText id="textDisplay" size="24" left="0" right="0" textColor="0xffffff" top="0"
+                                        bottom="0" multiline="true" text="" />
+                        <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text=""
+                                 height="30" textColor="0x808080" />
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiTextInput>
+            <GameUi:UiButton id="_btnSend" label="发送" verticalCenter="0" right="0" width="80" height="50">
+                <GameUi:skinName>
+                    <e:Skin>
+                        <e:Group scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
+                            <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1" left="0"
+                                     right="0" top="0" bottom="0" locked="true" />
+                            <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff" scaleX="1" scaleY="1"
+                                            text="asdf" textAlign="center" verticalAlign="middle" left="8" right="8"
+                                            top="8" bottom="8" wordWrap="true" />
+                            <GameUi:UiImage id="_imgRed" width="14" height="14" source="c04_t01_s01_f01" right="0"
+                                            top="0" locked="true" />
                         </e:Group>
                     </e:Skin>
-                </e:itemRendererSkinName>
-            </e:List>
-        </GameUi:UiScrollList>
-        <GameUi:UiButton id="_btnRefresh" label="" width="50" height="40" bottom="0" right="0">
-            <GameUi:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" source="c04_t01_s02_f01" scale9Grid="9,9,2,2" />
-                    <e:Image source="icon_switch_001" scaleX="0.8" scaleY="0.8" horizontalCenter="0" verticalCenter="0" />
-                    <GameUi:UiLabel id="labelDisplay" size="14" textColor="0x00ff00" verticalCenter="0"
-                                    horizontalCenter="0" maxTextWidth="70" />
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
-        <GameUi:UiButton id="_btnBack" label="" width="50" height="40" bottom="0" left="0"
-                         skinName="Skins.Component.Button.ButtonClose002"></GameUi:UiButton>
-    </e:Group>
-    <e:Group id="_groupMessage" top="40" bottom="50" right="0" width="800">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" locked="true" />
-        <GameUi:UiLabel id="_labelNoMessage" text="无信息" bold="true" size="30" textColor="0xFFFFFF" horizontalCenter="0"
-                        verticalCenter="0" locked="true" />
-        <GameUi:UiScrollList id="_listMessage" left="0" right="0" bottom="8" top="8">
-            <e:List>
-                <e:itemRendererSkinName>
-                    <e:Skin currentState="up" states="down,up">
-                        <e:Group left="0" right="0" top="0" bottom="0">
-                            <GameUi:UiLabel id="_labelName" text="" size="12" textColor="0xffffff" x="10" scaleX="1"
-                                            scaleY="1" />
-                            <GameUi:UiLabel id="_labelContent" text="" size="16" textColor="0xFFFFFF" y="16"
-                                            wordWrap="true" scaleX="1" scaleY="1" x="10" maxWidth="780" />
-                        </e:Group>
-                    </e:Skin>
-                </e:itemRendererSkinName>
-                <e:layout>
-                    <e:VerticalLayout paddingTop="4" gap="14" />
-                </e:layout>
-            </e:List>
-        </GameUi:UiScrollList>
-    </e:Group>
-    <e:Group id="_groupInput" bottom="0" right="0" height="50" width="800">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" locked="true" />
-        <GameUi:UiTextInput id="_inputMessage" maxChars="200" left="10" right="90" bottom="4">
-            <GameUi:skinName>
-                <e:Skin width="100" height="30">
-                    <e:Image source="c08_t06_s01_f01" left="0" right="0" bottom="0" />
-                    <e:EditableText id="textDisplay" size="24" left="0" right="0" textColor="0xffffff" top="0"
-                                    bottom="0" multiline="true" text="" />
-                    <e:Label id="promptDisplay" size="24" touchEnabled="false" left="0" right="0" text="" height="30"
-                             textColor="0x808080" />
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiTextInput>
-        <GameUi:UiButton id="_btnSend" label="发送" verticalCenter="0" right="0" width="80" height="50">
-            <GameUi:skinName>
-                <e:Skin>
-                    <e:Group scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
-                        <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1" left="0" right="0"
-                                 top="0" bottom="0" locked="true" />
-                        <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff" scaleX="1" scaleY="1"
-                                        text="asdf" textAlign="center" verticalAlign="middle" left="8" right="8" top="8"
-                                        bottom="8" wordWrap="true" />
-                        <GameUi:UiImage id="_imgRed" width="14" height="14" source="c04_t01_s01_f01" right="0" top="0"
-                                        locked="true" />
-                    </e:Group>
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
     </e:Group>
 </e:Skin>

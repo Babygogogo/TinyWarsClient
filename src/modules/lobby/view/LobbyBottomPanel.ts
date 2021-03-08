@@ -76,6 +76,7 @@ namespace TinyWars.Lobby {
 
         private _onTouchedGroupMapEditor(e: egret.TouchEvent): void {
             this.close();
+            LobbyTopPanel.hide();
             MapEditor.MeMapListPanel.show();
         }
 
