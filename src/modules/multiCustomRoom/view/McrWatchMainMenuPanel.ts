@@ -57,6 +57,8 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             this.close();
             McrMainMenuPanel.show();
+            Lobby.LobbyTopPanel.show();
+            Lobby.LobbyBottomPanel.show();
         }
 
         private _onMsgUserLogout(e: egret.Event): void {

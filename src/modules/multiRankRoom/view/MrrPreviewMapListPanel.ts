@@ -116,6 +116,8 @@ namespace TinyWars.MultiRankRoom {
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
             MrrMainMenuPanel.show();
+            Lobby.LobbyTopPanel.show();
+            Lobby.LobbyBottomPanel.show();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

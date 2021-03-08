@@ -128,6 +128,8 @@ namespace TinyWars.ReplayWar {
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
             MultiCustomRoom.McrMainMenuPanel.show();
+            Lobby.LobbyTopPanel.show();
+            Lobby.LobbyBottomPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -59,7 +59,7 @@ namespace TinyWars.MapManagement {
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             this.close();
-            Lobby.LobbyPanel.show();
+            FlowManager.gotoLobby();
         }
         private _onMsgUserLogout(e: egret.Event): void {
             this.close();

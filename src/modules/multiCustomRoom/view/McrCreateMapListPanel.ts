@@ -133,6 +133,8 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
             McrMainMenuPanel.show();
+            Lobby.LobbyTopPanel.show();
+            Lobby.LobbyBottomPanel.show();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

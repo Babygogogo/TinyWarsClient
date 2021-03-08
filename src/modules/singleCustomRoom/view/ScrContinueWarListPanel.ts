@@ -113,6 +113,8 @@ namespace TinyWars.SingleCustomRoom {
         private _onTouchTapBtnBack(): void {
             this.close();
             SinglePlayerLobby.SinglePlayerLobbyPanel.show();
+            Lobby.LobbyTopPanel.show();
+            Lobby.LobbyBottomPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

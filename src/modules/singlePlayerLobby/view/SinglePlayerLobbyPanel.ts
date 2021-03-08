@@ -21,9 +21,6 @@ namespace TinyWars.SinglePlayerLobby {
         private readonly _btnRanking        : TinyWars.GameUi.UiButton;
         private readonly _btnSinglePlayer   : TinyWars.GameUi.UiButton;
 
-        private readonly _btnBack           : TinyWars.GameUi.UiButton;
-
-
         public static show(): void {
             if (!SinglePlayerLobbyPanel._instance) {
                 SinglePlayerLobbyPanel._instance = new SinglePlayerLobbyPanel();
@@ -50,16 +47,12 @@ namespace TinyWars.SinglePlayerLobby {
                 { ui: this._btnRanking,     callback: this._onTouchedBtnRanking },
                 { ui: this._btnCampaign,    callback: this._onTouchedBtnCampaign },
                 { ui: this._btnContinueWar, callback: this._onTouchedBtnContinueWar },
-                { ui: this._btnBack,        callback: this._onTouchedBtnBack },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
             ]);
 
             this._showOpenAnimation();
-
-            this._updateComponentsForLanguage();
         }
 
         protected async _onClosed(): Promise<void> {
@@ -71,10 +64,6 @@ namespace TinyWars.SinglePlayerLobby {
         ////////////////////////////////////////////////////////////////////////////////
         private _onMsgUserLogout(e: egret.Event): void {
             this.close();
-        }
-
-        private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateComponentsForLanguage();
         }
 
         private _onTouchedBtnMultiPlayer(e: egret.TouchEvent): void {
@@ -90,29 +79,15 @@ namespace TinyWars.SinglePlayerLobby {
         }
         private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
             this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
             SingleCustomRoom.ScrContinueWarListPanel.show();
-        }
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            this.close();
-            Lobby.LobbyPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _updateComponentsForLanguage(): void {
-            this._btnBack.label = Lang.getText(Lang.Type.B0146);
-        }
-
         private _showOpenAnimation(): void {
-            Helpers.resetTween({
-                obj         : this._btnBack,
-                beginProps  : { alpha: 0, bottom: -20 },
-                waitTime    : 0,
-                endProps    : { alpha: 1, bottom: 20 },
-                tweenTime   : 200,
-            });
-
             const group = this._group;
             Tween.removeTweens(group);
             group.right = 60;
@@ -162,14 +137,6 @@ namespace TinyWars.SinglePlayerLobby {
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, bottom: 20 },
-                    waitTime    : 0,
-                    endProps    : { alpha: 0, bottom: -20 },
-                    tweenTime   : 200,
-                });
-
                 const group = this._group;
                 Tween.removeTweens(group);
                 Tween.get(group)

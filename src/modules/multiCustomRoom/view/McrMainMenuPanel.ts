@@ -11,8 +11,6 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrMainMenuPanel;
 
-        private readonly _btnBack           : TinyWars.GameUi.UiButton;
-
         private readonly _group             : eui.Group;
         private readonly _btnMultiPlayer    : TinyWars.GameUi.UiButton;
         private readonly _btnRanking        : TinyWars.GameUi.UiButton;
@@ -48,7 +46,6 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._btnBack,            callback: this._onTouchedBtnBack },
                 { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
                 { ui: this._btnSinglePlayer,    callback: this._onTouchedBtnSinglePlayer },
                 { ui: this._btnCreateRoom,      callback: this._onTouchedBtnCreateRoom },
@@ -59,7 +56,6 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnReplayWar,       callback: this._onTouchedBtnReplayWar },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
             ]);
 
@@ -75,10 +71,6 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            this.close();
-            Lobby.LobbyPanel.show();
-        }
         private _onTouchedBtnRanking(e: egret.TouchEvent): void {
             this.close();
             MultiRankRoom.MrrMainMenuPanel.show();
@@ -89,32 +81,41 @@ namespace TinyWars.MultiCustomRoom {
         }
         private _onTouchedBtnCreateRoom(e: egret.TouchEvent): void {
             this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
             McrCreateMapListPanel.show({});
         }
         private _onTouchedBtnJoinRoom(e: egret.TouchEvent): void {
             this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
             McrJoinRoomListPanel.show();
         }
         private _onTouchedBtnMyRoom(e: egret.TouchEvent): void {
             this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
             McrMyRoomListPanel.show();
         }
         private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
             this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
             McrMyWarListPanel.show();
         }
         private _onTouchedBtnWatchWar(e: egret.TouchEvent): void {
             this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
             McrWatchMainMenuPanel.show();
         }
         private _onTouchedBtnReplayWar(e: egret.TouchEvent): void {
             this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
             ReplayWar.RwReplayListPanel.show();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateComponentsForLanguage();
-        }
         private _onMsgUserLogout(e: egret.Event): void {
             this.close();
         }
@@ -123,14 +124,6 @@ namespace TinyWars.MultiCustomRoom {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _showOpenAnimation(): void {
-            Helpers.resetTween({
-                obj         : this._btnBack,
-                beginProps  : { alpha: 0, bottom: -20 },
-                waitTime    : 0,
-                endProps    : { alpha: 1, bottom: 20 },
-                tweenTime   : 200,
-            });
-
             const group = this._group;
             Tween.removeTweens(group);
             group.right = 60;
@@ -208,14 +201,6 @@ namespace TinyWars.MultiCustomRoom {
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, bottom: 20 },
-                    waitTime    : 0,
-                    endProps    : { alpha: 0, bottom: -20 },
-                    tweenTime   : 200,
-                });
-
                 const group = this._group;
                 Tween.removeTweens(group);
                 Tween.get(group)
@@ -232,16 +217,10 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateView(): Promise<void> {
-            this._updateComponentsForLanguage();
-
             const watchInfos = MultiPlayerWar.MpwModel.getWatchRequestedWarInfos();
             this._btnMyRoom.setRedVisible(await McrModel.checkIsRed());
             this._btnContinueWar.setRedVisible(MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars());
             this._btnWatchWar.setRedVisible((!!watchInfos) && (watchInfos.length > 0))
-        }
-
-        private _updateComponentsForLanguage(): void {
-            this._btnBack.label = Lang.getText(Lang.Type.B0146);
         }
     }
 }

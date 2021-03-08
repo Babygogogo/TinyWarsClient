@@ -84,6 +84,7 @@ namespace TinyWars.Utility.FlowManager {
         Lobby.LobbyBackgroundPanel.show();
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
+        Lobby.LobbyBottomPanel.show();
         Broadcast.BroadcastPanel.show();
     }
     export async function gotoMultiCustomWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {

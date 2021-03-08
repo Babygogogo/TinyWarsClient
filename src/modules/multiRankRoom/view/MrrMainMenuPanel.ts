@@ -23,8 +23,6 @@ namespace TinyWars.MultiRankRoom {
         private readonly _btnPreviewStdMaps : TinyWars.GameUi.UiButton;
         private readonly _btnPreviewFogMaps : TinyWars.GameUi.UiButton;
 
-        private readonly _btnBack           : TinyWars.GameUi.UiButton;
-
         public static show(): void {
             if (!MrrMainMenuPanel._instance) {
                 MrrMainMenuPanel._instance = new MrrMainMenuPanel();
@@ -47,7 +45,6 @@ namespace TinyWars.MultiRankRoom {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._btnBack,            callback: this._onTouchedBtnBack },
                 { ui: this._btnMultiPlayer,     callback: this._onTouchedBtnMultiPlayer },
                 { ui: this._btnSinglePlayer,    callback: this._onTouchedBtnSinglePlayer },
                 { ui: this._btnSetGameNumber,   callback: this._onTouchedBtnSetGameNumber },
@@ -57,7 +54,6 @@ namespace TinyWars.MultiRankRoom {
                 { ui: this._btnPreviewFogMaps,  callback: this._onTouchedBtnPreviewFogMaps },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
                 { type: Notify.Type.MsgMrrGetRoomPublicInfo,        callback: this._onMsgMrrGetRoomPublicInfo },
                 { type: Notify.Type.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
@@ -75,10 +71,6 @@ namespace TinyWars.MultiRankRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            this.close();
-            Lobby.LobbyPanel.show();
-        }
         private _onTouchedBtnMultiPlayer(e: egret.TouchEvent): void {
             this.close();
             MultiCustomRoom.McrMainMenuPanel.show();
@@ -92,24 +84,29 @@ namespace TinyWars.MultiRankRoom {
         }
         private _onTouchedBtnMyRoom(e: egret.TouchEvent): void {
             this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
             MrrMyRoomListPanel.show();
         }
         private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
             this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
             MrrMyWarListPanel.show();
         }
         private _onTouchedBtnPreviewStdMaps(e: egret.TouchEvent): void {
             this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
             MrrPreviewMapListPanel.show({ hasFog: false });
         }
         private _onTouchedBtnPreviewFogMaps(e: egret.TouchEvent): void {
             this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
             MrrPreviewMapListPanel.show({ hasFog: true });
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateComponentsForLanguage();
-        }
         private _onMsgUserLogout(e: egret.Event): void {
             this.close();
         }
@@ -124,13 +121,7 @@ namespace TinyWars.MultiRankRoom {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            this._updateComponentsForLanguage();
-
             this._updateComponentsForRed();
-        }
-
-        private _updateComponentsForLanguage(): void {
-            this._btnBack.label = Lang.getText(Lang.Type.B0146);
         }
 
         private async _updateComponentsForRed(): Promise<void> {
@@ -139,14 +130,6 @@ namespace TinyWars.MultiRankRoom {
         }
 
         private _showOpenAnimation(): void {
-            Helpers.resetTween({
-                obj         : this._btnBack,
-                beginProps  : { alpha: 0, bottom: -20 },
-                waitTime    : 0,
-                endProps    : { alpha: 1, bottom: 20 },
-                tweenTime   : 200,
-            });
-
             const group = this._group;
             Tween.removeTweens(group);
             group.right = 60;
@@ -217,14 +200,6 @@ namespace TinyWars.MultiRankRoom {
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
-                Helpers.resetTween({
-                    obj         : this._btnBack,
-                    beginProps  : { alpha: 1, bottom: 20 },
-                    waitTime    : 0,
-                    endProps    : { alpha: 0, bottom: -20 },
-                    tweenTime   : 200,
-                });
-
                 const group = this._group;
                 Tween.removeTweens(group);
                 Tween.get(group)

@@ -196,8 +196,8 @@ namespace TinyWars.User {
             UserSetPrivilegePanel.show({ userId: this._userId });
         }
         private _onTouchedBtnMapManagement(e: egret.TouchEvent): void {
-            this.close();
-            Lobby.LobbyPanel.hide();
+            Utility.StageManager.closeAllPanels();
+            Lobby.LobbyBackgroundPanel.show();
             MapManagement.MmMainMenuPanel.show();
         }
 

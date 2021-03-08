@@ -34,12 +34,6 @@ namespace TinyWars.Lobby {
         private _btnMultiPlayer : GameUi.UiButton;
         private _btnRanking     : GameUi.UiButton;
 
-        private _groupBottom    : eui.Group;
-        private _groupMyInfo    : eui.Group;
-        private _groupChat      : eui.Group;
-        private _groupMapEditor : eui.Group;
-        private _groupGameData  : eui.Group;
-
         public static show(): void {
             if (!LobbyPanel._instance) {
                 LobbyPanel._instance = new LobbyPanel();
@@ -62,10 +56,6 @@ namespace TinyWars.Lobby {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._groupMyInfo,        callback: this._onTouchedGroupMyInfo },
-                { ui: this._groupChat,          callback: this._onTouchedGroupChat },
-                { ui: this._groupMapEditor,     callback: this._onTouchedGroupMapEditor },
-                { ui: this._groupGameData,      callback: this._onTouchedGroupGameData },
                 { ui: this._groupDiscord,       callback: this._onTouchedGroupDiscord },
                 { ui: this._groupGithub,        callback: this._onTouchedGroupGithub },
                 { ui: this._btnMultiPlayer,     callback: this._onTouchedBtnMultiPlayer },
@@ -93,31 +83,6 @@ namespace TinyWars.Lobby {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedGroupMyInfo(e: egret.TouchEvent): void {
-            User.UserOnlineUsersPanel.hide();
-            Chat.ChatPanel.hide();
-            User.UserPanel.show({ userId: UserModel.getSelfUserId() });
-        }
-
-        private _onTouchedGroupChat(e: egret.TouchEvent): void {
-            User.UserOnlineUsersPanel.hide();
-            User.UserPanel.hide();
-            if (!Chat.ChatPanel.getIsOpening()) {
-                Chat.ChatPanel.show({ toUserId: null });
-            } else {
-                Chat.ChatPanel.hide();
-            }
-        }
-
-        private _onTouchedGroupMapEditor(e: egret.TouchEvent): void {
-            this.close();
-            MapEditor.MeMapListPanel.show();
-        }
-
-        private _onTouchedGroupGameData(e: egret.TouchEvent): void {
-            Common.CommonDamageChartPanel.show();
-        }
-
         private _onTouchedGroupDiscord(e: egret.TouchEvent): void {
             if ((window) && (window.open)) {
                 Common.CommonConfirmPanel.show({
@@ -208,12 +173,6 @@ namespace TinyWars.Lobby {
                 tweenTime   : 200,
             });
 
-            const groupBottom = this._groupBottom;
-            Tween.removeTweens(groupBottom);
-            Tween.get(groupBottom)
-                .set({ alpha: 0, bottom: -40 })
-                .to({ alpha: 1, bottom: 0 }, 200);
-
             // const groupTips = this._groupTips;
             // Tween.removeTweens(groupTips);
             // Tween.get(groupTips)
@@ -251,35 +210,6 @@ namespace TinyWars.Lobby {
                 endProps    : { alpha: 1, left: 0 },
                 tweenTime   : 200,
             });
-
-            Helpers.resetTween({
-                obj         : this._groupMyInfo,
-                beginProps  : { alpha: 0, top: 40 },
-                waitTime    : 0,
-                endProps    : { alpha: 1, top: 0 },
-                tweenTime   : 200,
-            });
-            Helpers.resetTween({
-                obj         : this._groupChat,
-                beginProps  : { alpha: 0, top: 40 },
-                waitTime    : 66,
-                endProps    : { alpha: 1, top: 0 },
-                tweenTime   : 200,
-            });
-            Helpers.resetTween({
-                obj         : this._groupMapEditor,
-                beginProps  : { alpha: 0, top: 40 },
-                waitTime    : 132,
-                endProps    : { alpha: 1, top: 0 },
-                tweenTime   : 200,
-            });
-            Helpers.resetTween({
-                obj         : this._groupGameData,
-                beginProps  : { alpha: 0, top: 40 },
-                waitTime    : 200,
-                endProps    : { alpha: 1, top: 0 },
-                tweenTime   : 200,
-            });
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
@@ -288,12 +218,6 @@ namespace TinyWars.Lobby {
                 Tween.get(group)
                     .set({ alpha: 1, right: 60 })
                     .to({ alpha: 0, right: 20 }, 200);
-
-                const groupBottom = this._groupBottom;
-                Tween.removeTweens(groupBottom);
-                Tween.get(groupBottom)
-                    .set({ alpha: 1, bottom: 0 })
-                    .to({ alpha: 0, bottom: -40 }, 200);
 
                 const groupTips = this._groupTips;
                 Tween.removeTweens(groupTips);

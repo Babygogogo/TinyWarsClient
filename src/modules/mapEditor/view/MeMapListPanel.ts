@@ -104,7 +104,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            Lobby.LobbyPanel.show();
+            Utility.FlowManager.gotoLobby();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
