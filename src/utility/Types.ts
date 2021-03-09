@@ -306,6 +306,11 @@ namespace TinyWars.Utility.Types {
         Green   = 0x00FF00,
     }
 
+    export const enum SoundType {
+        Bgm,
+        Effect,
+    }
+
     export const UiState = {
         Up  : "up",
         Down: "down",

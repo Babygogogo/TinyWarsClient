@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group id="_groupBottom" bottom="0" horizontalCenter="0">
+    <e:Group id="_groupBottom" bottom="0" right="0">
         <GameUi:UiImage source="lobby0000" x="60" locked="true" />
         <e:Group x="0" y="10">
             <GameUi:UiImage source="lobby0002" y="0" x="0" locked="true" />

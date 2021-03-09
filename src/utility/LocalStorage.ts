@@ -9,6 +9,10 @@ namespace TinyWars.Utility {
     const KEY_LANGUAGE                  = KEY_PREFIX + "Language";
     const KEY_SHOW_TILE_ANIMATION       = KEY_PREFIX + "ShowTileAnimation";
     const KEY_MAP_RAW_DATA_PREFIX       = KEY_PREFIX + "MapRawData_";
+    const KEY_SOUND_BGM_MUTE            = KEY_PREFIX + "SoundBgmMute";
+    const KEY_SOUND_BGM_VOLUME          = KEY_PREFIX + "SoundBgmVolume";
+    const KEY_SOUND_EFFECT_MUTE         = KEY_PREFIX + "SoundEffectMute";
+    const KEY_SOUND_EFFECT_VOLUME       = KEY_PREFIX + "SoundEffectVolume";
     const VALUE_TRUE                    = "1";
     const VALUE_FALSE                   = "0";
 
@@ -57,6 +61,34 @@ namespace TinyWars.Utility {
         export function getShowTileAnimation(): boolean {
             const data = localStorage.getItem(KEY_SHOW_TILE_ANIMATION);
             return (data == null) || (data === VALUE_TRUE);
+        }
+
+        export function setIsSoundBgmMute(isMute: boolean): void {
+            localStorage.setItem(KEY_SOUND_BGM_MUTE, isMute ? VALUE_TRUE : VALUE_FALSE);
+        }
+        export function getIsSoundBgmMute(): boolean {
+            return localStorage.getItem(KEY_SOUND_BGM_MUTE) == VALUE_TRUE;
+        }
+
+        export function setSoundBgmVolume(volume: number): void {
+            localStorage.setItem(KEY_SOUND_BGM_VOLUME, `${volume}`);
+        }
+        export function getSoundBgmVolume(): number {
+            return parseFloat(localStorage.getItem(KEY_SOUND_BGM_VOLUME)) || 1;
+        }
+
+        export function setIsSoundEffectMute(isMute: boolean): void {
+            localStorage.setItem(KEY_SOUND_EFFECT_MUTE, isMute ? VALUE_TRUE : VALUE_FALSE);
+        }
+        export function getIsSoundEffectMute(): boolean {
+            return localStorage.getItem(KEY_SOUND_EFFECT_MUTE) == VALUE_TRUE;
+        }
+
+        export function setSoundEffectVolume(volume: number): void {
+            localStorage.setItem(KEY_SOUND_EFFECT_VOLUME, `${volume}`);
+        }
+        export function getSoundEffectVolume(): number {
+            return parseFloat(localStorage.getItem(KEY_SOUND_EFFECT_VOLUME)) || 1;
         }
     }
 }

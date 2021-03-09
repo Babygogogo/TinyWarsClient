@@ -60,6 +60,7 @@ namespace TinyWars.GameUi {
         }
         private _onTouchBegin(e: egret.TouchEvent): void {
             Helpers.changeColor(this, Types.ColorType.White, 50);
+            Utility.SoundManager.playEffect("button.mp3");
         }
         private _onTouchEnd(e: egret.TouchEvent): void {
             Helpers.changeColor(this, Types.ColorType.Origin);
