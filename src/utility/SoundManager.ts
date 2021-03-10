@@ -7,6 +7,11 @@ namespace TinyWars.Utility.SoundManager {
 
     const _SOUND_PATH           = "resource/assets/sound/";
 
+    let _audioGain              : GainNode;
+    let _audioContext           : AudioContext;
+    let _audioSource            : AudioBufferSourceNode;
+    const _audioBuffers         = new Map<string, AudioBuffer>();
+
     let _bgmMute                = DEFAULT_MUTE;
     let _bgmVolume              = DEFAULT_VOLUME;    // 音量范围是0～1，1为最大音量
     let _bgmPrevName            : string;
@@ -20,20 +25,43 @@ namespace TinyWars.Utility.SoundManager {
     let _effectCacheForNormal   : { [name: string]: egret.Sound } = {};
     let _effectsForNormal       : { [name: string]: egret.SoundChannel } = {};
 
-    // var audio_file = new Audio('./videos/bg.mp3');
-    // audio_file.play();
-    // audio_file.addEventListener('timeupdate', function(){
-    //     var buffer = 1.2;
-    //     if(this.currentTime > this.duration - buffer){
-    //         this.currentTime = 0;
-    //         this.play();
-    //     }}, false);
+    // const audio = new Audio(getResourcePath("war01.mp3", SoundType.Bgm));
+    // audio.play();
+    // audio.addEventListener(
+    //     'timeupdate',
+    //     () => {
+    //         if (audio.currentTime > audio.duration - 0.77) {
+    //             audio.currentTime = 1.75;
+    //             audio.play();
+    //         }
+    //     },
+    //     false
+    // );
 
-    export function init() {
+    export async function init(): Promise<void> {
         _initBgmMute();
         _initBgmVolume();
         _initEffectMute();
         _initEffectVolume();
+
+        try {
+            _audioContext   = new AudioContext();
+            _audioGain      = _audioContext.createGain();
+            _audioSource    = _audioContext.createBufferSource();
+            _audioSource.connect(_audioGain);
+            _audioGain.connect(_audioContext.destination);
+
+            const buffer = await loadAudioBuffer(getResourcePath("war01.mp3", SoundType.Bgm));
+            const source = _audioSource;
+            source.buffer       = buffer;
+            source.loopStart    = 1.75;
+            source.loopEnd      = 56.75;
+            source.loop         = true;
+            source.start();
+
+        } catch (e) {
+            FloatText.show(Lang.getText(Lang.Type.A0196));
+        }
     }
 
     export function resume(): void {
@@ -301,5 +329,23 @@ namespace TinyWars.Utility.SoundManager {
             case SoundType.Effect   : return _SOUND_PATH + "effect/" + musicName;
             default                 : return undefined;
         }
+    }
+
+    async function loadAudioBuffer(fullName: string): Promise<AudioBuffer | undefined> {
+        if (!_audioContext) {
+            return undefined;
+        }
+
+        const arrayBuffer = await RES.getResByUrl(
+            fullName,
+            () => {},
+            SoundManager,
+            RES.ResourceItem.TYPE_BIN
+        );
+        if (!arrayBuffer) {
+            return undefined;
+        }
+
+        return await _audioContext.decodeAudioData(arrayBuffer);
     }
 }
