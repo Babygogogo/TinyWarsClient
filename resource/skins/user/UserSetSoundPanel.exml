@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <e:Group horizontalCenter="0" verticalCenter="0" width="560" height="320">
+        <GameUi:UiImage anchorOffsetY="0" source="c04_t01_s02_f01" scale9Grid="7,7,6,6" left="0" right="0" top="0"
+                        bottom="0" />
+        <GameUi:UiImage anchorOffsetY="0" source="bg_19_png" horizontalCenter="0" top="14" locked="true" />
+        <GameUi:UiLabel id="_labelTitle" text="声音设定" size="22" textColor="0xffffff" y="14" horizontalCenter="0"
+                        style="title" />
+        <e:Group y="60" horizontalCenter="0">
+            <e:Group y="0" x="0">
+                <GameUi:UiLabel id="_labelBgmTitle" text="背景音乐" x="0" y="0" size="18" textColor="0xffffff" />
+                <e:Group left="0" top="0">
+                    <GameUi:UiImage id="_imgBgmMute" source="common_point_png" verticalCenter="0" horizontalCenter="0" />
+                    <e:Group id="_groupBgmVolume" x="128" y="0" width="300" scaleX="1" scaleY="1">
+                        <GameUi:UiImage id="_imgBgmBar" verticalCenter="0" width="300" x="0" source="c04_t01_s02_f01"
+                                        scale9Grid="7,7,6,6" />
+                        <GameUi:UiImage id="_imgBgmPoint" y="0" x="300" anchorOffsetX="10" touchEnabled="false"
+                                        source="c04_t01_s01_f01" scaleX="2" scaleY="2" />
+                    </e:Group>
+                    <GameUi:UiLabel id="_labelBgmVolume" text="100" x="444" y="7" size="20" textColor="0xffffff" />
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="middle" gap="20" />
+                    </e:layout>
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:Group y="10" x="10">
+                <GameUi:UiLabel id="_labelEffectTitle" text="音效" x="0" y="0" size="18" textColor="0xFFFFFF" />
+                <e:Group left="0" top="0">
+                    <GameUi:UiImage id="_imgEffectMute" source="common_point_png" verticalCenter="0"
+                                    horizontalCenter="0" />
+                    <e:Group id="_groupEffectVolume" x="128" y="0" width="300" scaleX="1" scaleY="1">
+                        <GameUi:UiImage id="_imgEffectBar" source="c04_t01_s02_f01" verticalCenter="0" width="300" x="0"
+                                        scale9Grid="7,7,6,6" />
+                        <GameUi:UiImage id="_imgEffectPoint" source="c04_t01_s01_f01" y="0" x="300" anchorOffsetX="10"
+                                        touchEnabled="false" scaleX="2" scaleY="2" />
+                    </e:Group>
+                    <GameUi:UiLabel id="_labelEffectVolume" text="100" x="444" y="7" textColor="0xFFFFFF" size="20" />
+                    <e:layout>
+                        <e:HorizontalLayout verticalAlign="middle" gap="20" />
+                    </e:layout>
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout gap="40" />
+            </e:layout>
+        </e:Group>
+        <e:Group horizontalCenter="0" bottom="20">
+            <GameUi:UiButton id="_btnCancel" label="取消" y="0" x="232"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" />
+            <GameUi:UiButton id="_btnDefault" label="恢复默认" y="0.33" x="0" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                             width="120"></GameUi:UiButton>
+            <GameUi:UiButton id="_btnConfirm" label="确定" y="0" x="232" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                             width="120"></GameUi:UiButton>
+            <e:layout>
+                <e:HorizontalLayout gap="40" />
+            </e:layout>
+        </e:Group>
+        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" source="common_36_png" scale9Grid="45,1,31,6" bottom="30"
+                        horizontalCenter="0" locked="true" />
+    </e:Group>
+</e:Skin>

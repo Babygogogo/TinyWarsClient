@@ -1,20 +1,33 @@
 
 namespace TinyWars.Utility.SoundManager {
-    import SoundType    = Types.SoundType;
-    const _SOUND_PATH   = "resource/assets/sound/";
+    import SoundType            = Types.SoundType;
 
-    let _bgmMute                = false;
-    let _bgmVolume              = 1;    // 音量范围是0～1，1为最大音量
+    export const DEFAULT_MUTE   = false;
+    export const DEFAULT_VOLUME = 1;
+
+    const _SOUND_PATH           = "resource/assets/sound/";
+
+    let _bgmMute                = DEFAULT_MUTE;
+    let _bgmVolume              = DEFAULT_VOLUME;    // 音量范围是0～1，1为最大音量
     let _bgmPrevName            : string;
 
-    let _effectMute             = false;
-    let _effectVolume           = 1;
+    let _effectMute             = DEFAULT_MUTE;
+    let _effectVolume           = DEFAULT_VOLUME;
 
     let _bgmCacheForNormal      : { [name: string]: egret.Sound } = {};
     let _bgmForNormal           : egret.SoundChannel;
 
     let _effectCacheForNormal   : { [name: string]: egret.Sound } = {};
     let _effectsForNormal       : { [name: string]: egret.SoundChannel } = {};
+
+    // var audio_file = new Audio('./videos/bg.mp3');
+    // audio_file.play();
+    // audio_file.addEventListener('timeupdate', function(){
+    //     var buffer = 1.2;
+    //     if(this.currentTime > this.duration - buffer){
+    //         this.currentTime = 0;
+    //         this.play();
+    //     }}, false);
 
     export function init() {
         _initBgmMute();
@@ -35,35 +48,37 @@ namespace TinyWars.Utility.SoundManager {
     // bgm(背景音乐)
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _initBgmMute(): void {
-        setIsBgmMute(LocalStorage.getIsSoundBgmMute(), false);
+        setIsBgmMute(LocalStorage.getIsSoundBgmMute());
     }
-    export function setIsBgmMute(isMute: boolean, setStore = true): void {
-        if (isMute == _bgmMute) {
+    export function setIsBgmMute(isMute: boolean): void {
+        if (isMute == getIsBgmMute()) {
             return;
         }
 
         _bgmMute = isMute;
-        if (setStore) {
-            LocalStorage.setIsSoundBgmMute(isMute);
-        }
-
         _updateBgmVolumeForNormal();
+    }
+    export function setIsBgmMuteToStore(): void {
+        LocalStorage.setIsSoundBgmMute(this.getIsBgmMute());
     }
     export function getIsBgmMute(): boolean {
         return _bgmMute;
     }
 
     function _initBgmVolume(): void {
-        setBgmVolume(LocalStorage.getSoundBgmVolume(), false);
+        setBgmVolume(LocalStorage.getSoundBgmVolume());
     }
-    export function setBgmVolume(volume: number, setStore = true): void {
-        volume          = Math.min(1, Math.max(0, volume || 0));
-        _bgmVolume = volume;
-        if (setStore) {
-            LocalStorage.setSoundBgmVolume(volume);
+    export function setBgmVolume(volume: number): void {
+        volume = Math.min(1, Math.max(0, volume || 0));
+        if (volume === getBgmVolume()) {
+            return;
         }
 
+        _bgmVolume = volume;
         _updateBgmVolumeForNormal();
+    }
+    export function setBgmVolumeToStore(): void {
+        LocalStorage.setSoundBgmVolume(getBgmVolume());
     }
     export function getBgmVolume(): number {
         return _bgmVolume;
@@ -74,7 +89,7 @@ namespace TinyWars.Utility.SoundManager {
     function _updateBgmVolumeForNormal(): void {
         const channel = _bgmForNormal;
         if (channel) {
-            channel.volume = _getRevisedBgmVolume();
+            try { channel.volume = _getRevisedBgmVolume(); } catch (e) {}
         }
     }
 
@@ -115,9 +130,9 @@ namespace TinyWars.Utility.SoundManager {
 
         _stopBgm();
 
-        const channel               = sound.play(0, -1);
-        channel.volume              = _getRevisedBgmVolume();
-        _bgmForNormal  = channel;
+        const channel   = sound.play(0, -1);
+        channel.volume  = _getRevisedBgmVolume();
+        _bgmForNormal   = channel;
     }
 
     function _stopBgm(): void {
@@ -125,7 +140,7 @@ namespace TinyWars.Utility.SoundManager {
     }
     function _stopBgmForNormal(): void {
         if (_bgmForNormal) {
-            _bgmForNormal.stop();
+            try { _bgmForNormal.stop(); } catch (e) {};
             _bgmForNormal = null;
         }
     }
@@ -134,19 +149,18 @@ namespace TinyWars.Utility.SoundManager {
     // effect(各种音效)
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _initEffectMute(): void {
-        setIsEffectMute(LocalStorage.getIsSoundEffectMute(), false);
+        setIsEffectMute(LocalStorage.getIsSoundEffectMute());
     }
-    export function setIsEffectMute(isMute: boolean, setStore = true): void {
-        if (isMute == _effectMute) {
+    export function setIsEffectMute(isMute: boolean): void {
+        if (isMute === getIsEffectMute()) {
             return;
         }
 
         _effectMute = isMute;
-        if (setStore) {
-            LocalStorage.setIsSoundEffectMute(isMute);
-        }
-
         _updateEffectVolumeForNormal();
+    }
+    export function setIsEffectMuteToStore(): void {
+        LocalStorage.setIsSoundEffectMute(getIsEffectMute());
     }
     export function getIsEffectMute(): boolean {
         return _effectMute;
@@ -155,14 +169,17 @@ namespace TinyWars.Utility.SoundManager {
     function _initEffectVolume(): void {
         setEffectVolume(LocalStorage.getSoundEffectVolume());
     }
-    export function setEffectVolume(volume: number, setStore = true): void {
-        volume              = Math.min(1, Math.max(0, volume || 0));
-        _effectVolume  = volume;
-        if (setStore) {
-            LocalStorage.setSoundEffectVolume(volume);
+    export function setEffectVolume(volume: number): void {
+        volume = Math.min(1, Math.max(0, volume || 0));
+        if (volume === getEffectVolume()) {
+            return;
         }
 
+        _effectVolume = volume;
         _updateEffectVolumeForNormal();
+    }
+    export function setEffectVolumeToStore(): void {
+        LocalStorage.setSoundEffectVolume(getEffectVolume());
     }
     export function getEffectVolume(): number {
         return _effectVolume;
@@ -175,7 +192,9 @@ namespace TinyWars.Utility.SoundManager {
         const volume    = _getRevisedEffectVolume();
         for (const name in effects) {
             const eff = effects[name];
-            (eff) && (eff.volume = volume);
+            if (eff) {
+                try { eff.volume = volume; } catch (e) {};
+            }
         }
     }
 
@@ -208,9 +227,9 @@ namespace TinyWars.Utility.SoundManager {
 
         _stopEffect(musicName);
 
-        const channel                       = sound.play(0, 1);
-        channel.volume                      = _getRevisedEffectVolume();
-        _effectsForNormal[musicName]   = channel;
+        const channel                   = sound.play(0, 1);
+        channel.volume                  = _getRevisedEffectVolume();
+        _effectsForNormal[musicName]    = channel;
     }
 
     function _stopEffect(musicName: string): void {
@@ -220,7 +239,7 @@ namespace TinyWars.Utility.SoundManager {
         const effects   = _effectsForNormal;
         const eff       = effects[musicName];
         if (eff) {
-            eff.stop();
+            try { eff.stop(); } catch (e) {};
             effects[musicName] = null;
         }
     }
@@ -232,7 +251,9 @@ namespace TinyWars.Utility.SoundManager {
         const effects = _effectsForNormal;
         for (const name in effects) {
             const eff = effects[name];
-            (eff) && (eff.stop());
+            if (eff) {
+                try { eff.stop(); } catch (e) {};
+            }
         }
         _effectsForNormal = {};
     }
@@ -252,7 +273,7 @@ namespace TinyWars.Utility.SoundManager {
         _bgmCacheForNormal = {};
 
         if (_bgmForNormal) {
-            _bgmForNormal.stop();
+            try { _bgmForNormal.stop(); } catch (e) {};
             _bgmForNormal = null;
         }
     }
@@ -267,7 +288,9 @@ namespace TinyWars.Utility.SoundManager {
         const effects = _effectsForNormal;
         for (const name in effects) {
             const eff = effects[name];
-            (eff) && (eff.stop());
+            if (eff) {
+                try { eff.stop(); } catch (e) {};
+            }
         }
         _effectsForNormal = {};
     }
