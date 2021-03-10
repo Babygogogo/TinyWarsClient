@@ -37,7 +37,6 @@ namespace TinyWars.Utility.FlowManager {
         MpwProxy.init();
         MpwModel.init();
         Time.TimeModel.init();
-        SoundManager.init();
         User.UserProxy.init();
         User.UserModel.init();
         WarMap.WarMapProxy.init();

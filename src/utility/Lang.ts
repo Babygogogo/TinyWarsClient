@@ -925,6 +925,10 @@ namespace TinyWars.Utility.Lang {
             `感谢您游玩Tiny Wars!`,
             `Thank you for playing Tiny Wars!`,
         ],
+        [Type.A0196]: [
+            `您的浏览器不支持播放背景音乐`,
+            `BGM is not supported by your browser.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

@@ -4,23 +4,36 @@ namespace TinyWars.Utility.SoundManager {
 
     export const DEFAULT_MUTE   = false;
     export const DEFAULT_VOLUME = 1;
+    export const enum BgmCode {
+        War01,
+        Lobby01,
+    }
 
-    const _SOUND_PATH           = "resource/assets/sound/";
+    type BgmParams = {
+        name    : string;
+        start   : number;
+        end     : number;
+    };
 
-    let _audioGain              : GainNode;
+    const _SOUND_PATH   = "resource/assets/sound/";
+    const _BGM_PARAMS   = new Map<BgmCode, BgmParams>([
+        [ BgmCode.War01,    { name: "war01.mp3",    start: 1.75, end: 56.75} ],
+        [ BgmCode.Lobby01,  { name: "lobby01.mp3",  start: 16.07, end: 58.07} ],
+    ]);
+
+    let _isInitialized          = false;
     let _audioContext           : AudioContext;
-    let _audioSource            : AudioBufferSourceNode;
-    const _audioBuffers         = new Map<string, AudioBuffer>();
 
     let _bgmMute                = DEFAULT_MUTE;
     let _bgmVolume              = DEFAULT_VOLUME;    // 音量范围是0～1，1为最大音量
-    let _bgmPrevName            : string;
+    let _bgmPrevCode            : BgmCode;
+
+    const _bgmBufferCache       = new Map<BgmCode, AudioBuffer>();
+    let _bgmGain                : GainNode;
+    let _bgmSourceNode          : AudioBufferSourceNode;
 
     let _effectMute             = DEFAULT_MUTE;
     let _effectVolume           = DEFAULT_VOLUME;
-
-    let _bgmCacheForNormal      : { [name: string]: egret.Sound } = {};
-    let _bgmForNormal           : egret.SoundChannel;
 
     let _effectCacheForNormal   : { [name: string]: egret.Sound } = {};
     let _effectsForNormal       : { [name: string]: egret.SoundChannel } = {};
@@ -39,6 +52,11 @@ namespace TinyWars.Utility.SoundManager {
     // );
 
     export async function init(): Promise<void> {
+        if (_isInitialized) {
+            return;
+        }
+        _isInitialized = true;
+
         _initBgmMute();
         _initBgmVolume();
         _initEffectMute();
@@ -46,26 +64,19 @@ namespace TinyWars.Utility.SoundManager {
 
         try {
             _audioContext   = new AudioContext();
-            _audioGain      = _audioContext.createGain();
-            _audioSource    = _audioContext.createBufferSource();
-            _audioSource.connect(_audioGain);
-            _audioGain.connect(_audioContext.destination);
-
-            const buffer = await loadAudioBuffer(getResourcePath("war01.mp3", SoundType.Bgm));
-            const source = _audioSource;
-            source.buffer       = buffer;
-            source.loopStart    = 1.75;
-            source.loopEnd      = 56.75;
-            source.loop         = true;
-            source.start();
-
+            _bgmGain        = _audioContext.createGain();
+            _bgmSourceNode  = _audioContext.createBufferSource();
+            _bgmSourceNode.connect(_bgmGain);
+            _bgmGain.connect(_audioContext.destination);
         } catch (e) {
             FloatText.show(Lang.getText(Lang.Type.A0196));
         }
+
+        playBgm(BgmCode.Lobby01);
     }
 
     export function resume(): void {
-        playBgm(_getBgmPrevName());
+        playBgm(_getBgmPrevCode());
     }
     export function pause(): void {
         _stopBgm();
@@ -115,61 +126,52 @@ namespace TinyWars.Utility.SoundManager {
         return getIsBgmMute() ? 0 : getBgmVolume();
     }
     function _updateBgmVolumeForNormal(): void {
-        const channel = _bgmForNormal;
-        if (channel) {
-            try { channel.volume = _getRevisedBgmVolume(); } catch (e) {}
+        const gain = _bgmGain;
+        if (gain) {
+            gain.gain.value = _getRevisedBgmVolume();
         }
     }
 
-    function _setBgmPrevName(musicName: string): void {
-        _bgmPrevName = musicName;
+    function _setBgmPrevCode(bgmCode: BgmCode): void {
+        _bgmPrevCode = bgmCode;
     }
-    function _getBgmPrevName(): string {
-        return _bgmPrevName;
+    function _getBgmPrevCode(): BgmCode {
+        return _bgmPrevCode;
     }
     /** 播放背景音乐，同时只能有一个在播放 */
-    export function playBgm(musicName: string): void {
-        if (musicName) {
-            _setBgmPrevName(musicName);
-            _playBgmForNormal(musicName);
-        }
+    export function playBgm(bgmCode: BgmCode): void {
+        _setBgmPrevCode(bgmCode);
+        _playBgmForNormal(bgmCode);
     }
-    function _playBgmForNormal(musicName: string): void {
-        const cache = _bgmCacheForNormal;
-        if (cache[musicName]) {
-            _doPlayBgmForNormal(cache[musicName]);
-        } else {
-            // _disposeAllBgm();
-            RES.getResByUrl(
-                getResourcePath(musicName, SoundType.Bgm),
-                (sound: egret.Sound) => {
-                    cache[musicName] = sound;
-                    _doPlayBgmForNormal(sound);
-                },
-                SoundManager,
-                RES.ResourceItem.TYPE_SOUND
-            );
+    async function _playBgmForNormal(bgmCode: BgmCode): Promise<void> {
+        const cache     = _bgmBufferCache;
+        const params    = _BGM_PARAMS.get(bgmCode);
+        if (!cache.has(bgmCode)) {
+            cache.set(bgmCode, await loadAudioBuffer(getResourcePath(params.name, SoundType.Bgm)));
         }
+
+        _doPlayBgmForNormal(cache.get(bgmCode), params);
     }
-    function _doPlayBgmForNormal(sound: egret.Sound): void {
-        if (!sound) {
+    function _doPlayBgmForNormal(buffer: AudioBuffer, params: BgmParams): void {
+        if (!buffer) {
             return;
         }
 
         _stopBgm();
 
-        const channel   = sound.play(0, -1);
-        channel.volume  = _getRevisedBgmVolume();
-        _bgmForNormal   = channel;
+        _bgmSourceNode.buffer       = buffer;
+        _bgmSourceNode.loopStart    = params.start;
+        _bgmSourceNode.loopEnd      = params.end;
+        _bgmSourceNode.loop         = true;
+        _bgmSourceNode.start();
     }
 
     function _stopBgm(): void {
         _stopBgmForNormal();
     }
     function _stopBgmForNormal(): void {
-        if (_bgmForNormal) {
-            try { _bgmForNormal.stop(); } catch (e) {};
-            _bgmForNormal = null;
+        if (_bgmSourceNode) {
+            try { _bgmSourceNode.stop(); } catch {};
         }
     }
 
@@ -294,15 +296,10 @@ namespace TinyWars.Utility.SoundManager {
         _disposeAllEffects();
     }
     function _disposeAllBgm(): void {
-        const cache = _bgmCacheForNormal;
-        for (const name in cache) {
-            cache[name].close();
-        }
-        _bgmCacheForNormal = {};
+        _bgmBufferCache.clear();
 
-        if (_bgmForNormal) {
-            try { _bgmForNormal.stop(); } catch (e) {};
-            _bgmForNormal = null;
+        if (_bgmSourceNode) {
+            try { _bgmSourceNode.stop(); } catch {};
         }
     }
     function _disposeAllEffects(): void {

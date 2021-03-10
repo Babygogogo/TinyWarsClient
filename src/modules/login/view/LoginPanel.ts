@@ -51,6 +51,7 @@ namespace TinyWars.Login {
                 { type: NotifyType.MsgUserLogin,    callback: this._onMsgUserLogin },
             ]);
             this._setUiListenerArray([
+                { ui: this,                         callback: this._onTouchedSelf },
                 { ui: this._btnLogin,               callback: this._onTouchedBtnLogin },
                 { ui: this._btnRegister,            callback: this._onTouchedBtnRegister },
                 { ui: this._btnForgetPassword,      callback: this._onTouchedBtnForgetPassword },
@@ -71,6 +72,10 @@ namespace TinyWars.Login {
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
+        }
+
+        private _onTouchedSelf(e: egret.TouchEvent): void {
+            Utility.SoundManager.init();
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {
