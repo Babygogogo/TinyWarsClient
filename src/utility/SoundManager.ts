@@ -61,8 +61,6 @@ namespace TinyWars.Utility.SoundManager {
         try {
             _audioContext   = new AudioContext();
             _bgmGain        = _audioContext.createGain();
-            _bgmSourceNode  = _audioContext.createBufferSource();
-            _bgmSourceNode.connect(_bgmGain);
             _bgmGain.connect(_audioContext.destination);
         } catch (e) {
             FloatText.show(Lang.getText(Lang.Type.A0196));
@@ -77,7 +75,7 @@ namespace TinyWars.Utility.SoundManager {
     }
 
     export function resume(): void {
-        playBgm(_getBgmPrevCode());
+        playBgm(_getBgmPrevCode(), true);
     }
     export function pause(): void {
         _stopBgm();
@@ -140,8 +138,17 @@ namespace TinyWars.Utility.SoundManager {
         return _bgmPrevCode;
     }
     /** 播放背景音乐，同时只能有一个在播放 */
-    export function playBgm(bgmCode: BgmCode): void {
-        if ((bgmCode) && (_getBgmPrevCode() !== bgmCode)) {
+    export function playBgm(bgmCode: BgmCode, forcePlayFromBeginning = false): void {
+        if (!_isInitialized) {
+            return;
+        }
+
+        if (!bgmCode) {
+            _stopBgm();
+            return;
+        }
+
+        if ((_getBgmPrevCode() !== bgmCode) || (forcePlayFromBeginning)) {
             _setBgmPrevCode(bgmCode);
             _playBgmForNormal(bgmCode);
         }
@@ -162,10 +169,12 @@ namespace TinyWars.Utility.SoundManager {
 
         _stopBgm();
 
+        _bgmSourceNode              = _audioContext.createBufferSource();
         _bgmSourceNode.buffer       = buffer;
         _bgmSourceNode.loopStart    = params.start;
         _bgmSourceNode.loopEnd      = params.end;
         _bgmSourceNode.loop         = true;
+        _bgmSourceNode.connect(_bgmGain);
         _bgmSourceNode.start();
     }
 
@@ -174,7 +183,11 @@ namespace TinyWars.Utility.SoundManager {
     }
     function _stopBgmForNormal(): void {
         if (_bgmSourceNode) {
-            try { _bgmSourceNode.stop(); } catch (e) {};
+            try {
+                _bgmSourceNode.stop();
+                _bgmSourceNode.disconnect();
+            } catch (e) {};
+            _bgmSourceNode = null;
         }
     }
 
@@ -302,7 +315,11 @@ namespace TinyWars.Utility.SoundManager {
         _bgmBufferCache.clear();
 
         if (_bgmSourceNode) {
-            try { _bgmSourceNode.stop(); } catch (e) {};
+            try {
+                _bgmSourceNode.stop();
+                _bgmSourceNode.disconnect();
+            } catch (e) {};
+            _bgmSourceNode = null;
         }
     }
     function _disposeAllEffects(): void {

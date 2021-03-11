@@ -72,6 +72,8 @@ namespace TinyWars.Utility.FlowManager {
         Login.LoginBackgroundPanel.show();
         Login.LoginPanel.show();
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
     }
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
@@ -86,6 +88,8 @@ namespace TinyWars.Utility.FlowManager {
         Lobby.LobbyTopPanel.show();
         Lobby.LobbyBottomPanel.show();
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
     }
     export async function gotoMultiCustomWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
         RwModel.unloadWar();
@@ -100,6 +104,8 @@ namespace TinyWars.Utility.FlowManager {
         MultiPlayerWar.McwTileBriefPanel.show();
         MultiPlayerWar.McwUnitBriefPanel.show();
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(SoundManager.BgmCode.War01);
     }
     export async function gotoReplay(warData: Uint8Array, replayId: number): Promise<void> {
         MpwModel.unloadWar();
@@ -114,6 +120,8 @@ namespace TinyWars.Utility.FlowManager {
         ReplayWar.RwTileBriefPanel.show();
         ReplayWar.RwUnitBriefPanel.show();
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(SoundManager.BgmCode.War01);
     }
     export async function gotoSingleCustomWar({ warData, slotIndex, slotComment }: {
         warData     : ProtoTypes.WarSerialization.ISerialWar;
@@ -132,6 +140,8 @@ namespace TinyWars.Utility.FlowManager {
         SingleCustomWar.ScwTileBriefPanel.show();
         SingleCustomWar.ScwUnitBriefPanel.show();
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(SoundManager.BgmCode.War01);
     }
     export async function gotoMapEditor(mapRawData: ProtoTypes.Map.IMapRawData, slotIndex: number, isReview: boolean): Promise<void> {
         MpwModel.unloadWar();
@@ -146,6 +156,8 @@ namespace TinyWars.Utility.FlowManager {
         MapEditor.MeTileBriefPanel.show();
         MapEditor.MeUnitBriefPanel.show();
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
     }
 
     export function gotoMrrMyWarListPanel(): void {
@@ -158,6 +170,8 @@ namespace TinyWars.Utility.FlowManager {
         Lobby.LobbyTopPanel.show();
         MultiRankRoom.MrrMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
     }
     export function gotoMcrMyWarListPanel(): void {
         MpwModel.unloadWar();
@@ -169,6 +183,8 @@ namespace TinyWars.Utility.FlowManager {
         Lobby.LobbyTopPanel.show();
         MultiCustomRoom.McrMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
