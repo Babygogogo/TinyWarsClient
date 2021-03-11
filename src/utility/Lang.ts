@@ -929,6 +929,10 @@ namespace TinyWars.Utility.Lang {
             `您的浏览器不支持播放背景音乐`,
             `BGM is not supported by your browser.`,
         ],
+        [Type.A0197]: [
+            `地图已保存，但数据不合法，因而无法提审`,
+            `The map has been saved, however the data is invalid for review.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

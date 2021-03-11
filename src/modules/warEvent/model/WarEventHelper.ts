@@ -6,8 +6,11 @@ namespace TinyWars.WarEvent.WarEventHelper {
     import Types                    = Utility.Types;
     import Logger                   = Utility.Logger;
     import ConfigManager            = Utility.ConfigManager;
+    import ClientErrorCode          = Utility.ClientErrorCode;
+    import CommonConstants          = Utility.CommonConstants;
     import BwHelpers                = BaseWar.BwHelpers;
     import LanguageType             = Types.LanguageType;
+    import ConditionType            = Types.WarEventConditionType;
     import WarEvent                 = ProtoTypes.WarEvent;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IMapRawData              = ProtoTypes.Map.IMapRawData;
@@ -15,8 +18,6 @@ namespace TinyWars.WarEvent.WarEventHelper {
     import IWarEventAction          = WarEvent.IWarEventAction;
     import IWarEventCondition       = WarEvent.IWarEventCondition;
     import IWarEventConditionNode   = WarEvent.IWarEventConditionNode;
-    import ConditionType            = Types.WarEventConditionType;
-    import CommonConstants          = Utility.CommonConstants;
 
     const CONDITION_TYPE_ARRAY = [
         ConditionType.WecTurnIndexEqualTo,
@@ -175,6 +176,101 @@ namespace TinyWars.WarEvent.WarEventHelper {
         }
 
         return true;
+    }
+    export function getErrorCodeForWarEventFullData(mapRawData: IMapRawData): ClientErrorCode {   // DONE
+        const warEventFullData = mapRawData.warEventFullData;
+        if (warEventFullData == null) {
+            return ClientErrorCode.NoError;
+        }
+
+        const warRuleArray = mapRawData.warRuleArray;
+        if (warRuleArray == null) {
+            return ClientErrorCode.WarEventFullDataValidation0000;
+        }
+
+        const actionDict = new Map<number, IWarEventAction>();
+        for (const action of warEventFullData.actionArray || []) {
+            const actionId = action.WarEventActionCommonData?.actionId;
+            if ((actionId == null) || (actionDict.has(actionId))) {
+                return ClientErrorCode.WarEventFullDataValidation0001;
+            }
+            actionDict.set(actionId, action);
+        }
+        if (actionDict.size > CommonConstants.WarEventMaxActionsPerMap) {
+            return ClientErrorCode.WarEventFullDataValidation0002;
+        }
+
+        const conditionDict = new Map<number, IWarEventCondition>();
+        for (const condition of warEventFullData.conditionArray || []) {
+            const conditionId = condition.WecCommonData?.conditionId;
+            if ((conditionId == null) || (conditionDict.has(conditionId))) {
+                return ClientErrorCode.WarEventFullDataValidation0003;
+            }
+            conditionDict.set(conditionId, condition);
+        }
+        if (conditionDict.size > CommonConstants.WarEventMaxConditionsPerMap) {
+            return ClientErrorCode.WarEventFullDataValidation0004;
+        }
+
+        const nodeDict = new Map<number, IWarEventConditionNode>();
+        for (const node of warEventFullData.conditionNodeArray || []) {
+            const nodeId = node.nodeId;
+            if ((nodeId == null) || (nodeDict.has(nodeId))) {
+                return ClientErrorCode.WarEventFullDataValidation0005;
+            }
+            nodeDict.set(nodeId, node);
+        }
+        if (nodeDict.size > CommonConstants.WarEventMaxConditionNodesPerMap) {
+            return ClientErrorCode.WarEventFullDataValidation0006;
+        }
+
+        const eventDict = new Map<number, IWarEvent>();
+        for (const event of warEventFullData.eventArray || []) {
+            const eventId = event.eventId;
+            if ((eventId == null) || (eventDict.has(eventId))) {
+                return ClientErrorCode.WarEventFullDataValidation0007;
+            }
+            eventDict.set(eventId, event);
+        }
+        if (eventDict.size > CommonConstants.WarEventMaxEventsPerMap) {
+            return ClientErrorCode.WarEventFullDataValidation0008;
+        }
+
+        if (!checkIsEveryWarEventActionInUse(actionDict, eventDict)) {
+            return ClientErrorCode.WarEventFullDataValidation0009;
+        }
+        if (!checkIsEveryWarEventConditionInUse(conditionDict, nodeDict)) {
+            return ClientErrorCode.WarEventFullDataValidation0010;
+        }
+        if (!checkIsEveryWarEventConditionNodeInUse(nodeDict, eventDict)) {
+            return ClientErrorCode.WarEventFullDataValidation0011;
+        }
+        if (!checkIsEveryWarEventInUse(eventDict, warRuleArray)) {
+            return ClientErrorCode.WarEventFullDataValidation0012;
+        }
+
+        for (const [, action] of actionDict) {
+            if (!checkIsValidWarEventAction({ action, eventDict, mapRawData })) {
+                return ClientErrorCode.WarEventFullDataValidation0013;
+            }
+        }
+        for (const [, condition] of conditionDict) {
+            if (!checkIsValidWarEventCondition({ condition, eventDict })) {
+                return ClientErrorCode.WarEventFullDataValidation0014;
+            }
+        }
+        for (const [, conditionNode] of nodeDict) {
+            if (!checkIsValidWarEventConditionNode({ conditionNode, conditionDict, nodeDict })) {
+                return ClientErrorCode.WarEventFullDataValidation0015;
+            }
+        }
+        for (const [, warEvent] of eventDict) {
+            if (!checkIsValidWarEvent({ warEvent, nodeDict, actionDict })) {
+                return ClientErrorCode.WarEventFullDataValidation0016;
+            }
+        }
+
+        return ClientErrorCode.NoError;
     }
     function checkIsEveryWarEventActionInUse(actionDict: WarEventActionDict, eventDict: WarEventDict): boolean {    // DONE
         for (const [actionId] of actionDict) {

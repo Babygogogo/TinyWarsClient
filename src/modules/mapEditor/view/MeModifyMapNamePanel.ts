@@ -55,8 +55,8 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnModify,  callback: this._onTouchedBtnModify },
             ]);
 
-            this._inputChinese.maxChars = CommonConstants.MaxMapNameLength;
-            this._inputEnglish.maxChars = CommonConstants.MaxMapNameLength;
+            this._inputChinese.maxChars = CommonConstants.MapMaxNameLength;
+            this._inputEnglish.maxChars = CommonConstants.MapMaxNameLength;
 
             this._updateView();
         }
@@ -74,8 +74,8 @@ namespace TinyWars.MapEditor {
             ];
             if (textList.every(v => v.text.length <= 0)) {
                 FloatText.show(Lang.getText(Lang.Type.A0155));
-            } else if (textList.some(v => v.text.length > CommonConstants.MaxMapNameLength)) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.MaxMapNameLength));
+            } else if (textList.some(v => v.text.length > CommonConstants.MapMaxNameLength)) {
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.MapMaxNameLength));
             } else {
                 MeModel.getWar().setMapNameArray(textList);
                 Notify.dispatch(Notify.Type.MeMapNameChanged);

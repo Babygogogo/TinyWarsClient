@@ -280,6 +280,32 @@ namespace TinyWars.BaseWar.BwHelpers {
             && (mapWidth * mapHeight <= CommonConstants.MapMaxGridsCount);
     }
 
+    export function checkIsUnitIdCompact(unitArray: WarSerialization.ISerialUnit[] | null | undefined): boolean {
+        if ((unitArray == null) || (unitArray.length <= 0)) {
+            return true;
+        }
+
+        const unitIdSet = new Set<number>();
+        for (const unit of unitArray) {
+            const unitId = unit.unitId;
+            if ((unitId == null) || (unitId < 0) || (unitIdSet.has(unitId))) {
+                return false;
+            }
+            unitIdSet.add(unitId);
+        }
+
+        if (!unitIdSet.has(0)) {
+            return false;
+        }
+        for (const unitId of unitIdSet) {
+            if ((unitId > 0) && (!unitIdSet.has(unitId - 1))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     export function checkIsStateRequesting(state: Types.ActionPlannerState): boolean {
         return (state === Types.ActionPlannerState.RequestingPlayerActivateSkill)
             || (state === Types.ActionPlannerState.RequestingPlayerBeginTurn)

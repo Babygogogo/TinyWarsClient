@@ -26,8 +26,8 @@ namespace TinyWars.Utility.CommonConstants {
     export const ChangeLogMessageListMaxLength      = 100;
 
     export const MapMaxGridsCount                   = 1000;
-    export const MaxMapNameLength                   = 30;
-    export const MaxDesignerLength                  = 30;
+    export const MapMaxNameLength                   = 30;
+    export const MapMaxDesignerLength               = 30;
 
     export const WarEventNameMaxLength              = 150;
     export const WarEventMaxEventsPerMap            = 10;

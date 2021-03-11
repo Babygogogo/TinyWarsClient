@@ -6,6 +6,7 @@ namespace TinyWars.MapEditor.MeUtility {
     import Helpers              = Utility.Helpers;
     import ConfigManager        = Utility.ConfigManager;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import ClientErrorCode      = Utility.ClientErrorCode;
     import BwWarRuleHelper      = BaseWar.BwWarRuleHelper;
     import BwHelpers            = BaseWar.BwHelpers;
     import BwTile               = BaseWar.BwTile;
@@ -182,14 +183,14 @@ namespace TinyWars.MapEditor.MeUtility {
     function checkIsMapDesignerNameValid(mapDesigner: string | null | undefined): boolean {
         return (mapDesigner != null)
             && (mapDesigner.length > 0)
-            && (mapDesigner.length <= CommonConstants.MaxDesignerLength);
+            && (mapDesigner.length <= CommonConstants.MapMaxDesignerLength);
     }
     function checkIsMapNameArrayValid(mapNameList: ProtoTypes.Structure.ILanguageText[] | null | undefined): boolean {
         return (mapNameList != null)
             && (Helpers.checkIsValidLanguageTextArray({
                 list            : mapNameList,
                 minTextLength   : 1,
-                maxTextLength   : CommonConstants.MaxMapNameLength,
+                maxTextLength   : CommonConstants.MapMaxNameLength,
                 minTextCount    : 1,
             }));
     }
@@ -675,5 +676,129 @@ namespace TinyWars.MapEditor.MeUtility {
                 shapeId2    : tile2.getObjectShapeId(),
                 symmetryType,
             }));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export async function getErrorCodeForMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
+        const configVersion = ConfigManager.getLatestFormalVersion();
+        if (configVersion == null) {
+            return ClientErrorCode.MapRawDataValidation0000;
+        }
+
+        const designerNameError = getErrorCodeForMapDesigner(mapRawData.designerName);
+        if (designerNameError) {
+            return designerNameError;
+        }
+
+        const mapNameArrayError = getErrorCodeForMapNameArray(mapRawData.mapNameArray);
+        if (mapNameArrayError) {
+            return mapNameArrayError;
+        }
+
+        const unitArrayError = getErrorCodeForUnitArray(mapRawData.unitDataArray);
+        if (unitArrayError) {
+            return unitArrayError;
+        }
+
+        const playersCountUnneutralError = getErrorCodeForPlayersCountUnneutral(mapRawData);
+        if (playersCountUnneutralError) {
+            return playersCountUnneutralError;
+        }
+
+        const warRuleError = BwWarRuleHelper.getErrorCodeForWarRuleArray({
+            ruleList                : mapRawData.warRuleArray,
+            playersCountUnneutral   : mapRawData.playersCountUnneutral!,
+            allWarEventIdArray      : WarEventHelper.getAllWarEventIdArray(mapRawData.warEventFullData),
+            configVersion,
+        });
+        if (warRuleError) {
+            return warRuleError;
+        }
+
+        const warEventError = WarEventHelper.getErrorCodeForWarEventFullData(mapRawData);
+        if (warEventError) {
+            return warEventError;
+        }
+
+        const testWarError = await new TwWar().initByMapRawData(mapRawData);
+        if (testWarError) {
+            return testWarError;
+        }
+
+        return ClientErrorCode.NoError;
+    }
+    function getErrorCodeForMapDesigner(mapDesigner: string | null | undefined): ClientErrorCode {
+        if ((mapDesigner == null)                                       ||
+            (mapDesigner.length <= 0)                                   ||
+            (mapDesigner.length > CommonConstants.MapMaxDesignerLength)
+        ) {
+            return ClientErrorCode.MapRawDataValidation0001;
+        } else {
+            return ClientErrorCode.NoError;
+        }
+    }
+    function getErrorCodeForMapNameArray(mapNameList: ProtoTypes.Structure.ILanguageText[] | null | undefined): ClientErrorCode {
+        if (!Helpers.checkIsValidLanguageTextArray({
+            list            : mapNameList,
+            maxTextLength   : CommonConstants.MapMaxNameLength,
+            minTextLength   : 1,
+            minTextCount    : 1,
+        })) {
+            return ClientErrorCode.MapRawDataValidation0002;
+        }
+
+        return ClientErrorCode.NoError;
+    }
+    function getErrorCodeForUnitArray(unitArray: ProtoTypes.WarSerialization.ISerialUnit[] | null | undefined): ClientErrorCode {
+        if (!BwHelpers.checkIsUnitIdCompact(unitArray)) {
+            return ClientErrorCode.MapRawDataValidation0003;
+        }
+
+        return ClientErrorCode.NoError;
+    }
+    function getErrorCodeForPlayersCountUnneutral(mapRawData: IMapRawData): ClientErrorCode {
+        const playersCountUnneutral = mapRawData.playersCountUnneutral;
+        if ((playersCountUnneutral == null)                                 ||
+            (playersCountUnneutral <= CommonConstants.WarFirstPlayerIndex)  ||
+            (playersCountUnneutral > CommonConstants.WarMaxPlayerIndex)
+        ) {
+            return ClientErrorCode.MapRawDataValidation0004;
+        }
+
+        const playerIndexSet = new Set<number>();
+        for (const tileData of mapRawData.tileDataArray || []) {
+            const playerIndex = tileData.playerIndex;
+            if ((playerIndex == null)                                   ||
+                (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
+                (playerIndex > playersCountUnneutral)
+            ) {
+                return ClientErrorCode.MapRawDataValidation0005;
+            }
+            playerIndexSet.add(playerIndex);
+        }
+        for (const unitData of mapRawData.unitDataArray || []) {
+            const playerIndex = unitData.playerIndex;
+            if ((playerIndex == null)                                   ||
+                (playerIndex < CommonConstants.WarFirstPlayerIndex)     ||
+                (playerIndex > playersCountUnneutral)
+            ) {
+                return ClientErrorCode.MapRawDataValidation0006;
+            }
+            playerIndexSet.add(playerIndex);
+        }
+
+        for (const playerIndex of playerIndexSet) {
+            if ((playerIndex > CommonConstants.WarFirstPlayerIndex) &&
+                (!playerIndexSet.has(playerIndex - 1))
+            ) {
+                return ClientErrorCode.MapRawDataValidation0007;
+            }
+        }
+
+        if (Math.max(...playerIndexSet) !== playersCountUnneutral) {
+            return ClientErrorCode.MapRawDataValidation0008;
+        }
+
+        return ClientErrorCode.NoError;
     }
 }

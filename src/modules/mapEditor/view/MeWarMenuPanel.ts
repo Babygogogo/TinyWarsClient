@@ -110,7 +110,13 @@ namespace TinyWars.MapEditor {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onMsgMeSubmitMap(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0085));
+            const data = e.data as ProtoTypes.NetMessage.MsgMeSubmitMap.IS;
+            if (data.mapRawDataErrorCode) {
+                FloatText.show(Lang.getText(Lang.Type.A0197));
+                FloatText.show(Lang.getNetErrorText(data.mapRawDataErrorCode));
+            } else {
+                FloatText.show(Lang.getText(Lang.Type.A0085));
+            }
             this._war.setIsMapModified(false);
         }
 
@@ -200,7 +206,7 @@ namespace TinyWars.MapEditor {
                     title           : Lang.getText(Lang.Type.B0163),
                     tips            : null,
                     currentValue    : war.getMapDesignerName(),
-                    maxChars        : Utility.CommonConstants.MaxDesignerLength,
+                    maxChars        : Utility.CommonConstants.MapMaxDesignerLength,
                     charRestrict    : null,
                     callback        : (panel) => {
                         war.setMapDesignerName(panel.getInputText());
