@@ -10,6 +10,7 @@ namespace TinyWars.Login {
 
         private static _instance: LoginBackgroundPanel;
 
+        private _imgBackground      : GameUi.UiImage;
         private _labelVersion       : GameUi.UiLabel;
         private _btnLanguage01      : GameUi.UiButton;
         private _btnLanguage02      : GameUi.UiButton;
@@ -41,10 +42,12 @@ namespace TinyWars.Login {
                 { type: Notify.Type.MsgCommonLatestConfigVersion,   callback: this._onMsgCommonLatestConfigVersion },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnLanguage01, callback: this._onTouchedBtnLanguage01 },
-                { ui: this._btnLanguage02, callback: this._onTouchedBtnLanguage02 },
+                { ui: this,                 callback: this._onTouchedSelf },
+                { ui: this._btnLanguage01,  callback: this._onTouchedBtnLanguage01 },
+                { ui: this._btnLanguage02,  callback: this._onTouchedBtnLanguage02 },
             ]);
 
+            this._imgBackground.touchEnabled = true;
             this._btnLanguage01.setImgDisplaySource("login_button_language_003");
             this._btnLanguage01.setImgExtraSource("login_button_language_001");
 
@@ -72,6 +75,9 @@ namespace TinyWars.Login {
         }
         private _onMsgCommonLatestConfigVersion(e: egret.Event): void {
             // this._initGroupUnits();
+        }
+        private _onTouchedSelf(e: egret.TouchEvent): void {
+            Utility.SoundManager.init();
         }
         private _onTouchedBtnLanguage01(e: egret.TouchEvent): void {
             if (Lang.getCurrentLanguageType() !== Types.LanguageType.Chinese) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage source="bg_001_png" left="0" right="0" top="0" bottom="0" locked="true" />
+    <GameUi:UiImage id="_imgBackground" source="bg_001_png" left="0" right="0" top="0" bottom="0" />
     <e:Group x="0" verticalCenter="120">
         <GameUi:UiButton id="_btnLanguage01" label="" y="0" skinName="Skins.Component.Button.ButtonConfirm001" x="0" />
         <GameUi:UiButton id="_btnLanguage02" label="" y="10" skinName="Skins.Component.Button.ButtonConfirm001" x="0" />

@@ -49,6 +49,7 @@ namespace TinyWars.User {
         private _btnRankList                : GameUi.UiButton;
         private _btnShowOnlineUsers         : GameUi.UiButton;
         private _btnChangeLanguage          : GameUi.UiButton;
+        private _btnSetSound                : GameUi.UiButton;
         private _btnServerStatus            : GameUi.UiButton;
         private _btnChat                    : GameUi.UiButton;
         private _btnComplaint               : GameUi.UiButton;
@@ -96,6 +97,7 @@ namespace TinyWars.User {
                 { ui: this._btnRankList,        callback: this._onTouchedBtnRankList },
                 { ui: this._btnShowOnlineUsers, callback: this._onTouchedBtnShowOnlineUsers },
                 { ui: this._btnChangeLanguage,  callback: this._onTouchedBtnChangeLanguage },
+                { ui: this._btnSetSound,        callback: this._onTouchedBtnSetSound },
                 { ui: this._btnServerStatus,    callback: this._onTouchedBtnServerStatus },
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
                 { ui: this._btnComplaint,       callback: this._onTouchedBtnComplaint },
@@ -165,6 +167,9 @@ namespace TinyWars.User {
             LocalStorage.setLanguageType(languageType);
 
             Notify.dispatch(Notify.Type.LanguageChanged);
+        }
+        private _onTouchedBtnSetSound(e: egret.TouchEvent): void {
+            UserSetSoundPanel.show();
         }
         private _onTouchedBtnServerStatus(e: egret.TouchEvent): void {
             Common.CommonServerStatusPanel.show();
@@ -248,6 +253,7 @@ namespace TinyWars.User {
             group.addChild(this._btnRankList);
             group.addChild(this._btnShowOnlineUsers);
             group.addChild(this._btnChangeLanguage);
+            group.addChild(this._btnSetSound);
             group.addChild(this._btnSwitchTexture);
             group.addChild(this._btnUnitsInfo);
             group.addChild(this._btnChangeLog);
@@ -280,6 +286,7 @@ namespace TinyWars.User {
             this._updateBtnRankList();
             this._updateBtnShowOnlineUsers();
             this._updateBtnChangeLanguage();
+            this._updateBtnSetSound();
             this._updateBtnSwitchTexture();
             this._updateBtnUnitsInfo();
             this._updateBtnChangeLog();
@@ -362,6 +369,9 @@ namespace TinyWars.User {
             this._btnChangeLanguage.label = Lang.getCurrentLanguageType() === Types.LanguageType.Chinese
                 ? Lang.getText(Lang.Type.B0148, Types.LanguageType.English)
                 : Lang.getText(Lang.Type.B0148, Types.LanguageType.Chinese);
+        }
+        private _updateBtnSetSound(): void {
+            this._btnSetSound.label = Lang.getText(Lang.Type.B0540);
         }
         private _updateBtnSwitchTexture(): void {
             this._btnSwitchTexture.label = User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0

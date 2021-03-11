@@ -146,6 +146,8 @@
                                          skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <GameUi:UiButton id="_btnMapManagement" label="管理地图" y="360" x="256" width="200"
                                          skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+                        <GameUi:UiButton id="_btnSetSound" label="声音设置" y="360" x="256" width="200"
+                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
                         <e:layout>
                             <e:TileLayout orientation="rows" requestedColumnCount="4" />
                         </e:layout>

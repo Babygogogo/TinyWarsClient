@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="400" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group left="0" right="0" top="0" bottom="0">
-        <GameUi:UiImage source="login_title_001" left="0" right="0" top="0" bottom="0" alpha="0" x="-879" y="-84"
-                        scaleX="1" scaleY="1" />
-    </e:Group>
     <e:Group horizontalCenter="0" verticalCenter="-17">
         <GameUi:UiImage source="login_title_001" x="0" y="0" />
         <e:Group width="300" x="117" y="194">
