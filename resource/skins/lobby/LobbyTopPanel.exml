@@ -8,7 +8,7 @@
                             bold="true" />
             <GameUi:UiLabel id="_labelUserId" text="ID: 1" y="40" size="12" x="70" textColor="0xFFFFFF" />
         </e:Group>
-        <GameUi:UiButton id="_btnChat" label="" y="16" right="40" width="44" height="44">
+        <GameUi:UiButton id="_btnSettings" label="" y="16" right="40" width="44" height="44">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
                     <e:Image source="lobbyTop0001" horizontalCenter="0" verticalCenter="0" />

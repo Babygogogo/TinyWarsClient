@@ -26,6 +26,7 @@
                             <e:VerticalLayout gap="2" />
                         </e:layout>
                     </e:Group>
+                    <GameUi:UiImage id="_imgChatRed" scaleX="0.6" scaleY="0.6" source="common0000" right="-10" top="-6" />
                 </e:Group>
                 <e:Group id="_groupMapEditor" x="300" top="0">
                     <GameUi:UiImage scaleX="1" scaleY="1" verticalCenter="0" source="lobby0003" />

@@ -15,6 +15,7 @@ namespace TinyWars.Lobby {
         private _groupBottom    : eui.Group;
         private _groupMyInfo    : eui.Group;
         private _groupChat      : eui.Group;
+        private _imgChatRed     : GameUi.UiImage;
         private _groupMapEditor : eui.Group;
         private _groupGameData  : eui.Group;
 
@@ -45,10 +46,15 @@ namespace TinyWars.Lobby {
                 { ui: this._groupGameData,      callback: this._onTouchedGroupGameData },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.MsgUserLogout, callback: this._onMsgUserLogout },
+                { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
+                { type: Notify.Type.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
+                { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
+                { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
+                { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessages },
             ]);
 
             this._showOpenAnimation();
+            this._updateImgChatRed();
         }
 
         protected async _onClosed(): Promise<void> {
@@ -87,10 +93,26 @@ namespace TinyWars.Lobby {
         private _onMsgUserLogout(e: egret.Event): void {
             this.close();
         }
+        private _onMsgChatGetAllReadProgressList(e: egret.Event): void {
+            this._updateImgChatRed();
+        }
+        private _onMsgChatUpdateReadProgress(e: egret.Event): void {
+            this._updateImgChatRed();
+        }
+        private _onMsgChatGetAllMessages(e: egret.Event): void {
+            this._updateImgChatRed();
+        }
+        private _onMsgChatAddMessages(e: egret.Event): void {
+            this._updateImgChatRed();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _updateImgChatRed(): void {
+            this._imgChatRed.visible = Chat.ChatModel.checkHasUnreadMessage();
+        }
+
         private _showOpenAnimation(): void {
             const groupBottom = this._groupBottom;
             Tween.removeTweens(groupBottom);
