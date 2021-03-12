@@ -3093,6 +3093,10 @@ namespace TinyWars.Utility.Lang {
             `音效`,
             `SFX`,
         ],
+        [Type.B0543]: [
+            `默认`,
+            `Default`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3940,7 +3944,7 @@ namespace TinyWars.Utility.Lang {
         return Helpers.formatString(getText(t), ...params);
     }
 
-    export function getNetErrorText(code: ServerErrorCode): string {
+    export function getErrorText(code: ServerErrorCode | ClientErrorCode): string {
         const textList  = ERROR_TEXT[code];
         const text      = textList ? textList[_languageType] : undefined;
         return `${getText(Type.B0452)} ${code}: ${text || getText(Type.A0153)}`;
@@ -4138,18 +4142,6 @@ namespace TinyWars.Utility.Lang {
             case Types.MapReviewStatus.Rejected     : return getText(Type.B0275);
             case Types.MapReviewStatus.Accepted     : return getText(Type.B0276);
             default                                 : return null;
-        }
-    }
-
-    export function getMapInvalidationDesc(type: Types.CustomMapInvalidationType): string {
-        switch (type) {
-            case Types.CustomMapInvalidationType.InvalidMapDesigner     : return Lang.getText(Lang.Type.A0118);
-            case Types.CustomMapInvalidationType.InvalidMapName         : return Lang.getText(Lang.Type.A0119);
-            case Types.CustomMapInvalidationType.InvalidPlayersCount    : return Lang.getText(Lang.Type.A0121);
-            case Types.CustomMapInvalidationType.InvalidTiles           : return Lang.getText(Lang.Type.A0123);
-            case Types.CustomMapInvalidationType.InvalidUnits           : return Lang.getText(Lang.Type.A0122);
-            case Types.CustomMapInvalidationType.InvalidWarRuleList     : return Lang.getText(Lang.Type.A0124);
-            default                                                     : return "";
         }
     }
 

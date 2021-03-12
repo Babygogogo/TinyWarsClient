@@ -113,7 +113,7 @@ namespace TinyWars.MapEditor {
             const data = e.data as ProtoTypes.NetMessage.MsgMeSubmitMap.IS;
             if (data.mapRawDataErrorCode) {
                 FloatText.show(Lang.getText(Lang.Type.A0197));
-                FloatText.show(Lang.getNetErrorText(data.mapRawDataErrorCode));
+                FloatText.show(Lang.getErrorText(data.mapRawDataErrorCode));
             } else {
                 FloatText.show(Lang.getText(Lang.Type.A0085));
             }
@@ -556,10 +556,10 @@ namespace TinyWars.MapEditor {
             const war = this._war;
             return {
                 name    : Lang.getText(Lang.Type.B0325),
-                callback: () => {
-                    const invalidationType = MeUtility.getMapInvalidationType(war.serializeForMap());
-                    if (invalidationType !== Types.CustomMapInvalidationType.Valid) {
-                        FloatText.show(Lang.getMapInvalidationDesc(invalidationType));
+                callback: async () => {
+                    const errorCode = await MeUtility.getErrorCodeForMapRawData(war.serializeForMap());
+                    if (errorCode) {
+                        FloatText.show(Lang.getErrorText(errorCode));
                         return;
                     }
 

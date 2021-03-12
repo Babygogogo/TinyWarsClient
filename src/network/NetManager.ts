@@ -38,7 +38,7 @@ namespace TinyWars.Network.NetManager {
                 // Don't show the error text.
             } else {
                 if (action.errorCode) {
-                    FloatText.show(Utility.Lang.getNetErrorText(action.errorCode));
+                    FloatText.show(Utility.Lang.getErrorText(action.errorCode));
                 }
             }
             this.dispatchEventWith(name, false, action);

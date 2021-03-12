@@ -542,6 +542,7 @@ namespace TinyWars.Utility.Types {
         ScwStd      = 5,
         ScwFog      = 6,
         Me          = 7,
+        Test        = 8,
     }
 
     export const enum MapReviewStatus {
@@ -590,17 +591,6 @@ namespace TinyWars.Utility.Types {
     export const enum BootTimerType {
         Regular     = 1,
         Incremental = 2,
-    }
-
-    export const enum CustomMapInvalidationType {
-        Valid,
-        InvalidMapDesigner,
-        InvalidMapName,
-        InvalidPlayersCount,
-        InvalidUnits,
-        InvalidTiles,
-        InvalidWarRuleList,
-        InvalidWarEventData,
     }
 
     export const enum WarEventDescType {

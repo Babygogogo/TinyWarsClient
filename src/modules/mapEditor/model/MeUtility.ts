@@ -16,7 +16,6 @@ namespace TinyWars.MapEditor.MeUtility {
     import TileBaseType         = Types.TileBaseType;
     import SymmetryType         = Types.SymmetryType;
     import LanguageType         = Types.LanguageType;
-    import InvalidationType     = Types.CustomMapInvalidationType;
     import IMapRawData          = ProtoTypes.Map.IMapRawData;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
     import IWarRule             = ProtoTypes.WarRule.IWarRule;
@@ -158,291 +157,6 @@ namespace TinyWars.MapEditor.MeUtility {
             restTimeToBoot              : 0,
             unitAndTileSkinId           : playerIndex,
         };
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function getMapInvalidationType(mapRawData: IMapRawData): InvalidationType {
-        if (!checkIsMapDesignerNameValid(mapRawData.designerName)) {
-            return InvalidationType.InvalidMapDesigner;
-        } else if (!checkIsMapNameArrayValid(mapRawData.mapNameArray)) {
-            return InvalidationType.InvalidMapName;
-        } else if (!checkIsPlayersCountValid(mapRawData)) {
-            return InvalidationType.InvalidPlayersCount;
-        } else if (!checkIsUnitsValid(mapRawData)) {
-            return InvalidationType.InvalidUnits;
-        } else if (!checkIsTilesValid(mapRawData)) {
-            return InvalidationType.InvalidTiles;
-        } else if (!checkIsWarRuleArrayValid(mapRawData.warRuleArray, mapRawData.playersCountUnneutral, mapRawData.warEventFullData)) {
-            return InvalidationType.InvalidWarRuleList;
-        } else if (!WarEventHelper.checkIsWarEventFullDataValid(mapRawData)) {
-            return InvalidationType.InvalidWarEventData;
-        } else {
-            return InvalidationType.Valid;
-        }
-    }
-    function checkIsMapDesignerNameValid(mapDesigner: string | null | undefined): boolean {
-        return (mapDesigner != null)
-            && (mapDesigner.length > 0)
-            && (mapDesigner.length <= CommonConstants.MapMaxDesignerLength);
-    }
-    function checkIsMapNameArrayValid(mapNameList: ProtoTypes.Structure.ILanguageText[] | null | undefined): boolean {
-        return (mapNameList != null)
-            && (Helpers.checkIsValidLanguageTextArray({
-                list            : mapNameList,
-                minTextLength   : 1,
-                maxTextLength   : CommonConstants.MapMaxNameLength,
-                minTextCount    : 1,
-            }));
-    }
-    function checkIsPlayersCountValid(mapRawData: IMapRawData): boolean {
-        const playersCount = mapRawData.playersCountUnneutral;
-        if ((playersCount == null) || (playersCount <= 1) || (playersCount > CommonConstants.WarMaxPlayerIndex)) {
-            return false;
-        }
-
-        const playerIndexes = new Set<number>();
-        for (const tileData of mapRawData.tileDataArray || []) {
-            playerIndexes.add(tileData.playerIndex);
-        }
-        for (const unitData of mapRawData.unitDataArray || []) {
-            playerIndexes.add(unitData.playerIndex);
-        }
-
-        let maxPlayerIndex = 0;
-        for (const playerIndex of playerIndexes) {
-            maxPlayerIndex = Math.max(maxPlayerIndex, playerIndex);
-            if ((playerIndex > 1) && (!playerIndexes.has(playerIndex - 1))) {
-                return false;
-            }
-        }
-
-        return maxPlayerIndex === playersCount;
-    }
-    function checkIsUnitsValid(mapRawData: IMapRawData): boolean {
-        const mapHeight = mapRawData.mapHeight;
-        const mapWidth  = mapRawData.mapWidth;
-        if ((!mapHeight) || (!mapWidth)) {
-            return false;
-        }
-        const gridsCount = mapWidth * mapHeight;
-        if (gridsCount > CommonConstants.MapMaxGridsCount) {
-            return false;
-        }
-
-        const unitDataArray = mapRawData.unitDataArray;
-        if (unitDataArray) {
-            const configVersion         = ConfigManager.getLatestFormalVersion()!;
-            const maxPromotion          = ConfigManager.getUnitMaxPromotion(configVersion);
-            const units                 = new Map<number, ISerialUnit>();
-            const indexesForUnitOnMap   = new Set<number>();
-            for (const unitData of unitDataArray) {
-                const unitId = unitData.unitId;
-                if ((unitId == null) || (units.has(unitId))) {
-                    return false;
-                }
-                units.set(unitId, unitData);
-
-                const { x: gridX, y: gridY } = unitData.gridIndex;
-                if ((gridX == null) || (gridY == null) || (gridX >= mapWidth) || (gridY >= mapHeight)) {
-                    return false;
-                }
-
-                if (unitData.loaderUnitId == null) {
-                    const index = gridY * mapWidth + gridX;
-                    if (indexesForUnitOnMap.has(index)) {
-                        return false;
-                    }
-                    indexesForUnitOnMap.add(index);
-                }
-
-                const cfg = Utility.ConfigManager.getUnitTemplateCfg(configVersion, unitData.unitType);
-                if (!cfg) {
-                    return false;
-                }
-
-                const currBuildMaterial = unitData.currentBuildMaterial;
-                const maxBuildMaterial  = cfg.maxBuildMaterial;
-                if ((currBuildMaterial != null)                                         &&
-                    ((maxBuildMaterial == null) || (currBuildMaterial >= maxBuildMaterial))
-                ) {
-                    return false;
-                }
-
-                const currFuel  = unitData.currentFuel;
-                const maxFuel   = cfg.maxFuel;
-                if ((currFuel != null)                          &&
-                    ((maxFuel == null) || (currFuel >= maxFuel))
-                ) {
-                    return false;
-                }
-
-                const currHp    = unitData.currentHp;
-                const maxHp     = cfg.maxHp;
-                if ((currHp != null)                    &&
-                    ((maxHp == null) || (currHp >= maxHp))
-                ) {
-                    return false;
-                }
-
-                const currProduceMaterial   = unitData.currentProduceMaterial;
-                const maxProduceMaterial    = cfg.maxProduceMaterial;
-                if ((currProduceMaterial != null)                                               &&
-                    ((maxProduceMaterial == null) || (currProduceMaterial >= maxProduceMaterial))
-                ) {
-                    return false;
-                }
-
-                const currPromotion = unitData.currentPromotion;
-                if ((currPromotion != null)                                 &&
-                    ((maxPromotion == null) || (currPromotion > maxPromotion))
-                ) {
-                    return false;
-                }
-
-                const flareCurrentAmmo  = unitData.flareCurrentAmmo;
-                const flareMaxAmmo      = cfg.flareMaxAmmo;
-                if ((flareCurrentAmmo != null)                                  &&
-                    ((flareMaxAmmo == null) || (flareCurrentAmmo >= flareMaxAmmo))
-                ) {
-                    return false;
-                }
-
-                if ((unitData.isDiving) && (cfg.diveCfgs == null)) {
-                    return false;
-                }
-
-                const currAmmo  = unitData.primaryWeaponCurrentAmmo;
-                const maxAmmo   = cfg.primaryWeaponMaxAmmo;
-                if ((currAmmo != null)                          &&
-                    ((maxAmmo == null) || (currAmmo >= maxAmmo))
-                ) {
-                    return false;
-                }
-            }
-
-            for (const [, unitData] of units) {
-                const loaderUnitId = unitData.loaderUnitId;
-                if (loaderUnitId != null) {
-                    const loader = units.get(loaderUnitId);
-                    if ((!loader) || (!GridIndexHelpers.checkIsEqual(loader.gridIndex as GridIndex, unitData.gridIndex as GridIndex))) {
-                        return false;
-                    }
-                    const category = ConfigManager.getUnitTemplateCfg(configVersion, loader.unitType).loadUnitCategory;
-                    if ((category == null)                                                                  ||
-                        (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitData.unitType, category))
-                    ) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-    function checkIsTilesValid(mapRawData: IMapRawData): boolean {
-        const mapHeight = mapRawData.mapHeight;
-        const mapWidth  = mapRawData.mapWidth;
-        if ((!mapHeight) || (!mapWidth)) {
-            return false;
-        }
-        const gridsCount = mapWidth * mapHeight;
-        if (gridsCount > CommonConstants.MapMaxGridsCount) {
-            return false;
-        }
-
-        const tileDataArray = mapRawData.tileDataArray;
-        if ((tileDataArray == null) || (tileDataArray.length !== gridsCount)) {
-            return false;
-        }
-
-        const indexes       = new Set<number>();
-        const configVersion = ConfigManager.getLatestFormalVersion()!;
-        for (const tileData of mapRawData.tileDataArray || []) {
-            const gridIndex                 = tileData.gridIndex as GridIndex;
-            const { x: gridX, y: gridY }    = gridIndex;
-            if ((gridX == null) || (gridY == null) || (gridX >= mapWidth || (gridY >= mapHeight))) {
-                return false;
-            }
-
-            const index = gridX + gridY * mapWidth;
-            if (indexes.has(index)) {
-                return false;
-            }
-            indexes.add(index);
-
-            const baseType = tileData.baseType;
-            if (!ConfigManager.checkIsValidTileBaseShapeId(baseType, tileData.baseShapeId)) {
-                return false;
-            }
-
-            const objectType = tileData.objectType;
-            if (!ConfigManager.checkIsValidTileObjectShapeId(objectType, tileData.objectShapeId)) {
-                return false;
-            }
-
-            const cfg = ConfigManager.getTileTemplateCfg(configVersion, baseType, objectType);
-            if (!cfg) {
-                return false;
-            }
-
-            const currBuildPoint    = tileData.currentBuildPoint;
-            const maxBuildPoint     = cfg.maxBuildPoint;
-            if ((currBuildPoint != null)                                    &&
-                ((maxBuildPoint == null) || (currBuildPoint >= maxBuildPoint))
-            ) {
-                return false;
-            }
-
-            const currHp    = tileData.currentHp;
-            const maxHp     = cfg.maxHp;
-            if ((currHp != null)                    &&
-                ((maxHp == null) || (currHp >= maxHp))
-            ) {
-                return false;
-            }
-
-            if ((currHp != null)                                                        &&
-                ((mapRawData.unitDataArray || []).some(v => {
-                    const g = BwHelpers.convertGridIndex(v.gridIndex);
-                    return ((g != null) && (GridIndexHelpers.checkIsEqual(g, gridIndex)))
-                }))
-            ) {
-                return false;
-            }
-
-            const currCapturePoint  = tileData.currentCapturePoint;
-            const maxCapturePoint   = cfg.maxCapturePoint;
-            if ((currCapturePoint != null)                                          &&
-                ((maxCapturePoint == null) || (currCapturePoint >= maxCapturePoint))
-            ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-    function checkIsWarRuleArrayValid(ruleList: IWarRule[] | null | undefined, playersCount: number, warEventData: IWarEventFullData | null | undefined): boolean {
-        const rulesCount = ruleList ? ruleList.length : 0;
-        if ((rulesCount <= 0) || (rulesCount > CommonConstants.WarRuleMaxCount)) {
-            return false;
-        }
-
-        const ruleIdSet = new Set<number>();
-        for (const rule of ruleList) {
-            const ruleId = rule.ruleId;
-            if ((ruleId == null) || (ruleId < 0) || (ruleId >= rulesCount) || (ruleIdSet.has(ruleId))) {
-                return false;
-            }
-            ruleIdSet.add(ruleId);
-
-            if ((!BwWarRuleHelper.checkIsValidWarRule(rule, warEventData)) ||
-                (BwWarRuleHelper.getPlayersCount(rule) !== playersCount)
-            ) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -682,7 +396,7 @@ namespace TinyWars.MapEditor.MeUtility {
     export async function getErrorCodeForMapRawData(mapRawData: IMapRawData): Promise<ClientErrorCode> {
         const configVersion = ConfigManager.getLatestFormalVersion();
         if (configVersion == null) {
-            return ClientErrorCode.MapRawDataValidation0000;
+            return ClientErrorCode.MapRawDataValidation00;
         }
 
         const designerNameError = getErrorCodeForMapDesigner(mapRawData.designerName);
@@ -720,7 +434,7 @@ namespace TinyWars.MapEditor.MeUtility {
             return warEventError;
         }
 
-        const testWarError = await new TwWar().initByMapRawData(mapRawData);
+        const testWarError = await new TestWar.TwWar().initByMapRawData(mapRawData);
         if (testWarError) {
             return testWarError;
         }
@@ -732,7 +446,7 @@ namespace TinyWars.MapEditor.MeUtility {
             (mapDesigner.length <= 0)                                   ||
             (mapDesigner.length > CommonConstants.MapMaxDesignerLength)
         ) {
-            return ClientErrorCode.MapRawDataValidation0001;
+            return ClientErrorCode.MapRawDataValidation01;
         } else {
             return ClientErrorCode.NoError;
         }
@@ -744,14 +458,14 @@ namespace TinyWars.MapEditor.MeUtility {
             minTextLength   : 1,
             minTextCount    : 1,
         })) {
-            return ClientErrorCode.MapRawDataValidation0002;
+            return ClientErrorCode.MapRawDataValidation02;
         }
 
         return ClientErrorCode.NoError;
     }
     function getErrorCodeForUnitArray(unitArray: ProtoTypes.WarSerialization.ISerialUnit[] | null | undefined): ClientErrorCode {
         if (!BwHelpers.checkIsUnitIdCompact(unitArray)) {
-            return ClientErrorCode.MapRawDataValidation0003;
+            return ClientErrorCode.MapRawDataValidation03;
         }
 
         return ClientErrorCode.NoError;
@@ -762,7 +476,7 @@ namespace TinyWars.MapEditor.MeUtility {
             (playersCountUnneutral <= CommonConstants.WarFirstPlayerIndex)  ||
             (playersCountUnneutral > CommonConstants.WarMaxPlayerIndex)
         ) {
-            return ClientErrorCode.MapRawDataValidation0004;
+            return ClientErrorCode.MapRawDataValidation04;
         }
 
         const playerIndexSet = new Set<number>();
@@ -772,7 +486,7 @@ namespace TinyWars.MapEditor.MeUtility {
                 (playerIndex < CommonConstants.WarNeutralPlayerIndex)   ||
                 (playerIndex > playersCountUnneutral)
             ) {
-                return ClientErrorCode.MapRawDataValidation0005;
+                return ClientErrorCode.MapRawDataValidation05;
             }
             playerIndexSet.add(playerIndex);
         }
@@ -782,7 +496,7 @@ namespace TinyWars.MapEditor.MeUtility {
                 (playerIndex < CommonConstants.WarFirstPlayerIndex)     ||
                 (playerIndex > playersCountUnneutral)
             ) {
-                return ClientErrorCode.MapRawDataValidation0006;
+                return ClientErrorCode.MapRawDataValidation06;
             }
             playerIndexSet.add(playerIndex);
         }
@@ -791,12 +505,12 @@ namespace TinyWars.MapEditor.MeUtility {
             if ((playerIndex > CommonConstants.WarFirstPlayerIndex) &&
                 (!playerIndexSet.has(playerIndex - 1))
             ) {
-                return ClientErrorCode.MapRawDataValidation0007;
+                return ClientErrorCode.MapRawDataValidation07;
             }
         }
 
         if (Math.max(...playerIndexSet) !== playersCountUnneutral) {
-            return ClientErrorCode.MapRawDataValidation0008;
+            return ClientErrorCode.MapRawDataValidation08;
         }
 
         return ClientErrorCode.NoError;

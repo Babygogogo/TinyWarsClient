@@ -1,10 +1,8 @@
 
 namespace TinyWars.MapEditor {
-    import Lang             = Utility.Lang;
-    import Notify           = Utility.Notify;
-    import Types            = Utility.Types;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import InvalidationType = Types.CustomMapInvalidationType;
+    import Lang         = Utility.Lang;
+    import Notify       = Utility.Notify;
+    import ProtoTypes   = Utility.ProtoTypes;
 
     export class MeConfirmSaveMapPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
@@ -45,7 +43,7 @@ namespace TinyWars.MapEditor {
             this._setIsTouchMaskEnabled();
         }
 
-        protected _onOpened(): void {
+        protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
@@ -61,11 +59,11 @@ namespace TinyWars.MapEditor {
 
             const war                       = MeModel.getWar();
             const mapRawData                = war.serializeForMap();
-            const invalidationType          = MeUtility.getMapInvalidationType(mapRawData);
+            const errorCode                 = await MeUtility.getErrorCodeForMapRawData(mapRawData);
             this._mapRawData                = mapRawData;
             this._slotIndex                 = war.getMapSlotIndex();
-            this._groupNeedReview.visible   = invalidationType === InvalidationType.Valid;
-            this._labelReviewDesc.text      = Lang.getMapInvalidationDesc(invalidationType);
+            this._groupNeedReview.visible   = !errorCode;
+            this._labelReviewDesc.text      = Lang.getErrorText(errorCode);
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {

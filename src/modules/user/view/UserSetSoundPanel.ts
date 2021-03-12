@@ -172,6 +172,7 @@ namespace TinyWars.User {
             this._labelBgmTitle.text    = Lang.getText(Lang.Type.B0541);
             this._labelEffectTitle.text = Lang.getText(Lang.Type.B0542);
             this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
+            this._btnDefault.label      = Lang.getText(Lang.Type.B0543);
             this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
         }
 

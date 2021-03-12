@@ -369,6 +369,15 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         );
     }
 
+    export function getTeamIndexByRuleForPlayers(ruleForPlayers: IRuleForPlayers, playerIndex: number): number | null | undefined {
+        for (const playerRule of ruleForPlayers ? ruleForPlayers.playerRuleDataArray || [] : []) {
+            if (playerRule.playerIndex === playerIndex) {
+                return playerRule.teamIndex;
+            }
+        }
+        return undefined;
+    }
+
     export function getPlayerRule(warRule: IWarRule, playerIndex: number): IDataForPlayerRule | undefined {
         if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
             return DEFAULT_PLAYER_RULE;
