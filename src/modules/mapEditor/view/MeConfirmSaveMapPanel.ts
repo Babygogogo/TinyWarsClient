@@ -63,7 +63,7 @@ namespace TinyWars.MapEditor {
             this._mapRawData                = mapRawData;
             this._slotIndex                 = war.getMapSlotIndex();
             this._groupNeedReview.visible   = !errorCode;
-            this._labelReviewDesc.text      = Lang.getErrorText(errorCode);
+            this._labelReviewDesc.text      = errorCode ? Lang.getErrorText(errorCode) : undefined;
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {

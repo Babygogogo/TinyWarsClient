@@ -78,16 +78,7 @@ namespace TinyWars.Lobby {
         }
 
         private _onTouchedBtnSettings(e: egret.TouchEvent): void {
-            User.UserOnlineUsersPanel.hide();
-            Chat.ChatPanel.hide();
-            User.UserPanel.show({ userId: UserModel.getSelfUserId() });
-            // User.UserOnlineUsersPanel.hide();
-            // User.UserPanel.hide();
-            // if (!Chat.ChatPanel.getIsOpening()) {
-            //     Chat.ChatPanel.show({ toUserId: null });
-            // } else {
-            //     Chat.ChatPanel.hide();
-            // }
+            User.UserSettingsPanel.show();
         }
 
         private _showOpenAnimation(): void {

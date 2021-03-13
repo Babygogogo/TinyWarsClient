@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group top="40" bottom="0" width="960" horizontalCenter="0">
+    <e:Group width="740" horizontalCenter="0" height="300" verticalCenter="0">
         <e:Group id="_group" scaleX="1" scaleY="1" width="100%" height="100%">
             <GameUi:UiImage source="c04_t01_s02_f01" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0"
                             top="0" bottom="0" scale9Grid="9,9,2,2" />
             <GameUi:UiLabel id="_labelTitle" text="XXX的履历" y="10" horizontalCenter="0" textColor="0xffffff" size="25"
                             locked="true" />
+            <GameUi:UiButton id="_btnChat" label="聊天" width="160"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" left="0" />
             <GameUi:UiButton id="_btnClose" label="关闭" y="0" right="0" width="160"
                              skinName="Skins.Component.Button.ButtonSelfAdaption001" />
             <e:Scroller id="_scroller" left="0" right="0" top="40" bottom="5">
@@ -115,41 +117,6 @@
                         </e:Group>
                         <e:layout>
                             <e:HorizontalLayout gap="60" />
-                        </e:layout>
-                    </e:Group>
-                    <e:Group id="_groupButtons" y="220" horizontalCenter="0">
-                        <GameUi:UiButton id="_btnRankList" label="积分排名" y="300" x="196" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnChangeNickname" label="更改昵称" y="290" x="186" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnChangePassword" label="更改密码" y="290" x="186" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnChangeDiscordId" label="更改Discord ID" y="300" x="196" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnShowOnlineUsers" label="在线玩家" y="310" x="206" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnChangeLanguage" label="Language" y="320" x="216" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnServerStatus" label="服务器状态" y="330" x="226" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnChat" label="聊天" y="340" x="236" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnComplaint" label="意见反馈" y="340" x="236" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnSwitchTexture" label="切换贴图" y="350" x="246" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnUnitsInfo" label="部队属性表" y="360" x="256" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnChangeLog" label="更新日志" y="360" x="256" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnSetPrivilege" label="设置权限" y="360" x="256" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnMapManagement" label="管理地图" y="360" x="256" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnSetSound" label="声音设置" y="360" x="256" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <e:layout>
-                            <e:TileLayout orientation="rows" requestedColumnCount="4" />
                         </e:layout>
                     </e:Group>
                     <e:layout>
