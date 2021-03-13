@@ -5,9 +5,12 @@ namespace TinyWars.Utility.SoundManager {
     export const DEFAULT_MUTE   = false;
     export const DEFAULT_VOLUME = 1;
     export const enum BgmCode {
-        None    = 0,
-        War01,
+        None        = 0,
         Lobby01,
+        War01,
+        War02,
+        RandomMin   = Lobby01,
+        RandomMax   = War02,
     }
 
     type BgmParams = {
@@ -18,8 +21,9 @@ namespace TinyWars.Utility.SoundManager {
 
     const _SOUND_PATH   = "resource/assets/sound/";
     const _BGM_PARAMS   = new Map<BgmCode, BgmParams>([
-        [ BgmCode.War01,    { name: "war01.mp3",    start: 1.75,    end: 56.75 } ],
-        [ BgmCode.Lobby01,  { name: "lobby01.mp3",  start: 16.07,   end: 58.07 } ],
+        [ BgmCode.Lobby01,  { name: "lobby01.mp3",  start: 16.07,   end: 58.07  } ],
+        [ BgmCode.War01,    { name: "war01.mp3",    start: 1.75,    end: 56.75  } ],
+        [ BgmCode.War02,    { name: "war02.mp3",    start: 1.15,    end: 60     } ],
     ]);
 
     let _isInitialized          = false;

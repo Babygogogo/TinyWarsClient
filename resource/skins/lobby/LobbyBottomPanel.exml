@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group id="_groupBottom" bottom="0" right="0">
-        <GameUi:UiImage source="lobby0000" x="60" locked="true" />
-        <e:Group x="0" y="10">
-            <GameUi:UiImage source="lobby0002" y="0" x="0" locked="true" />
-            <GameUi:UiImage source="lobby0001" y="53" x="284" locked="true" />
-            <e:Group x="320" y="16" height="0">
+    <e:Group id="_groupBottom" bottom="0" right="0" left="0">
+        <GameUi:UiImage source="lobby0000" right="765" locked="true" />
+        <e:Group y="10" right="0" left="0">
+            <GameUi:UiImage source="lobby0002" scale9Grid="120,48,70,9" bottom="0" right="0" left="0" />
+            <GameUi:UiImage source="lobby0001" right="0" bottom="0" />
+            <e:Group y="16" height="0" right="84">
                 <e:Group id="_groupMyInfo" x="0" top="0">
                     <GameUi:UiImage scaleX="1" scaleY="1" source="lobby0006" verticalCenter="0" />
                     <e:Group x="40" y="0">

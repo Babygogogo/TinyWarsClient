@@ -177,10 +177,10 @@ namespace TinyWars.User {
         }
 
         private _updateGroupBgmMute(): void {
-            this._imgBgmMute.source = SoundManager.getIsBgmMute() ? "icon_sound_001_png" : "icon_sound_002_png";
+            this._imgBgmMute.source = SoundManager.getIsBgmMute() ? "icon_sound_001" : "icon_sound_002";
         }
         private _updateGroupEffectMute(): void {
-            this._imgEffectMute.source = SoundManager.getIsEffectMute() ? "icon_sound_001_png" : "icon_sound_002_png";
+            this._imgEffectMute.source = SoundManager.getIsEffectMute() ? "icon_sound_001" : "icon_sound_002";
         }
         private _updateGroupBgmVolume(): void {
             const volume                = SoundManager.getBgmVolume();
