@@ -53,7 +53,16 @@
                 </e:layout>
             </e:Group>
             <e:layout>
-                <e:VerticalLayout gap="40" />
+                <e:VerticalLayout gap="20" />
+            </e:layout>
+        </e:Group>
+        <e:Group horizontalCenter="0" bottom="60">
+            <GameUi:UiButton id="_btnPrevBgm" label="上一首" y="0" x="232"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" />
+            <GameUi:UiButton id="_btnNextBgm" label="下一首" y="10" x="242"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" />
+            <e:layout>
+                <e:HorizontalLayout gap="40" />
             </e:layout>
         </e:Group>
         <e:Group horizontalCenter="0" bottom="20">

@@ -26,6 +26,9 @@ namespace TinyWars.User {
         private readonly _imgEffectPoint    : TinyWars.GameUi.UiImage;
         private readonly _labelEffectVolume : TinyWars.GameUi.UiLabel;
 
+        private readonly _btnPrevBgm        : GameUi.UiButton;
+        private readonly _btnNextBgm        : GameUi.UiButton;
+
         private readonly _btnCancel         : TinyWars.GameUi.UiButton;
         private readonly _btnDefault        : TinyWars.GameUi.UiButton;
         private readonly _btnConfirm        : TinyWars.GameUi.UiButton;
@@ -69,6 +72,9 @@ namespace TinyWars.User {
                 { ui: this._groupEffectVolume,  callback: this._onTouchEndGroupEffectVolume,            eventType: egret.TouchEvent.TOUCH_END },
                 { ui: this._groupEffectVolume,  callback: this._onTouchReleaseOutsideGroupEffectVolume, eventType: egret.TouchEvent.TOUCH_RELEASE_OUTSIDE },
                 { ui: this._imgEffectMute,      callback: this._onTouchedGroupEffectMute },
+
+                { ui: this._btnPrevBgm,         callback: this._onTouchedBtnPrevBgm },
+                { ui: this._btnNextBgm,         callback: this._onTouchedBtnNextBgm },
 
                 { ui: this._btnCancel,          callback: this._onTouchedBtnCancel },
                 { ui: this._btnDefault,         callback: this._onTouchedBtnDefault },
@@ -131,6 +137,12 @@ namespace TinyWars.User {
             soundManager.setIsEffectMute(!soundManager.getIsEffectMute());
             this._updateGroupEffectMute();
         }
+        private _onTouchedBtnPrevBgm(e: egret.TouchEvent): void {
+            SoundManager.playPreviousBgm();
+        }
+        private _onTouchedBtnNextBgm(e: egret.TouchEvent): void {
+            SoundManager.playNextBgm();
+        }
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
             SoundManager.setBgmVolume(this._prevBgmVolume);
             SoundManager.setEffectVolume(this._prevEffectVolume);
@@ -171,6 +183,8 @@ namespace TinyWars.User {
             this._labelTitle.text       = Lang.getText(Lang.Type.B0540);
             this._labelBgmTitle.text    = Lang.getText(Lang.Type.B0541);
             this._labelEffectTitle.text = Lang.getText(Lang.Type.B0542);
+            this._btnPrevBgm.label      = Lang.getText(Lang.Type.B0544);
+            this._btnNextBgm.label      = Lang.getText(Lang.Type.B0545);
             this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
             this._btnDefault.label      = Lang.getText(Lang.Type.B0543);
             this._btnCancel.label       = Lang.getText(Lang.Type.B0154);

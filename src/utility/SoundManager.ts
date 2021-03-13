@@ -7,11 +7,18 @@ namespace TinyWars.Utility.SoundManager {
     export const enum BgmCode {
         None        = 0,
         Lobby01,
+        MapEditor01,
         War01,
         War02,
-        RandomMin   = Lobby01,
-        RandomMax   = War02,
+        War03,
+        War04,
+        War05,
+        War06,
     }
+    const AllBgmMinCode = BgmCode.Lobby01;
+    const AllBgmMaxCode = BgmCode.War06;
+    const WarBgmMinCode = BgmCode.War01;
+    const WarBgmMaxCode = BgmCode.War06;
 
     type BgmParams = {
         name    : string;
@@ -21,9 +28,15 @@ namespace TinyWars.Utility.SoundManager {
 
     const _SOUND_PATH   = "resource/assets/sound/";
     const _BGM_PARAMS   = new Map<BgmCode, BgmParams>([
-        [ BgmCode.Lobby01,  { name: "lobby01.mp3",  start: 16.07,   end: 58.07  } ],
-        [ BgmCode.War01,    { name: "war01.mp3",    start: 1.75,    end: 56.75  } ],
-        [ BgmCode.War02,    { name: "war02.mp3",    start: 1.15,    end: 60     } ],
+        [ BgmCode.Lobby01,      { name: "lobby01.mp3",      start: 16.07,   end: 58.07  } ],
+        [ BgmCode.MapEditor01,  { name: "mapEditor01.mp3",  start: 0.7,     end: 36     } ],
+        [ BgmCode.War01,        { name: "war01.mp3",        start: 1.75,    end: 56.75  } ],
+        [ BgmCode.War02,        { name: "war02.mp3",        start: 1.15,    end: 60     } ],
+        [ BgmCode.War03,        { name: "war03.mp3",        start: 1,       end: 65     } ],
+        [ BgmCode.War04,        { name: "war04.mp3",        start: 1.92,    end: 63     } ],
+        [ BgmCode.War05,        { name: "war05.mp3",        start: 8.5,     end: 72.5   } ],
+        // [ BgmCode.War06,        { name: "war06.mp3",        start: 0.05,    end: 118.19 } ],
+        [ BgmCode.War06,        { name: "war06.mp3",        start: 4.7,     end: 115.44 } ],
     ]);
 
     let _isInitialized          = false;
@@ -84,6 +97,18 @@ namespace TinyWars.Utility.SoundManager {
     export function pause(): void {
         _stopBgm();
         _stopAllEffects();
+    }
+
+    export function playPreviousBgm(): void {
+        const code = _getBgmPrevCode() - 1;
+        playBgm(code >= AllBgmMinCode ? code : AllBgmMaxCode);
+    }
+    export function playNextBgm(): void {
+        const code = _getBgmPrevCode() + 1;
+        playBgm(code <= AllBgmMaxCode ? code : AllBgmMinCode);
+    }
+    export function playRandomWarBgm(): void {
+        playBgm(Math.floor(Math.random() * (WarBgmMaxCode - WarBgmMinCode + 1)) + WarBgmMinCode);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
