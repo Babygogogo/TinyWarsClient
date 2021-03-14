@@ -17,30 +17,50 @@ namespace TinyWars.User {
 
         private static _instance: UserPanel;
 
-        private _group                      : eui.Group;
-        private _labelTitle                 : GameUi.UiLabel;
-        private _btnChat                    : GameUi.UiButton;
-        private _btnClose                   : GameUi.UiButton;
+        private readonly _imgMask           : GameUi.UiImage;
+        private readonly _group             : eui.Group;
+        private readonly _labelTitle        : GameUi.UiLabel;
+        private readonly _btnChat           : GameUi.UiButton;
+        private readonly _btnClose          : GameUi.UiButton;
 
-        private _scroller                   : eui.Scroller;
-        private _labelStdRankTitle          : GameUi.UiLabel;
-        private _labelStdRankScore          : GameUi.UiLabel;
-        private _labelFogRankTitle          : GameUi.UiLabel;
-        private _labelFogRankScore          : GameUi.UiLabel;
+        private readonly _scroller                  : eui.Scroller;
+        private readonly _labelStdRankScoreTitle    : GameUi.UiLabel;
+        private readonly _labelStdRankScore         : GameUi.UiLabel;
+        private readonly _labelStdRankRankTitle     : GameUi.UiLabel;
+        private readonly _labelStdRankRank          : GameUi.UiLabel;
+        private readonly _labelStdRankRankSuffix    : GameUi.UiLabel;
+        private readonly _labelFogRankScoreTitle    : GameUi.UiLabel;
+        private readonly _labelFogRankScore         : GameUi.UiLabel;
+        private readonly _labelFogRankRankTitle     : GameUi.UiLabel;
+        private readonly _labelFogRankRank          : GameUi.UiLabel;
+        private readonly _labelFogRankRankSuffix    : GameUi.UiLabel;
 
-        private _labelRegisterTimeTitle     : GameUi.UiLabel;
-        private _labelRegisterTime          : GameUi.UiLabel;
-        private _labelLastLoginTimeTitle    : GameUi.UiLabel;
-        private _labelLastLoginTime         : GameUi.UiLabel;
-        private _labelOnlineTimeTitle       : GameUi.UiLabel;
-        private _labelOnlineTime            : GameUi.UiLabel;
-        private _labelLoginCountTitle       : GameUi.UiLabel;
-        private _labelLoginCount            : GameUi.UiLabel;
-        private _labelUserId                : GameUi.UiLabel;
-        private _labelDiscordId             : GameUi.UiLabel;
+        private readonly _labelRegisterTimeTitle    : GameUi.UiLabel;
+        private readonly _labelRegisterTime1        : GameUi.UiLabel;
+        private readonly _labelRegisterTime2        : GameUi.UiLabel;
+        private readonly _labelLastLoginTimeTitle   : GameUi.UiLabel;
+        private readonly _labelLastLoginTime1       : GameUi.UiLabel;
+        private readonly _labelLastLoginTime2       : GameUi.UiLabel;
+        private readonly _labelOnlineTimeTitle      : GameUi.UiLabel;
+        private readonly _labelOnlineTime           : GameUi.UiLabel;
+        private readonly _labelLoginCountTitle      : GameUi.UiLabel;
+        private readonly _labelLoginCount           : GameUi.UiLabel;
+        private readonly _labelUserId               : GameUi.UiLabel;
+        private readonly _labelDiscordId            : GameUi.UiLabel;
 
-        private _labelHistoryTitle          : GameUi.UiLabel;
-        private _sclHistory                 : GameUi.UiScrollList;
+        private readonly _labelHistoryStd           : GameUi.UiLabel;
+        private readonly _labelHistoryStdWin        : GameUi.UiLabel;
+        private readonly _labelHistoryStdLose       : GameUi.UiLabel;
+        private readonly _labelHistoryStdDraw       : GameUi.UiLabel;
+        private readonly _labelHistoryStdRatio      : GameUi.UiLabel;
+        private readonly _labelHistoryFog           : GameUi.UiLabel;
+        private readonly _labelHistoryFogWin        : GameUi.UiLabel;
+        private readonly _labelHistoryFogLose       : GameUi.UiLabel;
+        private readonly _labelHistoryFogDraw       : GameUi.UiLabel;
+        private readonly _labelHistoryFogRatio      : GameUi.UiLabel;
+
+        private readonly _sclHistoryStd             : GameUi.UiScrollList;
+        private readonly _sclHistoryFog             : GameUi.UiScrollList;
 
         private _userId: number;
 
@@ -76,7 +96,8 @@ namespace TinyWars.User {
                 { ui: this._btnChat,            callback: this._onTouchedBtnChat },
                 { ui: this._btnClose,           callback: this.close },
             ]);
-            this._sclHistory.setItemRenderer(HistoryRenderer);
+            this._sclHistoryStd.setItemRenderer(HistoryRenderer);
+            this._sclHistoryFog.setItemRenderer(HistoryRenderer);
 
             this._showOpenAnimation();
 
@@ -89,6 +110,9 @@ namespace TinyWars.User {
         }
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
+
+            this._sclHistoryStd.clear();
+            this._sclHistoryFog.clear();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -116,6 +140,14 @@ namespace TinyWars.User {
         }
 
         private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
+
             const group = this._group;
             egret.Tween.removeTweens(group);
             egret.Tween.get(group)
@@ -124,6 +156,14 @@ namespace TinyWars.User {
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                });
+
                 const group = this._group;
                 egret.Tween.removeTweens(group);
                 egret.Tween.get(group)
@@ -137,8 +177,13 @@ namespace TinyWars.User {
             const userId    = this._userId;
             const info      = userId != null ? await UserModel.getUserPublicInfo(userId) : undefined;
             if (info) {
-                this._labelRegisterTime.text    = Helpers.getTimestampShortText(info.registerTime);
-                this._labelLastLoginTime.text   = Helpers.getTimestampShortText(info.lastLoginTime);
+                const registerTime              = info.registerTime;
+                this._labelRegisterTime1.text   = Helpers.getTimestampShortText(registerTime, { hour: false, minute: false, second: false });
+                this._labelRegisterTime2.text   = Helpers.getTimestampShortText(registerTime, { year: false, month: false, date: false });
+
+                const loginTime                 = info.lastLoginTime;
+                this._labelLastLoginTime1.text  = Helpers.getTimestampShortText(loginTime, { hour: false, minute: false, second: false });
+                this._labelLastLoginTime2.text  = Helpers.getTimestampShortText(loginTime, { year: false, month: false, date: false });
                 this._labelLoginCount.text      = `${info.loginCount}`;
                 this._labelUserId.text          = `${userId}`;
                 this._labelDiscordId.text       = info.discordId || "--";
@@ -154,18 +199,31 @@ namespace TinyWars.User {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelStdRankTitle.text        = `${Lang.getText(Lang.Type.B0198)}:`;
-            this._labelFogRankTitle.text        = `${Lang.getText(Lang.Type.B0199)}:`;
-            this._labelRegisterTimeTitle.text   = `${Lang.getText(Lang.Type.B0194)}:`;
-            this._labelLastLoginTimeTitle.text  = `${Lang.getText(Lang.Type.B0195)}:`;
-            this._labelOnlineTimeTitle.text     = `${Lang.getText(Lang.Type.B0196)}:`;
-            this._labelLoginCountTitle.text     = `${Lang.getText(Lang.Type.B0197)}:`;
-            this._labelHistoryTitle.text        = `${Lang.getText(Lang.Type.B0201)}:`;
+            this._labelStdRankScoreTitle.text   = Lang.getText(Lang.Type.B0198);
+            this._labelStdRankRankTitle.text    = Lang.getText(Lang.Type.B0546);
+            this._labelFogRankScoreTitle.text   = Lang.getText(Lang.Type.B0199);
+            this._labelFogRankRankTitle.text    = Lang.getText(Lang.Type.B0547);
+            this._labelRegisterTimeTitle.text   = Lang.getText(Lang.Type.B0194);
+            this._labelLastLoginTimeTitle.text  = Lang.getText(Lang.Type.B0195);
+            this._labelOnlineTimeTitle.text     = Lang.getText(Lang.Type.B0196);
+            this._labelLoginCountTitle.text     = Lang.getText(Lang.Type.B0197);
+            this._labelHistoryStd.text          = Lang.getText(Lang.Type.B0548);
+            this._labelHistoryStdWin.text       = Lang.getText(Lang.Type.B0550);
+            this._labelHistoryStdLose.text      = Lang.getText(Lang.Type.B0551);
+            this._labelHistoryStdDraw.text      = Lang.getText(Lang.Type.B0552);
+            this._labelHistoryStdRatio.text     = Lang.getText(Lang.Type.B0553);
+            this._labelHistoryFog.text          = Lang.getText(Lang.Type.B0549);
+            this._labelHistoryFogWin.text       = Lang.getText(Lang.Type.B0550);
+            this._labelHistoryFogLose.text      = Lang.getText(Lang.Type.B0551);
+            this._labelHistoryFogDraw.text      = Lang.getText(Lang.Type.B0552);
+            this._labelHistoryFogRatio.text     = Lang.getText(Lang.Type.B0553);
+
             this._btnClose.label                = `${Lang.getText(Lang.Type.B0204)}`;
             this._updateLabelTitle();
-            this._updateLabelStdRankScore();
-            this._updateLabelFogRankScore();
-            this._updateSclHistory();
+            this._updateComponentsForStdRank();
+            this._updateComponentsForFogRank();
+            this._updateSclHistoryStd();
+            this._updateSclHistoryFog();
             this._updateBtnChat();
         }
 
@@ -173,50 +231,67 @@ namespace TinyWars.User {
             const nickname          = await UserModel.getUserNickname(this._userId);
             this._labelTitle.text   = Lang.getFormattedText(Lang.Type.F0009, nickname);
         }
-        private async _updateLabelStdRankScore(): Promise<void> {
+        private async _updateComponentsForStdRank(): Promise<void> {
             const data                      = await UserModel.getRankScoreData(this._userId, WarType.MrwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rank                      = data ? data.currentRank : null;
-            const rankText                  = `(${rank == null ? Lang.getText(Lang.Type.B0435) : `No.${rank}`})`;
             const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestFormalVersion(), score)})`;
-            this._labelStdRankScore.text    = `${score} ${rankText} ${rankName}`;
+            this._labelStdRankScore.text    = `${score} ${rankName}`;
+
+            const rank                          = data ? data.currentRank : null;
+            this._labelStdRankRank.text         = rank == null ? `--` : `${rank}`;
+            this._labelStdRankRankSuffix.text   = getSuffixForRank(rank);
         }
-        private async _updateLabelFogRankScore(): Promise<void> {
+        private async _updateComponentsForFogRank(): Promise<void> {
             const data                      = await UserModel.getRankScoreData(this._userId, WarType.MrwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
-            const rank                      = data ? data.currentRank : null;
-            const rankText                  = `(${rank == null ? Lang.getText(Lang.Type.B0435) : `No.${rank}`})`;
             const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestFormalVersion(), score)})`;
-            this._labelFogRankScore.text    = `${score} ${rankText} ${rankName}`;
+            this._labelFogRankScore.text    = `${score} ${rankName}`;
+
+            const rank                          = data ? data.currentRank : null;
+            this._labelFogRankRank.text         = rank == null ? `--` : `${rank}`;
+            this._labelFogRankRankSuffix.text   = getSuffixForRank(rank);
         }
-        private async _updateSclHistory(): Promise<void> {
+        private _updateSclHistoryStd(): void {
             const userId    = this._userId;
-            const dataList  : DataForHistoryRenderer[] = [
-                {
-                    userId,
-                    warType     : WarType.MrwStd,
-                    playersCount: 2,
-                },
-                {
-                    userId,
-                    warType     : WarType.MrwFog,
-                    playersCount: 2,
-                },
-            ];
+            let index       = 0;
+            const dataList  : DataForHistoryRenderer[] = [{
+                index       : index++,
+                userId,
+                warType     : WarType.MrwStd,
+                playersCount: 2,
+            }];
             for (let playersCount = 2; playersCount <= CommonConstants.WarMaxPlayerIndex; ++playersCount) {
                 dataList.push({
+                    index       : index++,
                     userId,
                     warType     : WarType.McwStd,
                     playersCount,
-                }, {
+                });
+            }
+            dataList[dataList.length - 1].showBottom = true;
+            this._sclHistoryStd.bindData(dataList);
+        }
+        private _updateSclHistoryFog(): void {
+            const userId    = this._userId;
+            let index       = 0;
+            const dataList  : DataForHistoryRenderer[] = [{
+                index       : index++,
+                userId,
+                warType     : WarType.MrwStd,
+                playersCount: 2,
+            }];
+            for (let playersCount = 2; playersCount <= CommonConstants.WarMaxPlayerIndex; ++playersCount) {
+                dataList.push({
+                    index       : index++,
                     userId,
                     warType     : WarType.McwFog,
                     playersCount,
                 });
             }
-            this._sclHistory.bindData(dataList);
+            dataList[dataList.length - 1].showBottom = true;
+            this._sclHistoryFog.bindData(dataList);
         }
         private async _updateLabelOnlineTime(): Promise<void> {
             const info                  = await UserModel.getUserPublicInfo(this._userId);
@@ -228,27 +303,68 @@ namespace TinyWars.User {
     }
 
     type DataForHistoryRenderer = {
+        index       : number;
         userId      : number;
         warType     : WarType;
         playersCount: number;
+        showBottom? : boolean;
     }
 
     class HistoryRenderer extends GameUi.UiListItemRenderer {
-        private _labelType  : TinyWars.GameUi.UiLabel;
-        private _labelCount : TinyWars.GameUi.UiLabel;
+        private readonly _imgBg         : TinyWars.GameUi.UiImage;
+        private readonly _labelType     : TinyWars.GameUi.UiLabel;
+        private readonly _labelWin      : TinyWars.GameUi.UiLabel;
+        private readonly _labelLose     : TinyWars.GameUi.UiLabel;
+        private readonly _labelDraw     : TinyWars.GameUi.UiLabel;
+        private readonly _labelRatio    : TinyWars.GameUi.UiLabel;
+        private readonly _imgBottom     : TinyWars.GameUi.UiImage;
 
         protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
             const data              = this.data as DataForHistoryRenderer;
-            const warType           = data.warType;
-            const playersCount      = data.playersCount;
-            this._labelType.text    = `${playersCount}P ${Lang.getWarTypeName(warType)}`
+            this._imgBg.alpha       = data.index % 2 === 0 ? 0.2 : 0.5;
+            this._imgBottom.visible = !!data.showBottom;
+
+            const warType       = data.warType;
+            const playersCount  = data.playersCount;
+            const labelType     = this._labelType;
+            if ((warType === WarType.MrwFog) || (warType === WarType.MrwStd)) {
+                labelType.text = Lang.getText(Lang.Type.B0554);
+            } else {
+                labelType.text  = `${playersCount}P`;
+            }
 
             const info              = await UserModel.getUserWarStatisticsData(data.userId, warType, playersCount);
-            this._labelCount.text   = info
-                ? `${info.wins} / ${info.loses} / ${info.draws}`
-                : `0 / 0 / 0`;
+            const winCount          = info ? info.wins : 0;
+            const loseCount         = info ? info.loses : 0;
+            const drawCount         = info ? info.draws : 0;
+            const totalCount        = winCount + loseCount + drawCount;
+            this._labelWin.text     = `${winCount}`;
+            this._labelLose.text    = `${loseCount}`;
+            this._labelDraw.text    = `${drawCount}`;
+            this._labelRatio.text   = totalCount ? Helpers.formatString(`%.2f`, winCount / totalCount) : `--`;
+        }
+    }
+
+    function getSuffixForRank(rank: number): string {
+        if (rank == null) {
+            return undefined;
+        } else {
+            if (Math.floor(rank / 10) % 10 === 1) {
+                return `th`;
+            } else {
+                const num = rank % 10;
+                if (num === 1) {
+                    return `st`;
+                } else if (num === 2) {
+                    return `nd`;
+                } else if (num === 3) {
+                    return `rd`;
+                } else {
+                    return `th`;
+                }
+            }
         }
     }
 }

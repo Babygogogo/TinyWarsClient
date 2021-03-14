@@ -72,7 +72,7 @@
 			"url": "assets/texture/common/uncompressed.json",
 			"type": "sheet",
 			"name": "uncompressed_json",
-			"subkeys": "c08_t06_s01_f01,image_line_001,semi_transparent,setting0002,transparent"
+			"subkeys": "c08_t06_s01_f01,commonBlack,commonBlue,commonGrey,commonPurple,image_line_001,semi_transparent,setting0002,transparent"
 		},
 		{
 			"url": "assets/texture/common/extrude.json",
