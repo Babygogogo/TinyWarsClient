@@ -20,10 +20,11 @@ namespace TinyWars.User {
         private readonly _imgMask           : GameUi.UiImage;
         private readonly _group             : eui.Group;
         private readonly _labelTitle        : GameUi.UiLabel;
+
+        private readonly _groupButtons      : GameUi.UiButton;
         private readonly _btnChat           : GameUi.UiButton;
         private readonly _btnClose          : GameUi.UiButton;
 
-        private readonly _scroller                  : eui.Scroller;
         private readonly _labelStdRankScoreTitle    : GameUi.UiLabel;
         private readonly _labelStdRankScore         : GameUi.UiLabel;
         private readonly _labelStdRankRankTitle     : GameUi.UiLabel;
@@ -105,7 +106,6 @@ namespace TinyWars.User {
             this._userId    = userId;
             UserProxy.reqUserGetPublicInfo(userId);
 
-            this._scroller.viewport.scrollV = 0;
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
@@ -195,7 +195,12 @@ namespace TinyWars.User {
         }
 
         private async _updateGroupButtons(): Promise<void> {
-            this._btnChat.visible = this._userId !== UserModel.getSelfUserId();
+            const group = this._groupButtons;
+            group.removeChildren();
+            if (this._userId !== UserModel.getSelfUserId()) {
+                group.addChild(this._btnChat);
+            }
+            group.addChild(this._btnClose);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -343,7 +348,7 @@ namespace TinyWars.User {
             this._labelWin.text     = `${winCount}`;
             this._labelLose.text    = `${loseCount}`;
             this._labelDraw.text    = `${drawCount}`;
-            this._labelRatio.text   = totalCount ? Helpers.formatString(`%.2f`, winCount / totalCount) : `--`;
+            this._labelRatio.text   = totalCount ? Helpers.formatString(`%.2f`, winCount / totalCount * 100) : `--`;
         }
     }
 
