@@ -40,9 +40,9 @@
                                     <e:Group id="_groupCanBeBlockedByUnit" scaleX="1" scaleY="1" y="0" x="0">
                                         <e:Group x="0" y="0">
                                             <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5"
-                                                            source="Common0002" />
+                                                            source="common0005" />
                                             <GameUi:UiImage id="_imgCanBeBlockedByUnit" anchorOffsetX="0"
-                                                            anchorOffsetY="0" alpha="0.8" x="0" source="Common0004"
+                                                            anchorOffsetY="0" alpha="0.8" x="0" source="common0006"
                                                             y="0" />
                                         </e:Group>
                                         <GameUi:UiLabel id="_labelCanBeBlockedByUnit" text="被部队阻挡" size="18"
@@ -54,9 +54,9 @@
                                     <e:Group id="_groupNeedMovableTile" scaleX="1" scaleY="1" right="0" top="0">
                                         <e:Group x="0" y="0">
                                             <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5"
-                                                            source="Common0002" />
+                                                            source="common0005" />
                                             <GameUi:UiImage id="_imgNeedMovableTile" anchorOffsetX="0" anchorOffsetY="0"
-                                                            alpha="0.8" x="0" source="Common0004" y="0" />
+                                                            alpha="0.8" x="0" source="common0006" y="0" />
                                         </e:Group>
                                         <GameUi:UiLabel id="_labelNeedMovableTile" text="寻找合适地形" size="18"
                                                         textColor="0xFFFFFF" x="10" y="10" />
@@ -204,9 +204,9 @@
                                     <e:Group id="_groupHasLoadedCo" scaleX="1" scaleY="1" right="0" top="0">
                                         <e:Group x="0" y="0">
                                             <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5"
-                                                            source="Common0002" />
+                                                            source="common0005" />
                                             <GameUi:UiImage id="_imgHasLoadedCo" anchorOffsetX="0" anchorOffsetY="0"
-                                                            alpha="0.8" x="0" source="Common0004" y="0" />
+                                                            alpha="0.8" x="0" source="common0006" y="0" />
                                         </e:Group>
                                         <GameUi:UiLabel id="_labelHasLoadedCo" text="Has Loaded CO" size="18"
                                                         textColor="0xFFFFFF" x="10" y="10" />
@@ -260,9 +260,9 @@
                                     <e:Group id="_groupIsDiving" scaleX="1" scaleY="1" right="0" top="0">
                                         <e:Group x="0" y="0">
                                             <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5"
-                                                            source="Common0002" />
+                                                            source="common0005" />
                                             <GameUi:UiImage id="_imgIsDiving" anchorOffsetX="0" anchorOffsetY="0"
-                                                            alpha="0.8" x="0" source="Common0004" y="0" />
+                                                            alpha="0.8" x="0" source="common0006" y="0" />
                                         </e:Group>
                                         <GameUi:UiLabel id="_labelIsDiving" text="Is Diving" size="18"
                                                         textColor="0xFFFFFF" x="10" y="10" />

@@ -29,41 +29,41 @@
             <e:Group>
                 <e:Group id="_groupIsAdmin" y="178" x="229">
                     <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
-                                    source="Common0002" />
+                                    source="common0005" />
                     <GameUi:UiImage id="_imgIsAdmin" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    verticalCenter="0" source="Common0004" />
+                                    verticalCenter="0" source="common0006" />
                     <GameUi:UiLabel id="_labelIsAdmin" text="系统管理员" textColor="0xFFFFFF" size="20" x="32"
                                     verticalCenter="0" />
                 </e:Group>
                 <e:Group id="_groupCanLogin" y="188" x="239">
                     <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
-                                    source="Common0002" />
+                                    source="common0005" />
                     <GameUi:UiImage id="_imgCanLogin" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    verticalCenter="0" source="Common0004" />
+                                    verticalCenter="0" source="common0006" />
                     <GameUi:UiLabel id="_labelCanLogin" text="允许登录" textColor="0xFFFFFF" size="20" x="32"
                                     verticalCenter="0" />
                 </e:Group>
                 <e:Group id="_groupIsMapCommittee" y="188" x="239">
                     <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
-                                    source="Common0002" />
+                                    source="common0005" />
                     <GameUi:UiImage id="_imgIsMapCommittee" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    verticalCenter="0" source="Common0004" />
+                                    verticalCenter="0" source="common0006" />
                     <GameUi:UiLabel id="_labelIsMapCommittee" text="地图管理员" textColor="0xFFFFFF" size="20" x="32"
                                     verticalCenter="0" />
                 </e:Group>
                 <e:Group id="_groupIsChangeLogEditor" y="188" x="239">
                     <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
-                                    source="Common0002" />
+                                    source="common0005" />
                     <GameUi:UiImage id="_imgIsChangeLogEditor" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    verticalCenter="0" source="Common0004" />
+                                    verticalCenter="0" source="common0006" />
                     <GameUi:UiLabel id="_labelIsChangeLogEditor" text="更新日志管理员" textColor="0xFFFFFF" size="20" x="32"
                                     verticalCenter="0" />
                 </e:Group>
                 <e:Group id="_groupCanChat" y="188" x="239">
                     <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" verticalCenter="0" y="10"
-                                    source="Common0002" />
+                                    source="common0005" />
                     <GameUi:UiImage id="_imgCanChat" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                    verticalCenter="0" source="Common0004" />
+                                    verticalCenter="0" source="common0006" />
                     <GameUi:UiLabel id="_labelCanChat" text="允许聊天" textColor="0xFFFFFF" size="20" x="32"
                                     verticalCenter="0" />
                 </e:Group>

@@ -22,9 +22,9 @@
             <e:Group x="82" y="200">
                 <e:Group id="_groupIsNot" x="0" y="0">
                     <e:Group x="0" y="0" locked="true">
-                        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="Common0002" />
+                        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5" source="common0005" />
                         <GameUi:UiImage id="_imgIsNot" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="0"
-                                        source="Common0004" y="0" />
+                                        source="common0006" y="0" />
                     </e:Group>
                     <GameUi:UiLabel id="_labelIsNot" text="取反" size="18" textColor="0xFFFFFF" x="10" y="10"
                                     locked="true" />
