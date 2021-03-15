@@ -28,16 +28,19 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwPlayerManagerInit01;
             }
 
-            const newPlayerMap = new Map<number, BwPlayer>();
+            const newPlayerMap  = new Map<number, BwPlayer>();
+            const skinIdSet     = new Set<number>();
             for (const playerData of playerArray) {
                 const playerIndex = playerData.playerIndex;
-                if (playerIndex == null) {
+                if ((playerIndex == null) || (newPlayerMap.has(playerIndex))) {
                     return ClientErrorCode.BwPlayerManagerInit02;
                 }
 
-                if (newPlayerMap.has(playerIndex)) {
+                const skinId = playerData.unitAndTileSkinId;
+                if ((skinId == null) || (skinIdSet.has(skinId))) {
                     return ClientErrorCode.BwPlayerManagerInit03;
                 }
+                skinIdSet.add(skinId);
 
                 const player        = new BwPlayer();
                 const playerError   = player.init(playerData, configVersion);
