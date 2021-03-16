@@ -12,6 +12,8 @@ namespace TinyWars.Utility {
 
         MrwWarInit00,
 
+        MtwWarInit00,
+
         TwWarInitByMapRawData00,
 
         BwDrawVoteManagerInit00,

@@ -12,6 +12,7 @@ export const enum ServerErrorCode {
     MpwManager0004,
     MpwManager0005,
     MpwManager0006,
+    MpwManager0007,
 
     ReplayManager0000,
     ReplayManager0001,
@@ -232,6 +233,8 @@ export const enum ServerErrorCode {
     McwWarInit0007,
     McwWarInit0008,
     McwWarInit0009,
+
+    MtwWarInit0000,
 
     TwWarInitByMapRawData0000,
 
@@ -653,6 +656,39 @@ export const enum ServerErrorCode {
     MsgMtrJoinRoom0018,
     MsgMtrJoinRoom0019,
     MsgMtrJoinRoom0020,
+
+    MsgMtrSetReady0000,
+    MsgMtrSetReady0001,
+    MsgMtrSetReady0002,
+    MsgMtrSetReady0003,
+    MsgMtrSetReady0004,
+    MsgMtrSetReady0005,
+
+    MsgMtrSetSelfSettings0000,
+    MsgMtrSetSelfSettings0001,
+    MsgMtrSetSelfSettings0002,
+    MsgMtrSetSelfSettings0003,
+    MsgMtrSetSelfSettings0004,
+    MsgMtrSetSelfSettings0005,
+    MsgMtrSetSelfSettings0006,
+    MsgMtrSetSelfSettings0007,
+    MsgMtrSetSelfSettings0008,
+    MsgMtrSetSelfSettings0009,
+    MsgMtrSetSelfSettings0010,
+    MsgMtrSetSelfSettings0011,
+    MsgMtrSetSelfSettings0012,
+    MsgMtrSetSelfSettings0013,
+    MsgMtrSetSelfSettings0014,
+
+    MsgMtrStartWar0000,
+    MsgMtrStartWar0001,
+    MsgMtrStartWar0002,
+    MsgMtrStartWar0003,
+    MsgMtrStartWar0004,
+    MsgMtrStartWar0005,
+    MsgMtrStartWar0006,
+    MsgMtrStartWar0007,
+    MsgMtrStartWar0008,
 
     MsgMpwActionPlayerDeleteUnit0000,
     MsgMpwActionPlayerDeleteUnit0001,

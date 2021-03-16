@@ -10,11 +10,11 @@ namespace TinyWars.MultiPlayerWar {
     const _LEFT_X               = 80;
     const _RIGHT_X              = 880;
 
-    export class McwUnitBriefPanel extends GameUi.UiPanel {
+    export class MpwUnitBriefPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: McwUnitBriefPanel;
+        private static _instance: MpwUnitBriefPanel;
 
         private _group      : eui.Group;
         private _cellList   : McwUnitBriefCell[] = [];
@@ -26,24 +26,24 @@ namespace TinyWars.MultiPlayerWar {
         private _isLeftSide = true;
 
         public static show(): void {
-            if (!McwUnitBriefPanel._instance) {
-                McwUnitBriefPanel._instance = new McwUnitBriefPanel();
+            if (!MpwUnitBriefPanel._instance) {
+                MpwUnitBriefPanel._instance = new MpwUnitBriefPanel();
             }
-            McwUnitBriefPanel._instance.open(undefined);
+            MpwUnitBriefPanel._instance.open(undefined);
         }
         public static async hide(): Promise<void> {
-            if (McwUnitBriefPanel._instance) {
-                await McwUnitBriefPanel._instance.close();
+            if (MpwUnitBriefPanel._instance) {
+                await MpwUnitBriefPanel._instance.close();
             }
         }
-        public static getInstance(): McwUnitBriefPanel {
-            return McwUnitBriefPanel._instance;
+        public static getInstance(): MpwUnitBriefPanel {
+            return MpwUnitBriefPanel._instance;
         }
 
         public constructor() {
             super();
 
-            this.skinName = `resource/skins/multiCustomWar/McwUnitBriefPanel.exml`;
+            this.skinName = `resource/skins/multiPlayerWar/MpwUnitBriefPanel.exml`;
         }
 
         protected _onOpened(): void {
@@ -174,7 +174,7 @@ namespace TinyWars.MultiPlayerWar {
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {
-            const tileBriefPanel = McwTileBriefPanel.getInstance();
+            const tileBriefPanel = MpwTileBriefPanel.getInstance();
             const unitBriefPanel = this;
             let target = e.target as egret.DisplayObject;
             while (target) {

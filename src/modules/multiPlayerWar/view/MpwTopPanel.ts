@@ -7,11 +7,11 @@ namespace TinyWars.MultiPlayerWar {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
 
-    export class McwTopPanel extends GameUi.UiPanel {
+    export class MpwTopPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: McwTopPanel;
+        private static _instance: MpwTopPanel;
 
         private _groupPlayer        : eui.Group;
         private _labelPlayer        : GameUi.UiLabel;
@@ -34,34 +34,34 @@ namespace TinyWars.MultiPlayerWar {
         private _war    : MpwWar;
 
         public static show(): void {
-            if (!McwTopPanel._instance) {
-                McwTopPanel._instance = new McwTopPanel();
+            if (!MpwTopPanel._instance) {
+                MpwTopPanel._instance = new MpwTopPanel();
             }
-            McwTopPanel._instance.open(undefined);
+            MpwTopPanel._instance.open(undefined);
         }
 
         public static async hide(): Promise<void> {
-            if (McwTopPanel._instance) {
-                await McwTopPanel._instance.close();
+            if (MpwTopPanel._instance) {
+                await MpwTopPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomWar/McwTopPanel.exml";
+            this.skinName = "resource/skins/multiPlayerWar/MpwTopPanel.exml";
         }
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.TimeTick,                       callback: this._onNotifyTimeTick },
-                { type: Notify.Type.BwTurnPhaseCodeChanged,         callback: this._onNotifyMcwTurnPhaseCodeChanged },
-                { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyMcwPlayerFundChanged },
-                { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyMcwPlayerIndexInTurnChanged },
-                { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyMcwCoEnergyChanged },
-                { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyMcwCoUsingSkillChanged },
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyMcwActionPlannerStateChanged },
+                { type: Notify.Type.BwTurnPhaseCodeChanged,         callback: this._onNotifyBwTurnPhaseCodeChanged },
+                { type: Notify.Type.BwPlayerFundChanged,            callback: this._onNotifyBwPlayerFundChanged },
+                { type: Notify.Type.BwPlayerIndexInTurnChanged,     callback: this._onNotifyBwPlayerIndexInTurnChanged },
+                { type: Notify.Type.BwCoEnergyChanged,              callback: this._onNotifyBwCoEnergyChanged },
+                { type: Notify.Type.BwCoUsingSkillTypeChanged,      callback: this._onNotifyBwCoUsingSkillChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
                 { type: Notify.Type.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
                 { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
                 { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
@@ -100,27 +100,27 @@ namespace TinyWars.MultiPlayerWar {
                 (!war.getIsExecutingAction())   &&
                 (war.checkIsBoot())
             ) {
-                MpwProxy.reqMcwCommonHandleBoot(war.getWarId());
+                MpwProxy.reqMpwCommonHandleBoot(war.getWarId());
             }
         }
-        private _onNotifyMcwTurnPhaseCodeChanged(e: egret.Event): void {
+        private _onNotifyBwTurnPhaseCodeChanged(e: egret.Event): void {
             this._updateBtnEndTurn();
             this._updateBtnFindBuilding();
             this._updateBtnCancel();
         }
-        private _onNotifyMcwPlayerFundChanged(e: egret.Event): void {
+        private _onNotifyBwPlayerFundChanged(e: egret.Event): void {
             this._updateLabelFund();
         }
-        private _onNotifyMcwPlayerIndexInTurnChanged(e: egret.Event): void {
+        private _onNotifyBwPlayerIndexInTurnChanged(e: egret.Event): void {
             this._updateView();
         }
-        private _onNotifyMcwCoEnergyChanged(e: egret.Event): void {
+        private _onNotifyBwCoEnergyChanged(e: egret.Event): void {
             this._updateLabelCoAndEnergy();
         }
-        private _onNotifyMcwCoUsingSkillChanged(e: egret.Event): void {
+        private _onNotifyBwCoUsingSkillChanged(e: egret.Event): void {
             this._updateLabelCoAndEnergy();
         }
-        private _onNotifyMcwActionPlannerStateChanged(e: egret.Event): void {
+        private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
             this._updateBtnUnitList();
             this._updateBtnEndTurn();
             this._updateBtnCancel();

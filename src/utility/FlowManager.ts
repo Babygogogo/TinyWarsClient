@@ -91,18 +91,18 @@ namespace TinyWars.Utility.FlowManager {
 
         SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
     }
-    export async function gotoMultiCustomWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
+    export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
         RwModel.unloadWar();
         ScwModel.unloadWar();
         MeModel.unloadWar();
         await MpwModel.loadWar(data);
 
         StageManager.closeAllPanels();
-        MultiPlayerWar.McwBackgroundPanel.show();
-        MultiPlayerWar.McwTopPanel.show();
-        MultiPlayerWar.McwWarPanel.show();
-        MultiPlayerWar.McwTileBriefPanel.show();
-        MultiPlayerWar.McwUnitBriefPanel.show();
+        MultiPlayerWar.MpwBackgroundPanel.show();
+        MultiPlayerWar.MpwTopPanel.show();
+        MultiPlayerWar.MpwWarPanel.show();
+        MultiPlayerWar.MpwTileBriefPanel.show();
+        MultiPlayerWar.MpwUnitBriefPanel.show();
         Broadcast.BroadcastPanel.show();
 
         SoundManager.playRandomWarBgm();
@@ -239,7 +239,7 @@ namespace TinyWars.Utility.FlowManager {
 
     function _onMsgMpwCommonContinueWar(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgMpwCommonContinueWar.IS;
-        gotoMultiCustomWar(data.war);
+        gotoMultiPlayerWar(data.war);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

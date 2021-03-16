@@ -59,13 +59,13 @@ namespace TinyWars.BaseWar {
                 return commonSettingManagerError;
             }
 
-            const isNeedReplay          = this.getIsNeedReplay();
-            const warEventManagerError  = this.getWarEventManager().init(dataForWarEventManager);
+            const warEventManagerError = this.getWarEventManager().init(dataForWarEventManager);
             if (warEventManagerError) {
                 return warEventManagerError;
             }
 
-            const randomNumberManagerError = this.getRandomNumberManager().init({
+            const isNeedReplay              = this.getIsNeedReplay();
+            const randomNumberManagerError  = this.getRandomNumberManager().init({
                 isNeedReplay,
                 initialState: data.seedRandomInitialState,
                 currentState: data.seedRandomCurrentState,

@@ -84,7 +84,12 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
             unloadWar();
         }
 
-        const war       = data.settingsForMcw ? new MultiCustomWar.McwWar() : new MultiRankWar.MrwWar();
+        const war = data.settingsForMcw
+            ? new MultiCustomWar.McwWar()
+            : (data.settingsForMrw
+                ? new MultiRankWar.MrwWar()
+                : new MultiTemporaryWar.MtwWar()
+            );
         const initError = await war.init(data);
         if (initError) {
             Logger.error(`MpwModel.loadWar() initError: ${initError}`);
@@ -151,14 +156,14 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                 const requestType = data.requestType as Types.SyncWarRequestType;
                 if (requestType === Types.SyncWarRequestType.PlayerForce) {
                     war.setIsEnded(true);
-                    await Utility.FlowManager.gotoMultiCustomWar(data.war),
+                    await Utility.FlowManager.gotoMultiPlayerWar(data.war),
                     FloatText.show(Lang.getText(Lang.Type.A0038));
 
                 } else {
                     const cachedActionsCount = _cachedActions.length;
                     if (data.executedActionsCount !== war.getExecutedActionManager().getExecutedActionsCount() + cachedActionsCount) {
                         war.setIsEnded(true);
-                        await Utility.FlowManager.gotoMultiCustomWar(data.war);
+                        await Utility.FlowManager.gotoMultiPlayerWar(data.war);
                         FloatText.show(Lang.getText(Lang.Type.A0036));
 
                     } else {

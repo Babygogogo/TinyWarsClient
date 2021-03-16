@@ -6339,8 +6339,8 @@ export declare namespace WarSettings {
     /** Properties of a SettingsForMtw. */
     interface ISettingsForMtw {
 
-        /** SettingsForMtw warData */
-        warData?: (WarSerialization.ISerialWar|null);
+        /** SettingsForMtw initialWarData */
+        initialWarData?: (WarSerialization.ISerialWar|null);
 
         /** SettingsForMtw warName */
         warName?: (string|null);
@@ -6364,8 +6364,8 @@ export declare namespace WarSettings {
          */
         constructor(properties?: WarSettings.ISettingsForMtw);
 
-        /** SettingsForMtw warData. */
-        public warData?: (WarSerialization.ISerialWar|null);
+        /** SettingsForMtw initialWarData. */
+        public initialWarData?: (WarSerialization.ISerialWar|null);
 
         /** SettingsForMtw warName. */
         public warName: string;

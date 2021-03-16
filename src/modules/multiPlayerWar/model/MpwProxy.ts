@@ -233,7 +233,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         }
     }
 
-    export function reqMcwCommonHandleBoot(warId: number): void {
+    export function reqMpwCommonHandleBoot(warId: number): void {
         NetManager.send({
             MsgMpwCommonHandleBoot: { c: {
                 warId,

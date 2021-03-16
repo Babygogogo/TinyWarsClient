@@ -14,45 +14,45 @@ namespace TinyWars.MultiPlayerWar {
     const _LEFT_X               = 0;
     const _RIGHT_X              = 880;
 
-    export class McwTileBriefPanel extends GameUi.UiPanel {
+    export class MpwTileBriefPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: McwTileBriefPanel;
+        private static _instance: MpwTileBriefPanel;
 
-        private _group              : eui.Group;
-        private _conTileView        : eui.Group;
-        private readonly _tileView  = new BaseWar.BwTileView();
-        private _labelName          : GameUi.UiLabel;
-        private _labelGridIndex     : GameUi.UiLabel;
-        private _labelState         : GameUi.UiLabel;
-        private _labelDefense       : GameUi.UiLabel;
-        private _imgDefense         : GameUi.UiImage;
-        private _imgState           : GameUi.UiImage;
+        private readonly _group             : eui.Group;
+        private readonly _conTileView       : eui.Group;
+        private readonly _tileView          = new BaseWar.BwTileView();
+        private readonly _labelName         : GameUi.UiLabel;
+        private readonly _labelGridIndex    : GameUi.UiLabel;
+        private readonly _labelState        : GameUi.UiLabel;
+        private readonly _labelDefense      : GameUi.UiLabel;
+        private readonly _imgDefense        : GameUi.UiImage;
+        private readonly _imgState          : GameUi.UiImage;
 
         private _war        : MpwWar;
         private _cursor     : BaseWar.BwCursor;
         private _tileMap    : MpwTileMap;
 
         public static show(): void {
-            if (!McwTileBriefPanel._instance) {
-                McwTileBriefPanel._instance = new McwTileBriefPanel();
+            if (!MpwTileBriefPanel._instance) {
+                MpwTileBriefPanel._instance = new MpwTileBriefPanel();
             }
-            McwTileBriefPanel._instance.open(undefined);
+            MpwTileBriefPanel._instance.open(undefined);
         }
         public static async hide(): Promise<void> {
-            if (McwTileBriefPanel._instance) {
-                await McwTileBriefPanel._instance.close();
+            if (MpwTileBriefPanel._instance) {
+                await MpwTileBriefPanel._instance.close();
             }
         }
-        public static getInstance(): McwTileBriefPanel {
-            return McwTileBriefPanel._instance;
+        public static getInstance(): MpwTileBriefPanel {
+            return MpwTileBriefPanel._instance;
         }
 
         public constructor() {
             super();
 
-            this.skinName = `resource/skins/multiCustomWar/McwTileBriefPanel.exml`;
+            this.skinName = `resource/skins/multiPlayerWar/MpwTileBriefPanel.exml`;
         }
 
         protected _onOpened(): void {
@@ -179,7 +179,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {
             const tileBriefPanel = this;
-            const unitBriefPanel = McwUnitBriefPanel.getInstance();
+            const unitBriefPanel = MpwUnitBriefPanel.getInstance();
             let target = e.target as egret.DisplayObject;
             while (target) {
                 if ((target) && ((target === tileBriefPanel) || (target === unitBriefPanel))) {
