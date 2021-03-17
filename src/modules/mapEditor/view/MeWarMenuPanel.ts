@@ -96,7 +96,7 @@ namespace TinyWars.MapEditor {
 
             this._updateView();
 
-            Notify.dispatch(Notify.Type.McwWarMenuPanelOpened);
+            Notify.dispatch(Notify.Type.BwWarMenuPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
             this._war           = null;

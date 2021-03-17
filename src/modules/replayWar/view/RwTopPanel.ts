@@ -186,8 +186,9 @@ namespace TinyWars.ReplayWar {
             this._war.setIsAutoReplay(false);
         }
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
-            this._war.getField().getActionPlanner().setStateIdle();
-            RwUnitListPanel.show();
+            const war = this._war;
+            war.getField().getActionPlanner().setStateIdle();
+            BaseWar.BwUnitListPanel.show({ war });
         }
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {
             const actionPlanner = this._war.getActionPlanner();

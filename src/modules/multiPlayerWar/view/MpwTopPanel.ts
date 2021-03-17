@@ -155,10 +155,11 @@ namespace TinyWars.MultiPlayerWar {
             Chat.ChatPanel.show({});
         }
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
-            const actionPlanner = this._war.getField().getActionPlanner();
+            const war           = this._war;
+            const actionPlanner = war.getField().getActionPlanner();
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
                 actionPlanner.setStateIdle();
-                McwUnitListPanel.show();
+                BaseWar.BwUnitListPanel.show({ war });
             }
         }
         private _onTouchedBtnFindBuilding(e: egret.TouchEvent): void {

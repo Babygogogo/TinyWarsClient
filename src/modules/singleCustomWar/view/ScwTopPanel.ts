@@ -141,8 +141,9 @@ namespace TinyWars.SingleCustomWar {
             Chat.ChatPanel.show({});
         }
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
-            this._war.getField().getActionPlanner().setStateIdle();
-            BwUnitListPanel.show();
+            const war = this._war;
+            war.getField().getActionPlanner().setStateIdle();
+            BaseWar.BwUnitListPanel.show({ war });
         }
         private _onTouchedBtnFindBuilding(e: egret.TouchEvent): void {
             const war           = this._war;
