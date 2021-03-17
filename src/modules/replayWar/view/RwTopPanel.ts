@@ -129,7 +129,11 @@ namespace TinyWars.ReplayWar {
             (userId) && (User.UserPanel.show({ userId }));
         }
         private _onTouchedGroupCo(e: egret.TouchEvent): void {
-            RwCoListPanel.show({ selectedIndex: Math.max(this._war.getPlayerIndexInTurn() - 1, 0) });
+            const war = this._war;
+            BaseWar.BwCoListPanel.show({
+                war,
+                selectedIndex: Math.max(war.getPlayerIndexInTurn() - 1, 0),
+            });
             RwWarMenuPanel.hide();
         }
         private _onTouchedBtnChat(e: egret.TouchEvent): void {

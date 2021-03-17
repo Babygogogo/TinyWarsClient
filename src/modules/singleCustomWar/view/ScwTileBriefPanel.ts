@@ -140,7 +140,7 @@ namespace TinyWars.SingleCustomWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            if ((ScwWarMenuPanel.getIsOpening()) || (BaseWar.BwProduceUnitPanel.getIsOpening()) || (ScwCoListPanel.getIsOpening())) {
+            if ((ScwWarMenuPanel.getIsOpening()) || (BaseWar.BwProduceUnitPanel.getIsOpening()) || (BaseWar.BwCoListPanel.getIsOpening())) {
                 this.visible = false;
             } else {
                 this.visible = true;

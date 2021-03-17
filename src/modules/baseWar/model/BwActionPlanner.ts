@@ -19,11 +19,7 @@ namespace TinyWars.BaseWar {
         unit        : BwUnit;
         destination : GridIndex;
     }
-    export type OpenDataForBwUnitActionsPanel   = {
-        destination : GridIndex;
-        actionList  : DataForUnitActionRenderer[];
-    }
-    export type DataForUnitActionRenderer       = {
+    export type DataForUnitAction = {
         actionType      : UnitActionType;
         callback        : () => void;
         unitForLaunch?  : BwUnit;
@@ -1602,8 +1598,10 @@ namespace TinyWars.BaseWar {
         protected _getDataForUnitActionsPanel(): OpenDataForBwUnitActionsPanel {
             const destination           = this.getMovePathDestination();
             const actionUnitBeLoaded    = this._getActionUnitBeLoaded();
+            const war                   = this._getWar();
             if (actionUnitBeLoaded.length) {
                 return {
+                    war,
                     destination,
                     actionList: actionUnitBeLoaded
                 };
@@ -1612,12 +1610,13 @@ namespace TinyWars.BaseWar {
             const actionUnitJoin = this._getActionUnitJoin();
             if (actionUnitJoin.length) {
                 return {
+                    war,
                     destination,
                     actionList: actionUnitJoin
                 };
             }
 
-            const dataList = [] as DataForUnitActionRenderer[];
+            const dataList = [] as DataForUnitAction[];
             dataList.push(...this._getActionUnitUseCoSuperPower());
             dataList.push(...this._getActionUnitUseCoPower());
             dataList.push(...this._getActionUnitLoadCo());
@@ -1636,28 +1635,29 @@ namespace TinyWars.BaseWar {
 
             Logger.assert(dataList.length, `BwActionPlanner._getDataForUnitActionsPanel() no actions available?!`);
             return {
+                war,
                 destination,
                 actionList: dataList,
             };
         }
 
-        protected abstract _getActionUnitBeLoaded(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitJoin(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitUseCoSuperPower(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitUseCoPower(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitLoadCo(): DataForUnitActionRenderer[];
-        private _getActionUnitAttack(): DataForUnitActionRenderer[] {
+        protected abstract _getActionUnitBeLoaded(): DataForUnitAction[];
+        protected abstract _getActionUnitJoin(): DataForUnitAction[];
+        protected abstract _getActionUnitUseCoSuperPower(): DataForUnitAction[];
+        protected abstract _getActionUnitUseCoPower(): DataForUnitAction[];
+        protected abstract _getActionUnitLoadCo(): DataForUnitAction[];
+        private _getActionUnitAttack(): DataForUnitAction[] {
             return this._createAttackableGridsAfterMove().length
                 ? [{ actionType: UnitActionType.Attack, callback: () => this._setStateChoosingAttackTargetOnChooseAction() }]
                 : [];
         }
-        protected abstract _getActionUnitCapture(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitDive(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitSurface(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitBuildTile(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitSupply(): DataForUnitActionRenderer[];
-        private _getActionsUnitLaunchUnit(): DataForUnitActionRenderer[] {
-            const dataList  = [] as DataForUnitActionRenderer[];
+        protected abstract _getActionUnitCapture(): DataForUnitAction[];
+        protected abstract _getActionUnitDive(): DataForUnitAction[];
+        protected abstract _getActionUnitSurface(): DataForUnitAction[];
+        protected abstract _getActionUnitBuildTile(): DataForUnitAction[];
+        protected abstract _getActionUnitSupply(): DataForUnitAction[];
+        private _getActionsUnitLaunchUnit(): DataForUnitAction[] {
+            const dataList  = [] as DataForUnitAction[];
             const focusUnit = this.getFocusUnit();
             if ((focusUnit !== this.getFocusUnitLoaded()) && (this.getMovePath().length === 1) && (focusUnit.checkCanLaunchLoadedUnit())) {
                 const tile = this._getTileMap().getTile(this.getMovePathDestination());
@@ -1673,13 +1673,13 @@ namespace TinyWars.BaseWar {
             }
             return dataList;
         }
-        private _getActionsUnitDropUnit(): DataForUnitActionRenderer[] {
+        private _getActionsUnitDropUnit(): DataForUnitAction[] {
             const focusUnit                 = this.getFocusUnit();
             const destination               = this.getMovePathDestination();
             const loadedUnits               = focusUnit.getLoadedUnits();
             const chosenUnits               = this.getChosenUnitsForDrop();
             const chosenDropDestinations    = this._getChosenDropDestinations();
-            const actions                   = [] as DataForUnitActionRenderer[];
+            const actions                   = [] as DataForUnitAction[];
             if ((loadedUnits.length > chosenUnits.length) && (focusUnit.checkCanDropLoadedUnit(this._getTileMap().getTile(destination).getType()))) {
                 for (const unit of loadedUnits) {
                     if ((chosenUnits.every(value => value.unit !== unit)) && (this._calculateAvailableDropDestination(unit, chosenDropDestinations).length)) {
@@ -1693,7 +1693,7 @@ namespace TinyWars.BaseWar {
             }
             return actions;
         }
-        private _getActionUnitLaunchFlare(): DataForUnitActionRenderer[] {
+        private _getActionUnitLaunchFlare(): DataForUnitAction[] {
             if ((!this._getWar().getFogMap().checkHasFogCurrently()) ||
                 (this.getMovePath().length !== 1)               ||
                 (!this.getFocusUnit().getFlareCurrentAmmo())
@@ -1703,13 +1703,13 @@ namespace TinyWars.BaseWar {
                 return [{ actionType: UnitActionType.LaunchFlare, callback: () => this._setStateChoosingFlareDestinationOnChooseAction() }];
             }
         }
-        private _getActionUnitLaunchSilo(): DataForUnitActionRenderer[] {
+        private _getActionUnitLaunchSilo(): DataForUnitAction[] {
             return (this.getFocusUnit().checkCanLaunchSiloOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
                 ? [{ actionType: UnitActionType.LaunchSilo, callback: () => this._setStateChoosingSiloDestinationOnChooseAction() }]
                 : [];
         }
-        protected abstract _getActionUnitProduceUnit(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitWait(hasOtherAction: boolean): DataForUnitActionRenderer[];
+        protected abstract _getActionUnitProduceUnit(): DataForUnitAction[];
+        protected abstract _getActionUnitWait(hasOtherAction: boolean): DataForUnitAction[];
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.

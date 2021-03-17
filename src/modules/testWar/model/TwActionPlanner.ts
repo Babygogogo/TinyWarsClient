@@ -78,40 +78,40 @@ namespace TinyWars.TestWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitJoin(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitJoin(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitLoadCo(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitLoadCo(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitCapture(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitCapture(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitDive(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitDive(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitSurface(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitSurface(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitBuildTile(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitBuildTile(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitSupply(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitSupply(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitAction[] {
             return [];
         }
-        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitAction[] {
             return [];
         }
     }

@@ -1,24 +1,27 @@
 
-namespace TinyWars.SingleCustomWar {
+namespace TinyWars.BaseWar {
     import Types    = Utility.Types;
     import Lang     = Utility.Lang;
     import Notify   = Utility.Notify;
 
-    type OpenDataForScwCoListPanel = {
+    type OpenDataForBwCoListPanel = {
+        war             : BwWar;
         selectedIndex   : number;
     }
-    export class ScwCoListPanel extends GameUi.UiPanel {
+    export class BwCoListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: ScwCoListPanel;
+        private static _instance: BwCoListPanel;
 
-        private _labelCommanderInfo : GameUi.UiLabel;
-        private _listCo             : GameUi.UiScrollList;
-        private _btnBack            : GameUi.UiButton;
+        private _groupList  : eui.Group;
+        private _listCo     : GameUi.UiScrollList;
+        private _btnBack    : GameUi.UiButton;
 
+        private _groupInfo                      : eui.Group;
         private _scrCoInfo                      : eui.Scroller;
         private _imgCoPortrait                  : GameUi.UiImage;
+        private _labelCommanderInfo             : GameUi.UiLabel;
         private _labelNameTitle                 : GameUi.UiLabel;
         private _labelName                      : GameUi.UiLabel;
         private _labelForceTitle                : GameUi.UiLabel;
@@ -48,24 +51,23 @@ namespace TinyWars.SingleCustomWar {
         private _scrHelp    : eui.Scroller;
         private _labelHelp  : GameUi.UiLabel;
 
-        private _war                : ScwWar;
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(openData: OpenDataForScwCoListPanel): void {
-            if (!ScwCoListPanel._instance) {
-                ScwCoListPanel._instance = new ScwCoListPanel();
+        public static show(openData: OpenDataForBwCoListPanel): void {
+            if (!BwCoListPanel._instance) {
+                BwCoListPanel._instance = new BwCoListPanel();
             }
 
-            ScwCoListPanel._instance.open(openData);
+            BwCoListPanel._instance.open(openData);
         }
         public static async hide(): Promise<void> {
-            if (ScwCoListPanel._instance) {
-                await ScwCoListPanel._instance.close();
+            if (BwCoListPanel._instance) {
+                await BwCoListPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
-            const instance = ScwCoListPanel._instance;
+            const instance = BwCoListPanel._instance;
             return instance ? instance.getIsOpening() : false;
         }
 
@@ -74,13 +76,12 @@ namespace TinyWars.SingleCustomWar {
 
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/singleCustomWar/ScwCoListPanel.exml";
+            this.skinName = "resource/skins/baseWar/BwCoListPanel.exml";
         }
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyScwPlannerStateChanged },
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -90,17 +91,18 @@ namespace TinyWars.SingleCustomWar {
             this._listCop.setItemRenderer(SkillRenderer);
             this._listScop.setItemRenderer(SkillRenderer);
 
+            this._showOpenAnimation();
             this._updateComponentsForLanguage();
 
-            this._war           = ScwModel.getWar();
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
-            this.setSelectedIndex(this._getOpenData<OpenDataForScwCoListPanel>().selectedIndex);
+            this.setSelectedIndex(this._getOpenData<OpenDataForBwCoListPanel>().selectedIndex);
 
             Notify.dispatch(Notify.Type.BwCoListPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
-            this._war = null;
+            await this._showCloseAnimation();
+
             this._listCo.clear();
             this._listPassiveSkill.clear();
             this._listCop.clear();
@@ -138,15 +140,6 @@ namespace TinyWars.SingleCustomWar {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyScwPlannerStateChanged(e: egret.Event): void {
-            const war = this._war;
-            if (war.checkIsHumanInTurn()) {
-                this.close();
-            } else {
-                this.setSelectedIndex(this._selectedIndex);
-            }
-        }
-
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
         }
@@ -154,9 +147,39 @@ namespace TinyWars.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _showOpenAnimation(): void {
+            const group = this._groupList;
+            egret.Tween.removeTweens(group);
+            egret.Tween.get(group)
+                .set({ alpha: 0, left: -40 })
+                .to({ alpha: 1, left: 0 }, 200);
+
+            const _groupInfo = this._groupInfo;
+            egret.Tween.removeTweens(_groupInfo);
+            egret.Tween.get(_groupInfo)
+                .set({ alpha: 0, right: -40 })
+                .to({ alpha: 1, right: 0 }, 200);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve, reject) => {
+                const group = this._groupList;
+                egret.Tween.removeTweens(group);
+                egret.Tween.get(group)
+                    .set({ alpha: 1, left: 0 })
+                    .to({ alpha: 0, left: -40 }, 200);
+
+                const _groupInfo = this._groupInfo;
+                egret.Tween.removeTweens(_groupInfo);
+                egret.Tween.get(_groupInfo)
+                    .set({ alpha: 1, right: 0 })
+                    .to({ alpha: 0, right: -40 }, 200)
+                    .call(resolve);
+            });
+        }
+
         private _createDataForListCo(): DataForCoRenderer[] {
             const data          : DataForCoRenderer[] = [];
-            const war           = this._war;
+            const war           = this._getOpenData<OpenDataForBwCoListPanel>().war;
             const playerManager = war.getPlayerManager();
             const configVersion = war.getConfigVersion();
 
@@ -299,7 +322,7 @@ namespace TinyWars.SingleCustomWar {
         configVersion   : string;
         player          : BaseWar.BwPlayer;
         index           : number;
-        panel           : ScwCoListPanel;
+        panel           : BwCoListPanel;
     }
 
     class CoNameRenderer extends GameUi.UiListItemRenderer {
@@ -324,7 +347,9 @@ namespace TinyWars.SingleCustomWar {
             } else {
                 const coId              = player.getCoId();
                 const cfg               = coId != null ? Utility.ConfigManager.getCoBasicCfg(data.configVersion, coId) : null;
-                this._labelName.text    = cfg ? cfg.name : `(${Lang.getText(Lang.Type.B0001)}CO)`;
+                this._labelName.text    = cfg
+                    ? `${cfg.name}`
+                    : `(${Lang.getText(Lang.Type.B0001)}CO)`;
             }
         }
 

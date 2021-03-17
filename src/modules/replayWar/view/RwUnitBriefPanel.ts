@@ -136,7 +136,7 @@ namespace TinyWars.ReplayWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            if ((RwWarMenuPanel.getIsOpening()) || (RwCoListPanel.getIsOpening()) || (BaseWar.BwProduceUnitPanel.getIsOpening())) {
+            if ((RwWarMenuPanel.getIsOpening()) || (BaseWar.BwCoListPanel.getIsOpening()) || (BaseWar.BwProduceUnitPanel.getIsOpening())) {
                 this.visible = false;
             } else {
                 this.visible = true;

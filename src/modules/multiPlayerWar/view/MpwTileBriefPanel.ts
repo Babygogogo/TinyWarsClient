@@ -137,7 +137,7 @@ namespace TinyWars.MultiPlayerWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            if ((McwWarMenuPanel.getIsOpening()) || (BaseWar.BwProduceUnitPanel.getIsOpening()) || (McwCoListPanel.getIsOpening())) {
+            if ((McwWarMenuPanel.getIsOpening()) || (BaseWar.BwProduceUnitPanel.getIsOpening()) || (BaseWar.BwCoListPanel.getIsOpening())) {
                 this.visible = false;
             } else {
                 this.visible = true;

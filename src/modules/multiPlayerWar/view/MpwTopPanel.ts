@@ -144,7 +144,10 @@ namespace TinyWars.MultiPlayerWar {
             (userId) && (User.UserPanel.show({ userId }));
         }
         private _onTouchedGroupCo(e: egret.TouchEvent): void {
-            McwCoListPanel.show({ selectedIndex: Math.max(this._war.getPlayerIndexInTurn() - 1, 0) });
+            BaseWar.BwCoListPanel.show({
+                war             : this._war,
+                selectedIndex   : Math.max(this._war.getPlayerIndexInTurn() - 1, 0),
+            });
             McwWarMenuPanel.hide();
         }
         private _onTouchedBtnChat(e: egret.TouchEvent): void {
@@ -196,7 +199,7 @@ namespace TinyWars.MultiPlayerWar {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            McwCoListPanel.hide();
+            BaseWar.BwCoListPanel.hide();
             McwWarMenuPanel.show();
         }
 

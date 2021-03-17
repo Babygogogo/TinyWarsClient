@@ -312,7 +312,11 @@ namespace TinyWars.SingleCustomWar {
             return {
                 name    : Lang.getText(Lang.Type.B0140),
                 callback: () => {
-                    ScwCoListPanel.show({ selectedIndex: this._war.getPlayerIndexInTurn() - 1 });
+                    const war = this._war;
+                    BaseWar.BwCoListPanel.show({
+                        war,
+                        selectedIndex: war.getPlayerIndexInTurn() - 1,
+                    });
                     this.close();
                 },
             };

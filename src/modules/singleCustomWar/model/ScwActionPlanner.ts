@@ -229,9 +229,9 @@ namespace TinyWars.SingleCustomWar {
 
             const currState = this.getState();
             if (currState === State.ChoosingAction) {
-                ScwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
+                BaseWar.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
             } else {
-                ScwUnitActionsPanel.hide();
+                BaseWar.BwUnitActionsPanel.hide();
             }
         }
 
@@ -417,7 +417,7 @@ namespace TinyWars.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = this.getFocusUnit();
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -429,7 +429,7 @@ namespace TinyWars.SingleCustomWar {
                     : [];
             }
         }
-        protected _getActionUnitJoin(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitJoin(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = this.getFocusUnit();
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -441,7 +441,7 @@ namespace TinyWars.SingleCustomWar {
                     : [];
             }
         }
-        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -459,7 +459,7 @@ namespace TinyWars.SingleCustomWar {
                     }];
             }
         }
-        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -477,7 +477,7 @@ namespace TinyWars.SingleCustomWar {
                     }];
             }
         }
-        protected _getActionUnitLoadCo(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitLoadCo(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -486,7 +486,7 @@ namespace TinyWars.SingleCustomWar {
                     : [];
             }
         }
-        protected _getActionUnitCapture(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitCapture(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -495,7 +495,7 @@ namespace TinyWars.SingleCustomWar {
                     : [];
             }
         }
-        protected _getActionUnitDive(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitDive(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -504,7 +504,7 @@ namespace TinyWars.SingleCustomWar {
                     : [];
             }
         }
-        protected _getActionUnitSurface(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitSurface(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -513,7 +513,7 @@ namespace TinyWars.SingleCustomWar {
                     : [];
             }
         }
-        protected _getActionUnitBuildTile(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitBuildTile(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -522,7 +522,7 @@ namespace TinyWars.SingleCustomWar {
                     : [];
             }
         }
-        protected _getActionUnitSupply(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitSupply(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -540,7 +540,7 @@ namespace TinyWars.SingleCustomWar {
                 return [];
             }
         }
-        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -581,7 +581,7 @@ namespace TinyWars.SingleCustomWar {
                 }
             }
         }
-        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitAction[] {
             const existingUnit = this._getUnitMap().getVisibleUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];

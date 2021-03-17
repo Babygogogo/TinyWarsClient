@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiPlayerWar {
+namespace TinyWars.BaseWar {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
     import StageManager     = Utility.StageManager;
@@ -9,34 +9,36 @@ namespace TinyWars.MultiPlayerWar {
     const _LEFT_X       = 0;
     const _RIGHT_X      = 860;
 
-    export class McwUnitActionsPanel extends GameUi.UiPanel {
+    export type OpenDataForBwUnitActionsPanel   = {
+        war         : BwWar;
+        destination : Types.GridIndex;
+        actionList  : DataForUnitAction[];
+    }
+    export class BwUnitActionsPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: McwUnitActionsPanel;
+        private static _instance: BwUnitActionsPanel;
 
         private _group      : eui.Group;
         private _listAction : GameUi.UiScrollList;
 
-        private _war            : MpwWar;
-        private _actionPlanner  : MpwActionPlanner;
-
-        public static show(openData: OpenDataForMcwUnitActionsPanel): void {
-            if (!McwUnitActionsPanel._instance) {
-                McwUnitActionsPanel._instance = new McwUnitActionsPanel();
+        public static show(openData: OpenDataForBwUnitActionsPanel): void {
+            if (!BwUnitActionsPanel._instance) {
+                BwUnitActionsPanel._instance = new BwUnitActionsPanel();
             }
-            McwUnitActionsPanel._instance.open(openData);
+            BwUnitActionsPanel._instance.open(openData);
         }
         public static async hide(): Promise<void> {
-            if (McwUnitActionsPanel._instance) {
-                await McwUnitActionsPanel._instance.close();
+            if (BwUnitActionsPanel._instance) {
+                await BwUnitActionsPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this.skinName = `resource/skins/multiCustomWar/McwUnitActionsPanel.exml`;
+            this.skinName = `resource/skins/baseWar/BwUnitActionsPanel.exml`;
         }
 
         protected _onOpened(): void {
@@ -49,15 +51,10 @@ namespace TinyWars.MultiPlayerWar {
             ]);
             this._listAction.setItemRenderer(UnitActionRenderer);
 
-            this._war           = MpwModel.getWar();
-            this._actionPlanner = this._war.getField().getActionPlanner() as MpwActionPlanner;
-
             this._updateView();
             this._updatePosition();
         }
         protected async _onClosed(): Promise<void> {
-            this._war           = null;
-            this._actionPlanner = null;
             this._listAction.clear();
         }
 
@@ -87,9 +84,10 @@ namespace TinyWars.MultiPlayerWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const war       = MpwModel.getWar();
+            const openData  = this._getOpenData<OpenDataForBwUnitActionsPanel>();
+            const war       = openData.war;
             const dataArray = [] as DataForUnitActionRenderer[];
-            for (const data of this._getOpenData<OpenDataForMcwUnitActionsPanel>().actionList) {
+            for (const data of openData.actionList) {
                 const produceUnitType = data.produceUnitType;
                 if (produceUnitType == null) {
                     dataArray.push({
@@ -122,9 +120,10 @@ namespace TinyWars.MultiPlayerWar {
         }
 
         private _updatePosition(): void {
-            const container = MpwModel.getWar().getView().getFieldContainer();
+            const openData  = this._getOpenData<OpenDataForBwUnitActionsPanel>();
+            const container = openData.war.getView().getFieldContainer();
             const contents  = container.getContents();
-            const gridIndex = this._getOpenData<OpenDataForMcwUnitActionsPanel>().destination;
+            const gridIndex = openData.destination;
             const gridSize  = Utility.CommonConstants.GridSize;
             const stage     = Utility.StageManager.getStage();
             const group     = this._group;
@@ -144,8 +143,7 @@ namespace TinyWars.MultiPlayerWar {
         }
     }
 
-    type OpenDataForMcwUnitActionsPanel = BaseWar.OpenDataForBwUnitActionsPanel;
-    type DataForUnitActionRenderer      = {
+    type DataForUnitActionRenderer = {
         actionType      : UnitActionType;
         callback        : () => void;
         unit?           : BaseWar.BwUnit;
