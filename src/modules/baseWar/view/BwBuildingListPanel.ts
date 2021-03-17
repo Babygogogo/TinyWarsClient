@@ -1,30 +1,32 @@
 
-namespace TinyWars.MultiPlayerWar {
+namespace TinyWars.BaseWar {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
     import Types            = Utility.Types;
-    import ConfigManager    = Utility.ConfigManager;
     import CommonConstants  = Utility.CommonConstants;
 
-    export class McwBuildingListPanel extends GameUi.UiPanel {
+    type OpenDataForBwBuildingListPanel = {
+        war: BwWar;
+    }
+    export class BwBuildingListPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McwBuildingListPanel;
+        private static _instance: BwBuildingListPanel;
 
         public _labelTitle  : GameUi.UiLabel;
         public _listTile    : GameUi.UiScrollList;
 
-        public static show(): void {
-            if (!McwBuildingListPanel._instance) {
-                McwBuildingListPanel._instance = new McwBuildingListPanel();
+        public static show(openData: OpenDataForBwBuildingListPanel): void {
+            if (!BwBuildingListPanel._instance) {
+                BwBuildingListPanel._instance = new BwBuildingListPanel();
             }
-            McwBuildingListPanel._instance.open(undefined);
+            BwBuildingListPanel._instance.open(openData);
         }
 
         public static async hide(): Promise<void> {
-            if (McwBuildingListPanel._instance) {
-                await McwBuildingListPanel._instance.close();
+            if (BwBuildingListPanel._instance) {
+                await BwBuildingListPanel._instance.close();
             }
         }
 
@@ -33,7 +35,7 @@ namespace TinyWars.MultiPlayerWar {
 
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/multiCustomWar/McwBuildingListPanel.exml";
+            this.skinName = "resource/skins/baseWar/BwBuildingListPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -64,7 +66,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _updateListTile(): void {
             const dict  = new Map<number, Map<number, number>>();
-            const war   = MpwModel.getWar();
+            const war   = this._getOpenData<OpenDataForBwBuildingListPanel>().war;
             war.getTileMap().forEachTile(tile => {
                 if (tile.getMaxCapturePoint() != null) {
                     const tileType = tile.getType();
@@ -78,7 +80,7 @@ namespace TinyWars.MultiPlayerWar {
             });
 
             const dataList      : DataForTileRenderer[] = [];
-            const playerManager = war.getPlayerManager() as MpwPlayerManager;
+            const playerManager = war.getPlayerManager();
             const configVersion = war.getConfigVersion();
             for (const [tileType, subDict] of dict) {
                 dataList.push({
@@ -94,7 +96,7 @@ namespace TinyWars.MultiPlayerWar {
 
     type DataForTileRenderer = {
         configVersion   : string;
-        playerManager   : MpwPlayerManager;
+        playerManager   : BwPlayerManager;
         tileType        : Types.TileType;
         dict            : Map<number, number>;
     }

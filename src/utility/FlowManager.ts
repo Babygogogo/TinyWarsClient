@@ -91,32 +91,33 @@ namespace TinyWars.Utility.FlowManager {
 
         SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
     }
+
     export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
         RwModel.unloadWar();
         ScwModel.unloadWar();
         MeModel.unloadWar();
-        await MpwModel.loadWar(data);
+        const war = await MpwModel.loadWar(data);
 
         StageManager.closeAllPanels();
-        MultiPlayerWar.MpwBackgroundPanel.show();
+        BaseWar.BwBackgroundPanel.show();
         MultiPlayerWar.MpwTopPanel.show();
-        MultiPlayerWar.MpwWarPanel.show();
+        BaseWar.BwWarPanel.show({ war });
         MultiPlayerWar.MpwTileBriefPanel.show();
         MultiPlayerWar.MpwUnitBriefPanel.show();
         Broadcast.BroadcastPanel.show();
 
         SoundManager.playRandomWarBgm();
     }
-    export async function gotoReplay(warData: Uint8Array, replayId: number): Promise<void> {
+    export async function gotoReplayWar(warData: Uint8Array, replayId: number): Promise<void> {
         MpwModel.unloadWar();
         ScwModel.unloadWar();
         MeModel.unloadWar();
-        await RwModel.loadWar(warData, replayId);
+        const war = await RwModel.loadWar(warData, replayId);
 
         StageManager.closeAllPanels();
-        ReplayWar.RwBackgroundPanel.show();
+        BaseWar.BwBackgroundPanel.show();
         ReplayWar.RwTopPanel.show();
-        ReplayWar.RwWarPanel.show();
+        BaseWar.BwWarPanel.show({ war });
         ReplayWar.RwTileBriefPanel.show();
         ReplayWar.RwUnitBriefPanel.show();
         Broadcast.BroadcastPanel.show();
@@ -131,28 +132,28 @@ namespace TinyWars.Utility.FlowManager {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         MeModel.unloadWar();
-        await ScwModel.loadWar({ warData, slotIndex, slotComment });
+        const war = await ScwModel.loadWar({ warData, slotIndex, slotComment });
 
         StageManager.closeAllPanels();
-        SingleCustomWar.ScwBackgroundPanel.show();
+        BaseWar.BwBackgroundPanel.show();
         SingleCustomWar.ScwTopPanel.show();
-        SingleCustomWar.ScwWarPanel.show();
+        BaseWar.BwWarPanel.show({ war });
         SingleCustomWar.ScwTileBriefPanel.show();
         SingleCustomWar.ScwUnitBriefPanel.show();
         Broadcast.BroadcastPanel.show();
 
         SoundManager.playRandomWarBgm();
     }
-    export async function gotoMapEditor(mapRawData: ProtoTypes.Map.IMapRawData, slotIndex: number, isReview: boolean): Promise<void> {
+    export async function gotoMapEditorWar(mapRawData: ProtoTypes.Map.IMapRawData, slotIndex: number, isReview: boolean): Promise<void> {
         MpwModel.unloadWar();
         ScwModel.unloadWar();
         RwModel.unloadWar();
-        await MeModel.loadWar(mapRawData, slotIndex, isReview);
+        const war = await MeModel.loadWar(mapRawData, slotIndex, isReview);
 
         StageManager.closeAllPanels();
-        MapEditor.MeBackgroundPanel.show();
+        BaseWar.BwBackgroundPanel.show();
         MapEditor.MeTopPanel.show();
-        MapEditor.MeWarPanel.show();
+        BaseWar.BwWarPanel.show({ war });
         MapEditor.MeTileBriefPanel.show();
         MapEditor.MeUnitBriefPanel.show();
         Broadcast.BroadcastPanel.show();

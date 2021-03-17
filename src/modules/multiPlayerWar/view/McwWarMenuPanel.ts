@@ -165,7 +165,7 @@ namespace TinyWars.MultiPlayerWar {
         }
 
         private _onTouchedBtnBuildings(e: egret.TouchEvent): void {
-            McwBuildingListPanel.show();
+            BaseWar.BwBuildingListPanel.show({ war: this._war });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

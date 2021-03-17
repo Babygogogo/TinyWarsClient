@@ -188,7 +188,7 @@ namespace TinyWars.MapManagement {
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
             const data = (this.data as DataForMapRenderer).mapEditorData;
-            Utility.FlowManager.gotoMapEditor(data.mapRawData, data.slotIndex, true);
+            Utility.FlowManager.gotoMapEditorWar(data.mapRawData, data.slotIndex, true);
         }
     }
 

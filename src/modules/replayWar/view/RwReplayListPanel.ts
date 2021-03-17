@@ -109,7 +109,7 @@ namespace TinyWars.ReplayWar {
 
         private _onNotifySMcrGetReplayData(e: egret.Event): void {
             const data = ReplayWar.RwModel.getReplayData();
-            FlowManager.gotoReplay(data.encodedWar, data.replayId);
+            FlowManager.gotoReplayWar(data.encodedWar, data.replayId);
         }
 
         private _onNotifySMcrGetReplayDataFailed(e: egret.Event): void {

@@ -194,7 +194,7 @@ namespace TinyWars.MapEditor {
                     title   : Lang.getText(Lang.Type.B0305),
                     content : mapData.reviewComment || Lang.getText(Lang.Type.B0001),
                     callback: () => {
-                        Utility.FlowManager.gotoMapEditor(mapData.mapRawData, mapData.slotIndex, false);
+                        Utility.FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
                     },
                 });
             } else if (reviewStatus === Types.MapReviewStatus.Accepted) {
@@ -202,11 +202,11 @@ namespace TinyWars.MapEditor {
                     title   : Lang.getText(Lang.Type.B0326),
                     content : mapData.reviewComment || Lang.getText(Lang.Type.B0001),
                     callback: () => {
-                        Utility.FlowManager.gotoMapEditor(mapData.mapRawData, mapData.slotIndex, false);
+                        Utility.FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
                     },
                 });
             } else {
-                Utility.FlowManager.gotoMapEditor(mapData.mapRawData, mapData.slotIndex, false);
+                Utility.FlowManager.gotoMapEditorWar(mapData.mapRawData, mapData.slotIndex, false);
             }
         }
     }
