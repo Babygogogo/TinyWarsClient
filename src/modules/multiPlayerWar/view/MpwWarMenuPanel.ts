@@ -18,11 +18,11 @@ namespace TinyWars.MultiPlayerWar {
         Advanced,
     }
 
-    export class McwWarMenuPanel extends GameUi.UiPanel {
+    export class MpwWarMenuPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: McwWarMenuPanel;
+        private static _instance: MpwWarMenuPanel;
 
         private _group          : eui.Group;
         private _listCommand    : GameUi.UiScrollList;
@@ -47,18 +47,18 @@ namespace TinyWars.MultiPlayerWar {
         private _menuType       = MenuType.Main;
 
         public static show(): void {
-            if (!McwWarMenuPanel._instance) {
-                McwWarMenuPanel._instance = new McwWarMenuPanel();
+            if (!MpwWarMenuPanel._instance) {
+                MpwWarMenuPanel._instance = new MpwWarMenuPanel();
             }
-            McwWarMenuPanel._instance.open(undefined);
+            MpwWarMenuPanel._instance.open(undefined);
         }
         public static async hide(): Promise<void> {
-            if (McwWarMenuPanel._instance) {
-                await McwWarMenuPanel._instance.close();
+            if (MpwWarMenuPanel._instance) {
+                await MpwWarMenuPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
-            const instance = McwWarMenuPanel._instance;
+            const instance = MpwWarMenuPanel._instance;
             return instance ? instance.getIsOpening() : false;
         }
 
@@ -67,12 +67,12 @@ namespace TinyWars.MultiPlayerWar {
 
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-            this.skinName = `resource/skins/multiCustomWar/McwWarMenuPanel.exml`;
+            this.skinName = `resource/skins/multiPlayerWar/MpwWarMenuPanel.exml`;
         }
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyMcwPlannerStateChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
@@ -114,7 +114,7 @@ namespace TinyWars.MultiPlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyMcwPlannerStateChanged(e: egret.Event): void {
+        private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
             const war = this._war;
             if (war.getPlayerInTurn() === war.getPlayerLoggedIn()) {
                 this.close();
@@ -151,7 +151,7 @@ namespace TinyWars.MultiPlayerWar {
                 this._menuType = MenuType.Main;
                 this._updateListCommand();
             } else {
-                Logger.error(`McwWarMenuPanel._onTouchedBtnBack() invalid this._menuType: ${type}`);
+                Logger.error(`MpwWarMenuPanel._onTouchedBtnBack() invalid this._menuType: ${type}`);
                 this.close();
             }
         }
@@ -273,7 +273,7 @@ namespace TinyWars.MultiPlayerWar {
             } else if (type === MenuType.Advanced) {
                 return this._createDataForAdvancedMenu();
             } else {
-                Logger.error(`McwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
+                Logger.error(`MpwWarMenuPanel._createDataForList() invalid this._menuType: ${type}`);
                 return [];
             }
         }
@@ -326,7 +326,7 @@ namespace TinyWars.MultiPlayerWar {
                 name    : Lang.getText(Lang.Type.B0089),
                 callback: () => {
                     const war = this._war;
-                    MpwProxy.reqMcwCommonSyncWar(
+                    MpwProxy.reqMpwCommonSyncWar(
                         war,
                         war.getActionPlanner().checkIsStateRequesting()
                             ? Types.SyncWarRequestType.PlayerForce

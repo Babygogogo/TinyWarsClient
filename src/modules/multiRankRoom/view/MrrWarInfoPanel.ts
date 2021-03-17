@@ -87,7 +87,7 @@ namespace TinyWars.MultiRankRoom {
         private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
             const warInfo = this._getOpenData<OpenDataForMrrWarInfoPanel>().warInfo;
             if (warInfo) {
-                MpwProxy.reqMcwCommonContinueWar(warInfo.warId);
+                MpwProxy.reqMpwCommonContinueWar(warInfo.warId);
             }
         }
 

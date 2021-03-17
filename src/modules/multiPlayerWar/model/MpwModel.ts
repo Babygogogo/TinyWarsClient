@@ -215,7 +215,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
         const war = getWar();
         if ((war) && (war.getWarId() === warId)) {
             if (container.actionId !== war.getExecutedActionManager().getExecutedActionsCount() + _cachedActions.length) {
-                MpwProxy.reqMcwCommonSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
+                MpwProxy.reqMpwCommonSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
             } else {
                 _cachedActions.push(container);
                 MpwActionExecutor.checkAndRunFirstCachedAction(war, _cachedActions);

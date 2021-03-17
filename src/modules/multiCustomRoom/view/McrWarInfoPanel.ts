@@ -87,7 +87,7 @@ namespace TinyWars.MultiCustomRoom {
         private _onTouchedBtnStartGame(e: egret.TouchEvent): void {
             const warInfo = this._getOpenData<OpenDataForMcrWarInfoPanel>().warInfo;
             if (warInfo) {
-                MpwProxy.reqMcwCommonContinueWar(warInfo.warId);
+                MpwProxy.reqMpwCommonContinueWar(warInfo.warId);
             }
         }
 

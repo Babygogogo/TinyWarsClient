@@ -227,7 +227,7 @@ namespace TinyWars.Utility.FlowManager {
         } else {
             const mcwWar = MpwModel.getWar();
             if (mcwWar) {
-                MpwProxy.reqMcwCommonSyncWar(mcwWar, Types.SyncWarRequestType.ReconnectionRequest);
+                MpwProxy.reqMpwCommonSyncWar(mcwWar, Types.SyncWarRequestType.ReconnectionRequest);
             }
         }
     }

@@ -239,7 +239,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnFight(e: egret.Event): void {
             const data = this.data as DataForWarRenderer;
-            MultiPlayerWar.MpwProxy.reqMcwCommonContinueWar(data.warInfo.warId);
+            MultiPlayerWar.MpwProxy.reqMpwCommonContinueWar(data.warInfo.warId);
         }
 
         private _checkIsInTurn(info: IMpwWarInfo): boolean {

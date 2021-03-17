@@ -17,7 +17,7 @@ namespace TinyWars.MultiPlayerWar {
             return MpwTurnManager;
         }
         public getIsWarMenuPanelOpening(): boolean {
-            return McwWarMenuPanel.getIsOpening();
+            return MpwWarMenuPanel.getIsOpening();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
