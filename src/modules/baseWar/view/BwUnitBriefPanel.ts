@@ -1,79 +1,73 @@
 
-namespace TinyWars.MapEditor {
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import StageManager     = Utility.StageManager;
-    import GridIndexHelpers = Utility.GridIndexHelpers;
-    import Types            = Utility.Types;
-    import CommonModel      = Common.CommonModel;
+namespace TinyWars.BaseWar {
+    import Notify               = Utility.Notify;
+    import Lang                 = Utility.Lang;
+    import StageManager         = Utility.StageManager;
+    import Types                = Utility.Types;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import CommonModel          = Common.CommonModel;
 
     const _CELL_WIDTH           = 80;
     const _LEFT_X               = 80;
     const _RIGHT_X              = 880;
 
-    export class MeUnitBriefPanel extends GameUi.UiPanel {
+    type OpenDataForBwUnitBriefPanel = {
+        war : BwWar;
+    }
+
+    export class BwUnitBriefPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: MeUnitBriefPanel;
+        private static _instance: BwUnitBriefPanel;
 
         private _group      : eui.Group;
-        private _cellList   : McwUnitBriefCell[] = [];
+        private _cellList   : BwUnitBriefCell[] = [];
 
-        private _war        : MeWar;
-        private _cursor     : BaseWar.BwCursor;
-        private _unitMap    : MeUnitMap;
         private _unitList   : BaseWar.BwUnit[] = [];
         private _isLeftSide = true;
 
-        public static show(): void {
-            if (!MeUnitBriefPanel._instance) {
-                MeUnitBriefPanel._instance = new MeUnitBriefPanel();
+        public static show(openData: OpenDataForBwUnitBriefPanel): void {
+            if (!BwUnitBriefPanel._instance) {
+                BwUnitBriefPanel._instance = new BwUnitBriefPanel();
             }
-            MeUnitBriefPanel._instance.open(undefined);
+            BwUnitBriefPanel._instance.open(openData);
         }
         public static async hide(): Promise<void> {
-            if (MeUnitBriefPanel._instance) {
-                await MeUnitBriefPanel._instance.close();
+            if (BwUnitBriefPanel._instance) {
+                await BwUnitBriefPanel._instance.close();
             }
         }
-        public static getInstance(): MeUnitBriefPanel {
-            return MeUnitBriefPanel._instance;
+        public static getInstance(): BwUnitBriefPanel {
+            return BwUnitBriefPanel._instance;
         }
 
         public constructor() {
             super();
 
-            this.skinName = `resource/skins/mapEditor/MeUnitBriefPanel.exml`;
+            this.skinName = `resource/skins/baseWar/BwUnitBriefPanel.exml`;
         }
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyMcwCursorGridIndexChanged },
-                { type: Notify.Type.BwWarMenuPanelOpened,          callback: this._onNotifyMcwWarMenuPanelOpened },
-                { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
-                { type: Notify.Type.BwCoListPanelOpened,            callback: this._onNotifyMcwCoListPanelOpened },
-                { type: Notify.Type.BwCoListPanelClosed,            callback: this._onNotifyMcwCoListPanelClosed },
-                { type: Notify.Type.BwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
-                { type: Notify.Type.BwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
+                { type: Notify.Type.BwCursorGridIndexChanged,       callback: this._onNotifyBwCursorGridIndexChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
+                { type: Notify.Type.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
+                { type: Notify.Type.BwWarMenuPanelClosed,           callback: this._onNotifyBwWarMenuPanelClosed },
+                { type: Notify.Type.BwCoListPanelOpened,            callback: this._onNotifyBwCoListPanelOpened },
+                { type: Notify.Type.BwCoListPanelClosed,            callback: this._onNotifyBwCoListPanelClosed },
+                { type: Notify.Type.BwProduceUnitPanelOpened,       callback: this._onNotifyBwProduceUnitPanelOpened },
+                { type: Notify.Type.BwProduceUnitPanelClosed,       callback: this._onNotifyBwProduceUnitPanelClosed },
                 { type: Notify.Type.MeUnitChanged,                  callback: this._onNotifyMeUnitChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
             ]);
 
-            const war       = MeModel.getWar();
-            this._war       = war;
-            this._unitMap   = war.getUnitMap() as MeUnitMap;
-            this._cursor    = war.getField().getCursor();
-
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            this._war       = null;
-            this._unitMap   = null;
-            this._cursor    = null;
-
             for (const cell of this._cellList) {
                 this._destroyCell(cell);
             }
@@ -90,30 +84,38 @@ namespace TinyWars.MapEditor {
         private _onNotifyGlobalTouchMove(e: egret.Event): void {
             this._adjustPositionOnTouch(e.data);
         }
-        private _onNotifyMcwCursorGridIndexChanged(e: egret.Event): void {
+        private _onNotifyBwCursorGridIndexChanged(e: egret.Event): void {
             this._updateView();
         }
-        private _onNotifyMcwWarMenuPanelOpened(e: egret.Event): void {
+        private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
+            const planner = this._getOpenData<OpenDataForBwUnitBriefPanel>().war.getActionPlanner();
+            if ((planner.getPreviousState() === Types.ActionPlannerState.ExecutingAction) &&
+                (planner.getState() !== Types.ActionPlannerState.ExecutingAction)
+            ) {
+                this._updateView();
+            }
+        }
+        private _onNotifyBwWarMenuPanelOpened(e: egret.Event): void {
             this._updateView();
         }
-        private _onNotifyMcwWarMenuPanelClosed(e: egret.Event): void {
+        private _onNotifyBwWarMenuPanelClosed(e: egret.Event): void {
             this._updateView();
         }
-        private _onNotifyMcwCoListPanelOpened(e: egret.Event): void {
+        private _onNotifyBwCoListPanelOpened(e: egret.Event): void {
             this._updateView();
         }
-        private _onNotifyMcwCoListPanelClosed(e: egret.Event): void {
+        private _onNotifyBwCoListPanelClosed(e: egret.Event): void {
             this._updateView();
         }
-        private _onNotifyMcwProduceUnitPanelOpened(e: egret.Event): void {
+        private _onNotifyBwProduceUnitPanelOpened(e: egret.Event): void {
             this._updateView();
         }
-        private _onNotifyMcwProduceUnitPanelClosed(e: egret.Event): void {
+        private _onNotifyBwProduceUnitPanelClosed(e: egret.Event): void {
             this._updateView();
         }
         private _onNotifyMeUnitChanged(e: egret.Event): void {
             const data = e.data as Notify.Data.MeUnitChanged;
-            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._cursor.getGridIndex())) {
+            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData<OpenDataForBwUnitBriefPanel>().war.getField().getCursor().getGridIndex())) {
                 this._updateView();
             }
         }
@@ -136,7 +138,11 @@ namespace TinyWars.MapEditor {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            if ((MeWarMenuPanel.getIsOpening())) {
+            const war = this._getOpenData<OpenDataForBwUnitBriefPanel>().war;
+            if ((war.getIsWarMenuPanelOpening())            ||
+                (BaseWar.BwProduceUnitPanel.getIsOpening()) ||
+                (BaseWar.BwCoListPanel.getIsOpening())
+            ) {
                 this.visible = false;
             } else {
                 this.visible = true;
@@ -144,14 +150,29 @@ namespace TinyWars.MapEditor {
                 const unitList  = this._unitList;
                 unitList.length = 0;
 
-                const gridIndex = this._cursor.getGridIndex();
-                const unitOnMap = this._unitMap.getUnitOnMap(gridIndex);
-                if (unitOnMap) {
+                const unitMap       = war.getUnitMap();
+                const gridIndex     = war.getField().getCursor().getGridIndex();
+                const unitOnMap     = unitMap.getUnitOnMap(gridIndex);
+                const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+
+                if ((unitOnMap)                                         &&
+                    (VisibilityHelpers.checkIsUnitOnMapVisibleToTeams({
+                        war,
+                        gridIndex,
+                        unitType            : unitOnMap.getUnitType(),
+                        isDiving            : unitOnMap.getIsDiving(),
+                        unitPlayerIndex     : unitOnMap.getPlayerIndex(),
+                        observerTeamIndexes : teamIndexes
+                    }))
+                ) {
                     unitList.push(unitOnMap);
 
-                    const war = this._war;
-                    for (const loadedUnit of this._unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
-                        unitList.push(loadedUnit);
+                    if ((!war.getFogMap().checkHasFogCurrently())   ||
+                        (teamIndexes.has(unitOnMap.getTeamIndex()))
+                    ) {
+                        for (const loadedUnit of unitMap.getUnitsLoadedByLoader(unitOnMap, true)) {
+                            unitList.push(loadedUnit);
+                        }
                     }
                 }
 
@@ -170,7 +191,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {
-            const tileBriefPanel = MeTileBriefPanel.getInstance();
+            const tileBriefPanel = BaseWar.BwTileBriefPanel.getInstance();
             const unitBriefPanel = this;
             let target = e.target as egret.DisplayObject;
             while (target) {
@@ -204,12 +225,12 @@ namespace TinyWars.MapEditor {
             }
         }
 
-        private _createCell(): McwUnitBriefCell {
-            const cell = new McwUnitBriefCell();
+        private _createCell(): BwUnitBriefCell {
+            const cell = new BwUnitBriefCell();
             cell.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onCellTouchTap, this);
             return cell;
         }
-        private _destroyCell(cell: McwUnitBriefCell) {
+        private _destroyCell(cell: BwUnitBriefCell) {
             cell.removeEventListener(egret.TouchEvent.TOUCH_TAP, this._onCellTouchTap, this);
         }
     }
@@ -220,7 +241,7 @@ namespace TinyWars.MapEditor {
     const _IMAGE_SOURCE_MATERIAL    = `c03_t99_s02_f04`;
     const _IMAGE_SOURCE_FLARE       = `c03_t99_s02_f02`;
 
-    class McwUnitBriefCell extends eui.Component {
+    class BwUnitBriefCell extends eui.Component {
         private _group          : eui.Group;
         private _conUnitView    : eui.Group;
         private _labelName      : GameUi.UiLabel;
@@ -238,7 +259,7 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this.skinName = `resource/skins/mapEditor/MeUnitBriefCell.exml`;
+            this.skinName = `resource/skins/baseWar/BwUnitBriefCell.exml`;
         }
 
         protected childrenCreated(): void {

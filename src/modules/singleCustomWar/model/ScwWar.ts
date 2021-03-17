@@ -192,6 +192,9 @@ namespace TinyWars.SingleCustomWar {
         public getIsNeedReplay(): boolean {
             return false;
         }
+        public getIsWarMenuPanelOpening(): boolean {
+            return ScwWarMenuPanel.getIsOpening();
+        }
         protected _getFieldClass(): new () => ScwField {
             return ScwField;
         }

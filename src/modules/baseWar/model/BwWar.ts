@@ -29,6 +29,7 @@ namespace TinyWars.BaseWar {
         public abstract getWarType(): Types.WarType;
         public abstract getMapId(): number | undefined;
         public abstract getIsNeedReplay(): boolean;
+        public abstract getIsWarMenuPanelOpening(): boolean;
         protected abstract _getPlayerManagerClass(): new () => BwPlayerManager;
         protected abstract _getTurnManagerClass(): new () => BwTurnManager;
         protected abstract _getFieldClass(): new () => BwField;

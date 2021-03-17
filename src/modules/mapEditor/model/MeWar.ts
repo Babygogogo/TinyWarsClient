@@ -178,6 +178,9 @@ namespace TinyWars.MapEditor {
         public getMapId(): number | undefined {
             return undefined;
         }
+        public getIsWarMenuPanelOpening(): boolean {
+            return MeWarMenuPanel.getIsOpening();
+        }
 
         protected _getFieldClass(): new () => MeField {
             return MeField;

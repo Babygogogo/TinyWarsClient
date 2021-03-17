@@ -258,6 +258,9 @@ namespace TinyWars.ReplayWar {
 
             return undefined;
         }
+        public getIsWarMenuPanelOpening(): boolean {
+            return RwWarMenuPanel.getIsOpening();
+        }
 
         private _getSettingsForMcw(): ProtoTypes.WarSettings.ISettingsForMcw {
             return this._settingsForMcw;

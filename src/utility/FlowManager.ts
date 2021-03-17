@@ -102,8 +102,8 @@ namespace TinyWars.Utility.FlowManager {
         BaseWar.BwBackgroundPanel.show();
         MultiPlayerWar.MpwTopPanel.show();
         BaseWar.BwWarPanel.show({ war });
-        MultiPlayerWar.MpwTileBriefPanel.show();
-        MultiPlayerWar.MpwUnitBriefPanel.show();
+        BaseWar.BwTileBriefPanel.show({ war });
+        BaseWar.BwUnitBriefPanel.show({ war });
         Broadcast.BroadcastPanel.show();
 
         SoundManager.playRandomWarBgm();
@@ -118,8 +118,8 @@ namespace TinyWars.Utility.FlowManager {
         BaseWar.BwBackgroundPanel.show();
         ReplayWar.RwTopPanel.show();
         BaseWar.BwWarPanel.show({ war });
-        ReplayWar.RwTileBriefPanel.show();
-        ReplayWar.RwUnitBriefPanel.show();
+        BaseWar.BwTileBriefPanel.show({ war });
+        BaseWar.BwUnitBriefPanel.show({ war });
         Broadcast.BroadcastPanel.show();
 
         SoundManager.playRandomWarBgm();
@@ -138,8 +138,8 @@ namespace TinyWars.Utility.FlowManager {
         BaseWar.BwBackgroundPanel.show();
         SingleCustomWar.ScwTopPanel.show();
         BaseWar.BwWarPanel.show({ war });
-        SingleCustomWar.ScwTileBriefPanel.show();
-        SingleCustomWar.ScwUnitBriefPanel.show();
+        BaseWar.BwTileBriefPanel.show({ war });
+        BaseWar.BwUnitBriefPanel.show({ war });
         Broadcast.BroadcastPanel.show();
 
         SoundManager.playRandomWarBgm();
@@ -154,8 +154,8 @@ namespace TinyWars.Utility.FlowManager {
         BaseWar.BwBackgroundPanel.show();
         MapEditor.MeTopPanel.show();
         BaseWar.BwWarPanel.show({ war });
-        MapEditor.MeTileBriefPanel.show();
-        MapEditor.MeUnitBriefPanel.show();
+        BaseWar.BwTileBriefPanel.show({ war });
+        BaseWar.BwUnitBriefPanel.show({ war });
         Broadcast.BroadcastPanel.show();
 
         SoundManager.playBgm(SoundManager.BgmCode.MapEditor01);

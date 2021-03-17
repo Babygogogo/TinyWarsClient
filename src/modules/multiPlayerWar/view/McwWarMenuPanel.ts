@@ -108,7 +108,7 @@ namespace TinyWars.MultiPlayerWar {
             this._listPlayer.clear();
             this._listWarInfo.clear();
 
-            Notify.dispatch(Notify.Type.McwWarMenuPanelClosed);
+            Notify.dispatch(Notify.Type.BwWarMenuPanelClosed);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -16,6 +16,9 @@ namespace TinyWars.MultiPlayerWar {
         protected _getTurnManagerClass(): new () => MpwTurnManager {
             return MpwTurnManager;
         }
+        public getIsWarMenuPanelOpening(): boolean {
+            return McwWarMenuPanel.getIsOpening();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.

@@ -62,6 +62,10 @@ namespace TinyWars.TestWar {
         public getIsNeedReplay(): boolean {
             return false;
         }
+
+        public getIsWarMenuPanelOpening(): boolean {
+            return false;
+        }
     }
 
     async function _createDataForCreateTwWar(mapRawData: IMapRawData): Promise<ISerialWar | undefined> {

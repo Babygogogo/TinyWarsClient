@@ -103,7 +103,7 @@ namespace TinyWars.MapEditor {
             this._dataForList   = null;
             this._listCommand.clear();
 
-            Notify.dispatch(Notify.Type.McwWarMenuPanelClosed);
+            Notify.dispatch(Notify.Type.BwWarMenuPanelClosed);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

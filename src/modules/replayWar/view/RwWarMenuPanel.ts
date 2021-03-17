@@ -101,7 +101,7 @@ namespace TinyWars.ReplayWar {
             this._listCommand.clear();
             this._listPlayer.clear();
 
-            Notify.dispatch(Notify.Type.McwWarMenuPanelClosed);
+            Notify.dispatch(Notify.Type.BwWarMenuPanelClosed);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
