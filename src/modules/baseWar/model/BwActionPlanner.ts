@@ -1056,6 +1056,7 @@ namespace TinyWars.BaseWar {
         protected abstract _setStateRequestingUnitDropOnTap(gridIndex: GridIndex): void;
         protected abstract _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void;
         protected abstract _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void;
+        public abstract setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Types.UnitType, unitHp: number): void;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.

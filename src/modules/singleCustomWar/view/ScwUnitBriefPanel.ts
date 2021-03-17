@@ -57,8 +57,8 @@ namespace TinyWars.SingleCustomWar {
                 { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
                 { type: Notify.Type.BwCoListPanelOpened,            callback: this._onNotifyBwCoListPanelOpened },
                 { type: Notify.Type.BwCoListPanelClosed,            callback: this._onNotifyBwCoListPanelClosed },
-                { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
-                { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
+                { type: Notify.Type.BwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
+                { type: Notify.Type.BwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
             ]);
 
@@ -137,7 +137,7 @@ namespace TinyWars.SingleCustomWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            if ((ScwWarMenuPanel.getIsOpening()) || (ScwProduceUnitPanel.getIsOpening()) || (ScwCoListPanel.getIsOpening())) {
+            if ((ScwWarMenuPanel.getIsOpening()) || (BaseWar.BwProduceUnitPanel.getIsOpening()) || (ScwCoListPanel.getIsOpening())) {
                 this.visible = false;
             } else {
                 this.visible = true;

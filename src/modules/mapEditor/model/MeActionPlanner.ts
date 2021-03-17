@@ -26,6 +26,9 @@ namespace TinyWars.MapEditor {
         protected _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {
         }
 
+        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Types.UnitType, unitHp: number): void {
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////

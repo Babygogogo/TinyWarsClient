@@ -65,8 +65,8 @@ namespace TinyWars.ReplayWar {
                 { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
                 { type: Notify.Type.BwCoListPanelOpened,            callback: this._onNotifyMcwCoListPanelOpened },
                 { type: Notify.Type.BwCoListPanelClosed,            callback: this._onNotifyMcwCoListPanelClosed },
-                { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
-                { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
+                { type: Notify.Type.BwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
+                { type: Notify.Type.BwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
                 { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
             ]);
             this._setUiListenerArray([
@@ -136,7 +136,7 @@ namespace TinyWars.ReplayWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            if ((RwWarMenuPanel.getIsOpening()) || (RwProduceUnitPanel.getIsOpening()) || (RwCoListPanel.getIsOpening())) {
+            if ((RwWarMenuPanel.getIsOpening()) || (BaseWar.BwProduceUnitPanel.getIsOpening()) || (RwCoListPanel.getIsOpening())) {
                 this.visible = false;
             } else {
                 this.visible = true;

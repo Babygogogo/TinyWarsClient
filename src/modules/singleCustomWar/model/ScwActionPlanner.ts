@@ -33,7 +33,10 @@ namespace TinyWars.SingleCustomWar {
 
             this._setState(State.ChoosingProductionTarget);
             this._updateView();
-            ScwProduceUnitPanel.show({ gridIndex });
+            BaseWar.BwProduceUnitPanel.show({
+                gridIndex,
+                war     : this._getWar(),
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

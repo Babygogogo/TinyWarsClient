@@ -65,8 +65,8 @@ namespace TinyWars.MultiPlayerWar {
                 { type: Notify.Type.McwWarMenuPanelClosed,          callback: this._onNotifyMcwWarMenuPanelClosed },
                 { type: Notify.Type.BwCoListPanelOpened,            callback: this._onNotifyMcwCoListPanelOpened },
                 { type: Notify.Type.BwCoListPanelClosed,            callback: this._onNotifyMcwCoListPanelClosed },
-                { type: Notify.Type.McwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
-                { type: Notify.Type.McwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
+                { type: Notify.Type.BwProduceUnitPanelOpened,      callback: this._onNotifyMcwProduceUnitPanelOpened },
+                { type: Notify.Type.BwProduceUnitPanelClosed,      callback: this._onNotifyMcwProduceUnitPanelClosed },
                 { type: Notify.Type.TileAnimationTick,              callback: this._onNotifyTileAnimationTick },
             ]);
             this._setUiListenerArray([
@@ -137,7 +137,7 @@ namespace TinyWars.MultiPlayerWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            if ((McwWarMenuPanel.getIsOpening()) || (McwProduceUnitPanel.getIsOpening()) || (McwCoListPanel.getIsOpening())) {
+            if ((McwWarMenuPanel.getIsOpening()) || (BaseWar.BwProduceUnitPanel.getIsOpening()) || (McwCoListPanel.getIsOpening())) {
                 this.visible = false;
             } else {
                 this.visible = true;

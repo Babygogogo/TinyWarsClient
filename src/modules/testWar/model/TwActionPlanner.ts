@@ -12,20 +12,29 @@ namespace TinyWars.TestWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting common state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _setStateChoosingProductionTargetOnTap(gridIndex: GridIndex): void {}
+        protected _setStateChoosingProductionTargetOnTap(gridIndex: GridIndex): void {
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting requesting state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _setStateRequestingUnitAttackUnit(targetGridIndex: GridIndex): void {}
+        protected _setStateRequestingUnitAttackUnit(targetGridIndex: GridIndex): void {
+        }
 
-        protected _setStateRequestingUnitAttackTile(targetGridIndex: GridIndex): void {}
+        protected _setStateRequestingUnitAttackTile(targetGridIndex: GridIndex): void {
+        }
 
-        protected _setStateRequestingUnitDropOnTap(gridIndex: GridIndex): void {}
+        protected _setStateRequestingUnitDropOnTap(gridIndex: GridIndex): void {
+        }
 
-        protected _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {}
+        protected _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {
+        }
 
-        protected _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void {}
+        protected _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void {
+        }
+
+        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Types.UnitType, unitHp: number): void {
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.

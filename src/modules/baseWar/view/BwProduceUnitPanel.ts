@@ -1,58 +1,59 @@
 
-namespace TinyWars.SingleCustomWar {
+namespace TinyWars.BaseWar {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
     import Types            = Utility.Types;
     import FloatText        = Utility.FloatText;
-    import ConfigManager    = Utility.ConfigManager;
+    import CommonConstants  = Utility.CommonConstants;
     import BwHelpers        = BaseWar.BwHelpers;
+    import BwUnit           = BaseWar.BwUnit;
     import UnitType         = Types.UnitType;
     import GridIndex        = Types.GridIndex;
-    import CommonConstants  = Utility.CommonConstants;
 
-    type OpenDataForScwProduceUnitPanel = {
+    type OpenDataForBwProduceUnitPanel = {
         gridIndex   : GridIndex;
+        war         : BaseWar.BwWar;
     }
-    export class ScwProduceUnitPanel extends GameUi.UiPanel {
+    export class BwProduceUnitPanel extends GameUi.UiPanel {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: ScwProduceUnitPanel;
+        private static _instance: BwProduceUnitPanel;
 
         private _group      : eui.Group;
         private _listUnit   : GameUi.UiScrollList;
         private _btnCancel  : GameUi.UiButton;
         private _btnDetail  : GameUi.UiButton;
 
-        private _war        : ScwWar;
         private _dataForList: DataForUnitRenderer[];
 
-        public static show(openData: OpenDataForScwProduceUnitPanel): void {
-            if (!ScwProduceUnitPanel._instance) {
-                ScwProduceUnitPanel._instance = new ScwProduceUnitPanel();
+        public static show(openData: OpenDataForBwProduceUnitPanel): void {
+            if (!BwProduceUnitPanel._instance) {
+                BwProduceUnitPanel._instance = new BwProduceUnitPanel();
             }
-            ScwProduceUnitPanel._instance.open(openData);
+            BwProduceUnitPanel._instance.open(openData);
         }
         public static async hide(): Promise<void> {
-            if (ScwProduceUnitPanel._instance) {
-                await ScwProduceUnitPanel._instance.close();
+            if (BwProduceUnitPanel._instance) {
+                await BwProduceUnitPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
-            const instance = ScwProduceUnitPanel._instance;
+            const instance = BwProduceUnitPanel._instance;
             return instance ? instance.getIsOpening() : false;
         }
 
         public constructor() {
             super();
 
-            this.skinName = `resource/skins/multiCustomWar/McwProduceUnitPanel.exml`;
+            this.skinName = `resource/skins/baseWar/BwProduceUnitPanel.exml`;
         }
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
-                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyScwPlannerStateChanged },
+                { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel, callback: this._onTouchedBtnCancel },
@@ -60,22 +61,24 @@ namespace TinyWars.SingleCustomWar {
             ]);
             this._listUnit.setItemRenderer(UnitRenderer);
 
-            this._war = ScwModel.getWar();
             this._updateView();
 
-            Notify.dispatch(Notify.Type.McwProduceUnitPanelOpened);
+            Notify.dispatch(Notify.Type.BwProduceUnitPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
-            this._war           = null;
-            this._dataForList   = null;
+            this._dataForList = null;
             this._listUnit.clear();
 
-            Notify.dispatch(Notify.Type.McwProduceUnitPanelClosed);
+            Notify.dispatch(Notify.Type.BwProduceUnitPanelClosed);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             const viewList = this._listUnit.getViewList();
             for (let i = 0; i < viewList.numChildren; ++i) {
@@ -83,12 +86,12 @@ namespace TinyWars.SingleCustomWar {
                 (child instanceof UnitRenderer) && (child.updateOnUnitAnimationTick());
             }
         }
-        private _onNotifyScwPlannerStateChanged(e: egret.Event): void {
+        private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
             this.close();
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            this._war.getActionPlanner().setStateIdle();
+            this._getOpenData<OpenDataForBwProduceUnitPanel>().war.getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnDetail(e: egret.TouchEvent): void {
             const selectedIndex = this._listUnit.getViewList().selectedIndex;
@@ -104,21 +107,34 @@ namespace TinyWars.SingleCustomWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
+            this._updateComponentsForLanguage();
+
             this._dataForList = this._createDataForList();
             this._listUnit.bindData(this._dataForList);
         }
 
+        private _updateComponentsForLanguage(): void {
+            this._btnCancel.label = Lang.getText(Lang.Type.B0154);
+            this._btnDetail.label = Lang.getText(Lang.Type.B0267);
+
+            const viewList = this._listUnit.getViewList();
+            for (let i = 0; i < viewList.numChildren; ++i) {
+                const child = viewList.getChildAt(i);
+                (child instanceof UnitRenderer) && (child.updateOnLanguageChanged());
+            }
+        }
+
         private _createDataForList(): DataForUnitRenderer[] {
             const dataList          = [] as DataForUnitRenderer[];
-            const war               = this._war;
-            const player            = war.getPlayerInTurn();
+            const openData          = this._getOpenData<OpenDataForBwProduceUnitPanel>();
+            const war               = openData.war;
+            const gridIndex         = openData.gridIndex;
+            const tile              = war.getTileMap().getTile(gridIndex);
+            const player            = tile.getPlayer();
             const currentFund       = player.getFund();
             const playerIndex       = player.getPlayerIndex();
             const configVersion     = war.getConfigVersion();
-            const actionPlanner     = war.getActionPlanner() as ScwActionPlanner;
-            const unitMap           = war.getUnitMap();
-            const gridIndex         = this._getOpenData<OpenDataForScwProduceUnitPanel>().gridIndex;
-            const tile              = war.getTileMap().getTile(gridIndex);
+            const actionPlanner     = war.getActionPlanner();
             const skillCfg          = tile.getEffectiveSelfUnitProductionSkillCfg(playerIndex);
             const unitCategory      = skillCfg ? skillCfg[1] : tile.getCfgProduceUnitCategory();
             const minNormalizedHp   = skillCfg ? BwHelpers.getNormalizedHp(skillCfg[3]) : BwHelpers.getNormalizedHp(CommonConstants.UnitMaxHp);
@@ -157,11 +173,11 @@ namespace TinyWars.SingleCustomWar {
 
     type DataForUnitRenderer = {
         unitType                : UnitType;
-        unit                    : BaseWar.BwUnit;
-        cfgCost                 : number;
+        unit                    : BwUnit;
         minCost                 : number;
+        cfgCost                 : number;
         currentFund             : number;
-        actionPlanner           : ScwActionPlanner;
+        actionPlanner           : BaseWar.BwActionPlanner;
         gridIndex               : GridIndex;
         unitProductionSkillCfg  : number[] | null;
     }
@@ -190,6 +206,10 @@ namespace TinyWars.SingleCustomWar {
                 this._unitView.tickUnitAnimationFrame();
                 this._unitView.tickStateAnimationFrame();
             }
+        }
+
+        public updateOnLanguageChanged(): void {
+            (this.data) && (this._updateView());
         }
 
         protected dataChanged(): void {
@@ -253,6 +273,7 @@ namespace TinyWars.SingleCustomWar {
             this._labelCost.textColor       = isFundEnough ? 0x00FF00 : 0xFF0000;
             this._labelName.text            = Lang.getUnitName(unitType);
             this._labelProduce.textColor    = isFundEnough ? 0x00FF00 : 0xFF0000;
+            this._labelProduce.text         = Lang.getText(Lang.Type.B0095);
 
             this._unitView.init(data.unit).startRunningView();
         }

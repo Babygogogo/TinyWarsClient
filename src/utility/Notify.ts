@@ -57,8 +57,8 @@ namespace TinyWars.Utility.Notify {
 
         McwWarMenuPanelOpened,
         McwWarMenuPanelClosed,
-        McwProduceUnitPanelOpened,
-        McwProduceUnitPanelClosed,
+        BwProduceUnitPanelOpened,
+        BwProduceUnitPanelClosed,
         BwCoListPanelOpened,
         BwCoListPanelClosed,
 

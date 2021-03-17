@@ -27,7 +27,10 @@ namespace TinyWars.ReplayWar {
 
             this._setState(State.ChoosingProductionTarget);
             this._updateView();
-            RwProduceUnitPanel.show({ gridIndex });
+            BaseWar.BwProduceUnitPanel.show({
+                gridIndex,
+                war     : this._getWar(),
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,6 +67,9 @@ namespace TinyWars.ReplayWar {
         }
 
         protected _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {
+        }
+
+        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Types.UnitType, unitHp: number): void {
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
