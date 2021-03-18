@@ -1,5 +1,6 @@
 
 namespace TinyWars.BaseWar {
+    import Tween                = egret.Tween;
     import Notify               = Utility.Notify;
     import Lang                 = Utility.Lang;
     import StageManager         = Utility.StageManager;
@@ -9,8 +10,6 @@ namespace TinyWars.BaseWar {
     import CommonModel          = Common.CommonModel;
 
     const _CELL_WIDTH           = 80;
-    const _LEFT_X               = 80;
-    const _RIGHT_X              = 880;
 
     type OpenDataForBwUnitBriefPanel = {
         war : BwWar;
@@ -65,9 +64,16 @@ namespace TinyWars.BaseWar {
                 { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
             ]);
 
+            const group     = this._group;
+            group.alpha     = 0;
+            group.bottom    = -40;
+            this._showOpenAnimation();
+
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+
             for (const cell of this._cellList) {
                 this._destroyCell(cell);
             }
@@ -140,6 +146,7 @@ namespace TinyWars.BaseWar {
         private _updateView(): void {
             const war = this._getOpenData<OpenDataForBwUnitBriefPanel>().war;
             if ((war.getIsWarMenuPanelOpening())            ||
+                (!war.getIsRunning())                       ||
                 (BaseWar.BwProduceUnitPanel.getIsOpening()) ||
                 (BaseWar.BwCoListPanel.getIsOpening())
             ) {
@@ -190,7 +197,7 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _adjustPositionOnTouch(e: egret.TouchEvent): void {
+        private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {
             const tileBriefPanel = BaseWar.BwTileBriefPanel.getInstance();
             const unitBriefPanel = this;
             let target = e.target as egret.DisplayObject;
@@ -201,17 +208,19 @@ namespace TinyWars.BaseWar {
                 target = target.parent;
             }
 
-            const stageWidth = StageManager.getStage().stageWidth;
-            if (e.stageX >= stageWidth / 4 * 3) {
-                if (!this._isLeftSide) {
-                    this._isLeftSide = true;
-                    this._updatePosition();
-                }
-            } else if (e.stageX < stageWidth / 4) {
-                if (this._isLeftSide) {
-                    this._isLeftSide = false;
-                    this._updatePosition();
-                }
+            const stageWidth        = StageManager.getStage().stageWidth;
+            const currentIsLeftSide = this._isLeftSide;
+            const newIsLeftSide     = e.stageX >= stageWidth / 4 * 3
+                ? true
+                : (e.stageX < stageWidth / 4
+                    ? false
+                    : currentIsLeftSide
+                );
+            if (newIsLeftSide !== currentIsLeftSide) {
+                await this._showCloseAnimation();
+                this._isLeftSide = newIsLeftSide;
+                this._updatePosition();
+                this._showOpenAnimation();
             }
         }
 
@@ -219,7 +228,7 @@ namespace TinyWars.BaseWar {
             const isLeftSide    = this._isLeftSide;
             const cellList      = this._cellList;
             const length        = this._unitList.length;
-            this._group.x       = isLeftSide ? _LEFT_X : _RIGHT_X - _CELL_WIDTH * length;
+            this._group.x       = isLeftSide ? _CELL_WIDTH : StageManager.getStage().stageWidth - _CELL_WIDTH * (length + 1);
             for (let i = 0; i < length; ++i) {
                 cellList[i].x = isLeftSide ? _CELL_WIDTH * i : (length - 1 - i) * _CELL_WIDTH;
             }
@@ -232,6 +241,22 @@ namespace TinyWars.BaseWar {
         }
         private _destroyCell(cell: BwUnitBriefCell) {
             cell.removeEventListener(egret.TouchEvent.TOUCH_TAP, this._onCellTouchTap, this);
+        }
+
+        private _showOpenAnimation(): void {
+            const group = this._group;
+            Tween.removeTweens(group);
+            Tween.get(group)
+                .to({ bottom: 0, alpha: 1 }, 50);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                const group = this._group;
+                Tween.removeTweens(group);
+                Tween.get(group)
+                    .to({ bottom: -40, alpha: 0 }, 50)
+                    .call(() => resolve());
+            });
         }
     }
 

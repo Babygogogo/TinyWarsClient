@@ -1,5 +1,6 @@
 
 namespace TinyWars.BaseWar {
+    import Tween            = egret.Tween;
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
     import StageManager     = Utility.StageManager;
@@ -12,8 +13,7 @@ namespace TinyWars.BaseWar {
     const _IMAGE_SOURCE_DEFENSE = `c04_t10_s03_f00`;
     const _IMAGE_SOURCE_CAPTURE = `c04_t10_s04_f00`;
     const _IMAGE_SOURCE_BUILD   = `c04_t10_s05_f00`;
-    const _LEFT_X               = 0;
-    const _RIGHT_X              = 880;
+    const _CELL_WIDTH           = 80;
 
     type OpenDataForBwTileBriefPanel = {
         war : BwWar;
@@ -78,9 +78,15 @@ namespace TinyWars.BaseWar {
             this._conTileView.addChild(this._tileView.getImgBase());
             this._conTileView.addChild(this._tileView.getImgObject());
 
+            const group     = this._group;
+            group.alpha     = 0;
+            group.bottom    = -40;
+            this._showOpenAnimation();
+
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,7 +191,7 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _adjustPositionOnTouch(e: egret.TouchEvent): void {
+        private async _adjustPositionOnTouch(e: egret.TouchEvent): Promise<void> {
             const tileBriefPanel = this;
             const unitBriefPanel = BwUnitBriefPanel.getInstance();
             let target = e.target as egret.DisplayObject;
@@ -196,12 +202,36 @@ namespace TinyWars.BaseWar {
                 target = target.parent;
             }
 
-            const stageWidth = StageManager.getStage().stageWidth;
-            if (e.stageX >= stageWidth / 4 * 3) {
-                this._group.x = _LEFT_X;
-            } else if (e.stageX < stageWidth / 4) {
-                this._group.x = _RIGHT_X;
+            const stageWidth    = StageManager.getStage().stageWidth;
+            const group         = this._group;
+            const currentX      = group.x;
+            const newX          = e.stageX >= stageWidth / 4 * 3
+                ? 0
+                : (e.stageX < stageWidth / 4
+                    ? stageWidth - _CELL_WIDTH
+                    : currentX
+                );
+            if (newX !== currentX) {
+                await this._showCloseAnimation();
+                group.x = newX;
+                this._showOpenAnimation();
             }
+        }
+
+        private _showOpenAnimation(): void {
+            const group = this._group;
+            Tween.removeTweens(group);
+            Tween.get(group)
+                .to({ bottom: 0, alpha: 1 }, 50);
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                const group = this._group;
+                Tween.removeTweens(group);
+                Tween.get(group)
+                    .to({ bottom: -40, alpha: 0 }, 50)
+                    .call(() => resolve());
+            });
         }
     }
 }
