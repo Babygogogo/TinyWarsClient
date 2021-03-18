@@ -1,12 +1,11 @@
 
 namespace TinyWars.Utility.FlowManager {
-    import UserModel        = User.UserModel;
-    import MpwProxy         = MultiPlayerWar.MpwProxy;
-    import MpwModel         = MultiPlayerWar.MpwModel;
-    import ScwModel         = SingleCustomWar.ScwModel;
-    import RwModel          = ReplayWar.RwModel;
-    import MeModel          = MapEditor.MeModel;
-    import CommonConstants  = Utility.CommonConstants;
+    import UserModel    = User.UserModel;
+    import MpwProxy     = MultiPlayerWar.MpwProxy;
+    import MpwModel     = MultiPlayerWar.MpwModel;
+    import ScwModel     = SingleCustomWar.ScwModel;
+    import RwModel      = ReplayWar.RwModel;
+    import MeModel      = MapEditor.MeModel;
 
     const _NET_EVENTS = [
         { msgCode: Network.Codes.MsgCommonServerDisconnect, callback: _onMsgCommonServerDisconnect },
@@ -22,9 +21,7 @@ namespace TinyWars.Utility.FlowManager {
     let _hasOnceWentToLobby = false;
 
     export async function startGame(stage: egret.Stage): Promise<void> {
-        _registerWindowOnError();
-        _preventBrowserBack();
-
+        CompatibilityHelper.init();
         Network.NetManager.addListeners(_NET_EVENTS, FlowManager);
         Notify.addEventListeners(_NOTIFY_EVENTS, FlowManager);
         Utility.StageManager.init(stage);
@@ -258,39 +255,6 @@ namespace TinyWars.Utility.FlowManager {
         if (document) {
             const outLoadingLayer = document.getElementById("outLoadingLayer");
             (outLoadingLayer) && (document.body.removeChild(outLoadingLayer));
-        }
-    }
-
-    function _registerWindowOnError(): void {
-        window.onerror = (message, filename, row, col, err) => {
-            const content = `${message}\n\n${err ? err.stack : "No available call stack."}`;
-            Common.CommonErrorPanel.show({
-                content,
-            });
-            Chat.ChatProxy.reqChatAddMessage(
-                content.substr(0, CommonConstants.ChatContentMaxLength),
-                Types.ChatMessageToCategory.Private,
-                CommonConstants.AdminUserId,
-            );
-        };
-    }
-
-    function _preventBrowserBack(): void {
-        const state = {
-            url: window.location.href,
-        };
-        try {
-            if (window.history) {
-                window.history.pushState(state, "", window.location.href);
-            }
-        } catch (e) {
-            Logger.error(e);
-        }
-
-        if (window.addEventListener) {
-            window.addEventListener("popstate", (e) => {
-                FloatText.show(Lang.getText(Lang.Type.A0194));
-            }, false);
         }
     }
 }

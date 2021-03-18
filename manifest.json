@@ -331,6 +331,7 @@
 		"bin-debug/modules/warMap/view/WarMapUnitMapView.js",
 		"bin-debug/modules/warMap/view/WarMapUnitView.js",
 		"bin-debug/modules/warMap/view/WarMapView.js",
+		"bin-debug/utility/CompatibilityHelper.js",
 		"bin-debug/utility/ResManager.js",
 		"bin-debug/utility/SeedRandom.js",
 		"bin-debug/utility/ServerErrorCode.js"
