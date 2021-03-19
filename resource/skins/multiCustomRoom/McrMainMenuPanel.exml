@@ -178,6 +178,29 @@
                 </GameUi:skinName>
             </GameUi:UiButton>
         </e:Group>
+        <e:Group x="168" y="43">
+            <GameUi:UiButton id="_btnFreeMode" label="" scaleX="1" scaleY="1" top="0" left="0">
+                <GameUi:skinName>
+                    <e:Skin>
+                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
+                            <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0004" />
+                            <GameUi:UiImage id="_imgRed" right="14" source="common0000" verticalCenter="0" />
+                            <e:Group verticalCenter="0" right="40">
+                                <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="Free Mode" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" y="2" x="-172"
+                                                textColor="0xaaaaaa" />
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" scaleX="1" scaleY="1" text="自由模式"
+                                                textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
+                                                x="-162" />
+                                <e:layout>
+                                    <e:HorizontalLayout verticalAlign="bottom" gap="10" />
+                                </e:layout>
+                            </e:Group>
+                        </e:Group>
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
         <e:layout>
             <e:VerticalLayout gap="15" horizontalAlign="left" />
         </e:layout>

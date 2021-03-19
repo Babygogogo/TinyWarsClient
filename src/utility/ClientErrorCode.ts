@@ -12,7 +12,7 @@ namespace TinyWars.Utility {
 
         MrwWarInit00,
 
-        MtwWarInit00,
+        MfwWarInit00,
 
         TwWarInitByMapRawData00,
 

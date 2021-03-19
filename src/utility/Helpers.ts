@@ -415,18 +415,23 @@ namespace TinyWars.Utility.Helpers {
         }
     }
 
-    export function resetTween({ obj, beginProps, waitTime, endProps, tweenTime }: {
+    export function resetTween({ obj, beginProps, waitTime, endProps, tweenTime, callback }: {
         obj         : egret.DisplayObject;
         beginProps  : any;
         waitTime    : number;
         endProps    : any;
         tweenTime   : number;
+        callback?   : () => void
     }): void {
         egret.Tween.removeTweens(obj);
-        egret.Tween.get(obj)
+
+        const tween = egret.Tween.get(obj)
             .set(beginProps)
             .wait(waitTime)
             .to(endProps, tweenTime, egret.Ease.sineOut);
+        if (callback) {
+            tween.call(callback);
+        }
     }
 
     export namespace Sha1Generator {

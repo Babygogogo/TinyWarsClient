@@ -23,6 +23,7 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _btnContinueWar    : TinyWars.GameUi.UiButton;
         private readonly _btnWatchWar       : TinyWars.GameUi.UiButton;
         private readonly _btnReplayWar      : TinyWars.GameUi.UiButton;
+        private readonly _btnFreeMode       : TinyWars.GameUi.UiButton;
 
         public static show(): void {
             if (!McrMainMenuPanel._instance) {
@@ -53,6 +54,7 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnContinueWar,     callback: this._onTouchedBtnContinueWar },
                 { ui: this._btnWatchWar,        callback: this._onTouchedBtnWatchWar },
                 { ui: this._btnReplayWar,       callback: this._onTouchedBtnReplayWar },
+                { ui: this._btnFreeMode,        callback: this._onTouchedBtnFreeMode },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
@@ -114,6 +116,10 @@ namespace TinyWars.MultiCustomRoom {
             Lobby.LobbyBottomPanel.hide();
             ReplayWar.RwReplayListPanel.show();
         }
+        private _onTouchedBtnFreeMode(e: egret.TouchEvent): void {
+            // TODO
+            Utility.FloatText.show(Lang.getText(Lang.Type.A0053));
+        }
 
         private _onMsgUserLogout(e: egret.Event): void {
             this.close();
@@ -165,33 +171,40 @@ namespace TinyWars.MultiCustomRoom {
             Helpers.resetTween({
                 obj         : this._btnJoinRoom,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 40,
+                waitTime    : 33,
                 endProps    : { alpha: 1, left: 0 },
                 tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnMyRoom,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 80,
+                waitTime    : 66,
                 endProps    : { alpha: 1, left: 0 },
                 tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnContinueWar,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 120,
+                waitTime    : 100,
                 endProps    : { alpha: 1, left: 0 },
                 tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnWatchWar,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 160,
+                waitTime    : 133,
                 endProps    : { alpha: 1, left: 0 },
                 tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnReplayWar,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 166,
+                endProps    : { alpha: 1, left: 0 },
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
+                obj         : this._btnFreeMode,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
@@ -200,18 +213,21 @@ namespace TinyWars.MultiCustomRoom {
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
-                const group = this._group;
-                Tween.removeTweens(group);
-                Tween.get(group)
-                    .set({ alpha: 1, right: 60 })
-                    .to({ alpha: 0, right: 20 }, 200);
-
-                const groupLeft = this._groupLeft;
-                Tween.removeTweens(groupLeft);
-                Tween.get(groupLeft)
-                    .set({ alpha: 1, left: 0 })
-                    .to({ alpha: 0, left: -40 }, 200)
-                    .call(resolve);
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, right: 60 },
+                    endProps    : { alpha: 0, right: 20 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                });
+                Helpers.resetTween({
+                    obj         : this._groupLeft,
+                    beginProps  : { alpha: 1, left: 0 },
+                    endProps    : { alpha: 0, left: -40 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                    callback    : resolve,
+                });
             });
         }
 

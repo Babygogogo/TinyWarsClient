@@ -1,14 +1,14 @@
 
-namespace TinyWars.MultiTemporaryWar {
+namespace TinyWars.MultiFreeWar {
     import Logger           = Utility.Logger;
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import ClientErrorCode  = Utility.ClientErrorCode;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
-    import ISettingsForMtw  = ProtoTypes.WarSettings.ISettingsForMtw;
+    import ISettingsForMfw  = ProtoTypes.WarSettings.ISettingsForMfw;
 
-    export class MtwWar extends MultiPlayerWar.MpwWar {
-        private _settingsForMtw?: ISettingsForMtw;
+    export class MfwWar extends MultiPlayerWar.MpwWar {
+        private _settingsForMfw?: ISettingsForMfw;
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
             const baseInitError = await this._baseInit(data);
@@ -16,12 +16,12 @@ namespace TinyWars.MultiTemporaryWar {
                 return baseInitError;
             }
 
-            const settingsForMtw = data.settingsForMtw;
-            if (settingsForMtw == null) {
-                return ClientErrorCode.MtwWarInit00;
+            const settingsForMfw = data.settingsForMfw;
+            if (settingsForMfw == null) {
+                return ClientErrorCode.MfwWarInit00;
             }
 
-            this._setSettingsForMtw(settingsForMtw);
+            this._setSettingsForMfw(settingsForMfw);
 
             this._initView();
 
@@ -31,67 +31,67 @@ namespace TinyWars.MultiTemporaryWar {
         public serializeForSimulation(): ISerialWar | undefined {
             const warId = this.getWarId();
             if (warId == null) {
-                Logger.error(`MtwWar.serializeForSimulation() empty warId.`);
+                Logger.error(`MfwWar.serializeForSimulation() empty warId.`);
                 return undefined;
             }
 
             const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
             if (settingsForCommon == null) {
-                Logger.error(`MtwWar.serializeForSimulation() empty settingsForCommon.`);
+                Logger.error(`MfwWar.serializeForSimulation() empty settingsForCommon.`);
                 return undefined;
             }
 
-            const settingsForMtw = this.getSettingsForMtw();
-            if (settingsForMtw == null) {
-                Logger.error(`MtwWar.serializeForSimulation() empty settingsForMtw.`);
+            const settingsForMfw = this.getSettingsForMfw();
+            if (settingsForMfw == null) {
+                Logger.error(`MfwWar.serializeForSimulation() empty settingsForMfw.`);
                 return undefined;
             }
 
             const warEventManager = this.getWarEventManager();
             if (warEventManager == null) {
-                Logger.error(`MtwWar.serializeForSimulation() empty warEventManager.`);
+                Logger.error(`MfwWar.serializeForSimulation() empty warEventManager.`);
                 return undefined;
             }
 
             const playerManager = this.getPlayerManager();
             if (playerManager == null) {
-                Logger.error(`MtwWar.serializeForSimulation() empty playerManager.`);
+                Logger.error(`MfwWar.serializeForSimulation() empty playerManager.`);
                 return undefined;
             }
 
             const turnManager = this.getTurnManager();
             if (turnManager == null) {
-                Logger.error(`MtwWar.serializeForSimulation() empty turnManager.`);
+                Logger.error(`MfwWar.serializeForSimulation() empty turnManager.`);
                 return undefined;
             }
 
             const field = this.getField();
             if (field == null) {
-                Logger.error(`MtwWar.serializeForSimulation() empty field.`);
+                Logger.error(`MfwWar.serializeForSimulation() empty field.`);
                 return undefined;
             }
 
             const serialWarEventManager = warEventManager.serializeForSimulation();
             if (serialWarEventManager == null) {
-                Logger.error(`MtwWar.serializeForSimulation() empty serialWarEventManager.`);
+                Logger.error(`MfwWar.serializeForSimulation() empty serialWarEventManager.`);
                 return undefined;
             }
 
             const serialPlayerManager = playerManager.serializeForSimulation();
             if (serialPlayerManager == null) {
-                Logger.error(`MtwWar.serializeForSimulation() empty serialPlayerManager.`);
+                Logger.error(`MfwWar.serializeForSimulation() empty serialPlayerManager.`);
                 return undefined;
             }
 
             const serialTurnManager = turnManager.serializeForSimulation();
             if (serialTurnManager == null) {
-                Logger.error(`MtwWar.serializeForSimulation() empty serialTurnManager.`);
+                Logger.error(`MfwWar.serializeForSimulation() empty serialTurnManager.`);
                 return undefined;
             }
 
             const serialField = field.serializeForSimulation();
             if (serialField == null) {
-                Logger.error(`MtwWar.serializeForSimulation() empty serialField.`);
+                Logger.error(`MfwWar.serializeForSimulation() empty serialField.`);
                 return undefined;
             }
 
@@ -99,7 +99,7 @@ namespace TinyWars.MultiTemporaryWar {
                 settingsForCommon,
                 settingsForMcw              : null,
                 settingsForMrw              : null,
-                settingsForMtw              : null,
+                settingsForMfw              : null,
                 settingsForScw              : { isCheating: true },
 
                 warId,
@@ -116,8 +116,8 @@ namespace TinyWars.MultiTemporaryWar {
 
         public getWarType(): Types.WarType {
             return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.MtwFog
-                : Types.WarType.MtwStd;
+                ? Types.WarType.MfwFog
+                : Types.WarType.MfwStd;
         }
         public getIsNeedReplay(): boolean {
             return false;
@@ -126,52 +126,52 @@ namespace TinyWars.MultiTemporaryWar {
             return undefined
         }
 
-        private _setSettingsForMtw(settings: ISettingsForMtw): void {
-            this._settingsForMtw = settings;
+        private _setSettingsForMfw(settings: ISettingsForMfw): void {
+            this._settingsForMfw = settings;
         }
-        public getSettingsForMtw(): ISettingsForMtw | null | undefined {
-            return this._settingsForMtw;
+        public getSettingsForMfw(): ISettingsForMfw | null | undefined {
+            return this._settingsForMfw;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getWarName(): string {
-            const settingsForMtw = this.getSettingsForMtw();
-            if (settingsForMtw == null) {
-                Logger.error(`MtwWar.getWarName() empty settingsForMtw.`);
+            const settingsForMfw = this.getSettingsForMfw();
+            if (settingsForMfw == null) {
+                Logger.error(`MfwWar.getWarName() empty settingsForMfw.`);
                 return undefined;
             }
 
-            return settingsForMtw.warName;
+            return settingsForMfw.warName;
         }
         public getWarPassword(): string {
-            const settingsForMtw = this.getSettingsForMtw();
-            if (settingsForMtw == null) {
-                Logger.error(`MtwWar.getWarPassword() empty settingsForMtw.`);
+            const settingsForMfw = this.getSettingsForMfw();
+            if (settingsForMfw == null) {
+                Logger.error(`MfwWar.getWarPassword() empty settingsForMfw.`);
                 return undefined;
             }
 
-            return settingsForMtw.warPassword;
+            return settingsForMfw.warPassword;
         }
         public getWarComment(): string {
-            const settingsForMtw = this.getSettingsForMtw();
-            if (settingsForMtw == null) {
-                Logger.error(`MtwWar.getWarComment() empty settingsForMtw.`);
+            const settingsForMfw = this.getSettingsForMfw();
+            if (settingsForMfw == null) {
+                Logger.error(`MfwWar.getWarComment() empty settingsForMfw.`);
                 return undefined;
             }
 
-            return settingsForMtw.warComment;
+            return settingsForMfw.warComment;
         }
 
         public getSettingsBootTimerParams(): number[] {
-            const settingsForMtw = this.getSettingsForMtw();
-            if (settingsForMtw == null) {
-                Logger.error(`MtwWar.getSettingsBootTimerParams() empty settingsForMtw.`);
+            const settingsForMfw = this.getSettingsForMfw();
+            if (settingsForMfw == null) {
+                Logger.error(`MfwWar.getSettingsBootTimerParams() empty settingsForMfw.`);
                 return undefined;
             }
 
-            return settingsForMtw.bootTimerParams;
+            return settingsForMfw.bootTimerParams;
         }
     }
 }

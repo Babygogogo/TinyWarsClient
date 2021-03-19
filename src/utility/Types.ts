@@ -543,8 +543,8 @@ namespace TinyWars.Utility.Types {
         ScwFog      = 6,
         Me          = 7,
         Test        = 8,
-        MtwStd      = 9,
-        MtwFog      = 10,
+        MfwStd      = 9,
+        MfwFog      = 10,
     }
 
     export const enum MapReviewStatus {

@@ -88,7 +88,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
             ? new MultiCustomWar.McwWar()
             : (data.settingsForMrw
                 ? new MultiRankWar.MrwWar()
-                : new MultiTemporaryWar.MtwWar()
+                : new MultiFreeWar.MfwWar()
             );
         const initError = await war.init(data);
         if (initError) {

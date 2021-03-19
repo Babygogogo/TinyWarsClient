@@ -1,5 +1,6 @@
 
 namespace TinyWars.BaseWar {
+    import Helpers          = Utility.Helpers;
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
     import StageManager     = Utility.StageManager;
@@ -51,10 +52,12 @@ namespace TinyWars.BaseWar {
             ]);
             this._listAction.setItemRenderer(UnitActionRenderer);
 
+            this._showOpenAnimation();
             this._updateView();
             this._updatePosition();
         }
         protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
             this._listAction.clear();
         }
 
@@ -140,6 +143,28 @@ namespace TinyWars.BaseWar {
             if (e.target !== this._group) {
                 this._group.x = (e.stageX >= StageManager.getStage().stageWidth / 2) ? _LEFT_X : _RIGHT_X;
             }
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._group,
+                waitTime    : 0,
+                beginProps  : { scaleX: 0, scaleY: 0 },
+                endProps    : { scaleX: 1, scaleY: 1 },
+                tweenTime   : 100,
+            });
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._group,
+                    waitTime    : 0,
+                    beginProps  : { scaleX: 1, scaleY: 1 },
+                    endProps    : { scaleX: 0, scaleY: 0 },
+                    tweenTime   : 100,
+                    callback    : resolve,
+                });
+            });
         }
     }
 
