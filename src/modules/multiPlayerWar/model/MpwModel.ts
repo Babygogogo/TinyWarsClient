@@ -27,22 +27,28 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     function getAllMyWarInfoList(): IMpwWarInfo[] {
         return _allWarInfoList;
     }
-    export function getMyMcwWarInfoList(): IMpwWarInfo[] {
+    export function getMyMcwWarInfoArray(): IMpwWarInfo[] {
         return getAllMyWarInfoList().filter(v => v.settingsForMcw != null);
     }
-    export function getMyMrwWarInfoList(): IMpwWarInfo[] {
+    export function getMyMrwWarInfoArray(): IMpwWarInfo[] {
         return getAllMyWarInfoList().filter(v => v.settingsForMrw != null);
+    }
+    export function getMyMfwWarInfoArray(): IMpwWarInfo[] {
+        return getAllMyWarInfoList().filter(v => v.settingsForMfw != null);
     }
 
     export function checkIsRedForMyMcwWars(): boolean {
-        const selfUserId = User.UserModel.getSelfUserId();
-        return getMyMcwWarInfoList().some(warInfo => {
-            return warInfo.playerInfoList.some(v => (v.playerIndex === warInfo.playerIndexInTurn) && (v.userId === selfUserId));
-        });
+        return checkIsRedForMyWars(getMyMcwWarInfoArray());
     }
     export function checkIsRedForMyMrwWars(): boolean {
+        return checkIsRedForMyWars(getMyMrwWarInfoArray());
+    }
+    export function checkIsRedForMyMfwWars(): boolean {
+        return checkIsRedForMyWars(getMyMfwWarInfoArray());
+    }
+    function checkIsRedForMyWars(wars: IMpwWarInfo[]): boolean {
         const selfUserId = User.UserModel.getSelfUserId();
-        return getMyMrwWarInfoList().some(warInfo => {
+        return wars.some(warInfo => {
             return warInfo.playerInfoList.some(v => (v.playerIndex === warInfo.playerIndexInTurn) && (v.userId === selfUserId));
         });
     }

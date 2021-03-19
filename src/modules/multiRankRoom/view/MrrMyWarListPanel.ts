@@ -98,7 +98,7 @@ namespace TinyWars.MultiRankRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
-            const newData        = this._createDataForListWar(MultiPlayerWar.MpwModel.getMyMrwWarInfoList());
+            const newData        = this._createDataForListWar(MultiPlayerWar.MpwModel.getMyMrwWarInfoArray());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {

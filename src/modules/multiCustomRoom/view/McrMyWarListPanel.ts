@@ -100,7 +100,7 @@ namespace TinyWars.MultiCustomRoom {
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
-            const newData        = this._createDataForListWar(MultiPlayerWar.MpwModel.getMyMcwWarInfoList());
+            const newData        = this._createDataForListWar(MultiPlayerWar.MpwModel.getMyMcwWarInfoArray());
             this._dataForListWar = newData;
 
             if (newData.length > 0) {

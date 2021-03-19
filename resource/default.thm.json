@@ -111,6 +111,7 @@
 		"resource/skins/multiCustomRoom/McrWatchMakeRequestDetailPanel.exml",
 		"resource/skins/multiCustomRoom/McrWatchMakeRequestWarsPanel.exml",
 		"resource/skins/multiCustomRoom/McrWatchOngoingWarsPanel.exml",
+		"resource/skins/multiFreeRoom/MfrMainMenuPanel.exml",
 		"resource/skins/multiPlayerWar/MpwTopPanel.exml",
 		"resource/skins/multiPlayerWar/MpwWarMenuPanel.exml",
 		"resource/skins/multiRankRoom/MrrMainMenuPanel.exml",
