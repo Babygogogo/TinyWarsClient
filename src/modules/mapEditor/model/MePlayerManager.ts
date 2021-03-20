@@ -17,6 +17,9 @@ namespace TinyWars.MapEditor {
                 players,
             };
         }
+        public serializeForCreateMfw(): ISerialPlayerManager {
+            return this.serializeForSimulation();
+        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.

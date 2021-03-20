@@ -6,21 +6,18 @@ namespace TinyWars.BaseWar {
     import ProtoTypes           = Utility.ProtoTypes;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import ClientErrorCode      = Utility.ClientErrorCode;
-    import ConfigManager        = Utility.ConfigManager;
+    import CommonConstants      = Utility.CommonConstants;
     import MapSize              = Types.MapSize;
     import WarSerialization     = ProtoTypes.WarSerialization;
     import ISerialTileMap       = WarSerialization.ISerialTileMap;
     import ISerialTile          = WarSerialization.ISerialTile;
-    import CommonConstants      = Utility.CommonConstants;
 
-    export abstract class BwTileMap {
+    export class BwTileMap {
         private _map        : BwTile[][];
         private _mapSize    : MapSize;
         private _war        : BwWar;
 
         private readonly _view  = new BwTileMapView();
-
-        protected abstract _getBwTileClass(): new () => BwTile;
 
         public init({ data, configVersion, mapSize, playersCountUnneutral }: {
             data                    : ISerialTileMap;
@@ -170,6 +167,38 @@ namespace TinyWars.BaseWar {
                 }
             }
             return { tiles: tilesData };
+        }
+        public serializeForCreateMfw(): ISerialTileMap | undefined {
+            const mapSize = this.getMapSize();
+            if (mapSize == null) {
+                Logger.error(`BwTileMap.serializeForCreateMfw() empty mapSize.`);
+                return undefined;
+            }
+
+            const map = this._getMap();
+            if (map == null) {
+                Logger.error(`BwTileMap.serializeForCreateMfw() empty map.`);
+                return undefined;
+            }
+
+            const { width, height } = mapSize;
+            const tilesData         : ISerialTile[] = [];
+            for (let x = 0; x < width; ++x) {
+                for (let y = 0; y < height; ++y) {
+                    const tileData = map[x][y].serializeForCreateMfw();
+                    if (tileData == null) {
+                        Logger.error(`BwTileMap.serializeForCreateMfw() empty tileData.`);
+                        return undefined;
+                    }
+
+                    tilesData.push(tileData);
+                }
+            }
+            return { tiles: tilesData };
+        }
+
+        protected _getBwTileClass(): new () => BwTile {
+            return BwTile;
         }
 
         private _setWar(war: BwWar): void {

@@ -99,7 +99,7 @@ namespace TinyWars.BaseWar {
             return this._getWar().getTurnManager();
         }
         public getCursor(): BwCursor {
-            return this._getWar().getField().getCursor();
+            return this._getWar().getCursor();
         }
         protected _getMapSize(): Types.MapSize {
             return this._mapSize;

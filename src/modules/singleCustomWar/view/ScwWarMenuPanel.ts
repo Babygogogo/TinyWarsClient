@@ -410,7 +410,7 @@ namespace TinyWars.SingleCustomWar {
                     name    : Lang.getText(Lang.Type.B0081),
                     callback: () => {
                         const unitMap       = war.getUnitMap();
-                        const unit          = unitMap.getUnitOnMap(war.getField().getCursor().getGridIndex());
+                        const unit          = unitMap.getUnitOnMap(war.getCursor().getGridIndex());
                         const playerIndex   = war.getPlayerIndexInTurn();
                         if (!unit) {
                             FloatText.show(Lang.getText(Lang.Type.A0027));

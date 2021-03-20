@@ -209,6 +209,31 @@ namespace TinyWars.BaseWar {
                 nextUnitId,
             };
         }
+        public serializeForCreateMfw(): ISerialUnitMap | undefined {
+            const nextUnitId = this.getNextUnitId();
+            if (nextUnitId == null) {
+                Logger.error(`BwUnitMap.serializeForCreateMfw() empty nextUnitId.`);
+                return undefined;
+            }
+
+            const war           = this.getWar();
+            const units         : ISerialUnit[] = [];
+            const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            for (const unit of VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+                units.push(unit.serializeForCreateMfw());
+
+                if (teamIndexes.has(unit.getTeamIndex())) {
+                    for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
+                        units.push(loadedUnit.serializeForCreateMfw());
+                    }
+                }
+            }
+
+            return {
+                units,
+                nextUnitId,
+            };
+        }
 
         private _setMap(map: (BwUnit | undefined)[][]): void {
             this._map = map;

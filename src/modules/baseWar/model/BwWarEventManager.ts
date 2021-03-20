@@ -46,10 +46,13 @@ namespace TinyWars.BaseWar {
             };
         }
         public serializeForSimulation(): ISerialWarEventManager | undefined {
-            return {
+            return Helpers.deepClone({
                 warEventFullData    : this.getWarEventFullData(),
                 calledCountList     : this._getCalledCountList(),
-            };
+            });
+        }
+        public serializeForCreateMfw(): ISerialWarEventManager | undefined {
+            return this.serializeForSimulation();
         }
 
         public startRunning(war: BwWar): void {

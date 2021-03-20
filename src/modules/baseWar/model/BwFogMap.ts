@@ -168,6 +168,9 @@ namespace TinyWars.BaseWar {
                 mapsFromPath,
             };
         }
+        public serializeForCreateMfw(): ISerialFogMap | undefined {
+            return this.serializeForSimulation();
+        }
 
         protected _setWar(war: BwWar): void {
             this._war = war;
@@ -179,7 +182,7 @@ namespace TinyWars.BaseWar {
         private _setAllMapsFromPath(mapsFromPath: Map<number, Visibility[][]>): void {
             this._allMapsFromPath = mapsFromPath;
         }
-        private _getAllMapsFromPath(): Map<number, Visibility[][]> {
+        protected _getAllMapsFromPath(): Map<number, Visibility[][]> {
             return this._allMapsFromPath;
         }
         private _getMapFromPath(playerIndex: number): Visibility[][] | undefined {

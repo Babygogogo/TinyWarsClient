@@ -65,7 +65,7 @@ namespace TinyWars.BaseWar {
 
             const war           = this._getOpenData<OpenDataForBwUnitListPanel>().war;
             this._unitMap       = war.getUnitMap();
-            this._cursor        = war.getField().getCursor();
+            this._cursor        = war.getCursor();
             this._playerIndex   = war.getPlayerIndexInTurn();
             this._updateView();
         }

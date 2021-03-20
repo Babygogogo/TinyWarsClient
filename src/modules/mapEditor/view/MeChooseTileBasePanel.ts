@@ -283,7 +283,7 @@ namespace TinyWars.MapEditor {
 
                         panel.updateOnChooseTileBase(dataForDrawTileBase);
                         panel.close();
-                        Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: war.getField().getCursor().getGridIndex() } as Notify.Data.MeTileChanged);
+                        Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: war.getCursor().getGridIndex() } as Notify.Data.MeTileChanged);
                     },
                 });
             }

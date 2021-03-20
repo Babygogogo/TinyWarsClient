@@ -3,10 +3,12 @@ namespace TinyWars.BaseWar {
     import Logger               = Utility.Logger;
     import ProtoTypes           = Utility.ProtoTypes;
     import ConfigManager        = Utility.ConfigManager;
+    import Helpers              = Utility.Helpers;
     import ClientErrorCode      = Utility.ClientErrorCode;
     import ISettingsForCommon   = ProtoTypes.WarSettings.ISettingsForCommon;
 
     export class BwCommonSettingManager {
+        private _war?               : BwWar;
         private _settingsForCommon? : ISettingsForCommon;
 
         public async init({ settings, allWarEventIdArray, playersCountUnneutral }: {
@@ -41,6 +43,24 @@ namespace TinyWars.BaseWar {
             this._setSettingsForCommon(settings);
 
             return ClientErrorCode.NoError;
+        }
+
+        public serializeForSimulation(): ISettingsForCommon {
+            return Helpers.deepClone(this.getSettingsForCommon());
+        }
+        public serializeForCreateMfw(): ISettingsForCommon {
+            return this.serializeForSimulation();
+        }
+
+        public startRunning(war: BwWar): void {
+            this._setWar(war);
+        }
+
+        private _setWar(war: BwWar): void {
+            this._war = war;
+        }
+        protected _getWar(): BwWar | undefined {
+            return this._war;
         }
 
         protected _setSettingsForCommon(settings: ISettingsForCommon): void {

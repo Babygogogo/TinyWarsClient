@@ -421,7 +421,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         } else {
             const targetGridIndex               = action.targetGridIndex as GridIndex;
             const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
-            const tileMap                       = war.getTileMap() as ScwTileMap;
+            const tileMap                       = war.getTileMap();
             const targetTile                    = tileMap.getTile(targetGridIndex);
             BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(attackerUnit);

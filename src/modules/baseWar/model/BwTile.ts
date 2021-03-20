@@ -1,19 +1,20 @@
 
 namespace TinyWars.BaseWar {
-    import Types            = Utility.Types;
-    import Logger           = Utility.Logger;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ConfigManager    = Utility.ConfigManager;
-    import ClientErrorCode  = Utility.ClientErrorCode;
-    import TileType         = Types.TileType;
-    import TileObjectType   = Types.TileObjectType;
-    import TileBaseType     = Types.TileBaseType;
-    import TileTemplateCfg  = Types.TileTemplateCfg;
-    import UnitCategory     = Types.UnitCategory;
-    import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
-    import CommonConstants  = Utility.CommonConstants;
+    import Types                = Utility.Types;
+    import Logger               = Utility.Logger;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import ConfigManager        = Utility.ConfigManager;
+    import ClientErrorCode      = Utility.ClientErrorCode;
+    import CommonConstants      = Utility.CommonConstants;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import TileType             = Types.TileType;
+    import TileObjectType       = Types.TileObjectType;
+    import TileBaseType         = Types.TileBaseType;
+    import TileTemplateCfg      = Types.TileTemplateCfg;
+    import UnitCategory         = Types.UnitCategory;
+    import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
 
-    export abstract class BwTile {
+    export class BwTile {
         private _templateCfg    : TileTemplateCfg;
         private _gridX          : number;
         private _gridY          : number;
@@ -30,8 +31,6 @@ namespace TinyWars.BaseWar {
         private _war            : BwWar;
         private readonly _view  = new BwTileView();
         private _hasFog         = false;
-
-        public abstract serializeForSimulation(): ISerialTile;
 
         public init(data: ISerialTile, configVersion: string): ClientErrorCode {
             const deserializeError = this.deserialize(data, configVersion);
@@ -210,6 +209,63 @@ namespace TinyWars.BaseWar {
             (objectShapeId !== 0) && (data.objectShapeId = objectShapeId);
 
             return data;
+        }
+        public serializeForSimulation(): ISerialTile | undefined {
+            const war = this.getWar();
+            if (VisibilityHelpers.checkIsTileVisibleToTeams(war, this.getGridIndex(), war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
+                const data = this.serialize();
+                if (data == null) {
+                    Logger.error(`BwTile.serializeForSimulation() empty data.`);
+                    return undefined;
+                }
+                return data;
+
+            } else {
+                const gridIndex = this.getGridIndex();
+                if (gridIndex == null) {
+                    Logger.error(`BwTile.serializeForSimulation() empty gridIndex.`);
+                    return undefined;
+                }
+
+                const baseType = this.getBaseType();
+                if (baseType == null) {
+                    Logger.error(`BwTile.serializeForSimulation() empty baseType.`);
+                    return undefined;
+                }
+
+                const objectType = this.getObjectType();
+                if (objectType == null) {
+                    Logger.error(`BwTile.serializeForSimulation() empty objectType.`);
+                    return undefined;
+                }
+
+                const playerIndex = this.getPlayerIndex();
+                if (playerIndex == null) {
+                    Logger.error(`BwTile.serializeForSimulation() empty playerIndex.`);
+                    return undefined;
+                }
+
+                const data: ISerialTile = {
+                    gridIndex,
+                    baseType,
+                    objectType,
+                    playerIndex : objectType === Types.TileObjectType.Headquarters ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                };
+
+                const currentHp = this.getCurrentHp();
+                (currentHp !== this.getMaxHp()) && (data.currentHp = currentHp);
+
+                const baseShapeId = this.getBaseShapeId();
+                (baseShapeId !== 0) && (data.baseShapeId = baseShapeId);
+
+                const objectShapeId = this.getObjectShapeId();
+                (objectShapeId !== 0) && (data.objectShapeId = objectShapeId);
+
+                return data;
+            }
+        }
+        public serializeForCreateMfw(): ISerialTile | undefined {
+            return this.serializeForSimulation();
         }
 
         private _setWar(war: BwWar): void {

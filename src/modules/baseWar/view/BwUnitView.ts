@@ -216,7 +216,7 @@ namespace TinyWars.BaseWar {
                         resolve();
                     });
                 } else {
-                    const cursor = war.getField().getCursor();
+                    const cursor = war.getCursor();
                     tween.call(() => {
                         cursor.setIsMovableByTouches(false);
                         cursor.setGridIndex(aiming);

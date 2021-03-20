@@ -317,7 +317,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     let _turnManager            : ScwTurnManager;
     let _playerManager          : ScwPlayerManager;
     let _unitMap                : BaseWar.BwUnitMap;
-    let _tileMap                : ScwTileMap;
+    let _tileMap                : BaseWar.BwTileMap;
     let _mapSize                : Types.MapSize;
     let _unitValues             : Map<number, number>;
     let _unitValueRatio         : number;
@@ -332,7 +332,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         _turnManager    = war.getTurnManager() as ScwTurnManager;
         _playerManager  = war.getPlayerManager() as ScwPlayerManager;
         _unitMap        = war.getUnitMap();
-        _tileMap        = war.getTileMap() as ScwTileMap;
+        _tileMap        = war.getTileMap();
         _mapSize        = _tileMap.getMapSize();
         _unitValues     = _getUnitValues();
         _unitValueRatio = _getUnitValueRatio();

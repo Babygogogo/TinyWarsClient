@@ -41,16 +41,6 @@ namespace TinyWars.TestWar {
             return await this.init(warData);
         }
 
-        public serialize(): ISerialWar | undefined {
-            return undefined;
-        }
-        public serializeToReplayData(): ISerialWar | undefined {
-            return undefined;
-        }
-        public serializeForSimulation(): ISerialWar | undefined {
-            return undefined;
-        }
-
         public getWarType(): Types.WarType {
             return Types.WarType.Test;
         }

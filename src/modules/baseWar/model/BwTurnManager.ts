@@ -87,6 +87,9 @@ namespace TinyWars.BaseWar {
         public serializeForSimulation(): ISerialTurnManager {
             return this.serialize();
         }
+        public serializeForCreateMfw(): ISerialTurnManager {
+            return this.serializeForSimulation();
+        }
 
         private _setWar(war: BwWar): void {
             this._war = war;

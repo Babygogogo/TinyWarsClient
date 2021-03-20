@@ -129,7 +129,7 @@ namespace TinyWars.BaseWar {
         }
         private _onNotifyMeTileChanged(e: egret.Event): void {
             const data = e.data as Notify.Data.MeTileChanged;
-            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData<OpenDataForBwTileBriefPanel>().war.getField().getCursor().getGridIndex())) {
+            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData<OpenDataForBwTileBriefPanel>().war.getCursor().getGridIndex())) {
                 this._updateView();
             }
         }
@@ -139,7 +139,7 @@ namespace TinyWars.BaseWar {
 
         private _onTouchedThis(e: egret.TouchEvent): void {
             const war   = this._getOpenData<OpenDataForBwTileBriefPanel>().war;
-            const tile  = war.getTileMap().getTile(war.getField().getCursor().getGridIndex());
+            const tile  = war.getTileMap().getTile(war.getCursor().getGridIndex());
             (tile) && (BaseWar.BwTileDetailPanel.show({ tile }));
         }
 
@@ -156,7 +156,7 @@ namespace TinyWars.BaseWar {
             } else {
                 this.visible = true;
 
-                const gridIndex = war.getField().getCursor().getGridIndex();
+                const gridIndex = war.getCursor().getGridIndex();
                 const tile      = war.getTileMap().getTile(gridIndex);
                 const tileView  = this._tileView;
                 tileView.setData({

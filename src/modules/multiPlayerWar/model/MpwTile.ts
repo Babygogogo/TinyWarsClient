@@ -1,17 +1,10 @@
 
 namespace TinyWars.MultiPlayerWar {
     import Types            = Utility.Types;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ConfigManager    = Utility.ConfigManager;
-    import TileType         = Types.TileType;
-    import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
     import CommonConstants  = Utility.CommonConstants;
+    import TileType         = Types.TileType;
 
     export class MpwTile extends BaseWar.BwTile {
-        public serializeForSimulation(): ISerialTile | null {
-            return this.serialize();
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for fog.
         ////////////////////////////////////////////////////////////////////////////////

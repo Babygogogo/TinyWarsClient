@@ -14,7 +14,9 @@ namespace TinyWars.BaseWar {
         private readonly _view              = new BwFieldView();
 
         protected abstract _getFogMapClass(): new () => BwFogMap;
-        protected abstract _getTileMapClass(): new () => BwTileMap;
+        protected _getTileMapClass(): new () => BwTileMap {
+            return BwTileMap;
+        }
         protected _getUnitMapClass(): new () => BwUnitMap {
             return BwUnitMap;
         }
@@ -191,6 +193,13 @@ namespace TinyWars.BaseWar {
                 fogMap  : this.getFogMap().serializeForSimulation(),
                 unitMap : this.getUnitMap().serializeForSimulation(),
                 tileMap : this.getTileMap().serializeForSimulation(),
+            };
+        }
+        public serializeForCreateMfw(): ISerialField {
+            return {
+                fogMap  : this.getFogMap().serializeForCreateMfw(),
+                unitMap : this.getUnitMap().serializeForCreateMfw(),
+                tileMap : this.getTileMap().serializeForCreateMfw(),
             };
         }
 

@@ -121,7 +121,7 @@ namespace TinyWars.BaseWar {
         }
         private _onNotifyMeUnitChanged(e: egret.Event): void {
             const data = e.data as Notify.Data.MeUnitChanged;
-            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData<OpenDataForBwUnitBriefPanel>().war.getField().getCursor().getGridIndex())) {
+            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData<OpenDataForBwUnitBriefPanel>().war.getCursor().getGridIndex())) {
                 this._updateView();
             }
         }
@@ -158,7 +158,7 @@ namespace TinyWars.BaseWar {
                 unitList.length = 0;
 
                 const unitMap       = war.getUnitMap();
-                const gridIndex     = war.getField().getCursor().getGridIndex();
+                const gridIndex     = war.getCursor().getGridIndex();
                 const unitOnMap     = unitMap.getUnitOnMap(gridIndex);
                 const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
 

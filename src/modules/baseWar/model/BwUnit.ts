@@ -202,13 +202,10 @@ namespace TinyWars.BaseWar {
             return data;
         }
         public serializeForSimulation(): ISerialUnit | undefined {
-            const data = this.serialize();
-            if (data == null) {
-                Logger.error(`BwUnit.serializeForSimulation() empty data.`);
-                return undefined;
-            }
-
-            return data;
+            return this.serialize();
+        }
+        public serializeForCreateMfw(): ISerialUnit | undefined {
+            return this.serializeForSimulation();
         }
 
         private _setWar(war: BwWar): void {

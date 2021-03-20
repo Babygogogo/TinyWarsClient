@@ -25,7 +25,6 @@ namespace TinyWars.BaseWar {
         private _isExecutingAction      = false;
 
         public abstract init(data: ISerialWar): Promise<ClientErrorCode>;
-        public abstract serializeForSimulation(): ISerialWar | undefined;
         public abstract getWarType(): Types.WarType;
         public abstract getMapId(): number | undefined;
         public abstract getIsNeedReplay(): boolean;
@@ -117,6 +116,105 @@ namespace TinyWars.BaseWar {
             return this._view;
         }
 
+        public serializeForSimulation(): ISerialWar | undefined {
+            const settingsForCommon = this.getCommonSettingManager().serializeForSimulation();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.serializeForSimulation() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            const serialWarEventManager = this.getWarEventManager().serializeForSimulation();
+            if (serialWarEventManager == null) {
+                Logger.error(`BwWar.serializeForSimulation() empty serialWarEventManager.`);
+                return undefined;
+            }
+
+            const serialPlayerManager = this.getPlayerManager().serializeForSimulation();
+            if (serialPlayerManager == null) {
+                Logger.error(`BwWar.serializeForSimulation() empty serialPlayerManager.`);
+                return undefined;
+            }
+
+            const serialTurnManager = this.getTurnManager().serializeForSimulation();
+            if (serialTurnManager == null) {
+                Logger.error(`BwWar.serializeForSimulation() empty serialTurnManager.`);
+                return undefined;
+            }
+
+            const serialField = this.getField().serializeForSimulation();
+            if (serialField == null) {
+                Logger.error(`BwWar.serializeForSimulation() empty serialField.`);
+                return undefined;
+            }
+
+            return {
+                settingsForCommon,
+                settingsForMcw              : null,
+                settingsForMrw              : null,
+                settingsForMfw              : null,
+                settingsForScw              : { isCheating: true },
+
+                warId                       : this.getWarId(),
+                seedRandomInitialState      : null,
+                seedRandomCurrentState      : null,
+                executedActions             : [],
+                remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
+                warEventManager             : serialWarEventManager,
+                playerManager               : serialPlayerManager,
+                turnManager                 : serialTurnManager,
+                field                       : serialField,
+            };
+        }
+        public serializeForCreateMfw(): ISerialWar | undefined {
+            const settingsForCommon = this.getCommonSettingManager().serializeForCreateMfw();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.serializeForCreateMfw() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            const serialWarEventManager = this.getWarEventManager().serializeForCreateMfw();
+            if (serialWarEventManager == null) {
+                Logger.error(`BwWar.serializeForCreateMfw() empty serialWarEventManager.`);
+                return undefined;
+            }
+
+            const serialPlayerManager = this.getPlayerManager().serializeForCreateMfw();
+            if (serialPlayerManager == null) {
+                Logger.error(`BwWar.serializeForCreateMfw() empty serialPlayerManager.`);
+                return undefined;
+            }
+
+            const serialTurnManager = this.getTurnManager().serializeForCreateMfw();
+            if (serialTurnManager == null) {
+                Logger.error(`BwWar.serializeForCreateMfw() empty serialTurnManager.`);
+                return undefined;
+            }
+
+            const serialField = this.getField().serializeForCreateMfw();
+            if (serialField == null) {
+                Logger.error(`BwWar.serializeForCreateMfw() empty serialField.`);
+                return undefined;
+            }
+
+            return {
+                settingsForCommon,
+                settingsForMcw              : null,
+                settingsForMrw              : null,
+                settingsForMfw              : null,
+                settingsForScw              : null,
+
+                warId                       : this.getWarId(),
+                seedRandomInitialState      : null,
+                seedRandomCurrentState      : null,
+                executedActions             : [],
+                remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
+                warEventManager             : serialWarEventManager,
+                playerManager               : serialPlayerManager,
+                turnManager                 : serialTurnManager,
+                field                       : serialField,
+            };
+        }
+
         protected _getWarEventManagerClass(): new () => BwWarEventManager {
             return BwWarEventManager;
         }
@@ -125,6 +223,7 @@ namespace TinyWars.BaseWar {
         }
 
         public startRunning(): BwWar {
+            this.getCommonSettingManager().startRunning(this);
             this.getWarEventManager().startRunning(this);
             this.getTurnManager().startRunning(this);
             this.getPlayerManager().startRunning(this);
@@ -213,6 +312,9 @@ namespace TinyWars.BaseWar {
         }
         public getGridVisionEffect(): BwGridVisualEffect {
             return this.getField().getGridVisualEffect();
+        }
+        public getCursor(): BwCursor {
+            return this.getField().getCursor();
         }
 
         public getTurnManager(): BwTurnManager {
