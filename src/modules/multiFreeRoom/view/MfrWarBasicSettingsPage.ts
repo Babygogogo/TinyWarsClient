@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomRoom {
+namespace TinyWars.MultiFreeRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
@@ -12,13 +12,11 @@ namespace TinyWars.MultiCustomRoom {
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
     import IWarPlayerInfo   = ProtoTypes.Structure.IWarPlayerInfo;
 
-    export type OpenDataForMcrWarBasicSettingsPage = {
+    export type OpenDataForMfrWarBasicSettingsPage = {
         warInfo  : IMpwWarInfo;
     }
 
-    export class McrWarBasicSettingsPage extends GameUi.UiTabPage {
-        private _btnMapNameTitle        : TinyWars.GameUi.UiButton;
-        private _labelMapName           : TinyWars.GameUi.UiLabel;
+    export class MfrWarBasicSettingsPage extends GameUi.UiTabPage {
         private _btnBuildings           : TinyWars.GameUi.UiButton;
 
         private _btnModifyWarName       : TinyWars.GameUi.UiButton;
@@ -60,7 +58,7 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrWarBasicSettingsPage.exml";
+            this.skinName = "resource/skins/multiFreeRoom/MfrWarBasicSettingsPage.exml";
         }
 
         protected _onOpened(): void {
@@ -76,7 +74,7 @@ namespace TinyWars.MultiCustomRoom {
             ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            this._warInfo = this._getOpenData<OpenDataForMcrWarBasicSettingsPage>().warInfo;
+            this._warInfo = this._getOpenData<OpenDataForMfrWarBasicSettingsPage>().warInfo;
 
             this._updateComponentsForLanguage();
             this._updateComponentsForWarInfo();
@@ -97,11 +95,11 @@ namespace TinyWars.MultiCustomRoom {
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             const warInfo = this._warInfo;
             if (warInfo) {
-                const mapRawData = await WarMapModel.getRawData(warInfo.settingsForMcw.mapId);
+                const warData = warInfo.settingsForMfw.initialWarData;
                 WarMap.WarMapBuildingListPanel.show({
-                    configVersion           : warInfo.settingsForCommon.configVersion,
-                    tileDataArray           : mapRawData.tileDataArray,
-                    playersCountUnneutral   : mapRawData.playersCountUnneutral,
+                    configVersion           : warData.settingsForCommon.configVersion,
+                    tileDataArray           : warData.field.tileMap.tiles,
+                    playersCountUnneutral   : warData.playerManager.players.length - 1,
                 });
             }
         }
@@ -138,7 +136,6 @@ namespace TinyWars.MultiCustomRoom {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnMapNameTitle.label         = Lang.getText(Lang.Type.B0225);
             this._btnModifyWarName.label        = Lang.getText(Lang.Type.B0185);
             this._btnModifyWarPassword.label    = Lang.getText(Lang.Type.B0186);
             this._btnModifyWarComment.label     = Lang.getText(Lang.Type.B0187);
@@ -155,7 +152,6 @@ namespace TinyWars.MultiCustomRoom {
             this._updateLabelWarName();
             this._updateLabelWarPassword();
             this._updateLabelWarComment();
-            this._updateLabelMapName();
             this._updateLabelWarRule();
             this._updateLabelPlayerIndex();
             this._updateImgHasFog();
@@ -168,30 +164,21 @@ namespace TinyWars.MultiCustomRoom {
         private _updateLabelWarName(): void {
             const warInfo = this._warInfo;
             if (warInfo) {
-                this._labelWarName.text = warInfo.settingsForMcw.warName || "--";
+                this._labelWarName.text = warInfo.settingsForMfw.warName || "--";
             }
         }
 
         private _updateLabelWarPassword(): void {
             const warInfo = this._warInfo;
             if (warInfo) {
-                this._labelWarPassword.text = warInfo.settingsForMcw.warPassword || "--";
+                this._labelWarPassword.text = warInfo.settingsForMfw.warPassword || "--";
             }
         }
 
         private _updateLabelWarComment(): void {
             const warInfo = this._warInfo;
             if (warInfo) {
-                this._labelWarComment.text = warInfo.settingsForMcw.warComment || "--";
-            }
-        }
-
-        private _updateLabelMapName(): void {
-            const warInfo = this._warInfo;
-            if (warInfo) {
-                WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForMcw.mapId).then(v =>
-                    this._labelMapName.text = `${v} (${BwWarRuleHelper.getPlayersCount(warInfo.settingsForCommon.warRule)}P)`
-                );
+                this._labelWarComment.text = warInfo.settingsForMfw.warComment || "--";
             }
         }
 
@@ -225,7 +212,7 @@ namespace TinyWars.MultiCustomRoom {
         private _updateLabelTimeLimit(): void {
             const warInfo = this._warInfo;
             if (warInfo) {
-                this._labelTimeLimit.text = Lang.getBootTimerDesc(warInfo.settingsForMcw.bootTimerParams);
+                this._labelTimeLimit.text = Lang.getBootTimerDesc(warInfo.settingsForMfw.bootTimerParams);
             }
         }
 
@@ -266,8 +253,7 @@ namespace TinyWars.MultiCustomRoom {
                 const playerInfoList    = warInfo.playerInfoList;
                 const playerRules       = settingsForCommon.warRule.ruleForPlayers;
                 const configVersion     = settingsForCommon.configVersion;
-                const playersCount      = (await WarMapModel.getRawData(warInfo.settingsForMcw.mapId)).playersCountUnneutral;
-                for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
+                for (let playerIndex = 1; playerIndex <= playerRules.playerRuleDataArray.length; ++playerIndex) {
                     dataList.push({
                         configVersion,
                         playerIndex,

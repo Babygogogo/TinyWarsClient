@@ -175,7 +175,7 @@ namespace TinyWars.SingleCustomRoom {
                 groupInfo.alpha     = 1;
                 egret.Tween.removeTweens(groupInfo);
                 egret.Tween.get(groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {groupInfo.visible = false; groupInfo.alpha = 1});
-                zoomMap.showMap(mapRawData);
+                zoomMap.showMapByMapData(mapRawData);
             }
         }
     }

@@ -90,9 +90,11 @@ namespace TinyWars.MultiRankRoom {
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             const warInfo = this._warInfo;
             if (warInfo) {
+                const mapRawData = await WarMapModel.getRawData(warInfo.settingsForMrw.mapId);
                 WarMap.WarMapBuildingListPanel.show({
-                    configVersion   : warInfo.settingsForCommon.configVersion,
-                    mapRawData      : await WarMapModel.getRawData(warInfo.settingsForMrw.mapId),
+                    configVersion           : warInfo.settingsForCommon.configVersion,
+                    tileDataArray           : mapRawData.tileDataArray,
+                    playersCountUnneutral   : mapRawData.playersCountUnneutral,
                 });
             }
         }

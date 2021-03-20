@@ -180,7 +180,7 @@ namespace TinyWars.MultiCustomRoom {
             this._groupInfo.alpha        = 1;
             egret.Tween.removeTweens(this._groupInfo);
             egret.Tween.get(this._groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
-            this._zoomMap.showMap(mapRawData);
+            this._zoomMap.showMapByMapData(mapRawData);
         }
 
         private _updateComponentsForLanguage(): void {

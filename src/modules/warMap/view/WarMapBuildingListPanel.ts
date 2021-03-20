@@ -8,8 +8,9 @@ namespace TinyWars.WarMap {
     import CommonConstants  = Utility.CommonConstants;
 
     type OpenDataForBuildingListPanel = {
-        configVersion   : string;
-        mapRawData      : ProtoTypes.Map.IMapRawData;
+        configVersion           : string;
+        tileDataArray           : ProtoTypes.WarSerialization.ISerialTile[];
+        playersCountUnneutral   : number;
     }
 
     export class WarMapBuildingListPanel extends GameUi.UiPanel {
@@ -70,10 +71,9 @@ namespace TinyWars.WarMap {
 
         private _updateListTile(): void {
             const openData      = this._getOpenData<OpenDataForBuildingListPanel>();
-            const mapRawData    = openData.mapRawData;
             const configVersion = openData.configVersion;
             const dict          = new Map<number, Map<number, number>>();
-            for (const tileData of mapRawData.tileDataArray) {
+            for (const tileData of openData.tileDataArray || []) {
                 const template = ConfigManager.getTileTemplateCfg(configVersion, Types.TileBaseType.Plain, tileData.objectType);
                 if ((template) && (template.maxCapturePoint != null)) {
                     const tileType = template.type;
@@ -87,14 +87,13 @@ namespace TinyWars.WarMap {
                 }
             }
 
-            const dataList          : DataForTileRenderer[] = [];
-            const maxPlayerIndex    = mapRawData.playersCountUnneutral;
+            const dataList: DataForTileRenderer[] = [];
             for (const [tileType, subDict] of dict) {
                 dataList.push({
                     configVersion,
-                    maxPlayerIndex: maxPlayerIndex,
+                    maxPlayerIndex  : openData.playersCountUnneutral,
                     tileType,
-                    dict    : subDict,
+                    dict            : subDict,
                 });
             }
             this._listTile.bindData(dataList);

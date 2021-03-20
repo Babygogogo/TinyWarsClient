@@ -78,31 +78,29 @@ namespace TinyWars.MultiFreeRoom {
         }
         private _onTouchedBtnCreateRoom(e: egret.TouchEvent): void {
             Utility.FloatText.show(Lang.getText(Lang.Type.A0053));
+            Utility.FloatText.show(Lang.getText(Lang.Type.A0198));
             // this.close();
             // Lobby.LobbyTopPanel.hide();
             // Lobby.LobbyBottomPanel.hide();
-            // McrCreateMapListPanel.show({});
+            // MfrCreateMapListPanel.show({});
         }
         private _onTouchedBtnJoinRoom(e: egret.TouchEvent): void {
-            Utility.FloatText.show(Lang.getText(Lang.Type.A0053));
-            // this.close();
-            // Lobby.LobbyTopPanel.hide();
-            // Lobby.LobbyBottomPanel.hide();
-            // McrJoinRoomListPanel.show();
+            this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
+            MfrJoinRoomListPanel.show();
         }
         private _onTouchedBtnMyRoom(e: egret.TouchEvent): void {
-            Utility.FloatText.show(Lang.getText(Lang.Type.A0053));
-            // this.close();
-            // Lobby.LobbyTopPanel.hide();
-            // Lobby.LobbyBottomPanel.hide();
-            // McrMyRoomListPanel.show();
+            this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
+            MfrMyRoomListPanel.show();
         }
         private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
-            Utility.FloatText.show(Lang.getText(Lang.Type.A0053));
-            // this.close();
-            // Lobby.LobbyTopPanel.hide();
-            // Lobby.LobbyBottomPanel.hide();
-            // McrMyWarListPanel.show();
+            this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
+            MfrMyWarListPanel.show();
         }
         private _onTouchedBtnNormalMode(e: egret.TouchEvent): void {
             this.close();
@@ -206,7 +204,7 @@ namespace TinyWars.MultiFreeRoom {
         }
 
         private async _updateView(): Promise<void> {
-            // this._btnMyRoom.setRedVisible(await McrModel.checkIsRed());
+            this._btnMyRoom.setRedVisible(await MfrModel.checkIsRed());
             this._btnContinueWar.setRedVisible(MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars());
             this._btnNormalMode.setRedVisible(
                 (MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars()) ||

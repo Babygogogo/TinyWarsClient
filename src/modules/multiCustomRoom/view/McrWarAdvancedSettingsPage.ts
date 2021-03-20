@@ -49,9 +49,11 @@ namespace TinyWars.MultiCustomRoom {
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             const warInfo = this._warInfo;
             if (warInfo) {
+                const mapRawData = await WarMapModel.getRawData(warInfo.settingsForMcw.mapId);
                 WarMap.WarMapBuildingListPanel.show({
-                    configVersion   : warInfo.settingsForCommon.configVersion,
-                    mapRawData      : await WarMapModel.getRawData(warInfo.settingsForMcw.mapId),
+                    configVersion           : warInfo.settingsForCommon.configVersion,
+                    tileDataArray           : mapRawData.tileDataArray,
+                    playersCountUnneutral   : mapRawData.playersCountUnneutral,
                 });
             }
         }

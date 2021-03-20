@@ -19,15 +19,25 @@ namespace TinyWars.GameUi {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public showMap(map: ProtoTypes.Map.IMapRawData): void {
+        public showMapByMapData(map: ProtoTypes.Map.IMapRawData): void {
             const mapView = this._mapView;
-            mapView.showMap(map);
+            mapView.showMapByMapData(map);
 
             const zoom = this._zoomableComponent;
             zoom.setContentWidth(mapView.width);
             zoom.setContentHeight(mapView.height);
             zoom.setContentScale(0, true);
         }
+        public showMapByWarData(data: ProtoTypes.WarSerialization.ISerialWar): void {
+            const mapView = this._mapView;
+            mapView.showMapByWarData(data);
+
+            const zoom = this._zoomableComponent;
+            zoom.setContentWidth(mapView.width);
+            zoom.setContentHeight(mapView.height);
+            zoom.setContentScale(0, true);
+        }
+
         public clearMap(): void {
             this._mapView.clear();
         }

@@ -583,6 +583,7 @@ namespace TinyWars.Utility.Types {
         WarAndTeam      = 2,
         PublicChannel   = 3,
         McrRoom         = 4,
+        MfrRoom         = 5,
     }
 
     export const enum UnitAndTileTextureVersion {

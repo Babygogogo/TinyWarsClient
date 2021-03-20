@@ -7,15 +7,15 @@ namespace TinyWars.Chat {
     import ProtoTypes       = Utility.ProtoTypes;
     import Helpers          = Utility.Helpers;
     import Logger           = Utility.Logger;
-    import ConfigManager    = Utility.ConfigManager;
     import ChatCategory     = Types.ChatMessageToCategory;
     import ChatChannel      = Types.ChatChannel;
     import NetMessage       = ProtoTypes.NetMessage;
     import CommonConstants  = Utility.CommonConstants;
 
     type OpenDataForChatPanel = {
-        toUserId?   : number;
-        toMcrRoomId?: number;
+        toUserId?       : number;
+        toMcrRoomId?    : number;
+        toMfrRoomId?    : number;
     }
 
     export class ChatPanel extends GameUi.UiPanel {
@@ -295,6 +295,18 @@ namespace TinyWars.Chat {
                     ++indexForSort;
                 }
             }
+            for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.MfrRoom)) {
+                if (await MultiFreeRoom.MfrModel.getRoomInfo(toRoomId)) {
+                    dataDict.set(indexForSort, {
+                        index       : indexForSort,
+                        panel       : this,
+                        toCategory  : ChatCategory.MfrRoom,
+                        toTarget    : toRoomId,
+                    });
+                    timestampList.push(getLatestTimestamp(indexForSort, msgList));
+                    ++indexForSort;
+                }
+            }
             for (const [toUserId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.Private)) {
                 dataDict.set(indexForSort, {
                     index       : indexForSort,
@@ -359,6 +371,18 @@ namespace TinyWars.Chat {
                 ++indexForSort;
             }
 
+            const toMfrRoomId = openData.toMfrRoomId;
+            if ((toMfrRoomId != null) && (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.MfrRoom, toTarget: toMfrRoomId }))) {
+                dataDict.set(indexForSort, {
+                    index       : indexForSort,
+                    panel       : this,
+                    toCategory  : ChatCategory.MfrRoom,
+                    toTarget    : toMfrRoomId,
+                });
+                timestampList.push(getLatestTimestamp(indexForSort, null));
+                ++indexForSort;
+            }
+
             timestampList.sort((a, b) => b.timestamp - a.timestamp);
 
             const dataList  : DataForChatPageRenderer[] = [];
@@ -407,6 +431,15 @@ namespace TinyWars.Chat {
             if (toMcrRoomId != null) {
                 for (const data of dataForListChat) {
                     if ((data.toCategory === ChatCategory.McrRoom) && (data.toTarget === toMcrRoomId)) {
+                        return data.index;
+                    }
+                }
+            }
+
+            const toMfrRoomId = openData.toMfrRoomId;
+            if (toMfrRoomId != null) {
+                for (const data of dataForListChat) {
+                    if ((data.toCategory === ChatCategory.MfrRoom) && (data.toTarget === toMfrRoomId)) {
                         return data.index;
                     }
                 }
@@ -519,6 +552,13 @@ namespace TinyWars.Chat {
                     } else {
                         labelName.text = await WarMap.WarMapModel.getMapNameInCurrentLanguage(v.settingsForMcw.mapId);
                     }
+                });
+
+            } else if (toCategory === ChatCategory.MfrRoom) {
+                labelType.text = `${Lang.getText(Lang.Type.B0556)} #${toTarget}`;
+                labelName.text = null;
+                MultiFreeRoom.MfrModel.getRoomInfo(toTarget).then(async (v) => {
+                    labelName.text = v.settingsForMfw.warName || Lang.getText(Lang.Type.B0555);
                 });
 
             } else {

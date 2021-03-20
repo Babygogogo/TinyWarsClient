@@ -142,7 +142,7 @@ namespace TinyWars.MapEditor {
 
             } else {
                 this._labelNoData.visible = false;
-                this._zoomMap.showMap(mapData);
+                this._zoomMap.showMapByMapData(mapData);
             }
         }
     }

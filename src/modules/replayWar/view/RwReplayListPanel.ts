@@ -197,7 +197,7 @@ namespace TinyWars.ReplayWar {
                 this._zoomMap.visible = false;
             } else {
                 this._zoomMap.visible = true;
-                this._zoomMap.showMap(await WarMapModel.getRawData(data.info.replayBriefInfo.mapId));
+                this._zoomMap.showMapByMapData(await WarMapModel.getRawData(data.info.replayBriefInfo.mapId));
             }
         }
 

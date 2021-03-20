@@ -1,31 +1,27 @@
 
-namespace TinyWars.MultiRankRoom {
+namespace TinyWars.MultiFreeRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Lang             = Utility.Lang;
-    import ConfigManager    = Utility.ConfigManager;
     import Notify           = Utility.Notify;
-    import WarMapModel      = WarMap.WarMapModel;
+    import CommonConstants  = Utility.CommonConstants;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
-    import CommonConstants  = Utility.CommonConstants;
 
-    export type OpenDataForWarAdvancedSettingsPage = {
+    export type OpenDataForMfrWarAdvancedSettingsPage = {
         warInfo : IMpwWarInfo;
     }
 
-    export class MrrWarAdvancedSettingsPage extends GameUi.UiTabPage {
-        private _btnMapNameTitle    : TinyWars.GameUi.UiButton;
-        private _labelMapName       : TinyWars.GameUi.UiLabel;
+    export class MfrWarAdvancedSettingsPage extends GameUi.UiTabPage {
         private _btnBuildings       : TinyWars.GameUi.UiButton;
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
         private _listPlayer         : TinyWars.GameUi.UiScrollList;
 
-        private _warInfo        : IMpwWarInfo;
+        private _warInfo            : IMpwWarInfo;
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiRankRoom/MrrWarAdvancedSettingsPage.exml";
+            this.skinName = "resource/skins/multiFreeRoom/MfrWarAdvancedSettingsPage.exml";
         }
 
         protected async _onOpened(): Promise<void> {
@@ -37,7 +33,7 @@ namespace TinyWars.MultiRankRoom {
             ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            this._warInfo = this._getOpenData<OpenDataForWarAdvancedSettingsPage>().warInfo;
+            this._warInfo = this._getOpenData<OpenDataForMfrWarAdvancedSettingsPage>().warInfo;
 
             this._updateComponentsForLanguage();
         }
@@ -49,11 +45,11 @@ namespace TinyWars.MultiRankRoom {
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             const warInfo = this._warInfo;
             if (warInfo) {
-                const mapRawData = await WarMapModel.getRawData(warInfo.settingsForMrw.mapId);
+                const warData = warInfo.settingsForMfw.initialWarData;
                 WarMap.WarMapBuildingListPanel.show({
-                    configVersion           : warInfo.settingsForCommon.configVersion,
-                    tileDataArray           : mapRawData.tileDataArray,
-                    playersCountUnneutral   : mapRawData.playersCountUnneutral,
+                    configVersion           : warData.settingsForCommon.configVersion,
+                    tileDataArray           : warData.field.tileMap.tiles,
+                    playersCountUnneutral   : warData.playerManager.players.length - 1,
                 });
             }
         }
@@ -67,9 +63,7 @@ namespace TinyWars.MultiRankRoom {
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._labelPlayerList.text  = Lang.getText(Lang.Type.B0395);
-            this._btnMapNameTitle.label = Lang.getText(Lang.Type.B0225);
             this._btnBuildings.label    = Lang.getText(Lang.Type.B0333);
-            this._updateLabelMapName();
             this._updateListPlayer();
         }
 
@@ -85,14 +79,6 @@ namespace TinyWars.MultiRankRoom {
                     });
                 }
                 this._listPlayer.bindData(dataList);
-            }
-        }
-
-        private async _updateLabelMapName(): Promise<void> {
-            const warInfo = this._warInfo;
-            if (warInfo) {
-                const mapId             = warInfo.settingsForMrw.mapId;
-                this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapId) || "----"})`;
             }
         }
     }

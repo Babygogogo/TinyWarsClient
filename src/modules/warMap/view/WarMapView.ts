@@ -9,6 +9,7 @@ namespace TinyWars.WarMap {
     import Types            = Utility.Types;
     import MapSize          = Types.MapSize;
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
+    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
     import CommonConstants  = Utility.CommonConstants;
 
@@ -25,12 +26,22 @@ namespace TinyWars.WarMap {
             this.addChild(this._unitMapView);
         }
 
-        public showMap(mapRawData: IMapRawData): void {
+        public showMapByMapData(mapRawData: IMapRawData): void {
             this.width  = GRID_WIDTH  * mapRawData.mapWidth;
             this.height = GRID_HEIGHT * mapRawData.mapHeight;
             this._tileMapView.showTileMap(mapRawData.tileDataArray);
-            this._unitMapView.showUnitMap(mapRawData);
+            this._unitMapView.showUnitMap(mapRawData.unitDataArray);
         }
+        public showMapByWarData(warData: ISerialWar): void {
+            const field     = warData.field;
+            const tileMap   = field.tileMap;
+            const mapSize   = BaseWar.BwHelpers.getMapSize(tileMap);
+            this.width      = GRID_WIDTH * mapSize.width;
+            this.height     = GRID_HEIGHT * mapSize.height;
+            this._tileMapView.showTileMap(tileMap.tiles);
+            this._unitMapView.showUnitMap(field.unitMap.units);
+        }
+
         public clear(): void {
             this._tileMapView.clear();
             this._unitMapView.clear();
@@ -235,8 +246,8 @@ namespace TinyWars.WarMap {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public showUnitMap(mapRawData: ProtoTypes.Map.IMapRawData): void {
-            this._initWithDataList(_createUnitViewDataList(mapRawData.unitDataArray));
+        public showUnitMap(unitDataArray: ProtoTypes.WarSerialization.ISerialUnit[]): void {
+            this._initWithDataList(_createUnitViewDataList(unitDataArray));
         }
         private _initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
             this.clear();

@@ -81,9 +81,11 @@ namespace TinyWars.MapEditor {
         }
 
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
+            const mapRawData = MeModel.Sim.getMapRawData();
             WarMap.WarMapBuildingListPanel.show({
-                configVersion   : MeModel.Sim.getWarData().settingsForCommon.configVersion,
-                mapRawData      : MeModel.Sim.getMapRawData(),
+                configVersion           : MeModel.Sim.getWarData().settingsForCommon.configVersion,
+                tileDataArray           : mapRawData.tileDataArray,
+                playersCountUnneutral   : mapRawData.playersCountUnneutral,
             });
         }
 

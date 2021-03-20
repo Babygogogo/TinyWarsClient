@@ -144,7 +144,7 @@ namespace TinyWars.MapManagement {
             if (!mapData) {
                 this._zoomMap.clearMap();
             } else {
-                this._zoomMap.showMap(mapData);
+                this._zoomMap.showMapByMapData(mapData);
             }
         }
     }

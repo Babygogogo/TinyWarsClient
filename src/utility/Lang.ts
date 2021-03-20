@@ -933,6 +933,10 @@ namespace TinyWars.Utility.Lang {
             `地图已保存，但数据不合法，因而无法提审`,
             `The map has been saved, however the data is invalid for review.`,
         ],
+        [Type.A0198]: [
+            `您可以通过地图编辑器和模拟战来创建自由模式房间。`,
+            `You can create rooms via the map editor or the simulation wars.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3140,6 +3144,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0554]: [
             `排位`,
             `Ranking`,
+        ],
+        [Type.B0555]: [
+            `无名`,
+            `No Name`,
+        ],
+        [Type.B0556]: [
+            `多人自由房间`,
+            `MP Free Room`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
