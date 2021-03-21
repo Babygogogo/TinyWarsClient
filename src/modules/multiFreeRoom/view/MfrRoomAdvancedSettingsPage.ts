@@ -5,7 +5,6 @@ namespace TinyWars.MultiFreeRoom {
     import Notify           = Utility.Notify;
     import CommonConstants  = Utility.CommonConstants;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
-    import WarMapModel      = WarMap.WarMapModel;
     import NetMessage       = ProtoTypes.NetMessage;
     import IMfrRoomInfo     = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
 

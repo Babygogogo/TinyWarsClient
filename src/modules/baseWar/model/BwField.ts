@@ -195,11 +195,11 @@ namespace TinyWars.BaseWar {
                 tileMap : this.getTileMap().serializeForSimulation(),
             };
         }
-        public serializeForCreateMfw(): ISerialField {
+        public serializeForCreateMfr(): ISerialField {
             return {
-                fogMap  : this.getFogMap().serializeForCreateMfw(),
-                unitMap : this.getUnitMap().serializeForCreateMfw(),
-                tileMap : this.getTileMap().serializeForCreateMfw(),
+                fogMap  : this.getFogMap().serializeForCreateMfr(),
+                unitMap : this.getUnitMap().serializeForCreateMfr(),
+                tileMap : this.getTileMap().serializeForCreateMfr(),
             };
         }
 

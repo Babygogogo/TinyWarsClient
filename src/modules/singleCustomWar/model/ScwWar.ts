@@ -83,13 +83,13 @@ namespace TinyWars.SingleCustomWar {
 
             const serialField = field.serialize();
             if (serialField == null) {
-                Logger.error(`ScwWar.serializeForSimulation() empty serialField.`);
+                Logger.error(`ScwWar.serialize() empty serialField.`);
                 return undefined;
             }
 
             const serialWarEventManager = warEventManager.serialize();
             if (serialWarEventManager == null) {
-                Logger.error(`ScwWar.serializeForSimulation() empty serialWarEventManager.`);
+                Logger.error(`ScwWar.serialize() empty serialWarEventManager.`);
                 return undefined;
             }
 

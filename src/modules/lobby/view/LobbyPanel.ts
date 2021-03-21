@@ -65,6 +65,7 @@ namespace TinyWars.Lobby {
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
                 { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
+                { type: Notify.Type.MsgMfrGetJoinedRoomInfoList,    callback: this._onMsgMfrGetJoinedRoomInfoList },
                 { type: Notify.Type.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
             ]);
 
@@ -126,6 +127,10 @@ namespace TinyWars.Lobby {
         }
 
         private _onMsgMcrGetJoinedRoomInfoList(e: egret.Event): void {
+            this._updateBtnMultiPlayer();
+        }
+
+        private _onMsgMfrGetJoinedRoomInfoList(e: egret.Event): void {
             this._updateBtnMultiPlayer();
         }
 
@@ -240,8 +245,10 @@ namespace TinyWars.Lobby {
 
         private async _updateBtnMultiPlayer(): Promise<void> {
             this._btnMultiPlayer.setRedVisible(
-                (MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars()) ||
-                (await MultiCustomRoom.McrModel.checkIsRed())
+                (MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars())  ||
+                (MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars())  ||
+                (await MultiCustomRoom.McrModel.checkIsRed())       ||
+                (await MultiFreeRoom.MfrModel.checkIsRed())
             );
         }
 

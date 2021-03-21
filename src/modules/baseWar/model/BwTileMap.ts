@@ -168,16 +168,16 @@ namespace TinyWars.BaseWar {
             }
             return { tiles: tilesData };
         }
-        public serializeForCreateMfw(): ISerialTileMap | undefined {
+        public serializeForCreateMfr(): ISerialTileMap | undefined {
             const mapSize = this.getMapSize();
             if (mapSize == null) {
-                Logger.error(`BwTileMap.serializeForCreateMfw() empty mapSize.`);
+                Logger.error(`BwTileMap.serializeForCreateMfr() empty mapSize.`);
                 return undefined;
             }
 
             const map = this._getMap();
             if (map == null) {
-                Logger.error(`BwTileMap.serializeForCreateMfw() empty map.`);
+                Logger.error(`BwTileMap.serializeForCreateMfr() empty map.`);
                 return undefined;
             }
 
@@ -185,9 +185,9 @@ namespace TinyWars.BaseWar {
             const tilesData         : ISerialTile[] = [];
             for (let x = 0; x < width; ++x) {
                 for (let y = 0; y < height; ++y) {
-                    const tileData = map[x][y].serializeForCreateMfw();
+                    const tileData = map[x][y].serializeForCreateMfr();
                     if (tileData == null) {
-                        Logger.error(`BwTileMap.serializeForCreateMfw() empty tileData.`);
+                        Logger.error(`BwTileMap.serializeForCreateMfr() empty tileData.`);
                         return undefined;
                     }
 

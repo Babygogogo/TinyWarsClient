@@ -33,18 +33,13 @@ namespace TinyWars.MapEditor {
         }
 
         public serializeForSimulation(): ISettingsForCommon | undefined {
-            const settingsForCommon = Helpers.deepClone(this.getSettingsForCommon());
-            if (settingsForCommon != null) {
-                const playerRules               = settingsForCommon.warRule.ruleForPlayers;
-                const playersCountUnneutral     = (this._getWar().getField() as MeField).getMaxPlayerIndex();
-                playerRules.playerRuleDataArray = playerRules.playerRuleDataArray.filter(v => {
-                    const playerIndex = v.playerIndex;
-                    return (playerIndex <= playersCountUnneutral)
-                        && (playerIndex >= CommonConstants.WarFirstPlayerIndex);
-                }).sort((v1, v2) => v1.playerIndex - v2.playerIndex);
-            }
-
-            return settingsForCommon;
+            const war       = this._getWar() as MeWar;
+            const warRule   = war.getRevisedWarRuleArray((war.getField() as MeField).getMaxPlayerIndex())[0];
+            return {
+                configVersion   : this.getSettingsForCommon().configVersion,
+                presetWarRuleId : warRule.ruleId,
+                warRule         : Helpers.deepClone(warRule),
+            };
         }
     }
 }

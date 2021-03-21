@@ -277,7 +277,7 @@ namespace TinyWars.BaseWar {
                 watchOngoingSrcUserIdArray  : []
             };
         }
-        public serializeForCreateMfw(): ISerialPlayer | undefined {
+        public serializeForCreateMfr(): ISerialPlayer | undefined {
             return this.serializeForSimulation();
         }
 

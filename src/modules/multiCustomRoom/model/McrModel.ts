@@ -5,13 +5,12 @@ namespace TinyWars.MultiCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Notify           = Utility.Notify;
     import Helpers          = Utility.Helpers;
-    import ConfigManager    = Utility.ConfigManager;
+    import CommonConstants  = Utility.CommonConstants;
     import WarMapModel      = WarMap.WarMapModel;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import BootTimerType    = Types.BootTimerType;
     import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
     import NetMessage       = ProtoTypes.NetMessage;
-    import CommonConstants  = Utility.CommonConstants;
 
     const REGULAR_TIME_LIMITS = [
         60 * 60 * 24 * 1,   // 1 day

@@ -204,7 +204,7 @@ namespace TinyWars.BaseWar {
         public serializeForSimulation(): ISerialUnit | undefined {
             return this.serialize();
         }
-        public serializeForCreateMfw(): ISerialUnit | undefined {
+        public serializeForCreateMfr(): ISerialUnit | undefined {
             return this.serializeForSimulation();
         }
 

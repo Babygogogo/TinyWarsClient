@@ -26,6 +26,17 @@ namespace TinyWars.Utility.Lang {
         A0180, A0181, A0182, A0183, A0184, A0185, A0186, A0187, A0188, A0189,
         A0190, A0191, A0192, A0193, A0194, A0195, A0196, A0197, A0198, A0199,
 
+        A0200, A0201, A0202, A0203, A0204, A0205, A0206, A0207, A0208, A0209,
+        A0210, A0211, A0212, A0213, A0214, A0215, A0216, A0217, A0218, A0219,
+        A0220, A0221, A0222, A0223, A0224, A0225, A0226, A0227, A0228, A0229,
+        A0230, A0231, A0232, A0233, A0234, A0235, A0236, A0237, A0238, A0239,
+        A0240, A0241, A0242, A0243, A0244, A0245, A0246, A0247, A0248, A0249,
+        A0250, A0251, A0252, A0253, A0254, A0255, A0256, A0257, A0258, A0259,
+        A0260, A0261, A0262, A0263, A0264, A0265, A0266, A0267, A0268, A0269,
+        A0270, A0271, A0272, A0273, A0274, A0275, A0276, A0277, A0278, A0279,
+        A0280, A0281, A0282, A0283, A0284, A0285, A0286, A0287, A0288, A0289,
+        A0290, A0291, A0292, A0293, A0294, A0295, A0296, A0297, A0298, A0299,
+
         B0000, B0001, B0002, B0003, B0004, B0005, B0006, B0007, B0008, B0009,
         B0010, B0011, B0012, B0013, B0014, B0015, B0016, B0017, B0018, B0019,
         B0020, B0021, B0022, B0023, B0024, B0025, B0026, B0027, B0028, B0029,
@@ -936,6 +947,18 @@ namespace TinyWars.Utility.Lang {
         [Type.A0198]: [
             `您可以通过地图编辑器和模拟战来创建自由模式房间。`,
             `You can create rooms via the map editor or the simulation wars.`,
+        ],
+        [Type.A0199]: [
+            `请确保地图上至少有两个存活的势力`,
+            `Please ensure that there're at least 2 alive forces.`,
+        ],
+        [Type.A0200]: [
+            `请确保地图上至少有两个存活的势力`,
+            `Please ensure that there're at least 2 alive forces.`,
+        ],
+        [Type.A0201]: [
+            `将离开战局并前往创建自由模式房间的页面。\n您确定要继续吗？`,
+            `You have to leave the war scene (you can enter it again later) in order to create the free mode room.\nAre you sure to continue?`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3153,6 +3176,10 @@ namespace TinyWars.Utility.Lang {
             `多人自由房间`,
             `MP Free Room`,
         ],
+        [Type.B0557]: [
+            `自由模式`,
+            `Free Mode`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3799,6 +3826,10 @@ namespace TinyWars.Utility.Lang {
             `观战请求已被接受`,
             `The request has already been accepted.`,
         ],
+        [ServerErrorCode.MsgMfrCreateRoom0016]: [
+            `您已创建了许多未开始的房间，请删除部分后重试`,
+            `You have created too many rooms simultaneously.`,
+        ],
         [ServerErrorCode.ServerDisconnect0001]: [
             `服务器维护中`,
             `The server is under maintenance.`,
@@ -3977,6 +4008,25 @@ namespace TinyWars.Utility.Lang {
                 ``,
                 `Sandbox Mode (where you can set unit HP for a better planning purpose) is now under development, and it may be online SOOOON.`,
             ].join("\n"),
+        ],
+
+        [RichType.R0007]: [
+            [
+                `自由模式是一个多人对战模式，但与常规模式不同的是，您可以以任意战局局面为战局起点。`,
+                `常见的应用场景包括：`,
+                `1. 自行任意设计地图并直接用于对战，而不必经过审核`,
+                `2. 从某个回放的某个步骤直接开打，以便探讨战局发展的各种可能性`,
+                ``,
+                `自由模式的战绩不会计入您的履历，您可以无忧无虑地轻松游戏。`,
+            ].join(`\n`),
+            [
+                `The Free Mode is a multi-player mode. What makes it different from the Normal Mode is that you can start the game with arbitrary states.`,
+                `For example, you can:`,
+                `1. Design an arbitrary map and start a game with it. No map review is required.`,
+                `2. Start with any step in any replay so that you can study more with the replay.`,
+                ``,
+                `The results of the Free Mode will not affect your profile. Just relax and enjoy :)`,
+            ].join(`\n`),
         ],
     };
 
@@ -4333,15 +4383,18 @@ namespace TinyWars.Utility.Lang {
         }
     }
     export async function getGameStartDesc(data: ProtoTypes.NetMessage.MsgMpwCommonBroadcastGameStart.IS): Promise<string> {
-        const playerList: string[] = [];
-        let playerIndex = 1;
+        const playerArray   : string[] = [];
+        let playerIndex     = CommonConstants.WarFirstPlayerIndex;
         for (const playerInfo of data.playerInfoList) {
-            playerList.push(`P${playerIndex}: ${await User.UserModel.getUserNickname(playerInfo.userId)}`);
+            const userId = playerInfo.userId;
+            playerArray.push(`P${playerIndex}: ${userId != null ? await User.UserModel.getUserNickname(userId) : `----`}`);
             ++playerIndex;
         }
+
+        const mapId = data.mapId;
         return [
-            getFormattedText(Type.F0027, await WarMap.WarMapModel.getMapNameInCurrentLanguage(data.mapId)),
-            ...playerList,
+            getFormattedText(Type.F0027, mapId != null ? await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId) : getText(Type.B0557)),
+            ...playerArray,
             getText(Type.A0125)
         ].join("\n");
     }

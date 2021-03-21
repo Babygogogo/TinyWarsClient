@@ -227,11 +227,15 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
         function setSelfPlayerIndex(playerIndex: number): void {
             getData().selfPlayerIndex = playerIndex;
         }
-        export async function tickSelfPlayerIndex(): Promise<void> {
+        export function tickSelfPlayerIndex(): void {
             setSelfPlayerIndex(getSelfPlayerIndex() % BwWarRuleHelper.getPlayersCount(getWarRule()) + 1);
         }
         export function getSelfPlayerIndex(): number {
             return getData().selfPlayerIndex;
+        }
+        export function getSelfPlayerData(): ProtoTypes.WarSerialization.ISerialPlayer {
+            const playerIndex = getSelfPlayerIndex();
+            return getInitialWarData().playerManager.players.find(v => v.playerIndex === playerIndex);
         }
 
         export function setHasFog(hasFog: boolean): void {

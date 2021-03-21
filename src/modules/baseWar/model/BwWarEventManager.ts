@@ -51,7 +51,7 @@ namespace TinyWars.BaseWar {
                 calledCountList     : this._getCalledCountList(),
             });
         }
-        public serializeForCreateMfw(): ISerialWarEventManager | undefined {
+        public serializeForCreateMfr(): ISerialWarEventManager | undefined {
             return this.serializeForSimulation();
         }
 

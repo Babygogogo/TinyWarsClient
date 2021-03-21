@@ -48,7 +48,7 @@ namespace TinyWars.BaseWar {
         public serializeForSimulation(): ISettingsForCommon {
             return Helpers.deepClone(this.getSettingsForCommon());
         }
-        public serializeForCreateMfw(): ISettingsForCommon {
+        public serializeForCreateMfr(): ISettingsForCommon {
             return this.serializeForSimulation();
         }
 

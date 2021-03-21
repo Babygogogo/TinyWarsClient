@@ -40,6 +40,7 @@ namespace TinyWars.Utility.FlowManager {
         WarMap.WarMapModel.init();
         MultiCustomRoom.McrProxy.init();
         MultiRankRoom.MrrProxy.init();
+        MultiFreeRoom.MfrProxy.init();
         ReplayWar.RwProxy.init();
         RwModel.init();
         SingleCustomRoom.ScrProxy.init();

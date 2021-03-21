@@ -236,6 +236,8 @@ export const enum ServerErrorCode {
 
     MfwWarInit0000,
 
+    MpwWarBaseInit0000,
+
     TwWarInitByMapRawData0000,
 
     WarEventFullDataValidation0000,

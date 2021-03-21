@@ -168,7 +168,7 @@ namespace TinyWars.BaseWar {
                 mapsFromPath,
             };
         }
-        public serializeForCreateMfw(): ISerialFogMap | undefined {
+        public serializeForCreateMfr(): ISerialFogMap | undefined {
             return this.serializeForSimulation();
         }
 

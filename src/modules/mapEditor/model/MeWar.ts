@@ -82,7 +82,7 @@ namespace TinyWars.MapEditor {
                 modifiedTime            : Time.TimeModel.getServerTimestamp(),
                 tileDataArray           : this.getTileMap().serialize().tiles,
                 unitDataArray           : unitMap.serialize().units,
-                warRuleArray            : this._getRevisedWarRuleArray(playersCountUnneutral),
+                warRuleArray            : this.getRevisedWarRuleArray(playersCountUnneutral),
                 mapTag                  : this.getMapTag(),
                 warEventFullData        : this.getWarEventManager().getWarEventFullData(),
             };
@@ -179,7 +179,7 @@ namespace TinyWars.MapEditor {
         public getWarRuleByRuleId(ruleId: number): IWarRule {
             return this.getWarRuleArray().find(v => v.ruleId === ruleId);
         }
-        private _getRevisedWarRuleArray(playersCountUnneutral: number): IWarRule[] {
+        public getRevisedWarRuleArray(playersCountUnneutral: number): IWarRule[] {
             const ruleArray: IWarRule[] = [];
             for (const rule of this.getWarRuleArray() || []) {
                 const revisedRule = Helpers.deepClone(rule);

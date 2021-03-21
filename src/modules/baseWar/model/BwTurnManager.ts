@@ -87,7 +87,7 @@ namespace TinyWars.BaseWar {
         public serializeForSimulation(): ISerialTurnManager {
             return this.serialize();
         }
-        public serializeForCreateMfw(): ISerialTurnManager {
+        public serializeForCreateMfr(): ISerialTurnManager {
             return this.serializeForSimulation();
         }
 

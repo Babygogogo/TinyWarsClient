@@ -165,34 +165,34 @@ namespace TinyWars.BaseWar {
                 field                       : serialField,
             };
         }
-        public serializeForCreateMfw(): ISerialWar | undefined {
-            const settingsForCommon = this.getCommonSettingManager().serializeForCreateMfw();
+        public serializeForCreateMfr(): ISerialWar | undefined {
+            const settingsForCommon = this.getCommonSettingManager().serializeForCreateMfr();
             if (settingsForCommon == null) {
-                Logger.error(`BwWar.serializeForCreateMfw() empty settingsForCommon.`);
+                Logger.error(`BwWar.serializeForCreateMfr() empty settingsForCommon.`);
                 return undefined;
             }
 
-            const serialWarEventManager = this.getWarEventManager().serializeForCreateMfw();
+            const serialWarEventManager = this.getWarEventManager().serializeForCreateMfr();
             if (serialWarEventManager == null) {
-                Logger.error(`BwWar.serializeForCreateMfw() empty serialWarEventManager.`);
+                Logger.error(`BwWar.serializeForCreateMfr() empty serialWarEventManager.`);
                 return undefined;
             }
 
-            const serialPlayerManager = this.getPlayerManager().serializeForCreateMfw();
+            const serialPlayerManager = this.getPlayerManager().serializeForCreateMfr();
             if (serialPlayerManager == null) {
-                Logger.error(`BwWar.serializeForCreateMfw() empty serialPlayerManager.`);
+                Logger.error(`BwWar.serializeForCreateMfr() empty serialPlayerManager.`);
                 return undefined;
             }
 
-            const serialTurnManager = this.getTurnManager().serializeForCreateMfw();
+            const serialTurnManager = this.getTurnManager().serializeForCreateMfr();
             if (serialTurnManager == null) {
-                Logger.error(`BwWar.serializeForCreateMfw() empty serialTurnManager.`);
+                Logger.error(`BwWar.serializeForCreateMfr() empty serialTurnManager.`);
                 return undefined;
             }
 
-            const serialField = this.getField().serializeForCreateMfw();
+            const serialField = this.getField().serializeForCreateMfr();
             if (serialField == null) {
-                Logger.error(`BwWar.serializeForCreateMfw() empty serialField.`);
+                Logger.error(`BwWar.serializeForCreateMfr() empty serialField.`);
                 return undefined;
             }
 

@@ -233,6 +233,7 @@ namespace TinyWars.ReplayWar {
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
             return [
                 this._createCommandSimulation(),
+                this._createCommandCreateMfr(),
                 this._createCommandShowTileAnimation(),
                 this._createCommandStopTileAnimation(),
                 this._createCommandUseOriginTexture(),
@@ -309,6 +310,41 @@ namespace TinyWars.ReplayWar {
                         SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForSimulation());
                     }
                 },
+            };
+        }
+
+        private _createCommandCreateMfr(): DataForCommandRenderer | null {
+            const war = this._war;
+            return {
+                name    : Lang.getText(Lang.Type.B0557),
+                callback: async () => {
+                    if (war.getPlayerManager().getAliveOrDyingTeamsCount(false) < 2) {
+                        FloatText.show(Lang.getText(Lang.Type.A0199));
+                        return;
+                    }
+
+                    const warData = war.serializeForCreateMfr();
+                    if (warData == null) {
+                        FloatText.show(Lang.getText(Lang.Type.A0200));
+                        return;
+                    }
+
+                    const errorCode = await (new TestWar.TwWar()).init(warData);
+                    if (errorCode) {
+                        FloatText.show(Lang.getErrorText(errorCode));
+                        return;
+                    }
+
+                    Common.CommonConfirmPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : Lang.getText(Lang.Type.A0201),
+                        callback: () => {
+                            MultiFreeRoom.MfrModel.Create.resetDataByInitialWarData(warData);
+                            MultiFreeRoom.MfrCreateSettingsPanel.show();
+                            this.close();
+                        }
+                    });
+                }
             };
         }
 

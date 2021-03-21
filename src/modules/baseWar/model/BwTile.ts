@@ -264,7 +264,7 @@ namespace TinyWars.BaseWar {
                 return data;
             }
         }
-        public serializeForCreateMfw(): ISerialTile | undefined {
+        public serializeForCreateMfr(): ISerialTile | undefined {
             return this.serializeForSimulation();
         }
 

@@ -235,7 +235,8 @@ namespace TinyWars.MultiCustomRoom {
             const watchInfos = MultiPlayerWar.MpwModel.getWatchRequestedWarInfos();
             this._btnMyRoom.setRedVisible(await McrModel.checkIsRed());
             this._btnContinueWar.setRedVisible(MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars());
-            this._btnWatchWar.setRedVisible((!!watchInfos) && (watchInfos.length > 0))
+            this._btnWatchWar.setRedVisible((!!watchInfos) && (watchInfos.length > 0));
+            this._btnFreeMode.setRedVisible(MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars() || await MultiFreeRoom.MfrModel.checkIsRed());
         }
     }
 }

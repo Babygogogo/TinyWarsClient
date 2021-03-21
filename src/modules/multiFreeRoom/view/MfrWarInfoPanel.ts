@@ -51,7 +51,7 @@ namespace TinyWars.MultiFreeRoom {
             this._btnBack.setTextColor(0x00FF00);
             this._btnContinueWar.setTextColor(0x00FF00);
 
-            const warInfo = this._getOpenData<OpenDataForMfrWarInfoPanel>();
+            const warInfo = this._getOpenData<OpenDataForMfrWarInfoPanel>().warInfo;
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0002) },
