@@ -8,10 +8,11 @@ namespace TinyWars.Utility.StageManager {
     const DESIGN_MAX_HEIGHT    = DESIGN_WIDTH;
     const RATIO_FOR_MIN_HEIGHT = DESIGN_WIDTH / DESIGN_MIN_HEIGHT;
 
-    let   _stage    : egret.Stage;
-    let   _mouseX   : number;
-    let   _mouseY   : number;
-    const _LAYERS   = new Map<LayerType, UiLayer>();
+    let   _stage        : egret.Stage;
+    let   _mouseX       : number;
+    let   _mouseY       : number;
+    let   _stageScaler  = 100;
+    const _LAYERS       = new Map<LayerType, UiLayer>();
 
     export function init(stg: egret.Stage): void {
         _stage = stg;
@@ -69,6 +70,18 @@ namespace TinyWars.Utility.StageManager {
 
     export function getLayer(layer: LayerType): UiLayer {
         return _LAYERS.get(layer);
+    }
+
+    export function setStageScaler(scaler: number): void {
+        const s = Math.min(Math.max(100, scaler), 400);
+        if (getStageScaler() !== s) {
+            _stageScaler = s;
+
+            egret.updateAllScreens();
+        }
+    }
+    export function getStageScaler(): number {
+        return _stageScaler;
     }
 
     export function closeAllPanels(): void {
@@ -146,19 +159,20 @@ namespace TinyWars.Utility.StageManager {
             //     };
             // }
 
+            const scaler = getStageScaler() / 100;
             if (screenWidth / screenHeight > RATIO_FOR_MIN_HEIGHT) {
                 // 屏幕高度不足
                 return {
-                    stageWidth      : reviseStageDisplaySize(DESIGN_MIN_HEIGHT * screenWidth / screenHeight),
-                    stageHeight     : reviseStageDisplaySize(DESIGN_MIN_HEIGHT),
+                    stageWidth      : reviseStageDisplaySize(DESIGN_MIN_HEIGHT * screenWidth / screenHeight * scaler),
+                    stageHeight     : reviseStageDisplaySize(DESIGN_MIN_HEIGHT * scaler),
                     displayWidth    : reviseStageDisplaySize(screenWidth),
                     displayHeight   : reviseStageDisplaySize(screenHeight),
                 };
             } else {
                 // 屏幕高度充足
                 return {
-                    stageWidth      : reviseStageDisplaySize(contentWidth),
-                    stageHeight     : reviseStageDisplaySize(contentWidth * screenHeight / screenWidth),
+                    stageWidth      : reviseStageDisplaySize(DESIGN_WIDTH * scaler),
+                    stageHeight     : reviseStageDisplaySize(DESIGN_WIDTH * screenHeight / screenWidth * scaler),
                     displayWidth    : reviseStageDisplaySize(screenWidth),
                     displayHeight   : reviseStageDisplaySize(screenHeight),
                 };

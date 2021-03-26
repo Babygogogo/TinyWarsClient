@@ -25,6 +25,7 @@ namespace TinyWars.User {
         private readonly _btnShowOnlineUsers    : GameUi.UiButton;
         private readonly _btnChangeLanguage     : GameUi.UiButton;
         private readonly _btnSetSound           : GameUi.UiButton;
+        private readonly _btnSetStageScaler     : GameUi.UiButton;
         private readonly _btnServerStatus       : GameUi.UiButton;
         private readonly _btnComplaint          : GameUi.UiButton;
         private readonly _btnSwitchTexture      : GameUi.UiButton;
@@ -70,6 +71,7 @@ namespace TinyWars.User {
                 { ui: this._btnShowOnlineUsers, callback: this._onTouchedBtnShowOnlineUsers },
                 { ui: this._btnChangeLanguage,  callback: this._onTouchedBtnChangeLanguage },
                 { ui: this._btnSetSound,        callback: this._onTouchedBtnSetSound },
+                { ui: this._btnSetStageScaler,  callback: this._onTouchedBtnSetStageScaler },
                 { ui: this._btnServerStatus,    callback: this._onTouchedBtnServerStatus },
                 { ui: this._btnComplaint,       callback: this._onTouchedBtnComplaint },
                 { ui: this._btnSwitchTexture,   callback: this._onTouchedBtnSwitchTexture },
@@ -131,6 +133,9 @@ namespace TinyWars.User {
         }
         private _onTouchedBtnSetSound(e: egret.TouchEvent): void {
             UserSetSoundPanel.show();
+        }
+        private _onTouchedBtnSetStageScaler(e: egret.TouchEvent): void {
+            // UserSetStageScalerPanel.show();
         }
         private _onTouchedBtnServerStatus(e: egret.TouchEvent): void {
             Common.CommonServerStatusPanel.show();
@@ -211,6 +216,7 @@ namespace TinyWars.User {
             group.addChild(this._btnShowOnlineUsers);
             group.addChild(this._btnChangeLanguage);
             group.addChild(this._btnSetSound);
+            group.addChild(this._btnSetStageScaler);
             group.addChild(this._btnSwitchTexture);
             group.addChild(this._btnUnitsInfo);
             group.addChild(this._btnChangeLog);
@@ -231,6 +237,7 @@ namespace TinyWars.User {
             this._updateBtnShowOnlineUsers();
             this._updateBtnChangeLanguage();
             this._updateBtnSetSound();
+            this._updateBtnSetStageScaler();
             this._updateBtnSwitchTexture();
             this._updateBtnUnitsInfo();
             this._updateBtnChangeLog();
@@ -262,6 +269,9 @@ namespace TinyWars.User {
         }
         private _updateBtnSetSound(): void {
             this._btnSetSound.label = Lang.getText(Lang.Type.B0540);
+        }
+        private _updateBtnSetStageScaler(): void {
+            this._btnSetStageScaler.label = Lang.getText(Lang.Type.B0558);
         }
         private _updateBtnSwitchTexture(): void {
             this._btnSwitchTexture.label = User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0
