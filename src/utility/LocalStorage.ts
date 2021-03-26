@@ -13,6 +13,7 @@ namespace TinyWars.Utility.LocalStorage {
     const KEY_SOUND_BGM_VOLUME          = KEY_PREFIX + "SoundBgmVolume";
     const KEY_SOUND_EFFECT_MUTE         = KEY_PREFIX + "SoundEffectMute";
     const KEY_SOUND_EFFECT_VOLUME       = KEY_PREFIX + "SoundEffectVolume";
+    const KEY_STAGE_SCALE               = KEY_PREFIX + "StageScale";
     const VALUE_TRUE                    = "1";
     const VALUE_FALSE                   = "0";
 
@@ -88,5 +89,12 @@ namespace TinyWars.Utility.LocalStorage {
     }
     export function getSoundEffectVolume(): number {
         return parseFloat(storage.getItem(KEY_SOUND_EFFECT_VOLUME)) || 1;
+    }
+
+    export function setStageScale(scale: number): void {
+        storage.setItem(KEY_STAGE_SCALE, `${scale}`);
+    }
+    export function getStageScale(): number {
+        return parseInt(storage.getItem(KEY_STAGE_SCALE)) || CommonConstants.StageMinScale;
     }
 }

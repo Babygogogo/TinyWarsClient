@@ -166,6 +166,7 @@
 		"resource/skins/user/UserSetPasswordPanel.exml",
 		"resource/skins/user/UserSetPrivilegePanel.exml",
 		"resource/skins/user/UserSetSoundPanel.exml",
+		"resource/skins/user/UserSetStageScalePanel.exml",
 		"resource/skins/user/UserSettingsPanel.exml",
 		"resource/skins/utility/LoadingUiPanel.exml",
 		"resource/skins/warEvent/WeActionAddUnitListPanel.exml",

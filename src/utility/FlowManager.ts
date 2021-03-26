@@ -24,8 +24,9 @@ namespace TinyWars.Utility.FlowManager {
         CompatibilityHelper.init();
         Network.NetManager.addListeners(_NET_EVENTS, FlowManager);
         Notify.addEventListeners(_NOTIFY_EVENTS, FlowManager);
-        Utility.StageManager.init(stage);
+        StageManager.init(stage);
         await Promise.all([ResManager.init(), ProtoManager.init()]);
+        StageManager.setStageScale(LocalStorage.getStageScale());
 
         Lang.init();
         NoSleepManager.init();

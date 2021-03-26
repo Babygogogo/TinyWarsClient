@@ -3184,6 +3184,10 @@ namespace TinyWars.Utility.Lang {
             `分辨率设定`,
             `Resolution Settings`,
         ],
+        [Type.B0559]: [
+            `UI缩放倍率`,
+            `UI Scale`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -4024,12 +4028,12 @@ namespace TinyWars.Utility.Lang {
                 `自由模式的战绩不会计入您的履历，您可以无忧无虑地轻松游戏。`,
             ].join(`\n`),
             [
-                `The Free Mode is a multi-player mode. What makes it different from the Normal Mode is that you can start the game with arbitrary states.`,
-                `For example, you can:`,
-                `1. Design an arbitrary map and start a game with it. No map review is required.`,
-                `2. Start with any step in any replay so that you can study more with the replay.`,
+                `The Free Mode is a multi-player mode. But unlike Normal Mode you can start the game from any game state.`,
+                `Examples include:`,
+                `1. Design a custom map and use the map for battles, skipping the map review process.`,
+                `2. Start a game from a certain step of a replay to study the possibilities.`,
                 ``,
-                `The results of the Free Mode will not affect your profile. Just relax and enjoy :)`,
+                `The results of the Free Mode will not affect the statistics in your profile. Just relax and enjoy :)`,
             ].join(`\n`),
         ],
     };

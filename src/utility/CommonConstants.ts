@@ -109,9 +109,11 @@ namespace TinyWars.Utility.CommonConstants {
     export const WarRuleMaxCount                        = 5;
 
     export const GridSize: Types.Size = {
-        width: 72,
-        height: 72
+        width   : 72,
+        height  : 72
     };
+    export const StageMinScale  = 100;
+    export const StageMaxScale  = 300;
 
     export const TileTypeMapping = new Map<TileBaseType, Map<TileObjectType, TileType>>([
         [TileBaseType.Beach, new Map([

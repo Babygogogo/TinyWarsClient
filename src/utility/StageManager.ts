@@ -11,7 +11,7 @@ namespace TinyWars.Utility.StageManager {
     let   _stage        : egret.Stage;
     let   _mouseX       : number;
     let   _mouseY       : number;
-    let   _stageScaler  = 100;
+    let   _stageScale   = CommonConstants.StageMinScale;
     const _LAYERS       = new Map<LayerType, UiLayer>();
 
     export function init(stg: egret.Stage): void {
@@ -72,16 +72,16 @@ namespace TinyWars.Utility.StageManager {
         return _LAYERS.get(layer);
     }
 
-    export function setStageScaler(scaler: number): void {
-        const s = Math.min(Math.max(100, scaler), 400);
-        if (getStageScaler() !== s) {
-            _stageScaler = s;
+    export function setStageScale(scale: number): void {
+        const s = Math.min(Math.max(CommonConstants.StageMinScale, scale), CommonConstants.StageMaxScale);
+        if (getStageScale() !== s) {
+            _stageScale = s;
 
             egret.updateAllScreens();
         }
     }
-    export function getStageScaler(): number {
-        return _stageScaler;
+    export function getStageScale(): number {
+        return _stageScale;
     }
 
     export function closeAllPanels(): void {
@@ -159,7 +159,7 @@ namespace TinyWars.Utility.StageManager {
             //     };
             // }
 
-            const scaler = getStageScaler() / 100;
+            const scaler = getStageScale() / 100;
             if (screenWidth / screenHeight > RATIO_FOR_MIN_HEIGHT) {
                 // 屏幕高度不足
                 return {

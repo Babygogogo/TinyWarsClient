@@ -2,55 +2,95 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="semi_transparent" />
-    <e:Group width="440" horizontalCenter="0" height="300" verticalCenter="0">
-        <e:Group id="_group" scaleX="1" scaleY="1" width="100%" height="100%">
-            <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
-                            source="setting0002" scale9Grid="1,1,2,2" locked="true" />
-            <e:Scroller id="_scroller" left="0" right="0" top="10" bottom="10">
-                <e:Group x="20" y="0">
-                    <e:Group id="_groupButtons" y="220" horizontalCenter="0">
-                        <GameUi:UiButton id="_btnRankList" label="积分排名" y="300" x="196"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnChangeNickname" label="更改昵称" y="290" x="186"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnChangePassword" label="更改密码" y="290" x="186"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnChangeDiscordId" label="更改Discord ID" y="300" x="196"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnShowOnlineUsers" label="在线玩家" y="310" x="206"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnChangeLanguage" label="Language" y="320" x="216"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnServerStatus" label="服务器状态" y="330" x="226"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnChat" label="聊天" y="340" x="236"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnComplaint" label="意见反馈" y="340" x="236"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnSwitchTexture" label="切换贴图" y="350" x="246"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnUnitsInfo" label="部队属性表" y="360" x="256"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnChangeLog" label="更新日志" y="360" x="256"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnSetPrivilege" label="设置权限" y="360" x="256"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnMapManagement" label="管理地图" y="360" x="256"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnSetSound" label="声音设置" y="360" x="256"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
-                        <GameUi:UiButton id="_btnSetStageScaler" label="分辨率设置" y="360" x="256"
-                                         skinName="Skins.Component.Button.ButtonSetting001" />
+    <e:Group id="_group" scaleX="1" scaleY="1" width="480" height="360" horizontalCenter="0" verticalCenter="0">
+        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
+                        source="setting0002" scale9Grid="1,1,2,2" />
+        <e:Scroller id="_scroller" left="0" right="0" top="10" bottom="10">
+            <e:Group x="20" y="0">
+                <e:Group x="781" y="327">
+                    <e:Group x="21" y="50">
+                        <e:Group x="0" y="0">
+                            <GameUi:UiImage id="_imgLanguageChineseOn" x="0" y="0" source="commonRatio0001"
+                                            scale9Grid="2,2,1,1" width="110" height="24" />
+                            <GameUi:UiImage id="_imgLanguageChineseOff" x="0" y="0" scale9Grid="2,2,1,1" width="110"
+                                            height="24" source="commonRatio0002" />
+                            <GameUi:UiLabel id="_labelLanguageChinese" text="English" size="12" textColor="0xcccccc"
+                                            horizontalCenter="0" verticalCenter="1" />
+                        </e:Group>
+                        <e:Group x="10" y="10">
+                            <GameUi:UiImage id="_imgLanguageEnglishOn" x="0" y="0" source="commonRatio0001"
+                                            scale9Grid="2,2,1,1" width="110" height="24" />
+                            <GameUi:UiImage id="_imgLanguageEnglishOff" x="0" y="0" scale9Grid="2,2,1,1" width="110"
+                                            height="24" source="commonRatio0002" />
+                            <GameUi:UiLabel id="_labelLanguageEnglish" text="English" size="12" textColor="0xCCCCCC"
+                                            horizontalCenter="0" verticalCenter="1" />
+                        </e:Group>
                         <e:layout>
-                            <e:TileLayout orientation="rows" requestedColumnCount="3" horizontalGap="20"
-                                          verticalGap="20" />
+                            <e:HorizontalLayout gap="0" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="31" y="60" locked="true">
+                        <e:Group x="0" y="0">
+                            <GameUi:UiImage id="_imgTextureOriginOn" x="0" y="0" source="commonRatio0001"
+                                            scale9Grid="2,2,1,1" width="110" height="24" />
+                            <GameUi:UiImage id="_imgTextureOriginOff" x="0" y="0" scale9Grid="2,2,1,1" width="110"
+                                            height="24" source="commonRatio0002" />
+                            <GameUi:UiLabel id="_labelTextureOrigin" text="English" size="12" textColor="0xCCCCCC"
+                                            horizontalCenter="0" verticalCenter="1" />
+                        </e:Group>
+                        <e:Group x="10" y="10">
+                            <GameUi:UiImage id="_imgTextureNewOn" x="0" y="0" source="commonRatio0001"
+                                            scale9Grid="2,2,1,1" width="110" height="24" />
+                            <GameUi:UiImage id="_imgTextureNewOff" x="0" y="0" scale9Grid="2,2,1,1" width="110"
+                                            height="24" source="commonRatio0002" />
+                            <GameUi:UiLabel id="_labelTextureNew" text="Origin Texture" size="12" textColor="0xCCCCCC"
+                                            horizontalCenter="0" verticalCenter="1" />
+                        </e:Group>
+                        <e:layout>
+                            <e:HorizontalLayout gap="0" />
                         </e:layout>
                     </e:Group>
                     <e:layout>
-                        <e:VerticalLayout horizontalAlign="center" gap="30" />
+                        <e:HorizontalLayout gap="20" />
                     </e:layout>
                 </e:Group>
-            </e:Scroller>
-        </e:Group>
+                <e:Group id="_groupButtons" y="220" horizontalCenter="0">
+                    <GameUi:UiButton id="_btnRankList" label="积分排名" y="300" x="196"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnChangeNickname" label="更改昵称" y="290" x="186"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnChangePassword" label="更改密码" y="290" x="186"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnChangeDiscordId" label="更改Discord ID" y="300" x="196"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnShowOnlineUsers" label="在线玩家" y="310" x="206"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnServerStatus" label="服务器状态" y="330" x="226"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnChat" label="聊天" y="340" x="236"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnComplaint" label="意见反馈" y="340" x="236"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnUnitsInfo" label="部队属性表" y="360" x="256"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnChangeLog" label="更新日志" y="360" x="256"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnSetPrivilege" label="设置权限" y="360" x="256"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnMapManagement" label="管理地图" y="360" x="256"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnSetSound" label="声音设置" y="360" x="256"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnSetStageScaler" label="分辨率设置" y="360" x="256"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <e:layout>
+                        <e:TileLayout orientation="rows" requestedColumnCount="3" horizontalGap="20" verticalGap="20" />
+                    </e:layout>
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout horizontalAlign="center" gap="20" paddingTop="2" />
+                </e:layout>
+            </e:Group>
+        </e:Scroller>
     </e:Group>
 </e:Skin>
