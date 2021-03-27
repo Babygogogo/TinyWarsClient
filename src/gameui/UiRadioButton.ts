@@ -33,7 +33,7 @@ namespace TinyWars.GameUi {
             this._imgRightOff.touchEnabled  = true;
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._clearData();
         }
 
@@ -58,7 +58,7 @@ namespace TinyWars.GameUi {
 
         public updateView(): void {
             const data = this._getData();
-            if ((!data) || (!this._getIsOpening())) {
+            if ((!data) || (!this.getIsOpening())) {
                 return;
             }
 
@@ -72,7 +72,7 @@ namespace TinyWars.GameUi {
         }
         private _updateLabels(): void {
             const data = this._getData();
-            if ((!data) || (!this._getIsOpening())) {
+            if ((!data) || (!this.getIsOpening())) {
                 return;
             }
 

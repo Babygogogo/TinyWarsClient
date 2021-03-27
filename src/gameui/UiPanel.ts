@@ -2,26 +2,12 @@
 namespace TinyWars.GameUi {
     import Logger = Utility.Logger;
 
-    type UiListener = {
-        ui         : egret.DisplayObject,
-        callback   : (e: egret.Event) => void,
-        eventType ?: string,
-        thisObject?: any,
-    }
-
-    export abstract class UiPanel extends eui.Component {
+    export abstract class UiPanel extends UiComponent {
         protected abstract readonly _LAYER_TYPE  : Utility.Types.LayerType;
         protected abstract readonly _IS_EXCLUSIVE: boolean;
 
-        private _isChildrenCreated      = false;
-        private _isSkinLoaded           = false;
-        private _isOpening              = false;
-
         private _isRunningClose         = false;
         private _cachedOpenFunc         : (() => void) | undefined;
-
-        private _uiListenerArray        : UiListener[];
-        private _notifyListenerArray    : Utility.Notify.Listener[];
 
         private _isTouchMaskEnabled     = false;
         private _isCloseOnTouchedMask   = false;
@@ -34,35 +20,6 @@ namespace TinyWars.GameUi {
             super();
 
             this.touchEnabled = false;
-            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
-            this.once(egret.Event.COMPLETE, this._onSkinLoaded, this);
-        }
-
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._isChildrenCreated = true;
-            this._doOpen();
-        }
-
-        private _onSkinLoaded(e: egret.Event): void {
-            this._isSkinLoaded = true;
-
-            this._doOpen();
-        }
-
-        private _onAddedToStage(e: egret.Event): void {
-            this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
-            this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
-
-            this._doOpen();
-        }
-
-        private _onRemovedFromStage(e: egret.Event): void {
-            this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
-            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
-
-            this._doClose();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -89,7 +46,7 @@ namespace TinyWars.GameUi {
             this._doOpen();
         }
 
-        private _doOpen(): void {
+        protected _doOpen(): void {
             if (!this._checkIsReadyForOpen()) {
                 return;
             }
@@ -106,26 +63,11 @@ namespace TinyWars.GameUi {
             }
         }
 
-        protected _onOpened(): void {}
-
-        private _checkIsReadyForOpen(): boolean {
-            return (this.stage != null)
-                && (this._isChildrenCreated)
-                && (this._isSkinLoaded);
-        }
-
         private _setOpenData(data: any): void {
             this._openData = data;
         }
         protected _getOpenData<T>(): T {
             return this._openData;
-        }
-
-        public getIsOpening(): boolean {
-            return this._isOpening;
-        }
-        private _setIsOpening(opening: boolean): void {
-            this._isOpening = opening;
         }
 
         private _setCachedOpenFunc(func: (() => void) | undefined): void {
@@ -165,7 +107,7 @@ namespace TinyWars.GameUi {
             }
         }
 
-        private async _doClose(): Promise<void> {
+        protected async _doClose(): Promise<void> {
             if (this.getIsOpening()) {
                 this._setIsOpening(false);
 
@@ -176,8 +118,6 @@ namespace TinyWars.GameUi {
                 await this._onClosed();
             }
         }
-
-        protected async _onClosed(): Promise<void> {}
 
         private _getIsRunningClose(): boolean {
             return this._isRunningClose;
@@ -252,49 +192,6 @@ namespace TinyWars.GameUi {
 
             if (this._getIsCloseOnTouchedMask()) {
                 this.close();
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-        // UI / notify listeners.
-        ////////////////////////////////////////////////////////////////////////////////
-        protected _setUiListenerArray(array: UiListener[]): void {
-            this._uiListenerArray = array;
-        }
-        protected _getUiListenerArray(): UiListener[] | undefined {
-            return this._uiListenerArray;
-        }
-        protected _setNotifyListenerArray(array: Utility.Notify.Listener[]): void {
-            this._notifyListenerArray = array;
-        }
-        protected _getNotifyListenerArray(): Utility.Notify.Listener[] | undefined {
-            return this._notifyListenerArray;
-        }
-
-        private _registerListeners(): void {
-            const notifyListenerArray = this._getNotifyListenerArray();
-            if (notifyListenerArray) {
-                Utility.Notify.addEventListeners(notifyListenerArray, this);
-            }
-
-            const uiListenerArray = this._getUiListenerArray();
-            if (uiListenerArray) {
-                for (const l of uiListenerArray) {
-                    l.ui.addEventListener(l.eventType || egret.TouchEvent.TOUCH_TAP, l.callback, l.thisObject || this);
-                }
-            }
-        }
-        private _unregisterListeners(): void {
-            const notifyListenerArray = this._getNotifyListenerArray();
-            if (notifyListenerArray) {
-                Utility.Notify.removeEventListeners(notifyListenerArray, this);
-            }
-
-            const uiListenerArray = this._getUiListenerArray();
-            if (uiListenerArray) {
-                for (const l of uiListenerArray) {
-                    l.ui.removeEventListener(l.eventType || egret.TouchEvent.TOUCH_TAP, l.callback, l.thisObject || this);
-                }
             }
         }
     }

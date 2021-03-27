@@ -9,7 +9,7 @@ namespace TinyWars.GameUi {
         thisObject? : any,
     }
 
-    export class UiComponent extends eui.Component {
+    export abstract class UiComponent extends eui.Component {
         private _isChildrenCreated  = false;
         private _isSkinLoaded       = false;
         private _isOpening          = false;
@@ -17,7 +17,7 @@ namespace TinyWars.GameUi {
         private _notifyListenerArray: Notify.Listener[];
         private _uiListenerArray    : UiListener[];
 
-        public constructor() {
+        protected constructor() {
             super();
 
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
@@ -51,41 +51,41 @@ namespace TinyWars.GameUi {
             this._doClose();
         }
 
-        private _doOpen(): void {
+        protected _doOpen(): void {
             if (!this._checkIsReadyForOpen()) {
                 return;
             }
 
-            if (!this._getIsOpening()) {
+            if (!this.getIsOpening()) {
                 this._setIsOpening(true);
 
                 this._onOpened();
                 this._registerListeners();
             }
         }
-        private _doClose(): void {
-            if (this._getIsOpening()) {
+        protected async _doClose(): Promise<void> {
+            if (this.getIsOpening()) {
                 this._setIsOpening(false);
 
                 this._unregisterListeners();
                 this._setUiListenerArray(undefined);
                 this._setNotifyListenerArray(undefined);
-                this._onClosed();
+                await this._onClosed();
             }
         }
 
         protected _onOpened(): void {}
-        protected _onClosed(): void {}
+        protected async _onClosed(): Promise<void> {}
 
-        private _checkIsReadyForOpen(): boolean {
+        protected _checkIsReadyForOpen(): boolean {
             return (this.stage != null)
                 && (this._isChildrenCreated)
                 && (this._isSkinLoaded);
         }
-        protected _getIsOpening(): boolean {
+        public getIsOpening(): boolean {
             return this._isOpening;
         }
-        private _setIsOpening(opening: boolean): void {
+        protected _setIsOpening(opening: boolean): void {
             this._isOpening = opening;
         }
 
@@ -102,7 +102,7 @@ namespace TinyWars.GameUi {
             return this._uiListenerArray;
         }
 
-        private _registerListeners(): void {
+        protected _registerListeners(): void {
             const notifyListenerArray = this._getNotifyListenerArray();
             if (notifyListenerArray) {
                 Utility.Notify.addEventListeners(notifyListenerArray, this);
@@ -116,7 +116,7 @@ namespace TinyWars.GameUi {
             }
         }
 
-        private _unregisterListeners(): void {
+        protected _unregisterListeners(): void {
             const notifyListenerArray = this._getNotifyListenerArray();
             if (notifyListenerArray) {
                 Utility.Notify.removeEventListeners(notifyListenerArray, this);
