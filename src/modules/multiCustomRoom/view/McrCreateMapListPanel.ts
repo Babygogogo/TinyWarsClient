@@ -4,7 +4,11 @@ namespace TinyWars.MultiCustomRoom {
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
     import ProtoTypes       = Utility.ProtoTypes;
+    import CommonConstants  = Utility.CommonConstants;
+    import ConfigManager    = Utility.ConfigManager;
+    import Helpers          = Utility.Helpers;
     import WarMapModel      = WarMap.WarMapModel;
+    import TileType         = Types.TileType;
     import IDataForMapTag   = ProtoTypes.Map.IDataForMapTag;
 
     type FiltersForMapList = {
@@ -22,20 +26,38 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrCreateMapListPanel;
 
-        private _listMap        : GameUi.UiScrollList;
-        private _zoomMap        : GameUi.UiZoomableMap;
-        private _btnSearch      : GameUi.UiButton;
-        private _btnBack        : GameUi.UiButton;
-        private _labelNoMap     : GameUi.UiLabel;
-        private _labelLoading   : GameUi.UiLabel;
+        private readonly _groupMapView          : eui.Group;
+        private readonly _zoomMap               : GameUi.UiZoomableMap;
+        private readonly _labelLoading          : GameUi.UiLabel;
 
-        private _groupInfo          : eui.Group;
-        private _labelMenuTitle     : GameUi.UiLabel;
-        private _labelMapName       : GameUi.UiLabel;
-        private _labelDesigner      : GameUi.UiLabel;
-        private _labelRating        : GameUi.UiLabel;
-        private _labelPlayedTimes   : GameUi.UiLabel;
-        private _labelPlayersCount  : GameUi.UiLabel;
+        private readonly _groupNavigator        : eui.Group;
+        private readonly _labelMultiPlayer      : GameUi.UiLabel;
+        private readonly _labelCreateRoom       : GameUi.UiLabel;
+        private readonly _labelChooseMap        : GameUi.UiLabel;
+
+        private readonly _btnBack               : GameUi.UiButton;
+        private readonly _btnSearch             : GameUi.UiButton;
+        private readonly _btnMapInfo            : GameUi.UiButton;
+
+        private readonly _groupMapList          : eui.Group;
+        private readonly _listMap               : GameUi.UiScrollList;
+        private readonly _labelNoMap            : GameUi.UiLabel;
+
+        private readonly _groupTile             : eui.Group;
+        private readonly _listTile              : GameUi.UiScrollList;
+
+        private readonly _groupMapInfo          : eui.Group;
+        private readonly _labelMapName          : GameUi.UiLabel;
+        private readonly _labelDesignerTitle    : GameUi.UiLabel;
+        private readonly _labelDesigner         : GameUi.UiLabel;
+        private readonly _labelRatingTitle      : GameUi.UiLabel;
+        private readonly _labelRating           : GameUi.UiLabel;
+        private readonly _labelPlayedTimesTitle : GameUi.UiLabel;
+        private readonly _labelPlayedTimes      : GameUi.UiLabel;
+        private readonly _labelPlayersCountTitle: GameUi.UiLabel;
+        private readonly _labelPlayersCount     : GameUi.UiLabel;
+        private readonly _labelMapSizeTitle     : GameUi.UiLabel;
+        private readonly _labelMapSize          : GameUi.UiLabel;
 
         private _mapFilters         : FiltersForMapList = {};
         private _dataForList        : DataForMapNameRenderer[] = [];
@@ -72,16 +94,19 @@ namespace TinyWars.MultiCustomRoom {
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._listMap.setItemRenderer(MapNameRenderer);
+            this._listTile.setItemRenderer(TileRenderer);
 
-            this._groupInfo.visible = false;
+            this._showOpenAnimation();
+
             this._updateComponentsForLanguage();
 
             this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
         protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+
             this._zoomMap.clearMap();
             this._listMap.clear();
-            egret.Tween.removeTweens(this._groupInfo);
         }
 
         public async setSelectedMapId(newMapId: number): Promise<void> {
@@ -144,10 +169,18 @@ namespace TinyWars.MultiCustomRoom {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0227);
-            this._labelLoading.text     = Lang.getText(Lang.Type.A0150);
-            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-            this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
+            this._labelCreateRoom.text          = Lang.getText(Lang.Type.B0000);
+            this._labelMultiPlayer.text         = Lang.getText(Lang.Type.B0137);
+            this._labelChooseMap.text           = Lang.getText(Lang.Type.B0227);
+            this._labelLoading.text             = Lang.getText(Lang.Type.A0150);
+            this._labelDesignerTitle.text       = `${Lang.getText(Lang.Type.B0163)}:`;
+            this._labelPlayersCountTitle.text   = Lang.getText(Lang.Type.B0229);
+            this._labelPlayedTimesTitle.text    = Lang.getText(Lang.Type.B0565);
+            this._labelMapSizeTitle.text        = Lang.getText(Lang.Type.B0300);
+            this._labelRatingTitle.text         = Lang.getText(Lang.Type.B0253);
+            this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
+            this._btnSearch.label               = Lang.getText(Lang.Type.B0228);
+            this._btnMapInfo.label              = Lang.getText(Lang.Type.B0298);
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
@@ -187,18 +220,164 @@ namespace TinyWars.MultiCustomRoom {
         private async _showMap(mapId: number): Promise<void> {
             const mapRawData                = await WarMapModel.getRawData(mapId);
             const rating                    = await WarMapModel.getAverageRating(mapId);
-            this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-            this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-            this._labelPlayersCount.text    = Lang.getFormattedText(Lang.Type.F0002, mapRawData.playersCountUnneutral);
-            this._labelRating.text          = Lang.getFormattedText(Lang.Type.F0003, rating != null ? rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormattedText(Lang.Type.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
-            this._groupInfo.visible         = true;
-            this._groupInfo.alpha           = 1;
-            egret.Tween.removeTweens(this._groupInfo);
-            egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
+            this._labelMapName.text         = await WarMapModel.getMapNameInCurrentLanguage(mapId);
+            this._labelDesigner.text        = mapRawData.designerName;
+            this._labelPlayersCount.text    = `${mapRawData.playersCountUnneutral}`;
+            this._labelRating.text          = rating != null ? rating.toFixed(2) : Lang.getText(Lang.Type.B0001);
+            this._labelPlayedTimes.text     = `${await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)}`;
+            this._labelMapSize.text         = `${mapRawData.mapWidth} x ${mapRawData.mapHeight}`;
             this._zoomMap.showMapByMapData(mapRawData);
+
+            const tileCountDict = new Map<TileType, number>();
+            for (const tile of mapRawData.tileDataArray || []) {
+                const tileType = ConfigManager.getTileType(tile.baseType, tile.objectType);
+                if (tileType != null) {
+                    tileCountDict.set(tileType, (tileCountDict.get(tileType) || 0) + 1);
+                }
+            }
+            const configVersion = ConfigManager.getLatestFormalVersion();
+            const tileDataArray: DataForTileRenderer[] = [];
+            for (const tileType of TileTypes) {
+                tileDataArray.push({
+                    configVersion,
+                    tileType,
+                    num     : tileCountDict.get(tileType) || 0,
+                });
+            }
+            this._listTile.bindData(tileDataArray);
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._groupMapView,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 0, y: -20 },
+                endProps    : { alpha: 1, y: 20 },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 0, y: -20 },
+                endProps    : { alpha: 1, y: 20 },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
+                obj         : this._btnSearch,
+                beginProps  : { alpha: 0, y: 40 },
+                endProps    : { alpha: 1, y: 80 },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
+                obj         : this._btnMapInfo,
+                beginProps  : { alpha: 0, y: 40 },
+                endProps    : { alpha: 1, y: 80 },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
+                obj         : this._groupMapList,
+                beginProps  : { alpha: 0, left: -20 },
+                endProps    : { alpha: 1, left: 20 },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
+                obj         : this._groupTile,
+                beginProps  : { alpha: 0, right: -40 },
+                endProps    : { alpha: 1, right: 0 },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
+                obj         : this._groupMapInfo,
+                beginProps  : { alpha: 0, right: -40 },
+                endProps    : { alpha: 1, right: 0 },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
+        }
+        private async _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._groupMapView,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                });
+                Helpers.resetTween({
+                    obj         : this._groupNavigator,
+                    beginProps  : { alpha: 1, y: 20 },
+                    endProps    : { alpha: 0, y: -20 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                });
+                Helpers.resetTween({
+                    obj         : this._btnBack,
+                    beginProps  : { alpha: 1, y: 20 },
+                    endProps    : { alpha: 0, y: -20 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                });
+                Helpers.resetTween({
+                    obj         : this._btnSearch,
+                    beginProps  : { alpha: 1, y: 80 },
+                    endProps    : { alpha: 0, y: 40 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                });
+                Helpers.resetTween({
+                    obj         : this._btnMapInfo,
+                    beginProps  : { alpha: 1, y: 80 },
+                    endProps    : { alpha: 0, y: 40 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                });
+                Helpers.resetTween({
+                    obj         : this._groupMapList,
+                    beginProps  : { alpha: 1, left: 20 },
+                    endProps    : { alpha: 0, left: -20 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                });
+                Helpers.resetTween({
+                    obj         : this._groupTile,
+                    beginProps  : { alpha: 1, right: 0 },
+                    endProps    : { alpha: 0, right: -40 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                });
+                Helpers.resetTween({
+                    obj         : this._groupMapInfo,
+                    beginProps  : { alpha: 1, right: 0 },
+                    endProps    : { alpha: 0, right: -40 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                    callback    : resolve,
+                });
+            });
         }
     }
+
+    const TileTypes: TileType[] = [
+        TileType.Factory,
+        TileType.City,
+        TileType.Airport,
+        TileType.TempAirport,
+        TileType.Seaport,
+        TileType.TempSeaport,
+        TileType.CommandTower,
+        TileType.Radar,
+    ];
 
     type DataForMapNameRenderer = {
         mapId   : number;
@@ -236,6 +415,59 @@ namespace TinyWars.MultiCustomRoom {
             data.panel.close();
             await McrModel.Create.resetDataByMapId(data.mapId);
             McrCreateSettingsPanel.show();
+        }
+    }
+
+
+    type DataForTileRenderer = {
+        configVersion   : string;
+        tileType        : Types.TileType;
+        num             : number;
+    }
+
+    class TileRenderer extends GameUi.UiListItemRenderer {
+        private _group          : eui.Group;
+        private _conTileView    : eui.Group;
+        private _labelNum       : TinyWars.GameUi.UiLabel;
+
+        private _tileView       = new MapEditor.MeTileSimpleView();
+
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+            ]);
+
+            const tileView = this._tileView;
+            this._conTileView.addChild(tileView.getImgBase());
+            this._conTileView.addChild(tileView.getImgObject());
+            tileView.startRunningView();
+
+        }
+        protected async _onClosed(): Promise<void> {
+            this._conTileView.removeChildren();
+        }
+
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            const data          = this.data as DataForTileRenderer;
+            this._labelNum.text = `x${data.num}`;
+
+            const tileObjectType = Utility.ConfigManager.getTileObjectTypeByTileType(data.tileType);
+            this._tileView.init({
+                tileBaseType        : null,
+                tileBaseShapeId     : null,
+                tileObjectType      : tileObjectType,
+                tileObjectShapeId   : 0,
+                playerIndex         : tileObjectType === Types.TileObjectType.Headquarters
+                    ? CommonConstants.WarFirstPlayerIndex
+                    : CommonConstants.WarNeutralPlayerIndex,
+            });
+            this._tileView.updateView();
+        }
+
+        public _onNotifyTileAnimationTick(): void {
+            this._tileView.updateOnAnimationTick();
         }
     }
 }

@@ -966,7 +966,7 @@ namespace TinyWars.Utility.Lang {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B0000]: [
             "创建房间",
-            "Create Room",
+            "Create Rooms",
         ],
         [Type.B0001]: [
             "无",
@@ -1874,7 +1874,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0227]: [
             `选择地图`,
-            `Select Map`,
+            `Select a Map`,
         ],
         [Type.B0228]: [
             `查找`,
@@ -3207,6 +3207,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0564]: [
             `使用英文`,
             `Use English`,
+        ],
+        [Type.B0565]: [
+            `热度`,
+            `Popularity`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

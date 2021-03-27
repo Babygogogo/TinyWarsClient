@@ -1,22 +1,23 @@
 {
   "file": "uncompressed.png",
   "frames": { 
-    "c08_t06_s01_f01": {"x":19,"y":0,"w":3,"h":3},
+    "c08_t06_s01_f01": {"x":10,"y":12,"w":3,"h":3},
     "commonBlack": {"x":7,"y":0,"w":4,"h":4},
     "commonBlue": {"x":7,"y":6,"w":4,"h":4},
-    "commonGrey": {"x":10,"y":12,"w":4,"h":4},
+    "commonGrey": {"x":15,"y":12,"w":3,"h":3},
     "commonPurple": {"x":13,"y":0,"w":4,"h":4},
     "commonRatio0001": {"x":0,"y":0,"w":5,"h":5},
     "commonRatio0002": {"x":0,"y":7,"w":5,"h":5},
+    "commonWhite": {"x":19,"y":6,"w":3,"h":3},
     "image_line_001": {"x":0,"y":14,"w":8,"h":1},
     "semi_transparent": {"x":13,"y":6,"w":4,"h":4},
-    "setting0002": {"x":16,"y":12,"w":4,"h":4},
-    "transparent": {"x":19,"y":5,"w":3,"h":3,"offX":0,"offY":0,"sourceW":4,"sourceH":4}
+    "setting0002": {"x":19,"y":0,"w":4,"h":4},
+    "transparent": {"x":20,"y":11,"w":3,"h":3,"offX":0,"offY":0,"sourceW":4,"sourceH":4}
   },
   "meta": {
     "app": "https://www.codeandweb.com/texturepacker",
     "exporter": "egret",
-    "sheetsize": "22x16",
-    "smartupdate": "$TexturePacker:SmartUpdate:60f636eadaa513131a97502e0bfcae87:e99c6fdf08a9d01fd780e0859667ca7b:06603b7443b9482a9c04b2c0ab5118a4$"
+    "sheetsize": "23x15",
+    "smartupdate": "$TexturePacker:SmartUpdate:427de927e5b8c2e189026eb1f406f53b:a28f142da6137199383d87f4cc286890:06603b7443b9482a9c04b2c0ab5118a4$"
   }
 }
