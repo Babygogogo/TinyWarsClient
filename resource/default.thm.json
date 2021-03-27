@@ -37,6 +37,7 @@
 		"resource/skins/component/button/ButtonSetting001.exml",
 		"resource/skins/component/CheckBox1.exml",
 		"resource/skins/component/input/Input001.exml",
+		"resource/skins/component/radioButton/RadioButton001.exml",
 		"resource/skins/lobby/LobbyBackgroundPanel.exml",
 		"resource/skins/lobby/LobbyBottomPanel.exml",
 		"resource/skins/lobby/LobbyPanel.exml",

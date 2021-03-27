@@ -234,10 +234,7 @@ namespace TinyWars.ReplayWar {
             return [
                 this._createCommandSimulation(),
                 this._createCommandCreateMfr(),
-                this._createCommandShowTileAnimation(),
-                this._createCommandStopTileAnimation(),
-                this._createCommandUseOriginTexture(),
-                this._createCommandUseNewTexture(),
+                this._createCommandUserSettings(),
                 this._createCommandSetPathMode(),
             ].filter(v => !!v);
         }
@@ -347,62 +344,13 @@ namespace TinyWars.ReplayWar {
                 }
             };
         }
-
-        private _createCommandShowTileAnimation(): DataForCommandRenderer | null {
-            if (TimeModel.checkIsTileAnimationTicking()) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(Lang.Type.B0176),
-                    callback: () => {
-                        TimeModel.startTileAnimationTick();
-                        LocalStorage.setShowTileAnimation(true);
-                        this._updateView();
-                    },
+        private _createCommandUserSettings(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0560),
+                callback: () => {
+                    User.UserSettingsPanel.show();
                 }
-            }
-        }
-        private _createCommandStopTileAnimation(): DataForCommandRenderer | null {
-            if (!TimeModel.checkIsTileAnimationTicking()) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(Lang.Type.B0177),
-                    callback: () => {
-                        TimeModel.stopTileAnimationTick();
-                        LocalStorage.setShowTileAnimation(false);
-                        this._updateView();
-                    },
-                }
-            }
-        }
-        private _createCommandUseOriginTexture(): DataForCommandRenderer | null {
-            if (User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(Lang.Type.B0385),
-                    callback: () => {
-                        User.UserProxy.reqUserSetSettings({
-                            unitAndTileTextureVersion   : Types.UnitAndTileTextureVersion.V0,
-                        });
-                    }
-                };
-            }
-        }
-        private _createCommandUseNewTexture(): DataForCommandRenderer | null {
-            if (User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V1) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(Lang.Type.B0386),
-                    callback: () => {
-                        User.UserProxy.reqUserSetSettings({
-                            unitAndTileTextureVersion   : Types.UnitAndTileTextureVersion.V1,
-                        });
-                    }
-                };
-            }
+            };
         }
         private _createCommandSetPathMode(): DataForCommandRenderer {
             return {

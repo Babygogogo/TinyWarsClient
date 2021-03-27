@@ -8,6 +8,7 @@ namespace TinyWars.Utility.LocalStorage {
     const KEY_REMEMBER_PASSWORD         = KEY_PREFIX + "RememberPassword";
     const KEY_LANGUAGE                  = KEY_PREFIX + "Language";
     const KEY_SHOW_TILE_ANIMATION       = KEY_PREFIX + "ShowTileAnimation";
+    const KEY_SHOW_UNIT_ANIMATION       = KEY_PREFIX + "ShowUnitAnimation";
     const KEY_MAP_RAW_DATA_PREFIX       = KEY_PREFIX + "MapRawData_";
     const KEY_SOUND_BGM_MUTE            = KEY_PREFIX + "SoundBgmMute";
     const KEY_SOUND_BGM_VOLUME          = KEY_PREFIX + "SoundBgmVolume";
@@ -60,6 +61,14 @@ namespace TinyWars.Utility.LocalStorage {
     }
     export function getShowTileAnimation(): boolean {
         const data = storage.getItem(KEY_SHOW_TILE_ANIMATION);
+        return (data == null) || (data === VALUE_TRUE);
+    }
+
+    export function setShowUnitAnimation(show: boolean): void {
+        storage.setItem(KEY_SHOW_UNIT_ANIMATION, show ? VALUE_TRUE : VALUE_FALSE);
+    }
+    export function getShowUnitAnimation(): boolean {
+        const data = storage.getItem(KEY_SHOW_UNIT_ANIMATION);
         return (data == null) || (data === VALUE_TRUE);
     }
 

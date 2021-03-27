@@ -1669,12 +1669,12 @@ namespace TinyWars.Utility.Lang {
             `Nickname`,
         ],
         [Type.B0176]: [
-            `显示地形动画`,
-            `Show Tile Animation`,
+            `打开地形动画`,
+            `Tile Animation On`,
         ],
         [Type.B0177]: [
-            `停止地形动画`,
-            `Stop Tile Animation`,
+            `关闭地形动画`,
+            `Tile Animation Off`,
         ],
         [Type.B0178]: [
             `初始资金`,
@@ -2490,11 +2490,11 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0385]: [
             `使用原版贴图`,
-            `Origin Texture`,
+            `Use Origin Texture`,
         ],
         [Type.B0386]: [
             `使用新版贴图`,
-            `New Texture`,
+            `Use New Texture`,
         ],
         [Type.B0387]: [
             `常规`,
@@ -3187,6 +3187,26 @@ namespace TinyWars.Utility.Lang {
         [Type.B0559]: [
             `UI缩放倍率`,
             `UI Scale`,
+        ],
+        [Type.B0560]: [
+            `设置`,
+            `Settings`,
+        ],
+        [Type.B0561]: [
+            `打开部队动画`,
+            `Unit Animation On`,
+        ],
+        [Type.B0562]: [
+            `关闭部队动画`,
+            `Unit Animation Off`,
+        ],
+        [Type.B0563]: [
+            `使用中文`,
+            `Use Chinese`,
+        ],
+        [Type.B0564]: [
+            `使用英文`,
+            `Use English`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

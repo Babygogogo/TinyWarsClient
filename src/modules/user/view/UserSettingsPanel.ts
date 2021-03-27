@@ -17,18 +17,10 @@ namespace TinyWars.User {
         private readonly _group                 : eui.Group;
         private readonly _scroller              : eui.Scroller;
 
-        private readonly _imgLanguageChineseOn  : TinyWars.GameUi.UiImage;
-        private readonly _imgLanguageChineseOff : TinyWars.GameUi.UiImage;
-        private readonly _labelLanguageChinese  : TinyWars.GameUi.UiLabel;
-        private readonly _imgLanguageEnglishOn  : TinyWars.GameUi.UiImage;
-        private readonly _imgLanguageEnglishOff : TinyWars.GameUi.UiImage;
-        private readonly _labelLanguageEnglish  : TinyWars.GameUi.UiLabel;
-        private readonly _imgTextureOriginOn    : TinyWars.GameUi.UiImage;
-        private readonly _imgTextureOriginOff   : TinyWars.GameUi.UiImage;
-        private readonly _labelTextureOrigin    : TinyWars.GameUi.UiLabel;
-        private readonly _imgTextureNewOn       : TinyWars.GameUi.UiImage;
-        private readonly _imgTextureNewOff      : TinyWars.GameUi.UiImage;
-        private readonly _labelTextureNew       : TinyWars.GameUi.UiLabel;
+        private readonly _uiRadioLanguage       : GameUi.UiRadioButton;
+        private readonly _uiRadioTexture        : GameUi.UiRadioButton;
+        private readonly _uiRadioUnitAnimation  : GameUi.UiRadioButton;
+        private readonly _uiRadioTileAnimation  : GameUi.UiRadioButton;
 
         private readonly _groupButtons          : eui.Group;
         private readonly _btnChangeNickname     : GameUi.UiButton;
@@ -88,15 +80,78 @@ namespace TinyWars.User {
                 { ui: this._btnChangeLog,           callback: this._onTouchedBtnChangeLog },
                 { ui: this._btnSetPrivilege,        callback: this._onTouchedBtnSetPrivilege },
                 { ui: this._btnMapManagement,       callback: this._onTouchedBtnMapManagement },
-                { ui: this._imgTextureNewOff,       callback: this._onTouchedImgTextureNewOff },
-                { ui: this._imgTextureOriginOff,    callback: this._onTouchedImgTextureOriginOff },
-                { ui: this._imgLanguageChineseOff,  callback: this._onTouchedImgLanguageChineseOff },
-                { ui: this._imgLanguageEnglishOff,  callback: this._onTouchedImgLanguageEnglishOff },
             ]);
-            this._imgTextureNewOff.touchEnabled         = true;
-            this._imgTextureOriginOff.touchEnabled      = true;
-            this._imgLanguageChineseOff.touchEnabled    = true;
-            this._imgLanguageEnglishOff.touchEnabled    = true;
+
+            this._uiRadioLanguage.setData({
+                leftTextType    : Lang.Type.B0563,
+                leftLangType    : Types.LanguageType.Chinese,
+                rightTextType   : Lang.Type.B0564,
+                rightLangType   : Types.LanguageType.English,
+                callbackOnLeft  : () => {
+                    const languageType = Types.LanguageType.Chinese;
+                    Lang.setLanguageType(languageType);
+                    LocalStorage.setLanguageType(languageType);
+
+                    Notify.dispatch(Notify.Type.LanguageChanged);
+                },
+                callbackOnRight : () => {
+                    const languageType = Types.LanguageType.English;
+                    Lang.setLanguageType(languageType);
+                    LocalStorage.setLanguageType(languageType);
+
+                    Notify.dispatch(Notify.Type.LanguageChanged);
+                },
+                checkerForLeftOn: () => {
+                    return Lang.getCurrentLanguageType() === Types.LanguageType.Chinese;
+                },
+            });
+            this._uiRadioTexture.setData({
+                leftTextType    : Lang.Type.B0385,
+                rightTextType   : Lang.Type.B0386,
+                callbackOnLeft  : () => {
+                    User.UserProxy.reqUserSetSettings({
+                        unitAndTileTextureVersion: Types.UnitAndTileTextureVersion.V0,
+                    });
+                },
+                callbackOnRight : () => {
+                    User.UserProxy.reqUserSetSettings({
+                        unitAndTileTextureVersion: Types.UnitAndTileTextureVersion.V1,
+                    });
+                },
+                checkerForLeftOn: () => {
+                    return User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0;
+                },
+            });
+            this._uiRadioUnitAnimation.setData({
+                leftTextType    : Lang.Type.B0561,
+                rightTextType   : Lang.Type.B0562,
+                callbackOnLeft  : () => {
+                    Time.TimeModel.startUnitAnimationTick();
+                    LocalStorage.setShowUnitAnimation(true);
+                },
+                callbackOnRight : () => {
+                    Time.TimeModel.stopUnitAnimationTick();
+                    LocalStorage.setShowUnitAnimation(false);
+                },
+                checkerForLeftOn: () => {
+                    return Time.TimeModel.checkIsUnitAnimationTicking();
+                },
+            });
+            this._uiRadioTileAnimation.setData({
+                leftTextType    : Lang.Type.B0176,
+                rightTextType   : Lang.Type.B0177,
+                callbackOnLeft  : () => {
+                    Time.TimeModel.startTileAnimationTick();
+                    LocalStorage.setShowTileAnimation(true);
+                },
+                callbackOnRight : () => {
+                    Time.TimeModel.stopTileAnimationTick();
+                    LocalStorage.setShowTileAnimation(false);
+                },
+                checkerForLeftOn: () => {
+                    return Time.TimeModel.checkIsTileAnimationTicking();
+                },
+            });
 
             this._showOpenAnimation();
 
@@ -111,10 +166,9 @@ namespace TinyWars.User {
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
-            this._updateGroupLanguage();
         }
         private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
-            this._updateGroupTexture();
+            this._uiRadioTexture.updateView();
         }
         private _onMsgUserGetPublicInfo(e: egret.Event): void {
             this._updateView();
@@ -167,30 +221,6 @@ namespace TinyWars.User {
             Lobby.LobbyBackgroundPanel.show();
             MapManagement.MmMainMenuPanel.show();
         }
-        private _onTouchedImgLanguageChineseOff(e: egret.TouchEvent): void {
-            const languageType = Types.LanguageType.Chinese;
-            Lang.setLanguageType(languageType);
-            LocalStorage.setLanguageType(languageType);
-
-            Notify.dispatch(Notify.Type.LanguageChanged);
-        }
-        private _onTouchedImgLanguageEnglishOff(e: egret.TouchEvent): void {
-            const languageType = Types.LanguageType.English;
-            Lang.setLanguageType(languageType);
-            LocalStorage.setLanguageType(languageType);
-
-            Notify.dispatch(Notify.Type.LanguageChanged);
-        }
-        private _onTouchedImgTextureNewOff(e: egret.TouchEvent): void {
-            User.UserProxy.reqUserSetSettings({
-                unitAndTileTextureVersion: Types.UnitAndTileTextureVersion.V1,
-            });
-        }
-        private _onTouchedImgTextureOriginOff(e: egret.TouchEvent): void {
-            User.UserProxy.reqUserSetSettings({
-                unitAndTileTextureVersion: Types.UnitAndTileTextureVersion.V0,
-            });
-        }
 
         private _showOpenAnimation(): void {
             Helpers.resetTween({
@@ -231,8 +261,6 @@ namespace TinyWars.User {
         private async _updateView(): Promise<void> {
             this._updateComponentsForLanguage();
             this._updateGroupButtons();
-            this._updateGroupTexture();
-            this._updateGroupLanguage();
         }
 
         private async _updateGroupButtons(): Promise<void> {
@@ -263,10 +291,8 @@ namespace TinyWars.User {
             this._updateBtnChangeDiscordId();
             this._updateBtnRankList();
             this._updateBtnShowOnlineUsers();
-            this._updateGroupLanguageText();
             this._updateBtnSetSound();
             this._updateBtnSetStageScaler();
-            this._updateGroupTextureText();
             this._updateBtnUnitsInfo();
             this._updateBtnChangeLog();
             this._updateBtnSetPrivilege();
@@ -290,19 +316,11 @@ namespace TinyWars.User {
         private _updateBtnShowOnlineUsers(): void {
             this._btnShowOnlineUsers.label = Lang.getText(Lang.Type.B0151);
         }
-        private _updateGroupLanguageText(): void {
-            this._labelLanguageChinese.text = Lang.getText(Lang.Type.B0455);
-            this._labelLanguageEnglish.text = Lang.getText(Lang.Type.B0456);
-        }
         private _updateBtnSetSound(): void {
             this._btnSetSound.label = Lang.getText(Lang.Type.B0540);
         }
         private _updateBtnSetStageScaler(): void {
             this._btnSetStageScaler.label = Lang.getText(Lang.Type.B0558);
-        }
-        private _updateGroupTextureText(): void {
-            this._labelTextureOrigin.text   = Lang.getText(Lang.Type.B0385);
-            this._labelTextureNew.text      = Lang.getText(Lang.Type.B0386);
         }
         private _updateBtnUnitsInfo(): void {
             this._btnUnitsInfo.label = Lang.getText(Lang.Type.B0440);
@@ -321,21 +339,6 @@ namespace TinyWars.User {
         }
         private _updateBtnMapManagement(): void {
             this._btnMapManagement.label = Lang.getText(Lang.Type.B0192);
-        }
-
-        private _updateGroupTexture(): void {
-            const isOriginTexture               = User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0;
-            this._imgTextureOriginOn.visible    = isOriginTexture;
-            this._imgTextureOriginOff.visible   = !isOriginTexture;
-            this._imgTextureNewOn.visible       = !isOriginTexture;
-            this._imgTextureNewOff.visible      = isOriginTexture;
-        }
-        private _updateGroupLanguage(): void {
-            const isLanguageChinese             = Lang.getCurrentLanguageType() === Types.LanguageType.Chinese;
-            this._imgLanguageChineseOn.visible  = isLanguageChinese;
-            this._imgLanguageChineseOff.visible = !isLanguageChinese;
-            this._imgLanguageEnglishOn.visible  = !isLanguageChinese;
-            this._imgLanguageEnglishOff.visible = isLanguageChinese;
         }
     }
 }

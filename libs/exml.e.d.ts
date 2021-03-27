@@ -30,3 +30,7 @@ declare module Skins.Component.Input{
 	class Input001 extends eui.Skin{
 	}
 }
+declare module Skins.Component.RadioButton{
+	class RadioButton001 extends eui.Skin{
+	}
+}
