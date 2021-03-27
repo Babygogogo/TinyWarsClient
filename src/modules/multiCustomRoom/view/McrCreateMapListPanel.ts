@@ -38,6 +38,7 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _btnBack               : GameUi.UiButton;
         private readonly _btnSearch             : GameUi.UiButton;
         private readonly _btnMapInfo            : GameUi.UiButton;
+        private readonly _btnNextStep           : GameUi.UiButton;
 
         private readonly _groupMapList          : eui.Group;
         private readonly _listMap               : GameUi.UiScrollList;
@@ -58,6 +59,7 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _labelPlayersCount     : GameUi.UiLabel;
         private readonly _labelMapSizeTitle     : GameUi.UiLabel;
         private readonly _labelMapSize          : GameUi.UiLabel;
+
 
         private _mapFilters         : FiltersForMapList = {};
         private _dataForList        : DataForMapNameRenderer[] = [];
@@ -87,8 +89,9 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
-                { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
+                { ui: this._btnSearch,      callback: this._onTouchTapBtnSearch },
+                { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
+                { ui: this._btnNextStep,    callback: this._onTouchedBtnNextStep },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
@@ -114,10 +117,10 @@ namespace TinyWars.MultiCustomRoom {
             if (dataList.length <= 0) {
                 this._selectedMapId = null;
             } else {
-                const index                 = dataList.findIndex(data => data.mapId === newMapId);
-                const newIndex              = index >= 0 ? index : Math.floor(Math.random() * dataList.length);
-                const oldIndex              = dataList.findIndex(data => data.mapId === this._selectedMapId);
-                this._selectedMapId   = dataList[newIndex].mapId;
+                const index         = dataList.findIndex(data => data.mapId === newMapId);
+                const newIndex      = index >= 0 ? index : Math.floor(Math.random() * dataList.length);
+                const oldIndex      = dataList.findIndex(data => data.mapId === this._selectedMapId);
+                this._selectedMapId = dataList[newIndex].mapId;
                 (dataList[oldIndex])    && (this._listMap.updateSingleData(oldIndex, dataList[oldIndex]));
                 (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
 
@@ -161,6 +164,15 @@ namespace TinyWars.MultiCustomRoom {
             Lobby.LobbyBottomPanel.show();
         }
 
+        private async _onTouchedBtnNextStep(e: egret.TouchEvent): Promise<void> {
+            const selectedMapId = this.getSelectedMapId();
+            if (selectedMapId != null) {
+                this.close();
+                await McrModel.Create.resetDataByMapId(selectedMapId);
+                McrCreateSettingsPanel.show();
+            }
+        }
+
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }
@@ -181,6 +193,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
             this._btnSearch.label               = Lang.getText(Lang.Type.B0228);
             this._btnMapInfo.label              = Lang.getText(Lang.Type.B0298);
+            this._btnNextStep.label             = Lang.getText(Lang.Type.B0566);
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
@@ -284,6 +297,13 @@ namespace TinyWars.MultiCustomRoom {
                 tweenTime   : 200,
             });
             Helpers.resetTween({
+                obj         : this._btnNextStep,
+                beginProps  : { alpha: 0, right: -40 },
+                endProps    : { alpha: 1, right: 0 },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
                 obj         : this._groupMapList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
@@ -339,6 +359,13 @@ namespace TinyWars.MultiCustomRoom {
                     obj         : this._btnMapInfo,
                     beginProps  : { alpha: 1, y: 80 },
                     endProps    : { alpha: 0, y: 40 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                });
+                Helpers.resetTween({
+                    obj         : this._btnNextStep,
+                    beginProps  : { alpha: 1, right: 0 },
+                    endProps    : { alpha: 0, right: -40 },
                     waitTime    : 0,
                     tweenTime   : 200,
                 });

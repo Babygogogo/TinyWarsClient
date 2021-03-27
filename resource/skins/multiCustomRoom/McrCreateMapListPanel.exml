@@ -120,12 +120,12 @@
                 </e:layout>
             </e:Group>
         </e:Group>
-        <e:Group id="_groupTile" right="0" width="180" bottom="200">
-            <e:Group left="0" right="0" locked="true">
+        <e:Group id="_groupTile" right="0" width="180" bottom="250">
+            <e:Group left="0" right="0">
                 <GameUi:UiImage height="30" y="0" source="buttonBg0005" scale9Grid="12,4,1,1" x="0" width="180" />
-                <GameUi:UiImage height="30" y="10" scale9Grid="12,4,1,1" x="0" source="buttonBg0006" width="180" />
+                <GameUi:UiImage height="30" y="10" scale9Grid="12,4,1,1" x="0" source="buttonBg0008" width="180" />
                 <GameUi:UiImage height="30" y="20" scale9Grid="12,4,1,1" x="0" source="buttonBg0007" width="180" />
-                <GameUi:UiImage height="30" y="30" scale9Grid="12,4,1,1" x="0" source="buttonBg0008" width="180" />
+                <GameUi:UiImage height="30" y="30" scale9Grid="12,4,1,1" x="0" source="buttonBg0006" width="180" />
                 <e:layout>
                     <e:VerticalLayout gap="10" />
                 </e:layout>
@@ -137,7 +137,7 @@
                             <e:Group id="_group" left="0" right="0" top="0" bottom="0">
                                 <e:Group id="_conTileView" touchChildren="false" touchEnabled="false" left="0"
                                          bottom="4" scaleX="0.3" scaleY="0.3" width="0" height="0" />
-                                <GameUi:UiLabel id="_labelNum" text="x200" size="16" textColor="0xffffff" x="30"
+                                <GameUi:UiLabel id="_labelNum" text="x200" size="16" textColor="0xffffff" x="28"
                                                 strokeColor="0x000000" bold="true" bottom="4" />
                             </e:Group>
                         </e:Skin>
@@ -148,7 +148,7 @@
                 </e:List>
             </GameUi:UiScrollList>
         </e:Group>
-        <e:Group id="_groupMapInfo" touchThrough="true" touchEnabled="false" touchChildren="false" right="0" bottom="20"
+        <e:Group id="_groupMapInfo" touchThrough="true" touchEnabled="false" touchChildren="false" right="0" bottom="70"
                  width="180" height="160">
             <GameUi:UiImage source="buttonBg0004" left="0" right="0" top="0" bottom="0" scale9Grid="13,3,1,1" />
             <e:Group x="10" y="10">
@@ -211,5 +211,19 @@
                 </e:layout>
             </e:Group>
         </e:Group>
+        <GameUi:UiButton id="_btnNextStep" label="下一步" height="30" width="180" right="0" x="810" bottom="20">
+            <GameUi:skinName>
+                <e:Skin>
+                    <e:Group scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
+                        <e:Image scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0" source="buttonBg0001"
+                                 scale9Grid="17,4,1,1" />
+                        <GameUi:UiLabel id="labelDisplay" size="16" scaleX="1" scaleY="1" text="Change Password"
+                                        textAlign="center" verticalAlign="middle" wordWrap="true" verticalCenter="0"
+                                        textColor="0x000000" bold="true" x="20" />
+                        <GameUi:UiImage id="_imgRed" right="0" top="0" source="common0000" width="16" height="16" />
+                    </e:Group>
+                </e:Skin>
+            </GameUi:skinName>
+        </GameUi:UiButton>
     </e:Group>
 </e:Skin>
