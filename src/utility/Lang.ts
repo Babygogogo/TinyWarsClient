@@ -1866,7 +1866,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0225]: [
             `地图名称`,
-            `Map name`,
+            `Map Name`,
         ],
         [Type.B0226]: [
             `战局ID`,
@@ -3215,6 +3215,22 @@ namespace TinyWars.Utility.Lang {
         [Type.B0566]: [
             `下一步`,
             `Next`,
+        ],
+        [Type.B0567]: [
+            `重置`,
+            `Reset`,
+        ],
+        [Type.B0568]: [
+            `最小热度`,
+            `Min. Popularity`,
+        ],
+        [Type.B0569]: [
+            `最低评分`,
+            `Min. Rating`,
+        ],
+        [Type.B0570]: [
+            `雾战标签`,
+            `FoW Tagged`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
