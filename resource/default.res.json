@@ -72,7 +72,7 @@
 			"url": "assets/texture/common/uncompressed.json",
 			"type": "sheet",
 			"name": "uncompressed_json",
-			"subkeys": "buttonBg0000,buttonBg0001,buttonBg0002,buttonBg0003,buttonBg0004,buttonBg0005,buttonBg0006,buttonBg0007,buttonBg0008,c04_t01_s01_f01,c04_t01_s02_f01,c08_t06_s01_f01,commonBlack,commonBlue,commonGrey,commonPurple,commonRatio0001,commonRatio0002,commonWhite,image_line_001,semi_transparent,setting0002,transparent"
+			"subkeys": "c04_t01_s01_f01,c04_t01_s02_f01,c08_t06_s01_f01,commonColorBlack0000,commonColorBlack0001,commonColorBlue0000,commonColorGrey0000,commonColorPurple0000,commonColorTransparent0000,commonColorTransparent0001,commonColorWhite0000,commonLine0000,commonPentagon0000,commonPentagon0001,commonPentagon0002,commonPentagon0003,commonPentagon0004,commonPentagon0005,commonPentagon0006,commonPentagon0007,commonPentagon0008,commonRectangle0000,commonRectangle0001"
 		},
 		{
 			"url": "assets/texture/common/extrude.json",

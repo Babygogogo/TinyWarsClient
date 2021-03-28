@@ -21,9 +21,9 @@
             </e:Group>
             <e:Group x="34" y="17">
                 <GameUi:UiImage x="0" y="0" source="point0000" />
-                <GameUi:UiImage x="10" y="10" source="commonWhite" width="80" scale9Grid="1,1,1,1" />
+                <GameUi:UiImage x="10" y="10" source="commonColorWhite0000" width="80" scale9Grid="1,1,1,1" />
                 <GameUi:UiImage x="10" y="10" source="point0000" />
-                <GameUi:UiImage x="10" y="10" source="commonWhite" width="80" scale9Grid="1,1,1,1" />
+                <GameUi:UiImage x="10" y="10" source="commonColorWhite0000" width="80" scale9Grid="1,1,1,1" />
                 <GameUi:UiImage x="20" y="20" source="point0000" />
                 <e:layout>
                     <e:HorizontalLayout gap="0" verticalAlign="middle" />
@@ -37,7 +37,7 @@
             <GameUi:skinName>
                 <e:Skin>
                     <e:Group scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
-                        <e:Image scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0" source="buttonBg0001"
+                        <e:Image scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0" source="commonPentagon0001"
                                  scale9Grid="17,4,1,1" />
                         <GameUi:UiLabel id="labelDisplay" size="16" scaleX="1" scaleY="1" text="Change Password"
                                         textAlign="center" verticalAlign="middle" wordWrap="true" verticalCenter="0"
@@ -51,7 +51,7 @@
             <GameUi:skinName>
                 <e:Skin>
                     <e:Group scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
-                        <e:Image scaleX="1" scaleY="1" source="buttonBg0000" scale9Grid="4,4,1,1" left="0" right="0"
+                        <e:Image scaleX="1" scaleY="1" source="commonPentagon0000" scale9Grid="4,4,1,1" left="0" right="0"
                                  top="0" bottom="0" />
                         <GameUi:UiLabel id="labelDisplay" size="16" textColor="0xffffff" scaleX="1" scaleY="1"
                                         text="Change Password" textAlign="center" verticalAlign="middle" wordWrap="true"
@@ -65,7 +65,7 @@
             <GameUi:skinName>
                 <e:Skin>
                     <e:Group scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
-                        <e:Image scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0" source="commonRatio0001"
+                        <e:Image scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0" source="commonRectangle0000"
                                  scale9Grid="2,2,1,1" />
                         <GameUi:UiLabel id="labelDisplay" size="16" textColor="0xffffff" scaleX="1" scaleY="1"
                                         text="Change Password" textAlign="center" verticalAlign="middle" wordWrap="true"
@@ -82,15 +82,15 @@
                 <e:List>
                     <e:itemRendererSkinName>
                         <e:Skin width="200" height="40" currentState="up" states="up,down">
-                            <GameUi:UiImage source="buttonBg0002" left="0" right="0" top="0" bottom="0"
-                                            scale9Grid="2,2,1,1" visible.down="false" />
-                            <GameUi:UiImage left="0" right="0" top="0" bottom="0" scale9Grid="2,2,1,1" x="10" y="10"
-                                            source="buttonBg0003" visible.up="false" />
+                            <GameUi:UiImage source="commonPentagon0002" left="0" right="0" top="0" bottom="0"
+                                            visible.down="false" scale9Grid="4,4,1,1" />
+                            <GameUi:UiImage left="0" right="0" top="0" bottom="0" x="10" y="10" source="commonPentagon0003"
+                                            visible.up="false" scale9Grid="4,4,1,1" />
                             <GameUi:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0"
                                              visible.down="false">
                                 <GameUi:skinName>
                                     <e:Skin states="up,down,disabled">
-                                        <e:Image source="transparent" left="0" right="0" top="0" bottom="0" />
+                                        <e:Image source="commonColorTransparent0000" left="0" right="0" top="0" bottom="0" />
                                         <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="22"
                                                  bold="true" textColor="0x000000" />
                                     </e:Skin>
@@ -122,10 +122,10 @@
         </e:Group>
         <e:Group id="_groupTile" right="0" width="180" bottom="250">
             <e:Group left="0" right="0">
-                <GameUi:UiImage height="30" y="0" source="buttonBg0005" scale9Grid="12,4,1,1" x="0" width="180" />
-                <GameUi:UiImage height="30" y="10" scale9Grid="12,4,1,1" x="0" source="buttonBg0008" width="180" />
-                <GameUi:UiImage height="30" y="20" scale9Grid="12,4,1,1" x="0" source="buttonBg0007" width="180" />
-                <GameUi:UiImage height="30" y="30" scale9Grid="12,4,1,1" x="0" source="buttonBg0006" width="180" />
+                <GameUi:UiImage height="30" y="0" source="commonPentagon0005" scale9Grid="12,4,1,1" x="0" width="180" />
+                <GameUi:UiImage height="30" y="10" scale9Grid="12,4,1,1" x="0" source="commonPentagon0008" width="180" />
+                <GameUi:UiImage height="30" y="20" scale9Grid="12,4,1,1" x="0" source="commonPentagon0007" width="180" />
+                <GameUi:UiImage height="30" y="30" scale9Grid="12,4,1,1" x="0" source="commonPentagon0006" width="180" />
                 <e:layout>
                     <e:VerticalLayout gap="10" />
                 </e:layout>
@@ -150,7 +150,7 @@
         </e:Group>
         <e:Group id="_groupMapInfo" touchThrough="true" touchEnabled="false" touchChildren="false" right="0" bottom="70"
                  width="180" height="160">
-            <GameUi:UiImage source="buttonBg0004" left="0" right="0" top="0" bottom="0" scale9Grid="13,3,1,1" />
+            <GameUi:UiImage source="commonPentagon0004" left="0" right="0" top="0" bottom="0" scale9Grid="13,3,1,1" />
             <e:Group x="10" y="10">
                 <e:Group x="10" y="0">
                     <e:Group x="0" y="25">
@@ -215,7 +215,7 @@
             <GameUi:skinName>
                 <e:Skin>
                     <e:Group scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
-                        <e:Image scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0" source="buttonBg0001"
+                        <e:Image scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0" source="commonPentagon0001"
                                  scale9Grid="17,4,1,1" />
                         <GameUi:UiLabel id="labelDisplay" size="16" scaleX="1" scaleY="1" text="Change Password"
                                         textAlign="center" verticalAlign="middle" wordWrap="true" verticalCenter="0"

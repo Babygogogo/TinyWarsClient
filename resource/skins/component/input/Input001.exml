@@ -2,7 +2,7 @@
 <e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing"
         class="Skins.Component.Input.Input001">
     <e:Group left="0" right="0" top="0" bottom="0">
-        <e:Image right="0" bottom="0" source="image_line_001" left="0" scale9Grid="3,0,1,1" />
+        <e:Image right="0" bottom="0" source="commonLine0000" left="0" scale9Grid="3,0,1,1" />
         <e:EditableText id="textDisplay" size="20" textColor="0x000000" top="0" bottom="0" verticalAlign="middle"
                         left="0" right="0" />
         <e:Label id="promptDisplay" size="20" touchEnabled="false" left="0" right="0" text="" textColor="0x808080"

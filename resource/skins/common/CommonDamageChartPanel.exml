@@ -13,7 +13,7 @@
                         <e:Skin width="160" height="40" currentState="up" states="up,down">
                             <GameUi:UiLabel id="_labelName" text="地图名称" size="22" verticalCenter="0"
                                             textColor.down="0x00ff00" horizontalCenter="0" maxTextWidth="150" />
-                            <e:Image id="_imgChoose" source="transparent" left="0" right="0" top="0" bottom="0" />
+                            <e:Image id="_imgChoose" source="commonColorTransparent0000" left="0" right="0" top="0" bottom="0" />
                         </e:Skin>
                     </e:itemRendererSkinName>
                 </e:List>

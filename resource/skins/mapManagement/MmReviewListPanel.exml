@@ -21,7 +21,7 @@
                         <GameUi:UiButton id="_btnChoose" label="" left="0" right="0" top="0" bottom="0">
                             <GameUi:skinName>
                                 <e:Skin states="up,down,disabled">
-                                    <e:Image source="transparent" left="0" right="0" top="0" bottom="0" />
+                                    <e:Image source="commonColorTransparent0000" left="0" right="0" top="0" bottom="0" />
                                     <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="22"
                                              bold="true" textColor="0x000000" />
                                 </e:Skin>
