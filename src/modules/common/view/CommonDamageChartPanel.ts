@@ -189,9 +189,9 @@ namespace TinyWars.Common {
                 this._labelName.text    = Lang.getUnitName(unitType);
                 this._unitView.update({
                     gridIndex       : { x: 0, y: 0 },
-                    skinId          : CommonConstants.WarFirstPlayerIndex,
+                    playerIndex     : CommonConstants.WarFirstPlayerIndex,
                     unitType,
-                    unitActionState : Types.UnitActionState.Idle,
+                    actionState     : Types.UnitActionState.Idle,
                 }, Time.TimeModel.getUnitAnimationTickCount());
             }
         }
@@ -487,8 +487,8 @@ namespace TinyWars.Common {
                 this._unitView.update({
                     gridIndex       : { x: 0, y: 0 },
                     unitType        : targetUnitType,
-                    skinId          : data.playerIndex,
-                    unitActionState : Types.UnitActionState.Idle,
+                    playerIndex     : data.playerIndex,
+                    actionState     : Types.UnitActionState.Idle,
                 }, Time.TimeModel.getUnitAnimationTickCount());
 
                 const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);

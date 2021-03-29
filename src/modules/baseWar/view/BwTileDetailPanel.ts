@@ -411,9 +411,9 @@ namespace TinyWars.BaseWar {
             this._labelMoveCost.text    = moveCost != null ? `${moveCost}` : `--`;
             this._unitView.update({
                 gridIndex       : { x: 0, y: 0 },
-                skinId          : data.playerIndex,
+                playerIndex     : data.playerIndex,
                 unitType        : data.unitType,
-                unitActionState : Types.UnitActionState.Idle,
+                actionState     : Types.UnitActionState.Idle,
             }, Time.TimeModel.getUnitAnimationTickCount());
         }
     }

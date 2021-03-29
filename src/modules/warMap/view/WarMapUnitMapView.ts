@@ -7,10 +7,13 @@ namespace TinyWars.WarMap {
     import TimeModel        = Time.TimeModel;
 
     export class WarMapUnitMapView extends egret.DisplayObjectContainer {
-        private _unitViews  : WarMapUnitView[] = [];
-        private _airLayer   : egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
-        private _groundLayer: egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
-        private _seaLayer   : egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
+        private readonly _unitViews             : WarMapUnitView[] = [];
+        private readonly _airLayer              = new egret.DisplayObjectContainer();
+        private readonly _groundLayer           = new egret.DisplayObjectContainer();
+        private readonly _seaLayer              = new egret.DisplayObjectContainer();
+        private readonly _notifyListenerArray   : Notify.Listener[] = [
+            { type: Notify.Type.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick }
+        ];
 
         public constructor() {
             super();
@@ -18,14 +21,14 @@ namespace TinyWars.WarMap {
             this.addChild(this._seaLayer);
             this.addChild(this._groundLayer);
             this.addChild(this._airLayer);
-
-            Notify.addEventListeners([
-                { type: Notify.Type.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick }
-            ], this);
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
-            this._clearUnits();
+        public showUnitMap(unitDataArray: ProtoTypes.WarSerialization.ISerialUnit[]): void {
+            this._initWithDataList(_createUnitViewDataList(unitDataArray));
+        }
+        private _initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
+            this.clear();
 
             const tickCount = TimeModel.getUnitAnimationTickCount();
             for (const data of dataList) {
@@ -33,10 +36,25 @@ namespace TinyWars.WarMap {
             }
             this._reviseZOrderForAllUnits();
         }
-        public initWithMapRawData(mapRawData: ProtoTypes.Map.IMapRawData): void {
-            this.initWithDataList(_createUnitViewDataList(mapRawData.unitDataArray));
+        public clear(): void {
+            for (const view of this._unitViews) {
+                (view.parent) && (view.parent.removeChild(view));
+            }
+            this._unitViews.length = 0;
         }
 
+        private _onAddedToStage(e: egret.Event): void {
+            this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+            this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
+
+            Notify.addEventListeners(this._notifyListenerArray, this);
+        }
+        private _onRemovedFromStage(e: egret.Event): void {
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+            this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
+
+            Notify.removeEventListeners(this._notifyListenerArray, this);
+        }
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
             const tickCount = TimeModel.getUnitAnimationTickCount();
             for (const view of this._unitViews) {
@@ -49,10 +67,9 @@ namespace TinyWars.WarMap {
             this._reviseZOrderForSingleLayer(this._groundLayer);
             this._reviseZOrderForSingleLayer(this._seaLayer);
         }
-
         private _reviseZOrderForSingleLayer(layer: egret.DisplayObjectContainer): void {
-            const unitsCount = layer.numChildren;
-            const unitViews: WarMapUnitView[] = [];
+            const unitsCount    = layer.numChildren;
+            const unitViews     : WarMapUnitView[] = [];
             for (let i = 0; i < unitsCount; ++i) {
                 unitViews.push(layer.getChildAt(i) as WarMapUnitView);
             }
@@ -83,13 +100,6 @@ namespace TinyWars.WarMap {
                 this._seaLayer.addChild(view);
             }
         }
-
-        private _clearUnits(): void {
-            for (const view of this._unitViews) {
-                (view.parent) && (view.parent.removeChild(view));
-            }
-            this._unitViews.length = 0;
-        }
     }
 
     function _createUnitViewDataList(unitDataList: ProtoTypes.WarSerialization.ISerialUnit[]): Types.WarMapUnitViewData[] {
@@ -97,12 +107,7 @@ namespace TinyWars.WarMap {
         if (unitDataList) {
             for (const unitData of unitDataList) {
                 if (unitData.loaderUnitId == null) {
-                    dataList.push({
-                        gridIndex       : unitData.gridIndex as Types.GridIndex,
-                        skinId          : ConfigManager.getUnitAndTileDefaultSkinId(unitData.playerIndex),
-                        unitType        : unitData.unitType,
-                        unitActionState : unitData.actionState,
-                    });
+                    dataList.push(unitData);
                 }
             }
         }

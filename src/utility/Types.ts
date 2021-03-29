@@ -252,11 +252,8 @@ namespace TinyWars.Utility.Types {
         TrueVision      = 2,
     }
 
-    export type WarMapUnitViewData = {
-        gridIndex       : GridIndex;
-        skinId          : number;
-        unitType        : UnitType;
-        unitActionState : UnitActionState;
+    export interface WarMapUnitViewData extends ProtoTypes.WarSerialization.ISerialUnit {
+        skinId? : number;
     }
 
     export type MovableArea = {

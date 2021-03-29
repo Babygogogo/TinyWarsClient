@@ -3,6 +3,7 @@ namespace TinyWars.MultiCustomRoom {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
+    import Helpers      = Utility.Helpers;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -12,10 +13,15 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrCreateSettingsPanel;
 
-        private _tabSettings    : GameUi.UiTab;
-        private _labelMenuTitle : GameUi.UiLabel;
-        private _btnBack        : GameUi.UiButton;
-        private _btnConfirm     : GameUi.UiButton;
+        private readonly _groupNavigator        : eui.Group;
+        private readonly _labelMultiPlayer      : GameUi.UiLabel;
+        private readonly _labelCreateRoom       : GameUi.UiLabel;
+        private readonly _labelChooseMap        : GameUi.UiLabel;
+        private readonly _labelRoomSettings     : GameUi.UiLabel;
+
+        private readonly _tabSettings           : GameUi.UiTab;
+        private readonly _btnBack               : GameUi.UiButton;
+        private readonly _btnConfirm            : GameUi.UiButton;
 
         private _timeoutIdForBtnConfirm: number;
 
@@ -43,8 +49,8 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.MsgMcrCreateRoom,     callback: this._onNotifySCreateCustomOnlineWar },
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgMcrCreateRoom,   callback: this._onNotifyMsgMcrCreateRoom },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
@@ -59,11 +65,14 @@ namespace TinyWars.MultiCustomRoom {
                 },
             ]);
 
+            this._showOpenAnimation();
+
             this._updateComponentsForLanguage();
             this._btnConfirm.enabled = true;
         }
 
         protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
             this._tabSettings.clear();
             this._clearTimeoutForBtnConfirm();
         }
@@ -81,7 +90,7 @@ namespace TinyWars.MultiCustomRoom {
             this._resetTimeoutForBtnConfirm();
         }
 
-        private _onNotifySCreateCustomOnlineWar(e: egret.Event): void {
+        private _onNotifyMsgMcrCreateRoom(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0015));
             Utility.FlowManager.gotoLobby();
         }
@@ -106,9 +115,62 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0000);
-            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-            this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
+            this._labelCreateRoom.text      = Lang.getText(Lang.Type.B0000);
+            this._labelMultiPlayer.text     = Lang.getText(Lang.Type.B0137);
+            this._labelChooseMap.text       = Lang.getText(Lang.Type.B0227);
+            this._labelRoomSettings.text    = Lang.getText(Lang.Type.B0571);
+            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+            this._btnConfirm.label          = Lang.getText(Lang.Type.B0026);
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 0, y: -20 },
+                endProps    : { alpha: 1, y: 20 },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 0, y: -20 },
+                endProps    : { alpha: 1, y: 20 },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
+            Helpers.resetTween({
+                obj         : this._btnConfirm,
+                beginProps  : { alpha: 0, left: -40 },
+                endProps    : { alpha: 1, left: 0 },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
+        }
+        private async _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._groupNavigator,
+                    beginProps  : { alpha: 1, y: 20 },
+                    endProps    : { alpha: 0, y: -20 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                    callback    : resolve,
+                });
+                Helpers.resetTween({
+                    obj         : this._btnBack,
+                    beginProps  : { alpha: 1, y: 20 },
+                    endProps    : { alpha: 0, y: -20 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                });
+                Helpers.resetTween({
+                    obj         : this._btnConfirm,
+                    beginProps  : { alpha: 1, left: 0 },
+                    endProps    : { alpha: 0, left: -40 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                });
+            });
         }
     }
 

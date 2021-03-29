@@ -141,7 +141,7 @@ namespace TinyWars.BaseWar {
                 gridIndex       : { x: 0, y: 0},
                 skinId          : unit.getSkinId(),
                 unitType        : unit.getUnitType(),
-                unitActionState : unit.getActionState(),
+                actionState     : unit.getActionState(),
             }, Time.TimeModel.getUnitAnimationTickCount());
         }
 
@@ -683,8 +683,8 @@ namespace TinyWars.BaseWar {
                 this._unitView.update({
                     gridIndex       : { x: 0, y: 0 },
                     unitType        : targetUnitType,
-                    skinId          : data.playerIndex,
-                    unitActionState : Types.UnitActionState.Idle,
+                    playerIndex     : data.playerIndex,
+                    actionState     : Types.UnitActionState.Idle,
                 }, Time.TimeModel.getUnitAnimationTickCount());
 
                 const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);

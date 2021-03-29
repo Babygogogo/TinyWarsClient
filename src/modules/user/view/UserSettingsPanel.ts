@@ -269,14 +269,14 @@ namespace TinyWars.User {
             group.addChild(this._btnChangePassword);
             group.addChild(this._btnChangeNickname);
             group.addChild(this._btnChangeDiscordId);
-            group.addChild(this._btnComplaint);
-            group.addChild(this._btnRankList);
-            group.addChild(this._btnShowOnlineUsers);
             group.addChild(this._btnSetSound);
             group.addChild(this._btnSetStageScaler);
-            group.addChild(this._btnUnitsInfo);
-            group.addChild(this._btnChangeLog);
+            group.addChild(this._btnRankList);
+            group.addChild(this._btnShowOnlineUsers);
             group.addChild(this._btnServerStatus);
+            group.addChild(this._btnChangeLog);
+            group.addChild(this._btnUnitsInfo);
+            group.addChild(this._btnComplaint);
             if (await UserModel.getIsSelfAdmin()) {
                 group.addChild(this._btnSetPrivilege);
             }
