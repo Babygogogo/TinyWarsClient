@@ -231,6 +231,8 @@ namespace TinyWars.MultiCustomRoom {
                     setPresetWarRuleId(ruleId);
                     setSelfCoId(BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
                 }
+
+                Notify.dispatch(Notify.Type.McrCreateTeamIndexChanged);
             }
             export function setPresetWarRuleId(ruleId: number | null | undefined): void {
                 const settingsForCommon             = getData().settingsForCommon;
@@ -307,8 +309,11 @@ namespace TinyWars.MultiCustomRoom {
                 return getData().selfCoId;
             }
 
-            function setSelfUnitAndTileSkinId(skinId: number): void {
-                getData().selfUnitAndTileSkinId = skinId;
+            export function setSelfUnitAndTileSkinId(skinId: number): void {
+                if (skinId !== getSelfUnitAndTileSkinId()) {
+                    getData().selfUnitAndTileSkinId = skinId;
+                    Notify.dispatch(Notify.Type.McrCreateSelfSkinIdChanged);
+                }
             }
             export function tickSelfUnitAndTileSkinId(): void {
                 setSelfUnitAndTileSkinId(getSelfUnitAndTileSkinId() % CommonConstants.UnitAndTileMaxSkinId + 1);
@@ -361,6 +366,7 @@ namespace TinyWars.MultiCustomRoom {
 
             export function tickTeamIndex(playerIndex: number): void {
                 BwWarRuleHelper.tickTeamIndex(getWarRule(), playerIndex);
+                Notify.dispatch(Notify.Type.McrCreateTeamIndexChanged);
             }
             export function getTeamIndex(playerIndex: number): number {
                 return BwWarRuleHelper.getTeamIndex(getWarRule(), playerIndex);

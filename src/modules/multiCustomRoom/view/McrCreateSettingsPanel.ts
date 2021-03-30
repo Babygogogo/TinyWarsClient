@@ -30,7 +30,10 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _groupChoosePlayerIndex: eui.Group;
         private readonly _labelChoosePlayerIndex: GameUi.UiLabel;
         private readonly _sclPlayerIndex        : GameUi.UiScrollList;
-        private readonly _listPlayerIndex       : eui.List;
+
+        private readonly _groupChooseSkinId     : eui.Group;
+        private readonly _labelChooseSkinId     : GameUi.UiLabel;
+        private readonly _sclSkinId             : GameUi.UiScrollList;
 
         private readonly _tabSettings           : GameUi.UiTab;
         private readonly _btnBack               : GameUi.UiButton;
@@ -69,6 +72,7 @@ namespace TinyWars.MultiCustomRoom {
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
+            this._sclSkinId.setItemRenderer(SkinIdRenderer);
 
             this._tabSettings.bindData([
                 {
@@ -149,6 +153,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelRoomSettings.text        = Lang.getText(Lang.Type.B0571);
             this._labelChooseCo.text            = Lang.getText(Lang.Type.B0145);
             this._labelChoosePlayerIndex.text   = Lang.getText(Lang.Type.B0572);
+            this._labelChooseSkinId.text        = Lang.getText(Lang.Type.B0573);
             this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
             this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
         }
@@ -167,7 +172,6 @@ namespace TinyWars.MultiCustomRoom {
                 });
             }
             this._sclPlayerIndex.bindData(dataArray);
-            this._listPlayerIndex.selectedIndex = 0;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -261,6 +265,7 @@ namespace TinyWars.MultiCustomRoom {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.McrCreateTeamIndexChanged,          callback: this._onNotifyMcrCreateTeamIndexChanged },
                 { type: Notify.Type.McrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMcrCreateSelfPlayerIndexChanged },
             ]);
         }
@@ -288,6 +293,9 @@ namespace TinyWars.MultiCustomRoom {
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateLabelName();
         }
+        private _onNotifyMcrCreateTeamIndexChanged(e: egret.Event): void {
+            this._updateLabelName();
+        }
         private _onNotifyMcrCreateSelfPlayerIndexChanged(e: egret.Event): void {
             this._updateState();
         }
@@ -301,6 +309,63 @@ namespace TinyWars.MultiCustomRoom {
         }
         private _updateState(): void {
             const data          = this.data as DataForPlayerIndexRenderer;
+            this.currentState   = ((data) && (data.playerIndex === McrModel.Create.getSelfPlayerIndex())) ? `down` : `up`;
+        }
+    }
+
+    type DataForSkinIdRenderer = {
+        playerIndex: number;
+    }
+    class SkinIdRenderer extends GameUi.UiListItemRenderer {
+        private readonly _labelName : GameUi.UiLabel;
+
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.McrCreateTeamIndexChanged,          callback: this._onNotifyMcrCreateTeamIndexChanged },
+                { type: Notify.Type.McrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMcrCreateSelfPlayerIndexChanged },
+            ]);
+        }
+
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            this._updateLabelName();
+            this._updateState();
+        }
+
+        public onItemTapEvent(e: eui.ItemTapEvent): void {
+            const data = this.data as DataForSkinIdRenderer;
+            if (data) {
+                const creator       = McrModel.Create;
+                const playerIndex   = data.playerIndex;
+                creator.setSelfPlayerIndex(playerIndex);
+
+                const coIdArray = creator.getAvailableCoIdList(playerIndex);
+                if (coIdArray.indexOf(creator.getSelfCoId()) < 0) {
+                    creator.setSelfCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(coIdArray));
+                }
+            }
+        }
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateLabelName();
+        }
+        private _onNotifyMcrCreateTeamIndexChanged(e: egret.Event): void {
+            this._updateLabelName();
+        }
+        private _onNotifyMcrCreateSelfPlayerIndexChanged(e: egret.Event): void {
+            this._updateState();
+        }
+
+        private _updateLabelName(): void {
+            const data = this.data as DataForSkinIdRenderer;
+            if (data) {
+                const playerIndex       = data.playerIndex;
+                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelper.getTeamIndex(McrModel.Create.getWarRule(), playerIndex))})`;
+            }
+        }
+        private _updateState(): void {
+            const data          = this.data as DataForSkinIdRenderer;
             this.currentState   = ((data) && (data.playerIndex === McrModel.Create.getSelfPlayerIndex())) ? `down` : `up`;
         }
     }

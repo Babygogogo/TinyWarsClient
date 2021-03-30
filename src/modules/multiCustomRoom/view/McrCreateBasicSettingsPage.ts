@@ -6,32 +6,31 @@ namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import FloatText        = Utility.FloatText;
-    import ConfigManager    = Utility.ConfigManager;
     import CommonConstants  = Utility.CommonConstants;
-    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import WarMapModel      = WarMap.WarMapModel;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
     export class McrCreateBasicSettingsPage extends GameUi.UiTabPage {
-        private _btnMapNameTitle            : TinyWars.GameUi.UiButton;
-        private _labelMapName               : TinyWars.GameUi.UiLabel;
-        private _btnBuildings               : TinyWars.GameUi.UiButton;
+        private _labelMapNameTitle          : GameUi.UiLabel;
+        private _labelMapName               : GameUi.UiLabel;
 
-        private _btnModifyWarName           : TinyWars.GameUi.UiButton;
-        private _labelWarName               : TinyWars.GameUi.UiLabel;
+        private _labelWarNameTitle          : GameUi.UiLabel;
+        private _inputWarName               : GameUi.UiTextInput;
 
-        private _btnModifyWarPassword       : TinyWars.GameUi.UiButton;
-        private _labelWarPassword           : TinyWars.GameUi.UiLabel;
+        private _labelWarPasswordTitle      : GameUi.UiLabel;
+        private _inputWarPassword           : GameUi.UiTextInput;
 
-        private _btnModifyWarComment        : TinyWars.GameUi.UiButton;
-        private _labelWarComment            : TinyWars.GameUi.UiLabel;
+        private _labelWarCommentTitle       : GameUi.UiLabel;
+        private _inputWarComment            : GameUi.UiTextInput;
 
-        private _btnModifyWarRule           : TinyWars.GameUi.UiButton;
-        private _labelWarRule               : TinyWars.GameUi.UiLabel;
+        private _labelWarRuleTitle          : GameUi.UiLabel;
+        private _labelWarRule               : GameUi.UiLabel;
+        private _btnWarRule                 : GameUi.UiButton;
 
-        private _btnModifyHasFog            : TinyWars.GameUi.UiButton;
-        private _imgHasFog                  : TinyWars.GameUi.UiImage;
-        private _btnHelpHasFog              : TinyWars.GameUi.UiButton;
+        private _labelHasFogTitle           : GameUi.UiLabel;
+        private _labelHasFog                : GameUi.UiLabel;
+        private _btnHasFog                  : GameUi.UiButton;
+        private _btnHasFogHelp              : GameUi.UiButton;
 
         private _groupTimer                 : eui.Group;
         private _btnModifyTimerType         : TinyWars.GameUi.UiButton;
@@ -57,43 +56,42 @@ namespace TinyWars.MultiCustomRoom {
 
         protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
-                { ui: this._btnModifyWarName,           callback: this._onTouchedBtnModifyWarName, },
-                { ui: this._btnModifyWarPassword,       callback: this._onTouchedBtnModifyWarPassword, },
-                { ui: this._btnModifyWarComment,        callback: this._onTouchedBtnModifyWarComment, },
-                { ui: this._btnModifyWarRule,           callback: this._onTouchedBtnModifyWarRule },
+                { ui: this._inputWarName,               callback: this._onFocusOutInputWarName,         eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputWarPassword,           callback: this._onFocusOutInputWarPassword,     eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._inputWarComment,            callback: this._onFocusOutInputWarComment,      eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._btnWarRule,                 callback: this._onTouchedBtnWarRule },
+                { ui: this._btnHasFog,                  callback: this._onTouchedBtnHasFog },
+                { ui: this._btnHasFogHelp,              callback: this._onTouchedBtnHasFogHelp },
                 { ui: this._btnModifySkinId,            callback: this._onTouchedBtnModifySkin, },
                 { ui: this._btnHelpSkinId,              callback: this._onTouchedBtnHelpSkinId, },
-                { ui: this._btnModifyHasFog,            callback: this._onTouchedBtnModifyHasFog, },
-                { ui: this._btnHelpHasFog,              callback: this._onTouchedBtnHelpHasFog, },
                 { ui: this._btnModifyTimerType,         callback: this._onTouchedBtnModifyTimerType, },
                 { ui: this._btnHelpTimer,               callback: this._onTouchedBtnHelpTimer, },
                 { ui: this._btnModifyTimerRegular,      callback: this._onTouchedBtnModifyTimerRegular, },
                 { ui: this._btnModifyTimerIncremental1, callback: this._onTouchedBtnModifyTimerIncremental1 },
                 { ui: this._btnModifyTimerIncremental2, callback: this._onTouchedBtnModifyTimerIncremental2 },
-                { ui: this._btnBuildings,               callback: this._onTouchedBtnBuildings },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
 
-            this._btnModifyHasFog.setTextColor(0x00FF00);
+            this._inputWarName.maxChars     = CommonConstants.WarNameMaxLength;
+            this._inputWarPassword.restrict = `0-9`;
+            this._inputWarPassword.maxChars = CommonConstants.WarPasswordMaxLength;
+            this._inputWarComment.maxChars  = CommonConstants.WarCommentMaxLength;
+
             this._btnModifySkinId.setTextColor(0x00FF00);
             this._btnModifyTimerIncremental1.setTextColor(0x00FF00);
             this._btnModifyTimerIncremental2.setTextColor(0x00FF00);
             this._btnModifyTimerRegular.setTextColor(0x00FF00);
             this._btnModifyTimerType.setTextColor(0x00FF00);
-            this._btnModifyWarComment.setTextColor(0x00FF00);
-            this._btnModifyWarName.setTextColor(0x00FF00);
-            this._btnModifyWarPassword.setTextColor(0x00FF00);
-            this._btnModifyWarRule.setTextColor(0x00FF00);
 
             this._mapRawData = await McrModel.Create.getMapRawData();
 
             this._updateComponentsForLanguage();
             this._updateComponentsForWarRule();
-            this._updateLabelWarName();
-            this._updateLabelWarPassword();
-            this._updateLabelWarComment();
+            this._updateInputWarName();
+            this._updateInputWarPassword();
+            this._updateInputWarComment();
             this._updateLabelMapName();
         }
 
@@ -104,49 +102,22 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnModifyWarName(e: egret.TouchEvent): void {
-            Common.CommonInputPanel.show({
-                title           : Lang.getText(Lang.Type.B0185),
-                currentValue    : McrModel.Create.getWarName(),
-                maxChars        : CommonConstants.WarNameMaxLength,
-                charRestrict    : null,
-                tips            : null,
-                callback        : panel => {
-                    McrModel.Create.setWarName(panel.getInputText());
-                    this._updateLabelWarName();
-                },
-            });
+        private _onFocusOutInputWarName(e: egret.TouchEvent): void {
+            McrModel.Create.setWarName(this._inputWarName.text || undefined);
+            this._updateInputWarName();
         }
 
-        private _onTouchedBtnModifyWarPassword(e: egret.Event): void {
-            Common.CommonInputPanel.show({
-                title           : Lang.getText(Lang.Type.B0186),
-                currentValue    : McrModel.Create.getWarPassword(),
-                maxChars        : CommonConstants.WarPasswordMaxLength,
-                charRestrict    : "0-9",
-                tips            : Lang.getText(Lang.Type.B0323),
-                callback        : panel => {
-                    McrModel.Create.setWarPassword(panel.getInputText());
-                    this._updateLabelWarPassword();
-                },
-            });
+        private _onFocusOutInputWarPassword(e: egret.Event): void {
+            McrModel.Create.setWarPassword(this._inputWarPassword.text || undefined);
+            this._updateInputWarPassword();
         }
 
-        private _onTouchedBtnModifyWarComment(e: egret.Event): void {
-            Common.CommonInputPanel.show({
-                title           : Lang.getText(Lang.Type.B0187),
-                currentValue    : McrModel.Create.getWarComment(),
-                maxChars        : CommonConstants.WarCommentMaxLength,
-                charRestrict    : null,
-                tips            : null,
-                callback        : panel => {
-                    McrModel.Create.setWarComment(panel.getInputText());
-                    this._updateLabelWarComment();
-                },
-            });
+        private _onFocusOutInputWarComment(e: egret.Event): void {
+            McrModel.Create.setWarComment(this._inputWarComment.text || undefined);
+            this._updateInputWarComment();
         }
 
-        private async _onTouchedBtnModifyWarRule(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnWarRule(e: egret.TouchEvent): Promise<void> {
             await McrModel.Create.tickPresetWarRuleId();
             this._updateComponentsForWarRule();
         }
@@ -163,10 +134,10 @@ namespace TinyWars.MultiCustomRoom {
             });
         }
 
-        private _onTouchedBtnModifyHasFog(e: egret.TouchEvent): void {
+        private _onTouchedBtnHasFog(e: egret.TouchEvent): void {
             const callback = () => {
                 McrModel.Create.setHasFog(!McrModel.Create.getHasFog());
-                this._updateImgHasFog();
+                this._updateLabelHasFog();
                 this._updateLabelWarRule();
             };
             if (McrModel.Create.getPresetWarRuleId() == null) {
@@ -183,7 +154,7 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _onTouchedBtnHelpHasFog(e: egret.TouchEvent): void {
+        private _onTouchedBtnHasFogHelp(e: egret.TouchEvent): void {
             CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
                 content: Lang.getRichText(Lang.RichType.R0002),
@@ -251,68 +222,56 @@ namespace TinyWars.MultiCustomRoom {
             });
         }
 
-        private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
-            const mapRawData = await WarMapModel.getRawData(McrModel.Create.getMapId());
-            WarMap.WarMapBuildingListPanel.show({
-                configVersion           : McrModel.Create.getData().settingsForCommon.configVersion,
-                tileDataArray           : mapRawData.tileDataArray,
-                playersCountUnneutral   : mapRawData.playersCountUnneutral,
-            });
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnMapNameTitle.label         = Lang.getText(Lang.Type.B0225);
-            this._btnModifyWarPassword.label    = Lang.getText(Lang.Type.B0186);
-            this._btnModifyWarComment.label     = Lang.getText(Lang.Type.B0187);
-            this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
+            this._labelMapNameTitle.text        = Lang.getText(Lang.Type.B0225);
+            this._labelWarNameTitle.text        = Lang.getText(Lang.Type.B0185);
+            this._labelWarPasswordTitle.text    = Lang.getText(Lang.Type.B0186);
+            this._labelWarCommentTitle.text     = Lang.getText(Lang.Type.B0187);
+            this._labelWarRuleTitle.text        = Lang.getText(Lang.Type.B0318);
+            this._labelHasFogTitle.text         = Lang.getText(Lang.Type.B0020);
             this._btnModifySkinId.label         = Lang.getText(Lang.Type.B0397);
             this._btnModifyTimerType.label      = Lang.getText(Lang.Type.B0188);
-            this._btnModifyWarRule.label        = Lang.getText(Lang.Type.B0318);
-            this._btnModifyWarName.label        = Lang.getText(Lang.Type.B0185);
-            this._btnBuildings.label            = Lang.getText(Lang.Type.B0333);
         }
 
         private _updateComponentsForWarRule(): void {
             this._updateLabelWarRule();
             this._updateLabelSkinId();
-            this._updateImgHasFog();
+            this._updateLabelHasFog();
             this._updateGroupTimer();
         }
 
-        private _updateLabelWarName(): void {
-            this._labelWarName.text = McrModel.Create.getWarName() || `(${Lang.getText(Lang.Type.B0001)})`;
+        private _updateInputWarName(): void {
+            this._inputWarName.text = McrModel.Create.getWarName();
         }
 
-        private _updateLabelWarPassword(): void {
-            this._labelWarPassword.text = McrModel.Create.getWarPassword() || `(${Lang.getText(Lang.Type.B0001)})`;
+        private _updateInputWarPassword(): void {
+            this._inputWarPassword.text = McrModel.Create.getWarPassword();
         }
 
-        private _updateLabelWarComment(): void {
-            this._labelWarComment.text = McrModel.Create.getWarComment() || `(${Lang.getText(Lang.Type.B0001)})`;
+        private _updateInputWarComment(): void {
+            this._inputWarComment.text = McrModel.Create.getWarComment();
         }
 
-        private _updateLabelMapName(): void {
-            WarMapModel.getMapNameInCurrentLanguage(this._mapRawData.mapId).then(v =>
-                this._labelMapName.text = `${v} (${this._mapRawData.playersCountUnneutral}P)`
-            );
+        private async _updateLabelMapName(): Promise<void> {
+            this._labelMapName.text = await WarMapModel.getMapNameInCurrentLanguage(this._mapRawData.mapId);
         }
 
-        private async _updateLabelWarRule(): Promise<void> {
+        private _updateLabelWarRule(): void {
             const label             = this._labelWarRule;
             const settingsForCommon = McrModel.Create.getData().settingsForCommon;
             label.text              = Lang.getWarRuleNameInLanguage(settingsForCommon.warRule);
-            label.textColor         = settingsForCommon.presetWarRuleId == null ? 0xFF0000 : 0x00FF00;
+            label.textColor         = settingsForCommon.presetWarRuleId == null ? 0xFFFF00 : 0xFFFFFF;
         }
 
         private _updateLabelSkinId(): void {
             this._labelSkinId.text = Lang.getUnitAndTileSkinName(McrModel.Create.getSelfUnitAndTileSkinId());
         }
 
-        private _updateImgHasFog(): void {
-            this._imgHasFog.visible = McrModel.Create.getHasFog();
+        private _updateLabelHasFog(): void {
+            this._labelHasFog.text = Lang.getText(McrModel.Create.getHasFog() ? Lang.Type.B0012 : Lang.Type.B0013);
         }
 
         private _updateGroupTimer(): void {

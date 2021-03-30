@@ -69,9 +69,35 @@
                 </e:layout>
             </e:Group>
             <e:Group id="_groupChoosePlayerIndex" x="0" y="84">
-                <GameUi:UiLabel id="_labelChoosePlayerIndex" text="选择CO" x="0" y="-82" bold="true" size="20" />
+                <GameUi:UiLabel id="_labelChoosePlayerIndex" text="选择势力" x="0" y="-82" bold="true" size="20" />
                 <GameUi:UiScrollList id="_sclPlayerIndex" x="0">
-                    <e:List id="_listPlayerIndex">
+                    <e:List>
+                        <e:itemRendererSkinName>
+                            <e:Skin height="24" width="80" currentState="up" states="up,down">
+                                <e:Group left="0" top="0" bottom="0" right="0">
+                                    <GameUi:UiImage source="commonRectangle0000" scale9Grid="2,2,1,1" left="0" right="0"
+                                                    top="0" bottom="0" x="0" y="0" visible.up="false" />
+                                    <GameUi:UiImage scale9Grid="2,2,1,1" source="commonRectangle0001" left="0" right="0"
+                                                    top="0" bottom="0" x="0" y="0" visible.up="true"
+                                                    visible.down="false" />
+                                    <GameUi:UiLabel id="_labelName" text="P1" size="12" textColor="0xCCCCCC"
+                                                    horizontalCenter="0" verticalCenter="1" x="90" y="7" />
+                                </e:Group>
+                            </e:Skin>
+                        </e:itemRendererSkinName>
+                        <e:layout>
+                            <e:TileLayout orientation="rows" horizontalGap="0" paddingTop="2" requestedColumnCount="2" />
+                        </e:layout>
+                    </e:List>
+                </GameUi:UiScrollList>
+                <e:layout>
+                    <e:VerticalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:Group id="_groupChooseSkinId" x="0" y="84" visible="false">
+                <GameUi:UiLabel id="_labelChooseSkinId" text="选择颜色" x="0" y="-82" bold="true" size="20" />
+                <GameUi:UiScrollList id="_sclSkinId" x="0">
+                    <e:List>
                         <e:itemRendererSkinName>
                             <e:Skin height="24" width="80" currentState="up" states="up,down">
                                 <e:Group left="0" top="0" bottom="0" right="0">
@@ -112,29 +138,35 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <e:Group top="80" bottom="0" left="200" right="0">
-            <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0"
-                            alpha="0.8" left="0" top="0" bottom="0" right="0" />
+        <e:Group top="80" left="200" right="20" bottom="20">
+            <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" top="40" bottom="0" right="0"
+                            source="commonColorBlack0001" scale9Grid="1,1,2,2" />
             <GameUi:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
                 <e:skinName>
-                    <e:Skin width="960">
-                        <e:Scroller top="60" bottom="0" left="0" right="0">
-                            <e:Group id="_page" />
-                        </e:Scroller>
-                        <e:Scroller left="0" y="10">
-                            <e:TabBar id="_bar" anchorOffsetY="0" anchorOffsetX="0">
+                    <e:Skin>
+                        <e:Scroller left="0">
+                            <e:TabBar id="_bar">
                                 <e:itemRendererSkinName>
-                                    <e:Skin states="up,down,disabled" height="50" width="190">
-                                        <GameUi:UiLabel id="_labelName" size="22" anchorOffsetY="0" anchorOffsetX="0"
-                                                        verticalAlign="middle" textAlign="center" top="0" left="0"
-                                                        bottom="0" right="0" textColor="0x777777"
-                                                        textColor.up="0xffffff" text="页签" textColor.down="0x00ff00" />
+                                    <e:Skin states="up,down,disabled" height="30" width="100">
+                                        <e:Group left="0" top="0" bottom="0" right="0">
+                                            <GameUi:UiImage source="commonRectangle0000" scale9Grid="2,2,1,1" left="0"
+                                                            right="0" top="0" bottom="0" x="0" y="0" visible.up="false" />
+                                            <GameUi:UiImage scale9Grid="2,2,1,1" source="commonRectangle0001" left="0"
+                                                            right="0" top="0" bottom="0" x="0" y="0" visible.up="true"
+                                                            visible.down="false" />
+                                            <GameUi:UiLabel id="_labelName" text="Advanced Settings" size="12"
+                                                            textColor="0xCCCCCC" wordWrap="true" left="4" right="4"
+                                                            textAlign="center" verticalCenter="1" />
+                                        </e:Group>
                                     </e:Skin>
                                 </e:itemRendererSkinName>
                                 <e:layout>
-                                    <e:HorizontalLayout/>
+                                    <e:HorizontalLayout paddingTop="2" gap="20" />
                                 </e:layout>
                             </e:TabBar>
+                        </e:Scroller>
+                        <e:Scroller top="40" bottom="0" left="0" right="0">
+                            <e:Group id="_page" />
                         </e:Scroller>
                     </e:Skin>
                 </e:skinName>

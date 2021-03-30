@@ -1046,7 +1046,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0020]: [
             "战争迷雾",
-            "Fog",
+            "FoW",
         ],
         [Type.B0021]: [
             "回合显示",
@@ -3239,6 +3239,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0572]: [
             `选择势力`,
             `Choose a Force`,
+        ],
+        [Type.B0573]: [
+            `选择颜色`,
+            `Choose a Color`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
