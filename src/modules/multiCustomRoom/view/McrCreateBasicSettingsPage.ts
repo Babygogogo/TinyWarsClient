@@ -43,13 +43,6 @@ namespace TinyWars.MultiCustomRoom {
         private _btnModifyTimerIncremental1 : TinyWars.GameUi.UiButton;
         private _btnModifyTimerIncremental2 : TinyWars.GameUi.UiButton;
 
-        private _btnModifyPlayerIndex       : TinyWars.GameUi.UiButton;
-        private _labelPlayerIndex           : TinyWars.GameUi.UiLabel;
-        private _btnHelpPlayerIndex         : TinyWars.GameUi.UiButton;
-
-        private _btnChangeCo                : TinyWars.GameUi.UiButton;
-        private _labelCoName                : TinyWars.GameUi.UiLabel;
-
         private _btnModifySkinId            : TinyWars.GameUi.UiButton;
         private _labelSkinId                : TinyWars.GameUi.UiLabel;
         private _btnHelpSkinId              : TinyWars.GameUi.UiButton;
@@ -68,8 +61,6 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnModifyWarPassword,       callback: this._onTouchedBtnModifyWarPassword, },
                 { ui: this._btnModifyWarComment,        callback: this._onTouchedBtnModifyWarComment, },
                 { ui: this._btnModifyWarRule,           callback: this._onTouchedBtnModifyWarRule },
-                { ui: this._btnModifyPlayerIndex,       callback: this._onTouchedBtnModifyPlayerIndex, },
-                { ui: this._btnHelpPlayerIndex,         callback: this._onTouchedBtnHelpPlayerIndex, },
                 { ui: this._btnModifySkinId,            callback: this._onTouchedBtnModifySkin, },
                 { ui: this._btnHelpSkinId,              callback: this._onTouchedBtnHelpSkinId, },
                 { ui: this._btnModifyHasFog,            callback: this._onTouchedBtnModifyHasFog, },
@@ -79,16 +70,13 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnModifyTimerRegular,      callback: this._onTouchedBtnModifyTimerRegular, },
                 { ui: this._btnModifyTimerIncremental1, callback: this._onTouchedBtnModifyTimerIncremental1 },
                 { ui: this._btnModifyTimerIncremental2, callback: this._onTouchedBtnModifyTimerIncremental2 },
-                { ui: this._btnChangeCo,                callback: this._onTouchedBtnChangeCo, },
                 { ui: this._btnBuildings,               callback: this._onTouchedBtnBuildings },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
 
-            this._btnChangeCo.setTextColor(0x00FF00);
             this._btnModifyHasFog.setTextColor(0x00FF00);
-            this._btnModifyPlayerIndex.setTextColor(0x00FF00);
             this._btnModifySkinId.setTextColor(0x00FF00);
             this._btnModifyTimerIncremental1.setTextColor(0x00FF00);
             this._btnModifyTimerIncremental2.setTextColor(0x00FF00);
@@ -161,21 +149,6 @@ namespace TinyWars.MultiCustomRoom {
         private async _onTouchedBtnModifyWarRule(e: egret.TouchEvent): Promise<void> {
             await McrModel.Create.tickPresetWarRuleId();
             this._updateComponentsForWarRule();
-        }
-
-        private async _onTouchedBtnModifyPlayerIndex(e: egret.TouchEvent): Promise<void> {
-            const creator = McrModel.Create;
-            await creator.tickSelfPlayerIndex();
-            creator.setSelfCoId(BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(creator.getData().settingsForCommon, creator.getSelfPlayerIndex()));
-            this._updateLabelPlayerIndex();
-            this._updateLabelCoName();
-        }
-
-        private _onTouchedBtnHelpPlayerIndex(e: egret.TouchEvent): void {
-            CommonHelpPanel.show({
-                title  : Lang.getText(Lang.Type.B0018),
-                content: Lang.getRichText(Lang.RichType.R0000),
-            });
         }
 
         private async _onTouchedBtnModifySkin(e: egret.TouchEvent): Promise<void> {
@@ -278,11 +251,6 @@ namespace TinyWars.MultiCustomRoom {
             });
         }
 
-        private _onTouchedBtnChangeCo(e: egret.TouchEvent): void {
-            McrCreateSettingsPanel.hide();
-            McrCreateChooseCoPanel.show({ coId: McrModel.Create.getSelfCoId() });
-        }
-
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             const mapRawData = await WarMapModel.getRawData(McrModel.Create.getMapId());
             WarMap.WarMapBuildingListPanel.show({
@@ -300,7 +268,6 @@ namespace TinyWars.MultiCustomRoom {
             this._btnModifyWarPassword.label    = Lang.getText(Lang.Type.B0186);
             this._btnModifyWarComment.label     = Lang.getText(Lang.Type.B0187);
             this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
-            this._btnModifyPlayerIndex.label    = Lang.getText(Lang.Type.B0018);
             this._btnModifySkinId.label         = Lang.getText(Lang.Type.B0397);
             this._btnModifyTimerType.label      = Lang.getText(Lang.Type.B0188);
             this._btnModifyWarRule.label        = Lang.getText(Lang.Type.B0318);
@@ -310,11 +277,9 @@ namespace TinyWars.MultiCustomRoom {
 
         private _updateComponentsForWarRule(): void {
             this._updateLabelWarRule();
-            this._updateLabelPlayerIndex();
             this._updateLabelSkinId();
             this._updateImgHasFog();
             this._updateGroupTimer();
-            this._updateLabelCoName();
         }
 
         private _updateLabelWarName(): void {
@@ -340,12 +305,6 @@ namespace TinyWars.MultiCustomRoom {
             const settingsForCommon = McrModel.Create.getData().settingsForCommon;
             label.text              = Lang.getWarRuleNameInLanguage(settingsForCommon.warRule);
             label.textColor         = settingsForCommon.presetWarRuleId == null ? 0xFF0000 : 0x00FF00;
-        }
-
-        private _updateLabelPlayerIndex(): void {
-            const playerIndex           = McrModel.Create.getSelfPlayerIndex();
-            const teamIndex             = BwWarRuleHelper.getTeamIndex(McrModel.Create.getData().settingsForCommon.warRule, playerIndex);
-            this._labelPlayerIndex.text = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(teamIndex)})`;
         }
 
         private _updateLabelSkinId(): void {
@@ -376,11 +335,6 @@ namespace TinyWars.MultiCustomRoom {
                 this._btnModifyTimerIncremental1.label  = Helpers.getTimeDurationText2(params[1]);
                 this._btnModifyTimerIncremental2.label  = Helpers.getTimeDurationText2(params[2]);
             }
-        }
-
-        private _updateLabelCoName(): void {
-            const cfg               = ConfigManager.getCoBasicCfg(McrModel.Create.getData().settingsForCommon.configVersion, McrModel.Create.getSelfCoId());
-            this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
         }
     }
 }

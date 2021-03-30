@@ -24,6 +24,8 @@ namespace TinyWars.GameUi {
             this.once(egret.Event.COMPLETE, this._onSkinLoaded, this);
         }
 
+        public onItemTapEvent(e: eui.ItemTapEvent): void {}
+
         protected childrenCreated(): void {
             super.childrenCreated();
 

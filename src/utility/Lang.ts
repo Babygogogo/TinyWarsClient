@@ -1546,7 +1546,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0145]: [
             `选择CO`,
-            `Choose CO`,
+            `Choose a CO`,
         ],
         [Type.B0146]: [
             `返回`,
@@ -3235,6 +3235,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0571]: [
             `房间设置`,
             `Room Settings`,
+        ],
+        [Type.B0572]: [
+            `选择势力`,
+            `Choose a Force`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

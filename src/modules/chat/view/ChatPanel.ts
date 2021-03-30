@@ -493,7 +493,7 @@ namespace TinyWars.Chat {
             ]);
         }
 
-        public onItemTapEvent(e: egret.TouchEvent): void {
+        public onItemTapEvent(e: eui.ItemTapEvent): void {
             const data = this.data as DataForChatPageRenderer;
             data.panel.setSelectedIndex(data.index);
         }

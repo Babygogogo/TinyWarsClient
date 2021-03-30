@@ -284,18 +284,24 @@ namespace TinyWars.MultiCustomRoom {
                 return getData().settingsForMcw.warComment;
             }
 
-            function setSelfPlayerIndex(playerIndex: number): void {
-                getData().selfPlayerIndex = playerIndex;
+            export function setSelfPlayerIndex(playerIndex: number): void {
+                if (playerIndex !== getSelfPlayerIndex()) {
+                    getData().selfPlayerIndex = playerIndex;
+                    Notify.dispatch(Notify.Type.McrCreateSelfPlayerIndexChanged);
+                }
             }
-            export async function tickSelfPlayerIndex(): Promise<void> {
-                setSelfPlayerIndex(getSelfPlayerIndex() % BwWarRuleHelper.getPlayersCount(getWarRule()) + 1);
-            }
+            // export async function tickSelfPlayerIndex(): Promise<void> {
+            //     setSelfPlayerIndex(getSelfPlayerIndex() % BwWarRuleHelper.getPlayersCount(getWarRule()) + 1);
+            // }
             export function getSelfPlayerIndex(): number {
                 return getData().selfPlayerIndex;
             }
 
             export function setSelfCoId(coId: number): void {
-                getData().selfCoId = coId;
+                if (getSelfCoId() !== coId) {
+                    getData().selfCoId = coId;
+                    Notify.dispatch(Notify.Type.McrCreateSelfCoIdChanged);
+                }
             }
             export function getSelfCoId(): number | null {
                 return getData().selfCoId;

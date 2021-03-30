@@ -132,8 +132,10 @@ namespace TinyWars.GameUi {
         }
 
         private _onTouchedListItem(e : eui.ItemTapEvent) : void {
-            const item: any = this.getViewList().getElementAt(e.itemIndex);
-            (item) && (item.onItemTapEvent) && item.onItemTapEvent(e);
+            const item = this.getViewList().getElementAt(e.itemIndex);
+            if (item instanceof UiListItemRenderer) {
+                item.onItemTapEvent(e);
+            }
         }
 
         private _onEnterFrameScrollVertical(e : egret.Event) : void {

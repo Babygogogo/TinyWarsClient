@@ -29,6 +29,9 @@ namespace TinyWars.Utility.Notify {
         ChatPanelClosed,
 
         McrCreateAvailableCoIdListChanged,
+        McrCreateSelfCoIdChanged,
+        McrCreateSelfPlayerIndexChanged,
+
         MrrMyRoomAdded,
         MrrMyRoomDeleted,
 
