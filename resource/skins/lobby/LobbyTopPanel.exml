@@ -13,7 +13,7 @@
                 <e:Skin states="up,down,disabled">
                     <e:Image source="lobbyTop0001" horizontalCenter="0" verticalCenter="0" />
                     <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
-                    <e:Image id="_imgRed" source="common0000" right="0" top="0" />
+                    <e:Image id="_imgRed" source="commonIcon0000" right="0" top="0" />
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>

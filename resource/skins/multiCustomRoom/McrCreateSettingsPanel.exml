@@ -41,7 +41,7 @@
                         <GameUi:UiLabel id="labelDisplay" size="16" scaleX="1" scaleY="1" text="Change Password"
                                         textAlign="center" verticalAlign="middle" wordWrap="true" verticalCenter="0"
                                         textColor="0x000000" bold="true" x="20" />
-                        <GameUi:UiImage id="_imgRed" right="0" top="0" source="common0000" width="16" height="16" />
+                        <GameUi:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16" height="16" />
                     </e:Group>
                 </e:Skin>
             </GameUi:skinName>
@@ -58,7 +58,7 @@
                                 <GameUi:UiLabel id="labelDisplay" size="16" scaleX="1" scaleY="1" text="Change Password"
                                                 textAlign="center" verticalAlign="middle" wordWrap="true"
                                                 verticalCenter="0" x="20" textColor="0xFFFFFF" />
-                                <GameUi:UiImage id="_imgRed" right="0" top="0" source="common0000" width="16"
+                                <GameUi:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16"
                                                 height="16" />
                             </e:Group>
                         </e:Skin>
@@ -133,7 +133,7 @@
                         <GameUi:UiLabel id="labelDisplay" size="16" scaleX="1" scaleY="1" text="Change Password"
                                         textAlign="center" verticalAlign="middle" wordWrap="true" verticalCenter="0"
                                         textColor="0x000000" bold="true" x="20" />
-                        <GameUi:UiImage id="_imgRed" right="0" top="0" source="common0000" width="16" height="16" />
+                        <GameUi:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16" height="16" />
                     </e:Group>
                 </e:Skin>
             </GameUi:skinName>

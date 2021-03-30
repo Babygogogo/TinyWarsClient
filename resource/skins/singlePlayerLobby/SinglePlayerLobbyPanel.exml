@@ -8,7 +8,7 @@
                     <e:Skin>
                         <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
                             <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0004" />
-                            <GameUi:UiImage id="_imgRed" right="14" source="common0000" verticalCenter="0" />
+                            <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
                                 <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="Campaign" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="2" x="-172"
@@ -31,7 +31,7 @@
                     <e:Skin>
                         <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
                             <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0002" />
-                            <GameUi:UiImage id="_imgRed" right="14" source="common0000" verticalCenter="0" />
+                            <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
                                 <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="Continue Wars" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="2" x="-172"
@@ -59,7 +59,7 @@
                     <e:Skin states="up,down,disabled">
                         <e:Image source="lobby0010" source.down="lobby0009" />
                         <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
-                        <e:Image id="_imgRed" source="common0000" right="0" top="0" />
+                        <e:Image id="_imgRed" source="commonIcon0000" right="0" top="0" />
                     </e:Skin>
                 </GameUi:skinName>
             </GameUi:UiButton>
@@ -70,7 +70,7 @@
                     <e:Skin states="up,down,disabled">
                         <e:Image source="lobby0012" source.down="lobby0011" />
                         <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
-                        <e:Image id="_imgRed" source="common0000" right="0" top="0" />
+                        <e:Image id="_imgRed" source="commonIcon0000" right="0" top="0" />
                     </e:Skin>
                 </GameUi:skinName>
             </GameUi:UiButton>
@@ -81,7 +81,7 @@
                     <e:Skin states="up,down,disabled">
                         <e:Image source="lobby0007" source.down="lobby0007" />
                         <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
-                        <e:Image id="_imgRed" source="common0000" right="0" top="0" />
+                        <e:Image id="_imgRed" source="commonIcon0000" right="0" top="0" />
                     </e:Skin>
                 </GameUi:skinName>
             </GameUi:UiButton>

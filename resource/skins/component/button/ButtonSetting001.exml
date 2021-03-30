@@ -6,6 +6,6 @@
         <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff" scaleX="1" scaleY="1" text="Change Password"
                         textAlign="center" verticalAlign="middle" wordWrap="true" width="100" horizontalCenter="0"
                         verticalCenter="0" />
-        <GameUi:UiImage id="_imgRed" right="0" top="0" source="common0000" width="16" height="16" />
+        <GameUi:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16" height="16" />
     </e:Group>
 </e:Skin>
