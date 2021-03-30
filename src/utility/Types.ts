@@ -253,7 +253,9 @@ namespace TinyWars.Utility.Types {
     }
 
     export interface WarMapUnitViewData extends ProtoTypes.WarSerialization.ISerialUnit {
-        skinId? : number;
+        skinId?             : number;
+        hasLoadedUnit?      : boolean;
+        coUsingSkillType?   : CoSkillType;
     }
 
     export type MovableArea = {

@@ -111,16 +111,13 @@ namespace TinyWars.WarMap {
         }
 
         private _addFrameForCoSkill(): void {
-            // TODO
-            // const unit          = this._unitData;
-            // const player        = unit.getPlayer();
-            // const skillType     = player ? player.getCoUsingSkillType() : null;
-            // const strForSkinId  = Helpers.getNumText(unit.getSkinId());
-            // if (skillType === Types.CoSkillType.Power) {
-            //     this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s08_f${strForSkinId}`);
-            // } else if (skillType === Types.CoSkillType.SuperPower) {
-            //     this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s07_f${strForSkinId}`);
-            // }
+            const skillType     = this._unitData.coUsingSkillType;
+            const strForSkinId  = Helpers.getNumText(this._getSkinId());
+            if (skillType === Types.CoSkillType.Power) {
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s08_f${strForSkinId}`);
+            } else if (skillType === Types.CoSkillType.SuperPower) {
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s07_f${strForSkinId}`);
+            }
         }
         private _addFrameForPromotion(): void {
             const unit = this._unitData;
@@ -163,25 +160,9 @@ namespace TinyWars.WarMap {
             }
         }
         private _addFrameForLoader(): void {
-            // TODO
-            // const unit  = this.getUnit();
-            // const war   = unit.getWar();
-            // if ((war) && (unit.getMaxLoadUnitsCount())) {
-            //     const strForSkinId = Helpers.getNumText(unit.getSkinId());
-            //     if (!war.getFogMap().checkHasFogCurrently()) {
-            //         if (unit.getLoadedUnitsCount() > 0) {
-            //             this._getFramesForStateAnimation().push(`${getImageSourcePrefix(this._getIsDark())}_t99_s06_f${strForSkinId}`);
-            //         }
-            //     } else {
-            //         if (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().has(unit.getTeamIndex())) {
-            //             this._getFramesForStateAnimation().push(`${getImageSourcePrefix(this._getIsDark())}_t99_s06_f${strForSkinId}`);
-            //         } else {
-            //             if (unit.getLoadedUnitsCount() > 0) {
-            //                 this._getFramesForStateAnimation().push(`${getImageSourcePrefix(this._getIsDark())}_t99_s06_f${strForSkinId}`);
-            //             }
-            //         }
-            //     }
-            // }
+            if (this._unitData.hasLoadedUnit) {
+                this._framesForStateAnimation.push(`${getImageSourcePrefix(this._isDark)}_t99_s06_f${Helpers.getNumText(this._getSkinId())}`);
+            }
         }
         private _addFrameForMaterial(): void {
             const unitData  = this._unitData;

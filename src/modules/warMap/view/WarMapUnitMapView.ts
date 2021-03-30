@@ -3,8 +3,10 @@ namespace TinyWars.WarMap {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types
     import ProtoTypes       = Utility.ProtoTypes;
+    import Helpers          = Utility.Helpers;
     import ConfigManager    = Utility.ConfigManager;
     import TimeModel        = Time.TimeModel;
+    import WarSerialization = ProtoTypes.WarSerialization;
 
     export class WarMapUnitMapView extends egret.DisplayObjectContainer {
         private readonly _unitViews             : WarMapUnitView[] = [];
@@ -24,8 +26,11 @@ namespace TinyWars.WarMap {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public showUnitMap(unitDataArray: ProtoTypes.WarSerialization.ISerialUnit[]): void {
-            this._initWithDataList(_createUnitViewDataList(unitDataArray));
+        public showUnitMap({ unitDataArray, playerManagerData }: {
+            unitDataArray       : WarSerialization.ISerialUnit[];
+            playerManagerData   : WarSerialization.ISerialPlayerManager | null;
+        }): void {
+            this._initWithDataList(_createUnitViewDataList({ unitDataArray, playerManagerData }));
         }
         private _initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
             this.clear();
@@ -102,16 +107,35 @@ namespace TinyWars.WarMap {
         }
     }
 
-    function _createUnitViewDataList(unitDataList: ProtoTypes.WarSerialization.ISerialUnit[]): Types.WarMapUnitViewData[] {
-        const dataList: Types.WarMapUnitViewData[] = [];
-        if (unitDataList) {
-            for (const unitData of unitDataList) {
-                if (unitData.loaderUnitId == null) {
-                    dataList.push(unitData);
+    function _createUnitViewDataList({ unitDataArray, playerManagerData }: {
+        unitDataArray       : WarSerialization.ISerialUnit[];
+        playerManagerData   : WarSerialization.ISerialPlayerManager | null;
+    }): Types.WarMapUnitViewData[] {
+        const dataArray: Types.WarMapUnitViewData[] = [];
+        if (unitDataArray) {
+            const loaderUnitIdSet = new Set<number>();
+            for (const unitData of unitDataArray) {
+                const loaderUnitId = unitData.loaderUnitId;
+                if (loaderUnitId == null) {
+                    dataArray.push(Helpers.deepClone(unitData));
+                } else {
+                    loaderUnitIdSet.add(loaderUnitId);
+                }
+            }
+
+            const playerDataArray = playerManagerData ? playerManagerData.players || [] : [];
+            for (const unitData of dataArray) {
+                if (loaderUnitIdSet.has(unitData.unitId)) {
+                    unitData.hasLoadedUnit = true;
+                }
+
+                const playerData = playerDataArray.find(v => v.playerIndex === unitData.playerIndex);
+                if (playerData) {
+                    unitData.coUsingSkillType = playerData.coUsingSkillType;
                 }
             }
         }
 
-        return dataList;
+        return dataArray;
     }
 }
