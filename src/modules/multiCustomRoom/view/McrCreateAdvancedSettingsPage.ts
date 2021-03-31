@@ -5,17 +5,11 @@ namespace TinyWars.MultiCustomRoom {
     import Lang             = Utility.Lang;
     import CommonConstants  = Utility.CommonConstants;
     import Notify           = Utility.Notify;
-    import WarMapModel      = WarMap.WarMapModel;
 
     export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
-        private _labelMapNameTitle      : GameUi.UiLabel;
-        private _labelMapName           : GameUi.UiLabel;
-        private _labelPlayersCountTitle : GameUi.UiLabel;
-        private _labelPlayersCount      : GameUi.UiLabel;
-        private _labelPlayerList        : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList;
+        private readonly _listPlayer    : GameUi.UiScrollList;
 
-        protected _mapRawData   : ProtoTypes.Map.IMapRawData;
+        private _mapRawData : ProtoTypes.Map.IMapRawData;
 
         public constructor() {
             super();
@@ -33,8 +27,6 @@ namespace TinyWars.MultiCustomRoom {
             this._mapRawData = await McrModel.Create.getMapRawData();
 
             this._updateComponentsForLanguage();
-            this._updateLabelMapName();
-            this._updateLabelPlayersCount();
             this._updateListPlayer();
         }
 
@@ -52,17 +44,6 @@ namespace TinyWars.MultiCustomRoom {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}:`;
-            this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}:`;
-            this._labelPlayerList.text          = Lang.getText(Lang.Type.B0395);
-        }
-
-        private _updateLabelMapName(): void {
-            WarMapModel.getMapNameInCurrentLanguage(this._mapRawData.mapId).then(v => this._labelMapName.text = v);
-        }
-
-        private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapRawData.playersCountUnneutral;
         }
 
         private _updateListPlayer(): void {
@@ -80,7 +61,8 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     class PlayerRenderer extends GameUi.UiListItemRenderer {
-        private _listInfo   : GameUi.UiScrollList;
+        private _labelPlayerIndex   : GameUi.UiLabel;
+        private _listInfo           : GameUi.UiScrollList;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -95,8 +77,11 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateView(): void {
-            this._listInfo.visible  = true;
-            this._listInfo.bindData(this._createDataForListInfo());
+            const data = this.data as DataForPlayerRenderer;
+            if (data) {
+                this._labelPlayerIndex.text = `P${data.playerIndex}`;
+                this._listInfo.bindData(this._createDataForListInfo());
+            }
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {

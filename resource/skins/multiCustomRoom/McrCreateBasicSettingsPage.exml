@@ -16,62 +16,31 @@
                                         verticalCenter="0" textColor="0xAAAAAA" />
                     </e:Group>
                 </e:Group>
-                <e:Group x="0" y="0" height="32" width="410">
+                <e:Group x="0" y="0" height="32" width="410" locked="true">
                     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                     scale9Grid="1,1,2,2" />
                     <GameUi:UiLabel id="_labelWarNameTitle" text="War Name" textColor="0xFFFFFF" size="16"
                                     maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                    <GameUi:UiTextInput id="_inputWarName" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20"
-                                        verticalCenter="0" height="24" right="6">
-                        <GameUi:skinName>
-                            <e:Skin>
-                                <e:Image left="0" right="0" source="commonRectangle0001" scale9Grid="2,2,1,1" top="0"
-                                         bottom="0" />
-                                <e:EditableText id="textDisplay" size="16" left="10" right="10" textColor="0xffffff"
-                                                y="4" />
-                                <e:Label id="promptDisplay" size="16" touchEnabled="false" left="10" right="10" text=""
-                                         textColor="0x808080" verticalCenter="0" />
-                            </e:Skin>
-                        </GameUi:skinName>
-                    </GameUi:UiTextInput>
+                    <GameUi:UiTextInput id="_inputWarName" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" verticalCenter="0"
+                                        height="24" right="6" skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
                 </e:Group>
-                <e:Group x="0" y="0" height="32" width="410">
+                <e:Group x="0" y="0" height="32" width="410" locked="true">
                     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                     scale9Grid="1,1,2,2" />
                     <GameUi:UiLabel id="_labelWarPasswordTitle" text="War Password" textColor="0xFFFFFF" size="16"
                                     maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                    <GameUi:UiTextInput id="_inputWarPassword" width="270" anchorOffsetX="0" anchorOffsetY="0"
-                                        maxChars="20" verticalCenter="0" height="24" right="6">
-                        <GameUi:skinName>
-                            <e:Skin>
-                                <e:Image left="0" right="0" source="commonRectangle0001" scale9Grid="2,2,1,1" top="0"
-                                         bottom="0" />
-                                <e:EditableText id="textDisplay" size="16" left="10" right="10" textColor="0xffffff"
-                                                y="4" />
-                                <e:Label id="promptDisplay" size="16" touchEnabled="false" left="10" right="10" text=""
-                                         textColor="0x808080" verticalCenter="0" />
-                            </e:Skin>
-                        </GameUi:skinName>
-                    </GameUi:UiTextInput>
+                    <GameUi:UiTextInput id="_inputWarPassword" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20"
+                                        verticalCenter="0" height="24" right="6"
+                                        skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
                 </e:Group>
-                <e:Group x="0" y="0" height="32" width="410">
+                <e:Group x="0" y="0" height="32" width="410" locked="true">
                     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                     scale9Grid="1,1,2,2" />
                     <GameUi:UiLabel id="_labelWarCommentTitle" text="War Comment" textColor="0xFFFFFF" size="16"
                                     maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                    <GameUi:UiTextInput id="_inputWarComment" width="270" anchorOffsetX="0" anchorOffsetY="0"
-                                        maxChars="20" verticalCenter="0" height="24" right="6">
-                        <GameUi:skinName>
-                            <e:Skin>
-                                <e:Image left="0" right="0" source="commonRectangle0001" scale9Grid="2,2,1,1" top="0"
-                                         bottom="0" />
-                                <e:EditableText id="textDisplay" size="16" left="10" right="10" textColor="0xffffff"
-                                                y="4" />
-                                <e:Label id="promptDisplay" size="16" touchEnabled="false" left="10" right="10" text=""
-                                         textColor="0x808080" verticalCenter="0" />
-                            </e:Skin>
-                        </GameUi:skinName>
-                    </GameUi:UiTextInput>
+                    <GameUi:UiTextInput id="_inputWarComment" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20"
+                                        verticalCenter="0" height="24" right="6"
+                                        skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
                 </e:Group>
                 <e:Group x="0" y="0" height="32" width="410">
                     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"

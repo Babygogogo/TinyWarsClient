@@ -7,14 +7,14 @@
             <e:Group width="270" x="0">
                 <GameUi:UiImage id="_imgAccountTitle" source="login_text_account_002" verticalCenter="0" right="190" />
                 <GameUi:UiTextInput id="_inputAccount" anchorOffsetX="0" anchorOffsetY="0" restrict="A-Za-z0-9_"
-                                    maxChars="20" left="90" right="0" skinName="Skins.Component.Input.Input001" top="0"
+                                    maxChars="20" left="90" right="0" skinName="Skins.Component.TextInput.TextInput001" top="0"
                                     bottom="0" />
             </e:Group>
             <e:Group y="44" width="270" x="0">
                 <GameUi:UiImage id="_imgPasswordTitle" verticalCenter="0" right="190" source="login_text_password_002" />
                 <GameUi:UiTextInput id="_inputPassword" y="0" anchorOffsetX="0" anchorOffsetY="0" restrict="A-Za-z0-9_"
                                     maxChars="20" displayAsPassword="true" left="90"
-                                    skinName="Skins.Component.Input.Input001" right="0" />
+                                    skinName="Skins.Component.TextInput.TextInput001" right="0" />
             </e:Group>
             <e:Group y="94" height="16" width="240" x="30">
                 <e:Group id="_groupRememberPassword">
