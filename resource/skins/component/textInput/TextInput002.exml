@@ -3,8 +3,8 @@
         class="Skins.Component.TextInput.TextInput002">
     <e:Group left="0" right="0" top="0" bottom="0">
         <e:Image left="0" right="0" source="commonRectangle0001" scale9Grid="2,2,1,1" top="0" bottom="0" />
-        <e:EditableText id="textDisplay" size="16" left="10" right="10" textColor="0xffffff" text="asdfasdfasdf" top="0"
-                        bottom="0" verticalAlign="middle" />
+        <e:EditableText id="textDisplay" size="16" left="10" right="10" textColor="0xffffff" top="0" bottom="0"
+                        verticalAlign="middle" />
         <e:Label id="promptDisplay" size="16" touchEnabled="false" left="10" right="10" text="" textColor="0x808080"
                  verticalCenter="0" />
     </e:Group>

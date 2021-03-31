@@ -11,95 +11,48 @@
         <GameUi:UiLabel id="_labelDesc" text="注:任意条件均可留空,等同于不限查找结果" size="12" lineSpacing="3" wordWrap="true"
                         textAlign="center" x="20" y="56" textColor="0xAAAAAA" />
         <e:Group x="20" y="80">
-            <e:Group x="0" y="0" height="32" width="410" locked="true">
+            <e:Group x="0" y="0" height="32" width="410">
                 <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                 scale9Grid="1,1,2,2" />
                 <GameUi:UiLabel id="_labelMapNameTitle" text="Map Name" textColor="0xFFFFFF" size="16"
                                 maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                <GameUi:UiTextInput id="_inputMapName" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20"
-                                    verticalCenter="0" height="24" right="6">
-                    <GameUi:skinName>
-                        <e:Skin>
-                            <e:Image left="0" right="0" source="commonRectangle0001" scale9Grid="2,2,1,1" top="0"
-                                     bottom="0" />
-                            <e:EditableText id="textDisplay" size="16" left="10" right="10" textColor="0xffffff" y="4" />
-                            <e:Label id="promptDisplay" size="16" touchEnabled="false" left="10" right="10" text=""
-                                     textColor="0x808080" verticalCenter="0" />
-                        </e:Skin>
-                    </GameUi:skinName>
-                </GameUi:UiTextInput>
+                <GameUi:UiTextInput id="_inputMapName" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" verticalCenter="0"
+                                    height="24" right="6" skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
             </e:Group>
-            <e:Group x="0" y="0" height="32" width="410" locked="true">
+            <e:Group x="0" y="0" height="32" width="410">
                 <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                 scale9Grid="1,1,2,2" />
                 <GameUi:UiLabel id="_labelDesignerTitle" text="Designer" textColor="0xFFFFFF" size="16"
                                 maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                <GameUi:UiTextInput id="_inputDesigner" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20"
-                                    verticalCenter="0" height="24" right="6">
-                    <GameUi:skinName>
-                        <e:Skin>
-                            <e:Image left="0" right="0" source="commonRectangle0001" scale9Grid="2,2,1,1" top="0"
-                                     bottom="0" />
-                            <e:EditableText id="textDisplay" size="16" left="10" right="10" textColor="0xffffff" y="4" />
-                            <e:Label id="promptDisplay" size="16" touchEnabled="false" left="10" right="10" text=""
-                                     textColor="0x808080" verticalCenter="0" />
-                        </e:Skin>
-                    </GameUi:skinName>
-                </GameUi:UiTextInput>
+                <GameUi:UiTextInput id="_inputDesigner" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" verticalCenter="0"
+                                    height="24" right="6" skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
             </e:Group>
-            <e:Group x="0" y="0" height="32" width="410" locked="true">
+            <e:Group x="0" y="0" height="32" width="410">
                 <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                 scale9Grid="1,1,2,2" />
                 <GameUi:UiLabel id="_labelPlayersCountTitle" text="Players" textColor="0xFFFFFF" size="16"
                                 maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
                 <GameUi:UiTextInput id="_inputPlayersCount" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="1"
-                                    verticalCenter="0" height="24" right="6" restrict="2-4">
-                    <GameUi:skinName>
-                        <e:Skin>
-                            <e:Image left="0" right="0" source="commonRectangle0001" scale9Grid="2,2,1,1" top="0"
-                                     bottom="0" />
-                            <e:EditableText id="textDisplay" size="16" left="10" right="10" textColor="0xffffff" y="4" />
-                            <e:Label id="promptDisplay" size="16" touchEnabled="false" left="10" right="10" text=""
-                                     textColor="0x808080" verticalCenter="0" />
-                        </e:Skin>
-                    </GameUi:skinName>
-                </GameUi:UiTextInput>
+                                    verticalCenter="0" height="24" right="6" restrict="2-4"
+                                    skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
             </e:Group>
-            <e:Group x="0" y="0" height="32" width="410" locked="true">
+            <e:Group x="0" y="0" height="32" width="410">
                 <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                 scale9Grid="1,1,2,2" />
                 <GameUi:UiLabel id="_labelPlayedTimesTitle" text="Min. Popularity" textColor="0xFFFFFF" size="16"
                                 maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
                 <GameUi:UiTextInput id="_inputPlayedTimes" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="10"
-                                    verticalCenter="0" height="24" right="6" restrict="0-9">
-                    <GameUi:skinName>
-                        <e:Skin>
-                            <e:Image left="0" right="0" source="commonRectangle0001" scale9Grid="2,2,1,1" top="0"
-                                     bottom="0" />
-                            <e:EditableText id="textDisplay" size="16" left="10" right="10" textColor="0xffffff" y="4" />
-                            <e:Label id="promptDisplay" size="16" touchEnabled="false" left="10" right="10" text=""
-                                     textColor="0x808080" verticalCenter="0" />
-                        </e:Skin>
-                    </GameUi:skinName>
-                </GameUi:UiTextInput>
+                                    verticalCenter="0" height="24" right="6" restrict="0-9"
+                                    skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
             </e:Group>
-            <e:Group x="0" y="0" height="32" width="410" locked="true">
+            <e:Group x="0" y="0" height="32" width="410">
                 <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                 scale9Grid="1,1,2,2" />
                 <GameUi:UiLabel id="_labelMinRatingTitle" text="Min. Rating" textColor="0xFFFFFF" size="16"
                                 maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
-                <GameUi:UiTextInput id="_inputMinRating" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="4"
-                                    verticalCenter="0" height="24" right="6" restrict="0-9.">
-                    <GameUi:skinName>
-                        <e:Skin>
-                            <e:Image left="0" right="0" source="commonRectangle0001" scale9Grid="2,2,1,1" top="0"
-                                     bottom="0" />
-                            <e:EditableText id="textDisplay" size="16" left="10" right="10" textColor="0xffffff" y="4" />
-                            <e:Label id="promptDisplay" size="16" touchEnabled="false" left="10" right="10" text=""
-                                     textColor="0x808080" verticalCenter="0" />
-                        </e:Skin>
-                    </GameUi:skinName>
-                </GameUi:UiTextInput>
+                <GameUi:UiTextInput id="_inputMinRating" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="4" verticalCenter="0"
+                                    height="24" right="6" restrict="0-9."
+                                    skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
             </e:Group>
             <e:Group x="0" y="0" height="32" width="410">
                 <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
