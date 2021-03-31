@@ -82,7 +82,6 @@ namespace TinyWars.WarEvent {
         private _onTouchedBtnClear(e: egret.TouchEvent): void {
             const openData = this._getOpenData<OpenDataForWeEventListPanel>();
             Common.CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0188),
                 callback: () => {
                     const result = WarEventHelper.checkAndDeleteUnusedComponents(openData.war.getWarEventManager().getWarEventFullData());

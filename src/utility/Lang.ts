@@ -1049,7 +1049,7 @@ namespace TinyWars.Utility.Lang {
             "FoW",
         ],
         [Type.B0021]: [
-            "回合显示",
+            "回合限时",
             "Time Limit",
         ],
         [Type.B0022]: [
@@ -3243,6 +3243,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0573]: [
             `选择颜色`,
             `Choose a Color`,
+        ],
+        [Type.B0574]: [
+            `计时模式`,
+            `Timer Mode`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

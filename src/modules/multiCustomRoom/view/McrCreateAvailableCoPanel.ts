@@ -109,7 +109,6 @@ namespace TinyWars.MultiCustomRoom {
                     callback();
                 } else {
                     ConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0057),
                         callback: () => {
                             McrModel.Create.setSelfCoId(Helpers.pickRandomElement([...availableCoIdSet]));
@@ -149,7 +148,6 @@ namespace TinyWars.MultiCustomRoom {
                     callback();
                 } else {
                     ConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0057),
                         callback,
                     });
@@ -180,7 +178,6 @@ namespace TinyWars.MultiCustomRoom {
                     callback();
                 } else {
                     ConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0057),
                         callback,
                     });

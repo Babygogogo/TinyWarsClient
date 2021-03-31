@@ -7,6 +7,7 @@ namespace TinyWars.MultiCustomRoom {
     import ConfigManager    = Utility.ConfigManager;
     import CommonConstants  = Utility.CommonConstants;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
+    import BwHelpers        = BaseWar.BwHelpers;
 
     const CONFIRM_INTERVAL_MS = 5000;
 
@@ -89,6 +90,7 @@ namespace TinyWars.MultiCustomRoom {
 
             this._updateComponentsForLanguage();
             this._initSclPlayerIndex();
+            this._initSclSkinId();
             this._updateBtnChooseCo();
             this._btnConfirm.enabled = true;
         }
@@ -172,6 +174,16 @@ namespace TinyWars.MultiCustomRoom {
                 });
             }
             this._sclPlayerIndex.bindData(dataArray);
+        }
+
+        private _initSclSkinId(): void {
+            const dataArray: DataForSkinIdRenderer[] = [];
+            for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
+                dataArray.push({
+                    skinId,
+                });
+            }
+            this._sclSkinId.bindData(dataArray);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -314,59 +326,39 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForSkinIdRenderer = {
-        playerIndex: number;
+        skinId: number;
     }
     class SkinIdRenderer extends GameUi.UiListItemRenderer {
-        private readonly _labelName : GameUi.UiLabel;
+        private readonly _imgColor  : GameUi.UiImage;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.McrCreateTeamIndexChanged,          callback: this._onNotifyMcrCreateTeamIndexChanged },
-                { type: Notify.Type.McrCreateSelfPlayerIndexChanged,    callback: this._onNotifyMcrCreateSelfPlayerIndexChanged },
+                { type: Notify.Type.McrCreateSelfSkinIdChanged, callback: this._onNotifyMcrCreateSelfSkinIdChanged },
             ]);
         }
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            this._updateLabelName();
-            this._updateState();
+            this._updateImgColor();
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
             const data = this.data as DataForSkinIdRenderer;
             if (data) {
-                const creator       = McrModel.Create;
-                const playerIndex   = data.playerIndex;
-                creator.setSelfPlayerIndex(playerIndex);
-
-                const coIdArray = creator.getAvailableCoIdList(playerIndex);
-                if (coIdArray.indexOf(creator.getSelfCoId()) < 0) {
-                    creator.setSelfCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(coIdArray));
-                }
+                McrModel.Create.setSelfUnitAndTileSkinId(data.skinId);
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateLabelName();
-        }
-        private _onNotifyMcrCreateTeamIndexChanged(e: egret.Event): void {
-            this._updateLabelName();
-        }
-        private _onNotifyMcrCreateSelfPlayerIndexChanged(e: egret.Event): void {
-            this._updateState();
+        private _onNotifyMcrCreateSelfSkinIdChanged(e: egret.Event): void {
+            this._updateImgColor();
         }
 
-        private _updateLabelName(): void {
+        private _updateImgColor(): void {
             const data = this.data as DataForSkinIdRenderer;
             if (data) {
-                const playerIndex       = data.playerIndex;
-                this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelper.getTeamIndex(McrModel.Create.getWarRule(), playerIndex))})`;
+                const skinId            = data.skinId;
+                this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, McrModel.Create.getSelfUnitAndTileSkinId() === skinId);
             }
-        }
-        private _updateState(): void {
-            const data          = this.data as DataForSkinIdRenderer;
-            this.currentState   = ((data) && (data.playerIndex === McrModel.Create.getSelfPlayerIndex())) ? `down` : `up`;
         }
     }
 }

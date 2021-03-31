@@ -98,7 +98,7 @@ namespace TinyWars.MultiFreeRoom {
             this._updateComponentsForRoomInfo();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listPlayer.clear();
             this._roomInfo = null;
         }
@@ -434,7 +434,6 @@ namespace TinyWars.MultiFreeRoom {
             if (playerData) {
                 const userId = playerData.userId;
                 Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getFormattedText(Lang.Type.F0029, await User.UserModel.getUserNickname(userId)),
                     callback: () => {
                         MfrProxy.reqMfrDeletePlayer(data.roomInfo.roomId, playerData.playerIndex);

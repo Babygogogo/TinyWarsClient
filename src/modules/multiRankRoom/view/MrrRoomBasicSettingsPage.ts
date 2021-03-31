@@ -96,7 +96,7 @@ namespace TinyWars.MultiRankRoom {
             this._updateComponentsForRoomInfo();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listPlayer.clear();
             this._roomInfo = null;
         }
@@ -187,7 +187,6 @@ namespace TinyWars.MultiRankRoom {
                 const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
                 if ((selfPlayerData != null) && (!selfPlayerData.isReady)) {
                     Common.CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0137),
                         callback: () => {
                             MrrProxy.reqMrrSetSelfSettings(

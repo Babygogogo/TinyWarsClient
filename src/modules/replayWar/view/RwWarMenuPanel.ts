@@ -122,7 +122,6 @@ namespace TinyWars.ReplayWar {
         private _onMsgScrCreateCustomWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
             Common.CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
                     FlowManager.gotoSingleCustomWar({
@@ -333,7 +332,6 @@ namespace TinyWars.ReplayWar {
                     }
 
                     Common.CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0201),
                         callback: () => {
                             MultiFreeRoom.MfrModel.Create.resetDataByInitialWarData(warData);
@@ -358,7 +356,6 @@ namespace TinyWars.ReplayWar {
                 callback: () => {
                     const isEnabled = User.UserModel.getSelfSettingsIsSetPathMode();
                     Common.CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getFormattedText(
                             Lang.Type.F0033,
                             Lang.getText(isEnabled ? Lang.Type.B0431 : Lang.Type.B0432),

@@ -90,7 +90,6 @@ namespace TinyWars.WarEvent {
         private _onTouchedBtnClear(e: egret.TouchEvent): void {
             const openData = this._getOpenData<OpenDataForWeActionModifyPanel1>();
             Common.CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0190),
                 callback: () => {
                     openData.action.WarEventActionAddUnit.unitArray.length = 0;
@@ -231,7 +230,6 @@ namespace TinyWars.WarEvent {
             const data = this.data as DataForUnitRenderer;
             if (data) {
                 Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0029),
                     callback: () => {
                         Helpers.deleteElementFromArray(data.action.WarEventActionAddUnit.unitArray, data.dataForAddUnit);

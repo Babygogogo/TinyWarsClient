@@ -113,7 +113,6 @@ namespace TinyWars.MultiFreeRoom {
             const roomId = this._getOpenData<OpenDataForMfrRoomInfoPanel>().roomId;
             if (roomId != null) {
                 CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0149),
                     callback: () => {
                         MfrProxy.reqMfrDestroyRoom(roomId);
@@ -130,7 +129,6 @@ namespace TinyWars.MultiFreeRoom {
 
         private async _onTouchedBtnExitRoom(e: egret.TouchEvent): Promise<void> {
             CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0126),
                 callback: () => {
                     MfrProxy.reqMfrExitRoom(this._getOpenData<OpenDataForMfrRoomInfoPanel>().roomId);

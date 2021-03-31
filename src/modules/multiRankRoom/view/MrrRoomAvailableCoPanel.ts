@@ -135,7 +135,6 @@ namespace TinyWars.MultiRankRoom {
 
             const roomInfo = this._roomInfo;
             Common.CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
                 content : bannedCoCount
                     ? Lang.getText(Lang.Type.A0138) + `\n${generateCoNameList(roomInfo.settingsForCommon.configVersion, bannedCoIdList)}`
                     : Lang.getText(Lang.Type.A0139),

@@ -38,7 +38,7 @@ namespace TinyWars.MultiFreeRoom {
             this._updateComponentsForLanguage();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listPlayer.clear();
         }
 

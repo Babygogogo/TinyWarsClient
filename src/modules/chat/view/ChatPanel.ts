@@ -602,7 +602,6 @@ namespace TinyWars.Chat {
                     const info = await User.UserModel.getUserPublicInfo(userId);
                     if (info) {
                         Common.CommonConfirmPanel.show({
-                            title   : Lang.getText(Lang.Type.B0088),
                             content : Lang.getFormattedText(Lang.Type.F0025, info.nickname),
                             callback: () => {
                                 ChatPanel.show({ toUserId: userId });

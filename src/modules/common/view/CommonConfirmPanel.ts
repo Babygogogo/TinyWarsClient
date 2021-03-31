@@ -1,9 +1,10 @@
 
 namespace TinyWars.Common {
-    import Lang = Utility.Lang;
+    import Helpers  = Utility.Helpers;
+    import Lang     = Utility.Lang;
 
     type OpenDataForCommonConfirmPanel = {
-        title               : string;
+        title?              : string;
         content             : string;
         callback            : () => any;
         callbackOnCancel?   : () => any;
@@ -17,11 +18,13 @@ namespace TinyWars.Common {
 
         private static _instance: CommonConfirmPanel;
 
-        private _group          : eui.Group;
-        private _labelTitle     : GameUi.UiLabel;
-        private _labelContent   : GameUi.UiLabel;
-        private _btnCancel      : GameUi.UiButton;
-        private _btnConfirm     : GameUi.UiButton;
+        private readonly _imgMask       : GameUi.UiImage;
+
+        private readonly _group         : eui.Group;
+        private readonly _labelTitle    : GameUi.UiLabel;
+        private readonly _labelContent  : GameUi.UiLabel;
+        private readonly _btnCancel     : GameUi.UiButton;
+        private readonly _btnConfirm    : GameUi.UiButton;
 
         public static show(openData: OpenDataForCommonConfirmPanel): void {
             if (!CommonConfirmPanel._instance) {
@@ -49,15 +52,12 @@ namespace TinyWars.Common {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm, },
             ]);
 
-            this._btnConfirm.setTextColor(0x00FF00);
-            this._btnCancel.setTextColor(0xFF0000);
-
             this._showOpenAnimation();
 
             const openData          = this._getOpenData<OpenDataForCommonConfirmPanel>();
             this._btnConfirm.label  = openData.textForConfirm || Lang.getText(Lang.Type.B0026);
             this._btnCancel.label   = openData.textForCancel || Lang.getText(Lang.Type.B0154);
-            this._labelTitle.text   = openData.title;
+            this._labelTitle.text   = openData.title || Lang.getText(Lang.Type.B0088);
             this._labelContent.setRichText(openData.content);
         }
         protected async _onClosed(): Promise<void> {
@@ -77,20 +77,39 @@ namespace TinyWars.Common {
         }
 
         private _showOpenAnimation(): void {
-            const group = this._group;
-            egret.Tween.removeTweens(group);
-            egret.Tween.get(group)
-                .set({ alpha: 0, verticalCenter: -40 })
-                .to({ alpha: 1, verticalCenter: 0 }, 200);
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+                tweenTime   : 200,
+                waitTime    : 0,
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: -40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+                tweenTime   : 200,
+                waitTime    : 0,
+            });
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>(resolve => {
-                const group = this._group;
-                egret.Tween.removeTweens(group);
-                egret.Tween.get(group)
-                    .set({ alpha: 1, verticalCenter: 0 })
-                    .to({ alpha: 0, verticalCenter: -40 }, 200)
-                    .call(resolve);
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                    tweenTime   : 200,
+                    waitTime    : 0,
+                });
+
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: -40 },
+                    tweenTime   : 200,
+                    waitTime    : 0,
+                    callback    : resolve,
+                });
             });
         }
     }

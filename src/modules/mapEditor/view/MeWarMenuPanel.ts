@@ -133,7 +133,6 @@ namespace TinyWars.MapEditor {
         private _onMsgScrCreateCustomWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
             Common.CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
                     FlowManager.gotoSingleCustomWar({
@@ -439,7 +438,6 @@ namespace TinyWars.MapEditor {
                     name    : Lang.getText(Lang.Type.B0288),
                     callback: () => {
                         Common.CommonConfirmPanel.show({
-                            title   : Lang.getText(Lang.Type.B0088),
                             content : Lang.getText(Lang.Type.A0072),
                             callback: async () => {
                                 const slotIndex = war.getMapSlotIndex();
@@ -571,7 +569,6 @@ namespace TinyWars.MapEditor {
                         cb();
                     } else {
                         Common.CommonConfirmPanel.show({
-                            title           : Lang.getText(Lang.Type.B0088),
                             content         : Lang.getText(Lang.Type.A0142),
                             callback        : () => {
                                 MeConfirmSaveMapPanel.show();
@@ -609,7 +606,6 @@ namespace TinyWars.MapEditor {
 
                     const cb = () => {
                         Common.CommonConfirmPanel.show({
-                            title   : Lang.getText(Lang.Type.B0088),
                             content : Lang.getText(Lang.Type.A0201),
                             callback: () => {
                                 MultiFreeRoom.MfrModel.Create.resetDataByInitialWarData(warData);
@@ -623,7 +619,6 @@ namespace TinyWars.MapEditor {
                         cb();
                     } else {
                         Common.CommonConfirmPanel.show({
-                            title           : Lang.getText(Lang.Type.B0088),
                             content         : Lang.getText(Lang.Type.A0142),
                             callback        : () => {
                                 MeConfirmSaveMapPanel.show();

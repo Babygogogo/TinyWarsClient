@@ -138,7 +138,6 @@ namespace TinyWars.SingleCustomWar {
             const slotInfo  = data.slotInfo;
             if (slotInfo) {
                 Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0072),
                     callback: () => {
                         SingleCustomRoom.ScrProxy.reqContinueWar(slotInfo.slotIndex);

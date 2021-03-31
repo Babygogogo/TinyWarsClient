@@ -86,7 +86,6 @@ namespace TinyWars.Lobby {
         private _onTouchedGroupDiscord(e: egret.TouchEvent): void {
             if ((window) && (window.open)) {
                 Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getFormattedText(Lang.Type.F0065, `Discord`),
                     callback: () => {
                         window.open(DISCORD_URL);
@@ -98,7 +97,6 @@ namespace TinyWars.Lobby {
         private _onTouchedGroupGithub(e: egret.TouchEvent): void {
             if ((window) && (window.open)) {
                 Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getFormattedText(Lang.Type.F0065, `GitHub`),
                     callback: () => {
                         window.open(GITHUB_URL);

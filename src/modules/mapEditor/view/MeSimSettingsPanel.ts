@@ -81,7 +81,6 @@ namespace TinyWars.MapEditor {
         private _onMsgScrCreateCustomWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
             Common.CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
                     FlowManager.gotoSingleCustomWar({

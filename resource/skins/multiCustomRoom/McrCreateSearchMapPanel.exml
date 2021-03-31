@@ -111,20 +111,9 @@
                                     bottom="0" />
                     <GameUi:UiLabel id="_labelTagFog" size="16" touchEnabled="false" text="Yes" x="10"
                                     verticalCenter="0" textColor="0xFFFFFF" />
-                    <GameUi:UiButton id="_btnTagFog" top="0" bottom="0" width="30" right="0">
-                        <GameUi:skinName>
-                            <e:Skin>
-                                <e:Group horizontalCenter="0" verticalCenter="0">
-                                    <e:Image source="commonColorTransparent0000" left="0" right="0" top="0" bottom="0" />
-                                    <e:Image source="shape0000" />
-                                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25"
-                                             bold="true" textColor="0xffffff" />
-                                    <GameUi:UiImage id="_imgExtra" verticalCenter="0" horizontalCenter="0" />
-                                </e:Group>
-                            </e:Skin>
-                        </GameUi:skinName>
-                    </GameUi:UiButton>
                 </e:Group>
+                <GameUi:UiButton id="_btnTagFog" top="0" bottom="0" width="40" right="0"
+                                 skinName="Skins.Component.Button.ButtonTriangle001"></GameUi:UiButton>
             </e:Group>
             <e:layout>
                 <e:VerticalLayout gap="4" />

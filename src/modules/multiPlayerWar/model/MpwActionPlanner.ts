@@ -458,7 +458,6 @@ namespace TinyWars.MultiPlayerWar {
                         actionType  : UnitActionType.UseCoSuperPower,
                         callback    : () => {
                             CommonConfirmPanel.show({
-                                title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0058),
                                 callback: () => this._setStateRequestingUnitUseCoSuperPower(),
                             });
@@ -476,7 +475,6 @@ namespace TinyWars.MultiPlayerWar {
                         actionType  : UnitActionType.UseCoPower,
                         callback    : () => {
                             CommonConfirmPanel.show({
-                                title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0054),
                                 callback: () => this._setStateRequestingUnitUseCoPower(),
                             });
@@ -599,7 +597,6 @@ namespace TinyWars.MultiPlayerWar {
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitDropOnChooseAction()
                             : () => CommonConfirmPanel.show({
-                                title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0055),
                                 callback: () => this._setStateRequestingUnitDropOnChooseAction(),
                             }),
@@ -610,7 +607,6 @@ namespace TinyWars.MultiPlayerWar {
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitWait()
                             : () => CommonConfirmPanel.show({
-                                title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0055),
                                 callback: () => this._setStateRequestingUnitWait(),
                             }),

@@ -177,7 +177,6 @@ namespace TinyWars.WarEvent {
                 callback();
             } else {
                 CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getFormattedText(Lang.Type.F0060, `N${nodeId}`),
                     callback,
                 });

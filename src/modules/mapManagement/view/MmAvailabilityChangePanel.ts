@@ -101,7 +101,6 @@ namespace TinyWars.MapManagement {
 
         private _onTouchedBtnDelete(e: egret.TouchEvent): void {
             Common.CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0080),
                 callback: () => {
                     WarMapProxy.reqMmSetMapEnabled(this._mapId, false);

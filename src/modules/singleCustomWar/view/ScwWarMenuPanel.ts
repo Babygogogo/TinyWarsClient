@@ -144,7 +144,6 @@ namespace TinyWars.SingleCustomWar {
         private _onMsgScrCreateCustomWar(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
             Common.CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
                     FlowManager.gotoSingleCustomWar({
@@ -333,7 +332,6 @@ namespace TinyWars.SingleCustomWar {
                     name    : Lang.getText(Lang.Type.B0260),
                     callback: () => {
                         Common.CommonConfirmPanel.show({
-                            title   : Lang.getText(Lang.Type.B0088),
                             content : Lang.getText(Lang.Type.A0071),
                             callback: () => {
                                 SingleCustomRoom.ScrProxy.reqSaveWar(war);
@@ -371,7 +369,6 @@ namespace TinyWars.SingleCustomWar {
                     name    : Lang.getText(Lang.Type.B0366),
                     callback: () => {
                         Common.CommonConfirmPanel.show({
-                            title   : Lang.getText(Lang.Type.B0088),
                             content : Lang.getText(Lang.Type.A0108),
                             callback: () => {
                                 war.setIsSinglePlayerCheating(true);
@@ -465,7 +462,6 @@ namespace TinyWars.SingleCustomWar {
                     }
 
                     Common.CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0201),
                         callback: () => {
                             MultiFreeRoom.MfrModel.Create.resetDataByInitialWarData(warData);
@@ -486,7 +482,6 @@ namespace TinyWars.SingleCustomWar {
                     name    : Lang.getText(Lang.Type.B0420),
                     callback: () => {
                         CommonConfirmPanel.show({
-                            title   : Lang.getText(Lang.Type.B0088),
                             content : Lang.getText(Lang.Type.A0140),
                             callback: () => {
                                 SingleCustomRoom.ScrProxy.reqScrDeleteWar(saveSlotIndex);
@@ -509,7 +504,6 @@ namespace TinyWars.SingleCustomWar {
                 callback: () => {
                     const isEnabled = User.UserModel.getSelfSettingsIsSetPathMode();
                     CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getFormattedText(
                             Lang.Type.F0033,
                             Lang.getText(isEnabled ? Lang.Type.B0431 : Lang.Type.B0432),
@@ -605,7 +599,6 @@ namespace TinyWars.SingleCustomWar {
                 const player        = war.getPlayer(playerIndex);
                 const isHuman       = player.getUserId() != null;
                 Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : isHuman ? Lang.getText(Lang.Type.A0110) : Lang.getText(Lang.Type.A0111),
                     callback: () => {
                         if (!isHuman) {

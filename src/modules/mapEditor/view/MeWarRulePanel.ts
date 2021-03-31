@@ -164,7 +164,6 @@ namespace TinyWars.MapEditor {
                     FloatText.show(Lang.getText(Lang.Type.A0096));
                 } else {
                     CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0097),
                         callback: () => {
                             war.deleteWarRule(selectedRule.ruleId);

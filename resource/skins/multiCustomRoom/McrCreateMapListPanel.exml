@@ -99,15 +99,8 @@
                             </GameUi:UiButton>
                             <GameUi:UiLabel id="_labelName" text="地图名称" size="16" verticalCenter="0" x="10"
                                             maxTextWidth="150" />
-                            <GameUi:UiButton id="_btnNext" visible.up="false" width="40" top="0" bottom="0" right="0">
-                                <e:skinName>
-                                    <e:Skin states="up,down,disabled">
-                                        <e:Image source="shape0000" horizontalCenter="0" verticalCenter="0" />
-                                        <e:Image source="shape0000" left="0" right="0" top="0" bottom="0" alpha="0" />
-                                        <e:Label id="labelDisplay" text="" x="4" y="5" visible="false" />
-                                    </e:Skin>
-                                </e:skinName>
-                            </GameUi:UiButton>
+                            <GameUi:UiButton id="_btnNext" visible.up="false" width="40" top="0" bottom="0" right="0"
+                                             skinName="Skins.Component.Button.ButtonTriangle001"></GameUi:UiButton>
                         </e:Skin>
                     </e:itemRendererSkinName>
                     <e:layout>

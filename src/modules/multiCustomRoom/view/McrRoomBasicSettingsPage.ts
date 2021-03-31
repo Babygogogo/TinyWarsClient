@@ -100,7 +100,7 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForRoomInfo();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listPlayer.clear();
             this._roomInfo = null;
         }
@@ -501,7 +501,6 @@ namespace TinyWars.MultiCustomRoom {
             if (playerData) {
                 const userId = playerData.userId;
                 Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getFormattedText(Lang.Type.F0029, await User.UserModel.getUserNickname(userId)),
                     callback: () => {
                         McrProxy.reqMcrDeletePlayer(data.roomInfo.roomId, playerData.playerIndex);

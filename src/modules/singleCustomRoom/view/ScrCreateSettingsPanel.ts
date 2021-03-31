@@ -92,7 +92,6 @@ namespace TinyWars.SingleCustomRoom {
                     func();
                 } else {
                     Common.CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0070),
                         callback: func,
                     });

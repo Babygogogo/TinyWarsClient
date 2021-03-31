@@ -90,7 +90,6 @@ namespace TinyWars.MultiCustomRoom {
                     callback1();
                 } else {
                     CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : `${Lang.getText(Lang.Type.A0050)}\n${Lang.getText(Lang.Type.A0052)}`,
                         callback: callback1,
                     });
@@ -101,7 +100,6 @@ namespace TinyWars.MultiCustomRoom {
                 callback2();
             } else {
                 CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0102),
                     callback: callback2,
                 });

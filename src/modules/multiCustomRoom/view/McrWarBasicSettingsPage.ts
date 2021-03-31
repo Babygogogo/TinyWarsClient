@@ -82,7 +82,7 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForWarInfo();
         }
 
-        protected _onClosed(): void {
+        protected async _onClosed(): Promise<void> {
             this._listPlayer.clear();
             this._warInfo = null;
         }

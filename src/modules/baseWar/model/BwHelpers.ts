@@ -906,6 +906,20 @@ namespace TinyWars.BaseWar.BwHelpers {
         );
     }
 
+    export function getImageSourceForSkinId(skinId: number, isSelected: boolean): string {
+        if (skinId === 1) {
+            return isSelected ? `commonCircle0000` : `commonCircle0001`;
+        } else if (skinId === 2) {
+            return isSelected ? `commonCircle0002` : `commonCircle0003`;
+        } else if (skinId === 3) {
+            return isSelected ? `commonCircle0004` : `commonCircle0005`;
+        } else if (skinId === 4) {
+            return isSelected ? `commonCircle0006` : `commonCircle0007`;
+        } else {
+            return undefined;
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Other validators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////

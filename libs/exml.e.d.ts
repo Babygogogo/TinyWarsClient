@@ -1,4 +1,8 @@
 declare module Skins.Component.Button{
+	class ButtonBlue001 extends eui.Skin{
+	}
+}
+declare module Skins.Component.Button{
 	class ButtonClose001 extends eui.Skin{
 	}
 }
@@ -24,6 +28,14 @@ declare module Skins.Component.Button{
 }
 declare module Skins.Component.Button{
 	class ButtonSetting001 extends eui.Skin{
+	}
+}
+declare module Skins.Component.Button{
+	class ButtonTriangle001 extends eui.Skin{
+	}
+}
+declare module Skins.Component.Button{
+	class ButtonYellow001 extends eui.Skin{
 	}
 }
 declare module Skins.Component.Input{

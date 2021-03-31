@@ -263,7 +263,6 @@ namespace TinyWars.MapEditor {
                 MeModel.getWar().getDrawer().setModeDrawTileBase(dataForDrawTileBase);
             } else {
                 Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0089),
                     callback: () => {
                         const war           = MeModel.getWar();
