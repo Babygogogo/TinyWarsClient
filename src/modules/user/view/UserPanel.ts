@@ -284,7 +284,7 @@ namespace TinyWars.User {
             const dataList  : DataForHistoryRenderer[] = [{
                 index       : index++,
                 userId,
-                warType     : WarType.MrwStd,
+                warType     : WarType.MrwFog,
                 playersCount: 2,
             }];
             for (let playersCount = 2; playersCount <= CommonConstants.WarMaxPlayerIndex; ++playersCount) {
