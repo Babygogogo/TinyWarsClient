@@ -14,8 +14,8 @@ namespace TinyWars.MapEditor {
         private static _instance: MeChooseTileObjectPanel;
 
         private _labelRecentTitle   : GameUi.UiLabel;
-        private _listRecent         : GameUi.UiScrollList;
-        private _listCategory       : GameUi.UiScrollList;
+        private _listRecent         : GameUi.UiScrollList<DataForTileObjectRenderer>;
+        private _listCategory       : GameUi.UiScrollList<DataForCategoryRenderer>;
         private _btnCancel          : GameUi.UiButton;
 
         private _dataListForRecent  : DataForTileObjectRenderer[] = [];
@@ -163,7 +163,7 @@ namespace TinyWars.MapEditor {
 
     class CategoryRenderer extends GameUi.UiListItemRenderer {
         private _labelCategory  : GameUi.UiLabel;
-        private _listTileObject : GameUi.UiScrollList;
+        private _listTileObject : GameUi.UiScrollList<DataForTileObjectRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();

@@ -30,11 +30,11 @@ namespace TinyWars.MultiCustomRoom {
 
         private readonly _groupChoosePlayerIndex: eui.Group;
         private readonly _labelChoosePlayerIndex: GameUi.UiLabel;
-        private readonly _sclPlayerIndex        : GameUi.UiScrollList;
+        private readonly _sclPlayerIndex        : GameUi.UiScrollList<DataForPlayerIndexRenderer>;
 
         private readonly _groupChooseSkinId     : eui.Group;
         private readonly _labelChooseSkinId     : GameUi.UiLabel;
-        private readonly _sclSkinId             : GameUi.UiScrollList;
+        private readonly _sclSkinId             : GameUi.UiScrollList<DataForSkinIdRenderer>;
 
         private readonly _tabSettings           : GameUi.UiTab;
         private readonly _btnBack               : GameUi.UiButton;

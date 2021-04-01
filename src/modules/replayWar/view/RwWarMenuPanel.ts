@@ -24,7 +24,7 @@ namespace TinyWars.ReplayWar {
         private static _instance: RwWarMenuPanel;
 
         private _group          : eui.Group;
-        private _listCommand    : GameUi.UiScrollList;
+        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer>;
         private _labelNoCommand : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
 
@@ -42,7 +42,7 @@ namespace TinyWars.ReplayWar {
         private _labelTurnIndex         : GameUi.UiLabel;
         private _btnActionId            : GameUi.UiButton;
         private _labelActionId          : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _war        : RwWar;
         private _unitMap    : BaseWar.BwUnitMap;
@@ -417,7 +417,7 @@ namespace TinyWars.ReplayWar {
         private _labelName  : GameUi.UiLabel;
         private _labelForce : GameUi.UiLabel;
         private _labelLost  : GameUi.UiLabel;
-        private _listInfo   : GameUi.UiScrollList;
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();

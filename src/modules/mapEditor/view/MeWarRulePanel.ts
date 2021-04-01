@@ -20,7 +20,7 @@ namespace TinyWars.MapEditor {
         private static _instance: MeWarRulePanel;
 
         private _labelMenuTitle         : GameUi.UiLabel;
-        private _listWarRule            : GameUi.UiScrollList;
+        private _listWarRule            : GameUi.UiScrollList<DataForWarRuleNameRenderer>;
         private _btnAddRule             : GameUi.UiButton;
         private _btnDelete              : GameUi.UiButton;
         private _btnBack                : GameUi.UiButton;
@@ -44,10 +44,10 @@ namespace TinyWars.MapEditor {
         private _btnTestWarEvent        : GameUi.UiButton;
         private _btnAddWarEvent         : GameUi.UiButton;
         private _btnEditWarEvent        : GameUi.UiButton;
-        private _listWarEvent           : GameUi.UiScrollList;
+        private _listWarEvent           : GameUi.UiScrollList<DataForWarEventRenderer>;
 
         private _labelPlayerList        : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _war                    : MeWar;
         private _dataForListWarRule     : DataForWarRuleNameRenderer[] = [];
@@ -523,7 +523,7 @@ namespace TinyWars.MapEditor {
     }
 
     class PlayerRenderer extends GameUi.UiListItemRenderer {
-        private _listInfo   : GameUi.UiScrollList;
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([

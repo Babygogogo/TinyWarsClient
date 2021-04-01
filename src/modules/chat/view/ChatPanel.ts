@@ -26,12 +26,12 @@ namespace TinyWars.Chat {
 
         private _groupChannel   : eui.Group;
         private _labelChatTitle : TinyWars.GameUi.UiLabel;
-        private _listChat       : TinyWars.GameUi.UiScrollList;
+        private _listChat       : TinyWars.GameUi.UiScrollList<DataForChatPageRenderer>;
         private _btnBack        : TinyWars.GameUi.UiButton;
         private _btnRefresh     : TinyWars.GameUi.UiButton;
         private _groupMessage   : eui.Group;
         private _labelNoMessage : TinyWars.GameUi.UiLabel;
-        private _listMessage    : TinyWars.GameUi.UiScrollList;
+        private _listMessage    : TinyWars.GameUi.UiScrollList<DataForMessageRenderer>;
         private _groupInput     : eui.Group;
         private _inputMessage   : TinyWars.GameUi.UiTextInput;
         private _btnSend        : TinyWars.GameUi.UiButton;

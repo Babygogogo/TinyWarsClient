@@ -22,7 +22,7 @@ namespace TinyWars.BaseWar {
         private static _instance: BwUnitActionsPanel;
 
         private _group      : eui.Group;
-        private _listAction : GameUi.UiScrollList;
+        private _listAction : GameUi.UiScrollList<DataForUnitActionRenderer>;
 
         public static show(openData: OpenDataForBwUnitActionsPanel): void {
             if (!BwUnitActionsPanel._instance) {

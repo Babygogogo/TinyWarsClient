@@ -19,7 +19,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelMapName       : TinyWars.GameUi.UiLabel;
         private _btnBuildings       : TinyWars.GameUi.UiButton;
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
-        private _listPlayer         : TinyWars.GameUi.UiScrollList;
+        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _roomInfo           : IMcrRoomInfo;
 
@@ -120,7 +120,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     class PlayerRenderer extends GameUi.UiListItemRenderer {
-        private _listInfo   : GameUi.UiScrollList;
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();

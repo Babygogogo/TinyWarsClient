@@ -12,7 +12,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _labelMenuTitle : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
-        private _listCommand    : GameUi.UiScrollList;
+        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer>;
 
         public static show(): void {
             if (!McrWatchMainMenuPanel._instance) {

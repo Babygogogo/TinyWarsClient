@@ -22,7 +22,7 @@ namespace TinyWars.WarEvent {
 
         private _labelTitle : GameUi.UiLabel;
         private _btnClose   : GameUi.UiButton;
-        private _listType   : GameUi.UiScrollList;
+        private _listType   : GameUi.UiScrollList<DataForTypeRenderer>;
 
         public static show(openData: OpenDataForWeConditionTypeListPanel): void {
             if (!WeConditionTypeListPanel._instance) {

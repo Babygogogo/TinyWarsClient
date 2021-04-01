@@ -25,8 +25,8 @@ namespace TinyWars.BaseWar {
         private _labelName          : GameUi.UiLabel;
         private _btnUnitsInfo       : GameUi.UiButton;
 
-        private _listInfo           : GameUi.UiScrollList;
-        private _listDamageChart    : GameUi.UiScrollList;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
+        private _listDamageChart    : GameUi.UiScrollList<DataForDamageRenderer>;
         private _labelDamageChart   : GameUi.UiLabel;
         private _labelOffenseMain1  : GameUi.UiLabel;
         private _labelOffenseSub1   : GameUi.UiLabel;

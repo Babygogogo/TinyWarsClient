@@ -24,9 +24,9 @@ namespace TinyWars.BaseWar {
         private _labelName          : GameUi.UiLabel;
         private _imgTileBase        : GameUi.UiImage;
         private _imgTileObject      : GameUi.UiImage;
-        private _listInfo           : GameUi.UiScrollList;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
         private _labelMoveCost      : GameUi.UiLabel;
-        private _listMoveCost       : GameUi.UiScrollList;
+        private _listMoveCost       : GameUi.UiScrollList<DataForMoveRangeRenderer>;
 
         private _dataForListMoveCost: DataForMoveRangeRenderer[];
 

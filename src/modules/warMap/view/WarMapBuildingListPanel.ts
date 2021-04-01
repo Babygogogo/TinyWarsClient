@@ -19,8 +19,8 @@ namespace TinyWars.WarMap {
 
         private static _instance: WarMapBuildingListPanel;
 
-        public _labelTitle  : GameUi.UiLabel;
-        public _listTile    : GameUi.UiScrollList;
+        private readonly _labelTitle    : GameUi.UiLabel;
+        private readonly _listTile      : GameUi.UiScrollList<DataForTileRenderer>;
 
         public static show(openData: OpenDataForBuildingListPanel): void {
             if (!WarMapBuildingListPanel._instance) {

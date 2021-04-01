@@ -16,7 +16,7 @@ namespace TinyWars.MultiRankRoom {
         private static _instance: MrrMyWarListPanel;
 
         private _labelMenuTitle : GameUi.UiLabel;
-        private _listWar        : GameUi.UiScrollList;
+        private _listWar        : GameUi.UiScrollList<DataForWarRenderer>;
         private _labelNoWar     : GameUi.UiLabel;
         private _zoomMap        : GameUi.UiZoomableMap;
         private _btnBack        : GameUi.UiButton;
@@ -26,7 +26,7 @@ namespace TinyWars.MultiRankRoom {
         private _labelDesigner          : GameUi.UiLabel;
         private _labelHasFog            : GameUi.UiLabel;
         private _labelPlayers           : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
         private _selectedWarIndex   : number;

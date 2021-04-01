@@ -15,7 +15,7 @@ namespace TinyWars.MultiFreeRoom {
     export class MfrRoomAdvancedSettingsPage extends GameUi.UiTabPage {
         private _btnBuildings       : TinyWars.GameUi.UiButton;
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
-        private _listPlayer         : TinyWars.GameUi.UiScrollList;
+        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _roomInfo           : IMfrRoomInfo;
 
@@ -106,7 +106,7 @@ namespace TinyWars.MultiFreeRoom {
     }
 
     class PlayerRenderer extends GameUi.UiListItemRenderer {
-        private _listInfo   : GameUi.UiScrollList;
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();

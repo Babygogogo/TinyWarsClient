@@ -60,7 +60,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelReady             : TinyWars.GameUi.UiLabel;
 
         private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
-        private _listPlayer             : TinyWars.GameUi.UiScrollList;
+        private _listPlayer             : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _roomInfo               : ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
 

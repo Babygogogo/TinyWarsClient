@@ -20,7 +20,7 @@ namespace TinyWars.MapManagement {
         private _labelNoData    : GameUi.UiLabel;
         private _labelMenuTitle : GameUi.UiLabel;
         private _labelLoading   : GameUi.UiLabel;
-        private _listMap        : GameUi.UiScrollList;
+        private _listMap        : GameUi.UiScrollList<DataForMapRenderer>;
         private _btnBack        : GameUi.UiButton;
 
         private _dataForListMap     : DataForMapRenderer[] = [];

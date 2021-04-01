@@ -11,7 +11,7 @@ namespace TinyWars.MultiFreeRoom {
         private _labelPlayersCountTitle : GameUi.UiLabel;
         private _labelPlayersCount      : GameUi.UiLabel;
         private _labelPlayerList        : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();
@@ -64,7 +64,7 @@ namespace TinyWars.MultiFreeRoom {
     }
 
     class PlayerRenderer extends GameUi.UiListItemRenderer {
-        private _listInfo   : GameUi.UiScrollList;
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();

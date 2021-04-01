@@ -2,18 +2,17 @@
 namespace TinyWars.MultiCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import Lang             = Utility.Lang;
-    import ConfigManager    = Utility.ConfigManager;
+    import CommonConstants  = Utility.CommonConstants;
     import WarMapModel      = WarMap.WarMapModel;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
-    import CommonConstants  = Utility.CommonConstants;
 
     export class McrJoinAdvancedSettingsPage extends GameUi.UiTabPage {
         private _btnMapNameTitle    : TinyWars.GameUi.UiButton;
         private _labelMapName       : TinyWars.GameUi.UiLabel;
         private _btnBuildings       : TinyWars.GameUi.UiButton;
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
-        private _listPlayer         : TinyWars.GameUi.UiScrollList;
+        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _mapRawData : ProtoTypes.Map.IMapRawData;
 
@@ -79,7 +78,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     class PlayerRenderer extends GameUi.UiListItemRenderer {
-        private _listInfo   : GameUi.UiScrollList;
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();

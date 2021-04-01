@@ -15,7 +15,7 @@ namespace TinyWars.BaseWar {
         private static _instance: BwBuildingListPanel;
 
         public _labelTitle  : GameUi.UiLabel;
-        public _listTile    : GameUi.UiScrollList;
+        public _listTile    : GameUi.UiScrollList<DataForTileRenderer>;
 
         public static show(openData: OpenDataForBwBuildingListPanel): void {
             if (!BwBuildingListPanel._instance) {

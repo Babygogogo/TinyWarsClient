@@ -18,15 +18,15 @@ namespace TinyWars.Common {
 
         private _groupList          : eui.Group;
         private _labelTitle         : TinyWars.GameUi.UiLabel;
-        private _listUnit           : TinyWars.GameUi.UiScrollList;
+        private _listUnit           : TinyWars.GameUi.UiScrollList<DataForUnitRenderer>;
         private _btnBack            : TinyWars.GameUi.UiButton;
 
         private _groupInfo          : eui.Group;
         private _conUnitView        : eui.Group;
         private _labelName          : GameUi.UiLabel;
 
-        private _listInfo           : GameUi.UiScrollList;
-        private _listDamageChart    : GameUi.UiScrollList;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
+        private _listDamageChart    : GameUi.UiScrollList<DataForDamageRenderer>;
         private _labelDamageChart   : GameUi.UiLabel;
         private _labelOffenseMain1  : GameUi.UiLabel;
         private _labelOffenseSub1   : GameUi.UiLabel;

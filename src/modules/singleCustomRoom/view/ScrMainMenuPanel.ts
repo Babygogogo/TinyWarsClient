@@ -10,7 +10,7 @@ namespace TinyWars.SingleCustomRoom {
         private static _instance: ScrMainMenuPanel;
 
         private _btnBack    : GameUi.UiButton;
-        private _listCommand: GameUi.UiScrollList;
+        private _listCommand: GameUi.UiScrollList<DataForCommandRenderer>;
 
         public static show(): void {
             if (!ScrMainMenuPanel._instance) {

@@ -27,7 +27,7 @@ namespace TinyWars.SingleCustomWar {
         private static _instance: ScwWarMenuPanel;
 
         private _group          : eui.Group;
-        private _listCommand    : GameUi.UiScrollList;
+        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer>;
         private _labelNoCommand : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
 
@@ -37,9 +37,9 @@ namespace TinyWars.SingleCustomWar {
         private _labelPlayerInfoTitle   : GameUi.UiLabel;
         private _btnMapNameTitle        : GameUi.UiButton;
         private _labelMapName           : GameUi.UiLabel;
-        private _listWarInfo            : GameUi.UiScrollList;
+        private _listWarInfo            : GameUi.UiScrollList<DataForInfoRenderer>;
         private _btnBuildings           : GameUi.UiButton;
-        private _listPlayer             : GameUi.UiScrollList;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _war            : ScwWar;
         private _unitMap        : BaseWar.BwUnitMap;
@@ -576,7 +576,7 @@ namespace TinyWars.SingleCustomWar {
         private _btnName        : GameUi.UiButton;
         private _labelForce     : GameUi.UiLabel;
         private _labelLost      : GameUi.UiLabel;
-        private _listInfo       : GameUi.UiScrollList;
+        private _listInfo       : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();

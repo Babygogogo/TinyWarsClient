@@ -16,7 +16,7 @@ namespace TinyWars.MultiFreeRoom {
         private static _instance: MfrMyRoomListPanel;
 
         private _labelMenuTitle : GameUi.UiLabel;
-        private _listWar        : GameUi.UiScrollList;
+        private _listWar        : GameUi.UiScrollList<DataForWarRenderer>;
         private _labelNoWar     : GameUi.UiLabel;
         private _zoomMap        : GameUi.UiZoomableMap;
         private _btnBack        : GameUi.UiButton;
@@ -24,7 +24,7 @@ namespace TinyWars.MultiFreeRoom {
         private _groupInfo          : eui.Group;
         private _labelHasFog        : GameUi.UiLabel;
         private _labelWarComment    : GameUi.UiLabel;
-        private _listPlayer         : GameUi.UiScrollList;
+        private _listPlayer         : GameUi.UiScrollList<DataForPlayerRenderer>;
         private _labelCommentTitle  : GameUi.UiLabel;
         private _labelPlayersTitle  : GameUi.UiLabel;
 

@@ -12,7 +12,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _group          : eui.Group;
         private _labelPanelTitle: GameUi.UiLabel;
-        private _srlSaveSlot    : GameUi.UiScrollList;
+        private _srlSaveSlot    : GameUi.UiScrollList<DataForSlotRenderer>;
         private _listSaveSlot   : eui.List;
         private _btnCancel      : GameUi.UiButton;
 

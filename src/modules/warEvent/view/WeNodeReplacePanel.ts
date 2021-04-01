@@ -19,7 +19,7 @@ namespace TinyWars.WarEvent {
 
         private static _instance: WeNodeReplacePanel;
 
-        private _listNode       : GameUi.UiScrollList;
+        private _listNode       : GameUi.UiScrollList<DataForNodeRenderer>;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoNode    : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;

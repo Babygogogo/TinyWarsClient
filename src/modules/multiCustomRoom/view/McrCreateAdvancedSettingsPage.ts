@@ -7,7 +7,9 @@ namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
 
     export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
-        private readonly _listPlayer    : GameUi.UiScrollList;
+        private readonly _btnReset      : GameUi.UiButton;
+        private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer>;
+        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _mapRawData : ProtoTypes.Map.IMapRawData;
 
@@ -22,11 +24,13 @@ namespace TinyWars.MultiCustomRoom {
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.McrCreateAvailableCoIdListChanged,  callback: this._onNotifyMcrCreateAvailableCoIdListChanged },
             ]);
+            this._listSetting.setItemRenderer(SettingRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
             this._mapRawData = await McrModel.Create.getMapRawData();
 
             this._updateComponentsForLanguage();
+            this._initListSetting();
             this._updateListPlayer();
         }
 
@@ -44,6 +48,13 @@ namespace TinyWars.MultiCustomRoom {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
+            this._btnReset.label = Lang.getText(Lang.Type.B0567);
+        }
+
+        private _initListSetting(): void {
+            const dataArray: DataForSettingRenderer[] = [];
+            // TODO
+            this._listSetting.bindData(dataArray);
         }
 
         private _updateListPlayer(): void {
@@ -56,13 +67,44 @@ namespace TinyWars.MultiCustomRoom {
         }
     }
 
+    type DataForSettingRenderer = {
+        nameLangType    : Lang.Type;
+        callbackForHelp : (() => void) | null;
+    }
+    class SettingRenderer extends GameUi.UiListItemRenderer {
+        private readonly _labelName : GameUi.UiLabel;
+        private readonly _btnHelp   : GameUi.UiButton;
+
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
+            ]);
+        }
+
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            const data = this.data as DataForSettingRenderer;
+            if (data) {
+                this._labelName.text    = Lang.getText(data.nameLangType);
+                this._btnHelp.visible   = !!data.callbackForHelp;
+            }
+        }
+
+        private _onTouchedBtnHelp(e: egret.Event): void {
+            const data = this.data as DataForSettingRenderer;
+            if ((data) && (data.callbackForHelp)) {
+                data.callbackForHelp();
+            }
+        }
+    }
+
     type DataForPlayerRenderer = {
         playerIndex : number;
     }
-
     class PlayerRenderer extends GameUi.UiListItemRenderer {
         private _labelPlayerIndex   : GameUi.UiLabel;
-        private _listInfo           : GameUi.UiScrollList;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -439,7 +481,6 @@ namespace TinyWars.MultiCustomRoom {
         infoColor               : number;
         callbackOnTouchedTitle  : (() => void) | null;
     }
-
     class InfoRenderer extends GameUi.UiListItemRenderer {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;

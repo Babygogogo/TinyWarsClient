@@ -12,7 +12,7 @@ namespace TinyWars.MapManagement {
 
         private static _instance: MmTagListPanel;
 
-        private _listMap        : GameUi.UiScrollList;
+        private _listMap        : GameUi.UiScrollList<DataForMapNameRenderer>;
         private _zoomMap        : GameUi.UiZoomableMap;
         private _labelMenuTitle : GameUi.UiLabel;
         private _btnSearch      : GameUi.UiButton;

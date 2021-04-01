@@ -18,7 +18,7 @@ namespace TinyWars.ReplayWar {
 
         private _labelMenuTitle : GameUi.UiLabel;
         private _labelNoReplay  : GameUi.UiLabel;
-        private _listMap        : GameUi.UiScrollList;
+        private _listMap        : GameUi.UiScrollList<DataForMapNameRenderer>;
         private _zoomMap        : GameUi.UiZoomableMap;
         private _btnSearch      : GameUi.UiButton;
         private _btnBack        : GameUi.UiButton;
@@ -34,7 +34,7 @@ namespace TinyWars.ReplayWar {
         private _labelGlobalRating      : GameUi.UiLabel;
         private _labelMyRatingTitle     : GameUi.UiLabel;
         private _labelMyRating          : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _dataForListReplay  : DataForMapNameRenderer[] = [];
         private _selectedIndex      : number;

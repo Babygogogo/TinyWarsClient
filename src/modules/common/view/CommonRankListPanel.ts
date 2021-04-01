@@ -17,11 +17,11 @@ namespace TinyWars.Common {
 
         private _labelStd       : TinyWars.GameUi.UiLabel;
         private _labelStdNoData : TinyWars.GameUi.UiLabel;
-        private _listStd        : TinyWars.GameUi.UiScrollList;
+        private _listStd        : TinyWars.GameUi.UiScrollList<DataForUserRenderer>;
 
         private _labelFog       : TinyWars.GameUi.UiLabel;
         private _labelFogNoData : TinyWars.GameUi.UiLabel;
-        private _listFog        : TinyWars.GameUi.UiScrollList;
+        private _listFog        : TinyWars.GameUi.UiScrollList<DataForUserRenderer>;
 
         public static show(): void {
             if (!CommonRankListPanel._instance) {

@@ -15,7 +15,7 @@ namespace TinyWars.User {
         private _labelUsersCountTitle   : GameUi.UiLabel;
 
         private _group          : eui.Group;
-        private _listUser       : GameUi.UiScrollList;
+        private _listUser       : GameUi.UiScrollList<DataForUserRenderer>;
         private _labelUsersCount: GameUi.UiLabel;
         private _labelLoading   : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;

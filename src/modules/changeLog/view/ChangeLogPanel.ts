@@ -12,7 +12,7 @@ namespace TinyWars.ChangeLog {
 
         private static _instance: ChangeLogPanel;
 
-        private _listMessage    : GameUi.UiScrollList;
+        private _listMessage    : GameUi.UiScrollList<DataForMessageRenderer>;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoMessage : GameUi.UiLabel;
         private _btnAddMessage  : GameUi.UiButton;

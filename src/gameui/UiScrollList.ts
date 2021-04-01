@@ -4,7 +4,7 @@ namespace TinyWars.GameUi {
     import Logger       = Utility.Logger;
     import StageManager = Utility.StageManager;
 
-    export class UiScrollList extends eui.Scroller {
+    export class UiScrollList<DataForRenderer> extends eui.Scroller {
         private _itemRenderer : new () => GameUi.UiListItemRenderer;
         private _dataProvider : eui.ArrayCollection;
 
@@ -28,7 +28,7 @@ namespace TinyWars.GameUi {
             }
         }
 
-        public bindData(data : any[]): void {
+        public bindData(data: DataForRenderer[]): void {
             const provider = this._dataProvider;
             for (let i = 0; i < data.length; ++i) {
                 const newItem = data[i];
@@ -78,7 +78,7 @@ namespace TinyWars.GameUi {
             return this._dataProvider;
         }
 
-        public updateSingleData(index : number, data : any) : void {
+        public updateSingleData(index: number, data: DataForRenderer) : void {
             let dataProvider = this._dataProvider;
             if (!dataProvider) {
                 return;

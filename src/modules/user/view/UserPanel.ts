@@ -60,8 +60,8 @@ namespace TinyWars.User {
         private readonly _labelHistoryFogDraw       : GameUi.UiLabel;
         private readonly _labelHistoryFogRatio      : GameUi.UiLabel;
 
-        private readonly _sclHistoryStd             : GameUi.UiScrollList;
-        private readonly _sclHistoryFog             : GameUi.UiScrollList;
+        private readonly _sclHistoryStd             : GameUi.UiScrollList<DataForHistoryRenderer>;
+        private readonly _sclHistoryFog             : GameUi.UiScrollList<DataForHistoryRenderer>;
 
         private _userId: number;
 

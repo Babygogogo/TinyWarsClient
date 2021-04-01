@@ -23,7 +23,7 @@ namespace TinyWars.WarEvent {
         private _btnClear       : GameUi.UiButton;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoEvent   : GameUi.UiLabel;
-        private _listWarEvent   : GameUi.UiScrollList;
+        private _listWarEvent   : GameUi.UiScrollList<DataForWarEventDescRenderer>;
 
         public static show(openData: OpenDataForWeEventListPanel): void {
             if (!WeEventListPanel._instance) {

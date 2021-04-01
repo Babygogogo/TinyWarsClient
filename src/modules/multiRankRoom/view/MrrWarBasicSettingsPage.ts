@@ -46,7 +46,7 @@ namespace TinyWars.MultiRankRoom {
         private _btnHelpSkinId          : TinyWars.GameUi.UiButton;
 
         private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
-        private _listPlayer             : TinyWars.GameUi.UiScrollList;
+        private _listPlayer             : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _warInfo                : IMpwWarInfo;
 
