@@ -129,7 +129,7 @@ namespace TinyWars.ChangeLog {
         }
 
         private _onTouchedBtnModify(e: egret.TouchEvent): void {
-            ChangeLogModifyPanel.show({ messageId: (this.data).messageId });
+            ChangeLogModifyPanel.show({ messageId: this.data.messageId });
         }
     }
 }

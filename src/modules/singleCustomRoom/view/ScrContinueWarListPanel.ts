@@ -230,7 +230,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchTapBtnNext(): void {
-            ScrProxy.reqContinueWar((this.data).slotInfo.slotIndex);
+            ScrProxy.reqContinueWar(this.data.slotInfo.slotIndex);
             Common.CommonBlockPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0021),

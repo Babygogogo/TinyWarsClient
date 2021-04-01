@@ -7,6 +7,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
 
     export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
+        private readonly _scroller      : eui.Scroller;
         private readonly _btnReset      : GameUi.UiButton;
         private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer, SettingRenderer>;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
@@ -26,6 +27,7 @@ namespace TinyWars.MultiCustomRoom {
             ]);
             this._listSetting.setItemRenderer(SettingRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
+            this._scroller.scrollPolicyH = eui.ScrollPolicy.OFF;
 
             this._mapRawData = await McrModel.Create.getMapRawData();
 
@@ -52,9 +54,19 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initListSetting(): void {
-            const dataArray: DataForSettingRenderer[] = [];
-            // TODO
-            this._listSetting.bindData(dataArray);
+            this._listSetting.bindData([
+                createSettingDataTeamIndex(),
+                createSettingDataAvailableCoIdList(),
+                createSettingDataInitialFund(),
+                createSettingDataIncomeMultiplier(),
+                createSettingDataInitialEnergyPercentage(),
+                createSettingDataEnergyGrowthMultiplier(),
+                createSettingDataMoveRangeModifier(),
+                createSettingDataAttackPowerModifier(),
+                createSettingDataVisionRangeModifier(),
+                createSettingDataLuckLowerLimit(),
+                createSettingDataLuckUpperLimit(),
+            ]);
         }
 
         private _updateListPlayer(): void {
@@ -66,7 +78,81 @@ namespace TinyWars.MultiCustomRoom {
             this._listPlayer.bindData(dataList);
         }
     }
+    function createSettingDataTeamIndex(): DataForSettingRenderer {
+        return {
+            nameLangType    : Lang.Type.B0019,
+            callbackForHelp : null,
+        };
+    }
+    function createSettingDataAvailableCoIdList(): DataForSettingRenderer {
+        return {
+            nameLangType    : Lang.Type.B0403,
+            callbackForHelp : () => {
+                Common.CommonHelpPanel.show({
+                    title   : `CO`,
+                    content : Lang.getRichText(Lang.RichType.R0004),
+                });
+            },
+        };
+    }
+    function createSettingDataInitialFund(): DataForSettingRenderer {
+        return {
+            nameLangType    : Lang.Type.B0178,
+            callbackForHelp : null,
+        };
+    }
+    function createSettingDataIncomeMultiplier(): DataForSettingRenderer {
+        return {
+            nameLangType    : Lang.Type.B0179,
+            callbackForHelp : null,
+        };
+    }
+    function createSettingDataInitialEnergyPercentage(): DataForSettingRenderer {
+        return {
+            nameLangType    : Lang.Type.B0180,
+            callbackForHelp : null,
+        };
+    }
+    function createSettingDataEnergyGrowthMultiplier(): DataForSettingRenderer {
+        return {
+            nameLangType    : Lang.Type.B0181,
+            callbackForHelp : null,
+        };
+    }
+    function createSettingDataMoveRangeModifier(): DataForSettingRenderer {
+        return {
+            nameLangType    : Lang.Type.B0182,
+            callbackForHelp : null,
+        };
+    }
+    function createSettingDataAttackPowerModifier(): DataForSettingRenderer {
+        return {
+            nameLangType    : Lang.Type.B0183,
+            callbackForHelp : null,
+        };
+    }
+    function createSettingDataVisionRangeModifier(): DataForSettingRenderer {
+        return {
+            nameLangType    : Lang.Type.B0184,
+            callbackForHelp : null,
+        };
+    }
+    function createSettingDataLuckLowerLimit(): DataForSettingRenderer {
+        return {
+            nameLangType    : Lang.Type.B0189,
+            callbackForHelp : null,
+        };
+    }
+    function createSettingDataLuckUpperLimit(): DataForSettingRenderer {
+        return {
+            nameLangType    : Lang.Type.B0190,
+            callbackForHelp : null,
+        };
+    }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // SettingRenderer
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForSettingRenderer = {
         nameLangType    : Lang.Type;
         callbackForHelp : (() => void) | null;
@@ -99,6 +185,9 @@ namespace TinyWars.MultiCustomRoom {
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // PlayerRenderer
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForPlayerRenderer = {
         playerIndex : number;
     }
@@ -475,6 +564,9 @@ namespace TinyWars.MultiCustomRoom {
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // InfoRenderer
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForInfoRenderer = {
         titleText               : string;
         infoText                : string;

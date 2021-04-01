@@ -209,11 +209,11 @@ namespace TinyWars.BaseWar {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data).callback();
+            this.data.callback();
         }
 
         public updateOnUnitAnimationTick(): void {
-            if ((this.data).unit) {
+            if (this.data.unit) {
                 this._unitView.tickUnitAnimationFrame();
                 this._unitView.tickStateAnimationFrame();
             }

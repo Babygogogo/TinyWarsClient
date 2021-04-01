@@ -223,7 +223,7 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const unit = (this.data).unit;
+            const unit = this.data.unit;
             this._unitView.init(unit).startRunningView();
             this._labelHp.text          = `${unit.getCurrentHp()}`;
             this._labelFuel.text        = `${unit.getCurrentFuel()}`;

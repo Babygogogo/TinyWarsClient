@@ -117,7 +117,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data).callback();
+            this.data.callback();
         }
     }
 }

@@ -156,7 +156,7 @@ namespace TinyWars.Common {
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
             CommonRankListPanel.hide();
-            User.UserPanel.show({ userId: (this.data).userId });
+            User.UserPanel.show({ userId: this.data.userId });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

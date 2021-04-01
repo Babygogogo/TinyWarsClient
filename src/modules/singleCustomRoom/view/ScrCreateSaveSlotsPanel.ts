@@ -122,7 +122,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
-            ScrModel.setCreateWarSaveSlotIndex((this.data).slotIndex);
+            ScrModel.setCreateWarSaveSlotIndex(this.data.slotIndex);
             ScrCreateSaveSlotsPanel.hide();
         }
 

@@ -245,7 +245,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            McrWatchMakeRequestDetailPanel.show({ watchInfo: (this.data).info });
+            McrWatchMakeRequestDetailPanel.show({ watchInfo: this.data.info });
         }
     }
 

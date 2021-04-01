@@ -214,7 +214,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            MmTagChangePanel.show({ mapId: (this.data).mapId });
+            MmTagChangePanel.show({ mapId: this.data.mapId });
         }
     }
 }

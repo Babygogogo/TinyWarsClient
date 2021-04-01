@@ -398,7 +398,7 @@ namespace TinyWars.ReplayWar {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data).callback();
+            this.data.callback();
         }
 
         private _updateView(): void {

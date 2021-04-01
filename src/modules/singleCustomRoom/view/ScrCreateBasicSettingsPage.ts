@@ -173,7 +173,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _updateLabelCoName(): void {
-            const coId = (this.data).coId;
+            const coId = this.data.coId;
             if (coId == null) {
                 this._labelCoName.text = `(${Lang.getText(Lang.Type.B0001)} CO)`;
             } else {

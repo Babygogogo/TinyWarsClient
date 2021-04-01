@@ -250,7 +250,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            MultiPlayerWar.MpwProxy.reqWatchContinueWar((this.data).info.warInfo.warId);
+            MultiPlayerWar.MpwProxy.reqWatchContinueWar(this.data.info.warInfo.warId);
         }
     }
 
