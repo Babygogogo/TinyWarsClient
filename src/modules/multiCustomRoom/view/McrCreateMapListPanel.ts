@@ -41,11 +41,11 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _btnNextStep           : GameUi.UiButton;
 
         private readonly _groupMapList          : eui.Group;
-        private readonly _listMap               : GameUi.UiScrollList<DataForMapNameRenderer>;
+        private readonly _listMap               : GameUi.UiScrollList<DataForMapNameRenderer, MapNameRenderer>;
         private readonly _labelNoMap            : GameUi.UiLabel;
 
         private readonly _groupTile             : eui.Group;
-        private readonly _listTile              : GameUi.UiScrollList<DataForTileRenderer>;
+        private readonly _listTile              : GameUi.UiScrollList<DataForTileRenderer, TileRenderer>;
 
         private readonly _groupMapInfo          : eui.Group;
         private readonly _labelMapName          : GameUi.UiLabel;
@@ -412,7 +412,7 @@ namespace TinyWars.MultiCustomRoom {
         panel   : McrCreateMapListPanel;
     }
 
-    class MapNameRenderer extends GameUi.UiListItemRenderer {
+    class MapNameRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
         private _btnChoose: GameUi.UiButton;
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
@@ -427,18 +427,18 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data          = this.data as DataForMapNameRenderer;
+            const data          = this.data;
             this.currentState   = data.mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
             WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForMapNameRenderer;
+            const data = this.data;
             data.panel.setSelectedMapId(data.mapId);
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            const data = this.data as DataForMapNameRenderer;
+            const data = this.data;
             data.panel.close();
             await McrModel.Create.resetDataByMapId(data.mapId);
             McrCreateSettingsPanel.show();
@@ -452,7 +452,7 @@ namespace TinyWars.MultiCustomRoom {
         num             : number;
     }
 
-    class TileRenderer extends GameUi.UiListItemRenderer {
+    class TileRenderer extends GameUi.UiListItemRenderer<DataForTileRenderer> {
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
         private _labelNum       : TinyWars.GameUi.UiLabel;
@@ -477,7 +477,7 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data          = this.data as DataForTileRenderer;
+            const data          = this.data;
             this._labelNum.text = `x${data.num}`;
 
             const tileObjectType = Utility.ConfigManager.getTileObjectTypeByTileType(data.tileType);

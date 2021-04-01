@@ -15,18 +15,18 @@ namespace TinyWars.MultiRankRoom {
 
         private static _instance: MrrMyWarListPanel;
 
-        private _labelMenuTitle : GameUi.UiLabel;
-        private _listWar        : GameUi.UiScrollList<DataForWarRenderer>;
-        private _labelNoWar     : GameUi.UiLabel;
-        private _zoomMap        : GameUi.UiZoomableMap;
-        private _btnBack        : GameUi.UiButton;
+        private readonly _labelMenuTitle    : GameUi.UiLabel;
+        private readonly _listWar           : GameUi.UiScrollList<DataForWarRenderer, WarRenderer>;
+        private readonly _labelNoWar        : GameUi.UiLabel;
+        private readonly _zoomMap           : GameUi.UiZoomableMap;
+        private readonly _btnBack           : GameUi.UiButton;
 
-        private _groupInfo              : eui.Group;
-        private _labelMapName           : GameUi.UiLabel;
-        private _labelDesigner          : GameUi.UiLabel;
-        private _labelHasFog            : GameUi.UiLabel;
-        private _labelPlayers           : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private readonly _groupInfo         : eui.Group;
+        private readonly _labelMapName      : GameUi.UiLabel;
+        private readonly _labelDesigner     : GameUi.UiLabel;
+        private readonly _labelHasFog       : GameUi.UiLabel;
+        private readonly _labelPlayers      : GameUi.UiLabel;
+        private readonly _listPlayer        : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
         private _selectedWarIndex   : number;
@@ -186,7 +186,7 @@ namespace TinyWars.MultiRankRoom {
         panel   : MrrMyWarListPanel;
     }
 
-    class WarRenderer extends GameUi.UiListItemRenderer {
+    class WarRenderer extends GameUi.UiListItemRenderer<DataForWarRenderer> {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _btnFight       : GameUi.UiButton;
@@ -208,7 +208,7 @@ namespace TinyWars.MultiRankRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForWarRenderer;
+            const data              = this.data;
             const warInfo           = data.warInfo;
             const labelName         = this._labelName;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
@@ -218,17 +218,17 @@ namespace TinyWars.MultiRankRoom {
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarRenderer;
+            const data = this.data;
             data.panel.close();
             MrrWarInfoPanel.show({ warInfo: data.warInfo });
         }
         private _onTouchedBtnFight(e: egret.Event): void {
-            const data = this.data as DataForWarRenderer;
+            const data = this.data;
             MultiPlayerWar.MpwProxy.reqMpwCommonContinueWar(data.warInfo.warId);
         }
         private _checkIsInTurn(info: IMpwWarInfo): boolean {
@@ -243,7 +243,7 @@ namespace TinyWars.MultiRankRoom {
         playerIndexInTurn   : number;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelIndex     : GameUi.UiLabel;
         private _labelName      : GameUi.UiLabel;
         private _labelStatus    : GameUi.UiLabel;
@@ -251,7 +251,7 @@ namespace TinyWars.MultiRankRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForPlayerRenderer;
+            const data              = this.data;
             const playerInfo        = data.playerInfo;
             const playerIndex       = playerInfo.playerIndex;
             const teamIndex         = playerInfo.teamIndex;

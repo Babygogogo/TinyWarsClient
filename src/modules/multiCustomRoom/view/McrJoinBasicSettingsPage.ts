@@ -46,7 +46,7 @@ namespace TinyWars.MultiCustomRoom {
         private _btnHelpSkinId          : TinyWars.GameUi.UiButton;
 
         private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
-        private _listPlayer             : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer             : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _mapRawData: ProtoTypes.Map.IMapRawData;
 
@@ -258,14 +258,14 @@ namespace TinyWars.MultiCustomRoom {
         playerIndex     : number;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelIndex     : GameUi.UiLabel;
         private _labelNickname  : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForPlayerRenderer;
+            const data              = this.data;
             const playerIndex       = data.playerIndex;
             const roomInfo          = data.roomInfo;
             const labelIndex        = this._labelIndex;

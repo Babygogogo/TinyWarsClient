@@ -270,7 +270,7 @@ namespace TinyWars.MultiCustomRoom {
         Unavailable,
     }
 
-    class RendererForCoTier extends GameUi.UiListItemRenderer {
+    class RendererForCoTier extends GameUi.UiComponent {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 
@@ -316,7 +316,7 @@ namespace TinyWars.MultiCustomRoom {
         }
     }
 
-    class RendererForCoName extends GameUi.UiListItemRenderer {
+    class RendererForCoName extends GameUi.UiComponent {
         private _imgSelected: GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
 

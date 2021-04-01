@@ -15,7 +15,7 @@ namespace TinyWars.MultiCustomRoom {
         private static _instance: McrJoinSettingsPanel;
 
         private _labelMenuTitle : GameUi.UiLabel;
-        private _tabSettings    : GameUi.UiTab;
+        private _tabSettings    : GameUi.UiTab<DataForTabItemRenderer>;
         private _btnBack        : GameUi.UiButton;
         private _btnConfirm     : GameUi.UiButton;
 
@@ -161,11 +161,11 @@ namespace TinyWars.MultiCustomRoom {
         name: string;
     }
 
-    class TabItemRenderer extends GameUi.UiListItemRenderer {
+    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
         private _labelName: GameUi.UiLabel;
 
         protected dataChanged(): void {
-            const data = (this.data as GameUi.DataForUiTab).tabItemData as DataForTabItemRenderer;
+            const data = this.data.tabItemData;
             this._labelName.text = data.name;
         }
     }

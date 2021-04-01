@@ -15,7 +15,7 @@ namespace TinyWars.SingleCustomRoom {
         private static _instance: ScrContinueWarListPanel;
 
         private _labelMenuTitle : GameUi.UiLabel;
-        private _listWar        : GameUi.UiScrollList<DataForWarRenderer>;
+        private _listWar        : GameUi.UiScrollList<DataForWarRenderer, WarRenderer>;
         private _labelNoWar     : GameUi.UiLabel;
         private _zoomMap        : GameUi.UiZoomableMap;
         private _btnBack        : GameUi.UiButton;
@@ -186,7 +186,7 @@ namespace TinyWars.SingleCustomRoom {
         panel       : ScrContinueWarListPanel;
     }
 
-    class WarRenderer extends GameUi.UiListItemRenderer {
+    class WarRenderer extends GameUi.UiListItemRenderer<DataForWarRenderer> {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _labelSlotIndex : GameUi.UiLabel;
@@ -203,7 +203,7 @@ namespace TinyWars.SingleCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForWarRenderer;
+            const data                  = this.data;
             const slotInfo              = data.slotInfo;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelSlotIndex.text   = "" + slotInfo.slotIndex;
@@ -225,12 +225,12 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchTapBtnChoose(): void {
-            const data = this.data as DataForWarRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
         private _onTouchTapBtnNext(): void {
-            ScrProxy.reqContinueWar((this.data as DataForWarRenderer).slotInfo.slotIndex);
+            ScrProxy.reqContinueWar((this.data).slotInfo.slotIndex);
             Common.CommonBlockPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0021),

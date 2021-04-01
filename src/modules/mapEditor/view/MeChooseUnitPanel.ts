@@ -15,8 +15,8 @@ namespace TinyWars.MapEditor {
         private static _instance: MeChooseUnitPanel;
 
         private _labelRecentTitle   : GameUi.UiLabel;
-        private _listRecent         : GameUi.UiScrollList<DataForUnitRenderer>;
-        private _listCategory       : GameUi.UiScrollList<DataForCategoryRenderer>;
+        private _listRecent         : GameUi.UiScrollList<DataForUnitRenderer, UnitRenderer>;
+        private _listCategory       : GameUi.UiScrollList<DataForCategoryRenderer, CategoryRenderer>;
         private _btnCancel          : GameUi.UiButton;
 
         private _dataListForRecent   : DataForUnitRenderer[] = [];
@@ -151,8 +151,8 @@ namespace TinyWars.MapEditor {
         panel               : MeChooseUnitPanel;
     }
 
-    class CategoryRenderer extends GameUi.UiListItemRenderer {
-        private _listUnit: GameUi.UiScrollList<DataForUnitRenderer>;
+    class CategoryRenderer extends GameUi.UiListItemRenderer<DataForCategoryRenderer> {
+        private _listUnit: GameUi.UiScrollList<DataForUnitRenderer, UnitRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -164,7 +164,7 @@ namespace TinyWars.MapEditor {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForCategoryRenderer;
+            const data              = this.data;
             const unitViewIdList    = data.dataListForDrawUnit;
             const dataListForUnit   : DataForUnitRenderer[] = [];
             const panel             = data.panel;
@@ -191,7 +191,7 @@ namespace TinyWars.MapEditor {
         panel           : MeChooseUnitPanel;
     }
 
-    class UnitRenderer extends GameUi.UiListItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
         private _group          : eui.Group;
         private _labelName      : GameUi.UiLabel;
         private _conUnitView    : eui.Group;
@@ -211,7 +211,7 @@ namespace TinyWars.MapEditor {
         }
 
         protected dataChanged(): void {
-            const data              = this.data as DataForUnitRenderer;
+            const data              = this.data;
             const dataForDrawUnit   = data.dataForDrawUnit;
             const unitType          = dataForDrawUnit.unitType;
             const war               = MeModel.getWar();
@@ -231,7 +231,7 @@ namespace TinyWars.MapEditor {
         }
 
         public onItemTapEvent(): void {
-            const data              = this.data as DataForUnitRenderer;
+            const data              = this.data;
             const panel             = data.panel;
             const dataForDrawUnit   = data.dataForDrawUnit;
             panel.updateOnChooseUnit(dataForDrawUnit);

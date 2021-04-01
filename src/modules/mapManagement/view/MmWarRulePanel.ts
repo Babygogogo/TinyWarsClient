@@ -18,7 +18,7 @@ namespace TinyWars.MapManagement {
         private static _instance: MmWarRulePanel;
 
         private _labelMenuTitle     : TinyWars.GameUi.UiLabel;
-        private _listWarRule        : TinyWars.GameUi.UiScrollList<DataForWarRuleNameRenderer>;
+        private _listWarRule        : TinyWars.GameUi.UiScrollList<DataForWarRuleNameRenderer, WarRuleNameRenderer>;
         private _btnBack            : TinyWars.GameUi.UiButton;
 
         private _btnModifyRuleName  : TinyWars.GameUi.UiButton;
@@ -37,7 +37,7 @@ namespace TinyWars.MapManagement {
         private _imgAvailabilityMrw : TinyWars.GameUi.UiImage;
 
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
-        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _dataForListWarRule : DataForWarRuleNameRenderer[] = [];
         private _selectedIndex      : number;
@@ -217,7 +217,7 @@ namespace TinyWars.MapManagement {
         panel   : MmWarRulePanel;
     }
 
-    class WarRuleNameRenderer extends GameUi.UiListItemRenderer {
+    class WarRuleNameRenderer extends GameUi.UiListItemRenderer<DataForWarRuleNameRenderer> {
         private _btnChoose: GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
@@ -230,14 +230,14 @@ namespace TinyWars.MapManagement {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForWarRuleNameRenderer;
+            const data              = this.data;
             const index             = data.index;
             this.currentState       = index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelName.text    = `${Lang.getText(Lang.Type.B0318)} ${index}`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarRuleNameRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
     }
@@ -250,8 +250,8 @@ namespace TinyWars.MapManagement {
         panel       : MmWarRulePanel;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
-        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -270,7 +270,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data as DataForPlayerRenderer;
+            const data          = this.data;
             const warRule       = data.warRule;
             const playerRule    = data.playerRule;
             const isReviewing   = data.isReviewing;
@@ -408,7 +408,7 @@ namespace TinyWars.MapManagement {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
@@ -421,7 +421,7 @@ namespace TinyWars.MapManagement {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForInfoRenderer;
+            const data                  = this.data;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;
@@ -429,7 +429,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-            const data      = this.data as DataForInfoRenderer;
+            const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());
         }

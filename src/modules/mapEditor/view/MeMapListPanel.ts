@@ -16,7 +16,7 @@ namespace TinyWars.MapEditor {
         private _labelNoData    : GameUi.UiLabel;
         private _labelMenuTitle : GameUi.UiLabel;
         private _labelLoading   : GameUi.UiLabel;
-        private _listMap        : GameUi.UiScrollList<DataForMapRenderer>;
+        private _listMap        : GameUi.UiScrollList<DataForMapRenderer, MapRenderer>;
         private _btnBack        : GameUi.UiButton;
 
         private _dataForListMap     : DataForMapRenderer[] = [];
@@ -153,7 +153,7 @@ namespace TinyWars.MapEditor {
         panel   : MeMapListPanel;
     }
 
-    class MapRenderer extends GameUi.UiListItemRenderer {
+    class MapRenderer extends GameUi.UiListItemRenderer<DataForMapRenderer> {
         private _btnChoose      : GameUi.UiButton;
         private _labelName      : GameUi.UiLabel;
         private _labelStatus    : GameUi.UiLabel;
@@ -169,7 +169,7 @@ namespace TinyWars.MapEditor {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForMapRenderer;
+            const data                  = this.data;
             const mapData               = data.mapData;
             const mapRawData            = mapData.mapRawData;
             const status                = mapData.reviewStatus;
@@ -180,12 +180,12 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForMapRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data          = this.data as DataForMapRenderer;
+            const data          = this.data;
             const mapData       = data.mapData;
             const reviewStatus  = mapData.reviewStatus;
 

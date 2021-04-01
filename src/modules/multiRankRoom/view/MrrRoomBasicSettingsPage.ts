@@ -61,7 +61,7 @@ namespace TinyWars.MultiRankRoom {
         private _labelReady             : TinyWars.GameUi.UiLabel;
 
         private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
-        private _listPlayer             : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer             : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _roomInfo               : ProtoTypes.MultiRankRoom.IMrrRoomInfo;
 
@@ -462,14 +462,14 @@ namespace TinyWars.MultiRankRoom {
         playerData      : ProtoTypes.Structure.IDataForPlayerInRoom;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelNickname  : GameUi.UiLabel;
         private _labelIndex     : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForPlayerRenderer;
+            const data              = this.data;
             const playerData        = data.playerData;
             const labelIndex        = this._labelIndex;
             const playerIndex       = data.playerIndex;

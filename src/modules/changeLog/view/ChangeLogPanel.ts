@@ -12,7 +12,7 @@ namespace TinyWars.ChangeLog {
 
         private static _instance: ChangeLogPanel;
 
-        private _listMessage    : GameUi.UiScrollList<DataForMessageRenderer>;
+        private _listMessage    : GameUi.UiScrollList<DataForMessageRenderer, MessageRenderer>;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoMessage : GameUi.UiLabel;
         private _btnAddMessage  : GameUi.UiButton;
@@ -104,7 +104,7 @@ namespace TinyWars.ChangeLog {
     }
 
     type DataForMessageRenderer = ProtoTypes.ChangeLog.IChangeLogMessage;
-    class MessageRenderer extends GameUi.UiListItemRenderer {
+    class MessageRenderer extends GameUi.UiListItemRenderer<DataForMessageRenderer> {
         private _labelIndex     : GameUi.UiLabel;
         private _labelContent   : GameUi.UiLabel;
         private _btnModify      : GameUi.UiButton;
@@ -118,7 +118,7 @@ namespace TinyWars.ChangeLog {
         protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
-            const data              = this.data as DataForMessageRenderer;
+            const data              = this.data;
             this._labelIndex.text   = `#${Helpers.getNumText(data.messageId, 3)} (${Helpers.getTimestampShortText(data.createTimestamp)})`;
             this._labelContent.text = Lang.getLanguageText({ textArray: data.textList });
 
@@ -129,7 +129,7 @@ namespace TinyWars.ChangeLog {
         }
 
         private _onTouchedBtnModify(e: egret.TouchEvent): void {
-            ChangeLogModifyPanel.show({ messageId: (this.data as DataForMessageRenderer).messageId });
+            ChangeLogModifyPanel.show({ messageId: (this.data).messageId });
         }
     }
 }

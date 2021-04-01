@@ -23,7 +23,7 @@ namespace TinyWars.WarEvent {
         private _btnClear       : GameUi.UiButton;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoEvent   : GameUi.UiLabel;
-        private _listWarEvent   : GameUi.UiScrollList<DataForWarEventDescRenderer>;
+        private _listWarEvent   : GameUi.UiScrollList<DataForWarEventDescRenderer, WarEventDescRenderer>;
 
         public static show(openData: OpenDataForWeEventListPanel): void {
             if (!WeEventListPanel._instance) {
@@ -233,7 +233,7 @@ namespace TinyWars.WarEvent {
         parentNodeId?   : number;
         nodeId?         : number;
     }
-    class WarEventDescRenderer extends GameUi.UiListItemRenderer {
+    class WarEventDescRenderer extends GameUi.UiListItemRenderer<DataForWarEventDescRenderer> {
         private _btnModify  : GameUi.UiButton;
         private _labelPrefix: GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
@@ -250,7 +250,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _onTouchedBtnModify(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarEventDescRenderer;
+            const data = this.data;
             if (data) {
                 WeCommandPanel.show({
                     war             : data.war,
@@ -281,7 +281,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateLabelDescAndError(): void {
-            const data = this.data as DataForWarEventDescRenderer;
+            const data = this.data;
             if (data) {
                 const descType = data.descType;
                 if (descType === WarEventDescType.EventName) {

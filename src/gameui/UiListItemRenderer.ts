@@ -9,13 +9,15 @@ namespace TinyWars.GameUi {
         thisObject?: any,
     }
 
-    export class UiListItemRenderer extends eui.ItemRenderer {
+    export class UiListItemRenderer<DataForRenderer> extends eui.ItemRenderer {
         private _isChildrenCreated  = false;
         private _isSkinLoaded       = false;
         private _isOpening          = false;
 
         private _notifyListenerArray: Notify.Listener[];
         private _uiListenerArray    : UiListener[];
+
+        public data                 : DataForRenderer;
 
         public constructor() {
             super();

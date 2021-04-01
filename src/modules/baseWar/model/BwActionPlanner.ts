@@ -1616,7 +1616,7 @@ namespace TinyWars.BaseWar {
                 };
             }
 
-            const dataList = [] as DataForUnitAction[];
+            const dataList: DataForUnitAction[] = [];
             dataList.push(...this._getActionUnitUseCoSuperPower());
             dataList.push(...this._getActionUnitUseCoPower());
             dataList.push(...this._getActionUnitLoadCo());
@@ -1657,7 +1657,7 @@ namespace TinyWars.BaseWar {
         protected abstract _getActionUnitBuildTile(): DataForUnitAction[];
         protected abstract _getActionUnitSupply(): DataForUnitAction[];
         private _getActionsUnitLaunchUnit(): DataForUnitAction[] {
-            const dataList  = [] as DataForUnitAction[];
+            const dataList  : DataForUnitAction[] = [];
             const focusUnit = this.getFocusUnit();
             if ((focusUnit !== this.getFocusUnitLoaded()) && (this.getMovePath().length === 1) && (focusUnit.checkCanLaunchLoadedUnit())) {
                 const tile = this._getTileMap().getTile(this.getMovePathDestination());
@@ -1679,7 +1679,7 @@ namespace TinyWars.BaseWar {
             const loadedUnits               = focusUnit.getLoadedUnits();
             const chosenUnits               = this.getChosenUnitsForDrop();
             const chosenDropDestinations    = this._getChosenDropDestinations();
-            const actions                   = [] as DataForUnitAction[];
+            const actions                   : DataForUnitAction[] = [];
             if ((loadedUnits.length > chosenUnits.length) && (focusUnit.checkCanDropLoadedUnit(this._getTileMap().getTile(destination).getType()))) {
                 for (const unit of loadedUnits) {
                     if ((chosenUnits.every(value => value.unit !== unit)) && (this._calculateAvailableDropDestination(unit, chosenDropDestinations).length)) {

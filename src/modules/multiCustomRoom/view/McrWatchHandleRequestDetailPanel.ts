@@ -18,7 +18,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelNo                : GameUi.UiLabel;
         private _labelIsOpponent        : GameUi.UiLabel;
         private _labelIsWatchingOthers  : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList<DataForRequesterRenderer>;
+        private _listPlayer             : GameUi.UiScrollList<DataForRequesterRenderer, RequesterRenderer>;
         private _btnConfirm             : GameUi.UiButton;
         private _btnCancel              : GameUi.UiButton;
 
@@ -137,7 +137,7 @@ namespace TinyWars.MultiCustomRoom {
         isAccept        : boolean;
     }
 
-    class RequesterRenderer extends GameUi.UiListItemRenderer {
+    class RequesterRenderer extends GameUi.UiListItemRenderer<DataForRequesterRenderer> {
         private _labelName              : GameUi.UiLabel;
         private _labelIsOpponent        : GameUi.UiLabel;
         private _labelIsWatchingOthers  : GameUi.UiLabel;
@@ -147,7 +147,7 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                          = this.data as DataForRequesterRenderer;
+            const data                          = this.data;
             this._labelIsOpponent.text          = data.isOpponent ? Lang.getText(Lang.Type.B0012) : "";
             this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(Lang.Type.B0012) : "";
             this._imgAccept.visible             = data.isAccept;
@@ -157,7 +157,7 @@ namespace TinyWars.MultiCustomRoom {
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
             if ((this._imgAccept.visible) || (this._imgDecline.visible)) {
-                const data = this.data as DataForRequesterRenderer;
+                const data = this.data;
                 data.panel.setRequesterSelected(e.itemIndex, !data.isAccept);
             }
         }

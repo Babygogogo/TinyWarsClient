@@ -12,7 +12,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _labelMenuTitle : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
-        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer>;
+        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer, CommandRenderer>;
 
         public static show(): void {
             if (!McrWatchMainMenuPanel._instance) {
@@ -120,20 +120,20 @@ namespace TinyWars.MultiCustomRoom {
         redChecker? : () => boolean;
     }
 
-    class CommandRenderer extends GameUi.UiListItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
         private _labelCommand   : GameUi.UiLabel;
         private _imgRed         : GameUi.UiImage;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForCommandRenderer;
+            const data              = this.data;
             this._labelCommand.text = data.name;
             this._imgRed.visible    = (!!data.redChecker) && (data.redChecker());
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data as DataForCommandRenderer).callback();
+            (this.data).callback();
         }
     }
 }

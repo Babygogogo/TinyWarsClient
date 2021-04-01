@@ -8,8 +8,8 @@ namespace TinyWars.MultiCustomRoom {
 
     export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
         private readonly _btnReset      : GameUi.UiButton;
-        private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer>;
-        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer, SettingRenderer>;
+        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _mapRawData : ProtoTypes.Map.IMapRawData;
 
@@ -71,7 +71,7 @@ namespace TinyWars.MultiCustomRoom {
         nameLangType    : Lang.Type;
         callbackForHelp : (() => void) | null;
     }
-    class SettingRenderer extends GameUi.UiListItemRenderer {
+    class SettingRenderer extends GameUi.UiListItemRenderer<DataForSettingRenderer> {
         private readonly _labelName : GameUi.UiLabel;
         private readonly _btnHelp   : GameUi.UiButton;
 
@@ -84,7 +84,7 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForSettingRenderer;
+            const data = this.data;
             if (data) {
                 this._labelName.text    = Lang.getText(data.nameLangType);
                 this._btnHelp.visible   = !!data.callbackForHelp;
@@ -92,7 +92,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnHelp(e: egret.Event): void {
-            const data = this.data as DataForSettingRenderer;
+            const data = this.data;
             if ((data) && (data.callbackForHelp)) {
                 data.callbackForHelp();
             }
@@ -102,9 +102,9 @@ namespace TinyWars.MultiCustomRoom {
     type DataForPlayerRenderer = {
         playerIndex : number;
     }
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelPlayerIndex   : GameUi.UiLabel;
-        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -119,7 +119,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateView(): void {
-            const data = this.data as DataForPlayerRenderer;
+            const data = this.data;
             if (data) {
                 this._labelPlayerIndex.text = `P${data.playerIndex}`;
                 this._listInfo.bindData(this._createDataForListInfo());
@@ -127,7 +127,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data as DataForPlayerRenderer;
+            const data          = this.data;
             const playerIndex   = data.playerIndex;
             return [
                 this._createDataTeamIndex(playerIndex),
@@ -481,7 +481,7 @@ namespace TinyWars.MultiCustomRoom {
         infoColor               : number;
         callbackOnTouchedTitle  : (() => void) | null;
     }
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
@@ -494,7 +494,7 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForInfoRenderer;
+            const data                  = this.data;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;
@@ -502,7 +502,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-            const data      = this.data as DataForInfoRenderer;
+            const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());
         }

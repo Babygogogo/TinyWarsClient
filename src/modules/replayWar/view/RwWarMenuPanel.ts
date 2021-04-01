@@ -24,7 +24,7 @@ namespace TinyWars.ReplayWar {
         private static _instance: RwWarMenuPanel;
 
         private _group          : eui.Group;
-        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer>;
+        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer, CommandRenderer>;
         private _labelNoCommand : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
 
@@ -42,7 +42,7 @@ namespace TinyWars.ReplayWar {
         private _labelTurnIndex         : GameUi.UiLabel;
         private _btnActionId            : GameUi.UiButton;
         private _labelActionId          : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _war        : RwWar;
         private _unitMap    : BaseWar.BwUnitMap;
@@ -195,7 +195,7 @@ namespace TinyWars.ReplayWar {
 
         private _updateListPlayer(): void {
             const war   = this._war;
-            const data  = [] as DataForPlayerRenderer[];
+            const data  : DataForPlayerRenderer[] = [];
             war.getPlayerManager().forEachPlayer(false, player => {
                 data.push({
                     war,
@@ -387,7 +387,7 @@ namespace TinyWars.ReplayWar {
         callback: () => void;
     }
 
-    class CommandRenderer extends GameUi.UiListItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
 
@@ -398,11 +398,11 @@ namespace TinyWars.ReplayWar {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data as DataForCommandRenderer).callback();
+            (this.data).callback();
         }
 
         private _updateView(): void {
-            const data = this.data as DataForCommandRenderer;
+            const data = this.data;
             this._labelName.text    = data.name;
         }
     }
@@ -412,12 +412,12 @@ namespace TinyWars.ReplayWar {
         player  : BaseWar.BwPlayer;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
         private _labelForce : GameUi.UiLabel;
         private _labelLost  : GameUi.UiLabel;
-        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -428,7 +428,7 @@ namespace TinyWars.ReplayWar {
         protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
-            const data                  = this.data as DataForPlayerRenderer;
+            const data                  = this.data;
             const war                   = data.war;
             const player                = data.player;
             this._labelName.text        = await player.getNickname();
@@ -448,7 +448,7 @@ namespace TinyWars.ReplayWar {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data as DataForPlayerRenderer;
+            const data          = this.data;
             const war           = data.war;
             const player        = data.player;
             const playerIndex   = player.getPlayerIndex();
@@ -696,14 +696,14 @@ namespace TinyWars.ReplayWar {
         infoColor               : number;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForInfoRenderer;
+            const data                  = this.data;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;

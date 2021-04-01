@@ -16,7 +16,7 @@ namespace TinyWars.MultiFreeRoom {
 
         private static _instance: MfrRoomInfoPanel;
 
-        private _tabSettings    : TinyWars.GameUi.UiTab;
+        private _tabSettings    : TinyWars.GameUi.UiTab<DataForTabItemRenderer>;
         private _labelMenuTitle : TinyWars.GameUi.UiLabel;
 
         private _groupButton    : eui.Group;
@@ -221,11 +221,11 @@ namespace TinyWars.MultiFreeRoom {
         name: string;
     }
 
-    class TabItemRenderer extends GameUi.UiListItemRenderer {
+    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
         private _labelName: GameUi.UiLabel;
 
         protected dataChanged(): void {
-            const data = (this.data as GameUi.DataForUiTab).tabItemData as DataForTabItemRenderer;
+            const data = this.data.tabItemData;
             this._labelName.text = data.name;
         }
     }

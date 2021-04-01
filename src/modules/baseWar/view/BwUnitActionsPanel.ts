@@ -22,7 +22,7 @@ namespace TinyWars.BaseWar {
         private static _instance: BwUnitActionsPanel;
 
         private _group      : eui.Group;
-        private _listAction : GameUi.UiScrollList<DataForUnitActionRenderer>;
+        private _listAction : GameUi.UiScrollList<DataForUnitActionRenderer, UnitActionRenderer>;
 
         public static show(openData: OpenDataForBwUnitActionsPanel): void {
             if (!BwUnitActionsPanel._instance) {
@@ -89,7 +89,7 @@ namespace TinyWars.BaseWar {
         private _updateView(): void {
             const openData  = this._getOpenData<OpenDataForBwUnitActionsPanel>();
             const war       = openData.war;
-            const dataArray = [] as DataForUnitActionRenderer[];
+            const dataArray : DataForUnitActionRenderer[] = [];
             for (const data of openData.actionList) {
                 const produceUnitType = data.produceUnitType;
                 if (produceUnitType == null) {
@@ -175,7 +175,7 @@ namespace TinyWars.BaseWar {
         canProduceUnit? : boolean;
     }
 
-    class UnitActionRenderer extends GameUi.UiListItemRenderer {
+    class UnitActionRenderer extends GameUi.UiListItemRenderer<DataForUnitActionRenderer> {
         private _labelAction: GameUi.UiLabel;
         private _labelCost  : GameUi.UiLabel;
         private _conUnitView: eui.Group;
@@ -192,7 +192,7 @@ namespace TinyWars.BaseWar {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForUnitActionRenderer;
+            const data              = this.data;
             this._labelAction.text  = Lang.getUnitActionName(data.actionType);
 
             const unit = data.unit;
@@ -209,11 +209,11 @@ namespace TinyWars.BaseWar {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data as DataForUnitActionRenderer).callback();
+            (this.data).callback();
         }
 
         public updateOnUnitAnimationTick(): void {
-            if ((this.data as DataForUnitActionRenderer).unit) {
+            if ((this.data).unit) {
                 this._unitView.tickUnitAnimationFrame();
                 this._unitView.tickStateAnimationFrame();
             }

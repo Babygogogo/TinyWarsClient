@@ -2,13 +2,13 @@
 namespace TinyWars.GameUi {
     import Logger = Utility.Logger;
 
-    export class UiTab extends eui.Component {
-        private _bar     : eui.TabBar;  // 页签栏
-        private _page    : eui.Group;   // 页面内容，仅用于占位
+    export class UiTab<DataForTabItemRenderer> extends eui.Component {
+        private readonly _bar           : eui.TabBar;  // 页签栏
+        private readonly _page          : eui.Group;   // 页面内容，仅用于占位
 
-        private _dataProvider    : eui.ArrayCollection;
-        private _barItemRenderer : new () => GameUi.UiListItemRenderer;
-        private _selectedIndex   : number = -1;
+        private readonly _dataProvider  = new eui.ArrayCollection();
+        private _barItemRenderer        : new () => UiTabItemRenderer<DataForTabItemRenderer>;
+        private _selectedIndex          : number = -1;
 
         public constructor() {
             super();
@@ -22,18 +22,16 @@ namespace TinyWars.GameUi {
 
                 this._bar.addEventListener(eui.ItemTapEvent.ITEM_TAP, this._onTouchedBarItem, this);
                 this._bar.itemRenderer     = this._barItemRenderer;
-                this._bar.dataProvider     = this._dataProvider;
+                this._bar.dataProvider     = this.getDataProvider();
                 this._bar.requireSelection = true;
 
-                if (this._dataProvider) {
-                    this.setSelectedIndex(0);
-                }
+                this.setSelectedIndex(0);
             }
         }
 
         private _onTouchedBarItem(e: eui.ItemTapEvent): void {
             const index = e.itemIndex;
-            const data  = (this._dataProvider.getItemAt(index)) as DataForUiTab;
+            const data  = (this.getDataProvider().getItemAt(index)) as DataForUiTab<DataForTabItemRenderer>;
             if ((data.callbackOnTouchedItem == null) || (data.callbackOnTouchedItem())) {
                 this.setSelectedIndex(index);
             } else {
@@ -46,7 +44,7 @@ namespace TinyWars.GameUi {
             this._bar.selectedIndex = index;
             this._selectedIndex     = index;
 
-            const data = (this._dataProvider.getItemAt(index)) as DataForUiTab;
+            const data = (this.getDataProvider().getItemAt(index)) as DataForUiTab<DataForTabItemRenderer>;
             if (data) {
                 data.pageInstance = data.pageInstance || this._createPageInstance(data);
 
@@ -64,41 +62,48 @@ namespace TinyWars.GameUi {
         }
 
         public getPageInstance(index : number) : UiTabPage {
-            const data = this._dataProvider.getItemAt(index) as DataForUiTab;
+            const data = this.getDataProvider().getItemAt(index) as DataForUiTab<DataForTabItemRenderer>;
             if (!data.pageInstance) {
                 data.pageInstance = this._createPageInstance(data);
             }
             return data.pageInstance;
         }
 
-        public setBarItemRenderer(itemRenderer: new () => GameUi.UiListItemRenderer ): void {
+        public setBarItemRenderer(itemRenderer: new () => UiTabItemRenderer<DataForTabItemRenderer>): void {
             this._barItemRenderer = itemRenderer;
             if (this._bar) {
                 this._bar.itemRenderer = itemRenderer;
             }
         }
 
-        public bindData(data : DataForUiTab[], selectedIndex : number = 0): void {
-            egret.assert(data.length > 0, "UiTab.bindData() empty data is not allowed!");
-            this.clear();
+        public bindData(data: DataForUiTab<DataForTabItemRenderer>[], selectedIndex: number = 0): void {
+            if (!data.length) {
+                Logger.error(`UiTab.bindData() empty data.`);
+                return;
+            }
 
-            this._dataProvider     = new eui.ArrayCollection(data.concat());
-            this._bar.dataProvider = this._dataProvider;
-            this.setSelectedIndex(selectedIndex);
+            this.clear();
+            const dataProvider = this.getDataProvider();
+            dataProvider.replaceAll(data.concat());
+
+            const bar = this._bar;
+            if (bar) {
+                bar.dataProvider = dataProvider;
+                this.setSelectedIndex(selectedIndex);
+            }
         }
 
-        public getData() : eui.ArrayCollection {
+        public getDataProvider() : eui.ArrayCollection {
             return this._dataProvider;
         }
 
-        public updateSingleData(index : number, data : DataForUiTab, refreshPage : boolean = true) : void {
-            let dataProvider = this._dataProvider;
-            if (!dataProvider) {
-                return;
+        public updateSingleData(index : number, data : DataForUiTab<DataForTabItemRenderer>, refreshPage : boolean = true) : void {
+            const dataProvider = this.getDataProvider();
+            if ((index < 0) || (index >= dataProvider.length)) {
+                Logger.error(`UiTab.updateSingleData() invalid index.`);
             }
-            egret.assert(index >= 0 && index <= dataProvider.length, "UiTab.updateSingleData() 索引越界!");
 
-            const oldData = dataProvider.getItemAt(index) as DataForUiTab;
+            const oldData = dataProvider.getItemAt(index) as DataForUiTab<DataForTabItemRenderer>;
             if (oldData.pageClass == data.pageClass) {
                 data.pageInstance = oldData.pageInstance;
             }
@@ -113,33 +118,32 @@ namespace TinyWars.GameUi {
             this._removeAllCachedPagesFromParent();
         }
 
-        private _createPageInstance(data : DataForUiTab) : UiTabPage | undefined {
+        private _createPageInstance(data : DataForUiTab<DataForTabItemRenderer>) : UiTabPage | undefined {
             return new data.pageClass();
         }
 
         private _removeAllCachedPagesFromParent() : void {
-            const dataProvider = this._dataProvider;
-            if (dataProvider) {
-                for (let i = 0; i < dataProvider.length; ++i) {
-                    const pageInstance = (dataProvider.getItemAt(i) as DataForUiTab).pageInstance;
-                    if (pageInstance) {
-                        pageInstance.close();
-                    }
+            const dataProvider = this.getDataProvider();
+            for (let i = 0; i < dataProvider.length; ++i) {
+                const pageInstance = (dataProvider.getItemAt(i) as DataForUiTab<DataForTabItemRenderer>).pageInstance;
+                if (pageInstance) {
+                    pageInstance.close();
                 }
             }
         }
     }
 
-    export type DataForUiTab = {
-        callbackOnTouchedItem?: () => boolean;
-        tabItemData          ?: any;
+    export type DataForUiTab<DataForTabItemRenderer> = {
+        callbackOnTouchedItem?  : () => boolean;
+        tabItemData?            : DataForTabItemRenderer;
 
-        pageClass : new() => UiTabPage;
-        pageData ?: any;
+        pageClass               : new() => UiTabPage;
+        pageData?               : any;
+
         /**
          * 页面的实例。设计意图是作为UiTab的页面缓存使用，因此外部不必提供此值；
          * 但如果提供了，则UiTab会直接使用此实例，而忽略掉pageClassName和pageSkinName属性。
          */
-        pageInstance?: UiTabPage;
+        pageInstance?           : UiTabPage;
     }
 }

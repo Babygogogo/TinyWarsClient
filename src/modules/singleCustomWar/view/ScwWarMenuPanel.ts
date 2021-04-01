@@ -27,7 +27,7 @@ namespace TinyWars.SingleCustomWar {
         private static _instance: ScwWarMenuPanel;
 
         private _group          : eui.Group;
-        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer>;
+        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer, CommandRenderer>;
         private _labelNoCommand : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
 
@@ -37,9 +37,9 @@ namespace TinyWars.SingleCustomWar {
         private _labelPlayerInfoTitle   : GameUi.UiLabel;
         private _btnMapNameTitle        : GameUi.UiButton;
         private _labelMapName           : GameUi.UiLabel;
-        private _listWarInfo            : GameUi.UiScrollList<DataForInfoRenderer>;
+        private _listWarInfo            : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
         private _btnBuildings           : GameUi.UiButton;
-        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _war            : ScwWar;
         private _unitMap        : BaseWar.BwUnitMap;
@@ -221,7 +221,7 @@ namespace TinyWars.SingleCustomWar {
 
         public updateListPlayer(): void {
             const war   = this._war;
-            const data  = [] as DataForPlayerRenderer[];
+            const data  : DataForPlayerRenderer[] = [];
             war.getPlayerManager().forEachPlayer(false, (player: BaseWar.BwPlayer) => {
                 data.push({
                     war,
@@ -545,7 +545,7 @@ namespace TinyWars.SingleCustomWar {
         callback: () => void;
     }
 
-    class CommandRenderer extends GameUi.UiListItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
 
@@ -556,11 +556,11 @@ namespace TinyWars.SingleCustomWar {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data as DataForCommandRenderer).callback();
+            (this.data).callback();
         }
 
         private _updateView(): void {
-            const data = this.data as DataForCommandRenderer;
+            const data = this.data;
             this._labelName.text    = data.name;
         }
     }
@@ -571,12 +571,12 @@ namespace TinyWars.SingleCustomWar {
         panel       : ScwWarMenuPanel;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _group          : eui.Group;
         private _btnName        : GameUi.UiButton;
         private _labelForce     : GameUi.UiLabel;
         private _labelLost      : GameUi.UiLabel;
-        private _listInfo       : GameUi.UiScrollList<DataForInfoRenderer>;
+        private _listInfo       : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -592,7 +592,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _onTouchedBtnName(e: egret.TouchEvent): void {
-            const data  = this.data as DataForPlayerRenderer;
+            const data  = this.data;
             const war   = data.war;
             if (war.getIsSinglePlayerCheating()) {
                 const playerIndex   = data.playerIndex;
@@ -614,7 +614,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _updateView(): void {
-            const data                  = this.data as DataForPlayerRenderer;
+            const data                  = this.data;
             const war                   = data.war;
             const playerIndex           = data.playerIndex;
             const player                = war.getPlayer(playerIndex);
@@ -637,7 +637,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data as DataForPlayerRenderer;
+            const data          = this.data;
             const war           = data.war;
             const playerIndex   = data.playerIndex;
             const panel         = data.panel;
@@ -1165,7 +1165,7 @@ namespace TinyWars.SingleCustomWar {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
@@ -1178,7 +1178,7 @@ namespace TinyWars.SingleCustomWar {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForInfoRenderer;
+            const data                  = this.data;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;
@@ -1186,7 +1186,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-            const data      = this.data as DataForInfoRenderer;
+            const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());
         }

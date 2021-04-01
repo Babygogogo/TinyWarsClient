@@ -14,8 +14,8 @@ namespace TinyWars.MapEditor {
         private static _instance: MeChooseTileObjectPanel;
 
         private _labelRecentTitle   : GameUi.UiLabel;
-        private _listRecent         : GameUi.UiScrollList<DataForTileObjectRenderer>;
-        private _listCategory       : GameUi.UiScrollList<DataForCategoryRenderer>;
+        private _listRecent         : GameUi.UiScrollList<DataForTileObjectRenderer, TileObjectRenderer>;
+        private _listCategory       : GameUi.UiScrollList<DataForCategoryRenderer, CategoryRenderer>;
         private _btnCancel          : GameUi.UiButton;
 
         private _dataListForRecent  : DataForTileObjectRenderer[] = [];
@@ -161,9 +161,9 @@ namespace TinyWars.MapEditor {
         panel                       : MeChooseTileObjectPanel;
     }
 
-    class CategoryRenderer extends GameUi.UiListItemRenderer {
+    class CategoryRenderer extends GameUi.UiListItemRenderer<DataForCategoryRenderer> {
         private _labelCategory  : GameUi.UiLabel;
-        private _listTileObject : GameUi.UiScrollList<DataForTileObjectRenderer>;
+        private _listTileObject : GameUi.UiScrollList<DataForTileObjectRenderer, TileObjectRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -175,7 +175,7 @@ namespace TinyWars.MapEditor {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                      = this.data as DataForCategoryRenderer;
+            const data                      = this.data;
             const dataListForDrawTileObject = data.dataListForDrawTileObject;
             this._labelCategory.text        = Lang.getPlayerForceName(dataListForDrawTileObject[0].playerIndex);
 
@@ -204,7 +204,7 @@ namespace TinyWars.MapEditor {
         panel                   : MeChooseTileObjectPanel;
     }
 
-    class TileObjectRenderer extends GameUi.UiListItemRenderer {
+    class TileObjectRenderer extends GameUi.UiListItemRenderer<DataForTileObjectRenderer> {
         private _group          : eui.Group;
         private _labelName      : GameUi.UiLabel;
         private _conTileView    : eui.Group;
@@ -225,7 +225,7 @@ namespace TinyWars.MapEditor {
         }
 
         protected dataChanged(): void {
-            const data                  = this.data as DataForTileObjectRenderer;
+            const data                  = this.data;
             const dataForDrawTileObject = data.dataForDrawTileObject;
             const tileObjectType        = dataForDrawTileObject.objectType;
             this._labelName.text        = Lang.getTileName(ConfigManager.getTileType(Types.TileBaseType.Plain, tileObjectType));
@@ -240,7 +240,7 @@ namespace TinyWars.MapEditor {
         }
 
         public onItemTapEvent(): void {
-            const data                  = this.data as DataForTileObjectRenderer;
+            const data                  = this.data;
             const panel                 = data.panel;
             const dataForDrawTileObject = data.dataForDrawTileObject;
             panel.updateOnChooseTileObject(dataForDrawTileObject);

@@ -19,7 +19,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private static _instance: ScrCreateMapListPanel;
 
-        private _listMap   : GameUi.UiScrollList<DataForMapNameRenderer>;
+        private _listMap   : GameUi.UiScrollList<DataForMapNameRenderer, MapNameRenderer>;
         private _zoomMap   : GameUi.UiZoomableMap;
         private _btnSearch : GameUi.UiButton;
         private _btnBack   : GameUi.UiButton;
@@ -194,7 +194,7 @@ namespace TinyWars.SingleCustomRoom {
         panel       : ScrCreateMapListPanel;
     }
 
-    class MapNameRenderer extends GameUi.UiListItemRenderer {
+    class MapNameRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
         private _btnChoose: GameUi.UiButton;
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
@@ -209,18 +209,18 @@ namespace TinyWars.SingleCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data          = this.data as DataForMapNameRenderer;
+            const data          = this.data;
             this.currentState   = data.mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
             WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForMapNameRenderer;
+            const data = this.data;
             data.panel.setSelectedMapId(data.mapId);
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            const data = this.data as DataForMapNameRenderer;
+            const data = this.data;
             data.panel.close();
 
             await ScrModel.resetCreateWarDataByMapId(data.mapId);

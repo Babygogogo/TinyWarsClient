@@ -11,7 +11,7 @@ namespace TinyWars.MapEditor {
         private static _instance: MeImportPanel;
 
         private _group      : eui.Group;
-        private _listMap    : TinyWars.GameUi.UiScrollList<DataForMapRenderer>;
+        private _listMap    : TinyWars.GameUi.UiScrollList<DataForMapRenderer, MapRenderer>;
         private _btnCancel  : TinyWars.GameUi.UiButton;
 
         public static show(): void {
@@ -91,17 +91,17 @@ namespace TinyWars.MapEditor {
         panel   : MeImportPanel;
     }
 
-    class MapRenderer extends GameUi.UiListItemRenderer {
+    class MapRenderer extends GameUi.UiListItemRenderer<DataForMapRenderer> {
         private _group          : eui.Group;
         private _labelName      : GameUi.UiLabel;
 
         protected dataChanged(): void {
-            const data              = this.data as DataForMapRenderer;
+            const data              = this.data;
             this._labelName.text    = data.mapName;
         }
 
         public onItemTapEvent(): void {
-            const data = this.data as DataForMapRenderer;
+            const data = this.data;
             Common.CommonConfirmPanel.show({
                 content : Lang.getText(Lang.Type.A0095) + `\n"${data.mapName}"`,
                 callback: async () => {

@@ -16,7 +16,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
-        private _listCo         : GameUi.UiScrollList<DataForCoRenderer>;
+        private _listCo         : GameUi.UiScrollList<DataForCoRenderer, CoRenderer>;
         private _btnBack        : GameUi.UiButton;
 
         private _imgCoPortrait                  : GameUi.UiImage;
@@ -31,15 +31,15 @@ namespace TinyWars.SingleCustomRoom {
         private _labelEnergyBarTitle            : GameUi.UiLabel;
         private _labelEnergyBar                 : GameUi.UiLabel;
 
-        private _listPassiveSkill   : GameUi.UiScrollList<DataForSkillRenderer>;
+        private _listPassiveSkill   : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
         private _labelNoPassiveSkill: GameUi.UiLabel;
 
-        private _listCop            : GameUi.UiScrollList<DataForSkillRenderer>;
+        private _listCop            : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
         private _labelNoCop         : GameUi.UiLabel;
         private _labelCopEnergyTitle: GameUi.UiLabel;
         private _labelCopEnergy     : GameUi.UiLabel;
 
-        private _listScop               : GameUi.UiScrollList<DataForSkillRenderer>;
+        private _listScop               : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
         private _labelNoScop            : GameUi.UiLabel;
         private _labelScopEnergyTitle   : GameUi.UiLabel;
         private _labelScopEnergy        : GameUi.UiLabel;
@@ -261,7 +261,7 @@ namespace TinyWars.SingleCustomRoom {
         panel                           : ScrCreateCoListPanel;
     }
 
-    class CoRenderer extends GameUi.UiListItemRenderer {
+    class CoRenderer extends GameUi.UiListItemRenderer<DataForCoRenderer> {
         private _btnChoose: GameUi.UiButton;
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
@@ -276,19 +276,19 @@ namespace TinyWars.SingleCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForCoRenderer;
+            const data              = this.data;
             const cfg               = data.coBasicCfg;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelName.text    = cfg ? `${cfg.name} (T${cfg.tier})` : `(${Lang.getText(Lang.Type.B0001)} CO)`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForCoRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data = this.data as DataForCoRenderer;
+            const data = this.data;
             data.panel.close();
 
             const cfg   = data.coBasicCfg;
@@ -302,14 +302,14 @@ namespace TinyWars.SingleCustomRoom {
         skillId : number;
     }
 
-    class SkillRenderer extends GameUi.UiListItemRenderer {
+    class SkillRenderer extends GameUi.UiListItemRenderer<DataForSkillRenderer> {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForSkillRenderer;
+            const data              = this.data;
             this._labelIndex.text   = `${data.index}.`;
             this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()];
         }

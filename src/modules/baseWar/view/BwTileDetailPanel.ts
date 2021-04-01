@@ -24,9 +24,9 @@ namespace TinyWars.BaseWar {
         private _labelName          : GameUi.UiLabel;
         private _imgTileBase        : GameUi.UiImage;
         private _imgTileObject      : GameUi.UiImage;
-        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
         private _labelMoveCost      : GameUi.UiLabel;
-        private _listMoveCost       : GameUi.UiScrollList<DataForMoveRangeRenderer>;
+        private _listMoveCost       : GameUi.UiScrollList<DataForMoveRangeRenderer, MoveCostRenderer>;
 
         private _dataForListMoveCost: DataForMoveRangeRenderer[];
 
@@ -319,7 +319,7 @@ namespace TinyWars.BaseWar {
             const tileCfg           = Utility.ConfigManager.getTileTemplateCfgByType(configVersion, tile.getType());
             const playerIndex       = tile.getPlayerIndex() || 1;
 
-            const dataList = [] as DataForMoveRangeRenderer[];
+            const dataList: DataForMoveRangeRenderer[] = [];
             for (const unitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
                 dataList.push({
                     configVersion,
@@ -343,7 +343,7 @@ namespace TinyWars.BaseWar {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
@@ -354,14 +354,14 @@ namespace TinyWars.BaseWar {
         }
 
         protected dataChanged(): void {
-            const data              = this.data as DataForInfoRenderer;
+            const data              = this.data;
             this._btnTitle.label    = data.titleText;
             this._labelValue.text   = data.valueText;
             this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-            const data      = this.data as DataForInfoRenderer;
+            const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());
         }
@@ -374,7 +374,7 @@ namespace TinyWars.BaseWar {
         playerIndex     : number;
     }
 
-    class MoveCostRenderer extends GameUi.UiListItemRenderer {
+    class MoveCostRenderer extends GameUi.UiListItemRenderer<DataForMoveRangeRenderer> {
         private _group          : eui.Group;
         private _conView        : eui.Group;
         private _unitView       : WarMap.WarMapUnitView;
@@ -403,7 +403,7 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data                  = this.data as DataForMoveRangeRenderer;
+            const data                  = this.data;
             const configVersion         = data.configVersion;
             const unitType              = data.unitType;
             const moveCostCfg           = Utility.ConfigManager.getMoveCostCfgByTileType(configVersion, data.tileCfg.type);

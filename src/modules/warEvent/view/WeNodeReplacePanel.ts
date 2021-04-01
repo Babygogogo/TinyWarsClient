@@ -19,7 +19,7 @@ namespace TinyWars.WarEvent {
 
         private static _instance: WeNodeReplacePanel;
 
-        private _listNode       : GameUi.UiScrollList<DataForNodeRenderer>;
+        private _listNode       : GameUi.UiScrollList<DataForNodeRenderer, NodeRenderer>;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoNode    : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
@@ -102,7 +102,7 @@ namespace TinyWars.WarEvent {
         candidateNodeId : number;
         fullData        : IWarEventFullData;
     }
-    class NodeRenderer extends GameUi.UiListItemRenderer {
+    class NodeRenderer extends GameUi.UiListItemRenderer<DataForNodeRenderer> {
         private _labelNodeId        : GameUi.UiLabel;
         private _labelSubNode       : GameUi.UiLabel;
         private _labelSubCondition  : GameUi.UiLabel;
@@ -130,7 +130,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _onTouchedBtnCopy(e: egret.TouchEvent): void {          // DONE
-            const data = this.data as DataForNodeRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }
@@ -175,7 +175,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onTouchedBtnSelect(e: egret.TouchEvent): void {        // DONE
-            const data = this.data as DataForNodeRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }
@@ -221,13 +221,13 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateLabelNodeId(): void {
-            const data = this.data as DataForNodeRenderer;
+            const data = this.data;
             if (data) {
                 this._labelNodeId.text  = `${Lang.getText(Lang.Type.B0488)}: N${data.candidateNodeId}`;
             }
         }
         private _updateLabelSubNode(): void {
-            const data = this.data as DataForNodeRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }
@@ -246,7 +246,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _updateLabelSubCondition(): void {
-            const data = this.data as DataForNodeRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }

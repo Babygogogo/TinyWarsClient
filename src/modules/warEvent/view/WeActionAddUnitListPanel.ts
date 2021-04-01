@@ -22,7 +22,7 @@ namespace TinyWars.WarEvent {
 
         private _labelTitle : GameUi.UiLabel;
         private _btnClose   : GameUi.UiButton;
-        private _listType   : GameUi.UiScrollList<DataForTypeRenderer>;
+        private _listType   : GameUi.UiScrollList<DataForTypeRenderer, TypeRenderer>;
 
         public static show(openData: OpenDataForWeActionAddUnitListPanel): void {
             if (!WeActionAddUnitListPanel._instance) {
@@ -90,7 +90,7 @@ namespace TinyWars.WarEvent {
         newUnitType     : Types.UnitType;
         dataForAddUnit  : IDataForAddUnit;
     }
-    class TypeRenderer extends GameUi.UiListItemRenderer {
+    class TypeRenderer extends GameUi.UiListItemRenderer<DataForTypeRenderer> {
         private _labelType  : GameUi.UiLabel;
 
         protected _onOpened(): void {
@@ -111,7 +111,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _onTouchedSelf(e: egret.TouchEvent): void {
-            const data = this.data as DataForTypeRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }
@@ -129,7 +129,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateLabelType(): void {
-            const data  = this.data as DataForTypeRenderer;
+            const data  = this.data;
             const label = this._labelType;
             if (data == null) {
                 label.text = undefined;

@@ -14,7 +14,7 @@ namespace TinyWars.MultiRankRoom {
 
         private static _instance: MrrPreviewMapListPanel;
 
-        private _listMap        : GameUi.UiScrollList<DataForMapNameRenderer>;
+        private _listMap        : GameUi.UiScrollList<DataForMapNameRenderer, MapNameRenderer>;
         private _zoomMap        : GameUi.UiZoomableMap;
         private _btnBack        : GameUi.UiButton;
         private _labelNoMap     : GameUi.UiLabel;
@@ -181,7 +181,7 @@ namespace TinyWars.MultiRankRoom {
         panel   : MrrPreviewMapListPanel;
     }
 
-    class MapNameRenderer extends GameUi.UiListItemRenderer {
+    class MapNameRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
         private _btnChoose: GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
@@ -194,13 +194,13 @@ namespace TinyWars.MultiRankRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data          = this.data as DataForMapNameRenderer;
+            const data          = this.data;
             this.currentState   = data.mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
             WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v);
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForMapNameRenderer;
+            const data = this.data;
             data.panel.setSelectedMapId(data.mapId);
         }
     }

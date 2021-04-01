@@ -13,7 +13,7 @@ namespace TinyWars.SingleCustomRoom {
         private _labelPlayersCountTitle : GameUi.UiLabel;
         private _labelPlayersCount      : GameUi.UiLabel;
         private _labelPlayerList        : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _mapRawData             : ProtoTypes.Map.IMapRawData;
 
@@ -75,8 +75,8 @@ namespace TinyWars.SingleCustomRoom {
         playerIndex : number;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
-        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -96,7 +96,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data as DataForPlayerRenderer;
+            const data          = this.data;
             const playerIndex   = data.playerIndex;
             return [
                 this._createDataTeamIndex(playerIndex),
@@ -404,7 +404,7 @@ namespace TinyWars.SingleCustomRoom {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
@@ -417,7 +417,7 @@ namespace TinyWars.SingleCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForInfoRenderer;
+            const data                  = this.data;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;
@@ -425,7 +425,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-            const data      = this.data as DataForInfoRenderer;
+            const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());
         }

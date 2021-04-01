@@ -30,13 +30,13 @@ namespace TinyWars.MultiCustomRoom {
 
         private readonly _groupChoosePlayerIndex: eui.Group;
         private readonly _labelChoosePlayerIndex: GameUi.UiLabel;
-        private readonly _sclPlayerIndex        : GameUi.UiScrollList<DataForPlayerIndexRenderer>;
+        private readonly _sclPlayerIndex        : GameUi.UiScrollList<DataForPlayerIndexRenderer, PlayerIndexRenderer>;
 
         private readonly _groupChooseSkinId     : eui.Group;
         private readonly _labelChooseSkinId     : GameUi.UiLabel;
-        private readonly _sclSkinId             : GameUi.UiScrollList<DataForSkinIdRenderer>;
+        private readonly _sclSkinId             : GameUi.UiScrollList<DataForSkinIdRenderer, SkinIdRenderer>;
 
-        private readonly _tabSettings           : GameUi.UiTab;
+        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer>;
         private readonly _btnBack               : GameUi.UiButton;
         private readonly _btnConfirm            : GameUi.UiButton;
 
@@ -257,13 +257,13 @@ namespace TinyWars.MultiCustomRoom {
     type DataForTabItemRenderer = {
         name: string;
     }
-    class TabItemRenderer extends GameUi.UiListItemRenderer {
+    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
         private _labelName: GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = (this.data as GameUi.DataForUiTab).tabItemData as DataForTabItemRenderer;
+            const data = this.data.tabItemData;
             this._labelName.text = data.name;
         }
     }
@@ -271,7 +271,7 @@ namespace TinyWars.MultiCustomRoom {
     type DataForPlayerIndexRenderer = {
         playerIndex: number;
     }
-    class PlayerIndexRenderer extends GameUi.UiListItemRenderer {
+    class PlayerIndexRenderer extends GameUi.UiListItemRenderer<DataForPlayerIndexRenderer> {
         private readonly _labelName : GameUi.UiLabel;
 
         protected _onOpened(): void {
@@ -290,7 +290,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            const data = this.data as DataForPlayerIndexRenderer;
+            const data = this.data;
             if (data) {
                 const creator       = McrModel.Create;
                 const playerIndex   = data.playerIndex;
@@ -313,14 +313,14 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateLabelName(): void {
-            const data = this.data as DataForPlayerIndexRenderer;
+            const data = this.data;
             if (data) {
                 const playerIndex       = data.playerIndex;
                 this._labelName.text    = `P${playerIndex} (${Lang.getPlayerTeamName(BwWarRuleHelper.getTeamIndex(McrModel.Create.getWarRule(), playerIndex))})`;
             }
         }
         private _updateState(): void {
-            const data          = this.data as DataForPlayerIndexRenderer;
+            const data          = this.data;
             this.currentState   = ((data) && (data.playerIndex === McrModel.Create.getSelfPlayerIndex())) ? `down` : `up`;
         }
     }
@@ -328,7 +328,7 @@ namespace TinyWars.MultiCustomRoom {
     type DataForSkinIdRenderer = {
         skinId: number;
     }
-    class SkinIdRenderer extends GameUi.UiListItemRenderer {
+    class SkinIdRenderer extends GameUi.UiListItemRenderer<DataForSkinIdRenderer> {
         private readonly _imgColor  : GameUi.UiImage;
 
         protected _onOpened(): void {
@@ -344,7 +344,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            const data = this.data as DataForSkinIdRenderer;
+            const data = this.data;
             if (data) {
                 McrModel.Create.setSelfUnitAndTileSkinId(data.skinId);
             }
@@ -354,7 +354,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateImgColor(): void {
-            const data = this.data as DataForSkinIdRenderer;
+            const data = this.data;
             if (data) {
                 const skinId            = data.skinId;
                 this._imgColor.source   = BwHelpers.getImageSourceForSkinId(skinId, McrModel.Create.getSelfUnitAndTileSkinId() === skinId);

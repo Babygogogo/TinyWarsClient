@@ -21,7 +21,7 @@ namespace TinyWars.BaseWar {
         private readonly _labelName         : GameUi.UiLabel;
         private readonly _labelCountName    : GameUi.UiLabel;
         private readonly _labelValueName    : GameUi.UiLabel;
-        private readonly _listUnit          : GameUi.UiScrollList<DataForUnitRenderer>;
+        private readonly _listUnit          : GameUi.UiScrollList<DataForUnitRenderer, UnitRenderer>;
         private readonly _labelCount        : GameUi.UiLabel;
         private readonly _labelValue        : GameUi.UiLabel;
         private readonly _btnSwitch         : GameUi.UiButton;
@@ -175,7 +175,7 @@ namespace TinyWars.BaseWar {
         cursor  : BaseWar.BwCursor;
     }
 
-    class UnitRenderer extends GameUi.UiListItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
         private _group          : eui.Group;
         private _conUnitView    : eui.Group;
         private _labelName      : GameUi.UiLabel;
@@ -211,7 +211,7 @@ namespace TinyWars.BaseWar {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            const data      = this.data as DataForUnitRenderer;
+            const data      = this.data;
             const cursor    = data.cursor;
             const gridIndex = data.unit.getGridIndex();
             cursor.setGridIndex(gridIndex);
@@ -223,7 +223,7 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const unit = (this.data as DataForUnitRenderer).unit;
+            const unit = (this.data).unit;
             this._unitView.init(unit).startRunningView();
             this._labelHp.text          = `${unit.getCurrentHp()}`;
             this._labelFuel.text        = `${unit.getCurrentFuel()}`;

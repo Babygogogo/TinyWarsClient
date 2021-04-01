@@ -51,7 +51,7 @@ namespace TinyWars.MultiFreeRoom {
         private _btnHelpSkinId          : TinyWars.GameUi.UiButton;
 
         private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
-        private _listPlayer             : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer             : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _warInfo                : IMpwWarInfo;
 
@@ -274,7 +274,7 @@ namespace TinyWars.MultiFreeRoom {
         playerInfo      : IWarPlayerInfo;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelNickname  : GameUi.UiLabel;
         private _labelIndex     : GameUi.UiLabel;
         private _labelTeam      : GameUi.UiLabel;
@@ -283,7 +283,7 @@ namespace TinyWars.MultiFreeRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForPlayerRenderer;
+            const data              = this.data;
             this._labelIndex.text   = Lang.getPlayerForceName(data.playerIndex);
             this._labelTeam.text    = Lang.getPlayerTeamName(data.teamIndex);
 

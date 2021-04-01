@@ -12,7 +12,7 @@ namespace TinyWars.MapManagement {
 
         private static _instance: MmTagListPanel;
 
-        private _listMap        : GameUi.UiScrollList<DataForMapNameRenderer>;
+        private _listMap        : GameUi.UiScrollList<DataForMapNameRenderer, MapNameRenderer>;
         private _zoomMap        : GameUi.UiZoomableMap;
         private _labelMenuTitle : GameUi.UiLabel;
         private _btnSearch      : GameUi.UiButton;
@@ -183,7 +183,7 @@ namespace TinyWars.MapManagement {
         panel   : MmTagListPanel;
     }
 
-    class MapNameRenderer extends GameUi.UiListItemRenderer {
+    class MapNameRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
         private _btnChoose  : GameUi.UiButton;
         private _btnNext    : GameUi.UiButton;
         private _labelId    : GameUi.UiLabel;
@@ -199,7 +199,7 @@ namespace TinyWars.MapManagement {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data          = this.data as DataForMapNameRenderer;
+            const data          = this.data;
             const mapId         = data.mapId;
             const labelName     = this._labelName;
             this.currentState   = mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
@@ -209,12 +209,12 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForMapNameRenderer;
+            const data = this.data;
             data.panel.setSelectedMapFileName(data.mapId);
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            MmTagChangePanel.show({ mapId: (this.data as DataForMapNameRenderer).mapId });
+            MmTagChangePanel.show({ mapId: (this.data).mapId });
         }
     }
 }

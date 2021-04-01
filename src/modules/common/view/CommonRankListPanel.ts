@@ -17,11 +17,11 @@ namespace TinyWars.Common {
 
         private _labelStd       : TinyWars.GameUi.UiLabel;
         private _labelStdNoData : TinyWars.GameUi.UiLabel;
-        private _listStd        : TinyWars.GameUi.UiScrollList<DataForUserRenderer>;
+        private _listStd        : TinyWars.GameUi.UiScrollList<DataForUserRenderer, UserRenderer>;
 
         private _labelFog       : TinyWars.GameUi.UiLabel;
         private _labelFogNoData : TinyWars.GameUi.UiLabel;
-        private _listFog        : TinyWars.GameUi.UiScrollList<DataForUserRenderer>;
+        private _listFog        : TinyWars.GameUi.UiScrollList<DataForUserRenderer, UserRenderer>;
 
         public static show(): void {
             if (!CommonRankListPanel._instance) {
@@ -136,7 +136,7 @@ namespace TinyWars.Common {
         warType     : Types.WarType;
     }
 
-    class UserRenderer extends GameUi.UiListItemRenderer {
+    class UserRenderer extends GameUi.UiListItemRenderer<DataForUserRenderer> {
         private _group      : eui.Group;
         private _imgBg      : GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
@@ -156,14 +156,14 @@ namespace TinyWars.Common {
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
             CommonRankListPanel.hide();
-            User.UserPanel.show({ userId: (this.data as DataForUserRenderer).userId });
+            User.UserPanel.show({ userId: (this.data).userId });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private async _updateView(): Promise<void> {
-            const data  = this.data as DataForUserRenderer;
+            const data  = this.data;
             const label = this._labelName;
             label.text  = Lang.getText(Lang.Type.B0029);
 

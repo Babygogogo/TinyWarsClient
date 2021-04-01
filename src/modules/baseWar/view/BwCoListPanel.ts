@@ -15,7 +15,7 @@ namespace TinyWars.BaseWar {
         private static _instance: BwCoListPanel;
 
         private _groupList  : eui.Group;
-        private _listCo     : GameUi.UiScrollList<DataForCoRenderer>;
+        private _listCo     : GameUi.UiScrollList<DataForCoRenderer, CoNameRenderer>;
         private _btnBack    : GameUi.UiButton;
 
         private _groupInfo                      : eui.Group;
@@ -35,15 +35,15 @@ namespace TinyWars.BaseWar {
         private _labelEnergyBarTitle            : GameUi.UiLabel;
         private _labelEnergyBar                 : GameUi.UiLabel;
 
-        private _listPassiveSkill   : GameUi.UiScrollList<DataForSkillRenderer>;
+        private _listPassiveSkill   : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
         private _labelNoPassiveSkill: GameUi.UiLabel;
 
-        private _listCop            : GameUi.UiScrollList<DataForSkillRenderer>;
+        private _listCop            : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
         private _labelNoCop         : GameUi.UiLabel;
         private _labelCopEnergyTitle: GameUi.UiLabel;
         private _labelCopEnergy     : GameUi.UiLabel;
 
-        private _listScop               : GameUi.UiScrollList<DataForSkillRenderer>;
+        private _listScop               : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
         private _labelNoScop            : GameUi.UiLabel;
         private _labelScopEnergyTitle   : GameUi.UiLabel;
         private _labelScopEnergy        : GameUi.UiLabel;
@@ -325,7 +325,7 @@ namespace TinyWars.BaseWar {
         panel           : BwCoListPanel;
     }
 
-    class CoNameRenderer extends GameUi.UiListItemRenderer {
+    class CoNameRenderer extends GameUi.UiListItemRenderer<DataForCoRenderer> {
         private _btnChoose: GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
@@ -338,7 +338,7 @@ namespace TinyWars.BaseWar {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data          = this.data as DataForCoRenderer;
+            const data          = this.data;
             const player        = data.player;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
 
@@ -354,7 +354,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForCoRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
     }
@@ -364,14 +364,14 @@ namespace TinyWars.BaseWar {
         skillId : number;
     }
 
-    class SkillRenderer extends GameUi.UiListItemRenderer {
+    class SkillRenderer extends GameUi.UiListItemRenderer<DataForSkillRenderer> {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForSkillRenderer;
+            const data              = this.data;
             this._labelIndex.text   = `${data.index}.`;
             this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()];
         }

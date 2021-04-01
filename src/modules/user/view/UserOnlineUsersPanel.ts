@@ -15,7 +15,7 @@ namespace TinyWars.User {
         private _labelUsersCountTitle   : GameUi.UiLabel;
 
         private _group          : eui.Group;
-        private _listUser       : GameUi.UiScrollList<DataForUserRenderer>;
+        private _listUser       : GameUi.UiScrollList<DataForUserRenderer, UserRenderer>;
         private _labelUsersCount: GameUi.UiLabel;
         private _labelLoading   : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
@@ -124,7 +124,7 @@ namespace TinyWars.User {
         nickname    : string;
     }
 
-    class UserRenderer extends GameUi.UiListItemRenderer {
+    class UserRenderer extends GameUi.UiListItemRenderer<DataForUserRenderer> {
         private _group      : eui.Group;
         private _imgBg      : GameUi.UiImage;
         private _labelName  : GameUi.UiLabel;
@@ -144,14 +144,14 @@ namespace TinyWars.User {
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
             UserOnlineUsersPanel.hide();
-            UserPanel.show({ userId: (this.data as DataForUserRenderer).userId });
+            UserPanel.show({ userId: (this.data).userId });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data              = this.data as DataForUserRenderer;
+            const data              = this.data;
             this._labelName.text    = data.nickname;
         }
     }

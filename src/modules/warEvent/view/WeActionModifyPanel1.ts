@@ -31,7 +31,7 @@ namespace TinyWars.WarEvent {
         private _btnClear       : GameUi.UiButton;
         private _labelTitle     : GameUi.UiLabel;
         private _labelUnitsCount: GameUi.UiLabel;
-        private _listUnit       : GameUi.UiScrollList<DataForUnitRenderer>;
+        private _listUnit       : GameUi.UiScrollList<DataForUnitRenderer, UnitRenderer>;
 
         public static show(openData: OpenDataForWeActionModifyPanel1): void {
             if (!WeActionModifyPanel1._instance) {
@@ -142,7 +142,7 @@ namespace TinyWars.WarEvent {
         action          : IWarEventAction;
         dataForAddUnit  : ProtoTypes.WarEvent.WarEventActionAddUnit.IDataForAddUnit;
     }
-    class UnitRenderer extends GameUi.UiListItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
         private _btnDelete              : GameUi.UiButton;
         private _labelError             : GameUi.UiLabel;
 
@@ -227,7 +227,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _onTouchedBtnDelete(e: egret.TouchEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (data) {
                 Common.CommonConfirmPanel.show({
                     content : Lang.getText(Lang.Type.A0029),
@@ -239,21 +239,21 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onTouchedGroupCanBeBlockedByUnit(e: egret.TouchEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (data) {
                 data.dataForAddUnit.canBeBlockedByUnit = !data.dataForAddUnit.canBeBlockedByUnit;
                 Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
         private _onTouchedGroupNeedMovableTile(e: egret.TouchEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (data) {
                 data.dataForAddUnit.needMovableTile = !data.dataForAddUnit.needMovableTile;
                 Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
         private _onTouchedGroupIsDiving(e: egret.TouchEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (data) {
                 const unitData      = data.dataForAddUnit.unitData;
                 unitData.isDiving   = unitData.isDiving ? undefined : true;
@@ -261,7 +261,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onTouchedGroupHasLoadedCo(e: egret.TouchEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (data) {
                 const unitData          = data.dataForAddUnit.unitData;
                 unitData.hasLoadedCo    = unitData.hasLoadedCo ? undefined : true;
@@ -269,7 +269,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onTouchedBtnActionState(e: egret.TouchEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (data) {
                 const unitData = data.dataForAddUnit.unitData;
                 if (unitData.actionState === Types.UnitActionState.Acted) {
@@ -281,14 +281,14 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onTouchedBtnUnitType(e: egret.TouchEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             WeActionAddUnitListPanel.show({
                 configVersion   : data.war.getConfigVersion(),
                 dataForAddUnit  : data.dataForAddUnit,
             });
         }
         private _onFocusOutInputGridX(e: FocusEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (!data) {
                 return;
             }
@@ -301,7 +301,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onFocusOutInputGridY(e: FocusEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (!data) {
                 return;
             }
@@ -314,7 +314,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onFocusOutInputPlayerIndex(e: FocusEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (!data) {
                 return;
             }
@@ -330,7 +330,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onFocusOutInputHp(e: FocusEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (!data) {
                 return;
             }
@@ -345,7 +345,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onFocusOutInputFuel(e: FocusEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (!data) {
                 return;
             }
@@ -360,7 +360,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onFocusOutInputPromotion(e: FocusEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (!data) {
                 return;
             }
@@ -375,7 +375,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onFocusOutInputPrimaryAmmo(e: FocusEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (!data) {
                 return;
             }
@@ -390,7 +390,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onFocusOutInputFlareAmmo(e: FocusEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (!data) {
                 return;
             }
@@ -405,7 +405,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onFocusOutInputBuildMaterial(e: FocusEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (!data) {
                 return;
             }
@@ -420,7 +420,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onFocusOutInputProduceMaterial(e: FocusEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (!data) {
                 return;
             }
@@ -484,7 +484,7 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForProduceMaterial();
         }
         private _updateLabelError(): void {
-            const data  = this.data as DataForUnitRenderer;
+            const data  = this.data;
             const label = this._labelError;
             if (data == null) {
                 label.text = undefined;
@@ -500,15 +500,15 @@ namespace TinyWars.WarEvent {
             label.textColor = errorTips ? ColorValue.Red : ColorValue.Green;
         }
         private _updateComponentsForCanBeBlockedByUnit(): void {
-            const data                          = this.data as DataForUnitRenderer;
+            const data                          = this.data;
             this._imgCanBeBlockedByUnit.visible = (!!data) && (!!data.dataForAddUnit.canBeBlockedByUnit);
         }
         private _updateComponentsForNeedMovableTile(): void {
-            const data                          = this.data as DataForUnitRenderer;
+            const data                          = this.data;
             this._imgNeedMovableTile.visible    = (!!data) && (!!data.dataForAddUnit.needMovableTile);
         }
         private _updateComponentsForIsDiving(): void {
-            const data  = this.data as DataForUnitRenderer;
+            const data  = this.data;
             const group = this._groupIsDiving;
             if (!data) {
                 group.visible = false;
@@ -524,11 +524,11 @@ namespace TinyWars.WarEvent {
             }
         }
         private _updateComponentsForHasLoadedCo(): void {
-            const data                      = this.data as DataForUnitRenderer;
+            const data                      = this.data;
             this._imgHasLoadedCo.visible    = (!!data) && (!!data.dataForAddUnit.unitData.hasLoadedCo);
         }
         private _updateComponentsForActionState(): void {
-            const data  = this.data as DataForUnitRenderer;
+            const data  = this.data;
             const label = this._labelActionState;
             if (!data) {
                 label.text = undefined;
@@ -540,7 +540,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _updateComponentsForGridIndex(): void {
-            const data      = this.data as DataForUnitRenderer;
+            const data      = this.data;
             const inputX    = this._inputGridX;
             const inputY    = this._inputGridY;
             if (!data) {
@@ -553,19 +553,19 @@ namespace TinyWars.WarEvent {
             }
         }
         private _updateComponentsForPlayerIndex(): void {
-            const data                  = this.data as DataForUnitRenderer;
+            const data                  = this.data;
             this._inputPlayerIndex.text = data
                 ? `${data.dataForAddUnit.unitData.playerIndex}`
                 : undefined;
         }
         private _updateComponentsForUnitType(): void {
-            const data                  = this.data as DataForUnitRenderer;
+            const data                  = this.data;
             this._labelUnitType.text    = data
                 ? Lang.getUnitName(data.dataForAddUnit.unitData.unitType)
                 : undefined;
         }
         private _updateComponentsForHp(): void {
-            const data  = this.data as DataForUnitRenderer;
+            const data  = this.data;
             const input = this._inputHp;
             if (!data) {
                 input.text = undefined;
@@ -578,7 +578,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _updateComponentsForFuel(): void {
-            const data  = this.data as DataForUnitRenderer;
+            const data  = this.data;
             const input = this._inputFuel;
             if (!data) {
                 input.text = undefined;
@@ -591,7 +591,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _updateComponentsForPromotion(): void {
-            const data  = this.data as DataForUnitRenderer;
+            const data  = this.data;
             const input = this._inputPromotion;
             if (!data) {
                 input.text = undefined;
@@ -600,7 +600,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _updateComponentsForPrimaryAmmo(): void {
-            const data  = this.data as DataForUnitRenderer;
+            const data  = this.data;
             const group = this._groupPrimaryAmmo;
             if (!data) {
                 group.visible = false;
@@ -618,7 +618,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _updateComponentsForFlareAmmo(): void {
-            const data  = this.data as DataForUnitRenderer;
+            const data  = this.data;
             const group = this._groupFlareAmmo;
             if (!data) {
                 group.visible = false;
@@ -636,7 +636,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _updateComponentsForBuildMaterial(): void {
-            const data  = this.data as DataForUnitRenderer;
+            const data  = this.data;
             const group = this._groupBuildMaterial;
             if (!data) {
                 group.visible = false;
@@ -654,7 +654,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _updateComponentsForProduceMaterial(): void {
-            const data  = this.data as DataForUnitRenderer;
+            const data  = this.data;
             const group = this._groupProduceMaterial;
             if (!data) {
                 group.visible = false;

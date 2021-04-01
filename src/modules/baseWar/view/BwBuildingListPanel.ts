@@ -15,7 +15,7 @@ namespace TinyWars.BaseWar {
         private static _instance: BwBuildingListPanel;
 
         public _labelTitle  : GameUi.UiLabel;
-        public _listTile    : GameUi.UiScrollList<DataForTileRenderer>;
+        public _listTile    : GameUi.UiScrollList<DataForTileRenderer, TileRenderer>;
 
         public static show(openData: OpenDataForBwBuildingListPanel): void {
             if (!BwBuildingListPanel._instance) {
@@ -101,7 +101,7 @@ namespace TinyWars.BaseWar {
         dict            : Map<number, number>;
     }
 
-    class TileRenderer extends GameUi.UiListItemRenderer {
+    class TileRenderer extends GameUi.UiListItemRenderer<DataForTileRenderer> {
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
         private _labelNum0      : TinyWars.GameUi.UiLabel;
@@ -135,7 +135,7 @@ namespace TinyWars.BaseWar {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForTileRenderer;
+            const data              = this.data;
             const dict              = data.dict;
             const playerManager     = data.playerManager;
             let totalNum            = 0;

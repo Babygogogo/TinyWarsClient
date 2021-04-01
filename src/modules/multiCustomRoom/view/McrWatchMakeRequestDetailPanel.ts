@@ -17,7 +17,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelMenuTitle : GameUi.UiLabel;
         private _labelYes       : GameUi.UiLabel;
         private _labelNo        : GameUi.UiLabel;
-        private _listPlayer     : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer     : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
         private _btnConfirm     : GameUi.UiButton;
         private _btnCancel      : GameUi.UiButton;
 
@@ -141,7 +141,7 @@ namespace TinyWars.MultiCustomRoom {
         isRequesting    : boolean;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelIndex     : GameUi.UiLabel;
         private _labelTeam      : GameUi.UiLabel;
         private _labelName      : GameUi.UiLabel;
@@ -152,7 +152,7 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForPlayerRenderer;
+            const data              = this.data;
             const playerInfo        = data.playerInfo;
             this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
             this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);
@@ -194,7 +194,7 @@ namespace TinyWars.MultiCustomRoom {
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
             if ((this._imgAccept.visible) || (this._imgDecline.visible)) {
-                const data = this.data as DataForPlayerRenderer;
+                const data = this.data;
                 data.panel.setPlayerSelected(data.playerInfo.playerIndex, !data.isRequesting);
             }
         }

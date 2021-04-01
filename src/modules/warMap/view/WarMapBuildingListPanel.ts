@@ -20,7 +20,7 @@ namespace TinyWars.WarMap {
         private static _instance: WarMapBuildingListPanel;
 
         private readonly _labelTitle    : GameUi.UiLabel;
-        private readonly _listTile      : GameUi.UiScrollList<DataForTileRenderer>;
+        private readonly _listTile      : GameUi.UiScrollList<DataForTileRenderer, TileRenderer>;
 
         public static show(openData: OpenDataForBuildingListPanel): void {
             if (!WarMapBuildingListPanel._instance) {
@@ -107,7 +107,7 @@ namespace TinyWars.WarMap {
         dict            : Map<number, number>;
     }
 
-    class TileRenderer extends GameUi.UiListItemRenderer {
+    class TileRenderer extends GameUi.UiListItemRenderer<DataForTileRenderer> {
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
         private _labelNum0      : TinyWars.GameUi.UiLabel;
@@ -141,7 +141,7 @@ namespace TinyWars.WarMap {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForTileRenderer;
+            const data              = this.data;
             const dict              = data.dict;
             const maxPlayerIndex    = data.maxPlayerIndex;
             let totalNum            = 0;

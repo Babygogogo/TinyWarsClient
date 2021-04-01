@@ -25,7 +25,7 @@ namespace TinyWars.MapEditor {
         private static _instance: MeWarMenuPanel;
 
         private _group                  : eui.Group;
-        private _listCommand            : GameUi.UiScrollList<DataForCommandRenderer>;
+        private _listCommand            : GameUi.UiScrollList<DataForCommandRenderer, CommandRenderer>;
         private _labelNoCommand         : GameUi.UiLabel;
         private _btnBack                : GameUi.UiButton;
         private _labelMenuTitle         : GameUi.UiLabel;
@@ -40,8 +40,8 @@ namespace TinyWars.MapEditor {
         private _btnModifyMapSize       : TinyWars.GameUi.UiButton;
         private _labelMapSize           : TinyWars.GameUi.UiLabel;
 
-        private _listTile               : GameUi.UiScrollList<DataForTileRenderer>;
-        private _listUnit               : GameUi.UiScrollList<DataForUnitRenderer>;
+        private _listTile               : GameUi.UiScrollList<DataForTileRenderer, TileRenderer>;
+        private _listUnit               : GameUi.UiScrollList<DataForUnitRenderer, UnitRenderer>;
 
         private _war            : MeWar;
         private _dataForList    : DataForCommandRenderer[];
@@ -695,7 +695,7 @@ namespace TinyWars.MapEditor {
         callback: () => void;
     }
 
-    class CommandRenderer extends GameUi.UiListItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
 
@@ -706,11 +706,11 @@ namespace TinyWars.MapEditor {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data as DataForCommandRenderer).callback();
+            (this.data).callback();
         }
 
         private _updateView(): void {
-            const data = this.data as DataForCommandRenderer;
+            const data = this.data;
             this._labelName.text    = data.name;
         }
     }
@@ -723,7 +723,7 @@ namespace TinyWars.MapEditor {
         playerIndex : number;
     }
 
-    class TileRenderer extends GameUi.UiListItemRenderer {
+    class TileRenderer extends GameUi.UiListItemRenderer<DataForTileRenderer> {
         private _group          : eui.Group;
         private _labelNum       : GameUi.UiLabel;
         private _conTileView    : eui.Group;
@@ -744,7 +744,7 @@ namespace TinyWars.MapEditor {
         }
 
         protected dataChanged(): void {
-            const data              = this.data as DataForTileRenderer;
+            const data              = this.data;
             this._labelNum.text     = "" + data.count;
             this._tileView.init({
                 tileBaseType        : data.baseType,
@@ -762,7 +762,7 @@ namespace TinyWars.MapEditor {
         dataForDrawUnit : DataForDrawUnit;
     }
 
-    class UnitRenderer extends GameUi.UiListItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
         private _group          : eui.Group;
         private _labelNum       : GameUi.UiLabel;
         private _conUnitView    : eui.Group;
@@ -782,7 +782,7 @@ namespace TinyWars.MapEditor {
         }
 
         protected dataChanged(): void {
-            const data              = this.data as DataForUnitRenderer;
+            const data              = this.data;
             const dataForDrawUnit   = data.dataForDrawUnit;
             this._labelNum.text    = "" + data.count;
 
@@ -802,7 +802,7 @@ namespace TinyWars.MapEditor {
         }
 
         public onItemTapEvent(): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             MeChooseUnitPanel.hide();
             MeModel.getWar().getDrawer().setModeDrawUnit(data.dataForDrawUnit);
         }

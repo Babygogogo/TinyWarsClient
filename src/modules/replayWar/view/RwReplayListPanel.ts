@@ -18,7 +18,7 @@ namespace TinyWars.ReplayWar {
 
         private _labelMenuTitle : GameUi.UiLabel;
         private _labelNoReplay  : GameUi.UiLabel;
-        private _listMap        : GameUi.UiScrollList<DataForMapNameRenderer>;
+        private _listMap        : GameUi.UiScrollList<DataForMapNameRenderer, ReplayRenderer>;
         private _zoomMap        : GameUi.UiZoomableMap;
         private _btnSearch      : GameUi.UiButton;
         private _btnBack        : GameUi.UiButton;
@@ -34,7 +34,7 @@ namespace TinyWars.ReplayWar {
         private _labelGlobalRating      : GameUi.UiLabel;
         private _labelMyRatingTitle     : GameUi.UiLabel;
         private _labelMyRating          : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _dataForListReplay  : DataForMapNameRenderer[] = [];
         private _selectedIndex      : number;
@@ -241,7 +241,7 @@ namespace TinyWars.ReplayWar {
         panel       : RwReplayListPanel;
     }
 
-    class ReplayRenderer extends GameUi.UiListItemRenderer {
+    class ReplayRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _labelTurnIndex : GameUi.UiLabel;
@@ -258,7 +258,7 @@ namespace TinyWars.ReplayWar {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForMapNameRenderer;
+            const data                  = this.data;
             const info                  = data.info.replayBriefInfo;
             const warType               = info.warType;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
@@ -268,12 +268,12 @@ namespace TinyWars.ReplayWar {
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForMapNameRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data = this.data as DataForMapNameRenderer;
+            const data = this.data;
             if (data) {
                 CommonBlockPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
@@ -289,14 +289,14 @@ namespace TinyWars.ReplayWar {
         playerInfo      : ProtoTypes.Structure.IWarPlayerInfo;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForPlayerRenderer;
+            const data              = this.data;
             const playerInfo        = data.playerInfo;
             this._labelIndex.text   = `${Lang.getPlayerForceName(playerInfo.playerIndex)}(${Lang.getPlayerTeamName(playerInfo.teamIndex)})`;
             User.UserModel.getUserNickname(playerInfo.userId).then(name => {

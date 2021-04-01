@@ -22,7 +22,7 @@ namespace TinyWars.WarEvent {
 
         private _labelTitle : GameUi.UiLabel;
         private _btnClose   : GameUi.UiButton;
-        private _listType   : GameUi.UiScrollList<DataForTypeRenderer>;
+        private _listType   : GameUi.UiScrollList<DataForTypeRenderer, TypeRenderer>;
 
         public static show(openData: OpenDataForWeConditionTypeListPanel): void {
             if (!WeConditionTypeListPanel._instance) {
@@ -93,7 +93,7 @@ namespace TinyWars.WarEvent {
         newConditionType: ConditionType;
         condition       : IWarEventCondition;
     }
-    class TypeRenderer extends GameUi.UiListItemRenderer {
+    class TypeRenderer extends GameUi.UiListItemRenderer<DataForTypeRenderer> {
         private _labelType  : GameUi.UiLabel;
         private _labelUsing : GameUi.UiLabel;
         private _labelSwitch: GameUi.UiLabel;
@@ -117,7 +117,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _onTouchedSelf(e: egret.TouchEvent): void {
-            const data = this.data as DataForTypeRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }
@@ -144,7 +144,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateLabelType(): void {
-            const data  = this.data as DataForTypeRenderer;
+            const data  = this.data;
             const label = this._labelType;
             if (data == null) {
                 label.text = undefined;
@@ -153,7 +153,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _updateLabelUsingAndSwitch(): void {
-            const data          = this.data as DataForTypeRenderer;
+            const data          = this.data;
             const labelUsing    = this._labelUsing;
             const labelSwitch   = this._labelSwitch;
             if (data == null) {

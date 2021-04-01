@@ -25,8 +25,8 @@ namespace TinyWars.BaseWar {
         private _labelName          : GameUi.UiLabel;
         private _btnUnitsInfo       : GameUi.UiButton;
 
-        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
-        private _listDamageChart    : GameUi.UiScrollList<DataForDamageRenderer>;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
+        private _listDamageChart    : GameUi.UiScrollList<DataForDamageRenderer, DamageRenderer>;
         private _labelDamageChart   : GameUi.UiLabel;
         private _labelOffenseMain1  : GameUi.UiLabel;
         private _labelOffenseSub1   : GameUi.UiLabel;
@@ -577,7 +577,7 @@ namespace TinyWars.BaseWar {
             const attackUnitType    = unit.getUnitType();
             const playerIndex       = unit.getPlayerIndex();
 
-            const dataList = [] as DataForDamageRenderer[];
+            const dataList: DataForDamageRenderer[] = [];
             for (const targetUnitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
                 dataList.push({
                     configVersion,
@@ -608,7 +608,7 @@ namespace TinyWars.BaseWar {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
@@ -619,14 +619,14 @@ namespace TinyWars.BaseWar {
         }
 
         protected dataChanged(): void {
-            const data              = this.data as DataForInfoRenderer;
+            const data              = this.data;
             this._labelValue.text   = data.valueText;
             this._btnTitle.label    = data.titleText;
             this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-            const data      = this.data as DataForInfoRenderer;
+            const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());
         }
@@ -640,7 +640,7 @@ namespace TinyWars.BaseWar {
         targetTileType? : TileType;
     }
 
-    class DamageRenderer extends GameUi.UiListItemRenderer {
+    class DamageRenderer extends GameUi.UiListItemRenderer<DataForDamageRenderer> {
         private _group                  : eui.Group;
         private _conView                : eui.Group;
         private _unitView               : WarMap.WarMapUnitView;
@@ -673,7 +673,7 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data              = this.data as DataForDamageRenderer;
+            const data              = this.data;
             const configVersion     = data.configVersion;
             const attackUnitType    = data.attackUnitType;
             const targetUnitType    = data.targetUnitType;

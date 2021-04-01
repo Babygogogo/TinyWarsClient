@@ -23,7 +23,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _labelPlayerListTitle   : GameUi.UiLabel;
         private _labelPlayerListTips    : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _mapRawData : ProtoTypes.Map.IMapRawData;
 
@@ -129,7 +129,7 @@ namespace TinyWars.SingleCustomRoom {
 
     type DataForPlayerRenderer = ProtoTypes.Structure.IWarPlayerInfo;
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelPlayerIndex   : GameUi.UiLabel;
         private _labelTeamIndex     : GameUi.UiLabel;
         private _labelName          : GameUi.UiLabel;
@@ -146,7 +146,7 @@ namespace TinyWars.SingleCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForPlayerRenderer;
+            const data                  = this.data;
             this._labelPlayerIndex.text = Lang.getPlayerForceName(data.playerIndex);
             this._labelTeamIndex.text   = Lang.getPlayerTeamName(data.teamIndex);
             this._labelName.text        = data.userId ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256);
@@ -154,17 +154,17 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedLabelTeamIndex(e: egret.TouchEvent): void {
-            const data = this.data as DataForPlayerRenderer;
+            const data = this.data;
             ScrModel.tickCreateWarTeamIndex(data.playerIndex - 1);
         }
 
         private _onTouchedLabelName(e: egret.TouchEvent): void {
-            const data = this.data as DataForPlayerRenderer;
+            const data = this.data;
             ScrModel.tickCreateWarUserId(data.playerIndex - 1);
         }
 
         private _onTouchedLabelCoName(e: egret.TouchEvent): void {
-            const data = this.data as DataForPlayerRenderer;
+            const data = this.data;
             ScrCreateSettingsPanel.hide();
             ScrCreateCoListPanel.show({
                 dataIndex   : data.playerIndex - 1,
@@ -173,7 +173,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _updateLabelCoName(): void {
-            const coId = (this.data as DataForPlayerRenderer).coId;
+            const coId = (this.data).coId;
             if (coId == null) {
                 this._labelCoName.text = `(${Lang.getText(Lang.Type.B0001)} CO)`;
             } else {

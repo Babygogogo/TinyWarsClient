@@ -18,7 +18,7 @@ namespace TinyWars.WarEvent {
 
         private static _instance: WeConditionReplacePanel;
 
-        private _listCondition      : GameUi.UiScrollList<DataForConditionRenderer>;
+        private _listCondition      : GameUi.UiScrollList<DataForConditionRenderer, ConditionRenderer>;
         private _labelTitle         : GameUi.UiLabel;
         private _labelNoCondition   : GameUi.UiLabel;
         private _btnClose           : GameUi.UiButton;
@@ -99,7 +99,7 @@ namespace TinyWars.WarEvent {
         candidateConditionId: number;
         fullData            : IWarEventFullData;
     }
-    class ConditionRenderer extends GameUi.UiListItemRenderer {
+    class ConditionRenderer extends GameUi.UiListItemRenderer<DataForConditionRenderer> {
         private _labelConditionId   : GameUi.UiLabel;
         private _labelCondition     : GameUi.UiLabel;
         private _btnCopy            : GameUi.UiButton;
@@ -125,7 +125,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _onTouchedBtnCopy(e: egret.TouchEvent): void {          // DONE
-            const data = this.data as DataForConditionRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }
@@ -140,7 +140,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onTouchedBtnSelect(e: egret.TouchEvent): void {        // DONE
-            const data = this.data as DataForConditionRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }
@@ -167,13 +167,13 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateLabelConditionId(): void {
-            const data = this.data as DataForConditionRenderer;
+            const data = this.data;
             if (data) {
                 this._labelConditionId.text  = `${Lang.getText(Lang.Type.B0502)}: C${data.candidateConditionId}`;
             }
         }
         private _updateLabelCondition(): void {
-            const data = this.data as DataForConditionRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }

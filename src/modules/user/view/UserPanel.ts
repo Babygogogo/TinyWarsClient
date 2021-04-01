@@ -60,8 +60,8 @@ namespace TinyWars.User {
         private readonly _labelHistoryFogDraw       : GameUi.UiLabel;
         private readonly _labelHistoryFogRatio      : GameUi.UiLabel;
 
-        private readonly _sclHistoryStd             : GameUi.UiScrollList<DataForHistoryRenderer>;
-        private readonly _sclHistoryFog             : GameUi.UiScrollList<DataForHistoryRenderer>;
+        private readonly _sclHistoryStd             : GameUi.UiScrollList<DataForHistoryRenderer, HistoryRenderer>;
+        private readonly _sclHistoryFog             : GameUi.UiScrollList<DataForHistoryRenderer, HistoryRenderer>;
 
         private _userId: number;
 
@@ -315,7 +315,7 @@ namespace TinyWars.User {
         showBottom? : boolean;
     }
 
-    class HistoryRenderer extends GameUi.UiListItemRenderer {
+    class HistoryRenderer extends GameUi.UiListItemRenderer<DataForHistoryRenderer> {
         private readonly _imgBg         : TinyWars.GameUi.UiImage;
         private readonly _labelType     : TinyWars.GameUi.UiLabel;
         private readonly _labelWin      : TinyWars.GameUi.UiLabel;
@@ -327,7 +327,7 @@ namespace TinyWars.User {
         protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
-            const data              = this.data as DataForHistoryRenderer;
+            const data              = this.data;
             this._imgBg.alpha       = data.index % 2 === 0 ? 0.2 : 0.5;
             this._imgBottom.visible = !!data.showBottom;
 

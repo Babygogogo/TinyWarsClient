@@ -15,7 +15,7 @@ namespace TinyWars.MapEditor {
 
         private static _instance: MeAddWarEventToRulePanel;
 
-        private _listWarEvent   : GameUi.UiScrollList<DataForWarEventRenderer>;
+        private _listWarEvent   : GameUi.UiScrollList<DataForWarEventRenderer, WarEventRenderer>;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoWarEvent: GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
@@ -86,7 +86,7 @@ namespace TinyWars.MapEditor {
         warEventId  : number;
         warRule     : ProtoTypes.WarRule.IWarRule;
     }
-    class WarEventRenderer extends GameUi.UiListItemRenderer {
+    class WarEventRenderer extends GameUi.UiListItemRenderer<DataForWarEventRenderer> {
         private _labelId    : GameUi.UiLabel;
         private _btnDelete  : GameUi.UiButton;
         private _labelName  : GameUi.UiLabel;
@@ -112,14 +112,14 @@ namespace TinyWars.MapEditor {
             this._updateBtnAddAndBtnDelete();
         }
         private _onTouchedBtnAdd(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarEventRenderer;
+            const data = this.data;
             if (data) {
                 BwWarRuleHelper.addWarEventId(data.warRule, data.warEventId);
                 Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDelete(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarEventRenderer;
+            const data = this.data;
             if (data) {
                 BwWarRuleHelper.deleteWarEventId(data.warRule, data.warEventId);
                 Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
@@ -129,7 +129,7 @@ namespace TinyWars.MapEditor {
         protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
-            const data          = this.data as DataForWarEventRenderer;
+            const data          = this.data;
             this._labelId.text  = `#${data.warEventId}`;
             this._updateLabelName();
             this._updateBtnAddAndBtnDelete();
@@ -143,14 +143,14 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateLabelName(): void {
-            const data              = this.data as DataForWarEventRenderer;
+            const data              = this.data;
             this._labelName.text    = data
                 ? Lang.getLanguageText({ textArray: MeModel.getWar().getWarEventManager().getWarEvent(data.warEventId).eventNameArray })
                 : undefined;
         }
 
         private _updateBtnAddAndBtnDelete(): void {
-            const data = this.data as DataForWarEventRenderer;
+            const data = this.data;
             if (data) {
                 const isAdded               = (data.warRule.warEventIdArray || []).indexOf(data.warEventId) >= 0;
                 this._btnAdd.visible        = !isAdded;

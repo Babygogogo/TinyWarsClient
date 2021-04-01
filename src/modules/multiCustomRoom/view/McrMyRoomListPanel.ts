@@ -15,7 +15,7 @@ namespace TinyWars.MultiCustomRoom {
         private static _instance: McrMyRoomListPanel;
 
         private _labelMenuTitle : GameUi.UiLabel;
-        private _listWar        : GameUi.UiScrollList<DataForWarRenderer>;
+        private _listWar        : GameUi.UiScrollList<DataForWarRenderer, WarRenderer>;
         private _labelNoWar     : GameUi.UiLabel;
         private _zoomMap        : GameUi.UiZoomableMap;
         private _btnBack        : GameUi.UiButton;
@@ -25,7 +25,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelDesigner      : GameUi.UiLabel;
         private _labelHasFog        : GameUi.UiLabel;
         private _labelWarComment    : GameUi.UiLabel;
-        private _listPlayer         : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer         : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
         private _labelCommentTitle  : GameUi.UiLabel;
         private _labelPlayersTitle  : GameUi.UiLabel;
 
@@ -216,7 +216,7 @@ namespace TinyWars.MultiCustomRoom {
         panel   : McrMyRoomListPanel;
     }
 
-    class WarRenderer extends GameUi.UiListItemRenderer {
+    class WarRenderer extends GameUi.UiListItemRenderer<DataForWarRenderer> {
         private _btnChoose  : GameUi.UiButton;
         private _btnNext    : GameUi.UiButton;
         private _labelName  : GameUi.UiLabel;
@@ -232,7 +232,7 @@ namespace TinyWars.MultiCustomRoom {
         protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
-            const data              = this.data as DataForWarRenderer;
+            const data              = this.data;
             const roomInfo          = data.roomInfo;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._imgRed.visible    = await McrModel.checkIsRedForRoom(roomInfo.roomId);
@@ -248,12 +248,12 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarRenderer;
+            const data = this.data;
             McrRoomInfoPanel.show({ roomId: data.roomInfo.roomId });
         }
     }
@@ -264,14 +264,14 @@ namespace TinyWars.MultiCustomRoom {
         teamIndex   : number;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForPlayerRenderer;
+            const data              = this.data;
             this._labelIndex.text   = `${Lang.getPlayerForceName(data.playerIndex)} (${Lang.getPlayerTeamName(data.teamIndex)})`;
             User.UserModel.getUserNickname(data.userId).then(name => this._labelName.text = name || "----");
         }

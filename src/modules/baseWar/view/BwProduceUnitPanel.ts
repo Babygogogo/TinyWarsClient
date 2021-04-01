@@ -21,7 +21,7 @@ namespace TinyWars.BaseWar {
         private static _instance: BwProduceUnitPanel;
 
         private _group      : eui.Group;
-        private _listUnit   : GameUi.UiScrollList<DataForUnitRenderer>;
+        private _listUnit   : GameUi.UiScrollList<DataForUnitRenderer, UnitRenderer>;
         private _btnCancel  : GameUi.UiButton;
         private _btnDetail  : GameUi.UiButton;
 
@@ -125,7 +125,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
-            const dataList          = [] as DataForUnitRenderer[];
+            const dataList          : DataForUnitRenderer[] = [];
             const openData          = this._getOpenData<OpenDataForBwProduceUnitPanel>();
             const war               = openData.war;
             const gridIndex         = openData.gridIndex;
@@ -182,7 +182,7 @@ namespace TinyWars.BaseWar {
         unitProductionSkillCfg  : number[] | null;
     }
 
-    class UnitRenderer extends GameUi.UiListItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
         private _group          : eui.Group;
         private _imgBg          : GameUi.UiImage;
         private _conUnitView    : eui.Group;
@@ -219,7 +219,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             if (data.currentFund < data.minCost) {
                 FloatText.show(Lang.getText(Lang.Type.B0053));
             } else {
@@ -265,7 +265,7 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
 
             const unitType                  = data.unitType;
             const isFundEnough              = data.currentFund >= data.minCost;

@@ -12,7 +12,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _group          : eui.Group;
         private _labelPanelTitle: GameUi.UiLabel;
-        private _srlSaveSlot    : GameUi.UiScrollList<DataForSlotRenderer>;
+        private _srlSaveSlot    : GameUi.UiScrollList<DataForSlotRenderer, SlotRenderer>;
         private _listSaveSlot   : eui.List;
         private _btnCancel      : GameUi.UiButton;
 
@@ -100,7 +100,7 @@ namespace TinyWars.SingleCustomRoom {
         slotInfo    : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo | null;
     }
 
-    class SlotRenderer extends GameUi.UiListItemRenderer {
+    class SlotRenderer extends GameUi.UiListItemRenderer<DataForSlotRenderer> {
         private _group          : eui.Group;
         private _imgBg          : GameUi.UiImage;
         private _labelSlotIndex : GameUi.UiLabel;
@@ -122,7 +122,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
-            ScrModel.setCreateWarSaveSlotIndex((this.data as DataForSlotRenderer).slotIndex);
+            ScrModel.setCreateWarSaveSlotIndex((this.data).slotIndex);
             ScrCreateSaveSlotsPanel.hide();
         }
 
@@ -130,7 +130,7 @@ namespace TinyWars.SingleCustomRoom {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data                  = this.data as DataForSlotRenderer;
+            const data                  = this.data;
             const slotInfo              = data.slotInfo;
             this._labelSlotIndex.text   = "" + data.slotIndex;
             this._labelType.text        = slotInfo ? Lang.getWarTypeName(slotInfo.warType) : "----";

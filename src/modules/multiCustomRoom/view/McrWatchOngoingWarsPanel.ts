@@ -18,7 +18,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelMenuTitle     : GameUi.UiLabel;
         private _labelPlayersTitle  : GameUi.UiLabel;
         private _labelCommentTitle  : GameUi.UiLabel;
-        private _listWar            : GameUi.UiScrollList<DataForWarRenderer>;
+        private _listWar            : GameUi.UiScrollList<DataForWarRenderer, WarRenderer>;
         private _labelNoWar         : GameUi.UiLabel;
         private _zoomMap            : GameUi.UiZoomableMap;
         private _btnBack            : GameUi.UiButton;
@@ -28,7 +28,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelDesigner  : GameUi.UiLabel;
         private _labelHasFog    : GameUi.UiLabel;
         private _labelWarComment: GameUi.UiLabel;
-        private _listPlayer     : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer     : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
         private _selectedWarIndex   : number;
@@ -209,7 +209,7 @@ namespace TinyWars.MultiCustomRoom {
         panel   : McrWatchOngoingWarsPanel;
     }
 
-    class WarRenderer extends GameUi.UiListItemRenderer {
+    class WarRenderer extends GameUi.UiListItemRenderer<DataForWarRenderer> {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _labelName      : GameUi.UiLabel;
@@ -224,7 +224,7 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForWarRenderer;
+            const data              = this.data;
             const warInfo           = data.info.warInfo;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
 
@@ -245,12 +245,12 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            MultiPlayerWar.MpwProxy.reqWatchContinueWar((this.data as DataForWarRenderer).info.warInfo.warId);
+            MultiPlayerWar.MpwProxy.reqWatchContinueWar((this.data).info.warInfo.warId);
         }
     }
 
@@ -259,7 +259,7 @@ namespace TinyWars.MultiCustomRoom {
         configVersion   : string;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
         private _labelTeam : GameUi.UiLabel;
@@ -267,7 +267,7 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForPlayerRenderer;
+            const data              = this.data;
             const playerInfo        = data.playerInfo;
             this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
             this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);

@@ -10,7 +10,7 @@ namespace TinyWars.SingleCustomRoom {
         private static _instance: ScrMainMenuPanel;
 
         private _btnBack    : GameUi.UiButton;
-        private _listCommand: GameUi.UiScrollList<DataForCommandRenderer>;
+        private _listCommand: GameUi.UiScrollList<DataForCommandRenderer, CommandRenderer>;
 
         public static show(): void {
             if (!ScrMainMenuPanel._instance) {
@@ -106,18 +106,18 @@ namespace TinyWars.SingleCustomRoom {
         callback: () => void;
     }
 
-    class CommandRenderer extends GameUi.UiListItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
         private _labelCommand: GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data as DataForCommandRenderer;
+            const data = this.data;
             this._labelCommand.text = data.name;
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data as DataForCommandRenderer).callback();
+            (this.data).callback();
         }
     }
 }

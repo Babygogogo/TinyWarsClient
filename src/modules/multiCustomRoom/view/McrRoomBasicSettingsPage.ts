@@ -60,7 +60,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelReady             : TinyWars.GameUi.UiLabel;
 
         private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
-        private _listPlayer             : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer             : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _roomInfo               : ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
 
@@ -451,7 +451,7 @@ namespace TinyWars.MultiCustomRoom {
         playerData      : ProtoTypes.Structure.IDataForPlayerInRoom;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelNickname  : GameUi.UiLabel;
         private _labelIndex     : GameUi.UiLabel;
         private _btnDelete      : GameUi.UiButton;
@@ -468,7 +468,7 @@ namespace TinyWars.MultiCustomRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForPlayerRenderer;
+            const data              = this.data;
             const roomInfo          = data.roomInfo;
             const selfUserId        = UserModel.getSelfUserId();
             const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
@@ -496,7 +496,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnDelete(e: egret.TouchEvent): Promise<void> {
-            const data          = this.data as DataForPlayerRenderer;
+            const data          = this.data;
             const playerData    = data ? data.playerData : null;
             if (playerData) {
                 const userId = playerData.userId;

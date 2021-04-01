@@ -18,15 +18,15 @@ namespace TinyWars.Common {
 
         private _groupList          : eui.Group;
         private _labelTitle         : TinyWars.GameUi.UiLabel;
-        private _listUnit           : TinyWars.GameUi.UiScrollList<DataForUnitRenderer>;
+        private _listUnit           : TinyWars.GameUi.UiScrollList<DataForUnitRenderer, UnitRenderer>;
         private _btnBack            : TinyWars.GameUi.UiButton;
 
         private _groupInfo          : eui.Group;
         private _conUnitView        : eui.Group;
         private _labelName          : GameUi.UiLabel;
 
-        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
-        private _listDamageChart    : GameUi.UiScrollList<DataForDamageRenderer>;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
+        private _listDamageChart    : GameUi.UiScrollList<DataForDamageRenderer, DamageRenderer>;
         private _labelDamageChart   : GameUi.UiLabel;
         private _labelOffenseMain1  : GameUi.UiLabel;
         private _labelOffenseSub1   : GameUi.UiLabel;
@@ -397,7 +397,7 @@ namespace TinyWars.Common {
         panel           : CommonDamageChartPanel;
     }
 
-    class UnitRenderer extends GameUi.UiListItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
         private _imgChoose  : eui.Image;
         private _labelName  : TinyWars.GameUi.UiLabel;
 
@@ -410,12 +410,12 @@ namespace TinyWars.Common {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data as DataForUnitRenderer;
+            const data              = this.data;
             this._labelName.text    = Lang.getUnitName(data.unitType);
         }
 
         private _onTouchedImgChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             data.panel.setSelectedIndexAndUpdateView(data.index);
         }
     }
@@ -425,12 +425,12 @@ namespace TinyWars.Common {
         valueText   : string;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
         protected dataChanged(): void {
-            const data              = this.data as DataForInfoRenderer;
+            const data              = this.data;
             this._labelValue.text   = data.valueText;
             this._btnTitle.label    = data.titleText;
         }
@@ -444,7 +444,7 @@ namespace TinyWars.Common {
         targetTileType? : TileType;
     }
 
-    class DamageRenderer extends GameUi.UiListItemRenderer {
+    class DamageRenderer extends GameUi.UiListItemRenderer<DataForDamageRenderer> {
         private _group                  : eui.Group;
         private _conView                : eui.Group;
         private _unitView               : WarMap.WarMapUnitView;
@@ -477,7 +477,7 @@ namespace TinyWars.Common {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data              = this.data as DataForDamageRenderer;
+            const data              = this.data;
             const configVersion     = data.configVersion;
             const attackUnitType    = data.attackUnitType;
             const targetUnitType    = data.targetUnitType;

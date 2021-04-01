@@ -4,24 +4,22 @@ namespace TinyWars.GameUi {
     import Logger       = Utility.Logger;
     import StageManager = Utility.StageManager;
 
-    export class UiScrollList<DataForRenderer> extends eui.Scroller {
-        private _itemRenderer : new () => GameUi.UiListItemRenderer;
-        private _dataProvider : eui.ArrayCollection;
+    export class UiScrollList<DataForRenderer, Renderer extends GameUi.UiListItemRenderer<DataForRenderer>> extends eui.Scroller {
+        private readonly _dataProvider = new eui.ArrayCollection();
+        private _itemRenderer : new () => Renderer;
 
         private _scrollVerticalPercentage   : number;
         private _scrollHorizontalPercentage : number;
-        private _mousePoint                 = new egret.Point();
+        private readonly _mousePoint        = new egret.Point();
 
         public constructor() {
             super();
-
-            this._dataProvider = new eui.ArrayCollection();
 
             this.addEventListener(egret.Event.COMPLETE, this._onAllSkinPartsAdded, this);
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public setItemRenderer(itemRenderer: new () => GameUi.UiListItemRenderer): void {
+        public setItemRenderer(itemRenderer: new () => Renderer): void {
             if (this._itemRenderer !== itemRenderer) {
                 this._itemRenderer              = itemRenderer;
                 this.getViewList().itemRenderer = itemRenderer;
@@ -29,7 +27,7 @@ namespace TinyWars.GameUi {
         }
 
         public bindData(data: DataForRenderer[]): void {
-            const provider = this._dataProvider;
+            const provider = this.getDataProvider();
             for (let i = 0; i < data.length; ++i) {
                 const newItem = data[i];
                 if (provider.getItemAt(i) == null) {
@@ -79,17 +77,16 @@ namespace TinyWars.GameUi {
         }
 
         public updateSingleData(index: number, data: DataForRenderer) : void {
-            let dataProvider = this._dataProvider;
-            if (!dataProvider) {
-                return;
+            const dataProvider = this.getDataProvider();
+            if ((index < 0) || (index >= dataProvider.length)) {
+                Logger.error(`UiScrollList.updateSingleData() invalid index.`);
+            } else {
+                dataProvider.replaceItemAt(data, index);
             }
-            egret.assert(index >= 0 && index <= dataProvider.length, "UIScrollList.updateSingleData() 索引越界!");
-
-            dataProvider.replaceItemAt(data, index);
         }
 
         public refresh(): void {
-            this._dataProvider.refresh();
+            this.getDataProvider().refresh();
         }
 
         public clear() : void {
@@ -112,7 +109,7 @@ namespace TinyWars.GameUi {
                 }
 
                 list.itemRenderer = this._itemRenderer;
-                list.dataProvider = this._dataProvider;
+                list.dataProvider = this.getDataProvider();
                 list.addEventListener(eui.ItemTapEvent.ITEM_TAP, this._onTouchedListItem, this);
             }
         }

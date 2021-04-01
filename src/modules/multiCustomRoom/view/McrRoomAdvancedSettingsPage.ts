@@ -19,7 +19,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelMapName       : TinyWars.GameUi.UiLabel;
         private _btnBuildings       : TinyWars.GameUi.UiButton;
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
-        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
+        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _roomInfo           : IMcrRoomInfo;
 
@@ -119,8 +119,8 @@ namespace TinyWars.MultiCustomRoom {
         roomInfo    : IMcrRoomInfo;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
-        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -139,7 +139,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data as DataForPlayerRenderer;
+            const data          = this.data;
             const playerIndex   = data.playerIndex;
             const roomInfo      = data.roomInfo;
             return [
@@ -252,14 +252,14 @@ namespace TinyWars.MultiCustomRoom {
         infoColor   : number;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForInfoRenderer;
+            const data                  = this.data;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;

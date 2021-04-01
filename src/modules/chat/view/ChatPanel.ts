@@ -26,12 +26,12 @@ namespace TinyWars.Chat {
 
         private _groupChannel   : eui.Group;
         private _labelChatTitle : TinyWars.GameUi.UiLabel;
-        private _listChat       : TinyWars.GameUi.UiScrollList<DataForChatPageRenderer>;
+        private _listChat       : TinyWars.GameUi.UiScrollList<DataForChatPageRenderer, ChatPageRenderer>;
         private _btnBack        : TinyWars.GameUi.UiButton;
         private _btnRefresh     : TinyWars.GameUi.UiButton;
         private _groupMessage   : eui.Group;
         private _labelNoMessage : TinyWars.GameUi.UiLabel;
-        private _listMessage    : TinyWars.GameUi.UiScrollList<DataForMessageRenderer>;
+        private _listMessage    : TinyWars.GameUi.UiScrollList<DataForMessageRenderer, MessageRenderer>;
         private _groupInput     : eui.Group;
         private _inputMessage   : TinyWars.GameUi.UiTextInput;
         private _btnSend        : TinyWars.GameUi.UiButton;
@@ -479,7 +479,7 @@ namespace TinyWars.Chat {
         toTarget    : number;
     }
 
-    class ChatPageRenderer extends GameUi.UiListItemRenderer {
+    class ChatPageRenderer extends GameUi.UiListItemRenderer<DataForChatPageRenderer> {
         private _labelName      : GameUi.UiLabel;
         private _labelType      : GameUi.UiLabel;
         private _imgRed         : GameUi.UiLabel;
@@ -494,7 +494,7 @@ namespace TinyWars.Chat {
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            const data = this.data as DataForChatPageRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
@@ -514,14 +514,14 @@ namespace TinyWars.Chat {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data          = this.data as DataForChatPageRenderer;
+            const data          = this.data;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._updateLabels();
             this._updateImgRed();
         }
 
         private _updateLabels(): void {
-            const data          = this.data as DataForChatPageRenderer;
+            const data          = this.data;
             const toCategory    = data.toCategory;
             const toTarget      = data.toTarget;
             const labelType     = this._labelType;
@@ -567,27 +567,27 @@ namespace TinyWars.Chat {
         }
 
         private _updateImgRed(): void {
-            const data              = this.data as DataForChatPageRenderer;
+            const data              = this.data;
             this._imgRed.visible    = ChatModel.checkHasUnreadMessageForTarget(data.toCategory, data.toTarget);
         }
     }
 
     type DataForMessageRenderer = ProtoTypes.Chat.IChatMessage;
 
-    class MessageRenderer extends GameUi.UiListItemRenderer {
+    class MessageRenderer extends GameUi.UiListItemRenderer<DataForMessageRenderer> {
         private _labelName      : TinyWars.GameUi.UiLabel;
         private _labelContent   : TinyWars.GameUi.UiLabel;
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data as DataForMessageRenderer;
+            const data                  = this.data;
             const fromUserId            = data.fromUserId;
             this._labelContent.text     = data.content;
             this._labelName.textColor   = fromUserId === User.UserModel.getSelfUserId() ? 0x00FF00 : 0xFFFFFF;
             this._labelName.text        = `    (${Helpers.getTimestampShortText(data.timestamp)})`;
             User.UserModel.getUserPublicInfo(fromUserId).then(info => {
-                const d = this.data as DataForMessageRenderer;
+                const d = this.data;
                 if ((d) && (info.userId === d.fromUserId)) {
                     this._labelName.text = `${info.nickname || `???`}    (${Helpers.getTimestampShortText(data.timestamp)})`;
                 }
@@ -595,7 +595,7 @@ namespace TinyWars.Chat {
         }
 
         public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
-            const data = this.data as DataForMessageRenderer;
+            const data = this.data;
             if (data.toCategory !== ChatCategory.Private) {
                 const userId = data.fromUserId;
                 if (userId !== User.UserModel.getSelfUserId()) {
