@@ -3,8 +3,10 @@ namespace TinyWars.MultiCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
+    import Types            = Utility.Types;
     import CommonConstants  = Utility.CommonConstants;
     import Notify           = Utility.Notify;
+    import PlayerRuleType   = Types.PlayerRuleType;
 
     export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
         private readonly _scroller      : eui.Scroller;
@@ -12,7 +14,8 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer, SettingRenderer>;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
-        private _mapRawData : ProtoTypes.Map.IMapRawData;
+        private _initialWarRuleId   : number;
+        private _mapRawData         : ProtoTypes.Map.IMapRawData;
 
         public constructor() {
             super();
@@ -23,27 +26,35 @@ namespace TinyWars.MultiCustomRoom {
         protected async _onOpened(): Promise<void> {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.McrCreateAvailableCoIdListChanged,  callback: this._onNotifyMcrCreateAvailableCoIdListChanged },
+                { type: Notify.Type.McrCreatePresetWarRuleIdChanged,    callback: this._onNotifyMcrCreatePresetWarRuleIdChanged },
+            ]);
+            this._setUiListenerArray([
+                { ui: this._btnReset,   callback: this._onTouchedBtnReset },
             ]);
             this._listSetting.setItemRenderer(SettingRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._scroller.scrollPolicyH = eui.ScrollPolicy.OFF;
 
-            this._mapRawData = await McrModel.Create.getMapRawData();
+            this._initialWarRuleId  = McrModel.Create.getPresetWarRuleId();
+            this._mapRawData        = await McrModel.Create.getMapRawData();
 
             this._updateComponentsForLanguage();
             this._initListSetting();
             this._updateListPlayer();
+            this._updateButtonReset();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(): void {
+        private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyMcrCreateAvailableCoIdListChanged(e: egret.Event): void {
-            this._updateListPlayer();
+        private _onNotifyMcrCreatePresetWarRuleIdChanged(e: egret.Event): void {
+            this._updateButtonReset();
+        }
+        private _onTouchedBtnReset(e: egret.TouchEvent): void {
+            McrModel.Create.resetDataByWarRuleId(this._initialWarRuleId);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -53,19 +64,23 @@ namespace TinyWars.MultiCustomRoom {
             this._btnReset.label = Lang.getText(Lang.Type.B0567);
         }
 
+        private _updateButtonReset(): void {
+            this._btnReset.visible = (this._initialWarRuleId != null) && (McrModel.Create.getPresetWarRuleId() == null);
+        }
+
         private _initListSetting(): void {
             this._listSetting.bindData([
-                createSettingDataTeamIndex(),
-                createSettingDataAvailableCoIdList(),
-                createSettingDataInitialFund(),
-                createSettingDataIncomeMultiplier(),
-                createSettingDataInitialEnergyPercentage(),
-                createSettingDataEnergyGrowthMultiplier(),
-                createSettingDataMoveRangeModifier(),
-                createSettingDataAttackPowerModifier(),
-                createSettingDataVisionRangeModifier(),
-                createSettingDataLuckLowerLimit(),
-                createSettingDataLuckUpperLimit(),
+                { playerRuleType: PlayerRuleType.TeamIndex },
+                { playerRuleType: PlayerRuleType.AvailableCoIdList },
+                { playerRuleType: PlayerRuleType.InitialFund },
+                { playerRuleType: PlayerRuleType.IncomeMultiplier },
+                { playerRuleType: PlayerRuleType.InitialEnergyPercentage },
+                { playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
+                { playerRuleType: PlayerRuleType.MoveRangeModifier },
+                { playerRuleType: PlayerRuleType.AttackPowerModifier },
+                { playerRuleType: PlayerRuleType.VisionRangeModifier },
+                { playerRuleType: PlayerRuleType.LuckLowerLimit },
+                { playerRuleType: PlayerRuleType.LuckUpperLimit },
             ]);
         }
 
@@ -78,84 +93,12 @@ namespace TinyWars.MultiCustomRoom {
             this._listPlayer.bindData(dataList);
         }
     }
-    function createSettingDataTeamIndex(): DataForSettingRenderer {
-        return {
-            nameLangType    : Lang.Type.B0019,
-            callbackForHelp : null,
-        };
-    }
-    function createSettingDataAvailableCoIdList(): DataForSettingRenderer {
-        return {
-            nameLangType    : Lang.Type.B0403,
-            callbackForHelp : () => {
-                Common.CommonHelpPanel.show({
-                    title   : `CO`,
-                    content : Lang.getRichText(Lang.RichType.R0004),
-                });
-            },
-        };
-    }
-    function createSettingDataInitialFund(): DataForSettingRenderer {
-        return {
-            nameLangType    : Lang.Type.B0178,
-            callbackForHelp : null,
-        };
-    }
-    function createSettingDataIncomeMultiplier(): DataForSettingRenderer {
-        return {
-            nameLangType    : Lang.Type.B0179,
-            callbackForHelp : null,
-        };
-    }
-    function createSettingDataInitialEnergyPercentage(): DataForSettingRenderer {
-        return {
-            nameLangType    : Lang.Type.B0180,
-            callbackForHelp : null,
-        };
-    }
-    function createSettingDataEnergyGrowthMultiplier(): DataForSettingRenderer {
-        return {
-            nameLangType    : Lang.Type.B0181,
-            callbackForHelp : null,
-        };
-    }
-    function createSettingDataMoveRangeModifier(): DataForSettingRenderer {
-        return {
-            nameLangType    : Lang.Type.B0182,
-            callbackForHelp : null,
-        };
-    }
-    function createSettingDataAttackPowerModifier(): DataForSettingRenderer {
-        return {
-            nameLangType    : Lang.Type.B0183,
-            callbackForHelp : null,
-        };
-    }
-    function createSettingDataVisionRangeModifier(): DataForSettingRenderer {
-        return {
-            nameLangType    : Lang.Type.B0184,
-            callbackForHelp : null,
-        };
-    }
-    function createSettingDataLuckLowerLimit(): DataForSettingRenderer {
-        return {
-            nameLangType    : Lang.Type.B0189,
-            callbackForHelp : null,
-        };
-    }
-    function createSettingDataLuckUpperLimit(): DataForSettingRenderer {
-        return {
-            nameLangType    : Lang.Type.B0190,
-            callbackForHelp : null,
-        };
-    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // SettingRenderer
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForSettingRenderer = {
-        nameLangType    : Lang.Type;
-        callbackForHelp : (() => void) | null;
+        playerRuleType  : PlayerRuleType;
     }
     class SettingRenderer extends GameUi.UiListItemRenderer<DataForSettingRenderer> {
         private readonly _labelName : GameUi.UiLabel;
@@ -172,15 +115,20 @@ namespace TinyWars.MultiCustomRoom {
 
             const data = this.data;
             if (data) {
-                this._labelName.text    = Lang.getText(data.nameLangType);
-                this._btnHelp.visible   = !!data.callbackForHelp;
+                const playerRuleType    = data.playerRuleType;
+                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType);
+                this._btnHelp.visible   = playerRuleType === PlayerRuleType.AvailableCoIdList;
             }
         }
 
         private _onTouchedBtnHelp(e: egret.Event): void {
-            const data = this.data;
-            if ((data) && (data.callbackForHelp)) {
-                data.callbackForHelp();
+            const data              = this.data;
+            const playerRuleType    = data ? data.playerRuleType : null;
+            if (playerRuleType === PlayerRuleType.AvailableCoIdList) {
+                Common.CommonHelpPanel.show({
+                    title   : `CO`,
+                    content : Lang.getRichText(Lang.RichType.R0004),
+                });
             }
         }
     }
@@ -216,337 +164,20 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data;
-            const playerIndex   = data.playerIndex;
+            const playerIndex = this.data.playerIndex;
             return [
-                this._createDataTeamIndex(playerIndex),
-                this._createDataAvailableCoIdList(playerIndex),
-                this._createDataInitialFund(playerIndex),
-                this._createDataIncomeMultiplier(playerIndex),
-                this._createDataInitialEnergyPercentage(playerIndex),
-                this._createDataEnergyGrowthMultiplier(playerIndex),
-                this._createDataMoveRangeModifier(playerIndex),
-                this._createDataAttackPowerModifier(playerIndex),
-                this._createDataVisionRangeModifier(playerIndex),
-                this._createDataLuckLowerLimit(playerIndex),
-                this._createDataLuckUpperLimit(playerIndex),
+                { playerIndex, playerRuleType: PlayerRuleType.TeamIndex },
+                { playerIndex, playerRuleType: PlayerRuleType.AvailableCoIdList },
+                { playerIndex, playerRuleType: PlayerRuleType.InitialFund },
+                { playerIndex, playerRuleType: PlayerRuleType.IncomeMultiplier },
+                { playerIndex, playerRuleType: PlayerRuleType.InitialEnergyPercentage },
+                { playerIndex, playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
+                { playerIndex, playerRuleType: PlayerRuleType.MoveRangeModifier },
+                { playerIndex, playerRuleType: PlayerRuleType.AttackPowerModifier },
+                { playerIndex, playerRuleType: PlayerRuleType.VisionRangeModifier },
+                { playerIndex, playerRuleType: PlayerRuleType.LuckLowerLimit },
+                { playerIndex, playerRuleType: PlayerRuleType.LuckUpperLimit },
             ];
-        }
-        private _createDataTeamIndex(playerIndex: number): DataForInfoRenderer {
-            return {
-                titleText               : Lang.getText(Lang.Type.B0019),
-                infoText                : Lang.getPlayerTeamName(McrModel.Create.getTeamIndex(playerIndex)),
-                infoColor               : 0xFFFFFF,
-                callbackOnTouchedTitle  : () => {
-                    this._confirmUseCustomRule(() => {
-                        McrModel.Create.tickTeamIndex(playerIndex);
-                        this._updateView();
-                    });
-                },
-            };
-        }
-        private _createDataAvailableCoIdList(playerIndex: number): DataForInfoRenderer {
-            return {
-                titleText               : Lang.getText(Lang.Type.B0403),
-                infoText                : `${McrModel.Create.getAvailableCoIdList(playerIndex).length}`,
-                infoColor               : 0xFFFFFF,
-                callbackOnTouchedTitle  : () => {
-                    this._confirmUseCustomRule(() => {
-                        McrCreateAvailableCoPanel.show({ playerIndex });
-                    });
-                },
-            };
-        }
-        private _createDataInitialFund(playerIndex: number): DataForInfoRenderer {
-            const currValue = McrModel.Create.getInitialFund(playerIndex);
-            return {
-                titleText               : Lang.getText(Lang.Type.B0178),
-                infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
-                callbackOnTouchedTitle  : () => {
-                    this._confirmUseCustomRule(() => {
-                        const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
-                        const minValue  = CommonConstants.WarRuleInitialFundMinLimit;
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0178),
-                            currentValue    : "" + currValue,
-                            maxChars        : 7,
-                            charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    McrModel.Create.setInitialFund(playerIndex, value);
-                                    this._updateView();
-                                }
-                            },
-                        });
-                    });
-                }
-            };
-        }
-        private _createDataIncomeMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue = McrModel.Create.getIncomeMultiplier(playerIndex);
-            const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
-            const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0179),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
-                callbackOnTouchedTitle  : () => {
-                    this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0179),
-                            currentValue    : "" + currValue,
-                            maxChars        : 5,
-                            charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    McrModel.Create.setIncomeMultiplier(playerIndex, value);
-                                    this._updateView();
-                                }
-                            },
-                        });
-                    });
-                },
-            };
-        }
-        private _createDataInitialEnergyPercentage(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.Create.getInitialEnergyPercentage(playerIndex);
-            const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
-            const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0180),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
-                callbackOnTouchedTitle  : () => {
-                    this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0180),
-                            currentValue    : "" + currValue,
-                            maxChars        : 3,
-                            charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    McrModel.Create.setInitialEnergyPercentage(playerIndex, value);
-                                    this._updateView();
-                                }
-                            },
-                        });
-                    });
-                },
-            };
-        }
-        private _createDataEnergyGrowthMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.Create.getEnergyGrowthMultiplier(playerIndex);
-            const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
-            const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0181),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
-                callbackOnTouchedTitle  : () => {
-                    this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0181),
-                            currentValue    : "" + currValue,
-                            maxChars        : 5,
-                            charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    McrModel.Create.setEnergyGrowthMultiplier(playerIndex, value);
-                                    this._updateView();
-                                }
-                            },
-                        });
-                    });
-                },
-            };
-        }
-        private _createDataMoveRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.Create.getMoveRangeModifier(playerIndex);
-            const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
-            const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0182),
-                infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
-                callbackOnTouchedTitle  : () => {
-                    this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0182),
-                            currentValue    : "" + currValue,
-                            maxChars        : 3,
-                            charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    McrModel.Create.setMoveRangeModifier(playerIndex, value);
-                                    this._updateView();
-                                }
-                            },
-                        });
-                    });
-                },
-            };
-        }
-        private _createDataAttackPowerModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.Create.getAttackPowerModifier(playerIndex);
-            const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
-            const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0183),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
-                callbackOnTouchedTitle  : () => {
-                    this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0183),
-                            currentValue    : "" + currValue,
-                            maxChars        : 5,
-                            charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    McrModel.Create.setAttackPowerModifier(playerIndex, value);
-                                    this._updateView();
-                                }
-                            },
-                        });
-                    });
-                },
-            };
-        }
-        private _createDataVisionRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.Create.getVisionRangeModifier(playerIndex);
-            const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
-            const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0184),
-                infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
-                callbackOnTouchedTitle  : () => {
-                    this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0184),
-                            currentValue    : "" + currValue,
-                            maxChars        : 3,
-                            charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    McrModel.Create.setVisionRangeModifier(playerIndex, value);
-                                    this._updateView();
-                                }
-                            },
-                        });
-                    });
-                },
-            };
-        }
-        private _createDataLuckLowerLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.Create.getLuckLowerLimit(playerIndex);
-            const minValue      = CommonConstants.WarRuleLuckMinLimit;
-            const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0189),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
-                callbackOnTouchedTitle  : () => {
-                    this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0189),
-                            currentValue    : "" + currValue,
-                            maxChars        : 4,
-                            charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    const upperLimit = McrModel.Create.getLuckUpperLimit(playerIndex);
-                                    if (value <= upperLimit) {
-                                        McrModel.Create.setLuckLowerLimit(playerIndex, value);
-                                    } else {
-                                        McrModel.Create.setLuckUpperLimit(playerIndex, value);
-                                        McrModel.Create.setLuckLowerLimit(playerIndex, upperLimit);
-                                    }
-                                    this._updateView();
-                                }
-                            },
-                        });
-                    });
-                },
-            };
-        }
-        private _createDataLuckUpperLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = McrModel.Create.getLuckUpperLimit(playerIndex);
-            const minValue      = CommonConstants.WarRuleLuckMinLimit;
-            const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0190),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
-                callbackOnTouchedTitle  : () => {
-                    this._confirmUseCustomRule(() => {
-                        Common.CommonInputPanel.show({
-                            title           : Lang.getText(Lang.Type.B0190),
-                            currentValue    : "" + currValue,
-                            maxChars        : 4,
-                            charRestrict    : "0-9\\-",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minValue}, ${maxValue}]`,
-                            callback        : panel => {
-                                const text  = panel.getInputText();
-                                const value = text ? Number(text) : NaN;
-                                if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    const lowerLimit = McrModel.Create.getLuckLowerLimit(playerIndex);
-                                    if (value >= lowerLimit) {
-                                        McrModel.Create.setLuckUpperLimit(playerIndex, value);
-                                    } else {
-                                        McrModel.Create.setLuckLowerLimit(playerIndex, value);
-                                        McrModel.Create.setLuckUpperLimit(playerIndex, lowerLimit);
-                                    }
-                                    this._updateView();
-                                }
-                            },
-                        });
-                    });
-                },
-            };
         }
 
         private _confirmUseCustomRule(callback: () => void): void {
@@ -556,7 +187,7 @@ namespace TinyWars.MultiCustomRoom {
                 Common.CommonConfirmPanel.show({
                     content : Lang.getText(Lang.Type.A0129),
                     callback: () => {
-                        McrModel.Create.setPresetWarRuleId(null);
+                        McrModel.Create.setCustomWarRuleId();
                         callback();
                     },
                 });
@@ -568,35 +199,334 @@ namespace TinyWars.MultiCustomRoom {
     // InfoRenderer
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForInfoRenderer = {
-        titleText               : string;
-        infoText                : string;
-        infoColor               : number;
-        callbackOnTouchedTitle  : (() => void) | null;
+        playerIndex             : number;
+        playerRuleType          : PlayerRuleType;
+        infoText?               : string;
+        infoColor?              : number;
+        callbackOnTouchedTitle? : (() => void) | null;
     }
     class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : GameUi.UiButton;
-        private _labelValue : GameUi.UiLabel;
+        private readonly _btnCustom     : GameUi.UiButton;
+        private readonly _inputValue    : GameUi.UiTextInput;
+        private readonly _labelValue    : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        private _callbackForTouchLabelValue     : () => void;
+        private _callbackForFocusOutInputValue  : () => void;
 
-            this._btnTitle.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnTitle, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnCustom,  callback: this._onTouchedBtnCustom },
+                { ui: this._labelValue, callback: this._onTouchedLabelValue },
+                { ui: this._inputValue, callback: this._onFocusOutInputValue, eventType: egret.FocusEvent.FOCUS_OUT },
+            ]);
+            this._setNotifyListenerArray([
+                { type: Notify.Type.McrCreatePresetWarRuleIdChanged,    callback: this._onNotifyMcrCreatePresetWarRuleIdChanged },
+                { type: Notify.Type.McrCreateAvailableCoIdListChanged,  callback: this._onNotifyMcrCreateAvailableCoIdListChanged },
+            ]);
+            this._labelValue.touchEnabled = true;
+        }
+        protected _onClosed(): void {
+            this._callbackForTouchLabelValue    = null;
+            this._callbackForFocusOutInputValue = null;
         }
 
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data;
-            this._labelValue.text       = data.infoText;
-            this._labelValue.textColor  = data.infoColor;
-            this._btnTitle.label        = data.titleText;
-            this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
+            this._updateBtnCustom();
+            this._updateComponentsForValue();
         }
 
-        private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-            const data      = this.data;
-            const callback  = data ? data.callbackOnTouchedTitle : null;
-            (callback) && (callback());
+        private _onTouchedBtnCustom(e: egret.TouchEvent): void {
+            Common.CommonConfirmPanel.show({
+                content : Lang.getText(Lang.Type.A0129),
+                callback: () => {
+                    McrModel.Create.setCustomWarRuleId();
+                },
+            });
+        }
+        private _onTouchedLabelValue(e: egret.TouchEvent): void {
+            const callback = this._callbackForTouchLabelValue;
+            if (callback) {
+                callback();
+                this._updateComponentsForValue();
+            }
+        }
+        private _onFocusOutInputValue(e: egret.FocusEvent): void {
+            const callback = this._callbackForFocusOutInputValue;
+            if (callback) {
+                callback();
+                this._updateComponentsForValue();
+            }
+        }
+        private _onNotifyMcrCreatePresetWarRuleIdChanged(e: egret.Event): void {
+            this._updateBtnCustom();
+            this._updateComponentsForValue();
+        }
+        private _onNotifyMcrCreateAvailableCoIdListChanged(): void {
+            this._updateComponentsForValue();
+        }
+
+        private _updateBtnCustom(): void {
+            this._btnCustom.visible = McrModel.Create.getPresetWarRuleId() != null;
+        }
+        private _updateComponentsForValue(): void {
+            const data = this.data;
+            if (data) {
+                const playerIndex = data.playerIndex;
+                switch (data.playerRuleType) {
+                    case PlayerRuleType.TeamIndex               : this._updateComponentsForValueAsTeamIndex(playerIndex);               return;
+                    case PlayerRuleType.AvailableCoIdList       : this._updateComponentsForValueAsAvailableCoIdList(playerIndex);       return;
+                    case PlayerRuleType.InitialFund             : this._updateComponentsForValueAsInitialFund(playerIndex);             return;
+                    case PlayerRuleType.IncomeMultiplier        : this._updateComponentsForValueAsIncomeMultiplier(playerIndex);        return;
+                    case PlayerRuleType.InitialEnergyPercentage : this._updateComponentsForValueAsInitialEnergyPercentage(playerIndex); return;
+                    case PlayerRuleType.EnergyGrowthMultiplier  : this._updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex);  return;
+                    case PlayerRuleType.MoveRangeModifier       : this._updateComponentsForValueAsMoveRangeModifier(playerIndex);       return;
+                    case PlayerRuleType.AttackPowerModifier     : this._updateComponentsForValueAsAttackPowerModifier(playerIndex);     return;
+                    case PlayerRuleType.VisionRangeModifier     : this._updateComponentsForValueAsVisionRangeModifier(playerIndex);     return;
+                    case PlayerRuleType.LuckLowerLimit          : this._updateComponentsForValueAsLuckLowerLimit(playerIndex);          return;
+                    case PlayerRuleType.LuckUpperLimit          : this._updateComponentsForValueAsLuckUpperLimit(playerIndex);          return;
+                    default                                     : return;
+                }
+            }
+        }
+        private _updateComponentsForValueAsTeamIndex(playerIndex: number): void {
+            this._inputValue.visible            = false;
+            this._callbackForFocusOutInputValue = null;
+
+            const labelValue                    = this._labelValue;
+            labelValue.visible                  = true;
+            labelValue.text                     = Lang.getPlayerTeamName(McrModel.Create.getTeamIndex(playerIndex));
+            labelValue.textColor                = 0xFFFFFF;
+            this._callbackForTouchLabelValue    = () => McrModel.Create.tickTeamIndex(playerIndex);
+        }
+        private _updateComponentsForValueAsAvailableCoIdList(playerIndex: number): void {
+            this._inputValue.visible            = false;
+            this._callbackForFocusOutInputValue = null;
+
+            const labelValue                    = this._labelValue;
+            labelValue.visible                  = true;
+            labelValue.text                     = `${McrModel.Create.getAvailableCoIdList(playerIndex).length}`;
+            labelValue.textColor                = 0xFFFFFF;
+            this._callbackForTouchLabelValue    = () => McrCreateAvailableCoPanel.show({ playerIndex });
+        }
+        private _updateComponentsForValueAsInitialFund(playerIndex: number): void {
+            this._labelValue.visible            = false;
+            this._callbackForTouchLabelValue    = null;
+
+            const inputValue                    = this._inputValue;
+            const currValue                     = McrModel.Create.getInitialFund(playerIndex);
+            inputValue.visible                  = true;
+            inputValue.text                     = `${currValue}`;
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
+            inputValue.restrict                 = `0-9\\-`;
+            inputValue.maxChars                 = 7;
+            this._callbackForFocusOutInputValue = () => {
+                const text  = inputValue.text;
+                const value = text ? Number(text) : NaN;
+                if ((isNaN(value))                                          ||
+                    (value > CommonConstants.WarRuleInitialFundMaxLimit)    ||
+                    (value < CommonConstants.WarRuleInitialFundMinLimit)
+                ) {
+                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                } else {
+                    McrModel.Create.setInitialFund(playerIndex, value);
+                }
+            }
+        }
+        private _updateComponentsForValueAsIncomeMultiplier(playerIndex: number): void {
+            this._labelValue.visible            = false;
+            this._callbackForTouchLabelValue    = null;
+
+            const inputValue                    = this._inputValue;
+            const currValue                     = McrModel.Create.getIncomeMultiplier(playerIndex);
+            inputValue.visible                  = true;
+            inputValue.text                     = `${currValue}`;
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
+            inputValue.restrict                 = `0-9`;
+            inputValue.maxChars                 = 5;
+            this._callbackForFocusOutInputValue = () => {
+                const text  = inputValue.text;
+                const value = text ? Number(text) : NaN;
+                if ((isNaN(value))                                              ||
+                    (value > CommonConstants.WarRuleIncomeMultiplierMaxLimit)   ||
+                    (value < CommonConstants.WarRuleIncomeMultiplierMinLimit)
+                ) {
+                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                } else {
+                    McrModel.Create.setIncomeMultiplier(playerIndex, value);
+                }
+            }
+        }
+        private _updateComponentsForValueAsInitialEnergyPercentage(playerIndex: number): void {
+            this._labelValue.visible            = false;
+            this._callbackForTouchLabelValue    = null;
+
+            const inputValue                    = this._inputValue;
+            const currValue                     = McrModel.Create.getInitialEnergyPercentage(playerIndex);
+            inputValue.visible                  = true;
+            inputValue.text                     = `${currValue}`;
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault);
+            inputValue.restrict                 = `0-9`;
+            inputValue.maxChars                 = 3;
+            this._callbackForFocusOutInputValue = () => {
+                const text  = inputValue.text;
+                const value = text ? Number(text) : NaN;
+                if ((isNaN(value))                                                      ||
+                    (value > CommonConstants.WarRuleInitialEnergyPercentageMaxLimit)    ||
+                    (value < CommonConstants.WarRuleInitialEnergyPercentageMinLimit)
+                ) {
+                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                } else {
+                    McrModel.Create.setInitialEnergyPercentage(playerIndex, value);
+                }
+            }
+        }
+        private _updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex: number): void {
+            this._labelValue.visible            = false;
+            this._callbackForTouchLabelValue    = null;
+
+            const inputValue                    = this._inputValue;
+            const currValue                     = McrModel.Create.getEnergyGrowthMultiplier(playerIndex);
+            inputValue.visible                  = true;
+            inputValue.text                     = `${currValue}`;
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
+            inputValue.restrict                 = `0-9`;
+            inputValue.maxChars                 = 5;
+            this._callbackForFocusOutInputValue = () => {
+                const text  = inputValue.text;
+                const value = text ? Number(text) : NaN;
+                if ((isNaN(value))                                                  ||
+                    (value > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit) ||
+                    (value < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
+                ) {
+                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                } else {
+                    McrModel.Create.setEnergyGrowthMultiplier(playerIndex, value);
+                }
+            }
+        }
+        private _updateComponentsForValueAsMoveRangeModifier(playerIndex: number): void {
+            this._labelValue.visible            = false;
+            this._callbackForTouchLabelValue    = null;
+
+            const inputValue                    = this._inputValue;
+            const currValue                     = McrModel.Create.getMoveRangeModifier(playerIndex);
+            inputValue.visible                  = true;
+            inputValue.text                     = `${currValue}`;
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
+            inputValue.restrict                 = `0-9\\-`;
+            inputValue.maxChars                 = 3;
+            this._callbackForFocusOutInputValue = () => {
+                const text  = inputValue.text;
+                const value = text ? Number(text) : NaN;
+                if ((isNaN(value))                                              ||
+                    (value > CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
+                    (value < CommonConstants.WarRuleMoveRangeModifierMinLimit)
+                ) {
+                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                } else {
+                    McrModel.Create.setMoveRangeModifier(playerIndex, value);
+                }
+            }
+        }
+        private _updateComponentsForValueAsAttackPowerModifier(playerIndex: number): void {
+            this._labelValue.visible            = false;
+            this._callbackForTouchLabelValue    = null;
+
+            const inputValue                    = this._inputValue;
+            const currValue                     = McrModel.Create.getAttackPowerModifier(playerIndex);
+            inputValue.visible                  = true;
+            inputValue.text                     = `${currValue}`;
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
+            inputValue.restrict                 = `0-9\\-`;
+            inputValue.maxChars                 = 5;
+            this._callbackForFocusOutInputValue = () => {
+                const text  = inputValue.text;
+                const value = text ? Number(text) : NaN;
+                if ((isNaN(value))                                          ||
+                    (value > CommonConstants.WarRuleOffenseBonusMaxLimit)   ||
+                    (value < CommonConstants.WarRuleOffenseBonusMinLimit)
+                ) {
+                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                } else {
+                    McrModel.Create.setAttackPowerModifier(playerIndex, value);
+                }
+            }
+        }
+        private _updateComponentsForValueAsVisionRangeModifier(playerIndex: number): void {
+            this._labelValue.visible            = false;
+            this._callbackForTouchLabelValue    = null;
+
+            const inputValue                    = this._inputValue;
+            const currValue                     = McrModel.Create.getVisionRangeModifier(playerIndex);
+            inputValue.visible                  = true;
+            inputValue.text                     = `${currValue}`;
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
+            inputValue.restrict                 = `0-9\\-`;
+            inputValue.maxChars                 = 3;
+            this._callbackForFocusOutInputValue = () => {
+                const text  = inputValue.text;
+                const value = text ? Number(text) : NaN;
+                if ((isNaN(value))                                                  ||
+                    (value > CommonConstants.WarRuleVisionRangeModifierMaxLimit)    ||
+                    (value < CommonConstants.WarRuleVisionRangeModifierMinLimit)
+                ) {
+                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                } else {
+                    McrModel.Create.setVisionRangeModifier(playerIndex, value);
+                }
+            }
+        }
+        private _updateComponentsForValueAsLuckLowerLimit(playerIndex: number): void {
+            this._labelValue.visible            = false;
+            this._callbackForTouchLabelValue    = null;
+
+            const inputValue                    = this._inputValue;
+            const currValue                     = McrModel.Create.getLuckLowerLimit(playerIndex);
+            inputValue.visible                  = true;
+            inputValue.text                     = `${currValue}`;
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
+            inputValue.restrict                 = `0-9\\-`;
+            inputValue.maxChars                 = 4;
+            this._callbackForFocusOutInputValue = () => {
+                const text  = inputValue.text;
+                const value = text ? Number(text) : NaN;
+                if ((isNaN(value))                                          ||
+                    (value > CommonConstants.WarRuleLuckMaxLimit)           ||
+                    (value < CommonConstants.WarRuleLuckMinLimit)           ||
+                    (value > McrModel.Create.getLuckUpperLimit(playerIndex))
+                ) {
+                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                } else {
+                    McrModel.Create.setLuckLowerLimit(playerIndex, value);
+                }
+            }
+        }
+        private _updateComponentsForValueAsLuckUpperLimit(playerIndex: number): void {
+            this._labelValue.visible            = false;
+            this._callbackForTouchLabelValue    = null;
+
+            const inputValue                    = this._inputValue;
+            const currValue                     = McrModel.Create.getLuckUpperLimit(playerIndex);
+            inputValue.visible                  = true;
+            inputValue.text                     = `${currValue}`;
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
+            inputValue.restrict                 = `0-9\\-`;
+            inputValue.maxChars                 = 4;
+            this._callbackForFocusOutInputValue = () => {
+                const text  = inputValue.text;
+                const value = text ? Number(text) : NaN;
+                if ((isNaN(value))                                          ||
+                    (value > CommonConstants.WarRuleLuckMaxLimit)           ||
+                    (value < CommonConstants.WarRuleLuckMinLimit)           ||
+                    (value < McrModel.Create.getLuckLowerLimit(playerIndex))
+                ) {
+                    FloatText.show(Lang.getText(Lang.Type.A0098));
+                } else {
+                    McrModel.Create.setLuckUpperLimit(playerIndex, value);
+                }
+            }
         }
     }
 

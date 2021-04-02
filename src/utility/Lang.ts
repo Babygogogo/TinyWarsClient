@@ -2,6 +2,7 @@
 namespace TinyWars.Utility.Lang {
     import LanguageType             = Types.LanguageType;
     import WarEventConditionType    = Types.WarEventConditionType;
+    import PlayerRuleType           = Types.PlayerRuleType;
 
     export const enum Type {
         A0000, A0001, A0002, A0003, A0004, A0005, A0006, A0007, A0008, A0009,
@@ -1681,24 +1682,24 @@ namespace TinyWars.Utility.Lang {
             `Initial Fund`,
         ],
         [Type.B0179]: [
-            `收入倍率`,
-            `Income Multiplier`,
+            `收入倍率%`,
+            `Income Multiplier %`,
         ],
         [Type.B0180]: [
-            `初始能量`,
-            `Initial Energy`,
+            `初始能量%`,
+            `Initial Energy %`,
         ],
         [Type.B0181]: [
-            `能量增速`,
-            `Energy Growth Multiplier`,
+            `能量增速%`,
+            `Energy Growth Multiplier %`,
         ],
         [Type.B0182]: [
             `移动力加成`,
             `Movement Bonus`,
         ],
         [Type.B0183]: [
-            `攻击力加成`,
-            `Offense Bonus`,
+            `攻击力加成%`,
+            `Offense Bonus %`,
         ],
         [Type.B0184]: [
             `视野加成`,
@@ -1721,12 +1722,12 @@ namespace TinyWars.Utility.Lang {
             `Boot Timer`,
         ],
         [Type.B0189]: [
-            `幸运下限`,
-            `Min Luck`,
+            `幸运下限%`,
+            `Min Luck %`,
         ],
         [Type.B0190]: [
-            `幸运上限`,
-            `Max Luck`,
+            `幸运上限%`,
+            `Max Luck %`,
         ],
         [Type.B0191]: [
             `回合`,
@@ -4397,6 +4398,23 @@ namespace TinyWars.Utility.Lang {
             case WarEventConditionType.WecEventCalledCountTotalLessThan     : return Lang.getText(Lang.Type.B0514);
             case WarEventConditionType.WecPlayerAliveStateEqualTo           : return Lang.getText(Lang.Type.B0515);
             default                                                         : return undefined;
+        }
+    }
+
+    export function getPlayerRuleName(type: PlayerRuleType): string | undefined {
+        switch (type) {
+            case PlayerRuleType.TeamIndex               : return getText(Type.B0019);
+            case PlayerRuleType.AvailableCoIdList       : return getText(Type.B0403);
+            case PlayerRuleType.InitialFund             : return getText(Type.B0178);
+            case PlayerRuleType.IncomeMultiplier        : return getText(Type.B0179);
+            case PlayerRuleType.InitialEnergyPercentage : return getText(Type.B0180);
+            case PlayerRuleType.EnergyGrowthMultiplier  : return getText(Type.B0181);
+            case PlayerRuleType.MoveRangeModifier       : return getText(Type.B0182);
+            case PlayerRuleType.AttackPowerModifier     : return getText(Type.B0183);
+            case PlayerRuleType.VisionRangeModifier     : return getText(Type.B0184);
+            case PlayerRuleType.LuckLowerLimit          : return getText(Type.B0189);
+            case PlayerRuleType.LuckUpperLimit          : return getText(Type.B0190);
+            default                                     : return undefined;
         }
     }
 

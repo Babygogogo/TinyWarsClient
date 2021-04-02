@@ -595,6 +595,20 @@ namespace TinyWars.Utility.Types {
         Incremental = 2,
     }
 
+    export const enum PlayerRuleType {
+        TeamIndex,
+        AvailableCoIdList,
+        InitialFund,
+        IncomeMultiplier,
+        InitialEnergyPercentage,
+        EnergyGrowthMultiplier,
+        MoveRangeModifier,
+        AttackPowerModifier,
+        VisionRangeModifier,
+        LuckLowerLimit,
+        LuckUpperLimit,
+    }
+
     export const enum WarEventDescType {
         EventName,
         EventMaxCallCountInPlayerTurn,

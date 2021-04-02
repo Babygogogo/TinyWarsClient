@@ -131,7 +131,7 @@ namespace TinyWars.MultiCustomRoom {
                 Common.CommonConfirmPanel.show({
                     content : Lang.getText(Lang.Type.A0129),
                     callback: () => {
-                        McrModel.Create.setPresetWarRuleId(null);
+                        McrModel.Create.setCustomWarRuleId();
                         callback();
                     },
                 });
