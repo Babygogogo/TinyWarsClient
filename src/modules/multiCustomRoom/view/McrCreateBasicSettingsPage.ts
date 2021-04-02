@@ -76,7 +76,10 @@ namespace TinyWars.MultiCustomRoom {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
-
+            this.left                       = 0;
+            this.right                      = 0;
+            this.top                        = 0;
+            this.bottom                     = 0;
             this._inputWarName.maxChars     = CommonConstants.WarNameMaxLength;
             this._inputWarPassword.restrict = `0-9`;
             this._inputWarPassword.maxChars = CommonConstants.WarPasswordMaxLength;

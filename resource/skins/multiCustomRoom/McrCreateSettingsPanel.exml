@@ -135,13 +135,13 @@
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
-        <e:Group top="80" left="200" right="20" bottom="20">
+        <e:Group id="_groupTab" top="80" left="200" right="20" bottom="20">
             <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" top="40" bottom="0" right="0"
                             source="commonColorBlack0001" scale9Grid="1,1,2,2" />
             <GameUi:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
                 <e:skinName>
                     <e:Skin>
-                        <e:Scroller left="0">
+                        <e:Scroller left="0" right="0">
                             <e:TabBar id="_bar">
                                 <e:itemRendererSkinName>
                                     <e:Skin states="up,down,disabled" height="30" width="100">
@@ -168,11 +168,6 @@
                     </e:Skin>
                 </e:skinName>
             </GameUi:UiTab>
-            <e:Group right="0" bottom="0">
-                <e:layout>
-                    <e:VerticalLayout/>
-                </e:layout>
-            </e:Group>
         </e:Group>
     </e:Group>
 </e:Skin>

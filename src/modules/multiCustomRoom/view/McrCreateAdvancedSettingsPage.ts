@@ -34,6 +34,10 @@ namespace TinyWars.MultiCustomRoom {
             this._listSetting.setItemRenderer(SettingRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._scroller.scrollPolicyH = eui.ScrollPolicy.OFF;
+            this.left   = 0;
+            this.right  = 0;
+            this.top    = 0;
+            this.bottom = 0;
 
             this._initialWarRuleId  = McrModel.Create.getPresetWarRuleId();
             this._mapRawData        = await McrModel.Create.getMapRawData();

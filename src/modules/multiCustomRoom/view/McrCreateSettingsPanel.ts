@@ -36,7 +36,9 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _labelChooseSkinId     : GameUi.UiLabel;
         private readonly _sclSkinId             : GameUi.UiScrollList<DataForSkinIdRenderer, SkinIdRenderer>;
 
+        private readonly _groupTab              : eui.Group;
         private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer>;
+
         private readonly _btnBack               : GameUi.UiButton;
         private readonly _btnConfirm            : GameUi.UiButton;
 
@@ -218,6 +220,13 @@ namespace TinyWars.MultiCustomRoom {
                 waitTime    : 0,
                 tweenTime   : 200,
             });
+            Helpers.resetTween({
+                obj         : this._groupTab,
+                beginProps  : { alpha: 0, },
+                endProps    : { alpha: 1, },
+                waitTime    : 0,
+                tweenTime   : 200,
+            });
         }
         private async _showCloseAnimation(): Promise<void> {
             return new Promise<void>(resolve => {
@@ -247,6 +256,13 @@ namespace TinyWars.MultiCustomRoom {
                     obj         : this._btnConfirm,
                     beginProps  : { alpha: 1, left: 20 },
                     endProps    : { alpha: 0, left: -20 },
+                    waitTime    : 0,
+                    tweenTime   : 200,
+                });
+                Helpers.resetTween({
+                    obj         : this._groupTab,
+                    beginProps  : { alpha: 1, },
+                    endProps    : { alpha: 0, },
                     waitTime    : 0,
                     tweenTime   : 200,
                 });
