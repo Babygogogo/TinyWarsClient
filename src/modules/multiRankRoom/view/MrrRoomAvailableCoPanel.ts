@@ -290,7 +290,7 @@ namespace TinyWars.MultiRankRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/component/CheckBox1.exml";
+            this.skinName = "resource/skins/component/checkBox/CheckBox1.exml";
         }
 
         public setCoTier(tier: number): void {
@@ -336,7 +336,7 @@ namespace TinyWars.MultiRankRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/component/CheckBox1.exml";
+            this.skinName = "resource/skins/component/checkBox/CheckBox1.exml";
         }
 
         public setConfigVersion(version: string): void {

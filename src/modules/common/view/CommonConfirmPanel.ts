@@ -22,6 +22,7 @@ namespace TinyWars.Common {
 
         private readonly _group         : eui.Group;
         private readonly _labelTitle    : GameUi.UiLabel;
+        private readonly _scrContent    : eui.Scroller;
         private readonly _labelContent  : GameUi.UiLabel;
         private readonly _btnCancel     : GameUi.UiButton;
         private readonly _btnConfirm    : GameUi.UiButton;
@@ -42,8 +43,8 @@ namespace TinyWars.Common {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/common/CommonConfirmPanel.exml";
             this._setIsTouchMaskEnabled();
+            this.skinName = "resource/skins/common/CommonConfirmPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -59,6 +60,7 @@ namespace TinyWars.Common {
             this._btnCancel.label   = openData.textForCancel || Lang.getText(Lang.Type.B0154);
             this._labelTitle.text   = openData.title || Lang.getText(Lang.Type.B0088);
             this._labelContent.setRichText(openData.content);
+            this._scrContent.viewport.scrollV = 0;
         }
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();

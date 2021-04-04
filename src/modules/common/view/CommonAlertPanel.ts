@@ -3,6 +3,7 @@ namespace TinyWars.Common {
     import Lang     = Utility.Lang;
     import Notify   = Utility.Notify;
     import Types    = Utility.Types;
+    import Helpers  = Utility.Helpers;
 
     type OpenDataForCommonAlertPanel = {
         title       : string;
@@ -16,10 +17,12 @@ namespace TinyWars.Common {
 
         private static _instance: CommonAlertPanel;
 
-        private _scrContent     : eui.Scroller;
-        private _labelTitle     : GameUi.UiLabel;
-        private _labelContent   : GameUi.UiLabel;
-        private _btnClose       : GameUi.UiButton;
+        private readonly _imgMask       : GameUi.UiImage;
+        private readonly _group         : eui.Group;
+        private readonly _labelTitle    : GameUi.UiLabel;
+        private readonly _scrContent    : eui.Scroller;
+        private readonly _labelContent  : GameUi.UiLabel;
+        private readonly _btnConfirm    : GameUi.UiButton;
 
         public static show(openData: OpenDataForCommonAlertPanel): void {
             if (!CommonAlertPanel._instance) {
@@ -43,11 +46,13 @@ namespace TinyWars.Common {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._btnClose, callback: this._onTouchedBtnClose },
+                { ui: this._btnConfirm, callback: this._onTouchedBtnClose },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
+
+            this._showOpenAnimation();
 
             this._updateComponentsForLanguage();
 
@@ -55,6 +60,10 @@ namespace TinyWars.Common {
             this._labelTitle.text   = openData.title;
             this._labelContent.setRichText(openData.content);
             this._scrContent.viewport.scrollV = 0;
+        }
+
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
@@ -69,11 +78,44 @@ namespace TinyWars.Common {
         }
 
         private _updateComponentsForLanguage(): void {
-            if (Lang.getCurrentLanguageType() === Types.LanguageType.Chinese) {
-                this._btnClose.setImgDisplaySource("button_confirm_001");
-            } else {
-                this._btnClose.setImgDisplaySource("button_confirm_002");
-            }
+            this._btnConfirm.label = Lang.getText(Lang.Type.B0026);
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+                tweenTime   : 200,
+                waitTime    : 0,
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: -40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+                tweenTime   : 200,
+                waitTime    : 0,
+            });
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                    tweenTime   : 200,
+                    waitTime    : 0,
+                });
+
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: -40 },
+                    tweenTime   : 200,
+                    waitTime    : 0,
+                    callback    : resolve,
+                });
+            });
         }
     }
 }

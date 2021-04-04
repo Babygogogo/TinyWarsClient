@@ -17,17 +17,47 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrCreateAvailableCoPanel;
 
-        private _labelAvailableCoTitle  : TinyWars.GameUi.UiLabel;
-        private _groupCoTiers           : eui.Group;
-        private _groupCoNames           : eui.Group;
-        private _btnCancel              : TinyWars.GameUi.UiButton;
-        private _btnConfirm             : TinyWars.GameUi.UiButton;
+        private readonly _imgMask                   : GameUi.UiImage;
+        private readonly _group                     : eui.Group;
+        private readonly _labelAvailableCoTitle     : GameUi.UiLabel;
+        // private readonly _groupCoTiers              : eui.Group;
+        private readonly _groupCoNames              : eui.Group;
+        private readonly _btnCancel                 : GameUi.UiButton;
+        private readonly _btnConfirm                : GameUi.UiButton;
 
-        private _renderersForCoTiers    : RendererForCoTier[] = [];
+        private readonly _labelCoName                   : GameUi.UiLabel;
+        private readonly _labelDesignerTitle            : GameUi.UiLabel;
+        private readonly _labelDesigner                 : GameUi.UiLabel;
+        private readonly _imgCoPortrait                 : GameUi.UiImage;
+        private readonly _labelBoardCostPercentageTitle : GameUi.UiLabel;
+        private readonly _labelBoardCostPercentage      : GameUi.UiLabel;
+        private readonly _labelZoneRadiusTitle          : GameUi.UiLabel;
+        private readonly _labelZoneRadius               : GameUi.UiLabel;
+        private readonly _labelEnergyBarTitle           : GameUi.UiLabel;
+        private readonly _labelEnergyBar                : GameUi.UiLabel;
+
+        private readonly _groupPassiveSkill             : eui.Group;
+        private readonly _listPassiveSkill              : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
+        private readonly _labelNoPassiveSkill           : GameUi.UiLabel;
+
+        private readonly _groupCop                      : eui.Group;
+        private readonly _listCop                       : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
+        private readonly _labelNoCop                    : GameUi.UiLabel;
+        private readonly _labelCopEnergyTitle           : GameUi.UiLabel;
+        private readonly _labelCopEnergy                : GameUi.UiLabel;
+
+        private readonly _groupScop                     : eui.Group;
+        private readonly _listScop                      : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
+        private readonly _labelNoScop                   : GameUi.UiLabel;
+        private readonly _labelScopEnergyTitle          : GameUi.UiLabel;
+        private readonly _labelScopEnergy               : GameUi.UiLabel;
+
+        // private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
 
         private _playerIndex            : number;
         private _availableCoIdSet       = new Set<number>();
+        private _previewCoId            : number;
 
         public static show(openData: OpenDataForMcrCreateAvailableCoPanel): void {
             if (!McrCreateAvailableCoPanel._instance) {
@@ -58,6 +88,11 @@ namespace TinyWars.MultiCustomRoom {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
+            this._listPassiveSkill.setItemRenderer(SkillRenderer);
+            this._listCop.setItemRenderer(SkillRenderer);
+            this._listScop.setItemRenderer(SkillRenderer);
+
+            this._showOpenAnimation();
 
             const playerIndex = this._getOpenData<OpenDataForMcrCreateAvailableCoPanel>().playerIndex;
             this._playerIndex = playerIndex;
@@ -69,12 +104,15 @@ namespace TinyWars.MultiCustomRoom {
             }
 
             this._updateComponentsForLanguage();
-            this._initGroupCoTiers();
+            // this._initGroupCoTiers();
             this._initGroupCoNames();
+            this._initComponentsForPreviewCo();
         }
 
         protected async _onClosed(): Promise<void> {
-            this._clearGroupCoTiers();
+            await this._showCloseAnimation();
+
+            // this._clearGroupCoTiers();
             this._clearGroupCoNames();
         }
 
@@ -119,56 +157,65 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {
-            const renderer          = e.currentTarget as RendererForCoTier;
-            const availableCoIdSet  = this._availableCoIdSet;
-            const coIdList          = renderer.getIsCustomSwitch()
-                ? ConfigManager.getAvailableCustomCoIdList(ConfigManager.getLatestFormalVersion())
-                : ConfigManager.getAvailableCoIdListInTier(ConfigManager.getLatestFormalVersion(), renderer.getCoTier());
+        // private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {
+        //     const renderer          = e.currentTarget as RendererForCoTier;
+        //     const availableCoIdSet  = this._availableCoIdSet;
+        //     const coIdList          = renderer.getIsCustomSwitch()
+        //         ? ConfigManager.getAvailableCustomCoIdList(ConfigManager.getLatestFormalVersion())
+        //         : ConfigManager.getAvailableCoIdListInTier(ConfigManager.getLatestFormalVersion(), renderer.getCoTier());
 
-            if (renderer.getState() === CoTierState.Unavailable) {
-                for (const coId of coIdList) {
-                    availableCoIdSet.add(coId);
-                }
-                this._updateGroupCoTiers();
-                this._updateGroupCoNames();
+        //     if (renderer.getState() === CoTierState.Unavailable) {
+        //         for (const coId of coIdList) {
+        //             availableCoIdSet.add(coId);
+        //         }
+        //         this._updateGroupCoTiers();
+        //         this._updateGroupCoNames();
 
-            } else {
-                const callback = () => {
-                    for (const coId of coIdList) {
-                        availableCoIdSet.delete(coId);
-                    }
-                    this._updateGroupCoTiers();
-                    this._updateGroupCoNames();
-                }
+        //     } else {
+        //         const callback = () => {
+        //             for (const coId of coIdList) {
+        //                 availableCoIdSet.delete(coId);
+        //             }
+        //             this._updateGroupCoTiers();
+        //             this._updateGroupCoNames();
+        //         }
 
-                if ((this._playerIndex !== McrModel.Create.getSelfPlayerIndex()) ||
-                    (coIdList.indexOf(McrModel.Create.getSelfCoId()) < 0)
-                ) {
-                    callback();
-                } else {
-                    ConfirmPanel.show({
-                        content : Lang.getText(Lang.Type.A0057),
-                        callback,
-                    });
-                }
-            }
-        }
+        //         if ((this._playerIndex !== McrModel.Create.getSelfPlayerIndex()) ||
+        //             (coIdList.indexOf(McrModel.Create.getSelfCoId()) < 0)
+        //         ) {
+        //             callback();
+        //         } else {
+        //             ConfirmPanel.show({
+        //                 content : Lang.getText(Lang.Type.A0057),
+        //                 callback,
+        //             });
+        //         }
+        //     }
+        // }
 
         private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
             const renderer          = e.currentTarget as RendererForCoName;
             const coId              = renderer.getCoId();
             const availableCoIdSet  = this._availableCoIdSet;
+            this._setPreviewCoId(coId);
 
             if (!renderer.getIsSelected()) {
                 availableCoIdSet.add(coId);
-                this._updateGroupCoTiers();
+                // this._updateGroupCoTiers();
                 this._updateGroupCoNames();
 
             } else {
+                if (coId === CommonConstants.CoEmptyId) {
+                    Common.CommonAlertPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : Lang.getText(Lang.Type.A0130),
+                    });
+                    return;
+                }
+
                 const callback = () => {
                     availableCoIdSet.delete(coId);
-                    this._updateGroupCoTiers();
+                    // this._updateGroupCoTiers();
                     this._updateGroupCoNames();
                 };
 
@@ -189,53 +236,61 @@ namespace TinyWars.MultiCustomRoom {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
-            this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
-            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._playerIndex})`;
+            this._btnCancel.label                       = Lang.getText(Lang.Type.B0154);
+            this._btnConfirm.label                      = Lang.getText(Lang.Type.B0026);
+            this._labelAvailableCoTitle.text            = `${Lang.getText(Lang.Type.B0238)} (P${this._playerIndex})`;
+            this._labelDesignerTitle.text               = Lang.getText(Lang.Type.B0163);
+            this._labelBoardCostPercentageTitle.text    = `${Lang.getText(Lang.Type.B0164)}:`;
+            this._labelZoneRadiusTitle.text             = `${Lang.getText(Lang.Type.B0165)}:`;
+            this._labelEnergyBarTitle.text              = `${Lang.getText(Lang.Type.B0166)}:`;
+            this._labelCopEnergyTitle.text              = `${Lang.getText(Lang.Type.B0167)}:`;
+            this._labelScopEnergyTitle.text             = `${Lang.getText(Lang.Type.B0167)}:`;
+
+            this._updateComponentsForPreviewCoId();
         }
 
-        private _initGroupCoTiers(): void {
-            for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestFormalVersion())) {
-                const renderer = new RendererForCoTier();
-                renderer.setCoTier(tier);
-                renderer.setState(CoTierState.AllAvailable);
-                renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoTierRenderer, this);
-                this._renderersForCoTiers.push(renderer);
-                this._groupCoTiers.addChild(renderer);
-            }
+        // private _initGroupCoTiers(): void {
+        //     for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestFormalVersion())) {
+        //         const renderer = new RendererForCoTier();
+        //         renderer.setCoTier(tier);
+        //         renderer.setState(CoTierState.AllAvailable);
+        //         renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoTierRenderer, this);
+        //         this._renderersForCoTiers.push(renderer);
+        //         this._groupCoTiers.addChild(renderer);
+        //     }
 
-            const rendererForCustomCo = new RendererForCoTier();
-            rendererForCustomCo.setIsCustomSwitch(true);
-            rendererForCustomCo.setState(CoTierState.AllAvailable);
-            rendererForCustomCo.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoTierRenderer, this);
-            this._renderersForCoTiers.push(rendererForCustomCo);
-            this._groupCoTiers.addChild(rendererForCustomCo);
+        //     const rendererForCustomCo = new RendererForCoTier();
+        //     rendererForCustomCo.setIsCustomSwitch(true);
+        //     rendererForCustomCo.setState(CoTierState.AllAvailable);
+        //     rendererForCustomCo.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoTierRenderer, this);
+        //     this._renderersForCoTiers.push(rendererForCustomCo);
+        //     this._groupCoTiers.addChild(rendererForCustomCo);
 
-            this._updateGroupCoTiers();
-        }
+        //     this._updateGroupCoTiers();
+        // }
 
-        private _clearGroupCoTiers(): void {
-            this._groupCoTiers.removeChildren();
-            this._renderersForCoTiers.length = 0;
-        }
+        // private _clearGroupCoTiers(): void {
+        //     this._groupCoTiers.removeChildren();
+        //     this._renderersForCoTiers.length = 0;
+        // }
 
-        private _updateGroupCoTiers(): void {
-            const availableCoIdSet  = this._availableCoIdSet;
-            const configVersion     = McrModel.Create.getData().settingsForCommon.configVersion;
-            for (const renderer of this._renderersForCoTiers) {
-                const includedCoIdList = renderer.getIsCustomSwitch()
-                    ? ConfigManager.getAvailableCustomCoIdList(configVersion)
-                    : ConfigManager.getAvailableCoIdListInTier(configVersion, renderer.getCoTier());
+        // private _updateGroupCoTiers(): void {
+        //     const availableCoIdSet  = this._availableCoIdSet;
+        //     const configVersion     = McrModel.Create.getData().settingsForCommon.configVersion;
+        //     for (const renderer of this._renderersForCoTiers) {
+        //         const includedCoIdList = renderer.getIsCustomSwitch()
+        //             ? ConfigManager.getAvailableCustomCoIdList(configVersion)
+        //             : ConfigManager.getAvailableCoIdListInTier(configVersion, renderer.getCoTier());
 
-                if (includedCoIdList.every(coId => availableCoIdSet.has(coId))) {
-                    renderer.setState(CoTierState.AllAvailable);
-                } else if (includedCoIdList.every(coId => !availableCoIdSet.has(coId))) {
-                    renderer.setState(CoTierState.Unavailable);
-                } else {
-                    renderer.setState(CoTierState.PartialAvailable);
-                }
-            }
-        }
+        //         if (includedCoIdList.every(coId => availableCoIdSet.has(coId))) {
+        //             renderer.setState(CoTierState.AllAvailable);
+        //         } else if (includedCoIdList.every(coId => !availableCoIdSet.has(coId))) {
+        //             renderer.setState(CoTierState.Unavailable);
+        //         } else {
+        //             renderer.setState(CoTierState.PartialAvailable);
+        //         }
+        //     }
+        // }
 
         private _initGroupCoNames(): void {
             for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
@@ -262,63 +317,239 @@ namespace TinyWars.MultiCustomRoom {
                 renderer.setIsSelected(availableCoIdSet.has(renderer.getCoId()));
             }
         }
-    }
 
-    const enum CoTierState {
-        AllAvailable,
-        PartialAvailable,
-        Unavailable,
-    }
-
-    class RendererForCoTier extends GameUi.UiComponent {
-        private _imgSelected: GameUi.UiImage;
-        private _labelName  : GameUi.UiLabel;
-
-        private _tier           : number;
-        private _isCustomSwitch = false;
-        private _state          : CoTierState;
-
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/component/CheckBox1.exml";
-        }
-
-        public setCoTier(tier: number): void {
-            this._tier              = tier;
-            this._labelName.text    = `Tier ${tier}`;
-        }
-        public getCoTier(): number {
-            return this._tier;
-        }
-
-        public setIsCustomSwitch(isCustomSwitch: boolean): void {
-            this._isCustomSwitch    = isCustomSwitch;
-            this._labelName.text    = "Custom";
-        }
-        public getIsCustomSwitch(): boolean {
-            return this._isCustomSwitch;
-        }
-
-        public setState(state: CoTierState): void {
-            this._state = state;
-            if (state === CoTierState.AllAvailable) {
-                this._labelName.textColor = 0x00FF00;
-            } else if (state === CoTierState.PartialAvailable) {
-                this._labelName.textColor = 0xFFFF00;
-            } else {
-                this._labelName.textColor = 0xFF0000;
+        private _initComponentsForPreviewCo(): void {
+            for (const coId of this._availableCoIdSet) {
+                if (coId !== CommonConstants.CoEmptyId) {
+                    this._setPreviewCoId(coId);
+                    return;
+                }
             }
-            Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Types.ColorType.Origin : Types.ColorType.Gray);
         }
-        public getState(): CoTierState {
-            return this._state;
+
+        private _updateComponentsForPreviewCoId(): void {
+            const coId = this._previewCoId;
+            if (coId == null) {
+                return;
+            }
+
+            const cfg                           = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
+            this._labelCoName.text              = cfg.name;
+            this._labelDesigner.text            = cfg.designer;
+            this._imgCoPortrait.source          = cfg.fullPortrait;
+            this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
+            this._labelZoneRadius.text          = `${cfg.zoneRadius}`;
+            this._labelEnergyBar.text           = (cfg.zoneExpansionEnergyList || []).join(` / `) || `--`;
+
+            this._updateGroupPassiveSkill();
+            this._updateGroupCop();
+            this._updateGroupScop();
+        }
+        private _updateGroupPassiveSkill(): void {
+            const coId = this._getPreviewCoId();
+            if (coId == null) {
+                return;
+            }
+
+            const cfg           = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
+            const passiveSkills = cfg.passiveSkills || [];
+            const list          = this._listPassiveSkill;
+
+            if (!passiveSkills.length) {
+                this._labelNoPassiveSkill.text = Lang.getText(Lang.Type.B0001);
+
+                list.clear();
+                if (list.parent) {
+                    list.parent.removeChild(list);
+                }
+
+            } else {
+                this._labelNoPassiveSkill.text = "";
+
+                const data: DataForSkillRenderer[] = [];
+                for (let i = 0; i < passiveSkills.length; ++i) {
+                    data.push({
+                        skillId : passiveSkills[i],
+                    });
+                }
+                list.bindData(data);
+                if (!list.parent) {
+                    this._groupPassiveSkill.addChild(list);
+                }
+            }
+        }
+        private _updateGroupCop(): void {
+            const coId = this._getPreviewCoId();
+            if (coId == null) {
+                return;
+            }
+
+            const cfg       = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
+            const copSkills = cfg.powerSkills || [];
+            const list      = this._listCop;
+
+            if (!copSkills.length) {
+                this._labelNoCop.text       = Lang.getText(Lang.Type.B0001);
+                this._labelCopEnergy.text   = "--";
+
+                list.clear();
+                if (list.parent) {
+                    list.parent.removeChild(list);
+                }
+            } else {
+                this._labelNoCop.text       = "";
+                this._labelCopEnergy.text   = `${cfg.powerEnergyList[0]}`;
+
+                const data: DataForSkillRenderer[] = [];
+                for (let i = 0; i < copSkills.length; ++i) {
+                    data.push({
+                        skillId : copSkills[i],
+                    });
+                }
+                list.bindData(data);
+                if (!list.parent) {
+                    this._groupCop.addChild(list);
+                }
+            }
+        }
+        private _updateGroupScop(): void {
+            const coId = this._getPreviewCoId();
+            if (coId == null) {
+                return;
+            }
+
+            const cfg           = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
+            const scopSkills    = cfg.superPowerSkills || [];
+            const list          = this._listScop;
+
+            if (!scopSkills.length) {
+                this._labelNoScop.text      = Lang.getText(Lang.Type.B0001);
+                this._labelScopEnergy.text  = "--";
+
+                list.clear();
+                if (list.parent) {
+                    list.parent.removeChild(list);
+                }
+            } else {
+                this._labelNoScop.text      = "";
+                this._labelScopEnergy.text  = `${cfg.powerEnergyList[1]}`;
+
+                const data: DataForSkillRenderer[] = [];
+                for (let i = 0; i < scopSkills.length; ++i) {
+                    data.push({
+                        skillId : scopSkills[i],
+                    });
+                }
+                list.bindData(data);
+                if (!list.parent) {
+                    this._groupScop.addChild(list);
+                }
+            }
+        }
+
+        private _setPreviewCoId(coId: number): void {
+            if (this._getPreviewCoId() !== coId) {
+                this._previewCoId = coId;
+                this._updateComponentsForPreviewCoId();
+            }
+        }
+        private _getPreviewCoId(): number {
+            return this._previewCoId;
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+                tweenTime   : 200,
+                waitTime    : 0,
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: -40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+                tweenTime   : 200,
+                waitTime    : 0,
+            });
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                    tweenTime   : 200,
+                    waitTime    : 0,
+                });
+
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: -40 },
+                    tweenTime   : 200,
+                    waitTime    : 0,
+                    callback    : resolve,
+                });
+            });
         }
     }
+
+    // const enum CoTierState {
+    //     AllAvailable,
+    //     PartialAvailable,
+    //     Unavailable,
+    // }
+    // class RendererForCoTier extends GameUi.UiComponent {
+    //     private _imgSelected: GameUi.UiImage;
+    //     private _labelName  : GameUi.UiLabel;
+
+    //     private _tier           : number;
+    //     private _isCustomSwitch = false;
+    //     private _state          : CoTierState;
+
+    //     public constructor() {
+    //         super();
+
+    //         this.skinName = "resource/skins/component/checkBox/CheckBox1.exml";
+    //     }
+
+    //     public setCoTier(tier: number): void {
+    //         this._tier              = tier;
+    //         this._labelName.text    = `Tier ${tier}`;
+    //     }
+    //     public getCoTier(): number {
+    //         return this._tier;
+    //     }
+
+    //     public setIsCustomSwitch(isCustomSwitch: boolean): void {
+    //         this._isCustomSwitch    = isCustomSwitch;
+    //         this._labelName.text    = "Custom";
+    //     }
+    //     public getIsCustomSwitch(): boolean {
+    //         return this._isCustomSwitch;
+    //     }
+
+    //     public setState(state: CoTierState): void {
+    //         this._state = state;
+    //         if (state === CoTierState.AllAvailable) {
+    //             this._labelName.textColor = 0x00FF00;
+    //         } else if (state === CoTierState.PartialAvailable) {
+    //             this._labelName.textColor = 0xFFFF00;
+    //         } else {
+    //             this._labelName.textColor = 0xFF0000;
+    //         }
+    //         Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Types.ColorType.Origin : Types.ColorType.Gray);
+    //     }
+    //     public getState(): CoTierState {
+    //         return this._state;
+    //     }
+    // }
 
     class RendererForCoName extends GameUi.UiComponent {
-        private _imgSelected: GameUi.UiImage;
-        private _labelName  : GameUi.UiLabel;
+        private readonly _imgUnselected : GameUi.UiImage;
+        private readonly _imgSelected   : GameUi.UiImage;
+        private readonly _labelName     : GameUi.UiLabel;
 
         private _coId           : number;
         private _isSelected     : boolean;
@@ -326,26 +557,57 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/component/CheckBox1.exml";
+            this.skinName = "resource/skins/component/checkBox/CheckBox001.exml";
+        }
+
+        protected _onOpened(): void {
+            this._updateView();
         }
 
         public setCoId(coId: number): void {
             this._coId = coId;
 
-            const cfg               = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
-            this._labelName.text    = `${cfg.name} (T${cfg.tier})`;
+            this._updateView();
         }
         public getCoId(): number {
             return this._coId;
         }
 
         public setIsSelected(isSelected: boolean): void {
-            this._isSelected            = isSelected;
-            this._labelName.textColor   = isSelected ? 0x00ff00 : 0xff0000;
-            Helpers.changeColor(this._imgSelected, isSelected ? Types.ColorType.Origin : Types.ColorType.Gray);
+            this._isSelected = isSelected;
+            this._updateView();
         }
         public getIsSelected(): boolean {
             return this._isSelected;
+        }
+
+        private _updateView(): void {
+            if (!this.getIsOpening()) {
+                return;
+            }
+
+            const coCfg             = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), this._coId);
+            this._labelName.text    = coCfg ? coCfg.name : null;
+
+            const isSelected            = this._isSelected;
+            this._imgSelected.visible   = isSelected;
+            this._imgUnselected.visible = !isSelected;
+        }
+    }
+
+
+    type DataForSkillRenderer = {
+        skillId : number;
+    }
+
+    class SkillRenderer extends GameUi.UiListItemRenderer<DataForSkillRenderer> {
+        private _labelDesc  : GameUi.UiLabel;
+
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            const data              = this.data;
+            this._labelDesc.text    = `- ${ConfigManager.getCoSkillCfg(ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()]}`;
         }
     }
 }

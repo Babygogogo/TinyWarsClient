@@ -415,11 +415,11 @@ namespace TinyWars.Utility.Helpers {
         }
     }
 
-    export function resetTween({ obj, beginProps, waitTime, endProps, tweenTime, callback }: {
-        obj         : egret.DisplayObject;
-        beginProps  : any;
+    export function resetTween<T>({ obj, beginProps, waitTime, endProps, tweenTime, callback }: {
+        obj         : T;
+        beginProps  : { [K in keyof T]?: T[K] };
         waitTime    : number;
-        endProps    : any;
+        endProps    : { [K in keyof T]?: T[K] };
         tweenTime   : number;
         callback?   : () => void
     }): void {

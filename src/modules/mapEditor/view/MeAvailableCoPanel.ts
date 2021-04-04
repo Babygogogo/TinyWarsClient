@@ -246,7 +246,7 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/component/CheckBox1.exml";
+            this.skinName = "resource/skins/component/checkBox/CheckBox1.exml";
         }
 
         public setCoTier(tier: number): void {
@@ -291,7 +291,7 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/component/CheckBox1.exml";
+            this.skinName = "resource/skins/component/checkBox/CheckBox1.exml";
         }
 
         public setCoId(coId: number): void {
