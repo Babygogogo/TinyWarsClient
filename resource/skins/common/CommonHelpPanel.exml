@@ -8,7 +8,7 @@
                         source="commonColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
         <GameUi:UiLabel id="_labelTitle" text="标题" textColor="0xffffff" y="12" horizontalCenter="0" size="24"
                         bold="true" locked="true" />
-        <GameUi:UiImage width="380" height="2" y="40" source="commonColorWhite0000" horizontalCenter="0" />
+        <GameUi:UiImage height="2" y="40" source="commonColorWhite0000" left="20" right="20" />
         <e:Scroller id="_scrContent" left="20" right="20" top="50" bottom="20" minHeight="60" maxHeight="300">
             <e:Group>
                 <GameUi:UiLabel id="_labelContent" text="内容" textColor="0xFFFFFF" size="18" left="5" right="5" top="5"

@@ -595,7 +595,6 @@ namespace TinyWars.MultiCustomRoom {
         }
     }
 
-
     type DataForSkillRenderer = {
         skillId : number;
     }

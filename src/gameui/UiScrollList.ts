@@ -76,6 +76,10 @@ namespace TinyWars.GameUi {
             return this._dataProvider;
         }
 
+        public getSelectedData(): DataForRenderer | null {
+            return this.getViewList().selectedItem;
+        }
+
         public updateSingleData(index: number, data: DataForRenderer) : void {
             const dataProvider = this.getDataProvider();
             if ((index < 0) || (index >= dataProvider.length)) {

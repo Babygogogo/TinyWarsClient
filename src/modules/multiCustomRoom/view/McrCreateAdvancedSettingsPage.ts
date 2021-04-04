@@ -11,6 +11,7 @@ namespace TinyWars.MultiCustomRoom {
     export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
         private readonly _scroller      : eui.Scroller;
         private readonly _btnReset      : GameUi.UiButton;
+        private readonly _btnCustomize  : GameUi.UiButton;
         private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer, SettingRenderer>;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
@@ -29,7 +30,8 @@ namespace TinyWars.MultiCustomRoom {
                 { type: Notify.Type.McrCreatePresetWarRuleIdChanged,    callback: this._onNotifyMcrCreatePresetWarRuleIdChanged },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnReset,   callback: this._onTouchedBtnReset },
+                { ui: this._btnReset,       callback: this._onTouchedBtnReset },
+                { ui: this._btnCustomize,   callback: this._onTouchedBtnCustomize },
             ]);
             this._listSetting.setItemRenderer(SettingRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
@@ -45,7 +47,8 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
             this._initListSetting();
             this._updateListPlayer();
-            this._updateButtonReset();
+            this._updateBtnReset();
+            this._updateBtnCustomize();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -55,21 +58,34 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
         }
         private _onNotifyMcrCreatePresetWarRuleIdChanged(e: egret.Event): void {
-            this._updateButtonReset();
+            this._updateBtnReset();
+            this._updateBtnCustomize();
         }
         private _onTouchedBtnReset(e: egret.TouchEvent): void {
             McrModel.Create.resetDataByWarRuleId(this._initialWarRuleId);
+        }
+        private _onTouchedBtnCustomize(e: egret.TouchEvent): void {
+            Common.CommonConfirmPanel.show({
+                content : Lang.getText(Lang.Type.A0129),
+                callback: () => {
+                    McrModel.Create.setCustomWarRuleId();
+                },
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnReset.label = Lang.getText(Lang.Type.B0567);
+            this._btnReset.label        = Lang.getText(Lang.Type.B0567);
+            this._btnCustomize.label    = Lang.getText(Lang.Type.B0575);
         }
 
-        private _updateButtonReset(): void {
+        private _updateBtnReset(): void {
             this._btnReset.visible = (this._initialWarRuleId != null) && (McrModel.Create.getPresetWarRuleId() == null);
+        }
+        private _updateBtnCustomize(): void {
+            this._btnCustomize.visible = McrModel.Create.getPresetWarRuleId() != null;
         }
 
         private _initListSetting(): void {
@@ -182,20 +198,6 @@ namespace TinyWars.MultiCustomRoom {
                 { playerIndex, playerRuleType: PlayerRuleType.LuckLowerLimit },
                 { playerIndex, playerRuleType: PlayerRuleType.LuckUpperLimit },
             ];
-        }
-
-        private _confirmUseCustomRule(callback: () => void): void {
-            if (McrModel.Create.getPresetWarRuleId() == null) {
-                callback();
-            } else {
-                Common.CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0129),
-                    callback: () => {
-                        McrModel.Create.setCustomWarRuleId();
-                        callback();
-                    },
-                });
-            }
         }
     }
 
