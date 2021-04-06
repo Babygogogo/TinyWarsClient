@@ -3253,6 +3253,18 @@ namespace TinyWars.Utility.Lang {
             `自定义`,
             `Customize`,
         ],
+        [Type.B0576]: [
+            `D2D`,
+            `D2D`,
+        ],
+        [Type.B0577]: [
+            `COP`,
+            `COP`,
+        ],
+        [Type.B0578]: [
+            `SCOP`,
+            `SCOP`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3907,6 +3919,15 @@ namespace TinyWars.Utility.Lang {
             `服务器维护中`,
             `The server is under maintenance.`,
         ],
+
+        [ClientErrorCode.WarEventFullDataValidation09]: [
+            `存在未被引用的事件动作`,
+            `There is a redundant event action.`,
+        ],
+        [ClientErrorCode.WarEventFullDataValidation12]: [
+            `存在未被引用的事件`,
+            `There is a redundant event.`,
+        ],
     };
 
     const RICH_DATA = {
@@ -4361,6 +4382,15 @@ namespace TinyWars.Utility.Lang {
             case 3  : return getText(Type.B0006);
             case 4  : return getText(Type.B0007);
             default : return null;
+        }
+    }
+
+    export function getCoSkillTypeName(skillType: Types.CoSkillType): string | undefined {
+        switch (skillType) {
+            case Types.CoSkillType.Passive      : return getText(Type.B0576);
+            case Types.CoSkillType.Power        : return getText(Type.B0577);
+            case Types.CoSkillType.SuperPower   : return getText(Type.B0578);
+            default                             : return undefined;
         }
     }
 

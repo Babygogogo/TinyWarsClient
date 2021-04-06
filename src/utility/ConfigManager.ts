@@ -516,6 +516,19 @@ namespace TinyWars.Utility.ConfigManager {
     export function getCoSkillCfg(version: string, skillId: number): CoSkillCfg | null {
         return _CACHED_CONFIGS.get(version)!.CoSkill[skillId];
     }
+    export function getCoSkillArray(version: string, coId: number, skillType: Types.CoSkillType): number[] | undefined {
+        const coConfig = getCoBasicCfg(version, coId);
+        if (coConfig == null) {
+            return undefined;
+        } else {
+            switch (skillType) {
+                case Types.CoSkillType.Passive      : return coConfig.passiveSkills;
+                case Types.CoSkillType.Power        : return coConfig.powerSkills;
+                case Types.CoSkillType.SuperPower   : return coConfig.superPowerSkills;
+                default                             : return undefined;
+            }
+        }
+    }
 
     export function getAvailableCoArray(version: string): CoBasicCfg[] {
         if (!_AVAILABLE_CO_LIST.has(version)) {
