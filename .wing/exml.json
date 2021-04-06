@@ -1,5 +1,9 @@
 {
   "global": {
     "globalAutoLayerMarkEnable": true
+  },
+  "design": {
+    "height": "300",
+    "width": "400"
   }
 }

@@ -6,7 +6,6 @@ namespace TinyWars.MultiCustomRoom {
     import ConfigManager    = Utility.ConfigManager;
     import Helpers          = Utility.Helpers;
     import Notify           = Utility.Notify;
-    import CoSkillType      = Types.CoSkillType;
 
     type OpenDataForMcrCreateChooseCoPanel = {
         coId    : number | undefined | null;
@@ -17,37 +16,17 @@ namespace TinyWars.MultiCustomRoom {
 
         private static _instance: McrCreateChooseCoPanel;
 
-        private readonly _imgMask                       : GameUi.UiImage;
-        private readonly _group                         : eui.Group;
+        private readonly _imgMask       : GameUi.UiImage;
+        private readonly _group         : eui.Group;
 
-        private readonly _labelChooseCo                 : GameUi.UiLabel;
-        private readonly _listCo                        : GameUi.UiScrollList<DataForCoRenderer, CoRenderer>;
-        private readonly _btnConfirm                    : GameUi.UiButton;
-        private readonly _btnCancel                     : GameUi.UiButton;
-
-        private readonly _imgCoPortrait                 : GameUi.UiImage;
-        private readonly _labelCoName                   : GameUi.UiLabel;
-        private readonly _labelDesignerTitle            : GameUi.UiLabel;
-        private readonly _labelDesigner                 : GameUi.UiLabel;
-        private readonly _labelBoardCostPercentageTitle : GameUi.UiLabel;
-        private readonly _labelBoardCostPercentage      : GameUi.UiLabel;
-        private readonly _labelZoneRadiusTitle          : GameUi.UiLabel;
-        private readonly _labelZoneRadius               : GameUi.UiLabel;
-        private readonly _labelEnergyBarTitle           : GameUi.UiLabel;
-        private readonly _labelEnergyBar                : GameUi.UiLabel;
-
-        private readonly _labelSkillType                : GameUi.UiLabel;
-        private readonly _labelSkillName                : GameUi.UiLabel;
-        private readonly _groupEnergyCost               : eui.Group;
-        private readonly _labelEnergyCostTitle          : GameUi.UiLabel;
-        private readonly _labelEnergyCost               : GameUi.UiLabel;
-        private readonly _listSkillDesc                 : GameUi.UiScrollList<DataForSkillDescRenderer, SkillDescRenderer>;
-
-        private readonly _listSkillType                 : GameUi.UiScrollList<DataForSkillTypeRenderer, SkillTypeRenderer>;
+        private readonly _labelChooseCo : GameUi.UiLabel;
+        private readonly _listCo        : GameUi.UiScrollList<DataForCoRenderer, CoRenderer>;
+        private readonly _btnConfirm    : GameUi.UiButton;
+        private readonly _btnCancel     : GameUi.UiButton;
+        private readonly _uiCoInfo      : GameUi.UiCoInfo;
 
         private _dataForListCo          : DataForCoRenderer[] = [];
         private _selectedIndex          : number;
-        private _selectedCoSkillType    = CoSkillType.Passive;
 
         public static show(openData: OpenDataForMcrCreateChooseCoPanel): void {
             if (!McrCreateChooseCoPanel._instance) {
@@ -79,21 +58,16 @@ namespace TinyWars.MultiCustomRoom {
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._listCo.setItemRenderer(CoRenderer);
-            this._listSkillDesc.setItemRenderer(SkillDescRenderer);
-            this._listSkillType.setItemRenderer(SkillTypeRenderer);
 
             this._showOpenAnimation();
 
             this._updateComponentsForLanguage();
             this._initListCo();
-            this._initListSkillType();
         }
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
 
             this._listCo.clear();
-            this._listSkillDesc.clear();
-            this._listSkillType.clear();
         }
 
         public setSelectedIndex(newIndex: number): void {
@@ -112,16 +86,6 @@ namespace TinyWars.MultiCustomRoom {
         }
         public getSelectedIndex(): number {
             return this._selectedIndex;
-        }
-
-        public setSelectedSkillType(skillType: CoSkillType): void {
-            if (this.getSelectedSkillType() !== skillType) {
-                this._selectedCoSkillType = skillType;
-                this._updateComponentsForSkill();
-            }
-        }
-        public getSelectedSkillType(): CoSkillType {
-            return this._selectedCoSkillType;
         }
 
         private _getSelectedCoId(): number | null {
@@ -152,14 +116,9 @@ namespace TinyWars.MultiCustomRoom {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelDesignerTitle.text               = `${Lang.getText(Lang.Type.B0163)}:`;
-            this._labelBoardCostPercentageTitle.text    = `${Lang.getText(Lang.Type.B0164)}:`;
-            this._labelZoneRadiusTitle.text             = `${Lang.getText(Lang.Type.B0165)}:`;
-            this._labelEnergyBarTitle.text              = `${Lang.getText(Lang.Type.B0166)}:`;
-            this._labelEnergyCostTitle.text             = `${Lang.getText(Lang.Type.B0167)}:`;
-            this._labelChooseCo.text                    = Lang.getText(Lang.Type.B0145);
-            this._btnConfirm.label                      = Lang.getText(Lang.Type.B0026);
-            this._btnCancel.label                       = Lang.getText(Lang.Type.B0154);
+            this._labelChooseCo.text    = Lang.getText(Lang.Type.B0145);
+            this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
+            this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
 
             this._updateComponentsForCoInfo();
         }
@@ -174,23 +133,6 @@ namespace TinyWars.MultiCustomRoom {
                 const cfg = data.coBasicCfg;
                 return cfg ? cfg.coId === coId : coId == null;
             }));
-        }
-
-        private _initListSkillType(): void {
-            this._listSkillType.bindData([
-                {
-                    coSkillType : CoSkillType.Passive,
-                    panel       : this,
-                },
-                {
-                    coSkillType : CoSkillType.Power,
-                    panel       : this,
-                },
-                {
-                    coSkillType : CoSkillType.SuperPower,
-                    panel       : this,
-                },
-            ]);
         }
 
         private _createDataForListCo(): DataForCoRenderer[] {
@@ -217,58 +159,10 @@ namespace TinyWars.MultiCustomRoom {
                 return;
             }
 
-            const cfg                           = ConfigManager.getCoBasicCfg(ConfigManager.getLatestFormalVersion(), coId);
-            this._imgCoPortrait.source          = cfg.fullPortrait;
-            this._labelCoName.text              = cfg.name;
-            this._labelDesigner.text            = cfg.designer;
-            this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
-            this._labelZoneRadius.text          = `${cfg.zoneRadius}`;
-            this._labelEnergyBar.text           = (cfg.zoneExpansionEnergyList || []).join(` / `) || `--`;
-
-            this._updateComponentsForSkill();
-        }
-        private _updateComponentsForSkill(): void {
-            const coId = this._getSelectedCoId();
-            if (coId == null) {
-                return;
-            }
-            const skillType = this.getSelectedSkillType();
-            if (skillType == null) {
-                return;
-            }
-
-            this._listSkillType.refresh();
-
-            const configVersion         = ConfigManager.getLatestFormalVersion();
-            const skillIdArray          = ConfigManager.getCoSkillArray(configVersion, coId, skillType) || [];
-            const hasSkill              = !!skillIdArray.length;
-            this._labelSkillType.text   = `${Lang.getCoSkillTypeName(skillType)}:`;
-            this._labelSkillName.text   = hasSkill ? undefined : Lang.getText(Lang.Type.B0001);
-
-            const groupEnergyCost = this._groupEnergyCost;
-            if (!hasSkill) {
-                groupEnergyCost.visible = false;
-            } else {
-                const labelEnergyCost = this._labelEnergyCost;
-                const powerEnergyList = ConfigManager.getCoBasicCfg(configVersion, coId).powerEnergyList || [];
-                if (skillType === CoSkillType.Passive) {
-                    groupEnergyCost.visible = false;
-                } else if (skillType === CoSkillType.Power) {
-                    groupEnergyCost.visible = true;
-                    labelEnergyCost.text    = `${powerEnergyList[0]}`;
-                } else if (skillType === CoSkillType.SuperPower) {
-                    groupEnergyCost.visible = true;
-                    labelEnergyCost.text    = `${powerEnergyList[1]}`;
-                }
-            }
-
-            const dataArrayForListSkillDesc: DataForSkillDescRenderer[] = [];
-            for (const skillId of skillIdArray) {
-                dataArrayForListSkillDesc.push({
-                    skillId,
-                });
-            }
-            this._listSkillDesc.bindData(dataArrayForListSkillDesc);
+            this._uiCoInfo.setCoData({
+                configVersion   : ConfigManager.getLatestFormalVersion(),
+                coId,
+            });
         }
 
         private _showOpenAnimation(): void {
@@ -314,7 +208,6 @@ namespace TinyWars.MultiCustomRoom {
         index       : number;
         panel       : McrCreateChooseCoPanel;
     }
-
     class CoRenderer extends GameUi.UiListItemRenderer<DataForCoRenderer> {
         private _labelName: GameUi.UiLabel;
 
@@ -329,44 +222,6 @@ namespace TinyWars.MultiCustomRoom {
         public onItemTapEvent(e: eui.ItemTapEvent): void {
             const data = this.data;
             data.panel.setSelectedIndex(data.index);
-        }
-    }
-
-    type DataForSkillTypeRenderer = {
-        coSkillType : CoSkillType;
-        panel       : McrCreateChooseCoPanel;
-    }
-    class SkillTypeRenderer extends GameUi.UiListItemRenderer<DataForSkillTypeRenderer> {
-        private _labelType  : GameUi.UiLabel;
-
-        protected dataChanged(): void {
-            const data = this.data;
-            if (data) {
-                const skillType         = data.coSkillType;
-                this.currentState       = data.panel.getSelectedSkillType() === skillType ? Types.UiState.Down : Types.UiState.Up;
-                this._labelType.text    = Lang.getCoSkillTypeName(skillType);
-            }
-        }
-
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
-            const data = this.data;
-            if (data) {
-                data.panel.setSelectedSkillType(data.coSkillType);
-            }
-        }
-    }
-
-    type DataForSkillDescRenderer = {
-        skillId : number;
-    }
-    class SkillDescRenderer extends GameUi.UiListItemRenderer<DataForSkillDescRenderer> {
-        private _labelDesc  : GameUi.UiLabel;
-
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data;
-            this._labelDesc.text    = `- ${ConfigManager.getCoSkillCfg(ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()]}`;
         }
     }
 }

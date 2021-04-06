@@ -79,6 +79,7 @@
 		"bin-debug/utility/StageManager.js",
 		"bin-debug/utility/WarActionCodes.js",
 		"bin-debug/gameui/UiButton.js",
+		"bin-debug/gameui/UiCoInfo.js",
 		"bin-debug/gameui/UiLabel.js",
 		"bin-debug/gameui/UiRadioButton.js",
 		"bin-debug/gameui/UiScrollList.js",
