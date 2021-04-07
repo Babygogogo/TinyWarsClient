@@ -18,15 +18,14 @@ namespace TinyWars.MultiRankRoom.MrrProxy {
         ], MrrProxy);
     }
 
-    export function reqMrrGetMaxConcurrentCount(hasFog: boolean): void {
-        NetManager.send({ MsgMrrGetMaxConcurrentCount: { c: {
-            hasFog,
-        } }, });
+    export function reqMrrGetMaxConcurrentCount(): void {
+        NetManager.send({ MsgMrrGetMaxConcurrentCount: { c: {} } });
     }
     function _onMsgMrrGetMaxConcurrentCount(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMrrGetMaxConcurrentCount.IS;
         if (!data.errorCode) {
-            MrrModel.setMaxConcurrentCount(data.hasFog, data.maxCount);
+            MrrModel.setMaxConcurrentCount(false, data.maxCountForStd);
+            MrrModel.setMaxConcurrentCount(true, data.maxCountForFog);
             Notify.dispatch(Notify.Type.MsgMrrGetMaxConcurrentCount, data);
         }
     }
@@ -71,16 +70,17 @@ namespace TinyWars.MultiRankRoom.MrrProxy {
         }
     }
 
-    export function reqMrrSetMaxConcurrentCount(hasFog: boolean, maxCount: number): void {
+    export function reqMrrSetMaxConcurrentCount(maxCountForStd: number, maxCountForFog: number): void {
         NetManager.send({ MsgMrrSetMaxConcurrentCount: { c: {
-            hasFog,
-            maxCount,
+            maxCountForStd,
+            maxCountForFog,
         } }, });
     }
     function _onMsgMrrSetMaxConcurrentCount(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMrrSetMaxConcurrentCount.IS;
         if (!data.errorCode) {
-            MrrModel.setMaxConcurrentCount(data.hasFog, data.maxCount);
+            MrrModel.setMaxConcurrentCount(false, data.maxCountForStd);
+            MrrModel.setMaxConcurrentCount(true, data.maxCountForFog);
             Notify.dispatch(Notify.Type.MsgMrrSetMaxConcurrentCount, data);
         }
     }

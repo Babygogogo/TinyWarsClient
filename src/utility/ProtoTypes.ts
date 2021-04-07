@@ -49469,11 +49469,11 @@ export declare namespace NetMessage {
         /** Properties of a C. */
         interface IC {
 
-            /** C hasFog */
-            hasFog?: (boolean|null);
+            /** C maxCountForStd */
+            maxCountForStd?: (number|null);
 
-            /** C maxCount */
-            maxCount?: (number|null);
+            /** C maxCountForFog */
+            maxCountForFog?: (number|null);
         }
 
         /** Represents a C. */
@@ -49485,11 +49485,11 @@ export declare namespace NetMessage {
              */
             constructor(properties?: NetMessage.MsgMrrSetMaxConcurrentCount.IC);
 
-            /** C hasFog. */
-            public hasFog: boolean;
+            /** C maxCountForStd. */
+            public maxCountForStd: number;
 
-            /** C maxCount. */
-            public maxCount: number;
+            /** C maxCountForFog. */
+            public maxCountForFog: number;
 
             /**
              * Creates a new C instance using the specified properties.
@@ -49568,11 +49568,11 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
-            /** S hasFog */
-            hasFog?: (boolean|null);
+            /** S maxCountForStd */
+            maxCountForStd?: (number|null);
 
-            /** S maxCount */
-            maxCount?: (number|null);
+            /** S maxCountForFog */
+            maxCountForFog?: (number|null);
         }
 
         /** Represents a S. */
@@ -49587,11 +49587,11 @@ export declare namespace NetMessage {
             /** S errorCode. */
             public errorCode: number;
 
-            /** S hasFog. */
-            public hasFog: boolean;
+            /** S maxCountForStd. */
+            public maxCountForStd: number;
 
-            /** S maxCount. */
-            public maxCount: number;
+            /** S maxCountForFog. */
+            public maxCountForFog: number;
 
             /**
              * Creates a new S instance using the specified properties.
@@ -49765,9 +49765,6 @@ export declare namespace NetMessage {
 
         /** Properties of a C. */
         interface IC {
-
-            /** C hasFog */
-            hasFog?: (boolean|null);
         }
 
         /** Represents a C. */
@@ -49778,9 +49775,6 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              */
             constructor(properties?: NetMessage.MsgMrrGetMaxConcurrentCount.IC);
-
-            /** C hasFog. */
-            public hasFog: boolean;
 
             /**
              * Creates a new C instance using the specified properties.
@@ -49859,11 +49853,11 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
-            /** S hasFog */
-            hasFog?: (boolean|null);
+            /** S maxCountForStd */
+            maxCountForStd?: (number|null);
 
-            /** S maxCount */
-            maxCount?: (number|null);
+            /** S maxCountForFog */
+            maxCountForFog?: (number|null);
         }
 
         /** Represents a S. */
@@ -49878,11 +49872,11 @@ export declare namespace NetMessage {
             /** S errorCode. */
             public errorCode: number;
 
-            /** S hasFog. */
-            public hasFog: boolean;
+            /** S maxCountForStd. */
+            public maxCountForStd: number;
 
-            /** S maxCount. */
-            public maxCount: number;
+            /** S maxCountForFog. */
+            public maxCountForFog: number;
 
             /**
              * Creates a new S instance using the specified properties.

@@ -681,9 +681,8 @@ namespace TinyWars.Utility.Lang {
             `Please write down a Chinese Name and an English name if possible. Use a , as a separator.`,
         ],
         [Type.A0132]: [
-            `请设定您愿意同时进行的排位赛的数量上限（设置为0等同于您不参加排位赛；明战和雾战需要分别设定）。`,
-            `Please set the maximum number of qualifying matches you are willing to play at the same time. Setting it to 0 is equivalent to not participating in qualifying matches.` +
-            `\nNote: You need to set the numbers with fog on/off separately.`,
+            `请设定您愿意同时进行的排位赛的数量上限（设置为0等同于您不参加对应模式的排位赛）。`,
+            `Please set the maximum number of qualifying matches you are willing to play at the same time. Setting it to 0 is equivalent to not participating in qualifying matches.`
         ],
         [Type.A0133]: [
             `正在等待对战各方禁用CO。`,
@@ -2603,7 +2602,7 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.B0413]: [
             `设定战局数量`,
-            `Set Games Num`,
+            `Set Games Number`,
         ],
         [Type.B0414]: [
             `房间状态`,
@@ -3866,6 +3865,10 @@ namespace TinyWars.Utility.Lang {
         [ServerErrorCode.MsgMcrJoinRoom0013]: [
             "您已加入了该房间。",
             "You have already joined the room.",
+        ],
+        [ServerErrorCode.MsgMcrStartWar0009]: [
+            `还有玩家未准备就绪`,
+            `Some players are not ready yet.`,
         ],
         [ServerErrorCode.MsgMapGetRawData0001]: [
             "地图不存在，获取raw data失败。",

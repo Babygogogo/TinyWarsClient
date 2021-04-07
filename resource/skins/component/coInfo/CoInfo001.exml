@@ -13,73 +13,86 @@
                             top="0" bottom="0" locked="true" />
             <GameUi:UiImage id="_imgCoPortrait" alpha="0.5" source="c09_t01_s01_f01" right="0" scaleX="0.7" scaleY="0.7"
                             bottom="0" locked="true" />
-            <e:Group x="20" y="20" scaleX="1" scaleY="1">
-                <e:Group y="2" x="0" scaleX="1" scaleY="1">
-                    <GameUi:UiLabel id="_labelBoardCostPercentageTitle" text="出场费用：" textColor="0xFFFFFF" y="0"
-                                    size="14" x="0" scaleX="1" scaleY="1" maxTextWidth="120" />
-                    <GameUi:UiLabel id="_labelBoardCostPercentage" text="50%" textColor="0xFFFFFF" y="0" size="14"
-                                    x="120" textAlign="center" scaleX="1" scaleY="1" />
+            <e:Group x="20" y="20">
+                <e:Group x="0" y="0">
+                    <e:Group x="0" y="-60" scaleX="1" scaleY="1">
+                        <e:Group y="2" x="0" scaleX="1" scaleY="1">
+                            <GameUi:UiLabel id="_labelBoardCostPercentageTitle" text="出场费用：" textColor="0xFFFFFF" y="0"
+                                            size="14" x="0" scaleX="1" scaleY="1" maxTextWidth="120" />
+                            <GameUi:UiLabel id="_labelBoardCostPercentage" text="50%" textColor="0xFFFFFF" y="0"
+                                            size="14" x="120" textAlign="center" scaleX="1" scaleY="1" />
+                            <e:layout>
+                                <e:HorizontalLayout/>
+                            </e:layout>
+                        </e:Group>
+                        <e:Group y="2" x="240" scaleX="1" scaleY="1">
+                            <GameUi:UiLabel id="_labelZoneRadiusTitle" text="zone范围：" textColor="0xFFFFFF" y="0"
+                                            size="14" x="0" scaleX="1" scaleY="1" maxTextWidth="120" />
+                            <GameUi:UiLabel id="_labelZoneRadius" text="1" textColor="0xFFFFFF" y="0" size="14" x="120"
+                                            textAlign="center" scaleX="1" scaleY="1" />
+                            <e:layout>
+                                <e:HorizontalLayout/>
+                            </e:layout>
+                        </e:Group>
+                        <e:Group y="0" x="450" scaleX="1" scaleY="1">
+                            <GameUi:UiLabel id="_labelEnergyBarTitle" text="zone扩张能量值：" textColor="0xFFFFFF" y="0"
+                                            size="14" x="0" scaleX="1" scaleY="1" maxTextWidth="170" />
+                            <GameUi:UiLabel id="_labelEnergyBar" text="30 / 80" textColor="0xFFFFFF" y="0" size="14"
+                                            x="120" textAlign="center" scaleX="1" scaleY="1" />
+                            <e:layout>
+                                <e:HorizontalLayout/>
+                            </e:layout>
+                        </e:Group>
+                        <e:layout>
+                            <e:VerticalLayout gap="2" />
+                        </e:layout>
+                    </e:Group>
+                    <GameUi:UiImage scale9Grid="1,1,2,2" y="-8" source="commonColorWhite0000" height="2" width="320"
+                                    x="0" />
                     <e:layout>
-                        <e:HorizontalLayout/>
+                        <e:VerticalLayout/>
                     </e:layout>
                 </e:Group>
-                <e:Group y="2" x="240" scaleX="1" scaleY="1">
-                    <GameUi:UiLabel id="_labelZoneRadiusTitle" text="zone范围：" textColor="0xFFFFFF" y="0" size="14" x="0"
-                                    scaleX="1" scaleY="1" maxTextWidth="120" />
-                    <GameUi:UiLabel id="_labelZoneRadius" text="1" textColor="0xFFFFFF" y="0" size="14" x="120"
-                                    textAlign="center" scaleX="1" scaleY="1" />
+                <e:Group y="80" x="20" scaleX="1" scaleY="1" width="320">
+                    <e:Group x="20" y="0">
+                        <e:Group x="0" y="0">
+                            <GameUi:UiLabel id="_labelSkillType" text="COP：" textColor="0xFFFFFF" y="0" size="14"
+                                            textAlign="right" x="0" scaleX="1" scaleY="1" />
+                            <GameUi:UiLabel id="_labelSkillName" text="无" textColor="0xFFFFFF" y="0" size="14"
+                                            textAlign="right" x="80" scaleX="1" scaleY="1" />
+                            <e:layout>
+                                <e:HorizontalLayout/>
+                            </e:layout>
+                        </e:Group>
+                        <e:Group id="_groupEnergyCost" x="180" y="0">
+                            <GameUi:UiLabel id="_labelEnergyCostTitle" text="能量消耗:" textColor="0xFFFFFF" y="0" size="14"
+                                            textAlign="right" x="0" scaleX="1" scaleY="1" />
+                            <GameUi:UiLabel id="_labelEnergyCost" text="无" textColor="0xFFFFFF" y="0" size="14"
+                                            textAlign="right" x="0" scaleX="1" scaleY="1" />
+                            <e:layout>
+                                <e:HorizontalLayout/>
+                            </e:layout>
+                        </e:Group>
+                    </e:Group>
+                    <GameUi:UiScrollList id="_listSkillDesc" y="25" width="320" x="0">
+                        <e:List>
+                            <e:itemRendererSkinName>
+                                <e:Skin width="320">
+                                    <GameUi:UiLabel id="_labelDesc" text="技能描述" size="14" left="0" right="0"
+                                                    wordWrap="true" />
+                                </e:Skin>
+                            </e:itemRendererSkinName>
+                            <e:layout>
+                                <e:VerticalLayout gap="2" paddingTop="4" />
+                            </e:layout>
+                        </e:List>
+                    </GameUi:UiScrollList>
                     <e:layout>
-                        <e:HorizontalLayout/>
-                    </e:layout>
-                </e:Group>
-                <e:Group y="0" x="450" scaleX="1" scaleY="1">
-                    <GameUi:UiLabel id="_labelEnergyBarTitle" text="zone扩张能量值：" textColor="0xFFFFFF" y="0" size="14"
-                                    x="0" scaleX="1" scaleY="1" maxTextWidth="170" />
-                    <GameUi:UiLabel id="_labelEnergyBar" text="30 / 80" textColor="0xFFFFFF" y="0" size="14" x="120"
-                                    textAlign="center" scaleX="1" scaleY="1" />
-                    <e:layout>
-                        <e:HorizontalLayout/>
+                        <e:VerticalLayout horizontalAlign="justify" gap="2" />
                     </e:layout>
                 </e:Group>
                 <e:layout>
-                    <e:VerticalLayout gap="2" />
-                </e:layout>
-            </e:Group>
-            <e:Group y="80" x="20" scaleX="1" scaleY="1" width="320">
-                <e:Group x="20" y="0">
-                    <e:Group x="0" y="0">
-                        <GameUi:UiLabel id="_labelSkillType" text="COP：" textColor="0xFFFFFF" y="0" size="14"
-                                        textAlign="right" x="0" scaleX="1" scaleY="1" />
-                        <GameUi:UiLabel id="_labelSkillName" text="无" textColor="0xFFFFFF" y="0" size="14"
-                                        textAlign="right" x="80" scaleX="1" scaleY="1" />
-                        <e:layout>
-                            <e:HorizontalLayout/>
-                        </e:layout>
-                    </e:Group>
-                    <e:Group id="_groupEnergyCost" x="180" y="0">
-                        <GameUi:UiLabel id="_labelEnergyCostTitle" text="能量消耗:" textColor="0xFFFFFF" y="0" size="14"
-                                        textAlign="right" x="0" scaleX="1" scaleY="1" />
-                        <GameUi:UiLabel id="_labelEnergyCost" text="无" textColor="0xFFFFFF" y="0" size="14"
-                                        textAlign="right" x="0" scaleX="1" scaleY="1" />
-                        <e:layout>
-                            <e:HorizontalLayout/>
-                        </e:layout>
-                    </e:Group>
-                </e:Group>
-                <GameUi:UiScrollList id="_listSkillDesc" y="25" width="320" x="0">
-                    <e:List>
-                        <e:itemRendererSkinName>
-                            <e:Skin width="320">
-                                <GameUi:UiLabel id="_labelDesc" text="技能描述" size="14" left="0" right="0" wordWrap="true" />
-                            </e:Skin>
-                        </e:itemRendererSkinName>
-                        <e:layout>
-                            <e:VerticalLayout gap="2" paddingTop="4" />
-                        </e:layout>
-                    </e:List>
-                </GameUi:UiScrollList>
-                <e:layout>
-                    <e:VerticalLayout horizontalAlign="justify" gap="4" />
+                    <e:VerticalLayout gap="10" />
                 </e:layout>
             </e:Group>
             <GameUi:UiScrollList id="_listSkillType" x="20" bottom="20">

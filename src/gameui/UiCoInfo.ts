@@ -131,6 +131,10 @@ namespace TinyWars.GameUi {
         }
 
         private _updateComponentsForSkill(): void {
+            if (!this.getIsOpening()) {
+                return;
+            }
+
             const coData = this.getCoData();
             if (coData == null) {
                 return;
