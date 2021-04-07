@@ -76,10 +76,10 @@
             <GameUi:UiButton id="_btnSearch" label="确定" width="80" x="0" y="0">
                 <GameUi:skinName>
                     <e:Skin>
-                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
-                            <e:Image scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0"
+                        <e:Group left="0" right="0" y="0">
+                            <e:Image left="0" right="0" top="0" bottom="0"
                                      source="commonPentagon0000" scale9Grid="4,4,1,1" />
-                            <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff" scaleX="1" scaleY="1"
+                            <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff"
                                             text="asdf" textAlign="center" verticalAlign="middle" left="10" top="8"
                                             bottom="8" wordWrap="true" bold="true" />
                         </e:Group>
@@ -89,10 +89,10 @@
             <GameUi:UiButton id="_btnReset" label="全部显示" width="80" x="10" y="10">
                 <GameUi:skinName>
                     <e:Skin>
-                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
-                            <e:Image scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0"
+                        <e:Group left="0" right="0" y="0">
+                            <e:Image left="0" right="0" top="0" bottom="0"
                                      source="commonPentagon0009" scale9Grid="2,3,1,1" />
-                            <GameUi:UiLabel id="labelDisplay" size="12" scaleX="1" scaleY="1" text="asdf"
+                            <GameUi:UiLabel id="labelDisplay" size="12" text="asdf"
                                             textAlign="center" verticalAlign="middle" left="10" top="8" bottom="8"
                                             wordWrap="true" bold="true" textColor="0x000000" />
                         </e:Group>

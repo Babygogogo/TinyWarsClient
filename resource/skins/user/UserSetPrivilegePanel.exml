@@ -5,7 +5,7 @@
     <e:Group width="580" horizontalCenter="0" height="236" verticalCenter="0">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" locked="true" />
-        <GameUi:UiLabel text="玩家权限设定" textColor="0xFFFFFF" y="10" size="22" textAlign="right" scaleX="1" scaleY="1"
+        <GameUi:UiLabel text="玩家权限设定" textColor="0xFFFFFF" y="10" size="22" textAlign="right"
                         horizontalCenter="0" locked="true" />
         <e:Group x="10" y="40">
             <GameUi:UiButton id="_btnGetInfo" label="玩家ID" skinName="Skins.Component.Button.ButtonSelfAdaption001"
@@ -22,7 +22,7 @@
                     </e:Skin>
                 </GameUi:skinName>
             </GameUi:UiTextInput>
-            <GameUi:UiLabel id="_labelUserName" text="玩家名称" textColor="0xFFFFFF" size="20" x="260" scaleX="1" scaleY="1"
+            <GameUi:UiLabel id="_labelUserName" text="玩家名称" textColor="0xFFFFFF" size="20" x="260"
                             verticalCenter="0" />
         </e:Group>
         <e:Scroller left="10" right="10" bottom="60">

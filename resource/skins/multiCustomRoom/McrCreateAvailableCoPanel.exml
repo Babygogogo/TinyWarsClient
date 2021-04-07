@@ -5,7 +5,7 @@
                     scale9Grid="1,1,2,2" locked="true" />
     <e:Group id="_group" horizontalCenter="0" height="400" verticalCenter="0">
         <e:Group width="360" height="400" y="0" x="0" locked="true">
-            <GameUi:UiImage scaleX="1" scaleY="1" source="commonColorBlack0001" scale9Grid="1,1,2,2" left="0" right="0"
+            <GameUi:UiImage source="commonColorBlack0001" scale9Grid="1,1,2,2" left="0" right="0"
                             top="0" bottom="0" />
             <GameUi:UiLabel id="_labelAvailableCoTitle" text="可用CO" textColor="0xFFFFFF" y="20" size="24" x="20"
                             bold="true" />

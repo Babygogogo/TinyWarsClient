@@ -99,6 +99,27 @@ namespace TinyWars.Utility.Helpers {
         return (new Array(times + 1)).join(str);
     }
 
+    export function getSuffixForRank(rank: number): string {
+        if (rank == null) {
+            return undefined;
+        } else {
+            if (Math.floor(rank / 10) % 10 === 1) {
+                return `th`;
+            } else {
+                const num = rank % 10;
+                if (num === 1) {
+                    return `st`;
+                } else if (num === 2) {
+                    return `nd`;
+                } else if (num === 3) {
+                    return `rd`;
+                } else {
+                    return `th`;
+                }
+            }
+        }
+    }
+
     export function changeColor(obj: egret.DisplayObject, color: Types.ColorType, value = 100): void {
         if (checkIsWebGl()) {
             if ((color === ColorType.Gray) || (color === ColorType.Dark)) {

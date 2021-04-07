@@ -8,10 +8,10 @@
         <GameUi:UiButton id="_btnClose" label="关闭" width="140" right="0" top="0" locked="true">
             <GameUi:skinName>
                 <e:Skin>
-                    <e:Group scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
-                        <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1" left="0" right="0"
+                    <e:Group left="0" right="0" top="0" bottom="0">
+                        <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" left="0" right="0"
                                  top="0" bottom="0" locked="true" />
-                        <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff" scaleX="1" scaleY="1"
+                        <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff"
                                         text="asdf" textAlign="center" verticalAlign="middle" left="8" right="8" top="8"
                                         bottom="8" wordWrap="true" />
                         <GameUi:UiImage id="_imgRed" width="14" height="14" source="c04_t01_s01_f01" right="0" top="0"
@@ -30,12 +30,12 @@
                             <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0"
                                             anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
                                             locked="true" />
-                            <GameUi:UiLabel id="_labelType" text="日期" size="16" textColor="0xffffff" x="10" scaleX="1"
-                                            scaleY="1" verticalCenter="0" />
-                            <GameUi:UiLabel id="_labelUsing" text="更新内容" size="16" wordWrap="true" scaleX="1" scaleY="1"
+                            <GameUi:UiLabel id="_labelType" text="日期" size="16" textColor="0xffffff" x="10"
+                                            verticalCenter="0" />
+                            <GameUi:UiLabel id="_labelUsing" text="更新内容" size="16" wordWrap="true"
                                             maxWidth="780" textColor="0x00ff00" right="10" verticalCenter="0" />
-                            <GameUi:UiLabel id="_labelSwitch" text="更新内容" size="16" wordWrap="true" scaleX="1"
-                                            scaleY="1" maxWidth="780" right="10" verticalCenter="0" textColor="0xffffff" />
+                            <GameUi:UiLabel id="_labelSwitch" text="更新内容" size="16" wordWrap="true"
+                                            maxWidth="780" right="10" verticalCenter="0" textColor="0xffffff" />
                         </e:Group>
                     </e:Skin>
                 </e:itemRendererSkinName>

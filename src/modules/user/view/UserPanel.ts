@@ -245,7 +245,7 @@ namespace TinyWars.User {
 
             const rank                          = data ? data.currentRank : null;
             this._labelStdRankRank.text         = rank == null ? `--` : `${rank}`;
-            this._labelStdRankRankSuffix.text   = getSuffixForRank(rank);
+            this._labelStdRankRankSuffix.text   = Helpers.getSuffixForRank(rank);
         }
         private async _updateComponentsForFogRank(): Promise<void> {
             const data                      = await UserModel.getRankScoreData(this._userId, WarType.MrwFog, 2);
@@ -256,7 +256,7 @@ namespace TinyWars.User {
 
             const rank                          = data ? data.currentRank : null;
             this._labelFogRankRank.text         = rank == null ? `--` : `${rank}`;
-            this._labelFogRankRankSuffix.text   = getSuffixForRank(rank);
+            this._labelFogRankRankSuffix.text   = Helpers.getSuffixForRank(rank);
         }
         private _updateSclHistoryStd(): void {
             const userId    = this._userId;
@@ -349,27 +349,6 @@ namespace TinyWars.User {
             this._labelLose.text    = `${loseCount}`;
             this._labelDraw.text    = `${drawCount}`;
             this._labelRatio.text   = totalCount ? Helpers.formatString(`%.2f`, winCount / totalCount * 100) : `--`;
-        }
-    }
-
-    function getSuffixForRank(rank: number): string {
-        if (rank == null) {
-            return undefined;
-        } else {
-            if (Math.floor(rank / 10) % 10 === 1) {
-                return `th`;
-            } else {
-                const num = rank % 10;
-                if (num === 1) {
-                    return `st`;
-                } else if (num === 2) {
-                    return `nd`;
-                } else if (num === 3) {
-                    return `rd`;
-                } else {
-                    return `th`;
-                }
-            }
         }
     }
 }

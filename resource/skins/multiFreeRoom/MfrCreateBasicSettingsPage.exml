@@ -7,11 +7,11 @@
                 <GameUi:skinName>
                     <e:Skin states="up,down,disabled">
                         <e:Group y="0" x="0">
-                            <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1" left="0"
+                            <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" left="0"
                                      right="0" top="0" bottom="0" />
                             <e:Group>
                                 <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0" horizontalCenter="0"
-                                                x="98" y="97" scaleX="1" scaleY="1" text="" textColor="0x00ff00" />
+                                                x="98" y="97" text="" textColor="0x00ff00" />
                                 <e:layout>
                                     <e:HorizontalLayout paddingTop="8" paddingBottom="8" paddingLeft="10"
                                                         paddingRight="10" />
@@ -25,8 +25,8 @@
         <e:Group y="40" x="0">
             <e:Group y="0" x="0" locked="true">
                 <GameUi:UiButton id="_btnModifyWarName" label="战局名称" y="0" x="92"
-                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160" scaleX="1"
-                                 scaleY="1" />
+                                 skinName="Skins.Component.Button.ButtonSelfAdaption001" width="160"
+                                 />
                 <GameUi:UiLabel id="_labelWarName" text="(Empty)" size="16" textColor="0xFFFFFF" x="88" y="16"
                                 width="580" />
                 <e:layout>
@@ -104,12 +104,12 @@
                         <GameUi:skinName>
                             <e:Skin states="up,down,disabled">
                                 <e:Group y="0" x="0">
-                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1"
+                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2"
                                              left="0" right="0" top="0" bottom="0" />
                                     <e:Group>
                                         <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0"
                                                         horizontalCenter="0" textColor="0x00ff00" x="98" y="97"
-                                                        scaleX="1" scaleY="1" text="" />
+                                                        text="" />
                                         <e:layout>
                                             <e:HorizontalLayout paddingTop="8" paddingBottom="8" paddingLeft="10"
                                                                 paddingRight="10" />
@@ -128,12 +128,12 @@
                         <GameUi:skinName>
                             <e:Skin states="up,down,disabled">
                                 <e:Group y="0" x="0">
-                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1"
+                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2"
                                              left="0" right="0" top="0" bottom="0" />
                                     <e:Group>
                                         <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0"
                                                         horizontalCenter="0" textColor="0x00ff00" x="98" y="97"
-                                                        scaleX="1" scaleY="1" text="" />
+                                                        text="" />
                                         <e:layout>
                                             <e:HorizontalLayout paddingTop="8" paddingBottom="8" paddingLeft="10"
                                                                 paddingRight="10" />
@@ -147,12 +147,12 @@
                         <GameUi:skinName>
                             <e:Skin states="up,down,disabled">
                                 <e:Group y="0" x="0">
-                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1"
+                                    <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2"
                                              left="0" right="0" top="0" bottom="0" />
                                     <e:Group>
                                         <GameUi:UiLabel id="labelDisplay" size="12" verticalCenter="0"
                                                         horizontalCenter="0" textColor="0x00ff00" x="98" y="97"
-                                                        scaleX="1" scaleY="1" text="" />
+                                                        text="" />
                                         <e:layout>
                                             <e:HorizontalLayout paddingTop="8" paddingBottom="8" paddingLeft="10"
                                                                 paddingRight="10" />

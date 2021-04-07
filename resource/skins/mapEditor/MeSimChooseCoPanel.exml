@@ -7,58 +7,58 @@
         <GameUi:UiImage id="_imgCoPortrait" alpha="0.8" source="c09_t01_s01_f01" right="0" y="75" />
         <e:Scroller top="10" bottom="10" left="0" right="0">
             <e:Group>
-                <e:Group y="5" x="10" scaleX="1" scaleY="1">
+                <e:Group y="5" x="10">
                     <GameUi:UiLabel id="_labelNameTitle" text="姓名：" textColor="0xFFFFFF" y="0" size="20" x="0"
-                                    scaleX="1" scaleY="1" maxTextWidth="120" />
+                                    maxTextWidth="120" />
                     <GameUi:UiLabel id="_labelName" text="测试CO1号" textColor="0xFFFFFF" y="0" size="20" x="120"
-                                    textAlign="center" scaleX="1" scaleY="1" />
+                                    textAlign="center" />
                     <e:layout>
                         <e:HorizontalLayout/>
                     </e:layout>
                 </e:Group>
-                <e:Group y="5" x="250" scaleX="1" scaleY="1">
+                <e:Group y="5" x="250">
                     <GameUi:UiLabel id="_labelDesignerTitle" text="设计者：" textColor="0xFFFFFF" y="0" size="20" x="0"
-                                    scaleX="1" scaleY="1" maxTextWidth="120" />
+                                    maxTextWidth="120" />
                     <GameUi:UiLabel id="_labelDesigner" text="测试CO1号" textColor="0xFFFFFF" y="0" size="20" x="120"
-                                    textAlign="center" scaleX="1" scaleY="1" />
+                                    textAlign="center" />
                     <e:layout>
                         <e:HorizontalLayout/>
                     </e:layout>
                 </e:Group>
-                <e:Group y="45" x="10" scaleX="1" scaleY="1">
+                <e:Group y="45" x="10">
                     <GameUi:UiLabel id="_labelBoardCostPercentageTitle" text="出场费用：" textColor="0xFFFFFF" y="0"
-                                    size="20" x="0" scaleX="1" scaleY="1" maxTextWidth="120" />
+                                    size="20" x="0" maxTextWidth="120" />
                     <GameUi:UiLabel id="_labelBoardCostPercentage" text="50%" textColor="0xFFFFFF" y="0" size="20"
-                                    x="120" textAlign="center" scaleX="1" scaleY="1" />
+                                    x="120" textAlign="center" />
                     <e:layout>
                         <e:HorizontalLayout/>
                     </e:layout>
                 </e:Group>
-                <e:Group y="45" x="250" scaleX="1" scaleY="1">
+                <e:Group y="45" x="250">
                     <GameUi:UiLabel id="_labelZoneRadiusTitle" text="zone范围：" textColor="0xFFFFFF" y="0" size="20" x="0"
-                                    scaleX="1" scaleY="1" maxTextWidth="120" />
+                                    maxTextWidth="120" />
                     <GameUi:UiLabel id="_labelZoneRadius" text="1" textColor="0xFFFFFF" y="0" size="20" x="120"
-                                    textAlign="center" scaleX="1" scaleY="1" />
+                                    textAlign="center" />
                     <e:layout>
                         <e:HorizontalLayout/>
                     </e:layout>
                 </e:Group>
-                <e:Group y="43" x="460" scaleX="1" scaleY="1">
+                <e:Group y="43" x="460">
                     <GameUi:UiLabel id="_labelEnergyBarTitle" text="zone扩张能量值：" textColor="0xFFFFFF" y="0" size="20"
-                                    x="0" scaleX="1" scaleY="1" maxTextWidth="170" />
+                                    x="0" maxTextWidth="170" />
                     <GameUi:UiLabel id="_labelEnergyBar" text="30 / 80" textColor="0xFFFFFF" y="0" size="20" x="120"
-                                    textAlign="center" scaleX="1" scaleY="1" />
+                                    textAlign="center" />
                     <e:layout>
                         <e:HorizontalLayout/>
                     </e:layout>
                 </e:Group>
-                <e:Group y="85" left="0" x="0" scaleX="1" scaleY="1" width="500">
+                <e:Group y="85" left="0" x="0" width="500">
                     <e:Group y="0" x="0">
                         <e:Group x="20" y="0">
                             <GameUi:UiLabel text="D2D：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0"
-                                            scaleX="1" scaleY="1" />
+                                            />
                             <GameUi:UiLabel id="_labelNoPassiveSkill" text="无" textColor="0xFFFFFF" y="0" size="20"
-                                            textAlign="right" x="80" scaleX="1" scaleY="1" />
+                                            textAlign="right" x="80" />
                             <e:layout>
                                 <e:HorizontalLayout/>
                             </e:layout>
@@ -81,18 +81,18 @@
                     <e:Group y="0" x="0">
                         <e:Group x="20" y="0">
                             <GameUi:UiLabel text="COP：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0"
-                                            scaleX="1" scaleY="1" />
+                                            />
                             <GameUi:UiLabel id="_labelNoCop" text="无" textColor="0xFFFFFF" y="0" size="20"
-                                            textAlign="right" x="80" scaleX="1" scaleY="1" />
+                                            textAlign="right" x="80" />
                             <e:layout>
                                 <e:HorizontalLayout/>
                             </e:layout>
                         </e:Group>
                         <e:Group x="200" y="0">
                             <GameUi:UiLabel id="_labelCopEnergyTitle" text="能量消耗:" textColor="0xFFFFFF" y="0" size="20"
-                                            textAlign="right" x="0" scaleX="1" scaleY="1" />
+                                            textAlign="right" x="0" />
                             <GameUi:UiLabel id="_labelCopEnergy" text="无" textColor="0xFFFFFF" y="0" size="20"
-                                            textAlign="right" x="0" scaleX="1" scaleY="1" />
+                                            textAlign="right" x="0" />
                             <e:layout>
                                 <e:HorizontalLayout/>
                             </e:layout>
@@ -115,18 +115,18 @@
                     <e:Group y="0" x="0">
                         <e:Group x="20" y="0">
                             <GameUi:UiLabel text="SCOP：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0"
-                                            scaleX="1" scaleY="1" />
+                                            />
                             <GameUi:UiLabel id="_labelNoScop" text="无" textColor="0xFFFFFF" y="0" size="20"
-                                            textAlign="right" x="120" scaleX="1" scaleY="1" />
+                                            textAlign="right" x="120" />
                             <e:layout>
                                 <e:HorizontalLayout/>
                             </e:layout>
                         </e:Group>
                         <e:Group x="200">
                             <GameUi:UiLabel id="_labelScopEnergyTitle" text="能量消耗:" textColor="0xFFFFFF" y="0" size="20"
-                                            textAlign="right" x="0" scaleX="1" scaleY="1" />
+                                            textAlign="right" x="0" />
                             <GameUi:UiLabel id="_labelScopEnergy" text="无" textColor="0xFFFFFF" y="0" size="20"
-                                            textAlign="right" x="0" scaleX="1" scaleY="1" />
+                                            textAlign="right" x="0" />
                             <e:layout>
                                 <e:HorizontalLayout/>
                             </e:layout>

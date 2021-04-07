@@ -12,15 +12,15 @@
                 <GameUi:UiLabel id="_labelBgmTitle" text="背景音乐" x="0" y="0" size="18" textColor="0xffffff" />
                 <e:Group left="0" top="0">
                     <GameUi:UiImage id="_imgBgmMute" verticalCenter="0" horizontalCenter="0" source="icon_sound_001" />
-                    <e:Group id="_groupBgmVolume" x="128" y="0" width="300" scaleX="1" scaleY="1">
+                    <e:Group id="_groupBgmVolume" x="128" y="0" width="300">
                         <GameUi:UiImage id="_imgBgmBar" verticalCenter="0" width="300" x="0" source="c04_t01_s02_f01"
                                         scale9Grid="7,7,6,6" />
                         <GameUi:UiImage id="_imgBgmPoint" y="0" x="300" anchorOffsetX="10" touchEnabled="false"
                                         source="c04_t01_s01_f01" scaleX="2" scaleY="2" />
                     </e:Group>
                     <e:Group x="381" y="7" width="34">
-                        <GameUi:UiLabel id="_labelBgmVolume" text="100" size="20" textColor="0xffffff" scaleX="1"
-                                        scaleY="1" />
+                        <GameUi:UiLabel id="_labelBgmVolume" text="100" size="20" textColor="0xffffff"
+                                        />
                     </e:Group>
                     <e:layout>
                         <e:HorizontalLayout verticalAlign="middle" gap="20" />
@@ -34,15 +34,15 @@
                 <GameUi:UiLabel id="_labelEffectTitle" text="音效" x="0" y="0" size="18" textColor="0xFFFFFF" />
                 <e:Group left="0" top="0">
                     <GameUi:UiImage id="_imgEffectMute" verticalCenter="0" horizontalCenter="0" source="icon_sound_001" />
-                    <e:Group id="_groupEffectVolume" x="128" y="0" width="300" scaleX="1" scaleY="1">
+                    <e:Group id="_groupEffectVolume" x="128" y="0" width="300">
                         <GameUi:UiImage id="_imgEffectBar" source="c04_t01_s02_f01" verticalCenter="0" width="300" x="0"
                                         scale9Grid="7,7,6,6" />
                         <GameUi:UiImage id="_imgEffectPoint" source="c04_t01_s01_f01" y="0" x="300" anchorOffsetX="10"
                                         touchEnabled="false" scaleX="2" scaleY="2" />
                     </e:Group>
                     <e:Group x="384" y="11" width="34">
-                        <GameUi:UiLabel id="_labelEffectVolume" text="100" textColor="0xFFFFFF" size="20" scaleX="1"
-                                        scaleY="1" />
+                        <GameUi:UiLabel id="_labelEffectVolume" text="100" textColor="0xFFFFFF" size="20"
+                                        />
                     </e:Group>
                     <e:layout>
                         <e:HorizontalLayout verticalAlign="middle" gap="20" />

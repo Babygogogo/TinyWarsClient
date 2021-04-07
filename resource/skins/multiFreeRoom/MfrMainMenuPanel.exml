@@ -3,7 +3,7 @@
         xmlns:w="http://ns.egret.com/wing">
     <e:Group id="_group" right="60" verticalCenter="0" scaleX="0.9" scaleY="0.9">
         <e:Group x="168" y="43">
-            <GameUi:UiButton id="_btnMultiPlayer" label="" scaleX="1" scaleY="1" top="0" right="0">
+            <GameUi:UiButton id="_btnMultiPlayer" label="" top="0" right="0">
                 <GameUi:skinName>
                     <e:Skin states="up,down,disabled">
                         <e:Image source="lobby0009" />
@@ -14,7 +14,7 @@
             </GameUi:UiButton>
         </e:Group>
         <e:Group x="142" y="211">
-            <GameUi:UiButton id="_btnRanking" label="" scaleX="1" scaleY="1" right="0" top="0">
+            <GameUi:UiButton id="_btnRanking" label="" right="0" top="0">
                 <GameUi:skinName>
                     <e:Skin states="up,down,disabled">
                         <e:Image source="lobby0012" source.down="lobby0011" />
@@ -25,7 +25,7 @@
             </GameUi:UiButton>
         </e:Group>
         <e:Group x="102" y="202">
-            <GameUi:UiButton id="_btnSinglePlayer" label="" scaleX="1" scaleY="1" right="0" top="0">
+            <GameUi:UiButton id="_btnSinglePlayer" label="" right="0" top="0">
                 <GameUi:skinName>
                     <e:Skin states="up,down,disabled">
                         <e:Image source="lobby0008" source.down="lobby0007" />
@@ -41,17 +41,17 @@
     </e:Group>
     <e:Group id="_groupLeft" verticalCenter="0" scaleX="0.9" scaleY="0.9" left="0">
         <e:Group x="168" y="43">
-            <GameUi:UiButton id="_btnCreateRoom" label="" scaleX="1" scaleY="1" top="0" left="0">
+            <GameUi:UiButton id="_btnCreateRoom" label="" top="0" left="0">
                 <GameUi:skinName>
                     <e:Skin>
-                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
-                            <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0004" />
+                        <e:Group left="0" right="0" y="0">
+                            <e:Image scale9Grid="9,9,2,2" source="common0004" />
                             <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="Create Rooms" textAlign="center"
+                                <GameUi:UiLabel size="20" text="Create Rooms" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="2" x="-172"
                                                 textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" scaleX="1" scaleY="1" text="创建房间"
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="创建房间"
                                                 textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
                                                 x="-162" />
                                 <e:layout>
@@ -64,17 +64,17 @@
             </GameUi:UiButton>
         </e:Group>
         <e:Group x="142" y="211">
-            <GameUi:UiButton id="_btnJoinRoom" label="" scaleX="1" scaleY="1" top="0" left="0">
+            <GameUi:UiButton id="_btnJoinRoom" label="" top="0" left="0">
                 <GameUi:skinName>
                     <e:Skin>
-                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
-                            <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0004" />
+                        <e:Group left="0" right="0" y="0">
+                            <e:Image scale9Grid="9,9,2,2" source="common0004" />
                             <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="Join Rooms" textAlign="center"
+                                <GameUi:UiLabel size="20" text="Join Rooms" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="2" x="-172"
                                                 textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" scaleX="1" scaleY="1" text="加入房间"
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="加入房间"
                                                 textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
                                                 x="-162" />
                                 <e:layout>
@@ -87,17 +87,17 @@
             </GameUi:UiButton>
         </e:Group>
         <e:Group x="102" y="202">
-            <GameUi:UiButton id="_btnMyRoom" label="" scaleX="1" scaleY="1" top="0" left="0">
+            <GameUi:UiButton id="_btnMyRoom" label="" top="0" left="0">
                 <GameUi:skinName>
                     <e:Skin>
-                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
-                            <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0004" />
+                        <e:Group left="0" right="0" y="0">
+                            <e:Image scale9Grid="9,9,2,2" source="common0004" />
                             <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="My Rooms" textAlign="center"
+                                <GameUi:UiLabel size="20" text="My Rooms" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="2" x="-172"
                                                 textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" scaleX="1" scaleY="1" text="我的房间"
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="我的房间"
                                                 textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
                                                 x="-162" />
                                 <e:layout>
@@ -110,17 +110,17 @@
             </GameUi:UiButton>
         </e:Group>
         <e:Group x="112" y="212">
-            <GameUi:UiButton id="_btnContinueWar" label="" scaleX="1" scaleY="1" top="0" left="0">
+            <GameUi:UiButton id="_btnContinueWar" label="" top="0" left="0">
                 <GameUi:skinName>
                     <e:Skin>
-                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
-                            <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0002" />
+                        <e:Group left="0" right="0" y="0">
+                            <e:Image scale9Grid="9,9,2,2" source="common0002" />
                             <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="Continue Wars" textAlign="center"
+                                <GameUi:UiLabel size="20" text="Continue Wars" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="2" x="-172"
                                                 textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" scaleX="1" scaleY="1" text="继续战斗"
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="继续战斗"
                                                 textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
                                                 x="-162" />
                                 <e:layout>
@@ -133,17 +133,17 @@
             </GameUi:UiButton>
         </e:Group>
         <e:Group x="168" y="43">
-            <GameUi:UiButton id="_btnHelp" label="" scaleX="1" scaleY="1" top="0" left="0">
+            <GameUi:UiButton id="_btnHelp" label="" top="0" left="0">
                 <GameUi:skinName>
                     <e:Skin>
-                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
-                            <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0004" />
+                        <e:Group left="0" right="0" y="0">
+                            <e:Image scale9Grid="9,9,2,2" source="common0004" />
                             <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="Help" textAlign="center"
+                                <GameUi:UiLabel size="20" text="Help" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="2" x="-172"
                                                 textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" scaleX="1" scaleY="1" text="帮助"
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="帮助"
                                                 textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
                                                 x="-162" />
                                 <e:layout>
@@ -156,17 +156,17 @@
             </GameUi:UiButton>
         </e:Group>
         <e:Group x="168" y="43">
-            <GameUi:UiButton id="_btnNormalMode" label="" scaleX="1" scaleY="1" top="0" left="0">
+            <GameUi:UiButton id="_btnNormalMode" label="" top="0" left="0">
                 <GameUi:skinName>
                     <e:Skin>
-                        <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
-                            <e:Image scale9Grid="9,9,2,2" scaleX="1" scaleY="1" source="common0004" />
+                        <e:Group left="0" right="0" y="0">
+                            <e:Image scale9Grid="9,9,2,2" source="common0004" />
                             <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" scaleX="1" scaleY="1" text="Normal Mode" textAlign="center"
+                                <GameUi:UiLabel size="20" text="Normal Mode" textAlign="center"
                                                 verticalAlign="middle" wordWrap="true" y="2" x="-172"
                                                 textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" scaleX="1" scaleY="1" text="常规模式"
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="常规模式"
                                                 textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
                                                 x="-162" />
                                 <e:layout>

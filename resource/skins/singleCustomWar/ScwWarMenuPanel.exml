@@ -31,7 +31,7 @@
                         left="0" right="0" top="0" bottom="0" locked="true" />
         <e:Scroller left="0" right="0" top="8" bottom="8">
             <e:Group x="0" y="4">
-                <e:Group y="0" x="0" scaleX="1" scaleY="1" width="800" locked="true">
+                <e:Group y="0" x="0" width="800" locked="true">
                     <GameUi:UiLabel id="_labelWarInfoTitle" text="战场信息" y="4" bold="true" size="20" textColor="0xFFFFFF"
                                     horizontalCenter="0" locked="true" />
                     <e:Group y="26" left="0" right="0" locked="true">
@@ -48,10 +48,10 @@
                             <e:List>
                                 <e:itemRendererSkinName>
                                     <e:Skin width="380">
-                                        <e:Group scaleX="1" scaleY="1" left="0" right="0">
+                                        <e:Group left="0" right="0">
                                             <GameUi:UiButton id="_btnTitle" label="初始资金" y="0" right="0"
                                                              skinName="Skins.Component.Button.ButtonSelfAdaption001"
-                                                             x="56" scaleX="1" scaleY="1" width="120" />
+                                                             x="56" width="120" />
                                             <GameUi:UiLabel id="_labelValue" text="(Empty)" size="16"
                                                             textColor="0xFFFFFF" x="98" y="26" width="250" />
                                             <e:layout>
@@ -73,7 +73,7 @@
                 <e:Group y="166" x="0" width="800">
                     <GameUi:UiLabel id="_labelPlayerInfoTitle" text="玩家信息" y="0" bold="true" size="20"
                                     textColor="0xFFFFFF" horizontalCenter="0" locked="true" />
-                    <GameUi:UiScrollList id="_listPlayer" bottom="0" top="25" scaleX="1" scaleY="1" horizontalCenter="0">
+                    <GameUi:UiScrollList id="_listPlayer" bottom="0" top="25" horizontalCenter="0">
                         <e:List>
                             <e:itemRendererSkinName>
                                 <e:Skin width="190" currentState="up" states="down,up">
@@ -83,13 +83,13 @@
                                                 <e:Skin states="up,down,disabled">
                                                     <e:Group y="0" x="0">
                                                         <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2"
-                                                                 scaleX="1" scaleY="1" left="0" right="0" top="0"
+                                                                 left="0" right="0" top="0"
                                                                  bottom="0" />
                                                         <e:Group>
                                                             <GameUi:UiLabel id="labelDisplay" size="12"
                                                                             verticalCenter="0" horizontalCenter="0"
                                                                             textColor="0xffffff" x="98" y="97"
-                                                                            scaleX="1" scaleY="1" text="" />
+                                                                            text="" />
                                                             <e:layout>
                                                                 <e:HorizontalLayout paddingTop="8" paddingBottom="8"
                                                                                     paddingLeft="10" paddingRight="10" />
@@ -107,7 +107,7 @@
                                             <e:List>
                                                 <e:itemRendererSkinName>
                                                     <e:Skin width="190">
-                                                        <e:Group scaleX="1" scaleY="1" left="0" right="0" top="0"
+                                                        <e:Group left="0" right="0" top="0"
                                                                  bottom="0">
                                                             <GameUi:UiButton id="_btnTitle" label="Buildings" skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0"
                                                                              width="120"></GameUi:UiButton>

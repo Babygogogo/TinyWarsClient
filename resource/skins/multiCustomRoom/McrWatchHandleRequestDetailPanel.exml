@@ -18,15 +18,15 @@
                     <e:Skin width="580" height="26">
                         <e:Group left="0" right="0" top="0" bottom="0">
                             <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="0" size="20" verticalCenter="0"
-                                            maxTextWidth="360" y="3" scaleX="1" scaleY="1" />
+                                            maxTextWidth="360" y="3" />
                             <GameUi:UiLabel id="_labelIsOpponent" text="是" size="20" verticalCenter="0"
-                                            maxTextWidth="40" y="3" scaleX="1" scaleY="1" textColor="0xff0000"  horizontalCenter="85"/>
+                                            maxTextWidth="40" y="3" textColor="0xff0000"  horizontalCenter="85"/>
                             <GameUi:UiLabel id="_labelIsWatchingOthers" text="是" maxTextWidth="40" size="20"
-                                            verticalCenter="0" y="3" scaleX="1" scaleY="1" textColor="0xff0000"  horizontalCenter="149"/>
+                                            verticalCenter="0" y="3" textColor="0xff0000"  horizontalCenter="149"/>
                             <GameUi:UiImage id="_imgAccept" source="c04_t10_s03_f00" verticalCenter="0" x="490" y="5"
-                                            scaleX="1" scaleY="1" />
+                                            />
                             <GameUi:UiImage id="_imgDecline" source="c04_t10_s03_f00" verticalCenter="0" x="540" y="5"
-                                            scaleX="1" scaleY="1" />
+                                            />
                         </e:Group>
                     </e:Skin>
                 </e:itemRendererSkinName>

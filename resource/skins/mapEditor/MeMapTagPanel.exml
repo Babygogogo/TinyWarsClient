@@ -4,8 +4,8 @@
     <e:Group width="580" horizontalCenter="0" top="80" bottom="80">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" locked="true" />
-        <GameUi:UiLabel id="_labelTitle" text="可用性设定" textColor="0xFFFFFF" y="10" size="22" textAlign="right" scaleX="1"
-                        scaleY="1" horizontalCenter="0" />
+        <GameUi:UiLabel id="_labelTitle" text="可用性设定" textColor="0xFFFFFF" y="10" size="22" textAlign="right"
+                        horizontalCenter="0" />
         <e:Scroller left="5" right="5" top="40" bottom="50">
             <e:Group>
                 <e:Group id="_groupFog" y="178" x="229">

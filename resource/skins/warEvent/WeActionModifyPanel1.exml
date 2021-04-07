@@ -29,15 +29,15 @@
                                             anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"
                                             locked="true" />
                             <e:Group left="0" right="0" top="0">
-                                <e:Group y="-69" left="0" right="0" x="-158" scaleX="1" scaleY="1" width="750">
+                                <e:Group y="-69" left="0" right="0" x="-158" width="750">
                                     <GameUi:UiLabel id="_labelError" text="error" size="16" textColor="0xffffff"
-                                                    scaleX="1" scaleY="1" verticalCenter="0" x="10" />
+                                                    verticalCenter="0" x="10" />
                                     <GameUi:UiButton id="_btnDelete" label="Delete"
-                                                     skinName="Skins.Component.Button.ButtonSelfAdaption001" scaleX="1"
-                                                     scaleY="1" right="0" top="0" width="100" />
+                                                     skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                                                     right="0" top="0" width="100" />
                                 </e:Group>
-                                <e:Group y="-39" left="0" right="0" x="-158" scaleX="1" scaleY="1" width="750">
-                                    <e:Group id="_groupCanBeBlockedByUnit" scaleX="1" scaleY="1" y="0" x="0">
+                                <e:Group y="-39" left="0" right="0" x="-158" width="750">
+                                    <e:Group id="_groupCanBeBlockedByUnit" y="0" x="0">
                                         <e:Group x="0" y="0">
                                             <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5"
                                                             source="common0005" />
@@ -51,7 +51,7 @@
                                             <e:HorizontalLayout verticalAlign="middle" />
                                         </e:layout>
                                     </e:Group>
-                                    <e:Group id="_groupNeedMovableTile" scaleX="1" scaleY="1" right="0" top="0">
+                                    <e:Group id="_groupNeedMovableTile" right="0" top="0">
                                         <e:Group x="0" y="0">
                                             <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5"
                                                             source="common0005" />
@@ -79,7 +79,7 @@
                                             <e:HorizontalLayout verticalAlign="middle" />
                                         </e:layout>
                                     </e:Group>
-                                    <e:Group x="0" y="-72" scaleX="1" scaleY="1">
+                                    <e:Group x="0" y="-72">
                                         <GameUi:UiLabel id="_labelGridIndex" text="Grid Index" size="18"
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <GameUi:UiTextInput id="_inputGridX" width="40" x="58" y="0" anchorOffsetX="0"
@@ -110,7 +110,7 @@
                                             <e:HorizontalLayout verticalAlign="middle" />
                                         </e:layout>
                                     </e:Group>
-                                    <e:Group x="0" y="-36" scaleX="1" scaleY="1">
+                                    <e:Group x="0" y="-36">
                                         <GameUi:UiLabel id="_labelPlayerIndex" text="Player Index" size="18"
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <GameUi:UiTextInput id="_inputPlayerIndex" width="40" x="58" y="0"
@@ -144,7 +144,7 @@
                                             <e:HorizontalLayout verticalAlign="middle" />
                                         </e:layout>
                                     </e:Group>
-                                    <e:Group x="10" y="-26" scaleX="1" scaleY="1">
+                                    <e:Group x="10" y="-26">
                                         <GameUi:UiLabel id="_labelHp" text="HP" size="18" textColor="0xFFFFFF" x="0"
                                                         y="12" />
                                         <GameUi:UiTextInput id="_inputHp" width="40" x="58" y="0" anchorOffsetX="0"
@@ -163,7 +163,7 @@
                                             <e:HorizontalLayout verticalAlign="middle" />
                                         </e:layout>
                                     </e:Group>
-                                    <e:Group x="20" y="-16" scaleX="1" scaleY="1">
+                                    <e:Group x="20" y="-16">
                                         <GameUi:UiLabel id="_labelFuel" text="Fuel" size="18" textColor="0xFFFFFF" x="0"
                                                         y="12" />
                                         <GameUi:UiTextInput id="_inputFuel" width="40" x="58" y="0" anchorOffsetX="0"
@@ -182,7 +182,7 @@
                                             <e:HorizontalLayout verticalAlign="middle" />
                                         </e:layout>
                                     </e:Group>
-                                    <e:Group x="30" y="-6" scaleX="1" scaleY="1">
+                                    <e:Group x="30" y="-6">
                                         <GameUi:UiLabel id="_labelPromotion" text="Promotion" size="18"
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <GameUi:UiTextInput id="_inputPromotion" width="40" x="58" y="0"
@@ -201,7 +201,7 @@
                                             <e:HorizontalLayout verticalAlign="middle" />
                                         </e:layout>
                                     </e:Group>
-                                    <e:Group id="_groupHasLoadedCo" scaleX="1" scaleY="1" right="0" top="0">
+                                    <e:Group id="_groupHasLoadedCo" right="0" top="0">
                                         <e:Group x="0" y="0">
                                             <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5"
                                                             source="common0005" />
@@ -219,7 +219,7 @@
                                     </e:layout>
                                 </e:Group>
                                 <e:Group width="750" x="355" y="98">
-                                    <e:Group id="_groupPrimaryAmmo" x="0" y="-72" scaleX="1" scaleY="1">
+                                    <e:Group id="_groupPrimaryAmmo" x="0" y="-72">
                                         <GameUi:UiLabel id="_labelPrimaryAmmo" text="Primary Ammo" size="18"
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <GameUi:UiTextInput id="_inputPrimaryAmmo" width="40" x="58" y="0"
@@ -238,7 +238,7 @@
                                             <e:HorizontalLayout verticalAlign="middle" />
                                         </e:layout>
                                     </e:Group>
-                                    <e:Group id="_groupFlareAmmo" x="0" y="-36" scaleX="1" scaleY="1">
+                                    <e:Group id="_groupFlareAmmo" x="0" y="-36">
                                         <GameUi:UiLabel id="_labelFlareAmmo" text="Flare Ammo" size="18"
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <GameUi:UiTextInput id="_inputFlareAmmo" width="40" x="58" y="0"
@@ -257,7 +257,7 @@
                                             <e:HorizontalLayout verticalAlign="middle" />
                                         </e:layout>
                                     </e:Group>
-                                    <e:Group id="_groupIsDiving" scaleX="1" scaleY="1" right="0" top="0">
+                                    <e:Group id="_groupIsDiving" right="0" top="0">
                                         <e:Group x="0" y="0">
                                             <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" x="6" y="5"
                                                             source="common0005" />
@@ -275,7 +275,7 @@
                                     </e:layout>
                                 </e:Group>
                                 <e:Group width="750" x="365" y="108">
-                                    <e:Group id="_groupBuildMaterial" x="0" y="-72" scaleX="1" scaleY="1">
+                                    <e:Group id="_groupBuildMaterial" x="0" y="-72">
                                         <GameUi:UiLabel id="_labelBuildMaterial" text="Build Material" size="18"
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <GameUi:UiTextInput id="_inputBuildMaterial" width="40" x="58" y="0"
@@ -294,7 +294,7 @@
                                             <e:HorizontalLayout verticalAlign="middle" />
                                         </e:layout>
                                     </e:Group>
-                                    <e:Group id="_groupProduceMaterial" x="0" y="-36" scaleX="1" scaleY="1">
+                                    <e:Group id="_groupProduceMaterial" x="0" y="-36">
                                         <GameUi:UiLabel id="_labelProduceMaterial" text="ProduceMaterial" size="18"
                                                         textColor="0xFFFFFF" x="0" y="12" />
                                         <GameUi:UiTextInput id="_inputProduceMaterial" width="40" x="58" y="0"

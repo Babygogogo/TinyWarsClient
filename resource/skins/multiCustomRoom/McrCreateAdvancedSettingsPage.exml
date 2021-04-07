@@ -5,7 +5,7 @@
         <e:Scroller id="_scroller" top="10" bottom="10" right="10" left="10">
             <e:Group>
                 <GameUi:UiButton id="_btnReset" label="Reset" y="8" skinName="Skins.Component.Button.ButtonBlue001"
-                                 width="120" scaleX="1" scaleY="1" />
+                                 width="120" />
                 <GameUi:UiButton id="_btnCustomize" label="Customize" y="8"
                                  skinName="Skins.Component.Button.ButtonBlue001" width="120" />
                 <GameUi:UiScrollList id="_listSetting" y="50" left="0" right="0">
@@ -44,7 +44,7 @@
                                         <e:List>
                                             <e:itemRendererSkinName>
                                                 <e:Skin width="120" height="40">
-                                                    <e:Group scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
+                                                    <e:Group left="0" right="0" top="0" bottom="0">
                                                         <GameUi:UiImage source="commonRectangle0001" top="6" bottom="6"
                                                                         left="20" right="20" scale9Grid="2,2,1,1" />
                                                         <GameUi:UiTextInput id="_inputValue" left="20" right="20"

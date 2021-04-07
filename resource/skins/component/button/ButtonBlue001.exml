@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing"
         class="Skins.Component.Button.ButtonBlue001">
-    <e:Group scaleX="1" scaleY="1" left="0" right="0" y="0">
-        <e:Image scaleX="1" scaleY="1" source="commonPentagon0000" left="0" right="0" top="0" bottom="0"
+    <e:Group left="0" right="0" y="0">
+        <e:Image source="commonPentagon0000" left="0" right="0" top="0" bottom="0"
                  scale9Grid="4,4,1,1" />
-        <GameUi:UiLabel id="labelDisplay" size="16" textColor="0xffffff" scaleX="1" scaleY="1" text="啊啊啊啊啊啊"
+        <GameUi:UiLabel id="labelDisplay" size="16" textColor="0xffffff" text="啊啊啊啊啊啊"
                         wordWrap="true" left="10" right="20" bold="true" top="8" bottom="8" verticalAlign="middle" />
         <GameUi:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16" height="16" />
     </e:Group>

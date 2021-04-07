@@ -7,34 +7,34 @@
         <e:Group id="_groupInfo" y="10" touchThrough="true" touchEnabled="false" touchChildren="false" left="8"
                  right="8">
             <e:Group x="0" y="0">
-                <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1" x="0" />
-                <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1"
+                <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" x="0" />
+                <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="0" stroke="2" size="20"
                                 x="360" />
                 <e:layout>
                     <e:HorizontalLayout gap="30" />
                 </e:layout>
             </e:Group>
             <e:Group x="0" y="30">
-                <GameUi:UiLabel id="_labelHasFog" text="战争迷雾: 否" y="0" stroke="2" size="20" scaleX="1" scaleY="1" x="0" />
-                <GameUi:UiLabel id="_labelTurnIndex" text="回合数: 未知" stroke="2" size="20" scaleX="1" scaleY="1" x="280"
+                <GameUi:UiLabel id="_labelHasFog" text="战争迷雾: 否" y="0" stroke="2" size="20" x="0" />
+                <GameUi:UiLabel id="_labelTurnIndex" text="回合数: 未知" stroke="2" size="20" x="280"
                                 y="0" />
-                <GameUi:UiLabel id="_labelNextActionId" text="行动数: 未知" stroke="2" size="20" scaleX="1" scaleY="1" y="0"
+                <GameUi:UiLabel id="_labelNextActionId" text="行动数: 未知" stroke="2" size="20" y="0"
                                 x="560" />
             </e:Group>
             <e:Group x="10" y="10">
                 <e:Group x="0" y="0">
-                    <GameUi:UiLabel id="_labelGlobalRatingTitle" text="全局评分:" y="0" stroke="2" size="20" scaleX="1"
-                                    scaleY="1" x="0" />
-                    <GameUi:UiLabel id="_labelGlobalRating" text="未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1"
+                    <GameUi:UiLabel id="_labelGlobalRatingTitle" text="全局评分:" y="0" stroke="2" size="20"
+                                    x="0" />
+                    <GameUi:UiLabel id="_labelGlobalRating" text="未知" y="0" stroke="2" size="20"
                                     x="162" />
                     <e:layout>
                         <e:HorizontalLayout/>
                     </e:layout>
                 </e:Group>
                 <e:Group x="280" y="0">
-                    <GameUi:UiLabel id="_labelMyRatingTitle" text="我的评分:" y="0" stroke="2" size="20" scaleX="1"
-                                    scaleY="1" x="0" />
-                    <GameUi:UiLabel id="_labelMyRating" text="未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1"
+                    <GameUi:UiLabel id="_labelMyRatingTitle" text="我的评分:" y="0" stroke="2" size="20"
+                                    x="0" />
+                    <GameUi:UiLabel id="_labelMyRating" text="未知" y="0" stroke="2" size="20"
                                     x="162" />
                     <e:layout>
                         <e:HorizontalLayout/>
@@ -42,7 +42,7 @@
                 </e:Group>
             </e:Group>
             <e:Group x="0" y="60">
-                <GameUi:UiLabel id="_labelPlayers" text="已参战玩家:" stroke="2" size="20" scaleX="1" scaleY="1" y="0" x="0" />
+                <GameUi:UiLabel id="_labelPlayers" text="已参战玩家:" stroke="2" size="20" y="0" x="0" />
                 <GameUi:UiScrollList id="_listPlayer" y="25" width="500" x="0">
                     <e:List>
                         <e:itemRendererSkinName>
@@ -73,9 +73,9 @@
                     <e:Skin width="200" height="46" currentState="up" states="up,down">
                         <e:Group x="10" y="6">
                             <GameUi:UiLabel id="_labelTurnIndex" text="回合数: 0" x="-17" size="12" verticalCenter="-12"
-                                            textColor.down="0x00ff00" y="-6" scaleX="1" scaleY="1" />
+                                            textColor.down="0x00ff00" y="-6" />
                             <GameUi:UiLabel id="_labelReplayId" text="回合数: 0" x="-17" size="12" verticalCenter="-12"
-                                            y="-6" scaleX="1" scaleY="1" textColor.down="0x00ff00" />
+                                            y="-6" textColor.down="0x00ff00" />
                             <e:layout>
                                 <e:HorizontalLayout/>
                             </e:layout>

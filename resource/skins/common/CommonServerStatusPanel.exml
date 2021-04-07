@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" />
-    <e:Group left="100" right="100" top="80" bottom="80">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelTitle" text="服务器状态" textColor="0xffffff" y="12" horizontalCenter="0" size="24" />
-        <e:Scroller left="20" right="20" top="45" bottom="20">
-            <e:Group>
-                <e:Group x="0" y="4">
-                    <GameUi:UiLabel id="_labelAccountsTitle" text="账号总数:" x="0" y="0" size="18" maxTextWidth="150" />
-                    <GameUi:UiLabel id="_labelAccounts" text="0" x="150" size="18" maxTextWidth="150" />
-                </e:Group>
-                <e:Group x="360" y="4">
-                    <GameUi:UiLabel id="_labelOnlineTimeTitle" text="在线总时长:" x="0" y="0" size="18" maxTextWidth="150" />
-                    <GameUi:UiLabel id="_labelOnlineTime" text="0" x="150" size="18" maxTextWidth="150" />
-                </e:Group>
-                <e:Group y="35">
-                    <GameUi:UiLabel id="_labelNewAccountsTitle" text="新增账号数:" x="0" y="0" size="18" maxTextWidth="150" />
-                    <GameUi:UiLabel id="_labelNewAccounts" text="0" x="150" size="18" maxTextWidth="150" />
-                </e:Group>
-                <e:Group y="35" x="360">
-                    <GameUi:UiLabel id="_labelActiveAccountsTitle" text="活跃账号数:" x="0" y="0" size="18"
-                                    maxTextWidth="150" />
-                    <GameUi:UiLabel id="_labelActiveAccounts" text="0" x="150" size="18" maxTextWidth="150" />
-                </e:Group>
+    <GameUi:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
+                    locked="true" />
+    <e:Group id="_group" width="320" height="170" horizontalCenter="0" verticalCenter="0">
+        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
+                        source="commonColorBlack0001" scale9Grid="1,1,2,2" />
+        <GameUi:UiLabel id="_labelTitle" text="服务器状态" textColor="0xffffff" y="12" horizontalCenter="0" size="24"
+                        bold="true" />
+        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="20" right="20" x="10" y="40"
+                        source="commonColorWhite0000" height="2" />
+        <e:Group y="50" horizontalCenter="0">
+            <e:Group x="0" y="4">
+                <GameUi:UiLabel id="_labelAccountsTitle" text="账号总数:" x="0" y="0" size="16" maxTextWidth="150" />
+                <GameUi:UiLabel id="_labelAccounts" text="0" x="150" size="16" maxTextWidth="150" />
             </e:Group>
-        </e:Scroller>
+            <e:Group x="360" y="4">
+                <GameUi:UiLabel id="_labelOnlineTimeTitle" text="在线总时长:" x="0" y="0" size="16" maxTextWidth="150" />
+                <GameUi:UiLabel id="_labelOnlineTime" text="0" x="150" size="16" maxTextWidth="150" />
+            </e:Group>
+            <e:Group y="35">
+                <GameUi:UiLabel id="_labelNewAccountsTitle" text="新增账号数:" x="0" y="0" size="16" maxTextWidth="150" />
+                <GameUi:UiLabel id="_labelNewAccounts" text="0" x="150" size="16" maxTextWidth="150" />
+            </e:Group>
+            <e:Group y="35" x="360">
+                <GameUi:UiLabel id="_labelActiveAccountsTitle" text="活跃账号数:" x="0" y="0" size="16" maxTextWidth="150" />
+                <GameUi:UiLabel id="_labelActiveAccounts" text="0" x="150" size="16" maxTextWidth="150" />
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout/>
+            </e:layout>
+        </e:Group>
     </e:Group>
 </e:Skin>

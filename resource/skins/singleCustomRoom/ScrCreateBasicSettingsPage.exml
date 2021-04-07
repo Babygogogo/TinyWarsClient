@@ -24,7 +24,7 @@
     </e:Group>
     <e:Group y="50" x="10">
         <GameUi:UiLabel id="_labelFogTitle" text="战争迷雾：" textColor="0xFFFFFF" y="0" size="20" textAlign="right" x="0"
-                        scaleX="1" scaleY="1" maxTextWidth="120" />
+                        maxTextWidth="120" />
         <GameUi:UiButton id="_btnPrevFog" label="&lt;&lt;" x="120" y="0">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
@@ -44,7 +44,7 @@
             </GameUi:skinName>
         </GameUi:UiButton>
         <GameUi:UiLabel id="_labelFog" text="否" textColor="0xFFFFFF" y="0" size="20" x="150" width="100"
-                        textAlign="center" scaleX="1" scaleY="1" />
+                        textAlign="center" />
         <GameUi:UiButton id="_btnHelpFog" label="(?)" x="300">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
@@ -57,9 +57,9 @@
     </e:Group>
     <e:Group y="50" x="400">
         <GameUi:UiLabel id="_labelSaveSlotTitle" text="存档编号:" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
-                        x="0" scaleX="1" scaleY="1" maxTextWidth="90" />
-        <GameUi:UiLabel id="_labelSaveSlot" text="0" textColor="0xFFFFFF" y="0" size="20" textAlign="center" scaleX="1"
-                        scaleY="1" horizontalCenter="23" />
+                        x="0" maxTextWidth="90" />
+        <GameUi:UiLabel id="_labelSaveSlot" text="0" textColor="0xFFFFFF" y="0" size="20" textAlign="center"
+                        horizontalCenter="23" />
         <GameUi:UiButton id="_btnChangeSaveSlot" label="更换" x="120">
             <GameUi:skinName>
                 <e:Skin states="up,down,disabled">
@@ -75,10 +75,10 @@
     </e:Group>
     <e:Group x="10" y="100">
         <GameUi:UiLabel id="_labelPlayerListTitle" text="玩家列表:" textColor="0xFFFFFF" size="20" textAlign="right" x="0"
-                        scaleX="1" scaleY="1" maxTextWidth="120" />
+                        maxTextWidth="120" />
         <GameUi:UiLabel id="_labelPlayerListTips" text="(可点击以下各个文字以更改设置)" textColor="0xFFFFFF" size="20"
-                        textAlign="right" x="130" scaleX="1" scaleY="1" />
-        <GameUi:UiScrollList id="_listPlayer" width="740" height="220" y="30" scaleX="1" scaleY="1">
+                        textAlign="right" x="130" />
+        <GameUi:UiScrollList id="_listPlayer" width="740" height="220" y="30">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin width="740" height="40" currentState="up">

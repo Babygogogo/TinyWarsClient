@@ -6,21 +6,21 @@
         <GameUi:UiZoomableMap id="_zoomMap" left="20" right="20" top="20" bottom="20" />
         <e:Group id="_groupInfo" y="10" touchThrough="true" touchEnabled="false" touchChildren="false" left="8"
                  right="8">
-            <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" scaleX="1" scaleY="1" />
-            <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="25" stroke="2" size="20" scaleX="1" scaleY="1" />
+            <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" />
+            <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="25" stroke="2" size="20" />
             <e:Group x="0" y="60">
-                <GameUi:UiLabel id="_labelHasFogTitle" text="战争迷雾: " y="0" stroke="2" size="20" scaleX="1" scaleY="1"
+                <GameUi:UiLabel id="_labelHasFogTitle" text="战争迷雾: " y="0" stroke="2" size="20"
                                 x="0" />
-                <GameUi:UiLabel id="_labelHasFog" text="否" y="10" stroke="2" size="20" scaleX="1" scaleY="1" x="10" />
+                <GameUi:UiLabel id="_labelHasFog" text="否" y="10" stroke="2" size="20" x="10" />
                 <e:layout>
                     <e:HorizontalLayout/>
                 </e:layout>
             </e:Group>
-            <GameUi:UiLabel id="_labelCommentTitle" text="附言:" stroke="2" size="20" scaleX="1" scaleY="1" x="0" y="95" />
-            <GameUi:UiLabel id="_labelWarComment" text="ASDF" stroke="2" size="20" scaleX="1" scaleY="1" width="320"
+            <GameUi:UiLabel id="_labelCommentTitle" text="附言:" stroke="2" size="20" x="0" y="95" />
+            <GameUi:UiLabel id="_labelWarComment" text="ASDF" stroke="2" size="20" width="320"
                             x="0" height="120" y="120" wordWrap="true" />
             <e:Group x="340" y="0">
-                <GameUi:UiLabel id="_labelPlayersTitle" text="已参战玩家:" stroke="2" size="20" scaleX="1" scaleY="1" x="0"
+                <GameUi:UiLabel id="_labelPlayersTitle" text="已参战玩家:" stroke="2" size="20" x="0"
                                 y="0" locked="true" />
                 <GameUi:UiScrollList id="_listPlayer" y="25" width="400" x="0">
                     <e:List>
