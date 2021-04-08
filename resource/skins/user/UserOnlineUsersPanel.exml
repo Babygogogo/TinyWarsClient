@@ -22,12 +22,11 @@
         </e:Group>
         <e:Group y="60" left="20" right="20">
             <e:Group y="0" left="0" right="0" height="26">
-                <GameUi:UiImage alpha="0.8" scale9Grid="1,1,2,2" source="commonColorBlue0000" left="0" right="0" top="0"
-                                bottom="0" />
-                <GameUi:UiLabel id="_labelNameTitle1" text="明战" textColor="0xFFFFFF" size="14"
-                                verticalCenter="0" bold="true" x="20" />
-                <GameUi:UiLabel id="_labelNameTitle2" text="明战" textColor="0xFFFFFF" size="14"
-                                bold="true" x="300" verticalCenter="0" />
+                <GameUi:UiImage scale9Grid="1,1,2,2" source="commonColorBlue0000" left="0" right="0" top="0" bottom="0" />
+                <GameUi:UiLabel id="_labelNameTitle1" text="明战" textColor="0xFFFFFF" size="14" verticalCenter="0"
+                                bold="true" x="20" />
+                <GameUi:UiLabel id="_labelNameTitle2" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="300"
+                                verticalCenter="0" />
             </e:Group>
             <e:Scroller height="320" y="26" left="0" right="0">
                 <e:Group>
@@ -39,8 +38,7 @@
                                         <GameUi:UiImage id="_imgBg" source="commonColorBlack0000" left="0" right="0"
                                                         top="0" bottom="0" scale9Grid="1,1,2,2" />
                                         <GameUi:UiLabel id="_labelName" text="2人明战" textColor="0xFFFFFF" size="14"
-                                                        maxTextWidth="170" verticalCenter="0"
-                                                        x="20" />
+                                                        maxTextWidth="170" verticalCenter="0" x="20" />
                                     </e:Group>
                                 </e:Skin>
                             </e:itemRendererSkinName>
