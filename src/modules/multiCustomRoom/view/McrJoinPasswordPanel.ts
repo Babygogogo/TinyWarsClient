@@ -71,7 +71,7 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 this.close();
 
-                const joinData = McrModel.Join.getFastJoinData(roomInfo);
+                const joinData = McrModel.getFastJoinData(roomInfo);
                 if (joinData) {
                     McrProxy.reqMcrJoinRoom(joinData);
                 } else {

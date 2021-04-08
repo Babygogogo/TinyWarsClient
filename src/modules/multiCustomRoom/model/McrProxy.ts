@@ -59,9 +59,6 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         if (!data.errorCode) {
             const roomId = data.roomId;
             McrModel.deleteRoomInfo(roomId);
-            if (McrModel.Join.getRoomId() === roomId) {
-                McrModel.Join.clearData();
-            }
             Notify.dispatch(Notify.Type.MsgMcrDeleteRoom, data);
         }
     }
@@ -151,9 +148,6 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
             const roomId    = data.roomId;
             if (roomInfo) {
                 McrModel.setRoomInfo(roomInfo);
-                if (McrModel.Join.getRoomId() === roomId) {
-                    McrModel.Join.resetData(roomInfo);
-                }
             } else {
                 McrModel.deleteRoomInfo(roomId);
             }

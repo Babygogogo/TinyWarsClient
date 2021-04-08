@@ -127,6 +127,22 @@ namespace TinyWars.MultiCustomRoom {
             return infoList;
         }
 
+        export function getFastJoinData(roomInfo: IMcrRoomInfo): DataForJoinRoom | null {
+            const playerIndex       = generateAvailablePlayerIndexList(roomInfo)[0];
+            const unitAndTileSkinId = generateAvailableSkinIdList(roomInfo)[0];
+            if ((playerIndex == null) || (unitAndTileSkinId == null)) {
+                return null;
+            } else {
+                return {
+                    roomId          : roomInfo.roomId,
+                    isReady         : false,
+                    coId            : BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex),
+                    playerIndex,
+                    unitAndTileSkinId,
+                };
+            }
+        }
+
         export function updateOnDeletePlayer(data: ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS): void {
             if (data.targetUserId === User.UserModel.getSelfUserId()) {
                 const roomId = data.roomId;
@@ -462,151 +478,6 @@ namespace TinyWars.MultiCustomRoom {
             }
             export function getVisionRangeModifier(playerIndex: number): number {
                 return BwWarRuleHelper.getVisionRangeModifier(getWarRule(), playerIndex);
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Functions for joining room.
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        export namespace Join {
-            const _dataForJoinRoom: DataForJoinRoom = {
-                roomId              : null,
-                playerIndex         : null,
-                coId                : null,
-                isReady             : true,
-                unitAndTileSkinId   : null,
-            };
-            const _availablePlayerIndexList : number[] = [];
-            const _availableSkinIdList      : number[] = [];
-
-            export function getData(): DataForJoinRoom {
-                return _dataForJoinRoom;
-            }
-            export function getFastJoinData(roomInfo: IMcrRoomInfo): DataForJoinRoom | null {
-                const playerIndex       = generateAvailablePlayerIndexList(roomInfo)[0];
-                const unitAndTileSkinId = generateAvailableSkinIdList(roomInfo)[0];
-                if ((playerIndex == null) || (unitAndTileSkinId == null)) {
-                    return null;
-                } else {
-                    return {
-                        roomId          : roomInfo.roomId,
-                        isReady         : false,
-                        coId            : BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex),
-                        playerIndex,
-                        unitAndTileSkinId,
-                    };
-                }
-            }
-
-            export function getRoomId(): number {
-                return getData().roomId;
-            }
-            function setRoomId(roomId: number): void {
-                getData().roomId = roomId;
-            }
-
-            export async function getRoomInfo(): Promise<IMcrRoomInfo | null> {
-                return await McrModel.getRoomInfo(getRoomId());
-            }
-            export async function getMapId(): Promise<number> {
-                const info = await getRoomInfo();
-                return info ? info.settingsForMcw.mapId : null;
-            }
-            export async function getMapRawData(): Promise<ProtoTypes.Map.IMapRawData> {
-                return await WarMapModel.getRawData(await getMapId());
-            }
-            export async function getTeamIndex(): Promise<number> {
-                return BwWarRuleHelper.getPlayerRule((await McrModel.getRoomInfo(getRoomId())).settingsForCommon.warRule, getPlayerIndex()).teamIndex;
-            }
-
-            export function resetData(roomInfo: IMcrRoomInfo): void {
-                const availablePlayerIndexList    = generateAvailablePlayerIndexList(roomInfo);
-                const availableSkinIdList         = generateAvailableSkinIdList(roomInfo);
-                const playerIndex                 = availablePlayerIndexList[0];
-                setRoomId(roomInfo.roomId);
-                setAvailablePlayerIndexList(availablePlayerIndexList);
-                setAvailableSkinIdList(availableSkinIdList);
-                setPlayerIndex(playerIndex);
-                setUnitAndTileSkinId(availableSkinIdList[0]);
-                setIsReady(true);
-                setCoId(playerIndex == null
-                    ? CommonConstants.CoEmptyId
-                    : BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex)
-                );
-            }
-            export function clearData(): void {
-                setCoId(null);
-                setIsReady(true);
-                setPlayerIndex(null);
-                setRoomId(null);
-                setUnitAndTileSkinId(null);
-                setAvailablePlayerIndexList(null);
-                setAvailableSkinIdList(null);
-            }
-
-            export function checkCanJoin(): boolean {
-                const availablePlayerIndexList = getAvailablePlayerIndexList();
-                return (availablePlayerIndexList != null) && (availablePlayerIndexList.length > 0);
-            }
-
-            function setPlayerIndex(playerIndex: number): void {
-                getData().playerIndex = playerIndex;
-            }
-            export async function tickPlayerIndex(): Promise<void> {
-                const list = getAvailablePlayerIndexList();
-                if (list.length > 1) {
-                    const playerIndex = list[(list.indexOf(getPlayerIndex()) + 1) % list.length];
-                    setPlayerIndex(playerIndex);
-                    setCoId(BwWarRuleHelper.getRandomCoIdWithSettingsForCommon((await getRoomInfo()).settingsForCommon, playerIndex));
-                }
-            }
-            export function getPlayerIndex(): number {
-                return getData().playerIndex;
-            }
-
-            function setUnitAndTileSkinId(skinId: number): void {
-                getData().unitAndTileSkinId = skinId;
-            }
-            export function tickUnitAndTileSkinId(): void {
-                const list = getAvailableSkinIdList();
-                setUnitAndTileSkinId(list[(list.indexOf(getUnitAndTileSkinId()) + 1) % list.length]);
-            }
-            export function getUnitAndTileSkinId(): number {
-                return getData().unitAndTileSkinId;
-            }
-
-            export function setCoId(coId: number | null): void {
-                getData().coId = coId;
-            }
-            export function getCoId(): number | null {
-                return getData().coId;
-            }
-
-            export function setIsReady(isReady: boolean): void {
-                getData().isReady = isReady;
-            }
-            export function getIsReady(): boolean {
-                return getData().isReady;
-            }
-
-            function setAvailablePlayerIndexList(list: number[]): void {
-                _availablePlayerIndexList.length = 0;
-                for (const playerIndex of list || []) {
-                    _availablePlayerIndexList.push(playerIndex);
-                }
-            }
-            export function getAvailablePlayerIndexList(): number[] {
-                return _availablePlayerIndexList;
-            }
-
-            function setAvailableSkinIdList(list: number[]): void {
-                _availableSkinIdList.length = 0;
-                for (const skinId of list || []) {
-                    _availableSkinIdList.push(skinId);
-                }
-            }
-            export function getAvailableSkinIdList(): number[] {
-                return _availableSkinIdList;
             }
         }
     }
