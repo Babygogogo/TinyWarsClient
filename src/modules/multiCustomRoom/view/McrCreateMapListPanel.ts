@@ -246,8 +246,8 @@ namespace TinyWars.MultiCustomRoom {
             });
             Helpers.resetTween({
                 obj         : this._btnNextStep,
-                beginProps  : { alpha: 0, right: -40 },
-                endProps    : { alpha: 1, right: 0 },
+                beginProps  : { alpha: 0, left: -20 },
+                endProps    : { alpha: 1, left: 20 },
             });
             Helpers.resetTween({
                 obj         : this._groupMapList,
@@ -290,8 +290,8 @@ namespace TinyWars.MultiCustomRoom {
                 });
                 Helpers.resetTween({
                     obj         : this._btnNextStep,
-                    beginProps  : { alpha: 1, right: 0 },
-                    endProps    : { alpha: 0, right: -40 },
+                    beginProps  : { alpha: 1, left: 20 },
+                    endProps    : { alpha: 0, left: -20 },
                 });
                 Helpers.resetTween({
                     obj         : this._groupMapList,
