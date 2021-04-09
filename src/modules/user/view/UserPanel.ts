@@ -144,8 +144,6 @@ namespace TinyWars.User {
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
-                waitTime    : 0,
-                tweenTime   : 200,
             });
 
             const group = this._group;
@@ -160,8 +158,6 @@ namespace TinyWars.User {
                     obj         : this._imgMask,
                     beginProps  : { alpha: 1 },
                     endProps    : { alpha: 0 },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                 });
 
                 const group = this._group;

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing"
+        class="Skins.Component.MapInfo.MapInfo001">
+    <e:Group id="_group" x="0" y="0">
+        <e:Group id="_groupTile" right="0" width="180" bottom="250">
+            <e:Group left="0" right="0">
+                <GameUi:UiImage height="30" y="0" source="commonPentagon0005" scale9Grid="12,4,1,1" x="0" width="180" />
+                <GameUi:UiImage height="30" y="10" scale9Grid="12,4,1,1" x="0" source="commonPentagon0008" width="180" />
+                <GameUi:UiImage height="30" y="20" scale9Grid="12,4,1,1" x="0" source="commonPentagon0007" width="180" />
+                <GameUi:UiImage height="30" y="30" scale9Grid="12,4,1,1" x="0" source="commonPentagon0006" width="180" />
+                <e:layout>
+                    <e:VerticalLayout gap="10" />
+                </e:layout>
+            </e:Group>
+            <GameUi:UiScrollList id="_listTile" top="0" bottom="0" left="22" right="0">
+                <e:List>
+                    <e:itemRendererSkinName>
+                        <e:Skin width="68" height="30">
+                            <e:Group id="_group" left="0" right="0" top="0" bottom="0">
+                                <e:Group id="_conTileView" touchChildren="false" touchEnabled="false" left="0"
+                                         bottom="4" scaleX="0.3" scaleY="0.3" width="0" height="0" />
+                                <GameUi:UiLabel id="_labelNum" text="x200" size="16" textColor="0xffffff" x="28"
+                                                strokeColor="0x000000" bold="true" bottom="4" />
+                            </e:Group>
+                        </e:Skin>
+                    </e:itemRendererSkinName>
+                    <e:layout>
+                        <e:TileLayout orientation="rows" requestedColumnCount="2" verticalGap="10" />
+                    </e:layout>
+                </e:List>
+            </GameUi:UiScrollList>
+        </e:Group>
+        <e:Group id="_groupMapInfo" touchThrough="true" touchEnabled="false" touchChildren="false" right="0" bottom="70"
+                 width="180" height="160">
+            <GameUi:UiImage source="commonPentagon0004" left="0" right="0" top="0" bottom="0" scale9Grid="13,3,1,1" />
+            <e:Group x="10" y="10">
+                <e:Group x="10" y="0">
+                    <e:Group x="0" y="25">
+                        <GameUi:UiLabel id="_labelDesignerTitle" text="设计者:" y="10" size="12" x="10" />
+                        <GameUi:UiLabel id="_labelDesigner" text="设计者名称" y="0" size="12" x="0" />
+                        <e:layout>
+                            <e:HorizontalLayout/>
+                        </e:layout>
+                    </e:Group>
+                    <GameUi:UiLabel id="_labelMapName" text="地图名" y="0" size="18" x="0" bold="true" />
+                    <e:layout>
+                        <e:VerticalLayout gap="2" />
+                    </e:layout>
+                </e:Group>
+                <e:Group x="0" y="52">
+                    <e:Group x="0">
+                        <GameUi:UiLabel id="_labelPlayedTimesTitle" text="全服游戏次数" y="10" size="12" x="10" />
+                        <GameUi:UiLabel id="_labelPlayedTimes" text="100" y="0" size="18" x="0" textColor="0xDC6868"
+                                        bold="true" />
+                        <e:layout>
+                            <e:VerticalLayout gap="2" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="80">
+                        <GameUi:UiLabel id="_labelRatingTitle" text="评分" y="10" size="12" x="10" />
+                        <GameUi:UiLabel id="_labelRating" text="100" y="0" size="18" x="0" bold="true"
+                                        textColor="0x68DC68" />
+                        <e:layout>
+                            <e:VerticalLayout gap="2" />
+                        </e:layout>
+                    </e:Group>
+                </e:Group>
+                <e:Group x="0" y="104">
+                    <e:Group x="0">
+                        <GameUi:UiLabel id="_labelPlayersCountTitle" text="玩家数" y="10" size="12" x="10" />
+                        <GameUi:UiLabel id="_labelPlayersCount" text="100" y="0" size="18" x="0" bold="true" />
+                        <e:layout>
+                            <e:VerticalLayout gap="2" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="80">
+                        <GameUi:UiLabel id="_labelMapSizeTitle" text="地图尺寸" y="10" size="12" x="10" />
+                        <GameUi:UiLabel id="_labelMapSize" text="100*100" y="0" size="18" x="0" bold="true" />
+                        <e:layout>
+                            <e:VerticalLayout gap="2" />
+                        </e:layout>
+                    </e:Group>
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout gap="20" />
+                </e:layout>
+            </e:Group>
+        </e:Group>
+        <e:layout>
+            <e:VerticalLayout gap="20" />
+        </e:layout>
+    </e:Group>
+</e:Skin>

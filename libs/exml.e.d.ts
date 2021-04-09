@@ -46,6 +46,10 @@ declare module Skins.Component.CoInfo{
 	class CoInfo001 extends eui.Skin{
 	}
 }
+declare module Skins.Component.MapInfo{
+	class MapInfo001 extends eui.Skin{
+	}
+}
 declare module Skins.Component.RadioButton{
 	class RadioButton001 extends eui.Skin{
 	}

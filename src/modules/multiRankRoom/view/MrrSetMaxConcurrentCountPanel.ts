@@ -182,15 +182,11 @@ namespace TinyWars.MultiRankRoom {
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
-                tweenTime   : 200,
-                waitTime    : 0,
             });
             Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { verticalCenter: 40, alpha: 0 },
                 endProps    : { verticalCenter: 0, alpha: 1 },
-                tweenTime   : 200,
-                waitTime    : 0,
             });
         }
         private _showCloseAnimation(): Promise<void> {
@@ -199,16 +195,12 @@ namespace TinyWars.MultiRankRoom {
                     obj         : this._imgMask,
                     beginProps  : { alpha: 1 },
                     endProps    : { alpha: 0 },
-                    tweenTime   : 200,
-                    waitTime    : 0,
                     callback    : resolve,
                 });
                 Helpers.resetTween({
                     obj         : this._group,
                     beginProps  : { verticalCenter: 0, alpha: 1 },
                     endProps    : { verticalCenter: 40, alpha: 0 },
-                    tweenTime   : 200,
-                    waitTime    : 0,
                 });
             });
         }

@@ -148,7 +148,6 @@ namespace TinyWars.BaseWar {
         private _showOpenAnimation(): void {
             Helpers.resetTween({
                 obj         : this._group,
-                waitTime    : 0,
                 beginProps  : { scaleX: 0, scaleY: 0 },
                 endProps    : { scaleX: 1, scaleY: 1 },
                 tweenTime   : 100,
@@ -158,7 +157,6 @@ namespace TinyWars.BaseWar {
             return new Promise<void>(resolve => {
                 Helpers.resetTween({
                     obj         : this._group,
-                    waitTime    : 0,
                     beginProps  : { scaleX: 1, scaleY: 1 },
                     endProps    : { scaleX: 0, scaleY: 0 },
                     tweenTime   : 100,

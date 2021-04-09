@@ -137,23 +137,19 @@ namespace TinyWars.MultiRankRoom {
             Helpers.resetTween({
                 obj         : this._btnMultiPlayer,
                 beginProps  : { alpha: 0, right: -40 },
-                waitTime    : 0,
                 endProps    : { alpha: 1, right: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnRanking,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, right: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnSinglePlayer,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, right: 0 },
-                tweenTime   : 200,
             });
 
             const groupLeft = this._groupLeft;
@@ -164,37 +160,31 @@ namespace TinyWars.MultiRankRoom {
             Helpers.resetTween({
                 obj         : this._btnSetGameNumber,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 0,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnMyRoom,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 50,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnContinueWar,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnPreviewStdMaps,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 150,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnPreviewFogMaps,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
         }
         private _showCloseAnimation(): Promise<void> {

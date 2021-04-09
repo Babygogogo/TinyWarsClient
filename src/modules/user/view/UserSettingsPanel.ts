@@ -227,15 +227,11 @@ namespace TinyWars.User {
                 obj         : this._imgMask,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
-                waitTime    : 0,
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._group,
                 beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
-                waitTime    : 0,
-                tweenTime   : 200,
             });
         }
         private _showCloseAnimation(): Promise<void> {
@@ -244,15 +240,11 @@ namespace TinyWars.User {
                     obj         : this._imgMask,
                     beginProps  : { alpha: 1 },
                     endProps    : { alpha: 0 },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                 });
                 Helpers.resetTween({
                     obj         : this._group,
                     beginProps  : { alpha: 1, verticalCenter: 0 },
                     endProps    : { alpha: 0, verticalCenter: 40 },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                     callback    : resolve,
                 });
             });

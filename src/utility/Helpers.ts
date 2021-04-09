@@ -439,17 +439,17 @@ namespace TinyWars.Utility.Helpers {
     export function resetTween<T>({ obj, beginProps, waitTime, endProps, tweenTime, callback }: {
         obj         : T;
         beginProps  : { [K in keyof T]?: T[K] };
-        waitTime    : number;
+        waitTime?   : number;
         endProps    : { [K in keyof T]?: T[K] };
-        tweenTime   : number;
+        tweenTime?  : number;
         callback?   : () => void
     }): void {
         egret.Tween.removeTweens(obj);
 
         const tween = egret.Tween.get(obj)
             .set(beginProps)
-            .wait(waitTime)
-            .to(endProps, tweenTime, egret.Ease.sineOut);
+            .wait(waitTime || 0)
+            .to(endProps, tweenTime || 200, egret.Ease.sineOut);
         if (callback) {
             tween.call(callback);
         }

@@ -243,29 +243,21 @@ namespace TinyWars.MultiCustomRoom {
                 obj         : this._groupMapView,
                 beginProps  : { alpha: 0 },
                 endProps    : { alpha: 1 },
-                waitTime    : 0,
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
-                waitTime    : 0,
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._groupRoomList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
-                waitTime    : 0,
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnNextStep,
                 beginProps  : { alpha: 0, right: -40 },
                 endProps    : { alpha: 1, right: 0 },
-                waitTime    : 0,
-                tweenTime   : 200,
             });
         }
         private async _showCloseAnimation(): Promise<void> {
@@ -274,30 +266,22 @@ namespace TinyWars.MultiCustomRoom {
                     obj         : this._groupMapView,
                     beginProps  : { alpha: 1 },
                     endProps    : { alpha: 0 },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                     callback    : resolve,
                 });
                 Helpers.resetTween({
                     obj         : this._groupNavigator,
                     beginProps  : { alpha: 1, y: 20 },
                     endProps    : { alpha: 0, y: -20 },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                 });
                 Helpers.resetTween({
                     obj         : this._groupRoomList,
                     beginProps  : { alpha: 1, left: 20 },
                     endProps    : { alpha: 0, left: -20 },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                 });
                 Helpers.resetTween({
                     obj         : this._btnNextStep,
                     beginProps  : { alpha: 1, right: 0 },
                     endProps    : { alpha: 0, right: -40 },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                 });
             });
         }

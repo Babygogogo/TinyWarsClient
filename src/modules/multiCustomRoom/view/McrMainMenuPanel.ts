@@ -137,23 +137,19 @@ namespace TinyWars.MultiCustomRoom {
             Helpers.resetTween({
                 obj         : this._btnMultiPlayer,
                 beginProps  : { alpha: 0, right: -40 },
-                waitTime    : 0,
                 endProps    : { alpha: 1, right: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnRanking,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, right: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnSinglePlayer,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, right: 0 },
-                tweenTime   : 200,
             });
 
             const groupLeft = this._groupLeft;
@@ -164,51 +160,43 @@ namespace TinyWars.MultiCustomRoom {
             Helpers.resetTween({
                 obj         : this._btnCreateRoom,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 0,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnJoinRoom,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 33,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnMyRoom,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 66,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnContinueWar,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnWatchWar,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 133,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnReplayWar,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 166,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnFreeMode,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
         }
         private _showCloseAnimation(): Promise<void> {
@@ -217,15 +205,11 @@ namespace TinyWars.MultiCustomRoom {
                     obj         : this._group,
                     beginProps  : { alpha: 1, right: 60 },
                     endProps    : { alpha: 0, right: 20 },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                 });
                 Helpers.resetTween({
                     obj         : this._groupLeft,
                     beginProps  : { alpha: 1, left: 0 },
                     endProps    : { alpha: 0, left: -40 },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                     callback    : resolve,
                 });
             });

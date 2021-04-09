@@ -95,23 +95,19 @@ namespace TinyWars.SinglePlayerLobby {
             Helpers.resetTween({
                 obj         : this._btnMultiPlayer,
                 beginProps  : { alpha: 0, right: -40 },
-                waitTime    : 0,
                 endProps    : { alpha: 1, right: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnRanking,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, right: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnSinglePlayer,
                 beginProps  : { alpha: 0, right: -40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, right: 0 },
-                tweenTime   : 200,
             });
 
             const groupLeft = this._groupLeft;
@@ -122,16 +118,13 @@ namespace TinyWars.SinglePlayerLobby {
             Helpers.resetTween({
                 obj         : this._btnCampaign,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 0,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnContinueWar,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 100,
                 endProps    : { alpha: 1, left: 0 },
-                tweenTime   : 200,
             });
         }
         private _showCloseAnimation(): Promise<void> {

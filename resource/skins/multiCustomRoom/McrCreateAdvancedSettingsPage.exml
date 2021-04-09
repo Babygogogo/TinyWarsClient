@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="740" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
-        xmlns:w="http://ns.egret.com/wing">
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" right="0" top="0" bottom="0">
-        <e:Scroller id="_scroller" top="10" bottom="10" right="10" left="10">
+        <e:Scroller id="_scroller" top="0" bottom="0" right="0" left="0">
             <e:Group>
                 <GameUi:UiButton id="_btnReset" label="Reset" y="8" skinName="Skins.Component.Button.ButtonBlue001"
                                  width="120" />
@@ -84,7 +83,7 @@
                                                 </e:Skin>
                                             </e:itemRendererSkinName>
                                             <e:layout>
-                                                <e:VerticalLayout />
+                                                <e:VerticalLayout/>
                                             </e:layout>
                                         </e:List>
                                     </GameUi:UiScrollList>

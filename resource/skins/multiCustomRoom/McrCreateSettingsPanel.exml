@@ -36,11 +36,10 @@
             <GameUi:skinName>
                 <e:Skin>
                     <e:Group left="0" right="0" top="0" bottom="0">
-                        <e:Image left="0" right="0" top="0" bottom="0" source="commonPentagon0001"
-                                 scale9Grid="17,4,1,1" />
-                        <GameUi:UiLabel id="labelDisplay" size="16" text="Change Password"
-                                        textAlign="center" verticalAlign="middle" wordWrap="true" verticalCenter="0"
-                                        textColor="0x000000" bold="true" x="20" />
+                        <e:Image left="0" right="0" top="0" bottom="0" source="commonPentagon0001" scale9Grid="17,4,1,1" />
+                        <GameUi:UiLabel id="labelDisplay" size="16" text="Change Password" textAlign="center"
+                                        verticalAlign="middle" wordWrap="true" verticalCenter="0" textColor="0x000000"
+                                        bold="true" x="20" />
                         <GameUi:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16" height="16" />
                     </e:Group>
                 </e:Skin>
@@ -53,11 +52,11 @@
                     <GameUi:skinName>
                         <e:Skin>
                             <e:Group left="0" right="0" top="0" bottom="0">
-                                <e:Image left="0" right="0" top="0" bottom="0"
-                                         source="commonPentagon0000" scale9Grid="4,4,1,1" />
-                                <GameUi:UiLabel id="labelDisplay" size="16" text="Change Password"
-                                                textAlign="center" verticalAlign="middle" wordWrap="true"
-                                                verticalCenter="0" x="20" textColor="0xFFFFFF" />
+                                <e:Image left="0" right="0" top="0" bottom="0" source="commonPentagon0000"
+                                         scale9Grid="4,4,1,1" />
+                                <GameUi:UiLabel id="labelDisplay" size="16" text="Change Password" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" verticalCenter="0" x="20"
+                                                textColor="0xFFFFFF" />
                                 <GameUi:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16"
                                                 height="16" />
                             </e:Group>
@@ -125,19 +124,16 @@
             <GameUi:skinName>
                 <e:Skin>
                     <e:Group left="0" right="0" top="0" bottom="0">
-                        <e:Image left="0" right="0" top="0" bottom="0" source="commonPentagon0009"
-                                 scale9Grid="3,4,1,1" />
-                        <GameUi:UiLabel id="labelDisplay" size="16" text="Change Password"
-                                        textAlign="center" verticalAlign="middle" wordWrap="true" verticalCenter="0"
-                                        textColor="0x000000" bold="true" x="20" />
+                        <e:Image left="0" right="0" top="0" bottom="0" source="commonPentagon0009" scale9Grid="3,4,1,1" />
+                        <GameUi:UiLabel id="labelDisplay" size="16" text="Change Password" textAlign="center"
+                                        verticalAlign="middle" wordWrap="true" verticalCenter="0" textColor="0x000000"
+                                        bold="true" x="20" />
                         <GameUi:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16" height="16" />
                     </e:Group>
                 </e:Skin>
             </GameUi:skinName>
         </GameUi:UiButton>
         <e:Group id="_groupTab" top="80" left="200" right="20" bottom="20">
-            <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" top="40" bottom="0" right="0"
-                            source="commonColorBlack0001" scale9Grid="1,1,2,2" />
             <GameUi:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
                 <e:skinName>
                     <e:Skin>
@@ -162,9 +158,7 @@
                                 </e:layout>
                             </e:TabBar>
                         </e:Scroller>
-                        <e:Scroller top="40" bottom="0" left="0" right="0">
-                            <e:Group id="_page" />
-                        </e:Scroller>
+                        <e:Group id="_page" top="40" bottom="0" left="0" right="0" />
                     </e:Skin>
                 </e:skinName>
             </GameUi:UiTab>

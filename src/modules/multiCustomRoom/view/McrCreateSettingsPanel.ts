@@ -79,12 +79,16 @@ namespace TinyWars.MultiCustomRoom {
 
             this._tabSettings.bindData([
                 {
-                    tabItemData: { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass  : McrCreateBasicSettingsPage,
+                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                    pageClass   : McrCreateBasicSettingsPage,
                 },
                 {
-                    tabItemData: { name: Lang.getText(Lang.Type.B0003) },
-                    pageClass  : McrCreateAdvancedSettingsPage,
+                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                    pageClass   : McrCreateAdvancedSettingsPage,
+                },
+                {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                    pageClass   : McrCreateMapInfoPage,
                 },
             ]);
 
@@ -196,36 +200,26 @@ namespace TinyWars.MultiCustomRoom {
                 obj         : this._groupNavigator,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
-                waitTime    : 0,
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnBack,
                 beginProps  : { alpha: 0, y: -20 },
                 endProps    : { alpha: 1, y: 20 },
-                waitTime    : 0,
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._groupSettings,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
-                waitTime    : 0,
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._btnConfirm,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
-                waitTime    : 0,
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._groupTab,
                 beginProps  : { alpha: 0, },
                 endProps    : { alpha: 1, },
-                waitTime    : 0,
-                tweenTime   : 200,
             });
         }
         private async _showCloseAnimation(): Promise<void> {
@@ -234,37 +228,27 @@ namespace TinyWars.MultiCustomRoom {
                     obj         : this._groupNavigator,
                     beginProps  : { alpha: 1, y: 20 },
                     endProps    : { alpha: 0, y: -20 },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                     callback    : resolve,
                 });
                 Helpers.resetTween({
                     obj         : this._btnBack,
                     beginProps  : { alpha: 1, y: 20 },
                     endProps    : { alpha: 0, y: -20 },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                 });
                 Helpers.resetTween({
                     obj         : this._groupSettings,
                     beginProps  : { alpha: 1, left: 20 },
                     endProps    : { alpha: 0, left: -20 },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                 });
                 Helpers.resetTween({
                     obj         : this._btnConfirm,
                     beginProps  : { alpha: 1, left: 20 },
                     endProps    : { alpha: 0, left: -20 },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                 });
                 Helpers.resetTween({
                     obj         : this._groupTab,
                     beginProps  : { alpha: 1, },
                     endProps    : { alpha: 0, },
-                    waitTime    : 0,
-                    tweenTime   : 200,
                 });
             });
         }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing">
+    <e:Group left="0" right="0" top="0" bottom="0">
+        <GameUi:UiZoomableMap id="_zoomMap" left="0" right="200" top="0" bottom="20" />
+        <GameUi:UiMapInfo id="_uiMapInfo" skinName="Skins.Component.MapInfo.MapInfo001" right="0" bottom="70" />
+    </e:Group>
+</e:Skin>

@@ -123,30 +123,25 @@ namespace TinyWars.Lobby {
             Helpers.resetTween({
                 obj         : this._groupMyInfo,
                 beginProps  : { alpha: 0, top: 40 },
-                waitTime    : 0,
                 endProps    : { alpha: 1, top: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._groupChat,
                 beginProps  : { alpha: 0, top: 40 },
                 waitTime    : 66,
                 endProps    : { alpha: 1, top: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._groupMapEditor,
                 beginProps  : { alpha: 0, top: 40 },
                 waitTime    : 132,
                 endProps    : { alpha: 1, top: 0 },
-                tweenTime   : 200,
             });
             Helpers.resetTween({
                 obj         : this._groupGameData,
                 beginProps  : { alpha: 0, top: 40 },
                 waitTime    : 200,
                 endProps    : { alpha: 1, top: 0 },
-                tweenTime   : 200,
             });
         }
         private _showCloseAnimation(): Promise<void> {
