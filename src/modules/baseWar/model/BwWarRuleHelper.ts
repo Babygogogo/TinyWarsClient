@@ -293,6 +293,17 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
 
         return coIdArray;
     }
+    export function getAvailableCoIdArrayFilteredByConfig(warRule: IWarRule, playerIndex: number, configVersion: string): number[] | null | undefined {
+        const coIdArray = getAvailableCoIdList(warRule, playerIndex);
+        if (coIdArray == null) {
+            return null;
+        } else {
+            return coIdArray.filter(v => {
+                const cfg = ConfigManager.getCoBasicCfg(configVersion, v);
+                return (!!cfg) && (!!cfg.isEnabled);
+            });
+        }
+    }
     export function addAvailableCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
         const coIdList = getAvailableCoIdList(warRule, playerIndex);
         if (coIdList == null) {
@@ -929,38 +940,5 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 return false;
             }
         }
-    }
-
-    export function checkIsCoAvailable(configVersion: string, coId: number, playerIndex: number, warRule: IWarRule): boolean | undefined {
-        const availableCoIdList = getAvailableCoIdListByWarRule(configVersion, warRule, playerIndex);
-        if (availableCoIdList == null) {
-            Logger.error(`BwHelpers.checkIsCoAvailable() empty availableCoIdList.`);
-            return undefined;
-        }
-        return availableCoIdList.indexOf(coId) >= 0;
-    }
-
-    export function getAvailableCoIdListByWarRule(configVersion: string, warRule: IWarRule, playerIndex: number): number[] | null | undefined {
-        const playersCount = getPlayersCount(warRule);
-        if ((playersCount == null)                              ||
-            (playerIndex < CommonConstants.WarFirstPlayerIndex) ||
-            (playerIndex > playersCount)
-        ) {
-            return undefined;
-        }
-
-        const ruleForPlayers        = warRule.ruleForPlayers;
-        const playerRuleDataArray   = ruleForPlayers ? ruleForPlayers.playerRuleDataArray : undefined;
-        const playerRule            = (playerRuleDataArray || []).find(v => v.playerIndex === playerIndex);
-        const coIdList              = playerRule ? playerRule.availableCoIdArray : undefined;
-        if ((coIdList == null) || (!coIdList.length)) {
-            Logger.error(`BwHelpers.getAvailableCoIdListByWarRule() empty coIdList.`);
-            return undefined;
-        }
-
-        return coIdList.filter(coId => {
-            const config = ConfigManager.getCoBasicCfg(configVersion, coId);
-            return config ? (!!config.isEnabled) : false;
-        });
     }
 }

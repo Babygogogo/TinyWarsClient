@@ -34,7 +34,7 @@ namespace TinyWars.GameUi {
         private readonly _labelMapSizeTitle     : GameUi.UiLabel;
         private readonly _labelMapSize          : GameUi.UiLabel;
 
-        private _data: DataForUiMapInfo;
+        private _data: DataForUiMapInfo | null;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
@@ -46,7 +46,7 @@ namespace TinyWars.GameUi {
             this._updateComponentsForMapInfo();
         }
 
-        public setData(data: DataForUiMapInfo): void {
+        public setData(data: DataForUiMapInfo | null): void {
             this._data = data;
             if (this.getIsOpening()) {
                 this._updateComponentsForMapInfo();

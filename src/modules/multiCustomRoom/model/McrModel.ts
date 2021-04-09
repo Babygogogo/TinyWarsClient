@@ -127,22 +127,6 @@ namespace TinyWars.MultiCustomRoom {
             return infoList;
         }
 
-        export function getFastJoinData(roomInfo: IMcrRoomInfo): DataForJoinRoom | null {
-            const playerIndex       = generateAvailablePlayerIndexList(roomInfo)[0];
-            const unitAndTileSkinId = generateAvailableSkinIdList(roomInfo)[0];
-            if ((playerIndex == null) || (unitAndTileSkinId == null)) {
-                return null;
-            } else {
-                return {
-                    roomId          : roomInfo.roomId,
-                    isReady         : false,
-                    coId            : BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex),
-                    playerIndex,
-                    unitAndTileSkinId,
-                };
-            }
-        }
-
         export function updateOnDeletePlayer(data: ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS): void {
             if (data.targetUserId === User.UserModel.getSelfUserId()) {
                 const roomId = data.roomId;
@@ -237,9 +221,14 @@ namespace TinyWars.MultiCustomRoom {
             }
             async function resetDataByCustomWarRuleId(): Promise<void> {
                 const settingsForCommon     = getData().settingsForCommon;
-                settingsForCommon.warRule   = BwWarRuleHelper.createDefaultWarRule(null, (await getMapRawData()).playersCountUnneutral);
+                const warRule               = BwWarRuleHelper.createDefaultWarRule(null, (await getMapRawData()).playersCountUnneutral);
+                settingsForCommon.warRule   = warRule;
                 setCustomWarRuleId();
-                setSelfCoId(BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
+
+                const availableCoIdArray = BwWarRuleHelper.getAvailableCoIdArrayFilteredByConfig(warRule, getSelfPlayerIndex(), settingsForCommon.configVersion);
+                if (availableCoIdArray.indexOf(getSelfCoId()) < 0) {
+                    setSelfCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(availableCoIdArray));
+                }
 
                 Notify.dispatch(Notify.Type.McrCreateTeamIndexChanged);
             }
@@ -258,7 +247,11 @@ namespace TinyWars.MultiCustomRoom {
                 const settingsForCommon     = getData().settingsForCommon;
                 settingsForCommon.warRule   = Helpers.deepClone(warRule);
                 setPresetWarRuleId(ruleId);
-                setSelfCoId(BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, getSelfPlayerIndex()));
+
+                const availableCoIdArray = BwWarRuleHelper.getAvailableCoIdArrayFilteredByConfig(warRule, getSelfPlayerIndex(), settingsForCommon.configVersion);
+                if (availableCoIdArray.indexOf(getSelfCoId()) < 0) {
+                    setSelfCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(availableCoIdArray));
+                }
 
                 Notify.dispatch(Notify.Type.McrCreateTeamIndexChanged);
             }
@@ -478,6 +471,40 @@ namespace TinyWars.MultiCustomRoom {
             }
             export function getVisionRangeModifier(playerIndex: number): number {
                 return BwWarRuleHelper.getVisionRangeModifier(getWarRule(), playerIndex);
+            }
+        }
+
+        export namespace Join {
+            let _targetRoomId: number;
+
+            export function getFastJoinData(roomInfo: IMcrRoomInfo): DataForJoinRoom | null {
+                const playerIndex       = generateAvailablePlayerIndexList(roomInfo)[0];
+                const unitAndTileSkinId = generateAvailableSkinIdList(roomInfo)[0];
+                if ((playerIndex == null) || (unitAndTileSkinId == null)) {
+                    return null;
+                } else {
+                    return {
+                        roomId          : roomInfo.roomId,
+                        isReady         : false,
+                        coId            : BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(roomInfo.settingsForCommon, playerIndex),
+                        playerIndex,
+                        unitAndTileSkinId,
+                    };
+                }
+            }
+
+            export function getTargetRoomId(): number | null {
+                return _targetRoomId;
+            }
+            export function setTargetRoomId(roomId: number | null): void {
+                if (getTargetRoomId() !== roomId) {
+                    _targetRoomId = roomId;
+                    Notify.dispatch(Notify.Type.McrJoinTargetRoomIdChanged);
+                }
+            }
+            export async function getTargetRoomInfo(): Promise<IMcrRoomInfo | null> {
+                const roomId = getTargetRoomId();
+                return roomId == null ? null : await getRoomInfo(roomId);
             }
         }
     }

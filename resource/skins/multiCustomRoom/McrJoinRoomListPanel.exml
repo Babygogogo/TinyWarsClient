@@ -2,10 +2,11 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" right="0" top="0" bottom="0">
-        <e:Group id="_groupTab" top="80" left="200" right="20" bottom="20">
+        <e:Group id="_groupTab" top="80" left="240" right="0" bottom="0" locked="true">
             <GameUi:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
                 <e:skinName>
                     <e:Skin>
+                        <e:Group id="_page" top="40" bottom="0" left="0" right="0" />
                         <e:Scroller left="0" right="0">
                             <e:TabBar id="_bar">
                                 <e:itemRendererSkinName>
@@ -27,15 +28,9 @@
                                 </e:layout>
                             </e:TabBar>
                         </e:Scroller>
-                        <e:Group id="_page" top="40" bottom="0" left="0" right="0" />
                     </e:Skin>
                 </e:skinName>
             </GameUi:UiTab>
-        </e:Group>
-        <e:Group id="_groupMapView" left="240" right="200" bottom="20" top="130">
-            <GameUi:UiLabel id="_labelLoading" text="正在加载图片\n请耐心等候" size="20" textColor="0xFFFFFF" textAlign="center"
-                            horizontalCenter="0" verticalCenter="0" />
-            <GameUi:UiZoomableMap id="_zoomMap" left="0" right="0" top="0" bottom="0" />
         </e:Group>
         <GameUi:UiButton id="_btnBack" label="Back" y="20" height="30" width="80"
                          skinName="Skins.Component.Button.ButtonYellow001" left="0" locked="true"></GameUi:UiButton>
@@ -65,11 +60,9 @@
                 <e:VerticalLayout horizontalAlign="center" gap="4" />
             </e:layout>
         </e:Group>
-        <e:Group top="70" bottom="0" width="760" x="238">
+        <e:Group top="70" bottom="0" width="760" x="238" visible="true">
             <e:Group id="_groupInfo" y="10" touchThrough="true" touchEnabled="false" touchChildren="false" left="8"
                      right="8">
-                <GameUi:UiLabel id="_labelMapName" text="地图名: 未知" y="0" stroke="2" size="20" />
-                <GameUi:UiLabel id="_labelDesigner" text="作者: 未知" y="25" stroke="2" size="20" />
                 <e:Group x="0" y="60">
                     <GameUi:UiLabel id="_labelHasFogTitle" text="战争迷雾: " y="0" stroke="2" size="20" x="0" />
                     <GameUi:UiLabel id="_labelHasFog" text="否" y="10" stroke="2" size="20" x="10" />
@@ -100,6 +93,8 @@
         <e:Group id="_groupRoomList" width="200" top="130" bottom="70" left="20" locked="true">
             <GameUi:UiLabel id="_labelNoRoom" text="没有符合条件的地图" bold="true" size="20" textColor="0xFFFFFF"
                             horizontalCenter="0" width="160" textAlign="center" verticalCenter="-10" />
+            <GameUi:UiLabel id="_labelLoading" text="正在加载，请稍候" bold="true" size="20" textColor="0xFFFFFF"
+                            horizontalCenter="0" width="160" textAlign="center" verticalCenter="-10" x="30" y="150" />
             <GameUi:UiScrollList id="_listRoom" left="0" right="0" bottom="0" top="0">
                 <e:List>
                     <e:itemRendererSkinName>
@@ -126,6 +121,9 @@
                                              skinName="Skins.Component.Button.ButtonTriangle001" />
                         </e:Skin>
                     </e:itemRendererSkinName>
+                    <e:layout>
+                        <e:VerticalLayout/>
+                    </e:layout>
                 </e:List>
             </GameUi:UiScrollList>
         </e:Group>

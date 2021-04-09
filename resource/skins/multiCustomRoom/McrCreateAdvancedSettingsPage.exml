@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" right="0" top="0" bottom="0">
-        <e:Scroller id="_scroller" top="0" bottom="0" right="0" left="0">
+        <e:Scroller id="_scroller" top="0" bottom="20" right="20" left="0">
             <e:Group>
                 <GameUi:UiButton id="_btnReset" label="Reset" y="8" skinName="Skins.Component.Button.ButtonBlue001"
-                                 width="120" />
+                                 width="120" locked="true" />
                 <GameUi:UiButton id="_btnCustomize" label="Customize" y="8"
-                                 skinName="Skins.Component.Button.ButtonBlue001" width="120" />
+                                 skinName="Skins.Component.Button.ButtonBlue001" width="120" locked="true" />
                 <GameUi:UiScrollList id="_listSetting" y="50" left="0" right="0">
                     <e:List>
                         <e:itemRendererSkinName>
