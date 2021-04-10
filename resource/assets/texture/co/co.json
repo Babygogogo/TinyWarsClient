@@ -1,28 +1,28 @@
 {
   "file": "co.png",
   "frames": { 
-    "Beast": {"x":3099,"y":0,"w":177,"h":250,"offX":68,"offY":69,"sourceW":320,"sourceH":400},
-    "c09_t01_s01_f01": {"x":2126,"y":0,"w":174,"h":392,"offX":75,"offY":1,"sourceW":320,"sourceH":400},
-    "c09_t02_s01_f01": {"x":2820,"y":0,"w":110,"h":389,"offX":108,"offY":6,"sourceW":320,"sourceH":400},
-    "c09_t03_s01_f01": {"x":1826,"y":0,"w":161,"h":395,"offX":78,"offY":2,"sourceW":320,"sourceH":400},
-    "c09_t04_s01_f01": {"x":1185,"y":0,"w":201,"h":396,"offX":59,"offY":4,"sourceW":320,"sourceH":400},
-    "c09_t05_s01_f01": {"x":970,"y":0,"w":213,"h":396,"offX":52,"offY":0,"sourceW":320,"sourceH":400},
-    "c09_t06_s01_f01": {"x":1388,"y":0,"w":234,"h":395,"offX":48,"offY":1,"sourceW":320,"sourceH":400},
-    "c09_t07_s01_f01": {"x":0,"y":0,"w":175,"h":400,"offX":72,"offY":0,"sourceW":320,"sourceH":400},
-    "c09_t08_s01_f01": {"x":1989,"y":0,"w":135,"h":394,"offX":91,"offY":3,"sourceW":320,"sourceH":400},
-    "c09_t11_s01_f01": {"x":2302,"y":0,"w":158,"h":392,"offX":85,"offY":3,"sourceW":320,"sourceH":400},
-    "c09_t12_s01_f01": {"x":420,"y":0,"w":285,"h":397,"offX":33,"offY":3,"sourceW":320,"sourceH":400},
-    "c09_t13_s01_f01": {"x":2648,"y":0,"w":170,"h":391,"offX":73,"offY":4,"sourceW":320,"sourceH":400},
-    "c09_t19_s01_f01": {"x":177,"y":0,"w":241,"h":399,"offX":30,"offY":0,"sourceW":320,"sourceH":400},
-    "c09_t21_s01_f01": {"x":2462,"y":0,"w":184,"h":391,"offX":51,"offY":4,"sourceW":320,"sourceH":400},
-    "David": {"x":1624,"y":0,"w":200,"h":395,"offX":66,"offY":5,"sourceW":320,"sourceH":400},
-    "Doctor": {"x":707,"y":0,"w":261,"h":396,"offX":24,"offY":4,"sourceW":320,"sourceH":400},
-    "Penny": {"x":2932,"y":0,"w":165,"h":351,"offX":79,"offY":24,"sourceW":320,"sourceH":400}
+    "Beast": {"x":0,"y":795,"w":177,"h":250,"offX":68,"offY":69,"sourceW":320,"sourceH":400},
+    "c09_t01_s01_f01": {"x":379,"y":401,"w":131,"h":181},
+    "c09_t02_s01_f01": {"x":110,"y":1321,"w":95,"h":158},
+    "c09_t03_s01_f01": {"x":0,"y":1047,"w":167,"h":178},
+    "c09_t04_s01_f01": {"x":379,"y":584,"w":126,"h":183},
+    "c09_t05_s01_f01": {"x":298,"y":1281,"w":210,"h":178},
+    "c09_t06_s01_f01": {"x":179,"y":803,"w":183,"h":178},
+    "c09_t07_s01_f01": {"x":202,"y":401,"w":175,"h":400,"offX":72,"offY":0,"sourceW":320,"sourceH":400},
+    "c09_t08_s01_f01": {"x":364,"y":935,"w":138,"h":169},
+    "c09_t11_s01_f01": {"x":179,"y":983,"w":167,"h":182},
+    "c09_t12_s01_f01": {"x":348,"y":1106,"w":133,"h":173},
+    "c09_t13_s01_f01": {"x":169,"y":1167,"w":127,"h":152},
+    "c09_t19_s01_f01": {"x":263,"y":0,"w":241,"h":399,"offX":30,"offY":0,"sourceW":320,"sourceH":400},
+    "c09_t21_s01_f01": {"x":379,"y":769,"w":121,"h":164},
+    "David": {"x":0,"y":398,"w":200,"h":395,"offX":66,"offY":5,"sourceW":320,"sourceH":400},
+    "Doctor": {"x":0,"y":0,"w":261,"h":396,"offX":24,"offY":4,"sourceW":320,"sourceH":400},
+    "Penny": {"x":0,"y":1227,"w":108,"h":141}
   },
   "meta": {
     "app": "https://www.codeandweb.com/texturepacker",
     "exporter": "egret",
-    "sheetsize": "3276x400",
-    "smartupdate": "$TexturePacker:SmartUpdate:db061c22bb7ac2387d791ae18e382672:8dcf6a7aeaac0707d458cd8ac5f4c863:5397756d7a8435641bb2e6ae91fdf413$"
+    "sheetsize": "510x1479",
+    "smartupdate": "$TexturePacker:SmartUpdate:7b0279f8b65e267bb74750868071a4c4:2774c26af18381ab954196bf4ecdc7ea:5397756d7a8435641bb2e6ae91fdf413$"
   }
 }

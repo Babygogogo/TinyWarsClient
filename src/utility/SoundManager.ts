@@ -92,10 +92,19 @@ namespace TinyWars.Utility.SoundManager {
     }
 
     export function resume(): void {
-        playBgm(_getBgmPrevCode(), true);
+        // playBgm(_getBgmPrevCode(), true);
+        try {
+            _audioContext.resume();
+        } catch (e) {
+        }
     }
     export function pause(): void {
-        _stopBgm();
+        // _stopBgm();
+        // _stopAllEffects();
+        try {
+            _audioContext.suspend();
+        } catch (e) {
+        }
         _stopAllEffects();
     }
 

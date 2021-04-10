@@ -2,13 +2,11 @@
 namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
-    import ConfigManager    = Utility.ConfigManager;
     import Lang             = Utility.Lang;
     import ProtoTypes       = Utility.ProtoTypes;
     import FloatText        = Utility.FloatText;
     import Helpers          = Utility.Helpers;
     import WarMapModel      = WarMap.WarMapModel;
-    import BwHelpers        = BaseWar.BwHelpers;
     import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
 
     export class McrJoinRoomListPanel extends GameUi.UiPanel {
@@ -32,14 +30,6 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _listRoom              : GameUi.UiScrollList<DataForRoomRenderer, RoomRenderer>;
         private readonly _labelNoRoom           : GameUi.UiLabel;
         private readonly _labelLoading          : GameUi.UiLabel;
-
-        private _groupInfo          : eui.Group;
-        private _labelHasFogTitle   : GameUi.UiLabel;
-        private _labelHasFog        : GameUi.UiLabel;
-        private _labelWarComment    : GameUi.UiLabel;
-        private _labelPlayersTitle  : GameUi.UiLabel;
-        private _labelCommentTitle  : GameUi.UiLabel;
-        private _listPlayer         : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         private _hasReceivedData    = false;
         private _dataForListRoom    : DataForRoomRenderer[] = [];
@@ -75,20 +65,23 @@ namespace TinyWars.MultiCustomRoom {
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._listRoom.setItemRenderer(RoomRenderer);
-            this._listPlayer.setItemRenderer(PlayerRenderer);
 
             this._tabSettings.bindData([
-                // {
-                //     tabItemData : { name: Lang.getText(Lang.Type.B0002) },
-                //     pageClass   : McrJoinBasicSettingsPage,
-                // },
-                // {
-                //     tabItemData : { name: Lang.getText(Lang.Type.B0003) },
-                //     pageClass   : McrJoinAdvancedSettingsPage,
-                // },
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0298) },
                     pageClass   : McrJoinMapInfoPage,
+                },
+                {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                    pageClass   : McrJoinPlayerInfoPage,
+                },
+                {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                    pageClass   : McrJoinBasicSettingsPage,
+                },
+                {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                    pageClass   : McrJoinAdvancedSettingsPage,
                 },
             ]);
 
@@ -107,8 +100,6 @@ namespace TinyWars.MultiCustomRoom {
 
             this._tabSettings.clear();
             this._listRoom.clear();
-            this._listPlayer.clear();
-            egret.Tween.removeTweens(this._groupInfo);
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -170,10 +161,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelChooseRoom.text      = Lang.getText(Lang.Type.B0581);
             this._btnBack.label             = Lang.getText(Lang.Type.B0146);
             this._labelNoRoom.text          = Lang.getText(Lang.Type.B0582);
-            this._labelCommentTitle.text    = `${Lang.getText(Lang.Type.B0187)}:`;
-            this._labelPlayersTitle.text    = `${Lang.getText(Lang.Type.B0232)}:`;
-            this._labelHasFogTitle.text     = `${Lang.getText(Lang.Type.B0020)}:`;
-            this._btnNextStep.label         = Lang.getText(Lang.Type.B0566);
+            this._btnNextStep.label         = Lang.getText(Lang.Type.B0583);
         }
 
         private _updateGroupRoomList(): void {
@@ -207,52 +195,17 @@ namespace TinyWars.MultiCustomRoom {
             return data;
         }
 
-        private _createDataForListPlayer(roomInfo: IMcrRoomInfo, mapPlayersCount: number): DataForPlayerRenderer[] {
-            const playerInfoList    = roomInfo.playerDataList;
-            const configVersion     = roomInfo.settingsForCommon.configVersion;
-            const playerRuleList    = roomInfo.settingsForCommon.warRule.ruleForPlayers;
-            const dataList          : DataForPlayerRenderer[] = [];
-            for (let playerIndex = 1; playerIndex <= mapPlayersCount; ++playerIndex) {
-                dataList.push({
-                    configVersion,
-                    playerIndex,
-                    teamIndex   : BwHelpers.getTeamIndexByRuleForPlayers(playerRuleList, playerIndex),
-                    playerData  : playerInfoList.find(v => v.playerIndex === playerIndex),
-                });
-            }
-
-            return dataList;
-        }
-
         private async _updateComponentsForTargetRoomInfo(): Promise<void> {
             this._listRoom.refresh();
 
-
             const groupTab      = this._groupTab;
-            const groupInfo     = this._groupInfo;
             const btnNextStep   = this._btnNextStep;
-            egret.Tween.removeTweens(groupInfo);
-
-            const roomInfo = await McrModel.Join.getTargetRoomInfo();
-            if (!roomInfo) {
-                groupTab.visible        = false;
-                groupInfo.visible       = false;
-                btnNextStep.visible     = false;
+            if (!await McrModel.Join.getTargetRoomInfo()) {
+                groupTab.visible    = false;
+                btnNextStep.visible = false;
             } else {
-                groupTab.visible        = true;
-                btnNextStep.visible     = true;
-
-                const mapId                 = roomInfo.settingsForMcw.mapId;
-                const mapRawData            = await WarMapModel.getRawData(mapId);
-                const hasFog                = roomInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
-                this._labelHasFog.text      = Lang.getText(hasFog ? Lang.Type.B0012 : Lang.Type.B0001);
-                this._labelHasFog.textColor = hasFog ? 0xFF0000 : 0x00FF00;
-                this._labelWarComment.text  = roomInfo.settingsForMcw.warComment || "----";
-                this._listPlayer.bindData(this._createDataForListPlayer(roomInfo, mapRawData.playersCountUnneutral));
-
-                groupInfo.visible   = true;
-                groupInfo.alpha     = 1;
-                egret.Tween.get(groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {groupInfo.visible = false; groupInfo.alpha = 1});
+                groupTab.visible    = true;
+                btnNextStep.visible = true;
             }
         }
 
@@ -379,37 +332,6 @@ namespace TinyWars.MultiCustomRoom {
                     FloatText.show(Lang.getText(Lang.Type.A0145));
                     McrProxy.reqMcrGetJoinableRoomInfoList();
                 }
-            }
-        }
-    }
-
-    type DataForPlayerRenderer = {
-        configVersion   : string;
-        playerIndex     : number;
-        teamIndex       : number;
-        playerData      : ProtoTypes.Structure.IDataForPlayerInRoom | null;
-    }
-
-    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private _labelName : GameUi.UiLabel;
-        private _labelIndex: GameUi.UiLabel;
-
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data;
-            const playerData        = data.playerData;
-            const userId            = playerData ? playerData.userId : null;
-            this._labelIndex.text   = `${Lang.getPlayerForceName(data.playerIndex)}(${Lang.getPlayerTeamName(data.teamIndex)})`;
-
-            const labelName = this._labelName;
-            if (userId == null) {
-                labelName.text = "????";
-            } else {
-                labelName.text = "";
-                User.UserModel.getUserNickname(userId).then(name => {
-                    labelName.text = `${name} (${ConfigManager.getCoNameAndTierText(data.configVersion, playerData.coId)})`;
-                });
             }
         }
     }

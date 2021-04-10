@@ -60,36 +60,6 @@
                 <e:VerticalLayout horizontalAlign="center" gap="4" />
             </e:layout>
         </e:Group>
-        <e:Group top="70" bottom="0" width="760" x="238" visible="true">
-            <e:Group id="_groupInfo" y="10" touchThrough="true" touchEnabled="false" touchChildren="false" left="8"
-                     right="8">
-                <e:Group x="0" y="60">
-                    <GameUi:UiLabel id="_labelHasFogTitle" text="战争迷雾: " y="0" stroke="2" size="20" x="0" />
-                    <GameUi:UiLabel id="_labelHasFog" text="否" y="10" stroke="2" size="20" x="10" />
-                    <e:layout>
-                        <e:HorizontalLayout/>
-                    </e:layout>
-                </e:Group>
-                <GameUi:UiLabel id="_labelCommentTitle" text="附言:" stroke="2" size="20" x="0" y="95" />
-                <GameUi:UiLabel id="_labelWarComment" text="ASDF" stroke="2" size="20" width="320" x="0" height="120"
-                                y="120" wordWrap="true" />
-                <e:Group x="340" y="0">
-                    <GameUi:UiLabel id="_labelPlayersTitle" text="已参战玩家:" stroke="2" size="20" x="0" y="0" locked="true" />
-                    <GameUi:UiScrollList id="_listPlayer" y="25" width="400" x="0">
-                        <e:List>
-                            <e:itemRendererSkinName>
-                                <e:Skin width="400" height="26" currentState="up" states="up,down">
-                                    <GameUi:UiLabel id="_labelIndex" text="红方" size="16" verticalCenter="0" stroke="2"
-                                                    x="0" />
-                                    <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="90" size="16"
-                                                    verticalCenter="0" stroke="2" textColor.down="0x00ff00" />
-                                </e:Skin>
-                            </e:itemRendererSkinName>
-                        </e:List>
-                    </GameUi:UiScrollList>
-                </e:Group>
-            </e:Group>
-        </e:Group>
         <e:Group id="_groupRoomList" width="200" top="130" bottom="70" left="20" locked="true">
             <GameUi:UiLabel id="_labelNoRoom" text="没有符合条件的地图" bold="true" size="20" textColor="0xFFFFFF"
                             horizontalCenter="0" width="160" textAlign="center" verticalCenter="-10" />

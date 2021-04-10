@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing">
+    <e:Group left="0" right="0" top="0" bottom="0">
+        <e:Group id="_groupInfo" touchThrough="true" touchEnabled="false" touchChildren="false" left="0" top="0">
+            <e:Group left="0" top="0">
+                <GameUi:UiLabel id="_labelPlayersTitle" text="已参战玩家:" stroke="2" size="20" x="0" y="0" locked="true" />
+                <GameUi:UiScrollList id="_listPlayer" y="25" width="400" x="0">
+                    <e:List>
+                        <e:itemRendererSkinName>
+                            <e:Skin width="400" height="26" currentState="up" states="up,down">
+                                <GameUi:UiLabel id="_labelIndex" text="红方" size="16" verticalCenter="0" stroke="2" x="0" />
+                                <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="90" size="16" verticalCenter="0"
+                                                stroke="2" textColor.down="0x00ff00" />
+                            </e:Skin>
+                        </e:itemRendererSkinName>
+                    </e:List>
+                </GameUi:UiScrollList>
+            </e:Group>
+        </e:Group>
+    </e:Group>
+</e:Skin>

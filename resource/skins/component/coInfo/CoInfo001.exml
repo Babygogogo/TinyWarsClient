@@ -10,8 +10,7 @@
         <e:Group width="360" height="350" right="0" x="10" y="50">
             <GameUi:UiImage source="commonColorBlack0001" scale9Grid="1,1,2,2" left="0" right="0" top="0" bottom="0"
                             locked="true" />
-            <GameUi:UiImage id="_imgCoPortrait" alpha="0.5" source="c09_t01_s01_f01" right="0" scaleX="0.7" scaleY="0.7"
-                            bottom="0" locked="true" />
+            <GameUi:UiImage id="_imgCoPortrait" alpha="0.5" source="c09_t01_s01_f01" right="0" bottom="0" />
             <e:Group x="20" y="20">
                 <e:Group x="0" y="0">
                     <e:Group x="0" y="-60">
