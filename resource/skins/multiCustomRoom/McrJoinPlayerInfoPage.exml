@@ -1,21 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing">
     <e:Group left="0" right="0" top="0" bottom="0">
-        <e:Group id="_groupInfo" touchThrough="true" touchEnabled="false" touchChildren="false" left="0" top="0">
-            <e:Group left="0" top="0">
-                <GameUi:UiLabel id="_labelPlayersTitle" text="已参战玩家:" stroke="2" size="20" x="0" y="0" locked="true" />
-                <GameUi:UiScrollList id="_listPlayer" y="25" width="400" x="0">
-                    <e:List>
-                        <e:itemRendererSkinName>
-                            <e:Skin width="400" height="26" currentState="up" states="up,down">
-                                <GameUi:UiLabel id="_labelIndex" text="红方" size="16" verticalCenter="0" stroke="2" x="0" />
-                                <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="90" size="16" verticalCenter="0"
-                                                stroke="2" textColor.down="0x00ff00" />
-                            </e:Skin>
-                        </e:itemRendererSkinName>
-                    </e:List>
-                </GameUi:UiScrollList>
-            </e:Group>
-        </e:Group>
+        <GameUi:UiScrollList id="_listPlayer" left="0" right="20" top="0" bottom="20">
+            <e:List>
+                <e:itemRendererSkinName>
+                    <e:Skin width="150" height="300" currentState="up" states="up,down">
+                        <e:Group left="0" right="0" top="0" bottom="0">
+                            <e:Group x="0" y="0">
+                                <GameUi:UiLabel id="_labelPlayerIndex" text="红方" size="16" x="0" y="0" />
+                                <GameUi:UiLabel id="_labelTeamIndex" text="红方" size="16" x="10" y="0" />
+                                <e:layout>
+                                    <e:HorizontalLayout/>
+                                </e:layout>
+                            </e:Group>
+                            <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="90" size="16" y="0" />
+                            <GameUi:UiLabel id="_labelCo" text="玩家名称居然有十个字" x="100" size="16" y="10" />
+                            <GameUi:UiLabel id="_labelIsReady" text="玩家名称居然有十个字" x="100" size="16" y="10" />
+                            <e:Group x="10" y="10">
+                                <GameUi:UiLabel id="_labelRankStdTitle" text="红方" size="16" x="0" y="0" />
+                                <GameUi:UiLabel id="_labelRankStd" text="红方" size="16" x="10" y="0" />
+                                <e:layout>
+                                    <e:HorizontalLayout/>
+                                </e:layout>
+                            </e:Group>
+                            <e:Group x="20" y="20">
+                                <GameUi:UiLabel id="_labelRankFogTitle" text="红方" size="16" x="0" y="0" />
+                                <GameUi:UiLabel id="_labelRankFog" text="红方" size="16" x="10" y="0" />
+                                <e:layout>
+                                    <e:HorizontalLayout/>
+                                </e:layout>
+                            </e:Group>
+                            <GameUi:UiButton id="_btnChat" label="Button" x="85" y="179"
+                                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+                            <GameUi:UiButton label="Button" x="95" y="189" id="_btnInfo"
+                                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
+                            <e:layout>
+                                <e:VerticalLayout/>
+                            </e:layout>
+                        </e:Group>
+                    </e:Skin>
+                </e:itemRendererSkinName>
+                <e:layout>
+                    <e:HorizontalLayout/>
+                </e:layout>
+            </e:List>
+        </GameUi:UiScrollList>
     </e:Group>
 </e:Skin>

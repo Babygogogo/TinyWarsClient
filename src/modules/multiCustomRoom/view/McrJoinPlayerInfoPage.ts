@@ -4,12 +4,13 @@ namespace TinyWars.MultiCustomRoom {
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
     import ProtoTypes       = Utility.ProtoTypes;
+    import Types            = Utility.Types;
+    import CommonConstants  = Utility.CommonConstants;
     import BwHelpers        = BaseWar.BwHelpers;
 
     export class McrJoinPlayerInfoPage extends GameUi.UiTabPage {
-        private readonly _groupInfo          : eui.Group;
-        private readonly _labelPlayersTitle  : GameUi.UiLabel;
-        private readonly _listPlayer         : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
+        private readonly _groupInfo     : eui.Group;
+        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         public constructor() {
             super();
@@ -46,7 +47,6 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelPlayersTitle.text = `${Lang.getText(Lang.Type.B0232)}:`;
         }
         private async _updateComponentsForTargetRoomInfo(): Promise<void> {
             const roomInfo      = await McrModel.Join.getTargetRoomInfo();
@@ -85,26 +85,81 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private _labelName : GameUi.UiLabel;
-        private _labelIndex: GameUi.UiLabel;
+        private readonly _labelPlayerIndex  : TinyWars.GameUi.UiLabel;
+        private readonly _labelTeamIndex    : TinyWars.GameUi.UiLabel;
+        private readonly _labelNickname     : TinyWars.GameUi.UiLabel;
+        private readonly _labelCo           : TinyWars.GameUi.UiLabel;
+        private readonly _labelIsReady      : TinyWars.GameUi.UiLabel;
+        private readonly _labelRankStdTitle : TinyWars.GameUi.UiLabel;
+        private readonly _labelRankStd      : TinyWars.GameUi.UiLabel;
+        private readonly _labelRankFogTitle : TinyWars.GameUi.UiLabel;
+        private readonly _labelRankFog      : TinyWars.GameUi.UiLabel;
+        private readonly _btnChat           : TinyWars.GameUi.UiButton;
+        private readonly _btnInfo           : TinyWars.GameUi.UiButton;
 
-        protected dataChanged(): void {
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnChat,    callback: this._onTouchedBtnChat },
+                { ui: this._btnInfo,    callback: this._onTouchedBtnInfo },
+            ]);
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            ]);
+
+            this._updateComponentsForLanguage();
+        }
+
+        private _onTouchedBtnChat(e: egret.TouchEvent): void {
+            const playerData    = this.data.playerData;
+            const userId        = playerData ? playerData.userId : undefined;
+            if (userId != null) {
+                Chat.ChatPanel.show({ toUserId: userId });
+            }
+        }
+
+        private _onTouchedBtnInfo(e: egret.TouchEvent): void {
+            const playerData    = this.data.playerData;
+            const userId        = playerData ? playerData.userId : undefined;
+            if (userId != null) {
+                User.UserPanel.show({ userId });
+            }
+        }
+
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
+        }
+
+        protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
-            const data              = this.data;
-            const playerData        = data.playerData;
-            const userId            = playerData ? playerData.userId : null;
-            this._labelIndex.text   = `${Lang.getPlayerForceName(data.playerIndex)}(${Lang.getPlayerTeamName(data.teamIndex)})`;
+            const data                  = this.data;
+            this._labelPlayerIndex.text = Lang.getPlayerForceName(data.playerIndex);
+            this._labelTeamIndex.text   = Lang.getPlayerTeamName(data.teamIndex);
 
-            const labelName = this._labelName;
-            if (userId == null) {
-                labelName.text = "????";
-            } else {
-                labelName.text = "";
-                User.UserModel.getUserNickname(userId).then(name => {
-                    labelName.text = `${name} (${ConfigManager.getCoNameAndTierText(data.configVersion, playerData.coId)})`;
-                });
-            }
+            const playerData        = data.playerData;
+            this._labelIsReady.text = playerData ? `${playerData.isReady ? `Ready!` : `Not Ready`}` : `??`;
+
+            const coCfg         = ConfigManager.getCoBasicCfg(data.configVersion, playerData ? playerData.coId : null);
+            this._labelCo.text  = coCfg ? coCfg.name : `??`;
+
+            const userId                = playerData ? playerData.userId : null;
+            const userInfo              = userId == null ? null : await User.UserModel.getUserPublicInfo(userId);
+            this._btnChat.visible       = !!userInfo;
+            this._btnInfo.visible       = !!userInfo;
+            this._labelNickname.text    = userInfo ? userInfo.nickname : `??`;
+
+            const rankScoreArray        = userInfo ? userInfo.userRankScore.dataList : undefined;
+            const stdRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwStd) : null;
+            const fogRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwFog) : null;
+            this._labelRankStd.text     = stdRankInfo ? `${stdRankInfo.currentScore == null ? CommonConstants.RankInitialScore : stdRankInfo.currentScore}` : `??`;
+            this._labelRankFog.text     = fogRankInfo ? `${fogRankInfo.currentScore == null ? CommonConstants.RankInitialScore : fogRankInfo.currentScore}` : `??`;
+        }
+
+        private _updateComponentsForLanguage(): void {
+            this._labelRankStdTitle.text    = Lang.getText(Lang.Type.B0546);
+            this._labelRankFogTitle.text    = Lang.getText(Lang.Type.B0547);
+            this._btnChat.label             = Lang.getText(Lang.Type.B0383);
+            this._btnInfo.label             = Lang.getText(Lang.Type.B0423);
         }
     }
 }
