@@ -79,6 +79,51 @@
 			"type": "sheet",
 			"name": "extrude_json",
 			"subkeys": "c08_t01_s01_f01,c08_t01_s02_f01,c08_t01_s03_f01,c08_t01_s04_f01,c08_t01_s05_f01,c08_t01_s06_f01,c08_t01_s07_f01,c08_t01_s08_f01,c08_t01_s09_f01,c08_t01_s10_f01,c08_t02_s01_f01,c08_t02_s01_f02,c08_t02_s01_f03,c08_t02_s01_f04,c08_t02_s01_f05,c08_t02_s01_f06,c08_t02_s01_f07,c08_t02_s01_f08,c08_t02_s01_f09,c08_t02_s01_f10,c08_t02_s01_f11,c08_t02_s01_f12,c08_t02_s01_f13,c08_t02_s01_f14,c08_t02_s01_f15,c08_t02_s02_f01,c08_t02_s02_f02,c08_t02_s02_f03,c08_t02_s02_f04,c08_t02_s02_f05,c08_t02_s02_f06,c08_t02_s02_f07,c08_t02_s02_f08,c08_t02_s02_f09,c08_t02_s02_f10,c08_t02_s02_f11,c08_t02_s02_f12,c08_t02_s02_f13,c08_t02_s02_f14,c08_t02_s02_f15,c08_t03_s01_f01,c08_t03_s02_f01,c08_t03_s03_f01,c08_t03_s04_f01"
+		},
+		{
+			"url": "assets/texture/common/coBust0000.png",
+			"type": "image",
+			"name": "coBust0000"
+		},
+		{
+			"url": "assets/texture/common/commonIcon0002.png",
+			"type": "image",
+			"name": "commonIcon0002"
+		},
+		{
+			"url": "assets/texture/common/commonIcon0003.png",
+			"type": "image",
+			"name": "commonIcon0003"
+		},
+		{
+			"url": "assets/texture/common/commonIcon0004.png",
+			"type": "image",
+			"name": "commonIcon0004"
+		},
+		{
+			"url": "assets/texture/common/commonRectangle0005.png",
+			"type": "image",
+			"name": "commonRectangle0005"
+		},
+		{
+			"url": "assets/texture/common/commonRectangle0002.png",
+			"type": "image",
+			"name": "commonRectangle0002"
+		},
+		{
+			"url": "assets/texture/common/commonRectangle0003.png",
+			"type": "image",
+			"name": "commonRectangle0003"
+		},
+		{
+			"url": "assets/texture/common/commonRectangle0006.png",
+			"type": "image",
+			"name": "commonRectangle0006"
+		},
+		{
+			"url": "assets/texture/common/commonRectangle0004.png",
+			"type": "image",
+			"name": "commonRectangle0004"
 		}
 	]
 }

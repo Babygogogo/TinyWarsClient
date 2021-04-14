@@ -4,6 +4,7 @@ namespace TinyWars.GameUi {
     import Types            = Utility.Types;
     import Notify           = Utility.Notify;
     import ConfigManager    = Utility.ConfigManager;
+    import CommonConstants  = Utility.CommonConstants;
     import CoSkillType      = Types.CoSkillType;
 
     type CoData = {
@@ -119,8 +120,9 @@ namespace TinyWars.GameUi {
                 return;
             }
 
-            const cfg                           = ConfigManager.getCoBasicCfg(coData.configVersion, coData.coId);
-            this._imgCoPortrait.source          = cfg.fullPortrait;
+            const coId                          = coData.coId;
+            const cfg                           = ConfigManager.getCoBasicCfg(coData.configVersion, coId);
+            this._imgCoPortrait.source          = cfg.fullPortrait || (coId === CommonConstants.CoEmptyId ? null : `coBust0000`);
             this._labelCoName.text              = cfg.name;
             this._labelDesigner.text            = cfg.designer;
             this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;

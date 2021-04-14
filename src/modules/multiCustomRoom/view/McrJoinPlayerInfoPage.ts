@@ -2,6 +2,7 @@
 namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
+    import Helpers          = Utility.Helpers;
     import ConfigManager    = Utility.ConfigManager;
     import ProtoTypes       = Utility.ProtoTypes;
     import Types            = Utility.Types;
@@ -85,20 +86,25 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private readonly _labelPlayerIndex  : TinyWars.GameUi.UiLabel;
-        private readonly _labelTeamIndex    : TinyWars.GameUi.UiLabel;
-        private readonly _labelNickname     : TinyWars.GameUi.UiLabel;
-        private readonly _labelCo           : TinyWars.GameUi.UiLabel;
-        private readonly _labelIsReady      : TinyWars.GameUi.UiLabel;
-        private readonly _labelRankStdTitle : TinyWars.GameUi.UiLabel;
-        private readonly _labelRankStd      : TinyWars.GameUi.UiLabel;
-        private readonly _labelRankFogTitle : TinyWars.GameUi.UiLabel;
-        private readonly _labelRankFog      : TinyWars.GameUi.UiLabel;
-        private readonly _btnChat           : TinyWars.GameUi.UiButton;
-        private readonly _btnInfo           : TinyWars.GameUi.UiButton;
+        private readonly _groupCo           : eui.Group;
+        private readonly _imgSkin           : GameUi.UiImage;
+        private readonly _imgCoInfo         : GameUi.UiImage;
+        private readonly _labelNickname     : GameUi.UiLabel;
+        private readonly _labelCo           : GameUi.UiLabel;
+        private readonly _labelIsReady      : GameUi.UiLabel;
+
+        private readonly _labelPlayerIndex  : GameUi.UiLabel;
+        private readonly _labelTeamIndex    : GameUi.UiLabel;
+        private readonly _labelRankStdTitle : GameUi.UiLabel;
+        private readonly _labelRankStd      : GameUi.UiLabel;
+        private readonly _labelRankFogTitle : GameUi.UiLabel;
+        private readonly _labelRankFog      : GameUi.UiLabel;
+        private readonly _btnChat           : GameUi.UiButton;
+        private readonly _btnInfo           : GameUi.UiButton;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
+                { ui: this._groupCo,    callback: this._onTouchedGroupCo },
                 { ui: this._btnChat,    callback: this._onTouchedBtnChat },
                 { ui: this._btnInfo,    callback: this._onTouchedBtnInfo },
             ]);
@@ -107,6 +113,18 @@ namespace TinyWars.MultiCustomRoom {
             ]);
 
             this._updateComponentsForLanguage();
+        }
+
+        private _onTouchedGroupCo(e: egret.TouchEvent): void {
+            const data          = this.data;
+            const playerData    = data.playerData;
+            const coId          = playerData ? playerData.coId : null;
+            if ((coId != null) && (coId !== CommonConstants.CoEmptyId)) {
+                Common.CommonCoInfoPanel.show({
+                    configVersion   : data.configVersion,
+                    coId,
+                });
+            }
         }
 
         private _onTouchedBtnChat(e: egret.TouchEvent): void {
@@ -136,11 +154,14 @@ namespace TinyWars.MultiCustomRoom {
             this._labelPlayerIndex.text = Lang.getPlayerForceName(data.playerIndex);
             this._labelTeamIndex.text   = Lang.getPlayerTeamName(data.teamIndex);
 
-            const playerData        = data.playerData;
-            this._labelIsReady.text = playerData ? `${playerData.isReady ? `Ready!` : `Not Ready`}` : `??`;
+            const playerData            = data.playerData;
+            this._labelIsReady.visible  = (!!playerData) && (!!playerData.isReady);
+            this._imgSkin.source        = getSourceForImgSkin(playerData ? playerData.unitAndTileSkinId : null);
 
-            const coCfg         = ConfigManager.getCoBasicCfg(data.configVersion, playerData ? playerData.coId : null);
-            this._labelCo.text  = coCfg ? coCfg.name : `??`;
+            const coId                  = playerData ? playerData.coId : null;
+            const coCfg                 = ConfigManager.getCoBasicCfg(data.configVersion, coId);
+            this._labelCo.text          = coCfg ? coCfg.name : `??`;
+            this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
 
             const userId                = playerData ? playerData.userId : null;
             const userInfo              = userId == null ? null : await User.UserModel.getUserPublicInfo(userId);
@@ -151,15 +172,31 @@ namespace TinyWars.MultiCustomRoom {
             const rankScoreArray        = userInfo ? userInfo.userRankScore.dataList : undefined;
             const stdRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwStd) : null;
             const fogRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwFog) : null;
-            this._labelRankStd.text     = stdRankInfo ? `${stdRankInfo.currentScore == null ? CommonConstants.RankInitialScore : stdRankInfo.currentScore}` : `??`;
-            this._labelRankFog.text     = fogRankInfo ? `${fogRankInfo.currentScore == null ? CommonConstants.RankInitialScore : fogRankInfo.currentScore}` : `??`;
+            const stdScore              = stdRankInfo ? stdRankInfo.currentScore : null;
+            const fogScore              = fogRankInfo ? fogRankInfo.currentScore : null;
+            const stdRank               = stdRankInfo ? stdRankInfo.currentRank : null;
+            const fogRank               = fogRankInfo ? fogRankInfo.currentRank : null;
+            this._labelRankStd.text     = stdRankInfo
+                ? `${stdScore == null ? CommonConstants.RankInitialScore : stdScore} (${stdRank == null ? `--` : `${stdRank}${Helpers.getSuffixForRank(stdRank)}`})`
+                : `??`;
+            this._labelRankFog.text     = fogRankInfo
+                ? `${fogScore == null ? CommonConstants.RankInitialScore : fogScore} (${fogRank == null ? `--` : `${fogRank}${Helpers.getSuffixForRank(fogRank)}`})`
+                : `??`;
         }
 
         private _updateComponentsForLanguage(): void {
             this._labelRankStdTitle.text    = Lang.getText(Lang.Type.B0546);
             this._labelRankFogTitle.text    = Lang.getText(Lang.Type.B0547);
-            this._btnChat.label             = Lang.getText(Lang.Type.B0383);
-            this._btnInfo.label             = Lang.getText(Lang.Type.B0423);
+        }
+    }
+
+    function getSourceForImgSkin(skinId: number): string {
+        switch (skinId) {
+            case 1  : return `commonRectangle0002`;
+            case 2  : return `commonRectangle0003`;
+            case 3  : return `commonRectangle0004`;
+            case 4  : return `commonRectangle0005`;
+            default : return `commonRectangle0006`;
         }
     }
 }
