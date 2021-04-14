@@ -28,7 +28,7 @@
                                     <GameUi:UiLabel id="_labelPlayerIndex" text="P1" size="14" x="0" y="0" />
                                     <GameUi:UiLabel id="_labelTeamIndex" text="A队" size="14" x="10" y="0" />
                                     <e:layout>
-                                        <e:HorizontalLayout/>
+                                        <e:HorizontalLayout gap="20" />
                                     </e:layout>
                                 </e:Group>
                                 <GameUi:UiLabel id="_labelNickname" text="玩家名称居然有十个字" x="20" size="16" y="158"

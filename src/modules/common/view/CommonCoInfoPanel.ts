@@ -76,7 +76,7 @@ namespace TinyWars.Common {
             });
             Helpers.resetTween({
                 obj         : this._group,
-                beginProps  : { alpha: 0, verticalCenter: -40 },
+                beginProps  : { alpha: 0, verticalCenter: 40 },
                 endProps    : { alpha: 1, verticalCenter: 0 },
             });
         }
@@ -91,7 +91,7 @@ namespace TinyWars.Common {
                 Helpers.resetTween({
                     obj         : this._group,
                     beginProps  : { alpha: 1, verticalCenter: 0 },
-                    endProps    : { alpha: 0, verticalCenter: -40 },
+                    endProps    : { alpha: 0, verticalCenter: 40 },
                     callback    : resolve,
                 });
             });
