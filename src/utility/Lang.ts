@@ -960,6 +960,14 @@ namespace TinyWars.Utility.Lang {
             `将离开战局并前往创建自由模式房间的页面。\n您确定要继续吗？`,
             `You have to leave the war scene (you can enter it again later) in order to create the free mode room.\nAre you sure to continue?`,
         ],
+        [Type.A0202]: [
+            `已有其他玩家选择该势力`,
+            `The force has been chosen by another player.`,
+        ],
+        [Type.A0203]: [
+            `已有其他玩家选择该颜色`,
+            `The color has been chosen by another player.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

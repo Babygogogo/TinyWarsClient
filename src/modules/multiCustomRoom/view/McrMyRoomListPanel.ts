@@ -54,9 +54,8 @@ namespace TinyWars.MultiCustomRoom {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
-                { type: Notify.Type.MsgMcrExitRoom,                 callback: this._onMsgMcrExitRoom },
                 { type: Notify.Type.MsgMcrDeletePlayer,             callback: this._onMsgMcrDeletePlayer },
-                { type: Notify.Type.MsgMcrDeleteRoom,               callback: this._onMsgMcrDeleteRoom },
+                { type: Notify.Type.MsgMcrDeleteRoomByServer,       callback: this._onMsgMcrDeleteRoomByServer },
                 { type: Notify.Type.MsgMcrStartWar,                 callback: this._onMsgMcrStartWar },
             ]);
             this._setUiListenerArray([
@@ -110,10 +109,6 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForRoomList();
         }
 
-        private _onMsgMcrExitRoom(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0016));
-        }
-
         private _onMsgMcrDeletePlayer(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS;
             if (data.targetUserId === User.UserModel.getSelfUserId()) {
@@ -121,7 +116,7 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _onMsgMcrDeleteRoom(e: egret.Event): void {
+        private _onMsgMcrDeleteRoomByServer(e: egret.Event): void {
             this._updateComponentsForRoomList();
         }
 

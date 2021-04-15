@@ -10,7 +10,8 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         NetManager.addListeners([
             { msgCode: ActionCode.MsgMcrCreateRoom,                 callback: _onMsgMcrCreateRoom },
             { msgCode: ActionCode.MsgMcrJoinRoom,                   callback: _onMsgMcrJoinRoom },
-            { msgCode: ActionCode.MsgMcrDeleteRoom,                 callback: _onMsgMcrDeleteRoom },
+            { msgCode: ActionCode.MsgMcrDeleteRoomByPlayer,         callback: _onMsgMcrDeleteRoomByPlayer },
+            { msgCode: ActionCode.MsgMcrDeleteRoomByServer,         callback: _onMsgMcrDeleteRoomByServer },
             { msgCode: ActionCode.MsgMcrExitRoom,                   callback: _onMsgMcrExitRoom },
             { msgCode: ActionCode.MsgMcrSetWarRule,                 callback: _onMsgMcrSetWarRule },
             { msgCode: ActionCode.MsgMcrDeletePlayer,               callback: _onMsgMcrDeletePlayer },
@@ -47,19 +48,25 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         }
     }
 
-    export function reqMcrDestroyRoom(roomId: number): void {
+    export function reqMcrDeleteRoomByPlayer(roomId: number): void {
         NetManager.send({
-            MsgMcrDeleteRoom: { c: {
+            MsgMcrDeleteRoomByPlayer: { c: {
                 roomId,
             } },
         });
     }
-    function _onMsgMcrDeleteRoom(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrDeleteRoom.IS;
+    function _onMsgMcrDeleteRoomByPlayer(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrDeleteRoomByPlayer.IS;
         if (!data.errorCode) {
-            const roomId = data.roomId;
-            McrModel.deleteRoomInfo(roomId);
-            Notify.dispatch(Notify.Type.MsgMcrDeleteRoom, data);
+            Notify.dispatch(Notify.Type.MsgMcrDeleteRoomByPlayer, data);
+        }
+    }
+
+    function _onMsgMcrDeleteRoomByServer(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMcrDeleteRoomByServer.IS;
+        if (!data.errorCode) {
+            McrModel.deleteRoomInfo(data.roomId);
+            Notify.dispatch(Notify.Type.MsgMcrDeleteRoomByServer, data);
         }
     }
 
@@ -70,9 +77,10 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
             }, },
         });
     }
-    function _onMsgMcrExitRoom(e: egret.Event): void {
+    async function _onMsgMcrExitRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrExitRoom.IS;
         if (!data.errorCode) {
+            await McrModel.updateOnMsgMcrExitRoom(data);
             Notify.dispatch(Notify.Type.MsgMcrExitRoom, data);
         }
     }
@@ -100,7 +108,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onMsgMcrDeletePlayer(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrDeletePlayer.IS;
         if (!data.errorCode) {
-            McrModel.updateOnDeletePlayer(data);
+            McrModel.updateOnMsgMcrDeletePlayer(data);
             Notify.dispatch(Notify.Type.MsgMcrDeletePlayer, data);
         }
     }
@@ -113,9 +121,10 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
             }, },
         });
     }
-    function _onMsgMcrSetReady(e: egret.Event): void {
+    async function _onMsgMcrSetReady(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrSetReady.IS;
         if (!data.errorCode) {
+            await McrModel.updateOnMsgMcrSetReady(data);
             Notify.dispatch(Notify.Type.MsgMcrSetReady, data);
         }
     }
@@ -125,9 +134,10 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
             MsgMcrSetSelfSettings: { c: data },
         });
     }
-    function _onMsgMcrSetSelfSettings(e: egret.Event): void {
+    async function _onMsgMcrSetSelfSettings(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrSetSelfSettings.IS;
         if (!data.errorCode) {
+            await McrModel.updateOnMsgMcrSetSelfSettings(data);
             Notify.dispatch(Notify.Type.MsgMcrSetSelfSettings, data);
         }
     }
@@ -194,7 +204,6 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
     function _onMsgMcrStartWar(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMcrStartWar.IS;
         if (!data.errorCode) {
-            McrModel.deleteRoomInfo(data.roomId);
             Notify.dispatch(Notify.Type.MsgMcrStartWar, data);
         }
     }

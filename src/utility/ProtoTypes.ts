@@ -18978,8 +18978,11 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMcrJoinRoom */
         MsgMcrJoinRoom?: (NetMessage.IMsgMcrJoinRoom|null);
 
-        /** MessageContainer MsgMcrDeleteRoom */
-        MsgMcrDeleteRoom?: (NetMessage.IMsgMcrDeleteRoom|null);
+        /** MessageContainer MsgMcrDeleteRoomByPlayer */
+        MsgMcrDeleteRoomByPlayer?: (NetMessage.IMsgMcrDeleteRoomByPlayer|null);
+
+        /** MessageContainer MsgMcrDeleteRoomByServer */
+        MsgMcrDeleteRoomByServer?: (NetMessage.IMsgMcrDeleteRoomByServer|null);
 
         /** MessageContainer MsgMcrSetReady */
         MsgMcrSetReady?: (NetMessage.IMsgMcrSetReady|null);
@@ -19351,8 +19354,11 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMcrJoinRoom. */
         public MsgMcrJoinRoom?: (NetMessage.IMsgMcrJoinRoom|null);
 
-        /** MessageContainer MsgMcrDeleteRoom. */
-        public MsgMcrDeleteRoom?: (NetMessage.IMsgMcrDeleteRoom|null);
+        /** MessageContainer MsgMcrDeleteRoomByPlayer. */
+        public MsgMcrDeleteRoomByPlayer?: (NetMessage.IMsgMcrDeleteRoomByPlayer|null);
+
+        /** MessageContainer MsgMcrDeleteRoomByServer. */
+        public MsgMcrDeleteRoomByServer?: (NetMessage.IMsgMcrDeleteRoomByServer|null);
 
         /** MessageContainer MsgMcrSetReady. */
         public MsgMcrSetReady?: (NetMessage.IMsgMcrSetReady|null);
@@ -33613,6 +33619,12 @@ export declare namespace NetMessage {
 
             /** S roomId */
             roomId?: (number|null);
+
+            /** S playerIndex */
+            playerIndex?: (number|null);
+
+            /** S roomOwnerPlayerIndex */
+            roomOwnerPlayerIndex?: (number|null);
         }
 
         /** Represents a S. */
@@ -33629,6 +33641,12 @@ export declare namespace NetMessage {
 
             /** S roomId. */
             public roomId: number;
+
+            /** S playerIndex. */
+            public playerIndex: number;
+
+            /** S roomOwnerPlayerIndex. */
+            public roomOwnerPlayerIndex: number;
 
             /**
              * Creates a new S instance using the specified properties.
@@ -34860,103 +34878,103 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgMcrDeleteRoom. */
-    interface IMsgMcrDeleteRoom {
+    /** Properties of a MsgMcrDeleteRoomByPlayer. */
+    interface IMsgMcrDeleteRoomByPlayer {
 
-        /** MsgMcrDeleteRoom c */
-        c?: (NetMessage.MsgMcrDeleteRoom.IC|null);
+        /** MsgMcrDeleteRoomByPlayer c */
+        c?: (NetMessage.MsgMcrDeleteRoomByPlayer.IC|null);
 
-        /** MsgMcrDeleteRoom s */
-        s?: (NetMessage.MsgMcrDeleteRoom.IS|null);
+        /** MsgMcrDeleteRoomByPlayer s */
+        s?: (NetMessage.MsgMcrDeleteRoomByPlayer.IS|null);
     }
 
-    /** Represents a MsgMcrDeleteRoom. */
-    class MsgMcrDeleteRoom implements IMsgMcrDeleteRoom {
+    /** Represents a MsgMcrDeleteRoomByPlayer. */
+    class MsgMcrDeleteRoomByPlayer implements IMsgMcrDeleteRoomByPlayer {
 
         /**
-         * Constructs a new MsgMcrDeleteRoom.
+         * Constructs a new MsgMcrDeleteRoomByPlayer.
          * @param [properties] Properties to set
          */
-        constructor(properties?: NetMessage.IMsgMcrDeleteRoom);
+        constructor(properties?: NetMessage.IMsgMcrDeleteRoomByPlayer);
 
-        /** MsgMcrDeleteRoom c. */
-        public c?: (NetMessage.MsgMcrDeleteRoom.IC|null);
+        /** MsgMcrDeleteRoomByPlayer c. */
+        public c?: (NetMessage.MsgMcrDeleteRoomByPlayer.IC|null);
 
-        /** MsgMcrDeleteRoom s. */
-        public s?: (NetMessage.MsgMcrDeleteRoom.IS|null);
+        /** MsgMcrDeleteRoomByPlayer s. */
+        public s?: (NetMessage.MsgMcrDeleteRoomByPlayer.IS|null);
 
         /**
-         * Creates a new MsgMcrDeleteRoom instance using the specified properties.
+         * Creates a new MsgMcrDeleteRoomByPlayer instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns MsgMcrDeleteRoom instance
+         * @returns MsgMcrDeleteRoomByPlayer instance
          */
-        public static create(properties?: NetMessage.IMsgMcrDeleteRoom): NetMessage.MsgMcrDeleteRoom;
+        public static create(properties?: NetMessage.IMsgMcrDeleteRoomByPlayer): NetMessage.MsgMcrDeleteRoomByPlayer;
 
         /**
-         * Encodes the specified MsgMcrDeleteRoom message. Does not implicitly {@link NetMessage.MsgMcrDeleteRoom.verify|verify} messages.
-         * @param message MsgMcrDeleteRoom message or plain object to encode
+         * Encodes the specified MsgMcrDeleteRoomByPlayer message. Does not implicitly {@link NetMessage.MsgMcrDeleteRoomByPlayer.verify|verify} messages.
+         * @param message MsgMcrDeleteRoomByPlayer message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: NetMessage.IMsgMcrDeleteRoom, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: NetMessage.IMsgMcrDeleteRoomByPlayer, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified MsgMcrDeleteRoom message, length delimited. Does not implicitly {@link NetMessage.MsgMcrDeleteRoom.verify|verify} messages.
-         * @param message MsgMcrDeleteRoom message or plain object to encode
+         * Encodes the specified MsgMcrDeleteRoomByPlayer message, length delimited. Does not implicitly {@link NetMessage.MsgMcrDeleteRoomByPlayer.verify|verify} messages.
+         * @param message MsgMcrDeleteRoomByPlayer message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: NetMessage.IMsgMcrDeleteRoom, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: NetMessage.IMsgMcrDeleteRoomByPlayer, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a MsgMcrDeleteRoom message from the specified reader or buffer.
+         * Decodes a MsgMcrDeleteRoomByPlayer message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns MsgMcrDeleteRoom
+         * @returns MsgMcrDeleteRoomByPlayer
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMcrDeleteRoom;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMcrDeleteRoomByPlayer;
 
         /**
-         * Decodes a MsgMcrDeleteRoom message from the specified reader or buffer, length delimited.
+         * Decodes a MsgMcrDeleteRoomByPlayer message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns MsgMcrDeleteRoom
+         * @returns MsgMcrDeleteRoomByPlayer
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMcrDeleteRoom;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMcrDeleteRoomByPlayer;
 
         /**
-         * Verifies a MsgMcrDeleteRoom message.
+         * Verifies a MsgMcrDeleteRoomByPlayer message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a MsgMcrDeleteRoom message from a plain object. Also converts values to their respective internal types.
+         * Creates a MsgMcrDeleteRoomByPlayer message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns MsgMcrDeleteRoom
+         * @returns MsgMcrDeleteRoomByPlayer
          */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMcrDeleteRoom;
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMcrDeleteRoomByPlayer;
 
         /**
-         * Creates a plain object from a MsgMcrDeleteRoom message. Also converts values to other types if specified.
-         * @param message MsgMcrDeleteRoom
+         * Creates a plain object from a MsgMcrDeleteRoomByPlayer message. Also converts values to other types if specified.
+         * @param message MsgMcrDeleteRoomByPlayer
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: NetMessage.MsgMcrDeleteRoom, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: NetMessage.MsgMcrDeleteRoomByPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this MsgMcrDeleteRoom to JSON.
+         * Converts this MsgMcrDeleteRoomByPlayer to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace MsgMcrDeleteRoom {
+    namespace MsgMcrDeleteRoomByPlayer {
 
         /** Properties of a C. */
         interface IC {
@@ -34972,7 +34990,7 @@ export declare namespace NetMessage {
              * Constructs a new C.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMcrDeleteRoom.IC);
+            constructor(properties?: NetMessage.MsgMcrDeleteRoomByPlayer.IC);
 
             /** C roomId. */
             public roomId: number;
@@ -34982,23 +35000,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns C instance
              */
-            public static create(properties?: NetMessage.MsgMcrDeleteRoom.IC): NetMessage.MsgMcrDeleteRoom.C;
+            public static create(properties?: NetMessage.MsgMcrDeleteRoomByPlayer.IC): NetMessage.MsgMcrDeleteRoomByPlayer.C;
 
             /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMcrDeleteRoom.C.verify|verify} messages.
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgMcrDeleteRoomByPlayer.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMcrDeleteRoom.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMcrDeleteRoomByPlayer.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMcrDeleteRoom.C.verify|verify} messages.
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgMcrDeleteRoomByPlayer.C.verify|verify} messages.
              * @param message C message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMcrDeleteRoom.IC, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMcrDeleteRoomByPlayer.IC, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a C message from the specified reader or buffer.
@@ -35008,7 +35026,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMcrDeleteRoom.C;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMcrDeleteRoomByPlayer.C;
 
             /**
              * Decodes a C message from the specified reader or buffer, length delimited.
@@ -35017,7 +35035,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMcrDeleteRoom.C;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMcrDeleteRoomByPlayer.C;
 
             /**
              * Verifies a C message.
@@ -35031,7 +35049,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns C
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMcrDeleteRoom.C;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMcrDeleteRoomByPlayer.C;
 
             /**
              * Creates a plain object from a C message. Also converts values to other types if specified.
@@ -35039,7 +35057,7 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMcrDeleteRoom.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMcrDeleteRoomByPlayer.C, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this C to JSON.
@@ -35065,7 +35083,7 @@ export declare namespace NetMessage {
              * Constructs a new S.
              * @param [properties] Properties to set
              */
-            constructor(properties?: NetMessage.MsgMcrDeleteRoom.IS);
+            constructor(properties?: NetMessage.MsgMcrDeleteRoomByPlayer.IS);
 
             /** S errorCode. */
             public errorCode: number;
@@ -35078,23 +35096,23 @@ export declare namespace NetMessage {
              * @param [properties] Properties to set
              * @returns S instance
              */
-            public static create(properties?: NetMessage.MsgMcrDeleteRoom.IS): NetMessage.MsgMcrDeleteRoom.S;
+            public static create(properties?: NetMessage.MsgMcrDeleteRoomByPlayer.IS): NetMessage.MsgMcrDeleteRoomByPlayer.S;
 
             /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMcrDeleteRoom.S.verify|verify} messages.
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMcrDeleteRoomByPlayer.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: NetMessage.MsgMcrDeleteRoom.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: NetMessage.MsgMcrDeleteRoomByPlayer.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMcrDeleteRoom.S.verify|verify} messages.
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMcrDeleteRoomByPlayer.S.verify|verify} messages.
              * @param message S message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: NetMessage.MsgMcrDeleteRoom.IS, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: NetMessage.MsgMcrDeleteRoomByPlayer.IS, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a S message from the specified reader or buffer.
@@ -35104,7 +35122,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMcrDeleteRoom.S;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMcrDeleteRoomByPlayer.S;
 
             /**
              * Decodes a S message from the specified reader or buffer, length delimited.
@@ -35113,7 +35131,7 @@ export declare namespace NetMessage {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMcrDeleteRoom.S;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMcrDeleteRoomByPlayer.S;
 
             /**
              * Verifies a S message.
@@ -35127,7 +35145,7 @@ export declare namespace NetMessage {
              * @param object Plain object
              * @returns S
              */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMcrDeleteRoom.S;
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMcrDeleteRoomByPlayer.S;
 
             /**
              * Creates a plain object from a S message. Also converts values to other types if specified.
@@ -35135,7 +35153,196 @@ export declare namespace NetMessage {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: NetMessage.MsgMcrDeleteRoom.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: NetMessage.MsgMcrDeleteRoomByPlayer.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgMcrDeleteRoomByServer. */
+    interface IMsgMcrDeleteRoomByServer {
+
+        /** MsgMcrDeleteRoomByServer s */
+        s?: (NetMessage.MsgMcrDeleteRoomByServer.IS|null);
+    }
+
+    /** Represents a MsgMcrDeleteRoomByServer. */
+    class MsgMcrDeleteRoomByServer implements IMsgMcrDeleteRoomByServer {
+
+        /**
+         * Constructs a new MsgMcrDeleteRoomByServer.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMcrDeleteRoomByServer);
+
+        /** MsgMcrDeleteRoomByServer s. */
+        public s?: (NetMessage.MsgMcrDeleteRoomByServer.IS|null);
+
+        /**
+         * Creates a new MsgMcrDeleteRoomByServer instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMcrDeleteRoomByServer instance
+         */
+        public static create(properties?: NetMessage.IMsgMcrDeleteRoomByServer): NetMessage.MsgMcrDeleteRoomByServer;
+
+        /**
+         * Encodes the specified MsgMcrDeleteRoomByServer message. Does not implicitly {@link NetMessage.MsgMcrDeleteRoomByServer.verify|verify} messages.
+         * @param message MsgMcrDeleteRoomByServer message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMcrDeleteRoomByServer, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMcrDeleteRoomByServer message, length delimited. Does not implicitly {@link NetMessage.MsgMcrDeleteRoomByServer.verify|verify} messages.
+         * @param message MsgMcrDeleteRoomByServer message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMcrDeleteRoomByServer, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMcrDeleteRoomByServer message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMcrDeleteRoomByServer
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMcrDeleteRoomByServer;
+
+        /**
+         * Decodes a MsgMcrDeleteRoomByServer message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMcrDeleteRoomByServer
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMcrDeleteRoomByServer;
+
+        /**
+         * Verifies a MsgMcrDeleteRoomByServer message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMcrDeleteRoomByServer message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMcrDeleteRoomByServer
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMcrDeleteRoomByServer;
+
+        /**
+         * Creates a plain object from a MsgMcrDeleteRoomByServer message. Also converts values to other types if specified.
+         * @param message MsgMcrDeleteRoomByServer
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMcrDeleteRoomByServer, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMcrDeleteRoomByServer to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMcrDeleteRoomByServer {
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S roomId */
+            roomId?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMcrDeleteRoomByServer.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S roomId. */
+            public roomId: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMcrDeleteRoomByServer.IS): NetMessage.MsgMcrDeleteRoomByServer.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMcrDeleteRoomByServer.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMcrDeleteRoomByServer.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMcrDeleteRoomByServer.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMcrDeleteRoomByServer.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMcrDeleteRoomByServer.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMcrDeleteRoomByServer.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMcrDeleteRoomByServer.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMcrDeleteRoomByServer.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.
@@ -35344,6 +35551,15 @@ export declare namespace NetMessage {
 
             /** S errorCode */
             errorCode?: (number|null);
+
+            /** S roomId */
+            roomId?: (number|null);
+
+            /** S playerIndex */
+            playerIndex?: (number|null);
+
+            /** S isReady */
+            isReady?: (boolean|null);
         }
 
         /** Represents a S. */
@@ -35357,6 +35573,15 @@ export declare namespace NetMessage {
 
             /** S errorCode. */
             public errorCode: number;
+
+            /** S roomId. */
+            public roomId: number;
+
+            /** S playerIndex. */
+            public playerIndex: number;
+
+            /** S isReady. */
+            public isReady: boolean;
 
             /**
              * Creates a new S instance using the specified properties.
@@ -35944,6 +36169,21 @@ export declare namespace NetMessage {
 
             /** S errorCode */
             errorCode?: (number|null);
+
+            /** S roomId */
+            roomId?: (number|null);
+
+            /** S oldPlayerIndex */
+            oldPlayerIndex?: (number|null);
+
+            /** S newPlayerIndex */
+            newPlayerIndex?: (number|null);
+
+            /** S coId */
+            coId?: (number|null);
+
+            /** S unitAndTileSkinId */
+            unitAndTileSkinId?: (number|null);
         }
 
         /** Represents a S. */
@@ -35957,6 +36197,21 @@ export declare namespace NetMessage {
 
             /** S errorCode. */
             public errorCode: number;
+
+            /** S roomId. */
+            public roomId: number;
+
+            /** S oldPlayerIndex. */
+            public oldPlayerIndex: number;
+
+            /** S newPlayerIndex. */
+            public newPlayerIndex: number;
+
+            /** S coId. */
+            public coId: number;
+
+            /** S unitAndTileSkinId. */
+            public unitAndTileSkinId: number;
 
             /**
              * Creates a new S instance using the specified properties.

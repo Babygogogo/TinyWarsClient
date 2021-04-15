@@ -127,11 +127,42 @@ namespace TinyWars.MultiCustomRoom {
             return infoList;
         }
 
-        export function updateOnDeletePlayer(data: ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS): void {
+        export function updateOnMsgMcrDeletePlayer(data: ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS): void {
             if (data.targetUserId === User.UserModel.getSelfUserId()) {
                 const roomId = data.roomId;
                 _unjoinedRoomIdSet.add(roomId);
                 _joinedRoomIdSet.delete(roomId);
+            }
+        }
+        export async function updateOnMsgMcrSetReady(data: ProtoTypes.NetMessage.MsgMcrSetReady.IS): Promise<void> {
+            const roomInfo      = await getRoomInfo(data.roomId);
+            const playerData    = roomInfo ? roomInfo.playerDataList.find(v => v.playerIndex === data.playerIndex) : null;
+            if (playerData) {
+                playerData.isReady = data.isReady;
+            }
+        }
+        export async function updateOnMsgMcrSetSelfSettings(data: ProtoTypes.NetMessage.MsgMcrSetSelfSettings.IS): Promise<void> {
+            const roomInfo = await getRoomInfo(data.roomId);
+            if (roomInfo) {
+                const oldPlayerIndex            = data.oldPlayerIndex;
+                const newPlayerIndex            = data.newPlayerIndex;
+                const playerData                = roomInfo.playerDataList.find(v => v.playerIndex === oldPlayerIndex);
+                playerData.coId                 = data.coId;
+                playerData.unitAndTileSkinId    = data.unitAndTileSkinId;
+                playerData.playerIndex          = newPlayerIndex;
+                if ((oldPlayerIndex !== newPlayerIndex) && (roomInfo.ownerPlayerIndex === oldPlayerIndex)) {
+                    roomInfo.ownerPlayerIndex = newPlayerIndex;
+                }
+            }
+        }
+        export async function updateOnMsgMcrExitRoom(data: ProtoTypes.NetMessage.MsgMcrExitRoom.IS): Promise<void> {
+            const roomId    = data.roomId;
+            const roomInfo  = await getRoomInfo(roomId);
+            if (roomInfo) {
+                roomInfo.ownerPlayerIndex = data.roomOwnerPlayerIndex;
+
+                const playerDataList = roomInfo.playerDataList;
+                Helpers.deleteElementFromArray(playerDataList, playerDataList.find(v => v.playerIndex === data.playerIndex));
             }
         }
 
@@ -163,6 +194,21 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
             return false;
+        }
+
+        export async function checkCanStartGame(roomId: number): Promise<boolean> {
+            const roomInfo = await getRoomInfo(roomId);
+            if (!roomInfo) {
+                return false;
+            }
+
+            const selfUserId        = User.UserModel.getSelfUserId();
+            const playerDataList    = roomInfo.playerDataList || [];
+            const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
+            return (selfPlayerData != null)
+                && (selfPlayerData.playerIndex === roomInfo.ownerPlayerIndex)
+                && (playerDataList.length == BwWarRuleHelper.getPlayersCount(roomInfo.settingsForCommon.warRule))
+                && (playerDataList.every(v => (v.isReady) && (v.userId != null)));
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
