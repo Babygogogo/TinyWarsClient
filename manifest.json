@@ -211,6 +211,8 @@
 		"bin-debug/modules/multiCustomRoom/view/McrRoomBasicSettingsPage.js",
 		"bin-debug/modules/multiCustomRoom/view/McrRoomChooseCoPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrRoomInfoPanel.js",
+		"bin-debug/modules/multiCustomRoom/view/McrRoomMapInfoPage.js",
+		"bin-debug/modules/multiCustomRoom/view/McrRoomPlayerInfoPage.js",
 		"bin-debug/modules/multiCustomRoom/view/McrWarAdvancedSettingsPage.js",
 		"bin-debug/modules/multiCustomRoom/view/McrWarBasicSettingsPage.js",
 		"bin-debug/modules/multiCustomRoom/view/McrWarInfoPanel.js",

@@ -17,6 +17,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
             { msgCode: ActionCode.MsgMcrDeletePlayer,               callback: _onMsgMcrDeletePlayer },
             { msgCode: ActionCode.MsgMcrSetReady,                   callback: _onMsgMcrSetReady },
             { msgCode: ActionCode.MsgMcrSetSelfSettings,            callback: _onMsgMcrSetSelfSettings },
+            { msgCode: ActionCode.MsgMcrGetOwnerPlayerIndex,        callback: _onMsgMcrGetOwnerPlayerIndex },
             { msgCode: ActionCode.MsgMcrGetRoomInfo,                callback: _onMsgMcrGetRoomInfo },
             { msgCode: ActionCode.MsgMcrGetJoinableRoomInfoList,    callback: _onMsgMcrGetJoinableRoomInfoList },
             { msgCode: ActionCode.MsgMcrGetJoinedRoomInfoList,      callback: _onMsgMcrGetJoinedRoomInfoList },
@@ -41,9 +42,10 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
             MsgMcrJoinRoom: { c: data },
         });
     }
-    function _onMsgMcrJoinRoom(e: egret.Event): void {
+    async function _onMsgMcrJoinRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrJoinRoom.IS;
         if (!data.errorCode) {
+            await McrModel.updateOnMsgMcrJoinRoom(data);
             Notify.dispatch(Notify.Type.MsgMcrJoinRoom, data);
         }
     }
@@ -139,6 +141,14 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         if (!data.errorCode) {
             await McrModel.updateOnMsgMcrSetSelfSettings(data);
             Notify.dispatch(Notify.Type.MsgMcrSetSelfSettings, data);
+        }
+    }
+
+    async function _onMsgMcrGetOwnerPlayerIndex(e: egret.Event): Promise<void> {
+        const data = e.data as NetMessage.MsgMcrGetOwnerPlayerIndex.IS;
+        if (!data.errorCode) {
+            await McrModel.updateOnMsgMcrGetOwnerPlayerIndex(data);
+            Notify.dispatch(Notify.Type.MsgMcrGetOwnerPlayerIndex, data);
         }
     }
 

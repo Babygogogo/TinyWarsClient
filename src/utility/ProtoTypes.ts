@@ -18996,6 +18996,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMcrSetWarRule */
         MsgMcrSetWarRule?: (NetMessage.IMsgMcrSetWarRule|null);
 
+        /** MessageContainer MsgMcrGetOwnerPlayerIndex */
+        MsgMcrGetOwnerPlayerIndex?: (NetMessage.IMsgMcrGetOwnerPlayerIndex|null);
+
         /** MessageContainer MsgMcrStartWar */
         MsgMcrStartWar?: (NetMessage.IMsgMcrStartWar|null);
 
@@ -19371,6 +19374,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMcrSetWarRule. */
         public MsgMcrSetWarRule?: (NetMessage.IMsgMcrSetWarRule|null);
+
+        /** MessageContainer MsgMcrGetOwnerPlayerIndex. */
+        public MsgMcrGetOwnerPlayerIndex?: (NetMessage.IMsgMcrGetOwnerPlayerIndex|null);
 
         /** MessageContainer MsgMcrStartWar. */
         public MsgMcrStartWar?: (NetMessage.IMsgMcrStartWar|null);
@@ -33622,9 +33628,6 @@ export declare namespace NetMessage {
 
             /** S playerIndex */
             playerIndex?: (number|null);
-
-            /** S roomOwnerPlayerIndex */
-            roomOwnerPlayerIndex?: (number|null);
         }
 
         /** Represents a S. */
@@ -33644,9 +33647,6 @@ export declare namespace NetMessage {
 
             /** S playerIndex. */
             public playerIndex: number;
-
-            /** S roomOwnerPlayerIndex. */
-            public roomOwnerPlayerIndex: number;
 
             /**
              * Creates a new S instance using the specified properties.
@@ -34789,6 +34789,21 @@ export declare namespace NetMessage {
 
             /** S roomId */
             roomId?: (number|null);
+
+            /** S playerIndex */
+            playerIndex?: (number|null);
+
+            /** S coId */
+            coId?: (number|null);
+
+            /** S isReady */
+            isReady?: (boolean|null);
+
+            /** S unitAndTileSkinId */
+            unitAndTileSkinId?: (number|null);
+
+            /** S userId */
+            userId?: (number|null);
         }
 
         /** Represents a S. */
@@ -34805,6 +34820,21 @@ export declare namespace NetMessage {
 
             /** S roomId. */
             public roomId: number;
+
+            /** S playerIndex. */
+            public playerIndex: number;
+
+            /** S coId. */
+            public coId: number;
+
+            /** S isReady. */
+            public isReady: boolean;
+
+            /** S unitAndTileSkinId. */
+            public unitAndTileSkinId: number;
+
+            /** S userId. */
+            public userId: number;
 
             /**
              * Creates a new S instance using the specified properties.
@@ -36579,6 +36609,201 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgMcrSetWarRule.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgMcrGetOwnerPlayerIndex. */
+    interface IMsgMcrGetOwnerPlayerIndex {
+
+        /** MsgMcrGetOwnerPlayerIndex s */
+        s?: (NetMessage.MsgMcrGetOwnerPlayerIndex.IS|null);
+    }
+
+    /** Represents a MsgMcrGetOwnerPlayerIndex. */
+    class MsgMcrGetOwnerPlayerIndex implements IMsgMcrGetOwnerPlayerIndex {
+
+        /**
+         * Constructs a new MsgMcrGetOwnerPlayerIndex.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMcrGetOwnerPlayerIndex);
+
+        /** MsgMcrGetOwnerPlayerIndex s. */
+        public s?: (NetMessage.MsgMcrGetOwnerPlayerIndex.IS|null);
+
+        /**
+         * Creates a new MsgMcrGetOwnerPlayerIndex instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMcrGetOwnerPlayerIndex instance
+         */
+        public static create(properties?: NetMessage.IMsgMcrGetOwnerPlayerIndex): NetMessage.MsgMcrGetOwnerPlayerIndex;
+
+        /**
+         * Encodes the specified MsgMcrGetOwnerPlayerIndex message. Does not implicitly {@link NetMessage.MsgMcrGetOwnerPlayerIndex.verify|verify} messages.
+         * @param message MsgMcrGetOwnerPlayerIndex message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMcrGetOwnerPlayerIndex, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMcrGetOwnerPlayerIndex message, length delimited. Does not implicitly {@link NetMessage.MsgMcrGetOwnerPlayerIndex.verify|verify} messages.
+         * @param message MsgMcrGetOwnerPlayerIndex message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMcrGetOwnerPlayerIndex, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMcrGetOwnerPlayerIndex message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMcrGetOwnerPlayerIndex
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMcrGetOwnerPlayerIndex;
+
+        /**
+         * Decodes a MsgMcrGetOwnerPlayerIndex message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMcrGetOwnerPlayerIndex
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMcrGetOwnerPlayerIndex;
+
+        /**
+         * Verifies a MsgMcrGetOwnerPlayerIndex message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMcrGetOwnerPlayerIndex message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMcrGetOwnerPlayerIndex
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMcrGetOwnerPlayerIndex;
+
+        /**
+         * Creates a plain object from a MsgMcrGetOwnerPlayerIndex message. Also converts values to other types if specified.
+         * @param message MsgMcrGetOwnerPlayerIndex
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMcrGetOwnerPlayerIndex, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMcrGetOwnerPlayerIndex to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMcrGetOwnerPlayerIndex {
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S roomId */
+            roomId?: (number|null);
+
+            /** S ownerPlayerIndex */
+            ownerPlayerIndex?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMcrGetOwnerPlayerIndex.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S roomId. */
+            public roomId: number;
+
+            /** S ownerPlayerIndex. */
+            public ownerPlayerIndex: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMcrGetOwnerPlayerIndex.IS): NetMessage.MsgMcrGetOwnerPlayerIndex.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMcrGetOwnerPlayerIndex.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMcrGetOwnerPlayerIndex.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMcrGetOwnerPlayerIndex.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMcrGetOwnerPlayerIndex.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMcrGetOwnerPlayerIndex.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMcrGetOwnerPlayerIndex.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMcrGetOwnerPlayerIndex.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMcrGetOwnerPlayerIndex.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

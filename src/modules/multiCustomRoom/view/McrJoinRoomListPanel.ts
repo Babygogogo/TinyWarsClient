@@ -115,8 +115,10 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onMsgMcrJoinRoom(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMcrJoinRoom.IS;
-            this.close();
-            McrRoomInfoPanel.show({ roomId: data.roomId });
+            if (data.userId === User.UserModel.getSelfUserId()) {
+                this.close();
+                McrRoomInfoPanel.show({ roomId: data.roomId });
+            }
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

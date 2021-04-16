@@ -160,7 +160,7 @@
                 </e:layout>
             </e:Group>
             <e:layout>
-                <e:VerticalLayout gap="30" />
+                <e:VerticalLayout gap="20" />
             </e:layout>
         </e:Group>
         <e:Group id="_groupButton" bottom="20" left="20" locked="true">

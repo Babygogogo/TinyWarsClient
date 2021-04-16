@@ -88,6 +88,7 @@ namespace TinyWars.MultiCustomRoom {
                 { type: Notify.Type.MsgMcrDeleteRoomByServer,   callback: this._onMsgMcrDeleteRoomByServer },
                 { type: Notify.Type.MsgMcrStartWar,             callback: this._onMsgMcrStartWar },
                 { type: Notify.Type.MsgMcrDeletePlayer,         callback: this._onMsgMcrDeletePlayer },
+                { type: Notify.Type.MsgMcrGetOwnerPlayerIndex,  callback: this._onMsgMcrGetOwnerPlayerIndex },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._sclPlayerIndex.setItemRenderer(PlayerIndexRenderer);
@@ -99,6 +100,20 @@ namespace TinyWars.MultiCustomRoom {
             const roomId = this._getOpenData().roomId;
             this._tabSettings.bindData([
                 {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                    pageClass   : McrRoomMapInfoPage,
+                    pageData    : {
+                        roomId
+                    } as OpenDataForMcrRoomMapInfoPage,
+                },
+                {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                    pageClass   : McrRoomPlayerInfoPage,
+                    pageData    : {
+                        roomId,
+                    } as OpenDataForMcrRoomPlayerInfoPage,
+                },
+                {
                     tabItemData : { name: Lang.getText(Lang.Type.B0002) },
                     pageClass   : McrRoomBasicSettingsPage,
                     pageData    : {
@@ -106,8 +121,8 @@ namespace TinyWars.MultiCustomRoom {
                     } as OpenDataForMcrRoomBasicSettingsPage,
                 },
                 {
-                    tabItemData: { name: Lang.getText(Lang.Type.B0003) },
-                    pageClass  : McrRoomAdvancedSettingsPage,
+                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                    pageClass   : McrRoomAdvancedSettingsPage,
                     pageData    : {
                         roomId
                     } as OpenDataForMcrRoomAdvancedSettingsPage,
@@ -253,6 +268,13 @@ namespace TinyWars.MultiCustomRoom {
                 FloatText.show(Lang.getText(Lang.Type.A0127));
                 this.close();
                 McrMyRoomListPanel.show();
+            }
+        }
+
+        private _onMsgMcrGetOwnerPlayerIndex(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMcrGetOwnerPlayerIndex.IS;
+            if (data.roomId === this._getOpenData().roomId) {
+                this._updateGroupButton();
             }
         }
 

@@ -110,6 +110,8 @@
 		"resource/skins/multiCustomRoom/McrRoomBasicSettingsPage.exml",
 		"resource/skins/multiCustomRoom/McrRoomChooseCoPanel.exml",
 		"resource/skins/multiCustomRoom/McrRoomInfoPanel.exml",
+		"resource/skins/multiCustomRoom/McrRoomMapInfoPage.exml",
+		"resource/skins/multiCustomRoom/McrRoomPlayerInfoPage.exml",
 		"resource/skins/multiCustomRoom/McrWarAdvancedSettingsPage.exml",
 		"resource/skins/multiCustomRoom/McrWarBasicSettingsPage.exml",
 		"resource/skins/multiCustomRoom/McrWarInfoPanel.exml",

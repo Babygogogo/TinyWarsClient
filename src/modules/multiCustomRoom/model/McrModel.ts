@@ -155,12 +155,39 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
         }
+        export async function updateOnMsgMcrGetOwnerPlayerIndex(data: ProtoTypes.NetMessage.MsgMcrGetOwnerPlayerIndex.IS): Promise<void> {
+            const roomInfo = await getRoomInfo(data.roomId);
+            if (roomInfo) {
+                roomInfo.ownerPlayerIndex = data.ownerPlayerIndex;
+            }
+        }
+        export async function updateOnMsgMcrJoinRoom(data: ProtoTypes.NetMessage.MsgMcrJoinRoom.IS): Promise<void> {
+            const roomInfo      = await getRoomInfo(data.roomId);
+            const playerIndex   = data.playerIndex;
+            if (!roomInfo.playerDataList) {
+                roomInfo.playerDataList = [{
+                    playerIndex         : playerIndex,
+                    userId              : data.userId,
+                    isReady             : data.isReady,
+                    coId                : data.coId,
+                    unitAndTileSkinId   : data.unitAndTileSkinId,
+                }];
+            } else {
+                const playerDataList = roomInfo.playerDataList;
+                Helpers.deleteElementFromArray(playerDataList, playerDataList.find(v => v.playerIndex === playerIndex));
+                playerDataList.push({
+                    playerIndex         : playerIndex,
+                    userId              : data.userId,
+                    isReady             : data.isReady,
+                    coId                : data.coId,
+                    unitAndTileSkinId   : data.unitAndTileSkinId,
+                });
+            }
+        }
         export async function updateOnMsgMcrExitRoom(data: ProtoTypes.NetMessage.MsgMcrExitRoom.IS): Promise<void> {
             const roomId    = data.roomId;
             const roomInfo  = await getRoomInfo(roomId);
             if (roomInfo) {
-                roomInfo.ownerPlayerIndex = data.roomOwnerPlayerIndex;
-
                 const playerDataList = roomInfo.playerDataList;
                 Helpers.deleteElementFromArray(playerDataList, playerDataList.find(v => v.playerIndex === data.playerIndex));
             }

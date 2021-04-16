@@ -164,6 +164,7 @@ namespace TinyWars.Utility.Notify {
         MsgMcrDeletePlayer,
         MsgMcrSetReady,
         MsgMcrSetSelfSettings,
+        MsgMcrGetOwnerPlayerIndex,
         MsgMcrStartWar,
 
         MsgMfrCreateRoom,

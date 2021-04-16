@@ -41,7 +41,7 @@ namespace TinyWars.User {
             if (!UserSettingsPanel._instance) {
                 UserSettingsPanel._instance = new UserSettingsPanel();
             }
-            UserSettingsPanel._instance.open();
+            UserSettingsPanel._instance.open(undefined);
         }
 
         public static async hide(): Promise<void> {
