@@ -152,7 +152,8 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnChooseCo(e: egret.TouchEvent): Promise<void> {
-            const roomInfo          = await McrModel.getRoomInfo(this._getOpenData().roomId);
+            const roomId            = this._getOpenData().roomId;
+            const roomInfo          = await McrModel.getRoomInfo(roomId);
             const selfUserId        = User.UserModel.getSelfUserId();
             const selfPlayerData    = roomInfo ? roomInfo.playerDataList.find(v => v.userId === selfUserId) : null;
             if (selfPlayerData != null) {
@@ -160,10 +161,9 @@ namespace TinyWars.MultiCustomRoom {
                     FloatText.show(Lang.getText(Lang.Type.A0128));
                 } else {
                     McrRoomChooseCoPanel.show({
-                        roomInfo,
-                        selfPlayerData,
+                        roomId,
+                        playerIndex: selfPlayerData.playerIndex,
                     });
-                    McrRoomInfoPanel.hide();
                 }
             }
         }

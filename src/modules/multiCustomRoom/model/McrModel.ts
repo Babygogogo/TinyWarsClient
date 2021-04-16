@@ -127,11 +127,18 @@ namespace TinyWars.MultiCustomRoom {
             return infoList;
         }
 
-        export function updateOnMsgMcrDeletePlayer(data: ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS): void {
-            if (data.targetUserId === User.UserModel.getSelfUserId()) {
-                const roomId = data.roomId;
-                _unjoinedRoomIdSet.add(roomId);
-                _joinedRoomIdSet.delete(roomId);
+        export async function updateOnMsgMcrDeletePlayer(data: ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS): Promise<void> {
+            const roomId    = data.roomId;
+            const roomInfo  = await getRoomInfo(roomId);
+            if (roomInfo) {
+                const playerDataList    = roomInfo.playerDataList;
+                const playerData        = playerDataList.find(v => v.playerIndex === data.targetPlayerIndex);
+                Helpers.deleteElementFromArray(playerDataList, playerData);
+
+                if ((playerData) && (playerData.userId === User.UserModel.getSelfUserId())) {
+                    _unjoinedRoomIdSet.add(roomId);
+                    _joinedRoomIdSet.delete(roomId);
+                }
             }
         }
         export async function updateOnMsgMcrSetReady(data: ProtoTypes.NetMessage.MsgMcrSetReady.IS): Promise<void> {
@@ -188,8 +195,14 @@ namespace TinyWars.MultiCustomRoom {
             const roomId    = data.roomId;
             const roomInfo  = await getRoomInfo(roomId);
             if (roomInfo) {
-                const playerDataList = roomInfo.playerDataList;
-                Helpers.deleteElementFromArray(playerDataList, playerDataList.find(v => v.playerIndex === data.playerIndex));
+                const playerDataList    = roomInfo.playerDataList;
+                const playerData        = playerDataList.find(v => v.playerIndex === data.playerIndex);
+                Helpers.deleteElementFromArray(playerDataList, playerData);
+
+                if ((playerData) && (playerData.userId === User.UserModel.getSelfUserId())) {
+                    _unjoinedRoomIdSet.add(roomId);
+                    _joinedRoomIdSet.delete(roomId);
+                }
             }
         }
 
