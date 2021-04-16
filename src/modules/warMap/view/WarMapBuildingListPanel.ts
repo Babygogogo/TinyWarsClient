@@ -13,7 +13,7 @@ namespace TinyWars.WarMap {
         playersCountUnneutral   : number;
     }
 
-    export class WarMapBuildingListPanel extends GameUi.UiPanel {
+    export class WarMapBuildingListPanel extends GameUi.UiPanel<OpenDataForBuildingListPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -70,7 +70,7 @@ namespace TinyWars.WarMap {
         }
 
         private _updateListTile(): void {
-            const openData      = this._getOpenData<OpenDataForBuildingListPanel>();
+            const openData      = this._getOpenData();
             const configVersion = openData.configVersion;
             const dict          = new Map<number, Map<number, number>>();
             for (const tileData of openData.tileDataArray || []) {

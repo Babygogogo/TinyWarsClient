@@ -13,7 +13,7 @@ namespace TinyWars.MapManagement {
         warRule         : WarRule.IWarRule;
     }
 
-    export class MmWarRuleAvailableCoPanel extends GameUi.UiPanel {
+    export class MmWarRuleAvailableCoPanel extends GameUi.UiPanel<OpenDataForMmWarRuleAvailableCoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -58,7 +58,7 @@ namespace TinyWars.MapManagement {
             ]);
 
             const availableCoIdSet  = this._availableCoIdSet;
-            const openData          = this._getOpenData<OpenDataForMmWarRuleAvailableCoPanel>();
+            const openData          = this._getOpenData();
             availableCoIdSet.clear();
             for (const coId of openData.playerRule.availableCoIdArray) {
                 availableCoIdSet.add(coId);
@@ -90,7 +90,7 @@ namespace TinyWars.MapManagement {
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
-            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._getOpenData<OpenDataForMmWarRuleAvailableCoPanel>().playerRule.playerIndex})`;
+            this._labelAvailableCoTitle.text    = `${Lang.getText(Lang.Type.B0238)} (P${this._getOpenData().playerRule.playerIndex})`;
         }
 
         private _initGroupCoTiers(): void {

@@ -9,7 +9,7 @@ namespace TinyWars.MultiFreeRoom {
     import WarMapModel  = WarMap.WarMapModel;
     import IMfrRoomInfo = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
 
-    export class MfrMyRoomListPanel extends GameUi.UiPanel {
+    export class MfrMyRoomListPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

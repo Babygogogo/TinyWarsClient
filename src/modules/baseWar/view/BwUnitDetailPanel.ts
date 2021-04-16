@@ -14,7 +14,7 @@ namespace TinyWars.BaseWar {
         unit: BwUnit;
     }
 
-    export class BwUnitDetailPanel extends GameUi.UiPanel {
+    export class BwUnitDetailPanel extends GameUi.UiPanel<OpenDataForBwUnitDetailPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -135,7 +135,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateUnitViewAndLabelName(): void {
-            const unit              = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
+            const unit              = this._getOpenData().unit;
             this._labelName.text    = Lang.getUnitName(unit.getUnitType());
             this._unitView.update({
                 gridIndex       : { x: 0, y: 0},
@@ -146,7 +146,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateListInfo(): void {
-            const unit          = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
+            const unit          = this._getOpenData().unit;
             const configVersion = unit.getConfigVersion();
             const unitType      = unit.getUnitType();
             const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
@@ -572,7 +572,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _createDataForListDamageChart(): DataForDamageRenderer[] {
-            const unit              = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
+            const unit              = this._getOpenData().unit;
             const configVersion     = unit.getConfigVersion();
             const attackUnitType    = unit.getUnitType();
             const playerIndex       = unit.getPlayerIndex();

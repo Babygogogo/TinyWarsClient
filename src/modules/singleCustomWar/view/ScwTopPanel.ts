@@ -7,7 +7,7 @@ namespace TinyWars.SingleCustomWar {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
 
-    export class ScwTopPanel extends GameUi.UiPanel {
+    export class ScwTopPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 

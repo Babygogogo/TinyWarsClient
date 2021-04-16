@@ -6,7 +6,7 @@ namespace TinyWars.ReplayWar {
     import Helpers          = Utility.Helpers;
     import CommonConstants  = Utility.CommonConstants;
 
-    export class RwSearchReplayPanel extends GameUi.UiPanel {
+    export class RwSearchReplayPanel extends GameUi.UiPanel<void> {
         protected _IS_EXCLUSIVE = false;
         protected _LAYER_TYPE   = Types.LayerType.Hud2;
 

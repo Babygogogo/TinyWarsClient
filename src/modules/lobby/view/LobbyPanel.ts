@@ -9,7 +9,7 @@ namespace TinyWars.Lobby {
     const DISCORD_URL   = `https://discord.gg/jdtRpY9`;
     const GITHUB_URL    = `https://github.com/Babygogogo/TinyWarsClient`;
 
-    export class LobbyPanel extends GameUi.UiPanel {
+    export class LobbyPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

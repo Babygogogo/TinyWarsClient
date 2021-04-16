@@ -8,7 +8,7 @@ namespace TinyWars.MapEditor {
 
     const MAX_RECENT_COUNT = 10;
 
-    export class MeChooseUnitPanel extends GameUi.UiPanel {
+    export class MeChooseUnitPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 

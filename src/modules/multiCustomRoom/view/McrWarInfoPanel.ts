@@ -9,7 +9,7 @@ namespace TinyWars.MultiCustomRoom {
     type OpenDataForMcrWarInfoPanel = {
         warInfo: IMpwWarInfo;
     }
-    export class McrWarInfoPanel extends GameUi.UiPanel {
+    export class McrWarInfoPanel extends GameUi.UiPanel<OpenDataForMcrWarInfoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -51,7 +51,7 @@ namespace TinyWars.MultiCustomRoom {
             this._btnBack.setTextColor(0x00FF00);
             this._btnContinueWar.setTextColor(0x00FF00);
 
-            const warInfo = this._getOpenData<OpenDataForMcrWarInfoPanel>();
+            const warInfo = this._getOpenData();
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0002) },
@@ -85,7 +85,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnStartGame(e: egret.TouchEvent): void {
-            const warInfo = this._getOpenData<OpenDataForMcrWarInfoPanel>().warInfo;
+            const warInfo = this._getOpenData().warInfo;
             if (warInfo) {
                 MpwProxy.reqMpwCommonContinueWar(warInfo.warId);
             }

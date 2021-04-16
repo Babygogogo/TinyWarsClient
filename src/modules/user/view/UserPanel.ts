@@ -11,7 +11,7 @@ namespace TinyWars.User {
     type OpenDataForUserPanel = {
         userId  : number;
     }
-    export class UserPanel extends GameUi.UiPanel {
+    export class UserPanel extends GameUi.UiPanel<OpenDataForUserPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -102,7 +102,7 @@ namespace TinyWars.User {
 
             this._showOpenAnimation();
 
-            const userId    = this._getOpenData<OpenDataForUserPanel>().userId;
+            const userId    = this._getOpenData().userId;
             this._userId    = userId;
             UserProxy.reqUserGetPublicInfo(userId);
 

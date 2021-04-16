@@ -8,7 +8,7 @@ namespace TinyWars.SingleCustomRoom {
 
     const CONFIRM_INTERVAL_MS = 5000;
 
-    export class ScrCreateSettingsPanel extends GameUi.UiPanel {
+    export class ScrCreateSettingsPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 

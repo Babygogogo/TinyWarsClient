@@ -4,7 +4,7 @@ namespace TinyWars.SingleCustomRoom {
     import Lang         = Utility.Lang;
     import ProtoTypes   = Utility.ProtoTypes;
 
-    export class ScrCreateSaveSlotsPanel extends GameUi.UiPanel {
+    export class ScrCreateSaveSlotsPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 

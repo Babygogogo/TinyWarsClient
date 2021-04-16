@@ -18,7 +18,7 @@ namespace TinyWars.Chat {
         toMfrRoomId?    : number;
     }
 
-    export class ChatPanel extends GameUi.UiPanel {
+    export class ChatPanel extends GameUi.UiPanel<OpenDataForChatPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -346,7 +346,7 @@ namespace TinyWars.Chat {
                 }
             }
 
-            const openData = this._getOpenData<OpenDataForChatPanel>();
+            const openData = this._getOpenData();
             const toUserId = openData.toUserId;
             if ((toUserId != null) && (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.Private, toTarget: toUserId }))) {
                 dataDict.set(indexForSort, {
@@ -415,7 +415,7 @@ namespace TinyWars.Chat {
         }
 
         private _getDefaultSelectedIndex(): number {
-            const openData          = this._getOpenData<OpenDataForChatPanel>();
+            const openData          = this._getOpenData();
             const dataForListChat   = this._dataForListChat || [];
 
             const toUserId  = openData.toUserId;

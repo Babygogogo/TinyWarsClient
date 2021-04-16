@@ -5,7 +5,7 @@ namespace TinyWars.MultiFreeRoom {
     import Notify   = Utility.Notify;
     import Helpers  = Utility.Helpers;
 
-    export class MfrMainMenuPanel extends GameUi.UiPanel {
+    export class MfrMainMenuPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

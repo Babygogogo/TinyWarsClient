@@ -4,7 +4,7 @@ namespace TinyWars.User {
     import NotifyType   = Utility.Notify.Type;
     import SoundManager = Utility.SoundManager;
 
-    export class UserSetSoundPanel extends GameUi.UiPanel {
+    export class UserSetSoundPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 

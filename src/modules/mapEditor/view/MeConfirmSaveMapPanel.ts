@@ -4,7 +4,7 @@ namespace TinyWars.MapEditor {
     import Notify       = Utility.Notify;
     import ProtoTypes   = Utility.ProtoTypes;
 
-    export class MeConfirmSaveMapPanel extends GameUi.UiPanel {
+    export class MeConfirmSaveMapPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 

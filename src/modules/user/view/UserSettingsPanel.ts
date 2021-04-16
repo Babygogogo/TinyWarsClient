@@ -7,7 +7,7 @@ namespace TinyWars.User {
     import LocalStorage     = Utility.LocalStorage;
     import CommonConstants  = Utility.CommonConstants;
 
-    export class UserSettingsPanel extends GameUi.UiPanel {
+    export class UserSettingsPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -41,7 +41,7 @@ namespace TinyWars.User {
             if (!UserSettingsPanel._instance) {
                 UserSettingsPanel._instance = new UserSettingsPanel();
             }
-            UserSettingsPanel._instance.open(undefined);
+            UserSettingsPanel._instance.open();
         }
 
         public static async hide(): Promise<void> {

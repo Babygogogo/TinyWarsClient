@@ -6,7 +6,7 @@ namespace TinyWars.ChangeLog {
     import Lang         = Utility.Lang;
     import FloatText    = Utility.FloatText;
 
-    export class ChangeLogPanel extends GameUi.UiPanel {
+    export class ChangeLogPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 

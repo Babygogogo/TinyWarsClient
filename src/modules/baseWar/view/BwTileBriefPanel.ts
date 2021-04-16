@@ -19,7 +19,7 @@ namespace TinyWars.BaseWar {
         war : BwWar;
     }
 
-    export class BwTileBriefPanel extends GameUi.UiPanel {
+    export class BwTileBriefPanel extends GameUi.UiPanel<OpenDataForBwTileBriefPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -102,7 +102,7 @@ namespace TinyWars.BaseWar {
             this._updateView();
         }
         private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
-            const planner = this._getOpenData<OpenDataForBwTileBriefPanel>().war.getActionPlanner();
+            const planner = this._getOpenData().war.getActionPlanner();
             if ((planner.getPreviousState() === Types.ActionPlannerState.ExecutingAction) &&
                 (planner.getState() !== Types.ActionPlannerState.ExecutingAction)
             ) {
@@ -129,7 +129,7 @@ namespace TinyWars.BaseWar {
         }
         private _onNotifyMeTileChanged(e: egret.Event): void {
             const data = e.data as Notify.Data.MeTileChanged;
-            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData<OpenDataForBwTileBriefPanel>().war.getCursor().getGridIndex())) {
+            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData().war.getCursor().getGridIndex())) {
                 this._updateView();
             }
         }
@@ -138,7 +138,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _onTouchedThis(e: egret.TouchEvent): void {
-            const war   = this._getOpenData<OpenDataForBwTileBriefPanel>().war;
+            const war   = this._getOpenData().war;
             const tile  = war.getTileMap().getTile(war.getCursor().getGridIndex());
             (tile) && (BaseWar.BwTileDetailPanel.show({ tile }));
         }
@@ -147,7 +147,7 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const war = this._getOpenData<OpenDataForBwTileBriefPanel>().war;
+            const war = this._getOpenData().war;
             if ((war.getIsWarMenuPanelOpening())            ||
                 (BaseWar.BwProduceUnitPanel.getIsOpening()) ||
                 (BaseWar.BwCoListPanel.getIsOpening())

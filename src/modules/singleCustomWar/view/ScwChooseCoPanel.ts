@@ -12,7 +12,7 @@ namespace TinyWars.SingleCustomWar {
         playerIndex : number;
     }
 
-    export class ScwChooseCoPanel extends GameUi.UiPanel {
+    export class ScwChooseCoPanel extends GameUi.UiPanel<OpenDataForScwChooseCoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -133,7 +133,7 @@ namespace TinyWars.SingleCustomWar {
         }
 
         private _initListCo(): void {
-            const openData      = this._getOpenData<OpenDataForScwChooseCoPanel>();
+            const openData      = this._getOpenData();
             const selfCoId      = openData.war.getPlayer(openData.playerIndex).getCoId();
             const dataForListCo = this._createDataForListCo();
             this._dataForListCo = dataForListCo;
@@ -144,7 +144,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const data          : DataForCoRenderer[] = [];
-            const openData      = this._getOpenData<OpenDataForScwChooseCoPanel>();
+            const openData      = this._getOpenData();
             const war           = openData.war;
             const playerIndex   = openData.playerIndex;
 

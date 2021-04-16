@@ -10,7 +10,7 @@ namespace TinyWars.Common {
         coId            : number;
     }
 
-    export class CommonCoInfoPanel extends GameUi.UiPanel {
+    export class CommonCoInfoPanel extends GameUi.UiPanel<OpenDataForCommonCoInfoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -50,7 +50,7 @@ namespace TinyWars.Common {
 
             this._updateComponentsForLanguage();
 
-            const openData = this._getOpenData<OpenDataForCommonCoInfoPanel>();
+            const openData = this._getOpenData();
             this._uiCoInfo.setCoData({
                 configVersion   : openData.configVersion,
                 coId            : openData.coId,

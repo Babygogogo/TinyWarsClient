@@ -9,7 +9,7 @@ namespace TinyWars.SingleCustomRoom {
 
     export type OpenDataForScrCreateCustomSaveSlotsPanel = ISerialWar;
 
-    export class ScrCreateCustomSaveSlotsPanel extends GameUi.UiPanel {
+    export class ScrCreateCustomSaveSlotsPanel extends GameUi.UiPanel<OpenDataForScrCreateCustomSaveSlotsPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -99,7 +99,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
-            const warData   = this._getOpenData<OpenDataForScrCreateCustomSaveSlotsPanel>();
+            const warData   = this._getOpenData();
             const slotList  = ScrModel.getSaveSlotInfoList() || [];
             for (let i = 0; i < CommonConstants.ScwSaveSlotMaxCount; ++i) {
                 dataList.push({

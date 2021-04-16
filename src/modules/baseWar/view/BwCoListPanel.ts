@@ -8,7 +8,7 @@ namespace TinyWars.BaseWar {
         war             : BwWar;
         selectedIndex   : number;
     }
-    export class BwCoListPanel extends GameUi.UiPanel {
+    export class BwCoListPanel extends GameUi.UiPanel<OpenDataForBwCoListPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -96,7 +96,7 @@ namespace TinyWars.BaseWar {
 
             this._dataForListCo = this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
-            this.setSelectedIndex(this._getOpenData<OpenDataForBwCoListPanel>().selectedIndex);
+            this.setSelectedIndex(this._getOpenData().selectedIndex);
 
             Notify.dispatch(Notify.Type.BwCoListPanelOpened);
         }
@@ -179,7 +179,7 @@ namespace TinyWars.BaseWar {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const data          : DataForCoRenderer[] = [];
-            const war           = this._getOpenData<OpenDataForBwCoListPanel>().war;
+            const war           = this._getOpenData().war;
             const playerManager = war.getPlayerManager();
             const configVersion = war.getConfigVersion();
 

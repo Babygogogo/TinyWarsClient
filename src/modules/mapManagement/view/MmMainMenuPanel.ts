@@ -5,7 +5,7 @@ namespace TinyWars.MapManagement {
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
 
-    export class MmMainMenuPanel extends GameUi.UiPanel {
+    export class MmMainMenuPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

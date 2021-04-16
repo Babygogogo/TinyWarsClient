@@ -5,7 +5,7 @@ namespace TinyWars.MultiRankRoom {
     import Helpers      = Utility.Helpers;
     import Notify       = Utility.Notify;
 
-    export class MrrMainMenuPanel extends GameUi.UiPanel {
+    export class MrrMainMenuPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

@@ -10,7 +10,7 @@ namespace TinyWars.Common {
     import CommonConstants  = Utility.CommonConstants;
     import IUnitTemplateCfg = ProtoTypes.Config.IUnitTemplateCfg;
 
-    export class CommonDamageChartPanel extends GameUi.UiPanel {
+    export class CommonDamageChartPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 

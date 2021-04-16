@@ -7,7 +7,7 @@ namespace TinyWars.Common {
         content: string;
     }
 
-    export class CommonHelpPanel extends GameUi.UiPanel {
+    export class CommonHelpPanel extends GameUi.UiPanel<OpenDataForCommonHelpPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -41,7 +41,7 @@ namespace TinyWars.Common {
         }
 
         protected _onOpened(): void {
-            const openData                      = this._getOpenData<OpenDataForCommonHelpPanel>();
+            const openData                      = this._getOpenData();
             this._labelTitle.text               = openData.title;
             this._scrContent.viewport.scrollV   = 0;
             this._labelContent.setRichText(openData.content);

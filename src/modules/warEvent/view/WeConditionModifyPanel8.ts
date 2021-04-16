@@ -16,7 +16,7 @@ namespace TinyWars.WarEvent {
     }
 
     /** WecPlayerIndexInTurnLessThan */
-    export class WeConditionModifyPanel8 extends GameUi.UiPanel {
+    export class WeConditionModifyPanel8 extends GameUi.UiPanel<OpenDataForWeConditionModifyPanel8> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -73,7 +73,7 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForLanguage();
         }
         private _onTouchedBtnType(e: egret.TouchEvent): void {
-            const openData = this._getOpenData<OpenDataForWeConditionModifyPanel8>();
+            const openData = this._getOpenData();
             WeConditionTypeListPanel.show({
                 fullData    : openData.fullData,
                 condition   : openData.condition,
@@ -118,7 +118,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateLabelDescAndLabelError(): void {
-            const openData          = this._getOpenData<OpenDataForWeConditionModifyPanel8>();
+            const openData          = this._getOpenData();
             const condition         = openData.condition;
             const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition);
             const labelError        = this._labelError;
@@ -134,7 +134,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _getCondition(): IWarEventCondition {
-            return this._getOpenData<OpenDataForWeConditionModifyPanel8>().condition;
+            return this._getOpenData().condition;
         }
     }
 }

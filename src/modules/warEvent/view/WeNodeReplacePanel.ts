@@ -13,7 +13,7 @@ namespace TinyWars.WarEvent {
         nodeId          : number | null | undefined;
         fullData        : IWarEventFullData;
     }
-    export class WeNodeReplacePanel extends GameUi.UiPanel {
+    export class WeNodeReplacePanel extends GameUi.UiPanel<OpenDataForWeNodeReplacePanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -73,7 +73,7 @@ namespace TinyWars.WarEvent {
             this._btnClose.label    = Lang.getText(Lang.Type.B0146);
         }
         private _updateListNodeAndLabelNoNode(): void {
-            const openData      = this._getOpenData<OpenDataForWeNodeReplacePanel>();
+            const openData      = this._getOpenData();
             const eventId       = openData.eventId;
             const parentNodeId  = openData.parentNodeId;
             const srcNodeId     = openData.nodeId;

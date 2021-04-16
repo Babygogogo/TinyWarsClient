@@ -3,7 +3,7 @@ namespace TinyWars.Lobby {
     import UserModel    = User.UserModel;
     import Notify       = Utility.Notify;
 
-    export class LobbyTopPanel extends GameUi.UiPanel {
+    export class LobbyTopPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 

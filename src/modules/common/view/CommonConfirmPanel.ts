@@ -12,7 +12,7 @@ namespace TinyWars.Common {
         textForCancel?      : string;
     }
 
-    export class CommonConfirmPanel extends GameUi.UiPanel {
+    export class CommonConfirmPanel extends GameUi.UiPanel<OpenDataForCommonConfirmPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -55,7 +55,7 @@ namespace TinyWars.Common {
 
             this._showOpenAnimation();
 
-            const openData          = this._getOpenData<OpenDataForCommonConfirmPanel>();
+            const openData          = this._getOpenData();
             this._btnConfirm.label  = openData.textForConfirm || Lang.getText(Lang.Type.B0026);
             this._btnCancel.label   = openData.textForCancel || Lang.getText(Lang.Type.B0154);
             this._labelTitle.text   = openData.title || Lang.getText(Lang.Type.B0088);
@@ -67,14 +67,14 @@ namespace TinyWars.Common {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            const openData = this._getOpenData<OpenDataForCommonConfirmPanel>();
+            const openData = this._getOpenData();
             (openData.callbackOnCancel) && (openData.callbackOnCancel());
 
             this.close();
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            this._getOpenData<OpenDataForCommonConfirmPanel>().callback();
+            this._getOpenData().callback();
             this.close();
         }
 

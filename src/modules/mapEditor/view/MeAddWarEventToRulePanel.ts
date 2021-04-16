@@ -9,7 +9,7 @@ namespace TinyWars.MapEditor {
         warRule     : ProtoTypes.WarRule.IWarRule;
     }
 
-    export class MeAddWarEventToRulePanel extends GameUi.UiPanel {
+    export class MeAddWarEventToRulePanel extends GameUi.UiPanel<OpenDataForMeAddWarEventId>{
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -69,7 +69,7 @@ namespace TinyWars.MapEditor {
         }
         private _updateListMessageAndLabelNoMessage(): void {
             const dataArray : DataForWarEventRenderer[] = [];
-            const warRule   = this._getOpenData<OpenDataForMeAddWarEventId>().warRule;
+            const warRule   = this._getOpenData().warRule;
             for (const warEvent of MeModel.getWar().getWarEventManager().getWarEventFullData().eventArray || []) {
                 dataArray.push({
                     warEventId  : warEvent.eventId,

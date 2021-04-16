@@ -119,7 +119,7 @@ namespace TinyWars.Utility.StageManager {
             this.addEventListener(egret.Event.RESIZE, this._onResize, this);
         }
 
-        public closeAllPanels(except?: GameUi.UiPanel): void {
+        public closeAllPanels<T>(except?: GameUi.UiPanel<T>): void {
             for (let i = this.numChildren - 1; i >= 0; --i) {
                 const child = this.getChildAt(i);
                 if ((child instanceof GameUi.UiPanel) && (child !== except)) {

@@ -16,7 +16,7 @@ namespace TinyWars.WarEvent {
     }
 
     /** WecEventCalledCountTotalEqualTo */
-    export class WeConditionModifyPanel9 extends GameUi.UiPanel {
+    export class WeConditionModifyPanel9 extends GameUi.UiPanel<OpenDataForWeConditionModifyPanel9> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -76,7 +76,7 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForLanguage();
         }
         private _onTouchedBtnType(e: egret.TouchEvent): void {
-            const openData = this._getOpenData<OpenDataForWeConditionModifyPanel9>();
+            const openData = this._getOpenData();
             WeConditionTypeListPanel.show({
                 fullData    : openData.fullData,
                 condition   : openData.condition,
@@ -90,7 +90,7 @@ namespace TinyWars.WarEvent {
             Notify.dispatch(Notify.Type.WarEventFullDataChanged);
         }
         private _onTouchedBtnTurnEvent(e: egret.TouchEvent): void {
-            const openData              = this._getOpenData<OpenDataForWeConditionModifyPanel9>();
+            const openData              = this._getOpenData();
             const eventArray            = openData.fullData.eventArray;
             const condition             = openData.condition.WecEventCalledCountTotalEqualTo;
             const newIndex              = (eventArray.findIndex(v => v.eventId === condition.eventIdEqualTo) + 1) % eventArray.length;
@@ -136,7 +136,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateLabelDescAndLabelError(): void {
-            const openData          = this._getOpenData<OpenDataForWeConditionModifyPanel9>();
+            const openData          = this._getOpenData();
             const condition         = openData.condition;
             const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition);
             const labelError        = this._labelError;
@@ -148,7 +148,7 @@ namespace TinyWars.WarEvent {
             this._imgIsNot.visible = !!this._getCondition().WecEventCalledCountTotalEqualTo.isNot;
         }
         private _updateLabelEvent(): void {
-            const openData          = this._getOpenData<OpenDataForWeConditionModifyPanel9>();
+            const openData          = this._getOpenData();
             const eventId           = openData.condition.WecEventCalledCountTotalEqualTo.eventIdEqualTo;
             const event             = WarEventHelper.getEvent(openData.fullData, eventId);
             this._labelEvent.text   = `#${eventId} (${event ? Lang.getLanguageText({ textArray: event.eventNameArray }) : `---`})`;
@@ -158,7 +158,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _getCondition(): IWarEventCondition {
-            return this._getOpenData<OpenDataForWeConditionModifyPanel9>().condition;
+            return this._getOpenData().condition;
         }
     }
 }

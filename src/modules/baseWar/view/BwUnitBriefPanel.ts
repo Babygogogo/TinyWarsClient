@@ -15,7 +15,7 @@ namespace TinyWars.BaseWar {
         war : BwWar;
     }
 
-    export class BwUnitBriefPanel extends GameUi.UiPanel {
+    export class BwUnitBriefPanel extends GameUi.UiPanel<OpenDataForBwUnitBriefPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -94,7 +94,7 @@ namespace TinyWars.BaseWar {
             this._updateView();
         }
         private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
-            const planner = this._getOpenData<OpenDataForBwUnitBriefPanel>().war.getActionPlanner();
+            const planner = this._getOpenData().war.getActionPlanner();
             if ((planner.getPreviousState() === Types.ActionPlannerState.ExecutingAction) &&
                 (planner.getState() !== Types.ActionPlannerState.ExecutingAction)
             ) {
@@ -121,7 +121,7 @@ namespace TinyWars.BaseWar {
         }
         private _onNotifyMeUnitChanged(e: egret.Event): void {
             const data = e.data as Notify.Data.MeUnitChanged;
-            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData<OpenDataForBwUnitBriefPanel>().war.getCursor().getGridIndex())) {
+            if (GridIndexHelpers.checkIsEqual(data.gridIndex, this._getOpenData().war.getCursor().getGridIndex())) {
                 this._updateView();
             }
         }
@@ -144,7 +144,7 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const war = this._getOpenData<OpenDataForBwUnitBriefPanel>().war;
+            const war = this._getOpenData().war;
             if ((war.getIsWarMenuPanelOpening())            ||
                 (!war.getIsRunning())                       ||
                 (BaseWar.BwProduceUnitPanel.getIsOpening()) ||

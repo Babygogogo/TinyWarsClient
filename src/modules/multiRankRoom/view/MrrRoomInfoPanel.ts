@@ -9,7 +9,7 @@ namespace TinyWars.MultiRankRoom {
     type OpenDataForMrrRoomInfoPanel = {
         roomId  : number;
     }
-    export class MrrRoomInfoPanel extends GameUi.UiPanel {
+    export class MrrRoomInfoPanel extends GameUi.UiPanel<OpenDataForMrrRoomInfoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -51,7 +51,7 @@ namespace TinyWars.MultiRankRoom {
 
             this._updateComponentsForLanguage();
 
-            const roomId = this._getOpenData<OpenDataForMrrRoomInfoPanel>().roomId;
+            const roomId = this._getOpenData().roomId;
             if ((await MrrModel.getRoomInfo(roomId)) == null) {
                 this.close();
                 MrrMyRoomListPanel.show();
@@ -93,7 +93,7 @@ namespace TinyWars.MultiRankRoom {
 
         private _onMsgMrrDeleteRoom(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMrrDeleteRoom.IS;
-            if (data.roomId === this._getOpenData<OpenDataForMrrRoomInfoPanel>().roomId) {
+            if (data.roomId === this._getOpenData().roomId) {
                 FloatText.show(Lang.getText(Lang.Type.A0019));
                 this.close();
                 MrrMyRoomListPanel.show();

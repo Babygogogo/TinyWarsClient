@@ -4,7 +4,7 @@ namespace TinyWars.MapEditor {
     import Lang     = Utility.Lang;
     import Types    = Utility.Types;
 
-    export class MeImportPanel extends GameUi.UiPanel {
+    export class MeImportPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 

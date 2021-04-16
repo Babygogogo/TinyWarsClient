@@ -8,7 +8,7 @@ namespace TinyWars.MultiRankRoom {
     import WarMapModel  = WarMap.WarMapModel;
     import IMrrRoomInfo = ProtoTypes.MultiRankRoom.IMrrRoomInfo;
 
-    export class MrrMyRoomListPanel extends GameUi.UiPanel {
+    export class MrrMyRoomListPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

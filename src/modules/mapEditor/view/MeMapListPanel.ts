@@ -6,7 +6,7 @@ namespace TinyWars.MapEditor {
     import ProtoTypes       = Utility.ProtoTypes;
     import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
 
-    export class MeMapListPanel extends GameUi.UiPanel {
+    export class MeMapListPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

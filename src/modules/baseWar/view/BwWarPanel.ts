@@ -3,7 +3,7 @@ namespace TinyWars.BaseWar {
     type OpenDataForBwWarPanel = {
         war: BwWar;
     }
-    export class BwWarPanel extends GameUi.UiPanel {
+    export class BwWarPanel extends GameUi.UiPanel<OpenDataForBwWarPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -29,7 +29,7 @@ namespace TinyWars.BaseWar {
         }
 
         protected _onOpened(): void {
-            this.addChild(this._getOpenData<OpenDataForBwWarPanel>().war.getView());
+            this.addChild(this._getOpenData().war.getView());
         }
 
         protected async _onClosed(): Promise<void> {

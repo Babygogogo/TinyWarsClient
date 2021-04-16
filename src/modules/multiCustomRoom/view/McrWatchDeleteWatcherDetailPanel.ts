@@ -9,7 +9,7 @@ namespace TinyWars.MultiCustomRoom {
     type OpenDataForMcrWatchDeleteWatcherDetailPanel = {
         watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
     }
-    export class McrWatchDeleteWatcherDetailPanel extends GameUi.UiPanel {
+    export class McrWatchDeleteWatcherDetailPanel extends GameUi.UiPanel<OpenDataForMcrWatchDeleteWatcherDetailPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -87,7 +87,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
             if (deleteUserIds.length) {
-                MultiPlayerWar.MpwProxy.reqWatchDeleteWatcher(this._getOpenData<OpenDataForMcrWatchDeleteWatcherDetailPanel>().watchInfo.warInfo.warId, deleteUserIds);
+                MultiPlayerWar.MpwProxy.reqWatchDeleteWatcher(this._getOpenData().watchInfo.warInfo.warId, deleteUserIds);
             }
             this.close();
         }
@@ -111,7 +111,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _generateDataForListPlayer(): DataForRequesterRenderer[] {
-            const openData          = this._getOpenData<OpenDataForMcrWatchDeleteWatcherDetailPanel>().watchInfo;
+            const openData          = this._getOpenData().watchInfo;
             const warInfo           = openData.warInfo;
             const playerInfoList    = warInfo.playerInfoList;
             const dataList          : DataForRequesterRenderer[] = [];

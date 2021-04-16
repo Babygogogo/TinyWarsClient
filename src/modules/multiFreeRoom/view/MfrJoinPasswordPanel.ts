@@ -8,7 +8,7 @@ namespace TinyWars.MultiFreeRoom {
     type OpenDataForMfrJoinPasswordPanel = {
         roomInfo: ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
     }
-    export class MfrJoinPasswordPanel extends GameUi.UiPanel {
+    export class MfrJoinPasswordPanel extends GameUi.UiPanel<OpenDataForMfrJoinPasswordPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -64,7 +64,7 @@ namespace TinyWars.MultiFreeRoom {
         }
 
         private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
-            const roomInfo = this._getOpenData<OpenDataForMfrJoinPasswordPanel>().roomInfo;
+            const roomInfo = this._getOpenData().roomInfo;
             if (this._inputWarPassword.text !== roomInfo.settingsForMfw.warPassword) {
                 FloatText.show(Lang.getText(Lang.Type.A0017));
             } else {
@@ -81,7 +81,7 @@ namespace TinyWars.MultiFreeRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            const info                      = this._getOpenData<OpenDataForMfrJoinPasswordPanel>().roomInfo;
+            const info                      = this._getOpenData().roomInfo;
             this._labelWarName.text         = info.settingsForMfw.warName || Lang.getText(Lang.Type.B0555);
             this._labelTitle.text           = Lang.getText(Lang.Type.B0449);
             this._labelRoomTitle.text       = `${Lang.getText(Lang.Type.B0405)}:`;

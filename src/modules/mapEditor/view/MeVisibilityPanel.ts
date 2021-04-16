@@ -4,7 +4,7 @@ namespace TinyWars.MapEditor {
     import Notify   = Utility.Notify;
     import Types    = Utility.Types;
 
-    export class MeVisibilityPanel extends GameUi.UiPanel {
+    export class MeVisibilityPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = false;
 

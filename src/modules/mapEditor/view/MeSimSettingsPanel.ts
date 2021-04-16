@@ -6,7 +6,7 @@ namespace TinyWars.MapEditor {
     import ProtoTypes   = Utility.ProtoTypes;
     import FlowManager  = Utility.FlowManager;
 
-    export class MeSimSettingsPanel extends GameUi.UiPanel {
+    export class MeSimSettingsPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 

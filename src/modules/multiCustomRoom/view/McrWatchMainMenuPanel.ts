@@ -4,7 +4,7 @@ namespace TinyWars.MultiCustomRoom {
     import FlowManager  = Utility.FlowManager;
     import Notify       = Utility.Notify;
 
-    export class McrWatchMainMenuPanel extends GameUi.UiPanel {
+    export class McrWatchMainMenuPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

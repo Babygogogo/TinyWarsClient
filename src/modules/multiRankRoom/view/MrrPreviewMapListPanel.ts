@@ -8,7 +8,7 @@ namespace TinyWars.MultiRankRoom {
     type OpenDataForMrrPreviewMapListPanel = {
         hasFog  : boolean;
     }
-    export class MrrPreviewMapListPanel extends GameUi.UiPanel {
+    export class MrrPreviewMapListPanel extends GameUi.UiPanel<OpenDataForMrrPreviewMapListPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -134,7 +134,7 @@ namespace TinyWars.MultiRankRoom {
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
             const data      : DataForMapNameRenderer[] = [];
-            const hasFog    = this._getOpenData<OpenDataForMrrPreviewMapListPanel>().hasFog;
+            const hasFog    = this._getOpenData().hasFog;
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
                 const mapExtraData      = mapBriefData.mapExtraData;
                 const mapAvailability   = mapExtraData.mapComplexInfo.availability;

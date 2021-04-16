@@ -11,7 +11,7 @@ namespace TinyWars.MultiCustomRoom {
     type OpenDataForMcrCreateAvailableCoPanel = {
         playerIndex : number;
     }
-    export class McrCreateAvailableCoPanel extends GameUi.UiPanel {
+    export class McrCreateAvailableCoPanel extends GameUi.UiPanel<OpenDataForMcrCreateAvailableCoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -65,7 +65,7 @@ namespace TinyWars.MultiCustomRoom {
 
             this._showOpenAnimation();
 
-            const playerIndex = this._getOpenData<OpenDataForMcrCreateAvailableCoPanel>().playerIndex;
+            const playerIndex = this._getOpenData().playerIndex;
             this._playerIndex = playerIndex;
 
             const availableCoIdSet = this._availableCoIdSet;

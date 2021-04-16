@@ -4,7 +4,7 @@ namespace TinyWars.User {
     import Lang         = Utility.Lang;
     import NotifyType   = Utility.Notify.Type;
 
-    export class UserChangeDiscordIdPanel extends GameUi.UiPanel {
+    export class UserChangeDiscordIdPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 

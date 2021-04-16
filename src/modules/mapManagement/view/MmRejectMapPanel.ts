@@ -2,7 +2,7 @@
 namespace TinyWars.MapManagement {
     import Lang = Utility.Lang;
 
-    export class MmRejectMapPanel extends GameUi.UiPanel {
+    export class MmRejectMapPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 

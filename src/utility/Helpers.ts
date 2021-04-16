@@ -156,13 +156,6 @@ namespace TinyWars.Utility.Helpers {
         return null;
     }
 
-    export function cloneObject(obj: { [key: string]: any }): { [key: string]: any } {
-        const o: { [key: string]: any } = {};
-        for (const k in obj) {
-            o[k] = obj[k];
-        }
-        return o;
-    }
     export function deepClone<T>(src: T): T {
         if ((src == null) || (typeof src != "object")) {
             return src;
@@ -244,14 +237,6 @@ namespace TinyWars.Utility.Helpers {
         }
 
         return true;
-    }
-
-    export function getObjectKeysCount(obj: { [key: string]: any }): number {
-        let count = 0;
-        for (const k in obj) {
-            ++count;
-        }
-        return count;
     }
 
     export function pickRandomElement<T>(list: T[]): T {

@@ -8,7 +8,7 @@ namespace TinyWars.Login {
     import LocalStorage     = Utility.LocalStorage;
     import NoSleepManager   = Utility.NoSleepManager;
 
-    export class LoginPanel extends GameUi.UiPanel {
+    export class LoginPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 

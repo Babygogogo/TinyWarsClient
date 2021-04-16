@@ -8,7 +8,7 @@ namespace TinyWars.MapManagement {
     type OpenDataForMmAvailabilityChangePanel = {
         mapId   : number;
     }
-    export class MmAvailabilityChangePanel extends GameUi.UiPanel {
+    export class MmAvailabilityChangePanel extends GameUi.UiPanel<OpenDataForMmAvailabilityChangePanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -75,7 +75,7 @@ namespace TinyWars.MapManagement {
             this._btnDelete.setTextColor(0xFF0000);
             this._updateComponentsForLanguage();
 
-            const mapId = this._getOpenData<OpenDataForMmAvailabilityChangePanel>().mapId;
+            const mapId = this._getOpenData().mapId;
             this._mapId = mapId;
 
             const availability          = (await WarMapModel.getBriefData(mapId)).mapExtraData.mapComplexInfo.availability;

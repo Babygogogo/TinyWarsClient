@@ -5,7 +5,7 @@ namespace TinyWars.MapEditor {
     import Types        = Utility.Types;
     import FloatText    = Utility.FloatText;
 
-    export class MeOffsetPanel extends GameUi.UiPanel {
+    export class MeOffsetPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 

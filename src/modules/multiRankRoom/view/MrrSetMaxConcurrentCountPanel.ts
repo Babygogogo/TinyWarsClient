@@ -7,7 +7,7 @@ namespace TinyWars.MultiRankRoom {
     import MaxCount         = CommonConstants.RankMaxConcurrentCount;
     import MinCount         = CommonConstants.RankMinConcurrentCount;
 
-    export class MrrSetMaxConcurrentCountPanel extends GameUi.UiPanel {
+    export class MrrSetMaxConcurrentCountPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = true;
 

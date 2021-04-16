@@ -5,7 +5,7 @@ namespace TinyWars.Common {
     import Lang         = Utility.Lang;
     import Helpers      = Utility.Helpers;
 
-    export class CommonServerStatusPanel extends GameUi.UiPanel {
+    export class CommonServerStatusPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = false;
 

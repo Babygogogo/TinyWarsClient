@@ -9,7 +9,7 @@ namespace TinyWars.User {
         userId  : number;
     }
 
-    export class UserSetPrivilegePanel extends GameUi.UiPanel {
+    export class UserSetPrivilegePanel extends GameUi.UiPanel<OpenDataForUserSetPrivilegePanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -73,7 +73,7 @@ namespace TinyWars.User {
                 { ui: this._groupIsMapCommittee,    callback: this._onTouchedGroupIsMapCommittee },
             ]);
 
-            const userId = this._getOpenData<OpenDataForUserSetPrivilegePanel>().userId;
+            const userId = this._getOpenData().userId;
             this._inputUserId.text = `${userId}`;
             UserProxy.reqUserGetPublicInfo(userId);
         }

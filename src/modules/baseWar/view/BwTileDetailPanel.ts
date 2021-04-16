@@ -14,7 +14,7 @@ namespace TinyWars.BaseWar {
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.CommonConstants.GridSize;
 
-    export class BwTileDetailPanel extends GameUi.UiPanel {
+    export class BwTileDetailPanel extends GameUi.UiPanel<OpenDataForBwTileDetailPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -105,7 +105,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateTileViewAndLabelName(): void {
-            const data                  = this._getOpenData<OpenDataForBwTileDetailPanel>();
+            const data                  = this._getOpenData();
             const tile                  = data.tile;
             const version               = User.UserModel.getSelfSettingsTextureVersion();
             const tickCount             = Time.TimeModel.getTileAnimationTickCount();
@@ -130,7 +130,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateListInfo(): void {
-            const data                  = this._getOpenData<OpenDataForBwTileDetailPanel>();
+            const data                  = this._getOpenData();
             const tile                  = data.tile;
             const configVersion         = tile.getConfigVersion();
             const tileType              = tile.getType();
@@ -313,7 +313,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _createDataForListMoveCost(): DataForMoveRangeRenderer[] {
-            const openData          = this._getOpenData<OpenDataForBwTileDetailPanel>();
+            const openData          = this._getOpenData();
             const tile              = openData.tile;
             const configVersion     = tile.getConfigVersion();
             const tileCfg           = Utility.ConfigManager.getTileTemplateCfgByType(configVersion, tile.getType());

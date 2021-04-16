@@ -15,7 +15,7 @@ namespace TinyWars.MultiCustomRoom {
     type OpenDataForMcrRoomInfoPanel = {
         roomId  : number;
     }
-    export class McrRoomInfoPanel extends GameUi.UiPanel {
+    export class McrRoomInfoPanel extends GameUi.UiPanel<OpenDataForMcrRoomInfoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -96,7 +96,7 @@ namespace TinyWars.MultiCustomRoom {
 
             this._showOpenAnimation();
 
-            const roomId = this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId;
+            const roomId = this._getOpenData().roomId;
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0002) },
@@ -137,7 +137,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnChooseCo(e: egret.TouchEvent): Promise<void> {
-            const roomInfo          = await McrModel.getRoomInfo(this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId);
+            const roomInfo          = await McrModel.getRoomInfo(this._getOpenData().roomId);
             const selfUserId        = User.UserModel.getSelfUserId();
             const selfPlayerData    = roomInfo ? roomInfo.playerDataList.find(v => v.userId === selfUserId) : null;
             if (selfPlayerData != null) {
@@ -154,14 +154,14 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnStartGame(e: egret.TouchEvent): void {
-            const roomId = this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId;
+            const roomId = this._getOpenData().roomId;
             if (roomId != null) {
                 McrProxy.reqMcrStartWar(roomId);
             }
         }
 
         private _onTouchedBtnDeleteRoom(e: egret.TouchEvent): void {
-            const roomId = this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId;
+            const roomId = this._getOpenData().roomId;
             if (roomId != null) {
                 CommonConfirmPanel.show({
                     content : Lang.getText(Lang.Type.A0149),
@@ -174,7 +174,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchedBtnChat(e: egret.TouchEvent): void {
             Chat.ChatPanel.show({
-                toMcrRoomId: this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId,
+                toMcrRoomId: this._getOpenData().roomId,
             });
         }
 
@@ -182,7 +182,7 @@ namespace TinyWars.MultiCustomRoom {
             CommonConfirmPanel.show({
                 content : Lang.getText(Lang.Type.A0126),
                 callback: () => {
-                    McrProxy.reqMcrExitRoom(this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId);
+                    McrProxy.reqMcrExitRoom(this._getOpenData().roomId);
                 },
             });
         }
@@ -193,7 +193,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onMsgMcrGetRoomInfo(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
-            if (data.roomId === this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId) {
+            if (data.roomId === this._getOpenData().roomId) {
                 this._updateGroupButton();
                 this._updateBtnChooseCo();
             }
@@ -201,7 +201,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onMsgMcrSetSelfSettings(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMcrSetSelfSettings.IS;
-            if (data.roomId === this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId) {
+            if (data.roomId === this._getOpenData().roomId) {
                 this._updateGroupButton();
                 this._updateBtnChooseCo();
             }
@@ -209,14 +209,14 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onMsgMcrSetReady(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMcrSetReady.IS;
-            if (data.roomId === this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId) {
+            if (data.roomId === this._getOpenData().roomId) {
                 this._updateGroupButton();
             }
         }
 
         private async _onMsgMcrExitRoom(e: egret.Event): Promise<void> {
             const roomId = (e.data as NetMessage.MsgMcrExitRoom.IS).roomId;
-            if (roomId === this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId) {
+            if (roomId === this._getOpenData().roomId) {
                 const roomInfo      = await McrModel.getRoomInfo(roomId);
                 const userId        = User.UserModel.getSelfUserId();
                 const playerData    = roomInfo ? roomInfo.playerDataList.find(v => v.userId === userId) : null;
@@ -232,7 +232,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onMsgMcrDeleteRoomByServer(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMcrDeleteRoomByServer.IS;
-            if (data.roomId === this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId) {
+            if (data.roomId === this._getOpenData().roomId) {
                 FloatText.show(Lang.getText(Lang.Type.A0019));
                 this.close();
                 McrMyRoomListPanel.show();
@@ -241,7 +241,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onMsgMcrStartWar(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMcrStartWar.IS;
-            if (data.roomId === this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId) {
+            if (data.roomId === this._getOpenData().roomId) {
                 this.close();
                 McrMyRoomListPanel.show();
             }
@@ -249,7 +249,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onMsgMcrDeletePlayer(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS;
-            if ((data.roomId === this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId) && (data.targetUserId === User.UserModel.getSelfUserId())) {
+            if ((data.roomId === this._getOpenData().roomId) && (data.targetUserId === User.UserModel.getSelfUserId())) {
                 FloatText.show(Lang.getText(Lang.Type.A0127));
                 this.close();
                 McrMyRoomListPanel.show();
@@ -260,7 +260,7 @@ namespace TinyWars.MultiCustomRoom {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private async _initSclPlayerIndex(): Promise<void> {
-            const roomId                = this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId;
+            const roomId                = this._getOpenData().roomId;
             const roomInfo              = await McrModel.getRoomInfo(roomId);
             const playersCountUnneutral = roomInfo ? (await WarMap.WarMapModel.getRawData(roomInfo.settingsForMcw.mapId)).playersCountUnneutral : null;
             const dataArray             : DataForPlayerIndexRenderer[] = [];
@@ -274,7 +274,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initSclSkinId(): void {
-            const roomId    = this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId;
+            const roomId    = this._getOpenData().roomId;
             const dataArray : DataForSkinIdRenderer[] = [];
             for (let skinId = CommonConstants.UnitAndTileMinSkinId; skinId <= CommonConstants.UnitAndTileMaxSkinId; ++skinId) {
                 dataArray.push({
@@ -286,7 +286,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _initSclReady(): void {
-            const roomId = this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId;
+            const roomId = this._getOpenData().roomId;
             this._sclReady.bindData([
                 {
                     roomId,
@@ -314,7 +314,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateBtnChooseCo(): Promise<void> {
-            const roomInfo          = await McrModel.getRoomInfo(this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId);
+            const roomInfo          = await McrModel.getRoomInfo(this._getOpenData().roomId);
             const userId            = User.UserModel.getSelfUserId();
             const selfPlayerData    = roomInfo ? roomInfo.playerDataList.find(v => v.userId === userId) : null;
             if (selfPlayerData) {
@@ -323,7 +323,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateGroupButton(): Promise<void> {
-            const roomId            = this._getOpenData<OpenDataForMcrRoomInfoPanel>().roomId;
+            const roomId            = this._getOpenData().roomId;
             const roomInfo          = await McrModel.getRoomInfo(roomId);
             const playerDataList    = roomInfo.playerDataList;
             const ownerInfo         = playerDataList.find(v => v.playerIndex === roomInfo.ownerPlayerIndex);

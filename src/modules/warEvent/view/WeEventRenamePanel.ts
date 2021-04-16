@@ -13,7 +13,7 @@ namespace TinyWars.WarEvent {
         war         : BaseWar.BwWar;
         warEventId  : number;
     }
-    export class WeEventRenamePanel extends GameUi.UiPanel {
+    export class WeEventRenamePanel extends GameUi.UiPanel<OpenDataForWeEventRenamePanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -81,7 +81,7 @@ namespace TinyWars.WarEvent {
             } else if (textList.some(v => v.text.length > CommonConstants.WarEventNameMaxLength)) {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.WarEventNameMaxLength));
             } else {
-                const openData = this._getOpenData<OpenDataForWeEventRenamePanel>();
+                const openData = this._getOpenData();
                 openData.war.getWarEventManager().getWarEvent(openData.warEventId).eventNameArray = textList;
 
                 Notify.dispatch(Notify.Type.WarEventFullDataChanged);
@@ -92,7 +92,7 @@ namespace TinyWars.WarEvent {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const openData          = this._getOpenData<OpenDataForWeEventRenamePanel>();
+            const openData          = this._getOpenData();
             const nameArray         = openData.war.getWarEventManager().getWarEvent(openData.warEventId).eventNameArray;
             this._inputChinese.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.Chinese, useAlternate: false });
             this._inputEnglish.text = Lang.getLanguageText({ textArray: nameArray, languageType: Types.LanguageType.English, useAlternate: false });

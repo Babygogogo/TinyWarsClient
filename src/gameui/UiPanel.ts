@@ -2,7 +2,7 @@
 namespace TinyWars.GameUi {
     import Logger = Utility.Logger;
 
-    export abstract class UiPanel extends UiComponent {
+    export abstract class UiPanel<OpenData> extends UiComponent {
         protected abstract readonly _LAYER_TYPE  : Utility.Types.LayerType;
         protected abstract readonly _IS_EXCLUSIVE: boolean;
 
@@ -14,7 +14,7 @@ namespace TinyWars.GameUi {
         private _callbackOnTouchedMask  : () => void;
         private _touchMask              : eui.Group;
 
-        private _openData               : any;
+        private _openData               : OpenData;
 
         protected constructor() {
             super();
@@ -25,7 +25,7 @@ namespace TinyWars.GameUi {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for open self.
         ////////////////////////////////////////////////////////////////////////////////
-        public open(openData: any): void {
+        public open(openData: OpenData): void {
             if (this.getIsOpening()) {
                 Logger.warn(`%cUiPanel.open() it is opening already: ${this.skinName}`, `background:#FFDDDD;`);
                 this.close();
@@ -63,10 +63,10 @@ namespace TinyWars.GameUi {
             }
         }
 
-        private _setOpenData(data: any): void {
+        private _setOpenData(data: OpenData): void {
             this._openData = data;
         }
-        protected _getOpenData<T>(): T {
+        protected _getOpenData(): OpenData {
             return this._openData;
         }
 

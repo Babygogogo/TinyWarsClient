@@ -14,7 +14,7 @@ namespace TinyWars.WarEvent {
         configVersion   : string;
         dataForAddUnit  : IDataForAddUnit;
     }
-    export class WeActionAddUnitListPanel extends GameUi.UiPanel {
+    export class WeActionAddUnitListPanel extends GameUi.UiPanel<OpenDataForWeActionAddUnitListPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -72,7 +72,7 @@ namespace TinyWars.WarEvent {
             this._btnClose.label        = Lang.getText(Lang.Type.B0146);
         }
         private _updateListType(): void {
-            const openData          = this._getOpenData<OpenDataForWeActionAddUnitListPanel>();
+            const openData          = this._getOpenData();
             const dataForAddUnit    = openData.dataForAddUnit;
 
             const dataArray: DataForTypeRenderer[] = [];

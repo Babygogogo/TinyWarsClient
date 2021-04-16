@@ -10,7 +10,7 @@ namespace TinyWars.MultiCustomRoom {
     type OpenDataForMcrCreateChooseCoPanel = {
         coId    : number | undefined | null;
     }
-    export class McrCreateChooseCoPanel extends GameUi.UiPanel {
+    export class McrCreateChooseCoPanel extends GameUi.UiPanel<OpenDataForMcrCreateChooseCoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -128,7 +128,7 @@ namespace TinyWars.MultiCustomRoom {
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
 
-            const coId = this._getOpenData<OpenDataForMcrCreateChooseCoPanel>().coId;
+            const coId = this._getOpenData().coId;
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
                 const cfg = data.coBasicCfg;
                 return cfg ? cfg.coId === coId : coId == null;

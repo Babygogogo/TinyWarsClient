@@ -10,7 +10,7 @@ namespace TinyWars.MapManagement {
     import WarMapProxy      = WarMap.WarMapProxy;
     import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
 
-    export class MmReviewListPanel extends GameUi.UiPanel {
+    export class MmReviewListPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

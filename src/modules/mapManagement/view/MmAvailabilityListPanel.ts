@@ -14,7 +14,7 @@ namespace TinyWars.MapManagement {
         minRating?      : number;
     }
 
-    export class MmAvailabilityListPanel extends GameUi.UiPanel {
+    export class MmAvailabilityListPanel extends GameUi.UiPanel<FiltersForMapList> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

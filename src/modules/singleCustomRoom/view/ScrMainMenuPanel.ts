@@ -3,7 +3,7 @@ namespace TinyWars.SingleCustomRoom {
     import Lang         = Utility.Lang;
     import FlowManager  = Utility.FlowManager;
 
-    export class ScrMainMenuPanel extends GameUi.UiPanel {
+    export class ScrMainMenuPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

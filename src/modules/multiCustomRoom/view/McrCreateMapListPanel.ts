@@ -18,7 +18,7 @@ namespace TinyWars.MultiCustomRoom {
         mapTag?         : IDataForMapTag;
     }
 
-    export class McrCreateMapListPanel extends GameUi.UiPanel {
+    export class McrCreateMapListPanel extends GameUi.UiPanel<FiltersForMapList> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

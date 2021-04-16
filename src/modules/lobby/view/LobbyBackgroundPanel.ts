@@ -1,6 +1,6 @@
 
 namespace TinyWars.Lobby {
-    export class LobbyBackgroundPanel extends GameUi.UiPanel {
+    export class LobbyBackgroundPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Bottom;
         protected readonly _IS_EXCLUSIVE = false;
 

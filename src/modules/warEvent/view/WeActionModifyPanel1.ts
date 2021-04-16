@@ -20,7 +20,7 @@ namespace TinyWars.WarEvent {
         fullData    : IWarEventFullData;
         action      : IWarEventAction;
     }
-    export class WeActionModifyPanel1 extends GameUi.UiPanel {
+    export class WeActionModifyPanel1 extends GameUi.UiPanel<OpenDataForWeActionModifyPanel1> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -78,7 +78,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _onTouchedBtnAddUnit(e: egret.TouchEvent): void {
-            const unitArray = this._getOpenData<OpenDataForWeActionModifyPanel1>().action.WarEventActionAddUnit.unitArray;
+            const unitArray = this._getOpenData().action.WarEventActionAddUnit.unitArray;
             if (unitArray.length > CommonConstants.WarEventActionAddUnitMaxCount) {
                 FloatText.show(Lang.getText(Lang.Type.A0189));
             } else {
@@ -88,7 +88,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _onTouchedBtnClear(e: egret.TouchEvent): void {
-            const openData = this._getOpenData<OpenDataForWeActionModifyPanel1>();
+            const openData = this._getOpenData();
             Common.CommonConfirmPanel.show({
                 content : Lang.getText(Lang.Type.A0190),
                 callback: () => {
@@ -108,14 +108,14 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0533)} A${this._getOpenData<OpenDataForWeActionModifyPanel1>().action.WarEventActionCommonData.actionId}`;
+            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0533)} A${this._getOpenData().action.WarEventActionCommonData.actionId}`;
             this._btnAddUnit.label  = Lang.getText(Lang.Type.B0535);
             this._btnClear.label    = Lang.getText(Lang.Type.B0391);
             this._btnBack.label     = Lang.getText(Lang.Type.B0146);
         }
 
         private _updateComponentsForUnits(): void {
-            const openData  = this._getOpenData<OpenDataForWeActionModifyPanel1>();
+            const openData  = this._getOpenData();
             const action    = openData.action;
             const war       = openData.war;
             const dataArray : DataForUnitRenderer[] = [];

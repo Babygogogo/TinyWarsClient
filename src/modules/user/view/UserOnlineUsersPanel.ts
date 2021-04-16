@@ -5,7 +5,7 @@ namespace TinyWars.User {
     import Helpers      = Utility.Helpers;
     import ProtoTypes   = Utility.ProtoTypes;
 
-    export class UserOnlineUsersPanel extends GameUi.UiPanel {
+    export class UserOnlineUsersPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 

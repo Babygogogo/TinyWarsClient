@@ -13,7 +13,7 @@ namespace TinyWars.SingleCustomRoom {
         minRating?      : number;
     }
 
-    export class ScrCreateMapListPanel extends GameUi.UiPanel {
+    export class ScrCreateMapListPanel extends GameUi.UiPanel<FiltersForMapList> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

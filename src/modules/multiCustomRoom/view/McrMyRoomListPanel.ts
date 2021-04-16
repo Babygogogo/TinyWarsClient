@@ -8,7 +8,7 @@ namespace TinyWars.MultiCustomRoom {
     import BwHelpers    = BaseWar.BwHelpers;
     import WarMapModel  = WarMap.WarMapModel;
 
-    export class McrMyRoomListPanel extends GameUi.UiPanel {
+    export class McrMyRoomListPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

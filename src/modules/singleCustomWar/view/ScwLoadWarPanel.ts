@@ -5,7 +5,7 @@ namespace TinyWars.SingleCustomWar {
     import ProtoTypes   = Utility.ProtoTypes;
     import ISerialWar   = ProtoTypes.WarSerialization.ISerialWar;
 
-    export class ScwLoadWarPanel extends GameUi.UiPanel {
+    export class ScwLoadWarPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 

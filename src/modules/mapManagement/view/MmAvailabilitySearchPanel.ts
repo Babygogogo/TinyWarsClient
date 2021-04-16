@@ -6,7 +6,7 @@ namespace TinyWars.MapManagement {
     import Notify     = Utility.Notify;
     import ProtoTypes = Utility.ProtoTypes;
 
-    export class MmAvailabilitySearchPanel extends GameUi.UiPanel {
+    export class MmAvailabilitySearchPanel extends GameUi.UiPanel<void> {
         protected _IS_EXCLUSIVE = false;
         protected _LAYER_TYPE   = Types.LayerType.Hud2;
 

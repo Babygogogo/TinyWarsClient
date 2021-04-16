@@ -9,7 +9,7 @@ namespace TinyWars.MultiCustomRoom {
     import ConfigManager    = Utility.ConfigManager;
     import WarMapModel      = WarMap.WarMapModel;
 
-    export class McrWatchDeleteWatcherWarsPanel extends GameUi.UiPanel {
+    export class McrWatchDeleteWatcherWarsPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

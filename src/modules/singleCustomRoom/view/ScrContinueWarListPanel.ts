@@ -8,7 +8,7 @@ namespace TinyWars.SingleCustomRoom {
     import ProtoManager = Utility.ProtoManager;
     import WarMapModel  = WarMap.WarMapModel;
 
-    export class ScrContinueWarListPanel extends GameUi.UiPanel {
+    export class ScrContinueWarListPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

@@ -14,7 +14,7 @@ namespace TinyWars.MultiRankRoom {
         roomInfo        : IMrrRoomInfo;
         srcPlayerIndex  : number;
     }
-    export class MrrRoomAvailableCoPanel extends GameUi.UiPanel {
+    export class MrrRoomAvailableCoPanel extends GameUi.UiPanel<OpenDataForMrrRoomAvailableCoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -65,7 +65,7 @@ namespace TinyWars.MultiRankRoom {
                 { type: Notify.Type.MsgMrrDeleteRoom,   callback: this._onMsgMrrDeleteRoom },
             ]);
 
-            const openData          = this._getOpenData<OpenDataForMrrRoomAvailableCoPanel>();
+            const openData          = this._getOpenData();
             const roomInfo          = openData.roomInfo;
             const srcPlayerIndex    = openData.srcPlayerIndex;
             const availableCoIdSet  = this._availableCoIdSet;

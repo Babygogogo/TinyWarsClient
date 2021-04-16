@@ -11,7 +11,7 @@ namespace TinyWars.MapManagement {
     import CommonConstants      = Utility.CommonConstants;
 
     type OpenDataForMmWarRulePanel = ProtoTypes.Map.IMapRawData;
-    export class MmWarRulePanel extends GameUi.UiPanel {
+    export class MmWarRulePanel extends GameUi.UiPanel<OpenDataForMmWarRulePanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -151,7 +151,7 @@ namespace TinyWars.MapManagement {
         private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
             const data  : DataForWarRuleNameRenderer[] = [];
             let index   = 0;
-            for (const rule of this._getOpenData<OpenDataForMmWarRulePanel>().warRuleArray || []) {
+            for (const rule of this._getOpenData().warRuleArray || []) {
                 data.push({
                     index,
                     rule,

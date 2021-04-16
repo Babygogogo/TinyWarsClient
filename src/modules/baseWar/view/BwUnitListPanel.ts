@@ -11,7 +11,7 @@ namespace TinyWars.BaseWar {
     type OpenDataForBwUnitListPanel = {
         war : BwWar;
     }
-    export class BwUnitListPanel extends GameUi.UiPanel {
+    export class BwUnitListPanel extends GameUi.UiPanel<OpenDataForBwUnitListPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -63,7 +63,7 @@ namespace TinyWars.BaseWar {
             ]);
             this._listUnit.setItemRenderer(UnitRenderer);
 
-            const war           = this._getOpenData<OpenDataForBwUnitListPanel>().war;
+            const war           = this._getOpenData().war;
             this._unitMap       = war.getUnitMap();
             this._cursor        = war.getCursor();
             this._playerIndex   = war.getPlayerIndexInTurn();
@@ -103,7 +103,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _onTouchedBtnSwitch(e: egret.TouchEvent): void {
-            this._playerIndex = this._getOpenData<OpenDataForBwUnitListPanel>().war.getTurnManager().getNextPlayerIndex(this._playerIndex);
+            this._playerIndex = this._getOpenData().war.getTurnManager().getNextPlayerIndex(this._playerIndex);
             this._updateView();
         }
 

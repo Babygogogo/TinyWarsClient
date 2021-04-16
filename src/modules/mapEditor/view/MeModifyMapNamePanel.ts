@@ -9,7 +9,7 @@ namespace TinyWars.MapEditor {
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
     import CommonConstants  = Utility.CommonConstants;
 
-    export class MeModifyMapNamePanel extends GameUi.UiPanel {
+    export class MeModifyMapNamePanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 

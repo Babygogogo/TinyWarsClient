@@ -6,7 +6,7 @@ namespace TinyWars.SinglePlayerLobby {
     import Notify       = Utility.Notify;
     import Helpers      = Utility.Helpers;
 
-    export class SinglePlayerLobbyPanel extends GameUi.UiPanel {
+    export class SinglePlayerLobbyPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

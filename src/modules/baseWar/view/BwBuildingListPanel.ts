@@ -8,7 +8,7 @@ namespace TinyWars.BaseWar {
     type OpenDataForBwBuildingListPanel = {
         war: BwWar;
     }
-    export class BwBuildingListPanel extends GameUi.UiPanel {
+    export class BwBuildingListPanel extends GameUi.UiPanel<OpenDataForBwBuildingListPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -66,7 +66,7 @@ namespace TinyWars.BaseWar {
 
         private _updateListTile(): void {
             const dict  = new Map<number, Map<number, number>>();
-            const war   = this._getOpenData<OpenDataForBwBuildingListPanel>().war;
+            const war   = this._getOpenData().war;
             war.getTileMap().forEachTile(tile => {
                 if (tile.getMaxCapturePoint() != null) {
                     const tileType = tile.getType();

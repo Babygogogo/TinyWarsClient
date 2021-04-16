@@ -10,7 +10,7 @@ namespace TinyWars.MultiFreeRoom {
     type OpenDataForMfrRoomInfoPanel = {
         roomId  : number;
     }
-    export class MfrRoomInfoPanel extends GameUi.UiPanel {
+    export class MfrRoomInfoPanel extends GameUi.UiPanel<OpenDataForMfrRoomInfoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -68,7 +68,7 @@ namespace TinyWars.MultiFreeRoom {
             this._btnChat.setTextColor(0x00FF00);
             this._btnExitRoom.setTextColor(0xFF0000);
 
-            const roomId = this._getOpenData<OpenDataForMfrRoomInfoPanel>().roomId;
+            const roomId = this._getOpenData().roomId;
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0002) },
@@ -103,14 +103,14 @@ namespace TinyWars.MultiFreeRoom {
         }
 
         private _onTouchedBtnStartGame(e: egret.TouchEvent): void {
-            const roomId = this._getOpenData<OpenDataForMfrRoomInfoPanel>().roomId;
+            const roomId = this._getOpenData().roomId;
             if (roomId != null) {
                 MfrProxy.reqMfrStartWar(roomId);
             }
         }
 
         private _onTouchedBtnDeleteRoom(e: egret.TouchEvent): void {
-            const roomId = this._getOpenData<OpenDataForMfrRoomInfoPanel>().roomId;
+            const roomId = this._getOpenData().roomId;
             if (roomId != null) {
                 CommonConfirmPanel.show({
                     content : Lang.getText(Lang.Type.A0149),
@@ -123,7 +123,7 @@ namespace TinyWars.MultiFreeRoom {
 
         private _onTouchedBtnChat(e: egret.TouchEvent): void {
             Chat.ChatPanel.show({
-                toMfrRoomId: this._getOpenData<OpenDataForMfrRoomInfoPanel>().roomId,
+                toMfrRoomId: this._getOpenData().roomId,
             });
         }
 
@@ -131,7 +131,7 @@ namespace TinyWars.MultiFreeRoom {
             CommonConfirmPanel.show({
                 content : Lang.getText(Lang.Type.A0126),
                 callback: () => {
-                    MfrProxy.reqMfrExitRoom(this._getOpenData<OpenDataForMfrRoomInfoPanel>().roomId);
+                    MfrProxy.reqMfrExitRoom(this._getOpenData().roomId);
                 },
             });
         }
@@ -143,7 +143,7 @@ namespace TinyWars.MultiFreeRoom {
         private async _onMsgMfrGetRoomInfo(e: egret.Event): Promise<void> {
             const data      = e.data as NetMessage.MsgMfrGetRoomInfo.IS;
             const roomId    = data.roomId;
-            if (roomId === this._getOpenData<OpenDataForMfrRoomInfoPanel>().roomId) {
+            if (roomId === this._getOpenData().roomId) {
                 const selfUserId = User.UserModel.getSelfUserId();
                 if ((await MfrModel.getRoomInfo(roomId)).playerDataList.some(v => v.userId === selfUserId)) {
                     this._updateGroupButton();
@@ -153,7 +153,7 @@ namespace TinyWars.MultiFreeRoom {
 
         private _onMsgMfrExitRoom(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMfrExitRoom.IS;
-            if (data.roomId === this._getOpenData<OpenDataForMfrRoomInfoPanel>().roomId) {
+            if (data.roomId === this._getOpenData().roomId) {
                 FloatText.show(Lang.getText(Lang.Type.A0016));
                 this.close();
                 MfrMyRoomListPanel.show();
@@ -162,7 +162,7 @@ namespace TinyWars.MultiFreeRoom {
 
         private _onMsgMfrDeleteRoom(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMfrDeleteRoom.IS;
-            if (data.roomId === this._getOpenData<OpenDataForMfrRoomInfoPanel>().roomId) {
+            if (data.roomId === this._getOpenData().roomId) {
                 FloatText.show(Lang.getText(Lang.Type.A0019));
                 this.close();
                 MfrMyRoomListPanel.show();
@@ -171,7 +171,7 @@ namespace TinyWars.MultiFreeRoom {
 
         private _onMsgMfrStartWar(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMfrStartWar.IS;
-            if (data.roomId === this._getOpenData<OpenDataForMfrRoomInfoPanel>().roomId) {
+            if (data.roomId === this._getOpenData().roomId) {
                 this.close();
                 MfrMyRoomListPanel.show();
             }
@@ -179,7 +179,7 @@ namespace TinyWars.MultiFreeRoom {
 
         private _onMsgMfrDeletePlayer(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMfrDeletePlayer.IS;
-            if ((data.roomId === this._getOpenData<OpenDataForMfrRoomInfoPanel>().roomId) && (data.targetUserId === User.UserModel.getSelfUserId())) {
+            if ((data.roomId === this._getOpenData().roomId) && (data.targetUserId === User.UserModel.getSelfUserId())) {
                 FloatText.show(Lang.getText(Lang.Type.A0127));
                 this.close();
                 MfrMyRoomListPanel.show();
@@ -190,7 +190,7 @@ namespace TinyWars.MultiFreeRoom {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private async _updateGroupButton(): Promise<void> {
-            const roomId                = this._getOpenData<OpenDataForMfrRoomInfoPanel>().roomId;
+            const roomId                = this._getOpenData().roomId;
             const roomInfo              = await MfrModel.getRoomInfo(roomId);
             const playerDataList        = roomInfo.playerDataList;
             const ownerInfo             = playerDataList.find(v => v.playerIndex === roomInfo.ownerPlayerIndex);

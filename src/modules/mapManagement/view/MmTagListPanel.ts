@@ -6,7 +6,7 @@ namespace TinyWars.MapManagement {
     import FloatText    = Utility.FloatText;
     import WarMapModel  = WarMap.WarMapModel;
 
-    export class MmTagListPanel extends GameUi.UiPanel {
+    export class MmTagListPanel extends GameUi.UiPanel<FiltersForMapList> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

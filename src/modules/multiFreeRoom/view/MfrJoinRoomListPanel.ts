@@ -10,7 +10,7 @@ namespace TinyWars.MultiFreeRoom {
     import BwHelpers        = BaseWar.BwHelpers;
     import IMfrRoomInfo     = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
 
-    export class MfrJoinRoomListPanel extends GameUi.UiPanel {
+    export class MfrJoinRoomListPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

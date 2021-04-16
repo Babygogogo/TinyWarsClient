@@ -14,7 +14,7 @@ namespace TinyWars.BaseWar {
         gridIndex   : GridIndex;
         war         : BaseWar.BwWar;
     }
-    export class BwProduceUnitPanel extends GameUi.UiPanel {
+    export class BwProduceUnitPanel extends GameUi.UiPanel<OpenDataForBwProduceUnitPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -91,7 +91,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            this._getOpenData<OpenDataForBwProduceUnitPanel>().war.getActionPlanner().setStateIdle();
+            this._getOpenData().war.getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnDetail(e: egret.TouchEvent): void {
             const selectedIndex = this._listUnit.getViewList().selectedIndex;
@@ -126,7 +126,7 @@ namespace TinyWars.BaseWar {
 
         private _createDataForList(): DataForUnitRenderer[] {
             const dataList          : DataForUnitRenderer[] = [];
-            const openData          = this._getOpenData<OpenDataForBwProduceUnitPanel>();
+            const openData          = this._getOpenData();
             const war               = openData.war;
             const gridIndex         = openData.gridIndex;
             const tile              = war.getTileMap().getTile(gridIndex);

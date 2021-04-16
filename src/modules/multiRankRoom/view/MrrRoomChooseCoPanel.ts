@@ -12,7 +12,7 @@ namespace TinyWars.MultiRankRoom {
         playerIndex : number;
     }
 
-    export class MrrRoomChooseCoPanel extends GameUi.UiPanel {
+    export class MrrRoomChooseCoPanel extends GameUi.UiPanel<OpenDataForMrrRoomChooseCoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -122,7 +122,7 @@ namespace TinyWars.MultiRankRoom {
 
         private _onMsgMrrDeleteRoom(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMrrDeleteRoom.IS;
-            if (data.roomId === this._getOpenData<OpenDataForMrrRoomChooseCoPanel>().roomInfo.roomId) {
+            if (data.roomId === this._getOpenData().roomInfo.roomId) {
                 this.close();
                 MrrMyRoomListPanel.show();
             }
@@ -137,7 +137,7 @@ namespace TinyWars.MultiRankRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            MrrRoomInfoPanel.show({ roomId: this._getOpenData<OpenDataForMrrRoomChooseCoPanel>().roomInfo.roomId });
+            MrrRoomInfoPanel.show({ roomId: this._getOpenData().roomInfo.roomId });
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +160,7 @@ namespace TinyWars.MultiRankRoom {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const dataList          : DataForCoRenderer[] = [];
-            const openData          = this._getOpenData<OpenDataForMrrRoomChooseCoPanel>();
+            const openData          = this._getOpenData();
             const roomInfo          = openData.roomInfo;
             const availableCoIdList = MrrModel.SelfSettings.generateAvailableCoIdList(roomInfo, openData.playerIndex);
 

@@ -6,7 +6,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify       = Utility.Notify;
     import ProtoTypes   = Utility.ProtoTypes;
 
-    export class McrCreateSearchMapPanel extends GameUi.UiPanel {
+    export class McrCreateSearchMapPanel extends GameUi.UiPanel<void> {
         protected _IS_EXCLUSIVE = false;
         protected _LAYER_TYPE   = Types.LayerType.Hud2;
 

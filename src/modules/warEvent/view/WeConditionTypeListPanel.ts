@@ -14,7 +14,7 @@ namespace TinyWars.WarEvent {
         fullData    : IWarEventFullData;
         condition   : IWarEventCondition;
     }
-    export class WeConditionTypeListPanel extends GameUi.UiPanel {
+    export class WeConditionTypeListPanel extends GameUi.UiPanel<OpenDataForWeConditionTypeListPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -72,7 +72,7 @@ namespace TinyWars.WarEvent {
             this._btnClose.label        = Lang.getText(Lang.Type.B0146);
         }
         private _updateListType(): void {
-            const openData  = this._getOpenData<OpenDataForWeConditionTypeListPanel>();
+            const openData  = this._getOpenData();
             const condition = openData.condition;
             const fullData  = openData.fullData;
 

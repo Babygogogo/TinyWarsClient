@@ -11,7 +11,7 @@ namespace TinyWars.MapEditor {
         coId        : number;
     }
 
-    export class MeSimChooseCoPanel extends GameUi.UiPanel {
+    export class MeSimChooseCoPanel extends GameUi.UiPanel<OpenDataForSimChooseCoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -137,7 +137,7 @@ namespace TinyWars.MapEditor {
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
 
-            const openData = this._getOpenData<OpenDataForSimChooseCoPanel>();
+            const openData = this._getOpenData();
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
                 const cfg = data.coBasicCfg;
                 return cfg ? cfg.coId === openData.coId : openData == null;
@@ -146,7 +146,7 @@ namespace TinyWars.MapEditor {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const data          : DataForCoRenderer[] = [];
-            const playerIndex   = this._getOpenData<OpenDataForSimChooseCoPanel>().playerIndex;
+            const playerIndex   = this._getOpenData().playerIndex;
             let index           = 0;
             for (const cfg of ConfigManager.getAvailableCoArray(MeModel.Sim.getWarData().settingsForCommon.configVersion)) {
                 data.push({

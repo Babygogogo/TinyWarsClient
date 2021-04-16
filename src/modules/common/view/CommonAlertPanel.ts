@@ -11,7 +11,7 @@ namespace TinyWars.Common {
         callback?   : () => any;
     }
 
-    export class CommonAlertPanel extends GameUi.UiPanel {
+    export class CommonAlertPanel extends GameUi.UiPanel<OpenDataForCommonAlertPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -56,7 +56,7 @@ namespace TinyWars.Common {
 
             this._updateComponentsForLanguage();
 
-            const openData          = this._getOpenData<OpenDataForCommonAlertPanel>();
+            const openData          = this._getOpenData();
             this._labelTitle.text   = openData.title;
             this._labelContent.setRichText(openData.content);
             this._scrContent.viewport.scrollV = 0;
@@ -67,7 +67,7 @@ namespace TinyWars.Common {
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
-            const openData = this._getOpenData<OpenDataForCommonAlertPanel>();
+            const openData = this._getOpenData();
             (openData.callback) && (openData.callback());
 
             this.close();

@@ -10,7 +10,7 @@ namespace TinyWars.ReplayWar {
     import ConfigManager    = Utility.ConfigManager;
     import WarMapModel      = WarMap.WarMapModel;
 
-    export class RwReplayListPanel extends GameUi.UiPanel {
+    export class RwReplayListPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 

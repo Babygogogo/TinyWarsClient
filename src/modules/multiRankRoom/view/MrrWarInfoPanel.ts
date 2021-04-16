@@ -9,7 +9,7 @@ namespace TinyWars.MultiRankRoom {
     type OpenDataForMrrWarInfoPanel = {
         warInfo : IMpwWarInfo;
     }
-    export class MrrWarInfoPanel extends GameUi.UiPanel {
+    export class MrrWarInfoPanel extends GameUi.UiPanel<OpenDataForMrrWarInfoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -51,7 +51,7 @@ namespace TinyWars.MultiRankRoom {
             this._btnBack.setTextColor(0x00FF00);
             this._btnContinueWar.setTextColor(0x00FF00);
 
-            const warInfo = this._getOpenData<OpenDataForMrrWarInfoPanel>().warInfo;
+            const warInfo = this._getOpenData().warInfo;
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0002) },
@@ -85,7 +85,7 @@ namespace TinyWars.MultiRankRoom {
         }
 
         private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
-            const warInfo = this._getOpenData<OpenDataForMrrWarInfoPanel>().warInfo;
+            const warInfo = this._getOpenData().warInfo;
             if (warInfo) {
                 MpwProxy.reqMpwCommonContinueWar(warInfo.warId);
             }

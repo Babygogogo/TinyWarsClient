@@ -12,7 +12,7 @@ namespace TinyWars.WarEvent {
         parentNodeId    : number;
         conditionId     : number;
     }
-    export class WeConditionReplacePanel extends GameUi.UiPanel {
+    export class WeConditionReplacePanel extends GameUi.UiPanel<OpenDataForWeConditionReplacePanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -67,13 +67,13 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateComponentsForLanguage(): void {
-            const openData              = this._getOpenData<OpenDataForWeConditionReplacePanel>();
+            const openData              = this._getOpenData();
             this._labelTitle.text       = `${Lang.getText(Lang.Type.B0500)} C${openData.conditionId}`;
             this._labelNoCondition.text = Lang.getText(Lang.Type.B0278);
             this._btnClose.label        = Lang.getText(Lang.Type.B0146);
         }
         private _updateListConditionAndLabelNoCondition(): void {
-            const openData          = this._getOpenData<OpenDataForWeConditionReplacePanel>();
+            const openData          = this._getOpenData();
             const parentNodeId      = openData.parentNodeId;
             const srcConditionId    = openData.conditionId;
             const fullData          = openData.fullData;

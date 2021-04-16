@@ -10,12 +10,12 @@ namespace TinyWars.BaseWar {
     const _LEFT_X       = 0;
     const _RIGHT_X      = 860;
 
-    export type OpenDataForBwUnitActionsPanel   = {
+    export type OpenDataForBwUnitActionsPanel = {
         war         : BwWar;
         destination : Types.GridIndex;
         actionList  : DataForUnitAction[];
     }
-    export class BwUnitActionsPanel extends GameUi.UiPanel {
+    export class BwUnitActionsPanel extends GameUi.UiPanel<OpenDataForBwUnitActionsPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -87,7 +87,7 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const openData  = this._getOpenData<OpenDataForBwUnitActionsPanel>();
+            const openData  = this._getOpenData();
             const war       = openData.war;
             const dataArray : DataForUnitActionRenderer[] = [];
             for (const data of openData.actionList) {
@@ -123,7 +123,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updatePosition(): void {
-            const openData  = this._getOpenData<OpenDataForBwUnitActionsPanel>();
+            const openData  = this._getOpenData();
             const container = openData.war.getView().getFieldContainer();
             const contents  = container.getContents();
             const gridIndex = openData.destination;

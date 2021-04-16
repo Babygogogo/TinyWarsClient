@@ -8,7 +8,7 @@ namespace TinyWars.SingleCustomRoom {
         dataIndex   : number;
         coId        : number | null;
     }
-    export class ScrCreateCoListPanel extends GameUi.UiPanel {
+    export class ScrCreateCoListPanel extends GameUi.UiPanel<OpenDataForScrCreateCoListPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -134,7 +134,7 @@ namespace TinyWars.SingleCustomRoom {
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
 
-            const coId = this._getOpenData<OpenDataForScrCreateCoListPanel>().coId;
+            const coId = this._getOpenData().coId;
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
                 const cfg = data.coBasicCfg;
                 return cfg ? cfg.coId === coId : coId == null;
@@ -142,7 +142,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _createDataForListCo(): DataForCoRenderer[] {
-            const dataIndexForCreateWarPlayerList   = this._getOpenData<OpenDataForScrCreateCoListPanel>().dataIndex;
+            const dataIndexForCreateWarPlayerList   = this._getOpenData().dataIndex;
             const data                              : DataForCoRenderer[] = [];
             let index                               = 0;
             for (const cfg of Utility.ConfigManager.getAvailableCoArray(Utility.ConfigManager.getLatestFormalVersion())) {
