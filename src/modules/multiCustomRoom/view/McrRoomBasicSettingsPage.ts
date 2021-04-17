@@ -9,7 +9,7 @@ namespace TinyWars.MultiCustomRoom {
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
     export type OpenDataForMcrRoomBasicSettingsPage = {
-        roomId  : number;
+        roomId  : number | null;
     }
     export class McrRoomBasicSettingsPage extends GameUi.UiTabPage {
         private readonly _labelMapNameTitle             : GameUi.UiLabel;

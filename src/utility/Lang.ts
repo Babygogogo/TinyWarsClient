@@ -3894,6 +3894,10 @@ namespace TinyWars.Utility.Lang {
             "您已加入了该房间。",
             "You have already joined the room.",
         ],
+        [ServerErrorCode.MsgMcrStartWar0008]: [
+            `房间未满员`,
+            `There not enough players in the room.`,
+        ],
         [ServerErrorCode.MsgMcrStartWar0009]: [
             `还有玩家未准备就绪`,
             `Some players are not ready yet.`,

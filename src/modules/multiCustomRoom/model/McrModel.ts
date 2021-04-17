@@ -104,12 +104,8 @@ namespace TinyWars.MultiCustomRoom {
                 setRoomInfo(roomInfo);
             }
         }
-        export async function getUnjoinedRoomInfoList(): Promise<IMcrRoomInfo[]> {
-            const infoList: IMcrRoomInfo[] = [];
-            for (const roomId of _unjoinedRoomIdSet) {
-                infoList.push(await getRoomInfo(roomId));
-            }
-            return infoList;
+        export function getUnjoinedRoomIdSet(): Set<number> {
+            return _unjoinedRoomIdSet;
         }
 
         export function setJoinedRoomInfoList(infoList: IMcrRoomInfo[]): void {
@@ -119,12 +115,8 @@ namespace TinyWars.MultiCustomRoom {
                 setRoomInfo(roomInfo);
             }
         }
-        export async function getJoinedRoomInfoList(): Promise<IMcrRoomInfo[]> {
-            const infoList: IMcrRoomInfo[] = [];
-            for (const roomId of _joinedRoomIdSet) {
-                infoList.push(await getRoomInfo(roomId));
-            }
-            return infoList;
+        export function getJoinedRoomIdSet(): Set<number> {
+            return _joinedRoomIdSet;
         }
 
         export async function updateOnMsgMcrDeletePlayer(data: ProtoTypes.NetMessage.MsgMcrDeletePlayer.IS): Promise<void> {
@@ -560,6 +552,9 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for joining rooms.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         export namespace Join {
             let _targetRoomId: number;
 
@@ -591,6 +586,23 @@ namespace TinyWars.MultiCustomRoom {
             export async function getTargetRoomInfo(): Promise<IMcrRoomInfo | null> {
                 const roomId = getTargetRoomId();
                 return roomId == null ? null : await getRoomInfo(roomId);
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Functions for joined rooms.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        export namespace Joined {
+            let _previewingRoomId   : number;
+
+            export function getPreviewingRoomId(): number {
+                return _previewingRoomId;
+            }
+            export function setPreviewingRoomId(roomId: number | null): void {
+                if (getPreviewingRoomId() != roomId) {
+                    _previewingRoomId = roomId;
+                    Notify.dispatch(Notify.Type.McrJoinedPreviewingRoomIdChanged);
+                }
             }
         }
     }

@@ -7,7 +7,6 @@ namespace TinyWars.MultiCustomRoom {
     import FloatText        = Utility.FloatText;
     import Helpers          = Utility.Helpers;
     import WarMapModel      = WarMap.WarMapModel;
-    import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
 
     export class McrJoinRoomListPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -32,7 +31,6 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _labelLoading          : GameUi.UiLabel;
 
         private _hasReceivedData    = false;
-        private _dataForListRoom    : DataForRoomRenderer[] = [];
 
         public static show(): void {
             if (!McrJoinRoomListPanel._instance) {
@@ -57,7 +55,11 @@ namespace TinyWars.MultiCustomRoom {
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.McrJoinTargetRoomIdChanged,     callback: this._onNotifyMcrJoinTargetRoomIdChanged },
                 { type: Notify.Type.MsgMcrGetJoinableRoomInfoList,  callback: this._onMsgMcrGetJoinableRoomInfoList },
-                { type: Notify.Type.MsgMcrJoinRoom,                 callback: this._onMsgMcrJoinRoom },
+                { type: Notify.Type.MsgMcrCreateRoom,               callback: this._onNotifyMsgCreateRoom },
+                { type: Notify.Type.MsgMcrDeleteRoomByServer,       callback: this._onNotifyMsgMcrDeleteRoomByServer },
+                { type: Notify.Type.MsgMcrJoinRoom,                 callback: this._onNotifyMsgMcrJoinRoom },
+                { type: Notify.Type.MsgMcrDeletePlayer,             callback: this._onNotifyMsgMcrDeletePlayer },
+                { type: Notify.Type.MsgMcrExitRoom,                 callback: this._onNotifyMsgMcrExitRoom },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
@@ -66,28 +68,10 @@ namespace TinyWars.MultiCustomRoom {
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._listRoom.setItemRenderer(RoomRenderer);
 
-            this._tabSettings.bindData([
-                {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
-                    pageClass   : McrJoinMapInfoPage,
-                },
-                {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
-                    pageClass   : McrJoinPlayerInfoPage,
-                },
-                {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass   : McrJoinBasicSettingsPage,
-                },
-                {
-                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
-                    pageClass   : McrJoinAdvancedSettingsPage,
-                },
-            ]);
-
             this._showOpenAnimation();
 
             this._hasReceivedData = false;
+            this._initTabSettings();
             this._updateComponentsForLanguage();
             this._updateGroupRoomList();
             this._updateComponentsForTargetRoomInfo();
@@ -105,15 +89,29 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private async _onMsgMcrGetJoinableRoomInfoList(e: egret.Event): Promise<void> {
-            const newData           = this._createDataForListRoom(await McrModel.getUnjoinedRoomInfoList());
-            this._dataForListRoom   = newData;
-            this._hasReceivedData   = true;
-            this._updateGroupRoomList();
-            McrModel.Join.setTargetRoomId(newData.length ? newData[0].roomInfo.roomId : null);
+        private _onNotifyLanguageChanged(e: egret.Event): void {
+            this._updateComponentsForLanguage();
         }
 
-        private _onMsgMcrJoinRoom(e: egret.Event): void {
+        private _onNotifyMcrJoinTargetRoomIdChanged(): void {
+            this._updateComponentsForTargetRoomInfo();
+        }
+
+        private async _onMsgMcrGetJoinableRoomInfoList(e: egret.Event): Promise<void> {
+            this._hasReceivedData = true;
+            this._updateGroupRoomList();
+            this._updateComponentsForTargetRoomInfo();
+        }
+
+        private _onNotifyMsgCreateRoom(e: egret.Event): void {
+            this._updateGroupRoomList();
+        }
+
+        private _onNotifyMsgMcrDeleteRoomByServer(e: egret.Event): void {
+            this._updateGroupRoomList();
+        }
+
+        private _onNotifyMsgMcrJoinRoom(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMcrJoinRoom.IS;
             if (data.userId === User.UserModel.getSelfUserId()) {
                 this.close();
@@ -121,12 +119,12 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateComponentsForLanguage();
+        private _onNotifyMsgMcrDeletePlayer(e: egret.Event): void {
+            this._updateGroupRoomList();
         }
 
-        private async _onNotifyMcrJoinTargetRoomIdChanged(): Promise<void> {
-            this._updateComponentsForTargetRoomInfo();
+        private _onNotifyMsgMcrExitRoom(e: egret.Event): void {
+            this._updateGroupRoomList();
         }
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
@@ -137,7 +135,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnNextStep(e: egret.TouchEvent): Promise<void> {
-            const roomInfo  = await McrModel.Join.getTargetRoomInfo();
+            const roomInfo = await McrModel.getRoomInfo(McrModel.Join.getTargetRoomId());
             if (roomInfo) {
                 if (roomInfo.settingsForMcw.warPassword) {
                     McrJoinPasswordPanel.show({ roomInfo });
@@ -156,6 +154,31 @@ namespace TinyWars.MultiCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
+        private _initTabSettings(): void {
+            this._tabSettings.bindData([
+                {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                    pageClass   : McrRoomMapInfoPage,
+                    pageData    : { roomId: null } as OpenDataForMcrRoomMapInfoPage,
+                },
+                {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                    pageClass   : McrRoomPlayerInfoPage,
+                    pageData    : { roomId: null } as OpenDataForMcrRoomPlayerInfoPage,
+                },
+                {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                    pageClass   : McrRoomBasicSettingsPage,
+                    pageData    : { roomId: null } as OpenDataForMcrRoomBasicSettingsPage,
+                },
+                {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                    pageClass   : McrRoomAdvancedSettingsPage,
+                    pageData    : { roomId: null } as OpenDataForMcrRoomAdvancedSettingsPage,
+                },
+            ]);
+        }
+
         private _updateComponentsForLanguage(): void {
             this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
             this._labelMultiPlayer.text     = Lang.getText(Lang.Type.B0137);
@@ -174,41 +197,48 @@ namespace TinyWars.MultiCustomRoom {
                 labelLoading.visible    = true;
                 labelNoRoom.visible     = false;
                 listRoom.clear();
+
             } else {
-                const dataArray         = this._dataForListRoom || [];
+                const dataArray         = this._createDataForListRoom();
                 labelLoading.visible    = false;
                 labelNoRoom.visible     = !dataArray.length;
                 listRoom.bindData(dataArray);
-            }
-        }
 
-        private _createDataForListRoom(infos: IMcrRoomInfo[]): DataForRoomRenderer[] {
-            const data: DataForRoomRenderer[] = [];
-            if (infos) {
-                for (let i = 0; i < infos.length; ++i) {
-                    data.push({
-                        roomInfo : infos[i],
-                        index   : i,
-                        panel   : this,
-                    });
+                const roomId = McrModel.Join.getTargetRoomId();
+                if (dataArray.every(v => v.roomId != roomId)) {
+                    McrModel.Join.setTargetRoomId(dataArray.length ? dataArray[0].roomId : null);
                 }
             }
-
-            return data;
         }
 
         private async _updateComponentsForTargetRoomInfo(): Promise<void> {
-            this._listRoom.refresh();
-
             const groupTab      = this._groupTab;
             const btnNextStep   = this._btnNextStep;
-            if (!await McrModel.Join.getTargetRoomInfo()) {
+            const roomId        = McrModel.Join.getTargetRoomId();
+            if ((!this._hasReceivedData) || (roomId == null)) {
                 groupTab.visible    = false;
                 btnNextStep.visible = false;
             } else {
                 groupTab.visible    = true;
                 btnNextStep.visible = true;
+
+                const tab = this._tabSettings;
+                tab.updatePageData(0, { roomId } as OpenDataForMcrRoomMapInfoPage);
+                tab.updatePageData(1, { roomId } as OpenDataForMcrRoomPlayerInfoPage);
+                tab.updatePageData(2, { roomId } as OpenDataForMcrRoomBasicSettingsPage);
+                tab.updatePageData(3, { roomId } as OpenDataForMcrRoomAdvancedSettingsPage);
             }
+        }
+
+        private _createDataForListRoom(): DataForRoomRenderer[] {
+            const dataArray: DataForRoomRenderer[] = [];
+            for (const roomId of McrModel.getUnjoinedRoomIdSet()) {
+                dataArray.push({
+                    roomId,
+                });
+            }
+
+            return dataArray.sort((v1, v2) => v1.roomId - v2.roomId);
         }
 
         private _showOpenAnimation(): void {
@@ -285,9 +315,7 @@ namespace TinyWars.MultiCustomRoom {
     }
 
     type DataForRoomRenderer = {
-        roomInfo: IMcrRoomInfo;
-        index   : number;
-        panel   : McrJoinRoomListPanel;
+        roomId  : number;
     }
     class RoomRenderer extends GameUi.UiListItemRenderer<DataForRoomRenderer> {
         private readonly _btnChoose     : GameUi.UiButton;
@@ -300,14 +328,22 @@ namespace TinyWars.MultiCustomRoom {
                 { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
                 { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
             ]);
+            this._setNotifyListenerArray([
+                { type: Notify.Type.McrJoinTargetRoomIdChanged, callback: this._onNotifyMcrJoinTargetRoomIdChanged },
+            ]);
         }
 
-        protected dataChanged(): void {
+        protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
-            const roomInfo              = this.data.roomInfo;
+            this._updateState();
+
+            const roomInfo = await McrModel.getRoomInfo(this.data.roomId);
+            if (roomInfo == null) {
+                return;
+            }
+
             const settingsForMcw        = roomInfo.settingsForMcw;
-            this.currentState           = roomInfo.roomId === McrModel.Join.getTargetRoomId() ? Types.UiState.Down : Types.UiState.Up;
             this._imgPassword.visible   = !!settingsForMcw.warPassword;
 
             const warName = settingsForMcw.warName;
@@ -318,12 +354,20 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            McrModel.Join.setTargetRoomId(this.data.roomInfo.roomId);
+        private _onNotifyMcrJoinTargetRoomIdChanged(e: egret.Event): void {
+            this._updateState();
         }
 
-        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const roomInfo = this.data.roomInfo;
+        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+            McrModel.Join.setTargetRoomId(this.data.roomId);
+        }
+
+        private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
+            const roomInfo = await McrModel.getRoomInfo(this.data.roomId);
+            if (roomInfo == null) {
+                return;
+            }
+
             if (roomInfo.settingsForMcw.warPassword) {
                 McrJoinPasswordPanel.show({ roomInfo });
             } else {
@@ -335,6 +379,10 @@ namespace TinyWars.MultiCustomRoom {
                     McrProxy.reqMcrGetJoinableRoomInfoList();
                 }
             }
+        }
+
+        private _updateState(): void {
+            this.currentState = this.data.roomId === McrModel.Join.getTargetRoomId() ? Types.UiState.Down : Types.UiState.Up;
         }
     }
 }

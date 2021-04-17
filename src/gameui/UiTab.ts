@@ -2,7 +2,7 @@
 namespace TinyWars.GameUi {
     import Logger = Utility.Logger;
 
-    export class UiTab<DataForTabItemRenderer> extends eui.Component {
+    export class UiTab<DataForTabItemRenderer> extends UiComponent {
         private readonly _bar           : eui.TabBar;  // 页签栏
         private readonly _page          : eui.Group;   // 页面内容，仅用于占位
 
@@ -10,23 +10,16 @@ namespace TinyWars.GameUi {
         private _barItemRenderer        : new () => UiTabItemRenderer<DataForTabItemRenderer>;
         private _selectedIndex          : number = -1;
 
-        public constructor() {
-            super();
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._bar,    callback: this._onTouchedBarItem, eventType: eui.ItemTapEvent.ITEM_TAP },
+            ]);
 
-            this.addEventListener(egret.Event.COMPLETE, this._onAllSkinPartsAdded, this);
-        }
+            this._bar.itemRenderer     = this._barItemRenderer;
+            this._bar.dataProvider     = this.getDataProvider();
+            this._bar.requireSelection = true;
 
-        protected _onAllSkinPartsAdded(e : egret.Event) {
-            if (e.target === this) {
-                this.removeEventListener(egret.Event.COMPLETE, this._onAllSkinPartsAdded, this);
-
-                this._bar.addEventListener(eui.ItemTapEvent.ITEM_TAP, this._onTouchedBarItem, this);
-                this._bar.itemRenderer     = this._barItemRenderer;
-                this._bar.dataProvider     = this.getDataProvider();
-                this._bar.requireSelection = true;
-
-                this.setSelectedIndex(0);
-            }
+            this.setSelectedIndex(0);
         }
 
         private _onTouchedBarItem(e: eui.ItemTapEvent): void {
@@ -109,6 +102,18 @@ namespace TinyWars.GameUi {
             }
 
             dataProvider.replaceItemAt(data, index);
+            if ((index === this.getSelectedIndex()) && (refreshPage)) {
+                this.setSelectedIndex(index);
+            }
+        }
+        public updatePageData(index: number, pageData: any, refreshPage = true): void {
+            const dataProvider = this.getDataProvider();
+            if ((index < 0) || (index >= dataProvider.length)) {
+                Logger.error(`UiTab.updateSingleData() invalid index.`);
+                return;
+            }
+
+            (dataProvider.getItemAt(index) as DataForUiTab<DataForTabItemRenderer>).pageData = pageData;
             if ((index === this.getSelectedIndex()) && (refreshPage)) {
                 this.setSelectedIndex(index);
             }

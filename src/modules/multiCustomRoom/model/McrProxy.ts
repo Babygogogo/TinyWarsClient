@@ -107,10 +107,10 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
             }, },
         });
     }
-    function _onMsgMcrDeletePlayer(e: egret.Event): void {
+    async function _onMsgMcrDeletePlayer(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMcrDeletePlayer.IS;
         if (!data.errorCode) {
-            McrModel.updateOnMsgMcrDeletePlayer(data);
+            await McrModel.updateOnMsgMcrDeletePlayer(data);
             Notify.dispatch(Notify.Type.MsgMcrDeletePlayer, data);
         }
     }
