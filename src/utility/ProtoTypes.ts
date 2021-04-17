@@ -18305,6 +18305,9 @@ export declare namespace User {
 
         /** UserSettings isSetPathMode */
         isSetPathMode?: (boolean|null);
+
+        /** UserSettings isShowGridBorder */
+        isShowGridBorder?: (boolean|null);
     }
 
     /** Represents a UserSettings. */
@@ -18321,6 +18324,9 @@ export declare namespace User {
 
         /** UserSettings isSetPathMode. */
         public isSetPathMode: boolean;
+
+        /** UserSettings isShowGridBorder. */
+        public isShowGridBorder: boolean;
 
         /**
          * Creates a new UserSettings instance using the specified properties.

@@ -15,11 +15,16 @@ namespace TinyWars.GameUi {
                 { ui: this._bar,    callback: this._onTouchedBarItem, eventType: eui.ItemTapEvent.ITEM_TAP },
             ]);
 
-            this._bar.itemRenderer     = this._barItemRenderer;
-            this._bar.dataProvider     = this.getDataProvider();
-            this._bar.requireSelection = true;
+            const bar               = this._bar;
+            bar.itemRenderer        = this._barItemRenderer;
+            bar.dataProvider        = this.getDataProvider();
+            bar.requireSelection    = true;
 
             this.setSelectedIndex(0);
+        }
+
+        protected async _onClosed(): Promise<void> {
+            this.clear();
         }
 
         private _onTouchedBarItem(e: eui.ItemTapEvent): void {

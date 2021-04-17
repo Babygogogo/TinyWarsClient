@@ -2,7 +2,6 @@
 namespace TinyWars.BaseWar {
     import Notify               = Utility.Notify;
     import Helpers              = Utility.Helpers;
-    import ConfigManager        = Utility.ConfigManager;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import CommonConstants      = Utility.CommonConstants;
@@ -10,49 +9,77 @@ namespace TinyWars.BaseWar {
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
     export class BwTileMapView extends egret.DisplayObjectContainer {
-        private readonly _tileViews         = new Array<BwTileView>();
+        private readonly _tileViewArray     : BwTileView[] = [];
         private readonly _baseLayer         = new egret.DisplayObjectContainer();
+        private readonly _gridBorderLayer   = new egret.DisplayObjectContainer();
         private readonly _objectLayer       = new egret.DisplayObjectContainer();
         private readonly _coZoneContainer   = new egret.DisplayObjectContainer();
         private readonly _coZoneImageDict   = new Map<number, GameUi.UiImage[][]>();
 
-        private _tileMap            : BwTileMap;
-
-        private _notifyListeners = [
-            { type: Notify.Type.TileAnimationTick, callback: this._onNotifyTileAnimationTick },
+        private readonly _notifyListeners   = [
+            { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
+            { type: Notify.Type.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
         ];
+
+        private _tileMap: BwTileMap;
 
         public constructor() {
             super();
 
             this.addChild(this._baseLayer);
+            this.addChild(this._gridBorderLayer);
             this.addChild(this._objectLayer);
             this.addChild(this._coZoneContainer);
+            this._gridBorderLayer.alpha = 0.3;
         }
 
         public init(tileMap: BwTileMap): void {
             this._tileMap = tileMap;
 
-            this._tileViews.length = 0;
-            this._baseLayer.removeChildren();
-            this._objectLayer.removeChildren();
+            const tileViewArray     = this._tileViewArray;
+            const baseLayer         = this._baseLayer;
+            const objectLayer       = this._objectLayer;
+            tileViewArray.length    = 0;
+            baseLayer.removeChildren();
+            objectLayer.removeChildren();
 
             tileMap.forEachTile(tile => {
                 const view  = tile.getView();
                 const x     = GRID_WIDTH * tile.getGridX();
                 const y     = GRID_HEIGHT * (tile.getGridY() + 1);
-                this._tileViews.push(view);
+                tileViewArray.push(view);
 
-                const imgBase = view.getImgBase();
-                imgBase.x   = x;
-                imgBase.y   = y;
-                this._baseLayer.addChild(imgBase);
+                const imgBase   = view.getImgBase();
+                imgBase.x       = x;
+                imgBase.y       = y;
+                baseLayer.addChild(imgBase);
 
                 const imgObject = view.getImgObject();
-                imgObject.x = x;
-                imgObject.y = y;
-                this._objectLayer.addChild(imgObject);
+                imgObject.x     = x;
+                imgObject.y     = y;
+                objectLayer.addChild(imgObject);
             });
+
+            const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
+            const borderWidth                               = mapWidth * GRID_WIDTH;
+            const borderHeight                              = mapHeight * GRID_HEIGHT;
+            const gridBorderLayer                           = this._gridBorderLayer;
+            gridBorderLayer.removeChildren();
+            for (let x = 0; x <= mapWidth; ++x) {
+                const img   = new GameUi.UiImage(`commonColorBlack0000`);
+                img.width   = 2;
+                img.height  = borderHeight;
+                img.x       = (x * GRID_WIDTH) - 1;
+                gridBorderLayer.addChild(img);
+            }
+            for (let y = 0; y <= mapHeight; ++y) {
+                const img   = new GameUi.UiImage(`commonColorBlack0000`);
+                img.width   = borderWidth;
+                img.height  = 2;
+                img.y       = (y * GRID_HEIGHT) - 1;
+                gridBorderLayer.addChild(img);
+            }
+            this._updateGridBorderLayerVisible();
         }
         public fastInit(tileMap: BwTileMap): void {
             this._tileMap = tileMap;
@@ -191,9 +218,17 @@ namespace TinyWars.BaseWar {
         }
 
         private _onNotifyTileAnimationTick(e: egret.Event): void {
-            for (const view of this._tileViews) {
+            for (const view of this._tileViewArray) {
                 view.updateView();
             }
+        }
+
+        private _onNotifyIsShowGridBorderChanged(e: egret.Event): void {
+            this._updateGridBorderLayerVisible();
+        }
+
+        private _updateGridBorderLayerVisible(): void {
+            this._gridBorderLayer.visible = User.UserModel.getSelfSettingsIsShowGridBorder();
         }
     }
 }

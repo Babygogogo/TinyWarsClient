@@ -173,12 +173,16 @@ namespace TinyWars.User {
         }
 
         export function setSelfSettings(userSettings: IUserSettings): void {
-            const oldVersion = getSelfSettingsTextureVersion();
+            const oldVersion            = getSelfSettingsTextureVersion();
+            const oldIsShowGridBorder   = getSelfSettingsIsShowGridBorder();
             _selfSettings = userSettings;
 
             if (oldVersion !== getSelfSettingsTextureVersion()) {
                 Common.CommonModel.updateOnUnitAndTileTextureVersionChanged();
                 Notify.dispatch(Notify.Type.UnitAndTileTextureVersionChanged);
+            }
+            if (oldIsShowGridBorder !== getSelfSettingsIsShowGridBorder()) {
+                Notify.dispatch(Notify.Type.IsShowGridBorderChanged);
             }
         }
         export function getSelfSettingsTextureVersion(): Types.UnitAndTileTextureVersion {
@@ -189,6 +193,11 @@ namespace TinyWars.User {
         export function getSelfSettingsIsSetPathMode(): boolean {
             return _selfSettings
                 ? !!_selfSettings.isSetPathMode
+                : false;
+        }
+        export function getSelfSettingsIsShowGridBorder(): boolean {
+            return _selfSettings
+                ? _selfSettings.isShowGridBorder || false
                 : false;
         }
 

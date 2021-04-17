@@ -21,6 +21,7 @@ namespace TinyWars.User {
         private readonly _uiRadioTexture        : GameUi.UiRadioButton;
         private readonly _uiRadioUnitAnimation  : GameUi.UiRadioButton;
         private readonly _uiRadioTileAnimation  : GameUi.UiRadioButton;
+        private readonly _uiRadioShowGridBorder : GameUi.UiRadioButton;
 
         private readonly _groupButtons          : eui.Group;
         private readonly _btnChangeNickname     : GameUi.UiButton;
@@ -62,6 +63,7 @@ namespace TinyWars.User {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
+                { type: Notify.Type.IsShowGridBorderChanged,            callback: this._onNotifyIsShowGridBorderChanged },
                 { type: Notify.Type.MsgUserGetPublicInfo,               callback: this._onMsgUserGetPublicInfo },
                 { type: Notify.Type.MsgUserSetNickname,                 callback: this._onMsgUserSetNickname },
                 { type: Notify.Type.MsgUserSetDiscordId,                callback: this._onMsgUserSetDiscordId },
@@ -152,6 +154,23 @@ namespace TinyWars.User {
                     return Time.TimeModel.checkIsTileAnimationTicking();
                 },
             });
+            this._uiRadioShowGridBorder.setData({
+                leftTextType    : Lang.Type.B0584,
+                rightTextType   : Lang.Type.B0585,
+                callbackOnLeft  : () => {
+                    User.UserProxy.reqUserSetSettings({
+                        isShowGridBorder: false,
+                    });
+                },
+                callbackOnRight : () => {
+                    User.UserProxy.reqUserSetSettings({
+                        isShowGridBorder: true,
+                    });
+                },
+                checkerForLeftOn: () => {
+                    return !User.UserModel.getSelfSettingsIsShowGridBorder();
+                },
+            });
 
             this._showOpenAnimation();
 
@@ -169,6 +188,9 @@ namespace TinyWars.User {
         }
         private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
             this._uiRadioTexture.updateView();
+        }
+        private _onNotifyIsShowGridBorderChanged(e: egret.Event): void {
+            this._uiRadioShowGridBorder.updateView();
         }
         private _onMsgUserGetPublicInfo(e: egret.Event): void {
             this._updateView();

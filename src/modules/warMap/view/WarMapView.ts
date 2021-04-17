@@ -56,24 +56,28 @@ namespace TinyWars.WarMap {
 
     class TileMapView extends egret.DisplayObjectContainer {
         private readonly _baseLayer             = new TileBaseLayer();
+        private readonly _gridBorderLayer       = new egret.DisplayObjectContainer();
         private readonly _objectLayer           = new TileObjectLayer();
+
         private readonly _notifyListenerArray   : Notify.Listener[] = [
-            { type: Notify.Type.TileAnimationTick, callback: this._onNotifyTileAnimationTick }
+            { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
+            { type: Notify.Type.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
         ];
 
         public constructor() {
             super();
 
+            this._gridBorderLayer.alpha = 0.3;
             this.addChild(this._baseLayer);
+            this.addChild(this._gridBorderLayer);
             this.addChild(this._objectLayer);
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
-
-            // this._initTest();
         }
 
         public showTileMap(dataList: ISerialTile[]): void {
             this._baseLayer.updateWithTileDataList(dataList);
             this._objectLayer.updateWithTileDataList(dataList);
+            this._resetGridBorderLayer(dataList);
         }
         public clear(): void {
             this.showTileMap([]);
@@ -96,20 +100,35 @@ namespace TinyWars.WarMap {
             this._objectLayer.updateViewOnTick();
         }
 
-        // private _initTest(): void {
-        //     const ids1: number[][] = new Array(this._colCount);
-        //     const ids2: number[][] = new Array(this._colCount);
-        //     for (let x = 0; x < this._colCount; ++x) {
-        //         ids1[x] = new Array(this._rowCount);
-        //         ids2[x] = new Array(this._rowCount);
-        //         for (let y = 0; y < this._rowCount; ++y) {
-        //             ids1[x][y] = Math.floor(Math.random() * 100);
-        //             ids2[x][y] = Math.floor(Math.random() * 109);
-        //         }
-        //     }
-        //     this.updateWithBaseViewIdMatrix(ids1);
-        //     this.updateWithObjectViewIdMatrix(ids2);
-        // }
+        private _onNotifyIsShowGridBorderChanged(e: egret.Event): void {
+            this._updateGridBorderLayerVisible();
+        }
+
+        private _resetGridBorderLayer(tileDataArray: ISerialTile[]): void {
+            const { width: mapWidth, height: mapHeight }    = getMapSize(tileDataArray);
+            const borderWidth                               = mapWidth * GRID_WIDTH;
+            const borderHeight                              = mapHeight * GRID_HEIGHT;
+            const gridBorderLayer                           = this._gridBorderLayer;
+            gridBorderLayer.removeChildren();
+            for (let x = 0; x <= mapWidth; ++x) {
+                const img   = new GameUi.UiImage(`commonColorBlack0000`);
+                img.width   = 2;
+                img.height  = borderHeight;
+                img.x       = (x * GRID_WIDTH) - 1;
+                gridBorderLayer.addChild(img);
+            }
+            for (let y = 0; y <= mapHeight; ++y) {
+                const img   = new GameUi.UiImage(`commonColorBlack0000`);
+                img.width   = borderWidth;
+                img.height  = 2;
+                img.y       = (y * GRID_HEIGHT) - 1;
+                gridBorderLayer.addChild(img);
+            }
+            this._updateGridBorderLayerVisible();
+        }
+        private _updateGridBorderLayerVisible(): void {
+            this._gridBorderLayer.visible = User.UserModel.getSelfSettingsIsShowGridBorder();
+        }
     }
 
     abstract class TileLayerBase extends eui.Component {

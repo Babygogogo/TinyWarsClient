@@ -9,7 +9,7 @@ namespace TinyWars.GameUi {
         thisObject? : any,
     }
 
-    export abstract class UiComponent extends eui.Component {
+    export class UiComponent extends eui.Component {
         private _isChildrenCreated  = false;
         private _isSkinLoaded       = false;
         private _isOpening          = false;
