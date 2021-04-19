@@ -224,8 +224,11 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
             return getSettingsForMfw().warComment;
         }
 
-        function setSelfPlayerIndex(playerIndex: number): void {
-            getData().selfPlayerIndex = playerIndex;
+        export function setSelfPlayerIndex(playerIndex: number): void {
+            if (playerIndex !== getSelfPlayerIndex()) {
+                getData().selfPlayerIndex = playerIndex;
+                Notify.dispatch(Notify.Type.MfrCreateSelfPlayerIndexChanged);
+            }
         }
         export function tickSelfPlayerIndex(): void {
             setSelfPlayerIndex(getSelfPlayerIndex() % BwWarRuleHelper.getPlayersCount(getWarRule()) + 1);

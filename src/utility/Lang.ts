@@ -968,6 +968,10 @@ namespace TinyWars.Utility.Lang {
             `已有其他玩家选择该颜色`,
             `The color has been chosen by another player.`,
         ],
+        [Type.A0204]: [
+            `该势力不可选`,
+            `The force is unavailable.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3299,6 +3303,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0585]: [
             `显示棋盘格子`,
             `Show Border`,
+        ],
+        [Type.B0586]: [
+            `您的势力颜色`,
+            `Your Force Color`,
+        ],
+        [Type.B0587]: [
+            `您的CO`,
+            `Your CO`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

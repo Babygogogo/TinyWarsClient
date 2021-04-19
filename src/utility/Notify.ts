@@ -39,6 +39,11 @@ namespace TinyWars.Utility.Notify {
         McrJoinTargetRoomIdChanged,
         McrJoinedPreviewingRoomIdChanged,
 
+        MfrCreateSelfCoIdChanged,
+        MfrCreateTeamIndexChanged,
+        MfrCreateSelfPlayerIndexChanged,
+        MfrCreateSelfSkinIdChanged,
+
         MrrMyRoomAdded,
         MrrMyRoomDeleted,
 

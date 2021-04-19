@@ -609,9 +609,12 @@ namespace TinyWars.MapEditor {
                             content : Lang.getText(Lang.Type.A0201),
                             callback: () => {
                                 MultiFreeRoom.MfrModel.Create.resetDataByInitialWarData(warData);
+                                MeModel.unloadWar();
+                                Utility.StageManager.closeAllPanels();
+                                Lobby.LobbyBackgroundPanel.show();
+                                Broadcast.BroadcastPanel.show();
                                 MultiFreeRoom.MfrCreateSettingsPanel.show();
-                                this.close();
-                            }
+                            },
                         });
                     };
 

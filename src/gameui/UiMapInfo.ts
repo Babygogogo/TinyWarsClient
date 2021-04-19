@@ -96,7 +96,16 @@ namespace TinyWars.GameUi {
 
             const warData = data.warData;
             if (warData) {
-                // TODO
+                const tileMapData       = warData.field.tileMap;
+                const mapSize           = BaseWar.BwHelpers.getMapSize(tileMapData);
+                labelMapName.text       = `--`;
+                labelDesigner.text      = `--`;
+                labelPlayersCount.text  = `${warData.playerManager.players.length - 1}`;
+                labelRating.text        = `--`;
+                labelPlayedTimes.text   = `--`;
+                labelMapSize.text       = `${mapSize.width} x ${mapSize.height}`;
+                this._listTile.bindData(generateDataForListTile(tileMapData.tiles, warData.settingsForCommon.configVersion));
+
                 return;
             }
         }
