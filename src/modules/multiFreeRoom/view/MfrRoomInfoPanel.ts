@@ -53,12 +53,12 @@ namespace TinyWars.MultiFreeRoom {
                 { ui: this._btnExitRoom,    callback: this._onTouchedBtnExitRoom },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMfrGetRoomInfo,  callback: this._onMsgMfrGetRoomInfo },
-                { type: Notify.Type.MsgMfrExitRoom,     callback: this._onMsgMfrExitRoom },
-                { type: Notify.Type.MsgMfrDeleteRoom,   callback: this._onMsgMfrDeleteRoom },
-                { type: Notify.Type.MsgMfrStartWar,     callback: this._onMsgMfrStartWar },
-                { type: Notify.Type.MsgMfrDeletePlayer, callback: this._onMsgMfrDeletePlayer },
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgMfrGetRoomInfo,          callback: this._onMsgMfrGetRoomInfo },
+                { type: Notify.Type.MsgMfrExitRoom,             callback: this._onMsgMfrExitRoom },
+                { type: Notify.Type.MsgMfrDeleteRoomByServer,   callback: this._onMsgMfrDeleteRoomByServer },
+                { type: Notify.Type.MsgMfrStartWar,             callback: this._onMsgMfrStartWar },
+                { type: Notify.Type.MsgMfrDeletePlayer,         callback: this._onMsgMfrDeletePlayer },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
@@ -115,7 +115,7 @@ namespace TinyWars.MultiFreeRoom {
                 CommonConfirmPanel.show({
                     content : Lang.getText(Lang.Type.A0149),
                     callback: () => {
-                        MfrProxy.reqMfrDestroyRoom(roomId);
+                        MfrProxy.reqMfrDeleteRoomByPlayer(roomId);
                     },
                 });
             }
@@ -160,8 +160,8 @@ namespace TinyWars.MultiFreeRoom {
             }
         }
 
-        private _onMsgMfrDeleteRoom(e: egret.Event): void {
-            const data = e.data as NetMessage.MsgMfrDeleteRoom.IS;
+        private _onMsgMfrDeleteRoomByServer(e: egret.Event): void {
+            const data = e.data as NetMessage.MsgMfrDeleteRoomByServer.IS;
             if (data.roomId === this._getOpenData().roomId) {
                 FloatText.show(Lang.getText(Lang.Type.A0019));
                 this.close();

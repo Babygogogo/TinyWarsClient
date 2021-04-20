@@ -131,6 +131,8 @@
 		"resource/skins/multiFreeRoom/MfrRoomAdvancedSettingsPage.exml",
 		"resource/skins/multiFreeRoom/MfrRoomBasicSettingsPage.exml",
 		"resource/skins/multiFreeRoom/MfrRoomInfoPanel.exml",
+		"resource/skins/multiFreeRoom/MfrRoomMapInfoPage.exml",
+		"resource/skins/multiFreeRoom/MfrRoomPlayerInfoPage.exml",
 		"resource/skins/multiFreeRoom/MfrWarAdvancedSettingsPage.exml",
 		"resource/skins/multiFreeRoom/MfrWarBasicSettingsPage.exml",
 		"resource/skins/multiFreeRoom/MfrWarInfoPanel.exml",

@@ -235,6 +235,8 @@
 		"bin-debug/modules/multiFreeRoom/view/MfrRoomAdvancedSettingsPage.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrRoomBasicSettingsPage.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrRoomInfoPanel.js",
+		"bin-debug/modules/multiFreeRoom/view/MfrRoomMapInfoPage.js",
+		"bin-debug/modules/multiFreeRoom/view/MfrRoomPlayerInfoPage.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrWarAdvancedSettingsPage.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrWarBasicSettingsPage.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrWarInfoPanel.js",

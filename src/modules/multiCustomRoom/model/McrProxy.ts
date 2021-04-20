@@ -25,7 +25,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         ], McrProxy);
     }
 
-    export function reqCreateRoom(param: DataForCreateRoom): void {
+    export function reqCreateRoom(param: NetMessage.MsgMcrCreateRoom.IC): void {
         NetManager.send({
             MsgMcrCreateRoom: { c: param },
         });
@@ -37,7 +37,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         }
     }
 
-    export function reqMcrJoinRoom(data: DataForJoinRoom): void {
+    export function reqMcrJoinRoom(data: NetMessage.MsgMcrJoinRoom.IC): void {
         NetManager.send({
             MsgMcrJoinRoom: { c: data },
         });

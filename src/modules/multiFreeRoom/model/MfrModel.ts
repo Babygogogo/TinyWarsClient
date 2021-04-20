@@ -5,9 +5,7 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
     import ProtoTypes       = Utility.ProtoTypes;
     import Notify           = Utility.Notify;
     import Helpers          = Utility.Helpers;
-    import ConfigManager    = Utility.ConfigManager;
     import CommonConstants  = Utility.CommonConstants;
-    import WarMapModel      = WarMap.WarMapModel;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import BootTimerType    = Types.BootTimerType;
     import IMfrRoomInfo     = ProtoTypes.MultiFreeRoom.IMfrRoomInfo;
@@ -105,12 +103,8 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
             setRoomInfo(roomInfo);
         }
     }
-    export async function getUnjoinedRoomInfoList(): Promise<IMfrRoomInfo[]> {
-        const infoList: IMfrRoomInfo[] = [];
-        for (const roomId of _unjoinedRoomIdSet) {
-            infoList.push(await getRoomInfo(roomId));
-        }
-        return infoList;
+    export function getUnjoinedRoomIdSet(): Set<number> {
+        return _unjoinedRoomIdSet;
     }
 
     export function setJoinedRoomInfoList(infoList: IMfrRoomInfo[]): void {
@@ -120,19 +114,88 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
             setRoomInfo(roomInfo);
         }
     }
-    export async function getJoinedRoomInfoList(): Promise<IMfrRoomInfo[]> {
-        const infoList: IMfrRoomInfo[] = [];
-        for (const roomId of _joinedRoomIdSet) {
-            infoList.push(await getRoomInfo(roomId));
-        }
-        return infoList;
+    export function getJoinedRoomIdSet(): Set<number> {
+        return _joinedRoomIdSet;
     }
 
-    export function updateOnDeletePlayer(data: ProtoTypes.NetMessage.MsgMfrDeletePlayer.IS): void {
-        if (data.targetUserId === User.UserModel.getSelfUserId()) {
-            const roomId = data.roomId;
-            _unjoinedRoomIdSet.add(roomId);
-            _joinedRoomIdSet.delete(roomId);
+    export async function updateOnMsgMfrDeletePlayer(data: ProtoTypes.NetMessage.MsgMfrDeletePlayer.IS): Promise<void> {
+        const roomId    = data.roomId;
+        const roomInfo  = await getRoomInfo(roomId);
+        if (roomInfo) {
+            const playerDataList    = roomInfo.playerDataList;
+            const playerData        = playerDataList.find(v => v.playerIndex === data.targetPlayerIndex);
+            Helpers.deleteElementFromArray(playerDataList, playerData);
+
+            if ((playerData) && (playerData.userId === User.UserModel.getSelfUserId())) {
+                _unjoinedRoomIdSet.add(roomId);
+                _joinedRoomIdSet.delete(roomId);
+            }
+        }
+    }
+    export async function updateOnMsgMfrSetReady(data: ProtoTypes.NetMessage.MsgMfrSetReady.IS): Promise<void> {
+        const roomInfo      = await getRoomInfo(data.roomId);
+        const playerData    = roomInfo ? roomInfo.playerDataList.find(v => v.playerIndex === data.playerIndex) : null;
+        if (playerData) {
+            playerData.isReady = data.isReady;
+        }
+    }
+    export async function updateOnMsgMfrSetSelfSettings(data: ProtoTypes.NetMessage.MsgMfrSetSelfSettings.IS): Promise<void> {
+        const roomInfo = await getRoomInfo(data.roomId);
+        if (roomInfo) {
+            const oldPlayerIndex                = data.oldPlayerIndex;
+            const newPlayerIndex                = data.newPlayerIndex;
+            const playerDataInRoom              = roomInfo.playerDataList.find(v => v.playerIndex === oldPlayerIndex);
+            const playerDataInWar               = roomInfo.settingsForMfw.initialWarData.playerManager.players.find(v => v.playerIndex === newPlayerIndex);
+            playerDataInRoom.coId               = playerDataInWar.coId;
+            playerDataInRoom.unitAndTileSkinId  = playerDataInWar.unitAndTileSkinId;
+            playerDataInRoom.playerIndex        = newPlayerIndex;
+            if ((oldPlayerIndex !== newPlayerIndex) && (roomInfo.ownerPlayerIndex === oldPlayerIndex)) {
+                roomInfo.ownerPlayerIndex = newPlayerIndex;
+            }
+        }
+    }
+    export async function updateOnMsgMfrGetOwnerPlayerIndex(data: ProtoTypes.NetMessage.MsgMfrGetOwnerPlayerIndex.IS): Promise<void> {
+        const roomInfo = await getRoomInfo(data.roomId);
+        if (roomInfo) {
+            roomInfo.ownerPlayerIndex = data.ownerPlayerIndex;
+        }
+    }
+    export async function updateOnMsgMfrJoinRoom(data: ProtoTypes.NetMessage.MsgMfrJoinRoom.IS): Promise<void> {
+        const roomInfo          = await getRoomInfo(data.roomId);
+        const playerIndex       = data.playerIndex;
+        const playerDataInWar   = roomInfo.settingsForMfw.initialWarData.playerManager.players.find(v => v.playerIndex === playerIndex);
+        if (!roomInfo.playerDataList) {
+            roomInfo.playerDataList = [{
+                playerIndex         : playerIndex,
+                userId              : data.userId,
+                isReady             : data.isReady,
+                coId                : playerDataInWar.coId,
+                unitAndTileSkinId   : playerDataInWar.unitAndTileSkinId,
+            }];
+        } else {
+            const playerDataArrayInRoom = roomInfo.playerDataList;
+            Helpers.deleteElementFromArray(playerDataArrayInRoom, playerDataArrayInRoom.find(v => v.playerIndex === playerIndex));
+            playerDataArrayInRoom.push({
+                playerIndex         : playerIndex,
+                userId              : data.userId,
+                isReady             : data.isReady,
+                coId                : playerDataInWar.coId,
+                unitAndTileSkinId   : playerDataInWar.unitAndTileSkinId,
+            });
+        }
+    }
+    export async function updateOnMsgMfrExitRoom(data: ProtoTypes.NetMessage.MsgMfrExitRoom.IS): Promise<void> {
+        const roomId    = data.roomId;
+        const roomInfo  = await getRoomInfo(roomId);
+        if (roomInfo) {
+            const playerDataList    = roomInfo.playerDataList;
+            const playerData        = playerDataList.find(v => v.playerIndex === data.playerIndex);
+            Helpers.deleteElementFromArray(playerDataList, playerData);
+
+            if ((playerData) && (playerData.userId === User.UserModel.getSelfUserId())) {
+                _unjoinedRoomIdSet.add(roomId);
+                _joinedRoomIdSet.delete(roomId);
+            }
         }
     }
 
@@ -144,7 +207,6 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
         }
         return false;
     }
-
     export async function checkIsRedForRoom(roomId: number): Promise<boolean> {
         const roomInfo = await getRoomInfo(roomId);
         if (roomInfo) {
@@ -164,6 +226,20 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
             }
         }
         return false;
+    }
+    export async function checkCanStartGame(roomId: number): Promise<boolean> {
+        const roomInfo = await getRoomInfo(roomId);
+        if (!roomInfo) {
+            return false;
+        }
+
+        const selfUserId        = User.UserModel.getSelfUserId();
+        const playerDataList    = roomInfo.playerDataList || [];
+        const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
+        return (selfPlayerData != null)
+            && (selfPlayerData.playerIndex === roomInfo.ownerPlayerIndex)
+            && (playerDataList.length === getNeededPlayersCount(roomInfo))
+            && (playerDataList.every(v => (v.isReady) && (v.userId != null)));
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -394,24 +470,27 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
             }
         }
 
-        export function getRoomId(): number {
+        export function getTargetRoomId(): number {
             return getData().roomId;
         }
-        function setRoomId(roomId: number): void {
-            getData().roomId = roomId;
+        export function setTargetRoomId(roomId: number): void {
+            if (getTargetRoomId() !== roomId) {
+                getData().roomId = roomId;
+                Notify.dispatch(Notify.Type.MfrJoinTargetRoomIdChanged);
+            }
         }
 
         export async function getRoomInfo(): Promise<IMfrRoomInfo | null> {
-            return await MfrModel.getRoomInfo(getRoomId());
+            return await MfrModel.getRoomInfo(getTargetRoomId());
         }
         export async function getTeamIndex(): Promise<number> {
-            return BwWarRuleHelper.getPlayerRule((await MfrModel.getRoomInfo(getRoomId())).settingsForMfw.initialWarData.settingsForCommon.warRule, getPlayerIndex()).teamIndex;
+            return BwWarRuleHelper.getPlayerRule((await MfrModel.getRoomInfo(getTargetRoomId())).settingsForMfw.initialWarData.settingsForCommon.warRule, getPlayerIndex()).teamIndex;
         }
 
         export function resetData(roomInfo: IMfrRoomInfo): void {
             const availablePlayerIndexList    = generateAvailablePlayerIndexArray(roomInfo);
             const playerIndex                 = availablePlayerIndexList[0];
-            setRoomId(roomInfo.roomId);
+            setTargetRoomId(roomInfo.roomId);
             setAvailablePlayerIndexList(availablePlayerIndexList);
             setPlayerIndex(playerIndex);
             setIsReady(true);
@@ -419,7 +498,7 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
         export function clearData(): void {
             setIsReady(true);
             setPlayerIndex(null);
-            setRoomId(null);
+            setTargetRoomId(null);
             setAvailablePlayerIndexList(null);
         }
 
@@ -456,6 +535,23 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
         }
         export function getAvailablePlayerIndexList(): number[] {
             return _availablePlayerIndexList;
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Functions for joined rooms.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export namespace Joined {
+        let _previewingRoomId   : number;
+
+        export function getPreviewingRoomId(): number {
+            return _previewingRoomId;
+        }
+        export function setPreviewingRoomId(roomId: number | null): void {
+            if (getPreviewingRoomId() != roomId) {
+                _previewingRoomId = roomId;
+                Notify.dispatch(Notify.Type.MfrJoinedPreviewingRoomIdChanged);
+            }
         }
     }
 

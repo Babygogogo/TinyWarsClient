@@ -10,11 +10,13 @@ namespace TinyWars.MultiFreeRoom.MfrProxy {
         NetManager.addListeners([
             { msgCode: ActionCode.MsgMfrCreateRoom,                 callback: _onMsgMfrCreateRoom },
             { msgCode: ActionCode.MsgMfrJoinRoom,                   callback: _onMsgMfrJoinRoom },
-            { msgCode: ActionCode.MsgMfrDeleteRoom,                 callback: _onMsgMfrDeleteRoom },
+            { msgCode: ActionCode.MsgMfrDeleteRoomByPlayer,         callback: _onMsgMfrDeleteRoomByPlayer },
+            { msgCode: ActionCode.MsgMfrDeleteRoomByServer,         callback: _onMsgMfrDeleteRoomByServer },
             { msgCode: ActionCode.MsgMfrExitRoom,                   callback: _onMsgMfrExitRoom },
             { msgCode: ActionCode.MsgMfrDeletePlayer,               callback: _onMsgMfrDeletePlayer },
             { msgCode: ActionCode.MsgMfrSetReady,                   callback: _onMsgMfrSetReady },
             { msgCode: ActionCode.MsgMfrSetSelfSettings,            callback: _onMsgMfrSetSelfSettings },
+            { msgCode: ActionCode.MsgMfrGetOwnerPlayerIndex,        callback: _onMsgMfrGetOwnerPlayerIndex },
             { msgCode: ActionCode.MsgMfrGetRoomInfo,                callback: _onMsgMfrGetRoomInfo },
             { msgCode: ActionCode.MsgMfrGetJoinableRoomInfoList,    callback: _onMsgMfrGetJoinableRoomInfoList },
             { msgCode: ActionCode.MsgMfrGetJoinedRoomInfoList,      callback: _onMsgMfrGetJoinedRoomInfoList },
@@ -39,29 +41,33 @@ namespace TinyWars.MultiFreeRoom.MfrProxy {
             MsgMfrJoinRoom: { c: param },
         });
     }
-    function _onMsgMfrJoinRoom(e: egret.Event): void {
+    async function _onMsgMfrJoinRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrJoinRoom.IS;
         if (!data.errorCode) {
+            await MfrModel.updateOnMsgMfrJoinRoom(data);
             Notify.dispatch(Notify.Type.MsgMfrJoinRoom, data);
         }
     }
 
-    export function reqMfrDestroyRoom(roomId: number): void {
+    export function reqMfrDeleteRoomByPlayer(roomId: number): void {
         NetManager.send({
-            MsgMfrDeleteRoom: { c: {
+            MsgMfrDeleteRoomByPlayer: { c: {
                 roomId,
             } },
         });
     }
-    function _onMsgMfrDeleteRoom(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMfrDeleteRoom.IS;
+    function _onMsgMfrDeleteRoomByPlayer(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMfrDeleteRoomByPlayer.IS;
         if (!data.errorCode) {
-            const roomId = data.roomId;
-            MfrModel.deleteRoomInfo(roomId);
-            if (MfrModel.Join.getRoomId() === roomId) {
-                MfrModel.Join.clearData();
-            }
-            Notify.dispatch(Notify.Type.MsgMfrDeleteRoom, data);
+            Notify.dispatch(Notify.Type.MsgMfrDeleteRoomByPlayer, data);
+        }
+    }
+
+    function _onMsgMfrDeleteRoomByServer(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMfrDeleteRoomByServer.IS;
+        if (!data.errorCode) {
+            MfrModel.deleteRoomInfo(data.roomId);
+            Notify.dispatch(Notify.Type.MsgMfrDeleteRoomByServer, data);
         }
     }
 
@@ -72,9 +78,10 @@ namespace TinyWars.MultiFreeRoom.MfrProxy {
             }, },
         });
     }
-    function _onMsgMfrExitRoom(e: egret.Event): void {
+    async function _onMsgMfrExitRoom(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrExitRoom.IS;
         if (!data.errorCode) {
+            await MfrModel.updateOnMsgMfrExitRoom(data);
             Notify.dispatch(Notify.Type.MsgMfrExitRoom, data);
         }
     }
@@ -87,10 +94,10 @@ namespace TinyWars.MultiFreeRoom.MfrProxy {
             }, },
         });
     }
-    function _onMsgMfrDeletePlayer(e: egret.Event): void {
+    async function _onMsgMfrDeletePlayer(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrDeletePlayer.IS;
         if (!data.errorCode) {
-            MfrModel.updateOnDeletePlayer(data);
+            await MfrModel.updateOnMsgMfrDeletePlayer(data);
             Notify.dispatch(Notify.Type.MsgMfrDeletePlayer, data);
         }
     }
@@ -103,9 +110,10 @@ namespace TinyWars.MultiFreeRoom.MfrProxy {
             }, },
         });
     }
-    function _onMsgMfrSetReady(e: egret.Event): void {
+    async function _onMsgMfrSetReady(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrSetReady.IS;
         if (!data.errorCode) {
+            await MfrModel.updateOnMsgMfrSetReady(data);
             Notify.dispatch(Notify.Type.MsgMfrSetReady, data);
         }
     }
@@ -115,10 +123,19 @@ namespace TinyWars.MultiFreeRoom.MfrProxy {
             MsgMfrSetSelfSettings: { c: data },
         });
     }
-    function _onMsgMfrSetSelfSettings(e: egret.Event): void {
+    async function _onMsgMfrSetSelfSettings(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMfrSetSelfSettings.IS;
         if (!data.errorCode) {
+            await MfrModel.updateOnMsgMfrSetSelfSettings(data);
             Notify.dispatch(Notify.Type.MsgMfrSetSelfSettings, data);
+        }
+    }
+
+    async function _onMsgMfrGetOwnerPlayerIndex(e: egret.Event): Promise<void> {
+        const data = e.data as NetMessage.MsgMfrGetOwnerPlayerIndex.IS;
+        if (!data.errorCode) {
+            await MfrModel.updateOnMsgMfrGetOwnerPlayerIndex(data);
+            Notify.dispatch(Notify.Type.MsgMfrGetOwnerPlayerIndex, data);
         }
     }
 
@@ -138,9 +155,6 @@ namespace TinyWars.MultiFreeRoom.MfrProxy {
             const roomId    = data.roomId;
             if (roomInfo) {
                 MfrModel.setRoomInfo(roomInfo);
-                if (MfrModel.Join.getRoomId() === roomId) {
-                    MfrModel.Join.resetData(roomInfo);
-                }
             } else {
                 MfrModel.deleteRoomInfo(roomId);
             }
@@ -187,7 +201,6 @@ namespace TinyWars.MultiFreeRoom.MfrProxy {
     function _onMsgMfrStartWar(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMfrStartWar.IS;
         if (!data.errorCode) {
-            MfrModel.deleteRoomInfo(data.roomId);
             Notify.dispatch(Notify.Type.MsgMfrStartWar, data);
         }
     }
