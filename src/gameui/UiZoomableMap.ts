@@ -2,7 +2,7 @@
 namespace TinyWars.GameUi {
     import ProtoTypes = Utility.ProtoTypes;
 
-    export class UiZoomableMap extends eui.Component {
+    export class UiZoomableMap extends UiComponent {
         private _zoomableComponent  = new UiZoomableComponent();
         private _mapView            = new WarMap.WarMapView();
 
@@ -16,7 +16,21 @@ namespace TinyWars.GameUi {
             zoom.bottom = 0;
             zoom.addContent(this._mapView);
             this.addChild(zoom);
-            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+
+            this.dispatchEventWith(egret.Event.COMPLETE);
+        }
+
+        protected _onOpened(): void {
+            const zoom = this._zoomableComponent;
+            zoom.setMouseWheelListenerEnabled(true);
+            zoom.setTouchListenerEnabled(true);
+        }
+        protected async _onClosed(): Promise<void> {
+            const zoom = this._zoomableComponent;
+            zoom.setMouseWheelListenerEnabled(false);
+            zoom.setTouchListenerEnabled(false);
+
+            this.clearMap();
         }
 
         public showMapByMapData(map: ProtoTypes.Map.IMapRawData): void {
@@ -40,23 +54,6 @@ namespace TinyWars.GameUi {
 
         public clearMap(): void {
             this._mapView.clear();
-        }
-
-        private _onAddedToStage(e: egret.Event): void {
-            this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
-            this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
-
-            const zoom = this._zoomableComponent;
-            zoom.setMouseWheelListenerEnabled(true);
-            zoom.setTouchListenerEnabled(true);
-        }
-        private _onRemovedFromStage(e: egret.Event): void {
-            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
-            this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
-
-            const zoom = this._zoomableComponent;
-            zoom.setMouseWheelListenerEnabled(false);
-            zoom.setTouchListenerEnabled(false);
         }
     }
 }
