@@ -50,6 +50,8 @@ namespace TinyWars.Utility.Notify {
         MrrMyRoomAdded,
         MrrMyRoomDeleted,
 
+        McwPreviewingWarIdChanged,
+
         BroadcastOngoingMessagesChanged,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

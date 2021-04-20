@@ -111,6 +111,7 @@
 		"resource/skins/multiCustomRoom/McrWarAdvancedSettingsPage.exml",
 		"resource/skins/multiCustomRoom/McrWarBasicSettingsPage.exml",
 		"resource/skins/multiCustomRoom/McrWarInfoPanel.exml",
+		"resource/skins/multiCustomRoom/McrWarMapInfoPage.exml",
 		"resource/skins/multiCustomRoom/McrWatchDeleteWatcherDetailPanel.exml",
 		"resource/skins/multiCustomRoom/McrWatchDeleteWatcherWarsPanel.exml",
 		"resource/skins/multiCustomRoom/McrWatchHandleRequestDetailPanel.exml",
