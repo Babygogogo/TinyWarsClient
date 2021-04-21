@@ -241,7 +241,6 @@
 		"bin-debug/modules/multiFreeWar/view/MfwMyWarListPanel.js",
 		"bin-debug/modules/multiFreeWar/view/MfwWarAdvancedSettingsPage.js",
 		"bin-debug/modules/multiFreeWar/view/MfwWarBasicSettingsPage.js",
-		"bin-debug/modules/multiFreeWar/view/MfwWarInfoPanel.js",
 		"bin-debug/modules/multiFreeWar/view/MfwWarMapInfoPage.js",
 		"bin-debug/modules/multiFreeWar/view/MfwWarPlayerInfoPage.js",
 		"bin-debug/modules/multiPlayerWar/model/MpwActionExecutor.js",

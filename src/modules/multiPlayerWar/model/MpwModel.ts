@@ -17,6 +17,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     let _watchRequestedWarInfos : IMpwWatchInfo[];
     let _watchedWarInfos        : IMpwWatchInfo[];
     let _mcwPreviewingWarId     : number;
+    let _mfwPreviewingWarId     : number;
     let _war                    : MpwWar;
     let _cachedActions          : IWarActionContainer[] = [];
 
@@ -49,6 +50,16 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
         if (getMcwPreviewingWarId() != warId) {
             _mcwPreviewingWarId = warId;
             Notify.dispatch(Notify.Type.McwPreviewingWarIdChanged);
+        }
+    }
+
+    export function getMfwPreviewingWarId(): number | null {
+        return _mfwPreviewingWarId;
+    }
+    export function setMfwPreviewingWarId(warId: number | null): void {
+        if (getMfwPreviewingWarId() != warId) {
+            _mfwPreviewingWarId = warId;
+            Notify.dispatch(Notify.Type.MfwPreviewingWarIdChanged);
         }
     }
 

@@ -1,45 +1,46 @@
 
-namespace TinyWars.MultiFreeRoom {
+namespace TinyWars.MultiFreeWar {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
-    import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
-    import ProtoTypes       = Utility.ProtoTypes;
+    import Helpers          = Utility.Helpers;
     import WarMapModel      = WarMap.WarMapModel;
-    import IMpwWarInfo      = ProtoTypes.MultiPlayerWar.IMpwWarInfo;
-    import IWarPlayerInfo   = ProtoTypes.Structure.IWarPlayerInfo;
+    import MpwModel         = MultiPlayerWar.MpwModel;
+    import MpwProxy         = MultiPlayerWar.MpwProxy;
 
-    export class MfrMyWarListPanel extends GameUi.UiPanel<void> {
+    export class MfwMyWarListPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: MfrMyWarListPanel;
+        private static _instance: MfwMyWarListPanel;
 
-        private _labelMenuTitle : GameUi.UiLabel;
-        private _listWar        : GameUi.UiScrollList<DataForWarRenderer, WarRenderer>;
-        private _labelNoWar     : GameUi.UiLabel;
-        private _zoomMap        : GameUi.UiZoomableMap;
-        private _btnBack        : GameUi.UiButton;
+        private readonly _groupTab              : eui.Group;
+        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer>;
 
-        private _groupInfo              : eui.Group;
-        private _labelHasFog            : GameUi.UiLabel;
-        private _labelWarCommentTitle   : GameUi.UiLabel;
-        private _labelWarComment        : GameUi.UiLabel;
-        private _labelPlayers           : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
+        private readonly _groupNavigator        : eui.Group;
+        private readonly _labelMultiPlayer      : GameUi.UiLabel;
+        private readonly _labelMyWar            : GameUi.UiLabel;
+        private readonly _labelChooseWar        : GameUi.UiLabel;
 
-        private _dataForListWar     : DataForWarRenderer[] = [];
-        private _selectedWarIndex   : number;
+        private readonly _btnBack               : GameUi.UiButton;
+        private readonly _btnNextStep           : GameUi.UiButton;
+
+        private readonly _groupWarList          : eui.Group;
+        private readonly _listWar               : GameUi.UiScrollList<DataForWarRenderer, WarRenderer>;
+        private readonly _labelNoWar            : GameUi.UiLabel;
+        private readonly _labelLoading          : GameUi.UiLabel;
+
+        private _hasReceivedData    = false;
 
         public static show(): void {
-            if (!MfrMyWarListPanel._instance) {
-                MfrMyWarListPanel._instance = new MfrMyWarListPanel();
+            if (!MfwMyWarListPanel._instance) {
+                MfwMyWarListPanel._instance = new MfwMyWarListPanel();
             }
-            MfrMyWarListPanel._instance.open(undefined);
+            MfwMyWarListPanel._instance.open(undefined);
         }
         public static async hide(): Promise<void> {
-            if (MfrMyWarListPanel._instance) {
-                await MfrMyWarListPanel._instance.close();
+            if (MfwMyWarListPanel._instance) {
+                await MfwMyWarListPanel._instance.close();
             }
         }
 
@@ -52,230 +53,281 @@ namespace TinyWars.MultiFreeRoom {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMpwCommonGetMyWarInfoList,   callback: this._onMsgMpwCommonGetMyWarInfoList },
+                { type: Notify.Type.MfwPreviewingWarIdChanged,      callback: this._onNotifyMfwPreviewingWarIdChanged },
+                { type: Notify.Type.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
+                { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
+                { ui: this._btnNextStep,    callback: this._onTouchedBtnNextStep },
             ]);
+            this._tabSettings.setBarItemRenderer(TabItemRenderer);
             this._listWar.setItemRenderer(WarRenderer);
-            this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            this._groupInfo.visible = false;
+            this._showOpenAnimation();
+
+            this._hasReceivedData = false;
+            this._initTabSettings();
             this._updateComponentsForLanguage();
+            this._updateGroupWarList();
+            this._updateComponentsForPreviewingWarInfo();
 
-            MultiPlayerWar.MpwProxy.reqMpwCommonGetMyWarInfoList();
+            MpwProxy.reqMpwCommonGetMyWarInfoList();
         }
 
         protected async _onClosed(): Promise<void> {
-            this._zoomMap.clearMap()
+            await this._showCloseAnimation();
+
+            this._tabSettings.clear();
             this._listWar.clear();
-            this._listPlayer.clear();
-            egret.Tween.removeTweens(this._groupInfo);
-        }
-
-        public async setSelectedIndex(newIndex: number): Promise<void> {
-            const oldIndex         = this._selectedWarIndex;
-            const dataList         = this._dataForListWar;
-            this._selectedWarIndex = dataList[newIndex] ? newIndex : undefined;
-
-            if (dataList[oldIndex]) {
-                this._listWar.updateSingleData(oldIndex, dataList[oldIndex])
-            };
-
-            if (dataList[newIndex]) {
-                this._listWar.updateSingleData(newIndex, dataList[newIndex]);
-                await this._showMap(newIndex);
-            } else {
-                this._zoomMap.clearMap();
-                this._groupInfo.visible = false;
-            }
-        }
-        public getSelectedIndex(): number {
-            return this._selectedWarIndex;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
-            const newData        = this._createDataForListWar(MultiPlayerWar.MpwModel.getMyMfwWarInfoArray());
-            this._dataForListWar = newData;
-
-            if (newData.length > 0) {
-                this._labelNoWar.visible = false;
-                this._listWar.bindData(newData);
-            } else {
-                this._labelNoWar.visible = true;
-                this._listWar.clear();
-            }
-            this.setSelectedIndex(0);
-        }
-
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }
 
+        private _onNotifyMfwPreviewingWarIdChanged(e: egret.Event): void {
+            this._updateComponentsForPreviewingWarInfo();
+        }
+
+        private _onNotifyMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
+            this._hasReceivedData = true;
+            this._updateGroupWarList();
+            this._updateComponentsForPreviewingWarInfo();
+        }
+
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            MfrMainMenuPanel.show();
+            MultiFreeRoom.MfrMainMenuPanel.show();
             Lobby.LobbyTopPanel.show();
             Lobby.LobbyBottomPanel.show();
+        }
+
+        private _onTouchedBtnNextStep(e: egret.TouchEvent): void {
+            const warId = MpwModel.getMfwPreviewingWarId();
+            if (warId != null) {
+                MpwProxy.reqMpwCommonContinueWar(warId);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
-        private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0024);
-            this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
-            this._labelWarCommentTitle.text = `${Lang.getText(Lang.Type.B0187)}:`;
-            this._labelPlayers.text         = `${Lang.getText(Lang.Type.B0232)}:`;
-            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+        private _initTabSettings(): void {
+            this._tabSettings.bindData([
+                {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0298) },
+                    pageClass   : MfwWarMapInfoPage,
+                    pageData    : { warId: null } as OpenDataForMfwWarMapInfoPage,
+                },
+                {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                    pageClass   : MfwWarPlayerInfoPage,
+                    pageData    : { warId: null } as OpenDataForMfwWarPlayerInfoPage,
+                },
+                {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0002) },
+                    pageClass   : MfwWarBasicSettingsPage,
+                    pageData    : { warId: null } as OpenDataForMfwWarBasicSettingsPage,
+                },
+                {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0003) },
+                    pageClass   : MfwWarAdvancedSettingsPage,
+                    pageData    : { warId: null } as OpenDataForMfwWarAdvancedSettingsPage,
+                },
+            ]);
         }
 
-        private _createDataForListWar(warInfoList: IMpwWarInfo[]): DataForWarRenderer[] {
-            const data: DataForWarRenderer[] = [];
-            if (warInfoList) {
-                for (let i = 0; i < warInfoList.length; ++i) {
-                    data.push({
-                        warInfo : warInfoList[i],
-                        index   : i,
-                        panel   : this,
-                    });
+        private _updateComponentsForLanguage(): void {
+            this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
+            this._labelMultiPlayer.text     = Lang.getText(Lang.Type.B0137);
+            this._labelMyWar.text           = Lang.getText(Lang.Type.B0588);
+            this._labelChooseWar.text       = Lang.getText(Lang.Type.B0589);
+            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+            this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
+            this._btnNextStep.label         = Lang.getText(Lang.Type.B0024);
+        }
+
+        private _updateGroupWarList(): void {
+            const labelLoading  = this._labelLoading;
+            const labelNoWar    = this._labelNoWar;
+            const listWar       = this._listWar;
+            if (!this._hasReceivedData) {
+                labelLoading.visible    = true;
+                labelNoWar.visible     = false;
+                listWar.clear();
+
+            } else {
+                const dataArray         = this._createDataForListWar();
+                labelLoading.visible    = false;
+                labelNoWar.visible      = !dataArray.length;
+                listWar.bindData(dataArray);
+
+                const warId = MpwModel.getMfwPreviewingWarId();
+                if (dataArray.every(v => v.warId != warId)) {
+                    MpwModel.setMfwPreviewingWarId(dataArray.length ? dataArray[0].warId : null);
                 }
             }
-
-            return data;
         }
 
-        private _createDataForListPlayer(warInfo: IMpwWarInfo): DataForPlayerRenderer[] {
-            const enterTurnTime     = warInfo.enterTurnTime;
-            const playerIndexInTurn = warInfo.playerIndexInTurn;
-            const playerInfoList    = warInfo.playerInfoList;
-            const dataList          : DataForPlayerRenderer[] = [];
-            for (let playerIndex = 1; playerIndex <= playerInfoList.length; ++playerIndex) {
-                dataList.push({
-                    playerInfo      : playerInfoList.find(v => v.playerIndex === playerIndex),
-                    enterTurnTime,
-                    playerIndexInTurn,
+        private _updateComponentsForPreviewingWarInfo(): void {
+            const groupTab      = this._groupTab;
+            const btnNextStep   = this._btnNextStep;
+            const warId         = MpwModel.getMfwPreviewingWarId();
+            if ((!this._hasReceivedData) || (warId == null)) {
+                groupTab.visible    = false;
+                btnNextStep.visible = false;
+            } else {
+                groupTab.visible    = true;
+                btnNextStep.visible = true;
+                btnNextStep.setRedVisible(MpwModel.checkIsRedForMyWar(MpwModel.getMyWarInfo(warId)));
+
+                const tab = this._tabSettings;
+                tab.updatePageData(0, { warId } as OpenDataForMfwWarMapInfoPage);
+                tab.updatePageData(1, { warId } as OpenDataForMfwWarPlayerInfoPage);
+                tab.updatePageData(2, { warId } as OpenDataForMfwWarBasicSettingsPage);
+                tab.updatePageData(3, { warId } as OpenDataForMfwWarAdvancedSettingsPage);
+            }
+        }
+
+        private _createDataForListWar(): DataForWarRenderer[] {
+            const dataArray: DataForWarRenderer[] = [];
+            for (const warInfo of MpwModel.getMyMfwWarInfoArray()) {
+                dataArray.push({
+                    warId: warInfo.warId,
                 });
             }
 
-            return dataList;
+            return dataArray.sort((v1, v2) => v1.warId - v2.warId);
         }
 
-        private async _showMap(index: number): Promise<void> {
-            const warInfo               = this._dataForListWar[index].warInfo;
-            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(warInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0013));
-            this._labelWarComment.text  = warInfo.settingsForMfw.warComment || "----";
-            this._listPlayer.bindData(this._createDataForListPlayer(warInfo));
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 0, y: -20 },
+                endProps    : { alpha: 1, y: 20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 0, y: -20 },
+                endProps    : { alpha: 1, y: 20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupWarList,
+                beginProps  : { alpha: 0, left: -20 },
+                endProps    : { alpha: 1, left: 20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnNextStep,
+                beginProps  : { alpha: 0, left: -20 },
+                endProps    : { alpha: 1, left: 20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupTab,
+                beginProps  : { alpha: 0, },
+                endProps    : { alpha: 1, },
+            });
+        }
+        private async _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._btnBack,
+                    beginProps  : { alpha: 1, y: 20 },
+                    endProps    : { alpha: 0, y: -20 },
+                    callback    : resolve,
+                });
+                Helpers.resetTween({
+                    obj         : this._groupNavigator,
+                    beginProps  : { alpha: 1, y: 20 },
+                    endProps    : { alpha: 0, y: -20 },
+                });
+                Helpers.resetTween({
+                    obj         : this._groupWarList,
+                    beginProps  : { alpha: 1, left: 20 },
+                    endProps    : { alpha: 0, left: -20 },
+                });
+                Helpers.resetTween({
+                    obj         : this._btnNextStep,
+                    beginProps  : { alpha: 1, left: 20 },
+                    endProps    : { alpha: 0, left: -20 },
+                });
+                Helpers.resetTween({
+                    obj         : this._groupTab,
+                    beginProps  : { alpha: 1, },
+                    endProps    : { alpha: 0, },
+                });
+            });
+        }
+    }
 
-            this._groupInfo.visible      = true;
-            this._groupInfo.alpha        = 1;
-            egret.Tween.removeTweens(this._groupInfo);
-            egret.Tween.get(this._groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
-            this._zoomMap.showMapByWarData(warInfo.settingsForMfw.initialWarData);
+    type DataForTabItemRenderer = {
+        name: string;
+    }
+    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
+        private _labelName: GameUi.UiLabel;
+
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            const data              = this.data.tabItemData;
+            this._labelName.text    = data.name;
         }
     }
 
     type DataForWarRenderer = {
-        warInfo : IMpwWarInfo;
-        index   : number;
-        panel   : MfrMyWarListPanel;
+        warId: number;
     }
-
     class WarRenderer extends GameUi.UiListItemRenderer<DataForWarRenderer> {
-        private _btnChoose      : GameUi.UiButton;
-        private _btnNext        : GameUi.UiButton;
-        private _btnFight       : GameUi.UiButton;
-        private _labelName      : GameUi.UiLabel;
-        private _labelInTurn    : GameUi.UiLabel;
+        private readonly _btnChoose     : GameUi.UiButton;
+        private readonly _btnNext       : GameUi.UiButton;
+        private readonly _labelName     : GameUi.UiLabel;
+        private readonly _imgRed        : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            const btnNext   = this._btnNext;
-            const btnFight  = this._btnFight;
-
-            btnNext.label   = Lang.getText(Lang.Type.B0423);
-            btnFight.label  = Lang.getText(Lang.Type.B0422);
-            btnNext.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnNext, this);
-            btnFight.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnFight, this);
-            this._btnChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnChoose, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
+                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
+            ]);
+            this._setNotifyListenerArray([
+                { type: Notify.Type.MfwPreviewingWarIdChanged,  callback: this._onNotifyMfwPreviewingWarIdChanged },
+            ]);
         }
 
-        protected dataChanged(): void {
+        protected async dataChanged(): Promise<void> {
             super.dataChanged();
 
-            const data              = this.data;
-            const warInfo           = data.warInfo;
-            this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelInTurn.text  = this._checkIsInTurn(warInfo) ? Lang.getText(Lang.Type.B0231) : "";
-            this._labelName.text    = warInfo.settingsForMfw.warName || `#${warInfo.warId}`;
+            this._updateState();
+
+            const warId     = this.data.warId;
+            const warInfo   = MpwModel.getMyWarInfo(warId);
+            const imgRed    = this._imgRed;
+            const labelName = this._labelName;
+            if (!warInfo) {
+                imgRed.visible  = false;
+                labelName.text  = null;
+            } else {
+                const settingsForMfw    = warInfo.settingsForMfw;
+                imgRed.visible          = MpwModel.checkIsRedForMyWar(warInfo);
+                labelName.text          = settingsForMfw.warName || `#${warInfo.warId}`;
+            }
+        }
+
+        private _onNotifyMfwPreviewingWarIdChanged(e: egret.Event): void {
+            this._updateState();
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data;
-            data.panel.setSelectedIndex(data.index);
+            MpwModel.setMfwPreviewingWarId(this.data.warId);
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data = this.data;
-            MfrMyWarListPanel.hide();
-            MfrWarInfoPanel.show({ warInfo: data.warInfo });
+            MpwProxy.reqMpwCommonContinueWar(this.data.warId);
         }
 
-        private _onTouchedBtnFight(e: egret.Event): void {
-            const data = this.data;
-            MultiPlayerWar.MpwProxy.reqMpwCommonContinueWar(data.warInfo.warId);
-        }
-
-        private _checkIsInTurn(info: IMpwWarInfo): boolean {
-            const playerData = info.playerInfoList.find(v => v.playerIndex === info.playerIndexInTurn);
-            return (playerData != null) && (playerData.userId === User.UserModel.getSelfUserId());
-        }
-    }
-
-    type DataForPlayerRenderer = {
-        playerInfo          : IWarPlayerInfo;
-        enterTurnTime       : number;
-        playerIndexInTurn   : number;
-    }
-
-    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private _labelIndex     : GameUi.UiLabel;
-        private _labelName      : GameUi.UiLabel;
-        private _labelStatus    : GameUi.UiLabel;
-
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data;
-            const playerInfo        = data.playerInfo;
-            const playerIndex       = playerInfo.playerIndex;
-            const teamIndex         = playerInfo.teamIndex;
-            const defeatTimestamp   = data.playerIndexInTurn === playerIndex ? data.enterTurnTime + playerInfo.restTimeToBoot : null;
-            const labelIndex        = this._labelIndex;
-            const labelName         = this._labelName;
-            const labelStatus       = this._labelStatus;
-            labelIndex.text         = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(teamIndex)})`;
-            labelName.text          = ``;
-            User.UserModel.getUserNickname(playerInfo.userId).then(name => labelName.text = name);
-
-            if (defeatTimestamp != null) {
-                const leftTime          = defeatTimestamp - Time.TimeModel.getServerTimestamp();
-                labelIndex.textColor    = 0x00FF00;
-                labelName.textColor     = 0x00FF00;
-                labelStatus.textColor   = 0x00FF00;
-                labelStatus.text        = (leftTime > 0
-                    ? ` (${Lang.getText(Lang.Type.B0027)}:${Helpers.getTimeDurationText(leftTime)})`
-                    : ` (${Lang.getText(Lang.Type.B0028)})`)
-            } else {
-                labelIndex.textColor    = 0xFFFFFF;
-                labelName.textColor     = 0xFFFFFF;
-                labelStatus.textColor   = 0xFFFFFF;
-                labelStatus.text        = playerInfo.isAlive ? `` : `${name} (${Lang.getText(Lang.Type.B0056)})`;
-            }
+        private _updateState(): void {
+            this.currentState = this.data.warId === MpwModel.getMfwPreviewingWarId() ? Types.UiState.Down : Types.UiState.Up;
         }
     }
 }

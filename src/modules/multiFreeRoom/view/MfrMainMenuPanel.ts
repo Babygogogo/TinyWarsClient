@@ -102,7 +102,7 @@ namespace TinyWars.MultiFreeRoom {
             this.close();
             Lobby.LobbyTopPanel.hide();
             Lobby.LobbyBottomPanel.hide();
-            MfrMyWarListPanel.show();
+            MultiFreeWar.MfwMyWarListPanel.show();
         }
         private _onTouchedBtnHelp(e: egret.TouchEvent): void {
             Common.CommonAlertPanel.show({
