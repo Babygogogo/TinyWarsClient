@@ -6,9 +6,12 @@ namespace TinyWars.GameUi {
         private readonly _bar           : eui.TabBar;  // 页签栏
         private readonly _page          : eui.Group;   // 页面内容，仅用于占位
 
-        private readonly _tabDataArray  : DataForUiTab<DataForTabItemRenderer, DataForPage>[] = [];
-        private _barItemRenderer        : new () => UiTabItemRenderer<DataForTabItemRenderer>;
-        private _selectedIndex          : number = -1;
+        private _tabDataArray           : DataForUiTab<DataForTabItemRenderer, DataForPage>[] = [];
+        private _selectedIndex          : number;
+
+        private _cachedItemRenderer     : new () => UiTabItemRenderer<DataForTabItemRenderer>;
+        private _cachedTabDataArray     : DataForUiTab<DataForTabItemRenderer, DataForPage>[];
+        private _cachedSelectedIndex    : number;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -16,11 +19,19 @@ namespace TinyWars.GameUi {
             ]);
 
             const bar               = this._bar;
-            bar.itemRenderer        = this._barItemRenderer;
             bar.dataProvider        = new eui.ArrayCollection();
             bar.requireSelection    = true;
 
-            this.setSelectedIndex(0);
+            if (this._cachedItemRenderer) {
+                bar.itemRenderer            = this._cachedItemRenderer;
+                this._cachedItemRenderer    = null;
+            }
+
+            if (this._cachedTabDataArray) {
+                this.bindData(this._cachedTabDataArray, this._cachedSelectedIndex);
+                this._cachedTabDataArray    = null;
+                this._cachedSelectedIndex   = null;
+            }
         }
 
         protected async _onClosed(): Promise<void> {
@@ -31,30 +42,32 @@ namespace TinyWars.GameUi {
             const index = e.itemIndex;
             const data  = this._getTabDataArray()[index];
             if ((data.callbackOnTouchedItem == null) || (data.callbackOnTouchedItem())) {
-                this.setSelectedIndex(index);
+                this._setSelectedIndex(index);
             } else {
-                this._bar.selectedIndex = this._selectedIndex;
+                this._bar.selectedIndex = this.getSelectedIndex();
             }
         }
 
-        public setSelectedIndex(index: number): void {
+        private _setSelectedIndex(index: number): void {
+            if (!this.getIsOpening()) {
+                Logger.error(`UiTab._setSelectedIndex() not opening.`);
+                return;
+            }
+
+            const data = this._getTabDataArray()[index];
+            if (!data) {
+                Logger.error(`UiTab.setSelectedIndex() empty data.`);
+                return;
+            }
+
             this._removeAllCachedPagesFromParent();
             this._bar.selectedIndex = index;
             this._selectedIndex     = index;
 
-            const data = this._getTabDataArray()[index];
-            if (data) {
-                if (!data.pageInstance) {
-                    data.pageInstance = new data.pageClass();
-                }
-
-                const pageInstance = data.pageInstance;
-                if (!pageInstance) {
-                    Logger.error("pageInstance is null");
-                } else {
-                    pageInstance.open(this._page, data.pageData);
-                }
+            if (!data.pageInstance) {
+                data.pageInstance = new data.pageClass();
             }
+            data.pageInstance.open(this._page, data.pageData);
         }
         public getSelectedIndex() : number {
             return this._selectedIndex;
@@ -73,34 +86,33 @@ namespace TinyWars.GameUi {
         }
 
         public setBarItemRenderer(itemRenderer: new () => UiTabItemRenderer<DataForTabItemRenderer>): void {
-            this._barItemRenderer = itemRenderer;
-            if (this._bar) {
+            if (this.getIsOpening()) {
                 this._bar.itemRenderer = itemRenderer;
+            } else {
+                this._cachedItemRenderer = itemRenderer;
             }
         }
 
-        public bindData(dataArray: DataForUiTab<DataForTabItemRenderer, DataForPage>[], selectedIndex: number = 0): void {
+        public bindData(dataArray: DataForUiTab<DataForTabItemRenderer, DataForPage>[], selectedIndex = 0): void {
             if (!dataArray.length) {
                 Logger.error(`UiTab.bindData() empty data.`);
                 return;
             }
 
-            this.clear();
-            this._getTabDataArray().push(...dataArray);
+            if (!this.getIsOpening()) {
+                this._cachedTabDataArray    = dataArray;
+                this._cachedSelectedIndex   = selectedIndex;
+            } else {
+                this.clear();
+                this._getTabDataArray().push(...dataArray);
 
-            const bar = this._bar;
-            if (bar) {
                 const itemDataArray: DataForTabItemRenderer[] = [];
                 for (const tabData of dataArray) {
                     itemDataArray.push(tabData.tabItemData);
                 }
+                (this._bar.dataProvider as eui.ArrayCollection).source = itemDataArray;
 
-                const dataProvider = bar.dataProvider as eui.ArrayCollection;
-                (bar.dataProvider as eui.ArrayCollection).source = itemDataArray;
-                dataProvider.refresh();
-
-                // this.setSelectedIndex(selectedIndex);
-                this.setSelectedIndex(Math.floor(Math.random() * dataArray.length));
+                this._setSelectedIndex(selectedIndex);
             }
         }
 
@@ -109,6 +121,11 @@ namespace TinyWars.GameUi {
         }
 
         public updatePageData(index: number, pageData: DataForPage, refreshPage = true): void {
+            if (!this.getIsOpening()) {
+                Logger.error(`UiTab.updatePageData() not opening.`);
+                return;
+            }
+
             const tabData = this._getTabDataArray()[index];
             if (!tabData) {
                 Logger.error(`UiTab.updatePageData() invalid index.`);
@@ -117,13 +134,17 @@ namespace TinyWars.GameUi {
 
             tabData.pageData = pageData;
             if ((index === this.getSelectedIndex()) && (refreshPage)) {
-                this.setSelectedIndex(index);
+                this._setSelectedIndex(index);
             }
         }
 
         public clear() : void {
             this._removeAllCachedPagesFromParent();
-            this._getTabDataArray().length = 0;
+            this._getTabDataArray().length  = 0;
+            this._selectedIndex             = null;
+            this._cachedItemRenderer        = null;
+            this._cachedSelectedIndex       = null;
+            this._cachedTabDataArray        = null;
         }
 
         private _removeAllCachedPagesFromParent() : void {
@@ -134,7 +155,7 @@ namespace TinyWars.GameUi {
         }
     }
 
-    export type DataForUiTab<DataForTabItemRenderer, DataForPage> = {
+    type DataForUiTab<DataForTabItemRenderer, DataForPage> = {
         callbackOnTouchedItem?  : () => boolean;
         tabItemData?            : DataForTabItemRenderer;
 
