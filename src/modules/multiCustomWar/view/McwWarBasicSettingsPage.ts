@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomRoom {
+namespace TinyWars.MultiCustomWar {
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
@@ -9,10 +9,10 @@ namespace TinyWars.MultiCustomRoom {
     import WarMapModel      = WarMap.WarMapModel;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    export type OpenDataForMcrWarBasicSettingsPage = {
+    export type OpenDataForMcwWarBasicSettingsPage = {
         warId  : number | null;
     }
-    export class McrWarBasicSettingsPage extends GameUi.UiTabPage {
+    export class McwWarBasicSettingsPage extends GameUi.UiTabPage {
         private readonly _labelMapNameTitle             : GameUi.UiLabel;
         private readonly _labelMapName                  : GameUi.UiLabel;
 
@@ -50,7 +50,7 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrWarBasicSettingsPage.exml";
+            this.skinName = "resource/skins/multiCustomWar/McwWarBasicSettingsPage.exml";
         }
 
         protected _onOpened(): void {
@@ -80,7 +80,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onNotifyMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
             const data  = e.data as ProtoTypes.NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
-            const warId = this._getOpenData<OpenDataForMcrWarBasicSettingsPage>().warId;
+            const warId = this._getOpenData<OpenDataForMcwWarBasicSettingsPage>().warId;
             if ((warId != null) && ((data.infos || []).find(v => v.warId === warId))) {
                 this._updateComponentsForWarInfo();
             }
@@ -199,7 +199,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _getWarInfo(): ProtoTypes.MultiPlayerWar.IMpwWarInfo {
-            return MpwModel.getMyWarInfo(this._getOpenData<OpenDataForMcrWarBasicSettingsPage>().warId);
+            return MpwModel.getMyWarInfo(this._getOpenData<OpenDataForMcwWarBasicSettingsPage>().warId);
         }
     }
 }

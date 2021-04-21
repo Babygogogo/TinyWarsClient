@@ -181,7 +181,7 @@ namespace TinyWars.Utility.FlowManager {
         StageManager.closeAllPanels();
         Lobby.LobbyBackgroundPanel.show();
         Lobby.LobbyTopPanel.show();
-        MultiCustomRoom.McrMyWarListPanel.show();
+        MultiCustomWar.McwMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
 
         SoundManager.playBgm(SoundManager.BgmCode.Lobby01);

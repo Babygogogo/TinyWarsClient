@@ -1,14 +1,14 @@
 
-namespace TinyWars.MultiCustomRoom {
+namespace TinyWars.MultiCustomWar {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import ProtoTypes   = Utility.ProtoTypes;
     import MpwModel     = MultiPlayerWar.MpwModel;
 
-    export type OpenDataForMcrWarMapInfoPage = {
+    export type OpenDataForMcwWarMapInfoPage = {
         warId   : number;
     }
-    export class McrWarMapInfoPage extends GameUi.UiTabPage {
+    export class McwWarMapInfoPage extends GameUi.UiTabPage {
         private readonly _zoomMap       : GameUi.UiZoomableMap;
         private readonly _uiMapInfo     : GameUi.UiMapInfo;
         private readonly _labelLoading  : GameUi.UiLabel;
@@ -16,7 +16,7 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrWarMapInfoPage.exml";
+            this.skinName = "resource/skins/multiCustomWar/McwWarMapInfoPage.exml";
         }
 
         protected async _onOpened(): Promise<void> {
@@ -40,7 +40,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onNotifyMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
             const data  = e.data as ProtoTypes.NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
-            const warId = this._getOpenData<OpenDataForMcrWarMapInfoPage>().warId;
+            const warId = this._getOpenData<OpenDataForMcwWarMapInfoPage>().warId;
             if ((warId != null) && ((data.infos || []).find(v => v.warId === warId))) {
                 this._updateComponentsForWarInfo();
             }
@@ -50,7 +50,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelLoading.text = Lang.getText(Lang.Type.A0150);
         }
         private async _updateComponentsForWarInfo(): Promise<void> {
-            const warInfo       = MpwModel.getMyWarInfo(this._getOpenData<OpenDataForMcrWarMapInfoPage>().warId);
+            const warInfo       = MpwModel.getMyWarInfo(this._getOpenData<OpenDataForMcwWarMapInfoPage>().warId);
             const mapRawData    = warInfo ? await WarMap.WarMapModel.getRawData(warInfo.settingsForMcw.mapId) : null;
             const zoomMap       = this._zoomMap;
             const uiMapInfo     = this._uiMapInfo;
@@ -64,7 +64,7 @@ namespace TinyWars.MultiCustomRoom {
                         mapId           : mapRawData.mapId,
                         configVersion   : warInfo.settingsForCommon.configVersion,
                     },
-                })
+                });
             }
         }
     }

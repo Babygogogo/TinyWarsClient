@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomRoom {
+namespace TinyWars.MultiCustomWar {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
@@ -10,17 +10,17 @@ namespace TinyWars.MultiCustomRoom {
     import MpwModel         = MultiPlayerWar.MpwModel;
     import BwHelpers        = BaseWar.BwHelpers;
 
-    export type OpenDataForMcrWarPlayerInfoPage = {
+    export type OpenDataForMcwWarPlayerInfoPage = {
         warId   : number;
     }
-    export class McrWarPlayerInfoPage extends GameUi.UiTabPage {
+    export class McwWarPlayerInfoPage extends GameUi.UiTabPage {
         private readonly _groupInfo     : eui.Group;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrWarPlayerInfoPage.exml";
+            this.skinName = "resource/skins/multiCustomWar/McwWarPlayerInfoPage.exml";
         }
 
         protected async _onOpened(): Promise<void> {
@@ -54,7 +54,7 @@ namespace TinyWars.MultiCustomRoom {
         private _updateComponentsForLanguage(): void {
         }
         private async _updateComponentsForWarInfo(): Promise<void> {
-            const warInfo       = await MpwModel.getMyWarInfo(this._getOpenData<OpenDataForMcrWarPlayerInfoPage>().warId);
+            const warInfo       = await MpwModel.getMyWarInfo(this._getOpenData<OpenDataForMcwWarPlayerInfoPage>().warId);
             const mapRawData    = warInfo ? await WarMap.WarMapModel.getRawData(warInfo.settingsForMcw.mapId) : null;
             const listPlayer    = this._listPlayer;
             if (mapRawData) {

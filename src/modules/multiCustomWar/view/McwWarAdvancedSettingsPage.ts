@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomRoom {
+namespace TinyWars.MultiCustomWar {
     import Lang             = Utility.Lang;
     import Types            = Utility.Types;
     import CommonConstants  = Utility.CommonConstants;
@@ -9,10 +9,10 @@ namespace TinyWars.MultiCustomRoom {
     import MpwModel         = MultiPlayerWar.MpwModel;
     import PlayerRuleType   = Types.PlayerRuleType;
 
-    export type OpenDataForMcrWarAdvancedSettingsPage = {
+    export type OpenDataForMcwWarAdvancedSettingsPage = {
         warId  : number;
     }
-    export class McrWarAdvancedSettingsPage extends GameUi.UiTabPage {
+    export class McwWarAdvancedSettingsPage extends GameUi.UiTabPage {
         private readonly _scroller      : eui.Scroller;
         private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer, SettingRenderer>;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
@@ -20,7 +20,7 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrWarAdvancedSettingsPage.exml";
+            this.skinName = "resource/skins/multiCustomWar/McwWarAdvancedSettingsPage.exml";
         }
 
         protected async _onOpened(): Promise<void> {
@@ -50,7 +50,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onNotifyMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
             const data  = e.data as ProtoTypes.NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
-            const warId = this._getOpenData<OpenDataForMcrWarAdvancedSettingsPage>().warId;
+            const warId = this._getOpenData<OpenDataForMcwWarAdvancedSettingsPage>().warId;
             if ((warId != null) && ((data.infos || []).find(v => v.warId === warId))) {
                 this._updateListPlayer();
             }
@@ -79,7 +79,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateListPlayer(): Promise<void> {
-            const warId         = this._getOpenData<OpenDataForMcrWarAdvancedSettingsPage>().warId;
+            const warId         = this._getOpenData<OpenDataForMcwWarAdvancedSettingsPage>().warId;
             const warInfo       = await MpwModel.getMyWarInfo(warId);
             const playersCount  = warInfo ? warInfo.settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray.length : null;
             const listPlayer    = this._listPlayer;

@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiCustomRoom {
+namespace TinyWars.MultiCustomWar {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
@@ -8,11 +8,11 @@ namespace TinyWars.MultiCustomRoom {
     import MpwModel         = MultiPlayerWar.MpwModel;
     import MpwProxy         = MultiPlayerWar.MpwProxy;
 
-    export class McrMyWarListPanel extends GameUi.UiPanel<void> {
+    export class McwMyWarListPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrMyWarListPanel;
+        private static _instance: McwMyWarListPanel;
 
         private readonly _groupTab              : eui.Group;
         private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer>;
@@ -33,21 +33,21 @@ namespace TinyWars.MultiCustomRoom {
         private _hasReceivedData    = false;
 
         public static show(): void {
-            if (!McrMyWarListPanel._instance) {
-                McrMyWarListPanel._instance = new McrMyWarListPanel();
+            if (!McwMyWarListPanel._instance) {
+                McwMyWarListPanel._instance = new McwMyWarListPanel();
             }
-            McrMyWarListPanel._instance.open(undefined);
+            McwMyWarListPanel._instance.open(undefined);
         }
         public static async hide(): Promise<void> {
-            if (McrMyWarListPanel._instance) {
-                await McrMyWarListPanel._instance.close();
+            if (McwMyWarListPanel._instance) {
+                await McwMyWarListPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/McrMyWarListPanel.exml";
+            this.skinName = "resource/skins/multiCustomWar/McwMyWarListPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -100,7 +100,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            McrMainMenuPanel.show();
+            MultiCustomRoom.McrMainMenuPanel.show();
             Lobby.LobbyTopPanel.show();
             Lobby.LobbyBottomPanel.show();
         }
@@ -119,23 +119,23 @@ namespace TinyWars.MultiCustomRoom {
             this._tabSettings.bindData([
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0298) },
-                    pageClass   : McrWarMapInfoPage,
-                    pageData    : { warId: null } as OpenDataForMcrWarMapInfoPage,
+                    pageClass   : McwWarMapInfoPage,
+                    pageData    : { warId: null } as OpenDataForMcwWarMapInfoPage,
                 },
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0224) },
-                    pageClass   : McrWarPlayerInfoPage,
-                    pageData    : { warId: null } as OpenDataForMcrWarPlayerInfoPage,
+                    pageClass   : McwWarPlayerInfoPage,
+                    pageData    : { warId: null } as OpenDataForMcwWarPlayerInfoPage,
                 },
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass   : McrWarBasicSettingsPage,
-                    pageData    : { warId: null } as OpenDataForMcrWarBasicSettingsPage,
+                    pageClass   : McwWarBasicSettingsPage,
+                    pageData    : { warId: null } as OpenDataForMcwWarBasicSettingsPage,
                 },
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0003) },
-                    pageClass   : McrWarAdvancedSettingsPage,
-                    pageData    : { warId: null } as OpenDataForMcrWarAdvancedSettingsPage,
+                    pageClass   : McwWarAdvancedSettingsPage,
+                    pageData    : { warId: null } as OpenDataForMcwWarAdvancedSettingsPage,
                 },
             ]);
         }
@@ -185,10 +185,10 @@ namespace TinyWars.MultiCustomRoom {
                 btnNextStep.setRedVisible(MpwModel.checkIsRedForMyWar(MpwModel.getMyWarInfo(warId)));
 
                 const tab = this._tabSettings;
-                tab.updatePageData(0, { warId } as OpenDataForMcrWarMapInfoPage);
-                tab.updatePageData(1, { warId } as OpenDataForMcrWarPlayerInfoPage);
-                tab.updatePageData(2, { warId } as OpenDataForMcrWarBasicSettingsPage);
-                tab.updatePageData(3, { warId } as OpenDataForMcrWarAdvancedSettingsPage);
+                tab.updatePageData(0, { warId } as OpenDataForMcwWarMapInfoPage);
+                tab.updatePageData(1, { warId } as OpenDataForMcwWarPlayerInfoPage);
+                tab.updatePageData(2, { warId } as OpenDataForMcwWarBasicSettingsPage);
+                tab.updatePageData(3, { warId } as OpenDataForMcwWarAdvancedSettingsPage);
             }
         }
 

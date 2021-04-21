@@ -46,7 +46,7 @@ namespace TinyWars.MultiFreeRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiFreeRoom/MfrMyWarListPanel.exml";
+            this.skinName = "resource/skins/multiFreeWar/MfwMyWarListPanel.exml";
         }
 
         protected _onOpened(): void {

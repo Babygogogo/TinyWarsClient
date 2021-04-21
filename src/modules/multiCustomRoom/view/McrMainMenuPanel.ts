@@ -102,7 +102,7 @@ namespace TinyWars.MultiCustomRoom {
             this.close();
             Lobby.LobbyTopPanel.hide();
             Lobby.LobbyBottomPanel.hide();
-            McrMyWarListPanel.show();
+            MultiCustomWar.McwMyWarListPanel.show();
         }
         private _onTouchedBtnWatchWar(e: egret.TouchEvent): void {
             this.close();
