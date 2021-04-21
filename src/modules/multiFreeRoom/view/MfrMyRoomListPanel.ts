@@ -19,6 +19,7 @@ namespace TinyWars.MultiFreeRoom {
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : GameUi.UiLabel;
+        private readonly _labelFreeMode         : GameUi.UiLabel;
         private readonly _labelMyRoom           : GameUi.UiLabel;
 
         private readonly _btnBack               : GameUi.UiButton;
@@ -170,6 +171,7 @@ namespace TinyWars.MultiFreeRoom {
         private _updateComponentsForLanguage(): void {
             this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
             this._labelMultiPlayer.text     = Lang.getText(Lang.Type.B0137);
+            this._labelFreeMode.text        = Lang.getText(Lang.Type.B0557);
             this._labelMyRoom.text          = Lang.getText(Lang.Type.B0410);
             this._btnBack.label             = Lang.getText(Lang.Type.B0146);
             this._labelNoRoom.text          = Lang.getText(Lang.Type.B0582);

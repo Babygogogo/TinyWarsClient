@@ -46,7 +46,7 @@ namespace TinyWars.MultiRankRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiRankRoom/MrrMyWarListPanel.exml";
+            this.skinName = "resource/skins/multiRankWar/MrwMyWarListPanel.exml";
         }
 
         protected _onOpened(): void {

@@ -53,7 +53,7 @@ namespace TinyWars.MultiRankRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiRankRoom/MrrWarBasicSettingsPage.exml";
+            this.skinName = "resource/skins/multiRankWar/MrwWarBasicSettingsPage.exml";
         }
 
         protected _onOpened(): void {

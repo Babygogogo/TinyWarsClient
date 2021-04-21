@@ -24,7 +24,7 @@ namespace TinyWars.MultiRankRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiRankRoom/MrrWarAdvancedSettingsPage.exml";
+            this.skinName = "resource/skins/multiRankWar/MrwWarAdvancedSettingsPage.exml";
         }
 
         protected async _onOpened(): Promise<void> {

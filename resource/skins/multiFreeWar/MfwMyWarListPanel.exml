@@ -38,10 +38,10 @@
             <e:Group x="0" y="0">
                 <GameUi:UiLabel id="_labelMultiPlayer" text="Multi Player" size="14" width="80" wordWrap="true"
                                 textAlign="center" x="0" y="0" textColor="0xAAAAAA" />
+                <GameUi:UiLabel id="_labelFreeMode" text="Free Mode" size="14" width="80" wordWrap="true"
+                                textAlign="center" x="102" y="10" textColor="0xAAAAAA" />
                 <GameUi:UiLabel id="_labelMyWar" text="My Wars" size="14" width="80" wordWrap="true" textAlign="center"
                                 x="92" y="0" textColor="0xAAAAAA" />
-                <GameUi:UiLabel id="_labelChooseWar" text="Choose a War" size="14" width="80" wordWrap="true"
-                                textAlign="center" x="102" y="10" textColor="0xAAAAAA" />
                 <e:layout>
                     <e:HorizontalLayout verticalAlign="bottom" gap="12" />
                 </e:layout>

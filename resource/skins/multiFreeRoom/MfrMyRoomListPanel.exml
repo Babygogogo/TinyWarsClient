@@ -38,6 +38,8 @@
             <e:Group x="0" y="0">
                 <GameUi:UiLabel id="_labelMultiPlayer" text="Multi Player" size="14" width="80" wordWrap="true"
                                 textAlign="center" x="0" y="0" textColor="0xAAAAAA" />
+                <GameUi:UiLabel id="_labelFreeMode" text="Free Mode" size="14" width="80" wordWrap="true"
+                                textAlign="center" x="102" y="10" textColor="0xAAAAAA" />
                 <GameUi:UiLabel id="_labelMyRoom" text="My Rooms" size="14" width="80" wordWrap="true"
                                 textAlign="center" x="92" y="0" textColor="0xAAAAAA" />
                 <e:layout>
@@ -48,6 +50,8 @@
                 <GameUi:UiImage x="0" y="0" source="point0000" />
                 <GameUi:UiImage x="10" y="10" source="commonColorWhite0000" width="80" scale9Grid="1,1,1,1" />
                 <GameUi:UiImage x="10" y="10" source="point0000" />
+                <GameUi:UiImage x="20" y="20" source="commonColorWhite0000" width="80" scale9Grid="1,1,1,1" />
+                <GameUi:UiImage x="20" y="20" source="point0000" />
                 <e:layout>
                     <e:HorizontalLayout gap="0" verticalAlign="middle" />
                 </e:layout>

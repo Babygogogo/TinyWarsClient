@@ -19,8 +19,8 @@ namespace TinyWars.MultiFreeWar {
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : GameUi.UiLabel;
+        private readonly _labelFreeMode         : GameUi.UiLabel;
         private readonly _labelMyWar            : GameUi.UiLabel;
-        private readonly _labelChooseWar        : GameUi.UiLabel;
 
         private readonly _btnBack               : GameUi.UiButton;
         private readonly _btnNextStep           : GameUi.UiButton;
@@ -143,8 +143,8 @@ namespace TinyWars.MultiFreeWar {
         private _updateComponentsForLanguage(): void {
             this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
             this._labelMultiPlayer.text     = Lang.getText(Lang.Type.B0137);
+            this._labelFreeMode.text        = Lang.getText(Lang.Type.B0557);
             this._labelMyWar.text           = Lang.getText(Lang.Type.B0588);
-            this._labelChooseWar.text       = Lang.getText(Lang.Type.B0589);
             this._btnBack.label             = Lang.getText(Lang.Type.B0146);
             this._labelNoWar.text           = Lang.getText(Lang.Type.B0210);
             this._btnNextStep.label         = Lang.getText(Lang.Type.B0024);
