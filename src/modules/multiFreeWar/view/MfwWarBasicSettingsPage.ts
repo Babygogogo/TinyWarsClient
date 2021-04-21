@@ -12,7 +12,7 @@ namespace TinyWars.MultiFreeWar {
     export type OpenDataForMfwWarBasicSettingsPage = {
         warId  : number | null;
     }
-    export class MfwWarBasicSettingsPage extends GameUi.UiTabPage {
+    export class MfwWarBasicSettingsPage extends GameUi.UiTabPage<OpenDataForMfwWarBasicSettingsPage> {
         private readonly _labelMapNameTitle             : GameUi.UiLabel;
         private readonly _labelMapName                  : GameUi.UiLabel;
 
@@ -80,7 +80,7 @@ namespace TinyWars.MultiFreeWar {
 
         private _onNotifyMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
             const data  = e.data as ProtoTypes.NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
-            const warId = this._getOpenData<OpenDataForMfwWarBasicSettingsPage>().warId;
+            const warId = this._getOpenData().warId;
             if ((warId != null) && ((data.infos || []).find(v => v.warId === warId))) {
                 this._updateComponentsForWarInfo();
             }
@@ -198,7 +198,7 @@ namespace TinyWars.MultiFreeWar {
         }
 
         private _getWarInfo(): ProtoTypes.MultiPlayerWar.IMpwWarInfo {
-            return MpwModel.getMyWarInfo(this._getOpenData<OpenDataForMfwWarBasicSettingsPage>().warId);
+            return MpwModel.getMyWarInfo(this._getOpenData().warId);
         }
     }
 }

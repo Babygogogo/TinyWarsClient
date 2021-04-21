@@ -13,7 +13,7 @@ namespace TinyWars.MultiRankWar {
     export type OpenDataForMrwWarBasicSettingsPage = {
         warId  : number | null;
     }
-    export class MrwWarBasicSettingsPage extends GameUi.UiTabPage {
+    export class MrwWarBasicSettingsPage extends GameUi.UiTabPage<OpenDataForMrwWarBasicSettingsPage> {
         private readonly _labelMapNameTitle             : GameUi.UiLabel;
         private readonly _labelMapName                  : GameUi.UiLabel;
 
@@ -81,7 +81,7 @@ namespace TinyWars.MultiRankWar {
 
         private _onNotifyMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
             const data  = e.data as ProtoTypes.NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
-            const warId = this._getOpenData<OpenDataForMrwWarBasicSettingsPage>().warId;
+            const warId = this._getOpenData().warId;
             if ((warId != null) && ((data.infos || []).find(v => v.warId === warId))) {
                 this._updateComponentsForWarInfo();
             }
@@ -199,7 +199,7 @@ namespace TinyWars.MultiRankWar {
         }
 
         private _getWarInfo(): ProtoTypes.MultiPlayerWar.IMpwWarInfo {
-            return MpwModel.getMyWarInfo(this._getOpenData<OpenDataForMrwWarBasicSettingsPage>().warId);
+            return MpwModel.getMyWarInfo(this._getOpenData().warId);
         }
     }
 }

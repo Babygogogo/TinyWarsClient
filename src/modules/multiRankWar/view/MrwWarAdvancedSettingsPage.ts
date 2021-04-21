@@ -12,7 +12,7 @@ namespace TinyWars.MultiRankWar {
     export type OpenDataForMrwWarAdvancedSettingsPage = {
         warId  : number;
     }
-    export class MrwWarAdvancedSettingsPage extends GameUi.UiTabPage {
+    export class MrwWarAdvancedSettingsPage extends GameUi.UiTabPage<OpenDataForMrwWarAdvancedSettingsPage> {
         private readonly _scroller      : eui.Scroller;
         private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer, SettingRenderer>;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
@@ -23,7 +23,7 @@ namespace TinyWars.MultiRankWar {
             this.skinName = "resource/skins/multiRankWar/MrwWarAdvancedSettingsPage.exml";
         }
 
-        protected async _onOpened(): Promise<void> {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
@@ -50,7 +50,7 @@ namespace TinyWars.MultiRankWar {
 
         private _onNotifyMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
             const data  = e.data as ProtoTypes.NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
-            const warId = this._getOpenData<OpenDataForMrwWarAdvancedSettingsPage>().warId;
+            const warId = this._getOpenData().warId;
             if ((warId != null) && ((data.infos || []).find(v => v.warId === warId))) {
                 this._updateListPlayer();
             }
@@ -79,7 +79,7 @@ namespace TinyWars.MultiRankWar {
         }
 
         private async _updateListPlayer(): Promise<void> {
-            const warId         = this._getOpenData<OpenDataForMrwWarAdvancedSettingsPage>().warId;
+            const warId         = this._getOpenData().warId;
             const warInfo       = await MpwModel.getMyWarInfo(warId);
             const playersCount  = warInfo ? warInfo.settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray.length : null;
             const listPlayer    = this._listPlayer;

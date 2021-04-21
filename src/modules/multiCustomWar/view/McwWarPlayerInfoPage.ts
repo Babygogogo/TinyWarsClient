@@ -13,7 +13,7 @@ namespace TinyWars.MultiCustomWar {
     export type OpenDataForMcwWarPlayerInfoPage = {
         warId   : number;
     }
-    export class McwWarPlayerInfoPage extends GameUi.UiTabPage {
+    export class McwWarPlayerInfoPage extends GameUi.UiTabPage<OpenDataForMcwWarPlayerInfoPage> {
         private readonly _groupInfo     : eui.Group;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
@@ -23,7 +23,7 @@ namespace TinyWars.MultiCustomWar {
             this.skinName = "resource/skins/multiCustomWar/McwWarPlayerInfoPage.exml";
         }
 
-        protected async _onOpened(): Promise<void> {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMpwCommonGetMyWarInfoList,   callback: this._onNotifyMsgMpwCommonGetMyWarInfoList },
@@ -54,7 +54,7 @@ namespace TinyWars.MultiCustomWar {
         private _updateComponentsForLanguage(): void {
         }
         private async _updateComponentsForWarInfo(): Promise<void> {
-            const warInfo       = await MpwModel.getMyWarInfo(this._getOpenData<OpenDataForMcwWarPlayerInfoPage>().warId);
+            const warInfo       = await MpwModel.getMyWarInfo(this._getOpenData().warId);
             const mapRawData    = warInfo ? await WarMap.WarMapModel.getRawData(warInfo.settingsForMcw.mapId) : null;
             const listPlayer    = this._listPlayer;
             if (mapRawData) {

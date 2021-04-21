@@ -15,7 +15,7 @@ namespace TinyWars.MultiRankRoom {
 
         private static _instance: MrrRoomInfoPanel;
 
-        private _tabSettings    : TinyWars.GameUi.UiTab<DataForTabItemRenderer>;
+        private _tabSettings    : TinyWars.GameUi.UiTab<DataForTabItemRenderer, OpenDataForMrrRoomBasicSettingsPage | OpenDataForMrrRoomAdvancedSettingsPage>;
         private _labelMenuTitle : TinyWars.GameUi.UiLabel;
         private _btnBack        : TinyWars.GameUi.UiButton;
 
@@ -117,8 +117,7 @@ namespace TinyWars.MultiRankRoom {
         private _labelName: GameUi.UiLabel;
 
         protected dataChanged(): void {
-            const data = this.data.tabItemData;
-            this._labelName.text = data.name;
+            this._labelName.text = this.data.name;
         }
     }
 }

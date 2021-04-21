@@ -8,7 +8,7 @@ namespace TinyWars.MultiFreeRoom {
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import PlayerRuleType   = Types.PlayerRuleType;
 
-    export class MfrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
+    export class MfrCreateAdvancedSettingsPage extends GameUi.UiTabPage<void> {
         private readonly _scroller      : eui.Scroller;
         private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer, SettingRenderer>;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;

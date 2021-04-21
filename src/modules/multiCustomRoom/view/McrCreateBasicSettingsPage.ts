@@ -10,7 +10,7 @@ namespace TinyWars.MultiCustomRoom {
     import WarMapModel      = WarMap.WarMapModel;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    export class McrCreateBasicSettingsPage extends GameUi.UiTabPage {
+    export class McrCreateBasicSettingsPage extends GameUi.UiTabPage<void> {
         private readonly _labelMapNameTitle             : GameUi.UiLabel;
         private readonly _labelMapName                  : GameUi.UiLabel;
 

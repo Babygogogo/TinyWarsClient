@@ -11,7 +11,7 @@ namespace TinyWars.MultiCustomRoom {
     export type OpenDataForMcrRoomBasicSettingsPage = {
         roomId  : number | null;
     }
-    export class McrRoomBasicSettingsPage extends GameUi.UiTabPage {
+    export class McrRoomBasicSettingsPage extends GameUi.UiTabPage<OpenDataForMcrRoomBasicSettingsPage> {
         private readonly _labelMapNameTitle             : GameUi.UiLabel;
         private readonly _labelMapName                  : GameUi.UiLabel;
 
@@ -194,7 +194,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _getRoomInfo(): Promise<ProtoTypes.MultiCustomRoom.IMcrRoomInfo> {
-            return McrModel.getRoomInfo(this._getOpenData<OpenDataForMcrRoomBasicSettingsPage>().roomId);
+            return McrModel.getRoomInfo(this._getOpenData().roomId);
         }
     }
 }

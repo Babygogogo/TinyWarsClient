@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing">
+    <e:Group left="0" right="0" top="0" bottom="0">
+        <e:Group left="0" top="0" bottom="20" right="200">
+            <GameUi:UiLabel id="_labelLoading" text="正在加载图片\n请耐心等候" size="20" textColor="0xFFFFFF" textAlign="center"
+                            horizontalCenter="0" verticalCenter="0" />
+            <GameUi:UiZoomableMap id="_zoomMap" left="0" right="0" top="0" bottom="0" scaleX="1" scaleY="1" />
+        </e:Group>
+        <GameUi:UiMapInfo id="_uiMapInfo" skinName="Skins.Component.MapInfo.MapInfo001" right="0" bottom="20" />
+    </e:Group>
+</e:Skin>

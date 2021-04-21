@@ -15,7 +15,7 @@ namespace TinyWars.MultiCustomWar {
         private static _instance: McwMyWarListPanel;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer>;
+        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer, OpenDataForMcwWarMapInfoPage | OpenDataForMcwWarPlayerInfoPage | OpenDataForMcwWarAdvancedSettingsPage | OpenDataForMcwWarBasicSettingsPage>;
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelMultiPlayer      : GameUi.UiLabel;
@@ -271,8 +271,7 @@ namespace TinyWars.MultiCustomWar {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data              = this.data.tabItemData;
-            this._labelName.text    = data.name;
+            this._labelName.text = this.data.name;
         }
     }
 

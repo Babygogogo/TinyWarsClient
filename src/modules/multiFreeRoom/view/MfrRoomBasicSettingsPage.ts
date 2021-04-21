@@ -11,7 +11,7 @@ namespace TinyWars.MultiFreeRoom {
     export type OpenDataForMfrRoomBasicSettingsPage = {
         roomId  : number | null;
     }
-    export class MfrRoomBasicSettingsPage extends GameUi.UiTabPage {
+    export class MfrRoomBasicSettingsPage extends GameUi.UiTabPage<OpenDataForMfrRoomBasicSettingsPage> {
         private readonly _labelMapNameTitle             : GameUi.UiLabel;
         private readonly _labelMapName                  : GameUi.UiLabel;
 
@@ -185,7 +185,7 @@ namespace TinyWars.MultiFreeRoom {
         }
 
         private _getRoomInfo(): Promise<ProtoTypes.MultiFreeRoom.IMfrRoomInfo> {
-            return MfrModel.getRoomInfo(this._getOpenData<OpenDataForMfrRoomBasicSettingsPage>().roomId);
+            return MfrModel.getRoomInfo(this._getOpenData().roomId);
         }
     }
 }

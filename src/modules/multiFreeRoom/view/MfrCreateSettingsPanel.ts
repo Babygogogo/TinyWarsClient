@@ -38,7 +38,7 @@ namespace TinyWars.MultiFreeRoom {
         private readonly _sclSkinId             : GameUi.UiScrollList<DataForSkinIdRenderer, SkinIdRenderer>;
 
         private readonly _groupTab              : eui.Group;
-        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer>;
+        private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer, void>;
 
         private readonly _btnBack               : GameUi.UiButton;
         private readonly _btnConfirm            : GameUi.UiButton;
@@ -262,8 +262,7 @@ namespace TinyWars.MultiFreeRoom {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data = this.data.tabItemData;
-            this._labelName.text = data.name;
+            this._labelName.text = this.data.name;
         }
     }
 

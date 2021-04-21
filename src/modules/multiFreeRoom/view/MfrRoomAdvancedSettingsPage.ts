@@ -11,7 +11,7 @@ namespace TinyWars.MultiFreeRoom {
     export type OpenDataForMfrRoomAdvancedSettingsPage = {
         roomId  : number;
     }
-    export class MfrRoomAdvancedSettingsPage extends GameUi.UiTabPage {
+    export class MfrRoomAdvancedSettingsPage extends GameUi.UiTabPage<OpenDataForMfrRoomAdvancedSettingsPage> {
         private readonly _scroller      : eui.Scroller;
         private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer, SettingRenderer>;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
@@ -22,7 +22,7 @@ namespace TinyWars.MultiFreeRoom {
             this.skinName = "resource/skins/multiFreeRoom/MfrRoomAdvancedSettingsPage.exml";
         }
 
-        protected async _onOpened(): Promise<void> {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMfrGetRoomInfo,  callback: this._onNotifyMsgMfrGetRoomInfo },
@@ -74,7 +74,7 @@ namespace TinyWars.MultiFreeRoom {
         }
 
         private async _updateListPlayer(): Promise<void> {
-            const roomId        = this._getOpenData<OpenDataForMfrRoomAdvancedSettingsPage>().roomId;
+            const roomId        = this._getOpenData().roomId;
             const roomInfo      = await MfrModel.getRoomInfo(roomId);
             const playersCount  = roomInfo ? roomInfo.settingsForMfw.initialWarData.playerManager.players.length - 1 : null;
             const listPlayer    = this._listPlayer;

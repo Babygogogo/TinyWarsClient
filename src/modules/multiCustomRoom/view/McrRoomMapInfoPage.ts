@@ -7,7 +7,7 @@ namespace TinyWars.MultiCustomRoom {
     export type OpenDataForMcrRoomMapInfoPage = {
         roomId  : number;
     }
-    export class McrRoomMapInfoPage extends GameUi.UiTabPage {
+    export class McrRoomMapInfoPage extends GameUi.UiTabPage<OpenDataForMcrRoomMapInfoPage> {
         private readonly _zoomMap       : GameUi.UiZoomableMap;
         private readonly _uiMapInfo     : GameUi.UiMapInfo;
         private readonly _labelLoading  : GameUi.UiLabel;
@@ -18,7 +18,7 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrRoomMapInfoPage.exml";
         }
 
-        protected async _onOpened(): Promise<void> {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onNotifyMsgMcrGetRoomInfo },
@@ -38,7 +38,7 @@ namespace TinyWars.MultiCustomRoom {
         }
         private _onNotifyMsgMcrGetRoomInfo(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgMcrGetRoomInfo.IS;
-            if (data.roomId === this._getOpenData<OpenDataForMcrRoomMapInfoPage>().roomId) {
+            if (data.roomId === this._getOpenData().roomId) {
                 this._updateComponentsForRoomInfo();
             }
         }
@@ -47,7 +47,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelLoading.text = Lang.getText(Lang.Type.A0150);
         }
         private async _updateComponentsForRoomInfo(): Promise<void> {
-            const roomId        = this._getOpenData<OpenDataForMcrRoomMapInfoPage>().roomId;
+            const roomId        = this._getOpenData().roomId;
             const roomInfo      = await McrModel.getRoomInfo(roomId);
             const mapRawData    = roomInfo ? await WarMap.WarMapModel.getRawData(roomInfo.settingsForMcw.mapId) : null;
             const zoomMap       = this._zoomMap;

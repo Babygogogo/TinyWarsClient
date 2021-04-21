@@ -12,7 +12,7 @@ namespace TinyWars.MultiCustomWar {
     export type OpenDataForMcwWarAdvancedSettingsPage = {
         warId  : number;
     }
-    export class McwWarAdvancedSettingsPage extends GameUi.UiTabPage {
+    export class McwWarAdvancedSettingsPage extends GameUi.UiTabPage<OpenDataForMcwWarAdvancedSettingsPage> {
         private readonly _scroller      : eui.Scroller;
         private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer, SettingRenderer>;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
@@ -50,7 +50,7 @@ namespace TinyWars.MultiCustomWar {
 
         private _onNotifyMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
             const data  = e.data as ProtoTypes.NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
-            const warId = this._getOpenData<OpenDataForMcwWarAdvancedSettingsPage>().warId;
+            const warId = this._getOpenData().warId;
             if ((warId != null) && ((data.infos || []).find(v => v.warId === warId))) {
                 this._updateListPlayer();
             }
@@ -79,7 +79,7 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private async _updateListPlayer(): Promise<void> {
-            const warId         = this._getOpenData<OpenDataForMcwWarAdvancedSettingsPage>().warId;
+            const warId         = this._getOpenData().warId;
             const warInfo       = await MpwModel.getMyWarInfo(warId);
             const playersCount  = warInfo ? warInfo.settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray.length : null;
             const listPlayer    = this._listPlayer;

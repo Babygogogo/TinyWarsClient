@@ -10,7 +10,7 @@ namespace TinyWars.MultiFreeRoom {
     import WarMapModel      = WarMap.WarMapModel;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    export class MfrCreateBasicSettingsPage extends GameUi.UiTabPage {
+    export class MfrCreateBasicSettingsPage extends GameUi.UiTabPage<void> {
         private readonly _labelMapNameTitle             : GameUi.UiLabel;
         private readonly _labelMapName                  : GameUi.UiLabel;
 

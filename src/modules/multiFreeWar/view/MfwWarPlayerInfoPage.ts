@@ -13,7 +13,7 @@ namespace TinyWars.MultiFreeWar {
     export type OpenDataForMfwWarPlayerInfoPage = {
         warId   : number;
     }
-    export class MfwWarPlayerInfoPage extends GameUi.UiTabPage {
+    export class MfwWarPlayerInfoPage extends GameUi.UiTabPage<OpenDataForMfwWarPlayerInfoPage> {
         private readonly _groupInfo     : eui.Group;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
@@ -54,7 +54,7 @@ namespace TinyWars.MultiFreeWar {
         private _updateComponentsForLanguage(): void {
         }
         private async _updateComponentsForWarInfo(): Promise<void> {
-            const warInfo       = await MpwModel.getMyWarInfo(this._getOpenData<OpenDataForMfwWarPlayerInfoPage>().warId);
+            const warInfo       = await MpwModel.getMyWarInfo(this._getOpenData().warId);
             const warData       = warInfo ? warInfo.settingsForMfw.initialWarData : null;
             const listPlayer    = this._listPlayer;
             if (warData) {

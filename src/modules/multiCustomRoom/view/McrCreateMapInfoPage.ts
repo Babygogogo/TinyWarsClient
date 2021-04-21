@@ -4,7 +4,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
 
-    export class McrCreateMapInfoPage extends GameUi.UiTabPage {
+    export class McrCreateMapInfoPage extends GameUi.UiTabPage<void> {
         private readonly _zoomMap       : GameUi.UiZoomableMap;
         private readonly _uiMapInfo     : GameUi.UiMapInfo;
         private readonly _labelLoading  : GameUi.UiLabel;

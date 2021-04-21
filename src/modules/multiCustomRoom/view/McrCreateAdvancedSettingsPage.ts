@@ -8,7 +8,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import PlayerRuleType   = Types.PlayerRuleType;
 
-    export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage {
+    export class McrCreateAdvancedSettingsPage extends GameUi.UiTabPage<void> {
         private readonly _scroller      : eui.Scroller;
         private readonly _btnReset      : GameUi.UiButton;
         private readonly _btnCustomize  : GameUi.UiButton;

@@ -4,7 +4,7 @@ namespace TinyWars.MapEditor {
     import Notify           = Utility.Notify;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    export class MeSimBasicSettingsPage extends GameUi.UiTabPage {
+    export class MeSimBasicSettingsPage extends GameUi.UiTabPage<void> {
         private _btnMapNameTitle            : TinyWars.GameUi.UiButton;
         private _labelMapName               : TinyWars.GameUi.UiLabel;
         private _btnBuildings               : TinyWars.GameUi.UiButton;

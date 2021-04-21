@@ -3,7 +3,7 @@ namespace TinyWars.MultiFreeRoom {
     import Notify   = Utility.Notify;
     import Lang     = Utility.Lang;
 
-    export class MfrCreateMapInfoPage extends GameUi.UiTabPage {
+    export class MfrCreateMapInfoPage extends GameUi.UiTabPage<void> {
         private readonly _zoomMap       : GameUi.UiZoomableMap;
         private readonly _uiMapInfo     : GameUi.UiMapInfo;
         private readonly _labelLoading  : GameUi.UiLabel;

@@ -12,7 +12,7 @@ namespace TinyWars.MapEditor {
 
         private static _instance: MeSimSettingsPanel;
 
-        private _tabSettings    : GameUi.UiTab<DataForTabItemRenderer>;
+        private _tabSettings    : GameUi.UiTab<DataForTabItemRenderer, void>;
         private _labelMenuTitle : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
         private _btnConfirm     : GameUi.UiButton;
@@ -111,8 +111,7 @@ namespace TinyWars.MapEditor {
         private _labelName: GameUi.UiLabel;
 
         protected dataChanged(): void {
-            const data = this.data.tabItemData;
-            this._labelName.text = data.name;
+            this._labelName.text = this.data.name;
         }
     }
 }

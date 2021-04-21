@@ -5,7 +5,7 @@ namespace TinyWars.SingleCustomRoom {
     import Notify           = Utility.Notify;
     import WarMapModel      = WarMap.WarMapModel;
 
-    export class ScrCreateBasicSettingsPage extends GameUi.UiTabPage {
+    export class ScrCreateBasicSettingsPage extends GameUi.UiTabPage<void> {
         private _labelMapNameTitle      : GameUi.UiLabel;
         private _labelMapName           : GameUi.UiLabel;
         private _labelPlayersCountTitle : GameUi.UiLabel;

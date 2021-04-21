@@ -1,7 +1,7 @@
 
 namespace TinyWars.GameUi {
-    export abstract class UiTabPage extends UiComponent {
-        private _openData   : any;
+    export abstract class UiTabPage<OpenData> extends UiComponent {
+        private _openData   : OpenData;
 
         protected constructor() {
             super();
@@ -12,17 +12,17 @@ namespace TinyWars.GameUi {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for open self.
         ////////////////////////////////////////////////////////////////////////////////
-        public open(parent: egret.DisplayObjectContainer, data: any): void {
+        public open(parent: egret.DisplayObjectContainer, data: OpenData): void {
             this._setOpenData(data);
             parent.addChild(this);
 
             this._doOpen();
         }
 
-        private _setOpenData(data: any): void {
+        private _setOpenData(data: OpenData): void {
             this._openData = data;
         }
-        protected _getOpenData<T>(): T {
+        protected _getOpenData(): OpenData {
             return this._openData;
         }
 

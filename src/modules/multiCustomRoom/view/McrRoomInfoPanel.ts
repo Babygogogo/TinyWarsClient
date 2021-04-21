@@ -22,7 +22,7 @@ namespace TinyWars.MultiCustomRoom {
         private static _instance: McrRoomInfoPanel;
 
         private readonly _groupTab          : eui.Group;
-        private readonly _tabSettings       : TinyWars.GameUi.UiTab<DataForTabItemRenderer>;
+        private readonly _tabSettings       : TinyWars.GameUi.UiTab<DataForTabItemRenderer, OpenDataForMcrRoomMapInfoPage | OpenDataForMcrRoomPlayerInfoPage | OpenDataForMcrRoomBasicSettingsPage | OpenDataForMcrRoomAdvancedSettingsPage>;
 
         private readonly _groupNavigator    : eui.Group;
         private readonly _labelMultiPlayer  : GameUi.UiLabel;
@@ -429,8 +429,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelName: GameUi.UiLabel;
 
         protected dataChanged(): void {
-            const data = this.data.tabItemData;
-            this._labelName.text = data.name;
+            this._labelName.text = this.data.name;
         }
     }
 

@@ -14,7 +14,7 @@ namespace TinyWars.MultiRankRoom {
         roomId  : number;
     }
 
-    export class MrrRoomAdvancedSettingsPage extends GameUi.UiTabPage {
+    export class MrrRoomAdvancedSettingsPage extends GameUi.UiTabPage<OpenDataForMrrRoomAdvancedSettingsPage> {
         private _btnMapNameTitle    : TinyWars.GameUi.UiButton;
         private _labelMapName       : TinyWars.GameUi.UiLabel;
         private _btnBuildings       : TinyWars.GameUi.UiButton;
@@ -39,7 +39,7 @@ namespace TinyWars.MultiRankRoom {
             ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            const roomId    = this._getOpenData<OpenDataForMrrRoomAdvancedSettingsPage>().roomId;
+            const roomId    = this._getOpenData().roomId;
             this._roomInfo  = await MrrModel.getRoomInfo(roomId);
 
             this._updateComponentsForLanguage();

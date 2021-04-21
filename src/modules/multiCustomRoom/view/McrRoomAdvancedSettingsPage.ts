@@ -11,7 +11,7 @@ namespace TinyWars.MultiCustomRoom {
     export type OpenDataForMcrRoomAdvancedSettingsPage = {
         roomId  : number;
     }
-    export class McrRoomAdvancedSettingsPage extends GameUi.UiTabPage {
+    export class McrRoomAdvancedSettingsPage extends GameUi.UiTabPage<OpenDataForMcrRoomAdvancedSettingsPage> {
         private readonly _scroller      : eui.Scroller;
         private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer, SettingRenderer>;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
@@ -22,7 +22,7 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrRoomAdvancedSettingsPage.exml";
         }
 
-        protected async _onOpened(): Promise<void> {
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onNotifyMsgMcrGetRoomInfo },
@@ -74,7 +74,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateListPlayer(): Promise<void> {
-            const roomId        = this._getOpenData<OpenDataForMcrRoomAdvancedSettingsPage>().roomId;
+            const roomId        = this._getOpenData().roomId;
             const roomInfo      = await McrModel.getRoomInfo(roomId);
             const playersCount  = roomInfo ? roomInfo.settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray.length : null;
             const listPlayer    = this._listPlayer;

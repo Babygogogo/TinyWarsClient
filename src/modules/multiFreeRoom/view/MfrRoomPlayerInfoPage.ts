@@ -12,7 +12,7 @@ namespace TinyWars.MultiFreeRoom {
     export type OpenDataForMfrRoomPlayerInfoPage = {
         roomId  : number;
     }
-    export class MfrRoomPlayerInfoPage extends GameUi.UiTabPage {
+    export class MfrRoomPlayerInfoPage extends GameUi.UiTabPage<OpenDataForMfrRoomPlayerInfoPage> {
         private readonly _groupInfo     : eui.Group;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
 
@@ -53,7 +53,7 @@ namespace TinyWars.MultiFreeRoom {
         private _updateComponentsForLanguage(): void {
         }
         private async _updateComponentsForRoomInfo(): Promise<void> {
-            const roomInfo      = await MfrModel.getRoomInfo(this._getOpenData<OpenDataForMfrRoomPlayerInfoPage>().roomId);
+            const roomInfo      = await MfrModel.getRoomInfo(this._getOpenData().roomId);
             const warData       = roomInfo ? roomInfo.settingsForMfw.initialWarData : null;
             const listPlayer    = this._listPlayer;
             if (warData) {
