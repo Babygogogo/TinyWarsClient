@@ -53,7 +53,7 @@ namespace TinyWars.MultiRankWar {
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getSettingsBootTimerParams(): number[] {
-            return [Types.BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue];
+            return CommonConstants.WarBootTimerDefaultParams;
         }
     }
 }

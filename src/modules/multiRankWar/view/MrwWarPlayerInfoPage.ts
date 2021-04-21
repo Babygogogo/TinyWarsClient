@@ -1,5 +1,5 @@
 
-namespace TinyWars.MultiFreeWar {
+namespace TinyWars.MultiRankWar {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
@@ -20,7 +20,7 @@ namespace TinyWars.MultiFreeWar {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiFreeWar/MrwWarPlayerInfoPage.exml";
+            this.skinName = "resource/skins/multiRankWar/MrwWarPlayerInfoPage.exml";
         }
 
         protected async _onOpened(): Promise<void> {

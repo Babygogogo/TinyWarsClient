@@ -160,7 +160,7 @@ namespace TinyWars.Utility.FlowManager {
         SoundManager.playBgm(SoundManager.BgmCode.MapEditor01);
     }
 
-    export function gotoMrrMyWarListPanel(): void {
+    export function gotoMrwMyWarListPanel(): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();
@@ -168,12 +168,12 @@ namespace TinyWars.Utility.FlowManager {
         StageManager.closeAllPanels();
         Lobby.LobbyBackgroundPanel.show();
         Lobby.LobbyTopPanel.show();
-        MultiRankRoom.MrrMyWarListPanel.show();
+        MultiRankWar.MrwMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
 
         SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
     }
-    export function gotoMcrMyWarListPanel(): void {
+    export function gotoMcwMyWarListPanel(): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         ScwModel.unloadWar();

@@ -17,6 +17,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     let _watchRequestedWarInfos : IMpwWatchInfo[];
     let _watchedWarInfos        : IMpwWatchInfo[];
     let _mcwPreviewingWarId     : number;
+    let _mrwPreviewingWarId     : number;
     let _mfwPreviewingWarId     : number;
     let _war                    : MpwWar;
     let _cachedActions          : IWarActionContainer[] = [];
@@ -50,6 +51,16 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
         if (getMcwPreviewingWarId() != warId) {
             _mcwPreviewingWarId = warId;
             Notify.dispatch(Notify.Type.McwPreviewingWarIdChanged);
+        }
+    }
+
+    export function getMrwPreviewingWarId(): number | null {
+        return _mrwPreviewingWarId;
+    }
+    export function setMrwPreviewingWarId(warId: number | null): void {
+        if (getMrwPreviewingWarId() != warId) {
+            _mrwPreviewingWarId = warId;
+            Notify.dispatch(Notify.Type.MrwPreviewingWarIdChanged);
         }
     }
 
@@ -165,9 +176,9 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                     content : Lang.getText(Lang.Type.A0023),
                     callback: () => {
                         if (war instanceof MultiRankWar.MrwWar) {
-                            Utility.FlowManager.gotoMrrMyWarListPanel();
+                            Utility.FlowManager.gotoMrwMyWarListPanel();
                         } else {
-                            Utility.FlowManager.gotoMcrMyWarListPanel();
+                            Utility.FlowManager.gotoMcwMyWarListPanel();
                         }
                     },
                 });
@@ -179,9 +190,9 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                     content : Lang.getText(Lang.Type.A0035),
                     callback: () => {
                         if (war instanceof MultiRankWar.MrwWar) {
-                            Utility.FlowManager.gotoMrrMyWarListPanel();
+                            Utility.FlowManager.gotoMrwMyWarListPanel();
                         } else {
-                            Utility.FlowManager.gotoMcrMyWarListPanel();
+                            Utility.FlowManager.gotoMcwMyWarListPanel();
                         }
                     },
                 });

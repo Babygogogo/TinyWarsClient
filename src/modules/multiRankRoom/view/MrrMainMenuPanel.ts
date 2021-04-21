@@ -91,7 +91,7 @@ namespace TinyWars.MultiRankRoom {
             this.close();
             Lobby.LobbyTopPanel.hide();
             Lobby.LobbyBottomPanel.hide();
-            MrrMyWarListPanel.show();
+            MultiRankWar.MrwMyWarListPanel.show();
         }
         private _onTouchedBtnPreviewStdMaps(e: egret.TouchEvent): void {
             this.close();

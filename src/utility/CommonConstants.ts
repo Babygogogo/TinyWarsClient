@@ -79,6 +79,7 @@ namespace TinyWars.Utility.CommonConstants {
     export const WarBootTimerRegularMaxLimit            = 3600 * 24 * 7;
     export const WarBootTimerRegularDefaultValue        = 3600 * 24 * 3;
     export const WarBootTimerIncrementalMaxLimit        = 3600 * 24;
+    export const WarBootTimerDefaultParams              = [Types.BootTimerType.Regular, WarBootTimerRegularDefaultValue];
 
     export const WarRuleFirstId                         = 0;
     export const WarRuleNameMaxLength                   = 15;

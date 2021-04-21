@@ -73,9 +73,9 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         const selfPlayer        = playerManager.getPlayerByUserId(User.UserModel.getSelfUserId());
         const callbackForGoBack = () => {
             if (war instanceof MultiRankWar.MrwWar) {
-                Utility.FlowManager.gotoMrrMyWarListPanel();
+                Utility.FlowManager.gotoMrwMyWarListPanel();
             } else {
-                Utility.FlowManager.gotoMcrMyWarListPanel();
+                Utility.FlowManager.gotoMcwMyWarListPanel();
             }
         };
         if (war.getIsEnded()) {
