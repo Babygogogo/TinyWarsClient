@@ -124,8 +124,8 @@ namespace TinyWars.MultiCustomRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0224) },
-                    pageClass   : McrRoomPlayerInfoPage,
-                    pageData    : { roomId: null } as OpenDataForMcrRoomPlayerInfoPage,
+                    pageClass   : McrWarPlayerInfoPage,
+                    pageData    : { warId: null } as OpenDataForMcrWarPlayerInfoPage,
                 },
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0002) },
@@ -134,8 +134,8 @@ namespace TinyWars.MultiCustomRoom {
                 },
                 {
                     tabItemData : { name: Lang.getText(Lang.Type.B0003) },
-                    pageClass   : McrRoomAdvancedSettingsPage,
-                    pageData    : { roomId: null } as OpenDataForMcrRoomAdvancedSettingsPage,
+                    pageClass   : McrWarAdvancedSettingsPage,
+                    pageData    : { warId: null } as OpenDataForMcrWarAdvancedSettingsPage,
                 },
             ]);
         }
@@ -186,9 +186,9 @@ namespace TinyWars.MultiCustomRoom {
 
                 const tab = this._tabSettings;
                 tab.updatePageData(0, { warId } as OpenDataForMcrWarMapInfoPage);
-                tab.updatePageData(1, { roomId: warId } as OpenDataForMcrRoomPlayerInfoPage);
+                tab.updatePageData(1, { warId } as OpenDataForMcrWarPlayerInfoPage);
                 tab.updatePageData(2, { warId } as OpenDataForMcrWarBasicSettingsPage);
-                tab.updatePageData(3, { roomId: warId } as OpenDataForMcrRoomAdvancedSettingsPage);
+                tab.updatePageData(3, { warId } as OpenDataForMcrWarAdvancedSettingsPage);
             }
         }
 

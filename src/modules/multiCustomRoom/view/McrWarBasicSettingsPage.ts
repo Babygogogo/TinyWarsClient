@@ -5,6 +5,7 @@ namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
+    import MpwModel         = MultiPlayerWar.MpwModel;
     import WarMapModel      = WarMap.WarMapModel;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
@@ -79,7 +80,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _onNotifyMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
             const data  = e.data as ProtoTypes.NetMessage.MsgMpwCommonGetMyWarInfoList.IS;
-            const warId = this._getOpenData<OpenDataForMcrWarMapInfoPage>().warId;
+            const warId = this._getOpenData<OpenDataForMcrWarBasicSettingsPage>().warId;
             if ((warId != null) && ((data.infos || []).find(v => v.warId === warId))) {
                 this._updateComponentsForWarInfo();
             }
@@ -126,28 +127,28 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateLabelWarName(): Promise<void> {
-            const roomInfo          = await this._getRoomInfo();
-            this._labelWarName.text = roomInfo ? roomInfo.settingsForMcw.warName : undefined;
+            const warInfo           = await this._getWarInfo();
+            this._labelWarName.text = warInfo ? warInfo.settingsForMcw.warName : undefined;
         }
 
         private async _updateLabelWarPassword(): Promise<void> {
-            const roomInfo              = await this._getRoomInfo();
-            this._labelWarPassword.text = (roomInfo && roomInfo.settingsForMcw.warPassword) ? `****` : undefined;
+            const warInfo               = await this._getWarInfo();
+            this._labelWarPassword.text = (warInfo && warInfo.settingsForMcw.warPassword) ? `****` : undefined;
         }
 
         private async _updateLabelWarComment(): Promise<void> {
-            const roomInfo              = await this._getRoomInfo();
-            this._labelWarComment.text  = roomInfo ? roomInfo.settingsForMcw.warComment : undefined;
+            const warInfo               = await this._getWarInfo();
+            this._labelWarComment.text  = warInfo ? warInfo.settingsForMcw.warComment : undefined;
         }
 
         private async _updateLabelMapName(): Promise<void> {
-            const roomInfo          = await this._getRoomInfo();
-            this._labelMapName.text = roomInfo ? await WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForMcw.mapId) : undefined;
+            const warInfo           = await this._getWarInfo();
+            this._labelMapName.text = warInfo ? await WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForMcw.mapId) : undefined;
         }
 
         private async _updateLabelWarRule(): Promise<void> {
-            const roomInfo          = await this._getRoomInfo();
-            const settingsForCommon = roomInfo ? roomInfo.settingsForCommon : undefined;
+            const warInfo           = await this._getWarInfo();
+            const settingsForCommon = warInfo ? warInfo.settingsForCommon : undefined;
             const label             = this._labelWarRule;
             if (!settingsForCommon) {
                 label.text      = undefined;
@@ -158,12 +159,12 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _updateLabelHasFog(): Promise<void> {
-            const roomInfo      = await this._getRoomInfo();
+            const warInfo       = await this._getWarInfo();
             const labelHasFog   = this._labelHasFog;
-            if (!roomInfo) {
+            if (!warInfo) {
                 labelHasFog.text = undefined;
             } else {
-                const hasFog            = !!roomInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
+                const hasFog            = !!warInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
                 labelHasFog.text        = Lang.getText(hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
                 labelHasFog.textColor   = hasFog ? 0xFFFF00 : 0xFFFFFF;
             }
@@ -176,8 +177,8 @@ namespace TinyWars.MultiCustomRoom {
             (groupRegular.parent) && (groupRegular.parent.removeChild(groupRegular));
             (groupIncremental.parent) && (groupIncremental.parent.removeChild(groupIncremental));
 
-            const roomInfo          = await this._getRoomInfo();
-            const params            = roomInfo ? roomInfo.settingsForMcw.bootTimerParams : undefined;
+            const warInfo           = await this._getWarInfo();
+            const params            = warInfo ? warInfo.settingsForMcw.bootTimerParams : undefined;
             const labelTimerType    = this._labelTimerType;
             if (!params) {
                 labelTimerType.text = undefined;
@@ -197,8 +198,8 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _getRoomInfo(): Promise<ProtoTypes.MultiCustomRoom.IMcrRoomInfo> {
-            return McrModel.getRoomInfo(this._getOpenData<OpenDataForMcrWarBasicSettingsPage>().warId);
+        private _getWarInfo(): ProtoTypes.MultiPlayerWar.IMpwWarInfo {
+            return MpwModel.getMyWarInfo(this._getOpenData<OpenDataForMcrWarBasicSettingsPage>().warId);
         }
     }
 }
