@@ -72,8 +72,6 @@ namespace TinyWars.MapEditor {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.TileAnimationTick,                  callback: this._onNotifyTileAnimationTick },
-                { type: Notify.Type.UnitAnimationTick,                  callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: Notify.Type.MeMapNameChanged,                   callback: this._onNotifyMeMapNameChanged },
                 { type: Notify.Type.MsgMeSubmitMap,                     callback: this._onMsgMeSubmitMap },
@@ -146,22 +144,6 @@ namespace TinyWars.MapEditor {
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
-        }
-
-        private _onNotifyTileAnimationTick(e: egret.Event): void {
-            const viewList = this._listTile.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof TileRenderer) && (child.updateOnTileAnimationTick());
-            }
-        }
-
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
-            const viewList = this._listUnit.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof UnitRenderer) && (child.updateOnUnitAnimationTick());
-            }
         }
 
         private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
@@ -733,8 +715,10 @@ namespace TinyWars.MapEditor {
 
         private _tileView   = new MeTileSimpleView();
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+            ]);
 
             const tileView = this._tileView;
             this._conTileView.addChild(tileView.getImgBase());
@@ -742,7 +726,7 @@ namespace TinyWars.MapEditor {
             tileView.startRunningView();
         }
 
-        public updateOnTileAnimationTick(): void {
+        private _onNotifyTileAnimationTick(): void {
             this._tileView.updateOnAnimationTick();
         }
 
@@ -772,13 +756,15 @@ namespace TinyWars.MapEditor {
 
         private _unitView   = new BaseWar.BwUnitView();
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            ]);
 
             this._conUnitView.addChild(this._unitView);
         }
 
-        public updateOnUnitAnimationTick(): void {
+        private _onNotifyUnitAnimationTick(): void {
             const unitView = this._unitView;
             unitView.tickStateAnimationFrame();
             unitView.tickUnitAnimationFrame();

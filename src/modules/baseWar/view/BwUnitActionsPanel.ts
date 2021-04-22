@@ -48,7 +48,6 @@ namespace TinyWars.BaseWar {
                 // { type: Notify.Type.GlobalTouchMove,            callback: this._onNotifyGlobalTouchMove },
                 // { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
                 { type: Notify.Type.ZoomableContentsMoved,      callback: this._onNotifyZoomableContentsMoved },
-                { type: Notify.Type.UnitAnimationTick,          callback: this._onNotifyUnitAnimationTick },
             ]);
             this._listAction.setItemRenderer(UnitActionRenderer);
 
@@ -74,13 +73,6 @@ namespace TinyWars.BaseWar {
         }
         private _onNotifyZoomableContentsMoved(e: egret.Event): void {
             this._updatePosition();
-        }
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
-            const viewList = this._listAction.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof UnitActionRenderer) && (child.updateOnUnitAnimationTick());
-            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,8 +172,10 @@ namespace TinyWars.BaseWar {
 
         private _unitView   : BaseWar.BwUnitView;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            ]);
 
             this._unitView = new BaseWar.BwUnitView();
             this._conUnitView.addChild(this._unitView);
@@ -210,7 +204,7 @@ namespace TinyWars.BaseWar {
             this.data.callback();
         }
 
-        public updateOnUnitAnimationTick(): void {
+        private _onNotifyUnitAnimationTick(): void {
             if (this.data.unit) {
                 this._unitView.tickUnitAnimationFrame();
                 this._unitView.tickStateAnimationFrame();

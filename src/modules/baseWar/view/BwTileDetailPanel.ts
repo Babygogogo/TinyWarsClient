@@ -57,7 +57,6 @@ namespace TinyWars.BaseWar {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
             ]);
             this._listInfo.setItemRenderer(InfoRenderer);
@@ -78,13 +77,6 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
-        }
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
-            const viewList = this._listMoveCost.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof MoveCostRenderer) && (child.updateOnUnitAnimationTick());
-            }
         }
         private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
             this.close();
@@ -380,14 +372,16 @@ namespace TinyWars.BaseWar {
         private _unitView       : WarMap.WarMapUnitView;
         private _labelMoveCost  : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            ]);
 
             this._unitView = new WarMap.WarMapUnitView();
             this._conView.addChild(this._unitView);
         }
 
-        public updateOnUnitAnimationTick(): void {
+        private _onNotifyUnitAnimationTick(): void {
             if (this.data) {
                 this._unitView.updateOnAnimationTick(Time.TimeModel.getUnitAnimationTickCount());
             }

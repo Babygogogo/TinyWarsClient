@@ -42,7 +42,7 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnCancel,  callback: this.close },
             ]);
             this._listMap.setItemRenderer(MapRenderer);
-            this._listMap.scrollPolicyH = eui.ScrollPolicy.OFF;
+            this._listMap.setScrollPolicyH(eui.ScrollPolicy.OFF);
 
             this._updateComponentsForLanguage();
 

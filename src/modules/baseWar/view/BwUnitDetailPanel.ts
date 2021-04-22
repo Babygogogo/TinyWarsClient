@@ -94,12 +94,6 @@ namespace TinyWars.BaseWar {
         }
 
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
-            const viewList = this._listDamageChart.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof DamageRenderer) && (child.updateOnUnitAnimationTick());
-            }
-
             this._unitView.updateOnAnimationTick(Time.TimeModel.getUnitAnimationTickCount());
         }
         private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
@@ -650,14 +644,16 @@ namespace TinyWars.BaseWar {
         private _labelPrimaryDefend     : GameUi.UiLabel;
         private _labelSecondaryDefend   : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            ]);
 
             this._unitView = new WarMap.WarMapUnitView();
             this._conView.addChild(this._unitView);
         }
 
-        public updateOnUnitAnimationTick(): void {
+        private _onNotifyUnitAnimationTick(): void {
             if (this.data) {
                 this._unitView.updateOnAnimationTick(Time.TimeModel.getUnitAnimationTickCount());
             }

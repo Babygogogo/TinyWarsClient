@@ -54,7 +54,6 @@ namespace TinyWars.BaseWar {
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.GlobalTouchBegin,               callback: this._onNotifyGlobalTouchBegin },
                 { type: Notify.Type.GlobalTouchMove,                callback: this._onNotifyGlobalTouchMove },
-                { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
                 { type: Notify.Type.BwWarMenuPanelOpened,           callback: this._onNotifyBwWarMenuPanelOpened },
             ]);
@@ -87,13 +86,6 @@ namespace TinyWars.BaseWar {
         }
         private _onNotifyGlobalTouchMove(e: egret.Event): void {
             this._adjustPositionOnTouch(e.data);
-        }
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
-            const viewList = this._listUnit.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof UnitRenderer) && (child.updateOnUnitAnimationTick());
-            }
         }
         private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
             this.close();
@@ -188,8 +180,10 @@ namespace TinyWars.BaseWar {
         private _imgState       : GameUi.UiImage;
         private _unitView       : BaseWar.BwUnitView;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            ]);
 
             this._imgHp.source      = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_HP;
             this._imgFuel.source    = CommonModel.getUnitAndTileTexturePrefix() + _IMAGE_SOURCE_FUEL;
@@ -197,7 +191,7 @@ namespace TinyWars.BaseWar {
             this._conUnitView.addChild(this._unitView);
         }
 
-        public updateOnUnitAnimationTick(): void {
+        private _onNotifyUnitAnimationTick(): void {
             if (this.data) {
                 this._unitView.tickUnitAnimationFrame();
                 this._unitView.tickStateAnimationFrame();

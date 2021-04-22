@@ -46,7 +46,6 @@ namespace TinyWars.WarMap {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
             this._listTile.setItemRenderer(TileRenderer);
 
@@ -56,13 +55,6 @@ namespace TinyWars.WarMap {
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
-        }
-        private _onNotifyTileAnimationTick(e: egret.Event): void {
-            const viewList = this._listTile.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof TileRenderer) && (child.updateOnTileAnimationTick());
-            }
         }
 
         private _updateComponentsForLanguage(): void {
@@ -121,8 +113,10 @@ namespace TinyWars.WarMap {
 
         private _labelNumList   : GameUi.UiLabel[];
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+            ]);
 
             const tileView = this._tileView;
             this._conTileView.addChild(tileView.getImgBase());
@@ -136,6 +130,10 @@ namespace TinyWars.WarMap {
                 this._labelNum3,
                 this._labelNum4,
             ];
+        }
+
+        private _onNotifyTileAnimationTick(e: egret.Event): void {
+            this._tileView.updateOnAnimationTick();
         }
 
         protected dataChanged(): void {
@@ -163,10 +161,6 @@ namespace TinyWars.WarMap {
                     : CommonConstants.WarNeutralPlayerIndex,
             });
             this._tileView.updateView();
-        }
-
-        public updateOnTileAnimationTick(): void {
-            this._tileView.updateOnAnimationTick();
         }
     }
 }

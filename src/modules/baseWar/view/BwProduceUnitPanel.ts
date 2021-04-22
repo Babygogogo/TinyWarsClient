@@ -52,7 +52,6 @@ namespace TinyWars.BaseWar {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
             ]);
             this._setUiListenerArray([
@@ -79,13 +78,6 @@ namespace TinyWars.BaseWar {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
-            const viewList = this._listUnit.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof UnitRenderer) && (child.updateOnUnitAnimationTick());
-            }
-        }
         private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
             this.close();
         }
@@ -94,7 +86,7 @@ namespace TinyWars.BaseWar {
             this._getOpenData().war.getActionPlanner().setStateIdle();
         }
         private _onTouchedBtnDetail(e: egret.TouchEvent): void {
-            const selectedIndex = this._listUnit.getViewList().selectedIndex;
+            const selectedIndex = this._listUnit.getSelectedIndex();
             const data          = selectedIndex != null ? this._dataForList[selectedIndex] : null;
             if (data) {
                 BaseWar.BwUnitDetailPanel.show({
@@ -116,12 +108,6 @@ namespace TinyWars.BaseWar {
         private _updateComponentsForLanguage(): void {
             this._btnCancel.label = Lang.getText(Lang.Type.B0154);
             this._btnDetail.label = Lang.getText(Lang.Type.B0267);
-
-            const viewList = this._listUnit.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof UnitRenderer) && (child.updateOnLanguageChanged());
-            }
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
@@ -191,8 +177,11 @@ namespace TinyWars.BaseWar {
         private _labelProduce   : GameUi.UiLabel;
         private _unitView       : BaseWar.BwUnitView;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            ]);
 
             this._imgBg.touchEnabled = true;
             this._imgBg.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedImgBg, this);
@@ -201,14 +190,14 @@ namespace TinyWars.BaseWar {
             this._conUnitView.addChild(this._unitView);
         }
 
-        public updateOnUnitAnimationTick(): void {
+        private _onNotifyUnitAnimationTick(): void {
             if (this.data) {
                 this._unitView.tickUnitAnimationFrame();
                 this._unitView.tickStateAnimationFrame();
             }
         }
 
-        public updateOnLanguageChanged(): void {
+        private _onNotifyLanguageChanged(): void {
             (this.data) && (this._updateView());
         }
 

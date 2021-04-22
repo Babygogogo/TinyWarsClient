@@ -194,6 +194,13 @@ namespace TinyWars.Utility.Types {
     ////////////////////////////////////////////////////////////////////////////////
     // Other types.
     ////////////////////////////////////////////////////////////////////////////////
+    export type UiListener = {
+        ui          : egret.DisplayObject,
+        callback    : (e: egret.Event) => void,
+        eventType?  : string,
+        thisObject? : any,
+    }
+
     export type Size = {
         width : number;
         height: number;

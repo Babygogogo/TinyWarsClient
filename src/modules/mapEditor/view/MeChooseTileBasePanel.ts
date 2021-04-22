@@ -48,7 +48,6 @@ namespace TinyWars.MapEditor {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
@@ -101,20 +100,6 @@ namespace TinyWars.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
-        }
-
-        private _onNotifyTileAnimationTick(e: egret.Event): void {
-            const viewListForTileBase = this._listCategory.getViewList();
-            for (let i = 0; i < viewListForTileBase.numChildren; ++i) {
-                const child = viewListForTileBase.getChildAt(i);
-                (child instanceof CategoryRenderer) && (child.updateOnTileAnimationTick());
-            }
-
-            const viewListForRecent = this._listRecent.getViewList();
-            for (let i = 0; i < viewListForRecent.numChildren; ++i) {
-                const child = viewListForRecent.getChildAt(i);
-                (child instanceof TileBaseRenderer) && (child.updateOnTileAnimationTick());
-            }
         }
 
         private _onTouchedGroupFill(e: egret.Event): void {
@@ -182,11 +167,9 @@ namespace TinyWars.MapEditor {
         private _labelCategory  : GameUi.UiLabel;
         private _listTileBase   : GameUi.UiScrollList<DataForTileBaseRenderer, TileBaseRenderer>;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
+        protected _onOpened(): void {
             this._listTileBase.setItemRenderer(TileBaseRenderer);
-            this._listTileBase.scrollPolicyH = eui.ScrollPolicy.OFF;
+            this._listTileBase.setScrollPolicyH(eui.ScrollPolicy.OFF);
         }
 
         protected dataChanged(): void {
@@ -206,14 +189,6 @@ namespace TinyWars.MapEditor {
             }
             this._listTileBase.bindData(dataListForTileBase);
         }
-
-        public updateOnTileAnimationTick(): void {
-            const viewListForTileBase = this._listTileBase.getViewList();
-            for (let i = 0; i < viewListForTileBase.numChildren; ++i) {
-                const child = viewListForTileBase.getChildAt(i);
-                (child instanceof TileBaseRenderer) && (child.updateOnTileAnimationTick());
-            }
-        }
     }
 
     type DataForTileBaseRenderer = {
@@ -227,8 +202,10 @@ namespace TinyWars.MapEditor {
 
         private _tileView   = new MeTileSimpleView();
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+            ]);
 
             const tileView = this._tileView;
             this._conTileView.addChild(tileView.getImgBase());
@@ -236,7 +213,7 @@ namespace TinyWars.MapEditor {
             tileView.startRunningView();
         }
 
-        public updateOnTileAnimationTick(): void {
+        private _onNotifyTileAnimationTick(): void {
             this._tileView.updateOnAnimationTick();
         }
 

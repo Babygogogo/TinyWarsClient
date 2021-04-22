@@ -1,13 +1,7 @@
 
 namespace TinyWars.GameUi {
-    import Notify   = Utility.Notify;
-
-    type UiListener = {
-        ui          : egret.DisplayObject,
-        callback    : (e: egret.Event) => void,
-        eventType?  : string,
-        thisObject? : any,
-    }
+    import Notify       = Utility.Notify;
+    import UiListener   = Utility.Types.UiListener;
 
     export class UiComponent extends eui.Component {
         private _isChildrenCreated  = false;
@@ -32,9 +26,11 @@ namespace TinyWars.GameUi {
         }
 
         private _onSkinLoaded(e: egret.Event): void {
-            this._isSkinLoaded = true;
+            if (e.target === this) {
+                this._isSkinLoaded = true;
 
-            this._doOpen();
+                this._doOpen();
+            }
         }
 
         private _onAddedToStage(e: egret.Event): void {

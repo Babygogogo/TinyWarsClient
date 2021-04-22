@@ -44,7 +44,6 @@ namespace TinyWars.MapEditor {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
@@ -90,14 +89,6 @@ namespace TinyWars.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
-        }
-
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
-            const viewListForCategory = this._listCategory.getViewList();
-            for (let i = 0; i < viewListForCategory.numChildren; ++i) {
-                const child = viewListForCategory.getChildAt(i);
-                (child instanceof CategoryRenderer) && (child.updateOnUnitAnimationTick());
-            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -154,11 +145,9 @@ namespace TinyWars.MapEditor {
     class CategoryRenderer extends GameUi.UiListItemRenderer<DataForCategoryRenderer> {
         private _listUnit: GameUi.UiScrollList<DataForUnitRenderer, UnitRenderer>;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
+        protected _onOpened(): void {
             this._listUnit.setItemRenderer(UnitRenderer);
-            this._listUnit.scrollPolicyH = eui.ScrollPolicy.OFF;
+            this._listUnit.setScrollPolicyH(eui.ScrollPolicy.OFF);
         }
 
         protected dataChanged(): void {
@@ -176,14 +165,6 @@ namespace TinyWars.MapEditor {
             }
             this._listUnit.bindData(dataListForUnit);
         }
-
-        public updateOnUnitAnimationTick(): void {
-            const viewList = this._listUnit.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof UnitRenderer) && (child.updateOnUnitAnimationTick());
-            }
-        }
     }
 
     type DataForUnitRenderer = {
@@ -198,13 +179,15 @@ namespace TinyWars.MapEditor {
 
         private _unitView   = new BaseWar.BwUnitView();
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            ]);
 
             this._conUnitView.addChild(this._unitView);
         }
 
-        public updateOnUnitAnimationTick(): void {
+        private _onNotifyUnitAnimationTick(): void {
             const unitView = this._unitView;
             unitView.tickStateAnimationFrame();
             unitView.tickUnitAnimationFrame();
