@@ -29,9 +29,9 @@ namespace TinyWars.GameUi {
         private readonly _groupEnergyCost               : eui.Group;
         private readonly _labelEnergyCostTitle          : GameUi.UiLabel;
         private readonly _labelEnergyCost               : GameUi.UiLabel;
-        private readonly _listSkillDesc                 : GameUi.UiScrollList<DataForSkillDescRenderer, SkillDescRenderer>;
+        private readonly _listSkillDesc                 : GameUi.UiScrollList<DataForSkillDescRenderer>;
 
-        private readonly _listSkillType                 : GameUi.UiScrollList<DataForSkillTypeRenderer, SkillTypeRenderer>;
+        private readonly _listSkillType                 : GameUi.UiScrollList<DataForSkillTypeRenderer>;
 
         private _coData                 : CoData;
         private _selectedCoSkillType    = CoSkillType.Passive;

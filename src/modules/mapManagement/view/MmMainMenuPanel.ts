@@ -13,7 +13,7 @@ namespace TinyWars.MapManagement {
 
         private _labelMenuTitle : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
-        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer, CommandRenderer>;
+        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer>;
 
         public static show(): void {
             if (!MmMainMenuPanel._instance) {

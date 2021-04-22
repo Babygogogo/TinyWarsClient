@@ -14,7 +14,7 @@ namespace TinyWars.MultiRankRoom {
 
         private static _instance: MrrPreviewMapListPanel;
 
-        private _listMap        : GameUi.UiScrollList<DataForMapNameRenderer, MapNameRenderer>;
+        private _listMap        : GameUi.UiScrollList<DataForMapNameRenderer>;
         private _zoomMap        : GameUi.UiZoomableMap;
         private _btnBack        : GameUi.UiButton;
         private _labelNoMap     : GameUi.UiLabel;

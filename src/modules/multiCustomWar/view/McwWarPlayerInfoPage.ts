@@ -15,7 +15,7 @@ namespace TinyWars.MultiCustomWar {
     }
     export class McwWarPlayerInfoPage extends GameUi.UiTabPage<OpenDataForMcwWarPlayerInfoPage> {
         private readonly _groupInfo     : eui.Group;
-        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
+        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();

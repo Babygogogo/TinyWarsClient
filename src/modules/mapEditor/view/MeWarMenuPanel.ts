@@ -25,7 +25,7 @@ namespace TinyWars.MapEditor {
         private static _instance: MeWarMenuPanel;
 
         private _group                  : eui.Group;
-        private _listCommand            : GameUi.UiScrollList<DataForCommandRenderer, CommandRenderer>;
+        private _listCommand            : GameUi.UiScrollList<DataForCommandRenderer>;
         private _labelNoCommand         : GameUi.UiLabel;
         private _btnBack                : GameUi.UiButton;
         private _labelMenuTitle         : GameUi.UiLabel;
@@ -40,8 +40,8 @@ namespace TinyWars.MapEditor {
         private _btnModifyMapSize       : TinyWars.GameUi.UiButton;
         private _labelMapSize           : TinyWars.GameUi.UiLabel;
 
-        private _listTile               : GameUi.UiScrollList<DataForTileRenderer, TileRenderer>;
-        private _listUnit               : GameUi.UiScrollList<DataForUnitRenderer, UnitRenderer>;
+        private _listTile               : GameUi.UiScrollList<DataForTileRenderer>;
+        private _listUnit               : GameUi.UiScrollList<DataForUnitRenderer>;
 
         private _war            : MeWar;
         private _dataForList    : DataForCommandRenderer[];

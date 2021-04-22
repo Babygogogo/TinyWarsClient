@@ -19,7 +19,7 @@ namespace TinyWars.MultiRankRoom {
         private _labelMapName       : TinyWars.GameUi.UiLabel;
         private _btnBuildings       : TinyWars.GameUi.UiButton;
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
-        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
+        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _roomInfo       : IMrrRoomInfo;
 
@@ -115,7 +115,7 @@ namespace TinyWars.MultiRankRoom {
     }
 
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();

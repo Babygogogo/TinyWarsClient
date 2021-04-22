@@ -19,7 +19,7 @@ namespace TinyWars.User {
         private readonly _labelUsersCount       : TinyWars.GameUi.UiLabel;
         private readonly _labelNameTitle1       : TinyWars.GameUi.UiLabel;
         private readonly _labelNameTitle2       : TinyWars.GameUi.UiLabel;
-        private readonly _listUser              : TinyWars.GameUi.UiScrollList<DataForUserRenderer, UserRenderer>;
+        private readonly _listUser              : TinyWars.GameUi.UiScrollList<DataForUserRenderer>;
         private readonly _labelLoading          : TinyWars.GameUi.UiLabel;
 
         private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUsers.IS;

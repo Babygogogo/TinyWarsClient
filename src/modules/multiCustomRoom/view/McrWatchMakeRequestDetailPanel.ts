@@ -17,7 +17,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelMenuTitle : GameUi.UiLabel;
         private _labelYes       : GameUi.UiLabel;
         private _labelNo        : GameUi.UiLabel;
-        private _listPlayer     : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
+        private _listPlayer     : GameUi.UiScrollList<DataForPlayerRenderer>;
         private _btnConfirm     : GameUi.UiButton;
         private _btnCancel      : GameUi.UiButton;
 

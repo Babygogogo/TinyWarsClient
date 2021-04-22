@@ -23,7 +23,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _labelPlayerListTitle   : GameUi.UiLabel;
         private _labelPlayerListTips    : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _mapRawData : ProtoTypes.Map.IMapRawData;
 

@@ -26,7 +26,7 @@ namespace TinyWars.MultiFreeWar {
         private readonly _btnNextStep           : GameUi.UiButton;
 
         private readonly _groupWarList          : eui.Group;
-        private readonly _listWar               : GameUi.UiScrollList<DataForWarRenderer, WarRenderer>;
+        private readonly _listWar               : GameUi.UiScrollList<DataForWarRenderer>;
         private readonly _labelNoWar            : GameUi.UiLabel;
         private readonly _labelLoading          : GameUi.UiLabel;
 

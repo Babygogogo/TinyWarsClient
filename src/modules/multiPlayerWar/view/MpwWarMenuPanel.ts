@@ -25,7 +25,7 @@ namespace TinyWars.MultiPlayerWar {
         private static _instance: MpwWarMenuPanel;
 
         private _group          : eui.Group;
-        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer, CommandRenderer>;
+        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer>;
         private _labelNoCommand : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
         private _btnHome        : GameUi.UiButton;
@@ -36,9 +36,9 @@ namespace TinyWars.MultiPlayerWar {
         private _labelPlayerInfoTitle   : GameUi.UiLabel;
         private _btnMapNameTitle        : GameUi.UiButton;
         private _labelMapName           : GameUi.UiLabel;
-        private _listWarInfo            : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
+        private _listWarInfo            : GameUi.UiScrollList<DataForInfoRenderer>;
         private _btnBuildings           : GameUi.UiButton;
-        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _war            : MpwWar;
         private _unitMap        : BaseWar.BwUnitMap;
@@ -579,7 +579,7 @@ namespace TinyWars.MultiPlayerWar {
         private _labelName      : GameUi.UiLabel;
         private _labelForce     : GameUi.UiLabel;
         private _labelLost      : GameUi.UiLabel;
-        private _listInfo       : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
+        private _listInfo       : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();

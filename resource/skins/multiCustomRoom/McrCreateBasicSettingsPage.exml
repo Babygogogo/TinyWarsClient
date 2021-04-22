@@ -3,7 +3,7 @@
     <e:Group left="0" right="0" top="0" bottom="0">
         <e:Scroller left="0" right="20" bottom="20" top="0">
             <e:Group>
-                <e:Group x="0" y="0" height="32" width="420" locked="true">
+                <e:Group x="0" y="0" height="40" width="420" locked="true">
                     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.7"
                                     scale9Grid="1,1,2,2" />
                     <GameUi:UiLabel id="_labelMapNameTitle" text="Map Name" size="16" maxTextWidth="100" x="10"
@@ -15,7 +15,7 @@
                                         verticalCenter="0" textColor="0xAAAAAA" />
                     </e:Group>
                 </e:Group>
-                <e:Group x="0" y="0" height="32" width="420" locked="true">
+                <e:Group x="0" y="0" height="40" width="420" locked="true">
                     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                     scale9Grid="1,1,2,2" />
                     <GameUi:UiLabel id="_labelWarNameTitle" text="War Name" textColor="0xFFFFFF" size="16"
@@ -24,7 +24,7 @@
                                         verticalCenter="0" height="24" right="6"
                                         skinName="Skins.Component.TextInput.TextInput002" />
                 </e:Group>
-                <e:Group x="0" y="0" height="32" width="420" locked="true">
+                <e:Group x="0" y="0" height="40" width="420" locked="true">
                     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                     scale9Grid="1,1,2,2" />
                     <GameUi:UiLabel id="_labelWarPasswordTitle" text="War Password" textColor="0xFFFFFF" size="16"
@@ -33,7 +33,7 @@
                                         maxChars="20" verticalCenter="0" height="24" right="6"
                                         skinName="Skins.Component.TextInput.TextInput002" />
                 </e:Group>
-                <e:Group x="0" y="0" height="32" width="420" locked="true">
+                <e:Group x="0" y="0" height="40" width="420" locked="true">
                     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                     scale9Grid="1,1,2,2" />
                     <GameUi:UiLabel id="_labelWarCommentTitle" text="War Comment" textColor="0xFFFFFF" size="16"
@@ -42,7 +42,7 @@
                                         maxChars="20" verticalCenter="0" height="24" right="6"
                                         skinName="Skins.Component.TextInput.TextInput002" />
                 </e:Group>
-                <e:Group x="0" y="0" height="32" width="420" locked="true">
+                <e:Group x="0" y="0" height="40" width="420" locked="true">
                     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                     scale9Grid="1,1,2,2" />
                     <GameUi:UiLabel id="_labelWarRuleTitle" text="War Rule" textColor="0xFFFFFF" size="16"
@@ -56,7 +56,7 @@
                     <GameUi:UiButton id="_btnWarRule" top="0" bottom="0" width="40" right="0"
                                      skinName="Skins.Component.Button.ButtonTriangle001" />
                 </e:Group>
-                <e:Group x="0" y="-36" height="32" width="420" locked="true">
+                <e:Group x="0" y="-36" height="40" width="420" locked="true">
                     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                     scale9Grid="1,1,2,2" />
                     <GameUi:UiLabel id="_labelHasFogTitle" text="FoW" textColor="0xFFFFFF" size="16" maxTextWidth="100"
@@ -83,7 +83,7 @@
                                      skinName="Skins.Component.Button.ButtonTriangle001" />
                 </e:Group>
                 <e:Group id="_groupTimer" y="0" x="0">
-                    <e:Group x="0" y="-36" height="32" width="420">
+                    <e:Group x="0" y="-36" height="40" width="420">
                         <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                         scale9Grid="1,1,2,2" />
                         <GameUi:UiLabel id="_labelTimerTypeTitle" text="Timer Mode" textColor="0xFFFFFF" size="16"
@@ -109,7 +109,7 @@
                         <GameUi:UiButton id="_btnTimerType" top="0" bottom="0" width="40" right="0"
                                          skinName="Skins.Component.Button.ButtonTriangle001" />
                     </e:Group>
-                    <e:Group id="_groupTimerRegular" x="0" y="-36" height="32" width="420">
+                    <e:Group id="_groupTimerRegular" x="0" y="-36" height="40" width="420">
                         <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
                                         scale9Grid="1,1,2,2" />
                         <GameUi:UiLabel id="_labelTimerRegularTitle" text="Time Limit" textColor="0xFFFFFF" size="16"
@@ -124,7 +124,7 @@
                                          skinName="Skins.Component.Button.ButtonTriangle001" />
                     </e:Group>
                     <e:Group id="_groupTimerIncremental" x="326" y="0">
-                        <e:Group x="0" y="-36" height="32" width="420">
+                        <e:Group x="0" y="-36" height="40" width="420">
                             <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000"
                                             alpha="0.4" scale9Grid="1,1,2,2" />
                             <GameUi:UiLabel id="_labelTimerIncrementalTitle1" text="Incremental 1" textColor="0xFFFFFF"
@@ -138,7 +138,7 @@
                             <GameUi:UiButton id="_btnTimerIncremental1" top="0" bottom="0" width="40" right="0"
                                              skinName="Skins.Component.Button.ButtonTriangle001" />
                         </e:Group>
-                        <e:Group x="0" y="-36" height="32" width="420">
+                        <e:Group x="0" y="-36" height="40" width="420">
                             <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000"
                                             alpha="0.4" scale9Grid="1,1,2,2" />
                             <GameUi:UiLabel id="_labelTimerIncrementalTitle2" text="Incremental 2" textColor="0xFFFFFF"
@@ -153,15 +153,15 @@
                                              skinName="Skins.Component.Button.ButtonTriangle001" />
                         </e:Group>
                         <e:layout>
-                            <e:VerticalLayout gap="4" />
+                            <e:VerticalLayout />
                         </e:layout>
                     </e:Group>
                     <e:layout>
-                        <e:VerticalLayout gap="4" />
+                        <e:VerticalLayout />
                     </e:layout>
                 </e:Group>
                 <e:layout>
-                    <e:VerticalLayout gap="4" />
+                    <e:VerticalLayout />
                 </e:layout>
             </e:Group>
         </e:Scroller>

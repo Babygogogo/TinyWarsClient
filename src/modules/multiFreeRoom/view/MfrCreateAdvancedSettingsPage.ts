@@ -10,8 +10,8 @@ namespace TinyWars.MultiFreeRoom {
 
     export class MfrCreateAdvancedSettingsPage extends GameUi.UiTabPage<void> {
         private readonly _scroller      : eui.Scroller;
-        private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer, SettingRenderer>;
-        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
+        private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer>;
+        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();
@@ -133,7 +133,7 @@ namespace TinyWars.MultiFreeRoom {
     }
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelPlayerIndex   : GameUi.UiLabel;
-        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);

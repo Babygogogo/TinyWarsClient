@@ -5,7 +5,7 @@ namespace TinyWars.GameUi {
     import StageManager = Utility.StageManager;
     import UiListener   = Utility.Types.UiListener;
 
-    export class UiScrollList<DataForRenderer, Renderer extends GameUi.UiListItemRenderer<DataForRenderer>> extends eui.Scroller {
+    export class UiScrollList<DataForRenderer> extends eui.Scroller {
         private _isChildrenCreated  = false;
         private _isOpening          = false;
 
@@ -14,7 +14,7 @@ namespace TinyWars.GameUi {
 
         private _list                   : eui.List;
 
-        private _cachedItemRenderer     : new () => Renderer;
+        private _cachedItemRenderer     : new () => GameUi.UiListItemRenderer<DataForRenderer>;
         private _cachedListDataArray    : DataForRenderer[];
         private readonly _mousePoint    = new egret.Point();
 
@@ -57,14 +57,14 @@ namespace TinyWars.GameUi {
                 this._registerListeners();
             }
         }
-        private async _doClose(): Promise<void> {
+        private _doClose(): void {
             if (this.getIsOpening()) {
                 this._setIsOpening(false);
 
                 this._unregisterListeners();
                 this._setUiListenerArray(undefined);
                 this._setNotifyListenerArray(undefined);
-                await this._onClosed();
+                this._onClosed();
             }
         }
 
@@ -100,7 +100,7 @@ namespace TinyWars.GameUi {
                 this._cachedListDataArray = null;
             }
         }
-        private async _onClosed(): Promise<void> {
+        private _onClosed(): void {
             this.clear();
         }
 
@@ -182,7 +182,7 @@ namespace TinyWars.GameUi {
             }
         }
 
-        public setItemRenderer(itemRenderer: new () => Renderer): void {
+        public setItemRenderer(itemRenderer: new () => GameUi.UiListItemRenderer<DataForRenderer>): void {
             if (this.getIsOpening()) {
                 this._list.itemRenderer = itemRenderer;
             } else {
@@ -203,7 +203,7 @@ namespace TinyWars.GameUi {
                 list.scrollH    = Math.max(0, Math.min(list.scrollH, list.contentWidth - list.width));
             }
         }
-        public updateSingleData(index: number, data: DataForRenderer) : void {
+        public updateSingleData(index: number, data: DataForRenderer): void {
             if (this.getIsOpening()) {
                 const dataProvider = this._getDataProvider();
                 if ((index < 0) || (index >= dataProvider.length)) {

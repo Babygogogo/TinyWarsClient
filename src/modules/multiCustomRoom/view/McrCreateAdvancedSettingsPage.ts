@@ -12,8 +12,8 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _scroller      : eui.Scroller;
         private readonly _btnReset      : GameUi.UiButton;
         private readonly _btnCustomize  : GameUi.UiButton;
-        private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer, SettingRenderer>;
-        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
+        private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer>;
+        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _initialWarRuleId   : number;
         private _mapRawData         : ProtoTypes.Map.IMapRawData;
@@ -161,7 +161,7 @@ namespace TinyWars.MultiCustomRoom {
     }
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelPlayerIndex   : GameUi.UiLabel;
-        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();

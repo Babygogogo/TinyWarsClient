@@ -19,7 +19,7 @@ namespace TinyWars.GameUi {
 
     export class UiMapInfo extends UiComponent {
         private readonly _groupTile             : eui.Group;
-        private readonly _listTile              : GameUi.UiScrollList<DataForTileRenderer, TileRenderer>;
+        private readonly _listTile              : GameUi.UiScrollList<DataForTileRenderer>;
 
         private readonly _groupMapInfo          : eui.Group;
         private readonly _labelMapName          : GameUi.UiLabel;

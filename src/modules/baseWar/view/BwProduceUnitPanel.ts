@@ -21,7 +21,7 @@ namespace TinyWars.BaseWar {
         private static _instance: BwProduceUnitPanel;
 
         private _group      : eui.Group;
-        private _listUnit   : GameUi.UiScrollList<DataForUnitRenderer, UnitRenderer>;
+        private _listUnit   : GameUi.UiScrollList<DataForUnitRenderer>;
         private _btnCancel  : GameUi.UiButton;
         private _btnDetail  : GameUi.UiButton;
 

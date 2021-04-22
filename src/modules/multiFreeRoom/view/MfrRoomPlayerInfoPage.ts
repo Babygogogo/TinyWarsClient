@@ -14,7 +14,7 @@ namespace TinyWars.MultiFreeRoom {
     }
     export class MfrRoomPlayerInfoPage extends GameUi.UiTabPage<OpenDataForMfrRoomPlayerInfoPage> {
         private readonly _groupInfo     : eui.Group;
-        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
+        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();

@@ -16,7 +16,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
-        private _listCo         : GameUi.UiScrollList<DataForCoRenderer, CoRenderer>;
+        private _listCo         : GameUi.UiScrollList<DataForCoRenderer>;
         private _btnBack        : GameUi.UiButton;
 
         private _imgCoPortrait                  : GameUi.UiImage;
@@ -31,15 +31,15 @@ namespace TinyWars.SingleCustomRoom {
         private _labelEnergyBarTitle            : GameUi.UiLabel;
         private _labelEnergyBar                 : GameUi.UiLabel;
 
-        private _listPassiveSkill   : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
+        private _listPassiveSkill   : GameUi.UiScrollList<DataForSkillRenderer>;
         private _labelNoPassiveSkill: GameUi.UiLabel;
 
-        private _listCop            : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
+        private _listCop            : GameUi.UiScrollList<DataForSkillRenderer>;
         private _labelNoCop         : GameUi.UiLabel;
         private _labelCopEnergyTitle: GameUi.UiLabel;
         private _labelCopEnergy     : GameUi.UiLabel;
 
-        private _listScop               : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
+        private _listScop               : GameUi.UiScrollList<DataForSkillRenderer>;
         private _labelNoScop            : GameUi.UiLabel;
         private _labelScopEnergyTitle   : GameUi.UiLabel;
         private _labelScopEnergy        : GameUi.UiLabel;

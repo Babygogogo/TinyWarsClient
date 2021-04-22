@@ -16,7 +16,7 @@ namespace TinyWars.MapEditor {
         private _labelNoData    : GameUi.UiLabel;
         private _labelMenuTitle : GameUi.UiLabel;
         private _labelLoading   : GameUi.UiLabel;
-        private _listMap        : GameUi.UiScrollList<DataForMapRenderer, MapRenderer>;
+        private _listMap        : GameUi.UiScrollList<DataForMapRenderer>;
         private _btnBack        : GameUi.UiButton;
 
         private _dataForListMap     : DataForMapRenderer[] = [];

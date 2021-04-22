@@ -19,7 +19,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private static _instance: ScrCreateMapListPanel;
 
-        private _listMap   : GameUi.UiScrollList<DataForMapNameRenderer, MapNameRenderer>;
+        private _listMap   : GameUi.UiScrollList<DataForMapNameRenderer>;
         private _zoomMap   : GameUi.UiZoomableMap;
         private _btnSearch : GameUi.UiButton;
         private _btnBack   : GameUi.UiButton;

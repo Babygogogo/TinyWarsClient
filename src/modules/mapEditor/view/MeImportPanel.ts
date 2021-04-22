@@ -11,7 +11,7 @@ namespace TinyWars.MapEditor {
         private static _instance: MeImportPanel;
 
         private _group      : eui.Group;
-        private _listMap    : TinyWars.GameUi.UiScrollList<DataForMapRenderer, MapRenderer>;
+        private _listMap    : TinyWars.GameUi.UiScrollList<DataForMapRenderer>;
         private _btnCancel  : TinyWars.GameUi.UiButton;
 
         public static show(): void {

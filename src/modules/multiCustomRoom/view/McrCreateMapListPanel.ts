@@ -39,7 +39,7 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _btnNextStep           : GameUi.UiButton;
 
         private readonly _groupMapList          : eui.Group;
-        private readonly _listMap               : GameUi.UiScrollList<DataForMapNameRenderer, MapNameRenderer>;
+        private readonly _listMap               : GameUi.UiScrollList<DataForMapNameRenderer>;
         private readonly _labelNoMap            : GameUi.UiLabel;
 
         private readonly _uiMapInfo             : GameUi.UiMapInfo;

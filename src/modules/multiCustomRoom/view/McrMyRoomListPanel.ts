@@ -25,7 +25,7 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _btnNextStep           : GameUi.UiButton;
 
         private readonly _groupRoomList         : eui.Group;
-        private readonly _listRoom              : GameUi.UiScrollList<DataForRoomRenderer, RoomRenderer>;
+        private readonly _listRoom              : GameUi.UiScrollList<DataForRoomRenderer>;
         private readonly _labelNoRoom           : GameUi.UiLabel;
         private readonly _labelLoading          : GameUi.UiLabel;
 

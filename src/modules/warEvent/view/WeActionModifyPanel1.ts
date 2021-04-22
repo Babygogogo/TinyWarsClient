@@ -31,7 +31,7 @@ namespace TinyWars.WarEvent {
         private _btnClear       : GameUi.UiButton;
         private _labelTitle     : GameUi.UiLabel;
         private _labelUnitsCount: GameUi.UiLabel;
-        private _listUnit       : GameUi.UiScrollList<DataForUnitRenderer, UnitRenderer>;
+        private _listUnit       : GameUi.UiScrollList<DataForUnitRenderer>;
 
         public static show(openData: OpenDataForWeActionModifyPanel1): void {
             if (!WeActionModifyPanel1._instance) {

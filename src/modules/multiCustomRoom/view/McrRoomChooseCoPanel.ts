@@ -22,7 +22,7 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _group         : eui.Group;
 
         private readonly _labelChooseCo : GameUi.UiLabel;
-        private readonly _listCo        : GameUi.UiScrollList<DataForCoRenderer, CoRenderer>;
+        private readonly _listCo        : GameUi.UiScrollList<DataForCoRenderer>;
         private readonly _btnConfirm    : GameUi.UiButton;
         private readonly _btnCancel     : GameUi.UiButton;
         private readonly _uiCoInfo      : GameUi.UiCoInfo;

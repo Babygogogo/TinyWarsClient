@@ -1,13 +1,7 @@
 
 namespace TinyWars.GameUi {
-    import Notify   = Utility.Notify;
-
-    type UiListener = {
-        ui         : egret.DisplayObject,
-        callback   : (e: egret.Event) => void,
-        eventType ?: string,
-        thisObject?: any,
-    }
+    import Notify       = Utility.Notify;
+    import UiListener   = Utility.Types.UiListener;
 
     export class UiListItemRenderer<DataForRenderer> extends eui.ItemRenderer {
         private _isChildrenCreated  = false;

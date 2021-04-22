@@ -15,7 +15,7 @@ namespace TinyWars.MapEditor {
 
         private static _instance: MeAddWarEventToRulePanel;
 
-        private _listWarEvent   : GameUi.UiScrollList<DataForWarEventRenderer, WarEventRenderer>;
+        private _listWarEvent   : GameUi.UiScrollList<DataForWarEventRenderer>;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoWarEvent: GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;

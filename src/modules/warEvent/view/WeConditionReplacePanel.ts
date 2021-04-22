@@ -18,7 +18,7 @@ namespace TinyWars.WarEvent {
 
         private static _instance: WeConditionReplacePanel;
 
-        private _listCondition      : GameUi.UiScrollList<DataForConditionRenderer, ConditionRenderer>;
+        private _listCondition      : GameUi.UiScrollList<DataForConditionRenderer>;
         private _labelTitle         : GameUi.UiLabel;
         private _labelNoCondition   : GameUi.UiLabel;
         private _btnClose           : GameUi.UiButton;

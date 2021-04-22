@@ -13,7 +13,7 @@ namespace TinyWars.SingleCustomRoom {
         private _labelPlayersCountTitle : GameUi.UiLabel;
         private _labelPlayersCount      : GameUi.UiLabel;
         private _labelPlayerList        : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _mapRawData             : ProtoTypes.Map.IMapRawData;
 
@@ -76,7 +76,7 @@ namespace TinyWars.SingleCustomRoom {
     }
 
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();

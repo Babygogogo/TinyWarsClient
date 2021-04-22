@@ -19,13 +19,13 @@ namespace TinyWars.Common {
         private readonly _labelStdNoData    : GameUi.UiLabel;
         private readonly _labelStdNickname  : GameUi.UiLabel;
         private readonly _labelStdScore     : GameUi.UiLabel;
-        private readonly _listStd           : GameUi.UiScrollList<DataForUserRenderer, UserRenderer>;
+        private readonly _listStd           : GameUi.UiScrollList<DataForUserRenderer>;
 
         private readonly _labelFogTitle     : GameUi.UiLabel;
         private readonly _labelFogNoData    : GameUi.UiLabel;
         private readonly _labelFogNickname  : GameUi.UiLabel;
         private readonly _labelFogScore     : GameUi.UiLabel;
-        private readonly _listFog           : GameUi.UiScrollList<DataForUserRenderer, UserRenderer>;
+        private readonly _listFog           : GameUi.UiScrollList<DataForUserRenderer>;
 
         public static show(): void {
             if (!CommonRankListPanel._instance) {

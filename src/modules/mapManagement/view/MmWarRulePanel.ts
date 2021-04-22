@@ -18,7 +18,7 @@ namespace TinyWars.MapManagement {
         private static _instance: MmWarRulePanel;
 
         private _labelMenuTitle     : TinyWars.GameUi.UiLabel;
-        private _listWarRule        : TinyWars.GameUi.UiScrollList<DataForWarRuleNameRenderer, WarRuleNameRenderer>;
+        private _listWarRule        : TinyWars.GameUi.UiScrollList<DataForWarRuleNameRenderer>;
         private _btnBack            : TinyWars.GameUi.UiButton;
 
         private _btnModifyRuleName  : TinyWars.GameUi.UiButton;
@@ -37,7 +37,7 @@ namespace TinyWars.MapManagement {
         private _imgAvailabilityMrw : TinyWars.GameUi.UiImage;
 
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
-        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
+        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _dataForListWarRule : DataForWarRuleNameRenderer[] = [];
         private _selectedIndex      : number;
@@ -251,7 +251,7 @@ namespace TinyWars.MapManagement {
     }
 
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer, InfoRenderer>;
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected childrenCreated(): void {
             super.childrenCreated();

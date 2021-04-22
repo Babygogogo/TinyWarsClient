@@ -15,7 +15,7 @@ namespace TinyWars.BaseWar {
         private static _instance: BwCoListPanel;
 
         private _groupList  : eui.Group;
-        private _listCo     : GameUi.UiScrollList<DataForCoRenderer, CoNameRenderer>;
+        private _listCo     : GameUi.UiScrollList<DataForCoRenderer>;
         private _btnBack    : GameUi.UiButton;
 
         private _groupInfo                      : eui.Group;
@@ -35,15 +35,15 @@ namespace TinyWars.BaseWar {
         private _labelEnergyBarTitle            : GameUi.UiLabel;
         private _labelEnergyBar                 : GameUi.UiLabel;
 
-        private _listPassiveSkill   : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
+        private _listPassiveSkill   : GameUi.UiScrollList<DataForSkillRenderer>;
         private _labelNoPassiveSkill: GameUi.UiLabel;
 
-        private _listCop            : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
+        private _listCop            : GameUi.UiScrollList<DataForSkillRenderer>;
         private _labelNoCop         : GameUi.UiLabel;
         private _labelCopEnergyTitle: GameUi.UiLabel;
         private _labelCopEnergy     : GameUi.UiLabel;
 
-        private _listScop               : GameUi.UiScrollList<DataForSkillRenderer, SkillRenderer>;
+        private _listScop               : GameUi.UiScrollList<DataForSkillRenderer>;
         private _labelNoScop            : GameUi.UiLabel;
         private _labelScopEnergyTitle   : GameUi.UiLabel;
         private _labelScopEnergy        : GameUi.UiLabel;

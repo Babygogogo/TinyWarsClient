@@ -21,7 +21,7 @@ namespace TinyWars.BaseWar {
         private readonly _labelName         : GameUi.UiLabel;
         private readonly _labelCountName    : GameUi.UiLabel;
         private readonly _labelValueName    : GameUi.UiLabel;
-        private readonly _listUnit          : GameUi.UiScrollList<DataForUnitRenderer, UnitRenderer>;
+        private readonly _listUnit          : GameUi.UiScrollList<DataForUnitRenderer>;
         private readonly _labelCount        : GameUi.UiLabel;
         private readonly _labelValue        : GameUi.UiLabel;
         private readonly _btnSwitch         : GameUi.UiButton;

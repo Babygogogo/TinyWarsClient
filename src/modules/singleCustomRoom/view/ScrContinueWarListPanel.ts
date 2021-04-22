@@ -15,7 +15,7 @@ namespace TinyWars.SingleCustomRoom {
         private static _instance: ScrContinueWarListPanel;
 
         private _labelMenuTitle : GameUi.UiLabel;
-        private _listWar        : GameUi.UiScrollList<DataForWarRenderer, WarRenderer>;
+        private _listWar        : GameUi.UiScrollList<DataForWarRenderer>;
         private _labelNoWar     : GameUi.UiLabel;
         private _zoomMap        : GameUi.UiZoomableMap;
         private _btnBack        : GameUi.UiButton;

@@ -15,7 +15,7 @@ namespace TinyWars.MultiRankWar {
     }
     export class MrwWarPlayerInfoPage extends GameUi.UiTabPage<OpenDataForMrwWarPlayerInfoPage> {
         private readonly _groupInfo     : eui.Group;
-        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer, PlayerRenderer>;
+        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();
