@@ -49,10 +49,6 @@ namespace TinyWars.MapManagement {
             this._listCommand.bindData(await this._createDataForListCommand());
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._listCommand.clear();
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////

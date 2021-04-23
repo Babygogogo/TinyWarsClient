@@ -56,11 +56,6 @@ namespace TinyWars.MapEditor {
             this._updateListCategory();
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._listCategory.clear();
-            this._listRecent.clear();
-        }
-
         public updateOnChooseTileObject(data: DataForDrawTileObject): void {
             const dataList      = this._dataListForRecent;
             const filteredList  = dataList.filter(v => {

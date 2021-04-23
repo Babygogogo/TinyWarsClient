@@ -91,8 +91,6 @@ namespace TinyWars.Chat {
 
             this._dataForListChat   = null;
             this._selectedIndex     = null;
-            this._listChat.clear();
-            this._listMessage.clear();
 
             Notify.dispatch(Notify.Type.ChatPanelClosed);
         }

@@ -70,9 +70,6 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected async _onClosed(): Promise<void> {
-            this._zoomMap.clearMap();
-            this._listWar.clear();
-            this._listPlayer.clear();
             egret.Tween.removeTweens(this._groupInfo);
         }
 

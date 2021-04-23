@@ -68,7 +68,6 @@ namespace TinyWars.User {
 
             this._msg           = null;
             this._dataForList   = null;
-            this._listUser.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

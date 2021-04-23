@@ -57,9 +57,6 @@ namespace TinyWars.WarEvent {
 
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            this._listWarEvent.clear();
-        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.

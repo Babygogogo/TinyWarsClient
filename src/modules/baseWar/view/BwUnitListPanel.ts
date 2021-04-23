@@ -72,7 +72,6 @@ namespace TinyWars.BaseWar {
             this._unitMap       = null;
             this._cursor        = null;
             this._dataForList   = null;
-            this._listUnit.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

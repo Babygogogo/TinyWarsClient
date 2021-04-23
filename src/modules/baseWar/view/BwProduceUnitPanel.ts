@@ -66,7 +66,6 @@ namespace TinyWars.BaseWar {
         }
         protected async _onClosed(): Promise<void> {
             this._dataForList = null;
-            this._listUnit.clear();
 
             Notify.dispatch(Notify.Type.BwProduceUnitPanelClosed);
         }

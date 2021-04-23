@@ -76,9 +76,6 @@ namespace TinyWars.MultiFreeWar {
 
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
-
-            this._tabSettings.clear();
-            this._listWar.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

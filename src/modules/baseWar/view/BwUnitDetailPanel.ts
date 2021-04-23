@@ -81,8 +81,6 @@ namespace TinyWars.BaseWar {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            this._listDamageChart.clear();
-            this._listInfo.clear();
             this._dataForList = null;
         }
 

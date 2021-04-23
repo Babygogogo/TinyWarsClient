@@ -61,10 +61,6 @@ namespace TinyWars.MapEditor {
             this._btnConfirm.enabled = true;
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._tabSettings.clear();
-        }
-
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             this.close();
             MeWarMenuPanel.show();

@@ -55,7 +55,6 @@ namespace TinyWars.SingleCustomWar {
         }
         protected async _onClosed(): Promise<void> {
             this._dataForList = null;
-            this._srlSaveSlot.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

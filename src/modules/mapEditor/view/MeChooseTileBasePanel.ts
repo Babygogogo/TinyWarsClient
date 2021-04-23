@@ -64,11 +64,6 @@ namespace TinyWars.MapEditor {
             this._updateListRecent();
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._listCategory.clear();
-            this._listRecent.clear();
-        }
-
         public getNeedFill(): boolean {
             return this._needFill;
         }

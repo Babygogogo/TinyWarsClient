@@ -95,9 +95,6 @@ namespace TinyWars.Common {
             this._selectedIndex             = null;
             this._dataForListUnit           = null;
             this._dataForListDamageChart    = null;
-            this._listUnit.clear();
-            this._listDamageChart.clear();
-            this._listInfo.clear();
         }
 
         public setSelectedIndexAndUpdateView(newIndex: number): void {

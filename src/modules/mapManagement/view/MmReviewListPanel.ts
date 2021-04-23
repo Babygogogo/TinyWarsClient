@@ -61,11 +61,6 @@ namespace TinyWars.MapManagement {
             WarMapProxy.reqMmGetReviewingMaps();
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._zoomMap.clearMap();
-            this._listMap.clear();
-        }
-
         public async setSelectedIndex(newIndex: number): Promise<void> {
             const oldIndex         = this._selectedWarIndex;
             const dataList         = this._dataForListMap;

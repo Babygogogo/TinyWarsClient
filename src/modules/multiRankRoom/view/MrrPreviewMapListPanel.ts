@@ -68,8 +68,6 @@ namespace TinyWars.MultiRankRoom {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            this._zoomMap.clearMap();
-            this._listMap.clear();
             egret.Tween.removeTweens(this._groupInfo);
         }
 

@@ -69,8 +69,6 @@ namespace TinyWars.MapManagement {
             this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
         protected async _onClosed(): Promise<void> {
-            this._zoomMap.clearMap();
-            this._listMap.clear();
             egret.Tween.removeTweens(this._groupInfo);
         }
 

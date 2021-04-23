@@ -98,8 +98,6 @@ namespace TinyWars.ReplayWar {
             this._war           = null;
             this._unitMap       = null;
             this._dataForList   = null;
-            this._listCommand.clear();
-            this._listPlayer.clear();
 
             Notify.dispatch(Notify.Type.BwWarMenuPanelClosed);
         }

@@ -97,7 +97,6 @@ namespace TinyWars.MultiRankRoom {
         }
 
         protected async _onClosed(): Promise<void> {
-            this._listPlayer.clear();
             this._roomInfo = null;
         }
 

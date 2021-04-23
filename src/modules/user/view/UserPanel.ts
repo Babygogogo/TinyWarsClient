@@ -110,9 +110,6 @@ namespace TinyWars.User {
         }
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
-
-            this._sclHistoryStd.clear();
-            this._sclHistoryFog.clear();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {

@@ -103,11 +103,6 @@ namespace TinyWars.BaseWar {
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
 
-            this._listCo.clear();
-            this._listPassiveSkill.clear();
-            this._listCop.clear();
-            this._listScop.clear();
-
             Notify.dispatch(Notify.Type.BwCoListPanelClosed);
         }
 

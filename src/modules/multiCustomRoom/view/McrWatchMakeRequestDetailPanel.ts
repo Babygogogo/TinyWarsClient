@@ -58,7 +58,6 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected async _onClosed(): Promise<void> {
-            this._listPlayer.clear();
             this._dataForListPlayer = null;
         }
 

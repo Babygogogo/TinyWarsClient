@@ -81,10 +81,6 @@ namespace TinyWars.MapManagement {
 
             this._resetView();
         }
-        protected async _onClosed(): Promise<void> {
-            this._listWarRule.clear();
-            this._listPlayer.clear();
-        }
 
         public setSelectedIndex(newIndex: number): void {
             const dataList = this._dataForListWarRule;

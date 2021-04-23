@@ -46,10 +46,6 @@ namespace TinyWars.MultiCustomRoom {
             this._updateView();
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._listCommand.clear();
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////

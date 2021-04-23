@@ -47,10 +47,6 @@ namespace TinyWars.GameUi {
             this._updateComponentsForLanguage();
             this._updateComponentsForCoInfo();
         }
-        protected async _onClosed(): Promise<void> {
-            this._listSkillDesc.clear();
-            this._listSkillType.clear();
-        }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();

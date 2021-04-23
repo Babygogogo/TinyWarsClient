@@ -39,10 +39,6 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForRoomInfo();
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._listPlayer.clear();
-        }
-
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }

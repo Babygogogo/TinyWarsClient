@@ -77,9 +77,6 @@ namespace TinyWars.ReplayWar {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            this._zoomMap.clearMap();
-            this._listMap.clear();
-            this._listPlayer.clear();
             egret.Tween.removeTweens(this._groupInfo);
         }
 

@@ -83,12 +83,6 @@ namespace TinyWars.SingleCustomWar {
             this._initListCo();
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            this._listCo.clear();
-            this._listPassiveSkill.clear();
-            this._listCop.clear();
-            this._listScop.clear();
-        }
 
         public setSelectedIndex(newIndex: number): void {
             const dataList = this._dataForListCo;

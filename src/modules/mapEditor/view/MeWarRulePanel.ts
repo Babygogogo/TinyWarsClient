@@ -108,9 +108,6 @@ namespace TinyWars.MapEditor {
         }
         protected async _onClosed(): Promise<void> {
             this._war = null;
-            this._listWarRule.clear();
-            this._listWarEvent.clear();
-            this._listPlayer.clear();
 
             Notify.dispatch(Notify.Type.BwCoListPanelClosed);
         }

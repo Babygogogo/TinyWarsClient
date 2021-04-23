@@ -66,8 +66,6 @@ namespace TinyWars.MultiCustomRoom {
         }
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
-
-            this._listCo.clear();
         }
 
         public setSelectedIndex(newIndex: number): void {

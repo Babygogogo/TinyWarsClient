@@ -68,8 +68,6 @@ namespace TinyWars.BaseWar {
         }
         protected async _onClosed(): Promise<void> {
             this._dataForListMoveCost = null;
-            this._listInfo.clear();
-            this._listMoveCost.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

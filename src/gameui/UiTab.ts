@@ -145,6 +145,10 @@ namespace TinyWars.GameUi {
             this._cachedItemRenderer        = null;
             this._cachedSelectedIndex       = null;
             this._cachedTabDataArray        = null;
+
+            if (this.getIsOpening()) {
+                (this._bar.dataProvider as eui.ArrayCollection).removeAll();
+            }
         }
 
         private _removeAllCachedPagesFromParent() : void {

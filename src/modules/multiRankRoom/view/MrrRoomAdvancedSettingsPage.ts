@@ -45,10 +45,6 @@ namespace TinyWars.MultiRankRoom {
             this._updateComponentsForLanguage();
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._listPlayer.clear();
-        }
-
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
             const roomInfo = this._roomInfo;
             if (roomInfo) {

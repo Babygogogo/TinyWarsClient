@@ -64,9 +64,6 @@ namespace TinyWars.Common {
         }
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
-
-            this._listStd.clear();
-            this._listFog.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

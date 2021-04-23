@@ -89,9 +89,6 @@ namespace TinyWars.MultiCustomRoom {
         }
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
-
-            this._zoomMap.clearMap();
-            this._listMap.clear();
         }
 
         public async setSelectedMapId(newMapId: number): Promise<void> {
