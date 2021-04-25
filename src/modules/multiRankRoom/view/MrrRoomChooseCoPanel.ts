@@ -72,8 +72,8 @@ namespace TinyWars.MultiRankRoom {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMrrDeleteRoom,   callback: this._onMsgMrrDeleteRoom },
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgMrrDeleteRoomByServer,   callback: this._onMsgMrrDeleteRoomByServer },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
@@ -114,8 +114,8 @@ namespace TinyWars.MultiRankRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onMsgMrrDeleteRoom(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMrrDeleteRoom.IS;
+        private _onMsgMrrDeleteRoomByServer(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMrrDeleteRoomByServer.IS;
             if (data.roomId === this._getOpenData().roomInfo.roomId) {
                 this.close();
                 MrrMyRoomListPanel.show();
@@ -156,7 +156,7 @@ namespace TinyWars.MultiRankRoom {
             const dataList          : DataForCoRenderer[] = [];
             const openData          = this._getOpenData();
             const roomInfo          = openData.roomInfo;
-            const availableCoIdList = MrrModel.SelfSettings.generateAvailableCoIdList(roomInfo, openData.playerIndex);
+            const availableCoIdList = MrrModel.SelfSettings.getAvailableCoIdArray();
 
             let index = 0;
             for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {

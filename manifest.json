@@ -265,6 +265,7 @@
 		"bin-debug/modules/multiRankRoom/view/MrrRoomChooseCoPanel.js",
 		"bin-debug/modules/multiRankRoom/view/MrrRoomInfoPanel.js",
 		"bin-debug/modules/multiRankRoom/view/MrrRoomMapInfoPage.js",
+		"bin-debug/modules/multiRankRoom/view/MrrRoomPlayerInfoPage.js",
 		"bin-debug/modules/multiRankRoom/view/MrrSetMaxConcurrentCountPanel.js",
 		"bin-debug/modules/multiRankWar/model/MrwWar.js",
 		"bin-debug/modules/multiRankWar/view/MrwMyWarListPanel.js",

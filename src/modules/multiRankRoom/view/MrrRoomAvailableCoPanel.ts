@@ -61,8 +61,8 @@ namespace TinyWars.MultiRankRoom {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMrrDeleteRoom,   callback: this._onMsgMrrDeleteRoom },
+                { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgMrrDeleteRoomByServer,   callback: this._onMsgMrrDeleteRoomByServer },
             ]);
 
             const openData          = this._getOpenData();
@@ -96,8 +96,8 @@ namespace TinyWars.MultiRankRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onMsgMrrDeleteRoom(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgMrrDeleteRoom.IS;
+        private _onMsgMrrDeleteRoomByServer(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgMrrDeleteRoomByServer.IS;
             if (data.roomId === this._roomInfo.roomId) {
                 this.close();
             }

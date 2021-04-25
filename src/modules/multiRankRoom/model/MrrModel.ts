@@ -59,7 +59,7 @@ namespace TinyWars.MultiRankRoom.MrrModel {
 
         new Promise<void>((resolve, reject) => {
             const callbackOnSucceed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
+                const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
                 if (data.roomId === roomId) {
                     Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
                     Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
@@ -73,7 +73,7 @@ namespace TinyWars.MultiRankRoom.MrrModel {
                 }
             };
             const callbackOnFailed = (e: egret.Event): void => {
-                const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
+                const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
                 if (data.roomId === roomId) {
                     Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfo,         callbackOnSucceed);
                     Notify.removeEventListener(Notify.Type.MsgMrrGetRoomPublicInfoFailed,   callbackOnFailed);
@@ -111,22 +111,86 @@ namespace TinyWars.MultiRankRoom.MrrModel {
             setRoomInfo(roomInfo, false);
         }
     }
-    export function getAllRoomInfoDict(): Map<number, IMrrRoomInfo> {
-        return _allRoomDict;
-    }
-    export function getMyRoomInfoList(): IMrrRoomInfo[] {
-        const list: IMrrRoomInfo[] = [];
-        for (const [, roomInfo] of _allRoomDict) {
+    export function getMyRoomIdArray(): number[] {
+        const idArray: number[] = [];
+        for (const [roomId, roomInfo] of _allRoomDict) {
             if (checkIsMyRoom(roomInfo)) {
-                list.push(roomInfo);
+                idArray.push(roomId);
             }
         }
-        return list;
+        return idArray;
+    }
+
+    export async function updateOnMsgMrrSetBannedCoIdList(data: ProtoTypes.NetMessage.MsgMrrSetBannedCoIdList.IS): Promise<void> {
+        const roomInfo = await getRoomInfo(data.roomId);
+        if (!roomInfo) {
+            return;
+        }
+
+        roomInfo.timeForStartSetSelfSettings = data.timeForStartSetSelfSettings;
+
+        const settingsForMrw    = roomInfo.settingsForMrw;
+        const srcPlayerIndex    = data.playerIndex;
+        const bannedCoIdList    = data.bannedCoIdList;
+        if (settingsForMrw.dataArrayForBanCo == null) {
+            settingsForMrw.dataArrayForBanCo = [{
+                srcPlayerIndex,
+                bannedCoIdList,
+            }];
+        } else {
+            const dataArray     = settingsForMrw.dataArrayForBanCo;
+            const playerData    = dataArray.find(v => v.srcPlayerIndex === data.playerIndex);
+            if (playerData) {
+                playerData.bannedCoIdList = data.bannedCoIdList;
+            } else {
+                dataArray.push({
+                    srcPlayerIndex,
+                    bannedCoIdList,
+                });
+            }
+        }
+    }
+    export async function updateOnMsgMrrSetSelfSettings(data: ProtoTypes.NetMessage.MsgMrrSetSelfSettings.IS): Promise<void> {
+        const roomInfo = await getRoomInfo(data.roomId);
+        if (!roomInfo) {
+            return;
+        }
+
+        const playerIndex       = data.playerIndex;
+        const coId              = data.coId;
+        const unitAndTileSkinId = data.unitAndTileSkinId;
+        if (roomInfo.playerDataList == null) {
+            Logger.warn(`MrrModel.updateOnMsgMrrSetSelfSettings() roomInfo.playerDataList == null.`);
+            roomInfo.playerDataList = [{
+                playerIndex,
+                userId              : null,
+                coId,
+                unitAndTileSkinId,
+                isReady             : true,
+            }];
+        } else {
+            const dataArray     = roomInfo.playerDataList;
+            const playerData    = dataArray.find(v => v.playerIndex === playerIndex);
+            if (playerData) {
+                playerData.coId                 = coId;
+                playerData.isReady              = true;
+                playerData.unitAndTileSkinId    = unitAndTileSkinId;
+            } else {
+                Logger.warn(`MrrModel.updateOnMsgMrrSetSelfSettings() playerData == null.`);
+                dataArray.push({
+                    playerIndex,
+                    userId              : null,
+                    coId,
+                    unitAndTileSkinId,
+                    isReady             : true,
+                });
+            }
+        }
     }
 
     export async function checkIsRed(): Promise<boolean> {
-        for (const roomInfo of getMyRoomInfoList()) {
-            if (await checkIsRedForRoom(roomInfo.roomId)) {
+        for (const roomId of getMyRoomIdArray()) {
+            if (await checkIsRedForRoom(roomId)) {
                 return true;
             }
         }
@@ -154,72 +218,88 @@ namespace TinyWars.MultiRankRoom.MrrModel {
         }
     }
 
+    export namespace Joined {
+        let _previewingRoomId   : number;
+
+        export function getPreviewingRoomId(): number {
+            return _previewingRoomId;
+        }
+        export function setPreviewingRoomId(roomId: number | null): void {
+            if (getPreviewingRoomId() != roomId) {
+                _previewingRoomId = roomId;
+                Notify.dispatch(Notify.Type.MrrJoinedPreviewingRoomIdChanged);
+            }
+        }
+    }
+
     export namespace SelfSettings {
         let _coId               : number | null | undefined;
         let _unitAndTileSkinId  : number | null | undefined;
+        let _availableCoIdArray : number[] | null | undefined;
 
-        export function resetData(roomInfo: IMrrRoomInfo): void {
-            if (roomInfo.timeForStartSetSelfSettings == null) {
-                setCoId(null);
-                setUnitAndTileSkinId(null);
+        export async function resetData(roomId: number): Promise<void> {
+            setCoId(null);
+            setUnitAndTileSkinId(null);
+            setAvailableCoIdArray(null);
+
+            const roomInfo          = await getRoomInfo(roomId);
+            const playerDataList    = roomInfo ? roomInfo.playerDataList || [] : [];
+            const selfUserId        = User.UserModel.getSelfUserId();
+            const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
+            if ((roomInfo.timeForStartSetSelfSettings == null) || (selfPlayerData == null)) {
                 return;
             }
 
-            const playerDataList    = roomInfo.playerDataList;
-            const selfUserId        = User.UserModel.getSelfUserId();
-            const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
-            if (selfPlayerData == null) {
-                setCoId(null);
-                setUnitAndTileSkinId(null);
+            const selfPlayerIndex       = selfPlayerData.playerIndex;
+            const availableCoIdArray    = generateAvailableCoIdArray(roomInfo, selfPlayerIndex);
+            if ((availableCoIdArray == null) || (!availableCoIdArray.length)) {
+                Logger.error(`MrrModel.SelfSettings.resetData() empty availableCoIdArray.`);
+                return undefined;
+            }
+            setAvailableCoIdArray(availableCoIdArray);
+
+            if (selfPlayerData.isReady) {
+                setCoId(selfPlayerData.coId);
+                setUnitAndTileSkinId(selfPlayerData.unitAndTileSkinId);
             } else {
-                if (selfPlayerData.isReady) {
-                    setCoId(selfPlayerData.coId);
-                    setUnitAndTileSkinId(selfPlayerData.unitAndTileSkinId);
-                } else {
-                    const selfPlayerIndex   = selfPlayerData.playerIndex;
-                    const availableCoIdList = generateAvailableCoIdList(roomInfo, selfPlayerIndex);
-                    if ((availableCoIdList == null) || (!availableCoIdList.length)) {
-                        Logger.error(`MrrModel.SelfSettings.resetData() empty availableCoIdList.`);
-                        return undefined;
-                    }
-
-                    const availableSkinIdList = generateAvailableSkinIdList(roomInfo);
-                    if ((availableSkinIdList == null) || (!availableSkinIdList.length)) {
-                        Logger.error(`MrrModel.SelfSettings.resetData() empty availableSkinIdList.`);
-                        return undefined;
-                    }
-
-                    setCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(availableCoIdList));
-                    setUnitAndTileSkinId(availableSkinIdList.indexOf(selfPlayerIndex) >= 0 ? selfPlayerIndex : availableSkinIdList[0]);
+                const availableSkinIdList = generateAvailableSkinIdList(roomInfo);
+                if ((availableSkinIdList == null) || (!availableSkinIdList.length)) {
+                    Logger.error(`MrrModel.SelfSettings.resetData() empty availableSkinIdList.`);
+                    return undefined;
                 }
+
+                setCoId(CommonConstants.CoEmptyId);
+                setUnitAndTileSkinId(availableSkinIdList.indexOf(selfPlayerIndex) >= 0 ? selfPlayerIndex : availableSkinIdList[0]);
             }
         }
 
         export function setCoId(coId: number | null | undefined): void {
-            _coId = coId;
+            if (_coId !== coId) {
+                _coId = coId;
+                Notify.dispatch(Notify.Type.MrrSelfSettingsCoIdChanged);
+            }
         }
         export function getCoId(): number | null | undefined {
             return _coId;
         }
 
-        function setUnitAndTileSkinId(skinId: number | null | undefined): void {
-            _unitAndTileSkinId = skinId;
+        export function setUnitAndTileSkinId(skinId: number | null | undefined): void {
+            if (_unitAndTileSkinId !== skinId) {
+                _unitAndTileSkinId = skinId;
+                Notify.dispatch(Notify.Type.MrrSelfSettingsSkinIdChanged);
+            }
         }
         export function getUnitAndTileSkinId(): number | null | undefined {
             return _unitAndTileSkinId;
         }
-        export function tickUnitAndTileSkinId(roomInfo: IMrrRoomInfo): void {
-            const availableSkinIdList = generateAvailableSkinIdList(roomInfo);
-            if ((availableSkinIdList == null) || (!availableSkinIdList.length)) {
-                Logger.error(`MrrModel.SelfSettings.tickUnitAndTileSkinId() empty availableSkinIdList.`);
-                return;
-            }
 
-            const index = availableSkinIdList.indexOf(getUnitAndTileSkinId());
-            setUnitAndTileSkinId(availableSkinIdList[(index + 1) % availableSkinIdList.length]);
+        function setAvailableCoIdArray(idArray: number[] | null | undefined): void {
+            _availableCoIdArray = idArray;
         }
-
-        export function generateAvailableCoIdList(roomInfo: IMrrRoomInfo, playerIndex: number): number[] | undefined {
+        export function getAvailableCoIdArray(): number[] | null | undefined {
+            return _availableCoIdArray;
+        }
+        function generateAvailableCoIdArray(roomInfo: IMrrRoomInfo, playerIndex: number): number[] | undefined {
             const settingsForCommon = roomInfo.settingsForCommon;
             if (settingsForCommon == null) {
                 Logger.error(`MrrModel.generateAvailableCoIdList() empty settingsForCommon.`);
@@ -263,15 +343,16 @@ namespace TinyWars.MultiRankRoom.MrrModel {
                 }
             }
 
-            const availableCoIdList: number[] = [];
+            const availableCoIdArray: number[] = [];
             for (const coId of rawAvailableCoIdList) {
                 const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
                 if ((cfg) && (cfg.isEnabled) &&(!bannedCoIds.has(coId))) {
-                    availableCoIdList.push(coId);
+                    availableCoIdArray.push(coId);
                 }
             }
-            return availableCoIdList;
+            return availableCoIdArray;
         }
+
         function generateAvailableSkinIdList(roomInfo: IMrrRoomInfo): number[] | undefined {
             const playerDataList = roomInfo.playerDataList;
             if (playerDataList == null) {

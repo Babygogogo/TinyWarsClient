@@ -49,6 +49,9 @@ namespace TinyWars.Utility.Notify {
 
         MrrMyRoomAdded,
         MrrMyRoomDeleted,
+        MrrJoinedPreviewingRoomIdChanged,
+        MrrSelfSettingsCoIdChanged,
+        MrrSelfSettingsSkinIdChanged,
 
         McwPreviewingWarIdChanged,
         MrwPreviewingWarIdChanged,
@@ -203,7 +206,7 @@ namespace TinyWars.Utility.Notify {
         MsgMrrGetMyRoomPublicInfoList,
         MsgMrrSetBannedCoIdList,
         MsgMrrSetSelfSettings,
-        MsgMrrDeleteRoom,
+        MsgMrrDeleteRoomByServer,
 
         MsgReplayGetInfoList,
         MsgReplayGetData,

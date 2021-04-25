@@ -1,69 +1,51 @@
 
 namespace TinyWars.MultiRankRoom {
-    import ProtoTypes       = Utility.ProtoTypes;
+    import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
-    import FloatText        = Utility.FloatText;
-    import ConfigManager    = Utility.ConfigManager;
     import Types            = Utility.Types;
-    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
-    import CommonHelpPanel  = Common.CommonHelpPanel;
-    import BwHelpers        = BaseWar.BwHelpers;
-    import WarMapModel      = WarMap.WarMapModel;
-    import UserModel        = User.UserModel;
-    import NetMessage       = ProtoTypes.NetMessage;
+    import ProtoTypes       = Utility.ProtoTypes;
     import CommonConstants  = Utility.CommonConstants;
+    import WarMapModel      = WarMap.WarMapModel;
+    import CommonHelpPanel  = Common.CommonHelpPanel;
 
     export type OpenDataForMrrRoomBasicSettingsPage = {
-        roomId  : number;
+        roomId  : number | null;
     }
-
     export class MrrRoomBasicSettingsPage extends GameUi.UiTabPage<OpenDataForMrrRoomBasicSettingsPage> {
-        private _btnMapNameTitle        : TinyWars.GameUi.UiButton;
-        private _labelMapName           : TinyWars.GameUi.UiLabel;
-        private _btnBuildings           : TinyWars.GameUi.UiButton;
+        private readonly _labelMapNameTitle             : GameUi.UiLabel;
+        private readonly _labelMapName                  : GameUi.UiLabel;
 
-        private _btnModifyRoomStatus    : TinyWars.GameUi.UiButton;
-        private _labelRoomStatus        : TinyWars.GameUi.UiLabel;
+        private readonly _labelWarNameTitle             : GameUi.UiLabel;
+        private readonly _labelWarName                  : GameUi.UiLabel;
 
-        private _btnModifyWarRule       : TinyWars.GameUi.UiButton;
-        private _labelWarRule           : TinyWars.GameUi.UiLabel;
+        private readonly _labelWarPasswordTitle         : GameUi.UiLabel;
+        private readonly _labelWarPassword              : GameUi.UiLabel;
 
-        private _btnModifyHasFog        : TinyWars.GameUi.UiButton;
-        private _imgHasFog              : TinyWars.GameUi.UiImage;
-        private _btnHelpHasFog          : TinyWars.GameUi.UiButton;
+        private readonly _labelWarCommentTitle          : GameUi.UiLabel;
+        private readonly _labelWarComment               : GameUi.UiLabel;
 
-        private _btnModifyTimeLimit     : TinyWars.GameUi.UiButton;
-        private _labelTimeLimit         : TinyWars.GameUi.UiLabel;
-        private _btnHelpTimeLimit       : TinyWars.GameUi.UiButton;
+        private readonly _labelWarRuleTitle             : GameUi.UiLabel;
+        private readonly _labelWarRule                  : GameUi.UiLabel;
 
-        private _groupSelfInfo          : eui.Group;
-        private _groupPlayerIndex       : eui.Group;
-        private _btnModifyPlayerIndex   : TinyWars.GameUi.UiButton;
-        private _labelPlayerIndex       : TinyWars.GameUi.UiLabel;
-        private _btnHelpPlayerIndex     : TinyWars.GameUi.UiButton;
+        private readonly _labelHasFogTitle              : GameUi.UiLabel;
+        private readonly _labelHasFog                   : GameUi.UiLabel;
+        private readonly _btnHasFogHelp                 : GameUi.UiButton;
 
-        private _groupBanCo             : eui.Group;
-        private _btnBanCo               : TinyWars.GameUi.UiButton;
-        private _labelBanCo             : TinyWars.GameUi.UiLabel;
+        private readonly _groupTimer                    : eui.Group;
+        private readonly _labelTimerTypeTitle           : GameUi.UiLabel;
+        private readonly _labelTimerType                : GameUi.UiLabel;
+        private readonly _btnTimerTypeHelp              : GameUi.UiButton;
 
-        private _groupCo                : eui.Group;
-        private _btnChangeCo            : TinyWars.GameUi.UiButton;
-        private _labelCoName            : TinyWars.GameUi.UiLabel;
+        private readonly _groupTimerRegular             : eui.Group;
+        private readonly _labelTimerRegularTitle        : GameUi.UiLabel;
+        private readonly _labelTimerRegular             : GameUi.UiLabel;
 
-        private _groupSkinId            : eui.Group;
-        private _btnModifySkinId        : TinyWars.GameUi.UiButton;
-        private _labelSkinId            : TinyWars.GameUi.UiLabel;
-        private _btnHelpSkinId          : TinyWars.GameUi.UiButton;
-
-        private _groupReady             : eui.Group;
-        private _btnModifyReady         : TinyWars.GameUi.UiButton;
-        private _labelReady             : TinyWars.GameUi.UiLabel;
-
-        private _labelPlayersTitle      : TinyWars.GameUi.UiLabel;
-        private _listPlayer             : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
-
-        private _roomInfo               : ProtoTypes.MultiRankRoom.IMrrRoomInfo;
+        private readonly _groupTimerIncremental         : eui.Group;
+        private readonly _labelTimerIncrementalTitle1   : GameUi.UiLabel;
+        private readonly _labelTimerIncremental1        : GameUi.UiLabel;
+        private readonly _labelTimerIncrementalTitle2   : GameUi.UiLabel;
+        private readonly _labelTimerIncremental2        : GameUi.UiLabel;
 
         public constructor() {
             super();
@@ -71,33 +53,22 @@ namespace TinyWars.MultiRankRoom {
             this.skinName = "resource/skins/multiRankRoom/MrrRoomBasicSettingsPage.exml";
         }
 
-        protected async _onOpened(): Promise<void> {
+        protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._btnBuildings,           callback: this._onTouchedBtnBuildings },
-                { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
-                { ui: this._btnHelpPlayerIndex,     callback: this._onTouchedBtnHelpPlayerIndex, },
-                { ui: this._btnModifySkinId,        callback: this._onTouchedBtnModifySkinId, },
-                { ui: this._btnModifyReady,         callback: this._onTouchedBtnModifyReady, },
-                { ui: this._btnHelpSkinId,          callback: this._onTouchedBtnHelpSkinId, },
-                { ui: this._btnHelpTimeLimit,       callback: this._onTouchedBtnHelpTimeLimit, },
-                { ui: this._btnChangeCo,            callback: this._onTouchedBtnChangeCo, },
-                { ui: this._btnBanCo,               callback: this._onTouchedBtnBanCo },
+                { ui: this._btnHasFogHelp,          callback: this._onTouchedBtnHasFogHelp },
+                { ui: this._btnTimerTypeHelp,       callback: this._onTouchedBtnTimerTypeHelp, },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMrrGetRoomPublicInfo,    callback: this._onMsgMrrGetRoomPublicInfo },
+                { type: Notify.Type.MsgMrrGetRoomPublicInfo,    callback: this._onNotifyMsgMrrGetRoomPublicInfo },
             ]);
-            this._listPlayer.setItemRenderer(PlayerRenderer);
-
-            const roomId    = this._getOpenData().roomId;
-            this._roomInfo  = await MrrModel.getRoomInfo(roomId);
+            this.left       = 0;
+            this.right      = 0;
+            this.top        = 0;
+            this.bottom     = 0;
 
             this._updateComponentsForLanguage();
             this._updateComponentsForRoomInfo();
-        }
-
-        protected async _onClosed(): Promise<void> {
-            this._roomInfo = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -107,399 +78,120 @@ namespace TinyWars.MultiRankRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onMsgMrrGetRoomPublicInfo(e: egret.Event): void {
-            const data          = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
-            const currRoomInfo  = this._roomInfo;
-            const newRoomInfo   = data.roomInfo;
-            if ((currRoomInfo) && (newRoomInfo.roomId === currRoomInfo.roomId)) {
-                MrrModel.SelfSettings.resetData(newRoomInfo)
-                this._roomInfo = newRoomInfo;
-                this._updateComponentsForRoomInfo();
-            }
+        private _onNotifyMsgMrrGetRoomPublicInfo(e: egret.Event): void {
+            this._updateComponentsForRoomInfo();
         }
 
-        private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                const mapRawData = await WarMapModel.getRawData(roomInfo.settingsForMrw.mapId);
-                WarMap.WarMapBuildingListPanel.show({
-                    configVersion           : roomInfo.settingsForCommon.configVersion,
-                    tileDataArray           : mapRawData.tileDataArray,
-                    playersCountUnneutral   : mapRawData.playersCountUnneutral,
-                });
-            }
-        }
-
-        private _onTouchedBtnHelpHasFog(e: egret.TouchEvent): void {
+        private _onTouchedBtnHasFogHelp(e: egret.TouchEvent): void {
             CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
                 content: Lang.getRichText(Lang.RichType.R0002),
             });
         }
 
-        private _onTouchedBtnHelpPlayerIndex(e: egret.TouchEvent): void {
+        private _onTouchedBtnTimerTypeHelp(e: egret.TouchEvent): void {
             CommonHelpPanel.show({
-                title  : Lang.getText(Lang.Type.B0018),
-                content: Lang.getRichText(Lang.RichType.R0000),
-            });
-        }
-
-        private _onTouchedBtnChangeCo(e: egret.TouchEvent): void {
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                const selfUserId        = UserModel.getSelfUserId();
-                const playerDataList    = roomInfo.playerDataList;
-                const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
-                if ((selfPlayerData != null) && (!selfPlayerData.isReady)) {
-                    MrrRoomChooseCoPanel.show({
-                        roomInfo,
-                        playerIndex: selfPlayerData.playerIndex,
-                    });
-                    MrrRoomInfoPanel.hide();
-                }
-            }
-        }
-
-        private _onTouchedBtnModifySkinId(e: egret.TouchEvent): void {
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                const selfUserId        = UserModel.getSelfUserId();
-                const playerDataList    = roomInfo.playerDataList;
-                const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
-                if ((selfPlayerData != null) && (!selfPlayerData.isReady)) {
-                    const currSkinId = MrrModel.SelfSettings.getUnitAndTileSkinId();
-                    MrrModel.SelfSettings.tickUnitAndTileSkinId(roomInfo);
-                    if (currSkinId === MrrModel.SelfSettings.getUnitAndTileSkinId()) {
-                        FloatText.show(Lang.getText(Lang.Type.B0332));
-                    } else {
-                        this._updateGroupSkinId();
-                    }
-                }
-            }
-        }
-
-        private _onTouchedBtnModifyReady(e: egret.TouchEvent): void {
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                const selfUserId        = UserModel.getSelfUserId();
-                const playerDataList    = roomInfo.playerDataList;
-                const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
-                if ((selfPlayerData != null) && (!selfPlayerData.isReady)) {
-                    Common.CommonConfirmPanel.show({
-                        content : Lang.getText(Lang.Type.A0137),
-                        callback: () => {
-                            MrrProxy.reqMrrSetSelfSettings(
-                                roomInfo.roomId,
-                                MrrModel.SelfSettings.getCoId(),
-                                MrrModel.SelfSettings.getUnitAndTileSkinId(),
-                            );
-                        }
-                    });
-                }
-            }
-        }
-
-        private _onTouchedBtnHelpSkinId(e: egret.TouchEvent): void {
-            CommonHelpPanel.show({
-                title  : Lang.getText(Lang.Type.B0397),
-                content: Lang.getRichText(Lang.RichType.R0001),
-            });
-        }
-
-        private _onTouchedBtnHelpTimeLimit(e: egret.TouchEvent): void {
-            CommonHelpPanel.show({
-                title  : Lang.getText(Lang.Type.B0021),
+                title  : Lang.getText(Lang.Type.B0574),
                 content: Lang.getRichText(Lang.RichType.R0003),
             });
-        }
-
-        private _onTouchedBtnBanCo(e: egret.TouchEvent): void {
-            const roomInfo = this._roomInfo;
-            if ((roomInfo != null) && (roomInfo.timeForStartSetSelfSettings == null)) {
-                const selfUserId        = User.UserModel.getSelfUserId();
-                const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-                if ((selfPlayerData != null)                                                                                            &&
-                    ((roomInfo.settingsForMrw.dataArrayForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex) == null)
-                ) {
-                    MrrRoomAvailableCoPanel.show({ roomInfo, srcPlayerIndex: selfPlayerData.playerIndex });
-                }
-            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._btnMapNameTitle.label         = Lang.getText(Lang.Type.B0225);
-            this._btnModifyRoomStatus.label     = Lang.getText(Lang.Type.B0414);
-            this._btnModifyWarRule.label        = Lang.getText(Lang.Type.B0318);
-            this._btnModifyPlayerIndex.label    = Lang.getText(Lang.Type.B0018);
-            this._btnModifySkinId.label         = Lang.getText(Lang.Type.B0397);
-            this._btnModifyReady.label          = Lang.getText(Lang.Type.B0402);
-            this._btnModifyHasFog.label         = Lang.getText(Lang.Type.B0020);
-            this._btnModifyTimeLimit.label      = Lang.getText(Lang.Type.B0188);
-            this._btnBuildings.label            = Lang.getText(Lang.Type.B0333);
-            this._labelPlayersTitle.text        = `${Lang.getText(Lang.Type.B0395)}:`;
+            this._labelMapNameTitle.text            = Lang.getText(Lang.Type.B0225);
+            this._labelWarNameTitle.text            = Lang.getText(Lang.Type.B0185);
+            this._labelWarPasswordTitle.text        = Lang.getText(Lang.Type.B0186);
+            this._labelWarCommentTitle.text         = Lang.getText(Lang.Type.B0187);
+            this._labelWarRuleTitle.text            = Lang.getText(Lang.Type.B0318);
+            this._labelHasFogTitle.text             = Lang.getText(Lang.Type.B0020);
+            this._labelTimerTypeTitle.text          = Lang.getText(Lang.Type.B0574);
+            this._labelTimerRegularTitle.text       = Lang.getText(Lang.Type.B0021);
+            this._labelTimerIncrementalTitle1.text  = Lang.getText(Lang.Type.B0389);
+            this._labelTimerIncrementalTitle2.text  = Lang.getText(Lang.Type.B0390);
         }
 
         private _updateComponentsForRoomInfo(): void {
-            this._updateLabelRoomStatus();
+            this._updateLabelWarName();
+            this._updateLabelWarPassword();
+            this._updateLabelWarComment();
             this._updateLabelMapName();
             this._updateLabelWarRule();
-            this._updateGroupPlayerIndex();
-            this._updateImgHasFog();
-            this._updateLabelTimeLimit();
-            this._updateGroupBanCo();
-            this._updateGroupCo();
-            this._updateGroupSkinId();
-            this._updateGroupReady();
-            this._updateListPlayer();
+            this._updateLabelHasFog();
+            this._updateGroupTimer();
         }
 
-        private _updateLabelRoomStatus(): void {
-            const roomInfo  = this._roomInfo;
-            const label     = this._labelRoomStatus;
-            if (roomInfo == null) {
-                label.text = `???`;
+        private async _updateLabelWarName(): Promise<void> {
+            this._labelWarName.text = undefined;
+        }
+
+        private async _updateLabelWarPassword(): Promise<void> {
+            this._labelWarPassword.text = undefined;
+        }
+
+        private async _updateLabelWarComment(): Promise<void> {
+            this._labelWarComment.text = undefined;
+        }
+
+        private async _updateLabelMapName(): Promise<void> {
+            const roomInfo          = await this._getRoomInfo();
+            this._labelMapName.text = roomInfo ? await WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForMrw.mapId) : undefined;
+        }
+
+        private async _updateLabelWarRule(): Promise<void> {
+            const roomInfo          = await this._getRoomInfo();
+            const settingsForCommon = roomInfo ? roomInfo.settingsForCommon : undefined;
+            const label             = this._labelWarRule;
+            if (!settingsForCommon) {
+                label.text      = undefined;
             } else {
-                label.text = roomInfo.timeForStartSetSelfSettings == null
-                    ? Lang.getText(Lang.Type.A0133)
-                    : Lang.getText(Lang.Type.A0134);
+                label.text      = Lang.getWarRuleNameInLanguage(settingsForCommon.warRule);
+                label.textColor = settingsForCommon.presetWarRuleId == null ? 0xFFFF00 : 0xFFFFFF;
             }
         }
 
-        private _updateLabelMapName(): void {
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                WarMapModel.getMapNameInCurrentLanguage(roomInfo.settingsForMrw.mapId).then(v =>
-                    this._labelMapName.text = `${v} (${BwWarRuleHelper.getPlayersCount(roomInfo.settingsForCommon.warRule)}P)`
-                );
+        private async _updateLabelHasFog(): Promise<void> {
+            const roomInfo      = await this._getRoomInfo();
+            const labelHasFog   = this._labelHasFog;
+            if (!roomInfo) {
+                labelHasFog.text = undefined;
+            } else {
+                const hasFog            = !!roomInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
+                labelHasFog.text        = Lang.getText(hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
+                labelHasFog.textColor   = hasFog ? 0xFFFF00 : 0xFFFFFF;
             }
         }
 
-        private _updateLabelWarRule(): void {
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                this._labelWarRule.text = Lang.getWarRuleNameInLanguage(roomInfo.settingsForCommon.warRule);
-            }
-        }
+        private async _updateGroupTimer(): Promise<void> {
+            const groupTimer        = this._groupTimer;
+            const groupRegular      = this._groupTimerRegular;
+            const groupIncremental  = this._groupTimerIncremental;
+            (groupRegular.parent) && (groupRegular.parent.removeChild(groupRegular));
+            (groupIncremental.parent) && (groupIncremental.parent.removeChild(groupIncremental));
 
-        private _updateGroupPlayerIndex(): void {
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                const selfUserId    = UserModel.getSelfUserId();
-                const playerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-                const group         = this._groupPlayerIndex;
-                if (playerData == null) {
-                    group.visible = false;
-                } else {
-                    group.visible               = true;
-                    const playerIndex           = playerData.playerIndex;
-                    const playerRule            = BwWarRuleHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
-                    this._labelPlayerIndex.text = `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(playerRule.teamIndex)})`;
+            const params            = CommonConstants.WarBootTimerDefaultParams;
+            const labelTimerType    = this._labelTimerType;
+            if (!params) {
+                labelTimerType.text = undefined;
+            } else {
+                const timerType     : Types.BootTimerType = params[0];
+                labelTimerType.text = Lang.getBootTimerTypeName(timerType);
+
+                if (timerType === Types.BootTimerType.Regular) {
+                    groupTimer.addChild(groupRegular);
+                    this._labelTimerRegular.text = Helpers.getTimeDurationText2(params[1]);
+
+                } else if (timerType === Types.BootTimerType.Incremental) {
+                    groupTimer.addChild(groupIncremental);
+                    this._labelTimerIncremental1.text = Helpers.getTimeDurationText2(params[1]);
+                    this._labelTimerIncremental2.text = Helpers.getTimeDurationText2(params[2]);
                 }
             }
         }
 
-        private _updateImgHasFog(): void {
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                this._imgHasFog.visible = roomInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
-            }
-        }
-
-        private _updateLabelTimeLimit(): void {
-            this._labelTimeLimit.text = Lang.getBootTimerDesc([Types.BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
-        }
-
-        private _updateGroupBanCo(): void {
-            const roomInfo  = this._roomInfo;
-            const group     = this._groupBanCo;
-            if ((roomInfo == null) || (roomInfo.timeForStartSetSelfSettings != null)) {
-                (group.parent) && (group.parent.removeChild(group));
-                return;
-            }
-
-            const selfUserId        = User.UserModel.getSelfUserId();
-            const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-            if (selfPlayerData == null) {
-                (group.parent) && (group.parent.removeChild(group));
-                return;
-            }
-
-            (!group.parent) && (this._groupSelfInfo.addChild(group));
-
-            const dataForBanCo  = (roomInfo.settingsForMrw.dataArrayForBanCo || []).find(v => v.srcPlayerIndex === selfPlayerData.playerIndex);
-            const label         = this._labelBanCo;
-            const btn           = this._btnBanCo;
-            if (dataForBanCo) {
-                label.text = generateTextForBanCo(roomInfo.settingsForCommon.configVersion, dataForBanCo.bannedCoIdList);
-                btn.setTextColor(0xFFFFFF);
-                btn.setRedVisible(false);
-            } else {
-                label.text = Lang.getText(Lang.Type.A0135);
-                btn.setTextColor(0x00FF00);
-                btn.setRedVisible(true);
-            }
-        }
-
-        private _updateGroupCo(): void {
-            const roomInfo  = this._roomInfo;
-            const group     = this._groupCo;
-            if ((roomInfo == null) || (roomInfo.timeForStartSetSelfSettings == null)) {
-                (group.parent) && (group.parent.removeChild(group));
-                return;
-            }
-
-            const selfUserId        = User.UserModel.getSelfUserId();
-            const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-            if (selfPlayerData == null) {
-                (group.parent) && (group.parent.removeChild(group));
-                return;
-            }
-
-            (!group.parent) && (this._groupSelfInfo.addChild(group));
-
-            const btn               = this._btnChangeCo;
-            this._labelCoName.text  = ConfigManager.getCoNameAndTierText(roomInfo.settingsForCommon.configVersion, MrrModel.SelfSettings.getCoId());
-            if (selfPlayerData.isReady) {
-                btn.setTextColor(0xFFFFFF);
-                btn.setRedVisible(false);
-            } else {
-                btn.setTextColor(0x00FF00);
-                btn.setRedVisible(true);
-            }
-        }
-
-        private _updateGroupSkinId(): void {
-            const roomInfo  = this._roomInfo;
-            const group     = this._groupSkinId;
-            if ((roomInfo == null) || (roomInfo.timeForStartSetSelfSettings == null)) {
-                (group.parent) && (group.parent.removeChild(group));
-                return;
-            }
-
-            const selfUserId        = User.UserModel.getSelfUserId();
-            const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-            if (selfPlayerData == null) {
-                (group.parent) && (group.parent.removeChild(group));
-                return;
-            }
-
-            (!group.parent) && (this._groupSelfInfo.addChild(group));
-
-            const btn               = this._btnModifySkinId;
-            this._labelSkinId.text  = Lang.getUnitAndTileSkinName(MrrModel.SelfSettings.getUnitAndTileSkinId());
-            if (selfPlayerData.isReady) {
-                btn.setTextColor(0xFFFFFF);
-                btn.setRedVisible(false);
-            } else {
-                btn.setTextColor(0x00FF00);
-                btn.setRedVisible(true);
-            }
-        }
-
-        private _updateGroupReady(): void {
-            const roomInfo  = this._roomInfo;
-            const group     = this._groupReady;
-            if ((roomInfo == null) || (roomInfo.timeForStartSetSelfSettings == null)) {
-                (group.parent) && (group.parent.removeChild(group));
-                return;
-            }
-
-            const selfUserId        = User.UserModel.getSelfUserId();
-            const selfPlayerData    = roomInfo.playerDataList.find(v => v.userId === selfUserId);
-            if (selfPlayerData == null) {
-                (group.parent) && (group.parent.removeChild(group));
-                return;
-            }
-
-            (!group.parent) && (this._groupSelfInfo.addChild(group));
-
-            const label     = this._labelReady;
-            const btn       = this._btnModifyReady;
-            if (selfPlayerData.isReady) {
-                label.text = Lang.getText(Lang.Type.B0012);
-                btn.setRedVisible(false);
-                btn.setTextColor(0xFFFFFF);
-            } else {
-                label.text = Lang.getText(Lang.Type.B0013);
-                btn.setRedVisible(true);
-                btn.setTextColor(0x00FF00);
-            }
-        }
-
-        private async _updateListPlayer(): Promise<void> {
-            this._listPlayer.bindData(await this._getDataForListPlayer());
-        }
-
-        private async _getDataForListPlayer(): Promise<DataForPlayerRenderer[]> {
-            const dataList  : DataForPlayerRenderer[] = [];
-            const roomInfo  = this._roomInfo;
-            if (roomInfo) {
-                const playerDataList    = roomInfo.playerDataList;
-                const playerRules       = roomInfo.settingsForCommon.warRule.ruleForPlayers;
-                const playersCount      = (await WarMapModel.getRawData(roomInfo.settingsForMrw.mapId)).playersCountUnneutral;
-                for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
-                    dataList.push({
-                        roomInfo,
-                        playerIndex,
-                        teamIndex   : BwHelpers.getTeamIndexByRuleForPlayers(playerRules, playerIndex),
-                        playerData  : playerDataList.find(v => v.playerIndex === playerIndex),
-                    });
-                }
-            }
-
-            return dataList;
-        }
-    }
-
-    type DataForPlayerRenderer = {
-        roomInfo        : ProtoTypes.MultiRankRoom.IMrrRoomInfo;
-        playerIndex     : number;
-        teamIndex       : number;
-        playerData      : ProtoTypes.Structure.IDataForPlayerInRoom;
-    }
-
-    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private _labelNickname  : GameUi.UiLabel;
-        private _labelIndex     : GameUi.UiLabel;
-
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data;
-            const playerData        = data.playerData;
-            const labelIndex        = this._labelIndex;
-            const playerIndex       = data.playerIndex;
-            labelIndex.text         = `${Lang.getPlayerForceName(playerIndex)}(${Lang.getPlayerTeamName(data.teamIndex)})`;
-            labelIndex.textColor    = (playerData && playerData.isReady) ? 0x00FF00 : 0xFFFFFF;
-
-            const lbNickname        = this._labelNickname;
-            if (playerData == null) {
-                lbNickname.text = "----";
-            } else {
-                if (playerData.userId !== User.UserModel.getSelfUserId()) {
-                    lbNickname.text = `???`;
-                } else {
-                    lbNickname.text = "";
-                    UserModel.getUserNickname(playerData.userId).then(name => {
-                        lbNickname.text = name;
-                    });
-                }
-            }
-        }
-    }
-
-    function generateTextForBanCo(configVersion: string, bannedCoIdList: number[]): string {
-        if ((bannedCoIdList == null) || (bannedCoIdList.length <= 0)) {
-            return Lang.getText(Lang.Type.A0136)
-        } else {
-            const coNameList: string[] = [];
-            for (const coId of bannedCoIdList) {
-                coNameList.push(ConfigManager.getCoNameAndTierText(configVersion, coId));
-            }
-            return coNameList.join();
+        private _getRoomInfo(): Promise<ProtoTypes.MultiRankRoom.IMrrRoomInfo> {
+            return MrrModel.getRoomInfo(this._getOpenData().roomId);
         }
     }
 }

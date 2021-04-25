@@ -972,6 +972,34 @@ namespace TinyWars.Utility.Lang {
             `该势力不可选`,
             `The force is unavailable.`,
         ],
+        [Type.A0205]: [
+            `无法撤销准备状态`,
+            `It's not allowed to cancel the "ready" state.`,
+        ],
+        [Type.A0206]: [
+            `一旦进入准备状态，您将无法反悔，也无法修改您的CO和颜色设定。\n确定要继续吗？`,
+            `Once you're ready, you can not cancel the "ready" state nor change your CO and/or color.\nAre you sure to continue?`,
+        ],
+        [Type.A0207]: [
+            `您已准备就绪，无法再修改各项设定`,
+            `You're in the ready state and can no longer change the settings.`,
+        ],
+        [Type.A0208]: [
+            `您确定要不使用任何CO吗？`,
+            `Are you sure to use no CO?`,
+        ],
+        [Type.A0209]: [
+            `排位模式下无法修改势力`,
+            `It's not allowed to change your force in ranking matches.`,
+        ],
+        [Type.A0210]: [
+            `请禁用CO`,
+            `Please ban COs for the match.`
+        ],
+        [Type.A0211]: [
+            `请选择您的CO和颜色，并进入准备就绪状态`,
+            `Please choose your CO and color, and then set ready for the match.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3319,6 +3347,14 @@ namespace TinyWars.Utility.Lang {
         [Type.B0589]: [
             `选择战局`,
             `Choose a war`,
+        ],
+        [Type.B0590]: [
+            `禁用CO`,
+            `Ban COs`,
+        ],
+        [Type.B0591]: [
+            `已禁用CO`,
+            `Banned COs`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -14,7 +14,7 @@ namespace TinyWars.MultiRankRoom.MrrProxy {
             { msgCode: ActionCode.MsgMrrSetBannedCoIdList,          callback: _onMsgMrrSetBannedCoIdList },
             { msgCode: ActionCode.MsgMrrSetMaxConcurrentCount,      callback: _onMsgMrrSetMaxConcurrentCount },
             { msgCode: ActionCode.MsgMrrSetSelfSettings,            callback: _onMsgMrrSetSelfSettings },
-            { msgCode: ActionCode.MsgMrrDeleteRoom,                 callback: _onMsgMrrDeleteRoom },
+            { msgCode: ActionCode.MsgMrrDeleteRoomByServer,         callback: _onMsgMrrDeleteRoomByServer },
         ], MrrProxy);
     }
 
@@ -63,9 +63,10 @@ namespace TinyWars.MultiRankRoom.MrrProxy {
             bannedCoIdList,
         } }, });
     }
-    function _onMsgMrrSetBannedCoIdList(e: egret.Event): void {
+    async function _onMsgMrrSetBannedCoIdList(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMrrSetBannedCoIdList.IS;
         if (!data.errorCode) {
+            await MrrModel.updateOnMsgMrrSetBannedCoIdList(data);
             Notify.dispatch(Notify.Type.MsgMrrSetBannedCoIdList, data);
         }
     }
@@ -92,16 +93,17 @@ namespace TinyWars.MultiRankRoom.MrrProxy {
             unitAndTileSkinId,
         }, }, });
     }
-    function _onMsgMrrSetSelfSettings(e: egret.Event): void {
+    async function _onMsgMrrSetSelfSettings(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMrrSetSelfSettings.IS;
         if (!data.errorCode) {
+            await MrrModel.updateOnMsgMrrSetSelfSettings(data);
             Notify.dispatch(Notify.Type.MsgMrrSetSelfSettings, data);
         }
     }
 
-    function _onMsgMrrDeleteRoom(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMrrDeleteRoom.IS;
+    function _onMsgMrrDeleteRoomByServer(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMrrDeleteRoomByServer.IS;
         MrrModel.deleteRoomInfo(data.roomId);
-        Notify.dispatch(Notify.Type.MsgMrrDeleteRoom, data);
+        Notify.dispatch(Notify.Type.MsgMrrDeleteRoomByServer, data);
     }
 }

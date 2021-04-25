@@ -149,6 +149,7 @@
 		"resource/skins/multiRankRoom/MrrRoomChooseCoPanel.exml",
 		"resource/skins/multiRankRoom/MrrRoomInfoPanel.exml",
 		"resource/skins/multiRankRoom/MrrRoomMapInfoPage.exml",
+		"resource/skins/multiRankRoom/MrrRoomPlayerInfoPage.exml",
 		"resource/skins/multiRankRoom/MrrSetMaxConcurrentCountPanel.exml",
 		"resource/skins/multiRankWar/MrwMyWarListPanel.exml",
 		"resource/skins/multiRankWar/MrwWarAdvancedSettingsPage.exml",
