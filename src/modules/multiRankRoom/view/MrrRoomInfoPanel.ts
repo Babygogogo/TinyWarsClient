@@ -52,6 +52,8 @@ namespace TinyWars.MultiRankRoom {
         private readonly _sclReady              : GameUi.UiScrollList<DataForReadyRenderer>;
 
         private readonly _groupState            : eui.Group;
+        private readonly _labelCountdownTitle   : GameUi.UiLabel;
+        private readonly _labelCountdown        : GameUi.UiLabel;
         private readonly _labelState            : GameUi.UiLabel;
 
         private readonly _btnBack               : TinyWars.GameUi.UiButton;
@@ -82,6 +84,8 @@ namespace TinyWars.MultiRankRoom {
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.TimeTick,                   callback: this._onNotifyTimeTick },
+                { type: Notify.Type.MrrSelfSettingsCoIdChanged, callback: this._onNotifyMrrSelfSettingsCoIdChanged },
                 { type: Notify.Type.MsgMrrGetRoomPublicInfo,    callback: this._onNotifyMsgMrrGetRoomPublicInfo },
                 { type: Notify.Type.MsgMrrSetSelfSettings,      callback: this._onNotifyMsgMrrSetSelfSettings },
                 { type: Notify.Type.MsgMrrSetBannedCoIdList,    callback: this._onNotifyMsgMrrSetBannedCoIdList },
@@ -149,11 +153,12 @@ namespace TinyWars.MultiRankRoom {
         }
 
         private async _onTouchedBtnBanCo(e: egret.TouchEvent): Promise<void> {
-            const roomInfo          = await MrrModel.getRoomInfo(this._getOpenData().roomId);
+            const roomId            = this._getOpenData().roomId;
+            const roomInfo          = await MrrModel.getRoomInfo(roomId);
             const userId            = User.UserModel.getSelfUserId();
             const selfPlayerData    = roomInfo ? roomInfo.playerDataList.find(v => v.userId === userId) : null;
             if (selfPlayerData) {
-                MrrRoomAvailableCoPanel.show({ roomInfo, srcPlayerIndex: selfPlayerData.playerIndex });
+                MrrRoomBanCoPanel.show({ roomId });
             }
         }
 
@@ -167,8 +172,7 @@ namespace TinyWars.MultiRankRoom {
                     FloatText.show(Lang.getText(Lang.Type.A0207));
                 } else {
                     MrrRoomChooseCoPanel.show({
-                        roomInfo,
-                        playerIndex: selfPlayerData.playerIndex,
+                        coId: MrrModel.SelfSettings.getCoId(),
                     });
                 }
             }
@@ -178,21 +182,28 @@ namespace TinyWars.MultiRankRoom {
             this._updateComponentsForLanguage();
         }
 
+        private _onNotifyTimeTick(e: egret.Event): void {
+            this._updateLabelCountdown();
+        }
+
+        private _onNotifyMrrSelfSettingsCoIdChanged(e: egret.Event): void {
+            this._updateBtnChooseCo();
+        }
+
         private _onNotifyMsgMrrGetRoomPublicInfo(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
             if (data.roomId === this._getOpenData().roomId) {
                 this._updateGroupBanCo();
                 this._updateGroupSettings();
                 this._updateGroupState();
-                this._updateBtnChooseCo();
             }
         }
 
         private _onNotifyMsgMrrSetSelfSettings(e: egret.Event): void {
             const data = e.data as NetMessage.MsgMrrSetSelfSettings.IS;
             if (data.roomId === this._getOpenData().roomId) {
+                this._updateGroupSettings();
                 this._updateGroupState();
-                this._updateBtnChooseCo();
             }
         }
 
@@ -200,6 +211,7 @@ namespace TinyWars.MultiRankRoom {
             const data = e.data as NetMessage.MsgMrrSetBannedCoIdList.IS;
             if (data.roomId === this._getOpenData().roomId) {
                 this._updateGroupBanCo();
+                this._updateGroupSettings();
                 this._updateGroupState();
             }
         }
@@ -313,14 +325,36 @@ namespace TinyWars.MultiRankRoom {
 
         private async _updateBtnChooseCo(): Promise<void> {
             const roomInfo          = await MrrModel.getRoomInfo(this._getOpenData().roomId);
-            const userId            = User.UserModel.getSelfUserId();
-            const selfPlayerData    = roomInfo ? roomInfo.playerDataList.find(v => v.userId === userId) : null;
-            if (selfPlayerData) {
-                this._btnChooseCo.label = ConfigManager.getCoBasicCfg(roomInfo.settingsForCommon.configVersion, selfPlayerData.coId).name;
-            }
+            this._btnChooseCo.label = roomInfo
+                ? ConfigManager.getCoBasicCfg(roomInfo.settingsForCommon.configVersion, MrrModel.SelfSettings.getCoId()).name
+                : null;
         }
 
-        private async _updateGroupState(): Promise<void> {
+        private _updateGroupState(): void {
+            this._updateLabelCountdown();
+            this._updateLabelState();
+        }
+        private async _updateLabelCountdown(): Promise<void> {
+            const roomInfo              = await MrrModel.getRoomInfo(this._getOpenData().roomId);
+            const labelCountdownTitle   = this._labelCountdownTitle;
+            const labelCountdown        = this._labelCountdown;
+            if (!roomInfo) {
+                labelCountdownTitle.text    = null;
+                labelCountdown.text         = null;
+                return;
+            }
+
+            const timeForStartSetSelfSettings   = roomInfo.timeForStartSetSelfSettings;
+            const currentTime                   = Time.TimeModel.getServerTimestamp();
+            if (timeForStartSetSelfSettings != null) {
+                labelCountdownTitle.text    = Lang.getText(Lang.Type.B0593);
+                labelCountdown.text         = Helpers.getTimeDurationText2(Math.max(0, timeForStartSetSelfSettings + CommonConstants.RankRoomPhaseTime - currentTime));
+            } else {
+                labelCountdownTitle.text    = Lang.getText(Lang.Type.B0592);
+                labelCountdown.text         = Helpers.getTimeDurationText2(Math.max(0, roomInfo.timeForCreateRoom + CommonConstants.RankRoomPhaseTime - currentTime));
+            }
+        }
+        private async _updateLabelState(): Promise<void> {
             const roomInfo      = await MrrModel.getRoomInfo(this._getOpenData().roomId);
             const labelState    = this._labelState;
             if (!roomInfo) {

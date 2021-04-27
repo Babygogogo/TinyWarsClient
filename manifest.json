@@ -260,7 +260,7 @@
 		"bin-debug/modules/multiRankRoom/view/MrrMyRoomListPanel.js",
 		"bin-debug/modules/multiRankRoom/view/MrrPreviewMapListPanel.js",
 		"bin-debug/modules/multiRankRoom/view/MrrRoomAdvancedSettingsPage.js",
-		"bin-debug/modules/multiRankRoom/view/MrrRoomAvailableCoPanel.js",
+		"bin-debug/modules/multiRankRoom/view/MrrRoomBanCoPanel.js",
 		"bin-debug/modules/multiRankRoom/view/MrrRoomBasicSettingsPage.js",
 		"bin-debug/modules/multiRankRoom/view/MrrRoomChooseCoPanel.js",
 		"bin-debug/modules/multiRankRoom/view/MrrRoomInfoPanel.js",

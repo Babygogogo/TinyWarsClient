@@ -122,12 +122,19 @@ namespace TinyWars.MultiRankRoom.MrrModel {
     }
 
     export async function updateOnMsgMrrSetBannedCoIdList(data: ProtoTypes.NetMessage.MsgMrrSetBannedCoIdList.IS): Promise<void> {
-        const roomInfo = await getRoomInfo(data.roomId);
+        const roomId    = data.roomId;
+        const roomInfo  = await getRoomInfo(roomId);
         if (!roomInfo) {
             return;
         }
 
-        roomInfo.timeForStartSetSelfSettings = data.timeForStartSetSelfSettings;
+        const timeForStartSetSelfSettings = data.timeForStartSetSelfSettings;
+        if ((timeForStartSetSelfSettings != null) && (roomInfo.timeForStartSetSelfSettings == null)) {
+            roomInfo.timeForStartSetSelfSettings = timeForStartSetSelfSettings;
+            if (SelfSettings.getRoomId() === roomId) {
+                await SelfSettings.resetData(roomId);
+            }
+        }
 
         const settingsForMrw    = roomInfo.settingsForMrw;
         const srcPlayerIndex    = data.playerIndex;
@@ -233,11 +240,13 @@ namespace TinyWars.MultiRankRoom.MrrModel {
     }
 
     export namespace SelfSettings {
+        let _roomId             : number | null | undefined;
         let _coId               : number | null | undefined;
         let _unitAndTileSkinId  : number | null | undefined;
         let _availableCoIdArray : number[] | null | undefined;
 
         export async function resetData(roomId: number): Promise<void> {
+            setRoomId(roomId);
             setCoId(null);
             setUnitAndTileSkinId(null);
             setAvailableCoIdArray(null);
@@ -271,6 +280,12 @@ namespace TinyWars.MultiRankRoom.MrrModel {
                 setCoId(CommonConstants.CoEmptyId);
                 setUnitAndTileSkinId(availableSkinIdList.indexOf(selfPlayerIndex) >= 0 ? selfPlayerIndex : availableSkinIdList[0]);
             }
+        }
+        function setRoomId(roomId: number | null | undefined): void {
+            _roomId = roomId;
+        }
+        export function getRoomId(): number | null | undefined {
+            return _roomId;
         }
 
         export function setCoId(coId: number | null | undefined): void {

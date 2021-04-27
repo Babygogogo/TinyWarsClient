@@ -3356,6 +3356,14 @@ namespace TinyWars.Utility.Lang {
             `已禁用CO`,
             `Banned COs`,
         ],
+        [Type.B0592]: [
+            `禁用CO阶段倒计时`,
+            `Ban CO Phase Countdown`,
+        ],
+        [Type.B0593]: [
+            `准备阶段倒计时`,
+            `Standby Phase Countdown`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [

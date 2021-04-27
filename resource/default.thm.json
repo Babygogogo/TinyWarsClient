@@ -144,7 +144,7 @@
 		"resource/skins/multiRankRoom/MrrMyRoomListPanel.exml",
 		"resource/skins/multiRankRoom/MrrPreviewMapListPanel.exml",
 		"resource/skins/multiRankRoom/MrrRoomAdvancedSettingsPage.exml",
-		"resource/skins/multiRankRoom/MrrRoomAvailableCoPanel.exml",
+		"resource/skins/multiRankRoom/MrrRoomBanCoPanel.exml",
 		"resource/skins/multiRankRoom/MrrRoomBasicSettingsPage.exml",
 		"resource/skins/multiRankRoom/MrrRoomChooseCoPanel.exml",
 		"resource/skins/multiRankRoom/MrrRoomInfoPanel.exml",

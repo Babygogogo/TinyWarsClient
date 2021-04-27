@@ -48,6 +48,7 @@ namespace TinyWars.Utility.CommonConstants {
     export const RankMaxConcurrentCount             = 5;
     export const RankMinConcurrentCount             = 0;
     export const RankMaxBanCoCount                  = 3;
+    export const RankRoomPhaseTime                  = 3600 * 24;
 
     export const ChatContentMaxLength                   = 200;
     export const ChatTeamDivider                        = 100;
