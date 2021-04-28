@@ -977,8 +977,18 @@ namespace TinyWars.Utility.Lang {
             `It's not allowed to cancel the "ready" state.`,
         ],
         [Type.A0206]: [
-            `一旦进入准备状态，您将无法反悔，也无法修改您的CO和颜色设定。\n确定要继续吗？`,
-            `Once you're ready, you can not cancel the "ready" state nor change your CO and/or color.\nAre you sure to continue?`,
+            [
+                `一旦进入准备状态，您将无法反悔，也无法修改您的CO和颜色设定。`,
+                `确定要继续吗？`,
+                ``,
+                `注：正式开局前，您的对手不会知道您选择了哪个CO。`,
+            ].join(`\n`),
+            [
+                `Once you're ready, you can not undo nor change your CO and/or color.`,
+                `Are you sure to continue?`,
+                ``,
+                `Tips: Your opponent(s) will not know which CO you have chosen until the game starts.`,
+            ].join(`\n`),
         ],
         [Type.A0207]: [
             `您已准备就绪，无法再修改各项设定`,

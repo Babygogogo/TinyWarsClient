@@ -35,12 +35,12 @@ namespace TinyWars.MultiRankRoom.MrrProxy {
             roomId,
         } }, });
     }
-    function _onMsgMrrGetRoomPublicInfo(e: egret.Event): void {
+    async function _onMsgMrrGetRoomPublicInfo(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.MsgMrrGetRoomPublicInfoFailed, data);
         } else {
-            MrrModel.setRoomInfo(data.roomInfo, true);
+            await MrrModel.updateOnMsgMrrGetRoomPublicInfo(data);
             Notify.dispatch(Notify.Type.MsgMrrGetRoomPublicInfo, data);
         }
     }

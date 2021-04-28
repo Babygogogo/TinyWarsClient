@@ -25,21 +25,8 @@ namespace TinyWars.MultiRankRoom.MrrModel {
         return hasFog ? _maxConcurrentCountForFog : _maxConcurrentCountForStd;
     }
 
-    export function setRoomInfo(roomInfo: IMrrRoomInfo, needNotify: boolean): void {
-        const roomId        = roomInfo.roomId;
-        const oldRoomInfo   = _allRoomDict.get(roomId);
-        _allRoomDict.set(roomId, roomInfo);
-
-        if (needNotify) {
-            const isMyOldRoom = (oldRoomInfo != null) && (checkIsMyRoom(oldRoomInfo));
-            const isMyNewRoom = checkIsMyRoom(roomInfo);
-            if ((!isMyOldRoom) && (isMyNewRoom)) {
-                Notify.dispatch(Notify.Type.MrrMyRoomAdded);
-            }
-            if ((isMyOldRoom) && (!isMyNewRoom)) {
-                Notify.dispatch(Notify.Type.MrrMyRoomDeleted);
-            }
-        }
+    export function setRoomInfo(roomInfo: IMrrRoomInfo): void {
+        _allRoomDict.set(roomInfo.roomId, roomInfo);
     }
     export function getRoomInfo(roomId: number): Promise<IMrrRoomInfo | undefined | null> {
         if (roomId == null) {
@@ -108,7 +95,7 @@ namespace TinyWars.MultiRankRoom.MrrModel {
 
     export function updateWithMyRoomInfoList(roomList: IMrrRoomInfo[]): void {
         for (const roomInfo of roomList || []) {
-            setRoomInfo(roomInfo, false);
+            setRoomInfo(roomInfo);
         }
     }
     export function getMyRoomIdArray(): number[] {
@@ -121,19 +108,20 @@ namespace TinyWars.MultiRankRoom.MrrModel {
         return idArray;
     }
 
+    export async function updateOnMsgMrrGetRoomPublicInfo(data: ProtoTypes.NetMessage.MsgMrrGetRoomPublicInfo.IS): Promise<void> {
+        const roomInfo = data.roomInfo;
+        setRoomInfo(data.roomInfo);
+
+        const roomId = roomInfo.roomId;
+        if (SelfSettings.getRoomId() === roomId) {
+            await SelfSettings.resetData(roomId);
+        }
+    }
     export async function updateOnMsgMrrSetBannedCoIdList(data: ProtoTypes.NetMessage.MsgMrrSetBannedCoIdList.IS): Promise<void> {
         const roomId    = data.roomId;
         const roomInfo  = await getRoomInfo(roomId);
         if (!roomInfo) {
             return;
-        }
-
-        const timeForStartSetSelfSettings = data.timeForStartSetSelfSettings;
-        if ((timeForStartSetSelfSettings != null) && (roomInfo.timeForStartSetSelfSettings == null)) {
-            roomInfo.timeForStartSetSelfSettings = timeForStartSetSelfSettings;
-            if (SelfSettings.getRoomId() === roomId) {
-                await SelfSettings.resetData(roomId);
-            }
         }
 
         const settingsForMrw    = roomInfo.settingsForMrw;

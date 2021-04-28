@@ -51409,9 +51409,6 @@ export declare namespace NetMessage {
 
             /** S bannedCoIdList */
             bannedCoIdList?: (number[]|null);
-
-            /** S timeForStartSetSelfSettings */
-            timeForStartSetSelfSettings?: (number|null);
         }
 
         /** Represents a S. */
@@ -51434,9 +51431,6 @@ export declare namespace NetMessage {
 
             /** S bannedCoIdList. */
             public bannedCoIdList: number[];
-
-            /** S timeForStartSetSelfSettings. */
-            public timeForStartSetSelfSettings: number;
 
             /**
              * Creates a new S instance using the specified properties.
