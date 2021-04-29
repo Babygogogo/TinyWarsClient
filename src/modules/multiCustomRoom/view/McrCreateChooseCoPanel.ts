@@ -6,6 +6,7 @@ namespace TinyWars.MultiCustomRoom {
     import ConfigManager    = Utility.ConfigManager;
     import Helpers          = Utility.Helpers;
     import Notify           = Utility.Notify;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
 
     type OpenDataForMcrCreateChooseCoPanel = {
         coId    : number | undefined | null;
@@ -134,21 +135,19 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _createDataForListCo(): DataForCoRenderer[] {
-            const data              : DataForCoRenderer[] = [];
-            const availableCoIdList = McrModel.Create.getAvailableCoIdList(McrModel.Create.getSelfPlayerIndex());
-
-            let index = 0;
-            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
-                if (availableCoIdList.indexOf(cfg.coId) >= 0) {
-                    data.push({
-                        coBasicCfg  : cfg,
-                        index,
-                        panel       : this,
-                    });
-                    ++index;
-                }
+            const creator       = McrModel.Create;
+            const configVersion = ConfigManager.getLatestFormalVersion();
+            const dataArray     : DataForCoRenderer[] = [];
+            let index           = 0;
+            for (const coId of BwWarRuleHelper.getAvailableCoIdArrayForPlayer(creator.getWarRule(), creator.getSelfPlayerIndex(), configVersion)) {
+                dataArray.push({
+                    coBasicCfg  : ConfigManager.getCoBasicCfg(configVersion, coId),
+                    index,
+                    panel       : this,
+                });
+                ++index;
             }
-            return data;
+            return dataArray;
         }
 
         private _updateComponentsForCoInfo(): void {

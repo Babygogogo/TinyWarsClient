@@ -604,7 +604,7 @@ namespace TinyWars.Utility.Types {
 
     export const enum PlayerRuleType {
         TeamIndex,
-        AvailableCoIdList,
+        BannedCoIdArray,
         InitialFund,
         IncomeMultiplier,
         InitialEnergyPercentage,

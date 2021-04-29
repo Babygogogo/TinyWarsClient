@@ -246,14 +246,14 @@ namespace TinyWars.MapEditor.MeModel {
             return BwWarRuleHelper.getEnergyGrowthMultiplier(getWarRule(), playerIndex);
         }
 
-        export function getAvailableCoIdList(playerIndex: number): number[] {
-            return BwWarRuleHelper.getAvailableCoIdList(getWarRule(), playerIndex);
+        export function getBannedCoIdArray(playerIndex: number): number[] {
+            return BwWarRuleHelper.getBannedCoIdArray(getWarRule(), playerIndex);
         }
-        export function addAvailableCoId(playerIndex: number, coId: number): void {
-            BwWarRuleHelper.addAvailableCoId(getWarRule(), playerIndex, coId);
+        export function addBannedCoId(playerIndex: number, coId: number): void {
+            BwWarRuleHelper.addBannedCoId(getWarRule(), playerIndex, coId);
         }
-        export function removeAvailableCoId(playerIndex: number, coId: number): void {
-            BwWarRuleHelper.removeAvailableCoId(getWarRule(), playerIndex, coId);
+        export function deleteBannedCoId(playerIndex: number, coId: number): void {
+            BwWarRuleHelper.deleteBannedCoId(getWarRule(), playerIndex, coId);
         }
 
         export function setLuckLowerLimit(playerIndex: number, limit: number): void {

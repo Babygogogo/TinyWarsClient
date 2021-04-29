@@ -2611,8 +2611,8 @@ namespace TinyWars.Utility.Lang {
             `Ready`,
         ],
         [Type.B0403]: [
-            `可用CO数量`,
-            `Available COs Num`,
+            `禁用CO数量`,
+            `Banned COs Number`,
         ],
         [Type.B0404]: [
             `排位赛`,
@@ -4555,7 +4555,7 @@ namespace TinyWars.Utility.Lang {
     export function getPlayerRuleName(type: PlayerRuleType): string | undefined {
         switch (type) {
             case PlayerRuleType.TeamIndex               : return getText(Type.B0019);
-            case PlayerRuleType.AvailableCoIdList       : return getText(Type.B0403);
+            case PlayerRuleType.BannedCoIdArray         : return getText(Type.B0403);
             case PlayerRuleType.InitialFund             : return getText(Type.B0178);
             case PlayerRuleType.IncomeMultiplier        : return getText(Type.B0179);
             case PlayerRuleType.InitialEnergyPercentage : return getText(Type.B0180);

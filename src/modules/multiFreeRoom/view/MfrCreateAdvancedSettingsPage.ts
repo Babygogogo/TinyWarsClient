@@ -57,7 +57,7 @@ namespace TinyWars.MultiFreeRoom {
         private _initListSetting(): void {
             this._listSetting.bindData([
                 { playerRuleType: PlayerRuleType.TeamIndex },
-                { playerRuleType: PlayerRuleType.AvailableCoIdList },
+                { playerRuleType: PlayerRuleType.BannedCoIdArray },
                 { playerRuleType: PlayerRuleType.InitialFund },
                 { playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerRuleType: PlayerRuleType.InitialEnergyPercentage },
@@ -109,14 +109,14 @@ namespace TinyWars.MultiFreeRoom {
             if (data) {
                 const playerRuleType    = data.playerRuleType;
                 this._labelName.text    = Lang.getPlayerRuleName(playerRuleType);
-                this._btnHelp.visible   = playerRuleType === PlayerRuleType.AvailableCoIdList;
+                this._btnHelp.visible   = playerRuleType === PlayerRuleType.BannedCoIdArray;
             }
         }
 
         private _onTouchedBtnHelp(e: egret.Event): void {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
-            if (playerRuleType === PlayerRuleType.AvailableCoIdList) {
+            if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
                 Common.CommonHelpPanel.show({
                     title   : `CO`,
                     content : Lang.getRichText(Lang.RichType.R0004),
@@ -158,7 +158,7 @@ namespace TinyWars.MultiFreeRoom {
             const playerIndex   = data.playerIndex;
             return [
                 { playerIndex, playerRuleType: PlayerRuleType.TeamIndex },
-                { playerIndex, playerRuleType: PlayerRuleType.AvailableCoIdList },
+                { playerIndex, playerRuleType: PlayerRuleType.BannedCoIdArray },
                 { playerIndex, playerRuleType: PlayerRuleType.InitialFund },
                 { playerIndex, playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerIndex, playerRuleType: PlayerRuleType.InitialEnergyPercentage },
@@ -196,7 +196,7 @@ namespace TinyWars.MultiFreeRoom {
                 const playerIndex = data.playerIndex;
                 switch (data.playerRuleType) {
                     case PlayerRuleType.TeamIndex               : this._updateComponentsForValueAsTeamIndex(playerIndex);               return;
-                    case PlayerRuleType.AvailableCoIdList       : this._updateComponentsForValueAsAvailableCoIdList(playerIndex);       return;
+                    case PlayerRuleType.BannedCoIdArray         : this._updateComponentsForValueAsBannedCoIdArray(playerIndex);         return;
                     case PlayerRuleType.InitialFund             : this._updateComponentsForValueAsInitialFund(playerIndex);             return;
                     case PlayerRuleType.IncomeMultiplier        : this._updateComponentsForValueAsIncomeMultiplier(playerIndex);        return;
                     case PlayerRuleType.InitialEnergyPercentage : this._updateComponentsForValueAsInitialEnergyPercentage(playerIndex); return;
@@ -217,12 +217,12 @@ namespace TinyWars.MultiFreeRoom {
             labelValue.text         = teamIndex == null ? null : Lang.getPlayerTeamName(teamIndex);
             labelValue.textColor    = 0xFFFFFF;
         }
-        private async _updateComponentsForValueAsAvailableCoIdList(playerIndex: number): Promise<void> {
+        private async _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): Promise<void> {
             const warData           = MfrModel.Create.getInitialWarData();
-            const coIdArray         = warData ? BwWarRuleHelper.getAvailableCoIdList(warData.settingsForCommon.warRule, playerIndex) : undefined;
+            const currValue         = warData ? (BwWarRuleHelper.getBannedCoIdArray(warData.settingsForCommon.warRule, playerIndex) || []).length : 0;
             const labelValue        = this._labelValue;
-            labelValue.text         = coIdArray ? `${coIdArray.length}` : null;
-            labelValue.textColor    = 0xFFFFFF;
+            labelValue.text         = `${currValue}`;
+            labelValue.textColor    = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
         }
         private async _updateComponentsForValueAsInitialFund(playerIndex: number): Promise<void> {
             const warData           = MfrModel.Create.getInitialWarData();

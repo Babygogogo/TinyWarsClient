@@ -13,7 +13,7 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
             { msgCode: ActionCode.MsgMcrDeleteRoomByPlayer,         callback: _onMsgMcrDeleteRoomByPlayer },
             { msgCode: ActionCode.MsgMcrDeleteRoomByServer,         callback: _onMsgMcrDeleteRoomByServer },
             { msgCode: ActionCode.MsgMcrExitRoom,                   callback: _onMsgMcrExitRoom },
-            { msgCode: ActionCode.MsgMcrSetWarRule,                 callback: _onMsgMcrSetWarRule },
+            // { msgCode: ActionCode.MsgMcrSetWarRule,                 callback: _onMsgMcrSetWarRule },
             { msgCode: ActionCode.MsgMcrDeletePlayer,               callback: _onMsgMcrDeletePlayer },
             { msgCode: ActionCode.MsgMcrSetReady,                   callback: _onMsgMcrSetReady },
             { msgCode: ActionCode.MsgMcrSetSelfSettings,            callback: _onMsgMcrSetSelfSettings },
@@ -87,17 +87,17 @@ namespace TinyWars.MultiCustomRoom.McrProxy {
         }
     }
 
-    export function reqMcrSetWarRule(data: NetMessage.MsgMcrSetWarRule.IC): void {
-        NetManager.send({
-            MsgMcrSetWarRule: { c: data },
-        });
-    }
-    function _onMsgMcrSetWarRule(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMcrSetWarRule.IS;
-        if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgMcrSetWarRule, data);
-        }
-    }
+    // export function reqMcrSetWarRule(data: NetMessage.MsgMcrSetWarRule.IC): void {
+    //     NetManager.send({
+    //         MsgMcrSetWarRule: { c: data },
+    //     });
+    // }
+    // function _onMsgMcrSetWarRule(e: egret.Event): void {
+    //     const data = e.data as NetMessage.MsgMcrSetWarRule.IS;
+    //     if (!data.errorCode) {
+    //         Notify.dispatch(Notify.Type.MsgMcrSetWarRule, data);
+    //     }
+    // }
 
     export function reqMcrDeletePlayer(roomId: number, playerIndex: number): void {
         NetManager.send({

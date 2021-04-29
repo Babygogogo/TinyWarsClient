@@ -152,10 +152,10 @@ namespace TinyWars.SingleCustomRoom.ScrModel {
     }
 
     export function setCreateWarCoId(playerIndex: number, coId: number): void {
-        const availableCoIdList = getCreateWarPlayerRule(playerIndex).availableCoIdArray;
-        if (availableCoIdList.indexOf(coId) < 0) {
+        const bannedCoIdArray = getCreateWarPlayerRule(playerIndex).bannedCoIdArray;
+        if ((bannedCoIdArray) && (bannedCoIdArray.indexOf(coId) >= 0)) {
             setCreateWarPresetWarRuleId(null);
-            availableCoIdList.push(coId);
+            Helpers.deleteElementFromArray(bannedCoIdArray, coId);
         }
 
         getCreateWarPlayerInfo(playerIndex).coId = coId;

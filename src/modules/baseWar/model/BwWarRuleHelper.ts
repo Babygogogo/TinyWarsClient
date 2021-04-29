@@ -23,7 +23,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         playerIndex             : CommonConstants.WarNeutralPlayerIndex,
         teamIndex               : 0,
         attackPowerModifier     : 0,
-        availableCoIdArray      : [0],
+        bannedCoIdArray         : [],
         energyGrowthMultiplier  : 100,
         initialEnergyPercentage : 0,
         initialFund             : 0,
@@ -278,69 +278,72 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         playerRule.luckUpperLimit = value;
     }
 
-    export function getAvailableCoIdList(warRule: IWarRule, playerIndex: number): number[] {
+    export function getBannedCoIdArray(warRule: IWarRule, playerIndex: number): number[] | null | undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwWarRuleHelper.getAvailableCoIdList() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getBannedCoIdArray() empty playerRule.`);
             return undefined;
         }
 
-        const coIdArray = playerRule.availableCoIdArray;
-        if ((coIdArray == null) || (!coIdArray.length)) {
-            Logger.error(`BwWarRuleHelper.getAvailableCoIdList() empty coIdList.`);
-            return undefined;
-        }
-
-        return coIdArray;
+        return playerRule.bannedCoIdArray;
     }
-    export function getAvailableCoIdArrayFilteredByConfig(warRule: IWarRule, playerIndex: number, configVersion: string): number[] | null | undefined {
-        const coIdArray = getAvailableCoIdList(warRule, playerIndex);
-        if (coIdArray == null) {
-            return null;
+    export function getAvailableCoIdArrayForPlayer(warRule: IWarRule, playerIndex: number, configVersion: string): number[] | null | undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwWarRuleHelper.getAvailableCoIdArrayForPlayer() empty playerRule.`);
+            return undefined;
+        }
+
+        return getAvailableCoIdArray(configVersion, new Set<number>(playerRule.bannedCoIdArray));
+    }
+    export function getAvailableCoIdArray(configVersion: string, bannedCoIdSet: Set<number>): number[] {
+        return ConfigManager.getEnabledCoArray(configVersion)
+            .map(v => v.coId)
+            .filter(v => !bannedCoIdSet.has(v));
+    }
+    export function addBannedCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
+        const playerRule = getPlayerRule(warRule, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwWarRuleHelper.addBannedCoId() empty playerRule.`);
+            return undefined;
+        }
+
+        if (playerRule.bannedCoIdArray == null) {
+            playerRule.bannedCoIdArray = [coId];
         } else {
-            return coIdArray.filter(v => {
-                const cfg = ConfigManager.getCoBasicCfg(configVersion, v);
-                return (!!cfg) && (!!cfg.isEnabled);
-            });
-        }
-    }
-    export function addAvailableCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
-        const coIdList = getAvailableCoIdList(warRule, playerIndex);
-        if (coIdList == null) {
-            Logger.error(`BwWarRuleHelper.addAvailableCoId() empty coIdList.`);
-            return undefined;
-        }
-
-        if (coIdList.indexOf(coId) < 0) {
-            coIdList.push(coId);
-        }
-    }
-    export function removeAvailableCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
-        const coIdList = getAvailableCoIdList(warRule, playerIndex);
-        if (coIdList == null) {
-            Logger.error(`BwWarRuleHelper.removeAvailableCoId() empty coIdList.`);
-            return undefined;
-        }
-
-        while (true) {
-            const index = coIdList.indexOf(coId);
-            if (index >= 0) {
-                coIdList.splice(index, 1);
-            } else {
-                break;
+            const bannedCoIdArray = playerRule.bannedCoIdArray;
+            if (bannedCoIdArray.indexOf(coId) < 0) {
+                bannedCoIdArray.push(coId);
             }
         }
     }
-    export function setAvailableCoIdList(warRule: IWarRule, playerIndex: number, coIdSet: Set<number>): void {
-        const coIdList = getAvailableCoIdList(warRule, playerIndex);
-        if (coIdList == null) {
-            Logger.error(`BwWarRuleHelper.setAvailableCoIdList() empty coIdList.`);
+    export function deleteBannedCoId(warRule: IWarRule, playerIndex: number, coId: number): void {
+        const playerRule = getPlayerRule(warRule, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwWarRuleHelper.deleteBannedCoId() empty playerRule.`);
             return undefined;
         }
 
-        coIdList.length = 0;
-        for (const coId of coIdSet) {
-            coIdList.push(coId);
+        const bannedCoIdArray = playerRule.bannedCoIdArray;
+        if (bannedCoIdArray) {
+            Helpers.deleteElementFromArray(bannedCoIdArray, coId);
+        }
+    }
+    export function setBannedCoIdArray(warRule: IWarRule, playerIndex: number, coIdSet: Set<number>): void {
+        const playerRule = getPlayerRule(warRule, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwWarRuleHelper.setBannedCoIdArray() empty playerRule.`);
+            return undefined;
+        }
+
+        if (playerRule.bannedCoIdArray == null) {
+            playerRule.bannedCoIdArray = [...coIdSet];
+        } else {
+            const bannedCoIdArray   = playerRule.bannedCoIdArray;
+            bannedCoIdArray.length  = 0;
+            for (const coId of coIdSet) {
+                bannedCoIdArray.push(coId);
+            }
         }
     }
 
@@ -464,11 +467,13 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
     }
 
     export function getRandomCoIdWithSettingsForCommon(settingsForCommon: ISettingsForCommon, playerIndex: number): number {
-        const configVersion = settingsForCommon.configVersion;
-        return getRandomCoIdWithCoIdList(getPlayerRule(settingsForCommon.warRule, playerIndex).availableCoIdArray.filter(coId => {
-            const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
-            return (cfg != null) && (cfg.isEnabled);
-        }));
+        const availableCoIdArray = getAvailableCoIdArrayForPlayer(settingsForCommon.warRule, playerIndex, settingsForCommon.configVersion);
+        if (availableCoIdArray == null) {
+            Logger.error(`BwWarRuleHelper.getRandomCoIdWithSettingsForCommon() empty availableCoIdArray.`);
+            return undefined;
+        }
+
+        return getRandomCoIdWithCoIdList(availableCoIdArray);
     }
     export function getRandomCoIdWithCoIdList(coIdList: number[]): number {
         if (coIdList == null) {
@@ -522,7 +527,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
             visionRangeModifier     : CommonConstants.WarRuleVisionRangeModifierDefault,
             luckLowerLimit          : CommonConstants.WarRuleLuckDefaultLowerLimit,
             luckUpperLimit          : CommonConstants.WarRuleLuckDefaultUpperLimit,
-            availableCoIdArray      : ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion()).map(v => v.coId),
+            bannedCoIdArray         : [],
         }
     }
     export function reviseWarRule(warRule: IWarRule, playersCount: number): void {
@@ -623,7 +628,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
             }
 
             const {
-                initialFund,        availableCoIdArray,     incomeMultiplier,       initialEnergyPercentage,    energyGrowthMultiplier,
+                initialFund,        bannedCoIdArray = [],   incomeMultiplier,       initialEnergyPercentage,    energyGrowthMultiplier,
                 moveRangeModifier,  attackPowerModifier,    visionRangeModifier,    luckUpperLimit,             luckLowerLimit,
             } = data;
             if ((initialFund                == null)                                                    ||
@@ -654,9 +659,8 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 (luckUpperLimit             > CommonConstants.WarRuleLuckMaxLimit)                      ||
                 (luckUpperLimit             < CommonConstants.WarRuleLuckMinLimit)                      ||
                 (luckUpperLimit             < luckLowerLimit)                                           ||
-                (availableCoIdArray          == null)                                                    ||
-                (availableCoIdArray.every(v => v !== CommonConstants.CoEmptyId))                         ||
-                (availableCoIdArray.some(coId => ConfigManager.getCoBasicCfg(configVersion, coId) == null))
+                (bannedCoIdArray.indexOf(CommonConstants.CoEmptyId) >= 0)                               ||
+                (bannedCoIdArray.some(coId => ConfigManager.getCoBasicCfg(configVersion, coId) == null))
             ) {
                 return false;
             }
@@ -873,10 +877,9 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 return ClientErrorCode.PlayerRuleValidation11;
             }
 
-            const availableCoIdArray = data.availableCoIdArray;
-            if ((availableCoIdArray == null)                                                            ||
-                (availableCoIdArray.every(v => v !== CommonConstants.CoEmptyId))                        ||
-                (availableCoIdArray.some(coId => ConfigManager.getCoBasicCfg(configVersion, coId) == null))
+            const bannedCoIdArray = data.bannedCoIdArray || [];
+            if ((bannedCoIdArray.indexOf(CommonConstants.CoEmptyId) >= 0)                               ||
+                (bannedCoIdArray.some(coId => ConfigManager.getCoBasicCfg(configVersion, coId) == null))
             ) {
                 return ClientErrorCode.PlayerRuleValidation12;
             }

@@ -294,9 +294,9 @@ namespace TinyWars.MultiCustomRoom {
                 const playerIndex   = data.playerIndex;
                 creator.setSelfPlayerIndex(playerIndex);
 
-                const coIdArray = creator.getAvailableCoIdList(playerIndex);
-                if (coIdArray.indexOf(creator.getSelfCoId()) < 0) {
-                    creator.setSelfCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(coIdArray));
+                const availableCoIdArray = BwWarRuleHelper.getAvailableCoIdArrayForPlayer(creator.getWarRule(), playerIndex, ConfigManager.getLatestFormalVersion());
+                if (availableCoIdArray.indexOf(creator.getSelfCoId()) < 0) {
+                    creator.setSelfCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(availableCoIdArray));
                 }
             }
         }

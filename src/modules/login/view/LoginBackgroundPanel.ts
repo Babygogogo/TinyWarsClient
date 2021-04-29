@@ -3,6 +3,7 @@ namespace TinyWars.Login {
     import Notify   = Utility.Notify;
     import Lang     = Utility.Lang;
     import Types    = Utility.Types;
+    import Helpers  = Utility.Helpers;
 
     export class LoginBackgroundPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Bottom;
@@ -14,6 +15,7 @@ namespace TinyWars.Login {
         private _labelVersion       : GameUi.UiLabel;
         private _btnLanguage01      : GameUi.UiButton;
         private _btnLanguage02      : GameUi.UiButton;
+        private _groupCopyright     : eui.Group;
         private _groupUnits         : eui.Group;
 
         public static show(): void {
@@ -47,6 +49,8 @@ namespace TinyWars.Login {
                 { ui: this._btnLanguage02,  callback: this._onTouchedBtnLanguage02 },
             ]);
 
+            this._showOpenAnimation();
+
             this._imgBackground.touchEnabled = true;
             this._btnLanguage01.setImgDisplaySource("login_button_language_003");
             this._btnLanguage01.setImgExtraSource("login_button_language_001");
@@ -60,6 +64,8 @@ namespace TinyWars.Login {
         }
 
         protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+
             this._clearGroupUnits();
         }
 
@@ -102,6 +108,68 @@ namespace TinyWars.Login {
                 ? "login_button_language_002"
                 : "login_button_language_004"
             );
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgBackground,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnLanguage01,
+                waitTime    : 1400,
+                beginProps  : { left: -40, alpha: 0 },
+                endProps    : { left: 0, alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnLanguage02,
+                waitTime    : 1500,
+                beginProps  : { left: -40, alpha: 0 },
+                endProps    : { left: 0, alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._labelVersion,
+                waitTime    : 1600,
+                beginProps  : { right: -20, alpha: 0 },
+                endProps    : { right: 20, alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupCopyright,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+                waitTime    : 1700,
+            });
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._imgBackground,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                    callback    : resolve,
+                });
+                Helpers.resetTween({
+                    obj         : this._btnLanguage01,
+                    beginProps  : { left: 0, alpha: 1 },
+                    endProps    : { left: -40, alpha: 0 },
+                });
+                Helpers.resetTween({
+                    obj         : this._btnLanguage02,
+                    beginProps  : { left: 0, alpha: 1 },
+                    endProps    : { left: -40, alpha: 0 },
+                });
+                Helpers.resetTween({
+                    obj         : this._labelVersion,
+                    beginProps  : { right: 20, alpha: 1 },
+                    endProps    : { right: -20, alpha: 0 },
+                });
+                Helpers.resetTween({
+                    obj         : this._groupCopyright,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                });
+            });
         }
 
         // private _initGroupUnits(): void {

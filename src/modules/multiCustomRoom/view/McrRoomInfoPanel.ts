@@ -477,7 +477,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             } else {
                 const settingsForCommon     = roomInfo.settingsForCommon;
-                const availableCoIdArray    = BwWarRuleHelper.getAvailableCoIdArrayFilteredByConfig(settingsForCommon.warRule, newPlayerIndex, settingsForCommon.configVersion);
+                const availableCoIdArray    = BwWarRuleHelper.getAvailableCoIdArrayForPlayer(settingsForCommon.warRule, newPlayerIndex, settingsForCommon.configVersion);
                 const currCoId              = selfPlayerData.coId;
                 McrProxy.reqMcrSetSelfSettings({
                     roomId,

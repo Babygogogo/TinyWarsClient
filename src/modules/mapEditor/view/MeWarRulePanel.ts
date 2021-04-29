@@ -524,7 +524,7 @@ namespace TinyWars.MapEditor {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.MeAvailableCoChanged, callback: this._onNotifyMeAvailableCoChanged },
+                { type: Notify.Type.MeBannedCoIdArrayChanged, callback: this._onNotifyMeBannedCoIdArrayChanged },
             ]);
             this._listInfo.setItemRenderer(InfoRenderer);
         }
@@ -535,7 +535,7 @@ namespace TinyWars.MapEditor {
             this._updateView();
         }
 
-        private _onNotifyMeAvailableCoChanged(e: egret.Event): void {
+        private _onNotifyMeBannedCoIdArrayChanged(e: egret.Event): void {
             this._updateView();
         }
 
@@ -551,7 +551,7 @@ namespace TinyWars.MapEditor {
             return [
                 this._createDataPlayerIndex(warRule, playerRule, isReviewing),
                 this._createDataTeamIndex(warRule, playerRule, isReviewing),
-                this._createDataAvailableCoIdList(warRule, playerRule, isReviewing),
+                this._createDataBannedCoIdArray(warRule, playerRule, isReviewing),
                 this._createDataInitialFund(warRule, playerRule, isReviewing),
                 this._createDataIncomeMultiplier(warRule, playerRule, isReviewing),
                 this._createDataInitialEnergyPercentage(warRule, playerRule, isReviewing),
@@ -584,10 +584,10 @@ namespace TinyWars.MapEditor {
                     },
             };
         }
-        private _createDataAvailableCoIdList(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataBannedCoIdArray(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0403),
-                infoText                : `${playerRule.availableCoIdArray.length}`,
+                infoText                : `${(playerRule.bannedCoIdArray || []).length}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : isReviewing
                     ? null

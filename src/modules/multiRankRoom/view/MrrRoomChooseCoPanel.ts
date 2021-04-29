@@ -121,8 +121,8 @@ namespace TinyWars.MultiRankRoom {
             this._updateComponentsForCoInfo();
         }
 
-        private _initListCo(): void {
-            this._dataForListCo = this._createDataForListCo();
+        private async _initListCo(): Promise<void> {
+            this._dataForListCo = await this._createDataForListCo();
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
 
@@ -133,22 +133,24 @@ namespace TinyWars.MultiRankRoom {
             }));
         }
 
-        private _createDataForListCo(): DataForCoRenderer[] {
-            const data              : DataForCoRenderer[] = [];
-            const availableCoIdList = MrrModel.SelfSettings.getAvailableCoIdArray();
-
-            let index = 0;
-            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
-                if (availableCoIdList.indexOf(cfg.coId) >= 0) {
-                    data.push({
-                        coBasicCfg  : cfg,
-                        index,
-                        panel       : this,
-                    });
-                    ++index;
-                }
+        private async _createDataForListCo(): Promise<DataForCoRenderer[]> {
+            const roomInfo = await MrrModel.getRoomInfo(MrrModel.SelfSettings.getRoomId());
+            if (roomInfo == null) {
+                return [];
             }
-            return data;
+
+            const configVersion = roomInfo.settingsForCommon.configVersion;
+            const dataArray     : DataForCoRenderer[] = [];
+            let index           = 0;
+            for (const coId of MrrModel.SelfSettings.getAvailableCoIdArray() || []) {
+                dataArray.push({
+                    coBasicCfg  : ConfigManager.getCoBasicCfg(configVersion, coId),
+                    index,
+                    panel       : this,
+                });
+                ++index;
+            }
+            return dataArray;
         }
 
         private _updateComponentsForCoInfo(): void {

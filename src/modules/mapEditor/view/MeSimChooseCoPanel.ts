@@ -4,6 +4,7 @@ namespace TinyWars.MapEditor {
     import Lang             = Utility.Lang;
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
+    import Helpers          = Utility.Helpers;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
     type OpenDataForSimChooseCoPanel = {
@@ -142,7 +143,7 @@ namespace TinyWars.MapEditor {
             const data          : DataForCoRenderer[] = [];
             const playerIndex   = this._getOpenData().playerIndex;
             let index           = 0;
-            for (const cfg of ConfigManager.getAvailableCoArray(MeModel.Sim.getWarData().settingsForCommon.configVersion)) {
+            for (const cfg of ConfigManager.getEnabledCoArray(MeModel.Sim.getWarData().settingsForCommon.configVersion)) {
                 data.push({
                     playerIndex,
                     coBasicCfg  : cfg,
@@ -287,18 +288,19 @@ namespace TinyWars.MapEditor {
                 data.panel.close();
                 MeSimSettingsPanel.show();
             };
-            if (MeModel.Sim.getAvailableCoIdList(playerIndex).indexOf(coId) >= 0) {
+
+            if (!Helpers.checkHasElement(MeModel.Sim.getBannedCoIdArray(playerIndex) || [], coId)) {
                 callback();
             } else {
                 if (MeModel.Sim.getPresetWarRuleId() == null) {
-                    MeModel.Sim.addAvailableCoId(playerIndex, coId);
+                    MeModel.Sim.deleteBannedCoId(playerIndex, coId);
                     callback();
                 } else {
                     Common.CommonConfirmPanel.show({
                         content : Lang.getText(Lang.Type.A0129),
                         callback: () => {
                             MeModel.Sim.setPresetWarRuleId(null);
-                            MeModel.Sim.addAvailableCoId(playerIndex, coId);
+                            MeModel.Sim.deleteBannedCoId(playerIndex, coId);
                             callback();
                         },
                     });

@@ -29,7 +29,7 @@ namespace TinyWars.Utility.Notify {
         ChatPanelOpened,
         ChatPanelClosed,
 
-        McrCreateAvailableCoIdListChanged,
+        McrCreateBannedCoIdArrayChanged,
         McrCreateTeamIndexChanged,
         McrCreateSelfCoIdChanged,
         McrCreateSelfSkinIdChanged,
@@ -109,7 +109,7 @@ namespace TinyWars.Utility.Notify {
         MeMapNameChanged,
         MeWarRuleNameChanged,
         MeWarEventIdArrayChanged,
-        MeAvailableCoChanged,
+        MeBannedCoIdArrayChanged,
 
         WarEventFullDataChanged,
 

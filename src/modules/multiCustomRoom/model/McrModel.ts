@@ -300,7 +300,7 @@ namespace TinyWars.MultiCustomRoom.McrModel {
             settingsForCommon.warRule   = warRule;
             setCustomWarRuleId();
 
-            const availableCoIdArray = BwWarRuleHelper.getAvailableCoIdArrayFilteredByConfig(warRule, getSelfPlayerIndex(), settingsForCommon.configVersion);
+            const availableCoIdArray = BwWarRuleHelper.getAvailableCoIdArrayForPlayer(warRule, getSelfPlayerIndex(), settingsForCommon.configVersion);
             if (availableCoIdArray.indexOf(getSelfCoId()) < 0) {
                 setSelfCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(availableCoIdArray));
             }
@@ -323,7 +323,7 @@ namespace TinyWars.MultiCustomRoom.McrModel {
             settingsForCommon.warRule   = Helpers.deepClone(warRule);
             setPresetWarRuleId(ruleId);
 
-            const availableCoIdArray = BwWarRuleHelper.getAvailableCoIdArrayFilteredByConfig(warRule, getSelfPlayerIndex(), settingsForCommon.configVersion);
+            const availableCoIdArray = BwWarRuleHelper.getAvailableCoIdArrayForPlayer(warRule, getSelfPlayerIndex(), settingsForCommon.configVersion);
             if (availableCoIdArray.indexOf(getSelfCoId()) < 0) {
                 setSelfCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(availableCoIdArray));
             }
@@ -500,17 +500,17 @@ namespace TinyWars.MultiCustomRoom.McrModel {
             return BwWarRuleHelper.getEnergyGrowthMultiplier(getWarRule(), playerIndex);
         }
 
-        export function getAvailableCoIdList(playerIndex: number): number[] {
-            return BwWarRuleHelper.getAvailableCoIdList(getWarRule(), playerIndex);
+        export function getBannedCoIdArray(playerIndex: number): number[] {
+            return BwWarRuleHelper.getBannedCoIdArray(getWarRule(), playerIndex);
         }
-        export function addAvailableCoId(playerIndex: number, coId: number): void {
-            BwWarRuleHelper.addAvailableCoId(getWarRule(), playerIndex, coId);
+        export function addBannedCoId(playerIndex: number, coId: number): void {
+            BwWarRuleHelper.addBannedCoId(getWarRule(), playerIndex, coId);
         }
-        export function removeAvailableCoId(playerIndex: number, coId: number): void {
-            BwWarRuleHelper.removeAvailableCoId(getWarRule(), playerIndex, coId);
+        export function deleteBannedCoId(playerIndex: number, coId: number): void {
+            BwWarRuleHelper.deleteBannedCoId(getWarRule(), playerIndex, coId);
         }
-        export function setAvailableCoIdList(playerIndex: number, coIdSet: Set<number>): void {
-            BwWarRuleHelper.setAvailableCoIdList(getWarRule(), playerIndex, coIdSet);
+        export function setBannedCoIdArray(playerIndex: number, coIdSet: Set<number>): void {
+            BwWarRuleHelper.setBannedCoIdArray(getWarRule(), playerIndex, coIdSet);
         }
 
         export function setLuckLowerLimit(playerIndex: number, limit: number): void {

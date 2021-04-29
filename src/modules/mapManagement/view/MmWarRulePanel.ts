@@ -304,7 +304,7 @@ namespace TinyWars.MapManagement {
         private _createDataAvailableCoIdList(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0403),
-                infoText                : `${playerRule.availableCoIdArray.length}`,
+                infoText                : `${(playerRule.bannedCoIdArray || []).length}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     MmWarRuleAvailableCoPanel.show({

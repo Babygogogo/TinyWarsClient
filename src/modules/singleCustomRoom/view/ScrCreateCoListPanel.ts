@@ -139,7 +139,7 @@ namespace TinyWars.SingleCustomRoom {
             const dataIndexForCreateWarPlayerList   = this._getOpenData().dataIndex;
             const data                              : DataForCoRenderer[] = [];
             let index                               = 0;
-            for (const cfg of Utility.ConfigManager.getAvailableCoArray(Utility.ConfigManager.getLatestFormalVersion())) {
+            for (const cfg of Utility.ConfigManager.getEnabledCoArray(Utility.ConfigManager.getLatestFormalVersion())) {
                 data.push({
                     dataIndexForCreateWarPlayerList,
                     coBasicCfg  : cfg,

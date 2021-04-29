@@ -151,24 +151,23 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _createDataForListCo(): Promise<DataForCoRenderer[]> {
-            const openData              = this._getOpenData();
-            const roomInfo              = await McrModel.getRoomInfo(openData.roomId);
-            const settingsForCommon     = roomInfo ? roomInfo.settingsForCommon : null;
-            const availableCoIdArray    = settingsForCommon
-                ? BwWarRuleHelper.getAvailableCoIdList(settingsForCommon.warRule, openData.playerIndex) || []
-                : [];
+            const openData          = this._getOpenData();
+            const roomInfo          = await McrModel.getRoomInfo(openData.roomId);
+            const settingsForCommon = roomInfo ? roomInfo.settingsForCommon : null;
+            if (settingsForCommon == null) {
+                return [];
+            }
 
-            const dataArray : DataForCoRenderer[] = [];
-            let index       = 0;
-            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
-                if (availableCoIdArray.indexOf(cfg.coId) >= 0) {
-                    dataArray.push({
-                        coBasicCfg  : cfg,
-                        index,
-                        panel       : this,
-                    });
-                    ++index;
-                }
+            const configVersion = settingsForCommon.configVersion;
+            const dataArray     : DataForCoRenderer[] = [];
+            let index           = 0;
+            for (const coId of BwWarRuleHelper.getAvailableCoIdArrayForPlayer(settingsForCommon.warRule, openData.playerIndex, configVersion) || []) {
+                dataArray.push({
+                    coBasicCfg  : ConfigManager.getCoBasicCfg(configVersion, coId),
+                    index,
+                    panel       : this,
+                });
+                ++index;
             }
             return dataArray;
         }

@@ -333,27 +333,14 @@ namespace TinyWars.MultiRankRoom.MrrModel {
                 return undefined;
             }
 
-            const rawAvailableCoIdList = playerRule.availableCoIdArray;
-            if (rawAvailableCoIdList == null) {
-                Logger.error(`MrrModel.generateAvailableCoIdList() empty rawAvailableCoIdList.`);
-                return undefined;
-            }
-
-            const bannedCoIds = new Set<number>();
+            const bannedCoIdSet = new Set<number>(playerRule.bannedCoIdArray);
             for (const data of dataArrayForBanCo) {
                 for (const coId of data.bannedCoIdList || []) {
-                    bannedCoIds.add(coId);
+                    bannedCoIdSet.add(coId);
                 }
             }
 
-            const availableCoIdArray: number[] = [];
-            for (const coId of rawAvailableCoIdList) {
-                const cfg = ConfigManager.getCoBasicCfg(configVersion, coId);
-                if ((cfg) && (cfg.isEnabled) &&(!bannedCoIds.has(coId))) {
-                    availableCoIdArray.push(coId);
-                }
-            }
-            return availableCoIdArray;
+            return BwWarRuleHelper.getAvailableCoIdArray(configVersion, bannedCoIdSet);
         }
 
         function generateAvailableSkinIdList(roomInfo: IMrrRoomInfo): number[] | undefined {

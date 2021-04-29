@@ -168,7 +168,7 @@ namespace TinyWars.MultiRankRoom {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
+            for (const cfg of ConfigManager.getEnabledCoArray(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsAvailable(true);

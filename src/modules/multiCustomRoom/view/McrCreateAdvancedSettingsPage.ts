@@ -91,7 +91,7 @@ namespace TinyWars.MultiCustomRoom {
         private _initListSetting(): void {
             this._listSetting.bindData([
                 { playerRuleType: PlayerRuleType.TeamIndex },
-                { playerRuleType: PlayerRuleType.AvailableCoIdList },
+                { playerRuleType: PlayerRuleType.BannedCoIdArray },
                 { playerRuleType: PlayerRuleType.InitialFund },
                 { playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerRuleType: PlayerRuleType.InitialEnergyPercentage },
@@ -137,14 +137,14 @@ namespace TinyWars.MultiCustomRoom {
             if (data) {
                 const playerRuleType    = data.playerRuleType;
                 this._labelName.text    = Lang.getPlayerRuleName(playerRuleType);
-                this._btnHelp.visible   = playerRuleType === PlayerRuleType.AvailableCoIdList;
+                this._btnHelp.visible   = playerRuleType === PlayerRuleType.BannedCoIdArray;
             }
         }
 
         private _onTouchedBtnHelp(e: egret.Event): void {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
-            if (playerRuleType === PlayerRuleType.AvailableCoIdList) {
+            if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
                 Common.CommonHelpPanel.show({
                     title   : `CO`,
                     content : Lang.getRichText(Lang.RichType.R0004),
@@ -187,7 +187,7 @@ namespace TinyWars.MultiCustomRoom {
             const playerIndex = this.data.playerIndex;
             return [
                 { playerIndex, playerRuleType: PlayerRuleType.TeamIndex },
-                { playerIndex, playerRuleType: PlayerRuleType.AvailableCoIdList },
+                { playerIndex, playerRuleType: PlayerRuleType.BannedCoIdArray },
                 { playerIndex, playerRuleType: PlayerRuleType.InitialFund },
                 { playerIndex, playerRuleType: PlayerRuleType.IncomeMultiplier },
                 { playerIndex, playerRuleType: PlayerRuleType.InitialEnergyPercentage },
@@ -227,7 +227,7 @@ namespace TinyWars.MultiCustomRoom {
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.McrCreatePresetWarRuleIdChanged,    callback: this._onNotifyMcrCreatePresetWarRuleIdChanged },
-                { type: Notify.Type.McrCreateAvailableCoIdListChanged,  callback: this._onNotifyMcrCreateAvailableCoIdListChanged },
+                { type: Notify.Type.McrCreateBannedCoIdArrayChanged,    callback: this._onNotifyMcrCreateBannedCoIdArrayChanged },
             ]);
             this._labelValue.touchEnabled = true;
         }
@@ -269,7 +269,7 @@ namespace TinyWars.MultiCustomRoom {
             this._updateBtnCustom();
             this._updateComponentsForValue();
         }
-        private _onNotifyMcrCreateAvailableCoIdListChanged(): void {
+        private _onNotifyMcrCreateBannedCoIdArrayChanged(): void {
             this._updateComponentsForValue();
         }
 
@@ -282,7 +282,7 @@ namespace TinyWars.MultiCustomRoom {
                 const playerIndex = data.playerIndex;
                 switch (data.playerRuleType) {
                     case PlayerRuleType.TeamIndex               : this._updateComponentsForValueAsTeamIndex(playerIndex);               return;
-                    case PlayerRuleType.AvailableCoIdList       : this._updateComponentsForValueAsAvailableCoIdList(playerIndex);       return;
+                    case PlayerRuleType.BannedCoIdArray         : this._updateComponentsForValueAsBannedCoIdArray(playerIndex);         return;
                     case PlayerRuleType.InitialFund             : this._updateComponentsForValueAsInitialFund(playerIndex);             return;
                     case PlayerRuleType.IncomeMultiplier        : this._updateComponentsForValueAsIncomeMultiplier(playerIndex);        return;
                     case PlayerRuleType.InitialEnergyPercentage : this._updateComponentsForValueAsInitialEnergyPercentage(playerIndex); return;
@@ -306,14 +306,15 @@ namespace TinyWars.MultiCustomRoom {
             labelValue.textColor                = 0xFFFFFF;
             this._callbackForTouchLabelValue    = () => McrModel.Create.tickTeamIndex(playerIndex);
         }
-        private _updateComponentsForValueAsAvailableCoIdList(playerIndex: number): void {
+        private _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): void {
             this._inputValue.visible            = false;
             this._callbackForFocusOutInputValue = null;
 
             const labelValue                    = this._labelValue;
+            const currValue                     = (McrModel.Create.getBannedCoIdArray(playerIndex) || []).length;
             labelValue.visible                  = true;
-            labelValue.text                     = `${McrModel.Create.getAvailableCoIdList(playerIndex).length}`;
-            labelValue.textColor                = 0xFFFFFF;
+            labelValue.text                     = `${currValue}`;
+            labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
             this._callbackForTouchLabelValue    = () => McrCreateAvailableCoPanel.show({ playerIndex });
         }
         private _updateComponentsForValueAsInitialFund(playerIndex: number): void {

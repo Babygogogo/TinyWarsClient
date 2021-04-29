@@ -30,7 +30,7 @@ namespace TinyWars.MultiCustomRoom {
         private _renderersForCoNames    : RendererForCoName[] = [];
 
         private _playerIndex            : number;
-        private _availableCoIdSet       = new Set<number>();
+        private _bannedCoIdSet          = new Set<number>();
         private _previewCoId            : number;
 
         public static show(openData: OpenDataForMcrCreateAvailableCoPanel): void {
@@ -68,10 +68,10 @@ namespace TinyWars.MultiCustomRoom {
             const playerIndex = this._getOpenData().playerIndex;
             this._playerIndex = playerIndex;
 
-            const availableCoIdSet = this._availableCoIdSet;
-            availableCoIdSet.clear();
-            for (const coId of McrModel.Create.getAvailableCoIdList(this._playerIndex)) {
-                availableCoIdSet.add(coId);
+            const bannedCoIdSet = this._bannedCoIdSet;
+            bannedCoIdSet.clear();
+            for (const coId of McrModel.Create.getBannedCoIdArray(playerIndex) || []) {
+                bannedCoIdSet.add(coId);
             }
 
             this._updateComponentsForLanguage();
@@ -109,8 +109,8 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const availableCoIdSet = this._availableCoIdSet;
-            if (!availableCoIdSet.has(CommonConstants.CoEmptyId)) {
+            const bannedCoIdSet = this._bannedCoIdSet;
+            if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
                 Common.CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0130),
@@ -118,19 +118,19 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const playerIndex   = this._playerIndex;
                 const callback      = () => {
-                    McrModel.Create.setAvailableCoIdList(playerIndex, availableCoIdSet);
-                    Notify.dispatch(Notify.Type.McrCreateAvailableCoIdListChanged);
+                    McrModel.Create.setBannedCoIdArray(playerIndex, bannedCoIdSet);
+                    Notify.dispatch(Notify.Type.McrCreateBannedCoIdArrayChanged);
                     this.close();
                 };
                 if ((playerIndex !== McrModel.Create.getSelfPlayerIndex()) ||
-                    (availableCoIdSet.has(McrModel.Create.getSelfCoId()))
+                    (!bannedCoIdSet.has(McrModel.Create.getSelfCoId()))
                 ) {
                     callback();
                 } else {
                     ConfirmPanel.show({
                         content : Lang.getText(Lang.Type.A0057),
                         callback: () => {
-                            McrModel.Create.setSelfCoId(Helpers.pickRandomElement([...availableCoIdSet]));
+                            McrModel.Create.setSelfCoId(CommonConstants.CoEmptyId);
                             callback();
                         },
                     });
@@ -175,13 +175,13 @@ namespace TinyWars.MultiCustomRoom {
         // }
 
         private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
-            const renderer          = e.currentTarget as RendererForCoName;
-            const coId              = renderer.getCoId();
-            const availableCoIdSet  = this._availableCoIdSet;
+            const renderer      = e.currentTarget as RendererForCoName;
+            const coId          = renderer.getCoId();
+            const bannedCoIdSet = this._bannedCoIdSet;
             this._setPreviewCoId(coId);
 
             if (!renderer.getIsSelected()) {
-                availableCoIdSet.add(coId);
+                bannedCoIdSet.delete(coId);
                 // this._updateGroupCoTiers();
                 this._updateGroupCoNames();
 
@@ -195,7 +195,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
 
                 const callback = () => {
-                    availableCoIdSet.delete(coId);
+                    bannedCoIdSet.add(coId);
                     // this._updateGroupCoTiers();
                     this._updateGroupCoNames();
                 };
@@ -268,7 +268,7 @@ namespace TinyWars.MultiCustomRoom {
         // }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
+            for (const cfg of ConfigManager.getEnabledCoArray(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -287,19 +287,14 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateGroupCoNames(): void {
-            const availableCoIdSet = this._availableCoIdSet;
+            const bannedCoIdSet = this._bannedCoIdSet;
             for (const renderer of this._renderersForCoNames) {
-                renderer.setIsSelected(availableCoIdSet.has(renderer.getCoId()));
+                renderer.setIsSelected(!bannedCoIdSet.has(renderer.getCoId()));
             }
         }
 
         private _initComponentsForPreviewCo(): void {
-            for (const coId of this._availableCoIdSet) {
-                if (coId !== CommonConstants.CoEmptyId) {
-                    this._setPreviewCoId(coId);
-                    return;
-                }
-            }
+            this._setPreviewCoId(CommonConstants.CoEmptyId);
         }
 
         private _updateComponentsForPreviewCoId(): void {

@@ -5421,8 +5421,8 @@ export declare namespace WarRule {
         /** DataForPlayerRule luckUpperLimit */
         luckUpperLimit?: (number|null);
 
-        /** DataForPlayerRule availableCoIdArray */
-        availableCoIdArray?: (number[]|null);
+        /** DataForPlayerRule bannedCoIdArray */
+        bannedCoIdArray?: (number[]|null);
     }
 
     /** Represents a DataForPlayerRule. */
@@ -5467,8 +5467,8 @@ export declare namespace WarRule {
         /** DataForPlayerRule luckUpperLimit. */
         public luckUpperLimit: number;
 
-        /** DataForPlayerRule availableCoIdArray. */
-        public availableCoIdArray: number[];
+        /** DataForPlayerRule bannedCoIdArray. */
+        public bannedCoIdArray: number[];
 
         /**
          * Creates a new DataForPlayerRule instance using the specified properties.

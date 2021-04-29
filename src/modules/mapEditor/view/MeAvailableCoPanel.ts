@@ -31,7 +31,7 @@ namespace TinyWars.MapEditor {
         private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
 
-        private _availableCoIdSet       = new Set<number>();
+        private _bannedCoIdSet          = new Set<number>();
 
         public static show(openData: OpenDataForMeAvailableCoPanel): void {
             if (!MeAvailableCoPanel._instance) {
@@ -62,11 +62,11 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.LanguageChanged, callback: this._onNotifyLanguageChanged },
             ]);
 
-            const availableCoIdSet  = this._availableCoIdSet;
-            const openData          = this._getOpenData();
-            availableCoIdSet.clear();
-            for (const coId of openData.playerRule.availableCoIdArray) {
-                availableCoIdSet.add(coId);
+            const bannedCoIdSet = this._bannedCoIdSet;
+            const openData      = this._getOpenData();
+            bannedCoIdSet.clear();
+            for (const coId of openData.playerRule.bannedCoIdArray || []) {
+                bannedCoIdSet.add(coId);
             }
 
             this._btnConfirm.visible = !openData.isReviewing;
@@ -92,38 +92,38 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const availableCoIdSet = this._availableCoIdSet;
-            if ((!availableCoIdSet.size) || (!availableCoIdSet.has(CommonConstants.CoEmptyId))) {
+            const bannedCoIdSet = this._bannedCoIdSet;
+            if (bannedCoIdSet.has(CommonConstants.CoEmptyId)) {
                 Common.CommonAlertPanel.show({
                     title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0130),
                 });
             } else {
                 const openData = this._getOpenData();
-                BwWarRuleHelper.setAvailableCoIdList(openData.warRule, openData.playerRule.playerIndex, availableCoIdSet);
-                Notify.dispatch(Notify.Type.MeAvailableCoChanged);
+                BwWarRuleHelper.setBannedCoIdArray(openData.warRule, openData.playerRule.playerIndex, bannedCoIdSet);
+                Notify.dispatch(Notify.Type.MeBannedCoIdArrayChanged);
                 this.close();
             }
         }
 
         private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {
             if (!this._getOpenData().isReviewing) {
-                const renderer          = e.currentTarget as RendererForCoTier;
-                const availableCoIdSet  = this._availableCoIdSet;
-                const coIdList          = renderer.getIsCustomSwitch()
-                    ? ConfigManager.getAvailableCustomCoIdList(ConfigManager.getLatestFormalVersion())
-                    : ConfigManager.getAvailableCoIdListInTier(ConfigManager.getLatestFormalVersion(), renderer.getCoTier());
+                const renderer      = e.currentTarget as RendererForCoTier;
+                const bannedCoIdSet = this._bannedCoIdSet;
+                const coIdList      = renderer.getIsCustomSwitch()
+                    ? ConfigManager.getEnabledCustomCoIdList(ConfigManager.getLatestFormalVersion())
+                    : ConfigManager.getEnabledCoIdListInTier(ConfigManager.getLatestFormalVersion(), renderer.getCoTier());
 
                 if (renderer.getState() === CoTierState.Unavailable) {
                     for (const coId of coIdList) {
-                        availableCoIdSet.add(coId);
+                        bannedCoIdSet.delete(coId);
                     }
                     this._updateGroupCoTiers();
                     this._updateGroupCoNames();
 
                 } else {
                     for (const coId of coIdList) {
-                        availableCoIdSet.delete(coId);
+                        bannedCoIdSet.add(coId);
                     }
                     this._updateGroupCoTiers();
                     this._updateGroupCoNames();
@@ -133,17 +133,17 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
             if (!this._getOpenData().isReviewing) {
-                const renderer          = e.currentTarget as RendererForCoName;
-                const coId              = renderer.getCoId();
-                const availableCoIdSet  = this._availableCoIdSet;
+                const renderer      = e.currentTarget as RendererForCoName;
+                const coId          = renderer.getCoId();
+                const bannedCoIdSet = this._bannedCoIdSet;
 
                 if (!renderer.getIsSelected()) {
-                    availableCoIdSet.add(coId);
+                    bannedCoIdSet.delete(coId);
                     this._updateGroupCoTiers();
                     this._updateGroupCoNames();
 
                 } else {
-                    availableCoIdSet.delete(coId);
+                    bannedCoIdSet.add(coId);
                     this._updateGroupCoTiers();
                     this._updateGroupCoNames();
                 }
@@ -185,17 +185,17 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateGroupCoTiers(): void {
-            const availableCoIdSet  = this._availableCoIdSet;
-            const configVersion     = ConfigManager.getLatestFormalVersion();
+            const bannedCoIdSet = this._bannedCoIdSet;
+            const configVersion = ConfigManager.getLatestFormalVersion();
             for (const renderer of this._renderersForCoTiers) {
                 const includedCoIdList = renderer.getIsCustomSwitch()
-                    ? ConfigManager.getAvailableCustomCoIdList(configVersion)
-                    : ConfigManager.getAvailableCoIdListInTier(configVersion, renderer.getCoTier());
+                    ? ConfigManager.getEnabledCustomCoIdList(configVersion)
+                    : ConfigManager.getEnabledCoIdListInTier(configVersion, renderer.getCoTier());
 
-                if (includedCoIdList.every(coId => availableCoIdSet.has(coId))) {
-                    renderer.setState(CoTierState.AllAvailable);
-                } else if (includedCoIdList.every(coId => !availableCoIdSet.has(coId))) {
+                if (includedCoIdList.every(coId => bannedCoIdSet.has(coId))) {
                     renderer.setState(CoTierState.Unavailable);
+                } else if (includedCoIdList.every(coId => !bannedCoIdSet.has(coId))) {
+                    renderer.setState(CoTierState.AllAvailable);
                 } else {
                     renderer.setState(CoTierState.PartialAvailable);
                 }
@@ -203,7 +203,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _initGroupCoNames(): void {
-            for (const cfg of ConfigManager.getAvailableCoArray(ConfigManager.getLatestFormalVersion())) {
+            for (const cfg of ConfigManager.getEnabledCoArray(ConfigManager.getLatestFormalVersion())) {
                 const renderer = new RendererForCoName();
                 renderer.setCoId(cfg.coId);
                 renderer.setIsSelected(true);
@@ -222,9 +222,9 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateGroupCoNames(): void {
-            const availableCoIdSet = this._availableCoIdSet;
+            const bannedCoIdSet = this._bannedCoIdSet;
             for (const renderer of this._renderersForCoNames) {
-                renderer.setIsSelected(availableCoIdSet.has(renderer.getCoId()));
+                renderer.setIsSelected(!bannedCoIdSet.has(renderer.getCoId()));
             }
         }
     }

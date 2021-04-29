@@ -246,7 +246,6 @@ namespace TinyWars.Utility.Helpers {
             return list[Math.floor(Math.random() * list.length)];
         }
     }
-
     export function deleteElementFromArray<T>(arr: T[], element: T, maxDeleteCount = Number.MAX_VALUE): number {
         let index       = 0;
         let deleteCount = 0;
@@ -259,6 +258,9 @@ namespace TinyWars.Utility.Helpers {
             }
         }
         return deleteCount;
+    }
+    export function checkHasElement<T>(arr: T[], element: T): boolean {
+        return arr ? arr.indexOf(element) >= 0 : undefined;
     }
 
     /** 获取一个整数的位数。不计负数的符号；0-9计为1；10-99计为2；以此类推 */

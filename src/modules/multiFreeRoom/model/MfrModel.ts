@@ -394,19 +394,6 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
             return BwWarRuleHelper.getEnergyGrowthMultiplier(getWarRule(), playerIndex);
         }
 
-        export function getAvailableCoIdList(playerIndex: number): number[] {
-            return BwWarRuleHelper.getAvailableCoIdList(getWarRule(), playerIndex);
-        }
-        export function addAvailableCoId(playerIndex: number, coId: number): void {
-            BwWarRuleHelper.addAvailableCoId(getWarRule(), playerIndex, coId);
-        }
-        export function removeAvailableCoId(playerIndex: number, coId: number): void {
-            BwWarRuleHelper.removeAvailableCoId(getWarRule(), playerIndex, coId);
-        }
-        export function setAvailableCoIdList(playerIndex: number, coIdSet: Set<number>): void {
-            BwWarRuleHelper.setAvailableCoIdList(getWarRule(), playerIndex, coIdSet);
-        }
-
         export function setLuckLowerLimit(playerIndex: number, limit: number): void {
             BwWarRuleHelper.setLuckLowerLimit(getWarRule(), playerIndex, limit);
         }
