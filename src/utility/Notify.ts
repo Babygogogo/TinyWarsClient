@@ -57,6 +57,7 @@ namespace TinyWars.Utility.Notify {
         McwPreviewingWarIdChanged,
         MrwPreviewingWarIdChanged,
         MfwPreviewingWarIdChanged,
+        RwPreviewingReplayIdChanged,
 
         BroadcastOngoingMessagesChanged,
 

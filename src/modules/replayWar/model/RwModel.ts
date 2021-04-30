@@ -4,13 +4,15 @@ namespace TinyWars.ReplayWar.RwModel {
     import ProtoManager = Utility.ProtoManager;
     import ProtoTypes   = Utility.ProtoTypes;
     import Helpers      = Utility.Helpers;
+    import Notify       = Utility.Notify;
     import BwHelpers    = BaseWar.BwHelpers;
     import WarMapModel  = WarMap.WarMapModel;
     import IReplayInfo  = ProtoTypes.Replay.IReplayInfo;
 
-    let _replayInfoList : IReplayInfo[];
-    let _replayData     : ProtoTypes.NetMessage.MsgReplayGetData.IS;
-    let _war            : RwWar;
+    let _replayInfoList     : IReplayInfo[];
+    let _replayData         : ProtoTypes.NetMessage.MsgReplayGetData.IS;
+    let _previewingReplayId : number;
+    let _war                : RwWar;
 
     export function init(): void {
     }
@@ -21,12 +23,26 @@ namespace TinyWars.ReplayWar.RwModel {
     export function getReplayInfoList(): IReplayInfo[] | undefined {
         return _replayInfoList;
     }
+    export function getReplayInfo(replayId: number): IReplayInfo | undefined {
+        const replayInfoArray = getReplayInfoList();
+        return replayInfoArray ? replayInfoArray.find(v => v.replayBriefInfo.replayId === replayId) : undefined;
+    }
 
     export function setReplayData(data: ProtoTypes.NetMessage.MsgReplayGetData.IS): void {
         _replayData = data;
     }
     export function getReplayData(): ProtoTypes.NetMessage.MsgReplayGetData.IS | undefined {
         return _replayData;
+    }
+
+    export function setPreviewingReplayId(replayId: number): void {
+        if (getPreviewingReplayId() != replayId) {
+            _previewingReplayId = replayId;
+            Notify.dispatch(Notify.Type.RwPreviewingReplayIdChanged);
+        }
+    }
+    export function getPreviewingReplayId(): number | null | undefined {
+        return _previewingReplayId;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
