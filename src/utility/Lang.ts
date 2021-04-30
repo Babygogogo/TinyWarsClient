@@ -3374,6 +3374,22 @@ namespace TinyWars.Utility.Lang {
             `准备阶段倒计时`,
             `Standby Phase Countdown`,
         ],
+        [Type.B0594]: [
+            `预览地图`,
+            `Preview Maps`,
+        ],
+        [Type.B0595]: [
+            `标准地图`,
+            `Standard Maps`,
+        ],
+        [Type.B0596]: [
+            `雾战地图`,
+            `FoW Maps`,
+        ],
+        [Type.B0597]: [
+            `切换`,
+            `Switch`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [

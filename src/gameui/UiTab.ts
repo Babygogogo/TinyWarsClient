@@ -11,6 +11,7 @@ namespace TinyWars.GameUi {
 
         private _cachedItemRenderer     : new () => UiTabItemRenderer<DataForTabItemRenderer>;
         private _cachedTabDataArray     : DataForUiTab<DataForTabItemRenderer, DataForPage>[];
+        private _cachedPageDataDict     = new Map<number, DataForPage>();
         private _cachedSelectedIndex    : number;
 
         protected _onOpened(): void {
@@ -28,9 +29,18 @@ namespace TinyWars.GameUi {
             }
 
             if (this._cachedTabDataArray) {
-                this.bindData(this._cachedTabDataArray, this._cachedSelectedIndex);
+                const tabDataArray  = this._cachedTabDataArray;
+                const pageDataDict  = this._cachedPageDataDict;
+                for (const [index, pageData] of pageDataDict) {
+                    if (tabDataArray[index]) {
+                        tabDataArray[index].pageData = pageData;
+                    }
+                }
+                this.bindData(tabDataArray, this._cachedSelectedIndex);
+
                 this._cachedTabDataArray    = null;
                 this._cachedSelectedIndex   = null;
+                pageDataDict.clear();
             }
         }
 
@@ -122,7 +132,7 @@ namespace TinyWars.GameUi {
 
         public updatePageData(index: number, pageData: DataForPage, refreshPage = true): void {
             if (!this.getIsOpening()) {
-                Logger.error(`UiTab.updatePageData() not opening.`);
+                this._cachedPageDataDict.set(index, pageData);
                 return;
             }
 
@@ -145,6 +155,7 @@ namespace TinyWars.GameUi {
             this._cachedItemRenderer        = null;
             this._cachedSelectedIndex       = null;
             this._cachedTabDataArray        = null;
+            this._cachedPageDataDict.clear();
 
             if (this.getIsOpening()) {
                 (this._bar.dataProvider as eui.ArrayCollection).removeAll();

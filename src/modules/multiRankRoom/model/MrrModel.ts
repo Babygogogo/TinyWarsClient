@@ -227,6 +227,20 @@ namespace TinyWars.MultiRankRoom.MrrModel {
         }
     }
 
+    export namespace PreviewMap {
+        let _previewingMapId: number;
+
+        export function getPreviewingMapId(): number | null | undefined {
+            return _previewingMapId;
+        }
+        export function setPreviewingMapId(mapId: number): void {
+            if (getPreviewingMapId() != mapId) {
+                _previewingMapId = mapId;
+                Notify.dispatch(Notify.Type.MrrPreviewingMapIdChanged);
+            }
+        }
+    }
+
     export namespace SelfSettings {
         let _roomId             : number | null | undefined;
         let _coId               : number | null | undefined;

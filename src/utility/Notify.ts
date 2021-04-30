@@ -53,6 +53,7 @@ namespace TinyWars.Utility.Notify {
         MrrSelfSettingsCoIdChanged,
         MrrSelfSettingsSkinIdChanged,
 
+        MrrPreviewingMapIdChanged,
         McwPreviewingWarIdChanged,
         MrwPreviewingWarIdChanged,
         MfwPreviewingWarIdChanged,
