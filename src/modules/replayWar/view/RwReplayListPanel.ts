@@ -22,6 +22,7 @@ namespace TinyWars.ReplayWar {
 
         private readonly _btnBack               : GameUi.UiButton;
         private readonly _btnNextStep           : GameUi.UiButton;
+        private readonly _btnSearch             : GameUi.UiButton;
 
         private readonly _groupReplayList       : eui.Group;
         private readonly _listReplay            : GameUi.UiScrollList<DataForReplayRenderer>;
@@ -58,6 +59,7 @@ namespace TinyWars.ReplayWar {
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
+                { ui: this._btnSearch,      callback: this._onTouchedBtnSearch },
                 { ui: this._btnNextStep,    callback: this._onTouchedBtnNextStep },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
@@ -110,7 +112,9 @@ namespace TinyWars.ReplayWar {
             Lobby.LobbyTopPanel.show();
             Lobby.LobbyBottomPanel.show();
         }
-
+        private _onTouchedBtnSearch(e: egret.TouchEvent): void {
+            RwSearchReplayPanel.show();
+        }
         private _onTouchedBtnNextStep(e: egret.TouchEvent): void {
             const replayId = RwModel.getPreviewingReplayId();
             if (replayId != null) {
@@ -152,6 +156,7 @@ namespace TinyWars.ReplayWar {
             this._btnBack.label             = Lang.getText(Lang.Type.B0146);
             this._labelNoReplay.text        = Lang.getText(Lang.Type.B0241);
             this._btnNextStep.label         = Lang.getText(Lang.Type.B0024);
+            this._btnSearch.label           = Lang.getText(Lang.Type.B0228);
         }
 
         private _updateGroupReplayList(): void {
@@ -217,6 +222,11 @@ namespace TinyWars.ReplayWar {
                 endProps    : { alpha: 1, y: 20 },
             });
             Helpers.resetTween({
+                obj         : this._btnSearch,
+                beginProps  : { alpha: 0, y: 40 },
+                endProps    : { alpha: 1, y: 80 },
+            });
+            Helpers.resetTween({
                 obj         : this._groupReplayList,
                 beginProps  : { alpha: 0, left: -20 },
                 endProps    : { alpha: 1, left: 20 },
@@ -244,6 +254,11 @@ namespace TinyWars.ReplayWar {
                     obj         : this._groupNavigator,
                     beginProps  : { alpha: 1, y: 20 },
                     endProps    : { alpha: 0, y: -20 },
+                });
+                Helpers.resetTween({
+                    obj         : this._btnSearch,
+                    beginProps  : { alpha: 1, y: 80 },
+                    endProps    : { alpha: 0, y: 40 },
                 });
                 Helpers.resetTween({
                     obj         : this._groupReplayList,
