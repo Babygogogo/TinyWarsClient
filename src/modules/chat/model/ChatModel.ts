@@ -5,7 +5,6 @@ namespace TinyWars.Chat.ChatModel {
     import FloatText    = Utility.FloatText;
     import Types        = Utility.Types;
     import ChatCategory = Types.ChatMessageToCategory;
-    import NetMessage   = ProtoTypes.NetMessage;
     import IChatMessage = ProtoTypes.Chat.IChatMessage;
 
     type MessageDict                    = Map<number, IChatMessage[]>;

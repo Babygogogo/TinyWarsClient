@@ -24,17 +24,18 @@ namespace TinyWars.Chat {
 
         private static _instance: ChatPanel;
 
-        private _groupChannel   : eui.Group;
-        private _labelChatTitle : TinyWars.GameUi.UiLabel;
-        private _listChat       : TinyWars.GameUi.UiScrollList<DataForChatPageRenderer>;
-        private _btnBack        : TinyWars.GameUi.UiButton;
-        private _btnRefresh     : TinyWars.GameUi.UiButton;
-        private _groupMessage   : eui.Group;
-        private _labelNoMessage : TinyWars.GameUi.UiLabel;
-        private _listMessage    : TinyWars.GameUi.UiScrollList<DataForMessageRenderer>;
-        private _groupInput     : eui.Group;
-        private _inputMessage   : TinyWars.GameUi.UiTextInput;
-        private _btnSend        : TinyWars.GameUi.UiButton;
+        private readonly _imgMask           : GameUi.UiImage;
+
+        private readonly _groupChannel      : eui.Group;
+        private readonly _listChat          : TinyWars.GameUi.UiScrollList<DataForChatPageRenderer>;
+        private readonly _btnClose          : TinyWars.GameUi.UiButton;
+        private readonly _btnRefresh        : TinyWars.GameUi.UiButton;
+        private readonly _groupMessage      : eui.Group;
+        private readonly _labelNoMessage    : TinyWars.GameUi.UiLabel;
+        private readonly _listMessage       : TinyWars.GameUi.UiScrollList<DataForMessageRenderer>;
+        private readonly _groupInput        : eui.Group;
+        private readonly _inputMessage      : TinyWars.GameUi.UiTextInput;
+        private readonly _btnSend           : TinyWars.GameUi.UiButton;
 
         private _dataForListChat: DataForChatPageRenderer[] = [];
         private _selectedIndex  : number;
@@ -59,7 +60,6 @@ namespace TinyWars.Chat {
             super();
 
             this._setIsTouchMaskEnabled();
-            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/chat/ChatPanel.exml";
         }
 
@@ -70,7 +70,7 @@ namespace TinyWars.Chat {
                 { type: Notify.Type.MsgChatGetAllMessages,  callback: this._onMsgChatGetAllMessages },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnBack,    callback: this.close },
+                { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnRefresh, callback: this._onTouchedBtnRefresh },
                 { ui: this._btnSend,    callback: this._onTouchedBtnSend },
             ]);
@@ -202,58 +202,69 @@ namespace TinyWars.Chat {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _showOpenAnimation(): void {
-            const groupChannel = this._groupChannel;
-            egret.Tween.removeTweens(groupChannel);
-            egret.Tween.get(groupChannel)
-                .set({ alpha: 0, left: -40 })
-                .to({ alpha: 1, left: 0 }, 200);
-
-            const groupMessage = this._groupMessage;
-            egret.Tween.removeTweens(groupMessage);
-            egret.Tween.get(groupMessage)
-                .set({ alpha: 0, right: -40 })
-                .to({ alpha: 1, right: 0 }, 200);
-
-            const groupInput = this._groupInput;
-            egret.Tween.removeTweens(groupInput);
-            egret.Tween.get(groupInput)
-                .set({ alpha: 0, bottom: -40 })
-                .to({ alpha: 1, bottom: 0 }, 200);
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupChannel,
+                beginProps  : { alpha: 0, left: -40 },
+                endProps    : { alpha: 1, left: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupMessage,
+                beginProps  : { alpha: 0, right: -40 },
+                endProps    : { alpha: 1, right: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupInput,
+                beginProps  : { alpha: 0, bottom: -40 },
+                endProps    : { alpha: 1, bottom: 0 },
+            });
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>((resolve) => {
-                const groupChannel = this._groupChannel;
-                egret.Tween.removeTweens(groupChannel);
-                egret.Tween.get(groupChannel)
-                    .set({ alpha: 1, left: 0 })
-                    .to({ alpha: 0, left: -40 }, 200);
-
-                const groupMessage = this._groupMessage;
-                egret.Tween.removeTweens(groupMessage);
-                egret.Tween.get(groupMessage)
-                    .set({ alpha: 1, right: 0 })
-                    .to({ alpha: 0, right: -40 }, 200);
-
-                const groupInput = this._groupInput;
-                egret.Tween.removeTweens(groupInput);
-                egret.Tween.get(groupInput)
-                    .set({ alpha: 1, bottom: 0 })
-                    .to({ alpha: 0, bottom: -40 }, 200)
-                    .call(resolve);
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                });
+                Helpers.resetTween({
+                    obj         : this._groupChannel,
+                    beginProps  : { alpha: 1, left: 0 },
+                    endProps    : { alpha: 0, left: -40 },
+                    callback    : resolve,
+                });
+                Helpers.resetTween({
+                    obj         : this._groupMessage,
+                    beginProps  : { alpha: 1, right: 0 },
+                    endProps    : { alpha: 0, right: -40 },
+                });
+                Helpers.resetTween({
+                    obj         : this._groupInput,
+                    beginProps  : { alpha: 1, bottom: 0 },
+                    endProps    : { alpha: 0, bottom: -40 },
+                });
             });
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelChatTitle.text   = Lang.getText(Lang.Type.B0380);
             this._labelNoMessage.text   = Lang.getText(Lang.Type.B0381);
+            this._btnClose.label        = Lang.getText(Lang.Type.B0146);
+            this._btnRefresh.label      = Lang.getText(Lang.Type.B0602);
             this._btnSend.label         = Lang.getText(Lang.Type.B0382);
         }
 
         private _updateComponentsForMessage(): void {
-            const data                      = this._dataForListChat[this.getSelectedIndex()];
-            const messageList               = ChatModel.getMessagesForCategory(data.toCategory).get(data.toTarget) || [];
-            this._labelNoMessage.visible    = !messageList.length;
-            this._listMessage.bindData(messageList);
+            const chatData  = this._dataForListChat[this.getSelectedIndex()];
+            const dataArray : DataForMessageRenderer[] = [];
+            for (const message of ChatModel.getMessagesForCategory(chatData.toCategory).get(chatData.toTarget) || []) {
+                dataArray.push({ message });
+            }
+
+            this._labelNoMessage.visible = !dataArray.length;
+            this._listMessage.bindData(dataArray);
             this._listMessage.scrollVerticalTo(100);
         }
 
@@ -570,8 +581,9 @@ namespace TinyWars.Chat {
         }
     }
 
-    type DataForMessageRenderer = ProtoTypes.Chat.IChatMessage;
-
+    type DataForMessageRenderer = {
+        message: ProtoTypes.Chat.IChatMessage;
+    }
     class MessageRenderer extends GameUi.UiListItemRenderer<DataForMessageRenderer> {
         private _labelName      : TinyWars.GameUi.UiLabel;
         private _labelContent   : TinyWars.GameUi.UiLabel;
@@ -579,23 +591,23 @@ namespace TinyWars.Chat {
         protected dataChanged(): void {
             super.dataChanged();
 
-            const data                  = this.data;
-            const fromUserId            = data.fromUserId;
-            this._labelContent.text     = data.content;
+            const message               = this.data.message;
+            const fromUserId            = message.fromUserId;
+            this._labelContent.text     = message.content;
             this._labelName.textColor   = fromUserId === User.UserModel.getSelfUserId() ? 0x00FF00 : 0xFFFFFF;
-            this._labelName.text        = `    (${Helpers.getTimestampShortText(data.timestamp)})`;
+            this._labelName.text        = `    (${Helpers.getTimestampShortText(message.timestamp)})`;
             User.UserModel.getUserPublicInfo(fromUserId).then(info => {
                 const d = this.data;
-                if ((d) && (info.userId === d.fromUserId)) {
-                    this._labelName.text = `${info.nickname || `???`}    (${Helpers.getTimestampShortText(data.timestamp)})`;
+                if ((d) && (info.userId === d.message.fromUserId)) {
+                    this._labelName.text = `${info.nickname || `???`}    (${Helpers.getTimestampShortText(message.timestamp)})`;
                 }
             });
         }
 
         public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
-            const data = this.data;
-            if (data.toCategory !== ChatCategory.Private) {
-                const userId = data.fromUserId;
+            const message = this.data.message;
+            if (message.toCategory !== ChatCategory.Private) {
+                const userId = message.fromUserId;
                 if (userId !== User.UserModel.getSelfUserId()) {
                     const info = await User.UserModel.getUserPublicInfo(userId);
                     if (info) {
