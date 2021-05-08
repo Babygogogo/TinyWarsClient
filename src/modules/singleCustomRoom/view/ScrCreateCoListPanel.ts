@@ -286,7 +286,7 @@ namespace TinyWars.SingleCustomRoom {
             data.panel.close();
 
             const cfg   = data.coBasicCfg;
-            ScrModel.setCreateWarCoId(data.dataIndexForCreateWarPlayerList, cfg ? cfg.coId : null);
+            ScrModel.Create.setCoId(data.dataIndexForCreateWarPlayerList, cfg ? cfg.coId : null);
             ScrCreateSettingsPanel.show();
         }
     }

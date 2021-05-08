@@ -29,7 +29,7 @@ namespace TinyWars.SingleCustomRoom {
             ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            this._mapRawData = await ScrModel.getCreateWarMapRawData();
+            this._mapRawData = await ScrModel.Create.getMapRawData();
 
             this._updateComponentsForLanguage();
             this._updateLabelMapName();
@@ -114,16 +114,16 @@ namespace TinyWars.SingleCustomRoom {
         private _createDataTeamIndex(playerIndex: number): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0019),
-                infoText                : Lang.getPlayerTeamName(ScrModel.getCreateWarTeamIndex(playerIndex)),
+                infoText                : Lang.getPlayerTeamName(ScrModel.Create.getTeamIndex(playerIndex)),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    ScrModel.tickCreateWarTeamIndex(playerIndex);
+                    ScrModel.Create.tickTeamIndex(playerIndex);
                     this._updateView();
                 },
             };
         }
         private _createDataInitialFund(playerIndex: number): DataForInfoRenderer {
-            const currValue = ScrModel.getCreateWarInitialFund(playerIndex);
+            const currValue = ScrModel.Create.getInitialFund(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0178),
                 infoText                : `${currValue}`,
@@ -143,7 +143,7 @@ namespace TinyWars.SingleCustomRoom {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(Lang.Type.A0098));
                             } else {
-                                ScrModel.setCreateWarInitialFund(playerIndex, value);
+                                ScrModel.Create.setInitialFund(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -152,7 +152,7 @@ namespace TinyWars.SingleCustomRoom {
             };
         }
         private _createDataIncomeMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue = ScrModel.getCreateWarIncomeMultiplier(playerIndex);
+            const currValue = ScrModel.Create.getIncomeMultiplier(playerIndex);
             const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
             const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
             return {
@@ -172,7 +172,7 @@ namespace TinyWars.SingleCustomRoom {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(Lang.Type.A0098));
                             } else {
-                                ScrModel.setCreateWarIncomeMultiplier(playerIndex, value);
+                                ScrModel.Create.setIncomeMultiplier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -181,7 +181,7 @@ namespace TinyWars.SingleCustomRoom {
             };
         }
         private _createDataInitialEnergyPercentage(playerIndex: number): DataForInfoRenderer {
-            const currValue     = ScrModel.getCreateWarInitialEnergyPercentage(playerIndex);
+            const currValue     = ScrModel.Create.getInitialEnergyPercentage(playerIndex);
             const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
             const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
             return {
@@ -201,7 +201,7 @@ namespace TinyWars.SingleCustomRoom {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(Lang.Type.A0098));
                             } else {
-                                ScrModel.setCreateWarInitialEnergyPercentage(playerIndex, value);
+                                ScrModel.Create.setInitialEnergyPercentage(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -210,7 +210,7 @@ namespace TinyWars.SingleCustomRoom {
             };
         }
         private _createDataEnergyGrowthMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = ScrModel.getCreateWarEnergyGrowthMultiplier(playerIndex);
+            const currValue     = ScrModel.Create.getEnergyGrowthMultiplier(playerIndex);
             const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
             const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
             return {
@@ -230,7 +230,7 @@ namespace TinyWars.SingleCustomRoom {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(Lang.Type.A0098));
                             } else {
-                                ScrModel.setCreateWarEnergyGrowthMultiplier(playerIndex, value);
+                                ScrModel.Create.setEnergyGrowthMultiplier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -239,7 +239,7 @@ namespace TinyWars.SingleCustomRoom {
             };
         }
         private _createDataMoveRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = ScrModel.getCreateWarMoveRangeModifier(playerIndex);
+            const currValue     = ScrModel.Create.getMoveRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
             return {
@@ -259,7 +259,7 @@ namespace TinyWars.SingleCustomRoom {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(Lang.Type.A0098));
                             } else {
-                                ScrModel.setCreateWarMoveRangeModifier(playerIndex, value);
+                                ScrModel.Create.setMoveRangeModifier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -268,7 +268,7 @@ namespace TinyWars.SingleCustomRoom {
             };
         }
         private _createDataAttackPowerModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = ScrModel.getCreateWarAttackPowerModifier(playerIndex);
+            const currValue     = ScrModel.Create.getAttackPowerModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
             const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
             return {
@@ -288,7 +288,7 @@ namespace TinyWars.SingleCustomRoom {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(Lang.Type.A0098));
                             } else {
-                                ScrModel.setCreateWarAttackPowerModifier(playerIndex, value);
+                                ScrModel.Create.setAttackPowerModifier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -297,7 +297,7 @@ namespace TinyWars.SingleCustomRoom {
             };
         }
         private _createDataVisionRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = ScrModel.getCreateWarVisionRangeModifier(playerIndex);
+            const currValue     = ScrModel.Create.getVisionRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
             return {
@@ -317,7 +317,7 @@ namespace TinyWars.SingleCustomRoom {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(Lang.Type.A0098));
                             } else {
-                                ScrModel.setCreateWarVisionRangeModifier(playerIndex, value);
+                                ScrModel.Create.setVisionRangeModifier(playerIndex, value);
                                 this._updateView();
                             }
                         },
@@ -326,7 +326,7 @@ namespace TinyWars.SingleCustomRoom {
             };
         }
         private _createDataLuckLowerLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = ScrModel.getCreateWarLuckLowerLimit(playerIndex);
+            const currValue     = ScrModel.Create.getLuckLowerLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
@@ -346,12 +346,12 @@ namespace TinyWars.SingleCustomRoom {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(Lang.Type.A0098));
                             } else {
-                                const upperLimit = ScrModel.getCreateWarLuckUpperLimit(playerIndex);
+                                const upperLimit = ScrModel.Create.getLuckUpperLimit(playerIndex);
                                 if (value <= upperLimit) {
-                                    ScrModel.setCreateWarLuckLowerLimit(playerIndex, value);
+                                    ScrModel.Create.setLuckLowerLimit(playerIndex, value);
                                 } else {
-                                    ScrModel.setCreateWarLuckUpperLimit(playerIndex, value);
-                                    ScrModel.setCreateWarLuckLowerLimit(playerIndex, upperLimit);
+                                    ScrModel.Create.setLuckUpperLimit(playerIndex, value);
+                                    ScrModel.Create.setLuckLowerLimit(playerIndex, upperLimit);
                                 }
                                 this._updateView();
                             }
@@ -361,7 +361,7 @@ namespace TinyWars.SingleCustomRoom {
             };
         }
         private _createDataLuckUpperLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = ScrModel.getCreateWarLuckUpperLimit(playerIndex);
+            const currValue     = ScrModel.Create.getLuckUpperLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
@@ -381,12 +381,12 @@ namespace TinyWars.SingleCustomRoom {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    const lowerLimit = ScrModel.getCreateWarLuckLowerLimit(playerIndex);
+                                    const lowerLimit = ScrModel.Create.getLuckLowerLimit(playerIndex);
                                     if (value >= lowerLimit) {
-                                        ScrModel.setCreateWarLuckUpperLimit(playerIndex, value);
+                                        ScrModel.Create.setLuckUpperLimit(playerIndex, value);
                                     } else {
-                                        ScrModel.setCreateWarLuckLowerLimit(playerIndex, value);
-                                        ScrModel.setCreateWarLuckUpperLimit(playerIndex, lowerLimit);
+                                        ScrModel.Create.setLuckLowerLimit(playerIndex, value);
+                                        ScrModel.Create.setLuckUpperLimit(playerIndex, lowerLimit);
                                     }
                                     this._updateView();
                                 }

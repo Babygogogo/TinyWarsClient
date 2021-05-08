@@ -47,7 +47,7 @@ namespace TinyWars.SingleCustomRoom {
             ]);
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            this._mapRawData = await ScrModel.getCreateWarMapRawData();
+            this._mapRawData = await ScrModel.Create.getMapRawData();
 
             this._updateComponentsForLanguage();
             this._updateLabelMapName();
@@ -77,12 +77,12 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedBtnPrevFog(e: egret.TouchEvent): void {
-            ScrModel.setCreateWarPrevHasFog();
+            ScrModel.Create.setPrevHasFog();
             this._updateLabelFog();
         }
 
         private _onTouchedBtnNextFog(e: egret.TouchEvent): void {
-            ScrModel.setCreateWarNextHasFog();
+            ScrModel.Create.setNextHasFog();
             this._updateLabelFog();
         }
 
@@ -115,15 +115,15 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _updateLabelSaveSlot(): void {
-            this._labelSaveSlot.text = "" + ScrModel.getCreateWarSaveSlotIndex();
+            this._labelSaveSlot.text = "" + ScrModel.Create.getSaveSlotIndex();
         }
 
         private _updateLabelFog(): void {
-            this._labelFog.text = Lang.getText(ScrModel.getCreateWarHasFog() ? Lang.Type.B0012 : Lang.Type.B0013);
+            this._labelFog.text = Lang.getText(ScrModel.Create.getHasFog() ? Lang.Type.B0012 : Lang.Type.B0013);
         }
 
         private _updateListPlayer(): void {
-            this._listPlayer.bindData(ScrModel.getCreateWarData().playerInfoList);
+            this._listPlayer.bindData(ScrModel.Create.getData().playerInfoList);
         }
     }
 
@@ -155,12 +155,12 @@ namespace TinyWars.SingleCustomRoom {
 
         private _onTouchedLabelTeamIndex(e: egret.TouchEvent): void {
             const data = this.data;
-            ScrModel.tickCreateWarTeamIndex(data.playerIndex - 1);
+            ScrModel.Create.tickTeamIndex(data.playerIndex - 1);
         }
 
         private _onTouchedLabelName(e: egret.TouchEvent): void {
             const data = this.data;
-            ScrModel.tickCreateWarUserId(data.playerIndex - 1);
+            ScrModel.Create.tickUserId(data.playerIndex - 1);
         }
 
         private _onTouchedLabelCoName(e: egret.TouchEvent): void {

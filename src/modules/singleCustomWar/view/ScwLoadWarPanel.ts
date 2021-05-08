@@ -94,7 +94,7 @@ namespace TinyWars.SingleCustomWar {
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
-            const slotList  = SingleCustomRoom.ScrModel.getSaveSlotInfoList() || [];
+            const slotList  = SingleCustomRoom.ScrModel.SaveSlot.getInfoArray() || [];
             for (let i = 0; i < Utility.CommonConstants.ScwSaveSlotMaxCount; ++i) {
                 dataList.push({
                     slotIndex   : i,

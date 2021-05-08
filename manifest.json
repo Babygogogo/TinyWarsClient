@@ -303,7 +303,6 @@
 		"bin-debug/modules/singleCustomRoom/view/ScrCreateSaveSlotsPanel.js",
 		"bin-debug/modules/singleCustomRoom/view/ScrCreateSearchMapPanel.js",
 		"bin-debug/modules/singleCustomRoom/view/ScrCreateSettingsPanel.js",
-		"bin-debug/modules/singleCustomRoom/view/ScrMainMenuPanel.js",
 		"bin-debug/modules/singleCustomWar/model/ScwActionExecutor.js",
 		"bin-debug/modules/singleCustomWar/model/ScwActionPlanner.js",
 		"bin-debug/modules/singleCustomWar/model/ScwActionReviser.js",

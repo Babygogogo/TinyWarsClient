@@ -74,7 +74,6 @@ namespace TinyWars.SingleCustomRoom {
                 mapName     : this._inputMapName.text || null,
                 mapDesigner : this._inputDesigner.text || null,
                 playersCount: Number(this._inputPlayersCount.text) || null,
-                playedTimes : Number(this._inputPlayedTimes.text) || null,
                 minRating   : Number(this._inputMinRating.text) || null,
             });
 

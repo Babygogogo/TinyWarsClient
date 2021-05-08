@@ -1,37 +1,46 @@
 
 namespace TinyWars.SingleCustomRoom {
-    import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
-    import Lang         = Utility.Lang;
-    import WarMapModel  = WarMap.WarMapModel;
+    import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
+    import Lang             = Utility.Lang;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ConfigManager    = Utility.ConfigManager;
+    import Helpers          = Utility.Helpers;
+    import WarMapModel      = WarMap.WarMapModel;
+    import IDataForMapTag   = ProtoTypes.Map.IDataForMapTag;
 
     type FiltersForMapList = {
         mapName?        : string;
         mapDesigner?    : string;
         playersCount?   : number;
-        playedTimes?    : number;
         minRating?      : number;
+        mapTag?         : IDataForMapTag;
     }
-
     export class ScrCreateMapListPanel extends GameUi.UiPanel<FiltersForMapList> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: ScrCreateMapListPanel;
 
-        private _listMap   : GameUi.UiScrollList<DataForMapNameRenderer>;
-        private _zoomMap   : GameUi.UiZoomableMap;
-        private _btnSearch : GameUi.UiButton;
-        private _btnBack   : GameUi.UiButton;
-        private _labelNoMap: GameUi.UiLabel;
+        private readonly _groupMapView          : eui.Group;
+        private readonly _zoomMap               : GameUi.UiZoomableMap;
+        private readonly _labelLoading          : GameUi.UiLabel;
 
-        private _groupInfo          : eui.Group;
-        private _labelMenuTitle     : GameUi.UiLabel;
-        private _labelMapName       : GameUi.UiLabel;
-        private _labelDesigner      : GameUi.UiLabel;
-        private _labelRating        : GameUi.UiLabel;
-        private _labelPlayedTimes   : GameUi.UiLabel;
-        private _labelPlayersCount  : GameUi.UiLabel;
+        private readonly _groupNavigator        : eui.Group;
+        private readonly _labelSinglePlayer     : GameUi.UiLabel;
+        private readonly _labelCreateRoom       : GameUi.UiLabel;
+        private readonly _labelChooseMap        : GameUi.UiLabel;
+
+        private readonly _btnBack               : GameUi.UiButton;
+        private readonly _btnSearch             : GameUi.UiButton;
+        private readonly _btnMapInfo            : GameUi.UiButton;
+        private readonly _btnNextStep           : GameUi.UiButton;
+
+        private readonly _groupMapList          : eui.Group;
+        private readonly _listMap               : GameUi.UiScrollList<DataForMapNameRenderer>;
+        private readonly _labelNoMap            : GameUi.UiLabel;
+
+        private readonly _uiMapInfo             : GameUi.UiMapInfo;
 
         private _mapFilters         : FiltersForMapList = {};
         private _dataForList        : DataForMapNameRenderer[] = [];
@@ -61,21 +70,23 @@ namespace TinyWars.SingleCustomRoom {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
-                { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
+                { ui: this._btnSearch,      callback: this._onTouchTapBtnSearch },
+                { ui: this._btnBack,        callback: this._onTouchTapBtnBack },
+                { ui: this._btnNextStep,    callback: this._onTouchedBtnNextStep },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
             this._listMap.setItemRenderer(MapNameRenderer);
 
-            this._groupInfo.visible = false;
+            this._showOpenAnimation();
+
             this._updateComponentsForLanguage();
 
             this.setMapFilters(this._getOpenData() || this._mapFilters);
         }
         protected async _onClosed(): Promise<void> {
-            egret.Tween.removeTweens(this._groupInfo);
+            await this._showCloseAnimation();
         }
 
         public async setSelectedMapId(newMapId: number): Promise<void> {
@@ -126,6 +137,17 @@ namespace TinyWars.SingleCustomRoom {
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
             SinglePlayerLobby.SinglePlayerLobbyPanel.show();
+            Lobby.LobbyTopPanel.show();
+            Lobby.LobbyBottomPanel.show();
+        }
+
+        private async _onTouchedBtnNextStep(e: egret.TouchEvent): Promise<void> {
+            const selectedMapId = this.getSelectedMapId();
+            if (selectedMapId != null) {
+                this.close();
+                await ScrModel.Create.resetDataByMapId(selectedMapId);
+                ScrCreateSettingsPanel.show();
+            }
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -136,60 +158,153 @@ namespace TinyWars.SingleCustomRoom {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0227);
-            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-            this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
+            this._labelCreateRoom.text          = Lang.getText(Lang.Type.B0557);
+            this._labelSinglePlayer.text        = Lang.getText(Lang.Type.B0138);
+            this._labelChooseMap.text           = Lang.getText(Lang.Type.B0227);
+            this._labelLoading.text             = Lang.getText(Lang.Type.A0150);
+            this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
+            this._btnSearch.label               = Lang.getText(Lang.Type.B0228);
+            this._btnMapInfo.label              = Lang.getText(Lang.Type.B0298);
+            this._btnNextStep.label             = Lang.getText(Lang.Type.B0566);
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
             const data: DataForMapNameRenderer[] = [];
-            let { mapName, mapDesigner, playersCount, playedTimes, minRating } = this._mapFilters;
+            let { mapName, mapDesigner, playersCount, minRating } = this._mapFilters;
+            const filterTag = this._mapFilters.mapTag || {};
             (mapName)       && (mapName     = mapName.toLowerCase());
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
-                const mapName = Lang.getLanguageText({ textArray: mapBriefData.mapNameArray });
-                if ((!mapBriefData.mapExtraData.mapComplexInfo.availability.canScw)                                     ||
-                    ((mapName) && (mapName.toLowerCase().indexOf(mapName) < 0))                                         ||
+                const mapExtraData  = mapBriefData.mapExtraData;
+                const mapTag        = mapBriefData.mapTag || {};
+                const realMapName   = await WarMapModel.getMapNameInCurrentLanguage(mapId);
+                const rating        = await WarMapModel.getAverageRating(mapId);
+                if ((!mapExtraData.isEnabled)                                                                           ||
+                    (!mapExtraData.mapComplexInfo.availability.canScw)                                                  ||
+                    ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                                     ||
                     ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))               ||
                     ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                           ||
-                    ((playedTimes != null) && (await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId) < playedTimes))  ||
-                    ((minRating != null) && (!(await WarMapModel.getAverageRating(mapId) >= minRating)))
+                    ((minRating != null) && ((rating == null) || (rating < minRating)))                                 ||
+                    ((filterTag.fog != null) && ((!!mapTag.fog) !== filterTag.fog))
                 ) {
                     continue;
                 } else {
                     data.push({
                         mapId,
-                        mapName,
+                        mapName : realMapName,
                         panel   : this,
                     });
                 }
             }
 
-            data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
-            return data;
+            return data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
         private async _showMap(mapId: number): Promise<void> {
-            const mapRawData                = await WarMapModel.getRawData(mapId);
-            const averageRating             = await WarMapModel.getAverageRating(mapId);
-            this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-            this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-            this._labelPlayersCount.text    = Lang.getFormattedText(Lang.Type.F0002, mapRawData.playersCountUnneutral);
-            this._labelRating.text          = Lang.getFormattedText(Lang.Type.F0003, averageRating != null ? averageRating.toFixed(2) : Lang.getText(Lang.Type.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormattedText(Lang.Type.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
-            this._groupInfo.visible         = true;
-            this._groupInfo.alpha           = 1;
-            egret.Tween.removeTweens(this._groupInfo);
-            egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
+            const mapRawData = await WarMapModel.getRawData(mapId);
             this._zoomMap.showMapByMapData(mapRawData);
+            this._uiMapInfo.setData({
+                mapInfo: {
+                    mapId,
+                    configVersion   : ConfigManager.getLatestFormalVersion(),
+                },
+            });
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._groupMapView,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupNavigator,
+                beginProps  : { alpha: 0, y: -20 },
+                endProps    : { alpha: 1, y: 20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnBack,
+                beginProps  : { alpha: 0, y: -20 },
+                endProps    : { alpha: 1, y: 20 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnSearch,
+                beginProps  : { alpha: 0, y: 40 },
+                endProps    : { alpha: 1, y: 80 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnMapInfo,
+                beginProps  : { alpha: 0, y: 40 },
+                endProps    : { alpha: 1, y: 80 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnNextStep,
+                beginProps  : { alpha: 0, left: -20 },
+                endProps    : { alpha: 1, left: 20 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupMapList,
+                beginProps  : { alpha: 0, left: -20 },
+                endProps    : { alpha: 1, left: 20 },
+            });
+            Helpers.resetTween({
+                obj         : this._uiMapInfo,
+                beginProps  : { alpha: 0, right: -40 },
+                endProps    : { alpha: 1, right: 0 },
+            });
+        }
+        private async _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._groupMapView,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                    callback    : resolve,
+                });
+                Helpers.resetTween({
+                    obj         : this._groupNavigator,
+                    beginProps  : { alpha: 1, y: 20 },
+                    endProps    : { alpha: 0, y: -20 },
+                });
+                Helpers.resetTween({
+                    obj         : this._btnBack,
+                    beginProps  : { alpha: 1, y: 20 },
+                    endProps    : { alpha: 0, y: -20 },
+                });
+                Helpers.resetTween({
+                    obj         : this._btnSearch,
+                    beginProps  : { alpha: 1, y: 80 },
+                    endProps    : { alpha: 0, y: 40 },
+                });
+                Helpers.resetTween({
+                    obj         : this._btnMapInfo,
+                    beginProps  : { alpha: 1, y: 80 },
+                    endProps    : { alpha: 0, y: 40 },
+                });
+                Helpers.resetTween({
+                    obj         : this._btnNextStep,
+                    beginProps  : { alpha: 1, left: 20 },
+                    endProps    : { alpha: 0, left: -20 },
+                });
+                Helpers.resetTween({
+                    obj         : this._groupMapList,
+                    beginProps  : { alpha: 1, left: 20 },
+                    endProps    : { alpha: 0, left: -20 },
+                });
+                Helpers.resetTween({
+                    obj         : this._uiMapInfo,
+                    beginProps  : { alpha: 1, right: 0 },
+                    endProps    : { alpha: 0, right: -40 },
+                });
+            });
         }
     }
 
     type DataForMapNameRenderer = {
-        mapId       : number;
-        mapName     : string;
-        panel       : ScrCreateMapListPanel;
+        mapId   : number;
+        mapName : string;
+        panel   : ScrCreateMapListPanel;
     }
 
     class MapNameRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
@@ -220,8 +335,7 @@ namespace TinyWars.SingleCustomRoom {
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
             const data = this.data;
             data.panel.close();
-
-            await ScrModel.resetCreateWarDataByMapId(data.mapId);
+            await ScrModel.Create.resetDataByMapId(data.mapId);
             ScrCreateSettingsPanel.show();
         }
     }

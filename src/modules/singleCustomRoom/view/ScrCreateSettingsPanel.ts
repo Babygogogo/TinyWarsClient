@@ -75,19 +75,19 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const tips = ScrModel.getCreateWarInvalidParamTips();
+            const tips = ScrModel.Create.getInvalidParamTips();
             if (tips) {
                 FloatText.show(tips);
             } else {
-                const data  = ScrModel.getCreateWarData();
+                const data  = ScrModel.Create.getData();
                 const func  = () => {
-                    ScrProxy.reqScrCreateWar(ScrModel.getCreateWarData());
+                    ScrProxy.reqScrCreateWar(ScrModel.Create.getData());
 
                     this._btnConfirm.enabled = false;
                     this._resetTimeoutForBtnConfirm();
                 }
 
-                if (ScrModel.checkIsSaveSlotEmpty(data.slotIndex)) {
+                if (ScrModel.SaveSlot.checkIsEmpty(data.slotIndex)) {
                     func();
                 } else {
                     Common.CommonConfirmPanel.show({

@@ -36,7 +36,7 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
     function _onMsgScrGetSaveSlotInfoList(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgScrGetSaveSlotInfoList.IS;
         if (!data.errorCode) {
-            ScrModel.setSaveSlotInfoList(data.infoList);
+            ScrModel.SaveSlot.setInfoArray(data.infoList);
             Notify.dispatch(Notify.Type.MsgScrGetSaveInfoList, data);
         }
     }
@@ -103,7 +103,7 @@ namespace TinyWars.SingleCustomRoom.ScrProxy {
     function _onMsgScrDeleteWar(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgScrDeleteWar.IS;
         if (!data.errorCode) {
-            ScrModel.deleteSaveSlot(data.slotIndex);
+            ScrModel.SaveSlot.deleteInfo(data.slotIndex);
             Notify.dispatch(Notify.Type.MsgScrDeleteWar, data);
         }
     }

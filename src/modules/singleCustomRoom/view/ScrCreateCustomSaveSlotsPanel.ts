@@ -87,7 +87,7 @@ namespace TinyWars.SingleCustomRoom {
 
             this._dataForList = this._createDataForList();
             this._srlSaveSlot.bindData(this._dataForList);
-            this._listSaveSlot.selectedIndex = ScrModel.getCreateWarSaveSlotIndex();
+            this._listSaveSlot.selectedIndex = ScrModel.Create.getSaveSlotIndex();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -99,7 +99,7 @@ namespace TinyWars.SingleCustomRoom {
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
             const warData   = this._getOpenData();
-            const slotList  = ScrModel.getSaveSlotInfoList() || [];
+            const slotList  = ScrModel.SaveSlot.getInfoArray() || [];
             for (let i = 0; i < CommonConstants.ScwSaveSlotMaxCount; ++i) {
                 dataList.push({
                     slotIndex   : i,

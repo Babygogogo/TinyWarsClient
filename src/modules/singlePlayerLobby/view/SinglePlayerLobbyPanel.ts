@@ -14,6 +14,7 @@ namespace TinyWars.SinglePlayerLobby {
 
         private readonly _groupLeft         : eui.Group;
         private readonly _btnCampaign       : TinyWars.GameUi.UiButton;
+        private readonly _btnCreateCustomWar: TinyWars.GameUi.UiButton;
         private readonly _btnContinueWar    : TinyWars.GameUi.UiButton;
 
         private readonly _group             : eui.Group;
@@ -42,10 +43,11 @@ namespace TinyWars.SinglePlayerLobby {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._btnMultiPlayer, callback: this._onTouchedBtnMultiPlayer },
-                { ui: this._btnRanking,     callback: this._onTouchedBtnRanking },
-                { ui: this._btnCampaign,    callback: this._onTouchedBtnCampaign },
-                { ui: this._btnContinueWar, callback: this._onTouchedBtnContinueWar },
+                { ui: this._btnMultiPlayer,     callback: this._onTouchedBtnMultiPlayer },
+                { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
+                { ui: this._btnCampaign,        callback: this._onTouchedBtnCampaign },
+                { ui: this._btnCreateCustomWar, callback: this._onTouchedBtnCreateCustomWar },
+                { ui: this._btnContinueWar,     callback: this._onTouchedBtnContinueWar },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.MsgUserLogout,      callback: this._onMsgUserLogout },
@@ -75,6 +77,13 @@ namespace TinyWars.SinglePlayerLobby {
         }
         private _onTouchedBtnCampaign(e: egret.TouchEvent): void {
             FloatText.show(Lang.getText(Lang.Type.A0053));
+        }
+        private _onTouchedBtnCreateCustomWar(e: egret.TouchEvent): void {
+            FloatText.show(Lang.getText(Lang.Type.A0053));
+            // this.close();
+            // Lobby.LobbyTopPanel.hide();
+            // Lobby.LobbyBottomPanel.hide();
+            // SingleCustomRoom.ScrCreateMapListPanel.show();
         }
         private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
             this.close();
@@ -121,9 +130,15 @@ namespace TinyWars.SinglePlayerLobby {
                 endProps    : { alpha: 1, left: 0 },
             });
             Helpers.resetTween({
-                obj         : this._btnContinueWar,
+                obj         : this._btnCreateCustomWar,
                 beginProps  : { alpha: 0, left: -40 },
                 waitTime    : 100,
+                endProps    : { alpha: 1, left: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnContinueWar,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 200,
                 endProps    : { alpha: 1, left: 0 },
             });
         }

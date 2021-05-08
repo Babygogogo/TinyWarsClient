@@ -138,7 +138,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _createDataForListWar(): DataForWarRenderer[] {
-            const saveSlots = ScrModel.getSaveSlotInfoList();
+            const saveSlots = ScrModel.SaveSlot.getInfoArray();
             const data      : DataForWarRenderer[] = [];
             if (saveSlots) {
                 for (let i = 0; i < saveSlots.length; ++i) {
