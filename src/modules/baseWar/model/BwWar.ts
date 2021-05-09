@@ -9,18 +9,13 @@ namespace TinyWars.BaseWar {
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
 
     export abstract class BwWar {
-        private _warId                      : number;
 
-        private readonly _playerManager         = new (this._getPlayerManagerClass())();
-        private readonly _turnManager           = new (this._getTurnManagerClass());
-        private readonly _field                 = new (this._getFieldClass())();
-        private readonly _commonSettingManager  = new (this._getCommonSettingManagerClass())();
-        private readonly _warEventManager       = new (this._getWarEventManagerClass())();
         private readonly _executedActionManager = new BwExecutedActionManager();
         private readonly _randomNumberManager   = new BwRandomNumberManager();
         private readonly _drawVoteManager       = new BwDrawVoteManager();
         private readonly _view                  = new BwWarView();
 
+        private _warId                  : number;
         private _isRunning              = false;
         private _isExecutingAction      = false;
 
@@ -29,9 +24,12 @@ namespace TinyWars.BaseWar {
         public abstract getMapId(): number | undefined;
         public abstract getIsNeedReplay(): boolean;
         public abstract getIsWarMenuPanelOpening(): boolean;
-        protected abstract _getPlayerManagerClass(): new () => BwPlayerManager;
-        protected abstract _getTurnManagerClass(): new () => BwTurnManager;
-        protected abstract _getFieldClass(): new () => BwField;
+        public abstract getCanCheat(): boolean;
+        public abstract getPlayerManager(): BwPlayerManager;
+        public abstract getTurnManager(): BwTurnManager;
+        public abstract getField(): BwField;
+        public abstract getCommonSettingManager(): BwCommonSettingManager;
+        public abstract getWarEventManager(): BaseWar.BwWarEventManager;
 
         protected async _baseInit(data: ISerialWar): Promise<ClientErrorCode> {
             const settingsForCommon = data.settingsForCommon;
@@ -215,13 +213,6 @@ namespace TinyWars.BaseWar {
             };
         }
 
-        protected _getWarEventManagerClass(): new () => BwWarEventManager {
-            return BwWarEventManager;
-        }
-        protected _getCommonSettingManagerClass(): new () => BwCommonSettingManager {
-            return BwCommonSettingManager;
-        }
-
         public startRunning(): BwWar {
             this.getCommonSettingManager().startRunning(this);
             this.getWarEventManager().startRunning(this);
@@ -282,9 +273,6 @@ namespace TinyWars.BaseWar {
             return settingsForCommon.warRule;
         }
 
-        public getPlayerManager(): BwPlayerManager {
-            return this._playerManager;
-        }
         public getPlayer(playerIndex: number): BwPlayer | undefined {
             return this.getPlayerManager().getPlayer(playerIndex);
         }
@@ -295,9 +283,6 @@ namespace TinyWars.BaseWar {
             return this.getTurnManager().getPlayerIndexInTurn();
         }
 
-        public getField(): BwField {
-            return this._field;
-        }
         public getFogMap(): BwFogMap {
             return this.getField().getFogMap();
         }
@@ -317,9 +302,6 @@ namespace TinyWars.BaseWar {
             return this.getField().getCursor();
         }
 
-        public getTurnManager(): BwTurnManager {
-            return this._turnManager;
-        }
         public getEnterTurnTime(): number {
             return this.getTurnManager().getEnterTurnTime();
         }
@@ -328,9 +310,6 @@ namespace TinyWars.BaseWar {
             return this.getPlayerManager().getAliveWatcherTeamIndexes(watcherUserId);
         }
 
-        public getWarEventManager(): BwWarEventManager {
-            return this._warEventManager;
-        }
         public getDrawVoteManager(): BwDrawVoteManager {
             return this._drawVoteManager;
         }
@@ -339,9 +318,6 @@ namespace TinyWars.BaseWar {
         }
         public getExecutedActionManager(): BwExecutedActionManager {
             return this._executedActionManager;
-        }
-        public getCommonSettingManager(): BwCommonSettingManager {
-            return this._commonSettingManager;
         }
     }
 }

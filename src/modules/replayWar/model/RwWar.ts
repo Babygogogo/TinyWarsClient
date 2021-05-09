@@ -19,6 +19,12 @@ namespace TinyWars.ReplayWar {
     }
 
     export class RwWar extends BaseWar.BwWar {
+        private readonly _playerManager         = new RwPlayerManager();
+        private readonly _turnManager           = new RwTurnManager();
+        private readonly _field                 = new RwField();
+        private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
+        private readonly _warEventManager       = new BaseWar.BwWarEventManager();
+
         private _settingsForMcw: ProtoTypes.WarSettings.ISettingsForMcw;
         private _settingsForScw: ProtoTypes.WarSettings.ISettingsForScw;
         private _settingsForMrw: ProtoTypes.WarSettings.ISettingsForMrw;
@@ -53,14 +59,23 @@ namespace TinyWars.ReplayWar {
             return ClientErrorCode.NoError;
         }
 
-        protected _getFieldClass(): new () => RwField {
-            return RwField;
+        public getCanCheat(): boolean {
+            return false;
         }
-        protected _getPlayerManagerClass(): new () => RwPlayerManager {
-            return RwPlayerManager;
+        public getField(): RwField {
+            return this._field;
         }
-        protected _getTurnManagerClass(): new () => RwTurnManager {
-            return RwTurnManager;
+        public getPlayerManager(): RwPlayerManager {
+            return this._playerManager;
+        }
+        public getTurnManager(): RwTurnManager {
+            return this._turnManager;
+        }
+        public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
+            return this._commonSettingManager;
+        }
+        public getWarEventManager(): BaseWar.BwWarEventManager {
+            return this._warEventManager;
         }
 
         public serializeForCheckPoint(): CheckPointData {

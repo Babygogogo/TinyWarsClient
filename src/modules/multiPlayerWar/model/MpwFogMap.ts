@@ -9,16 +9,11 @@ namespace TinyWars.MultiPlayerWar {
 
             const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             war.getTileMap().forEachTile(tile => {
-                if (!(tile instanceof MpwTile)) {
-                    Logger.error(`McwFogMap.startRunning() invalid tile.`);
-                    return;
-                }
-
                 if (visibleTiles.has(tile)) {
                     tile.setHasFog(false);
                 } else {
                     if (!tile.getHasFog()) {
-                        tile.resetDataAsHasFog();
+                        MpwUtility.resetTileDataAsHasFog(tile);
                     }
                 }
             });

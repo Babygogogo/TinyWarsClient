@@ -30,7 +30,7 @@ namespace TinyWars.MapEditor {
 
     export class MeDrawer {
         private _war                            : MeWar;
-        private _tileMap                        : MeTileMap;
+        private _tileMap                        : BaseWar.BwTileMap;
         private _unitMap                        : MeUnitMap;
         private _configVersion                  : string;
         private _mode                           = DrawerMode.Preview;
@@ -50,7 +50,7 @@ namespace TinyWars.MapEditor {
 
         public startRunning(war: MeWar): void {
             this._setWar(war);
-            this._tileMap       = war.getTileMap() as MeTileMap;
+            this._tileMap       = war.getTileMap();
             this._unitMap       = war.getUnitMap() as MeUnitMap;
             this._configVersion = war.getConfigVersion();
 

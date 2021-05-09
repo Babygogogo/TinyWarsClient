@@ -6,13 +6,13 @@ namespace TinyWars.MultiPlayerWar.MpwUtility {
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import DestructionHelpers   = Utility.DestructionHelpers;
+    import CommonConstants      = Utility.CommonConstants;
     import BwWar                = BaseWar.BwWar;
     import GridIndex            = Types.GridIndex;
     import MovableArea          = Types.MovableArea;
     import AttackableArea       = Types.AttackableArea;
     import MapSize              = Types.MapSize;
     import MovePathNode         = Types.MovePathNode;
-    import UnitType             = Types.UnitType;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
@@ -109,21 +109,30 @@ namespace TinyWars.MultiPlayerWar.MpwUtility {
         const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(war, watcherTeamIndexes);
         const tileMap       = war.getTileMap();
         tileMap.forEachTile(tile => {
-            if (!(tile instanceof MpwTile)) {
-                Logger.error(`McwHelpers.updateTilesAndUnitsOnVisibilityChanged() invalid tile.`);
-                return;
-            }
-
             if (visibleTiles.has(tile)) {
                 tile.setHasFog(false);
             } else {
                 if (!tile.getHasFog()) {
-                    tile.resetDataAsHasFog();
+                    resetTileDataAsHasFog(tile);
                 }
             }
             tile.flushDataToView();
         });
         tileMap.getView().updateCoZone();
+    }
+
+    export function resetTileDataAsHasFog(tile: BaseWar.BwTile): void {
+        tile.setHasFog(true);
+
+        tile.deserialize({
+            gridIndex       : tile.getGridIndex(),
+            baseType        : tile.getBaseType(),
+            objectType      : tile.getObjectType(),
+            playerIndex     : tile.getType() === Types.TileType.Headquarters ? tile.getPlayerIndex() : CommonConstants.WarNeutralPlayerIndex,
+            baseShapeId     : tile.getBaseShapeId(),
+            objectShapeId   : tile.getObjectShapeId(),
+            currentHp       : tile.getCurrentHp(),
+        }, tile.getConfigVersion());
     }
 
     function _pushToAvailableMovableGrids(grids: AvailableMovableGrid[], gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {

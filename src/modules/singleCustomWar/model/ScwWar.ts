@@ -127,15 +127,6 @@ namespace TinyWars.SingleCustomWar {
             return settingsForScw ? settingsForScw.mapId : undefined;
         }
 
-        public setIsSinglePlayerCheating(isCheating: boolean): void {
-            const settingsForSinglePlayer = this.getSettingsForScw();
-            if (settingsForSinglePlayer == null) {
-                Logger.error(`ScwWar.setIsSinglePlayerCheating() empty settingsForSinglePlayer.`);
-                return undefined;
-            }
-
-            settingsForSinglePlayer.isCheating = isCheating;
-        }
         public getCanCheat(): boolean {
             return true;
         }

@@ -59,7 +59,7 @@ namespace TinyWars.BaseWar {
                     return ClientErrorCode.BwTileMapInit05;
                 }
 
-                const tile      = new (this._getBwTileClass())();
+                const tile      = new BwTile();
                 const tileError = tile.init(tileData, configVersion);
                 if (tileError) {
                     return tileError;
@@ -195,10 +195,6 @@ namespace TinyWars.BaseWar {
                 }
             }
             return { tiles: tilesData };
-        }
-
-        protected _getBwTileClass(): new () => BwTile {
-            return BwTile;
         }
 
         private _setWar(war: BwWar): void {

@@ -1,11 +1,22 @@
 
 namespace TinyWars.TestWar {
     export class TwField extends BaseWar.BwField {
-        protected _getFogMapClass(): new () => BaseWar.BwFogMap {
-            return TwFogMap;
+        private readonly _fogMap        = new TwFogMap();
+        private readonly _tileMap       = new BaseWar.BwTileMap();
+        private readonly _unitMap       = new BaseWar.BwUnitMap();
+        private readonly _actionPlanner = new TwActionPlanner();
+
+        public getFogMap(): TwFogMap {
+            return this._fogMap;
         }
-        protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
-            return TwActionPlanner;
+        public getTileMap(): BaseWar.BwTileMap {
+            return this._tileMap;
+        }
+        public getUnitMap(): BaseWar.BwUnitMap {
+            return this._unitMap;
+        }
+        public getActionPlanner(): TwActionPlanner {
+            return this._actionPlanner;
         }
     }
 }

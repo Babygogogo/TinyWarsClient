@@ -5,16 +5,22 @@ namespace TinyWars.MapEditor {
     import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
     import ClientErrorCode  = Utility.ClientErrorCode;
+    import CommonConstants  = Utility.CommonConstants;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import IWarRule         = ProtoTypes.WarRule.IWarRule;
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
     import IDataForMapTag   = ProtoTypes.Map.IDataForMapTag;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
-    import CommonConstants  = Utility.CommonConstants;
 
     export class MeWar extends BaseWar.BwWar {
-        private readonly _drawer    = new MeDrawer();
+        private readonly _playerManager         = new MePlayerManager();
+        private readonly _turnManager           = new MeTurnManager();
+        private readonly _field                 = new MeField();
+        private readonly _commonSettingManager  = new MeCommonSettingManager();
+        private readonly _drawer                = new MeDrawer();
+        private readonly _warEventManager       = new MeWarEventManager();
+
         private _mapModifiedTime    : number;
         private _mapSlotIndex       : number;
         private _mapDesignerUserId  : number;
@@ -88,6 +94,9 @@ namespace TinyWars.MapEditor {
             };
         }
 
+        public getCanCheat(): boolean {
+            return true;
+        }
         public getWarType(): Types.WarType {
             return Types.WarType.Me;
         }
@@ -101,20 +110,20 @@ namespace TinyWars.MapEditor {
             return MeWarMenuPanel.getIsOpening();
         }
 
-        protected _getFieldClass(): new () => MeField {
-            return MeField;
+        public getPlayerManager(): MePlayerManager {
+            return this._playerManager;
         }
-        protected _getWarEventManagerClass(): new () => MeWarEventManager {
-            return MeWarEventManager;
+        public getTurnManager(): MeTurnManager {
+            return this._turnManager;
         }
-        protected _getCommonSettingManagerClass(): new () => MeCommonSettingManager {
-            return MeCommonSettingManager;
+        public getField(): MeField {
+            return this._field;
         }
-        protected _getPlayerManagerClass(): new () => MePlayerManager {
-            return MePlayerManager;
+        public getCommonSettingManager(): MeCommonSettingManager {
+            return this._commonSettingManager;
         }
-        protected _getTurnManagerClass(): new () => MeTurnManager {
-            return MeTurnManager;
+        public getWarEventManager(): MeWarEventManager {
+            return this._warEventManager;
         }
 
         public getDrawer(): MeDrawer {

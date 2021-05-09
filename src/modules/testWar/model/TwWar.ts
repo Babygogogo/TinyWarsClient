@@ -14,14 +14,29 @@ namespace TinyWars.TestWar {
     import IMapRawData              = ProtoTypes.Map.IMapRawData;
 
     export class TwWar extends BaseWar.BwWar {
-        protected _getTurnManagerClass(): new () => TwTurnManager {
-            return TwTurnManager;
+        private readonly _playerManager         = new TwPlayerManager();
+        private readonly _turnManager           = new TwTurnManager();
+        private readonly _field                 = new TwField();
+        private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
+        private readonly _warEventManager       = new BaseWar.BwWarEventManager();
+
+        public getCanCheat(): boolean {
+            return false;
         }
-        protected _getFieldClass(): new () => TwField {
-            return TwField;
+        public getPlayerManager(): TwPlayerManager {
+            return this._playerManager;
         }
-        protected _getPlayerManagerClass(): new () => TwPlayerManager {
-            return TwPlayerManager;
+        public getTurnManager(): TwTurnManager {
+            return this._turnManager;
+        }
+        public getField(): TwField {
+            return this._field;
+        }
+        public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
+            return this._commonSettingManager;
+        }
+        public getWarEventManager(): BaseWar.BwWarEventManager {
+            return this._warEventManager;
         }
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {

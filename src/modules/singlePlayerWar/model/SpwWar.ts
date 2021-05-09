@@ -3,21 +3,32 @@ namespace TinyWars.SinglePlayerWar {
     import ProtoTypes = Utility.ProtoTypes;
 
     export abstract class SpwWar extends BaseWar.BwWar {
+        private readonly _playerManager         = new SpwPlayerManager();
+        private readonly _turnManager           = new SpwTurnManager();
+        private readonly _field                 = new SpwField();
+        private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
+        private readonly _warEventManager       = new BaseWar.BwWarEventManager();
+
         private _isEnded            = false;
         private _saveSlotIndex      : number;
         private _saveSlotComment    : string;
 
         public abstract serialize(): ProtoTypes.WarSerialization.ISerialWar;
-        public abstract getCanCheat(): boolean;
 
-        protected _getFieldClass(): new () => SpwField {
-            return SpwField;
+        public getPlayerManager(): SpwPlayerManager {
+            return this._playerManager;
         }
-        protected _getPlayerManagerClass(): new () => SpwPlayerManager {
-            return SpwPlayerManager;
+        public getField(): SpwField {
+            return this._field;
         }
-        protected _getTurnManagerClass(): new () => SpwTurnManager {
-            return SpwTurnManager;
+        public getTurnManager(): SpwTurnManager {
+            return this._turnManager;
+        }
+        public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
+            return this._commonSettingManager;
+        }
+        public getWarEventManager(): BaseWar.BwWarEventManager {
+            return this._warEventManager;
         }
 
         public setIsEnded(ended: boolean): void {

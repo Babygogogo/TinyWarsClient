@@ -3,21 +3,33 @@ namespace TinyWars.MultiPlayerWar {
     import Types = Utility.Types;
 
     export abstract class MpwWar extends BaseWar.BwWar {
+        private readonly _playerManager         = new MpwPlayerManager();
+        private readonly _turnManager           = new MpwTurnManager();
+        private readonly _field                 = new MpwField();
+        private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
+        private readonly _warEventManager       = new BaseWar.BwWarEventManager();
+
         private _isEnded = false;
 
         public abstract getSettingsBootTimerParams(): number[];
 
-        protected _getFieldClass(): new () => MpwField {
-            return MpwField;
+        public getField(): MpwField {
+            return this._field;
         }
-        protected _getPlayerManagerClass(): new () => MpwPlayerManager {
-            return MpwPlayerManager;
+        public getPlayerManager(): MpwPlayerManager {
+            return this._playerManager;
         }
-        protected _getTurnManagerClass(): new () => MpwTurnManager {
-            return MpwTurnManager;
+        public getTurnManager(): MpwTurnManager {
+            return this._turnManager;
+        }
+        public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
+            return this._commonSettingManager;
         }
         public getIsWarMenuPanelOpening(): boolean {
             return MpwWarMenuPanel.getIsOpening();
+        }
+        public getWarEventManager(): BaseWar.BwWarEventManager {
+            return this._warEventManager;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

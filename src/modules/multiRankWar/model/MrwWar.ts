@@ -29,6 +29,9 @@ namespace TinyWars.MultiRankWar {
             return ClientErrorCode.NoError;
         }
 
+        public getCanCheat(): boolean {
+            return false;
+        }
         public getWarType(): Types.WarType {
             return this.getCommonSettingManager().getSettingsHasFogByDefault()
                 ? Types.WarType.MrwFog

@@ -5,22 +5,14 @@ namespace TinyWars.BaseWar {
     import ISerialField     = ProtoTypes.WarSerialization.ISerialField;
 
     export abstract class BwField {
-        private readonly _fogMap            = new (this._getFogMapClass())();
-        private readonly _tileMap           = new (this._getTileMapClass())();
-        private readonly _unitMap           = new (this._getUnitMapClass())();
         private readonly _cursor            = new BwCursor();
-        private readonly _actionPlanner     = new (this._getActionPlannerClass())();
         private readonly _gridVisualEffect  = new BwGridVisualEffect();
         private readonly _view              = new BwFieldView();
 
-        protected abstract _getFogMapClass(): new () => BwFogMap;
-        protected _getTileMapClass(): new () => BwTileMap {
-            return BwTileMap;
-        }
-        protected _getUnitMapClass(): new () => BwUnitMap {
-            return BwUnitMap;
-        }
-        protected abstract _getActionPlannerClass(): new () => BwActionPlanner;
+        public abstract getFogMap(): BwFogMap;
+        public abstract getTileMap(): BwTileMap;
+        public abstract getUnitMap(): BwUnitMap;
+        public abstract getActionPlanner(): BwActionPlanner;
 
         public init({ data, configVersion, playersCountUnneutral }: {
             data                    : ISerialField;
@@ -210,24 +202,8 @@ namespace TinyWars.BaseWar {
             return this._view;
         }
 
-        public getFogMap(): BwFogMap {
-            return this._fogMap;
-        }
-
-        public getTileMap(): BwTileMap {
-            return this._tileMap;
-        }
-
-        public getUnitMap(): BwUnitMap {
-            return this._unitMap;
-        }
-
         public getCursor(): BwCursor {
             return this._cursor;
-        }
-
-        public getActionPlanner(): BwActionPlanner {
-            return this._actionPlanner;
         }
 
         public getGridVisualEffect(): BwGridVisualEffect {
