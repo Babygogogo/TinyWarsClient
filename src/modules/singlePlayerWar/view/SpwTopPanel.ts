@@ -1,5 +1,5 @@
 
-namespace TinyWars.SingleCustomWar {
+namespace TinyWars.SinglePlayerWar {
     import BwHelpers        = BaseWar.BwHelpers;
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
@@ -7,11 +7,11 @@ namespace TinyWars.SingleCustomWar {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
 
-    export class ScwTopPanel extends GameUi.UiPanel<void> {
+    export class SpwTopPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: ScwTopPanel;
+        private static _instance: SpwTopPanel;
 
         private _groupPlayer        : eui.Group;
         private _labelPlayer        : GameUi.UiLabel;
@@ -29,25 +29,25 @@ namespace TinyWars.SingleCustomWar {
         private _btnCancel          : GameUi.UiButton;
         private _btnMenu            : GameUi.UiButton;
 
-        private _war    : ScwWar;
+        private _war    : SpwWar;
 
         public static show(): void {
-            if (!ScwTopPanel._instance) {
-                ScwTopPanel._instance = new ScwTopPanel();
+            if (!SpwTopPanel._instance) {
+                SpwTopPanel._instance = new SpwTopPanel();
             }
-            ScwTopPanel._instance.open(undefined);
+            SpwTopPanel._instance.open(undefined);
         }
 
         public static async hide(): Promise<void> {
-            if (ScwTopPanel._instance) {
-                await ScwTopPanel._instance.close();
+            if (SpwTopPanel._instance) {
+                await SpwTopPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this.skinName = "resource/skins/singleCustomWar/ScwTopPanel.exml";
+            this.skinName = "resource/skins/singlePlayerWar/SpwTopPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -75,7 +75,7 @@ namespace TinyWars.SingleCustomWar {
                 { ui: this._btnMenu,            callback: this._onTouchedBtnMenu, },
             ]);
 
-            this._war = ScwModel.getWar();
+            this._war = SpwModel.getWar();
             this._updateView();
         }
 
@@ -134,10 +134,10 @@ namespace TinyWars.SingleCustomWar {
                 war,
                 selectedIndex: Math.max(war.getPlayerIndexInTurn() - 1, 0),
             });
-            ScwWarMenuPanel.hide();
+            SpwWarMenuPanel.hide();
         }
         private _onTouchedBtnChat(e: egret.TouchEvent): void {
-            ScwWarMenuPanel.hide();
+            SpwWarMenuPanel.hide();
             Chat.ChatPanel.show({});
         }
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
@@ -171,7 +171,7 @@ namespace TinyWars.SingleCustomWar {
                 Common.CommonConfirmPanel.show({
                     title   : Lang.getText(Lang.Type.B0036),
                     content : this._getHintForEndTurn(),
-                    callback: () => (this._war.getActionPlanner() as ScwActionPlanner).setStateRequestingPlayerEndTurn(),
+                    callback: () => (this._war.getActionPlanner() as SpwActionPlanner).setStateRequestingPlayerEndTurn(),
                 });
             }
         }
@@ -183,7 +183,7 @@ namespace TinyWars.SingleCustomWar {
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
             }
-            ScwWarMenuPanel.show();
+            SpwWarMenuPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +218,7 @@ namespace TinyWars.SingleCustomWar {
             const war               = this._war;
             const playerInTurn      = war.getPlayerInTurn();
             if ((war.getFogMap().checkHasFogCurrently())                                                                        &&
-                (!(war.getPlayerManager() as ScwPlayerManager).getAliveWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
+                (!(war.getPlayerManager() as SpwPlayerManager).getAliveWatcherTeamIndexesForSelf().has(playerInTurn.getTeamIndex()))
             ) {
                 this._labelFund.text = `????`;
             } else {

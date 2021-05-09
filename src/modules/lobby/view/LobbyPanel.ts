@@ -112,7 +112,7 @@ namespace TinyWars.Lobby {
 
         private _onTouchedBtnSinglePlayer(e: egret.TouchEvent): void {
             this.close();
-            SinglePlayerLobby.SinglePlayerLobbyPanel.show();
+            SinglePlayerMode.SpmMainMenuPanel.show();
         }
 
         private _onTouchedBtnRanking(e: egret.TouchEvent): void {

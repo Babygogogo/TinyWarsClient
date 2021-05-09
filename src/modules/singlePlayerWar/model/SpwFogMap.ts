@@ -1,9 +1,9 @@
 
-namespace TinyWars.SingleCustomWar {
+namespace TinyWars.SinglePlayerWar {
     import VisibilityHelpers = Utility.VisibilityHelpers;
 
-    export class ScwFogMap extends BaseWar.BwFogMap {
-        public startRunning(war: ScwWar): void {
+    export class SpwFogMap extends BaseWar.BwFogMap {
+        public startRunning(war: SpwWar): void {
             this._setWar(war);
 
             const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();

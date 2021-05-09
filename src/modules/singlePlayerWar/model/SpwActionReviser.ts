@@ -1,5 +1,5 @@
 
-namespace TinyWars.SingleCustomWar.ScwActionReviser {
+namespace TinyWars.SinglePlayerWar.SpwActionReviser {
     import Types                    = Utility.Types;
     import Logger                   = Utility.Logger;
     import ProtoTypes               = Utility.ProtoTypes;
@@ -31,7 +31,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         sameTeamMap : boolean[][];
     }
 
-    export function revise(war: ScwWar, container: RawWarAction): IWarActionContainer {
+    export function revise(war: SpwWar, container: RawWarAction): IWarActionContainer {
         if      (container.PlayerDeleteUnit)    { return revisePlayerDeleteUnit(war, container); }
         else if (container.PlayerEndTurn)       { return revisePlayerEndTurn(war, container); }
         else if (container.PlayerProduceUnit)   { return revisePlayerProduceUnit(war, container); }
@@ -58,7 +58,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.revisePlayerDeleteUnit() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.revisePlayerDeleteUnit() invalid turn phase code: ${currPhaseCode}`
         );
 
         return {
@@ -73,7 +73,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.revisePlayerEndTurn() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.revisePlayerEndTurn() invalid turn phase code: ${currPhaseCode}`
         );
 
         return {
@@ -86,7 +86,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.revisePlayerProduceUnit() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.revisePlayerProduceUnit() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = container.PlayerProduceUnit;
@@ -103,11 +103,11 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    function reviseUnitAttackUnit(war: ScwWar, container: RawWarAction): IWarActionContainer { // DONE
+    function reviseUnitAttackUnit(war: SpwWar, container: RawWarAction): IWarActionContainer { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitAttackUnit() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitAttackUnit() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action                        = container.UnitAttackUnit;
@@ -125,11 +125,11 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    function reviseUnitAttackTile(war: ScwWar, container: RawWarAction): IWarActionContainer { // DONE
+    function reviseUnitAttackTile(war: SpwWar, container: RawWarAction): IWarActionContainer { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitAttackTile() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitAttackTile() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action                        = container.UnitAttackTile;
@@ -151,7 +151,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitBeLoaded() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitBeLoaded() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = rawAction.UnitBeLoaded;
@@ -169,7 +169,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitBuildTile() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitBuildTile() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = rawAction.UnitBuildTile;
@@ -187,7 +187,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitCaptureTile() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitCaptureTile() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = rawAction.UnitCaptureTile;
@@ -205,7 +205,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitDive() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitDive() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = rawAction.UnitDive;
@@ -223,7 +223,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitDrop() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitDrop() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action                    = rawAction.UnitDrop;
@@ -246,7 +246,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitJoin() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitJoin() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = rawAction.UnitJoin;
@@ -264,7 +264,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitLaunchFlare() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitLaunchFlare() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = rawAction.UnitLaunchFlare;
@@ -283,7 +283,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitLaunchSilo() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitLaunchSilo() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = rawAction.UnitLaunchSilo;
@@ -302,7 +302,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitLoadCo() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitLoadCo() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = rawAction.UnitLoadCo;
@@ -320,7 +320,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitProduceUnit() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitProduceUnit() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = rawAction.UnitProduceUnit;
@@ -338,7 +338,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitSupply() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitSupply() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = rawAction.UnitSupply;
@@ -356,7 +356,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitSurface() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitSurface() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = rawAction.UnitSurface;
@@ -370,11 +370,11 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         };
     }
 
-    function reviseUnitUseCoSkill(war: ScwWar, rawAction: RawWarAction): IWarActionContainer { // DONE
+    function reviseUnitUseCoSkill(war: SpwWar, rawAction: RawWarAction): IWarActionContainer { // DONE
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitUseCoSkill() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitUseCoSkill() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = rawAction.UnitUseCoSkill;
@@ -402,7 +402,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         const currPhaseCode = war.getTurnManager().getPhaseCode();
         Logger.assert(
             currPhaseCode === TurnPhaseCode.Main,
-            `ScwActionReviser.reviseUnitWait() invalid turn phase code: ${currPhaseCode}`
+            `SpwActionReviser.reviseUnitWait() invalid turn phase code: ${currPhaseCode}`
         );
 
         const action        = rawAction.UnitWait;
@@ -417,7 +417,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     }
 
     function reviseUnknownAction(war: BwWar, rawAction: RawWarAction): IWarActionContainer {
-        Logger.error(`ScwActionReviser.reviseUnknownAction() invalid rawAction: ${JSON.stringify(rawAction)}`);
+        Logger.error(`SpwActionReviser.reviseUnknownAction() invalid rawAction: ${JSON.stringify(rawAction)}`);
         return null;
     }
 
@@ -523,7 +523,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
     }
 
     function getUseCoSkillExtraDataList(
-        war             : ScwWar,
+        war             : SpwWar,
         player          : BwPlayer,
         skillType       : Types.CoSkillType,
         movePath        : Types.MovePath,
@@ -567,7 +567,7 @@ namespace TinyWars.SingleCustomWar.ScwActionReviser {
         return dataList;
     }
 
-    function getIndiscriminateAreaDamageCenter(war: ScwWar, valueMaps: ValueMaps, indiscriminateCfg: number[]): GridIndex | null {
+    function getIndiscriminateAreaDamageCenter(war: SpwWar, valueMaps: ValueMaps, indiscriminateCfg: number[]): GridIndex | null {
         const targetType    = indiscriminateCfg[0];
         const radius        = indiscriminateCfg[1];
         const hpDamage      = indiscriminateCfg[2];

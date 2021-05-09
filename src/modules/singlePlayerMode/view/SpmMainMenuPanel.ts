@@ -1,16 +1,16 @@
 
-namespace TinyWars.SinglePlayerLobby {
+namespace TinyWars.SinglePlayerMode {
     import Tween        = egret.Tween;
     import Lang         = Utility.Lang;
     import FloatText    = Utility.FloatText;
     import Notify       = Utility.Notify;
     import Helpers      = Utility.Helpers;
 
-    export class SinglePlayerLobbyPanel extends GameUi.UiPanel<void> {
+    export class SpmMainMenuPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: SinglePlayerLobbyPanel;
+        private static _instance: SpmMainMenuPanel;
 
         private readonly _groupLeft         : eui.Group;
         private readonly _btnCampaign       : TinyWars.GameUi.UiButton;
@@ -23,22 +23,22 @@ namespace TinyWars.SinglePlayerLobby {
         private readonly _btnSinglePlayer   : TinyWars.GameUi.UiButton;
 
         public static show(): void {
-            if (!SinglePlayerLobbyPanel._instance) {
-                SinglePlayerLobbyPanel._instance = new SinglePlayerLobbyPanel();
+            if (!SpmMainMenuPanel._instance) {
+                SpmMainMenuPanel._instance = new SpmMainMenuPanel();
             }
-            SinglePlayerLobbyPanel._instance.open(undefined);
+            SpmMainMenuPanel._instance.open(undefined);
         }
 
         public static async hide(): Promise<void> {
-            if (SinglePlayerLobbyPanel._instance) {
-                await SinglePlayerLobbyPanel._instance.close();
+            if (SpmMainMenuPanel._instance) {
+                await SpmMainMenuPanel._instance.close();
             }
         }
 
         private constructor() {
             super();
 
-            this.skinName = "resource/skins/singlePlayerLobby/SinglePlayerLobbyPanel.exml";
+            this.skinName = "resource/skins/singlePlayerMode/SpmMainMenuPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -79,11 +79,10 @@ namespace TinyWars.SinglePlayerLobby {
             FloatText.show(Lang.getText(Lang.Type.A0053));
         }
         private _onTouchedBtnCreateCustomWar(e: egret.TouchEvent): void {
-            FloatText.show(Lang.getText(Lang.Type.A0053));
-            // this.close();
-            // Lobby.LobbyTopPanel.hide();
-            // Lobby.LobbyBottomPanel.hide();
-            // SingleCustomRoom.ScrCreateMapListPanel.show();
+            this.close();
+            Lobby.LobbyTopPanel.hide();
+            Lobby.LobbyBottomPanel.hide();
+            SingleCustomRoom.ScrCreateMapListPanel.show();
         }
         private _onTouchedBtnContinueWar(e: egret.TouchEvent): void {
             this.close();

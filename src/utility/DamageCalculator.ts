@@ -302,7 +302,7 @@ namespace TinyWars.Utility.DamageCalculator {
         return getBattleDamage(war, attackerMovePath, launchUnitId, targetGridIndex, false);
     }
 
-    export function getFinalBattleDamage(war: SpwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex): (number | undefined)[] {
+    export function getFinalBattleDamage(war: BwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex): (number | undefined)[] {
         return getBattleDamage(war, attackerMovePath, launchUnitId, targetGridIndex, true);
     }
 }

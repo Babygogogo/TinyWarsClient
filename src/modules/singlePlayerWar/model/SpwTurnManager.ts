@@ -1,5 +1,5 @@
 
-namespace TinyWars.SingleCustomWar {
+namespace TinyWars.SinglePlayerWar {
     import ProtoTypes                   = Utility.ProtoTypes;
     import ConfigManager                = Utility.ConfigManager;
     import Types                        = Utility.Types;
@@ -8,7 +8,7 @@ namespace TinyWars.SingleCustomWar {
     import IWarActionPlayerEndTurn      = ProtoTypes.WarAction.IWarActionPlayerEndTurn;
     import CommonConstants              = Utility.CommonConstants;
 
-    export class ScwTurnManager extends BaseWar.BwTurnManager {
+    export class SpwTurnManager extends BaseWar.BwTurnManager {
         protected _runPhaseGetFund(data: IWarActionSystemBeginTurn): void {
             BwTurnManagerHelper.runPhaseGetFundWithoutExtraData(this);
         }
@@ -42,7 +42,7 @@ namespace TinyWars.SingleCustomWar {
             war.getFogMap().resetMapFromPathsForPlayer(war.getPlayerIndexInTurn());
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(this.getWar());
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(this.getWar());
         }
     }
 }

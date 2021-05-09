@@ -1,5 +1,5 @@
 
-namespace TinyWars.SingleCustomWar.ScwActionExecutor {
+namespace TinyWars.SinglePlayerWar.SpwActionExecutor {
     import Types                = Utility.Types;
     import Logger               = Utility.Logger;
     import ProtoTypes           = Utility.ProtoTypes;
@@ -22,7 +22,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import IDataForUseCoSkill   = ProtoTypes.Structure.IDataForUseCoSkill;
 
-    const _EXECUTORS = new Map<WarActionCodes, (war: ScwWar, data: IWarActionContainer) => Promise<void>>([
+    const _EXECUTORS = new Map<WarActionCodes, (war: SpwWar, data: IWarActionContainer) => Promise<void>>([
         [WarActionCodes.WarActionSystemBeginTurn,           _exeSystemBeginTurn],
         [WarActionCodes.WarActionSystemCallWarEvent,        _exeSystemCallWarEvent],
         [WarActionCodes.WarActionSystemDestroyPlayerForce,  _exeSystemDestroyPlayerForce],
@@ -50,7 +50,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         [WarActionCodes.WarActionUnitWait,                  _exeUnitWait],
     ]);
 
-    export async function checkAndExecute(war: ScwWar, container: IWarActionContainer): Promise<void> {
+    export async function checkAndExecute(war: SpwWar, container: IWarActionContainer): Promise<void> {
         if ((!war.getIsRunning()) || (war.getIsEnded()) || (war.getIsExecutingAction())) {
             return;
         }
@@ -64,7 +64,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // The 'true' executors for war actions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function _exeSystemBeginTurn(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeSystemBeginTurn(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -83,7 +83,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeSystemCallWarEvent(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeSystemCallWarEvent(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0451)}`);
@@ -93,11 +93,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         warEventManager.updateWarEventCalledCountOnCall(warEventId)
         await warEventManager.callWarEvent(warEventId, false);
 
-        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _exeSystemDestroyPlayerForce(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeSystemDestroyPlayerForce(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -106,11 +106,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
         DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
 
-        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _exeSystemEndWar(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeSystemEndWar(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         FloatText.show(`${Lang.getText(Lang.Type.B0087)}`);
@@ -120,7 +120,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerDeleteUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exePlayerDeleteUnit(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -132,11 +132,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
         }
 
-        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerEndTurn(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exePlayerEndTurn(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
         await war.getTurnManager().endPhaseMain(data.WarActionPlayerEndTurn);
@@ -144,7 +144,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerProduceUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exePlayerProduceUnit(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -175,11 +175,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         unitMap.setNextUnitId(unitId + 1);
         playerInTurn.setFund(playerInTurn.getFund() - cost);
 
-        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerSurrender(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exePlayerSurrender(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         const player        = war.getPlayerInTurn();
         actionPlanner.setStateExecutingAction();
@@ -187,11 +187,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
         player.setAliveState(Types.PlayerAliveState.Dying);
 
-        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _exePlayerVoteForDraw(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exePlayerVoteForDraw(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -217,7 +217,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitAttackUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitAttackUnit(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -235,7 +235,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
             await attackerUnit.moveViewAlongPath(pathNodes, attackerUnit.getIsDiving(), true);
             attackerUnit.updateView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -295,13 +295,13 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             if (attackerPlayer.getCoId()) {
                 const attackerCoZoneRadius = attackerPlayer.getCoZoneRadius();
                 if (attackerCoZoneRadius == null) {
-                    Logger.error(`ScwModel._exeUnitAttackUnit() empty attackerCoZoneRadius.`);
+                    Logger.error(`SpwActionExecutor._exeUnitAttackUnit() empty attackerCoZoneRadius.`);
                     return undefined;
                 }
 
                 const hasAttackerLoadedCo = attackerUnit.getHasLoadedCo();
                 if (hasAttackerLoadedCo == null) {
-                    Logger.error(`ScwModel._exeUnitAttackUnit() empty hasAttackerLoadedCo.`);
+                    Logger.error(`SpwActionExecutor._exeUnitAttackUnit() empty hasAttackerLoadedCo.`);
                     return undefined;
                 }
 
@@ -392,12 +392,12 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
                 attackerPlayer.setAliveState(Types.PlayerAliveState.Dying);
             }
 
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
 
-    async function _exeUnitAttackTile(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitAttackTile(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -415,7 +415,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
             await attackerUnit.moveViewAlongPath(pathNodes, attackerUnit.getIsDiving(), true);
             attackerUnit.updateView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -457,12 +457,12 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
                 gridVisionEffect.showEffectExplosion(targetGridIndex);
             }
 
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
 
-    async function _exeUnitBeLoaded(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitBeLoaded(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -479,7 +479,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         } else {
             const loaderUnit = unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
@@ -490,12 +490,12 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             focusUnit.updateView();
             focusUnit.setViewVisible(false);
             loaderUnit.updateView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
 
-    async function _exeUnitBuildTile(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitBuildTile(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -538,11 +538,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
-        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitCaptureTile(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitCaptureTile(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -559,7 +559,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         if (path.isBlocked) {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
             focusUnit.updateView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -587,12 +587,12 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
             focusUnit.updateView();
             tile.flushDataToView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
 
-    async function _exeUnitDive(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitDive(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -624,11 +624,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             }
         }
 
-        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitDropUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitDropUnit(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -681,11 +681,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             })());
         }
         await Promise.all(promises);
-        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitJoinUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitJoinUnit(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -704,7 +704,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -768,12 +768,12 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
             unitMap.getView().removeUnit(targetUnit.getView());
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
 
-    async function _exeUnitLaunchFlare(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitLaunchFlare(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -804,11 +804,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
 
         focusUnit.updateView();
-        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitLaunchSilo(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitLaunchSilo(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -825,7 +825,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         if (path.isBlocked) {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -858,12 +858,12 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
             focusUnit.updateView();
             tile.flushDataToView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
 
-    async function _exeUnitLoadCo(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitLoadCo(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -882,7 +882,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             const playerIndex               = focusUnit.getPlayerIndex();
             const initialEnergyPercentage   = war.getCommonSettingManager().getSettingsInitialEnergyPercentage(playerIndex);
             if (initialEnergyPercentage == null) {
-                Logger.error(`ScwModel._exeUnitLoadCo() empty initialEnergyPercentage.`);
+                Logger.error(`SpwActionExecutor._exeUnitLoadCo() empty initialEnergyPercentage.`);
                 return undefined;
             }
 
@@ -899,11 +899,11 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
-        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitProduceUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitProduceUnit(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -920,7 +920,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         if (path.isBlocked) {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -945,12 +945,12 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
 
-    async function _exeUnitSupplyUnit(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitSupplyUnit(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
@@ -968,7 +968,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         if (isBlocked) {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), isBlocked);
             focusUnit.updateView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -997,19 +997,19 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
                 gridVisionEffect.showEffectSupply(unit.getGridIndex());
             }
 
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
         }
     }
 
-    async function _exeUnitSurface(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitSurface(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
         const action    = data.WarActionUnitSurface;
         const unitMap   = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`ScwModel._exeUnitSurface() empty unitMap.`);
+            Logger.error(`SpwActionExecutor._exeUnitSurface() empty unitMap.`);
             return undefined;
         }
 
@@ -1039,24 +1039,24 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             }
         }
 
-        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 
-    async function _exeUnitUseCoSkill(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitUseCoSkill(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
         const action    = data.WarActionUnitUseCoSkill;
         const skillType = action.skillType;
         if (skillType == null) {
-            Logger.error(`ScwModel._exeUnitUseCoSkill() empty skillType.`);
+            Logger.error(`SpwActionExecutor._exeUnitUseCoSkill() empty skillType.`);
             return undefined;
         }
 
         const unitMap = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`ScwModel._exeUnitUseCoSkill() empty unitMap.`);
+            Logger.error(`SpwActionExecutor._exeUnitUseCoSkill() empty unitMap.`);
             return undefined;
         }
 
@@ -1065,25 +1065,25 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
         if (focusUnit == null) {
-            Logger.error(`ScwModel._exeUnitUseCoSkill() empty focusUnit.`);
+            Logger.error(`SpwActionExecutor._exeUnitUseCoSkill() empty focusUnit.`);
             return undefined;
         }
 
         const teamIndexInTurn = focusUnit.getTeamIndex();
         if (teamIndexInTurn == null) {
-            Logger.error(`ScwModel._exeUnitUseCoSkill() empty teamIndexInTurn.`);
+            Logger.error(`SpwActionExecutor._exeUnitUseCoSkill() empty teamIndexInTurn.`);
             return undefined;
         }
 
         const player = focusUnit.getPlayer();
         if (player == null) {
-            Logger.error(`ScwModel._exeUnitUseCoSkill() empty player.`);
+            Logger.error(`SpwActionExecutor._exeUnitUseCoSkill() empty player.`);
             return undefined;
         }
 
         const currentEnergy = player.getCoCurrentEnergy();
         if (currentEnergy == null) {
-            Logger.error(`ScwModel._exeUnitUseCoSkill() empty currentEnergy.`);
+            Logger.error(`SpwActionExecutor._exeUnitUseCoSkill() empty currentEnergy.`);
             return undefined;
         }
 
@@ -1094,7 +1094,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
             focusUnit.updateView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
             actionPlanner.setStateIdle();
 
         } else {
@@ -1107,7 +1107,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             if (skillType === Types.CoSkillType.Power) {
                 const powerEnergy = player.getCoPowerEnergy();
                 if (powerEnergy == null) {
-                    Logger.error(`ScwModel._exeUnitUseCoSkill() empty powerEnergy.`);
+                    Logger.error(`SpwActionExecutor._exeUnitUseCoSkill() empty powerEnergy.`);
                     return undefined;
                 }
                 player.setCoCurrentEnergy(currentEnergy - powerEnergy);
@@ -1115,14 +1115,14 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             } else if (skillType === Types.CoSkillType.SuperPower) {
                 const superPowerEnergy = player.getCoSuperPowerEnergy();
                 if (superPowerEnergy == null) {
-                    Logger.error(`ScwModel._exeUnitUseCoSkill() empty superPowerEnergy.`);
+                    Logger.error(`SpwActionExecutor._exeUnitUseCoSkill() empty superPowerEnergy.`);
                     return undefined;
                 }
 
                 player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
 
             } else {
-                Logger.error(`ScwModel._exeUnitUseCoSkill() invalid skillType: ${skillType}`);
+                Logger.error(`SpwActionExecutor._exeUnitUseCoSkill() invalid skillType: ${skillType}`);
                 return undefined;
             }
 
@@ -1131,7 +1131,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
             for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
                 const dataForUseCoSkill = BwCoSkillHelper.getDataForUseCoSkill(war, player, skillIndex);
                 if (dataForUseCoSkill == null) {
-                    Logger.error(`ScwModel._exeUnitUseCoSkill() empty dataForUseCoSkill.`);
+                    Logger.error(`SpwActionExecutor._exeUnitUseCoSkill() empty dataForUseCoSkill.`);
                     return undefined;
                 }
 
@@ -1141,7 +1141,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
             focusUnit.updateView();
-            ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
 
             const gridVisionEffect  = war.getGridVisionEffect();
             const playerIndex       = focusUnit.getPlayerIndex();
@@ -1171,14 +1171,14 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
         }
     }
 
-    async function _exeUnitWait(war: ScwWar, data: IWarActionContainer): Promise<void> {
+    async function _exeUnitWait(war: SpwWar, data: IWarActionContainer): Promise<void> {
         const actionPlanner = war.getActionPlanner();
         actionPlanner.setStateExecutingAction();
 
         const action    = data.WarActionUnitWait;
         const unitMap   = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`ScwModel._exeUnitWait() empty unitMap.`);
+            Logger.error(`SpwActionExecutor._exeUnitWait() empty unitMap.`);
             return undefined;
         }
 
@@ -1192,7 +1192,7 @@ namespace TinyWars.SingleCustomWar.ScwActionExecutor {
 
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
-        ScwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        SpwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
         actionPlanner.setStateIdle();
     }
 }

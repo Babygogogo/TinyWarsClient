@@ -76,7 +76,7 @@ namespace TinyWars.MultiFreeRoom {
         }
         private _onTouchedBtnSinglePlayer(e: egret.TouchEvent): void {
             this.close();
-            SinglePlayerLobby.SinglePlayerLobbyPanel.show();
+            SinglePlayerMode.SpmMainMenuPanel.show();
         }
         private _onTouchedBtnCreateRoom(e: egret.TouchEvent): void {
             Utility.FloatText.show(Lang.getText(Lang.Type.A0053));

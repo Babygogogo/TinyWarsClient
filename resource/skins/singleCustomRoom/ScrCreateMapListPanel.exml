@@ -13,7 +13,7 @@
             <e:Group x="0" y="0">
                 <GameUi:UiLabel id="_labelSinglePlayer" text="Single Player" size="14" width="80" wordWrap="true"
                                 textAlign="center" x="0" y="0" textColor="0xAAAAAA" />
-                <GameUi:UiLabel text="Create Rooms" size="14" id="_labelCreateRoom" width="80" wordWrap="true"
+                <GameUi:UiLabel id="_labelCustomMode" text="Custom Mode" size="14" width="80" wordWrap="true"
                                 textAlign="center" x="92" y="0" textColor="0xAAAAAA" />
                 <GameUi:UiLabel text="Choose a Map" size="14" id="_labelChooseMap" width="80" wordWrap="true"
                                 textAlign="center" x="102" y="10" bold="true" />

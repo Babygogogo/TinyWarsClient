@@ -1,15 +1,15 @@
 
-namespace TinyWars.SingleCustomWar {
+namespace TinyWars.SinglePlayerWar {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import ProtoTypes   = Utility.ProtoTypes;
     import ISerialWar   = ProtoTypes.WarSerialization.ISerialWar;
 
-    export class ScwLoadWarPanel extends GameUi.UiPanel<void> {
+    export class SpwLoadWarPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: ScwLoadWarPanel;
+        private static _instance: SpwLoadWarPanel;
 
         private _group          : eui.Group;
         private _labelPanelTitle: GameUi.UiLabel;
@@ -21,15 +21,15 @@ namespace TinyWars.SingleCustomWar {
         private _dataForList: DataForSlotRenderer[];
 
         public static show(): void {
-            if (!ScwLoadWarPanel._instance) {
-                ScwLoadWarPanel._instance = new ScwLoadWarPanel();
+            if (!SpwLoadWarPanel._instance) {
+                SpwLoadWarPanel._instance = new SpwLoadWarPanel();
             }
 
-            ScwLoadWarPanel._instance.open(undefined);
+            SpwLoadWarPanel._instance.open(undefined);
         }
         public static async hide(): Promise<void> {
-            if (ScwLoadWarPanel._instance) {
-                await ScwLoadWarPanel._instance.close();
+            if (SpwLoadWarPanel._instance) {
+                await SpwLoadWarPanel._instance.close();
             }
         }
 
@@ -38,7 +38,7 @@ namespace TinyWars.SingleCustomWar {
 
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-            this.skinName = `resource/skins/singleCustomWar/ScwLoadWarPanel.exml`;
+            this.skinName = `resource/skins/singlePlayerWar/SpwLoadWarPanel.exml`;
         }
 
         protected _onOpened(): void {
@@ -83,7 +83,7 @@ namespace TinyWars.SingleCustomWar {
 
             this._dataForList = this._createDataForList();
             this._srlSaveSlot.bindData(this._dataForList);
-            this._listSaveSlot.selectedIndex = ScwModel.getWar().getSaveSlotIndex();
+            this._listSaveSlot.selectedIndex = SpwModel.getWar().getSaveSlotIndex();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -94,8 +94,8 @@ namespace TinyWars.SingleCustomWar {
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
-            const slotList  = SingleCustomRoom.ScrModel.SaveSlot.getInfoArray() || [];
-            for (let i = 0; i < Utility.CommonConstants.ScwSaveSlotMaxCount; ++i) {
+            const slotList  = SinglePlayerMode.SpmModel.SaveSlot.getInfoArray() || [];
+            for (let i = 0; i < Utility.CommonConstants.SpwSaveSlotMaxCount; ++i) {
                 dataList.push({
                     slotIndex   : i,
                     slotInfo    : slotList.find(v => v.slotIndex === i),
@@ -139,8 +139,8 @@ namespace TinyWars.SingleCustomWar {
                 Common.CommonConfirmPanel.show({
                     content : Lang.getText(Lang.Type.A0072),
                     callback: () => {
-                        SingleCustomRoom.ScrProxy.reqContinueWar(slotInfo.slotIndex);
-                        ScwLoadWarPanel.hide();
+                        SinglePlayerMode.SpmProxy.reqContinueWar(slotInfo.slotIndex);
+                        SpwLoadWarPanel.hide();
                     },
                 });
             }

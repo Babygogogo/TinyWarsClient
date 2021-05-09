@@ -1,6 +1,6 @@
 
-namespace TinyWars.SingleCustomWar {
-    export class ScwPlayerManager extends BaseWar.BwPlayerManager {
+namespace TinyWars.SinglePlayerWar {
+    export class SpwPlayerManager extends BaseWar.BwPlayerManager {
         ////////////////////////////////////////////////////////////////////////////////
         // The other public functions.
         ////////////////////////////////////////////////////////////////////////////////

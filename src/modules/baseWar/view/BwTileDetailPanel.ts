@@ -134,7 +134,7 @@ namespace TinyWars.BaseWar {
             const repairAmount          = cfg.repairAmount;
             const war                   = tile.getWar();
             const isCheating            = (tile instanceof MapEditor.MeTile) ||
-                ((war instanceof SingleCustomWar.ScwWar) ? war.getIsSinglePlayerCheating() : false);
+                ((war instanceof SingleCustomWar.ScwWar) ? war.getCanCheat() : false);
 
             const dataList: DataForInfoRenderer[] = [
                 {

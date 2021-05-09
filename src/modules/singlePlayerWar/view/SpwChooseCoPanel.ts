@@ -1,5 +1,5 @@
 
-namespace TinyWars.SingleCustomWar {
+namespace TinyWars.SinglePlayerWar {
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
@@ -7,16 +7,16 @@ namespace TinyWars.SingleCustomWar {
     import Notify           = Utility.Notify;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    type OpenDataForScwChooseCoPanel = {
+    type OpenDataForSpwChooseCoPanel = {
         war         : BaseWar.BwWar;
         playerIndex : number;
     }
 
-    export class ScwChooseCoPanel extends GameUi.UiPanel<OpenDataForScwChooseCoPanel> {
+    export class SpwChooseCoPanel extends GameUi.UiPanel<OpenDataForSpwChooseCoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: ScwChooseCoPanel;
+        private static _instance: SpwChooseCoPanel;
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
@@ -51,23 +51,23 @@ namespace TinyWars.SingleCustomWar {
         private _dataForListCo      : DataForCoRenderer[] = [];
         private _selectedIndex      : number;
 
-        public static show(openData: OpenDataForScwChooseCoPanel): void {
-            if (!ScwChooseCoPanel._instance) {
-                ScwChooseCoPanel._instance = new ScwChooseCoPanel();
+        public static show(openData: OpenDataForSpwChooseCoPanel): void {
+            if (!SpwChooseCoPanel._instance) {
+                SpwChooseCoPanel._instance = new SpwChooseCoPanel();
             }
 
-            ScwChooseCoPanel._instance.open(openData);
+            SpwChooseCoPanel._instance.open(openData);
         }
         public static async hide(): Promise<void> {
-            if (ScwChooseCoPanel._instance) {
-                await ScwChooseCoPanel._instance.close();
+            if (SpwChooseCoPanel._instance) {
+                await SpwChooseCoPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/singleCustomWar/ScwChooseCoPanel.exml";
+            this.skinName = "resource/skins/singlePlayerWar/SpwChooseCoPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -252,7 +252,7 @@ namespace TinyWars.SingleCustomWar {
         playerIndex     : number;
         coBasicCfg      : ProtoTypes.Config.ICoBasicCfg;
         index           : number;
-        panel           : ScwChooseCoPanel;
+        panel           : SpwChooseCoPanel;
     }
 
     class CoRenderer extends GameUi.UiListItemRenderer<DataForCoRenderer> {

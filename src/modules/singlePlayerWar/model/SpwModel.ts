@@ -1,5 +1,5 @@
 
-namespace TinyWars.SingleCustomWar.ScwModel {
+namespace TinyWars.SinglePlayerWar.SpwModel {
     import Types                = Utility.Types;
     import Logger               = Utility.Logger;
     import Lang                 = Utility.Lang;
@@ -10,7 +10,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
     import CommonAlertPanel     = Common.CommonAlertPanel;
     import CommonConstants      = Utility.CommonConstants;
 
-    let _war: ScwWar;
+    let _war: SpwWar;
     export function init(): void {
     }
 
@@ -21,16 +21,21 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         warData     : WarSerialization.ISerialWar;
         slotIndex   : number;
         slotComment : string;
-    }): Promise<ScwWar> {
+    }): Promise<SpwWar> {
         if (_war) {
-            Logger.warn(`ScwModel.loadWar() another war has been loaded already!`);
+            Logger.warn(`SpwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
-        const war       = new ScwWar();
+        const war = warData.settingsForScw ? new SingleCustomWar.ScwWar() : null;
+        if (war == null) {
+            Logger.error(`SpwModel.loadWar() empty war.`);
+            return undefined;
+        }
+
         const initError = await war.init(warData);
         if (initError) {
-            Logger.warn(`ScwModel.loadWar() initError: ${initError}`);
+            Logger.warn(`SpwModel.loadWar() initError: ${initError}`);
             return undefined;
         }
 
@@ -51,7 +56,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    export function getWar(): ScwWar | undefined {
+    export function getWar(): SpwWar | undefined {
         return _war;
     }
 
@@ -69,7 +74,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         if (war) {
             await checkAndHandleAutoActions(war);
             if (!war.checkIsHumanInTurn()) {
-                await handleAutoActionsAndPlayerAction(ScwActionReviser.revise(war, await ScwRobot.getNextAction(war)));
+                await handleAutoActionsAndPlayerAction(SpwActionReviser.revise(war, await SpwRobot.getNextAction(war)));
                 await checkAndHandleAutoActionsAndRobot();
             }
         }
@@ -91,7 +96,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
 
         playerAction.actionId = war.getExecutedActionManager().getExecutedActionsCount();
-        await ScwActionExecutor.checkAndExecute(war, playerAction);
+        await SpwActionExecutor.checkAndExecute(war, playerAction);
         if (checkAndEndWar(war)) {
             return;
         }
@@ -100,7 +105,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         checkAndEndWar(war);
     }
 
-    function checkAndEndWar(war: ScwWar): boolean {
+    function checkAndEndWar(war: SpwWar): boolean {
         if (!war.getIsEnded()) {
             return false;
         } else {
@@ -112,7 +117,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
                     callback,
                 });
             } else {
-                const humanPlayerList = (war.getPlayerManager() as ScwPlayerManager).getHumanPlayers();
+                const humanPlayerList = (war.getPlayerManager() as SpwPlayerManager).getHumanPlayers();
                 if (humanPlayerList.length <= 0) {
                     CommonAlertPanel.show({
                         title   : Lang.getText(Lang.Type.B0088),
@@ -133,7 +138,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
     }
 
-    async function checkAndHandleAutoActions(war: ScwWar): Promise<boolean> {
+    async function checkAndHandleAutoActions(war: SpwWar): Promise<boolean> {
         if ((war == null) || (war.getIsEnded())) {
             return false;
         }
@@ -141,7 +146,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         // Handle war events.
         const warEventManager = war.getWarEventManager();
         if (warEventManager == null) {
-            Logger.error(`ScwModel.checkAndHandleAutoActions() empty warEventManager.`);
+            Logger.error(`SpwModel.checkAndHandleAutoActions() empty warEventManager.`);
             return undefined;
         }
 
@@ -153,9 +158,9 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         }
 
         // Handle the ending war.
-        const playerManager = war.getPlayerManager() as ScwPlayerManager;
+        const playerManager = war.getPlayerManager() as SpwPlayerManager;
         if (playerManager == null) {
-            Logger.error(`ScwModel.checkAndHandleAutoActions() empty playerManager.`);
+            Logger.error(`SpwModel.checkAndHandleAutoActions() empty playerManager.`);
             return false;
         }
         if ((war.getDrawVoteManager().checkIsDraw())            ||
@@ -169,19 +174,19 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         // Handle the WaitBeginTurn phase.
         const turnManager = war.getTurnManager();
         if (turnManager == null) {
-            Logger.error(`ScwModel.checkAndHandleAutoActions() empty turnManager.`);
+            Logger.error(`SpwModel.checkAndHandleAutoActions() empty turnManager.`);
             return false;
         }
 
         const turnPhaseCode = turnManager.getPhaseCode();
         if (turnPhaseCode == null) {
-            Logger.error(`ScwModel.checkAndHandleAutoActions() empty turnPhaseCode.`);
+            Logger.error(`SpwModel.checkAndHandleAutoActions() empty turnPhaseCode.`);
             return false;
         }
 
         const playerInTurn = playerManager.getPlayerInTurn();
         if (playerInTurn == null) {
-            Logger.error(`ScwModel.checkAndHandleAutoActions() empty playerInTurn.`);
+            Logger.error(`SpwModel.checkAndHandleAutoActions() empty playerInTurn.`);
             return false;
         }
 
@@ -196,7 +201,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
             const player = playerManager.getPlayer(playerIndex);
             if (player == null) {
-                Logger.error(`ScwModel.checkAndHandleAutoActions() empty player.`);
+                Logger.error(`SpwModel.checkAndHandleAutoActions() empty player.`);
                 return false;
             }
 
@@ -210,7 +215,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         // Handle neutral player (end turn).
         if (playerInTurn.checkIsNeutral()) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                Logger.error(`ScwModel.checkAndHandleAutoActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`);
+                Logger.error(`SpwModel.checkAndHandleAutoActions() invalid turnPhaseCode for the neutral player: ${turnPhaseCode}`);
                 return false;
             }
 
@@ -222,7 +227,7 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         // Handle the dead player in turn (end turn).
         if (playerInTurn.getAliveState() === Types.PlayerAliveState.Dead) {
             if (turnPhaseCode !== Types.TurnPhaseCode.Main) {
-                Logger.error(`ScwModel.checkAndHandleAutoActions() invalid turnPhaseCode for the dead player in turn: ${turnPhaseCode}`);
+                Logger.error(`SpwModel.checkAndHandleAutoActions() invalid turnPhaseCode for the dead player in turn: ${turnPhaseCode}`);
                 return false;
             }
 
@@ -234,45 +239,45 @@ namespace TinyWars.SingleCustomWar.ScwModel {
         // No auto action available.
         return false;
     }
-    async function handleSystemBeginTurn(war: ScwWar): Promise<void> {
-        await ScwActionExecutor.checkAndExecute(war, {
+    async function handleSystemBeginTurn(war: SpwWar): Promise<void> {
+        await SpwActionExecutor.checkAndExecute(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemBeginTurn    : {
             },
         })
     }
-    async function handleSystemCallWarEvent(war: ScwWar, warEventId: number): Promise<void> {
-        await ScwActionExecutor.checkAndExecute(war, {
+    async function handleSystemCallWarEvent(war: SpwWar, warEventId: number): Promise<void> {
+        await SpwActionExecutor.checkAndExecute(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemCallWarEvent : {
                 warEventId,
             },
         });
     }
-    async function handleSystemDestroyPlayerForce(war: ScwWar, playerIndex: number): Promise<void> {
-        await ScwActionExecutor.checkAndExecute(war, {
+    async function handleSystemDestroyPlayerForce(war: SpwWar, playerIndex: number): Promise<void> {
+        await SpwActionExecutor.checkAndExecute(war, {
             actionId                            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemDestroyPlayerForce   : {
                 targetPlayerIndex           : playerIndex,
             },
         });
     }
-    async function handleSystemEndWar(war: ScwWar): Promise<void> {
-        await ScwActionExecutor.checkAndExecute(war, {
+    async function handleSystemEndWar(war: SpwWar): Promise<void> {
+        await SpwActionExecutor.checkAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemEndWar   : {
             },
         });
     }
-    async function handlePlayerEndTurn(war: ScwWar): Promise<void> {
-        await ScwActionExecutor.checkAndExecute(war, {
+    async function handlePlayerEndTurn(war: SpwWar): Promise<void> {
+        await SpwActionExecutor.checkAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerEndTurn  : {
             },
         });
     }
 
-    function checkCanExecuteAction(war: ScwWar): boolean {
+    function checkCanExecuteAction(war: SpwWar): boolean {
         return (war != null)                &&
             (!war.getIsEnded())             &&
             (!war.getIsExecutingAction())   &&

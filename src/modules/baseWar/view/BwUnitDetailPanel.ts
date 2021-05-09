@@ -144,7 +144,7 @@ namespace TinyWars.BaseWar {
             const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
             const war           = unit.getWar();
             const isCheating    = (war instanceof MapEditor.MeWar)
-                || ((war instanceof SingleCustomWar.ScwWar) && (war.getIsSinglePlayerCheating()));
+                || ((war instanceof SingleCustomWar.ScwWar) && (war.getCanCheat()));
 
             const dataList: DataForInfoRenderer[] = [
                 this._createInfoHp(unit, cfg, isCheating),

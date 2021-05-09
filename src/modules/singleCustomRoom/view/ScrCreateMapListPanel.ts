@@ -28,7 +28,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private readonly _groupNavigator        : eui.Group;
         private readonly _labelSinglePlayer     : GameUi.UiLabel;
-        private readonly _labelCreateRoom       : GameUi.UiLabel;
+        private readonly _labelCustomMode       : GameUi.UiLabel;
         private readonly _labelChooseMap        : GameUi.UiLabel;
 
         private readonly _btnBack               : GameUi.UiButton;
@@ -136,7 +136,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _onTouchTapBtnBack(e: egret.TouchEvent): void {
             this.close();
-            SinglePlayerLobby.SinglePlayerLobbyPanel.show();
+            SinglePlayerMode.SpmMainMenuPanel.show();
             Lobby.LobbyTopPanel.show();
             Lobby.LobbyBottomPanel.show();
         }
@@ -158,7 +158,7 @@ namespace TinyWars.SingleCustomRoom {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelCreateRoom.text          = Lang.getText(Lang.Type.B0557);
+            this._labelCustomMode.text          = Lang.getText(Lang.Type.B0603);
             this._labelSinglePlayer.text        = Lang.getText(Lang.Type.B0138);
             this._labelChooseMap.text           = Lang.getText(Lang.Type.B0227);
             this._labelLoading.text             = Lang.getText(Lang.Type.A0150);

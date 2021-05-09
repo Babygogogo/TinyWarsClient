@@ -109,7 +109,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _onTouchTapBtnBack(): void {
             this.close();
-            SinglePlayerLobby.SinglePlayerLobbyPanel.show();
+            SinglePlayerMode.SpmMainMenuPanel.show();
             Lobby.LobbyTopPanel.show();
             Lobby.LobbyBottomPanel.show();
         }
@@ -138,7 +138,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _createDataForListWar(): DataForWarRenderer[] {
-            const saveSlots = ScrModel.SaveSlot.getInfoArray();
+            const saveSlots = SinglePlayerMode.SpmModel.SaveSlot.getInfoArray();
             const data      : DataForWarRenderer[] = [];
             if (saveSlots) {
                 for (let i = 0; i < saveSlots.length; ++i) {
@@ -228,7 +228,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchTapBtnNext(): void {
-            ScrProxy.reqContinueWar(this.data.slotInfo.slotIndex);
+            SinglePlayerMode.SpmProxy.reqContinueWar(this.data.slotInfo.slotIndex);
             Common.CommonBlockPanel.show({
                 title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0021),

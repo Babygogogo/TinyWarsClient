@@ -78,7 +78,7 @@ namespace TinyWars.MultiCustomRoom {
         }
         private _onTouchedBtnSinglePlayer(e: egret.TouchEvent): void {
             this.close();
-            SinglePlayerLobby.SinglePlayerLobbyPanel.show();
+            SinglePlayerMode.SpmMainMenuPanel.show();
         }
         private _onTouchedBtnCreateRoom(e: egret.TouchEvent): void {
             this.close();

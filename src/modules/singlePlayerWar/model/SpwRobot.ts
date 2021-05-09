@@ -1,5 +1,5 @@
 
-namespace TinyWars.SingleCustomWar.ScwRobot {
+namespace TinyWars.SinglePlayerWar.SpwRobot {
     import Types            = Utility.Types;
     import GridIndexHelpers = Utility.GridIndexHelpers;
     import Helpers          = Utility.Helpers;
@@ -312,10 +312,10 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     };
 
     let _frameBeginTime         : number;
-    let _war                    : ScwWar;
+    let _war                    : SpwWar;
     let _configVersion          : string;
-    let _turnManager            : ScwTurnManager;
-    let _playerManager          : ScwPlayerManager;
+    let _turnManager            : SpwTurnManager;
+    let _playerManager          : SpwPlayerManager;
     let _unitMap                : BaseWar.BwUnitMap;
     let _tileMap                : BaseWar.BwTileMap;
     let _mapSize                : Types.MapSize;
@@ -325,12 +325,12 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Helpers.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function _initVariables(war: ScwWar): void {
+    function _initVariables(war: SpwWar): void {
         _frameBeginTime = Date.now();
         _war            = war;
         _configVersion  = war.getConfigVersion();
-        _turnManager    = war.getTurnManager() as ScwTurnManager;
-        _playerManager  = war.getPlayerManager() as ScwPlayerManager;
+        _turnManager    = war.getTurnManager() as SpwTurnManager;
+        _playerManager  = war.getPlayerManager() as SpwPlayerManager;
         _unitMap        = war.getUnitMap();
         _tileMap        = war.getTileMap();
         _mapSize        = _tileMap.getMapSize();
@@ -1542,7 +1542,7 @@ namespace TinyWars.SingleCustomWar.ScwRobot {
         return { PlayerEndTurn: {} };
     }
 
-    export async function getNextAction(war: ScwWar): Promise<WarAction> {
+    export async function getNextAction(war: SpwWar): Promise<WarAction> {
         const startTime = Date.now();
         _initVariables(war);
 

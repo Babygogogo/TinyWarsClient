@@ -1,5 +1,5 @@
 
-namespace TinyWars.SingleCustomWar {
+namespace TinyWars.SinglePlayerWar {
     import CommonConfirmPanel   = Common.CommonConfirmPanel;
     import TimeModel            = Time.TimeModel;
     import BwWarRuleHelper      = BaseWar.BwWarRuleHelper;
@@ -20,11 +20,11 @@ namespace TinyWars.SingleCustomWar {
         Advanced,
     }
 
-    export class ScwWarMenuPanel extends GameUi.UiPanel<void> {
+    export class SpwWarMenuPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: ScwWarMenuPanel;
+        private static _instance: SpwWarMenuPanel;
 
         private _group          : eui.Group;
         private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer>;
@@ -41,32 +41,32 @@ namespace TinyWars.SingleCustomWar {
         private _btnBuildings           : GameUi.UiButton;
         private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
-        private _war            : ScwWar;
+        private _war            : SpwWar;
         private _unitMap        : BaseWar.BwUnitMap;
-        private _actionPlanner  : ScwActionPlanner;
+        private _actionPlanner  : SpwActionPlanner;
         private _dataForList    : DataForCommandRenderer[];
         private _menuType       = MenuType.Main;
 
         public static show(): void {
-            if (!ScwWarMenuPanel._instance) {
-                ScwWarMenuPanel._instance = new ScwWarMenuPanel();
+            if (!SpwWarMenuPanel._instance) {
+                SpwWarMenuPanel._instance = new SpwWarMenuPanel();
             }
-            ScwWarMenuPanel._instance.open(undefined);
+            SpwWarMenuPanel._instance.open(undefined);
         }
         public static async hide(): Promise<void> {
-            if (ScwWarMenuPanel._instance) {
-                await ScwWarMenuPanel._instance.close();
+            if (SpwWarMenuPanel._instance) {
+                await SpwWarMenuPanel._instance.close();
             }
         }
         public static getIsOpening(): boolean {
-            const instance = ScwWarMenuPanel._instance;
+            const instance = SpwWarMenuPanel._instance;
             return instance ? instance.getIsOpening() : false;
         }
 
         public constructor() {
             super();
 
-            this.skinName = `resource/skins/singleCustomWar/ScwWarMenuPanel.exml`;
+            this.skinName = `resource/skins/singlePlayerWar/SpwWarMenuPanel.exml`;
         }
 
         protected _onOpened(): void {
@@ -87,10 +87,10 @@ namespace TinyWars.SingleCustomWar {
             this._listPlayer.setItemRenderer(PlayerRenderer);
             this._listWarInfo.setItemRenderer(InfoRenderer);
 
-            const war           = ScwModel.getWar();
+            const war           = SpwModel.getWar();
             this._war           = war;
             this._unitMap       = war.getUnitMap();
-            this._actionPlanner = war.getActionPlanner() as ScwActionPlanner;
+            this._actionPlanner = war.getActionPlanner() as SpwActionPlanner;
             this._menuType      = MenuType.Main;
 
             this._updateView();
@@ -264,7 +264,6 @@ namespace TinyWars.SingleCustomWar {
                 // this._createCommandOpenCoInfoMenu(),
                 this._createCommandSaveGame(),
                 this._createCommandLoadGame(),
-                this._createCommandEnableCheating(),
                 this._createCommandOpenAdvancedMenu(),
                 // this._createCommandChat(),
                 this._createCommandGotoLobby(),
@@ -331,7 +330,7 @@ namespace TinyWars.SingleCustomWar {
                         Common.CommonConfirmPanel.show({
                             content : Lang.getText(Lang.Type.A0071),
                             callback: () => {
-                                SingleCustomRoom.ScrProxy.reqSaveWar(war);
+                                SinglePlayerMode.SpmProxy.reqSaveWar(war);
                             },
                         })
                     },
@@ -351,29 +350,9 @@ namespace TinyWars.SingleCustomWar {
                 return {
                     name    : Lang.getText(Lang.Type.B0261),
                     callback: () => {
-                        ScwLoadWarPanel.show();
+                        SpwLoadWarPanel.show();
                     },
                 };
-            }
-        }
-
-        private _createCommandEnableCheating(): DataForCommandRenderer | null {
-            const war = this._war;
-            if ((!war) || (war.getIsSinglePlayerCheating())) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(Lang.Type.B0366),
-                    callback: () => {
-                        Common.CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0108),
-                            callback: () => {
-                                war.setIsSinglePlayerCheating(true);
-                                this._updateView();
-                            },
-                        });
-                    },
-                }
             }
         }
 
@@ -481,7 +460,7 @@ namespace TinyWars.SingleCustomWar {
                         CommonConfirmPanel.show({
                             content : Lang.getText(Lang.Type.A0140),
                             callback: () => {
-                                SingleCustomRoom.ScrProxy.reqScrDeleteWar(saveSlotIndex);
+                                SinglePlayerMode.SpmProxy.reqScrDeleteWar(saveSlotIndex);
                             },
                         });
                     },
@@ -563,9 +542,9 @@ namespace TinyWars.SingleCustomWar {
     }
 
     type DataForPlayerRenderer = {
-        war         : ScwWar;
+        war         : SpwWar;
         playerIndex : number;
-        panel       : ScwWarMenuPanel;
+        panel       : SpwWarMenuPanel;
     }
 
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
@@ -591,7 +570,7 @@ namespace TinyWars.SingleCustomWar {
         private _onTouchedBtnName(e: egret.TouchEvent): void {
             const data  = this.data;
             const war   = data.war;
-            if (war.getIsSinglePlayerCheating()) {
+            if (war.getCanCheat()) {
                 const playerIndex   = data.playerIndex;
                 const player        = war.getPlayer(playerIndex);
                 const isHuman       = player.getUserId() != null;
@@ -602,7 +581,7 @@ namespace TinyWars.SingleCustomWar {
                             player.setUserId(User.UserModel.getSelfUserId());
                         } else {
                             player.setUserId(null);
-                            ScwModel.checkAndHandleAutoActionsAndRobot();
+                            SpwModel.checkAndHandleAutoActionsAndRobot();
                         }
                         this._updateView();
                     },
@@ -621,7 +600,7 @@ namespace TinyWars.SingleCustomWar {
             this._labelForce.text       = `${Lang.getPlayerForceName(playerIndex)}`
                 + `  ${Lang.getPlayerTeamName(player.getTeamIndex())}`
                 + `  ${isPlayerInTurn ? Lang.getText(Lang.Type.B0086) : ""}`;
-            this._btnName.setTextColor(war.getIsSinglePlayerCheating() ? 0x00FF00 : 0xFFFFFF);
+            this._btnName.setTextColor(war.getCanCheat() ? 0x00FF00 : 0xFFFFFF);
 
             if (player.getAliveState() !== Types.PlayerAliveState.Alive) {
                 this._labelLost.visible = true;
@@ -639,7 +618,7 @@ namespace TinyWars.SingleCustomWar {
             const playerIndex   = data.playerIndex;
             const panel         = data.panel;
             const player        = war.getPlayer(playerIndex);
-            const isInfoKnown   = (!war.getFogMap().checkHasFogCurrently()) || ((war.getPlayerManager() as ScwPlayerManager).getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()));
+            const isInfoKnown   = (!war.getFogMap().checkHasFogCurrently()) || ((war.getPlayerManager() as SpwPlayerManager).getAliveWatcherTeamIndexesForSelf().has(player.getTeamIndex()));
             return [
                 this._createDataColor(war, player, isInfoKnown, panel),
                 this._createDataFund(war, player, isInfoKnown, panel),
@@ -659,10 +638,10 @@ namespace TinyWars.SingleCustomWar {
             ];
         }
         private _createDataColor(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0397),
@@ -672,15 +651,15 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataFund(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const currValue     = player.getFund();
             const maxValue      = CommonConstants.WarRuleInitialFundMaxLimit;
             const minValue      = CommonConstants.WarRuleInitialFundMinLimit;
-            const isCheating    = war.getIsSinglePlayerCheating();
+            const isCheating    = war.getCanCheat();
             return {
                 titleText               : Lang.getText(Lang.Type.B0032),
                 infoText                : (isInfoKnown || isCheating) ? `${player.getFund()}` : `?`,
@@ -709,10 +688,10 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataBuildings(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const info = getTilesCountAndIncome(war, player.getPlayerIndex());
             return {
@@ -723,20 +702,20 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataCoName(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const cfg = Utility.ConfigManager.getCoBasicCfg(war.getConfigVersion(), player.getCoId());
             return {
                 titleText               : `CO`,
                 infoText                : cfg.name,
                 infoColor               : 0xFFFFFF,
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
-                        ScwChooseCoPanel.show({
+                        SpwChooseCoPanel.show({
                             war,
                             playerIndex: player.getPlayerIndex(),
                         });
@@ -744,10 +723,10 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataEnergy(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const currValue         = player.getCoCurrentEnergy();
             const maxValue          = player.getCoMaxEnergy();
@@ -765,7 +744,7 @@ namespace TinyWars.SingleCustomWar {
                 titleText               : Lang.getText(Lang.Type.B0159),
                 infoText                : `${!hasLoadedCo ? `--` : currEnergyText} / ${powerEnergy == null ? "--" : powerEnergy} / ${superPowerEnergy == null ? "--" : superPowerEnergy}`,
                 infoColor               : 0xFFFFFF,
-                callbackOnTouchedTitle  : ((!war.getIsSinglePlayerCheating()) || (!maxValue))
+                callbackOnTouchedTitle  : ((!war.getCanCheat()) || (!maxValue))
                     ? null
                     : () => {
                         if (!hasLoadedCo) {
@@ -793,10 +772,10 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataUnitAndValue(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel
+            menuPanel   : SpwWarMenuPanel
         ): DataForInfoRenderer {
             const unitsCountAndValue = getUnitsCountAndValue(war, player.getPlayerIndex());
             return {
@@ -807,10 +786,10 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataInitialFund(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
@@ -818,7 +797,7 @@ namespace TinyWars.SingleCustomWar {
                 titleText               : Lang.getText(Lang.Type.B0178),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
                         const maxValue  = CommonConstants.WarRuleInitialFundMaxLimit;
@@ -844,10 +823,10 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataIncomeMultiplier(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
@@ -857,7 +836,7 @@ namespace TinyWars.SingleCustomWar {
                 titleText               : Lang.getText(Lang.Type.B0179),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
                         Common.CommonInputPanel.show({
@@ -881,10 +860,10 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataInitialEnergy(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getCommonSettingManager().getSettingsInitialEnergyPercentage(playerIndex);
@@ -894,7 +873,7 @@ namespace TinyWars.SingleCustomWar {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
                         Common.CommonInputPanel.show({
@@ -918,10 +897,10 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataEnergyGrowthMultiplier(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getCommonSettingManager().getSettingsEnergyGrowthMultiplier(playerIndex);
@@ -931,7 +910,7 @@ namespace TinyWars.SingleCustomWar {
                 titleText               : Lang.getText(Lang.Type.B0181),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
                         Common.CommonInputPanel.show({
@@ -955,10 +934,10 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataMoveRangeModifier(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
@@ -968,7 +947,7 @@ namespace TinyWars.SingleCustomWar {
                 titleText               : Lang.getText(Lang.Type.B0182),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
                         Common.CommonInputPanel.show({
@@ -992,10 +971,10 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataAttackPowerModifier(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
@@ -1005,7 +984,7 @@ namespace TinyWars.SingleCustomWar {
                 titleText               : Lang.getText(Lang.Type.B0183),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
                         Common.CommonInputPanel.show({
@@ -1029,10 +1008,10 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataVisionRangeModifier(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
@@ -1042,7 +1021,7 @@ namespace TinyWars.SingleCustomWar {
                 titleText               : Lang.getText(Lang.Type.B0184),
                 infoText                : `${currValue}`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
                         Common.CommonInputPanel.show({
@@ -1066,10 +1045,10 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataLuckLowerLimit(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
@@ -1079,7 +1058,7 @@ namespace TinyWars.SingleCustomWar {
                 titleText               : Lang.getText(Lang.Type.B0189),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
                         Common.CommonInputPanel.show({
@@ -1110,10 +1089,10 @@ namespace TinyWars.SingleCustomWar {
             };
         }
         private _createDataLuckUpperLimit(
-            war         : ScwWar,
+            war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,
-            menuPanel   : ScwWarMenuPanel,
+            menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
             const currValue     = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
@@ -1123,7 +1102,7 @@ namespace TinyWars.SingleCustomWar {
                 titleText               : Lang.getText(Lang.Type.B0190),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
-                callbackOnTouchedTitle  : !war.getIsSinglePlayerCheating()
+                callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
                         Common.CommonInputPanel.show({
@@ -1189,7 +1168,7 @@ namespace TinyWars.SingleCustomWar {
         }
     }
 
-    function getTilesCountAndIncome(war: ScwWar, playerIndex: number): { count: number, income: number } {
+    function getTilesCountAndIncome(war: SpwWar, playerIndex: number): { count: number, income: number } {
         let count   = 0;
         let income  = 0;
         war.getTileMap().forEachTile(tile => {
@@ -1201,7 +1180,7 @@ namespace TinyWars.SingleCustomWar {
         return { count, income };
     }
 
-    function getUnitsCountAndValue(war: ScwWar, playerIndex: number): { count: number, value: number } {
+    function getUnitsCountAndValue(war: SpwWar, playerIndex: number): { count: number, value: number } {
         const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
         const unitMap       = war.getUnitMap();
         let count           = 0;

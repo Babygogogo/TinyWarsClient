@@ -3,7 +3,6 @@ namespace TinyWars.SingleCustomRoom.ScrModel {
     import Lang                 = Utility.Lang;
     import ProtoTypes           = Utility.ProtoTypes;
     import Notify               = Utility.Notify;
-    import ConfigManager        = Utility.ConfigManager;
     import CommonConstants      = Utility.CommonConstants;
     import Logger               = Utility.Logger;
     import Helpers              = Utility.Helpers;
@@ -51,7 +50,7 @@ namespace TinyWars.SingleCustomRoom.ScrModel {
             getData().settingsForScw.mapId = mapId;
             setConfigVersion(Utility.ConfigManager.getLatestFormalVersion());
             await resetDataByPresetWarRuleId(CommonConstants.WarRuleFirstId);
-            setSaveSlotIndex(SaveSlot.getAvailableIndex());
+            setSaveSlotIndex(SinglePlayerMode.SpmModel.SaveSlot.getAvailableIndex());
         }
         export function getData(): DataForCreateWar {
             return _dataForCreateWar;
@@ -251,48 +250,6 @@ namespace TinyWars.SingleCustomRoom.ScrModel {
             }
 
             return null;
-        }
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Functions for save slots.
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export namespace SaveSlot {
-        let _infoArray  : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[];
-
-        export function setInfoArray(infoArray: ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[]): void {
-            _infoArray = infoArray;
-        }
-        export function getInfoArray(): ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[] | null {
-            return _infoArray;
-        }
-        export function deleteInfo(slotIndex: number): void {
-            const infoArray = getInfoArray();
-            if (infoArray) {
-                for (let i = 0; i < infoArray.length; ++i) {
-                    if (infoArray[i].slotIndex === slotIndex) {
-                        infoArray.splice(i, 1);
-                        return;
-                    }
-                }
-            }
-        }
-        export function checkIsEmpty(slotIndex: number): boolean {
-            const infoArray = getInfoArray();
-            if (!infoArray) {
-                return true;
-            } else {
-                return infoArray.every(v => v.slotIndex !== slotIndex);
-            }
-        }
-
-        export function getAvailableIndex(): number {
-            for (let index = 0; index < CommonConstants.ScwSaveSlotMaxCount; ++index) {
-                if (checkIsEmpty(index)) {
-                    return index;
-                }
-            }
-            return 0;
         }
     }
 }

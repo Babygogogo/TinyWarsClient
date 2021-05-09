@@ -1,11 +1,11 @@
 
-namespace TinyWars.SingleCustomWar.ScwLocalProxy {
+namespace TinyWars.SinglePlayerWar.SpwLocalProxy {
     import Types        = Utility.Types;
     import GridIndex    = Types.GridIndex;
     import UnitType     = Types.UnitType;
 
-    export function reqPlayerDeleteUnit(war: ScwWar, gridIndex: GridIndex): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqPlayerDeleteUnit(war: SpwWar, gridIndex: GridIndex): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId        : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -16,8 +16,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqPlayerEndTurn(war: ScwWar): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqPlayerEndTurn(war: SpwWar): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId        : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -26,8 +26,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqPlayerProduceUnit(war: ScwWar, gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqPlayerProduceUnit(war: SpwWar, gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId            : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -40,8 +40,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitAttackUnit(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitAttackUnit(war: SpwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -54,8 +54,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitAttackTile(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitAttackTile(war: SpwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId        : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -68,8 +68,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitBeLoaded(war: ScwWar, path: GridIndex[], launchUnitId: number | null): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitBeLoaded(war: SpwWar, path: GridIndex[], launchUnitId: number | null): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -81,8 +81,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitBuildTile(war: ScwWar, path: GridIndex[], launchUnitId?: number): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitBuildTile(war: SpwWar, path: GridIndex[], launchUnitId?: number): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId        : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -94,8 +94,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitCaptureTile(war: ScwWar, path: GridIndex[], launchUnitId: number | null): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitCaptureTile(war: SpwWar, path: GridIndex[], launchUnitId: number | null): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId        : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -107,8 +107,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitDive(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitDive(war: SpwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId: war.getExecutedActionManager().getExecutedActionsCount(),
@@ -120,8 +120,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitDrop(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined, dropDestinations: Types.DropDestination[]): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitDrop(war: SpwWar, path: GridIndex[], launchUnitId: number | undefined, dropDestinations: Types.DropDestination[]): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId: war.getExecutedActionManager().getExecutedActionsCount(),
@@ -134,8 +134,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitJoin(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitJoin(war: SpwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId: war.getExecutedActionManager().getExecutedActionsCount(),
@@ -147,8 +147,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitLaunchFlare(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitLaunchFlare(war: SpwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId        : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -161,8 +161,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitLaunchSilo(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitLaunchSilo(war: SpwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId        : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -175,8 +175,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitLoadCo(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitLoadCo(war: SpwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -188,8 +188,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitProduceUnit(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitProduceUnit(war: SpwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId        : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -201,8 +201,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitSupply(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitSupply(war: SpwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -214,8 +214,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitSurface(war: ScwWar, path: GridIndex[], launchUnitId: number | undefined): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitSurface(war: SpwWar, path: GridIndex[], launchUnitId: number | undefined): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -227,8 +227,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitUseCoSkill(war: ScwWar, skillType: Types.CoSkillType, path: GridIndex[], launchUnitId: number | null): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitUseCoSkill(war: SpwWar, skillType: Types.CoSkillType, path: GridIndex[], launchUnitId: number | null): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId        : war.getExecutedActionManager().getExecutedActionsCount(),
@@ -241,8 +241,8 @@ namespace TinyWars.SingleCustomWar.ScwLocalProxy {
         ));
     }
 
-    export function reqUnitWait(war: ScwWar, path: GridIndex[], launchUnitId?: number): void {
-        ScwModel.handlePlayerAction(ScwActionReviser.revise(
+    export function reqUnitWait(war: SpwWar, path: GridIndex[], launchUnitId?: number): void {
+        SpwModel.handlePlayerAction(SpwActionReviser.revise(
             war,
             {
                 actionId: war.getExecutedActionManager().getExecutedActionsCount(),

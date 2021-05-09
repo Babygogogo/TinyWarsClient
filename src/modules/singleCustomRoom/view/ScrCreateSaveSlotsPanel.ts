@@ -82,8 +82,8 @@ namespace TinyWars.SingleCustomRoom {
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
-            const slotList  = ScrModel.SaveSlot.getInfoArray() || [];
-            for (let i = 0; i < Utility.CommonConstants.ScwSaveSlotMaxCount; ++i) {
+            const slotList  = SinglePlayerMode.SpmModel.SaveSlot.getInfoArray() || [];
+            for (let i = 0; i < Utility.CommonConstants.SpwSaveSlotMaxCount; ++i) {
                 dataList.push({
                     slotIndex   : i,
                     slotInfo    : slotList.find(v => v.slotIndex === i),

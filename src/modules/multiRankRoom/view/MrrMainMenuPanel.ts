@@ -76,7 +76,7 @@ namespace TinyWars.MultiRankRoom {
         }
         private _onTouchedBtnSinglePlayer(e: egret.TouchEvent): void {
             this.close();
-            SinglePlayerLobby.SinglePlayerLobbyPanel.show();
+            SinglePlayerMode.SpmMainMenuPanel.show();
         }
         private _onTouchedBtnSetGameNumber(e: egret.TouchEvent): void {
             MrrSetMaxConcurrentCountPanel.show();

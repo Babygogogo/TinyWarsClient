@@ -1,11 +1,11 @@
 
-namespace TinyWars.SingleCustomWar {
-    export class ScwField extends BaseWar.BwField {
+namespace TinyWars.SinglePlayerWar {
+    export class SpwField extends BaseWar.BwField {
         protected _getFogMapClass(): new () => BaseWar.BwFogMap {
-            return ScwFogMap;
+            return SpwFogMap;
         }
         protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
-            return ScwActionPlanner;
+            return SpwActionPlanner;
         }
     }
 }

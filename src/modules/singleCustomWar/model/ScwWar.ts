@@ -9,10 +9,6 @@ namespace TinyWars.SingleCustomWar {
 
     export class ScwWar extends SinglePlayerWar.SpwWar {
         private _settingsForSinglePlayer    : ISettingsForScw;
-        private _saveSlotIndex              : number;
-        private _saveSlotComment            : string;
-
-        private _isEnded                    = false;
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
             const baseInitError = await this._baseInit(data);
@@ -46,19 +42,19 @@ namespace TinyWars.SingleCustomWar {
             }
 
             const playerManager = this.getPlayerManager();
-            if (!(playerManager instanceof ScwPlayerManager)) {
-                Logger.error(`ScwWar.serialize() invalid playerManager.`);
+            if (playerManager == null) {
+                Logger.error(`ScwWar.serialize() empty playerManager.`);
                 return undefined;
             }
 
             const turnManager = this.getTurnManager();
-            if (!(turnManager instanceof ScwTurnManager)) {
-                Logger.error(`ScwWar.serialize() invalid turnManager.`);
+            if (turnManager == null) {
+                Logger.error(`ScwWar.serialize() empty turnManager.`);
                 return undefined;
             }
 
             const field = this.getField();
-            if (!(field instanceof ScwField)) {
+            if (field == null) {
                 Logger.error(`ScwWar.serialize() empty field.`);
                 return undefined;
             }
@@ -114,42 +110,12 @@ namespace TinyWars.SingleCustomWar {
             return false;
         }
         public getIsWarMenuPanelOpening(): boolean {
-            return ScwWarMenuPanel.getIsOpening();
-        }
-        protected _getFieldClass(): new () => ScwField {
-            return ScwField;
-        }
-        protected _getPlayerManagerClass(): new () => ScwPlayerManager {
-            return ScwPlayerManager;
-        }
-        protected _getTurnManagerClass(): new () => ScwTurnManager {
-            return ScwTurnManager;
+            return SinglePlayerWar.SpwWarMenuPanel.getIsOpening();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public setIsEnded(ended: boolean): void {
-            this._isEnded = ended;
-        }
-        public getIsEnded(): boolean {
-            return this._isEnded;
-        }
-
-        public setSaveSlotIndex(slotIndex: number): void {
-            this._saveSlotIndex = slotIndex;
-        }
-        public getSaveSlotIndex(): number {
-            return this._saveSlotIndex;
-        }
-
-        public setSaveSlotComment(comment: string | null | undefined): void {
-            this._saveSlotComment = comment;
-        }
-        public getSaveSlotComment(): string | null | undefined {
-            return this._saveSlotComment;
-        }
-
         public getWarType(): Types.WarType {
             return this.getCommonSettingManager().getSettingsHasFogByDefault()
                 ? Types.WarType.ScwFog
@@ -170,14 +136,8 @@ namespace TinyWars.SingleCustomWar {
 
             settingsForSinglePlayer.isCheating = isCheating;
         }
-        public getIsSinglePlayerCheating(): boolean {
-            const settingsForSinglePlayer = this.getSettingsForScw();
-            if (settingsForSinglePlayer == null) {
-                Logger.error(`ScwWar.getIsSinglePlayerCheating() empty settingsForSinglePlayer.`);
-                return undefined;
-            }
-
-            return settingsForSinglePlayer.isCheating;
+        public getCanCheat(): boolean {
+            return true;
         }
 
         private _setSettingsForScw(settings: ISettingsForScw): void {
@@ -185,16 +145,6 @@ namespace TinyWars.SingleCustomWar {
         }
         public getSettingsForScw(): ISettingsForScw | null | undefined {
             return this._settingsForSinglePlayer;
-        }
-
-        public getHumanPlayerIndexes(): number[] {
-            return (this.getPlayerManager() as ScwPlayerManager).getHumanPlayerIndexes();
-        }
-        public getHumanPlayers(): BaseWar.BwPlayer[] {
-            return (this.getPlayerManager() as ScwPlayerManager).getHumanPlayers();
-        }
-        public checkIsHumanInTurn(): boolean {
-            return this.getHumanPlayerIndexes().indexOf(this.getPlayerIndexInTurn()) >= 0;
         }
     }
 }
