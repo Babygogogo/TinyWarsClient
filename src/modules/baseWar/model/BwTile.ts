@@ -210,12 +210,12 @@ namespace TinyWars.BaseWar {
 
             return data;
         }
-        public serializeForSimulation(): ISerialTile | undefined {
+        public serializeForCreateSfw(): ISerialTile | undefined {
             const war = this.getWar();
             if (VisibilityHelpers.checkIsTileVisibleToTeams(war, this.getGridIndex(), war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
                 const data = this.serialize();
                 if (data == null) {
-                    Logger.error(`BwTile.serializeForSimulation() empty data.`);
+                    Logger.error(`BwTile.serializeForCreateSfw() empty data.`);
                     return undefined;
                 }
                 return data;
@@ -223,25 +223,25 @@ namespace TinyWars.BaseWar {
             } else {
                 const gridIndex = this.getGridIndex();
                 if (gridIndex == null) {
-                    Logger.error(`BwTile.serializeForSimulation() empty gridIndex.`);
+                    Logger.error(`BwTile.serializeForCreateSfw() empty gridIndex.`);
                     return undefined;
                 }
 
                 const baseType = this.getBaseType();
                 if (baseType == null) {
-                    Logger.error(`BwTile.serializeForSimulation() empty baseType.`);
+                    Logger.error(`BwTile.serializeForCreateSfw() empty baseType.`);
                     return undefined;
                 }
 
                 const objectType = this.getObjectType();
                 if (objectType == null) {
-                    Logger.error(`BwTile.serializeForSimulation() empty objectType.`);
+                    Logger.error(`BwTile.serializeForCreateSfw() empty objectType.`);
                     return undefined;
                 }
 
                 const playerIndex = this.getPlayerIndex();
                 if (playerIndex == null) {
-                    Logger.error(`BwTile.serializeForSimulation() empty playerIndex.`);
+                    Logger.error(`BwTile.serializeForCreateSfw() empty playerIndex.`);
                     return undefined;
                 }
 
@@ -265,7 +265,7 @@ namespace TinyWars.BaseWar {
             }
         }
         public serializeForCreateMfr(): ISerialTile | undefined {
-            return this.serializeForSimulation();
+            return this.serializeForCreateSfw();
         }
 
         private _setWar(war: BwWar): void {

@@ -73,10 +73,10 @@ namespace TinyWars.MapEditor {
         }
 
         public serializeForMap(): IMapRawData {
-            const unitMap               = this.getUnitMap() as MeUnitMap;
+            const unitMap               = this.getUnitMap();
             const mapSize               = unitMap.getMapSize();
             const playersCountUnneutral = (this.getField() as MeField).getMaxPlayerIndex();
-            unitMap.reviseAllUnitIds();
+            MeUtility.reviseAllUnitIds(unitMap);
 
             return {
                 designerName            : this.getMapDesignerName(),

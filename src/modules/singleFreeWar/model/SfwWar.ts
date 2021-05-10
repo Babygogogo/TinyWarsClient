@@ -1,14 +1,14 @@
 
-namespace TinyWars.SingleCustomWar {
+namespace TinyWars.SingleFreeWar {
     import Types            = Utility.Types;
     import ClientErrorCode  = Utility.ClientErrorCode;
     import ProtoTypes       = Utility.ProtoTypes;
     import Logger           = Utility.Logger;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
-    import ISettingsForScw  = ProtoTypes.WarSettings.ISettingsForScw;
+    import ISettingsForSfw  = ProtoTypes.WarSettings.ISettingsForSfw;
 
-    export class ScwWar extends SinglePlayerWar.SpwWar {
-        private _settingsForScw : ISettingsForScw;
+    export class SfwWar extends SinglePlayerWar.SpwWar {
+        private _settingsForSfw : ISettingsForSfw;
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
             const baseInitError = await this._baseInit(data);
@@ -16,12 +16,12 @@ namespace TinyWars.SingleCustomWar {
                 return baseInitError;
             }
 
-            const settingsForScw = data.settingsForScw;
-            if (settingsForScw == null) {
-                return ClientErrorCode.ScwWarInit00;
+            const settingsForSfw = data.settingsForSfw;
+            if (settingsForSfw == null) {
+                return ClientErrorCode.SfwWarInit00;
             }
 
-            this._setSettingsForScw(settingsForScw);
+            this._setSettingsForSfw(settingsForSfw);
 
             this._initView();
 
@@ -31,67 +31,67 @@ namespace TinyWars.SingleCustomWar {
         public serialize(): ISerialWar {
             const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
             if (settingsForCommon == null) {
-                Logger.error(`ScwWar.serialize() empty settingsForCommon.`);
+                Logger.error(`SfwWar.serialize() empty settingsForCommon.`);
                 return undefined;
             }
 
-            const settingsForScw = this._getSettingsForScw();
-            if (settingsForScw == null) {
-                Logger.error(`ScwWar.serialize() empty settingsForScw.`);
+            const settingsForSfw = this._getSettingsForSfw();
+            if (settingsForSfw == null) {
+                Logger.error(`SfwWar.serialize() empty settingsForSfw.`);
                 return undefined;
             }
 
             const playerManager = this.getPlayerManager();
             if (playerManager == null) {
-                Logger.error(`ScwWar.serialize() empty playerManager.`);
+                Logger.error(`SfwWar.serialize() empty playerManager.`);
                 return undefined;
             }
 
             const turnManager = this.getTurnManager();
             if (turnManager == null) {
-                Logger.error(`ScwWar.serialize() empty turnManager.`);
+                Logger.error(`SfwWar.serialize() empty turnManager.`);
                 return undefined;
             }
 
             const field = this.getField();
             if (field == null) {
-                Logger.error(`ScwWar.serialize() empty field.`);
+                Logger.error(`SfwWar.serialize() empty field.`);
                 return undefined;
             }
 
             const warEventManager = this.getWarEventManager();
             if (warEventManager == null) {
-                Logger.error(`ScwWar.serialize() empty warEventManager.`);
+                Logger.error(`SfwWar.serialize() empty warEventManager.`);
                 return undefined;
             }
 
             const serialPlayerManager = playerManager.serialize();
             if (serialPlayerManager == null) {
-                Logger.error(`ScwWar.serialize() empty serialPlayerManager.`);
+                Logger.error(`SfwWar.serialize() empty serialPlayerManager.`);
                 return undefined;
             }
 
             const serialTurnManager = turnManager.serialize();
             if (serialTurnManager == null) {
-                Logger.error(`ScwWar.serialize() empty serialTurnManager.`);
+                Logger.error(`SfwWar.serialize() empty serialTurnManager.`);
                 return undefined;
             }
 
             const serialField = field.serialize();
             if (serialField == null) {
-                Logger.error(`ScwWar.serialize() empty serialField.`);
+                Logger.error(`SfwWar.serialize() empty serialField.`);
                 return undefined;
             }
 
             const serialWarEventManager = warEventManager.serialize();
             if (serialWarEventManager == null) {
-                Logger.error(`ScwWar.serialize() empty serialWarEventManager.`);
+                Logger.error(`SfwWar.serialize() empty serialWarEventManager.`);
                 return undefined;
             }
 
             return {
                 settingsForCommon,
-                settingsForScw,
+                settingsForSfw,
 
                 warId                       : this.getWarId(),
                 seedRandomInitialState      : null,
@@ -117,24 +117,23 @@ namespace TinyWars.SingleCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public getWarType(): Types.WarType {
             return this.getCommonSettingManager().getSettingsHasFogByDefault()
-                ? Types.WarType.ScwFog
-                : Types.WarType.ScwStd;
+                ? Types.WarType.SfwFog
+                : Types.WarType.SfwStd;
         }
 
         public getMapId(): number | undefined {
-            const settingsForScw = this._getSettingsForScw();
-            return settingsForScw ? settingsForScw.mapId : undefined;
+            return undefined;
         }
 
         public getCanCheat(): boolean {
             return true;
         }
 
-        private _setSettingsForScw(settings: ISettingsForScw): void {
-            this._settingsForScw = settings;
+        private _setSettingsForSfw(settings: ISettingsForSfw): void {
+            this._settingsForSfw = settings;
         }
-        private _getSettingsForScw(): ISettingsForScw | null | undefined {
-            return this._settingsForScw;
+        private _getSettingsForSfw(): ISettingsForSfw | null | undefined {
+            return this._settingsForSfw;
         }
     }
 }

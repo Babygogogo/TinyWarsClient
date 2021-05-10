@@ -84,11 +84,11 @@ namespace TinyWars.BaseWar {
                 enterTurnTime   : this.getEnterTurnTime(),
             };
         }
-        public serializeForSimulation(): ISerialTurnManager {
+        public serializeForCreateSfw(): ISerialTurnManager {
             return this.serialize();
         }
         public serializeForCreateMfr(): ISerialTurnManager {
-            return this.serializeForSimulation();
+            return this.serializeForCreateSfw();
         }
 
         private _setWar(war: BwWar): void {

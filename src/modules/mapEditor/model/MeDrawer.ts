@@ -31,7 +31,7 @@ namespace TinyWars.MapEditor {
     export class MeDrawer {
         private _war                            : MeWar;
         private _tileMap                        : BaseWar.BwTileMap;
-        private _unitMap                        : MeUnitMap;
+        private _unitMap                        : BaseWar.BwUnitMap;
         private _configVersion                  : string;
         private _mode                           = DrawerMode.Preview;
         private _drawTargetTileObjectData       : DataForDrawTileObject;
@@ -51,7 +51,7 @@ namespace TinyWars.MapEditor {
         public startRunning(war: MeWar): void {
             this._setWar(war);
             this._tileMap       = war.getTileMap();
-            this._unitMap       = war.getUnitMap() as MeUnitMap;
+            this._unitMap       = war.getUnitMap();
             this._configVersion = war.getConfigVersion();
 
             Notify.addEventListeners(this._notifyListeners, this);

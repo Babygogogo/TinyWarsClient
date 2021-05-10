@@ -76,7 +76,7 @@ namespace TinyWars.MapEditor {
                 { type: Notify.Type.MeMapNameChanged,                   callback: this._onNotifyMeMapNameChanged },
                 { type: Notify.Type.MsgMeSubmitMap,                     callback: this._onMsgMeSubmitMap },
                 { type: Notify.Type.MsgMmReviewMap,                     callback: this._onMsgMmReviewMap },
-                { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
+                { type: Notify.Type.MsgSpmCreateSfw,                    callback: this._onMsgSpmCreateSfw },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,                callback: this._onTouchedBtnBack },
@@ -127,8 +127,8 @@ namespace TinyWars.MapEditor {
             Utility.FlowManager.gotoLobby();
         }
 
-        private _onMsgScrCreateCustomWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
+        private _onMsgSpmCreateSfw(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
             Common.CommonConfirmPanel.show({
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
@@ -541,7 +541,7 @@ namespace TinyWars.MapEditor {
                     }
 
                     const cb = () => {
-                        MeModel.Sim.resetData(war.serializeForMap(), war.serializeForSimulation());
+                        MeModel.Sim.resetData(war.serializeForMap(), war.serializeForCreateSfw());
                         MeSimSettingsPanel.show();
                         this.close();
                     };

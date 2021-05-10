@@ -45,11 +45,11 @@ namespace TinyWars.BaseWar {
             return ClientErrorCode.NoError;
         }
 
-        public serializeForSimulation(): ISettingsForCommon {
+        public serializeForCreateSfw(): ISettingsForCommon {
             return Helpers.deepClone(this.getSettingsForCommon());
         }
         public serializeForCreateMfr(): ISettingsForCommon {
-            return this.serializeForSimulation();
+            return this.serializeForCreateSfw();
         }
 
         public startRunning(war: BwWar): void {

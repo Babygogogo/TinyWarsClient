@@ -99,12 +99,12 @@ namespace TinyWars.BaseWar {
 
             return { players };
         }
-        public serializeForSimulation(): ISerialPlayerManager | undefined {
+        public serializeForCreateSfw(): ISerialPlayerManager | undefined {
             const players: ISerialPlayer[] = [];
             for (const [, player] of this._getPlayersMap()) {
-                const serialPlayer = player.serializeForSimulation();
+                const serialPlayer = player.serializeForCreateSfw();
                 if (serialPlayer == null) {
-                    Logger.error(`BwPlayerManager.serializeForSimulation() empty serialPlayer.`);
+                    Logger.error(`BwPlayerManager.serializeForCreateSfw() empty serialPlayer.`);
                     return undefined;
                 }
 

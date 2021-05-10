@@ -75,7 +75,7 @@ namespace TinyWars.MultiPlayerWar {
                 { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
+                { type: Notify.Type.MsgSpmCreateSfw,                    callback: this._onNotifyMsgSpmCreateSfw },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,        callback: this._onTouchedBtnBack },
@@ -125,8 +125,8 @@ namespace TinyWars.MultiPlayerWar {
         private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
             this._updateView();
         }
-        private _onMsgScrCreateCustomWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
+        private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
             Common.CommonConfirmPanel.show({
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
@@ -370,7 +370,7 @@ namespace TinyWars.MultiPlayerWar {
                     if (war.getIsExecutingAction()) {
                         FloatText.show(Lang.getText(Lang.Type.A0103));
                     } else {
-                        SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForSimulation());
+                        SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForCreateSfw());
                     }
                 },
             };

@@ -3,7 +3,7 @@ namespace TinyWars.MapEditor {
     export class MeField extends BaseWar.BwField {
         private readonly _fogMap        = new MeFogMap();
         private readonly _tileMap       = new BaseWar.BwTileMap();
-        private readonly _unitMap       = new MeUnitMap();
+        private readonly _unitMap       = new BaseWar.BwUnitMap();
         private readonly _actionPlanner = new MeActionPlanner();
 
         public getFogMap(): MeFogMap {
@@ -12,7 +12,7 @@ namespace TinyWars.MapEditor {
         public getTileMap(): BaseWar.BwTileMap {
             return this._tileMap;
         }
-        public getUnitMap(): MeUnitMap {
+        public getUnitMap(): BaseWar.BwUnitMap {
             return this._unitMap;
         }
         public getActionPlanner(): MeActionPlanner {

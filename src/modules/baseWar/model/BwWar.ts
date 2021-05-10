@@ -9,7 +9,6 @@ namespace TinyWars.BaseWar {
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
 
     export abstract class BwWar {
-
         private readonly _executedActionManager = new BwExecutedActionManager();
         private readonly _randomNumberManager   = new BwRandomNumberManager();
         private readonly _drawVoteManager       = new BwDrawVoteManager();
@@ -114,34 +113,34 @@ namespace TinyWars.BaseWar {
             return this._view;
         }
 
-        public serializeForSimulation(): ISerialWar | undefined {
-            const settingsForCommon = this.getCommonSettingManager().serializeForSimulation();
+        public serializeForCreateSfw(): ISerialWar | undefined {
+            const settingsForCommon = this.getCommonSettingManager().serializeForCreateSfw();
             if (settingsForCommon == null) {
-                Logger.error(`BwWar.serializeForSimulation() empty settingsForCommon.`);
+                Logger.error(`BwWar.serializeForCreateSfw() empty settingsForCommon.`);
                 return undefined;
             }
 
-            const serialWarEventManager = this.getWarEventManager().serializeForSimulation();
+            const serialWarEventManager = this.getWarEventManager().serializeForCreateSfw();
             if (serialWarEventManager == null) {
-                Logger.error(`BwWar.serializeForSimulation() empty serialWarEventManager.`);
+                Logger.error(`BwWar.serializeForCreateSfw() empty serialWarEventManager.`);
                 return undefined;
             }
 
-            const serialPlayerManager = this.getPlayerManager().serializeForSimulation();
+            const serialPlayerManager = this.getPlayerManager().serializeForCreateSfw();
             if (serialPlayerManager == null) {
-                Logger.error(`BwWar.serializeForSimulation() empty serialPlayerManager.`);
+                Logger.error(`BwWar.serializeForCreateSfw() empty serialPlayerManager.`);
                 return undefined;
             }
 
-            const serialTurnManager = this.getTurnManager().serializeForSimulation();
+            const serialTurnManager = this.getTurnManager().serializeForCreateSfw();
             if (serialTurnManager == null) {
-                Logger.error(`BwWar.serializeForSimulation() empty serialTurnManager.`);
+                Logger.error(`BwWar.serializeForCreateSfw() empty serialTurnManager.`);
                 return undefined;
             }
 
-            const serialField = this.getField().serializeForSimulation();
+            const serialField = this.getField().serializeForCreateSfw();
             if (serialField == null) {
-                Logger.error(`BwWar.serializeForSimulation() empty serialField.`);
+                Logger.error(`BwWar.serializeForCreateSfw() empty serialField.`);
                 return undefined;
             }
 
@@ -150,7 +149,8 @@ namespace TinyWars.BaseWar {
                 settingsForMcw              : null,
                 settingsForMrw              : null,
                 settingsForMfw              : null,
-                settingsForScw              : { isCheating: true },
+                settingsForScw              : null,
+                settingsForSfw              : null,
 
                 warId                       : this.getWarId(),
                 seedRandomInitialState      : null,

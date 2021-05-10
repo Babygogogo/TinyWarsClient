@@ -260,12 +260,12 @@ namespace TinyWars.Utility.Notify {
         MsgMpwActionUnitWait,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        MsgScrCreateWar,
+        MsgSpmCreateScw,
         MsgScrGetSaveInfoList,
         MsgScrContinueWarFailed,
         MsgScrContinueWar,
         MsgScrSaveWar,
-        MsgScrCreateCustomWar,
+        MsgSpmCreateSfw,
         MsgScrDeleteWar,
     }
 

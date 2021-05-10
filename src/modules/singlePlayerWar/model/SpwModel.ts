@@ -27,7 +27,12 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
             unloadWar();
         }
 
-        const war = warData.settingsForScw ? new SingleCustomWar.ScwWar() : null;
+        const war = warData.settingsForScw
+            ? new SingleCustomWar.ScwWar()
+            : (warData.settingsForSfw
+                ? new SingleFreeWar.SfwWar()
+                : null
+            );
         if (war == null) {
             Logger.error(`SpwModel.loadWar() empty war.`);
             return undefined;

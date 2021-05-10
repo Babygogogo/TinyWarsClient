@@ -7,6 +7,8 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
 
     export function init(): void {
         NetManager.addListeners([
+            { msgCode: ActionCode.MsgSpmCreateScw,              callback: _onMsgSpmCreateScw,           },
+            { msgCode: ActionCode.MsgSpmCreateSfw,              callback: _onMsgSpmCreateSfw,           },
             { msgCode: ActionCode.MsgScrGetSaveSlotInfoList,    callback: _onMsgScrGetSaveSlotInfoList, },
             { msgCode: ActionCode.MsgScrContinueWar,            callback: _onMsgScrContinueWar,         },
             { msgCode: ActionCode.MsgScrSaveWar,                callback: _onMsgScrSaveWar,             },
@@ -24,6 +26,38 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
         if (!data.errorCode) {
             SinglePlayerMode.SpmModel.SaveSlot.setInfoArray(data.infoList);
             Notify.dispatch(Notify.Type.MsgScrGetSaveInfoList, data);
+        }
+    }
+
+    export function reqSpmCreateScw(param: SingleCustomRoom.ScrModel.DataForCreateWar): void {
+        NetManager.send({
+            MsgSpmCreateScw: { c: param },
+        });
+    }
+    function _onMsgSpmCreateScw(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateScw.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.MsgSpmCreateScw, data);
+        }
+    }
+
+    export function reqSpmCreateSfw({ slotIndex, slotComment, warData }: {
+        slotIndex   : number;
+        slotComment : string | null | undefined;
+        warData     : ProtoTypes.WarSerialization.ISerialWar;
+    }): void {
+        NetManager.send({
+            MsgSpmCreateSfw: { c: {
+                slotIndex,
+                slotComment,
+                warData,
+            }, },
+        });
+    }
+    function _onMsgSpmCreateSfw(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
+        if (!data.errorCode) {
+            Notify.dispatch(Notify.Type.MsgSpmCreateSfw, data);
         }
     }
 

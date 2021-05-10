@@ -201,11 +201,11 @@ namespace TinyWars.BaseWar {
 
             return data;
         }
-        public serializeForSimulation(): ISerialUnit | undefined {
+        public serializeForCreateSfw(): ISerialUnit | undefined {
             return this.serialize();
         }
         public serializeForCreateMfr(): ISerialUnit | undefined {
-            return this.serializeForSimulation();
+            return this.serializeForCreateSfw();
         }
 
         private _setWar(war: BwWar): void {

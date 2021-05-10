@@ -149,7 +149,7 @@ namespace TinyWars.SingleCustomRoom {
                     tips        : Lang.getText(Lang.Type.A0144),
                     charRestrict: null,
                     callback    : (panel) => {
-                        ScrProxy.reqScrCreateFreeWar({
+                        SinglePlayerMode.SpmProxy.reqSpmCreateSfw({
                             slotIndex   : data.slotIndex,
                             slotComment : panel.getInputText(),
                             warData     : data.warData,

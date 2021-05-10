@@ -46,7 +46,6 @@ namespace TinyWars.Utility.FlowManager {
         RwModel.init();
         SinglePlayerMode.SpmProxy.init();
         SinglePlayerMode.SpmModel.init();
-        SingleCustomRoom.ScrProxy.init();
         SingleCustomRoom.ScrModel.init();
         SpwModel.init();
         MapEditor.MeProxy.init();

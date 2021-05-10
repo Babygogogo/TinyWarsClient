@@ -77,7 +77,7 @@ namespace TinyWars.SinglePlayerWar {
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: Notify.Type.MsgScrContinueWar,                  callback: this._onMsgScrContinueWar },
                 { type: Notify.Type.MsgScrSaveWar,                      callback: this._onMsgScrSaveWar },
-                { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
+                { type: Notify.Type.MsgSpmCreateSfw,              callback: this._onMsgScrCreateCustomWar },
                 { type: Notify.Type.MsgScrDeleteWar,                    callback: this._onMsgScrDeleteWar },
             ]);
             this._setUiListenerArray([
@@ -139,7 +139,7 @@ namespace TinyWars.SinglePlayerWar {
         }
 
         private _onMsgScrCreateCustomWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
+            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
             Common.CommonConfirmPanel.show({
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
@@ -409,7 +409,7 @@ namespace TinyWars.SinglePlayerWar {
                     if (war.getIsExecutingAction()) {
                         FloatText.show(Lang.getText(Lang.Type.A0103));
                     } else {
-                        SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForSimulation());
+                        SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForCreateSfw());
                     }
                 },
             };

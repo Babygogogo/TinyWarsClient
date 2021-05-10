@@ -8,6 +8,8 @@ namespace TinyWars.Utility {
 
         ScwWarInit00,
 
+        SfwWarInit00,
+
         McwWarInit00,
 
         MrwWarInit00,

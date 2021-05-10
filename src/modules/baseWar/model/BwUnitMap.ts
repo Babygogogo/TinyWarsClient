@@ -184,10 +184,10 @@ namespace TinyWars.BaseWar {
                 nextUnitId,
             };
         }
-        public serializeForSimulation(): ISerialUnitMap | undefined {
+        public serializeForCreateSfw(): ISerialUnitMap | undefined {
             const nextUnitId = this.getNextUnitId();
             if (nextUnitId == null) {
-                Logger.error(`BwUnitMap.serializeForSimulation() empty nextUnitId.`);
+                Logger.error(`BwUnitMap.serializeForCreateSfw() empty nextUnitId.`);
                 return undefined;
             }
 
@@ -195,11 +195,11 @@ namespace TinyWars.BaseWar {
             const units         : ISerialUnit[] = [];
             const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             for (const unit of VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
-                units.push(unit.serializeForSimulation());
+                units.push(unit.serializeForCreateSfw());
 
                 if (teamIndexes.has(unit.getTeamIndex())) {
                     for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
-                        units.push(loadedUnit.serializeForSimulation());
+                        units.push(loadedUnit.serializeForCreateSfw());
                     }
                 }
             }

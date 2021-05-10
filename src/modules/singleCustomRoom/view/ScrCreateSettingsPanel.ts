@@ -46,7 +46,7 @@ namespace TinyWars.SingleCustomRoom {
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgScrCreateWar,    callback: this._onMsgScrCreateWar },
+                { type: Notify.Type.MsgSpmCreateScw,    callback: this._onNotifyMsgSpmCreateScw },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
@@ -81,7 +81,7 @@ namespace TinyWars.SingleCustomRoom {
             } else {
                 const data  = ScrModel.Create.getData();
                 const func  = () => {
-                    ScrProxy.reqScrCreateWar(ScrModel.Create.getData());
+                    SinglePlayerMode.SpmProxy.reqSpmCreateScw(ScrModel.Create.getData());
 
                     this._btnConfirm.enabled = false;
                     this._resetTimeoutForBtnConfirm();
@@ -98,8 +98,8 @@ namespace TinyWars.SingleCustomRoom {
             }
         }
 
-        private _onMsgScrCreateWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateWar.IS;
+        private _onNotifyMsgSpmCreateScw(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateScw.IS;
             Utility.FlowManager.gotoSingleCustomWar({
                 slotComment : null,
                 slotIndex   : data.slotIndex,

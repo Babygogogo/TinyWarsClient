@@ -41,8 +41,8 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgScrCreateCustomWar,  callback: this._onMsgScrCreateCustomWar },
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgSpmCreateSfw,    callback: this._onMsgSpmCreateSfw },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
@@ -74,8 +74,8 @@ namespace TinyWars.MapEditor {
             }
         }
 
-        private _onMsgScrCreateCustomWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
+        private _onMsgSpmCreateSfw(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
             Common.CommonConfirmPanel.show({
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {

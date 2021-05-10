@@ -32,7 +32,7 @@ namespace TinyWars.MapEditor {
             return ClientErrorCode.NoError;
         }
 
-        public serializeForSimulation(): ISettingsForCommon | undefined {
+        public serializeForCreateSfw(): ISettingsForCommon | undefined {
             const war       = this._getWar() as MeWar;
             const warRule   = war.getRevisedWarRuleArray((war.getField() as MeField).getMaxPlayerIndex())[0];
             return {

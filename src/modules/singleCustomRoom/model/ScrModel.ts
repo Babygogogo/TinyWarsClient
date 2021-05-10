@@ -11,7 +11,7 @@ namespace TinyWars.SingleCustomRoom.ScrModel {
     import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
     import IDataForPlayerInRoom = ProtoTypes.Structure.IDataForPlayerInRoom;
 
-    export type DataForCreateWar = ProtoTypes.NetMessage.MsgScrCreateWar.IC;
+    export type DataForCreateWar = ProtoTypes.NetMessage.MsgSpmCreateScw.IC;
 
     export function init(): void {
     }

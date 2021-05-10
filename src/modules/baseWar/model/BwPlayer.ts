@@ -204,58 +204,58 @@ namespace TinyWars.BaseWar {
                 watchOngoingSrcUserIdArray  : [...(this.getWatchOngoingSrcUserIds() || [])],
             };
         }
-        public serializeForSimulation(): ISerialPlayer {
+        public serializeForCreateSfw(): ISerialPlayer {
             const fund = this.getFund();
             if (fund == null) {
-                Logger.error(`BwPlayer.serializeForSimulation() empty fund.`);
+                Logger.error(`BwPlayer.serializeForCreateSfw() empty fund.`);
                 return undefined;
             }
 
             const hasVotedForDraw = this.getHasVotedForDraw();
             if (hasVotedForDraw == null) {
-                Logger.error(`BwPlayer.serializeForSimulation() empty hasVotedForDraw.`);
+                Logger.error(`BwPlayer.serializeForCreateSfw() empty hasVotedForDraw.`);
                 return undefined;
             }
 
             const aliveState = this.getAliveState();
             if (aliveState == null) {
-                Logger.error(`BwPlayer.serializeForSimulation() empty aliveState.`);
+                Logger.error(`BwPlayer.serializeForCreateSfw() empty aliveState.`);
                 return undefined;
             }
 
             const playerIndex = this.getPlayerIndex();
             if (playerIndex == null) {
-                Logger.error(`BwPlayer.serializeForSimulation() empty playerIndex.`);
+                Logger.error(`BwPlayer.serializeForCreateSfw() empty playerIndex.`);
                 return undefined;
             }
 
             const restTimeToBoot = this.getRestTimeToBoot();
             if (restTimeToBoot == null) {
-                Logger.error(`BwPlayer.serializeForSimulation() empty restTimeToBoo.`);
+                Logger.error(`BwPlayer.serializeForCreateSfw() empty restTimeToBoo.`);
                 return undefined;
             }
 
             const coUsingSkillType = this.getCoUsingSkillType();
             if (coUsingSkillType == null) {
-                Logger.error(`BwPlayer.serializeForSimulation() empty coUsingSkillType.`);
+                Logger.error(`BwPlayer.serializeForCreateSfw() empty coUsingSkillType.`);
                 return undefined;
             }
 
             const coIsDestroyedInTurn = this.getCoIsDestroyedInTurn();
             if (coIsDestroyedInTurn == null) {
-                Logger.error(`BwPlayer.serializeForSimulation() empty coIsDestroyedInTurn.`);
+                Logger.error(`BwPlayer.serializeForCreateSfw() empty coIsDestroyedInTurn.`);
                 return undefined;
             }
 
             const unitAndTileSkinId = this.getUnitAndTileSkinId();
             if (unitAndTileSkinId == null) {
-                Logger.error(`BwPlayer.serializeForSimulation() empty unitAndTileSkinId.`);
+                Logger.error(`BwPlayer.serializeForCreateSfw() empty unitAndTileSkinId.`);
                 return undefined;
             }
 
             const coId = this.getCoId();
             if (coId == null) {
-                Logger.error(`BwPlayer.serializeForSimulation() empty coId.`);
+                Logger.error(`BwPlayer.serializeForCreateSfw() empty coId.`);
                 return undefined;
             }
 
@@ -278,7 +278,7 @@ namespace TinyWars.BaseWar {
             };
         }
         public serializeForCreateMfr(): ISerialPlayer | undefined {
-            return this.serializeForSimulation();
+            return this.serializeForCreateSfw();
         }
 
         private _setWar(war: BwWar): void {

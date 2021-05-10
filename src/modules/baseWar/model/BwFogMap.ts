@@ -140,7 +140,7 @@ namespace TinyWars.BaseWar {
                 mapsFromPath            : serialMapsFromPath,
             };
         }
-        public serializeForSimulation(): ISerialFogMap | undefined {
+        public serializeForCreateSfw(): ISerialFogMap | undefined {
             const mapSize           = this.getMapSize();
             const war               = this._getWar();
             const targetTeamIndexes = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
@@ -169,7 +169,7 @@ namespace TinyWars.BaseWar {
             };
         }
         public serializeForCreateMfr(): ISerialFogMap | undefined {
-            return this.serializeForSimulation();
+            return this.serializeForCreateSfw();
         }
 
         protected _setWar(war: BwWar): void {

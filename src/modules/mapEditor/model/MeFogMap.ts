@@ -7,22 +7,22 @@ namespace TinyWars.MapEditor {
     import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
 
     export class MeFogMap extends BaseWar.BwFogMap {
-        public serializeForSimulation(): ISerialFogMap | undefined {
+        public serializeForCreateSfw(): ISerialFogMap | undefined {
             const mapSize = this.getMapSize();
             if (mapSize == null) {
-                Logger.error(`MeFogMap.serializeForSimulation() empty mapSize.`);
+                Logger.error(`MeFogMap.serializeForCreateSfw() empty mapSize.`);
                 return undefined;
             }
 
             const allMapsFromPath = this._getAllMapsFromPath();
             if (allMapsFromPath == null) {
-                Logger.error(`MeFogMap.serializeForSimulation() empty allMapsFromPath.`);
+                Logger.error(`MeFogMap.serializeForCreateSfw() empty allMapsFromPath.`);
                 return undefined;
             }
 
             const forceFogCode = this.getForceFogCode();
             if (forceFogCode == null) {
-                Logger.error(`MeFogMap.serializeForSimulation() empty forceFogCode.`);
+                Logger.error(`MeFogMap.serializeForCreateSfw() empty forceFogCode.`);
                 return undefined;
             }
 
