@@ -739,11 +739,11 @@ namespace TinyWars.MultiPlayerWar {
             isInfoKnown : boolean,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getCommonSettingManager().getSettingsInitialEnergyPercentage(playerIndex);
+            const currValue     = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
             };
         }
         private _createDataEnergyGrowthMultiplier(

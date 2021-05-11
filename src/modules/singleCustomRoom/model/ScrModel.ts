@@ -177,13 +177,13 @@ namespace TinyWars.SingleCustomRoom.ScrModel {
             return getPlayerRule(playerIndex).incomeMultiplier;
         }
 
-        export function setInitialEnergyPercentage(playerIndex: number, percentage: number): void {
+        export function setEnergyAddPctOnLoadCo(playerIndex: number, percentage: number): void {
             setPresetWarRuleId(null);
 
-            getPlayerRule(playerIndex).initialEnergyPercentage = percentage;
+            getPlayerRule(playerIndex).energyAddPctOnLoadCo = percentage;
         }
-        export function getInitialEnergyPercentage(playerIndex: number): number {
-            return getPlayerRule(playerIndex).initialEnergyPercentage;
+        export function getEnergyAddPctOnLoadCo(playerIndex: number): number {
+            return getPlayerRule(playerIndex).energyAddPctOnLoadCo;
         }
 
         export function setEnergyGrowthMultiplier(playerIndex: number, multiplier: number): void {

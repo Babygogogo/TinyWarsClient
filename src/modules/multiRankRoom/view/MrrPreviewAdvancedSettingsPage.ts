@@ -64,7 +64,7 @@ namespace TinyWars.MultiRankRoom {
                 { playerRuleType: PlayerRuleType.BannedCoIdArray },
                 { playerRuleType: PlayerRuleType.InitialFund },
                 { playerRuleType: PlayerRuleType.IncomeMultiplier },
-                { playerRuleType: PlayerRuleType.InitialEnergyPercentage },
+                { playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
                 { playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
                 { playerRuleType: PlayerRuleType.MoveRangeModifier },
                 { playerRuleType: PlayerRuleType.AttackPowerModifier },
@@ -167,7 +167,7 @@ namespace TinyWars.MultiRankRoom {
                 { mapId, hasFog, playerIndex, playerRuleType: PlayerRuleType.BannedCoIdArray },
                 { mapId, hasFog, playerIndex, playerRuleType: PlayerRuleType.InitialFund },
                 { mapId, hasFog, playerIndex, playerRuleType: PlayerRuleType.IncomeMultiplier },
-                { mapId, hasFog, playerIndex, playerRuleType: PlayerRuleType.InitialEnergyPercentage },
+                { mapId, hasFog, playerIndex, playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
                 { mapId, hasFog, playerIndex, playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
                 { mapId, hasFog, playerIndex, playerRuleType: PlayerRuleType.MoveRangeModifier },
                 { mapId, hasFog, playerIndex, playerRuleType: PlayerRuleType.AttackPowerModifier },
@@ -208,7 +208,7 @@ namespace TinyWars.MultiRankRoom {
                     case PlayerRuleType.BannedCoIdArray         : this._updateComponentsForValueAsBannedCoIdArray(playerIndex);         return;
                     case PlayerRuleType.InitialFund             : this._updateComponentsForValueAsInitialFund(playerIndex);             return;
                     case PlayerRuleType.IncomeMultiplier        : this._updateComponentsForValueAsIncomeMultiplier(playerIndex);        return;
-                    case PlayerRuleType.InitialEnergyPercentage : this._updateComponentsForValueAsInitialEnergyPercentage(playerIndex); return;
+                    case PlayerRuleType.EnergyAddPctOnLoadCo    : this._updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex);    return;
                     case PlayerRuleType.EnergyGrowthMultiplier  : this._updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex);  return;
                     case PlayerRuleType.MoveRangeModifier       : this._updateComponentsForValueAsMoveRangeModifier(playerIndex);       return;
                     case PlayerRuleType.AttackPowerModifier     : this._updateComponentsForValueAsAttackPowerModifier(playerIndex);     return;
@@ -247,12 +247,12 @@ namespace TinyWars.MultiRankRoom {
             labelValue.text         = currValue == null ? null : `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
         }
-        private async _updateComponentsForValueAsInitialEnergyPercentage(playerIndex: number): Promise<void> {
+        private async _updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex: number): Promise<void> {
             const warRule           = await this._getWarRule();
-            const currValue         = warRule ? BwWarRuleHelper.getInitialEnergyPercentage(warRule, playerIndex) : undefined;
+            const currValue         = warRule ? BwWarRuleHelper.getEnergyAddPctOnLoadCo(warRule, playerIndex) : undefined;
             const labelValue        = this._labelValue;
             labelValue.text         = currValue == null ? null : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault);
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
         }
         private async _updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex: number): Promise<void> {
             const warRule           = await this._getWarRule();

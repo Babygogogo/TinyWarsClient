@@ -276,7 +276,7 @@ namespace TinyWars.MapManagement {
                 this._createDataAvailableCoIdList(warRule, playerRule, isReviewing),
                 this._createDataInitialFund(warRule, playerRule, isReviewing),
                 this._createDataIncomeMultiplier(warRule, playerRule, isReviewing),
-                this._createDataInitialEnergyPercentage(warRule, playerRule, isReviewing),
+                this._createDataEnergyAddPctOnLoadCo(warRule, playerRule, isReviewing),
                 this._createDataEnergyGrowthMultiplier(warRule, playerRule, isReviewing),
                 this._createDataMoveRangeModifier(warRule, playerRule, isReviewing),
                 this._createDataAttackPowerModifier(warRule, playerRule, isReviewing),
@@ -332,12 +332,12 @@ namespace TinyWars.MapManagement {
                 callbackOnTouchedTitle  : null,
             };
         }
-        private _createDataInitialEnergyPercentage(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue     = playerRule.initialEnergyPercentage;
+        private _createDataEnergyAddPctOnLoadCo(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const currValue = playerRule.energyAddPctOnLoadCo;
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : null,
             };
         }

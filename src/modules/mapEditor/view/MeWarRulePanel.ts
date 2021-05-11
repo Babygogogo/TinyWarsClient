@@ -554,7 +554,7 @@ namespace TinyWars.MapEditor {
                 this._createDataBannedCoIdArray(warRule, playerRule, isReviewing),
                 this._createDataInitialFund(warRule, playerRule, isReviewing),
                 this._createDataIncomeMultiplier(warRule, playerRule, isReviewing),
-                this._createDataInitialEnergyPercentage(warRule, playerRule, isReviewing),
+                this._createDataEnergyAddPctOnLoadCo(warRule, playerRule, isReviewing),
                 this._createDataEnergyGrowthMultiplier(warRule, playerRule, isReviewing),
                 this._createDataMoveRangeModifier(warRule, playerRule, isReviewing),
                 this._createDataAttackPowerModifier(warRule, playerRule, isReviewing),
@@ -662,17 +662,17 @@ namespace TinyWars.MapEditor {
                     },
             };
         }
-        private _createDataInitialEnergyPercentage(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue     = playerRule.initialEnergyPercentage;
+        private _createDataEnergyAddPctOnLoadCo(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const currValue = playerRule.energyAddPctOnLoadCo;
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : isReviewing
                     ? null
                     : () => {
-                        const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
-                        const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
+                        const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
+                        const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
                         Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0180),
                             currentValue    : "" + currValue,
@@ -685,7 +685,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwWarRuleHelper.setInitialEnergyPercentage(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setEnergyAddPctOnLoadCo(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },

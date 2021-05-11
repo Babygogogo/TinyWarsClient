@@ -609,7 +609,7 @@ namespace TinyWars.Utility.Types {
         BannedCoIdArray,
         InitialFund,
         IncomeMultiplier,
-        InitialEnergyPercentage,
+        EnergyAddPctOnLoadCo,
         EnergyGrowthMultiplier,
         MoveRangeModifier,
         AttackPowerModifier,

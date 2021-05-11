@@ -93,9 +93,9 @@ namespace TinyWars.Utility.CommonConstants {
     export const WarRuleIncomeMultiplierMinLimit        = 0;
     export const WarRuleIncomeMultiplierMaxLimit        = 10000;
     export const WarRuleIncomeMultiplierDefault         = 100;
-    export const WarRuleInitialEnergyPercentageMinLimit = 0;
-    export const WarRuleInitialEnergyPercentageMaxLimit = 100;
-    export const WarRuleInitialEnergyPercentageDefault  = 0;
+    export const WarRuleEnergyAddPctOnLoadCoMinLimit    = 0;
+    export const WarRuleEnergyAddPctOnLoadCoMaxLimit    = 100;
+    export const WarRuleEnergyAddPctOnLoadCoDefault     = 0;
     export const WarRuleInitialFundMinLimit             = 0;
     export const WarRuleInitialFundMaxLimit             = 1000000;
     export const WarRuleInitialFundDefault              = 0;

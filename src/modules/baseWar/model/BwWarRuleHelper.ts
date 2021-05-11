@@ -25,7 +25,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         attackPowerModifier     : 0,
         bannedCoIdArray         : [],
         energyGrowthMultiplier  : 100,
-        initialEnergyPercentage : 0,
+        energyAddPctOnLoadCo    : 0,
         initialFund             : 0,
         incomeMultiplier        : 100,
         luckLowerLimit          : 0,
@@ -203,29 +203,29 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         playerRule.initialFund = value;
     }
 
-    export function getInitialEnergyPercentage(warRule: IWarRule, playerIndex: number): number | null | undefined {
+    export function getEnergyAddPctOnLoadCo(warRule: IWarRule, playerIndex: number): number | null | undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwWarRuleHelper.getInitialEnergyPercentage() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.getEnergyAddPctOnLoadCo() empty playerRule.`);
             return undefined;
         }
 
-        const initialEnergyPercentage = playerRule.initialEnergyPercentage;
-        if (initialEnergyPercentage == null) {
-            Logger.error(`BwWarRuleHelper.getInitialEnergyPercentage() empty initialEnergyPercentage.`);
+        const energyAddPctOnLoadCo = playerRule.energyAddPctOnLoadCo;
+        if (energyAddPctOnLoadCo == null) {
+            Logger.error(`BwWarRuleHelper.getEnergyAddPctOnLoadCo() empty energyAddPctOnLoadCo.`);
             return undefined;
         }
 
-        return initialEnergyPercentage;
+        return energyAddPctOnLoadCo;
     }
-    export function setInitialEnergyPercentage(warRule: IWarRule, playerIndex: number, value: number): undefined {
+    export function setEnergyAddPctOnLoadCo(warRule: IWarRule, playerIndex: number, value: number): undefined {
         const playerRule = getPlayerRule(warRule, playerIndex);
         if (playerRule == null) {
-            Logger.error(`BwWarRuleHelper.setInitialEnergyPercentage() empty playerRule.`);
+            Logger.error(`BwWarRuleHelper.setEnergyAddPctOnLoadCo() empty playerRule.`);
             return undefined;
         }
 
-        playerRule.initialEnergyPercentage = value;
+        playerRule.energyAddPctOnLoadCo = value;
     }
 
     export function getLuckLowerLimit(warRule: IWarRule, playerIndex: number): number | null | undefined {
@@ -520,7 +520,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
             teamIndex               : playerIndex,
             initialFund             : CommonConstants.WarRuleInitialFundDefault,
             incomeMultiplier        : CommonConstants.WarRuleIncomeMultiplierDefault,
-            initialEnergyPercentage : CommonConstants.WarRuleInitialEnergyPercentageDefault,
+            energyAddPctOnLoadCo    : CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault,
             energyGrowthMultiplier  : CommonConstants.WarRuleEnergyGrowthMultiplierDefault,
             moveRangeModifier       : CommonConstants.WarRuleMoveRangeModifierDefault,
             attackPowerModifier     : CommonConstants.WarRuleOffenseBonusDefault,
@@ -628,8 +628,8 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
             }
 
             const {
-                initialFund,        bannedCoIdArray = [],   incomeMultiplier,       initialEnergyPercentage,    energyGrowthMultiplier,
-                moveRangeModifier,  attackPowerModifier,    visionRangeModifier,    luckUpperLimit,             luckLowerLimit,
+                initialFund,        bannedCoIdArray = [],   incomeMultiplier,       energyAddPctOnLoadCo,   energyGrowthMultiplier,
+                moveRangeModifier,  attackPowerModifier,    visionRangeModifier,    luckUpperLimit,         luckLowerLimit,
             } = data;
             if ((initialFund                == null)                                                    ||
                 (initialFund                > CommonConstants.WarRuleInitialFundMaxLimit)               ||
@@ -637,9 +637,9 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 (incomeMultiplier           == null)                                                    ||
                 (incomeMultiplier           > CommonConstants.WarRuleIncomeMultiplierMaxLimit)          ||
                 (incomeMultiplier           < CommonConstants.WarRuleIncomeMultiplierMinLimit)          ||
-                (initialEnergyPercentage    == null)                                                    ||
-                (initialEnergyPercentage    > CommonConstants.WarRuleInitialEnergyPercentageMaxLimit)   ||
-                (initialEnergyPercentage    < CommonConstants.WarRuleInitialEnergyPercentageMinLimit)   ||
+                (energyAddPctOnLoadCo       == null)                                                    ||
+                (energyAddPctOnLoadCo       > CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)      ||
+                (energyAddPctOnLoadCo       < CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)      ||
                 (energyGrowthMultiplier     == null)                                                    ||
                 (energyGrowthMultiplier     > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit)    ||
                 (energyGrowthMultiplier     < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)    ||
@@ -820,10 +820,10 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 return ClientErrorCode.PlayerRuleValidation04;
             }
 
-            const initialEnergyPercentage = data.initialEnergyPercentage;
-            if ((initialEnergyPercentage == null)                                                   ||
-                (initialEnergyPercentage > CommonConstants.WarRuleInitialEnergyPercentageMaxLimit)  ||
-                (initialEnergyPercentage < CommonConstants.WarRuleInitialEnergyPercentageMinLimit)
+            const energyAddPctOnLoadCo = data.energyAddPctOnLoadCo;
+            if ((energyAddPctOnLoadCo == null)                                                  ||
+                (energyAddPctOnLoadCo > CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
+                (energyAddPctOnLoadCo < CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
             ) {
                 return ClientErrorCode.PlayerRuleValidation05;
             }

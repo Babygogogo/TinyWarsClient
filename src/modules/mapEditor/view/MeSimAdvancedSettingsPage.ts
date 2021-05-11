@@ -100,7 +100,7 @@ namespace TinyWars.MapEditor {
                 this._createDataSkinId(playerIndex),
                 this._createDataInitialFund(playerIndex),
                 this._createDataIncomeMultiplier(playerIndex),
-                this._createDataInitialEnergyPercentage(playerIndex),
+                this._createDataEnergyAddPctOnLoadCo(playerIndex),
                 this._createDataEnergyGrowthMultiplier(playerIndex),
                 this._createDataMoveRangeModifier(playerIndex),
                 this._createDataAttackPowerModifier(playerIndex),
@@ -222,14 +222,14 @@ namespace TinyWars.MapEditor {
                 },
             };
         }
-        private _createDataInitialEnergyPercentage(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Sim.getInitialEnergyPercentage(playerIndex);
-            const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
-            const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
+        private _createDataEnergyAddPctOnLoadCo(playerIndex: number): DataForInfoRenderer {
+            const currValue     = MeModel.Sim.getEnergyAddPctOnLoadCo(playerIndex);
+            const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
+            const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
                         Common.CommonInputPanel.show({
@@ -244,7 +244,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    MeModel.Sim.setInitialEnergyPercentage(playerIndex, value);
+                                    MeModel.Sim.setEnergyAddPctOnLoadCo(playerIndex, value);
                                     this._updateView();
                                 }
                             },

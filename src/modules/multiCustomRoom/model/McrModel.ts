@@ -486,11 +486,11 @@ namespace TinyWars.MultiCustomRoom.McrModel {
             return BwWarRuleHelper.getIncomeMultiplier(getWarRule(), playerIndex);
         }
 
-        export function setInitialEnergyPercentage(playerIndex: number, percentage: number): void {
-            BwWarRuleHelper.setInitialEnergyPercentage(getWarRule(), playerIndex, percentage);
+        export function setEnergyAddPctOnLoadCo(playerIndex: number, percentage: number): void {
+            BwWarRuleHelper.setEnergyAddPctOnLoadCo(getWarRule(), playerIndex, percentage);
         }
-        export function getInitialEnergyPercentage(playerIndex: number): number {
-            return BwWarRuleHelper.getInitialEnergyPercentage(getWarRule(), playerIndex);
+        export function getEnergyAddPctOnLoadCo(playerIndex: number): number {
+            return BwWarRuleHelper.getEnergyAddPctOnLoadCo(getWarRule(), playerIndex);
         }
 
         export function setEnergyGrowthMultiplier(playerIndex: number, multiplier: number): void {

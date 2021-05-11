@@ -99,17 +99,15 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwPlayerInit10;
             }
 
-            const coCurrentEnergy = data.coCurrentEnergy;
-            if ((coCurrentEnergy != null) && (coCurrentEnergy > BwHelpers.getCoMaxEnergy(coConfig))) {
+            const coCurrentEnergy = data.coCurrentEnergy || 0;
+            if (coCurrentEnergy > BwHelpers.getCoMaxEnergy(coConfig)) {
                 return ClientErrorCode.BwPlayerInit11;
             }
 
-            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
-                if ((aliveState !== PlayerAliveState.Alive) ||
-                    (coCurrentEnergy != null)
-                ) {
-                    return ClientErrorCode.BwPlayerInit12;
-                }
+            if ((playerIndex === CommonConstants.WarNeutralPlayerIndex) &&
+                (aliveState !== PlayerAliveState.Alive)
+            ) {
+                return ClientErrorCode.BwPlayerInit12;
             }
 
             this.setFund(fund);

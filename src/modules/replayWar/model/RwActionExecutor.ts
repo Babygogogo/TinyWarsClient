@@ -186,7 +186,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const gridIndex = action.gridIndex as GridIndex;
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit == null) {
-            Logger.error(`ReplayModel._exePlayerDeleteUnit() empty focusUnit.`);
+            Logger.error(`RwActionExecutor._exePlayerDeleteUnit() empty focusUnit.`);
             return undefined;
         }
 
@@ -366,13 +366,13 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             if (attackerPlayer.getCoId()) {
                 const attackerCoZoneRadius = attackerPlayer.getCoZoneRadius();
                 if (attackerCoZoneRadius == null) {
-                    Logger.error(`ReplayModel._exeUnitAttackUnit() empty attackerCoZoneRadius.`);
+                    Logger.error(`RwActionExecutor._exeUnitAttackUnit() empty attackerCoZoneRadius.`);
                     return undefined;
                 }
 
                 const hasAttackerLoadedCo = attackerUnit.getHasLoadedCo();
                 if (hasAttackerLoadedCo == null) {
-                    Logger.error(`ReplayModel._exeUnitAttackUnit() empty hasAttackerLoadedCo.`);
+                    Logger.error(`RwActionExecutor._exeUnitAttackUnit() empty hasAttackerLoadedCo.`);
                     return undefined;
                 }
 
@@ -390,7 +390,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             if (targetPlayer.getCoId()) {
                 const targetCoZoneRadius = targetPlayer.getCoZoneRadius();
                 if (targetCoZoneRadius == null) {
-                    Logger.error(`ReplayModel._exeUnitAttackUnit() empty targetCoZoneRadius.`);
+                    Logger.error(`RwActionExecutor._exeUnitAttackUnit() empty targetCoZoneRadius.`);
                     return undefined;
                 }
 
@@ -596,7 +596,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             } else {
                 const targetTileCfg = focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType());
                 if (targetTileCfg == null) {
-                    Logger.error(`ReplayModel._exeUnitBuildTile() empty targetTileCfg.`);
+                    Logger.error(`RwActionExecutor._exeUnitBuildTile() empty targetTileCfg.`);
                     return undefined;
                 }
 
@@ -944,22 +944,23 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         if (path.isBlocked) {
             focusUnit.setActionState(UnitActionState.Acted);
         } else {
-            const playerIndex               = focusUnit.getPlayerIndex();
-            const initialEnergyPercentage   = war.getCommonSettingManager().getSettingsInitialEnergyPercentage(playerIndex);
-            if (initialEnergyPercentage == null) {
-                Logger.error(`ReplayModel._exeUnitLoadCo() empty initialEnergyPercentage.`);
+            const playerIndex           = focusUnit.getPlayerIndex();
+            const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
+            if (energyAddPctOnLoadCo == null) {
+                Logger.error(`RwActionExecutor._exeUnitLoadCo() empty initialEnergyPercentage.`);
                 return undefined;
             }
 
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
             focusUnit.setHasLoadedCo(true);
 
-            const player = war.getPlayer(playerIndex);
+            const player        = war.getPlayer(playerIndex);
+            const coMaxEnergy   = player.getCoMaxEnergy();
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
-            if (player.getCoCurrentEnergy() == null) {
-                player.setCoCurrentEnergy(Math.floor(player.getCoMaxEnergy() * initialEnergyPercentage / 100));
-            }
-            player.setCoUsingSkillType(Types.CoSkillType.Passive);
+            player.setCoCurrentEnergy(Math.min(
+                coMaxEnergy,
+                player.getCoCurrentEnergy() + Math.floor(coMaxEnergy * energyAddPctOnLoadCo / 100))
+            );
         }
 
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
@@ -1077,7 +1078,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const action    = data.WarActionUnitSurface;
         const unitMap   = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`ReplayModel._exeUnitSurface() empty unitMap.`);
+            Logger.error(`RwActionExecutor._exeUnitSurface() empty unitMap.`);
             return undefined;
         }
 
@@ -1110,13 +1111,13 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const action    = data.WarActionUnitUseCoSkill;
         const skillType = action.skillType;
         if (skillType == null) {
-            Logger.error(`ReplayModel._exeUnitUseCoSkill() empty skillType.`);
+            Logger.error(`RwActionExecutor._exeUnitUseCoSkill() empty skillType.`);
             return undefined;
         }
 
         const unitMap = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`ReplayModel._exeUnitUseCoSkill() empty unitMap.`);
+            Logger.error(`RwActionExecutor._exeUnitUseCoSkill() empty unitMap.`);
             return undefined;
         }
 
@@ -1125,25 +1126,25 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
         if (focusUnit == null) {
-            Logger.error(`ReplayModel._exeUnitUseCoSkill() empty focusUnit.`);
+            Logger.error(`RwActionExecutor._exeUnitUseCoSkill() empty focusUnit.`);
             return undefined;
         }
 
         const teamIndexInTurn = focusUnit.getTeamIndex();
         if (teamIndexInTurn == null) {
-            Logger.error(`ReplayModel._exeUnitUseCoSkill() empty teamIndexInTurn.`);
+            Logger.error(`RwActionExecutor._exeUnitUseCoSkill() empty teamIndexInTurn.`);
             return undefined;
         }
 
         const player = focusUnit.getPlayer();
         if (player == null) {
-            Logger.error(`ReplayModel._exeUnitUseCoSkill() empty player.`);
+            Logger.error(`RwActionExecutor._exeUnitUseCoSkill() empty player.`);
             return undefined;
         }
 
         const currentEnergy = player.getCoCurrentEnergy();
         if (currentEnergy == null) {
-            Logger.error(`ReplayModel._exeUnitUseCoSkill() empty currentEnergy.`);
+            Logger.error(`RwActionExecutor._exeUnitUseCoSkill() empty currentEnergy.`);
             return undefined;
         }
 
@@ -1167,7 +1168,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             if (skillType === Types.CoSkillType.Power) {
                 const powerEnergy = player.getCoPowerEnergy();
                 if (powerEnergy == null) {
-                    Logger.error(`ReplayModel._exeUnitUseCoSkill() empty powerEnergy.`);
+                    Logger.error(`RwActionExecutor._exeUnitUseCoSkill() empty powerEnergy.`);
                     return undefined;
                 }
                 player.setCoCurrentEnergy(currentEnergy - powerEnergy);
@@ -1175,14 +1176,14 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             } else if (skillType === Types.CoSkillType.SuperPower) {
                 const superPowerEnergy = player.getCoSuperPowerEnergy();
                 if (superPowerEnergy == null) {
-                    Logger.error(`ReplayModel._exeUnitUseCoSkill() empty superPowerEnergy.`);
+                    Logger.error(`RwActionExecutor._exeUnitUseCoSkill() empty superPowerEnergy.`);
                     return undefined;
                 }
 
                 player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
 
             } else {
-                Logger.error(`ReplayModel._exeUnitUseCoSkill() invalid skillType: ${skillType}`);
+                Logger.error(`RwActionExecutor._exeUnitUseCoSkill() invalid skillType: ${skillType}`);
                 return undefined;
             }
 
@@ -1191,7 +1192,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
                 const dataForUseCoSkill = BwCoSkillHelper.getDataForUseCoSkill(war, player, skillIndex);
                 if (dataForUseCoSkill == null) {
-                    Logger.error(`ReplayModel._exeUnitUseCoSkill() empty dataForUseCoSkill.`);
+                    Logger.error(`RwActionExecutor._exeUnitUseCoSkill() empty dataForUseCoSkill.`);
                     return undefined;
                 }
 
@@ -1239,7 +1240,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const action    = data.WarActionUnitWait;
         const unitMap   = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`ReplayModel._exeUnitWait() empty unitMap.`);
+            Logger.error(`RwActionExecutor._exeUnitWait() empty unitMap.`);
             return undefined;
         }
 
@@ -1299,7 +1300,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const gridIndex = action.gridIndex as GridIndex;
         const focusUnit = war.getUnitMap().getUnitOnMap(gridIndex);
         if (focusUnit == null) {
-            Logger.error(`ReplayModel._fastExePlayerDeleteUnit() empty focusUnit.`);
+            Logger.error(`RwActionExecutor._fastExePlayerDeleteUnit() empty focusUnit.`);
             return undefined;
         }
 
@@ -1426,13 +1427,13 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             if (attackerPlayer.getCoId()) {
                 const attackerCoZoneRadius = attackerPlayer.getCoZoneRadius();
                 if (attackerCoZoneRadius == null) {
-                    Logger.error(`ReplayModel._fastExeUnitAttackUnit() empty attackerCoZoneRadius.`);
+                    Logger.error(`RwActionExecutor._fastExeUnitAttackUnit() empty attackerCoZoneRadius.`);
                     return undefined;
                 }
 
                 const hasAttackerLoadedCo = attackerUnit.getHasLoadedCo();
                 if (hasAttackerLoadedCo == null) {
-                    Logger.error(`ReplayModel._fastExeUnitAttackUnit() empty hasAttackerLoadedCo.`);
+                    Logger.error(`RwActionExecutor._fastExeUnitAttackUnit() empty hasAttackerLoadedCo.`);
                     return undefined;
                 }
 
@@ -1450,7 +1451,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             if (targetPlayer.getCoId()) {
                 const targetCoZoneRadius = targetPlayer.getCoZoneRadius();
                 if (targetCoZoneRadius == null) {
-                    Logger.error(`ReplayModel._fastExeUnitAttackUnit() empty targetCoZoneRadius.`);
+                    Logger.error(`RwActionExecutor._fastExeUnitAttackUnit() empty targetCoZoneRadius.`);
                     return undefined;
                 }
 
@@ -1600,7 +1601,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             } else {
                 const targetTileCfg = focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType());
                 if (targetTileCfg == null) {
-                    Logger.error(`ReplayModel._fastExeUnitBuildTile() empty targetTileCfg.`);
+                    Logger.error(`RwActionExecutor._fastExeUnitBuildTile() empty targetTileCfg.`);
                     return undefined;
                 }
 
@@ -1839,22 +1840,23 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         if (path.isBlocked) {
             focusUnit.setActionState(UnitActionState.Acted);
         } else {
-            const playerIndex               = focusUnit.getPlayerIndex();
-            const initialEnergyPercentage   = war.getCommonSettingManager().getSettingsInitialEnergyPercentage(playerIndex);
-            if (initialEnergyPercentage == null) {
-                Logger.error(`ReplayModel._fastExeUnitLoadCo() empty initialEnergyPercentage.`);
+            const playerIndex           = focusUnit.getPlayerIndex();
+            const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
+            if (energyAddPctOnLoadCo == null) {
+                Logger.error(`RwActionExecutor._fastExeUnitLoadCo() empty initialEnergyPercentage.`);
                 return undefined;
             }
 
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
             focusUnit.setHasLoadedCo(true);
 
-            const player = war.getPlayer(playerIndex);
+            const player        = war.getPlayer(playerIndex);
+            const coMaxEnergy   = player.getCoMaxEnergy();
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
-            if (player.getCoCurrentEnergy() == null) {
-                player.setCoCurrentEnergy(Math.floor(player.getCoMaxEnergy() * initialEnergyPercentage / 100));
-            }
-            player.setCoUsingSkillType(Types.CoSkillType.Passive);
+            player.setCoCurrentEnergy(Math.min(
+                coMaxEnergy,
+                player.getCoCurrentEnergy() + Math.floor(coMaxEnergy * energyAddPctOnLoadCo / 100))
+            );
         }
     }
 
@@ -1930,7 +1932,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const action    = data.WarActionUnitSurface;
         const unitMap   = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`ReplayModel._exeUnitSurface() empty unitMap.`);
+            Logger.error(`RwActionExecutor._exeUnitSurface() empty unitMap.`);
             return undefined;
         }
 
@@ -1949,13 +1951,13 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const action    = data.WarActionUnitUseCoSkill;
         const skillType = action.skillType;
         if (skillType == null) {
-            Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty skillType.`);
+            Logger.error(`RwActionExecutor._fastExeUnitUseCoSkill() empty skillType.`);
             return undefined;
         }
 
         const unitMap = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty unitMap.`);
+            Logger.error(`RwActionExecutor._fastExeUnitUseCoSkill() empty unitMap.`);
             return undefined;
         }
 
@@ -1964,25 +1966,25 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const launchUnitId  = action.launchUnitId;
         const focusUnit     = unitMap.getUnit(pathNodes[0], launchUnitId);
         if (focusUnit == null) {
-            Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty focusUnit.`);
+            Logger.error(`RwActionExecutor._fastExeUnitUseCoSkill() empty focusUnit.`);
             return undefined;
         }
 
         const teamIndexInTurn = focusUnit.getTeamIndex();
         if (teamIndexInTurn == null) {
-            Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty teamIndexInTurn.`);
+            Logger.error(`RwActionExecutor._fastExeUnitUseCoSkill() empty teamIndexInTurn.`);
             return undefined;
         }
 
         const player = focusUnit.getPlayer();
         if (player == null) {
-            Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty player.`);
+            Logger.error(`RwActionExecutor._fastExeUnitUseCoSkill() empty player.`);
             return undefined;
         }
 
         const currentEnergy = player.getCoCurrentEnergy();
         if (currentEnergy == null) {
-            Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty currentEnergy.`);
+            Logger.error(`RwActionExecutor._fastExeUnitUseCoSkill() empty currentEnergy.`);
             return undefined;
         }
 
@@ -2001,7 +2003,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             if (skillType === Types.CoSkillType.Power) {
                 const powerEnergy = player.getCoPowerEnergy();
                 if (powerEnergy == null) {
-                    Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty powerEnergy.`);
+                    Logger.error(`RwActionExecutor._fastExeUnitUseCoSkill() empty powerEnergy.`);
                     return undefined;
                 }
                 player.setCoCurrentEnergy(currentEnergy - powerEnergy);
@@ -2009,14 +2011,14 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             } else if (skillType === Types.CoSkillType.SuperPower) {
                 const superPowerEnergy = player.getCoSuperPowerEnergy();
                 if (superPowerEnergy == null) {
-                    Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty superPowerEnergy.`);
+                    Logger.error(`RwActionExecutor._fastExeUnitUseCoSkill() empty superPowerEnergy.`);
                     return undefined;
                 }
 
                 player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
 
             } else {
-                Logger.error(`ReplayModel._fastExeUnitUseCoSkill() invalid skillType: ${skillType}`);
+                Logger.error(`RwActionExecutor._fastExeUnitUseCoSkill() invalid skillType: ${skillType}`);
                 return undefined;
             }
 
@@ -2025,7 +2027,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
                 const dataForUseCoSkill = BwCoSkillHelper.getDataForUseCoSkill(war, player, skillIndex);
                 if (dataForUseCoSkill == null) {
-                    Logger.error(`ReplayModel._fastExeUnitUseCoSkill() empty dataForUseCoSkill.`);
+                    Logger.error(`RwActionExecutor._fastExeUnitUseCoSkill() empty dataForUseCoSkill.`);
                     return undefined;
                 }
 
@@ -2039,7 +2041,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         const action    = data.WarActionUnitWait;
         const unitMap   = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`ReplayModel._exeUnitWait() empty unitMap.`);
+            Logger.error(`RwActionExecutor._exeUnitWait() empty unitMap.`);
             return undefined;
         }
 

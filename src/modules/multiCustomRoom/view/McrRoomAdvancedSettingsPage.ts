@@ -63,7 +63,7 @@ namespace TinyWars.MultiCustomRoom {
                 { playerRuleType: PlayerRuleType.BannedCoIdArray },
                 { playerRuleType: PlayerRuleType.InitialFund },
                 { playerRuleType: PlayerRuleType.IncomeMultiplier },
-                { playerRuleType: PlayerRuleType.InitialEnergyPercentage },
+                { playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
                 { playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
                 { playerRuleType: PlayerRuleType.MoveRangeModifier },
                 { playerRuleType: PlayerRuleType.AttackPowerModifier },
@@ -167,7 +167,7 @@ namespace TinyWars.MultiCustomRoom {
                 { roomId, playerIndex, playerRuleType: PlayerRuleType.BannedCoIdArray },
                 { roomId, playerIndex, playerRuleType: PlayerRuleType.InitialFund },
                 { roomId, playerIndex, playerRuleType: PlayerRuleType.IncomeMultiplier },
-                { roomId, playerIndex, playerRuleType: PlayerRuleType.InitialEnergyPercentage },
+                { roomId, playerIndex, playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
                 { roomId, playerIndex, playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
                 { roomId, playerIndex, playerRuleType: PlayerRuleType.MoveRangeModifier },
                 { roomId, playerIndex, playerRuleType: PlayerRuleType.AttackPowerModifier },
@@ -207,7 +207,7 @@ namespace TinyWars.MultiCustomRoom {
                     case PlayerRuleType.BannedCoIdArray         : this._updateComponentsForValueAsBannedCoIdArray(playerIndex);         return;
                     case PlayerRuleType.InitialFund             : this._updateComponentsForValueAsInitialFund(playerIndex);             return;
                     case PlayerRuleType.IncomeMultiplier        : this._updateComponentsForValueAsIncomeMultiplier(playerIndex);        return;
-                    case PlayerRuleType.InitialEnergyPercentage : this._updateComponentsForValueAsInitialEnergyPercentage(playerIndex); return;
+                    case PlayerRuleType.EnergyAddPctOnLoadCo    : this._updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex);    return;
                     case PlayerRuleType.EnergyGrowthMultiplier  : this._updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex);  return;
                     case PlayerRuleType.MoveRangeModifier       : this._updateComponentsForValueAsMoveRangeModifier(playerIndex);       return;
                     case PlayerRuleType.AttackPowerModifier     : this._updateComponentsForValueAsAttackPowerModifier(playerIndex);     return;
@@ -246,12 +246,12 @@ namespace TinyWars.MultiCustomRoom {
             labelValue.text         = currValue == null ? null : `${currValue}`;
             labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
         }
-        private async _updateComponentsForValueAsInitialEnergyPercentage(playerIndex: number): Promise<void> {
+        private async _updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex: number): Promise<void> {
             const roomInfo          = await this._getRoomInfo();
-            const currValue         = roomInfo ? BwWarRuleHelper.getInitialEnergyPercentage(roomInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const currValue         = roomInfo ? BwWarRuleHelper.getEnergyAddPctOnLoadCo(roomInfo.settingsForCommon.warRule, playerIndex) : undefined;
             const labelValue        = this._labelValue;
             labelValue.text         = currValue == null ? null : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault);
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
         }
         private async _updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex: number): Promise<void> {
             const roomInfo          = await this._getRoomInfo();

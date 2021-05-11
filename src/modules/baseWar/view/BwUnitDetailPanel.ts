@@ -545,14 +545,7 @@ namespace TinyWars.BaseWar {
                         unit.updateView();
                         this._updateListInfo();
 
-                        const war       = unit.getWar();
-                        const player    = unit.getPlayer();
-                        war.getTileMap().getView().updateCoZone();
-                        if (war.getUnitMap().checkIsCoLoadedByAnyUnit(player.getPlayerIndex())) {
-                            player.setCoCurrentEnergy(player.getCoCurrentEnergy() || 0);
-                        } else {
-                            player.setCoCurrentEnergy(null);
-                        }
+                        unit.getWar().getTileMap().getView().updateCoZone();
                     },
             };
         }

@@ -102,7 +102,7 @@ namespace TinyWars.SingleCustomRoom {
                 this._createDataTeamIndex(playerIndex),
                 this._createDataInitialFund(playerIndex),
                 this._createDataIncomeMultiplier(playerIndex),
-                this._createDataInitialEnergyPercentage(playerIndex),
+                this._createDataEnergyAddPctOnLoadCo(playerIndex),
                 this._createDataEnergyGrowthMultiplier(playerIndex),
                 this._createDataMoveRangeModifier(playerIndex),
                 this._createDataAttackPowerModifier(playerIndex),
@@ -180,14 +180,14 @@ namespace TinyWars.SingleCustomRoom {
                 },
             };
         }
-        private _createDataInitialEnergyPercentage(playerIndex: number): DataForInfoRenderer {
-            const currValue     = ScrModel.Create.getInitialEnergyPercentage(playerIndex);
-            const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
-            const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
+        private _createDataEnergyAddPctOnLoadCo(playerIndex: number): DataForInfoRenderer {
+            const currValue     = ScrModel.Create.getEnergyAddPctOnLoadCo(playerIndex);
+            const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
+            const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : () => {
                     Common.CommonInputPanel.show({
                         title           : Lang.getText(Lang.Type.B0180),
@@ -201,7 +201,7 @@ namespace TinyWars.SingleCustomRoom {
                             if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                 FloatText.show(Lang.getText(Lang.Type.A0098));
                             } else {
-                                ScrModel.Create.setInitialEnergyPercentage(playerIndex, value);
+                                ScrModel.Create.setEnergyAddPctOnLoadCo(playerIndex, value);
                                 this._updateView();
                             }
                         },

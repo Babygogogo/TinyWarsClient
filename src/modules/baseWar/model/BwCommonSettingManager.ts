@@ -184,20 +184,20 @@ namespace TinyWars.BaseWar {
 
             return BwWarRuleHelper.getInitialFund(warRule, playerIndex);
         }
-        public getSettingsInitialEnergyPercentage(playerIndex: number): number | null | undefined {
+        public getSettingsEnergyAddPctOnLoadCo(playerIndex: number): number | null | undefined {
             const settingsForCommon = this.getSettingsForCommon();
             if (settingsForCommon == null) {
-                Logger.error(`BwCommonSettingManager.getSettingsInitialEnergyPercentage() empty settingsForCommon.`);
+                Logger.error(`BwCommonSettingManager.getSettingsEnergyAddPctOnLoadCo() empty settingsForCommon.`);
                 return undefined;
             }
 
             const warRule = settingsForCommon.warRule;
             if (warRule == null) {
-                Logger.error(`BwCommonSettingManager.getSettingsInitialEnergyPercentage() empty warRule.`);
+                Logger.error(`BwCommonSettingManager.getSettingsEnergyAddPctOnLoadCo() empty warRule.`);
                 return undefined;
             }
 
-            return BwWarRuleHelper.getInitialEnergyPercentage(warRule, playerIndex);
+            return BwWarRuleHelper.getEnergyAddPctOnLoadCo(warRule, playerIndex);
         }
         public getSettingsLuckLowerLimit(playerIndex: number): number | null | undefined {
             const settingsForCommon = this.getSettingsForCommon();

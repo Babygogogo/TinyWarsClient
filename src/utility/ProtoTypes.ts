@@ -5400,8 +5400,8 @@ export declare namespace WarRule {
         /** DataForPlayerRule incomeMultiplier */
         incomeMultiplier?: (number|null);
 
-        /** DataForPlayerRule initialEnergyPercentage */
-        initialEnergyPercentage?: (number|null);
+        /** DataForPlayerRule energyAddPctOnLoadCo */
+        energyAddPctOnLoadCo?: (number|null);
 
         /** DataForPlayerRule energyGrowthMultiplier */
         energyGrowthMultiplier?: (number|null);
@@ -5446,8 +5446,8 @@ export declare namespace WarRule {
         /** DataForPlayerRule incomeMultiplier. */
         public incomeMultiplier: number;
 
-        /** DataForPlayerRule initialEnergyPercentage. */
-        public initialEnergyPercentage: number;
+        /** DataForPlayerRule energyAddPctOnLoadCo. */
+        public energyAddPctOnLoadCo: number;
 
         /** DataForPlayerRule energyGrowthMultiplier. */
         public energyGrowthMultiplier: number;

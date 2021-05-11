@@ -459,7 +459,7 @@ namespace TinyWars.ReplayWar {
                 this._createDataUnitAndValue(war, playerIndex, player),
                 this._createDataInitialFund(war, playerIndex, player),
                 this._createDataIncomeMultiplier(war, playerIndex, player),
-                this._createDataInitialEnergyPercentage(war, playerIndex, player),
+                this._createDataEnergyAddPctOnLoadCo(war, playerIndex, player),
                 this._createDataEnergyGrowthMultiplier(war, playerIndex, player),
                 this._createDataMoveRangeModifier(war, playerIndex, player),
                 this._createDataAttackPowerModifier(war, playerIndex, player),
@@ -572,16 +572,16 @@ namespace TinyWars.ReplayWar {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
             };
         }
-        private _createDataInitialEnergyPercentage(
+        private _createDataEnergyAddPctOnLoadCo(
             war         : RwWar,
             playerIndex : number,
             player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
-            const currValue = war.getCommonSettingManager().getSettingsInitialEnergyPercentage(playerIndex);
+            const currValue = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
             };
         }
         private _createDataEnergyGrowthMultiplier(

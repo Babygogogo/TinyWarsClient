@@ -866,13 +866,13 @@ namespace TinyWars.SinglePlayerWar {
             menuPanel   : SpwWarMenuPanel,
         ): DataForInfoRenderer {
             const playerIndex   = player.getPlayerIndex();
-            const currValue     = war.getCommonSettingManager().getSettingsInitialEnergyPercentage(playerIndex);
-            const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
-            const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
+            const currValue     = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
+            const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
+            const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : !war.getCanCheat()
                     ? null
                     : () => {
@@ -888,7 +888,7 @@ namespace TinyWars.SinglePlayerWar {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwWarRuleHelper.setInitialEnergyPercentage(war.getWarRule(), playerIndex, value);
+                                    BwWarRuleHelper.setEnergyAddPctOnLoadCo(war.getWarRule(), playerIndex, value);
                                     this._updateView();
                                 }
                             },

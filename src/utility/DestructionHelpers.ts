@@ -33,7 +33,7 @@ namespace TinyWars.Utility.DestructionHelpers {
             if (restCoUnitsCount > 0) {
                 player.setCoCurrentEnergy(Math.floor(currentEnergy * restCoUnitsCount / totalCoUnitsCount));
             } else {
-                player.setCoCurrentEnergy(undefined);
+                player.setCoCurrentEnergy(0);
                 player.setCoUsingSkillType(Types.CoSkillType.Passive);
             }
         }
@@ -78,7 +78,7 @@ namespace TinyWars.Utility.DestructionHelpers {
         const player = war.getPlayer(playerIndex)!;
         player.setAliveState(Types.PlayerAliveState.Dead);
         player.setCoIsDestroyedInTurn(true);
-        player.setCoCurrentEnergy(undefined);
+        player.setCoCurrentEnergy(0);
         player.setCoUsingSkillType(Types.CoSkillType.Passive);
 
         war.getDrawVoteManager().setRemainingVotes(undefined);

@@ -1746,8 +1746,8 @@ namespace TinyWars.Utility.Lang {
             `Income Multiplier %`,
         ],
         [Type.B0180]: [
-            `初始能量%`,
-            `Initial Energy %`,
+            `装载CO时获得能量%`,
+            `Energy Gain % on Load CO`,
         ],
         [Type.B0181]: [
             `能量增速%`,
@@ -4609,7 +4609,7 @@ namespace TinyWars.Utility.Lang {
             case PlayerRuleType.BannedCoIdArray         : return getText(Type.B0403);
             case PlayerRuleType.InitialFund             : return getText(Type.B0178);
             case PlayerRuleType.IncomeMultiplier        : return getText(Type.B0179);
-            case PlayerRuleType.InitialEnergyPercentage : return getText(Type.B0180);
+            case PlayerRuleType.EnergyAddPctOnLoadCo    : return getText(Type.B0180);
             case PlayerRuleType.EnergyGrowthMultiplier  : return getText(Type.B0181);
             case PlayerRuleType.MoveRangeModifier       : return getText(Type.B0182);
             case PlayerRuleType.AttackPowerModifier     : return getText(Type.B0183);

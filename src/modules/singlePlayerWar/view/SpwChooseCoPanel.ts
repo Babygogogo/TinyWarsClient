@@ -288,11 +288,8 @@ namespace TinyWars.SinglePlayerWar {
             const player    = war.getPlayer(data.playerIndex);
             if (newCoId !== player.getCoId()) {
                 player.setCoId(newCoId);
+                player.setCoCurrentEnergy(Math.min(player.getCoCurrentEnergy(), player.getCoMaxEnergy()));
 
-                const currEnergy = player.getCoCurrentEnergy();
-                if (currEnergy != null) {
-                    player.setCoCurrentEnergy(Math.min(currEnergy, player.getCoMaxEnergy()));
-                }
                 war.getTileMap().getView().updateCoZone();
             }
             data.panel.close();

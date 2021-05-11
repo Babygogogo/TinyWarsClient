@@ -226,7 +226,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         const playerInTurn  = war.getPlayerInTurn();
         const unitData      = extraData.unitData;
         if (unitData == null) {
-            Logger.error(`McwModel._exePlayerProduceUnit() empty unitData.`);
+            Logger.error(`MpwActionExecutor._exePlayerProduceUnit() empty unitData.`);
             return undefined;
         }
 
@@ -478,7 +478,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
             } else {
                 const targetTileCfg = focusUnit.getBuildTargetTileCfg(tile.getBaseType(), tile.getObjectType());
                 if (targetTileCfg == null) {
-                    Logger.error(`McwModel._exeUnitBuildTile() empty targetTileCfg.`);
+                    Logger.error(`MpwActionExecutor._exeUnitBuildTile() empty targetTileCfg.`);
                     return undefined;
                 }
 
@@ -841,22 +841,23 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
         if (path.isBlocked) {
             focusUnit.setActionState(UnitActionState.Acted);
         } else {
-            const playerIndex               = focusUnit.getPlayerIndex();
-            const initialEnergyPercentage   = war.getCommonSettingManager().getSettingsInitialEnergyPercentage(playerIndex);
-            if (initialEnergyPercentage == null) {
-                Logger.error(`McwModel._exeUnitLoadCo() empty initialEnergyPercentage.`);
+            const playerIndex           = focusUnit.getPlayerIndex();
+            const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
+            if (energyAddPctOnLoadCo == null) {
+                Logger.error(`MpwActionExecutor._exeUnitLoadCo() empty initialEnergyPercentage.`);
                 return undefined;
             }
 
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
             focusUnit.setHasLoadedCo(true);
 
-            const player = war.getPlayer(playerIndex);
+            const player        = war.getPlayer(playerIndex);
+            const coMaxEnergy   = player.getCoMaxEnergy();
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
-            if (player.getCoCurrentEnergy() == null) {
-                player.setCoCurrentEnergy(Math.floor(player.getCoMaxEnergy() * initialEnergyPercentage / 100));
-            }
-            player.setCoUsingSkillType(Types.CoSkillType.Passive);
+            player.setCoCurrentEnergy(Math.min(
+                coMaxEnergy,
+                player.getCoCurrentEnergy() + Math.floor(coMaxEnergy * energyAddPctOnLoadCo / 100))
+            );
         }
 
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
@@ -1042,7 +1043,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
             if (skillType === Types.CoSkillType.Power) {
                 const powerEnergy = player.getCoPowerEnergy();
                 if (powerEnergy == null) {
-                    Logger.error(`McwModel._exeUnitUseCoSkill() empty powerEnergy.`);
+                    Logger.error(`MpwActionExecutor._exeUnitUseCoSkill() empty powerEnergy.`);
                     return undefined;
                 }
                 player.setCoCurrentEnergy(currentEnergy - powerEnergy);
@@ -1050,14 +1051,14 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
             } else if (skillType === Types.CoSkillType.SuperPower) {
                 const superPowerEnergy = player.getCoSuperPowerEnergy();
                 if (superPowerEnergy == null) {
-                    Logger.error(`McwModel._exeUnitUseCoSkill() empty superPowerEnergy.`);
+                    Logger.error(`MpwActionExecutor._exeUnitUseCoSkill() empty superPowerEnergy.`);
                     return undefined;
                 }
 
                 player.setCoCurrentEnergy(currentEnergy - superPowerEnergy);
 
             } else {
-                Logger.error(`McwModel._exeUnitUseCoSkill() invalid skillType: ${skillType}`);
+                Logger.error(`MpwActionExecutor._exeUnitUseCoSkill() invalid skillType: ${skillType}`);
                 return undefined;
             }
 
@@ -1066,7 +1067,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
             for (let skillIndex = 0; skillIndex < skillIdList.length; ++skillIndex) {
                 const dataForUseCoSkill = skillDataList.find(v => v.skillIndex === skillIndex);
                 if (dataForUseCoSkill == null) {
-                    Logger.error(`McwModel._exeUnitUseCoSkill() empty dataForUseCoSkill.`);
+                    Logger.error(`MpwActionExecutor._exeUnitUseCoSkill() empty dataForUseCoSkill.`);
                     return undefined;
                 }
 

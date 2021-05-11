@@ -94,7 +94,7 @@ namespace TinyWars.MultiCustomRoom {
                 { playerRuleType: PlayerRuleType.BannedCoIdArray },
                 { playerRuleType: PlayerRuleType.InitialFund },
                 { playerRuleType: PlayerRuleType.IncomeMultiplier },
-                { playerRuleType: PlayerRuleType.InitialEnergyPercentage },
+                { playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
                 { playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
                 { playerRuleType: PlayerRuleType.MoveRangeModifier },
                 { playerRuleType: PlayerRuleType.AttackPowerModifier },
@@ -190,7 +190,7 @@ namespace TinyWars.MultiCustomRoom {
                 { playerIndex, playerRuleType: PlayerRuleType.BannedCoIdArray },
                 { playerIndex, playerRuleType: PlayerRuleType.InitialFund },
                 { playerIndex, playerRuleType: PlayerRuleType.IncomeMultiplier },
-                { playerIndex, playerRuleType: PlayerRuleType.InitialEnergyPercentage },
+                { playerIndex, playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
                 { playerIndex, playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
                 { playerIndex, playerRuleType: PlayerRuleType.MoveRangeModifier },
                 { playerIndex, playerRuleType: PlayerRuleType.AttackPowerModifier },
@@ -285,7 +285,7 @@ namespace TinyWars.MultiCustomRoom {
                     case PlayerRuleType.BannedCoIdArray         : this._updateComponentsForValueAsBannedCoIdArray(playerIndex);         return;
                     case PlayerRuleType.InitialFund             : this._updateComponentsForValueAsInitialFund(playerIndex);             return;
                     case PlayerRuleType.IncomeMultiplier        : this._updateComponentsForValueAsIncomeMultiplier(playerIndex);        return;
-                    case PlayerRuleType.InitialEnergyPercentage : this._updateComponentsForValueAsInitialEnergyPercentage(playerIndex); return;
+                    case PlayerRuleType.EnergyAddPctOnLoadCo    : this._updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex);    return;
                     case PlayerRuleType.EnergyGrowthMultiplier  : this._updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex);  return;
                     case PlayerRuleType.MoveRangeModifier       : this._updateComponentsForValueAsMoveRangeModifier(playerIndex);       return;
                     case PlayerRuleType.AttackPowerModifier     : this._updateComponentsForValueAsAttackPowerModifier(playerIndex);     return;
@@ -365,27 +365,27 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
         }
-        private _updateComponentsForValueAsInitialEnergyPercentage(playerIndex: number): void {
+        private _updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex: number): void {
             this._labelValue.visible            = false;
             this._callbackForTouchLabelValue    = null;
 
             const inputValue                    = this._inputValue;
-            const currValue                     = McrModel.Create.getInitialEnergyPercentage(playerIndex);
+            const currValue                     = McrModel.Create.getEnergyAddPctOnLoadCo(playerIndex);
             inputValue.visible                  = true;
             inputValue.text                     = `${currValue}`;
-            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault);
+            inputValue.textColor                = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
             inputValue.restrict                 = `0-9`;
             inputValue.maxChars                 = 3;
             this._callbackForFocusOutInputValue = () => {
                 const text  = inputValue.text;
                 const value = text ? Number(text) : NaN;
                 if ((isNaN(value))                                                      ||
-                    (value > CommonConstants.WarRuleInitialEnergyPercentageMaxLimit)    ||
-                    (value < CommonConstants.WarRuleInitialEnergyPercentageMinLimit)
+                    (value > CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
+                    (value < CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
                 ) {
                     FloatText.show(Lang.getText(Lang.Type.A0098));
                 } else {
-                    McrModel.Create.setInitialEnergyPercentage(playerIndex, value);
+                    McrModel.Create.setEnergyAddPctOnLoadCo(playerIndex, value);
                 }
             }
         }

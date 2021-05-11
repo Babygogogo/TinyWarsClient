@@ -879,9 +879,9 @@ namespace TinyWars.SinglePlayerWar.SpwActionExecutor {
         if (path.isBlocked) {
             focusUnit.setActionState(UnitActionState.Acted);
         } else {
-            const playerIndex               = focusUnit.getPlayerIndex();
-            const initialEnergyPercentage   = war.getCommonSettingManager().getSettingsInitialEnergyPercentage(playerIndex);
-            if (initialEnergyPercentage == null) {
+            const playerIndex           = focusUnit.getPlayerIndex();
+            const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
+            if (energyAddPctOnLoadCo == null) {
                 Logger.error(`SpwActionExecutor._exeUnitLoadCo() empty initialEnergyPercentage.`);
                 return undefined;
             }
@@ -889,12 +889,13 @@ namespace TinyWars.SinglePlayerWar.SpwActionExecutor {
             focusUnit.setCurrentPromotion(focusUnit.getMaxPromotion());
             focusUnit.setHasLoadedCo(true);
 
-            const player = war.getPlayer(playerIndex);
+            const player        = war.getPlayer(playerIndex);
+            const coMaxEnergy   = player.getCoMaxEnergy();
             player.setFund(player.getFund() - focusUnit.getLoadCoCost()!);
-            if (player.getCoCurrentEnergy() == null) {
-                player.setCoCurrentEnergy(Math.floor(player.getCoMaxEnergy() * initialEnergyPercentage / 100));
-            }
-            player.setCoUsingSkillType(Types.CoSkillType.Passive);
+            player.setCoCurrentEnergy(Math.min(
+                coMaxEnergy,
+                player.getCoCurrentEnergy() + Math.floor(coMaxEnergy * energyAddPctOnLoadCo / 100))
+            );
         }
 
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
