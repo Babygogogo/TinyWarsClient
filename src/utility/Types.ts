@@ -281,6 +281,12 @@ namespace TinyWars.Utility.Types {
         flareAmmo   : number | null;
     }
 
+    export type SpmWarSaveSlotData = {
+        slotIndex   : number;
+        extraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+        warData     : ProtoTypes.WarSerialization.ISerialWar;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.
     ////////////////////////////////////////////////////////////////////////////////
@@ -541,6 +547,7 @@ namespace TinyWars.Utility.Types {
     }
 
     export const enum WarType {
+        Undefined   = 0,
         McwStd      = 1,
         McwFog      = 2,
         MrwStd      = 3,

@@ -123,9 +123,9 @@ namespace TinyWars.ReplayWar {
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
                     FlowManager.gotoSingleCustomWar({
-                        slotIndex   : data.slotIndex,
-                        slotComment : data.slotComment,
-                        warData     : data.warData,
+                        slotIndex       : data.slotIndex,
+                        slotExtraData   : data.extraData,
+                        warData         : data.warData,
                     });
                 },
             });

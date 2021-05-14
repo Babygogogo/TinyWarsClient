@@ -124,15 +124,15 @@ namespace TinyWars.Utility.FlowManager {
 
         SoundManager.playRandomWarBgm();
     }
-    export async function gotoSingleCustomWar({ warData, slotIndex, slotComment }: {
-        warData     : ProtoTypes.WarSerialization.ISerialWar;
-        slotIndex   : number;
-        slotComment : string;
+    export async function gotoSingleCustomWar({ warData, slotIndex, slotExtraData }: {
+        slotIndex       : number;
+        slotExtraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+        warData         : ProtoTypes.WarSerialization.ISerialWar;
     }): Promise<void> {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         MeModel.unloadWar();
-        const war = await SpwModel.loadWar({ warData, slotIndex, slotComment });
+        const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData });
 
         StageManager.closeAllPanels();
         BaseWar.BwBackgroundPanel.show();

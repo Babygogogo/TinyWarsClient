@@ -7,25 +7,24 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.MsgSpmCreateScw,              callback: _onMsgSpmCreateScw,           },
-            { msgCode: ActionCode.MsgSpmCreateSfw,              callback: _onMsgSpmCreateSfw,           },
-            { msgCode: ActionCode.MsgScrGetSaveSlotInfoList,    callback: _onMsgScrGetSaveSlotInfoList, },
-            { msgCode: ActionCode.MsgScrContinueWar,            callback: _onMsgScrContinueWar,         },
-            { msgCode: ActionCode.MsgScrSaveWar,                callback: _onMsgScrSaveWar,             },
-            { msgCode: ActionCode.MsgScrDeleteWar,              callback: _onMsgScrDeleteWar            },
+            { msgCode: ActionCode.MsgSpmCreateScw,                      callback: _onMsgSpmCreateScw, },
+            { msgCode: ActionCode.MsgSpmCreateSfw,                      callback: _onMsgSpmCreateSfw, },
+            { msgCode: ActionCode.MsgSpmGetWarSaveSlotFullDataArray,    callback: _onMsgSpmGetWarSaveSlotFullDataArray, },
+            { msgCode: ActionCode.MsgSpmDeleteWarSaveSlot,              callback: _onMsgSpmDeleteWarSaveSlot, },
+            { msgCode: ActionCode.MsgScrSaveWar,                        callback: _onMsgScrSaveWar, },
         ], SpmProxy);
     }
 
-    export function reqScrGetSaveSlotInfoList(): void {
+    export function reqSpmGetWarSaveSlotFullDataArray(): void {
         NetManager.send({
-            MsgScrGetSaveSlotInfoList: { c: {} },
+            MsgSpmGetWarSaveSlotFullDataArray: { c: {} },
         });
     }
-    function _onMsgScrGetSaveSlotInfoList(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgScrGetSaveSlotInfoList.IS;
+    function _onMsgSpmGetWarSaveSlotFullDataArray(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS;
         if (!data.errorCode) {
-            SinglePlayerMode.SpmModel.SaveSlot.setInfoArray(data.infoList);
-            Notify.dispatch(Notify.Type.MsgScrGetSaveInfoList, data);
+            SpmModel.SaveSlot.updateOnMsgSpmGetWarSaveSlotFullDataArray(data);
+            Notify.dispatch(Notify.Type.MsgSpmGetWarSaveSlotFullDataArray, data);
         }
     }
 
@@ -37,19 +36,20 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
     function _onMsgSpmCreateScw(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateScw.IS;
         if (!data.errorCode) {
+            SpmModel.SaveSlot.updateOnMsgSpmCreateScw(data);
             Notify.dispatch(Notify.Type.MsgSpmCreateScw, data);
         }
     }
 
-    export function reqSpmCreateSfw({ slotIndex, slotComment, warData }: {
-        slotIndex   : number;
-        slotComment : string | null | undefined;
-        warData     : ProtoTypes.WarSerialization.ISerialWar;
+    export function reqSpmCreateSfw({ slotIndex, slotExtraData, warData }: {
+        slotIndex       : number;
+        slotExtraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+        warData         : ProtoTypes.WarSerialization.ISerialWar;
     }): void {
         NetManager.send({
             MsgSpmCreateSfw: { c: {
                 slotIndex,
-                slotComment,
+                slotExtraData,
                 warData,
             }, },
         });
@@ -57,23 +57,8 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
     function _onMsgSpmCreateSfw(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
         if (!data.errorCode) {
+            SpmModel.SaveSlot.updateOnMsgSpmCreateSfw(data);
             Notify.dispatch(Notify.Type.MsgSpmCreateSfw, data);
-        }
-    }
-
-    export function reqContinueWar(slotIndex: number): void {
-        NetManager.send({
-            MsgScrContinueWar: { c: {
-                slotIndex,
-            }, },
-        });
-    }
-    function _onMsgScrContinueWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgScrContinueWar.IS;
-        if (data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgScrContinueWarFailed, data);
-        } else {
-            Notify.dispatch(Notify.Type.MsgScrContinueWar, data);
         }
     }
 
@@ -81,7 +66,7 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
         NetManager.send({
             MsgScrSaveWar: { c: {
                 slotIndex   : war.getSaveSlotIndex(),
-                slotComment : war.getSaveSlotComment(),
+                slotComment : war.getSaveSlotExtraData().slotComment,
                 warData     : war.serialize(),
             }, },
         });
@@ -93,18 +78,18 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
         }
     }
 
-    export function reqScrDeleteWar(slotIndex: number): void {
+    export function reqSpmDeleteWarSaveSlot(slotIndex: number): void {
         NetManager.send({
-            MsgScrDeleteWar: { c: {
+            MsgSpmDeleteWarSaveSlot: { c: {
                 slotIndex,
             } },
         })
     }
-    function _onMsgScrDeleteWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgScrDeleteWar.IS;
+    function _onMsgSpmDeleteWarSaveSlot(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgSpmDeleteWarSaveSlot.IS;
         if (!data.errorCode) {
-            SinglePlayerMode.SpmModel.SaveSlot.deleteInfo(data.slotIndex);
-            Notify.dispatch(Notify.Type.MsgScrDeleteWar, data);
+            SpmModel.SaveSlot.updateOnMsgSpmDeleteWarSaveSlot(data.slotIndex);
+            Notify.dispatch(Notify.Type.MsgSpmDeleteWarSaveSlot, data);
         }
     }
 }

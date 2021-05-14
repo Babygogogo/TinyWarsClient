@@ -882,7 +882,7 @@ namespace TinyWars.SinglePlayerWar.SpwActionExecutor {
             const playerIndex           = focusUnit.getPlayerIndex();
             const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
             if (energyAddPctOnLoadCo == null) {
-                Logger.error(`SpwActionExecutor._exeUnitLoadCo() empty initialEnergyPercentage.`);
+                Logger.error(`SpwActionExecutor._exeUnitLoadCo() empty energyAddPctOnLoadCo.`);
                 return undefined;
             }
 

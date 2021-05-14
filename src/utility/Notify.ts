@@ -261,12 +261,10 @@ namespace TinyWars.Utility.Notify {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         MsgSpmCreateScw,
-        MsgScrGetSaveInfoList,
-        MsgScrContinueWarFailed,
-        MsgScrContinueWar,
-        MsgScrSaveWar,
         MsgSpmCreateSfw,
-        MsgScrDeleteWar,
+        MsgSpmGetWarSaveSlotFullDataArray,
+        MsgSpmDeleteWarSaveSlot,
+        MsgScrSaveWar,
     }
 
     ////////////////////////////////////////////////////////////////////////////////

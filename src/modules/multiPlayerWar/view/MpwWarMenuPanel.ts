@@ -131,9 +131,9 @@ namespace TinyWars.MultiPlayerWar {
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
                     FlowManager.gotoSingleCustomWar({
-                        slotIndex   : data.slotIndex,
-                        slotComment : data.slotComment,
-                        warData     : data.warData,
+                        slotIndex       : data.slotIndex,
+                        slotExtraData   : data.extraData,
+                        warData         : data.warData,
                     });
                 },
             });
@@ -621,7 +621,7 @@ namespace TinyWars.MultiPlayerWar {
 
                 this._createDataInitialFund(war, player, isInfoKnown),
                 this._createDataIncomeMultiplier(war, player, isInfoKnown),
-                this._createDataInitialEnergy(war, player, isInfoKnown),
+                this._createDataEnergyAddPctOnLoadCo(war, player, isInfoKnown),
                 this._createDataEnergyGrowthMultiplier(war, player, isInfoKnown),
                 this._createDataMoveRangeModifier(war, player, isInfoKnown),
                 this._createDataAttackPowerModifier(war, player, isInfoKnown),
@@ -733,7 +733,7 @@ namespace TinyWars.MultiPlayerWar {
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
             };
         }
-        private _createDataInitialEnergy(
+        private _createDataEnergyAddPctOnLoadCo(
             war         : MpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,

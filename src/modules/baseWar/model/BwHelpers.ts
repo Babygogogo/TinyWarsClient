@@ -14,6 +14,7 @@ namespace TinyWars.BaseWar.BwHelpers {
     import MovePathNode             = Types.MovePathNode;
     import UnitType                 = Types.UnitType;
     import TileType                 = Types.TileType;
+    import WarType                  = Types.WarType;
     import Visibility               = Types.Visibility;
     import CoSkillAreaType          = Types.CoSkillAreaType;
     import WarSerialization         = ProtoTypes.WarSerialization;
@@ -875,7 +876,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         return needSerialize ? data : undefined;
     }
 
-    export function getMapId(warData: ProtoTypes.WarSerialization.ISerialWar): number | undefined {
+    export function getMapId(warData: ISerialWar): number | undefined {
         if (warData.settingsForMcw) {
             return warData.settingsForMcw.mapId;
         } else if (warData.settingsForMrw) {
@@ -884,6 +885,28 @@ namespace TinyWars.BaseWar.BwHelpers {
             return warData.settingsForScw.mapId;
         } else {
             return undefined;
+        }
+    }
+    export function getWarType(warData: ISerialWar): WarType {
+        const settingsForCommon = warData.settingsForCommon;
+        const warRule           = settingsForCommon ? settingsForCommon.warRule : null;
+        const hasFog            = warRule ? BwWarRuleHelper.getHasFogByDefault(warRule) : null;
+        if (hasFog == null) {
+            return WarType.Undefined;
+        }
+
+        if (warData.settingsForMcw) {
+            return hasFog ? WarType.McwFog : WarType.McwStd;
+        } else if (warData.settingsForMfw) {
+            return hasFog ? WarType.MfwFog : WarType.MfwStd;
+        } else if (warData.settingsForMrw) {
+            return hasFog ? WarType.MrwFog : WarType.MrwStd;
+        } else if (warData.settingsForScw) {
+            return hasFog ? WarType.ScwFog : WarType.ScwStd;
+        } else if (warData.settingsForSfw) {
+            return hasFog ? WarType.SfwFog : WarType.SfwStd;
+        } else {
+            return WarType.Undefined;
         }
     }
 
@@ -937,7 +960,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             return ClientErrorCode.UnitDataValidation01;
         }
 
-        const unitType = unitData.unitType as Types.UnitType;
+        const unitType = unitData.unitType as UnitType;
         if (unitType == null) {
             return ClientErrorCode.UnitDataValidation02;
         }

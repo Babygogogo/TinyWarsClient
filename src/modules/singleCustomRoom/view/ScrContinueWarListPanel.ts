@@ -4,8 +4,6 @@ namespace TinyWars.SingleCustomRoom {
     import Types        = Utility.Types;
     import Lang         = Utility.Lang;
     import ProtoTypes   = Utility.ProtoTypes;
-    import FloatText    = Utility.FloatText;
-    import ProtoManager = Utility.ProtoManager;
     import WarMapModel  = WarMap.WarMapModel;
 
     export class ScrContinueWarListPanel extends GameUi.UiPanel<void> {
@@ -49,8 +47,6 @@ namespace TinyWars.SingleCustomRoom {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgScrContinueWarFailed,    callback: this._onMsgScrContinueWarFailed },
-                { type: Notify.Type.MsgScrContinueWar,          callback: this._onMsgScrContinueWar },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
@@ -94,19 +90,6 @@ namespace TinyWars.SingleCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private _onMsgScrContinueWarFailed(e: egret.Event): void {
-            Common.CommonBlockPanel.hide();
-        }
-
-        private _onMsgScrContinueWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgScrContinueWar.IS;
-            Utility.FlowManager.gotoSingleCustomWar({
-                slotIndex   : data.slotIndex,
-                slotComment : ProtoManager.decodeAsScrSaveSlotInfo(data.encodedSlot).slotComment,
-                warData     : ProtoManager.decodeAsSerialWar(data.encodedWar),
-            });
-        }
-
         private _onTouchTapBtnBack(): void {
             this.close();
             SinglePlayerMode.SpmMainMenuPanel.show();
@@ -138,7 +121,7 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _createDataForListWar(): DataForWarRenderer[] {
-            const saveSlots = SinglePlayerMode.SpmModel.SaveSlot.getInfoArray();
+            const saveSlots = SinglePlayerMode.SpmModel.SaveSlot.getSlotArray();
             const data      : DataForWarRenderer[] = [];
             if (saveSlots) {
                 for (let i = 0; i < saveSlots.length; ++i) {
@@ -155,35 +138,36 @@ namespace TinyWars.SingleCustomRoom {
 
         private async _showMap(index: number): Promise<void> {
             const slotInfo  = this._dataForListWar[index].slotInfo;
-            const mapId     = slotInfo.mapId;
-            const zoomMap   = this._zoomMap;
-            const groupInfo = this._groupInfo;
-            zoomMap.clearMap();
+            // TODO
+            Utility.FloatText.show(`ScrContinueWarListPanel.ScrContinueWarListPanel._showMap()`);
+            // const mapId     = slotInfo.mapId;
+            // const zoomMap   = this._zoomMap;
+            // const groupInfo = this._groupInfo;
+            // zoomMap.clearMap();
 
-            if (!mapId) {
-                this._labelNoPreview.text   = Lang.getText(Lang.Type.B0324);
-                groupInfo.visible           = false;
-            } else {
-                const mapRawData            = await WarMapModel.getRawData(mapId);
-                this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-                this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-                this._labelNoPreview.text   = "";
+            // if (!mapId) {
+            //     this._labelNoPreview.text   = Lang.getText(Lang.Type.B0324);
+            //     groupInfo.visible           = false;
+            // } else {
+            //     const mapRawData            = await WarMapModel.getRawData(mapId);
+            //     this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+            //     this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
+            //     this._labelNoPreview.text   = "";
 
-                groupInfo.visible   = true;
-                groupInfo.alpha     = 1;
-                egret.Tween.removeTweens(groupInfo);
-                egret.Tween.get(groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {groupInfo.visible = false; groupInfo.alpha = 1});
-                zoomMap.showMapByMapData(mapRawData);
-            }
+            //     groupInfo.visible   = true;
+            //     groupInfo.alpha     = 1;
+            //     egret.Tween.removeTweens(groupInfo);
+            //     egret.Tween.get(groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {groupInfo.visible = false; groupInfo.alpha = 1});
+            //     zoomMap.showMapByMapData(mapRawData);
+            // }
         }
     }
 
     type DataForWarRenderer = {
         index       : number;
-        slotInfo    : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo;
+        slotInfo    : Types.SpmWarSaveSlotData;
         panel       : ScrContinueWarListPanel;
     }
-
     class WarRenderer extends GameUi.UiListItemRenderer<DataForWarRenderer> {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
@@ -191,11 +175,11 @@ namespace TinyWars.SingleCustomRoom {
         private _labelWarType   : GameUi.UiLabel;
         private _labelName      : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnChoose, this);
-            this._btnNext.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnNext, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
+                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
+            ]);
         }
 
         protected dataChanged(): void {
@@ -205,21 +189,23 @@ namespace TinyWars.SingleCustomRoom {
             const slotInfo              = data.slotInfo;
             this.currentState           = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelSlotIndex.text   = "" + slotInfo.slotIndex;
-            this._labelWarType.text     = Lang.getWarTypeName(slotInfo.warType);
 
-            const comment   = slotInfo.slotComment;
-            const labelName = this._labelName;
-            if (comment) {
-                labelName.text = comment;
-            } else {
-                const mapId = slotInfo.mapId;
-                if (mapId == null) {
-                    labelName.text = `(${Lang.getText(Lang.Type.B0321)})`;
-                } else {
-                    labelName.text = ``;
-                    WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v);
-                }
-            }
+            // TODO
+            Utility.FloatText.show(`ScrContinueWarListPanel.WarRenderer.dataChanged()`);
+            // this._labelWarType.text     = Lang.getWarTypeName(slotInfo.warType);
+            // const comment   = slotInfo.slotComment;
+            // const labelName = this._labelName;
+            // if (comment) {
+            //     labelName.text = comment;
+            // } else {
+            //     const mapId = slotInfo.mapId;
+            //     if (mapId == null) {
+            //         labelName.text = `(${Lang.getText(Lang.Type.B0321)})`;
+            //     } else {
+            //         labelName.text = ``;
+            //         WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v);
+            //     }
+            // }
         }
 
         private _onTouchTapBtnChoose(): void {
@@ -228,10 +214,11 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private _onTouchTapBtnNext(): void {
-            SinglePlayerMode.SpmProxy.reqContinueWar(this.data.slotInfo.slotIndex);
-            Common.CommonBlockPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
-                content : Lang.getText(Lang.Type.A0021),
+            const slotInfo = this.data.slotInfo;
+            Utility.FlowManager.gotoSingleCustomWar({
+                slotIndex       : slotInfo.slotIndex,
+                warData         : slotInfo.warData,
+                slotExtraData   : slotInfo.extraData,
             });
         }
     }

@@ -75,10 +75,9 @@ namespace TinyWars.SinglePlayerWar {
                 { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
                 { type: Notify.Type.BwCoIdChanged,                      callback: this._onNotifyBwCoIdChanged },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: Notify.Type.MsgScrContinueWar,                  callback: this._onMsgScrContinueWar },
                 { type: Notify.Type.MsgScrSaveWar,                      callback: this._onMsgScrSaveWar },
-                { type: Notify.Type.MsgSpmCreateSfw,              callback: this._onMsgScrCreateCustomWar },
-                { type: Notify.Type.MsgScrDeleteWar,                    callback: this._onMsgScrDeleteWar },
+                { type: Notify.Type.MsgSpmCreateSfw,                    callback: this._onMsgScrCreateCustomWar },
+                { type: Notify.Type.MsgSpmDeleteWarSaveSlot,            callback: this._onNotifyMsgSpmDeleteWarSaveSlot },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnBack, callback: this._onTouchedBtnBack },
@@ -125,15 +124,6 @@ namespace TinyWars.SinglePlayerWar {
             this._updateView();
         }
 
-        private _onMsgScrContinueWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgScrContinueWar.IS;
-            Utility.FlowManager.gotoSingleCustomWar({
-                slotIndex   : data.slotIndex,
-                slotComment : ProtoManager.decodeAsScrSaveSlotInfo(data.encodedSlot).slotComment,
-                warData     : ProtoManager.decodeAsSerialWar(data.encodedWar),
-            });
-        }
-
         private _onMsgScrSaveWar(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0073));
         }
@@ -144,15 +134,15 @@ namespace TinyWars.SinglePlayerWar {
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
                     FlowManager.gotoSingleCustomWar({
-                        slotIndex   : data.slotIndex,
-                        slotComment : data.slotComment,
-                        warData     : data.warData,
+                        slotIndex       : data.slotIndex,
+                        slotExtraData   : data.extraData,
+                        warData         : data.warData,
                     });
                 },
             });
         }
 
-        private _onMsgScrDeleteWar(e: egret.Event): void {
+        private _onNotifyMsgSpmDeleteWarSaveSlot(e: egret.Event): void {
             FloatText.show(Lang.getFormattedText(Lang.Type.A0141));
         }
 
@@ -460,7 +450,7 @@ namespace TinyWars.SinglePlayerWar {
                         CommonConfirmPanel.show({
                             content : Lang.getText(Lang.Type.A0140),
                             callback: () => {
-                                SinglePlayerMode.SpmProxy.reqScrDeleteWar(saveSlotIndex);
+                                SinglePlayerMode.SpmProxy.reqSpmDeleteWarSaveSlot(saveSlotIndex);
                             },
                         });
                     },
@@ -628,7 +618,7 @@ namespace TinyWars.SinglePlayerWar {
                 this._createDataUnitAndValue(war, player, isInfoKnown, panel),
                 this._createDataInitialFund(war, player, isInfoKnown, panel),
                 this._createDataIncomeMultiplier(war, player, isInfoKnown, panel),
-                this._createDataInitialEnergy(war, player, isInfoKnown, panel),
+                this._createDataEnergyAddPctOnLoadCo(war, player, isInfoKnown, panel),
                 this._createDataEnergyGrowthMultiplier(war, player, isInfoKnown, panel),
                 this._createDataMoveRangeModifier(war, player, isInfoKnown, panel),
                 this._createDataAttackPowerModifier(war, player, isInfoKnown, panel),
@@ -859,7 +849,7 @@ namespace TinyWars.SinglePlayerWar {
                     },
             };
         }
-        private _createDataInitialEnergy(
+        private _createDataEnergyAddPctOnLoadCo(
             war         : SpwWar,
             player      : BaseWar.BwPlayer,
             isInfoKnown : boolean,

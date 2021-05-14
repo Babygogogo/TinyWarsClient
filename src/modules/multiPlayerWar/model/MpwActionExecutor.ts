@@ -844,7 +844,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
             const playerIndex           = focusUnit.getPlayerIndex();
             const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
             if (energyAddPctOnLoadCo == null) {
-                Logger.error(`MpwActionExecutor._exeUnitLoadCo() empty initialEnergyPercentage.`);
+                Logger.error(`MpwActionExecutor._exeUnitLoadCo() empty energyAddPctOnLoadCo.`);
                 return undefined;
             }
 

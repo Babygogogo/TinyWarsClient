@@ -1,14 +1,14 @@
 
 namespace TinyWars.SinglePlayerWar.SpwModel {
-    import Types                = Utility.Types;
-    import Logger               = Utility.Logger;
-    import Lang                 = Utility.Lang;
-    import ConfigManager        = Utility.ConfigManager;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import WarSerialization     = ProtoTypes.WarSerialization;
-    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
-    import CommonAlertPanel     = Common.CommonAlertPanel;
-    import CommonConstants      = Utility.CommonConstants;
+    import Types                    = Utility.Types;
+    import Logger                   = Utility.Logger;
+    import Lang                     = Utility.Lang;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import CommonConstants          = Utility.CommonConstants;
+    import WarSerialization         = ProtoTypes.WarSerialization;
+    import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
+    import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+    import CommonAlertPanel         = Common.CommonAlertPanel;
 
     let _war: SpwWar;
     export function init(): void {
@@ -17,10 +17,10 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function loadWar({ warData, slotIndex, slotComment }: {
-        warData     : WarSerialization.ISerialWar;
-        slotIndex   : number;
-        slotComment : string;
+    export async function loadWar({ warData, slotIndex, slotExtraData }: {
+        warData         : WarSerialization.ISerialWar;
+        slotIndex       : number;
+        slotExtraData   : ISpmWarSaveSlotExtraData;
     }): Promise<SpwWar> {
         if (_war) {
             Logger.warn(`SpwModel.loadWar() another war has been loaded already!`);
@@ -46,7 +46,7 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
 
         war.startRunning().startRunningView();
         war.setSaveSlotIndex(slotIndex);
-        war.setSaveSlotComment(slotComment);
+        war.setSaveSlotExtraData(slotExtraData);
         _war = war;
         await checkAndHandleAutoActionsAndRobot();
         await checkAndHandleAutoActions(war);

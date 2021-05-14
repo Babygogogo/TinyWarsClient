@@ -1,6 +1,7 @@
 
 namespace TinyWars.SinglePlayerWar {
-    import ProtoTypes = Utility.ProtoTypes;
+    import ProtoTypes               = Utility.ProtoTypes;
+    import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
 
     export abstract class SpwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new SpwPlayerManager();
@@ -11,7 +12,7 @@ namespace TinyWars.SinglePlayerWar {
 
         private _isEnded            = false;
         private _saveSlotIndex      : number;
-        private _saveSlotComment    : string;
+        private _saveSlotExtraData  : ISpmWarSaveSlotExtraData;
 
         public abstract serialize(): ProtoTypes.WarSerialization.ISerialWar;
 
@@ -45,11 +46,11 @@ namespace TinyWars.SinglePlayerWar {
             return this._saveSlotIndex;
         }
 
-        public setSaveSlotComment(comment: string | null | undefined): void {
-            this._saveSlotComment = comment;
+        public setSaveSlotExtraData(extraData: ISpmWarSaveSlotExtraData): void {
+            this._saveSlotExtraData = extraData;
         }
-        public getSaveSlotComment(): string | null | undefined {
-            return this._saveSlotComment;
+        public getSaveSlotExtraData(): ISpmWarSaveSlotExtraData | null | undefined {
+            return this._saveSlotExtraData;
         }
 
         public getHumanPlayerIndexes(): number[] {

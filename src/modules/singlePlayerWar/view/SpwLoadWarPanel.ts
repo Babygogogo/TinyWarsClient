@@ -2,8 +2,8 @@
 namespace TinyWars.SinglePlayerWar {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import ISerialWar   = ProtoTypes.WarSerialization.ISerialWar;
+    import Types        = Utility.Types;
+    import BwHelpers    = BaseWar.BwHelpers;
 
     export class SpwLoadWarPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
@@ -94,7 +94,7 @@ namespace TinyWars.SinglePlayerWar {
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
-            const slotList  = SinglePlayerMode.SpmModel.SaveSlot.getInfoArray() || [];
+            const slotList  = SinglePlayerMode.SpmModel.SaveSlot.getSlotArray() || [];
             for (let i = 0; i < Utility.CommonConstants.SpwSaveSlotMaxCount; ++i) {
                 dataList.push({
                     slotIndex   : i,
@@ -108,7 +108,7 @@ namespace TinyWars.SinglePlayerWar {
 
     type DataForSlotRenderer = {
         slotIndex   : number;
-        slotInfo    : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo | null;
+        slotInfo    : Types.SpmWarSaveSlotData | null;
     }
 
     class SlotRenderer extends GameUi.UiListItemRenderer<DataForSlotRenderer> {
@@ -119,11 +119,13 @@ namespace TinyWars.SinglePlayerWar {
         private _labelMapName   : GameUi.UiLabel;
         private _labelChoose    : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._imgBg, callback: this._onTouchedImgBg, },
+            ]);
 
-            this._imgBg.touchEnabled = true;
-            this._imgBg.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedImgBg, this);
+            this._imgBg.touchEnabled    = true;
+            this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
         }
 
         protected dataChanged(): void {
@@ -139,8 +141,11 @@ namespace TinyWars.SinglePlayerWar {
                 Common.CommonConfirmPanel.show({
                     content : Lang.getText(Lang.Type.A0072),
                     callback: () => {
-                        SinglePlayerMode.SpmProxy.reqContinueWar(slotInfo.slotIndex);
-                        SpwLoadWarPanel.hide();
+                        Utility.FlowManager.gotoSingleCustomWar({
+                            slotIndex       : slotInfo.slotIndex,
+                            warData         : slotInfo.warData,
+                            slotExtraData   : slotInfo.extraData,
+                        });
                     },
                 });
             }
@@ -149,28 +154,28 @@ namespace TinyWars.SinglePlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             const data                  = this.data;
-            const slotInfo              = data.slotInfo;
             this._labelSlotIndex.text   = "" + data.slotIndex;
-            this._labelType.text        = slotInfo ? Lang.getWarTypeName(slotInfo.warType) : "----";
-            this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
 
-            const labelMapName = this._labelMapName;
-            if (!slotInfo) {
-                labelMapName.text = "----";
+            const slotInfo      = data.slotInfo;
+            const labelType     = this._labelType;
+            const labelMapName  = this._labelMapName;
+            if (slotInfo == null) {
+                labelType.text      = `----`;
+                labelMapName.text   = `----`;
             } else {
-                const comment = slotInfo.slotComment;
-                if (comment) {
-                    labelMapName.text = comment;
+                const warData   = slotInfo.warData;
+                labelType.text  = Lang.getWarTypeName(BwHelpers.getWarType(warData));
+
+                const slotComment = slotInfo.extraData.slotComment;
+                if (slotComment) {
+                    labelMapName.text = slotComment;
                 } else {
-                    const mapId = slotInfo.mapId;
-                    if (mapId == null) {
-                        labelMapName.text = `(${Lang.getText(Lang.Type.B0321)})`;
-                    } else {
-                        labelMapName.text = ``;
-                        WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(value => labelMapName.text = value);
-                    }
+                    const mapId         = BwHelpers.getMapId(warData);
+                    labelMapName.text   = mapId == null
+                        ? `(${Lang.getText(Lang.Type.B0321)})`
+                        : await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId);
                 }
             }
         }

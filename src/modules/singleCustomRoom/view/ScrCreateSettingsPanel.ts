@@ -101,9 +101,9 @@ namespace TinyWars.SingleCustomRoom {
         private _onNotifyMsgSpmCreateScw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateScw.IS;
             Utility.FlowManager.gotoSingleCustomWar({
-                slotComment : null,
-                slotIndex   : data.slotIndex,
-                warData     : data.warData,
+                slotExtraData   : data.extraData,
+                slotIndex       : data.slotIndex,
+                warData         : data.warData,
             });
         }
 

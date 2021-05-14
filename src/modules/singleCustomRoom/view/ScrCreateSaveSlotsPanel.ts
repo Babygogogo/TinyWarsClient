@@ -2,7 +2,7 @@
 namespace TinyWars.SingleCustomRoom {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
-    import ProtoTypes   = Utility.ProtoTypes;
+    import Types        = Utility.Types;
 
     export class ScrCreateSaveSlotsPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
@@ -82,7 +82,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
-            const slotList  = SinglePlayerMode.SpmModel.SaveSlot.getInfoArray() || [];
+            const slotList  = SinglePlayerMode.SpmModel.SaveSlot.getSlotArray() || [];
             for (let i = 0; i < Utility.CommonConstants.SpwSaveSlotMaxCount; ++i) {
                 dataList.push({
                     slotIndex   : i,
@@ -96,9 +96,8 @@ namespace TinyWars.SingleCustomRoom {
 
     type DataForSlotRenderer = {
         slotIndex   : number;
-        slotInfo    : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo | null;
+        slotInfo    : Types.SpmWarSaveSlotData | null;
     }
-
     class SlotRenderer extends GameUi.UiListItemRenderer<DataForSlotRenderer> {
         private _group          : eui.Group;
         private _imgBg          : GameUi.UiImage;
@@ -107,11 +106,13 @@ namespace TinyWars.SingleCustomRoom {
         private _labelMapName   : GameUi.UiLabel;
         private _labelChoose    : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
+        protected _onOpened(): void {
             this._imgBg.touchEnabled = true;
-            this._imgBg.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedImgBg, this);
+
+            this._setUiListenerArray([
+                { ui: this._imgBg,  callback: this._onTouchedImgBg },
+            ]);
+            this._labelChoose.text = Lang.getText(Lang.Type.B0258);
         }
 
         protected dataChanged(): void {
@@ -132,26 +133,27 @@ namespace TinyWars.SingleCustomRoom {
             const data                  = this.data;
             const slotInfo              = data.slotInfo;
             this._labelSlotIndex.text   = "" + data.slotIndex;
-            this._labelType.text        = slotInfo ? Lang.getWarTypeName(slotInfo.warType) : "----";
-            this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
 
-            const labelMapName = this._labelMapName;
-            if (!slotInfo) {
-                labelMapName.text = "----";
-            } else {
-                const comment = slotInfo.slotComment;
-                if (comment) {
-                    labelMapName.text = comment;
-                } else {
-                    const mapId = slotInfo.mapId;
-                    if (mapId == null) {
-                        labelMapName.text = `(${Lang.getText(Lang.Type.B0321)})`;
-                    } else {
-                        labelMapName.text = ``;
-                        WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(value => labelMapName.text = value);
-                    }
-                }
-            }
+            // TODO
+            Utility.FloatText.show(`ScrCreateSaveSlotsPanel.SlotRenderer._updateView()`);
+            // this._labelType.text        = slotInfo ? Lang.getWarTypeName(slotInfo.warType) : "----";
+            // const labelMapName = this._labelMapName;
+            // if (!slotInfo) {
+            //     labelMapName.text = "----";
+            // } else {
+            //     const comment = slotInfo.slotComment;
+            //     if (comment) {
+            //         labelMapName.text = comment;
+            //     } else {
+            //         const mapId = slotInfo.mapId;
+            //         if (mapId == null) {
+            //             labelMapName.text = `(${Lang.getText(Lang.Type.B0321)})`;
+            //         } else {
+            //             labelMapName.text = ``;
+            //             WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(value => labelMapName.text = value);
+            //         }
+            //     }
+            // }
         }
     }
 }

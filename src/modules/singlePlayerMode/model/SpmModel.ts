@@ -1,7 +1,11 @@
 
 namespace TinyWars.SinglePlayerMode.SpmModel {
     import ProtoTypes           = Utility.ProtoTypes;
+    import ProtoManager         = Utility.ProtoManager;
     import CommonConstants      = Utility.CommonConstants;
+    import Types                = Utility.Types;
+    import NetMessage           = ProtoTypes.NetMessage;
+    import SpmWarSaveSlotData   = Types.SpmWarSaveSlotData;
 
     export function init(): void {
     }
@@ -10,32 +14,18 @@ namespace TinyWars.SinglePlayerMode.SpmModel {
     // Functions for save slots.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export namespace SaveSlot {
-        let _infoArray  : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[];
+        const _slotArray: SpmWarSaveSlotData[] = [];
 
-        export function setInfoArray(infoArray: ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[]): void {
-            _infoArray = infoArray;
+        export function getSlotArray(): SpmWarSaveSlotData[] {
+            return _slotArray;
         }
-        export function getInfoArray(): ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo[] | null {
-            return _infoArray;
+
+        export function checkHasRequiredSlotDataArray(): boolean {
+            return getSlotArray().length > 0;
         }
-        export function deleteInfo(slotIndex: number): void {
-            const infoArray = getInfoArray();
-            if (infoArray) {
-                for (let i = 0; i < infoArray.length; ++i) {
-                    if (infoArray[i].slotIndex === slotIndex) {
-                        infoArray.splice(i, 1);
-                        return;
-                    }
-                }
-            }
-        }
+
         export function checkIsEmpty(slotIndex: number): boolean {
-            const infoArray = getInfoArray();
-            if (!infoArray) {
-                return true;
-            } else {
-                return infoArray.every(v => v.slotIndex !== slotIndex);
-            }
+            return getSlotArray()[slotIndex] == null;
         }
 
         export function getAvailableIndex(): number {
@@ -45,6 +35,42 @@ namespace TinyWars.SinglePlayerMode.SpmModel {
                 }
             }
             return 0;
+        }
+
+        export function updateOnMsgSpmGetWarSaveSlotFullDataArray(data: NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS): void {
+            const dataArray = data.dataArray || [];
+            const slotArray = getSlotArray();
+            for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
+                const fullData = dataArray.find(v => v.slotIndex === slotIndex);
+                if (fullData == null) {
+                    slotArray[slotIndex] = null;
+                } else {
+                    slotArray[slotIndex] = {
+                        slotIndex,
+                        extraData   : ProtoManager.decodeAsSpmWarSaveSlotExtraData(fullData.encodedExtraData),
+                        warData     : ProtoManager.decodeAsSerialWar(fullData.encodedWarData),
+                    };
+                }
+            }
+        }
+        export function updateOnMsgSpmCreateScw(data: NetMessage.MsgSpmCreateScw.IS): void {
+            const slotIndex = data.slotIndex;
+            getSlotArray()[slotIndex] = {
+                slotIndex,
+                warData     : data.warData,
+                extraData   : data.extraData,
+            };
+        }
+        export function updateOnMsgSpmCreateSfw(data: NetMessage.MsgSpmCreateSfw.IS): void {
+            const slotIndex = data.slotIndex;
+            getSlotArray()[slotIndex] = {
+                slotIndex,
+                warData     : data.warData,
+                extraData   : data.extraData,
+            };
+        }
+        export function updateOnMsgSpmDeleteWarSaveSlot(slotIndex: number): void {
+            getSlotArray()[slotIndex] = null;
         }
     }
 }

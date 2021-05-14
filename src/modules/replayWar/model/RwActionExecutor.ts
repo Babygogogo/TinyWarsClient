@@ -947,7 +947,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             const playerIndex           = focusUnit.getPlayerIndex();
             const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
             if (energyAddPctOnLoadCo == null) {
-                Logger.error(`RwActionExecutor._exeUnitLoadCo() empty initialEnergyPercentage.`);
+                Logger.error(`RwActionExecutor._exeUnitLoadCo() empty energyAddPctOnLoadCo.`);
                 return undefined;
             }
 
@@ -1843,7 +1843,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             const playerIndex           = focusUnit.getPlayerIndex();
             const energyAddPctOnLoadCo  = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
             if (energyAddPctOnLoadCo == null) {
-                Logger.error(`RwActionExecutor._fastExeUnitLoadCo() empty initialEnergyPercentage.`);
+                Logger.error(`RwActionExecutor._fastExeUnitLoadCo() empty energyAddPctOnLoadCo.`);
                 return undefined;
             }
 
