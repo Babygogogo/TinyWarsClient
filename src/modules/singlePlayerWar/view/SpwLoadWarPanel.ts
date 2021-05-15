@@ -94,11 +94,11 @@ namespace TinyWars.SinglePlayerWar {
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
-            const slotList  = SinglePlayerMode.SpmModel.SaveSlot.getSlotArray() || [];
-            for (let i = 0; i < Utility.CommonConstants.SpwSaveSlotMaxCount; ++i) {
+            const slotDict  = SinglePlayerMode.SpmModel.SaveSlot.getSlotDict();
+            for (let slotIndex = 0; slotIndex < Utility.CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
-                    slotIndex   : i,
-                    slotInfo    : slotList.find(v => v.slotIndex === i),
+                    slotIndex,
+                    slotInfo    : slotDict.get(slotIndex),
                 });
             }
 

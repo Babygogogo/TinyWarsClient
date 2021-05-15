@@ -315,7 +315,7 @@ namespace TinyWars.MultiCustomRoom {
             labelValue.visible                  = true;
             labelValue.text                     = `${currValue}`;
             labelValue.textColor                = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
-            this._callbackForTouchLabelValue    = () => McrCreateAvailableCoPanel.show({ playerIndex });
+            this._callbackForTouchLabelValue    = () => McrCreateBanCoPanel.show({ playerIndex });
         }
         private _updateComponentsForValueAsInitialFund(playerIndex: number): void {
             this._labelValue.visible            = false;

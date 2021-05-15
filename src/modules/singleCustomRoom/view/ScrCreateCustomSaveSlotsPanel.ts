@@ -5,6 +5,7 @@ namespace TinyWars.SingleCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
     import CommonConstants  = Utility.CommonConstants;
     import Types            = Utility.Types;
+    import BwHelpers        = BaseWar.BwHelpers;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
 
     export type OpenDataForScrCreateCustomSaveSlotsPanel = ISerialWar;
@@ -99,11 +100,11 @@ namespace TinyWars.SingleCustomRoom {
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
             const warData   = this._getOpenData();
-            const slotList  = SinglePlayerMode.SpmModel.SaveSlot.getSlotArray() || [];
-            for (let i = 0; i < CommonConstants.SpwSaveSlotMaxCount; ++i) {
+            const slotDict  = SinglePlayerMode.SpmModel.SaveSlot.getSlotDict();
+            for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
-                    slotIndex   : i,
-                    slotInfo    : slotList.find(v => v.slotIndex === i),
+                    slotIndex,
+                    slotInfo    : slotDict.get(slotIndex),
                     warData,
                 });
             }
@@ -114,7 +115,7 @@ namespace TinyWars.SingleCustomRoom {
 
     type DataForSlotRenderer = {
         slotIndex   : number;
-        slotInfo    : Types.SpmWarSaveSlotData;
+        slotInfo    : Types.SpmWarSaveSlotData | null;
         warData     : ISerialWar;
     }
     class SlotRenderer extends GameUi.UiListItemRenderer<DataForSlotRenderer> {
@@ -172,31 +173,30 @@ namespace TinyWars.SingleCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             const data                  = this.data;
-            const slotInfo              = data.slotInfo;
             this._labelSlotIndex.text   = "" + data.slotIndex;
 
-            // TODO
-            Utility.FloatText.show(`ScrCreateCustomSaveSlotsPanel.SlotRenderer._updateView()`);
-            // this._labelType.text        = slotInfo ? Lang.getWarTypeName(slotInfo.warType) : "----";
-            // const labelMapName = this._labelMapName;
-            // if (!slotInfo) {
-            //     labelMapName.text = "----";
-            // } else {
-            //     const comment = slotInfo.slotComment;
-            //     if (comment) {
-            //         labelMapName.text = comment;
-            //     } else {
-            //         const mapId = slotInfo.mapId;
-            //         if (mapId == null) {
-            //             labelMapName.text = `(${Lang.getText(Lang.Type.B0321)})`;
-            //         } else {
-            //             labelMapName.text = ``;
-            //             WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(value => labelMapName.text = value);
-            //         }
-            //     }
-            // }
+            const slotInfo      = data.slotInfo;
+            const labelType     = this._labelType;
+            const labelMapName  = this._labelMapName;
+            if (slotInfo == null) {
+                labelType.text      = `----`;
+                labelMapName.text   = `----`;
+            } else {
+                const warData   = slotInfo.warData;
+                labelType.text  = Lang.getWarTypeName(BwHelpers.getWarType(warData));
+
+                const slotComment = slotInfo.extraData.slotComment;
+                if (slotComment) {
+                    labelMapName.text = slotComment;
+                } else {
+                    const mapId         = BwHelpers.getMapId(warData);
+                    labelMapName.text   = mapId == null
+                        ? `(${Lang.getText(Lang.Type.B0321)})`
+                        : await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId);
+                }
+            }
         }
     }
 }

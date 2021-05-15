@@ -571,7 +571,7 @@ namespace TinyWars.SinglePlayerWar {
                             player.setUserId(User.UserModel.getSelfUserId());
                         } else {
                             player.setUserId(null);
-                            SpwModel.checkAndHandleAutoActionsAndRobot();
+                            SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
                         }
                         this._updateView();
                     },

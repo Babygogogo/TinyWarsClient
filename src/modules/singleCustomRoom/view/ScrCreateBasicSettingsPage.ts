@@ -1,29 +1,33 @@
 
 namespace TinyWars.SingleCustomRoom {
     import ProtoTypes       = Utility.ProtoTypes;
+    import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
+    import Types            = Utility.Types;
+    import CommonConstants  = Utility.CommonConstants;
     import WarMapModel      = WarMap.WarMapModel;
+    import CommonHelpPanel  = Common.CommonHelpPanel;
 
     export class ScrCreateBasicSettingsPage extends GameUi.UiTabPage<void> {
-        private _labelMapNameTitle      : GameUi.UiLabel;
-        private _labelMapName           : GameUi.UiLabel;
-        private _labelPlayersCountTitle : GameUi.UiLabel;
-        private _labelPlayersCount      : GameUi.UiLabel;
+        private readonly _labelMapNameTitle             : GameUi.UiLabel;
+        private readonly _labelMapName                  : GameUi.UiLabel;
 
-        private _labelFogTitle  : GameUi.UiLabel;
-        private _btnPrevFog     : GameUi.UiButton;
-        private _btnNextFog     : GameUi.UiButton;
-        private _labelFog       : GameUi.UiLabel;
-        private _btnHelpFog     : GameUi.UiButton;
+        private readonly _labelSaveSlotTitle            : GameUi.UiLabel;
+        private readonly _labelSaveSlot                 : GameUi.UiLabel;
+        private readonly _btnSaveSlot                   : GameUi.UiButton;
 
-        private _labelSaveSlotTitle : GameUi.UiLabel;
-        private _labelSaveSlot      : GameUi.UiLabel;
-        private _btnChangeSaveSlot  : GameUi.UiButton;
+        private readonly _labelSlotCommentTitle         : GameUi.UiLabel;
+        private readonly _inputSlotComment              : GameUi.UiTextInput;
 
-        private _labelPlayerListTitle   : GameUi.UiLabel;
-        private _labelPlayerListTips    : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
+        private readonly _labelWarRuleTitle             : GameUi.UiLabel;
+        private readonly _labelWarRule                  : GameUi.UiLabel;
+        private readonly _btnWarRule                    : GameUi.UiButton;
+
+        private readonly _labelHasFogTitle              : GameUi.UiLabel;
+        private readonly _labelHasFog                   : GameUi.UiLabel;
+        private readonly _btnHasFog                     : GameUi.UiButton;
+        private readonly _btnHasFogHelp                 : GameUi.UiButton;
 
         private _mapRawData : ProtoTypes.Map.IMapRawData;
 
@@ -35,26 +39,29 @@ namespace TinyWars.SingleCustomRoom {
 
         protected async _onOpened(): Promise<void> {
             this._setUiListenerArray([
-                { ui: this._btnChangeSaveSlot,  callback: this._onTouchedBtnChangeSaveSlot, },
-                { ui: this._btnPrevFog,         callback: this._onTouchedBtnPrevFog, },
-                { ui: this._btnNextFog,         callback: this._onTouchedBtnNextFog, },
-                { ui: this._btnHelpFog,         callback: this._onTouchedBtnHelpFog, },
+                { ui: this._inputSlotComment,   callback: this._onFocusOutInputSlotComment,     eventType: egret.FocusEvent.FOCUS_OUT },
+                { ui: this._btnWarRule,         callback: this._onTouchedBtnWarRule },
+                { ui: this._btnHasFog,          callback: this._onTouchedBtnHasFog },
+                { ui: this._btnHasFogHelp,      callback: this._onTouchedBtnHasFogHelp },
+                { ui: this._btnSaveSlot,        callback: this._onTouchedBtnSaveSlot, },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.ScrCreateWarSaveSlotChanged,        callback: this._onNotifyScrCreateWarSaveSlotChanged },
-                { type: Notify.Type.ScrCreateWarPlayerInfoListChanged,  callback: this._onNotifyScrCreateWarPlayerInfoListChanged },
+                { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.ScrCreateWarSaveSlotChanged,    callback: this._onNotifyScrCreateWarSaveSlotChanged },
             ]);
-            this._listPlayer.setItemRenderer(PlayerRenderer);
+            this.left                       = 0;
+            this.right                      = 0;
+            this.top                        = 0;
+            this.bottom                     = 0;
+            this._inputSlotComment.maxChars = CommonConstants.ScwSaveSlotCommentMaxLength;
 
             this._mapRawData = await ScrModel.Create.getMapRawData();
 
             this._updateComponentsForLanguage();
+            this._updateComponentsForWarRule();
+            this._updateInputSlotComment();
             this._updateLabelMapName();
-            this._updateLabelPlayersCount();
             this._updateLabelSaveSlot();
-            this._updateLabelFog();
-            this._updateListPlayer();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -63,123 +70,87 @@ namespace TinyWars.SingleCustomRoom {
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }
-
         private _onNotifyScrCreateWarSaveSlotChanged(e: egret.Event): void {
             this._updateLabelSaveSlot();
         }
 
-        private _onNotifyScrCreateWarPlayerInfoListChanged(e: egret.Event): void {
-            this._updateListPlayer();
+        private _onFocusOutInputSlotComment(e: egret.Event): void {
+            ScrModel.Create.setSlotComment(this._inputSlotComment.text || undefined);
+            this._updateInputSlotComment();
         }
 
-        private _onTouchedBtnChangeSaveSlot(e: egret.TouchEvent): void {
-            ScrCreateSaveSlotsPanel.show();
+        private async _onTouchedBtnWarRule(e: egret.TouchEvent): Promise<void> {
+            await ScrModel.Create.tickPresetWarRuleId();
+            this._updateComponentsForWarRule();
         }
 
-        private _onTouchedBtnPrevFog(e: egret.TouchEvent): void {
-            ScrModel.Create.setPrevHasFog();
-            this._updateLabelFog();
+        private _onTouchedBtnHasFog(e: egret.TouchEvent): void {
+            const callback = () => {
+                ScrModel.Create.setHasFog(!ScrModel.Create.getHasFog());
+                this._updateLabelHasFog();
+                this._updateLabelWarRule();
+            };
+            if (ScrModel.Create.getPresetWarRuleId() == null) {
+                callback();
+            } else {
+                Common.CommonConfirmPanel.show({
+                    content : Lang.getText(Lang.Type.A0129),
+                    callback: () => {
+                        ScrModel.Create.setCustomWarRuleId();
+                        callback();
+                    },
+                });
+            }
         }
 
-        private _onTouchedBtnNextFog(e: egret.TouchEvent): void {
-            ScrModel.Create.setNextHasFog();
-            this._updateLabelFog();
-        }
-
-        private _onTouchedBtnHelpFog(e: egret.TouchEvent): void {
-            Common.CommonHelpPanel.show({
+        private _onTouchedBtnHasFogHelp(e: egret.TouchEvent): void {
+            CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
                 content: Lang.getRichText(Lang.RichType.R0002),
             });
+        }
+
+        private _onTouchedBtnSaveSlot(e: egret.TouchEvent): void {
+            ScrCreateSaveSlotsPanel.show();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelMapNameTitle.text        = `${Lang.getText(Lang.Type.B0225)}: `;
-            this._labelPlayersCountTitle.text   = `${Lang.getText(Lang.Type.B0229)}: `;
-            this._labelFogTitle.text            = `${Lang.getText(Lang.Type.B0020)}: `;
-            this._labelSaveSlotTitle.text       = `${Lang.getText(Lang.Type.B0255)}: `;
-            this._labelPlayerListTitle.text     = `${Lang.getText(Lang.Type.B0232)}: `;
-            this._labelPlayerListTips.text      = `(${Lang.getText(Lang.Type.A0068)})`;
-            this._btnChangeSaveSlot.label       = `${Lang.getText(Lang.Type.B0230)}`;
+            this._labelMapNameTitle.text        = Lang.getText(Lang.Type.B0225);
+            this._labelSaveSlotTitle.text       = Lang.getText(Lang.Type.B0606);
+            this._labelSlotCommentTitle.text    = Lang.getText(Lang.Type.B0605);
+            this._labelWarRuleTitle.text        = Lang.getText(Lang.Type.B0318);
+            this._labelHasFogTitle.text         = Lang.getText(Lang.Type.B0020);
+        }
+
+        private _updateComponentsForWarRule(): void {
+            this._updateLabelWarRule();
+            this._updateLabelHasFog();
+        }
+
+        private _updateInputSlotComment(): void {
+            this._inputSlotComment.text = ScrModel.Create.getSlotComment();
         }
 
         private async _updateLabelMapName(): Promise<void> {
-            WarMapModel.getMapNameInCurrentLanguage(this._mapRawData.mapId).then(v => this._labelMapName.text = v);
-        }
-
-        private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + this._mapRawData.playersCountUnneutral;
+            this._labelMapName.text = await WarMapModel.getMapNameInCurrentLanguage(this._mapRawData.mapId);
         }
 
         private _updateLabelSaveSlot(): void {
-            this._labelSaveSlot.text = "" + ScrModel.Create.getSaveSlotIndex();
+            this._labelSaveSlot.text = `${ScrModel.Create.getSaveSlotIndex()}`;
         }
 
-        private _updateLabelFog(): void {
-            this._labelFog.text = Lang.getText(ScrModel.Create.getHasFog() ? Lang.Type.B0012 : Lang.Type.B0013);
+        private _updateLabelWarRule(): void {
+            const label             = this._labelWarRule;
+            const settingsForCommon = ScrModel.Create.getData().settingsForCommon;
+            label.text              = Lang.getWarRuleNameInLanguage(settingsForCommon.warRule);
+            label.textColor         = settingsForCommon.presetWarRuleId == null ? 0xFFFF00 : 0xFFFFFF;
         }
 
-        private _updateListPlayer(): void {
-            this._listPlayer.bindData(ScrModel.Create.getData().playerInfoList);
-        }
-    }
-
-    type DataForPlayerRenderer = ProtoTypes.Structure.IWarPlayerInfo;
-
-    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private _labelPlayerIndex   : GameUi.UiLabel;
-        private _labelTeamIndex     : GameUi.UiLabel;
-        private _labelName          : GameUi.UiLabel;
-        private _labelCoName        : GameUi.UiLabel;
-
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._labelTeamIndex.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedLabelTeamIndex, this);
-            this._labelName.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedLabelName, this);
-            this._labelCoName.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedLabelCoName, this);
-        }
-
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data                  = this.data;
-            this._labelPlayerIndex.text = Lang.getPlayerForceName(data.playerIndex);
-            this._labelTeamIndex.text   = Lang.getPlayerTeamName(data.teamIndex);
-            this._labelName.text        = data.userId ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256);
-            this._updateLabelCoName();
-        }
-
-        private _onTouchedLabelTeamIndex(e: egret.TouchEvent): void {
-            const data = this.data;
-            ScrModel.Create.tickTeamIndex(data.playerIndex - 1);
-        }
-
-        private _onTouchedLabelName(e: egret.TouchEvent): void {
-            const data = this.data;
-            ScrModel.Create.tickUserId(data.playerIndex - 1);
-        }
-
-        private _onTouchedLabelCoName(e: egret.TouchEvent): void {
-            const data = this.data;
-            ScrCreateSettingsPanel.hide();
-            ScrCreateCoListPanel.show({
-                dataIndex   : data.playerIndex - 1,
-                coId        : data.coId,
-            });
-        }
-
-        private _updateLabelCoName(): void {
-            const coId = this.data.coId;
-            if (coId == null) {
-                this._labelCoName.text = `(${Lang.getText(Lang.Type.B0001)} CO)`;
-            } else {
-                const cfg               = Utility.ConfigManager.getCoBasicCfg(Utility.ConfigManager.getLatestFormalVersion(), coId);
-                this._labelCoName.text  = `${cfg.name} (T${cfg.tier})`;
-            }
+        private _updateLabelHasFog(): void {
+            this._labelHasFog.text = Lang.getText(ScrModel.Create.getHasFog() ? Lang.Type.B0012 : Lang.Type.B0013);
         }
     }
 }

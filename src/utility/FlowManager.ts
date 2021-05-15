@@ -143,6 +143,8 @@ namespace TinyWars.Utility.FlowManager {
         Broadcast.BroadcastPanel.show();
 
         SoundManager.playRandomWarBgm();
+
+        await SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
     }
     export async function gotoMapEditorWar(mapRawData: ProtoTypes.Map.IMapRawData, slotIndex: number, isReview: boolean): Promise<void> {
         MpwModel.unloadWar();

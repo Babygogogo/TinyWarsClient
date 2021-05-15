@@ -1,6 +1,5 @@
 
-namespace TinyWars.MultiCustomRoom {
-    import Types            = Utility.Types;
+namespace TinyWars.SingleCustomRoom {
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
@@ -8,41 +7,39 @@ namespace TinyWars.MultiCustomRoom {
     import CommonConstants  = Utility.CommonConstants;
     import ConfirmPanel     = Common.CommonConfirmPanel;
 
-    type OpenDataForMcrCreateAvailableCoPanel = {
+    type OpenDataForScrCreateBanCoPanel = {
         playerIndex : number;
     }
-    export class McrCreateAvailableCoPanel extends GameUi.UiPanel<OpenDataForMcrCreateAvailableCoPanel> {
+    export class ScrCreateBanCoPanel extends GameUi.UiPanel<OpenDataForScrCreateBanCoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud2;
         protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: McrCreateAvailableCoPanel;
+        private static _instance: ScrCreateBanCoPanel;
 
         private readonly _imgMask                   : GameUi.UiImage;
         private readonly _group                     : eui.Group;
         private readonly _labelAvailableCoTitle     : GameUi.UiLabel;
-        // private readonly _groupCoTiers              : eui.Group;
         private readonly _groupCoNames              : eui.Group;
         private readonly _btnCancel                 : GameUi.UiButton;
         private readonly _btnConfirm                : GameUi.UiButton;
         private readonly _uiCoInfo                  : GameUi.UiCoInfo;
 
-        // private _renderersForCoTiers    : RendererForCoTier[] = [];
         private _renderersForCoNames    : RendererForCoName[] = [];
 
         private _playerIndex            : number;
         private _bannedCoIdSet          = new Set<number>();
         private _previewCoId            : number;
 
-        public static show(openData: OpenDataForMcrCreateAvailableCoPanel): void {
-            if (!McrCreateAvailableCoPanel._instance) {
-                McrCreateAvailableCoPanel._instance = new McrCreateAvailableCoPanel();
+        public static show(openData: OpenDataForScrCreateBanCoPanel): void {
+            if (!ScrCreateBanCoPanel._instance) {
+                ScrCreateBanCoPanel._instance = new ScrCreateBanCoPanel();
             }
-            McrCreateAvailableCoPanel._instance.open(openData);
+            ScrCreateBanCoPanel._instance.open(openData);
         }
 
         public static async hide(): Promise<void> {
-            if (McrCreateAvailableCoPanel._instance) {
-                await McrCreateAvailableCoPanel._instance.close();
+            if (ScrCreateBanCoPanel._instance) {
+                await ScrCreateBanCoPanel._instance.close();
             }
         }
 
@@ -51,7 +48,7 @@ namespace TinyWars.MultiCustomRoom {
 
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/multiCustomRoom/McrCreateAvailableCoPanel.exml";
+            this.skinName = "resource/skins/singleCustomRoom/ScrCreateBanCoPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -70,12 +67,11 @@ namespace TinyWars.MultiCustomRoom {
 
             const bannedCoIdSet = this._bannedCoIdSet;
             bannedCoIdSet.clear();
-            for (const coId of McrModel.Create.getBannedCoIdArray(playerIndex) || []) {
+            for (const coId of ScrModel.Create.getBannedCoIdArray(playerIndex) || []) {
                 bannedCoIdSet.add(coId);
             }
 
             this._updateComponentsForLanguage();
-            // this._initGroupCoTiers();
             this._initGroupCoNames();
             this._initComponentsForPreviewCo();
         }
@@ -83,7 +79,6 @@ namespace TinyWars.MultiCustomRoom {
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
 
-            // this._clearGroupCoTiers();
             this._clearGroupCoNames();
         }
 
@@ -118,61 +113,24 @@ namespace TinyWars.MultiCustomRoom {
             } else {
                 const playerIndex   = this._playerIndex;
                 const callback      = () => {
-                    McrModel.Create.setBannedCoIdArray(playerIndex, bannedCoIdSet);
-                    Notify.dispatch(Notify.Type.McrCreateBannedCoIdArrayChanged);
+                    ScrModel.Create.setBannedCoIdArray(playerIndex, bannedCoIdSet);
+                    Notify.dispatch(Notify.Type.ScrCreateBannedCoIdArrayChanged);
                     this.close();
                 };
-                if ((playerIndex !== McrModel.Create.getSelfPlayerIndex()) ||
-                    (!bannedCoIdSet.has(McrModel.Create.getSelfCoId()))
-                ) {
+
+                if (!bannedCoIdSet.has(ScrModel.Create.getCoId(playerIndex))) {
                     callback();
                 } else {
                     ConfirmPanel.show({
                         content : Lang.getText(Lang.Type.A0057),
                         callback: () => {
-                            McrModel.Create.setSelfCoId(CommonConstants.CoEmptyId);
+                            ScrModel.Create.setCoId(playerIndex, CommonConstants.CoEmptyId);
                             callback();
                         },
                     });
                 }
             }
         }
-
-        // private _onTouchedCoTierRenderer(e: egret.TouchEvent): void {
-        //     const renderer          = e.currentTarget as RendererForCoTier;
-        //     const availableCoIdSet  = this._availableCoIdSet;
-        //     const coIdList          = renderer.getIsCustomSwitch()
-        //         ? ConfigManager.getAvailableCustomCoIdList(ConfigManager.getLatestFormalVersion())
-        //         : ConfigManager.getAvailableCoIdListInTier(ConfigManager.getLatestFormalVersion(), renderer.getCoTier());
-
-        //     if (renderer.getState() === CoTierState.Unavailable) {
-        //         for (const coId of coIdList) {
-        //             availableCoIdSet.add(coId);
-        //         }
-        //         this._updateGroupCoTiers();
-        //         this._updateGroupCoNames();
-
-        //     } else {
-        //         const callback = () => {
-        //             for (const coId of coIdList) {
-        //                 availableCoIdSet.delete(coId);
-        //             }
-        //             this._updateGroupCoTiers();
-        //             this._updateGroupCoNames();
-        //         }
-
-        //         if ((this._playerIndex !== McrModel.Create.getSelfPlayerIndex()) ||
-        //             (coIdList.indexOf(McrModel.Create.getSelfCoId()) < 0)
-        //         ) {
-        //             callback();
-        //         } else {
-        //             ConfirmPanel.show({
-        //                 content : Lang.getText(Lang.Type.A0057),
-        //                 callback,
-        //             });
-        //         }
-        //     }
-        // }
 
         private _onTouchedCoNameRenderer(e: egret.TouchEvent): void {
             const renderer      = e.currentTarget as RendererForCoName;
@@ -182,7 +140,6 @@ namespace TinyWars.MultiCustomRoom {
 
             if (!renderer.getIsSelected()) {
                 bannedCoIdSet.delete(coId);
-                // this._updateGroupCoTiers();
                 this._updateGroupCoNames();
 
             } else {
@@ -196,13 +153,10 @@ namespace TinyWars.MultiCustomRoom {
 
                 const callback = () => {
                     bannedCoIdSet.add(coId);
-                    // this._updateGroupCoTiers();
                     this._updateGroupCoNames();
                 };
 
-                if ((this._playerIndex !== McrModel.Create.getSelfPlayerIndex()) ||
-                    (coId !== McrModel.Create.getSelfCoId())
-                ) {
+                if (coId !== ScrModel.Create.getCoId(this._playerIndex)) {
                     callback();
                 } else {
                     ConfirmPanel.show({
@@ -223,49 +177,6 @@ namespace TinyWars.MultiCustomRoom {
 
             this._updateComponentsForPreviewCoId();
         }
-
-        // private _initGroupCoTiers(): void {
-        //     for (const tier of ConfigManager.getCoTiers(ConfigManager.getLatestFormalVersion())) {
-        //         const renderer = new RendererForCoTier();
-        //         renderer.setCoTier(tier);
-        //         renderer.setState(CoTierState.AllAvailable);
-        //         renderer.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoTierRenderer, this);
-        //         this._renderersForCoTiers.push(renderer);
-        //         this._groupCoTiers.addChild(renderer);
-        //     }
-
-        //     const rendererForCustomCo = new RendererForCoTier();
-        //     rendererForCustomCo.setIsCustomSwitch(true);
-        //     rendererForCustomCo.setState(CoTierState.AllAvailable);
-        //     rendererForCustomCo.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedCoTierRenderer, this);
-        //     this._renderersForCoTiers.push(rendererForCustomCo);
-        //     this._groupCoTiers.addChild(rendererForCustomCo);
-
-        //     this._updateGroupCoTiers();
-        // }
-
-        // private _clearGroupCoTiers(): void {
-        //     this._groupCoTiers.removeChildren();
-        //     this._renderersForCoTiers.length = 0;
-        // }
-
-        // private _updateGroupCoTiers(): void {
-        //     const availableCoIdSet  = this._availableCoIdSet;
-        //     const configVersion     = McrModel.Create.getData().settingsForCommon.configVersion;
-        //     for (const renderer of this._renderersForCoTiers) {
-        //         const includedCoIdList = renderer.getIsCustomSwitch()
-        //             ? ConfigManager.getAvailableCustomCoIdList(configVersion)
-        //             : ConfigManager.getAvailableCoIdListInTier(configVersion, renderer.getCoTier());
-
-        //         if (includedCoIdList.every(coId => availableCoIdSet.has(coId))) {
-        //             renderer.setState(CoTierState.AllAvailable);
-        //         } else if (includedCoIdList.every(coId => !availableCoIdSet.has(coId))) {
-        //             renderer.setState(CoTierState.Unavailable);
-        //         } else {
-        //             renderer.setState(CoTierState.PartialAvailable);
-        //         }
-        //     }
-        // }
 
         private _initGroupCoNames(): void {
             for (const cfg of ConfigManager.getEnabledCoArray(ConfigManager.getLatestFormalVersion())) {
@@ -338,57 +249,6 @@ namespace TinyWars.MultiCustomRoom {
             });
         }
     }
-
-    // const enum CoTierState {
-    //     AllAvailable,
-    //     PartialAvailable,
-    //     Unavailable,
-    // }
-    // class RendererForCoTier extends GameUi.UiComponent {
-    //     private _imgSelected: GameUi.UiImage;
-    //     private _labelName  : GameUi.UiLabel;
-
-    //     private _tier           : number;
-    //     private _isCustomSwitch = false;
-    //     private _state          : CoTierState;
-
-    //     public constructor() {
-    //         super();
-
-    //         this.skinName = "resource/skins/component/checkBox/CheckBox1.exml";
-    //     }
-
-    //     public setCoTier(tier: number): void {
-    //         this._tier              = tier;
-    //         this._labelName.text    = `Tier ${tier}`;
-    //     }
-    //     public getCoTier(): number {
-    //         return this._tier;
-    //     }
-
-    //     public setIsCustomSwitch(isCustomSwitch: boolean): void {
-    //         this._isCustomSwitch    = isCustomSwitch;
-    //         this._labelName.text    = "Custom";
-    //     }
-    //     public getIsCustomSwitch(): boolean {
-    //         return this._isCustomSwitch;
-    //     }
-
-    //     public setState(state: CoTierState): void {
-    //         this._state = state;
-    //         if (state === CoTierState.AllAvailable) {
-    //             this._labelName.textColor = 0x00FF00;
-    //         } else if (state === CoTierState.PartialAvailable) {
-    //             this._labelName.textColor = 0xFFFF00;
-    //         } else {
-    //             this._labelName.textColor = 0xFF0000;
-    //         }
-    //         Helpers.changeColor(this._imgSelected, state === CoTierState.AllAvailable ? Types.ColorType.Origin : Types.ColorType.Gray);
-    //     }
-    //     public getState(): CoTierState {
-    //         return this._state;
-    //     }
-    // }
 
     class RendererForCoName extends GameUi.UiComponent {
         private readonly _imgUnselected : GameUi.UiImage;

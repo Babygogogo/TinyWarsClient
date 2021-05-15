@@ -1946,8 +1946,8 @@ namespace TinyWars.Utility.Lang {
             `Players`,
         ],
         [Type.B0230]: [
-            `更换`,
-            `Change`,
+            `更换CO`,
+            `Change CO`,
         ],
         [Type.B0231]: [
             `我的回合`,
@@ -3425,6 +3425,46 @@ namespace TinyWars.Utility.Lang {
             `自定义模式`,
             `Custom Mode`,
         ],
+        [Type.B0604]: [
+            `游戏设置`,
+            `Game Settings`,
+        ],
+        [Type.B0605]: [
+            `存档备注`,
+            `Save Comment`,
+        ],
+        [Type.B0606]: [
+            `存档编号`,
+            `Save Slot`,
+        ],
+        [Type.B0607]: [
+            `电脑`,
+            `A.I.`,
+        ],
+        [Type.B0608]: [
+            `更换控制者`,
+            `Controller`,
+        ],
+        [Type.B0609]: [
+            `更换颜色`,
+            `Change Color`,
+        ],
+        [Type.B0610]: [
+            `自定义明战`,
+            `Custom Std`,
+        ],
+        [Type.B0611]: [
+            `自定义雾战`,
+            `Custom FoW`,
+        ],
+        [Type.B0612]: [
+            `模拟战明战`,
+            `Simulation Std`,
+        ],
+        [Type.B0613]: [
+            `模拟战雾战`,
+            `Simulation FoW`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -4497,8 +4537,10 @@ namespace TinyWars.Utility.Lang {
             case Types.WarType.Me       : return getText(Type.B0419);
             case Types.WarType.MrwStd   : return getText(Type.B0415);
             case Types.WarType.MrwFog   : return getText(Type.B0416);
-            case Types.WarType.ScwStd   : return getText(Type.B0254);
-            case Types.WarType.ScwFog   : return getText(Type.B0536);
+            case Types.WarType.ScwStd   : return getText(Type.B0610);
+            case Types.WarType.ScwFog   : return getText(Type.B0611);
+            case Types.WarType.SfwStd   : return getText(Type.B0612);
+            case Types.WarType.SfwFog   : return getText(Type.B0613);
             default                     : return null;
         }
     }

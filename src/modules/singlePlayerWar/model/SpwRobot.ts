@@ -5,6 +5,8 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     import Helpers          = Utility.Helpers;
     import DamageCalculator = Utility.DamageCalculator;
     import ConfigManager    = Utility.ConfigManager;
+    import CommonConstants  = Utility.CommonConstants;
+    import Logger           = Utility.Logger;
     import BwHelpers        = BaseWar.BwHelpers;
     import WarAction        = Types.RawWarActionContainer;
     import WeaponType       = Types.WeaponType;
@@ -14,7 +16,6 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     import TileType         = Types.TileType;
     import UnitType         = Types.UnitType;
     import UnitActionState  = Types.UnitActionState;
-    import CommonConstants  = Utility.CommonConstants;
 
     type AttackInfo = {
         baseDamage      : number;
@@ -313,12 +314,6 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
     let _frameBeginTime         : number;
     let _war                    : SpwWar;
-    let _configVersion          : string;
-    let _turnManager            : SpwTurnManager;
-    let _playerManager          : SpwPlayerManager;
-    let _unitMap                : BaseWar.BwUnitMap;
-    let _tileMap                : BaseWar.BwTileMap;
-    let _mapSize                : Types.MapSize;
     let _unitValues             : Map<number, number>;
     let _unitValueRatio         : number;
 
@@ -328,27 +323,15 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     function _initVariables(war: SpwWar): void {
         _frameBeginTime = Date.now();
         _war            = war;
-        _configVersion  = war.getConfigVersion();
-        _turnManager    = war.getTurnManager() as SpwTurnManager;
-        _playerManager  = war.getPlayerManager() as SpwPlayerManager;
-        _unitMap        = war.getUnitMap();
-        _tileMap        = war.getTileMap();
-        _mapSize        = _tileMap.getMapSize();
         _unitValues     = _getUnitValues();
         _unitValueRatio = _getUnitValueRatio();
     }
 
     function _clearVariables(): void {
-        _frameBeginTime         = null;
-        _war                    = null;
-        _configVersion          = null;
-        _turnManager            = null;
-        _playerManager          = null;
-        _unitMap                = null;
-        _tileMap                = null;
-        _mapSize                = null;
-        _unitValues             = null;
-        _unitValueRatio         = null;
+        _frameBeginTime = null;
+        _war            = null;
+        _unitValues     = null;
+        _unitValueRatio = null;
     }
 
     function _checkAndCallLater(): Promise<void> {  // DONE
@@ -366,7 +349,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
     function _getUnitValues(): Map<number, number> {    // DONE
         const values = new Map<number, number>();
-        _unitMap.forEachUnit(unit => {
+        _war.getUnitMap().forEachUnit(unit => {
             const playerIndex = unit.getPlayerIndex();
             values.set(playerIndex, (values.get(playerIndex) || 0) + unit.getProductionFinalCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp());
         });
@@ -376,9 +359,10 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     function _getUnitValueRatio(): number { // DONE
         let selfValue       = 0;
         let enemyValue      = 0;
-        const selfTeamIndex = _playerManager.getPlayerInTurn().getTeamIndex();
+        const playerManager = _war.getPlayerManager();
+        const selfTeamIndex = playerManager.getPlayerInTurn().getTeamIndex();
         for (const [playerIndex, value] of _unitValues) {
-            if (_playerManager.getPlayer(playerIndex).getTeamIndex() === selfTeamIndex) {
+            if (playerManager.getPlayer(playerIndex).getTeamIndex() === selfTeamIndex) {
                 selfValue += value;
             } else {
                 enemyValue += value;
@@ -391,7 +375,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         if (GridIndexHelpers.checkIsEqual(unit.getGridIndex(), gridIndex)) {
             return unit.getLoaderUnitId() == null;
         } else {
-            return !_unitMap.getUnitOnMap(gridIndex);
+            return !_war.getUnitMap().getUnitOnMap(gridIndex);
         }
     }
 
@@ -419,8 +403,9 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         if (!unit) {
             return null;
         } else {
-            if ((_unitMap.getUnitOnMap(unit.getGridIndex()) === unit) ||
-                (_unitMap.getUnitLoadedById(unit.getUnitId()) === unit)
+            const unitMap = _war.getUnitMap();
+            if ((unitMap.getUnitOnMap(unit.getGridIndex()) === unit) ||
+                (unitMap.getUnitLoadedById(unit.getUnitId()) === unit)
             ) {
                 return unit;
             } else {
@@ -430,23 +415,26 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     }
 
     function _getReachableArea(unit: BaseWar.BwUnit, passableGridIndex: GridIndex | null, blockedGridIndex: GridIndex | null): MovableArea {
+        const unitMap = _war.getUnitMap();
+        const tileMap = _war.getTileMap();
+        const mapSize = tileMap.getMapSize();
         return BwHelpers.createMovableArea(
             unit.getGridIndex(),
             Math.min(unit.getFinalMoveRange(), unit.getCurrentFuel()),
             (gridIndex: GridIndex) => {
-                if ((!GridIndexHelpers.checkIsInsideMap(gridIndex, _mapSize))                           ||
+                if ((!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))                            ||
                     ((blockedGridIndex) && (GridIndexHelpers.checkIsEqual(gridIndex, blockedGridIndex)))
                 ) {
                     return null;
                 } else {
                     if ((passableGridIndex) && (GridIndexHelpers.checkIsEqual(gridIndex, passableGridIndex))) {
-                        return _tileMap.getTile(gridIndex).getMoveCostByUnit(unit);
+                        return tileMap.getTile(gridIndex).getMoveCostByUnit(unit);
                     } else {
-                        const existingUnit = _unitMap.getUnitOnMap(gridIndex);
+                        const existingUnit = unitMap.getUnitOnMap(gridIndex);
                         if ((existingUnit) && (existingUnit.getTeamIndex() != unit.getTeamIndex())) {
                             return null;
                         } else {
-                            return _tileMap.getTile(gridIndex).getMoveCostByUnit(unit);
+                            return tileMap.getTile(gridIndex).getMoveCostByUnit(unit);
                         }
                     }
                 }
@@ -460,15 +448,17 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     async function _createScoreMapForDistance(unit: BaseWar.BwUnit): Promise<number[][] | null> {
         await _checkAndCallLater();
 
-        const nearestCapturableTile = BwHelpers.findNearestCapturableTile(_tileMap, _unitMap, unit);
+        const tileMap = _war.getTileMap();
+        const nearestCapturableTile = BwHelpers.findNearestCapturableTile(tileMap, _war.getUnitMap(), unit);
         if (!nearestCapturableTile) {
             return null;
         }
 
-        const { distanceMap, maxDistance }  = BwHelpers.createDistanceMap(_tileMap, unit, nearestCapturableTile.getGridIndex());
-        const scoreForUnmovableGrid = -10 * (maxDistance + 1);                                                      // ADJUSTABLE
-        for (let x = 0; x < _mapSize.width; ++x) {
-            for (let y = 0; y < _mapSize.height; ++y) {
+        const { distanceMap, maxDistance }  = BwHelpers.createDistanceMap(tileMap, unit, nearestCapturableTile.getGridIndex());
+        const mapSize                       = tileMap.getMapSize();
+        const scoreForUnmovableGrid         = -10 * (maxDistance + 1);                                              // ADJUSTABLE
+        for (let x = 0; x < mapSize.width; ++x) {
+            for (let y = 0; y < mapSize.height; ++y) {
                 distanceMap[x][y] = distanceMap[x][y] != null ? distanceMap[x][y] * -10 : scoreForUnmovableGrid;    // ADJUSTABLE
             }
         }
@@ -482,12 +472,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     function _getAttackBonusForAllPlayers(): Map<number, number> {  // DONE
         const bonuses               = new Map<number, number>();
         const commonSettingManager  = _war.getCommonSettingManager();
-        _playerManager.forEachPlayer(false, player => {
+        _war.getPlayerManager().forEachPlayer(false, player => {
             const playerIndex = player.getPlayerIndex();
             bonuses.set(playerIndex, commonSettingManager.getSettingsAttackPowerModifier(playerIndex));
         });
 
-        _tileMap.forEachTile(tile => {
+        _war.getTileMap().forEachTile(tile => {
             const bonus = tile.getGlobalAttackBonus();
             if (bonus) {
                 const playerIndex = tile.getPlayerIndex();
@@ -501,7 +491,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     function _getDefenseBonusForTargetUnit(unit: BaseWar.BwUnit): number { // DONE
         let bonus           = unit.getPromotionDefenseBonus();
         const playerIndex   = unit.getPlayerIndex();
-        _tileMap.forEachTile(tile => {
+        _war.getTileMap().forEachTile(tile => {
             if (tile.getPlayerIndex() === playerIndex) {
                 bonus += (tile.getGlobalDefenseBonus() || 0);
             }
@@ -514,12 +504,14 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         const gridIndex             = attacker.getGridIndex();
         const attackerPlayerIndex   = attacker.getPlayerIndex();
         const commonSettingManager  = _war.getCommonSettingManager();
+        const unitMap               = _war.getUnitMap();
+        const tileMap               = _war.getTileMap();
         const luckValue             = (commonSettingManager.getSettingsLuckLowerLimit(attackerPlayerIndex) + commonSettingManager.getSettingsLuckUpperLimit(attackerPlayerIndex)) / 2;
         const targetArmorType       = target.getArmorType();
-        const baseDamageWithAmmo    =  attacker.getCfgBaseDamage(targetArmorType, attacker.checkHasPrimaryWeapon() ? WeaponType.Primary : WeaponType.Secondary);
+        const baseDamageWithAmmo    = attacker.getCfgBaseDamage(targetArmorType, attacker.checkHasPrimaryWeapon() ? WeaponType.Primary : WeaponType.Secondary);
 
         if (attacker.getLoaderUnitId() == null) {
-            const tile          = _tileMap.getTile(gridIndex);
+            const tile          = tileMap.getTile(gridIndex);
             const repairInfo    = tile.getRepairHpAndCostForUnit(attacker);
             if (repairInfo) {
                 return {
@@ -529,9 +521,9 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                     luckValue,
                 };
             } else {
-                if ((tile.checkCanSupplyUnit(attacker))                                     ||
-                    (GridIndexHelpers.getAdjacentGrids(gridIndex, _mapSize).some(g => {
-                        const supplier = _unitMap.getUnitOnMap(g);
+                if ((tile.checkCanSupplyUnit(attacker))                                             ||
+                    (GridIndexHelpers.getAdjacentGrids(gridIndex, tileMap.getMapSize()).some(g => {
+                        const supplier = unitMap.getUnitOnMap(g);
                         return (!!supplier) && (supplier.checkCanSupplyAdjacentUnit(attacker))
                     }))
                 ) {
@@ -552,7 +544,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             }
 
         } else {
-            const loader = _unitMap.getUnitOnMap(gridIndex);
+            const loader = unitMap.getUnitOnMap(gridIndex);
             if ((!attacker.checkCanAttackAfterMove())               ||
                 (loader.getUnitId() !== attacker.getLoaderUnitId()) ||
                 (!loader.checkCanLaunchLoadedUnit())
@@ -602,11 +594,14 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     async function _createDamageMap(targetUnit: BaseWar.BwUnit, isDiving: boolean): Promise<DamageMapData[][]> { // DONE
         await _checkAndCallLater();
 
-        const map               = Helpers.createEmptyMap<DamageMapData>(_mapSize.width);
+        const unitMap           = _war.getUnitMap();
+        const tileMap           = _war.getTileMap();
+        const mapSize           = tileMap.getMapSize();
+        const map               = Helpers.createEmptyMap<DamageMapData>(mapSize.width);
         const attackBonuses     = _getAttackBonusForAllPlayers();
         const defenseBonus      = _getDefenseBonusForTargetUnit(targetUnit);
         const targetTeamIndex   = targetUnit.getTeamIndex();
-        _unitMap.forEachUnit(async (attacker: BaseWar.BwUnit) => {
+        unitMap.forEachUnit(async (attacker: BaseWar.BwUnit) => {
             await _checkAndCallLater();
 
             const minAttackRange    = attacker.getMinAttackRange();
@@ -630,21 +625,21 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 beginningGridIndex,
                 Math.min(attacker.getFinalMoveRange(), fuel),
                 gridIndex => {
-                    if (!GridIndexHelpers.checkIsInsideMap(gridIndex, _mapSize)) {
+                    if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
                         return null;
                     } else {
-                        const existingUnit = _unitMap.getUnitOnMap(gridIndex);
+                        const existingUnit = unitMap.getUnitOnMap(gridIndex);
                         if ((existingUnit) && (existingUnit.getTeamIndex() != attacker.getTeamIndex())) {
                             return null;
                         } else {
-                            return _tileMap.getTile(gridIndex).getMoveCostByUnit(attacker);
+                            return tileMap.getTile(gridIndex).getMoveCostByUnit(attacker);
                         }
                     }
                 }
             );
             const attackableArea = BwHelpers.createAttackableArea(
                 movableArea,
-                _mapSize,
+                mapSize,
                 minAttackRange,
                 maxAttackRange,
                 (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
@@ -653,15 +648,15 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                         && ((attacker.checkCanAttackAfterMove()) || (!hasMoved));
                 }
             );
-            for (let x = 0; x < _mapSize.width; ++x) {
+            for (let x = 0; x < mapSize.width; ++x) {
                 const column = attackableArea[x];
                 if (column) {
-                    for (let y = 0; y < _mapSize.height; ++y) {
+                    for (let y = 0; y < mapSize.height; ++y) {
                         if (column[y]) {
                             const damage = Math.floor(
                                 (baseDamage * Math.max(0, 1 + attackBonus / 100) + luckValue)
                                 * normalizedHp
-                                * _getDefenseMultiplierWithBonus(defenseBonus + _tileMap.getTile({ x, y }).getDefenseAmountForUnit(targetUnit))
+                                * _getDefenseMultiplierWithBonus(defenseBonus + tileMap.getTile({ x, y }).getDefenseAmountForUnit(targetUnit))
                                 / CommonConstants.UnitHpNormalizer
                             );
                             if (!map[x][y]) {
@@ -688,8 +683,8 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         await _checkAndCallLater();
 
         const units             : BaseWar.BwUnit[] = [];
-        const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
-        _unitMap.forEachUnitOnMap((unit: BaseWar.BwUnit) => {
+        const playerIndexInturn = _war.getTurnManager().getPlayerIndexInTurn();
+        _war.getUnitMap().forEachUnitOnMap((unit: BaseWar.BwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
                 (unit.getActionState() === UnitActionState.Idle)            &&
                 (unit.getFinalMaxAttackRange() > 1)
@@ -703,8 +698,8 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         await _checkAndCallLater();
 
         const units             : BaseWar.BwUnit[] = [];
-        const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
-        _unitMap.forEachUnit((unit: BaseWar.BwUnit) => {
+        const playerIndexInturn = _war.getTurnManager().getPlayerIndexInTurn();
+        _war.getUnitMap().forEachUnit((unit: BaseWar.BwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
                 (unit.getActionState() === UnitActionState.Idle)
             ) {
@@ -718,8 +713,8 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         await _checkAndCallLater();
 
         const units             : BaseWar.BwUnit[] = [];
-        const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
-        _unitMap.forEachUnitOnMap((unit: BaseWar.BwUnit) => {
+        const playerIndexInturn = _war.getTurnManager().getPlayerIndexInTurn();
+        _war.getUnitMap().forEachUnitOnMap((unit: BaseWar.BwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
                 (unit.getActionState() === UnitActionState.Idle)            &&
                 (unit.getIsCapturingTile())
@@ -735,8 +730,8 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         await _checkAndCallLater();
 
         const units             : BaseWar.BwUnit[] = [];
-        const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
-        _unitMap.forEachUnitOnMap((unit: BaseWar.BwUnit) => {
+        const playerIndexInturn = _war.getTurnManager().getPlayerIndexInTurn();
+        _war.getUnitMap().forEachUnitOnMap((unit: BaseWar.BwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
                 (unit.getActionState() === UnitActionState.Idle)            &&
                 (unit.checkIsCapturer())
@@ -752,12 +747,13 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         await _checkAndCallLater();
 
         const units             : BaseWar.BwUnit[] = [];
-        const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
-        _unitMap.forEachUnitOnMap((unit: BaseWar.BwUnit) => {
+        const playerIndexInturn = _war.getTurnManager().getPlayerIndexInTurn();
+        const configVersion     = _war.getConfigVersion();
+        _war.getUnitMap().forEachUnitOnMap((unit: BaseWar.BwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)                                                   &&
                 (unit.getActionState() === UnitActionState.Idle)                                                &&
                 (unit.getMinAttackRange())                                                                      &&
-                (ConfigManager.checkIsUnitTypeInCategory(_configVersion, unit.getUnitType(), Types.UnitCategory.Air))
+                (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), Types.UnitCategory.Air))
             ) {
                 units.push(unit);
             }
@@ -770,8 +766,8 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         await _checkAndCallLater();
 
         const units             : BaseWar.BwUnit[] = [];
-        const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
-        _unitMap.forEachUnitOnMap((unit: BaseWar.BwUnit) => {
+        const playerIndexInturn = _war.getTurnManager().getPlayerIndexInTurn();
+        _war.getUnitMap().forEachUnitOnMap((unit: BaseWar.BwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn)   &&
                 (unit.getActionState() === UnitActionState.Idle)            &&
                 (unit.getFinalMaxAttackRange() === 1)
@@ -787,8 +783,8 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         await _checkAndCallLater();
 
         const units             : BaseWar.BwUnit[] = [];
-        const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
-        _unitMap.forEachUnitOnMap((unit: BaseWar.BwUnit) => {
+        const playerIndexInturn = _war.getTurnManager().getPlayerIndexInTurn();
+        _war.getUnitMap().forEachUnitOnMap((unit: BaseWar.BwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn) && (unit.getActionState() === UnitActionState.Idle)) {
                 const maxRange = unit.getFinalMaxAttackRange();
                 if ((!maxRange) || (maxRange === 1)) {
@@ -804,8 +800,8 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         await _checkAndCallLater();
 
         const units             : BaseWar.BwUnit[] = [];
-        const playerIndexInturn = _turnManager.getPlayerIndexInTurn();
-        _unitMap.forEachUnitOnMap((unit: BaseWar.BwUnit) => {
+        const playerIndexInturn = _war.getTurnManager().getPlayerIndexInTurn();
+        _war.getUnitMap().forEachUnitOnMap((unit: BaseWar.BwUnit) => {
             if ((unit.getPlayerIndex() === playerIndexInturn) && (unit.getActionState() === UnitActionState.Idle)) {
                 units.push(unit);
             }
@@ -834,7 +830,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             score += scoreMapForDistance[gridIndex.x][gridIndex.y];                     // ADJUSTABLE
         }
 
-        const tile = _tileMap.getTile(gridIndex);
+        const tile = _war.getTileMap().getTile(gridIndex);
         if (tile.checkCanRepairUnit(unit)) {
             score += (unit.getNormalizedMaxHp() - unit.getNormalizedCurrentHp()) * 15;  // ADJUSTABLE
         }
@@ -869,7 +865,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
         let distanceToEnemyUnits    = 0;
         let enemyUnitsCount         = 0;
-        _unitMap.forEachUnitOnMap(u => {
+        _war.getUnitMap().forEachUnitOnMap(u => {
             if (u.getTeamIndex() != teamIndex) {
                 distanceToEnemyUnits += GridIndexHelpers.getDistance(gridIndex, u.getGridIndex());
                 ++enemyUnitsCount;
@@ -885,7 +881,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     async function _getScoreForActionUnitBeLoaded(unit: BaseWar.BwUnit, gridIndex: GridIndex): Promise<number> { // DONE
         await _checkAndCallLater();
 
-        const loader = _unitMap.getUnitOnMap(gridIndex);
+        const loader = _war.getUnitMap().getUnitOnMap(gridIndex);
         if (!loader.checkCanLaunchLoadedUnit()) {
             return -1000;                                                                   // ADJUSTABLE
         } else {
@@ -900,7 +896,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     async function _getScoreForActionUnitJoin(unit: BaseWar.BwUnit, gridIndex: GridIndex): Promise<number> { // DONE
         await _checkAndCallLater();
 
-        const targetUnit = _unitMap.getUnitOnMap(gridIndex);
+        const targetUnit = _war.getUnitMap().getUnitOnMap(gridIndex);
         if (targetUnit.getActionState() === UnitActionState.Idle) {
             return -9999;                                                                       // ADJUSTABLE
         } else {
@@ -909,7 +905,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 const maxHp = unit.getNormalizedMaxHp();
                 return newHp > maxHp ? ((newHp - maxHp) * (-50)) : ((maxHp - newHp) * 5);       // ADJUSTABLE
             } else {
-                const currentCapturePoint   = _tileMap.getTile(gridIndex).getCurrentCapturePoint();
+                const currentCapturePoint   = _war.getTileMap().getTile(gridIndex).getCurrentCapturePoint();
                 const newHp                 = unit.getNormalizedCurrentHp() + targetUnit.getNormalizedCurrentHp();
                 const maxHp                 = unit.getNormalizedMaxHp();
                 if (targetUnit.getCaptureAmount() >= currentCapturePoint) {
@@ -935,14 +931,14 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             return null;
         }
 
-        const targetTile    = _tileMap.getTile(targetGridIndex);
+        const targetTile    = _war.getTileMap().getTile(targetGridIndex);
         const tileType      = targetTile.getType();
         if (tileType === TileType.Meteor) {
             return Math.min(attackDamage, targetTile.getCurrentHp());                                   // ADJUSTABLE
         }
 
         const attackerType  = unit.getUnitType();
-        const targetUnit    = _unitMap.getUnitOnMap(targetGridIndex);
+        const targetUnit    = _war.getUnitMap().getUnitOnMap(targetGridIndex);
         const targetHp      = targetUnit.getCurrentHp();
         const targetType    = targetUnit.getUnitType();
         attackDamage        = Math.min(attackDamage, targetHp);
@@ -977,7 +973,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     async function _getScoreForActionUnitCaptureTile(unit: BaseWar.BwUnit, gridIndex: GridIndex): Promise<number> {    // DONE
         await _checkAndCallLater();
 
-        const tile                  = _tileMap.getTile(gridIndex);
+        const tile                  = _war.getTileMap().getTile(gridIndex);
         const currentCapturePoint   = tile.getCurrentCapturePoint();
         const captureAmount         = unit.getCaptureAmount();
         if (captureAmount >= currentCapturePoint) {
@@ -1000,7 +996,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         await _checkAndCallLater();
 
         let score = 10000;                                                                                                          // ADJUSTABLE
-        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, _mapSize)) {
+        for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, CommonConstants.SiloRadius, _war.getTileMap().getMapSize())) {
             score += unitValueMap[gridIndex.x][gridIndex.y] || 0;                                                                   // ADJUSTABLE
         }
         return score;
@@ -1015,7 +1011,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     async function _getScoreForActionUnitWait(unit: BaseWar.BwUnit, gridIndex: GridIndex): Promise<number> {   // DONE
         await _checkAndCallLater();
 
-        const tile = _tileMap.getTile(gridIndex);
+        const tile = _war.getTileMap().getTile(gridIndex);
         if ((tile.getMaxCapturePoint()) && (tile.getTeamIndex() !== unit.getTeamIndex())) {
             return -20;                                                                     // ADJUSTABLE
         } else {
@@ -1026,37 +1022,38 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     async function _getScoreForActionPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType, idleFactoriesCount: number): Promise<number | null> { // DONE
         await _checkAndCallLater();
 
-        const tileType  = _tileMap.getTile(gridIndex).getType();
+        const tileType  = _war.getTileMap().getTile(gridIndex).getType();
         let score       = _PRODUCTION_CANDIDATES[tileType][unitType];
         if (score == null) {
             return null;
         }
 
-        const playerIndexInTurn = _turnManager.getPlayerIndexInTurn();
+        const configVersion     = _war.getConfigVersion();
+        const playerIndexInTurn = _war.getTurnManager().getPlayerIndexInTurn();
         const targetUnit        = new BaseWar.BwUnit();
         targetUnit.init({
             unitId      : 0,
             unitType,
             gridIndex,
             playerIndex : playerIndexInTurn,
-        }, _configVersion);
+        }, configVersion);
         targetUnit.startRunning(_war);
 
         const productionCost    = targetUnit.getProductionFinalCost();
-        const restFund          = _playerManager.getPlayer(playerIndexInTurn).getFund() - productionCost;
+        const restFund          = _war.getPlayerManager().getPlayer(playerIndexInTurn).getFund() - productionCost;
         if (restFund < 0) {
             return null;
         }
 
         if (unitType !== UnitType.Infantry) {
             const restFactoriesCount = tileType === TileType.Factory ? idleFactoriesCount - 1 : idleFactoriesCount;
-            if (restFactoriesCount * ConfigManager.getUnitTemplateCfg(_configVersion, UnitType.Infantry).productionCost > restFund) {
+            if (restFactoriesCount * ConfigManager.getUnitTemplateCfg(configVersion, UnitType.Infantry).productionCost > restFund) {
                 score += -999999;                                                                                                       // ADJUSTABLE
             }
         }
 
         const teamIndex = targetUnit.getTeamIndex();
-        _unitMap.forEachUnit(unit => {
+        _war.getUnitMap().forEachUnit(unit => {
             if (unit.getTeamIndex() === teamIndex) {
                 if (unit.getUnitType() === unitType) {
                     score += -unit.getCurrentHp() * productionCost / 3000 / 1.5;                                                        // ADJUSTABLE
@@ -1086,7 +1083,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             return null;
         }
 
-        const loader = _unitMap.getUnitOnMap(gridIndex);
+        const loader = _war.getUnitMap().getUnitOnMap(gridIndex);
         if ((!loader) || (!loader.checkCanLoadUnit(unit))) {
             return null;
         }
@@ -1107,7 +1104,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             return null;
         }
 
-        const existingUnit = _unitMap.getUnitOnMap(gridIndex);
+        const existingUnit = _war.getUnitMap().getUnitOnMap(gridIndex);
         if ((!existingUnit) || (!unit.checkCanJoinUnit(existingUnit))) {
             return null;
         }
@@ -1134,11 +1131,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         }
 
         const launchUnitId  = unit.getLoaderUnitId() == null ? null : unit.getUnitId();
+        const unitMap       = _war.getUnitMap();
         let data            : ScoreAndAction;
-        for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance(gridIndex, minRange, maxRange, _mapSize)) {
+        for (const targetGridIndex of GridIndexHelpers.getGridsWithinDistance(gridIndex, minRange, maxRange, unitMap.getMapSize())) {
             const damages = DamageCalculator.getEstimatedBattleDamage(_war, pathNodes, launchUnitId, targetGridIndex);
             if (damages[0] != null) {
-                const isAttackUnit = _unitMap.getUnitOnMap(targetGridIndex) != null;
+                const isAttackUnit = unitMap.getUnitOnMap(targetGridIndex) != null;
                 data = _getBetterScoreAndAction(
                     data,
                     {
@@ -1165,7 +1163,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     async function _getScoreAndActionUnitCaptureTile(unit: BaseWar.BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {  // DONE
         await _checkAndCallLater();
 
-        const tile = _tileMap.getTile(gridIndex);
+        const tile = _war.getTileMap().getTile(gridIndex);
         if (!unit.checkCanCaptureTile(tile)) {
             return null;
         } else {
@@ -1198,16 +1196,18 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     async function _getScoreAndActionUnitLaunchSilo(unit: BaseWar.BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ScoreAndAction | null> {   // DONE
         await _checkAndCallLater();
 
-        if (!unit.checkCanLaunchSiloOnTile(_tileMap.getTile(gridIndex))) {
+        const tileMap = _war.getTileMap();
+        if (!unit.checkCanLaunchSiloOnTile(tileMap.getTile(gridIndex))) {
             return null;
         }
 
-        const { width, height } = _mapSize;
+        const { width, height } = tileMap.getMapSize();
         const unitValueMap      = Helpers.createEmptyMap<number>(width, height);
         const teamIndex         = unit.getTeamIndex();
+        const unitMap           = _war.getUnitMap();
         for (let x = 0; x < width; ++x) {
             for (let y = 0; y < height; ++y) {
-                const targetUnit = _unitMap.getUnitOnMap({ x, y });
+                const targetUnit = unitMap.getUnitOnMap({ x, y });
                 if ((!targetUnit) || (targetUnit === unit)) {
                     unitValueMap[x][y] = 0;
                 } else {
@@ -1304,11 +1304,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         const damageMapForSurface   = await _createDamageMap(candidateUnit, false);
         const damageMapForDive      = candidateUnit.checkIsDiver() ? await _createDamageMap(candidateUnit, true) : null;
         const scoreMapForDistance   = await _createScoreMapForDistance(candidateUnit);
+        const mapSize               = _war.getTileMap().getMapSize();
         let bestScoreAndAction      : ScoreAndAction;
 
-        for (let x = 0; x < _mapSize.width; ++x) {
+        for (let x = 0; x < mapSize.width; ++x) {
             if (reachableArea[x]) {
-                for (let y = 0; y < _mapSize.height; ++y) {
+                for (let y = 0; y < mapSize.height; ++y) {
                     if (reachableArea[x][y]) {
                         const gridIndex     = { x, y };
                         const pathNodes     = BwHelpers.createShortestMovePath(reachableArea, gridIndex);
@@ -1342,7 +1343,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
         let maxScore        : number;
         let targetUnitType  : number;
-        for (const t in _PRODUCTION_CANDIDATES[_tileMap.getTile(gridIndex).getType()]) {
+        for (const t in _PRODUCTION_CANDIDATES[_war.getTileMap().getTile(gridIndex).getType()]) {
             const unitType  = Number(t);
             const score     = await _getScoreForActionPlayerProduceUnit(gridIndex, unitType, idleFactoriesCount);
             if ((maxScore == null) || (score > maxScore)) {
@@ -1368,17 +1369,18 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     async function _getActionPlayerProduceUnitForMaxScore(): Promise<WarAction | null> {    // DONE
         await _checkAndCallLater();
 
-        const playerIndexInTurn = _turnManager.getPlayerIndexInTurn();
+        const playerIndexInTurn = _war.getTurnManager().getPlayerIndexInTurn();
         if (playerIndexInTurn === 0) {
             return null;
         }
 
         const idleBuildingPosList   : GridIndex[] = [];
+        const unitMap               = _war.getUnitMap();
         let idleFactoriesCount      = 0;
 
-        _tileMap.forEachTile(tile => {
+        _war.getTileMap().forEachTile(tile => {
             const gridIndex = tile.getGridIndex();
-            if ((!_unitMap.getUnitOnMap(gridIndex)) && (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))) {
+            if ((!unitMap.getUnitOnMap(gridIndex)) && (tile.checkIsUnitProducerForPlayer(playerIndexInTurn))) {
                 idleBuildingPosList.push(gridIndex);
                 if (tile.getType() === TileType.Factory) {
                     ++idleFactoriesCount;
@@ -1543,6 +1545,15 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     }
 
     export async function getNextAction(war: SpwWar): Promise<WarAction> {
+        if (war == null) {
+            Logger.error(`SpwRobot.getNextAction() empty war.`);
+            return undefined;
+        }
+        if (_war != null) {
+            Logger.error(`SpwRobot.getNextAction() _war is not null!`);
+            return undefined;
+        }
+
         const startTime = Date.now();
         _initVariables(war);
 
@@ -1557,7 +1568,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         (!action) && (action = await _getActionForPhase7());
         (!action) && (action = await _getActionForPhase8());
         (!action) && (action = await _getActionForPhase9());
-        action.actionId = _war.getExecutedActionManager().getExecutedActionsCount();
+        action.actionId = war.getExecutedActionManager().getExecutedActionsCount();
 
         _clearVariables();
 

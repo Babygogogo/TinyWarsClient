@@ -1,55 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage source="bg_002_png" left="0" right="0" top="0" bottom="0" />
-    <e:Group left="0" top="40" bottom="0" right="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" top="0" bottom="0" right="200" />
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        right="0" top="0" bottom="0" width="200" />
-        <GameUi:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
-            <e:skinName>
-                <e:Skin width="960">
-                    <e:Scroller width="760" top="0" bottom="0">
-                        <e:Group id="_page"></e:Group>
-                    </e:Scroller>
-                    <e:Scroller width="190" top="50" bottom="50" right="5">
-                        <e:TabBar id="_bar" anchorOffsetY="0" anchorOffsetX="0">
-                            <e:itemRendererSkinName>
-                                <e:Skin states="up,down,disabled" height="50" width="190">
-                                    <GameUi:UiLabel id="_labelName" size="22" anchorOffsetY="0" anchorOffsetX="0"
-                                                    verticalAlign="middle" textAlign="center" top="0" left="0"
-                                                    bottom="0" right="0" textColor="0x777777" textColor.up="0xffffff"
-                                                    text="页签" textColor.down="0x00ff00" />
-                                </e:Skin>
-                            </e:itemRendererSkinName>
-                            <e:layout>
-                                <e:VerticalLayout/>
-                            </e:layout>
-                        </e:TabBar>
-                    </e:Scroller>
-                </e:Skin>
-            </e:skinName>
-        </GameUi:UiTab>
-        <GameUi:UiLabel id="_labelMenuTitle" text="创建战局" bold="true" size="26" top="14" textColor="0xffffff"
-                        horizontalCenter="380" />
-        <GameUi:UiButton id="_btnConfirm" label="确定&gt;&gt;" bottom="14" right="12">
-            <GameUi:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" />
-                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
-                             textColor="0x00ff00" />
-                </e:Skin>
-            </GameUi:skinName>
-        </GameUi:UiButton>
-        <GameUi:UiButton id="_btnBack" label="&lt;&lt;返回" bottom="14" left="775">
-            <e:skinName>
-                <e:Skin states="up,down,disabled">
-                    <e:Image width="100%" height="100%" />
-                    <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" size="25" bold="true"
-                             textColor="0xffffff" />
-                </e:Skin>
-            </e:skinName>
-        </GameUi:UiButton>
+    <e:Group left="0" right="0" top="0" bottom="0">
+        <e:Group id="_groupTab" top="80" left="200" right="0" bottom="0">
+            <GameUi:UiTab id="_tabSettings" left="0" top="0" bottom="0" right="0">
+                <e:skinName>
+                    <e:Skin>
+                        <e:Group id="_page" top="40" bottom="0" left="0" right="0" />
+                        <e:Scroller left="0" right="0">
+                            <e:TabBar id="_bar">
+                                <e:itemRendererSkinName>
+                                    <e:Skin states="up,down,disabled" height="30" width="100">
+                                        <e:Group left="0" top="0" bottom="0" right="0">
+                                            <GameUi:UiImage source="commonRectangle0000" scale9Grid="2,2,1,1" left="0"
+                                                            right="0" top="0" bottom="0" x="0" y="0" visible.up="false" />
+                                            <GameUi:UiImage scale9Grid="2,2,1,1" source="commonRectangle0001" left="0"
+                                                            right="0" top="0" bottom="0" x="0" y="0" visible.up="true"
+                                                            visible.down="false" />
+                                            <GameUi:UiLabel id="_labelName" text="Advanced Settings" size="12"
+                                                            textColor="0xCCCCCC" wordWrap="true" left="4" right="4"
+                                                            textAlign="center" verticalCenter="1" />
+                                        </e:Group>
+                                    </e:Skin>
+                                </e:itemRendererSkinName>
+                                <e:layout>
+                                    <e:HorizontalLayout paddingTop="2" gap="20" />
+                                </e:layout>
+                            </e:TabBar>
+                        </e:Scroller>
+                    </e:Skin>
+                </e:skinName>
+            </GameUi:UiTab>
+        </e:Group>
+        <e:Group id="_groupNavigator" x="100" y="20">
+            <e:Group x="0" y="0">
+                <GameUi:UiLabel id="_labelSinglePlayer" text="SinglePlayer" size="14" width="80" wordWrap="true"
+                                textAlign="center" x="0" y="0" textColor="0xAAAAAA" />
+                <GameUi:UiLabel id="_labelCustomMode" text="Custom Mode" size="14" width="80" wordWrap="true"
+                                textAlign="center" x="92" y="0" textColor="0xAAAAAA" />
+                <GameUi:UiLabel text="Choose a Map" size="14" id="_labelChooseMap" width="80" wordWrap="true"
+                                textAlign="center" x="102" y="10" textColor="0xAAAAAA" />
+                <GameUi:UiLabel id="_labelGameSettings" text="Game Settings" size="14" width="80" wordWrap="true"
+                                textAlign="center" x="112" y="20" bold="true" />
+                <e:layout>
+                    <e:HorizontalLayout verticalAlign="bottom" gap="12" />
+                </e:layout>
+            </e:Group>
+            <e:Group x="34" y="17" locked="true">
+                <GameUi:UiImage x="0" y="0" source="point0000" />
+                <GameUi:UiImage x="10" y="10" source="commonColorWhite0000" width="80" scale9Grid="1,1,1,1" />
+                <GameUi:UiImage x="10" y="10" source="point0000" />
+                <GameUi:UiImage x="10" y="10" source="commonColorWhite0000" width="80" scale9Grid="1,1,1,1" />
+                <GameUi:UiImage x="20" y="20" source="point0000" />
+                <GameUi:UiImage x="20" y="20" source="commonColorWhite0000" width="80" scale9Grid="1,1,1,1" />
+                <GameUi:UiImage x="30" y="30" source="point0000" />
+                <e:layout>
+                    <e:HorizontalLayout gap="0" verticalAlign="middle" />
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout horizontalAlign="center" gap="4" />
+            </e:layout>
+        </e:Group>
+        <GameUi:UiButton id="_btnBack" label="Back" y="20" height="30" width="80"
+                         skinName="Skins.Component.Button.ButtonYellow001" left="0"></GameUi:UiButton>
+
+        <GameUi:UiButton id="_btnConfirm" label="确定" height="30" width="160" bottom="20" left="20"
+                         skinName="Skins.Component.Button.ButtonYellow001"></GameUi:UiButton>
     </e:Group>
 </e:Skin>

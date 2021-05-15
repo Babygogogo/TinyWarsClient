@@ -4,6 +4,7 @@ namespace TinyWars.SinglePlayerMode.SpmModel {
     import ProtoManager         = Utility.ProtoManager;
     import CommonConstants      = Utility.CommonConstants;
     import Types                = Utility.Types;
+    import Notify               = Utility.Notify;
     import NetMessage           = ProtoTypes.NetMessage;
     import SpmWarSaveSlotData   = Types.SpmWarSaveSlotData;
 
@@ -14,18 +15,20 @@ namespace TinyWars.SinglePlayerMode.SpmModel {
     // Functions for save slots.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export namespace SaveSlot {
-        const _slotArray: SpmWarSaveSlotData[] = [];
+        const _slotDict             = new Map<number, SpmWarSaveSlotData>();
+        let _hasReceivedSlotArray   = false;
+        let _previewingSlotIndex    : number;
 
-        export function getSlotArray(): SpmWarSaveSlotData[] {
-            return _slotArray;
+        export function getSlotDict(): Map<number, SpmWarSaveSlotData> {
+            return _slotDict;
         }
 
-        export function checkHasRequiredSlotDataArray(): boolean {
-            return getSlotArray().length > 0;
+        export function getHasReceivedSlotArray(): boolean {
+            return _hasReceivedSlotArray;
         }
 
         export function checkIsEmpty(slotIndex: number): boolean {
-            return getSlotArray()[slotIndex] == null;
+            return !getSlotDict().has(slotIndex);
         }
 
         export function getAvailableIndex(): number {
@@ -37,40 +40,49 @@ namespace TinyWars.SinglePlayerMode.SpmModel {
             return 0;
         }
 
+        export function getPreviewingSlotIndex(): number {
+            return _previewingSlotIndex;
+        }
+        export function setPreviewingSlotIndex(index: number): void {
+            if (getPreviewingSlotIndex() !== index) {
+                _previewingSlotIndex = index;
+                Notify.dispatch(Notify.Type.SpmPreviewingWarSaveSlotChanged);
+            }
+        }
+
         export function updateOnMsgSpmGetWarSaveSlotFullDataArray(data: NetMessage.MsgSpmGetWarSaveSlotFullDataArray.IS): void {
-            const dataArray = data.dataArray || [];
-            const slotArray = getSlotArray();
-            for (let slotIndex = 0; slotIndex < CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
-                const fullData = dataArray.find(v => v.slotIndex === slotIndex);
-                if (fullData == null) {
-                    slotArray[slotIndex] = null;
-                } else {
-                    slotArray[slotIndex] = {
-                        slotIndex,
-                        extraData   : ProtoManager.decodeAsSpmWarSaveSlotExtraData(fullData.encodedExtraData),
-                        warData     : ProtoManager.decodeAsSerialWar(fullData.encodedWarData),
-                    };
-                }
+            _hasReceivedSlotArray = true;
+
+            const slotDict = getSlotDict();
+            slotDict.clear();
+
+            for (const fullData of data.dataArray || []) {
+                const slotIndex = fullData.slotIndex;
+                slotDict.set(slotIndex, {
+                    slotIndex,
+                    extraData   : ProtoManager.decodeAsSpmWarSaveSlotExtraData(fullData.encodedExtraData),
+                    warData     : ProtoManager.decodeAsSerialWar(fullData.encodedWarData),
+                });
             }
         }
         export function updateOnMsgSpmCreateScw(data: NetMessage.MsgSpmCreateScw.IS): void {
             const slotIndex = data.slotIndex;
-            getSlotArray()[slotIndex] = {
+            getSlotDict().set(slotIndex, {
                 slotIndex,
                 warData     : data.warData,
                 extraData   : data.extraData,
-            };
+            });
         }
         export function updateOnMsgSpmCreateSfw(data: NetMessage.MsgSpmCreateSfw.IS): void {
             const slotIndex = data.slotIndex;
-            getSlotArray()[slotIndex] = {
+            getSlotDict().set(slotIndex, {
                 slotIndex,
                 warData     : data.warData,
                 extraData   : data.extraData,
-            };
+            });
         }
         export function updateOnMsgSpmDeleteWarSaveSlot(slotIndex: number): void {
-            getSlotArray()[slotIndex] = null;
+            getSlotDict().delete(slotIndex);
         }
     }
 }

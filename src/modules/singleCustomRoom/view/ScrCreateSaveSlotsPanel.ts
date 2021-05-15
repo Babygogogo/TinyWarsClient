@@ -3,6 +3,7 @@ namespace TinyWars.SingleCustomRoom {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
     import Types        = Utility.Types;
+    import BwHelpers    = BaseWar.BwHelpers;
 
     export class ScrCreateSaveSlotsPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
@@ -82,12 +83,12 @@ namespace TinyWars.SingleCustomRoom {
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
-            const slotList  = SinglePlayerMode.SpmModel.SaveSlot.getSlotArray() || [];
-            for (let i = 0; i < Utility.CommonConstants.SpwSaveSlotMaxCount; ++i) {
+            const slotDict  = SinglePlayerMode.SpmModel.SaveSlot.getSlotDict();
+            for (let slotIndex = 0; slotIndex < Utility.CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
-                    slotIndex   : i,
-                    slotInfo    : slotList.find(v => v.slotIndex === i),
-                })
+                    slotIndex,
+                    slotInfo    : slotDict.get(slotIndex),
+                });
             }
 
             return dataList;
@@ -107,12 +108,12 @@ namespace TinyWars.SingleCustomRoom {
         private _labelChoose    : GameUi.UiLabel;
 
         protected _onOpened(): void {
-            this._imgBg.touchEnabled = true;
-
             this._setUiListenerArray([
                 { ui: this._imgBg,  callback: this._onTouchedImgBg },
             ]);
-            this._labelChoose.text = Lang.getText(Lang.Type.B0258);
+
+            this._imgBg.touchEnabled    = true;
+            this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
         }
 
         protected dataChanged(): void {
@@ -129,31 +130,30 @@ namespace TinyWars.SingleCustomRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
+        private async _updateView(): Promise<void> {
             const data                  = this.data;
-            const slotInfo              = data.slotInfo;
             this._labelSlotIndex.text   = "" + data.slotIndex;
 
-            // TODO
-            Utility.FloatText.show(`ScrCreateSaveSlotsPanel.SlotRenderer._updateView()`);
-            // this._labelType.text        = slotInfo ? Lang.getWarTypeName(slotInfo.warType) : "----";
-            // const labelMapName = this._labelMapName;
-            // if (!slotInfo) {
-            //     labelMapName.text = "----";
-            // } else {
-            //     const comment = slotInfo.slotComment;
-            //     if (comment) {
-            //         labelMapName.text = comment;
-            //     } else {
-            //         const mapId = slotInfo.mapId;
-            //         if (mapId == null) {
-            //             labelMapName.text = `(${Lang.getText(Lang.Type.B0321)})`;
-            //         } else {
-            //             labelMapName.text = ``;
-            //             WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(value => labelMapName.text = value);
-            //         }
-            //     }
-            // }
+            const slotInfo      = data.slotInfo;
+            const labelType     = this._labelType;
+            const labelMapName  = this._labelMapName;
+            if (slotInfo == null) {
+                labelType.text      = `----`;
+                labelMapName.text   = `----`;
+            } else {
+                const warData   = slotInfo.warData;
+                labelType.text  = Lang.getWarTypeName(BwHelpers.getWarType(warData));
+
+                const slotComment = slotInfo.extraData.slotComment;
+                if (slotComment) {
+                    labelMapName.text = slotComment;
+                } else {
+                    const mapId         = BwHelpers.getMapId(warData);
+                    labelMapName.text   = mapId == null
+                        ? `(${Lang.getText(Lang.Type.B0321)})`
+                        : await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId);
+                }
+            }
         }
     }
 }

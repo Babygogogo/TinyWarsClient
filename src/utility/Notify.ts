@@ -53,11 +53,17 @@ namespace TinyWars.Utility.Notify {
         MrrSelfSettingsCoIdChanged,
         MrrSelfSettingsSkinIdChanged,
 
+        ScrCreatePresetWarRuleIdChanged,
+        ScrCreateBannedCoIdArrayChanged,
+        ScrCreateWarSaveSlotChanged,
+        ScrCreatePlayerInfoChanged,
+
         MrrPreviewingMapIdChanged,
         McwPreviewingWarIdChanged,
         MrwPreviewingWarIdChanged,
         MfwPreviewingWarIdChanged,
         RwPreviewingReplayIdChanged,
+        SpmPreviewingWarSaveSlotChanged,
 
         BroadcastOngoingMessagesChanged,
 
@@ -98,9 +104,6 @@ namespace TinyWars.Utility.Notify {
         BwTileBeAttacked,
 
         BwSiloExploded,
-
-        ScrCreateWarSaveSlotChanged,
-        ScrCreateWarPlayerInfoListChanged,
 
         ReplayAutoReplayChanged,
 
@@ -281,6 +284,7 @@ namespace TinyWars.Utility.Notify {
         export type BwFieldDragged              = { previous: Types.Point, current: Types.Point };
         export type MeUnitChanged               = { gridIndex: GridIndex };
         export type MeTileChanged               = { gridIndex: GridIndex };
+        export type ScrCreatePlayerInfoChanged  = { playerIndex: number };
     }
 
     ////////////////////////////////////////////////////////////////////////////////

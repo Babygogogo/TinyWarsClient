@@ -22,7 +22,7 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         slotIndex       : number;
         slotExtraData   : ISpmWarSaveSlotExtraData;
     }): Promise<SpwWar> {
-        if (_war) {
+        if (getWar()) {
             Logger.warn(`SpwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
@@ -47,67 +47,80 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         war.startRunning().startRunningView();
         war.setSaveSlotIndex(slotIndex);
         war.setSaveSlotExtraData(slotExtraData);
-        _war = war;
-        await checkAndHandleAutoActionsAndRobot();
-        await checkAndHandleAutoActions(war);
+        setWar(war);
 
-        return _war;
+        return war;
     }
 
     export function unloadWar(): void {
-        if (_war) {
-            _war.stopRunning();
-            _war = undefined;
+        const war = getWar();
+        if (war) {
+            war.stopRunning();
+            setWar(null);
         }
     }
 
-    export function getWar(): SpwWar | undefined {
+    export function getWar(): SpwWar | undefined | null {
         return _war;
+    }
+    function setWar(war: SpwWar | null | undefined): void {
+        _war = war;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Util functions.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export async function handlePlayerAction(action: IWarActionContainer): Promise<void> {
-        await checkAndHandleAutoActionsAndRobot();
-        await handleAutoActionsAndPlayerAction(action);
-        await checkAndHandleAutoActionsAndRobot();
+    const _warsWithRobotRunning = new Set<SpwWar>();
+
+    export async function handlePlayerActionAndAutoActions(war: SpwWar, action: IWarActionContainer): Promise<void> {
+        await handlePlayerAction(war, action);
+
+        await checkAndHandleAutoActionsAndRobotRecursively(war);
     }
 
-    export async function checkAndHandleAutoActionsAndRobot(): Promise<void> {
-        const war = getWar();
-        if (war) {
-            await checkAndHandleAutoActions(war);
-            if (!war.checkIsHumanInTurn()) {
-                await handleAutoActionsAndPlayerAction(SpwActionReviser.revise(war, await SpwRobot.getNextAction(war)));
-                await checkAndHandleAutoActionsAndRobot();
-            }
-        }
-    }
-
-    async function handleAutoActionsAndPlayerAction(playerAction: IWarActionContainer): Promise<void> {
-        const war = getWar();
-        if (!checkCanExecuteAction(war)) {
+    export async function checkAndHandleAutoActionsAndRobotRecursively(war: SpwWar): Promise<void> {
+        if (_warsWithRobotRunning.has(war)) {
             return;
         }
+        _warsWithRobotRunning.add(war);
 
-        if (checkAndEndWar(war)) {
+        if ((checkAndEndWar(war)) || (!war.getIsRunning())) {
+            _warsWithRobotRunning.delete(war);
             return;
         }
 
         await checkAndHandleAutoActions(war);
-        if (checkAndEndWar(war)) {
+
+        if ((checkAndEndWar(war)) || (!war.getIsRunning())) {
+            _warsWithRobotRunning.delete(war);
+            return;
+        }
+
+        if (war.checkIsHumanInTurn()) {
+            _warsWithRobotRunning.delete(war);
+            return;
+        }
+
+        const action = SpwActionReviser.revise(war, await SpwRobot.getNextAction(war));
+        if (!war.getIsRunning()) {
+            _warsWithRobotRunning.delete(war);
+            return;
+        }
+
+        await handlePlayerAction(war, action);
+
+        _warsWithRobotRunning.delete(war);
+        await checkAndHandleAutoActionsAndRobotRecursively(war);
+    }
+
+    async function handlePlayerAction(war: SpwWar, playerAction: IWarActionContainer): Promise<void> {
+        if (!checkCanExecuteAction(war)) {
+            Logger.error(`SpwModel.handlePlayerAction() checkCanExecuteAction(war) is not true!`);
             return;
         }
 
         playerAction.actionId = war.getExecutedActionManager().getExecutedActionsCount();
         await SpwActionExecutor.checkAndExecute(war, playerAction);
-        if (checkAndEndWar(war)) {
-            return;
-        }
-
-        await checkAndHandleAutoActions(war);
-        checkAndEndWar(war);
     }
 
     function checkAndEndWar(war: SpwWar): boolean {
