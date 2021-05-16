@@ -118,7 +118,7 @@ namespace TinyWars.GameUi {
 
             const coId                          = coData.coId;
             const cfg                           = ConfigManager.getCoBasicCfg(coData.configVersion, coId);
-            this._imgCoPortrait.source          = cfg.fullPortrait || (coId === CommonConstants.CoEmptyId ? null : `coBust0000`);
+            this._imgCoPortrait.source          = ConfigManager.getCoBustImageSource(coId);
             this._labelCoName.text              = cfg.name;
             this._labelDesigner.text            = cfg.designer;
             this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;

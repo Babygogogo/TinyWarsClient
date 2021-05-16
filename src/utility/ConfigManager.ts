@@ -596,6 +596,17 @@ namespace TinyWars.Utility.ConfigManager {
         return _CUSTOM_CO_ID_LIST.get(version);
     }
 
+    export function getCoBustImageSource(coId: number): string {
+        return coId == null
+            ? null
+            : `coBust${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    }
+    export function getCoHeadImageSource(coId: number): string {
+        return coId == null
+            ? null
+            : `coHead${Helpers.getNumText(Math.floor(coId / 10000), 4)}`;
+    }
+
     export function checkIsUnitDivingByDefault(version: string, unitType: UnitType): boolean | undefined {
         const templateCfg = getUnitTemplateCfg(version, unitType);
         if (templateCfg == null) {

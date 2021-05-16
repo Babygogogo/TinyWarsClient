@@ -182,7 +182,7 @@ namespace TinyWars.MapEditor {
                 this._listScop.clear();
 
             } else {
-                this._imgCoPortrait.source          = cfg.fullPortrait;
+                this._imgCoPortrait.source          = ConfigManager.getCoBustImageSource(cfg.coId);
                 this._labelName.text                = cfg.name;
                 this._labelDesigner.text            = cfg.designer;
                 this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;

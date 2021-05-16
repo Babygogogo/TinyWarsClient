@@ -2,10 +2,8 @@
 namespace TinyWars.SingleCustomRoom {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
-    import Helpers          = Utility.Helpers;
     import ConfigManager    = Utility.ConfigManager;
     import ProtoTypes       = Utility.ProtoTypes;
-    import Types            = Utility.Types;
     import CommonConstants  = Utility.CommonConstants;
     import BwHelpers        = BaseWar.BwHelpers;
 
@@ -71,6 +69,7 @@ namespace TinyWars.SingleCustomRoom {
         private readonly _groupCo               : eui.Group;
         private readonly _imgSkin               : GameUi.UiImage;
         private readonly _imgCoInfo             : GameUi.UiImage;
+        private readonly _imgCoHead             : GameUi.UiImage;
         private readonly _labelCo               : GameUi.UiLabel;
         private readonly _labelPlayerType       : GameUi.UiLabel;
 
@@ -162,6 +161,7 @@ namespace TinyWars.SingleCustomRoom {
             const coId                  = playerData ? playerData.coId : null;
             const coCfg                 = ConfigManager.getCoBasicCfg(settingsForCommon.configVersion, coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
+            this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(coId);
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
         }
 

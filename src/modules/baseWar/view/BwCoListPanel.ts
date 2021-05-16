@@ -1,8 +1,9 @@
 
 namespace TinyWars.BaseWar {
-    import Types    = Utility.Types;
-    import Lang     = Utility.Lang;
-    import Notify   = Utility.Notify;
+    import Types            = Utility.Types;
+    import Lang             = Utility.Lang;
+    import Notify           = Utility.Notify;
+    import ConfigManager    = Utility.ConfigManager;
 
     type OpenDataForBwCoListPanel = {
         war             : BwWar;
@@ -233,7 +234,7 @@ namespace TinyWars.BaseWar {
                     this._listScop.clear();
 
                 } else {
-                    this._imgCoPortrait.source          = cfg.fullPortrait;
+                    this._imgCoPortrait.source          = ConfigManager.getCoBustImageSource(coId);
                     this._labelName.text                = cfg.name;
                     this._labelDesigner.text            = cfg.designer;
                     this._labelForce.text               = Lang.getPlayerForceName(player.getPlayerIndex());

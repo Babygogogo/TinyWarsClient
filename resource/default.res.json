@@ -30,7 +30,7 @@
 			"url": "assets/texture/co/co.json",
 			"type": "sheet",
 			"name": "co_json",
-			"subkeys": "Beast,David,Doctor,Penny,c09_t01_s01_f01,c09_t02_s01_f01,c09_t03_s01_f01,c09_t04_s01_f01,c09_t05_s01_f01,c09_t06_s01_f01,c09_t07_s01_f01,c09_t08_s01_f01,c09_t11_s01_f01,c09_t12_s01_f01,c09_t13_s01_f01,c09_t19_s01_f01,c09_t21_s01_f01,coBust0000"
+			"subkeys": "Albatross,Beast,David,Doctor,Penny,c09_t07_s01_f01,coBust0000,coBust0001,coBust0002,coBust0003,coBust0004,coBust0005,coBust0006,coBust0007,coBust0008,coBust0009,coBust0010,coBust0011,coBust0012,coBust0013,coBust0014,coBust0016,coBust0018,coBust0020,coHead0000,coHead0001,coHead0002,coHead0003,coHead0004,coHead0005,coHead0006,coHead0007,coHead0008,coHead0009,coHead0010,coHead0011,coHead0012,coHead0013,coHead0014,coHead0016,coHead0018,coHead0020"
 		},
 		{
 			"url": "assets/texture/unit/v1_unit.json",

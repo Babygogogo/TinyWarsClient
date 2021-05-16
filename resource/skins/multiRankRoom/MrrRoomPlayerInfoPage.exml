@@ -10,8 +10,13 @@
                                             source="commonColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
                             <e:Group left="0" right="0" top="0" bottom="0" x="0" y="0" scaleX="1" scaleY="1">
                                 <e:Group id="_groupCo" horizontalCenter="0" y="20">
-                                    <GameUi:UiImage id="_imgSkin" scaleX="1" scaleY="1" source="commonRectangle0002"
-                                                    scale9Grid="2,2,1,1" width="100" height="100" horizontalCenter="0" />
+                                    <e:Group horizontalCenter="0">
+                                        <GameUi:UiImage id="_imgSkin" scaleX="1" scaleY="1" source="commonRectangle0002"
+                                                        scale9Grid="2,2,1,1" width="100" height="100"
+                                                        horizontalCenter="0" verticalCenter="0" />
+                                        <GameUi:UiImage id="_imgCoHead" scaleX="1" scaleY="1" horizontalCenter="0"
+                                                        verticalCenter="0" source="coHead0001" />
+                                    </e:Group>
                                     <GameUi:UiImage id="_imgCoInfo" scaleX="1" scaleY="1" source="commonIcon0001" x="96"
                                                     y="-6" />
                                     <GameUi:UiLabel id="_labelIsReady" text="Ready!" size="26" stroke="2"

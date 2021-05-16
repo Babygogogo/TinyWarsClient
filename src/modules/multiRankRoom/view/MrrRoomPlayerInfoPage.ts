@@ -80,6 +80,7 @@ namespace TinyWars.MultiRankRoom {
         private readonly _groupCo           : eui.Group;
         private readonly _imgSkin           : GameUi.UiImage;
         private readonly _imgCoInfo         : GameUi.UiImage;
+        private readonly _imgCoHead         : GameUi.UiImage;
         private readonly _labelNickname     : GameUi.UiLabel;
         private readonly _labelCo           : GameUi.UiLabel;
         private readonly _labelIsReady      : GameUi.UiLabel;
@@ -171,6 +172,7 @@ namespace TinyWars.MultiRankRoom {
             const coId                  = playerData ? playerData.coId : null;
             const coCfg                 = ConfigManager.getCoBasicCfg(settingsForCommon.configVersion, coId);
             this._labelCo.text          = coCfg ? coCfg.name : `??`;
+            this._imgCoHead.source      = ConfigManager.getCoHeadImageSource(coId);
             this._imgCoInfo.visible     = (coId !== CommonConstants.CoEmptyId) && (!!coCfg);
 
             const userId                = playerData ? playerData.userId : null;

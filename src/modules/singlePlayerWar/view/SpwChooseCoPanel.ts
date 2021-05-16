@@ -4,7 +4,6 @@ namespace TinyWars.SinglePlayerWar {
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
     import ProtoTypes       = Utility.ProtoTypes;
-    import Notify           = Utility.Notify;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
     type OpenDataForSpwChooseCoPanel = {
@@ -183,7 +182,7 @@ namespace TinyWars.SinglePlayerWar {
                 this._listScop.clear();
 
             } else {
-                this._imgCoPortrait.source          = cfg.fullPortrait;
+                this._imgCoPortrait.source          = ConfigManager.getCoBustImageSource(cfg.coId);
                 this._labelName.text                = cfg.name;
                 this._labelDesigner.text            = cfg.designer;
                 this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
