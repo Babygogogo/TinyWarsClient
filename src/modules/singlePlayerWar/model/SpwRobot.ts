@@ -311,6 +311,15 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             [UnitType.Lander]:      1,      [UnitType.Gunboat]:         1,
         },
     };
+    const _DISTANCE_SCORE_SCALERS: { [tileType: number]: number } = {
+        [TileType.Airport]      : 1.2,
+        [TileType.City]         : 1.1,
+        [TileType.CommandTower] : 1.25,
+        [TileType.Factory]      : 1.3,
+        [TileType.Headquarters] : 1.35,
+        [TileType.Radar]        : 1.1,
+        [TileType.Seaport]      : 1.15,
+    };
 
     let _frameBeginTime         : number;
     let _war                    : SpwWar;
@@ -817,20 +826,138 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         const hp            = unit.getCurrentHp();
         const data          = damageMap[gridIndex.x][gridIndex.y];
         const maxDamage     = Math.min(data ? data.max : 0, hp);
-        const totalDamage   = Math.min(data ? data.total : 0, hp);
-        return - ((maxDamage + (maxDamage >= hp ? 30 : 0)) )
-            * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1); // ADJUSTABLE
+        // const totalDamage   = Math.min(data ? data.total : 0, hp);
+        return - (maxDamage * (maxDamage / 100) + (maxDamage >= hp ? 30 : 0))
+            * (unit.getProductionFinalCost() / 6000 / Math.max(1, _unitValueRatio))
+            * (unit.getHasLoadedCo() ? 2 : 1); // ADJUSTABLE
     }
 
-    async function _getScoreForPosition(unit: BaseWar.BwUnit, gridIndex: GridIndex, damageMap: DamageMapData[][], scoreMapForDistance: number[][] | null): Promise<number> {  // DONE
+    async function _getScoreForDistanceToCapturableBuildings(unit: BaseWar.BwUnit, movableArea: MovableArea): Promise<number> {
+        await _checkAndCallLater();
+
+        const tileMap                                   = _war.getTileMap();
+        const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
+        const teamIndex                                 = unit.getTeamIndex();
+        const distanceArray                             : number[] = [];
+        let totalDistance                               = 0;
+        for (let x = 0; x < mapWidth; ++x) {
+            if (movableArea[x]) {
+                for (let y = 0; y < mapHeight; ++y) {
+                    const info = movableArea[x][y];
+                    if (info) {
+                        const tile = tileMap.getTile({ x, y });
+                        if ((tile.getMaxCapturePoint() != null) && (tile.getTeamIndex() !== teamIndex)) {
+                            const distance = info.totalMoveCost * (_DISTANCE_SCORE_SCALERS[tile.getType()] || 1);
+                            totalDistance += distance;
+                            distanceArray.push(distance);
+                        }
+                    }
+                }
+            }
+        }
+
+        const tilesCount = distanceArray.length;
+        if (tilesCount <= 0) {
+            return 0;
+        } else {
+            const averageDistance   = totalDistance / tilesCount;
+            let score               = 0;
+            for (const distance of distanceArray) {
+                score += Math.pow(distance - averageDistance, 2) * (distance <= averageDistance ? 1 : -1);
+            }
+            return (score - averageDistance) / tilesCount * 5;
+
+            // let score = 0;
+            // for (const distance of distanceArray) {
+            //     score += -Math.pow(distance, 2)
+            // }
+            // return score / tilesCount;
+        }
+    }
+
+    async function _getScoreForDistanceToOtherUnits(unit: BaseWar.BwUnit, movableArea: MovableArea): Promise<number> {
+        // let score = 0;
+        // let distanceToEnemyUnits    = 0;
+        // let enemyUnitsCount         = 0;
+        // _war.getUnitMap().forEachUnitOnMap(u => {
+        //     if (u.getTeamIndex() != teamIndex) {
+        //         distanceToEnemyUnits += GridIndexHelpers.getDistance(gridIndex, u.getGridIndex());
+        //         ++enemyUnitsCount;
+        //     }
+        // });
+        // if (enemyUnitsCount > 0) {
+        //     score += - Math.pow(distanceToEnemyUnits / enemyUnitsCount, 2);                             // ADJUSTABLE
+        // }
+        // return score;
+
+        await _checkAndCallLater();
+
+        const unitMap                                   = _war.getUnitMap();
+        const { width: mapWidth, height: mapHeight }    = unitMap.getMapSize();
+        const teamIndex                                 = unit.getTeamIndex();
+        const distanceArrayToEnemies                    : number[] = [];
+        const distanceArrayToAllies                     : number[] = [];
+        let totalDistanceToEnemies                      = 0;
+        let totalDistanceToAllies                       = 0;
+        for (let x = 0; x < mapWidth; ++x) {
+            if (movableArea[x]) {
+                for (let y = 0; y < mapHeight; ++y) {
+                    const info = movableArea[x][y];
+                    if (info == null) {
+                        continue;
+                    }
+
+                    const otherUnit = unitMap.getUnitOnMap({ x, y });
+                    if ((otherUnit == null) || (otherUnit === unit)) {
+                        continue;
+                    }
+
+                    const distance = info.totalMoveCost * (otherUnit.getHasLoadedCo() ? 2 : 1);
+                    if (otherUnit.getTeamIndex() !== teamIndex) {
+                        totalDistanceToEnemies += distance;
+                        distanceArrayToEnemies.push(distance);
+                    } else {
+                        totalDistanceToAllies += distance;
+                        distanceArrayToAllies.push(distance);
+                    }
+                }
+            }
+        }
+
+        let totalScore      = 0;
+        const enemiesCount  = distanceArrayToEnemies.length;
+        if (enemiesCount > 0) {
+            const averageDistance   = totalDistanceToEnemies / enemiesCount;
+            let scoreForEnemies     = 0;
+            for (const distance of distanceArrayToEnemies) {
+                scoreForEnemies += Math.pow(distance - averageDistance, 2) * (distance <= averageDistance ? 1 : -1);
+            }
+            totalScore += (scoreForEnemies - averageDistance) / enemiesCount * 5;
+        }
+
+        const alliesCount = distanceArrayToAllies.length;
+        if (alliesCount > 0) {
+            const averageDistance   = totalDistanceToAllies / alliesCount;
+            let scoreForAllies      = 0;
+            for (const distance of distanceArrayToAllies) {
+                scoreForAllies += Math.pow(distance - averageDistance, 2) * (distance <= averageDistance ? 1 : -1);
+            }
+            totalScore += (scoreForAllies - averageDistance) / alliesCount * 1;
+        }
+
+        return totalScore;
+    }
+
+    async function _getScoreForPosition(unit: BaseWar.BwUnit, gridIndex: GridIndex, damageMap: DamageMapData[][]): Promise<number> {  // DONE
         await _checkAndCallLater();
 
         let score = _getScoreForThreat(unit, gridIndex, damageMap);
-        if (scoreMapForDistance) {
-            score += scoreMapForDistance[gridIndex.x][gridIndex.y];                     // ADJUSTABLE
-        }
+        // if (scoreMapForDistance) {
+        //     score += scoreMapForDistance[gridIndex.x][gridIndex.y];                     // ADJUSTABLE
+        // }
 
-        const tile = _war.getTileMap().getTile(gridIndex);
+        const tileMap   = _war.getTileMap();
+        const tile      = tileMap.getTile(gridIndex);
         if (tile.checkCanRepairUnit(unit)) {
             score += (unit.getNormalizedMaxHp() - unit.getNormalizedCurrentHp()) * 15;  // ADJUSTABLE
         }
@@ -863,17 +990,22 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             }
         }
 
-        let distanceToEnemyUnits    = 0;
-        let enemyUnitsCount         = 0;
-        _war.getUnitMap().forEachUnitOnMap(u => {
-            if (u.getTeamIndex() != teamIndex) {
-                distanceToEnemyUnits += GridIndexHelpers.getDistance(gridIndex, u.getGridIndex());
-                ++enemyUnitsCount;
+        await _checkAndCallLater();
+        const mapSize       = tileMap.getMapSize();
+        const moveType      = unit.getMoveType();
+        const movableArea   = BwHelpers.createMovableArea(
+            gridIndex,
+            Number.MAX_SAFE_INTEGER,
+            gridIndex => {
+                if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
+                    return null;
+                } else {
+                    return tileMap.getTile(gridIndex).getMoveCostByMoveType(moveType);
+                }
             }
-        });
-        if (enemyUnitsCount > 0) {
-            score += - (distanceToEnemyUnits / enemyUnitsCount) * 10;                           // ADJUSTABLE
-        }
+        );
+        score += await _getScoreForDistanceToCapturableBuildings(unit, movableArea);
+        score += await _getScoreForDistanceToOtherUnits(unit, movableArea);
 
         return score;
     }
@@ -1011,12 +1143,13 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     async function _getScoreForActionUnitWait(unit: BaseWar.BwUnit, gridIndex: GridIndex): Promise<number> {   // DONE
         await _checkAndCallLater();
 
-        const tile = _war.getTileMap().getTile(gridIndex);
-        if ((tile.getMaxCapturePoint()) && (tile.getTeamIndex() !== unit.getTeamIndex())) {
-            return -20;                                                                     // ADJUSTABLE
-        } else {
-            return 0;                                                                       // ADJUSTABLE
-        }
+        // const tile = _war.getTileMap().getTile(gridIndex);
+        // if ((tile.getMaxCapturePoint()) && (tile.getTeamIndex() !== unit.getTeamIndex())) {
+        //     return -20;                                                                     // ADJUSTABLE
+        // } else {
+        //     return 0;                                                                       // ADJUSTABLE
+        // }
+        return -10;
     }
 
     async function _getScoreForActionPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType, idleFactoriesCount: number): Promise<number | null> { // DONE
@@ -1053,6 +1186,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         }
 
         const teamIndex = targetUnit.getTeamIndex();
+        let canAttack   = false;
         _war.getUnitMap().forEachUnit(unit => {
             if (unit.getTeamIndex() === teamIndex) {
                 if (unit.getUnitType() === unitType) {
@@ -1060,16 +1194,26 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 }
             } else {
                 if (targetUnit.getMinAttackRange()) {
-                    const damage = Math.min(targetUnit.getBaseDamage(unit.getArmorType()) || 0, unit.getCurrentHp());
-                    score += damage * unit.getProductionFinalCost() / 3000 * Math.max(1, _unitValueRatio);                                                        // ADJUSTABLE
+                    const baseDamage = targetUnit.getBaseDamage(unit.getArmorType());
+                    if (baseDamage != null) {
+                        const damage    = Math.min(baseDamage, unit.getCurrentHp());
+                        canAttack       = true;
+                        score           += damage * unit.getProductionFinalCost() / 3000 * Math.max(1, _unitValueRatio);                                                        // ADJUSTABLE
+                    }
                 }
                 if (unit.getMinAttackRange()) {
-                    const damage = Math.min((unit.getBaseDamage(targetUnit.getArmorType()) || 0) * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp(), targetUnit.getCurrentHp());    // ADJUSTABLE
-                    score += -damage * productionCost / 3000 / Math.max(1, _unitValueRatio);                                                                           // ADJUSTABLE
+                    const baseDamage = unit.getBaseDamage(targetUnit.getArmorType());
+                    if (baseDamage != null) {
+                        const damage    = Math.min(baseDamage * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp(), targetUnit.getCurrentHp());    // ADJUSTABLE
+                        score           += -damage * productionCost / 3000 / Math.max(1, _unitValueRatio);                                                                           // ADJUSTABLE
+                    }
                 }
             }
         });
 
+        if (!canAttack) {
+            score += -999999;
+        }
         return score;
     }
 
@@ -1303,7 +1447,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         const reachableArea         = _getReachableArea(candidateUnit, null, null);
         const damageMapForSurface   = await _createDamageMap(candidateUnit, false);
         const damageMapForDive      = candidateUnit.checkIsDiver() ? await _createDamageMap(candidateUnit, true) : null;
-        const scoreMapForDistance   = await _createScoreMapForDistance(candidateUnit);
+        // const scoreMapForDistance   = await _createScoreMapForDistance(candidateUnit);
         const mapSize               = _war.getTileMap().getMapSize();
         let bestScoreAndAction      : ScoreAndAction;
 
@@ -1317,13 +1461,14 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
                         if (scoreAndAction) {
                             const action        = scoreAndAction.action;
+                            const baseScore     = scoreAndAction.score;
                             bestScoreAndAction  = _getBetterScoreAndAction(
                                 bestScoreAndAction,
                                 {
                                     action  : scoreAndAction.action,
                                     score   : (action.UnitDive) || ((candidateUnit.getIsDiving()) && (!action.UnitSurface))
-                                        ? scoreAndAction.score + await _getScoreForPosition(candidateUnit, gridIndex, damageMapForDive, scoreMapForDistance)
-                                        : scoreAndAction.score + await _getScoreForPosition(candidateUnit, gridIndex, damageMapForSurface, scoreMapForDistance)
+                                        ? baseScore + await _getScoreForPosition(candidateUnit, gridIndex, damageMapForDive)
+                                        : baseScore + await _getScoreForPosition(candidateUnit, gridIndex, damageMapForSurface)
                                 },
                             );
                         }
