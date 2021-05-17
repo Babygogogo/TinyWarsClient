@@ -838,8 +838,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         const tileMap                                   = _war.getTileMap();
         const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
         const teamIndex                                 = unit.getTeamIndex();
-        const distanceArray                             : number[] = [];
-        let totalDistance                               = 0;
+        const distanceInfoArray                         : { distance: number, scaler: number }[] = [];
         for (let x = 0; x < mapWidth; ++x) {
             if (movableArea[x]) {
                 for (let y = 0; y < mapHeight; ++y) {
@@ -847,49 +846,30 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                     if (info) {
                         const tile = tileMap.getTile({ x, y });
                         if ((tile.getMaxCapturePoint() != null) && (tile.getTeamIndex() !== teamIndex)) {
-                            const distance = info.totalMoveCost * (_DISTANCE_SCORE_SCALERS[tile.getType()] || 1);
-                            totalDistance += distance;
-                            distanceArray.push(distance);
+                            distanceInfoArray.push({
+                                distance: info.totalMoveCost,
+                                scaler  : _DISTANCE_SCORE_SCALERS[tile.getType()] || 1,
+                            });
                         }
                     }
                 }
             }
         }
 
-        const tilesCount = distanceArray.length;
+        const tilesCount = distanceInfoArray.length;
         if (tilesCount <= 0) {
             return 0;
         } else {
-            const averageDistance   = totalDistance / tilesCount;
-            let score               = 0;
-            for (const distance of distanceArray) {
-                score += Math.pow(distance - averageDistance, 2) * (distance <= averageDistance ? 1 : -1);
+            let score = 0;
+            for (const distanceInfo of distanceInfoArray) {
+                const distance  = distanceInfo.distance;
+                score           += - Math.pow(distance, 2) * distanceInfo.scaler;
             }
-            return (score - averageDistance) / tilesCount * 5;
-
-            // let score = 0;
-            // for (const distance of distanceArray) {
-            //     score += -Math.pow(distance, 2)
-            // }
-            // return score / tilesCount;
+            return score / tilesCount / tilesCount * 0.7;
         }
     }
 
     async function _getScoreForDistanceToOtherUnits(unit: BaseWar.BwUnit, movableArea: MovableArea): Promise<number> {
-        // let score = 0;
-        // let distanceToEnemyUnits    = 0;
-        // let enemyUnitsCount         = 0;
-        // _war.getUnitMap().forEachUnitOnMap(u => {
-        //     if (u.getTeamIndex() != teamIndex) {
-        //         distanceToEnemyUnits += GridIndexHelpers.getDistance(gridIndex, u.getGridIndex());
-        //         ++enemyUnitsCount;
-        //     }
-        // });
-        // if (enemyUnitsCount > 0) {
-        //     score += - Math.pow(distanceToEnemyUnits / enemyUnitsCount, 2);                             // ADJUSTABLE
-        // }
-        // return score;
-
         await _checkAndCallLater();
 
         const unitMap                                   = _war.getUnitMap();
@@ -897,8 +877,6 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         const teamIndex                                 = unit.getTeamIndex();
         const distanceArrayToEnemies                    : number[] = [];
         const distanceArrayToAllies                     : number[] = [];
-        let totalDistanceToEnemies                      = 0;
-        let totalDistanceToAllies                       = 0;
         for (let x = 0; x < mapWidth; ++x) {
             if (movableArea[x]) {
                 for (let y = 0; y < mapHeight; ++y) {
@@ -914,10 +892,8 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
                     const distance = info.totalMoveCost * (otherUnit.getHasLoadedCo() ? 2 : 1);
                     if (otherUnit.getTeamIndex() !== teamIndex) {
-                        totalDistanceToEnemies += distance;
                         distanceArrayToEnemies.push(distance);
                     } else {
-                        totalDistanceToAllies += distance;
                         distanceArrayToAllies.push(distance);
                     }
                 }
@@ -927,22 +903,20 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         let totalScore      = 0;
         const enemiesCount  = distanceArrayToEnemies.length;
         if (enemiesCount > 0) {
-            const averageDistance   = totalDistanceToEnemies / enemiesCount;
-            let scoreForEnemies     = 0;
+            let scoreForEnemies = 0;
             for (const distance of distanceArrayToEnemies) {
-                scoreForEnemies += Math.pow(distance - averageDistance, 2) * (distance <= averageDistance ? 1 : -1);
+                scoreForEnemies += - Math.pow(distance, 2);
             }
-            totalScore += (scoreForEnemies - averageDistance) / enemiesCount * 5;
+            totalScore += scoreForEnemies / enemiesCount / enemiesCount * 0.2;
         }
 
         const alliesCount = distanceArrayToAllies.length;
         if (alliesCount > 0) {
-            const averageDistance   = totalDistanceToAllies / alliesCount;
             let scoreForAllies      = 0;
             for (const distance of distanceArrayToAllies) {
-                scoreForAllies += Math.pow(distance - averageDistance, 2) * (distance <= averageDistance ? 1 : -1);
+                scoreForAllies += - Math.pow(distance, 2);
             }
-            totalScore += (scoreForAllies - averageDistance) / alliesCount * 1;
+            totalScore += scoreForAllies / alliesCount / alliesCount * 0.1;
         }
 
         return totalScore;
@@ -1600,7 +1574,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         await _checkAndCallLater();
 
         let scoreAndAction : ScoreAndAction;
-        for (const unit of await _getCandidateUnitsForPhase3()) {
+        for (const unit of await _getCandidateUnitsForPhase7()) {
             scoreAndAction = _getBetterScoreAndAction(scoreAndAction, await _getActionForMaxScoreWithCandidateUnit(unit));
         }
         if (scoreAndAction) {
