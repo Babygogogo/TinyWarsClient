@@ -49,7 +49,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             [UnitType.Bike]         : 520,
             [UnitType.Recon]        : 0,
             [UnitType.Flare]        : null,
-            [UnitType.AntiAir]      : 450,
+            [UnitType.AntiAir]      : 400,
             [UnitType.Tank]         : 650,
             [UnitType.MediumTank]   : 600,
             [UnitType.WarTank]      : 550,
@@ -865,7 +865,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 const distance  = distanceInfo.distance;
                 score           += - Math.pow(distance, 2) * distanceInfo.scaler;
             }
-            return score / tilesCount / tilesCount * 0.7;
+            return score / tilesCount / tilesCount;
         }
     }
 
