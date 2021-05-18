@@ -11,7 +11,7 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
             { msgCode: ActionCode.MsgSpmCreateSfw,                      callback: _onMsgSpmCreateSfw, },
             { msgCode: ActionCode.MsgSpmGetWarSaveSlotFullDataArray,    callback: _onMsgSpmGetWarSaveSlotFullDataArray, },
             { msgCode: ActionCode.MsgSpmDeleteWarSaveSlot,              callback: _onMsgSpmDeleteWarSaveSlot, },
-            { msgCode: ActionCode.MsgScrSaveWar,                        callback: _onMsgScrSaveWar, },
+            { msgCode: ActionCode.MsgSpmSaveScw,                        callback: _onMsgSpmSaveScw, },
         ], SpmProxy);
     }
 
@@ -62,19 +62,20 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
         }
     }
 
-    export function reqSaveWar(war: SinglePlayerWar.SpwWar): void {
+    export function reqSpmSaveScw(war: SinglePlayerWar.SpwWar): void {
         NetManager.send({
-            MsgScrSaveWar: { c: {
-                slotIndex   : war.getSaveSlotIndex(),
-                slotComment : war.getSaveSlotExtraData().slotComment,
-                warData     : war.serialize(),
+            MsgSpmSaveScw: { c: {
+                slotIndex       : war.getSaveSlotIndex(),
+                slotExtraData   : war.getSaveSlotExtraData(),
+                warData         : war.serialize(),
             }, },
         });
     }
-    function _onMsgScrSaveWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgScrSaveWar.IS;
+    function _onMsgSpmSaveScw(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgSpmSaveScw.IS;
         if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgScrSaveWar, data);
+            SpmModel.SaveSlot.updateOnMsgSpmSaveScw(data);
+            Notify.dispatch(Notify.Type.MsgSpmSaveScw, data);
         }
     }
 

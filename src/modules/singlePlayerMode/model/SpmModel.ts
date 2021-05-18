@@ -84,5 +84,13 @@ namespace TinyWars.SinglePlayerMode.SpmModel {
         export function updateOnMsgSpmDeleteWarSaveSlot(slotIndex: number): void {
             getSlotDict().delete(slotIndex);
         }
+        export function updateOnMsgSpmSaveScw(data: NetMessage.MsgSpmSaveScw.IS): void {
+            const slotIndex = data.slotIndex;
+            getSlotDict().set(slotIndex, {
+                slotIndex,
+                warData     : data.warData,
+                extraData   : data.slotExtraData,
+            });
+        }
     }
 }

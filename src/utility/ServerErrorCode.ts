@@ -1177,9 +1177,10 @@ export const enum ServerErrorCode {
 
     MsgScrDeleteWar0000,
 
-    MsgScrSaveWar0000,
-    MsgScrSaveWar0001,
-    MsgScrSaveWar0002,
+    MsgSpmSaveScw0000,
+    MsgSpmSaveScw0001,
+    MsgSpmSaveScw0002,
+    MsgSpmSaveScw0003,
 
     MsgUserGetPublicInfo0000,
     MsgUserGetPublicInfo0001,

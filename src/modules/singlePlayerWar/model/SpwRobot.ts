@@ -823,13 +823,18 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     // Score calculators.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     function _getScoreForThreat(unit: BaseWar.BwUnit, gridIndex: GridIndex, damageMap: DamageMapData[][]): number {   // DONE
-        const hp            = unit.getCurrentHp();
-        const data          = damageMap[gridIndex.x][gridIndex.y];
-        const maxDamage     = Math.min(data ? data.max : 0, hp);
-        // const totalDamage   = Math.min(data ? data.total : 0, hp);
-        return - (maxDamage * (maxDamage / 100) + (maxDamage >= hp ? 30 : 0))
-            * (unit.getProductionFinalCost() / 6000 / Math.max(1, _unitValueRatio))
-            * (unit.getHasLoadedCo() ? 2 : 1); // ADJUSTABLE
+        // const hp            = unit.getCurrentHp();
+        // const data          = damageMap[gridIndex.x][gridIndex.y];
+        // const maxDamage     = Math.min(data ? data.max : 0, hp);
+        // // const totalDamage   = Math.min(data ? data.total : 0, hp);
+        // return - (maxDamage * (maxDamage / 100) + (maxDamage >= hp ? 30 : 0))
+        //     * (unit.getProductionFinalCost() / 6000 / Math.max(1, _unitValueRatio))
+        //     * (unit.getHasLoadedCo() ? 2 : 1); // ADJUSTABLE
+
+        const data = damageMap[gridIndex.x][gridIndex.y];
+        return data
+            ? - data.total * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1) * 0.1
+            : 0;
     }
 
     async function _getScoreForDistanceToCapturableBuildings(unit: BaseWar.BwUnit, movableArea: MovableArea): Promise<number> {
@@ -860,13 +865,34 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         if (tilesCount <= 0) {
             return 0;
         } else {
-            let score = 0;
+            let score       = 0;
+            let maxDistance = 0;
             for (const distanceInfo of distanceInfoArray) {
                 const distance  = distanceInfo.distance;
+                maxDistance     = Math.max(maxDistance, distance);
                 score           += - Math.pow(distance, 2) * distanceInfo.scaler;
             }
-            return score / tilesCount / tilesCount;
+            return score / tilesCount / (maxDistance || 1) * 2 * unit.getProductionFinalCost() / unit.getMaxHp() * unit.getCurrentHp() / 3000;
         }
+
+        // const tileMap                                   = _war.getTileMap();
+        // const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
+        // const teamIndex                                 = unit.getTeamIndex();
+        // let maxScore                                    = Number.MIN_VALUE;
+        // for (let x = 0; x < mapWidth; ++x) {
+        //     if (movableArea[x]) {
+        //         for (let y = 0; y < mapHeight; ++y) {
+        //             const info = movableArea[x][y];
+        //             if (info) {
+        //                 const tile = tileMap.getTile({ x, y });
+        //                 if ((tile.getMaxCapturePoint() != null) && (tile.getTeamIndex() !== teamIndex)) {
+        //                     maxScore = Math.max(maxScore, - info.totalMoveCost * (_DISTANCE_SCORE_SCALERS[tile.getType()] || 1) * 10);
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // return maxScore > Number.MIN_VALUE ? maxScore : 0;
     }
 
     async function _getScoreForDistanceToOtherUnits(unit: BaseWar.BwUnit, movableArea: MovableArea): Promise<number> {
@@ -875,8 +901,8 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         const unitMap                                   = _war.getUnitMap();
         const { width: mapWidth, height: mapHeight }    = unitMap.getMapSize();
         const teamIndex                                 = unit.getTeamIndex();
-        const distanceArrayToEnemies                    : number[] = [];
-        const distanceArrayToAllies                     : number[] = [];
+        const distanceArrayForEnemies                   : number[] = [];
+        const distanceArrayForAllies                    : number[] = [];
         for (let x = 0; x < mapWidth; ++x) {
             if (movableArea[x]) {
                 for (let y = 0; y < mapHeight; ++y) {
@@ -892,34 +918,69 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
                     const distance = info.totalMoveCost * (otherUnit.getHasLoadedCo() ? 2 : 1);
                     if (otherUnit.getTeamIndex() !== teamIndex) {
-                        distanceArrayToEnemies.push(distance);
+                        distanceArrayForEnemies.push(distance);
                     } else {
-                        distanceArrayToAllies.push(distance);
+                        distanceArrayForAllies.push(distance);
                     }
                 }
             }
         }
 
-        let totalScore      = 0;
-        const enemiesCount  = distanceArrayToEnemies.length;
+        const enemiesCount      = distanceArrayForEnemies.length;
+        let scoreForEnemies     = 0;
         if (enemiesCount > 0) {
-            let scoreForEnemies = 0;
-            for (const distance of distanceArrayToEnemies) {
-                scoreForEnemies += - Math.pow(distance, 2);
+            let score       = 0;
+            let maxDistance = 0;
+            for (const distance of distanceArrayForEnemies) {
+                maxDistance = Math.max(maxDistance, distance);
+                score       += - Math.pow(distance, 2);
             }
-            totalScore += scoreForEnemies / enemiesCount / enemiesCount * 0.2;
+            scoreForEnemies = score / enemiesCount / (maxDistance || 1) * 0.2;
         }
 
-        const alliesCount = distanceArrayToAllies.length;
+        const alliesCount   = distanceArrayForAllies.length;
+        let scoreForAllies  = 0;
         if (alliesCount > 0) {
-            let scoreForAllies      = 0;
-            for (const distance of distanceArrayToAllies) {
-                scoreForAllies += - Math.pow(distance, 2);
+            let score       = 0;
+            let maxDistance = 0;
+            for (const distance of distanceArrayForAllies) {
+                maxDistance = Math.max(maxDistance, distance);
+                score       += - Math.pow(distance, 2);
             }
-            totalScore += scoreForAllies / alliesCount / alliesCount * 0.1;
+            scoreForAllies = score / alliesCount / (maxDistance || 1) * 0.2;
         }
 
-        return totalScore;
+        return (scoreForAllies + scoreForEnemies) * unit.getProductionFinalCost() / unit.getMaxHp() * unit.getCurrentHp() / 3000;
+
+        // const unitMap                                   = _war.getUnitMap();
+        // const { width: mapWidth, height: mapHeight }    = unitMap.getMapSize();
+        // const teamIndex                                 = unit.getTeamIndex();
+        // let maxScoreForEnemies                          = Number.MIN_VALUE;
+        // let maxScoreForAllies                           = Number.MIN_VALUE;
+        // for (let x = 0; x < mapWidth; ++x) {
+        //     if (movableArea[x]) {
+        //         for (let y = 0; y < mapHeight; ++y) {
+        //             const info = movableArea[x][y];
+        //             if (info == null) {
+        //                 continue;
+        //             }
+
+        //             const otherUnit = unitMap.getUnitOnMap({ x, y });
+        //             if ((otherUnit == null) || (otherUnit === unit)) {
+        //                 continue;
+        //             }
+
+        //             const score = - info.totalMoveCost * (otherUnit.getHasLoadedCo() ? 2 : 1);
+        //             if (otherUnit.getTeamIndex() !== teamIndex) {
+        //                 maxScoreForEnemies = Math.max(maxScoreForEnemies, score * 0);
+        //             } else {
+        //                 maxScoreForAllies = Math.max(maxScoreForAllies, score * 0);
+        //             }
+        //         }
+        //     }
+        // }
+        // return (maxScoreForEnemies > Number.MIN_VALUE ? maxScoreForEnemies : 0)
+        //     + (maxScoreForAllies > Number.MIN_VALUE ? maxScoreForAllies : 0);
     }
 
     async function _getScoreForPosition(unit: BaseWar.BwUnit, gridIndex: GridIndex, damageMap: DamageMapData[][]): Promise<number> {  // DONE
@@ -1054,13 +1115,13 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             * (_DAMAGE_SCORE_SCALERS[attackerType][targetType] || 1);                                   // ADJUSTABLE
 
         if (targetUnit.getIsCapturingTile()) {
-            score += targetTile.getCurrentCapturePoint() > targetUnit.getCaptureAmount() ? 20 : 200;    // ADJUSTABLE
+            score *= targetUnit.getCaptureAmount() >= targetTile.getCurrentCapturePoint() ? 2 : 1.1;    // ADJUSTABLE
             if ((tileType === TileType.Headquarters)    ||
                 (tileType === TileType.Factory)         ||
                 (tileType === TileType.Airport)         ||
                 (tileType === TileType.Seaport)
             ) {
-                score += 99999;                                                                         // ADJUSTABLE
+                score *= 5;                                                                             // ADJUSTABLE
             }
         }
 

@@ -75,8 +75,8 @@ namespace TinyWars.SinglePlayerWar {
                 { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyBwPlannerStateChanged },
                 { type: Notify.Type.BwCoIdChanged,                      callback: this._onNotifyBwCoIdChanged },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: Notify.Type.MsgScrSaveWar,                      callback: this._onMsgScrSaveWar },
-                { type: Notify.Type.MsgSpmCreateSfw,                    callback: this._onMsgScrCreateCustomWar },
+                { type: Notify.Type.MsgSpmSaveScw,                      callback: this._onMsgSpmSaveScw },
+                { type: Notify.Type.MsgSpmCreateSfw,                    callback: this._onMsgSpmCreateSfw },
                 { type: Notify.Type.MsgSpmDeleteWarSaveSlot,            callback: this._onNotifyMsgSpmDeleteWarSaveSlot },
             ]);
             this._setUiListenerArray([
@@ -124,11 +124,11 @@ namespace TinyWars.SinglePlayerWar {
             this._updateView();
         }
 
-        private _onMsgScrSaveWar(e: egret.Event): void {
+        private _onMsgSpmSaveScw(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0073));
         }
 
-        private _onMsgScrCreateCustomWar(e: egret.Event): void {
+        private _onMsgSpmCreateSfw(e: egret.Event): void {
             const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
             Common.CommonConfirmPanel.show({
                 content : Lang.getText(Lang.Type.A0107),
@@ -320,7 +320,7 @@ namespace TinyWars.SinglePlayerWar {
                         Common.CommonConfirmPanel.show({
                             content : Lang.getText(Lang.Type.A0071),
                             callback: () => {
-                                SinglePlayerMode.SpmProxy.reqSaveWar(war);
+                                SinglePlayerMode.SpmProxy.reqSpmSaveScw(war);
                             },
                         })
                     },
