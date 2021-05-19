@@ -53,7 +53,7 @@ namespace TinyWars.SingleCustomRoom {
             this.right                      = 0;
             this.top                        = 0;
             this.bottom                     = 0;
-            this._inputSlotComment.maxChars = CommonConstants.ScwSaveSlotCommentMaxLength;
+            this._inputSlotComment.maxChars = CommonConstants.SpmSaveSlotCommentMaxLength;
 
             this._mapRawData = await ScrModel.Create.getMapRawData();
 

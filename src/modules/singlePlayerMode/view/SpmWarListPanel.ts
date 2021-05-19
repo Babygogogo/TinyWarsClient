@@ -99,7 +99,7 @@ namespace TinyWars.SinglePlayerMode {
         private _onTouchedBtnNextStep(e: egret.TouchEvent): void {
             const slotData = SpmModel.SaveSlot.getSlotDict().get(SpmModel.SaveSlot.getPreviewingSlotIndex());
             if (slotData != null) {
-                Utility.FlowManager.gotoSingleCustomWar({
+                Utility.FlowManager.gotoSinglePlayerWar({
                     slotIndex       : slotData.slotIndex,
                     warData         : slotData.warData,
                     slotExtraData   : slotData.extraData,
@@ -327,7 +327,7 @@ namespace TinyWars.SinglePlayerMode {
             const slotIndex = this.data.slotIndex;
             const slotData  = SpmModel.SaveSlot.getSlotDict().get(slotIndex);
             if (slotData != null) {
-                Utility.FlowManager.gotoSingleCustomWar({
+                Utility.FlowManager.gotoSinglePlayerWar({
                     slotIndex,
                     warData         : slotData.warData,
                     slotExtraData   : slotData.extraData,

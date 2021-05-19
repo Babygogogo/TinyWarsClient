@@ -5,6 +5,7 @@ namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
     import FloatText        = Utility.FloatText;
     import CommonConstants  = Utility.CommonConstants;
+    import Helpers          = Utility.Helpers;
     import BwHelpers        = BaseWar.BwHelpers;
     import BwUnit           = BaseWar.BwUnit;
     import UnitType         = Types.UnitType;
@@ -20,6 +21,7 @@ namespace TinyWars.BaseWar {
 
         private static _instance: BwProduceUnitPanel;
 
+        private _imgMask    : GameUi.UiImage;
         private _group      : eui.Group;
         private _listUnit   : GameUi.UiScrollList<DataForUnitRenderer>;
         private _btnCancel  : GameUi.UiButton;
@@ -46,6 +48,8 @@ namespace TinyWars.BaseWar {
         public constructor() {
             super();
 
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/baseWar/BwProduceUnitPanel.exml`;
         }
 
@@ -60,11 +64,15 @@ namespace TinyWars.BaseWar {
             ]);
             this._listUnit.setItemRenderer(UnitRenderer);
 
+            this._showOpenAnimation();
+
             this._updateView();
 
             Notify.dispatch(Notify.Type.BwProduceUnitPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+
             this._dataForList = null;
 
             Notify.dispatch(Notify.Type.BwProduceUnitPanelClosed);
@@ -149,6 +157,35 @@ namespace TinyWars.BaseWar {
             }
 
             return dataList.sort(sorterForDataForList);
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: 40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+            });
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                });
+
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: 40 },
+                    callback    : resolve,
+                });
+            });
         }
     }
 

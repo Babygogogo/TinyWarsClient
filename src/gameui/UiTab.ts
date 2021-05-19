@@ -16,7 +16,8 @@ namespace TinyWars.GameUi {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this._bar,    callback: this._onTouchedBarItem, eventType: eui.ItemTapEvent.ITEM_TAP },
+                { ui: this._bar,    callback: this._onItemTapBar,       eventType: eui.ItemTapEvent.ITEM_TAP },
+                { ui: this._bar,    callback: this._onTouchBeginBar,    eventType: egret.TouchEvent.TOUCH_BEGIN },
             ]);
 
             const bar               = this._bar;
@@ -48,7 +49,7 @@ namespace TinyWars.GameUi {
             this.clear();
         }
 
-        private _onTouchedBarItem(e: eui.ItemTapEvent): void {
+        private _onItemTapBar(e: eui.ItemTapEvent): void {
             const index = e.itemIndex;
             const data  = this._getTabDataArray()[index];
             if ((data.callbackOnTouchedItem == null) || (data.callbackOnTouchedItem())) {
@@ -56,6 +57,9 @@ namespace TinyWars.GameUi {
             } else {
                 this._bar.selectedIndex = this.getSelectedIndex();
             }
+        }
+        private _onTouchBeginBar(e: egret.Event): void {
+            Utility.SoundManager.playEffect("button.mp3");
         }
 
         private _setSelectedIndex(index: number): void {

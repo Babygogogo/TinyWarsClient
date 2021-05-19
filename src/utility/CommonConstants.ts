@@ -42,7 +42,7 @@ namespace TinyWars.Utility.CommonConstants {
     export const MapEditorSlotMaxCountForNormal     = 3;
     export const MapEditorSlotMaxCountForCommittee  = 100;
     export const SpwSaveSlotMaxCount                = 10;
-    export const ScwSaveSlotCommentMaxLength        = 15;
+    export const SpmSaveSlotCommentMaxLength        = 15;
 
     export const RankInitialScore                   = 1200;
     export const RankMaxConcurrentCount             = 5;

@@ -68,7 +68,7 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             if (MeModel.Sim.checkIsValidWarData()) {
-                SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(MeModel.Sim.getWarData());
+                SinglePlayerMode.SpmCreateSfwSaveSlotsPanel.show(MeModel.Sim.getWarData());
             } else {
                 FloatText.show(Lang.getText(Lang.Type.A0146));
             }
@@ -79,7 +79,7 @@ namespace TinyWars.MapEditor {
             Common.CommonConfirmPanel.show({
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
-                    FlowManager.gotoSingleCustomWar({
+                    FlowManager.gotoSinglePlayerWar({
                         slotIndex       : data.slotIndex,
                         slotExtraData   : data.extraData,
                         warData         : data.warData,

@@ -141,7 +141,7 @@ namespace TinyWars.SinglePlayerWar {
                 Common.CommonConfirmPanel.show({
                     content : Lang.getText(Lang.Type.A0072),
                     callback: () => {
-                        Utility.FlowManager.gotoSingleCustomWar({
+                        Utility.FlowManager.gotoSinglePlayerWar({
                             slotIndex       : slotInfo.slotIndex,
                             warData         : slotInfo.warData,
                             slotExtraData   : slotInfo.extraData,

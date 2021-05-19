@@ -38,16 +38,24 @@ namespace TinyWars.Utility.DestructionHelpers {
             }
         }
 
-        const gridVisionEffect = showExplosionEffect ? war.getGridVisionEffect() : undefined;
-        (gridVisionEffect) && (gridVisionEffect.showEffectExplosion(gridIndex));
+        if (showExplosionEffect) {
+            const gridVisionEffect = war.getGridVisionEffect();
+            (gridVisionEffect) && (gridVisionEffect.showEffectExplosion(gridIndex));
+
+            const warView = war.getView();
+            (warView) && (warView.showVibration());
+        }
     }
 
     export function destroyPlayerForce(war: BwWar, playerIndex: number, showExplosionEffect: boolean): void {
         const unitMap           = war.getUnitMap();
         const tileMap           = war.getTileMap();
         const gridVisionEffect  = showExplosionEffect ? war.getGridVisionEffect() : undefined;
+        let hasRemovedUnit      = false;
         unitMap.forEachUnitOnMap(unit => {
             if (unit.getPlayerIndex() === playerIndex) {
+                hasRemovedUnit = true;
+
                 const gridIndex = unit.getGridIndex();
                 unitMap.removeUnitOnMap(gridIndex, true);
                 tileMap.getTile(gridIndex).updateOnUnitLeave();
@@ -55,6 +63,10 @@ namespace TinyWars.Utility.DestructionHelpers {
             }
         });
         unitMap.removeUnitsLoadedForPlayer(playerIndex);
+        if ((showExplosionEffect) && (hasRemovedUnit)) {
+            const warView = war.getView();
+            (warView) && (warView.showVibration());
+        }
 
         tileMap.forEachTile(tile => {
             if (tile.getPlayerIndex() === playerIndex) {

@@ -124,7 +124,7 @@ namespace TinyWars.Utility.FlowManager {
 
         SoundManager.playRandomWarBgm();
     }
-    export async function gotoSingleCustomWar({ warData, slotIndex, slotExtraData }: {
+    export async function gotoSinglePlayerWar({ warData, slotIndex, slotExtraData }: {
         slotIndex       : number;
         slotExtraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
         warData         : ProtoTypes.WarSerialization.ISerialWar;

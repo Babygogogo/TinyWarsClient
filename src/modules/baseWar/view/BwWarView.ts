@@ -11,25 +11,28 @@ namespace TinyWars.BaseWar {
         private _fieldContainer     = new GameUi.UiZoomableComponent();
         private _war                : BwWar;
 
+        private _isShowingVibration = false;
+        private _vibrationMaxOffset = 4;
+        private _vibrationTimeoutId : number;
+
         private _notifyListeners: Notify.Listener[] = [
             { type: Notify.Type.BwFieldZoomed,  callback: this._onNotifyBwFieldZoomed },
             { type: Notify.Type.BwFieldDragged, callback: this._onNotifyBwFieldDragged },
         ];
-        private _uiListeners = [
+        private _uiListeners: Utility.Types.UiListener[] = [
+            { ui: this,     callback: this._onEnterFrame,   eventType: egret.Event.ENTER_FRAME },
         ];
 
         public constructor() {
             super();
 
-            this.top    = 0;
-            this.bottom = 0;
-            this.left   = 0;
-            this.right  = 0;
+            this.percentWidth           = 100;
+            this.percentHeight          = 100;
 
-            this._fieldContainer.top       = 0;
-            this._fieldContainer.bottom    = 0;
-            this._fieldContainer.left      = 0;
-            this._fieldContainer.right     = 0;
+            this._fieldContainer.top    = 0;
+            this._fieldContainer.bottom = 0;
+            this._fieldContainer.left   = 0;
+            this._fieldContainer.right  = 0;
             this._fieldContainer.setBoundarySpacings(PADDING_HORIZONTAL, PADDING_HORIZONTAL, PADDING_VERTICAL, PADDING_VERTICAL);
             this.addChild(this._fieldContainer);
         }
@@ -114,6 +117,33 @@ namespace TinyWars.BaseWar {
             };
         }
 
+        public showVibration(duration = 450, maxOffset = 5): void {
+            this.stopVibration();
+
+            this._isShowingVibration    = true;
+            this._vibrationMaxOffset    = maxOffset;
+            this._vibrationTimeoutId    = egret.setTimeout(() => {
+                this.stopVibration();
+            }, this, duration);
+        }
+        public stopVibration(): void {
+            this._isShowingVibration    = false;
+            this.x                      = 0;
+            this.y                      = 0;
+
+            if (this._vibrationTimeoutId != null) {
+                egret.clearTimeout(this._vibrationTimeoutId);
+                this._vibrationTimeoutId = null;
+            }
+        }
+        private _checkAndVibrate(): void {
+            if (this._isShowingVibration) {
+                const maxOffset = this._vibrationMaxOffset;
+                this.x          = Math.random() * maxOffset * (Math.random() > 0.5 ? 1 : -1);
+                this.y          = Math.random() * maxOffset * (Math.random() > 0.5 ? 1 : -1);
+            }
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,6 +154,10 @@ namespace TinyWars.BaseWar {
         private _onNotifyBwFieldDragged(e: egret.Event): void {
             const data = e.data as Notify.Data.BwFieldDragged;
             this._fieldContainer.setDragByTouches(data.current, data.previous);
+        }
+
+        private _onEnterFrame(e: egret.Event): void {
+            this._checkAndVibrate();
         }
     }
 }

@@ -132,7 +132,7 @@ namespace TinyWars.MapEditor {
             Common.CommonConfirmPanel.show({
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
-                    FlowManager.gotoSingleCustomWar({
+                    FlowManager.gotoSinglePlayerWar({
                         slotIndex       : data.slotIndex,
                         slotExtraData   : data.extraData,
                         warData         : data.warData,

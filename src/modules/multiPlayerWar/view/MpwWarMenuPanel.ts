@@ -130,7 +130,7 @@ namespace TinyWars.MultiPlayerWar {
             Common.CommonConfirmPanel.show({
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
-                    FlowManager.gotoSingleCustomWar({
+                    FlowManager.gotoSinglePlayerWar({
                         slotIndex       : data.slotIndex,
                         slotExtraData   : data.extraData,
                         warData         : data.warData,
@@ -370,7 +370,7 @@ namespace TinyWars.MultiPlayerWar {
                     if (war.getIsExecutingAction()) {
                         FloatText.show(Lang.getText(Lang.Type.A0103));
                     } else {
-                        SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForCreateSfw());
+                        SinglePlayerMode.SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
                     }
                 },
             };

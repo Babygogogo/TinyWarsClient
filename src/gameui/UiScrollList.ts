@@ -84,7 +84,8 @@ namespace TinyWars.GameUi {
                 { type: Notify.Type.MouseWheel, callback: this._onNotifyMouseWheel },
             ]);
             this._setUiListenerArray([
-                { ui: list, callback: this._onTouchedListItem, eventType: eui.ItemTapEvent.ITEM_TAP },
+                { ui: list, callback: this._onItemTapList,      eventType: eui.ItemTapEvent.ITEM_TAP },
+                { ui: list, callback: this._onTouchBeginList,   eventType: egret.TouchEvent.TOUCH_BEGIN },
             ]);
 
             this._list          = list;
@@ -156,7 +157,7 @@ namespace TinyWars.GameUi {
             }
         }
 
-        private _onTouchedListItem(e : eui.ItemTapEvent) : void {
+        private _onItemTapList(e: eui.ItemTapEvent): void {
             if (!this.getIsOpening()) {
                 return;
             }
@@ -165,6 +166,9 @@ namespace TinyWars.GameUi {
             if (item instanceof UiListItemRenderer) {
                 item.onItemTapEvent(e);
             }
+        }
+        private _onTouchBeginList(e: egret.TouchEvent): void {
+            Utility.SoundManager.playEffect("button.mp3");
         }
         private _onNotifyMouseWheel(e: egret.Event): void {
             if (!this.getIsOpening()) {
