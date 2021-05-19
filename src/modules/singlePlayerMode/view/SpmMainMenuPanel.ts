@@ -54,10 +54,6 @@ namespace TinyWars.SinglePlayerMode {
             ]);
 
             this._showOpenAnimation();
-
-            if (!SpmModel.SaveSlot.getHasReceivedSlotArray()) {
-                SpmProxy.reqSpmGetWarSaveSlotFullDataArray();
-            }
         }
 
         protected async _onClosed(): Promise<void> {

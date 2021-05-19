@@ -1182,6 +1182,11 @@ export const enum ServerErrorCode {
     MsgSpmSaveScw0002,
     MsgSpmSaveScw0003,
 
+    MsgSpmSaveSfw0000,
+    MsgSpmSaveSfw0001,
+    MsgSpmSaveSfw0002,
+    MsgSpmSaveSfw0003,
+
     MsgUserGetPublicInfo0000,
     MsgUserGetPublicInfo0001,
 

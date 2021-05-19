@@ -268,6 +268,7 @@ namespace TinyWars.Utility.Notify {
         MsgSpmGetWarSaveSlotFullDataArray,
         MsgSpmDeleteWarSaveSlot,
         MsgSpmSaveScw,
+        MsgSpmSaveSfw,
     }
 
     ////////////////////////////////////////////////////////////////////////////////

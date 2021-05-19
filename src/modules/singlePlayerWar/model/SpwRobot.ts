@@ -833,7 +833,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
         const data = damageMap[gridIndex.x][gridIndex.y];
         return data
-            ? - data.total * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1) * 0.1
+            ? - data.total * unit.getProductionFinalCost() / 3000 / Math.max(1, _unitValueRatio) * (unit.getHasLoadedCo() ? 2 : 1) * 0.05
             : 0;
     }
 
@@ -849,11 +849,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 for (let y = 0; y < mapHeight; ++y) {
                     const info = movableArea[x][y];
                     if (info) {
-                        const tile = tileMap.getTile({ x, y });
-                        if ((tile.getMaxCapturePoint() != null) && (tile.getTeamIndex() !== teamIndex)) {
+                        const tile          = tileMap.getTile({ x, y });
+                        const tileTeamIndex = tile.getTeamIndex();
+                        if ((tile.getMaxCapturePoint() != null) && (tileTeamIndex !== teamIndex)) {
                             distanceInfoArray.push({
                                 distance: info.totalMoveCost,
-                                scaler  : _DISTANCE_SCORE_SCALERS[tile.getType()] || 1,
+                                scaler  : (_DISTANCE_SCORE_SCALERS[tile.getType()] || 1) * (tileTeamIndex === CommonConstants.WarNeutralTeamIndex ? 1.2 : 1),
                             });
                         }
                     }
@@ -929,25 +930,29 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         const enemiesCount      = distanceArrayForEnemies.length;
         let scoreForEnemies     = 0;
         if (enemiesCount > 0) {
-            let score       = 0;
-            let maxDistance = 0;
+            let maxDistance     = 0;
+            let totalDistance1  = 0;
+            let totalDistance2  = 0;
             for (const distance of distanceArrayForEnemies) {
-                maxDistance = Math.max(maxDistance, distance);
-                score       += - Math.pow(distance, 2);
+                maxDistance     = Math.max(maxDistance, distance);
+                totalDistance1  += distance;
+                totalDistance2  += Math.pow(distance, 2);
             }
-            scoreForEnemies = score / enemiesCount / (maxDistance || 1) * 0.2;
+            scoreForEnemies = - totalDistance1 * 0.05 - totalDistance2 / enemiesCount / (maxDistance || 1) * 0.2;
         }
 
         const alliesCount   = distanceArrayForAllies.length;
         let scoreForAllies  = 0;
         if (alliesCount > 0) {
-            let score       = 0;
-            let maxDistance = 0;
+            let maxDistance     = 0;
+            let totalDistance1  = 0;
+            let totalDistance2  = 0;
             for (const distance of distanceArrayForAllies) {
-                maxDistance = Math.max(maxDistance, distance);
-                score       += - Math.pow(distance, 2);
+                maxDistance     = Math.max(maxDistance, distance);
+                totalDistance1  += distance;
+                totalDistance2  += Math.pow(distance, 2);
             }
-            scoreForAllies = score / alliesCount / (maxDistance || 1) * 0.2;
+            scoreForAllies = - totalDistance1 * 0.025 - totalDistance2 / alliesCount / (maxDistance || 1) * 0.1;
         }
 
         return (scoreForAllies + scoreForEnemies) * unit.getProductionFinalCost() / unit.getMaxHp() * unit.getCurrentHp() / 3000;

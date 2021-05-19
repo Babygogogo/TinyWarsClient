@@ -76,6 +76,7 @@ namespace TinyWars.SinglePlayerWar {
                 { type: Notify.Type.BwCoIdChanged,                      callback: this._onNotifyBwCoIdChanged },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
                 { type: Notify.Type.MsgSpmSaveScw,                      callback: this._onMsgSpmSaveScw },
+                { type: Notify.Type.MsgSpmSaveSfw,                      callback: this._onMsgSpmSaveSfw },
                 { type: Notify.Type.MsgSpmCreateSfw,                    callback: this._onMsgSpmCreateSfw },
                 { type: Notify.Type.MsgSpmDeleteWarSaveSlot,            callback: this._onNotifyMsgSpmDeleteWarSaveSlot },
             ]);
@@ -125,6 +126,10 @@ namespace TinyWars.SinglePlayerWar {
         }
 
         private _onMsgSpmSaveScw(e: egret.Event): void {
+            FloatText.show(Lang.getText(Lang.Type.A0073));
+        }
+
+        private _onMsgSpmSaveSfw(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0073));
         }
 
@@ -252,7 +257,8 @@ namespace TinyWars.SinglePlayerWar {
         private _createDataForMainMenu(): DataForCommandRenderer[] {
             return [
                 // this._createCommandOpenCoInfoMenu(),
-                this._createCommandSaveGame(),
+                this._createCommandSaveScw(),
+                this._createCommandSaveSfw(),
                 this._createCommandLoadGame(),
                 this._createCommandOpenAdvancedMenu(),
                 // this._createCommandChat(),
@@ -305,11 +311,12 @@ namespace TinyWars.SinglePlayerWar {
             };
         }
 
-        private _createCommandSaveGame(): DataForCommandRenderer | null {
+        private _createCommandSaveScw(): DataForCommandRenderer | null {
             const war = this._war;
             if ((!war)                                                              ||
                 (!war.checkIsHumanInTurn())                                         ||
                 (!war.getTurnManager().getPhaseCode())                              ||
+                (!(war instanceof SingleCustomWar.ScwWar))                          ||
                 (war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)
             ) {
                 return null;
@@ -321,6 +328,30 @@ namespace TinyWars.SinglePlayerWar {
                             content : Lang.getText(Lang.Type.A0071),
                             callback: () => {
                                 SinglePlayerMode.SpmProxy.reqSpmSaveScw(war);
+                            },
+                        })
+                    },
+                };
+            }
+        }
+
+        private _createCommandSaveSfw(): DataForCommandRenderer | null {
+            const war = this._war;
+            if ((!war)                                                              ||
+                (!war.checkIsHumanInTurn())                                         ||
+                (!war.getTurnManager().getPhaseCode())                              ||
+                (!(war instanceof SingleFreeWar.SfwWar))                            ||
+                (war.getActionPlanner().getState() !== Types.ActionPlannerState.Idle)
+            ) {
+                return null;
+            } else {
+                return {
+                    name    : Lang.getText(Lang.Type.B0260),
+                    callback: () => {
+                        Common.CommonConfirmPanel.show({
+                            content : Lang.getText(Lang.Type.A0071),
+                            callback: () => {
+                                SinglePlayerMode.SpmProxy.reqSpmSaveSfw(war);
                             },
                         })
                     },

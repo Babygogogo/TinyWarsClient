@@ -12,6 +12,7 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
             { msgCode: ActionCode.MsgSpmGetWarSaveSlotFullDataArray,    callback: _onMsgSpmGetWarSaveSlotFullDataArray, },
             { msgCode: ActionCode.MsgSpmDeleteWarSaveSlot,              callback: _onMsgSpmDeleteWarSaveSlot, },
             { msgCode: ActionCode.MsgSpmSaveScw,                        callback: _onMsgSpmSaveScw, },
+            { msgCode: ActionCode.MsgSpmSaveSfw,                        callback: _onMsgSpmSaveSfw, },
         ], SpmProxy);
     }
 
@@ -76,6 +77,23 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
         if (!data.errorCode) {
             SpmModel.SaveSlot.updateOnMsgSpmSaveScw(data);
             Notify.dispatch(Notify.Type.MsgSpmSaveScw, data);
+        }
+    }
+
+    export function reqSpmSaveSfw(war: SinglePlayerWar.SpwWar): void {
+        NetManager.send({
+            MsgSpmSaveSfw: { c: {
+                slotIndex       : war.getSaveSlotIndex(),
+                slotExtraData   : war.getSaveSlotExtraData(),
+                warData         : war.serialize(),
+            }, },
+        });
+    }
+    function _onMsgSpmSaveSfw(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgSpmSaveSfw.IS;
+        if (!data.errorCode) {
+            SpmModel.SaveSlot.updateOnMsgSpmSaveSfw(data);
+            Notify.dispatch(Notify.Type.MsgSpmSaveSfw, data);
         }
     }
 
