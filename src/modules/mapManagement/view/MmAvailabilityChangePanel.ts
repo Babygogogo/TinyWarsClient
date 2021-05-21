@@ -22,6 +22,10 @@ namespace TinyWars.MapManagement {
         private _labelScw       : GameUi.UiLabel;
         private _imgScw         : GameUi.UiImage;
 
+        private _groupSrw       : eui.Group;
+        private _labelSrw       : GameUi.UiLabel;
+        private _imgSrw         : GameUi.UiImage;
+
         private _groupMrwStd    : eui.Group;
         private _labelMrwStd    : GameUi.UiLabel;
         private _imgMrwStd      : GameUi.UiImage;
@@ -68,8 +72,9 @@ namespace TinyWars.MapManagement {
                 { ui: this._btnWarRule,     callback: this._onTouchedBtnWarRule },
                 { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
                 { ui: this._groupScw,       callback: this._onTouchedGroupScw },
-                { ui: this._groupMrwStd,      callback: this._onTouchedGroupMrwStd },
-                { ui: this._groupMrwFog,   callback: this._onTouchedGroupMrwFog },
+                { ui: this._groupSrw,       callback: this._onTouchedGroupSrw },
+                { ui: this._groupMrwStd,    callback: this._onTouchedGroupMrwStd },
+                { ui: this._groupMrwFog,    callback: this._onTouchedGroupMrwFog },
             ]);
 
             this._btnDelete.setTextColor(0xFF0000);
@@ -81,6 +86,7 @@ namespace TinyWars.MapManagement {
             const availability          = (await WarMapModel.getBriefData(mapId)).mapExtraData.mapComplexInfo.availability;
             this._imgMcw.visible        = !!availability.canMcw;
             this._imgScw.visible        = !!availability.canScw;
+            this._imgSrw.visible        = !!availability.canSrw;
             this._imgMrwStd.visible     = !!availability.canMrwStd;
             this._imgMrwFog.visible     = !!availability.canMrwFog;
         }
@@ -93,6 +99,7 @@ namespace TinyWars.MapManagement {
             WarMapProxy.reqMmSetMapAvailability(this._mapId, {
                 canMcw      : this._imgMcw.visible,
                 canScw      : this._imgScw.visible,
+                canSrw      : this._imgSrw.visible,
                 canMrwStd   : this._imgMrwStd.visible,
                 canMrwFog   : this._imgMrwFog.visible,
             });
@@ -124,6 +131,9 @@ namespace TinyWars.MapManagement {
         private _onTouchedGroupScw(e: egret.TouchEvent): void {
             this._imgScw.visible = !this._imgScw.visible;
         }
+        private _onTouchedGroupSrw(e: egret.TouchEvent): void {
+            this._imgSrw.visible = !this._imgSrw.visible;
+        }
         private _onTouchedGroupMrwStd(e: egret.TouchEvent): void {
             this._imgMrwStd.visible = !this._imgMrwStd.visible;
         }
@@ -140,6 +150,7 @@ namespace TinyWars.MapManagement {
             this._labelMrwStd.text  = Lang.getText(Lang.Type.B0404);
             this._labelMrwFog.text  = Lang.getText(Lang.Type.B0408);
             this._labelScw.text     = Lang.getText(Lang.Type.B0409);
+            this._labelSrw.text     = Lang.getText(Lang.Type.B0614);
         }
     }
 }

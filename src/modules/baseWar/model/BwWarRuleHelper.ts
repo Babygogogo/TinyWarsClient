@@ -712,14 +712,14 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
             return ClientErrorCode.WarRuleValidation01;
         }
 
-        const errorCodeForRuleForPlayers = getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral });
-        if (errorCodeForRuleForPlayers) {
-            return errorCodeForRuleForPlayers;
+        const ruleAvailability = rule.ruleAvailability;
+        if ((!ruleAvailability) || (!checkIsValidWarRuleAvailability(ruleAvailability))) {
+            return ClientErrorCode.WarRuleValidation02;
         }
 
-        const availability = rule.ruleAvailability;
-        if ((!availability) || (!checkIsValidWarRuleAvailability(availability))) {
-            return ClientErrorCode.WarRuleValidation02;
+        const errorCodeForRuleForPlayers = getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral, ruleAvailability });
+        if (errorCodeForRuleForPlayers) {
+            return errorCodeForRuleForPlayers;
         }
 
         const ruleForGlobalParams = rule.ruleForGlobalParams;
@@ -771,16 +771,19 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         return ClientErrorCode.NoError;
     }
 
-    export function getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral }: {
+    export function getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral, ruleAvailability }: {
         ruleForPlayers          : IRuleForPlayers;
         configVersion           : string;
         playersCountUnneutral   : number;
+        ruleAvailability        : WarRule.IDataForWarRuleAvailability;
     }): ClientErrorCode {
         const ruleArray = ruleForPlayers.playerRuleDataArray;
         if ((ruleArray == null) || (ruleArray.length !== playersCountUnneutral)) {
-            return ClientErrorCode.PlayerRuleValidation00;
+            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_00;
         }
 
+        const canSrw            = ruleAvailability.canSrw;
+        let srwAiCount          = 0;
         const playerIndexSet    = new Set<number>();
         const teamIndexSet      = new Set<number>();
         for (const data of ruleArray) {
@@ -790,7 +793,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 (playerIndex >  playersCountUnneutral)                  ||
                 (playerIndexSet.has(playerIndex))
             ) {
-                return ClientErrorCode.PlayerRuleValidation01;
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_01;
             }
 
             const teamIndex = data.teamIndex;
@@ -798,7 +801,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 (teamIndex <  CommonConstants.WarFirstTeamIndex)    ||
                 (teamIndex >  playersCountUnneutral)
             ) {
-                return ClientErrorCode.PlayerRuleValidation02;
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_02;
             }
 
             playerIndexSet.add(playerIndex);
@@ -809,7 +812,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 (initialFund > CommonConstants.WarRuleInitialFundMaxLimit)  ||
                 (initialFund < CommonConstants.WarRuleInitialFundMinLimit)
             ) {
-                return ClientErrorCode.PlayerRuleValidation03;
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_03;
             }
 
             const incomeMultiplier = data.incomeMultiplier;
@@ -817,7 +820,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 (incomeMultiplier > CommonConstants.WarRuleIncomeMultiplierMaxLimit)    ||
                 (incomeMultiplier < CommonConstants.WarRuleIncomeMultiplierMinLimit)
             ) {
-                return ClientErrorCode.PlayerRuleValidation04;
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_04;
             }
 
             const energyAddPctOnLoadCo = data.energyAddPctOnLoadCo;
@@ -825,7 +828,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 (energyAddPctOnLoadCo > CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit)    ||
                 (energyAddPctOnLoadCo < CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit)
             ) {
-                return ClientErrorCode.PlayerRuleValidation05;
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_05;
             }
 
             const energyGrowthMultiplier = data.energyGrowthMultiplier;
@@ -833,7 +836,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 (energyGrowthMultiplier > CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit)    ||
                 (energyGrowthMultiplier < CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit)
             ) {
-                return ClientErrorCode.PlayerRuleValidation06;
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_06;
             }
 
             const moveRangeModifier = data.moveRangeModifier;
@@ -841,7 +844,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 (moveRangeModifier > CommonConstants.WarRuleMoveRangeModifierMaxLimit)  ||
                 (moveRangeModifier < CommonConstants.WarRuleMoveRangeModifierMinLimit)
             ) {
-                return ClientErrorCode.PlayerRuleValidation07;
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_07;
             }
 
             const attackPowerModifier = data.attackPowerModifier;
@@ -849,7 +852,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 (attackPowerModifier > CommonConstants.WarRuleOffenseBonusMaxLimit) ||
                 (attackPowerModifier < CommonConstants.WarRuleOffenseBonusMinLimit)
             ) {
-                return ClientErrorCode.PlayerRuleValidation08;
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_08;
             }
 
             const visionRangeModifier = data.visionRangeModifier;
@@ -857,7 +860,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 (visionRangeModifier > CommonConstants.WarRuleVisionRangeModifierMaxLimit)  ||
                 (visionRangeModifier < CommonConstants.WarRuleVisionRangeModifierMinLimit)
             ) {
-                return ClientErrorCode.PlayerRuleValidation09;
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_09;
             }
 
             const luckLowerLimit = data.luckLowerLimit;
@@ -865,7 +868,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 (luckLowerLimit > CommonConstants.WarRuleLuckMaxLimit)  ||
                 (luckLowerLimit < CommonConstants.WarRuleLuckMinLimit)
             ) {
-                return ClientErrorCode.PlayerRuleValidation10;
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_10;
             }
 
             const luckUpperLimit = data.luckUpperLimit;
@@ -874,22 +877,39 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 (luckUpperLimit < CommonConstants.WarRuleLuckMinLimit)  ||
                 (luckUpperLimit < luckLowerLimit)
             ) {
-                return ClientErrorCode.PlayerRuleValidation11;
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_11;
             }
 
             const bannedCoIdArray = data.bannedCoIdArray || [];
             if ((bannedCoIdArray.indexOf(CommonConstants.CoEmptyId) >= 0)                               ||
                 (bannedCoIdArray.some(coId => ConfigManager.getCoBasicCfg(configVersion, coId) == null))
             ) {
-                return ClientErrorCode.PlayerRuleValidation12;
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_12;
+            }
+
+            const fixedCoIdInSrw = data.fixedCoIdInSrw;
+            if (fixedCoIdInSrw != null) {
+                if (!canSrw) {
+                    return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_13;
+                } else {
+                    if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInSrw) == null) {
+                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_14;
+                    }
+                    ++srwAiCount;
+                }
             }
         }
 
         if (playerIndexSet.size !== playersCountUnneutral) {
-            return ClientErrorCode.PlayerRuleValidation13;
+            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_13;
         }
         if (teamIndexSet.size <= 1) {
-            return ClientErrorCode.PlayerRuleValidation14;
+            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_14;
+        }
+        if ((canSrw)                                                    &&
+            ((srwAiCount <= 0) || (srwAiCount >= playersCountUnneutral))
+        ) {
+            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_17;
         }
 
         return ClientErrorCode.NoError;
@@ -897,11 +917,12 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
 
     function checkIsValidWarRuleAvailability(availability: WarRule.IDataForWarRuleAvailability): boolean {
         const {
-            canMcw,     canScw,     canMrw,
+            canMcw,     canScw,     canMrw,     canSrw,
         } = availability;
         return (!!canMcw)
             || (!!canScw)
-            || (!!canMrw);
+            || (!!canMrw)
+            || (!!canSrw);
     }
 
     function getErrorCodeForRuleForGlobalParams(rule: IRuleForGlobalParams): ClientErrorCode {

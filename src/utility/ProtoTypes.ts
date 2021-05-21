@@ -2282,6 +2282,9 @@ export declare namespace Map {
 
         /** DataForMapAvailability canMrwFog */
         canMrwFog?: (boolean|null);
+
+        /** DataForMapAvailability canSrw */
+        canSrw?: (boolean|null);
     }
 
     /** Represents a DataForMapAvailability. */
@@ -2304,6 +2307,9 @@ export declare namespace Map {
 
         /** DataForMapAvailability canMrwFog. */
         public canMrwFog: boolean;
+
+        /** DataForMapAvailability canSrw. */
+        public canSrw: boolean;
 
         /**
          * Creates a new DataForMapAvailability instance using the specified properties.
@@ -5423,6 +5429,9 @@ export declare namespace WarRule {
 
         /** DataForPlayerRule bannedCoIdArray */
         bannedCoIdArray?: (number[]|null);
+
+        /** DataForPlayerRule fixedCoIdInSrw */
+        fixedCoIdInSrw?: (number|null);
     }
 
     /** Represents a DataForPlayerRule. */
@@ -5469,6 +5478,9 @@ export declare namespace WarRule {
 
         /** DataForPlayerRule bannedCoIdArray. */
         public bannedCoIdArray: number[];
+
+        /** DataForPlayerRule fixedCoIdInSrw. */
+        public fixedCoIdInSrw: number;
 
         /**
          * Creates a new DataForPlayerRule instance using the specified properties.
@@ -5552,6 +5564,9 @@ export declare namespace WarRule {
 
         /** DataForWarRuleAvailability canMrw */
         canMrw?: (boolean|null);
+
+        /** DataForWarRuleAvailability canSrw */
+        canSrw?: (boolean|null);
     }
 
     /** Represents a DataForWarRuleAvailability. */
@@ -5571,6 +5586,9 @@ export declare namespace WarRule {
 
         /** DataForWarRuleAvailability canMrw. */
         public canMrw: boolean;
+
+        /** DataForWarRuleAvailability canSrw. */
+        public canSrw: boolean;
 
         /**
          * Creates a new DataForWarRuleAvailability instance using the specified properties.
@@ -6734,6 +6752,12 @@ export declare namespace WarSettings {
 
     /** Properties of a SettingsForSrw. */
     interface ISettingsForSrw {
+
+        /** SettingsForSrw mapId */
+        mapId?: (number|null);
+
+        /** SettingsForSrw warSignature */
+        warSignature?: (string|null);
     }
 
     /** Represents a SettingsForSrw. */
@@ -6744,6 +6768,12 @@ export declare namespace WarSettings {
          * @param [properties] Properties to set
          */
         constructor(properties?: WarSettings.ISettingsForSrw);
+
+        /** SettingsForSrw mapId. */
+        public mapId: number;
+
+        /** SettingsForSrw warSignature. */
+        public warSignature: string;
 
         /**
          * Creates a new SettingsForSrw instance using the specified properties.
@@ -19401,6 +19431,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgSpmCreateSfw */
         MsgSpmCreateSfw?: (NetMessage.IMsgSpmCreateSfw|null);
 
+        /** MessageContainer MsgSpmCreateSrw */
+        MsgSpmCreateSrw?: (NetMessage.IMsgSpmCreateSrw|null);
+
         /** MessageContainer MsgSpmGetWarSaveSlotFullDataArray */
         MsgSpmGetWarSaveSlotFullDataArray?: (NetMessage.IMsgSpmGetWarSaveSlotFullDataArray|null);
 
@@ -19412,6 +19445,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgSpmSaveSfw */
         MsgSpmSaveSfw?: (NetMessage.IMsgSpmSaveSfw|null);
+
+        /** MessageContainer MsgSpmSaveSrw */
+        MsgSpmSaveSrw?: (NetMessage.IMsgSpmSaveSrw|null);
 
         /** MessageContainer MsgMrrSetMaxConcurrentCount */
         MsgMrrSetMaxConcurrentCount?: (NetMessage.IMsgMrrSetMaxConcurrentCount|null);
@@ -19786,6 +19822,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgSpmCreateSfw. */
         public MsgSpmCreateSfw?: (NetMessage.IMsgSpmCreateSfw|null);
 
+        /** MessageContainer MsgSpmCreateSrw. */
+        public MsgSpmCreateSrw?: (NetMessage.IMsgSpmCreateSrw|null);
+
         /** MessageContainer MsgSpmGetWarSaveSlotFullDataArray. */
         public MsgSpmGetWarSaveSlotFullDataArray?: (NetMessage.IMsgSpmGetWarSaveSlotFullDataArray|null);
 
@@ -19797,6 +19836,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgSpmSaveSfw. */
         public MsgSpmSaveSfw?: (NetMessage.IMsgSpmSaveSfw|null);
+
+        /** MessageContainer MsgSpmSaveSrw. */
+        public MsgSpmSaveSrw?: (NetMessage.IMsgSpmSaveSrw|null);
 
         /** MessageContainer MsgMrrSetMaxConcurrentCount. */
         public MsgMrrSetMaxConcurrentCount?: (NetMessage.IMsgMrrSetMaxConcurrentCount|null);
@@ -48984,6 +49026,327 @@ export declare namespace NetMessage {
         }
     }
 
+    /** Properties of a MsgSpmCreateSrw. */
+    interface IMsgSpmCreateSrw {
+
+        /** MsgSpmCreateSrw c */
+        c?: (NetMessage.MsgSpmCreateSrw.IC|null);
+
+        /** MsgSpmCreateSrw s */
+        s?: (NetMessage.MsgSpmCreateSrw.IS|null);
+    }
+
+    /** Represents a MsgSpmCreateSrw. */
+    class MsgSpmCreateSrw implements IMsgSpmCreateSrw {
+
+        /**
+         * Constructs a new MsgSpmCreateSrw.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgSpmCreateSrw);
+
+        /** MsgSpmCreateSrw c. */
+        public c?: (NetMessage.MsgSpmCreateSrw.IC|null);
+
+        /** MsgSpmCreateSrw s. */
+        public s?: (NetMessage.MsgSpmCreateSrw.IS|null);
+
+        /**
+         * Creates a new MsgSpmCreateSrw instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgSpmCreateSrw instance
+         */
+        public static create(properties?: NetMessage.IMsgSpmCreateSrw): NetMessage.MsgSpmCreateSrw;
+
+        /**
+         * Encodes the specified MsgSpmCreateSrw message. Does not implicitly {@link NetMessage.MsgSpmCreateSrw.verify|verify} messages.
+         * @param message MsgSpmCreateSrw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgSpmCreateSrw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgSpmCreateSrw message, length delimited. Does not implicitly {@link NetMessage.MsgSpmCreateSrw.verify|verify} messages.
+         * @param message MsgSpmCreateSrw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgSpmCreateSrw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgSpmCreateSrw message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgSpmCreateSrw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmCreateSrw;
+
+        /**
+         * Decodes a MsgSpmCreateSrw message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgSpmCreateSrw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmCreateSrw;
+
+        /**
+         * Verifies a MsgSpmCreateSrw message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgSpmCreateSrw message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgSpmCreateSrw
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmCreateSrw;
+
+        /**
+         * Creates a plain object from a MsgSpmCreateSrw message. Also converts values to other types if specified.
+         * @param message MsgSpmCreateSrw
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgSpmCreateSrw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgSpmCreateSrw to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgSpmCreateSrw {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C slotIndex */
+            slotIndex?: (number|null);
+
+            /** C slotExtraData */
+            slotExtraData?: (SinglePlayerMode.ISpmWarSaveSlotExtraData|null);
+
+            /** C settingsForCommon */
+            settingsForCommon?: (WarSettings.ISettingsForCommon|null);
+
+            /** C settingsForSrw */
+            settingsForSrw?: (WarSettings.ISettingsForSrw|null);
+
+            /** C playerInfoList */
+            playerInfoList?: (Structure.IDataForPlayerInRoom[]|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgSpmCreateSrw.IC);
+
+            /** C slotIndex. */
+            public slotIndex: number;
+
+            /** C slotExtraData. */
+            public slotExtraData?: (SinglePlayerMode.ISpmWarSaveSlotExtraData|null);
+
+            /** C settingsForCommon. */
+            public settingsForCommon?: (WarSettings.ISettingsForCommon|null);
+
+            /** C settingsForSrw. */
+            public settingsForSrw?: (WarSettings.ISettingsForSrw|null);
+
+            /** C playerInfoList. */
+            public playerInfoList: Structure.IDataForPlayerInRoom[];
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgSpmCreateSrw.IC): NetMessage.MsgSpmCreateSrw.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgSpmCreateSrw.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgSpmCreateSrw.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgSpmCreateSrw.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgSpmCreateSrw.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmCreateSrw.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmCreateSrw.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmCreateSrw.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgSpmCreateSrw.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S slotIndex */
+            slotIndex?: (number|null);
+
+            /** S warData */
+            warData?: (WarSerialization.ISerialWar|null);
+
+            /** S extraData */
+            extraData?: (SinglePlayerMode.ISpmWarSaveSlotExtraData|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgSpmCreateSrw.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S slotIndex. */
+            public slotIndex: number;
+
+            /** S warData. */
+            public warData?: (WarSerialization.ISerialWar|null);
+
+            /** S extraData. */
+            public extraData?: (SinglePlayerMode.ISpmWarSaveSlotExtraData|null);
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgSpmCreateSrw.IS): NetMessage.MsgSpmCreateSrw.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgSpmCreateSrw.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgSpmCreateSrw.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgSpmCreateSrw.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgSpmCreateSrw.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmCreateSrw.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmCreateSrw.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmCreateSrw.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgSpmCreateSrw.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a MsgSpmGetWarSaveSlotFullDataArray. */
     interface IMsgSpmGetWarSaveSlotFullDataArray {
 
@@ -50157,6 +50520,315 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgSpmSaveSfw.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgSpmSaveSrw. */
+    interface IMsgSpmSaveSrw {
+
+        /** MsgSpmSaveSrw c */
+        c?: (NetMessage.MsgSpmSaveSrw.IC|null);
+
+        /** MsgSpmSaveSrw s */
+        s?: (NetMessage.MsgSpmSaveSrw.IS|null);
+    }
+
+    /** Represents a MsgSpmSaveSrw. */
+    class MsgSpmSaveSrw implements IMsgSpmSaveSrw {
+
+        /**
+         * Constructs a new MsgSpmSaveSrw.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgSpmSaveSrw);
+
+        /** MsgSpmSaveSrw c. */
+        public c?: (NetMessage.MsgSpmSaveSrw.IC|null);
+
+        /** MsgSpmSaveSrw s. */
+        public s?: (NetMessage.MsgSpmSaveSrw.IS|null);
+
+        /**
+         * Creates a new MsgSpmSaveSrw instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgSpmSaveSrw instance
+         */
+        public static create(properties?: NetMessage.IMsgSpmSaveSrw): NetMessage.MsgSpmSaveSrw;
+
+        /**
+         * Encodes the specified MsgSpmSaveSrw message. Does not implicitly {@link NetMessage.MsgSpmSaveSrw.verify|verify} messages.
+         * @param message MsgSpmSaveSrw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgSpmSaveSrw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgSpmSaveSrw message, length delimited. Does not implicitly {@link NetMessage.MsgSpmSaveSrw.verify|verify} messages.
+         * @param message MsgSpmSaveSrw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgSpmSaveSrw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgSpmSaveSrw message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgSpmSaveSrw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmSaveSrw;
+
+        /**
+         * Decodes a MsgSpmSaveSrw message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgSpmSaveSrw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmSaveSrw;
+
+        /**
+         * Verifies a MsgSpmSaveSrw message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgSpmSaveSrw message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgSpmSaveSrw
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmSaveSrw;
+
+        /**
+         * Creates a plain object from a MsgSpmSaveSrw message. Also converts values to other types if specified.
+         * @param message MsgSpmSaveSrw
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgSpmSaveSrw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgSpmSaveSrw to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgSpmSaveSrw {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C slotIndex */
+            slotIndex?: (number|null);
+
+            /** C slotExtraData */
+            slotExtraData?: (SinglePlayerMode.ISpmWarSaveSlotExtraData|null);
+
+            /** C warData */
+            warData?: (WarSerialization.ISerialWar|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgSpmSaveSrw.IC);
+
+            /** C slotIndex. */
+            public slotIndex: number;
+
+            /** C slotExtraData. */
+            public slotExtraData?: (SinglePlayerMode.ISpmWarSaveSlotExtraData|null);
+
+            /** C warData. */
+            public warData?: (WarSerialization.ISerialWar|null);
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgSpmSaveSrw.IC): NetMessage.MsgSpmSaveSrw.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgSpmSaveSrw.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgSpmSaveSrw.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgSpmSaveSrw.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgSpmSaveSrw.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmSaveSrw.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmSaveSrw.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmSaveSrw.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgSpmSaveSrw.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S slotIndex */
+            slotIndex?: (number|null);
+
+            /** S slotExtraData */
+            slotExtraData?: (SinglePlayerMode.ISpmWarSaveSlotExtraData|null);
+
+            /** S warData */
+            warData?: (WarSerialization.ISerialWar|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgSpmSaveSrw.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S slotIndex. */
+            public slotIndex: number;
+
+            /** S slotExtraData. */
+            public slotExtraData?: (SinglePlayerMode.ISpmWarSaveSlotExtraData|null);
+
+            /** S warData. */
+            public warData?: (WarSerialization.ISerialWar|null);
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgSpmSaveSrw.IS): NetMessage.MsgSpmSaveSrw.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgSpmSaveSrw.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgSpmSaveSrw.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgSpmSaveSrw.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgSpmSaveSrw.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmSaveSrw.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmSaveSrw.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmSaveSrw.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgSpmSaveSrw.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

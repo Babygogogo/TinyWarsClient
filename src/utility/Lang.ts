@@ -2646,7 +2646,7 @@ namespace TinyWars.Utility.Lang {
             `Ranking Match FoW`,
         ],
         [Type.B0409]: [
-            `单人自由对战`,
+            `单人自定义游戏`,
             `SP Custom Games`,
         ],
         [Type.B0410]: [
@@ -3464,6 +3464,10 @@ namespace TinyWars.Utility.Lang {
         [Type.B0613]: [
             `模拟战雾战`,
             `Simulation FoW`,
+        ],
+        [Type.B0614]: [
+            `单人排位游戏`,
+            `SP Ranking Games`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

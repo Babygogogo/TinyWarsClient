@@ -560,6 +560,8 @@ namespace TinyWars.Utility.Types {
         MfwFog      = 10,
         SfwStd      = 11,
         SfwFog      = 12,
+        SrwStd      = 13,
+        SrwFog      = 14,
     }
 
     export const enum MapReviewStatus {

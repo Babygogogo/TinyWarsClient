@@ -63,6 +63,7 @@ namespace TinyWars.MapManagement {
                     canMrwStd   : false,
                     canMrwFog   : false,
                     canScw      : false,
+                    canSrw      : false,
                 },
             });
             this.close();

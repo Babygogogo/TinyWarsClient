@@ -74,9 +74,9 @@ namespace TinyWars.TestWar {
     }
 
     async function _createDataForCreateTwWar(mapRawData: IMapRawData): Promise<ISerialWar | undefined> {
-        const dataForPlayerManager = await _createInitialPlayerManagerDataForMrw(mapRawData);
+        const dataForPlayerManager = await _createInitialPlayerManagerDataForTw(mapRawData);
         if (!dataForPlayerManager) {
-            Logger.error(`TwWar._createDataForCreateTwWar() failed _createInitialPlayerManagerDataForMrw().`);
+            Logger.error(`TwWar._createDataForCreateTwWar() failed _createInitialPlayerManagerDataForTw().`);
             return undefined;
         }
 
@@ -124,23 +124,23 @@ namespace TinyWars.TestWar {
         };
     }
 
-    async function _createInitialPlayerManagerDataForMrw(mapRawData: IMapRawData): Promise<WarSerialization.ISerialPlayerManager | undefined> {
+    async function _createInitialPlayerManagerDataForTw(mapRawData: IMapRawData): Promise<WarSerialization.ISerialPlayerManager | undefined> {
         const configVersion = ConfigManager.getLatestFormalVersion();
         if (configVersion == null) {
-            Logger.error(`TwWar._createInitialPlayerManagerDataForMrw() empty configVersion.`);
+            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() empty configVersion.`);
             return undefined;
         }
 
         const playersCountUnneutral = mapRawData.playersCountUnneutral;
         if ((playersCountUnneutral == null) || (playersCountUnneutral < 2)) {
-            Logger.error(`TwWar._createInitialPlayerManagerDataForMrw() invalid playersCount!`);
+            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() invalid playersCount!`);
             return undefined;
         }
 
         const bootTimerParams   = [Types.BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue];
         const restTimeToBoot    = bootTimerParams ? bootTimerParams[1] : undefined;
         if (restTimeToBoot == null) {
-            Logger.error(`TwWar._createInitialPlayerManagerDataForMrw() empty restTimeToBoot.`);
+            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() empty restTimeToBoot.`);
             return undefined;
         }
 
@@ -152,24 +152,36 @@ namespace TinyWars.TestWar {
             restTimeToBoot      : 0,
             unitAndTileSkinId   : 0,
         })];
-        const warRule           = (mapRawData.warRuleArray || [])[0];
-        const ruleForPlayers    = warRule? warRule.ruleForPlayers : undefined;
-        if (ruleForPlayers == null) {
-            Logger.error(`TwWar._createInitialPlayerManagerDataForMrw() empty ruleForPlayers.`);
+
+        const warRule = (mapRawData.warRuleArray || [])[0];
+        if (warRule == null) {
+            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() empty warRule.`);
             return undefined;
         }
 
-        if ((BwWarRuleHelper.getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral })) ||
+        const ruleForPlayers = warRule.ruleForPlayers;
+        if (ruleForPlayers == null) {
+            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() empty ruleForPlayers.`);
+            return undefined;
+        }
+
+        const ruleAvailability = warRule.ruleAvailability;
+        if (ruleAvailability == null) {
+            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() empty ruleAvailability.`);
+            return undefined;
+        }
+
+        if ((BwWarRuleHelper.getErrorCodeForRuleForPlayers({ ruleForPlayers, configVersion, playersCountUnneutral, ruleAvailability })) ||
             ((ruleForPlayers.playerRuleDataArray || []).length !== playersCountUnneutral)
         ) {
-            Logger.error(`TwWar._createInitialPlayerManagerDataForMrw() invalid ruleForPlayers! ${JSON.stringify(bootTimerParams)}`);
+            Logger.error(`TwWar._createInitialPlayerManagerDataForTw() invalid ruleForPlayers! ${JSON.stringify(bootTimerParams)}`);
             return undefined;
         }
 
         for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCountUnneutral; ++playerIndex) {
             const teamIndex = BwWarRuleHelper.getTeamIndexByRuleForPlayers(ruleForPlayers, playerIndex);
             if (teamIndex == null) {
-                Logger.error(`TwWar._createInitialPlayerManagerDataForMrw() invalid teamIndex!`);
+                Logger.error(`TwWar._createInitialPlayerManagerDataForTw() invalid teamIndex!`);
                 return undefined;
             }
 
