@@ -126,9 +126,7 @@ namespace TinyWars.MapEditor {
             }
         }
 
-        protected async dataChanged(): Promise<void> {
-            super.dataChanged();
-
+        protected async _onDataChanged(): Promise<void> {
             const data          = this.data;
             this._labelId.text  = `#${data.warEventId}`;
             this._updateLabelName();

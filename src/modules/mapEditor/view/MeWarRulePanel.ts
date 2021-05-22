@@ -39,6 +39,8 @@ namespace TinyWars.MapEditor {
         private _imgAvailabilityScw     : GameUi.UiImage;
         private _btnAvailabilityMrw     : GameUi.UiButton;
         private _imgAvailabilityMrw     : GameUi.UiImage;
+        private _btnAvailabilitySrw     : GameUi.UiButton;
+        private _imgAvailabilitySrw     : GameUi.UiImage;
 
         private _labelWarEventListTitle : GameUi.UiLabel;
         private _btnTestWarEvent        : GameUi.UiButton;
@@ -93,6 +95,7 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnAvailabilityMcw,     callback: this._onTouchedBtnAvailabilityMcw },
                 { ui: this._btnAvailabilityScw,     callback: this._onTouchedBtnAvailabilityScw },
                 { ui: this._btnAvailabilityMrw,     callback: this._onTouchedBtnAvailabilityMrw },
+                { ui: this._btnAvailabilitySrw,     callback: this._onTouchedBtnAvailabilitySrw },
                 { ui: this._btnEditWarEvent,        callback: this._onTouchedBtnEditWarEvent },
                 { ui: this._btnAddWarEvent,         callback: this._onTouchedBtnAddWarEvent },
                 { ui: this._btnTestWarEvent,        callback: this._onTouchedBtnTestWarEvent },
@@ -224,6 +227,14 @@ namespace TinyWars.MapEditor {
             if ((rule) && (!this._war.getIsReviewingMap())) {
                 rule.ruleAvailability.canMrw = !rule.ruleAvailability.canMrw;
                 this._updateImgAvailabilityMrw(rule);
+            }
+        }
+
+        private _onTouchedBtnAvailabilitySrw(e: egret.TouchEvent): void {
+            const rule = this._selectedRule;
+            if ((rule) && (!this._war.getIsReviewingMap())) {
+                rule.ruleAvailability.canSrw = !rule.ruleAvailability.canSrw;
+                this._updateImgAvailabilitySrw(rule);
             }
         }
 
@@ -372,6 +383,7 @@ namespace TinyWars.MapEditor {
             this._btnAvailabilityMcw.setTextColor(colorForButtons);
             this._btnAvailabilityMrw.setTextColor(colorForButtons);
             this._btnAvailabilityScw.setTextColor(colorForButtons);
+            this._btnAvailabilitySrw.setTextColor(colorForButtons);
             this._btnModifyHasFog.setTextColor(colorForButtons);
             this._btnDelete.setTextColor(0xFF0000);
             this._btnAddRule.setTextColor(colorForButtons);
@@ -389,6 +401,7 @@ namespace TinyWars.MapEditor {
             this._btnAvailabilityMcw.label      = Lang.getText(Lang.Type.B0137);
             this._btnAvailabilityScw.label      = Lang.getText(Lang.Type.B0138);
             this._btnAvailabilityMrw.label      = Lang.getText(Lang.Type.B0404);
+            this._btnAvailabilitySrw.label      = Lang.getText(Lang.Type.B0614);
             this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
             this._btnDelete.label               = Lang.getText(Lang.Type.B0220);
             this._btnAddRule.label              = Lang.getText(Lang.Type.B0320);
@@ -421,6 +434,7 @@ namespace TinyWars.MapEditor {
             this._updateImgAvailabilityMcw(rule);
             this._updateImgAvailabilityScw(rule);
             this._updateImgAvailabilityMrw(rule);
+            this._updateImgAvailabilitySrw(rule);
             this._updateListWarEvent();
             this._updateListPlayerRule(rule);
         }
@@ -439,6 +453,9 @@ namespace TinyWars.MapEditor {
         }
         private _updateImgAvailabilityMrw(rule: IWarRule): void {
             this._imgAvailabilityMrw.visible = rule ? rule.ruleAvailability.canMrw : false;
+        }
+        private _updateImgAvailabilitySrw(rule: IWarRule): void {
+            this._imgAvailabilitySrw.visible = rule ? rule.ruleAvailability.canSrw : false;
         }
         private _updateListWarEvent(): void {
             const dataArray         : DataForWarEventRenderer[] = [];
@@ -490,15 +507,13 @@ namespace TinyWars.MapEditor {
         private _btnChoose: GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnChoose, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data              = this.data;
             const index             = data.index;
             this.currentState       = index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
@@ -529,9 +544,7 @@ namespace TinyWars.MapEditor {
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
@@ -906,15 +919,13 @@ namespace TinyWars.MapEditor {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnTitle.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnTitle, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnTitle, callback: this._onTouchedBtnTitle },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data                  = this.data;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
@@ -981,9 +992,7 @@ namespace TinyWars.MapEditor {
             this._updateComponentsForLanguage();
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data                  = this.data;
             this._labelWarEventId.text  = `${data.warEventId}`;
             this._updateLabelWarEventName();

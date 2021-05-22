@@ -168,9 +168,7 @@ namespace TinyWars.GameUi {
             this._conTileView.removeChildren();
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data          = this.data;
             this._labelNum.text = `x${data.num}`;
 

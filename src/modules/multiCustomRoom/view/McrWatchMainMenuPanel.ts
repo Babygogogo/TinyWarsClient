@@ -120,9 +120,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelCommand   : GameUi.UiLabel;
         private _imgRed         : GameUi.UiImage;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data              = this.data;
             this._labelCommand.text = data.name;
             this._imgRed.visible    = (!!data.redChecker) && (data.redChecker());

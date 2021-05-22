@@ -130,9 +130,7 @@ namespace TinyWars.MultiCustomRoom {
             ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data = this.data;
             if (data) {
                 const playerRuleType    = data.playerRuleType;
@@ -163,15 +161,11 @@ namespace TinyWars.MultiCustomRoom {
         private _labelPlayerIndex   : GameUi.UiLabel;
         private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
+        protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
@@ -236,9 +230,7 @@ namespace TinyWars.MultiCustomRoom {
             this._callbackForFocusOutInputValue = null;
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateBtnCustom();
             this._updateComponentsForValue();
         }

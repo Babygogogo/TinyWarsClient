@@ -325,15 +325,13 @@ namespace TinyWars.BaseWar {
         private _btnChoose: GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnChoose, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnChoose, callback: this._onTouchTapBtnChoose },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data          = this.data;
             const player        = data.player;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
@@ -364,9 +362,7 @@ namespace TinyWars.BaseWar {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data              = this.data;
             this._labelIndex.text   = `${data.index}.`;
             this._labelDesc.text    = Utility.ConfigManager.getCoSkillCfg(Utility.ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()];

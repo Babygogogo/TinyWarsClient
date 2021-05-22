@@ -683,9 +683,7 @@ namespace TinyWars.MapEditor {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
@@ -729,7 +727,7 @@ namespace TinyWars.MapEditor {
             this._tileView.updateOnAnimationTick();
         }
 
-        protected dataChanged(): void {
+        protected _onDataChanged(): void {
             const data              = this.data;
             this._labelNum.text     = "" + data.count;
             this._tileView.init({
@@ -769,7 +767,7 @@ namespace TinyWars.MapEditor {
             unitView.tickUnitAnimationFrame();
         }
 
-        protected dataChanged(): void {
+        protected _onDataChanged(): void {
             const data              = this.data;
             const dataForDrawUnit   = data.dataForDrawUnit;
             this._labelNum.text    = "" + data.count;

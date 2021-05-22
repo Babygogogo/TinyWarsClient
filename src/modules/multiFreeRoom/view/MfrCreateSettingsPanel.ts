@@ -258,9 +258,7 @@ namespace TinyWars.MultiFreeRoom {
     class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
         private _labelName: GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
         }
     }
@@ -279,9 +277,7 @@ namespace TinyWars.MultiFreeRoom {
             ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateLabelName();
             this._updateState();
         }
@@ -334,9 +330,7 @@ namespace TinyWars.MultiFreeRoom {
             ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateImgColor();
         }
 

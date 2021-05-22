@@ -208,9 +208,7 @@ namespace TinyWars.SingleCustomRoom {
     class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
         private _labelName: GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
         }
     }

@@ -520,9 +520,7 @@ namespace TinyWars.Chat {
             this._updateImgRed();
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data          = this.data;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._updateLabels();
@@ -588,9 +586,7 @@ namespace TinyWars.Chat {
         private _labelName      : TinyWars.GameUi.UiLabel;
         private _labelContent   : TinyWars.GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const message               = this.data.message;
             const fromUserId            = message.fromUserId;
             this._labelContent.text     = message.content;

@@ -145,9 +145,7 @@ namespace TinyWars.MapEditor {
             this._listUnit.setScrollPolicyH(eui.ScrollPolicy.OFF);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data              = this.data;
             const unitViewIdList    = data.dataListForDrawUnit;
             const dataListForUnit   : DataForUnitRenderer[] = [];
@@ -188,7 +186,7 @@ namespace TinyWars.MapEditor {
             unitView.tickUnitAnimationFrame();
         }
 
-        protected dataChanged(): void {
+        protected _onDataChanged(): void {
             const data              = this.data;
             const dataForDrawUnit   = data.dataForDrawUnit;
             const unitType          = dataForDrawUnit.unitType;

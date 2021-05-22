@@ -129,9 +129,7 @@ namespace TinyWars.SingleCustomRoom {
             }
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateComponentsForSettings();
         }
 

@@ -91,7 +91,7 @@ namespace TinyWars.MapEditor {
         private _group          : eui.Group;
         private _labelName      : GameUi.UiLabel;
 
-        protected dataChanged(): void {
+        protected _onDataChanged(): void {
             const data              = this.data;
             this._labelName.text    = data.mapName;
         }

@@ -303,9 +303,7 @@ namespace TinyWars.MultiFreeRoom {
     class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
         private _labelName: GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
         }
     }
@@ -329,9 +327,7 @@ namespace TinyWars.MultiFreeRoom {
             ]);
         }
 
-        protected async dataChanged(): Promise<void> {
-            super.dataChanged();
-
+        protected async _onDataChanged(): Promise<void> {
             this._updateState();
 
             const roomInfo = await MfrModel.getRoomInfo(this.data.roomId);

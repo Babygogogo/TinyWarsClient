@@ -135,9 +135,7 @@ namespace TinyWars.SinglePlayerMode {
             this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 

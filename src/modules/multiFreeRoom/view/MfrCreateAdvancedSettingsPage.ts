@@ -102,9 +102,7 @@ namespace TinyWars.MultiFreeRoom {
             ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data = this.data;
             if (data) {
                 const playerRuleType    = data.playerRuleType;
@@ -139,9 +137,7 @@ namespace TinyWars.MultiFreeRoom {
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
@@ -184,9 +180,7 @@ namespace TinyWars.MultiFreeRoom {
     class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private readonly _labelValue    : GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateComponentsForValue();
         }
 

@@ -317,9 +317,7 @@ namespace TinyWars.User {
         private readonly _labelRatio    : TinyWars.GameUi.UiLabel;
         private readonly _imgBottom     : TinyWars.GameUi.UiImage;
 
-        protected async dataChanged(): Promise<void> {
-            super.dataChanged();
-
+        protected async _onDataChanged(): Promise<void> {
             const data              = this.data;
             this._imgBg.alpha       = data.index % 2 === 0 ? 0.2 : 0.5;
             this._imgBottom.visible = !!data.showBottom;

@@ -143,9 +143,7 @@ namespace TinyWars.MultiRankWar {
             this._updateComponentsForLanguage();
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateComponentsForSettings();
             this._updateLabelStatus();
         }

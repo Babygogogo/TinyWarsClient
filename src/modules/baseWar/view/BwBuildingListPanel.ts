@@ -126,9 +126,7 @@ namespace TinyWars.BaseWar {
             ];
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data              = this.data;
             const dict              = data.dict;
             const playerManager     = data.playerManager;

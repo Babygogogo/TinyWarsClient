@@ -180,9 +180,7 @@ namespace TinyWars.BaseWar {
             this._conUnitView.addChild(this._unitView);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data              = this.data;
             this._labelAction.text  = Lang.getUnitActionName(data.actionType);
 

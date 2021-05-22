@@ -237,9 +237,7 @@ namespace TinyWars.BaseWar {
             (this.data) && (this._updateView());
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 

@@ -121,9 +121,7 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForLanguage();
         }
 
-        protected async dataChanged(): Promise<void> {
-            super.dataChanged();
-
+        protected async _onDataChanged(): Promise<void> {
             this._updateLabelNodeId();
             this._updateLabelSubNode();
             this._updateLabelSubCondition();

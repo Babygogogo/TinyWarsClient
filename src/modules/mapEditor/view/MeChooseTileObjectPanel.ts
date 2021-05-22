@@ -150,9 +150,7 @@ namespace TinyWars.MapEditor {
             this._listTileObject.setScrollPolicyH(eui.ScrollPolicy.OFF);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data                      = this.data;
             const dataListForDrawTileObject = data.dataListForDrawTileObject;
             this._labelCategory.text        = Lang.getPlayerForceName(dataListForDrawTileObject[0].playerIndex);
@@ -196,7 +194,7 @@ namespace TinyWars.MapEditor {
             this._tileView.updateOnAnimationTick();
         }
 
-        protected dataChanged(): void {
+        protected _onDataChanged(): void {
             const data                  = this.data;
             const dataForDrawTileObject = data.dataForDrawTileObject;
             const tileObjectType        = dataForDrawTileObject.objectType;

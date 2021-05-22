@@ -182,9 +182,7 @@ namespace TinyWars.User {
             this._imgBg.touchEnabled = true;
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data = this.data;
             if (data == null) {
                 return;

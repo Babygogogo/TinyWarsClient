@@ -107,9 +107,7 @@ namespace TinyWars.MultiRankRoom {
             ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data = this.data;
             if (data) {
                 const playerRuleType    = data.playerRuleType;
@@ -146,9 +144,7 @@ namespace TinyWars.MultiRankRoom {
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
@@ -193,9 +189,7 @@ namespace TinyWars.MultiRankRoom {
     class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private readonly _labelValue    : GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateComponentsForValue();
         }
 

@@ -104,9 +104,7 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForLanguage();
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateLabelType();
         }
 

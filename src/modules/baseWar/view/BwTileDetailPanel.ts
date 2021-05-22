@@ -336,13 +336,13 @@ namespace TinyWars.BaseWar {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnTitle.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnTitle, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnTitle, callback: this._onTouchedBtnTitle },
+            ]);
         }
 
-        protected dataChanged(): void {
+        protected _onDataChanged(): void {
             const data              = this.data;
             this._btnTitle.label    = data.titleText;
             this._labelValue.text   = data.valueText;
@@ -384,9 +384,7 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 

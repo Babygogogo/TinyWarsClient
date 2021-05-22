@@ -11,7 +11,8 @@ namespace TinyWars.GameUi {
         private _notifyListenerArray: Notify.Listener[];
         private _uiListenerArray    : UiListener[];
 
-        public data                 : DataForRenderer;
+        private _isDataChangedBeforeOpen    = false;
+        public data                         : DataForRenderer;
 
         public constructor() {
             super();
@@ -59,6 +60,11 @@ namespace TinyWars.GameUi {
 
                 this._onOpened();
                 this._registerListeners();
+
+                if (this._getIsDataChangedBeforeOpen()) {
+                    this._setIsDataChangedBeforeOpen(false);
+                    this._onDataChanged();
+                }
             }
         }
         private _doClose(): void {
@@ -85,6 +91,23 @@ namespace TinyWars.GameUi {
         }
         private _setIsOpening(opening: boolean): void {
             this._isOpening = opening;
+        }
+
+        protected _onDataChanged(): void {}
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            if (this._getIsOpening()) {
+                this._onDataChanged();
+            } else {
+                this._setIsDataChangedBeforeOpen(true);
+            }
+        }
+        private _getIsDataChangedBeforeOpen(): boolean {
+            return this._isDataChangedBeforeOpen;
+        }
+        private _setIsDataChangedBeforeOpen(isChanged: boolean): void {
+            this._isDataChangedBeforeOpen = isChanged;
         }
 
         protected _setNotifyListenerArray(array: Notify.Listener[]): void {

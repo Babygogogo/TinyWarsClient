@@ -136,9 +136,7 @@ namespace TinyWars.WarMap {
             this._tileView.updateOnAnimationTick();
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data              = this.data;
             const dict              = data.dict;
             const maxPlayerIndex    = data.maxPlayerIndex;

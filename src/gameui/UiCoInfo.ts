@@ -185,7 +185,7 @@ namespace TinyWars.GameUi {
     class SkillTypeRenderer extends GameUi.UiListItemRenderer<DataForSkillTypeRenderer> {
         private _labelType  : GameUi.UiLabel;
 
-        protected dataChanged(): void {
+        protected _onDataChanged(): void {
             const data = this.data;
             if (data) {
                 const skillType         = data.coSkillType;
@@ -209,9 +209,7 @@ namespace TinyWars.GameUi {
     class SkillDescRenderer extends GameUi.UiListItemRenderer<DataForSkillDescRenderer> {
         private _labelDesc  : GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data              = this.data;
             this._labelDesc.text    = `- ${ConfigManager.getCoSkillCfg(data.configVersion, data.skillId).desc[Lang.getCurrentLanguageType()]}`;
         }

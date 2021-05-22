@@ -106,7 +106,7 @@ namespace TinyWars.MapEditor {
     class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
         private _labelName: GameUi.UiLabel;
 
-        protected dataChanged(): void {
+        protected _onDataChanged(): void {
             this._labelName.text = this.data.name;
         }
     }

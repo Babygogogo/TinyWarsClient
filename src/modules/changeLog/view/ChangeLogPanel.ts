@@ -109,15 +109,13 @@ namespace TinyWars.ChangeLog {
         private _labelContent   : GameUi.UiLabel;
         private _btnModify      : GameUi.UiButton;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnModify.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnModify, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnModify,  callback: this._onTouchedBtnModify },
+            ]);
         }
 
-        protected async dataChanged(): Promise<void> {
-            super.dataChanged();
-
+        protected async _onDataChanged(): Promise<void> {
             const data              = this.data;
             this._labelIndex.text   = `#${Helpers.getNumText(data.messageId, 3)} (${Helpers.getTimestampShortText(data.createTimestamp)})`;
             this._labelContent.text = Lang.getLanguageText({ textArray: data.textList });

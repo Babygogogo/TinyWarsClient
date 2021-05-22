@@ -238,9 +238,7 @@ namespace TinyWars.MultiFreeRoom {
             }
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateComponentsForSettings();
             this._updateLabelReady();
         }

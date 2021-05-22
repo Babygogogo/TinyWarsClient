@@ -392,15 +392,13 @@ namespace TinyWars.Common {
         private _imgChoose  : eui.Image;
         private _labelName  : TinyWars.GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._imgChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedImgChoose, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._imgChoose,  callback: this._onTouchedImgChoose },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data              = this.data;
             this._labelName.text    = Lang.getUnitName(data.unitType);
         }
@@ -420,7 +418,7 @@ namespace TinyWars.Common {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
-        protected dataChanged(): void {
+        protected _onDataChanged(): void {
             const data              = this.data;
             this._labelValue.text   = data.valueText;
             this._btnTitle.label    = data.titleText;
@@ -460,9 +458,7 @@ namespace TinyWars.Common {
             }
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 

@@ -315,16 +315,14 @@ namespace TinyWars.MultiCustomRoom {
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnChoose, this);
-            this._btnNext.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnNext, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
+                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data          = this.data;
             this.currentState   = data.mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
             WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v);

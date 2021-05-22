@@ -441,9 +441,7 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForData();
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateComponentsForData();
         }
 

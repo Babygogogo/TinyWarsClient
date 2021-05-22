@@ -148,9 +148,7 @@ namespace TinyWars.MultiCustomRoom {
         private _imgAccept      : GameUi.UiImage;
         private _imgDecline     : GameUi.UiImage;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data              = this.data;
             const playerInfo        = data.playerInfo;
             this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);

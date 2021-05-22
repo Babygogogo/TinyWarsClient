@@ -389,9 +389,7 @@ namespace TinyWars.ReplayWar {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
@@ -417,15 +415,11 @@ namespace TinyWars.ReplayWar {
         private _labelLost  : GameUi.UiLabel;
         private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
+        protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        protected async dataChanged(): Promise<void> {
-            super.dataChanged();
-
+        protected async _onDataChanged(): Promise<void> {
             const data                  = this.data;
             const war                   = data.war;
             const player                = data.player;
@@ -698,9 +692,7 @@ namespace TinyWars.ReplayWar {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data                  = this.data;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;

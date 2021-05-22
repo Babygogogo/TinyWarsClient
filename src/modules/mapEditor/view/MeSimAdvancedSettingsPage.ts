@@ -73,15 +73,11 @@ namespace TinyWars.MapEditor {
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
+        protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
@@ -478,15 +474,13 @@ namespace TinyWars.MapEditor {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnTitle.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnTitle, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnTitle,   callback: this._onTouchedBtnTitle },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data                  = this.data;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;

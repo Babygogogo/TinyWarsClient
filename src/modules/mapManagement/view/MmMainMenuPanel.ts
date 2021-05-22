@@ -112,9 +112,7 @@ namespace TinyWars.MapManagement {
     class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
         private _labelCommand: GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data = this.data;
             this._labelCommand.text = data.name;
         }

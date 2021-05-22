@@ -200,9 +200,7 @@ namespace TinyWars.MultiCustomRoom {
     class CoRenderer extends GameUi.UiListItemRenderer<DataForCoRenderer> {
         private _labelName: GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             const data              = this.data;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelName.text    = data.coBasicCfg.name;

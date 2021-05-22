@@ -185,9 +185,7 @@ namespace TinyWars.Common {
             this._imgBg.touchEnabled = true;
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
