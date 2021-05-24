@@ -84,15 +84,29 @@ namespace TinyWars.User {
             return (!!privilege)
                 && ((privilege.isAdmin) || (privilege.isChangeLogEditor));
         }
+        async function setSelfUserPrivilege(userPrivilege: ProtoTypes.User.IUserPrivilege): Promise<void> {
+            const info = await getSelfPublicInfo();
+            (info) && (info.userPrivilege = userPrivilege);
+        }
 
         export async function getSelfNickname(): Promise<string> {
             const info = await getSelfPublicInfo();
             return info ? info.nickname : undefined;
         }
+        async function setSelfNickname(nickname: string): Promise<void> {
+            const info = await getSelfPublicInfo();
+            (info) && (info.nickname = nickname);
+        }
+
         export async function getSelfDiscordId(): Promise<string> {
             const info = await getSelfPublicInfo();
             return info ? info.discordId : undefined;
         }
+        async function setSelfDiscordId(discordId: string): Promise<void> {
+            const info = await getSelfPublicInfo();
+            (info) && (info.discordId = discordId);
+        }
+
         export async function getSelfRankScore(): Promise<number> {
             const info = await getSelfPublicInfo();
             // TODO
@@ -201,6 +215,17 @@ namespace TinyWars.User {
                 : false;
         }
 
+        export async function updateOnMsgUserSetNickname(data: ProtoTypes.NetMessage.MsgUserSetNickname.IS): Promise<void> {
+            await setSelfNickname(data.nickname);
+        }
+        export async function updateOnMsgUserSetDiscordId(data: ProtoTypes.NetMessage.MsgUserSetDiscordId.IS): Promise<void> {
+            await setSelfDiscordId(data.discordId);
+        }
+        export async function updateOnMsgUserSetPrivilege(data: ProtoTypes.NetMessage.MsgUserSetPrivilege.IS): Promise<void> {
+            if (data.userId === getSelfUserId()) {
+                await setSelfUserPrivilege(data.userPrivilege);
+            }
+        }
         function _onNotifyNetworkDisconnected(e: egret.Event): void {
             setIsLoggedIn(false);
         }

@@ -6758,6 +6758,9 @@ export declare namespace WarSettings {
 
         /** SettingsForSrw warSignature */
         warSignature?: (string|null);
+
+        /** SettingsForSrw totalScore */
+        totalScore?: (number|null);
     }
 
     /** Represents a SettingsForSrw. */
@@ -6774,6 +6777,9 @@ export declare namespace WarSettings {
 
         /** SettingsForSrw warSignature. */
         public warSignature: string;
+
+        /** SettingsForSrw totalScore. */
+        public totalScore: number;
 
         /**
          * Creates a new SettingsForSrw instance using the specified properties.
@@ -18944,120 +18950,6 @@ export declare namespace User {
          */
         public toJSON(): { [k: string]: any };
     }
-
-    /** Properties of a UserFullInfo. */
-    interface IUserFullInfo {
-
-        /** UserFullInfo userPublicInfo */
-        userPublicInfo?: (User.IUserPublicInfo|null);
-
-        /** UserFullInfo userSettings */
-        userSettings?: (User.IUserSettings|null);
-
-        /** UserFullInfo account */
-        account?: (string|null);
-
-        /** UserFullInfo password */
-        password?: (string|null);
-
-        /** UserFullInfo lastLoginIp */
-        lastLoginIp?: (string|null);
-    }
-
-    /** Represents a UserFullInfo. */
-    class UserFullInfo implements IUserFullInfo {
-
-        /**
-         * Constructs a new UserFullInfo.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: User.IUserFullInfo);
-
-        /** UserFullInfo userPublicInfo. */
-        public userPublicInfo?: (User.IUserPublicInfo|null);
-
-        /** UserFullInfo userSettings. */
-        public userSettings?: (User.IUserSettings|null);
-
-        /** UserFullInfo account. */
-        public account: string;
-
-        /** UserFullInfo password. */
-        public password: string;
-
-        /** UserFullInfo lastLoginIp. */
-        public lastLoginIp: string;
-
-        /**
-         * Creates a new UserFullInfo instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns UserFullInfo instance
-         */
-        public static create(properties?: User.IUserFullInfo): User.UserFullInfo;
-
-        /**
-         * Encodes the specified UserFullInfo message. Does not implicitly {@link User.UserFullInfo.verify|verify} messages.
-         * @param message UserFullInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: User.IUserFullInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified UserFullInfo message, length delimited. Does not implicitly {@link User.UserFullInfo.verify|verify} messages.
-         * @param message UserFullInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: User.IUserFullInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a UserFullInfo message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns UserFullInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserFullInfo;
-
-        /**
-         * Decodes a UserFullInfo message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns UserFullInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserFullInfo;
-
-        /**
-         * Verifies a UserFullInfo message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a UserFullInfo message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns UserFullInfo
-         */
-        public static fromObject(object: { [k: string]: any }): User.UserFullInfo;
-
-        /**
-         * Creates a plain object from a UserFullInfo message. Also converts values to other types if specified.
-         * @param message UserFullInfo
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: User.UserFullInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this UserFullInfo to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
 }
 
 /** Properties of a NetMessage. */
@@ -19449,6 +19341,9 @@ export declare namespace NetMessage {
         /** MessageContainer MsgSpmSaveSrw */
         MsgSpmSaveSrw?: (NetMessage.IMsgSpmSaveSrw|null);
 
+        /** MessageContainer MsgSpmValidateSrw */
+        MsgSpmValidateSrw?: (NetMessage.IMsgSpmValidateSrw|null);
+
         /** MessageContainer MsgMrrSetMaxConcurrentCount */
         MsgMrrSetMaxConcurrentCount?: (NetMessage.IMsgMrrSetMaxConcurrentCount|null);
 
@@ -19839,6 +19734,9 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgSpmSaveSrw. */
         public MsgSpmSaveSrw?: (NetMessage.IMsgSpmSaveSrw|null);
+
+        /** MessageContainer MsgSpmValidateSrw. */
+        public MsgSpmValidateSrw?: (NetMessage.IMsgSpmValidateSrw|null);
 
         /** MessageContainer MsgMrrSetMaxConcurrentCount. */
         public MsgMrrSetMaxConcurrentCount?: (NetMessage.IMsgMrrSetMaxConcurrentCount|null);
@@ -25621,6 +25519,12 @@ export declare namespace NetMessage {
 
             /** S errorCode */
             errorCode?: (number|null);
+
+            /** S userId */
+            userId?: (number|null);
+
+            /** S userPrivilege */
+            userPrivilege?: (User.IUserPrivilege|null);
         }
 
         /** Represents a S. */
@@ -25634,6 +25538,12 @@ export declare namespace NetMessage {
 
             /** S errorCode. */
             public errorCode: number;
+
+            /** S userId. */
+            public userId: number;
+
+            /** S userPrivilege. */
+            public userPrivilege?: (User.IUserPrivilege|null);
 
             /**
              * Creates a new S instance using the specified properties.
@@ -50838,6 +50748,297 @@ export declare namespace NetMessage {
         }
     }
 
+    /** Properties of a MsgSpmValidateSrw. */
+    interface IMsgSpmValidateSrw {
+
+        /** MsgSpmValidateSrw c */
+        c?: (NetMessage.MsgSpmValidateSrw.IC|null);
+
+        /** MsgSpmValidateSrw s */
+        s?: (NetMessage.MsgSpmValidateSrw.IS|null);
+    }
+
+    /** Represents a MsgSpmValidateSrw. */
+    class MsgSpmValidateSrw implements IMsgSpmValidateSrw {
+
+        /**
+         * Constructs a new MsgSpmValidateSrw.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgSpmValidateSrw);
+
+        /** MsgSpmValidateSrw c. */
+        public c?: (NetMessage.MsgSpmValidateSrw.IC|null);
+
+        /** MsgSpmValidateSrw s. */
+        public s?: (NetMessage.MsgSpmValidateSrw.IS|null);
+
+        /**
+         * Creates a new MsgSpmValidateSrw instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgSpmValidateSrw instance
+         */
+        public static create(properties?: NetMessage.IMsgSpmValidateSrw): NetMessage.MsgSpmValidateSrw;
+
+        /**
+         * Encodes the specified MsgSpmValidateSrw message. Does not implicitly {@link NetMessage.MsgSpmValidateSrw.verify|verify} messages.
+         * @param message MsgSpmValidateSrw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgSpmValidateSrw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgSpmValidateSrw message, length delimited. Does not implicitly {@link NetMessage.MsgSpmValidateSrw.verify|verify} messages.
+         * @param message MsgSpmValidateSrw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgSpmValidateSrw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgSpmValidateSrw message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgSpmValidateSrw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmValidateSrw;
+
+        /**
+         * Decodes a MsgSpmValidateSrw message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgSpmValidateSrw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmValidateSrw;
+
+        /**
+         * Verifies a MsgSpmValidateSrw message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgSpmValidateSrw message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgSpmValidateSrw
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmValidateSrw;
+
+        /**
+         * Creates a plain object from a MsgSpmValidateSrw message. Also converts values to other types if specified.
+         * @param message MsgSpmValidateSrw
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgSpmValidateSrw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgSpmValidateSrw to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgSpmValidateSrw {
+
+        /** Properties of a C. */
+        interface IC {
+
+            /** C slotIndex */
+            slotIndex?: (number|null);
+
+            /** C warData */
+            warData?: (WarSerialization.ISerialWar|null);
+        }
+
+        /** Represents a C. */
+        class C implements IC {
+
+            /**
+             * Constructs a new C.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgSpmValidateSrw.IC);
+
+            /** C slotIndex. */
+            public slotIndex: number;
+
+            /** C warData. */
+            public warData?: (WarSerialization.ISerialWar|null);
+
+            /**
+             * Creates a new C instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns C instance
+             */
+            public static create(properties?: NetMessage.MsgSpmValidateSrw.IC): NetMessage.MsgSpmValidateSrw.C;
+
+            /**
+             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgSpmValidateSrw.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgSpmValidateSrw.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgSpmValidateSrw.C.verify|verify} messages.
+             * @param message C message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgSpmValidateSrw.IC, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a C message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmValidateSrw.C;
+
+            /**
+             * Decodes a C message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns C
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmValidateSrw.C;
+
+            /**
+             * Verifies a C message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a C message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns C
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmValidateSrw.C;
+
+            /**
+             * Creates a plain object from a C message. Also converts values to other types if specified.
+             * @param message C
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgSpmValidateSrw.C, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this C to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S slotIndex */
+            slotIndex?: (number|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgSpmValidateSrw.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S slotIndex. */
+            public slotIndex: number;
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgSpmValidateSrw.IS): NetMessage.MsgSpmValidateSrw.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgSpmValidateSrw.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgSpmValidateSrw.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgSpmValidateSrw.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgSpmValidateSrw.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgSpmValidateSrw.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgSpmValidateSrw.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgSpmValidateSrw.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgSpmValidateSrw.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a MsgMrrSetMaxConcurrentCount. */
     interface IMsgMrrSetMaxConcurrentCount {
 
@@ -56393,230 +56594,5 @@ export declare namespace NetMessage {
             public toJSON(): { [k: string]: any };
         }
     }
-}
-
-/** Properties of a RPCC_SayHello. */
-export declare interface IRPCC_SayHello {
-
-    /** RPCC_SayHello name */
-    name?: (string|null);
-}
-
-/** Represents a RPCC_SayHello. */
-export declare class RPCC_SayHello implements IRPCC_SayHello {
-
-    /**
-     * Constructs a new RPCC_SayHello.
-     * @param [properties] Properties to set
-     */
-    constructor(properties?: IRPCC_SayHello);
-
-    /** RPCC_SayHello name. */
-    public name: string;
-
-    /**
-     * Creates a new RPCC_SayHello instance using the specified properties.
-     * @param [properties] Properties to set
-     * @returns RPCC_SayHello instance
-     */
-    public static create(properties?: IRPCC_SayHello): RPCC_SayHello;
-
-    /**
-     * Encodes the specified RPCC_SayHello message. Does not implicitly {@link RPCC_SayHello.verify|verify} messages.
-     * @param message RPCC_SayHello message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encode(message: IRPCC_SayHello, writer?: protobuf.Writer): protobuf.Writer;
-
-    /**
-     * Encodes the specified RPCC_SayHello message, length delimited. Does not implicitly {@link RPCC_SayHello.verify|verify} messages.
-     * @param message RPCC_SayHello message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IRPCC_SayHello, writer?: protobuf.Writer): protobuf.Writer;
-
-    /**
-     * Decodes a RPCC_SayHello message from the specified reader or buffer.
-     * @param reader Reader or buffer to decode from
-     * @param [length] Message length if known beforehand
-     * @returns RPCC_SayHello
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): RPCC_SayHello;
-
-    /**
-     * Decodes a RPCC_SayHello message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns RPCC_SayHello
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): RPCC_SayHello;
-
-    /**
-     * Verifies a RPCC_SayHello message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a RPCC_SayHello message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns RPCC_SayHello
-     */
-    public static fromObject(object: { [k: string]: any }): RPCC_SayHello;
-
-    /**
-     * Creates a plain object from a RPCC_SayHello message. Also converts values to other types if specified.
-     * @param message RPCC_SayHello
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: RPCC_SayHello, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this RPCC_SayHello to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
-}
-
-/** Properties of a RPCS_SayHello. */
-export declare interface IRPCS_SayHello {
-
-    /** RPCS_SayHello message */
-    message?: (string|null);
-}
-
-/** Represents a RPCS_SayHello. */
-export declare class RPCS_SayHello implements IRPCS_SayHello {
-
-    /**
-     * Constructs a new RPCS_SayHello.
-     * @param [properties] Properties to set
-     */
-    constructor(properties?: IRPCS_SayHello);
-
-    /** RPCS_SayHello message. */
-    public message: string;
-
-    /**
-     * Creates a new RPCS_SayHello instance using the specified properties.
-     * @param [properties] Properties to set
-     * @returns RPCS_SayHello instance
-     */
-    public static create(properties?: IRPCS_SayHello): RPCS_SayHello;
-
-    /**
-     * Encodes the specified RPCS_SayHello message. Does not implicitly {@link RPCS_SayHello.verify|verify} messages.
-     * @param message RPCS_SayHello message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encode(message: IRPCS_SayHello, writer?: protobuf.Writer): protobuf.Writer;
-
-    /**
-     * Encodes the specified RPCS_SayHello message, length delimited. Does not implicitly {@link RPCS_SayHello.verify|verify} messages.
-     * @param message RPCS_SayHello message or plain object to encode
-     * @param [writer] Writer to encode to
-     * @returns Writer
-     */
-    public static encodeDelimited(message: IRPCS_SayHello, writer?: protobuf.Writer): protobuf.Writer;
-
-    /**
-     * Decodes a RPCS_SayHello message from the specified reader or buffer.
-     * @param reader Reader or buffer to decode from
-     * @param [length] Message length if known beforehand
-     * @returns RPCS_SayHello
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): RPCS_SayHello;
-
-    /**
-     * Decodes a RPCS_SayHello message from the specified reader or buffer, length delimited.
-     * @param reader Reader or buffer to decode from
-     * @returns RPCS_SayHello
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {protobuf.util.ProtocolError} If required fields are missing
-     */
-    public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): RPCS_SayHello;
-
-    /**
-     * Verifies a RPCS_SayHello message.
-     * @param message Plain object to verify
-     * @returns `null` if valid, otherwise the reason why it is not
-     */
-    public static verify(message: { [k: string]: any }): (string|null);
-
-    /**
-     * Creates a RPCS_SayHello message from a plain object. Also converts values to their respective internal types.
-     * @param object Plain object
-     * @returns RPCS_SayHello
-     */
-    public static fromObject(object: { [k: string]: any }): RPCS_SayHello;
-
-    /**
-     * Creates a plain object from a RPCS_SayHello message. Also converts values to other types if specified.
-     * @param message RPCS_SayHello
-     * @param [options] Conversion options
-     * @returns Plain object
-     */
-    public static toObject(message: RPCS_SayHello, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-    /**
-     * Converts this RPCS_SayHello to JSON.
-     * @returns JSON object
-     */
-    public toJSON(): { [k: string]: any };
-}
-
-/** Represents a ReplayValidator */
-export declare class ReplayValidator extends protobuf.rpc.Service {
-
-    /**
-     * Constructs a new ReplayValidator service.
-     * @param rpcImpl RPC implementation
-     * @param [requestDelimited=false] Whether requests are length-delimited
-     * @param [responseDelimited=false] Whether responses are length-delimited
-     */
-    constructor(rpcImpl: protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
-
-    /**
-     * Creates new ReplayValidator service using the specified rpc implementation.
-     * @param rpcImpl RPC implementation
-     * @param [requestDelimited=false] Whether requests are length-delimited
-     * @param [responseDelimited=false] Whether responses are length-delimited
-     * @returns RPC service. Useful where requests and/or responses are streamed.
-     */
-    public static create(rpcImpl: protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean): ReplayValidator;
-
-    /**
-     * Calls sayHello.
-     * @param request RPCC_SayHello message or plain object
-     * @param callback Node-style callback called with the error, if any, and RPCS_SayHello
-     */
-    public sayHello(request: IRPCC_SayHello, callback: ReplayValidator.sayHelloCallback): void;
-
-    /**
-     * Calls sayHello.
-     * @param request RPCC_SayHello message or plain object
-     * @returns Promise
-     */
-    public sayHello(request: IRPCC_SayHello): Promise<RPCS_SayHello>;
-}
-
-export declare namespace ReplayValidator {
-
-    /**
-     * Callback as used by {@link ReplayValidator#sayHello}.
-     * @param error Error, if any
-     * @param [response] RPCS_SayHello
-     */
-    type sayHelloCallback = (error: (Error|null), response?: RPCS_SayHello) => void;
 }
 }}
