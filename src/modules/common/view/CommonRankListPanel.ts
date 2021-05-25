@@ -214,7 +214,7 @@ namespace TinyWars.Common {
             this._imgBg.alpha       = rank % 2 == 1 ? 0.2 : 0.5;
 
             const userInfo = await User.UserModel.getUserPublicInfo(data.userId);
-            const rankInfo = userInfo.userRankScore.dataList.find(v => {
+            const rankInfo = userInfo.userMrwRankInfo.find(v => {
                 return (v.playersCountUnneutral === data.playersCount) && (v.warType === data.warType);
             });
             labelNickname.text  = userInfo.nickname;

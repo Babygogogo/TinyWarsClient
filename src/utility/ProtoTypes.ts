@@ -17979,330 +17979,6 @@ export declare class User implements IUser {
 
 export declare namespace User {
 
-    /** Properties of a DataForUserWarStatistics. */
-    interface IDataForUserWarStatistics {
-
-        /** DataForUserWarStatistics warType */
-        warType?: (number|null);
-
-        /** DataForUserWarStatistics playersCountUnneutral */
-        playersCountUnneutral?: (number|null);
-
-        /** DataForUserWarStatistics wins */
-        wins?: (number|null);
-
-        /** DataForUserWarStatistics loses */
-        loses?: (number|null);
-
-        /** DataForUserWarStatistics draws */
-        draws?: (number|null);
-    }
-
-    /** Represents a DataForUserWarStatistics. */
-    class DataForUserWarStatistics implements IDataForUserWarStatistics {
-
-        /**
-         * Constructs a new DataForUserWarStatistics.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: User.IDataForUserWarStatistics);
-
-        /** DataForUserWarStatistics warType. */
-        public warType: number;
-
-        /** DataForUserWarStatistics playersCountUnneutral. */
-        public playersCountUnneutral: number;
-
-        /** DataForUserWarStatistics wins. */
-        public wins: number;
-
-        /** DataForUserWarStatistics loses. */
-        public loses: number;
-
-        /** DataForUserWarStatistics draws. */
-        public draws: number;
-
-        /**
-         * Creates a new DataForUserWarStatistics instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns DataForUserWarStatistics instance
-         */
-        public static create(properties?: User.IDataForUserWarStatistics): User.DataForUserWarStatistics;
-
-        /**
-         * Encodes the specified DataForUserWarStatistics message. Does not implicitly {@link User.DataForUserWarStatistics.verify|verify} messages.
-         * @param message DataForUserWarStatistics message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: User.IDataForUserWarStatistics, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified DataForUserWarStatistics message, length delimited. Does not implicitly {@link User.DataForUserWarStatistics.verify|verify} messages.
-         * @param message DataForUserWarStatistics message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: User.IDataForUserWarStatistics, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a DataForUserWarStatistics message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns DataForUserWarStatistics
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.DataForUserWarStatistics;
-
-        /**
-         * Decodes a DataForUserWarStatistics message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns DataForUserWarStatistics
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.DataForUserWarStatistics;
-
-        /**
-         * Verifies a DataForUserWarStatistics message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a DataForUserWarStatistics message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns DataForUserWarStatistics
-         */
-        public static fromObject(object: { [k: string]: any }): User.DataForUserWarStatistics;
-
-        /**
-         * Creates a plain object from a DataForUserWarStatistics message. Also converts values to other types if specified.
-         * @param message DataForUserWarStatistics
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: User.DataForUserWarStatistics, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this DataForUserWarStatistics to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    /** Properties of a DataForUserRankScore. */
-    interface IDataForUserRankScore {
-
-        /** DataForUserRankScore warType */
-        warType?: (number|null);
-
-        /** DataForUserRankScore playersCountUnneutral */
-        playersCountUnneutral?: (number|null);
-
-        /** DataForUserRankScore currentScore */
-        currentScore?: (number|null);
-
-        /** DataForUserRankScore currentRank */
-        currentRank?: (number|null);
-
-        /** DataForUserRankScore lastWarEndTime */
-        lastWarEndTime?: (number|null);
-    }
-
-    /** Represents a DataForUserRankScore. */
-    class DataForUserRankScore implements IDataForUserRankScore {
-
-        /**
-         * Constructs a new DataForUserRankScore.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: User.IDataForUserRankScore);
-
-        /** DataForUserRankScore warType. */
-        public warType: number;
-
-        /** DataForUserRankScore playersCountUnneutral. */
-        public playersCountUnneutral: number;
-
-        /** DataForUserRankScore currentScore. */
-        public currentScore: number;
-
-        /** DataForUserRankScore currentRank. */
-        public currentRank: number;
-
-        /** DataForUserRankScore lastWarEndTime. */
-        public lastWarEndTime: number;
-
-        /**
-         * Creates a new DataForUserRankScore instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns DataForUserRankScore instance
-         */
-        public static create(properties?: User.IDataForUserRankScore): User.DataForUserRankScore;
-
-        /**
-         * Encodes the specified DataForUserRankScore message. Does not implicitly {@link User.DataForUserRankScore.verify|verify} messages.
-         * @param message DataForUserRankScore message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: User.IDataForUserRankScore, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified DataForUserRankScore message, length delimited. Does not implicitly {@link User.DataForUserRankScore.verify|verify} messages.
-         * @param message DataForUserRankScore message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: User.IDataForUserRankScore, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a DataForUserRankScore message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns DataForUserRankScore
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.DataForUserRankScore;
-
-        /**
-         * Decodes a DataForUserRankScore message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns DataForUserRankScore
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.DataForUserRankScore;
-
-        /**
-         * Verifies a DataForUserRankScore message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a DataForUserRankScore message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns DataForUserRankScore
-         */
-        public static fromObject(object: { [k: string]: any }): User.DataForUserRankScore;
-
-        /**
-         * Creates a plain object from a DataForUserRankScore message. Also converts values to other types if specified.
-         * @param message DataForUserRankScore
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: User.DataForUserRankScore, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this DataForUserRankScore to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    /** Properties of a UserBriefInfo. */
-    interface IUserBriefInfo {
-
-        /** UserBriefInfo userId */
-        userId?: (number|null);
-
-        /** UserBriefInfo nickname */
-        nickname?: (string|null);
-    }
-
-    /** Represents a UserBriefInfo. */
-    class UserBriefInfo implements IUserBriefInfo {
-
-        /**
-         * Constructs a new UserBriefInfo.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: User.IUserBriefInfo);
-
-        /** UserBriefInfo userId. */
-        public userId: number;
-
-        /** UserBriefInfo nickname. */
-        public nickname: string;
-
-        /**
-         * Creates a new UserBriefInfo instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns UserBriefInfo instance
-         */
-        public static create(properties?: User.IUserBriefInfo): User.UserBriefInfo;
-
-        /**
-         * Encodes the specified UserBriefInfo message. Does not implicitly {@link User.UserBriefInfo.verify|verify} messages.
-         * @param message UserBriefInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: User.IUserBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified UserBriefInfo message, length delimited. Does not implicitly {@link User.UserBriefInfo.verify|verify} messages.
-         * @param message UserBriefInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: User.IUserBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a UserBriefInfo message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns UserBriefInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserBriefInfo;
-
-        /**
-         * Decodes a UserBriefInfo message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns UserBriefInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserBriefInfo;
-
-        /**
-         * Verifies a UserBriefInfo message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a UserBriefInfo message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns UserBriefInfo
-         */
-        public static fromObject(object: { [k: string]: any }): User.UserBriefInfo;
-
-        /**
-         * Creates a plain object from a UserBriefInfo message. Also converts values to other types if specified.
-         * @param message UserBriefInfo
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: User.UserBriefInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this UserBriefInfo to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
     /** Properties of a UserPrivilege. */
     interface IUserPrivilege {
 
@@ -18417,101 +18093,218 @@ export declare namespace User {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a UserRankScore. */
-    interface IUserRankScore {
+    /** Properties of a UserRankInfo. */
+    interface IUserRankInfo {
 
-        /** UserRankScore dataList */
-        dataList?: (User.IDataForUserRankScore[]|null);
+        /** UserRankInfo mrwArray */
+        mrwArray?: (User.UserRankInfo.IUserMrwRankInfo[]|null);
     }
 
-    /** Represents a UserRankScore. */
-    class UserRankScore implements IUserRankScore {
+    /** Represents a UserRankInfo. */
+    class UserRankInfo implements IUserRankInfo {
 
         /**
-         * Constructs a new UserRankScore.
+         * Constructs a new UserRankInfo.
          * @param [properties] Properties to set
          */
-        constructor(properties?: User.IUserRankScore);
+        constructor(properties?: User.IUserRankInfo);
 
-        /** UserRankScore dataList. */
-        public dataList: User.IDataForUserRankScore[];
+        /** UserRankInfo mrwArray. */
+        public mrwArray: User.UserRankInfo.IUserMrwRankInfo[];
 
         /**
-         * Creates a new UserRankScore instance using the specified properties.
+         * Creates a new UserRankInfo instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns UserRankScore instance
+         * @returns UserRankInfo instance
          */
-        public static create(properties?: User.IUserRankScore): User.UserRankScore;
+        public static create(properties?: User.IUserRankInfo): User.UserRankInfo;
 
         /**
-         * Encodes the specified UserRankScore message. Does not implicitly {@link User.UserRankScore.verify|verify} messages.
-         * @param message UserRankScore message or plain object to encode
+         * Encodes the specified UserRankInfo message. Does not implicitly {@link User.UserRankInfo.verify|verify} messages.
+         * @param message UserRankInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: User.IUserRankScore, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: User.IUserRankInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified UserRankScore message, length delimited. Does not implicitly {@link User.UserRankScore.verify|verify} messages.
-         * @param message UserRankScore message or plain object to encode
+         * Encodes the specified UserRankInfo message, length delimited. Does not implicitly {@link User.UserRankInfo.verify|verify} messages.
+         * @param message UserRankInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: User.IUserRankScore, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: User.IUserRankInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a UserRankScore message from the specified reader or buffer.
+         * Decodes a UserRankInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns UserRankScore
+         * @returns UserRankInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserRankScore;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserRankInfo;
 
         /**
-         * Decodes a UserRankScore message from the specified reader or buffer, length delimited.
+         * Decodes a UserRankInfo message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns UserRankScore
+         * @returns UserRankInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserRankScore;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserRankInfo;
 
         /**
-         * Verifies a UserRankScore message.
+         * Verifies a UserRankInfo message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a UserRankScore message from a plain object. Also converts values to their respective internal types.
+         * Creates a UserRankInfo message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns UserRankScore
+         * @returns UserRankInfo
          */
-        public static fromObject(object: { [k: string]: any }): User.UserRankScore;
+        public static fromObject(object: { [k: string]: any }): User.UserRankInfo;
 
         /**
-         * Creates a plain object from a UserRankScore message. Also converts values to other types if specified.
-         * @param message UserRankScore
+         * Creates a plain object from a UserRankInfo message. Also converts values to other types if specified.
+         * @param message UserRankInfo
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: User.UserRankScore, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: User.UserRankInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this UserRankScore to JSON.
+         * Converts this UserRankInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
+    namespace UserRankInfo {
+
+        /** Properties of a UserMrwRankInfo. */
+        interface IUserMrwRankInfo {
+
+            /** UserMrwRankInfo warType */
+            warType?: (number|null);
+
+            /** UserMrwRankInfo playersCountUnneutral */
+            playersCountUnneutral?: (number|null);
+
+            /** UserMrwRankInfo currentScore */
+            currentScore?: (number|null);
+
+            /** UserMrwRankInfo currentRank */
+            currentRank?: (number|null);
+
+            /** UserMrwRankInfo lastWarEndTime */
+            lastWarEndTime?: (number|null);
+        }
+
+        /** Represents a UserMrwRankInfo. */
+        class UserMrwRankInfo implements IUserMrwRankInfo {
+
+            /**
+             * Constructs a new UserMrwRankInfo.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: User.UserRankInfo.IUserMrwRankInfo);
+
+            /** UserMrwRankInfo warType. */
+            public warType: number;
+
+            /** UserMrwRankInfo playersCountUnneutral. */
+            public playersCountUnneutral: number;
+
+            /** UserMrwRankInfo currentScore. */
+            public currentScore: number;
+
+            /** UserMrwRankInfo currentRank. */
+            public currentRank: number;
+
+            /** UserMrwRankInfo lastWarEndTime. */
+            public lastWarEndTime: number;
+
+            /**
+             * Creates a new UserMrwRankInfo instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns UserMrwRankInfo instance
+             */
+            public static create(properties?: User.UserRankInfo.IUserMrwRankInfo): User.UserRankInfo.UserMrwRankInfo;
+
+            /**
+             * Encodes the specified UserMrwRankInfo message. Does not implicitly {@link User.UserRankInfo.UserMrwRankInfo.verify|verify} messages.
+             * @param message UserMrwRankInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: User.UserRankInfo.IUserMrwRankInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified UserMrwRankInfo message, length delimited. Does not implicitly {@link User.UserRankInfo.UserMrwRankInfo.verify|verify} messages.
+             * @param message UserMrwRankInfo message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: User.UserRankInfo.IUserMrwRankInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a UserMrwRankInfo message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns UserMrwRankInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserRankInfo.UserMrwRankInfo;
+
+            /**
+             * Decodes a UserMrwRankInfo message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns UserMrwRankInfo
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserRankInfo.UserMrwRankInfo;
+
+            /**
+             * Verifies a UserMrwRankInfo message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a UserMrwRankInfo message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns UserMrwRankInfo
+             */
+            public static fromObject(object: { [k: string]: any }): User.UserRankInfo.UserMrwRankInfo;
+
+            /**
+             * Creates a plain object from a UserMrwRankInfo message. Also converts values to other types if specified.
+             * @param message UserMrwRankInfo
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: User.UserRankInfo.UserMrwRankInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this UserMrwRankInfo to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a UserWarStatistics. */
     interface IUserWarStatistics {
 
-        /** UserWarStatistics dataList */
-        dataList?: (User.IDataForUserWarStatistics[]|null);
+        /** UserWarStatistics mpwArray */
+        mpwArray?: (User.UserWarStatistics.IUserMpwStatistics[]|null);
     }
 
     /** Represents a UserWarStatistics. */
@@ -18523,8 +18316,8 @@ export declare namespace User {
          */
         constructor(properties?: User.IUserWarStatistics);
 
-        /** UserWarStatistics dataList. */
-        public dataList: User.IDataForUserWarStatistics[];
+        /** UserWarStatistics mpwArray. */
+        public mpwArray: User.UserWarStatistics.IUserMpwStatistics[];
 
         /**
          * Creates a new UserWarStatistics instance using the specified properties.
@@ -18595,6 +18388,123 @@ export declare namespace User {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace UserWarStatistics {
+
+        /** Properties of a UserMpwStatistics. */
+        interface IUserMpwStatistics {
+
+            /** UserMpwStatistics warType */
+            warType?: (number|null);
+
+            /** UserMpwStatistics playersCountUnneutral */
+            playersCountUnneutral?: (number|null);
+
+            /** UserMpwStatistics wins */
+            wins?: (number|null);
+
+            /** UserMpwStatistics loses */
+            loses?: (number|null);
+
+            /** UserMpwStatistics draws */
+            draws?: (number|null);
+        }
+
+        /** Represents a UserMpwStatistics. */
+        class UserMpwStatistics implements IUserMpwStatistics {
+
+            /**
+             * Constructs a new UserMpwStatistics.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: User.UserWarStatistics.IUserMpwStatistics);
+
+            /** UserMpwStatistics warType. */
+            public warType: number;
+
+            /** UserMpwStatistics playersCountUnneutral. */
+            public playersCountUnneutral: number;
+
+            /** UserMpwStatistics wins. */
+            public wins: number;
+
+            /** UserMpwStatistics loses. */
+            public loses: number;
+
+            /** UserMpwStatistics draws. */
+            public draws: number;
+
+            /**
+             * Creates a new UserMpwStatistics instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns UserMpwStatistics instance
+             */
+            public static create(properties?: User.UserWarStatistics.IUserMpwStatistics): User.UserWarStatistics.UserMpwStatistics;
+
+            /**
+             * Encodes the specified UserMpwStatistics message. Does not implicitly {@link User.UserWarStatistics.UserMpwStatistics.verify|verify} messages.
+             * @param message UserMpwStatistics message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: User.UserWarStatistics.IUserMpwStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified UserMpwStatistics message, length delimited. Does not implicitly {@link User.UserWarStatistics.UserMpwStatistics.verify|verify} messages.
+             * @param message UserMpwStatistics message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: User.UserWarStatistics.IUserMpwStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a UserMpwStatistics message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns UserMpwStatistics
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserWarStatistics.UserMpwStatistics;
+
+            /**
+             * Decodes a UserMpwStatistics message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns UserMpwStatistics
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserWarStatistics.UserMpwStatistics;
+
+            /**
+             * Verifies a UserMpwStatistics message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a UserMpwStatistics message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns UserMpwStatistics
+             */
+            public static fromObject(object: { [k: string]: any }): User.UserWarStatistics.UserMpwStatistics;
+
+            /**
+             * Creates a plain object from a UserMpwStatistics message. Also converts values to other types if specified.
+             * @param message UserMpwStatistics
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: User.UserWarStatistics.UserMpwStatistics, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this UserMpwStatistics to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
     }
 
     /** Properties of a UserSettings. */
@@ -18705,8 +18615,8 @@ export declare namespace User {
         /** UserComplexInfo userPrivilege */
         userPrivilege?: (User.IUserPrivilege|null);
 
-        /** UserComplexInfo userRankScore */
-        userRankScore?: (User.IUserRankScore|null);
+        /** UserComplexInfo userRankInfo */
+        userRankInfo?: (User.IUserRankInfo|null);
 
         /** UserComplexInfo userWarStatistics */
         userWarStatistics?: (User.IUserWarStatistics|null);
@@ -18727,8 +18637,8 @@ export declare namespace User {
         /** UserComplexInfo userPrivilege. */
         public userPrivilege?: (User.IUserPrivilege|null);
 
-        /** UserComplexInfo userRankScore. */
-        public userRankScore?: (User.IUserRankScore|null);
+        /** UserComplexInfo userRankInfo. */
+        public userRankInfo?: (User.IUserRankInfo|null);
 
         /** UserComplexInfo userWarStatistics. */
         public userWarStatistics?: (User.IUserWarStatistics|null);
@@ -18807,11 +18717,110 @@ export declare namespace User {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a UserBriefInfo. */
+    interface IUserBriefInfo {
+
+        /** UserBriefInfo userId */
+        userId?: (number|null);
+
+        /** UserBriefInfo nickname */
+        nickname?: (string|null);
+    }
+
+    /** Represents a UserBriefInfo. */
+    class UserBriefInfo implements IUserBriefInfo {
+
+        /**
+         * Constructs a new UserBriefInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: User.IUserBriefInfo);
+
+        /** UserBriefInfo userId. */
+        public userId: number;
+
+        /** UserBriefInfo nickname. */
+        public nickname: string;
+
+        /**
+         * Creates a new UserBriefInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns UserBriefInfo instance
+         */
+        public static create(properties?: User.IUserBriefInfo): User.UserBriefInfo;
+
+        /**
+         * Encodes the specified UserBriefInfo message. Does not implicitly {@link User.UserBriefInfo.verify|verify} messages.
+         * @param message UserBriefInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: User.IUserBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified UserBriefInfo message, length delimited. Does not implicitly {@link User.UserBriefInfo.verify|verify} messages.
+         * @param message UserBriefInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: User.IUserBriefInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a UserBriefInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns UserBriefInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserBriefInfo;
+
+        /**
+         * Decodes a UserBriefInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns UserBriefInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserBriefInfo;
+
+        /**
+         * Verifies a UserBriefInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a UserBriefInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UserBriefInfo
+         */
+        public static fromObject(object: { [k: string]: any }): User.UserBriefInfo;
+
+        /**
+         * Creates a plain object from a UserBriefInfo message. Also converts values to other types if specified.
+         * @param message UserBriefInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: User.UserBriefInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UserBriefInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a UserPublicInfo. */
     interface IUserPublicInfo {
 
         /** UserPublicInfo userId */
         userId?: (number|null);
+
+        /** UserPublicInfo account */
+        account?: (string|null);
 
         /** UserPublicInfo nickname */
         nickname?: (string|null);
@@ -18834,8 +18843,8 @@ export declare namespace User {
         /** UserPublicInfo userPrivilege */
         userPrivilege?: (User.IUserPrivilege|null);
 
-        /** UserPublicInfo userRankScore */
-        userRankScore?: (User.IUserRankScore|null);
+        /** UserPublicInfo userMrwRankInfo */
+        userMrwRankInfo?: (User.UserRankInfo.IUserMrwRankInfo[]|null);
 
         /** UserPublicInfo userWarStatistics */
         userWarStatistics?: (User.IUserWarStatistics|null);
@@ -18852,6 +18861,9 @@ export declare namespace User {
 
         /** UserPublicInfo userId. */
         public userId: number;
+
+        /** UserPublicInfo account. */
+        public account: string;
 
         /** UserPublicInfo nickname. */
         public nickname: string;
@@ -18874,8 +18886,8 @@ export declare namespace User {
         /** UserPublicInfo userPrivilege. */
         public userPrivilege?: (User.IUserPrivilege|null);
 
-        /** UserPublicInfo userRankScore. */
-        public userRankScore?: (User.IUserRankScore|null);
+        /** UserPublicInfo userMrwRankInfo. */
+        public userMrwRankInfo: User.UserRankInfo.IUserMrwRankInfo[];
 
         /** UserPublicInfo userWarStatistics. */
         public userWarStatistics?: (User.IUserWarStatistics|null);
@@ -18946,6 +18958,138 @@ export declare namespace User {
 
         /**
          * Converts this UserPublicInfo to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a UserSelfInfo. */
+    interface IUserSelfInfo {
+
+        /** UserSelfInfo userId */
+        userId?: (number|null);
+
+        /** UserSelfInfo nickname */
+        nickname?: (string|null);
+
+        /** UserSelfInfo registerTime */
+        registerTime?: (number|null);
+
+        /** UserSelfInfo lastLoginTime */
+        lastLoginTime?: (number|null);
+
+        /** UserSelfInfo loginCount */
+        loginCount?: (number|null);
+
+        /** UserSelfInfo onlineTime */
+        onlineTime?: (number|null);
+
+        /** UserSelfInfo discordId */
+        discordId?: (string|null);
+
+        /** UserSelfInfo userComplexInfo */
+        userComplexInfo?: (User.IUserComplexInfo|null);
+    }
+
+    /** Represents a UserSelfInfo. */
+    class UserSelfInfo implements IUserSelfInfo {
+
+        /**
+         * Constructs a new UserSelfInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: User.IUserSelfInfo);
+
+        /** UserSelfInfo userId. */
+        public userId: number;
+
+        /** UserSelfInfo nickname. */
+        public nickname: string;
+
+        /** UserSelfInfo registerTime. */
+        public registerTime: number;
+
+        /** UserSelfInfo lastLoginTime. */
+        public lastLoginTime: number;
+
+        /** UserSelfInfo loginCount. */
+        public loginCount: number;
+
+        /** UserSelfInfo onlineTime. */
+        public onlineTime: number;
+
+        /** UserSelfInfo discordId. */
+        public discordId: string;
+
+        /** UserSelfInfo userComplexInfo. */
+        public userComplexInfo?: (User.IUserComplexInfo|null);
+
+        /**
+         * Creates a new UserSelfInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns UserSelfInfo instance
+         */
+        public static create(properties?: User.IUserSelfInfo): User.UserSelfInfo;
+
+        /**
+         * Encodes the specified UserSelfInfo message. Does not implicitly {@link User.UserSelfInfo.verify|verify} messages.
+         * @param message UserSelfInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: User.IUserSelfInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified UserSelfInfo message, length delimited. Does not implicitly {@link User.UserSelfInfo.verify|verify} messages.
+         * @param message UserSelfInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: User.IUserSelfInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a UserSelfInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns UserSelfInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): User.UserSelfInfo;
+
+        /**
+         * Decodes a UserSelfInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns UserSelfInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): User.UserSelfInfo;
+
+        /**
+         * Verifies a UserSelfInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a UserSelfInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns UserSelfInfo
+         */
+        public static fromObject(object: { [k: string]: any }): User.UserSelfInfo;
+
+        /**
+         * Creates a plain object from a UserSelfInfo message. Also converts values to other types if specified.
+         * @param message UserSelfInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: User.UserSelfInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this UserSelfInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -19085,9 +19229,6 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserSetPassword */
         MsgUserSetPassword?: (NetMessage.IMsgUserSetPassword|null);
-
-        /** MessageContainer MsgUserGetSettings */
-        MsgUserGetSettings?: (NetMessage.IMsgUserGetSettings|null);
 
         /** MessageContainer MsgUserSetSettings */
         MsgUserSetSettings?: (NetMessage.IMsgUserSetSettings|null);
@@ -19479,9 +19620,6 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgUserSetPassword. */
         public MsgUserSetPassword?: (NetMessage.IMsgUserSetPassword|null);
-
-        /** MessageContainer MsgUserGetSettings. */
-        public MsgUserGetSettings?: (NetMessage.IMsgUserGetSettings|null);
 
         /** MessageContainer MsgUserSetSettings. */
         public MsgUserSetSettings?: (NetMessage.IMsgUserSetSettings|null);
@@ -23804,8 +23942,8 @@ export declare namespace NetMessage {
             /** S errorCode */
             errorCode?: (number|null);
 
-            /** S userPublicInfo */
-            userPublicInfo?: (User.IUserPublicInfo|null);
+            /** S userSelfInfo */
+            userSelfInfo?: (User.IUserSelfInfo|null);
         }
 
         /** Represents a S. */
@@ -23820,8 +23958,8 @@ export declare namespace NetMessage {
             /** S errorCode. */
             public errorCode: number;
 
-            /** S userPublicInfo. */
-            public userPublicInfo?: (User.IUserPublicInfo|null);
+            /** S userSelfInfo. */
+            public userSelfInfo?: (User.IUserSelfInfo|null);
 
             /**
              * Creates a new S instance using the specified properties.
@@ -25902,285 +26040,6 @@ export declare namespace NetMessage {
         }
     }
 
-    /** Properties of a MsgUserGetSettings. */
-    interface IMsgUserGetSettings {
-
-        /** MsgUserGetSettings c */
-        c?: (NetMessage.MsgUserGetSettings.IC|null);
-
-        /** MsgUserGetSettings s */
-        s?: (NetMessage.MsgUserGetSettings.IS|null);
-    }
-
-    /** Represents a MsgUserGetSettings. */
-    class MsgUserGetSettings implements IMsgUserGetSettings {
-
-        /**
-         * Constructs a new MsgUserGetSettings.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: NetMessage.IMsgUserGetSettings);
-
-        /** MsgUserGetSettings c. */
-        public c?: (NetMessage.MsgUserGetSettings.IC|null);
-
-        /** MsgUserGetSettings s. */
-        public s?: (NetMessage.MsgUserGetSettings.IS|null);
-
-        /**
-         * Creates a new MsgUserGetSettings instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns MsgUserGetSettings instance
-         */
-        public static create(properties?: NetMessage.IMsgUserGetSettings): NetMessage.MsgUserGetSettings;
-
-        /**
-         * Encodes the specified MsgUserGetSettings message. Does not implicitly {@link NetMessage.MsgUserGetSettings.verify|verify} messages.
-         * @param message MsgUserGetSettings message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: NetMessage.IMsgUserGetSettings, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified MsgUserGetSettings message, length delimited. Does not implicitly {@link NetMessage.MsgUserGetSettings.verify|verify} messages.
-         * @param message MsgUserGetSettings message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: NetMessage.IMsgUserGetSettings, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a MsgUserGetSettings message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns MsgUserGetSettings
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserGetSettings;
-
-        /**
-         * Decodes a MsgUserGetSettings message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns MsgUserGetSettings
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserGetSettings;
-
-        /**
-         * Verifies a MsgUserGetSettings message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a MsgUserGetSettings message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns MsgUserGetSettings
-         */
-        public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserGetSettings;
-
-        /**
-         * Creates a plain object from a MsgUserGetSettings message. Also converts values to other types if specified.
-         * @param message MsgUserGetSettings
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: NetMessage.MsgUserGetSettings, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this MsgUserGetSettings to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    namespace MsgUserGetSettings {
-
-        /** Properties of a C. */
-        interface IC {
-        }
-
-        /** Represents a C. */
-        class C implements IC {
-
-            /**
-             * Constructs a new C.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: NetMessage.MsgUserGetSettings.IC);
-
-            /**
-             * Creates a new C instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns C instance
-             */
-            public static create(properties?: NetMessage.MsgUserGetSettings.IC): NetMessage.MsgUserGetSettings.C;
-
-            /**
-             * Encodes the specified C message. Does not implicitly {@link NetMessage.MsgUserGetSettings.C.verify|verify} messages.
-             * @param message C message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: NetMessage.MsgUserGetSettings.IC, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified C message, length delimited. Does not implicitly {@link NetMessage.MsgUserGetSettings.C.verify|verify} messages.
-             * @param message C message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: NetMessage.MsgUserGetSettings.IC, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a C message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns C
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserGetSettings.C;
-
-            /**
-             * Decodes a C message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns C
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserGetSettings.C;
-
-            /**
-             * Verifies a C message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a C message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns C
-             */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserGetSettings.C;
-
-            /**
-             * Creates a plain object from a C message. Also converts values to other types if specified.
-             * @param message C
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: NetMessage.MsgUserGetSettings.C, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this C to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a S. */
-        interface IS {
-
-            /** S errorCode */
-            errorCode?: (number|null);
-
-            /** S userSettings */
-            userSettings?: (User.IUserSettings|null);
-        }
-
-        /** Represents a S. */
-        class S implements IS {
-
-            /**
-             * Constructs a new S.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: NetMessage.MsgUserGetSettings.IS);
-
-            /** S errorCode. */
-            public errorCode: number;
-
-            /** S userSettings. */
-            public userSettings?: (User.IUserSettings|null);
-
-            /**
-             * Creates a new S instance using the specified properties.
-             * @param [properties] Properties to set
-             * @returns S instance
-             */
-            public static create(properties?: NetMessage.MsgUserGetSettings.IS): NetMessage.MsgUserGetSettings.S;
-
-            /**
-             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgUserGetSettings.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encode(message: NetMessage.MsgUserGetSettings.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgUserGetSettings.S.verify|verify} messages.
-             * @param message S message or plain object to encode
-             * @param [writer] Writer to encode to
-             * @returns Writer
-             */
-            public static encodeDelimited(message: NetMessage.MsgUserGetSettings.IS, writer?: protobuf.Writer): protobuf.Writer;
-
-            /**
-             * Decodes a S message from the specified reader or buffer.
-             * @param reader Reader or buffer to decode from
-             * @param [length] Message length if known beforehand
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgUserGetSettings.S;
-
-            /**
-             * Decodes a S message from the specified reader or buffer, length delimited.
-             * @param reader Reader or buffer to decode from
-             * @returns S
-             * @throws {Error} If the payload is not a reader or valid buffer
-             * @throws {protobuf.util.ProtocolError} If required fields are missing
-             */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgUserGetSettings.S;
-
-            /**
-             * Verifies a S message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a S message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns S
-             */
-            public static fromObject(object: { [k: string]: any }): NetMessage.MsgUserGetSettings.S;
-
-            /**
-             * Creates a plain object from a S message. Also converts values to other types if specified.
-             * @param message S
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: NetMessage.MsgUserGetSettings.S, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this S to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-    }
-
     /** Properties of a MsgUserSetSettings. */
     interface IMsgUserSetSettings {
 
@@ -26374,6 +26233,9 @@ export declare namespace NetMessage {
 
             /** S errorCode */
             errorCode?: (number|null);
+
+            /** S userSettings */
+            userSettings?: (User.IUserSettings|null);
         }
 
         /** Represents a S. */
@@ -26387,6 +26249,9 @@ export declare namespace NetMessage {
 
             /** S errorCode. */
             public errorCode: number;
+
+            /** S userSettings. */
+            public userSettings?: (User.IUserSettings|null);
 
             /**
              * Creates a new S instance using the specified properties.

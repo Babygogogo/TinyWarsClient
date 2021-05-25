@@ -230,7 +230,7 @@ namespace TinyWars.User {
             this._labelTitle.text   = Lang.getFormattedText(Lang.Type.F0009, nickname);
         }
         private async _updateComponentsForStdRank(): Promise<void> {
-            const data                      = await UserModel.getRankScoreData(this._userId, WarType.MrwStd, 2);
+            const data                      = await UserModel.getUserMrwRankScoreInfo(this._userId, WarType.MrwStd, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestFormalVersion(), score)})`;
@@ -241,7 +241,7 @@ namespace TinyWars.User {
             this._labelStdRankRankSuffix.text   = Helpers.getSuffixForRank(rank);
         }
         private async _updateComponentsForFogRank(): Promise<void> {
-            const data                      = await UserModel.getRankScoreData(this._userId, WarType.MrwFog, 2);
+            const data                      = await UserModel.getUserMrwRankScoreInfo(this._userId, WarType.MrwFog, 2);
             const rawScore                  = data ? data.currentScore : null;
             const score                     = rawScore != null ? rawScore : CommonConstants.RankInitialScore;
             const rankName                  = `(${ConfigManager.getRankName(ConfigManager.getLatestFormalVersion(), score)})`;
@@ -331,7 +331,7 @@ namespace TinyWars.User {
                 labelType.text  = `${playersCount}P`;
             }
 
-            const info              = await UserModel.getUserWarStatisticsData(data.userId, warType, playersCount);
+            const info              = await UserModel.getUserMpwStatisticsData(data.userId, warType, playersCount);
             const winCount          = info ? info.wins : 0;
             const loseCount         = info ? info.loses : 0;
             const drawCount         = info ? info.draws : 0;

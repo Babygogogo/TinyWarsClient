@@ -291,7 +291,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
 
-            const rankScoreArray        = userInfo ? userInfo.userRankScore.dataList : undefined;
+            const rankScoreArray        = userInfo ? userInfo.userMrwRankInfo : undefined;
             const stdRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwStd) : null;
             const fogRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwFog) : null;
             const stdScore              = stdRankInfo ? stdRankInfo.currentScore : null;

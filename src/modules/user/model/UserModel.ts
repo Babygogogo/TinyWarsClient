@@ -10,30 +10,22 @@ namespace TinyWars.User {
 
     export namespace UserModel {
         let _isLoggedIn                 = false;
-        let _selfUserId                 : number;
+        let _selfInfo                   : ProtoTypes.User.IUserSelfInfo;
         let _selfAccount                : string;
         let _selfPassword               : string;
-        let _selfSettings               : IUserSettings;
         const _userPublicInfoDict       = new Map<number, IUserPublicInfo>();
         const _userPublicInfoRequests   = new Map<number, ((info: NetMessage.MsgUserGetPublicInfo.IS | undefined | null) => void)[]>();
 
         export function init(): void {
             Notify.addEventListeners([
                 { type: Notify.Type.NetworkDisconnected,    callback: _onNotifyNetworkDisconnected, },
-                { type: Notify.Type.MsgUserLogout,          callback: _onMsgUserLogout, },
+                { type: Notify.Type.MsgUserLogout,          callback: _onNotifyMsgUserLogout, },
             ], UserModel);
-        }
-
-        export function updateOnLogin(data: NetMessage.MsgUserLogin.IS): void {
-            const userPublicInfo = data.userPublicInfo;
-            setIsLoggedIn(true);
-            setSelfUserId(userPublicInfo.userId);
-            setUserPublicInfo(userPublicInfo);
         }
 
         export function clearLoginInfo(): void {
             setIsLoggedIn(false);
-            setSelfUserId(undefined);
+            setSelfInfo(undefined);
             setSelfPassword(undefined);
         }
 
@@ -44,11 +36,20 @@ namespace TinyWars.User {
             return _isLoggedIn;
         }
 
-        function setSelfUserId(userId: number): void {
-            _selfUserId = userId;
+        function setSelfInfo(selfInfo: ProtoTypes.User.IUserSelfInfo): void {
+            _selfInfo = selfInfo;
         }
-        export function getSelfUserId(): number {
-            return _selfUserId;
+        export function getSelfInfo(): ProtoTypes.User.IUserSelfInfo | null {
+            return _selfInfo;
+        }
+        function getSelfUserComplexInfo(): ProtoTypes.User.IUserComplexInfo | null {
+            const selfInfo = getSelfInfo();
+            return selfInfo ? selfInfo.userComplexInfo : null;
+        }
+
+        export function getSelfUserId(): number | undefined {
+            const selfInfo = getSelfInfo();
+            return selfInfo ? selfInfo.userId : null;
         }
 
         export function setSelfAccount(account: string): void {
@@ -65,52 +66,44 @@ namespace TinyWars.User {
             return _selfPassword;
         }
 
-        export async function getSelfPublicInfo(): Promise<IUserPublicInfo> {
-            return await getUserPublicInfo(getSelfUserId());
+        function getSelfUserPrivilege(): ProtoTypes.User.IUserPrivilege | null {
+            const userComplexInfo = getSelfUserComplexInfo();
+            return userComplexInfo ? userComplexInfo.userPrivilege : null;
         }
-        export async function getIsSelfAdmin(): Promise<boolean> {
-            const info      = await getSelfPublicInfo();
-            const privilege = info ? info.userPrivilege : null;
+        function setSelfUserPrivilege(userPrivilege: ProtoTypes.User.IUserPrivilege): void {
+            const userComplexInfo = getSelfUserComplexInfo();
+            (userComplexInfo) && (userComplexInfo.userPrivilege = userPrivilege);
+        }
+        export function getIsSelfAdmin(): boolean {
+            const privilege = getSelfUserPrivilege();
             return privilege ? (!!privilege.isAdmin) : false;
         }
-        export async function getIsSelfMapCommittee(): Promise<boolean> {
-            const info      = await getSelfPublicInfo();
-            const privilege = info ? info.userPrivilege : null;
+        export function getIsSelfMapCommittee(): boolean {
+            const privilege = getSelfUserPrivilege();
             return privilege ? (!!privilege.isMapCommittee) : false;
         }
-        export async function checkCanSelfEditChangeLog(): Promise<boolean> {
-            const info      = await getSelfPublicInfo();
-            const privilege = info ? info.userPrivilege : null;
+        export function checkCanSelfEditChangeLog(): boolean {
+            const privilege = getSelfUserPrivilege();
             return (!!privilege)
                 && ((privilege.isAdmin) || (privilege.isChangeLogEditor));
         }
-        async function setSelfUserPrivilege(userPrivilege: ProtoTypes.User.IUserPrivilege): Promise<void> {
-            const info = await getSelfPublicInfo();
-            (info) && (info.userPrivilege = userPrivilege);
-        }
 
-        export async function getSelfNickname(): Promise<string> {
-            const info = await getSelfPublicInfo();
-            return info ? info.nickname : undefined;
+        export function getSelfNickname(): string | null {
+            const info = getSelfInfo();
+            return info ? info.nickname : null;
         }
-        async function setSelfNickname(nickname: string): Promise<void> {
-            const info = await getSelfPublicInfo();
+        function setSelfNickname(nickname: string): void {
+            const info = getSelfInfo();
             (info) && (info.nickname = nickname);
         }
 
-        export async function getSelfDiscordId(): Promise<string> {
-            const info = await getSelfPublicInfo();
-            return info ? info.discordId : undefined;
+        export function getSelfDiscordId(): string {
+            const info = getSelfInfo();
+            return info ? info.discordId : null;
         }
-        async function setSelfDiscordId(discordId: string): Promise<void> {
-            const info = await getSelfPublicInfo();
+        function setSelfDiscordId(discordId: string): void {
+            const info = getSelfInfo();
             (info) && (info.discordId = discordId);
-        }
-
-        export async function getSelfRankScore(): Promise<number> {
-            const info = await getSelfPublicInfo();
-            // TODO
-            return 0;
         }
 
         export function getUserPublicInfo(userId: number): Promise<IUserPublicInfo | undefined | null> {
@@ -177,19 +170,67 @@ namespace TinyWars.User {
             const info = await getUserPublicInfo(userId);
             return info ? info.nickname : undefined;
         }
-        export async function getRankScoreData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.IDataForUserRankScore> {
+        export async function getUserMrwRankScoreInfo(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserRankInfo.IUserMrwRankInfo> {
             const info = await getUserPublicInfo(userId);
-            return (info ? info.userRankScore.dataList || [] : []).find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount));
+            return (info ? info.userMrwRankInfo || [] : []).find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount));
         }
-        export async function getUserWarStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.IDataForUserWarStatistics> {
+        export async function getUserMpwStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserWarStatistics.IUserMpwStatistics> {
             const info = await getUserPublicInfo(userId);
-            return (info ? info.userWarStatistics.dataList || [] : []).find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount));
+            return (info ? info.userWarStatistics.mpwArray || [] : []).find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount));
         }
 
-        export function setSelfSettings(userSettings: IUserSettings): void {
+        function getSelfSettings(): IUserSettings | null {
+            const userComplexInfo = getSelfUserComplexInfo();
+            return userComplexInfo ? userComplexInfo.userSettings : null;
+        }
+        export function getSelfSettingsTextureVersion(): Types.UnitAndTileTextureVersion {
+            const selfSettings = getSelfSettings();
+            return selfSettings
+                ? selfSettings.unitAndTileTextureVersion || Types.UnitAndTileTextureVersion.V0
+                : Types.UnitAndTileTextureVersion.V0;
+        }
+        export function getSelfSettingsIsSetPathMode(): boolean {
+            const selfSettings = getSelfSettings();
+            return selfSettings
+                ? !!selfSettings.isSetPathMode
+                : false;
+        }
+        export function getSelfSettingsIsShowGridBorder(): boolean {
+            const selfSettings = getSelfSettings();
+            return selfSettings
+                ? selfSettings.isShowGridBorder || false
+                : false;
+        }
+
+        export function updateOnMsgUserLogin(data: NetMessage.MsgUserLogin.IS): void {
+            setIsLoggedIn(true);
+
+            const userSelfInfo = data.userSelfInfo;
+            (userSelfInfo) && (setSelfInfo(userSelfInfo));
+        }
+        export function updateOnMsgUserSetNickname(data: ProtoTypes.NetMessage.MsgUserSetNickname.IS): void {
+            setSelfNickname(data.nickname);
+        }
+        export function updateOnMsgUserSetDiscordId(data: ProtoTypes.NetMessage.MsgUserSetDiscordId.IS): void {
+            setSelfDiscordId(data.discordId);
+        }
+        export function updateOnMsgUserSetPrivilege(data: ProtoTypes.NetMessage.MsgUserSetPrivilege.IS): void {
+            if (data.userId === getSelfUserId()) {
+                setSelfUserPrivilege(data.userPrivilege);
+            }
+        }
+        export function updateOnMsgUserSetSettings(data: ProtoTypes.NetMessage.MsgUserSetSettings.IS): void {
+            const selfSettings  = getSelfSettings();
+            const newSettings   = data.userSettings;
+            if ((selfSettings == null) || (newSettings == null)) {
+                return;
+            }
+
             const oldVersion            = getSelfSettingsTextureVersion();
             const oldIsShowGridBorder   = getSelfSettingsIsShowGridBorder();
-            _selfSettings = userSettings;
+            (newSettings.isSetPathMode != null)             && (selfSettings.isSetPathMode = newSettings.isSetPathMode);
+            (newSettings.isShowGridBorder != null)          && (selfSettings.isShowGridBorder = newSettings.isShowGridBorder);
+            (newSettings.unitAndTileTextureVersion != null) && (selfSettings.unitAndTileTextureVersion = newSettings.unitAndTileTextureVersion);
 
             if (oldVersion !== getSelfSettingsTextureVersion()) {
                 Common.CommonModel.updateOnUnitAndTileTextureVersionChanged();
@@ -199,38 +240,11 @@ namespace TinyWars.User {
                 Notify.dispatch(Notify.Type.IsShowGridBorderChanged);
             }
         }
-        export function getSelfSettingsTextureVersion(): Types.UnitAndTileTextureVersion {
-            return _selfSettings
-                ? _selfSettings.unitAndTileTextureVersion || Types.UnitAndTileTextureVersion.V0
-                : Types.UnitAndTileTextureVersion.V0;
-        }
-        export function getSelfSettingsIsSetPathMode(): boolean {
-            return _selfSettings
-                ? !!_selfSettings.isSetPathMode
-                : false;
-        }
-        export function getSelfSettingsIsShowGridBorder(): boolean {
-            return _selfSettings
-                ? _selfSettings.isShowGridBorder || false
-                : false;
-        }
 
-        export async function updateOnMsgUserSetNickname(data: ProtoTypes.NetMessage.MsgUserSetNickname.IS): Promise<void> {
-            await setSelfNickname(data.nickname);
-        }
-        export async function updateOnMsgUserSetDiscordId(data: ProtoTypes.NetMessage.MsgUserSetDiscordId.IS): Promise<void> {
-            await setSelfDiscordId(data.discordId);
-        }
-        export async function updateOnMsgUserSetPrivilege(data: ProtoTypes.NetMessage.MsgUserSetPrivilege.IS): Promise<void> {
-            if (data.userId === getSelfUserId()) {
-                await setSelfUserPrivilege(data.userPrivilege);
-            }
-        }
         function _onNotifyNetworkDisconnected(e: egret.Event): void {
             setIsLoggedIn(false);
         }
-
-        function _onMsgUserLogout(e: egret.Event): void {
+        function _onNotifyMsgUserLogout(e: egret.Event): void {
             const data = e.data as NetMessage.MsgUserLogout.IS;
             if (data.reason === Types.LogoutType.SelfRequest) {
                 Utility.FloatText.show(Lang.getText(Lang.Type.A0005));
