@@ -180,6 +180,8 @@ namespace TinyWars.Utility {
         BwWarRuleHelper_GetErrorCodeForRuleForPlayers_15,
         BwWarRuleHelper_GetErrorCodeForRuleForPlayers_16,
         BwWarRuleHelper_GetErrorCodeForRuleForPlayers_17,
+        BwWarRuleHelper_GetErrorCodeForRuleForPlayers_18,
+        BwWarRuleHelper_GetErrorCodeForRuleForPlayers_19,
 
         WarRuleGlobalParamsValidation00,
 

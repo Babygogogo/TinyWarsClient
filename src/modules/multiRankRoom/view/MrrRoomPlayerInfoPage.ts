@@ -177,7 +177,7 @@ namespace TinyWars.MultiRankRoom {
             const userInfo              = userId == null ? null : await User.UserModel.getUserPublicInfo(userId);
             this._labelNickname.text    = userInfo ? userInfo.nickname : `??`;
 
-            const rankScoreArray        = userInfo ? userInfo.userMrwRankInfo : undefined;
+            const rankScoreArray        = userInfo ? userInfo.userMrwRankInfoArray : undefined;
             const stdRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwStd) : null;
             const fogRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwFog) : null;
             const stdScore              = stdRankInfo ? stdRankInfo.currentScore : null;

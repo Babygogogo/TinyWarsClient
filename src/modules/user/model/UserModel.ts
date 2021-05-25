@@ -7,10 +7,12 @@ namespace TinyWars.User {
     import NetMessage       = ProtoTypes.NetMessage;
     import IUserPublicInfo  = ProtoTypes.User.IUserPublicInfo;
     import IUserSettings    = ProtoTypes.User.IUserSettings;
+    import IUserSelfInfo    = ProtoTypes.User.IUserSelfInfo;
+    import IUserPrivilege   = ProtoTypes.User.IUserPrivilege;
 
     export namespace UserModel {
         let _isLoggedIn                 = false;
-        let _selfInfo                   : ProtoTypes.User.IUserSelfInfo;
+        let _selfInfo                   : IUserSelfInfo;
         let _selfAccount                : string;
         let _selfPassword               : string;
         const _userPublicInfoDict       = new Map<number, IUserPublicInfo>();
@@ -36,10 +38,10 @@ namespace TinyWars.User {
             return _isLoggedIn;
         }
 
-        function setSelfInfo(selfInfo: ProtoTypes.User.IUserSelfInfo): void {
+        function setSelfInfo(selfInfo: IUserSelfInfo): void {
             _selfInfo = selfInfo;
         }
-        export function getSelfInfo(): ProtoTypes.User.IUserSelfInfo | null {
+        export function getSelfInfo(): IUserSelfInfo | null {
             return _selfInfo;
         }
         function getSelfUserComplexInfo(): ProtoTypes.User.IUserComplexInfo | null {
@@ -66,11 +68,11 @@ namespace TinyWars.User {
             return _selfPassword;
         }
 
-        function getSelfUserPrivilege(): ProtoTypes.User.IUserPrivilege | null {
+        function getSelfUserPrivilege(): IUserPrivilege | null {
             const userComplexInfo = getSelfUserComplexInfo();
             return userComplexInfo ? userComplexInfo.userPrivilege : null;
         }
-        function setSelfUserPrivilege(userPrivilege: ProtoTypes.User.IUserPrivilege): void {
+        function setSelfUserPrivilege(userPrivilege: IUserPrivilege): void {
             const userComplexInfo = getSelfUserComplexInfo();
             (userComplexInfo) && (userComplexInfo.userPrivilege = userPrivilege);
         }
@@ -172,11 +174,11 @@ namespace TinyWars.User {
         }
         export async function getUserMrwRankScoreInfo(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserRankInfo.IUserMrwRankInfo> {
             const info = await getUserPublicInfo(userId);
-            return (info ? info.userMrwRankInfo || [] : []).find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount));
+            return (info ? info.userMrwRankInfoArray || [] : []).find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount));
         }
         export async function getUserMpwStatisticsData(userId: number, warType: Types.WarType, playersCount: number): Promise<ProtoTypes.User.UserWarStatistics.IUserMpwStatistics> {
             const info = await getUserPublicInfo(userId);
-            return (info ? info.userWarStatistics.mpwArray || [] : []).find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount));
+            return (info ? info.userMpwStatisticsArray || [] : []).find(v => (v.warType === warType) && (v.playersCountUnneutral === playersCount));
         }
 
         function getSelfSettings(): IUserSettings | null {
@@ -208,18 +210,18 @@ namespace TinyWars.User {
             const userSelfInfo = data.userSelfInfo;
             (userSelfInfo) && (setSelfInfo(userSelfInfo));
         }
-        export function updateOnMsgUserSetNickname(data: ProtoTypes.NetMessage.MsgUserSetNickname.IS): void {
+        export function updateOnMsgUserSetNickname(data: NetMessage.MsgUserSetNickname.IS): void {
             setSelfNickname(data.nickname);
         }
-        export function updateOnMsgUserSetDiscordId(data: ProtoTypes.NetMessage.MsgUserSetDiscordId.IS): void {
+        export function updateOnMsgUserSetDiscordId(data: NetMessage.MsgUserSetDiscordId.IS): void {
             setSelfDiscordId(data.discordId);
         }
-        export function updateOnMsgUserSetPrivilege(data: ProtoTypes.NetMessage.MsgUserSetPrivilege.IS): void {
+        export function updateOnMsgUserSetPrivilege(data: NetMessage.MsgUserSetPrivilege.IS): void {
             if (data.userId === getSelfUserId()) {
                 setSelfUserPrivilege(data.userPrivilege);
             }
         }
-        export function updateOnMsgUserSetSettings(data: ProtoTypes.NetMessage.MsgUserSetSettings.IS): void {
+        export function updateOnMsgUserSetSettings(data: NetMessage.MsgUserSetSettings.IS): void {
             const selfSettings  = getSelfSettings();
             const newSettings   = data.userSettings;
             if ((selfSettings == null) || (newSettings == null)) {

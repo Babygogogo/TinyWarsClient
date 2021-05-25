@@ -782,10 +782,12 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
             return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_00;
         }
 
-        const canSrw            = ruleAvailability.canSrw;
-        let srwAiCount          = 0;
-        const playerIndexSet    = new Set<number>();
-        const teamIndexSet      = new Set<number>();
+        const canSrw                = ruleAvailability.canSrw;
+        const playerIndexSet        = new Set<number>();
+        const teamIndexSet          = new Set<number>();
+        let srwAiCount              = 0;
+        let teamIndexForPlayerInSrw : number | null = null;
+
         for (const data of ruleArray) {
             const playerIndex = data.playerIndex;
             if ((playerIndex == null)                                   ||
@@ -888,12 +890,19 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
             }
 
             const fixedCoIdInSrw = data.fixedCoIdInSrw;
-            if (fixedCoIdInSrw != null) {
+            if (fixedCoIdInSrw == null) {
+                if (canSrw) {
+                    if ((teamIndexForPlayerInSrw != null) && (teamIndex !== teamIndexForPlayerInSrw)) {
+                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_13;
+                    }
+                    teamIndexForPlayerInSrw = teamIndex;
+                }
+            } else {
                 if (!canSrw) {
-                    return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_13;
+                    return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_14;
                 } else {
                     if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInSrw) == null) {
-                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_14;
+                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_15;
                     }
                     ++srwAiCount;
                 }
@@ -901,15 +910,15 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         }
 
         if (playerIndexSet.size !== playersCountUnneutral) {
-            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_13;
+            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_16;
         }
         if (teamIndexSet.size <= 1) {
-            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_14;
-        }
-        if ((canSrw)                                                    &&
-            ((srwAiCount <= 0) || (srwAiCount >= playersCountUnneutral))
-        ) {
             return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_17;
+        }
+        if ((canSrw)                                                                                        &&
+            ((srwAiCount <= 0) || (srwAiCount >= playersCountUnneutral) || (teamIndexForPlayerInSrw == null))
+        ) {
+            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_18;
         }
 
         return ClientErrorCode.NoError;

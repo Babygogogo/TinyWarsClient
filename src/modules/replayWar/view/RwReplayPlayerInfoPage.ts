@@ -195,7 +195,7 @@ namespace TinyWars.ReplayWar {
                 }
             }
 
-            const rankScoreArray        = userInfo ? userInfo.userMrwRankInfo : undefined;
+            const rankScoreArray        = userInfo ? userInfo.userMrwRankInfoArray : undefined;
             const stdRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwStd) : null;
             const fogRankInfo           = rankScoreArray ? rankScoreArray.find(v => v.warType === Types.WarType.MrwFog) : null;
             const stdScore              = stdRankInfo ? stdRankInfo.currentScore : null;

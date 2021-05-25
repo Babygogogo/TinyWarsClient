@@ -7,12 +7,16 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
 
     export function init(): void {
         NetManager.addListeners([
-            { msgCode: ActionCode.MsgSpmCreateScw,                      callback: _onMsgSpmCreateScw, },
-            { msgCode: ActionCode.MsgSpmCreateSfw,                      callback: _onMsgSpmCreateSfw, },
-            { msgCode: ActionCode.MsgSpmGetWarSaveSlotFullDataArray,    callback: _onMsgSpmGetWarSaveSlotFullDataArray, },
-            { msgCode: ActionCode.MsgSpmDeleteWarSaveSlot,              callback: _onMsgSpmDeleteWarSaveSlot, },
-            { msgCode: ActionCode.MsgSpmSaveScw,                        callback: _onMsgSpmSaveScw, },
-            { msgCode: ActionCode.MsgSpmSaveSfw,                        callback: _onMsgSpmSaveSfw, },
+            { msgCode: ActionCode.MsgSpmCreateScw,                      callback: _onMsgSpmCreateScw },
+            { msgCode: ActionCode.MsgSpmCreateSfw,                      callback: _onMsgSpmCreateSfw },
+            { msgCode: ActionCode.MsgSpmCreateSrw,                      callback: _onMsgSpmCreateSrw },
+            { msgCode: ActionCode.MsgSpmGetWarSaveSlotFullDataArray,    callback: _onMsgSpmGetWarSaveSlotFullDataArray },
+            { msgCode: ActionCode.MsgSpmDeleteWarSaveSlot,              callback: _onMsgSpmDeleteWarSaveSlot },
+            { msgCode: ActionCode.MsgSpmSaveScw,                        callback: _onMsgSpmSaveScw },
+            { msgCode: ActionCode.MsgSpmSaveSfw,                        callback: _onMsgSpmSaveSfw },
+            { msgCode: ActionCode.MsgSpmSaveSrw,                        callback: _onMsgSpmSaveSrw },
+            { msgCode: ActionCode.MsgSpmGetSrwRankInfo,                 callback: _onMsgSpmGetSrwRankInfo },
+            { msgCode: ActionCode.MsgSpmValidateSrw,                    callback: _onMsgSpmValidateSrw },
         ], SpmProxy);
     }
 
@@ -63,6 +67,19 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
         }
     }
 
+    export function reqSpmCreateSrw(data: ProtoTypes.NetMessage.MsgSpmCreateSrw.IC): void {
+        NetManager.send({
+            MsgSpmCreateSrw: { c: data },
+        });
+    }
+    function _onMsgSpmCreateSrw(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSrw.IS;
+        if (!data.errorCode) {
+            SpmModel.SaveSlot.updateOnMsgSpmCreateSrw(data);
+            Notify.dispatch(Notify.Type.MsgSpmCreateSrw, data);
+        }
+    }
+
     export function reqSpmSaveScw(war: SinglePlayerWar.SpwWar): void {
         NetManager.send({
             MsgSpmSaveScw: { c: {
@@ -97,6 +114,23 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
         }
     }
 
+    export function reqSpmSaveSrw(war: SinglePlayerWar.SpwWar): void {
+        NetManager.send({
+            MsgSpmSaveSrw: { c: {
+                slotIndex       : war.getSaveSlotIndex(),
+                slotExtraData   : war.getSaveSlotExtraData(),
+                warData         : war.serialize(),
+            }, },
+        });
+    }
+    function _onMsgSpmSaveSrw(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgSpmSaveSrw.IS;
+        if (!data.errorCode) {
+            SpmModel.SaveSlot.updateOnMsgSpmSaveSrw(data);
+            Notify.dispatch(Notify.Type.MsgSpmSaveSrw, data);
+        }
+    }
+
     export function reqSpmDeleteWarSaveSlot(slotIndex: number): void {
         NetManager.send({
             MsgSpmDeleteWarSaveSlot: { c: {
@@ -109,6 +143,37 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
         if (!data.errorCode) {
             SpmModel.SaveSlot.updateOnMsgSpmDeleteWarSaveSlot(data.slotIndex);
             Notify.dispatch(Notify.Type.MsgSpmDeleteWarSaveSlot, data);
+        }
+    }
+
+    export function reqSpmGetSrwRankInfo(mapId: number): void {
+        NetManager.send({
+            MsgSpmGetSrwRankInfo: { c: {
+                mapId,
+            } },
+        });
+    }
+    function _onMsgSpmGetSrwRankInfo(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgSpmGetSrwRankInfo.IS;
+        if (!data.errorCode) {
+            SpmModel.SrwRank.updateOnMsgSpmGetSrwRankInfo(data);
+            Notify.dispatch(Notify.Type.MsgSpmGetSrwRankInfo, data);
+        }
+    }
+
+    export function reqSpmValidateSrw(war: SinglePlayerWar.SpwWar): void {
+        NetManager.send({
+            MsgSpmValidateSrw: { c: {
+                slotIndex   : war.getSaveSlotIndex(),
+                warData     : war.serialize(),
+            } },
+        });
+    }
+    function _onMsgSpmValidateSrw(e: egret.Event): void {
+        const data = e.data as ProtoTypes.NetMessage.MsgSpmValidateSrw.IS;
+        if (!data.errorCode) {
+            SpmModel.SaveSlot.updateOnMsgSpmValidateSrw(data);
+            Notify.dispatch(Notify.Type.MsgSpmValidateSrw, data);
         }
     }
 }
