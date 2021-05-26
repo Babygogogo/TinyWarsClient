@@ -790,7 +790,7 @@ namespace TinyWars.BaseWar {
                 let maxModifier = Number.MIN_VALUE;
                 const war       = this.getWar();
                 war.getPlayerManager().forEachPlayer(false, player => {
-                    if ((player.getAliveState() === Types.PlayerAliveState.Alive) &&
+                    if ((player.getAliveState() !== Types.PlayerAliveState.Dead) &&
                         (teamIndexes.has(player.getTeamIndex()))
                     ) {
                         maxModifier = Math.max(maxModifier, war.getCommonSettingManager().getSettingsVisionRangeModifier(player.getPlayerIndex()));

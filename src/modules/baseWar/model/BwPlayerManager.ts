@@ -217,7 +217,12 @@ namespace TinyWars.BaseWar {
                     (playerIndex !== ignoredPlayerIndex)                &&
                     ((includeNeutral) || (playerIndex !== 0))
                 ) {
-                    indexes.add(player.getTeamIndex());
+                    const teamIndex = player.getTeamIndex();
+                    if (teamIndex == null) {
+                        Logger.error(`BwPlayerManager.getAliveTeamIndexes() empty teamIndex.`);
+                    } else {
+                        indexes.add(teamIndex);
+                    }
                 }
             }
             return indexes;

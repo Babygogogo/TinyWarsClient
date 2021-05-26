@@ -2052,331 +2052,115 @@ export declare class Map implements IMap {
 
 export declare namespace Map {
 
-    /** Properties of a DataForMapWarPlayerStatistics. */
-    interface IDataForMapWarPlayerStatistics {
+    /** Properties of a MapAvailability. */
+    interface IMapAvailability {
 
-        /** DataForMapWarPlayerStatistics playerIndex */
-        playerIndex?: (number|null);
-
-        /** DataForMapWarPlayerStatistics wins */
-        wins?: (number|null);
-
-        /** DataForMapWarPlayerStatistics loses */
-        loses?: (number|null);
-
-        /** DataForMapWarPlayerStatistics draws */
-        draws?: (number|null);
-    }
-
-    /** Represents a DataForMapWarPlayerStatistics. */
-    class DataForMapWarPlayerStatistics implements IDataForMapWarPlayerStatistics {
-
-        /**
-         * Constructs a new DataForMapWarPlayerStatistics.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: Map.IDataForMapWarPlayerStatistics);
-
-        /** DataForMapWarPlayerStatistics playerIndex. */
-        public playerIndex: number;
-
-        /** DataForMapWarPlayerStatistics wins. */
-        public wins: number;
-
-        /** DataForMapWarPlayerStatistics loses. */
-        public loses: number;
-
-        /** DataForMapWarPlayerStatistics draws. */
-        public draws: number;
-
-        /**
-         * Creates a new DataForMapWarPlayerStatistics instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns DataForMapWarPlayerStatistics instance
-         */
-        public static create(properties?: Map.IDataForMapWarPlayerStatistics): Map.DataForMapWarPlayerStatistics;
-
-        /**
-         * Encodes the specified DataForMapWarPlayerStatistics message. Does not implicitly {@link Map.DataForMapWarPlayerStatistics.verify|verify} messages.
-         * @param message DataForMapWarPlayerStatistics message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: Map.IDataForMapWarPlayerStatistics, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified DataForMapWarPlayerStatistics message, length delimited. Does not implicitly {@link Map.DataForMapWarPlayerStatistics.verify|verify} messages.
-         * @param message DataForMapWarPlayerStatistics message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: Map.IDataForMapWarPlayerStatistics, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a DataForMapWarPlayerStatistics message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns DataForMapWarPlayerStatistics
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Map.DataForMapWarPlayerStatistics;
-
-        /**
-         * Decodes a DataForMapWarPlayerStatistics message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns DataForMapWarPlayerStatistics
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Map.DataForMapWarPlayerStatistics;
-
-        /**
-         * Verifies a DataForMapWarPlayerStatistics message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a DataForMapWarPlayerStatistics message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns DataForMapWarPlayerStatistics
-         */
-        public static fromObject(object: { [k: string]: any }): Map.DataForMapWarPlayerStatistics;
-
-        /**
-         * Creates a plain object from a DataForMapWarPlayerStatistics message. Also converts values to other types if specified.
-         * @param message DataForMapWarPlayerStatistics
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: Map.DataForMapWarPlayerStatistics, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this DataForMapWarPlayerStatistics to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    /** Properties of a DataForMapWarStatistics. */
-    interface IDataForMapWarStatistics {
-
-        /** DataForMapWarStatistics totalPlayedTimes */
-        totalPlayedTimes?: (number|null);
-
-        /** DataForMapWarStatistics totalTurns */
-        totalTurns?: (number|null);
-
-        /** DataForMapWarStatistics warType */
-        warType?: (number|null);
-
-        /** DataForMapWarStatistics playerStatisticsArray */
-        playerStatisticsArray?: (Map.IDataForMapWarPlayerStatistics[]|null);
-    }
-
-    /** Represents a DataForMapWarStatistics. */
-    class DataForMapWarStatistics implements IDataForMapWarStatistics {
-
-        /**
-         * Constructs a new DataForMapWarStatistics.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: Map.IDataForMapWarStatistics);
-
-        /** DataForMapWarStatistics totalPlayedTimes. */
-        public totalPlayedTimes: number;
-
-        /** DataForMapWarStatistics totalTurns. */
-        public totalTurns: number;
-
-        /** DataForMapWarStatistics warType. */
-        public warType: number;
-
-        /** DataForMapWarStatistics playerStatisticsArray. */
-        public playerStatisticsArray: Map.IDataForMapWarPlayerStatistics[];
-
-        /**
-         * Creates a new DataForMapWarStatistics instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns DataForMapWarStatistics instance
-         */
-        public static create(properties?: Map.IDataForMapWarStatistics): Map.DataForMapWarStatistics;
-
-        /**
-         * Encodes the specified DataForMapWarStatistics message. Does not implicitly {@link Map.DataForMapWarStatistics.verify|verify} messages.
-         * @param message DataForMapWarStatistics message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: Map.IDataForMapWarStatistics, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified DataForMapWarStatistics message, length delimited. Does not implicitly {@link Map.DataForMapWarStatistics.verify|verify} messages.
-         * @param message DataForMapWarStatistics message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: Map.IDataForMapWarStatistics, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a DataForMapWarStatistics message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns DataForMapWarStatistics
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Map.DataForMapWarStatistics;
-
-        /**
-         * Decodes a DataForMapWarStatistics message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns DataForMapWarStatistics
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Map.DataForMapWarStatistics;
-
-        /**
-         * Verifies a DataForMapWarStatistics message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a DataForMapWarStatistics message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns DataForMapWarStatistics
-         */
-        public static fromObject(object: { [k: string]: any }): Map.DataForMapWarStatistics;
-
-        /**
-         * Creates a plain object from a DataForMapWarStatistics message. Also converts values to other types if specified.
-         * @param message DataForMapWarStatistics
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: Map.DataForMapWarStatistics, options?: protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this DataForMapWarStatistics to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-    }
-
-    /** Properties of a DataForMapAvailability. */
-    interface IDataForMapAvailability {
-
-        /** DataForMapAvailability canMcw */
+        /** MapAvailability canMcw */
         canMcw?: (boolean|null);
 
-        /** DataForMapAvailability canScw */
+        /** MapAvailability canScw */
         canScw?: (boolean|null);
 
-        /** DataForMapAvailability canMrwStd */
+        /** MapAvailability canMrwStd */
         canMrwStd?: (boolean|null);
 
-        /** DataForMapAvailability canMrwFog */
+        /** MapAvailability canMrwFog */
         canMrwFog?: (boolean|null);
 
-        /** DataForMapAvailability canSrw */
+        /** MapAvailability canSrw */
         canSrw?: (boolean|null);
     }
 
-    /** Represents a DataForMapAvailability. */
-    class DataForMapAvailability implements IDataForMapAvailability {
+    /** Represents a MapAvailability. */
+    class MapAvailability implements IMapAvailability {
 
         /**
-         * Constructs a new DataForMapAvailability.
+         * Constructs a new MapAvailability.
          * @param [properties] Properties to set
          */
-        constructor(properties?: Map.IDataForMapAvailability);
+        constructor(properties?: Map.IMapAvailability);
 
-        /** DataForMapAvailability canMcw. */
+        /** MapAvailability canMcw. */
         public canMcw: boolean;
 
-        /** DataForMapAvailability canScw. */
+        /** MapAvailability canScw. */
         public canScw: boolean;
 
-        /** DataForMapAvailability canMrwStd. */
+        /** MapAvailability canMrwStd. */
         public canMrwStd: boolean;
 
-        /** DataForMapAvailability canMrwFog. */
+        /** MapAvailability canMrwFog. */
         public canMrwFog: boolean;
 
-        /** DataForMapAvailability canSrw. */
+        /** MapAvailability canSrw. */
         public canSrw: boolean;
 
         /**
-         * Creates a new DataForMapAvailability instance using the specified properties.
+         * Creates a new MapAvailability instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns DataForMapAvailability instance
+         * @returns MapAvailability instance
          */
-        public static create(properties?: Map.IDataForMapAvailability): Map.DataForMapAvailability;
+        public static create(properties?: Map.IMapAvailability): Map.MapAvailability;
 
         /**
-         * Encodes the specified DataForMapAvailability message. Does not implicitly {@link Map.DataForMapAvailability.verify|verify} messages.
-         * @param message DataForMapAvailability message or plain object to encode
+         * Encodes the specified MapAvailability message. Does not implicitly {@link Map.MapAvailability.verify|verify} messages.
+         * @param message MapAvailability message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: Map.IDataForMapAvailability, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: Map.IMapAvailability, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified DataForMapAvailability message, length delimited. Does not implicitly {@link Map.DataForMapAvailability.verify|verify} messages.
-         * @param message DataForMapAvailability message or plain object to encode
+         * Encodes the specified MapAvailability message, length delimited. Does not implicitly {@link Map.MapAvailability.verify|verify} messages.
+         * @param message MapAvailability message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: Map.IDataForMapAvailability, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: Map.IMapAvailability, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a DataForMapAvailability message from the specified reader or buffer.
+         * Decodes a MapAvailability message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns DataForMapAvailability
+         * @returns MapAvailability
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Map.DataForMapAvailability;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Map.MapAvailability;
 
         /**
-         * Decodes a DataForMapAvailability message from the specified reader or buffer, length delimited.
+         * Decodes a MapAvailability message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns DataForMapAvailability
+         * @returns MapAvailability
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Map.DataForMapAvailability;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Map.MapAvailability;
 
         /**
-         * Verifies a DataForMapAvailability message.
+         * Verifies a MapAvailability message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a DataForMapAvailability message from a plain object. Also converts values to their respective internal types.
+         * Creates a MapAvailability message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns DataForMapAvailability
+         * @returns MapAvailability
          */
-        public static fromObject(object: { [k: string]: any }): Map.DataForMapAvailability;
+        public static fromObject(object: { [k: string]: any }): Map.MapAvailability;
 
         /**
-         * Creates a plain object from a DataForMapAvailability message. Also converts values to other types if specified.
-         * @param message DataForMapAvailability
+         * Creates a plain object from a MapAvailability message. Also converts values to other types if specified.
+         * @param message MapAvailability
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: Map.DataForMapAvailability, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: Map.MapAvailability, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this DataForMapAvailability to JSON.
+         * Converts this MapAvailability to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -2584,10 +2368,10 @@ export declare namespace Map {
     interface IMapComplexInfo {
 
         /** MapComplexInfo availability */
-        availability?: (Map.IDataForMapAvailability|null);
+        availability?: (Map.IMapAvailability|null);
 
         /** MapComplexInfo warStatisticsArray */
-        warStatisticsArray?: (Map.IDataForMapWarStatistics[]|null);
+        warStatisticsArray?: (Map.MapComplexInfo.IWarStatistics[]|null);
     }
 
     /** Represents a MapComplexInfo. */
@@ -2600,10 +2384,10 @@ export declare namespace Map {
         constructor(properties?: Map.IMapComplexInfo);
 
         /** MapComplexInfo availability. */
-        public availability?: (Map.IDataForMapAvailability|null);
+        public availability?: (Map.IMapAvailability|null);
 
         /** MapComplexInfo warStatisticsArray. */
-        public warStatisticsArray: Map.IDataForMapWarStatistics[];
+        public warStatisticsArray: Map.MapComplexInfo.IWarStatistics[];
 
         /**
          * Creates a new MapComplexInfo instance using the specified properties.
@@ -2674,6 +2458,228 @@ export declare namespace Map {
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
+    }
+
+    namespace MapComplexInfo {
+
+        /** Properties of a WarStatistics. */
+        interface IWarStatistics {
+
+            /** WarStatistics totalPlayedTimes */
+            totalPlayedTimes?: (number|null);
+
+            /** WarStatistics totalTurns */
+            totalTurns?: (number|null);
+
+            /** WarStatistics warType */
+            warType?: (number|null);
+
+            /** WarStatistics playerStatisticsArray */
+            playerStatisticsArray?: (Map.MapComplexInfo.WarStatistics.IPlayerStatistics[]|null);
+        }
+
+        /** Represents a WarStatistics. */
+        class WarStatistics implements IWarStatistics {
+
+            /**
+             * Constructs a new WarStatistics.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: Map.MapComplexInfo.IWarStatistics);
+
+            /** WarStatistics totalPlayedTimes. */
+            public totalPlayedTimes: number;
+
+            /** WarStatistics totalTurns. */
+            public totalTurns: number;
+
+            /** WarStatistics warType. */
+            public warType: number;
+
+            /** WarStatistics playerStatisticsArray. */
+            public playerStatisticsArray: Map.MapComplexInfo.WarStatistics.IPlayerStatistics[];
+
+            /**
+             * Creates a new WarStatistics instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns WarStatistics instance
+             */
+            public static create(properties?: Map.MapComplexInfo.IWarStatistics): Map.MapComplexInfo.WarStatistics;
+
+            /**
+             * Encodes the specified WarStatistics message. Does not implicitly {@link Map.MapComplexInfo.WarStatistics.verify|verify} messages.
+             * @param message WarStatistics message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: Map.MapComplexInfo.IWarStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified WarStatistics message, length delimited. Does not implicitly {@link Map.MapComplexInfo.WarStatistics.verify|verify} messages.
+             * @param message WarStatistics message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: Map.MapComplexInfo.IWarStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a WarStatistics message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns WarStatistics
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Map.MapComplexInfo.WarStatistics;
+
+            /**
+             * Decodes a WarStatistics message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns WarStatistics
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Map.MapComplexInfo.WarStatistics;
+
+            /**
+             * Verifies a WarStatistics message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a WarStatistics message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns WarStatistics
+             */
+            public static fromObject(object: { [k: string]: any }): Map.MapComplexInfo.WarStatistics;
+
+            /**
+             * Creates a plain object from a WarStatistics message. Also converts values to other types if specified.
+             * @param message WarStatistics
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: Map.MapComplexInfo.WarStatistics, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this WarStatistics to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        namespace WarStatistics {
+
+            /** Properties of a PlayerStatistics. */
+            interface IPlayerStatistics {
+
+                /** PlayerStatistics playerIndex */
+                playerIndex?: (number|null);
+
+                /** PlayerStatistics wins */
+                wins?: (number|null);
+
+                /** PlayerStatistics loses */
+                loses?: (number|null);
+
+                /** PlayerStatistics draws */
+                draws?: (number|null);
+            }
+
+            /** Represents a PlayerStatistics. */
+            class PlayerStatistics implements IPlayerStatistics {
+
+                /**
+                 * Constructs a new PlayerStatistics.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: Map.MapComplexInfo.WarStatistics.IPlayerStatistics);
+
+                /** PlayerStatistics playerIndex. */
+                public playerIndex: number;
+
+                /** PlayerStatistics wins. */
+                public wins: number;
+
+                /** PlayerStatistics loses. */
+                public loses: number;
+
+                /** PlayerStatistics draws. */
+                public draws: number;
+
+                /**
+                 * Creates a new PlayerStatistics instance using the specified properties.
+                 * @param [properties] Properties to set
+                 * @returns PlayerStatistics instance
+                 */
+                public static create(properties?: Map.MapComplexInfo.WarStatistics.IPlayerStatistics): Map.MapComplexInfo.WarStatistics.PlayerStatistics;
+
+                /**
+                 * Encodes the specified PlayerStatistics message. Does not implicitly {@link Map.MapComplexInfo.WarStatistics.PlayerStatistics.verify|verify} messages.
+                 * @param message PlayerStatistics message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encode(message: Map.MapComplexInfo.WarStatistics.IPlayerStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Encodes the specified PlayerStatistics message, length delimited. Does not implicitly {@link Map.MapComplexInfo.WarStatistics.PlayerStatistics.verify|verify} messages.
+                 * @param message PlayerStatistics message or plain object to encode
+                 * @param [writer] Writer to encode to
+                 * @returns Writer
+                 */
+                public static encodeDelimited(message: Map.MapComplexInfo.WarStatistics.IPlayerStatistics, writer?: protobuf.Writer): protobuf.Writer;
+
+                /**
+                 * Decodes a PlayerStatistics message from the specified reader or buffer.
+                 * @param reader Reader or buffer to decode from
+                 * @param [length] Message length if known beforehand
+                 * @returns PlayerStatistics
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Map.MapComplexInfo.WarStatistics.PlayerStatistics;
+
+                /**
+                 * Decodes a PlayerStatistics message from the specified reader or buffer, length delimited.
+                 * @param reader Reader or buffer to decode from
+                 * @returns PlayerStatistics
+                 * @throws {Error} If the payload is not a reader or valid buffer
+                 * @throws {protobuf.util.ProtocolError} If required fields are missing
+                 */
+                public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Map.MapComplexInfo.WarStatistics.PlayerStatistics;
+
+                /**
+                 * Verifies a PlayerStatistics message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a PlayerStatistics message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns PlayerStatistics
+                 */
+                public static fromObject(object: { [k: string]: any }): Map.MapComplexInfo.WarStatistics.PlayerStatistics;
+
+                /**
+                 * Creates a plain object from a PlayerStatistics message. Also converts values to other types if specified.
+                 * @param message PlayerStatistics
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: Map.MapComplexInfo.WarStatistics.PlayerStatistics, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this PlayerStatistics to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
     }
 
     /** Properties of a MapRawData. */
@@ -30249,7 +30255,7 @@ export declare namespace NetMessage {
             mapId?: (number|null);
 
             /** C availability */
-            availability?: (Map.IDataForMapAvailability|null);
+            availability?: (Map.IMapAvailability|null);
         }
 
         /** Represents a C. */
@@ -30265,7 +30271,7 @@ export declare namespace NetMessage {
             public mapId: number;
 
             /** C availability. */
-            public availability?: (Map.IDataForMapAvailability|null);
+            public availability?: (Map.IMapAvailability|null);
 
             /**
              * Creates a new C instance using the specified properties.
@@ -30348,7 +30354,7 @@ export declare namespace NetMessage {
             mapId?: (number|null);
 
             /** S availability */
-            availability?: (Map.IDataForMapAvailability|null);
+            availability?: (Map.IMapAvailability|null);
         }
 
         /** Represents a S. */
@@ -30367,7 +30373,7 @@ export declare namespace NetMessage {
             public mapId: number;
 
             /** S availability. */
-            public availability?: (Map.IDataForMapAvailability|null);
+            public availability?: (Map.IMapAvailability|null);
 
             /**
              * Creates a new S instance using the specified properties.
@@ -31407,7 +31413,7 @@ export declare namespace NetMessage {
             reviewComment?: (string|null);
 
             /** C availability */
-            availability?: (Map.IDataForMapAvailability|null);
+            availability?: (Map.IMapAvailability|null);
         }
 
         /** Represents a C. */
@@ -31435,7 +31441,7 @@ export declare namespace NetMessage {
             public reviewComment: string;
 
             /** C availability. */
-            public availability?: (Map.IDataForMapAvailability|null);
+            public availability?: (Map.IMapAvailability|null);
 
             /**
              * Creates a new C instance using the specified properties.

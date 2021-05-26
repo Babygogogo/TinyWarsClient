@@ -8,8 +8,8 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
     import ConfigManager                = Utility.ConfigManager;
     import GridIndex                    = Types.GridIndex;
     import WarAction                    = ProtoTypes.WarAction;
-    import IWarActionSystemBeginTurn   = WarAction.IWarActionSystemBeginTurn;
-    import IWarActionPlayerEndTurn     = WarAction.IWarActionPlayerEndTurn;
+    import IWarActionSystemBeginTurn    = WarAction.IWarActionSystemBeginTurn;
+    import IWarActionPlayerEndTurn      = WarAction.IWarActionPlayerEndTurn;
     import CommonConstants              = Utility.CommonConstants;
 
     export function runPhaseGetFundWithExtraData(turnManager: BwTurnManager, data: IWarActionSystemBeginTurn): void {

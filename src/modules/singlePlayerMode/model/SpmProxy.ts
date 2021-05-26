@@ -161,11 +161,11 @@ namespace TinyWars.SinglePlayerMode.SpmProxy {
         }
     }
 
-    export function reqSpmValidateSrw(war: SinglePlayerWar.SpwWar): void {
+    export function reqSpmValidateSrw(war: SingleRankWar.SrwWar): void {
         NetManager.send({
             MsgSpmValidateSrw: { c: {
                 slotIndex   : war.getSaveSlotIndex(),
-                warData     : war.serialize(),
+                warData     : war.serializeForValidation(),
             } },
         });
     }

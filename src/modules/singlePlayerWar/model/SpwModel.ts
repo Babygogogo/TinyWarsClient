@@ -31,7 +31,10 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
             ? new SingleCustomWar.ScwWar()
             : (warData.settingsForSfw
                 ? new SingleFreeWar.SfwWar()
-                : null
+                : (warData.settingsForSrw
+                    ? new SingleRankWar.SrwWar()
+                    : null
+                )
             );
         if (war == null) {
             Logger.error(`SpwModel.loadWar() empty war.`);
