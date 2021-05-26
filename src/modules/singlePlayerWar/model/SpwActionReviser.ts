@@ -4,12 +4,8 @@ namespace TinyWars.SinglePlayerWar.SpwActionReviser {
     import Logger                   = Utility.Logger;
     import ProtoTypes               = Utility.ProtoTypes;
     import GridIndexHelpers         = Utility.GridIndexHelpers;
-    import Helpers                  = Utility.Helpers;
     import VisibilityHelpers        = Utility.VisibilityHelpers;
-    import ConfigManager            = Utility.ConfigManager;
     import BwWar                    = BaseWar.BwWar;
-    import BwUnitMap                = BaseWar.BwUnitMap;
-    import BwPlayer                 = BaseWar.BwPlayer;
     import TurnPhaseCode            = Types.TurnPhaseCode;
     import RawWarAction             = Types.RawWarActionContainer;
     import GridIndex                = Types.GridIndex;
@@ -17,19 +13,7 @@ namespace TinyWars.SinglePlayerWar.SpwActionReviser {
     import DropDestination          = Types.DropDestination;
     import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
     import Structure                = ProtoTypes.Structure;
-    import IWarUseCoSkillExtraData  = Structure.IDataForUseCoSkill;
     import IGridIndex               = Structure.IGridIndex;
-    import CommonConstants          = Utility.CommonConstants;
-
-    type DamageMaps = {
-        hpMap   : number[][];
-        fundMap : number[][];
-    }
-    type ValueMaps = {
-        hpMap       : number[][];
-        fundMap     : number[][];
-        sameTeamMap : boolean[][];
-    }
 
     export function revise(war: SpwWar, container: RawWarAction): IWarActionContainer {
         if      (container.PlayerDeleteUnit)    { return revisePlayerDeleteUnit(war, container); }
@@ -381,19 +365,12 @@ namespace TinyWars.SinglePlayerWar.SpwActionReviser {
         const launchUnitId  = action.launchUnitId;
         const skillType     = action.skillType;
         const revisedPath   = getRevisedPath(war, action.path, launchUnitId);
-        const extraDataList = revisedPath.isBlocked
-            ? null
-            : getUseCoSkillExtraDataList(war, war.getPlayerInTurn(), skillType, revisedPath, launchUnitId);
-
         return {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionUnitUseCoSkill : {
                 path        : revisedPath,
                 launchUnitId,
                 skillType,
-                extraData   : {
-                    skillDataList: extraDataList
-                },
             },
         };
     }
@@ -520,207 +497,5 @@ namespace TinyWars.SinglePlayerWar.SpwActionReviser {
             }
         }
         return destinations;
-    }
-
-    function getUseCoSkillExtraDataList(
-        war             : SpwWar,
-        player          : BwPlayer,
-        skillType       : Types.CoSkillType,
-        movePath        : Types.MovePath,
-        launchUnitId    : number | null | undefined
-    ): IWarUseCoSkillExtraData[] {
-        const configVersion = war.getConfigVersion();
-        const skillCfgs     : ProtoTypes.Config.ICoSkillCfg[] = [];
-
-        let needValueMaps   = false;
-        for (const skillId of player.getCoSkills(skillType) || []) {
-            const skillCfg  = Utility.ConfigManager.getCoSkillCfg(configVersion, skillId)!;
-            skillCfgs.push(skillCfg);
-            if (skillCfg.indiscriminateAreaDamage) {
-                needValueMaps = true;
-            }
-        }
-
-        const valueMaps = needValueMaps ? getValueMap(war.getUnitMap(), player.getTeamIndex(), movePath, launchUnitId) : null;
-        const mapSize   = war.getUnitMap().getMapSize();
-        const dataList  : IWarUseCoSkillExtraData[] = [];
-        for (const skillCfg of skillCfgs) {
-            const data: IWarUseCoSkillExtraData = {};
-
-            if (skillCfg.indiscriminateAreaDamage) {
-                const cfg       = skillCfg.indiscriminateAreaDamage;
-                const center    = getIndiscriminateAreaDamageCenter(war, valueMaps!, cfg);
-                if (!center) {
-                    Logger.error("BwHelpers.getUseCoSkillExtraDataList() failed to get the indiscriminateAreaDamage center!!");
-                } else {
-                    const hpDamage = cfg[2];
-                    for (const g of GridIndexHelpers.getGridsWithinDistance(center, 0, cfg[1], mapSize)) {
-                        valueMaps!.hpMap[g.x][g.y] = Math.max(1, valueMaps!.hpMap[g.x][g.y] - hpDamage);
-                    }
-                }
-                data.indiscriminateAreaDamageCenter = center;
-            }
-
-            dataList.push(data);
-        }
-
-        return dataList;
-    }
-
-    function getIndiscriminateAreaDamageCenter(war: SpwWar, valueMaps: ValueMaps, indiscriminateCfg: number[]): GridIndex | null {
-        const targetType    = indiscriminateCfg[0];
-        const radius        = indiscriminateCfg[1];
-        const hpDamage      = indiscriminateCfg[2];
-        if (targetType === 1) { // HP
-            return getIndiscriminateAreaDamageCenterForType1(valueMaps, radius, hpDamage);
-
-        } else if (targetType === 2) {  // fund
-            return getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
-
-        } else if (targetType === 3) {  // random: HP or fund
-            return war.getRandomNumberManager().getRandomNumber() < 0.5
-                ? getIndiscriminateAreaDamageCenterForType1(valueMaps, radius, hpDamage)
-                : getIndiscriminateAreaDamageCenterForType2(valueMaps, radius, hpDamage);
-
-        } else {
-            return null;
-        }
-    }
-
-    function getIndiscriminateAreaDamageCenterForType1(valueMaps: ValueMaps, radius: number, hpDamage: number): GridIndex {
-        const damageMap = getDamageMap(valueMaps, hpDamage);
-        const centers   = getCentersOfHighestDamage(damageMap.hpMap, radius);
-        if (centers.length === 1) {
-            return centers[0];
-        } else {
-            return getCentersOfHighestDamageForCandidates(damageMap.fundMap, radius, centers);
-        }
-    }
-
-    function getIndiscriminateAreaDamageCenterForType2(valueMaps: ValueMaps, radius: number, hpDamage: number): GridIndex {
-        const damageMap = getDamageMap(valueMaps, hpDamage);
-        const centers   = getCentersOfHighestDamage(damageMap.fundMap, radius);
-        if (centers.length === 1) {
-            return centers[0];
-        } else {
-            return getCentersOfHighestDamageForCandidates(damageMap.hpMap, radius, centers);
-        }
-    }
-
-    function getValueMap(unitMap: BwUnitMap, teamIndex: number, movePath: Types.MovePath, launchUnitId: number | null | undefined): ValueMaps {
-        const { width, height }                 = unitMap.getMapSize();
-        const pathNodes                         = movePath.nodes;
-        const pathLength                        = pathNodes.length;
-        const beginningGridIndex                = pathNodes[0];
-        const unitOnBeginningGrid               = (pathLength > 1) && (launchUnitId == null) ? null : unitMap.getUnitOnMap(beginningGridIndex);
-        const unitOnEndingGrid                  = unitMap.getUnit(beginningGridIndex, launchUnitId)!;
-        const { x: beginningX, y: beginningY }  = beginningGridIndex;
-        const { x: endingX, y: endingY }        = pathNodes[pathLength - 1];
-
-        const hpMap         = Helpers.createEmptyMap(width, height, 0);
-        const fundMap       = Helpers.createEmptyMap(width, height, 0);
-        const sameTeamMap   = Helpers.createEmptyMap(width, height, false);
-
-        for (let x = 0; x < width; ++x) {
-            for (let y = 0; y < height; ++y) {
-                if ((x === beginningX) && (y === beginningY)) {
-                    if (unitOnBeginningGrid) {
-                        hpMap[x][y]         = unitOnBeginningGrid.getNormalizedCurrentHp();
-                        fundMap[x][y]       = unitOnBeginningGrid.getProductionFinalCost();
-                        sameTeamMap[x][y]   = unitOnBeginningGrid.getTeamIndex() === teamIndex;
-                    }
-
-                } else if ((x === endingX) && (y === endingY)) {
-                    hpMap[x][y]         = unitOnEndingGrid.getNormalizedCurrentHp();
-                    fundMap[x][y]       = unitOnEndingGrid.getProductionFinalCost();
-                    sameTeamMap[x][y]   = unitOnEndingGrid.getTeamIndex() === teamIndex;
-
-                } else {
-                    const unit = unitMap.getUnitOnMap({ x, y });
-                    if (unit) {
-                        hpMap[x][y]         = unit.getNormalizedCurrentHp();
-                        fundMap[x][y]       = unit.getProductionFinalCost();
-                        sameTeamMap[x][y]   = unit.getTeamIndex() === teamIndex;
-                    }
-                }
-            }
-        }
-
-        return { hpMap, fundMap, sameTeamMap };
-    }
-
-    function getDamageMap(valueMaps: ValueMaps, hpDamage: number): DamageMaps {
-        const srcHpMap          = valueMaps.hpMap;
-        const srcFundMap        = valueMaps.fundMap;
-        const srcSameTeamMap    = valueMaps.sameTeamMap;
-        const width             = srcHpMap.length;
-        const height            = srcHpMap[0].length;
-
-        const hpMap     = Helpers.createEmptyMap(width, height, 0);
-        const fundMap   = Helpers.createEmptyMap(width, height, 0);
-        for (let x = 0; x < width; ++x) {
-            for (let y = 0; y < height; ++y) {
-                if (srcHpMap[x][y] > 0) {
-                    const realHpDamage      = Math.min(hpDamage, srcHpMap[x][y] - 1);
-                    const realFundDamage    = Math.floor(srcFundMap[x][y] * realHpDamage / CommonConstants.UnitHpNormalizer);
-                    const isSameTeam        = srcSameTeamMap[x][y];
-                    hpMap[x][y]             = isSameTeam ? -realHpDamage * 2 : realHpDamage;
-                    fundMap[x][y]           = isSameTeam ? -realFundDamage * 2 : realFundDamage;
-                }
-            }
-        }
-        return { hpMap, fundMap };
-    }
-
-    function getCentersOfHighestDamage(map: number[][], radius: number): GridIndex[] {
-        const centers   : GridIndex[] = [];
-        const width     = map.length;
-        const height    = map[0].length;
-        const mapSize   = { width, height };
-        const sumMap    = Helpers.createEmptyMap(width, height, 0);
-
-        let maxDamage: number | null = null;
-        for (let x = 0; x < width; ++x) {
-            for (let y = 0; y < height; ++y) {
-                const center        = { x, y };
-                let totalDamage     = 0;
-                for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(center, 0, radius, mapSize)) {
-                    totalDamage += map[gridIndex.x][gridIndex.y];
-                }
-                sumMap[x][y] = totalDamage;
-
-                if ((maxDamage == null) || (totalDamage > maxDamage)) {
-                    maxDamage = totalDamage;
-                    centers.length = 0;
-                    centers.push(center);
-                } else if (maxDamage === totalDamage) {
-                    centers.push(center);
-                }
-            }
-        }
-
-        return centers;
-    }
-
-    function getCentersOfHighestDamageForCandidates(map: number[][], radius: number, candidates: GridIndex[]): GridIndex {
-        const mapSize   = { width: map.length, height: map[0].length };
-        const centers   : GridIndex[] = [];
-        let maxDamage   : number | null = null;
-
-        for (const candidate of candidates) {
-            let totalDamage = 0;
-            for (const g of GridIndexHelpers.getGridsWithinDistance(candidate, 0, radius, mapSize)) {
-                totalDamage += map[g.x][g.y];
-            }
-            if ((maxDamage == null) || (totalDamage > maxDamage)) {
-                maxDamage       = totalDamage;
-                centers.length  = 0;
-                centers.push(candidate);
-            } else if (totalDamage === maxDamage) {
-                centers.push(candidate);
-            }
-        }
-
-        return centers[0];
     }
 }

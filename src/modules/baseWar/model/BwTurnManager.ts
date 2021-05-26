@@ -101,7 +101,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public endPhaseWaitBeginTurn(action: IWarActionSystemBeginTurn | null | undefined): void {
+        public endPhaseWaitBeginTurn(action: IWarActionSystemBeginTurn): void {
             if (this.getPhaseCode() !== TurnPhaseCode.WaitBeginTurn) {
                 Logger.error(`BwTurnManager.endPhaseWaitBeginTurn() invalid current phase code: ${this.getPhaseCode()}`);
                 return;
