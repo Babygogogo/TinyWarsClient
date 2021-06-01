@@ -18,60 +18,6 @@ namespace TinyWars.SinglePlayerWar.SpwUtility {
         totalMoveCost   : number;
     }
 
-    export function createMovableArea(origin: GridIndex, maxMoveCost: number, moveCostGetter: (g: GridIndex) => number | undefined): MovableArea {
-        const area              = [] as MovableArea;
-        const availableGrids    = [] as AvailableMovableGrid[];
-        _pushToAvailableMovableGrids(availableGrids, origin, undefined, 0);
-
-        let index = 0;
-        while (index < availableGrids.length) {
-            const availableGrid = availableGrids[index];
-            const { currGridIndex, totalMoveCost } = availableGrid;
-            if (_checkAndUpdateMovableArea(area, currGridIndex, availableGrid.prevGridIndex, totalMoveCost)) {
-                for (const nextGridIndex of GridIndexHelpers.getAdjacentGrids(currGridIndex)) {
-                    const nextMoveCost = moveCostGetter(nextGridIndex);
-                    if ((nextMoveCost != null) && (nextMoveCost + totalMoveCost <= maxMoveCost)) {
-                        _pushToAvailableMovableGrids(availableGrids, nextGridIndex, currGridIndex, nextMoveCost + totalMoveCost);
-                    }
-                }
-            }
-
-            ++index;
-        }
-
-        return area;
-    }
-
-    export function createAttackableArea(movableArea: MovableArea, mapSize: MapSize, minAttackRange: number, maxAttackRange: number, checkCanAttack: (destination: GridIndex, target: GridIndex) => boolean): AttackableArea {
-        const area = [] as AttackableArea;
-        const { width, height } = mapSize;
-        for (let moveX = 0; moveX < width; ++moveX) {
-            if (movableArea[moveX]) {
-                for (let moveY = 0; moveY < height; ++moveY) {
-                    const movableGrid = movableArea[moveX][moveY];
-                    if (movableGrid) {
-                        const moveGridIndex = { x: moveX, y: moveY };
-                        for (const attackGridIndex of GridIndexHelpers.getGridsWithinDistance(moveGridIndex, minAttackRange, maxAttackRange, mapSize)) {
-                            const { x: attackX, y: attackY } = attackGridIndex;
-                            if (checkCanAttack(moveGridIndex, attackGridIndex)) {
-                                area[attackX] = area[attackX] || [];
-                                const attackableGrid = area[attackX][attackY];
-                                if ((!attackableGrid)                                                                                                               ||
-                                    (movableGrid.totalMoveCost < movableArea[attackableGrid.movePathDestination.x][attackableGrid.movePathDestination.y].totalMoveCost)
-                                ) {
-                                    area[attackX][attackY] = {
-                                        movePathDestination: { x: moveX, y: moveY },
-                                    };
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return area;
-    }
-
     export function createShortestMovePath(area: MovableArea, destination: GridIndex): MovePathNode[] {
         const reversedPath = [] as MovePathNode[];
         let gridIndex   = destination;

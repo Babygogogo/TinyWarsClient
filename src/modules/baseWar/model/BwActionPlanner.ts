@@ -1140,11 +1140,12 @@ namespace TinyWars.BaseWar {
 
         protected _resetMovableArea(): void {
             const unit = this.getFocusUnit();
-            this._movableArea = BwHelpers.createMovableArea(
-                unit.getGridIndex(),
-                unit.getFinalMoveRange(),
-                gridIndex => this._getMoveCost(gridIndex, unit)
-            );
+            this._movableArea = BwHelpers.createMovableArea({
+                origin          : unit.getGridIndex(),
+                maxMoveCost     : unit.getFinalMoveRange(),
+                mapSize         : this._getWar().getTileMap().getMapSize(),
+                moveCostGetter  : gridIndex => this._getMoveCost(gridIndex, unit)
+            });
         }
         public getMovableArea(): MovableArea {
             return this._movableArea;
@@ -1158,21 +1159,18 @@ namespace TinyWars.BaseWar {
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
             const unitMap               = this._getUnitMap();
             this._setAttackableArea(BwHelpers.createAttackableArea(
-                this.getMovableArea(),
-                this.getMapSize(),
-                unit.getMinAttackRange(),
-                unit.getFinalMaxAttackRange(),
-                (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
-                    const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
-                    if ((!hasAmmo) || ((existingUnit) && (existingUnit !== unit))) {
-                        return false;
-                    } else {
-                        const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
-                        return ((!isLoaded) || (hasMoved))
-                            && ((canAttackAfterMove) || (!hasMoved))
+                {
+                    movableArea: this.getMovableArea(), mapSize: this.getMapSize(), minAttackRange: unit.getMinAttackRange(), maxAttackRange: unit.getFinalMaxAttackRange(), checkCanAttack: (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
+                        const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
+                        if ((!hasAmmo) || ((existingUnit) && (existingUnit !== unit))) {
+                            return false;
+                        } else {
+                            const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
+                            return ((!isLoaded) || (hasMoved))
+                                && ((canAttackAfterMove) || (!hasMoved));
+                        }
                     }
-                }
-            ));
+                }            ));
         }
         protected _setAttackableArea(area: AttackableArea): void {
             this._attackableArea = area;
@@ -1287,22 +1285,23 @@ namespace TinyWars.BaseWar {
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
             const mapSize               = this.getMapSize();
             const unitMap               = this._getUnitMap();
-            const newArea               = BwHelpers.createAttackableArea(
-                BwHelpers.createMovableArea(
-                    unit.getGridIndex(),
-                    unit.getFinalMoveRange(),
-                    gridIndex => this._getMoveCost(gridIndex, unit)
-                ),
+            const newArea               = BwHelpers.createAttackableArea({
+                movableArea: BwHelpers.createMovableArea({
+                    origin          : unit.getGridIndex(),
+                    maxMoveCost     : unit.getFinalMoveRange(),
+                    mapSize,
+                    moveCostGetter  : gridIndex => this._getMoveCost(gridIndex, unit)
+                }),
                 mapSize,
-                unit.getMinAttackRange(),
-                unit.getFinalMaxAttackRange(),
-                (moveGridIndex, attackGridIndex) => {
+                minAttackRange: unit.getMinAttackRange(),
+                maxAttackRange: unit.getFinalMaxAttackRange(),
+                checkCanAttack: (moveGridIndex, attackGridIndex) => {
                     const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
                     return ((!existingUnit) || (existingUnit === unit))
                         && (hasAmmo)
                         && ((canAttackAfterMove) || (GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)));
                 }
-            );
+            });
 
             this._unitsForPreviewAttack.set(unit.getUnitId(), unit);
             if (!this._areaForPreviewAttack.length) {
@@ -1338,11 +1337,12 @@ namespace TinyWars.BaseWar {
         }
         private _setUnitForPreviewingMovableArea(unit: BwUnit): void {
             this._unitForPreviewMove = unit;
-            this._areaForPreviewMove = BwHelpers.createMovableArea(
-                unit.getGridIndex(),
-                unit.getFinalMoveRange(),
-                gridIndex => this._getMoveCost(gridIndex, unit)
-            );
+            this._areaForPreviewMove = BwHelpers.createMovableArea({
+                origin          : unit.getGridIndex(),
+                maxMoveCost     : unit.getFinalMoveRange(),
+                mapSize         : this._getWar().getTileMap().getMapSize(),
+                moveCostGetter  : gridIndex => this._getMoveCost(gridIndex, unit)
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

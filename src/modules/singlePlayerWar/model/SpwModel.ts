@@ -104,7 +104,17 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
             return;
         }
 
-        const action = SpwActionReviser.revise(war, await SpwRobot.getNextAction(war));
+        const {
+            errorCode   : errorCodeForRobot,
+            action      : actionForRobot,
+        } = await SpwRobot.getNextAction(war);
+        if (errorCodeForRobot) {
+            Logger.error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() errorCodeForRobot: ${errorCodeForRobot}`);
+        } else if (actionForRobot == null) {
+            Logger.error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() empty actionForRobot!`);
+        }
+
+        const action = SpwActionReviser.revise(war, actionForRobot);
         if (!war.getIsRunning()) {
             _warsWithRobotRunning.delete(war);
             return;

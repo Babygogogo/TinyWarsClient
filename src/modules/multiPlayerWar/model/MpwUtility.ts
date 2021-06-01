@@ -20,30 +20,6 @@ namespace TinyWars.MultiPlayerWar.MpwUtility {
         totalMoveCost   : number;
     }
 
-    export function createMovableArea(origin: GridIndex, maxMoveCost: number, moveCostGetter: (g: GridIndex) => number | undefined): MovableArea {
-        const area              = [] as MovableArea;
-        const availableGrids    = [] as AvailableMovableGrid[];
-        _pushToAvailableMovableGrids(availableGrids, origin, undefined, 0);
-
-        let index = 0;
-        while (index < availableGrids.length) {
-            const availableGrid = availableGrids[index];
-            const { currGridIndex, totalMoveCost } = availableGrid;
-            if (_checkAndUpdateMovableArea(area, currGridIndex, availableGrid.prevGridIndex, totalMoveCost)) {
-                for (const nextGridIndex of GridIndexHelpers.getAdjacentGrids(currGridIndex)) {
-                    const nextMoveCost = moveCostGetter(nextGridIndex);
-                    if ((nextMoveCost != null) && (nextMoveCost + totalMoveCost <= maxMoveCost)) {
-                        _pushToAvailableMovableGrids(availableGrids, nextGridIndex, currGridIndex, nextMoveCost + totalMoveCost);
-                    }
-                }
-            }
-
-            ++index;
-        }
-
-        return area;
-    }
-
     export function createAttackableArea(movableArea: MovableArea, mapSize: MapSize, minAttackRange: number, maxAttackRange: number, checkCanAttack: (destination: GridIndex, target: GridIndex) => boolean): AttackableArea {
         const area = [] as AttackableArea;
         const { width, height } = mapSize;

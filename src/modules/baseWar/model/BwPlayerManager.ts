@@ -144,6 +144,13 @@ namespace TinyWars.BaseWar {
         protected _getPlayersMap(): Map<number, BwPlayer> {
             return this._players;
         }
+        public getAllPlayers(): BwPlayer[] {
+            const players: BwPlayer[] = [];
+            for (const [, player] of this._getPlayersMap()) {
+                players.push(player);
+            }
+            return players;
+        }
 
         public getPlayerByUserId(userId: number): BwPlayer | undefined {
             for (const [, player] of this._players) {

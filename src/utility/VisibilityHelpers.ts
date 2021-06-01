@@ -336,35 +336,30 @@ namespace TinyWars.Utility.VisibilityHelpers {
         movingUnit      : BaseWar.BwUnit;
         isUnitDestroyed : boolean;
         visibleUnits    : Set<BaseWar.BwUnit>;
-    }): Set<BaseWar.BwUnit> {
+    }): { errorCode: ClientErrorCode, discoveredUnits?: Set<BaseWar.BwUnit> } {
         const observerTeamIndex = movingUnit.getTeamIndex();
         if (observerTeamIndex == null) {
-            Logger.error(`VisibilityHelpers.getDiscoveredUnitsByPath() empty observerTeamIndex.`);
-            return undefined;
+            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_00 };
         }
 
         const tileMap = war.getTileMap();
         if (tileMap == null) {
-            Logger.error(`VisibilityHelpers.getDiscoveredUnitsByPath() empty tileMap.`);
-            return undefined;
+            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_01 };
         }
 
         const mapSize = tileMap.getMapSize();
         if (mapSize == null) {
-            Logger.error(`VisibilityHelpers.getDiscoveredUnitsByPath() empty mapSize.`);
-            return undefined;
+            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_02 };
         }
 
         const visibilityMap = _createVisibilityMapFromPath(war, path, movingUnit);
         if (visibilityMap == null) {
-            Logger.error(`VisibilityHelpers.getDiscoveredUnitsByPath() empty visibilityMap.`);
-            return undefined;
+            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_03 };
         }
 
         const unitMap = war.getUnitMap();
         if (unitMap == null) {
-            Logger.error(`VisibilityHelpers.getDiscoveredUnitsByPath() empty unitMap.`);
-            return undefined;
+            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_04 };
         }
 
         const discoveredUnits                           = new Set<BaseWar.BwUnit>();
@@ -380,14 +375,12 @@ namespace TinyWars.Utility.VisibilityHelpers {
                     if ((unit) && (!visibleUnits.has(unit))) {
                         const unitType = unit.getUnitType();
                         if (unitType == null) {
-                            Logger.error(`VisibilityHelpers.getDiscoveredUnitsByPath() empty unitType.`);
-                            return undefined;
+                            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_05 };
                         }
 
                         const unitPlayerIndex = unit.getPlayerIndex();
                         if (unitPlayerIndex == null) {
-                            Logger.error(`VisibilityHelpers.getDiscoveredUnitsByPath() empty unitPlayerIndex.`);
-                            return undefined;
+                            return { errorCode: ClientErrorCode.VisibilityHelpers_GetDiscoveredUnitsByPath_06 };
                         }
 
                         if (unit.getIsDiving()) {
@@ -408,7 +401,10 @@ namespace TinyWars.Utility.VisibilityHelpers {
             }
         }
 
-        return discoveredUnits;
+        return {
+            errorCode       : ClientErrorCode.NoError,
+            discoveredUnits,
+        };
     }
 
     function _checkHasUnitWithTeamIndexesOnAdjacentGrids(unitMap: BaseWar.BwUnitMap, origin: GridIndex, teamIndexes: Set<number>): boolean {

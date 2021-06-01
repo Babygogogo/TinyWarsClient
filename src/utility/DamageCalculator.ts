@@ -43,6 +43,12 @@ namespace TinyWars.Utility.DamageCalculator {
         return Math.floor(randomNumber * (upperLimit - lowerLimit + 1)) + lowerLimit;
     }
 
+    export function getDamageMultiplierForDefenseBonus(bonus: number): number {    // DONE
+        return (bonus >= 0)
+            ? 1 / (1 + bonus / 100)
+            : 1 - bonus / 100;
+    }
+
     function getAttackBonusMultiplier(
         war                 : BwWar,
         attacker            : BwUnit,
@@ -141,10 +147,7 @@ namespace TinyWars.Utility.DamageCalculator {
                 }
             });
 
-            const totalAmount = amountFromTile + amountFromPromotion + amountFromCo + amountFromGlobalTiles;
-            return totalAmount >= 0
-                ? 1 / (1 + totalAmount / 100)
-                : 1 - totalAmount / 100;
+            return getDamageMultiplierForDefenseBonus(amountFromTile + amountFromPromotion + amountFromCo + amountFromGlobalTiles);
         }
     }
 

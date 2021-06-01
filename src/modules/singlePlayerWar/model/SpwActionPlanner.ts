@@ -634,13 +634,12 @@ namespace TinyWars.SinglePlayerWar {
             const beginningGridIndex    = focusUnit.getGridIndex();
             const hasAmmo               = (focusUnit.getPrimaryWeaponCurrentAmmo() > 0) || (focusUnit.checkHasSecondaryWeapon());
             const unitMap               = this._getUnitMap();
-            const war                   = this._getWar();
-            this._setAttackableArea(BwHelpers.createAttackableArea(
-                this.getMovableArea(),
-                this.getMapSize(),
-                focusUnit.getMinAttackRange(),
-                focusUnit.getFinalMaxAttackRange(),
-                (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
+            this._setAttackableArea(BwHelpers.createAttackableArea({
+                movableArea     : this.getMovableArea(),
+                mapSize         : this.getMapSize(),
+                minAttackRange  : focusUnit.getMinAttackRange(),
+                maxAttackRange  : focusUnit.getFinalMaxAttackRange(),
+                checkCanAttack  : (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
                     if (!hasAmmo) {
                         return false;
                     } else {
@@ -650,11 +649,11 @@ namespace TinyWars.SinglePlayerWar {
                         } else {
                             const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
                             return ((!isLoaded) || (hasMoved))
-                                && ((canAttackAfterMove) || (!hasMoved))
+                                && ((canAttackAfterMove) || (!hasMoved));
                         }
                     }
-                }
-            ));
+                },
+            }));
         }
 
         protected _addUnitForPreviewAttackableArea(unit: BaseWar.BwUnit): void {
@@ -663,24 +662,23 @@ namespace TinyWars.SinglePlayerWar {
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
             const mapSize               = this.getMapSize();
             const unitMap               = this._getUnitMap();
-            const war                   = this._getWar();
-            const teamIndexes           = (war.getPlayerManager() as SpwPlayerManager).getAliveWatcherTeamIndexesForSelf();
-            const newArea               = BwHelpers.createAttackableArea(
-                BwHelpers.createMovableArea(
-                    unit.getGridIndex(),
-                    unit.getFinalMoveRange(),
-                    gridIndex => this._getMoveCost(gridIndex, unit)
-                ),
+            const newArea               = BwHelpers.createAttackableArea({
+                movableArea: BwHelpers.createMovableArea({
+                    origin          : unit.getGridIndex(),
+                    maxMoveCost     : unit.getFinalMoveRange(),
+                    mapSize,
+                    moveCostGetter  : gridIndex => this._getMoveCost(gridIndex, unit),
+                }),
                 mapSize,
-                unit.getMinAttackRange(),
-                unit.getFinalMaxAttackRange(),
-                (moveGridIndex, attackGridIndex) => {
+                minAttackRange: unit.getMinAttackRange(),
+                maxAttackRange: unit.getFinalMaxAttackRange(),
+                checkCanAttack: (moveGridIndex, attackGridIndex) => {
                     const existingUnit = unitMap.getVisibleUnitOnMap(moveGridIndex);
                     return ((!existingUnit) || (existingUnit === unit))
                         && (hasAmmo)
                         && ((canAttackAfterMove) || (GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)));
-                }
-            );
+                },
+            });
 
             const unitsForPreviewAttack = this.getUnitsForPreviewingAttackableArea();
             unitsForPreviewAttack.set(unit.getUnitId(), unit);

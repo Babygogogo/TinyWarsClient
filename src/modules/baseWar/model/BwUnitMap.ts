@@ -169,7 +169,7 @@ namespace TinyWars.BaseWar {
             }
 
             const units: ISerialUnit[] = [];
-            for (const unit of this._getAllUnits()) {
+            for (const unit of this.getAllUnits()) {
                 const serializedUnit = unit.serialize();
                 if (!serializedUnit) {
                     Logger.error(`BwUnitMap.serialize() empty serializedUnit.`);
@@ -385,7 +385,7 @@ namespace TinyWars.BaseWar {
             this.forEachUnitOnMap(unit => units.push(unit));
             return units;
         }
-        protected _getAllUnits(): BwUnit[] {
+        public getAllUnits(): BwUnit[] {
             const units = this._getAllUnitsOnMap();
             this.forEachUnitLoaded(unit => units.push(unit));
             return units;

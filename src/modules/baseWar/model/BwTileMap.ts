@@ -228,6 +228,11 @@ namespace TinyWars.BaseWar {
         public getTile(gridIndex: Types.GridIndex): BwTile {
             return this._getMap()[gridIndex.x][gridIndex.y];
         }
+        public getAllTiles(): BwTile[] {
+            const tileArray: BwTile[] = [];
+            this.forEachTile(tile => tileArray.push(tile));
+            return tileArray;
+        }
 
         private _setMapSize(width: number, height: number): void {
             this._mapSize = { width: width, height: height };

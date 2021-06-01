@@ -31,7 +31,12 @@ namespace TinyWars.BaseWar.BwHelpers {
         totalMoveCost   : number;
     }
 
-    export function createMovableArea(origin: GridIndex, maxMoveCost: number, moveCostGetter: (g: GridIndex) => number | undefined): MovableArea {
+    export function createMovableArea({ origin, maxMoveCost, mapSize, moveCostGetter }: {
+        origin          : GridIndex;
+        maxMoveCost     : number;
+        mapSize         : MapSize;
+        moveCostGetter  : (g: GridIndex) => number | undefined;
+    }): MovableArea {
         const area              = [] as MovableArea;
         const availableGrids    = [] as AvailableMovableGrid[];
         _updateAvailableGrids(availableGrids, 0, origin, undefined, 0);
@@ -41,7 +46,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const availableGrid                     = _sortAvailableMovableGrids(availableGrids, index);
             const { currGridIndex, totalMoveCost }  = availableGrid;
             if (_checkAndUpdateMovableArea(area, currGridIndex, availableGrid.prevGridIndex, totalMoveCost)) {
-                for (const nextGridIndex of GridIndexHelpers.getAdjacentGrids(currGridIndex)) {
+                for (const nextGridIndex of GridIndexHelpers.getAdjacentGrids(currGridIndex, mapSize)) {
                     const nextMoveCost = moveCostGetter(nextGridIndex);
                     if ((nextMoveCost != null) && (nextMoveCost + totalMoveCost <= maxMoveCost)) {
                         _updateAvailableGrids(availableGrids, index + 1, nextGridIndex, currGridIndex, nextMoveCost + totalMoveCost);
@@ -55,7 +60,13 @@ namespace TinyWars.BaseWar.BwHelpers {
         return area;
     }
 
-    export function createAttackableArea(movableArea: MovableArea, mapSize: MapSize, minAttackRange: number, maxAttackRange: number, checkCanAttack: (destination: GridIndex, target: GridIndex) => boolean): AttackableArea {
+    export function createAttackableArea({ movableArea, mapSize, minAttackRange, maxAttackRange, checkCanAttack }: {
+        movableArea     : MovableArea;
+        mapSize         : MapSize;
+        minAttackRange  : number;
+        maxAttackRange  : number;
+        checkCanAttack  : (destination: GridIndex, target: GridIndex) => boolean;
+    }): AttackableArea {
         const area = [] as AttackableArea;
         const { width, height } = mapSize;
         for (let moveX = 0; moveX < width; ++moveX) {
