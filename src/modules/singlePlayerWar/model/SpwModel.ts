@@ -114,13 +114,12 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
             Logger.error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() empty actionForRobot!`);
         }
 
-        const action = SpwActionReviser.revise(war, actionForRobot);
         if (!war.getIsRunning()) {
             _warsWithRobotRunning.delete(war);
             return;
         }
 
-        await handlePlayerAction(war, action);
+        await handlePlayerAction(war, SpwActionReviser.revise(war, actionForRobot));
 
         _warsWithRobotRunning.delete(war);
         await checkAndHandleAutoActionsAndRobotRecursively(war);

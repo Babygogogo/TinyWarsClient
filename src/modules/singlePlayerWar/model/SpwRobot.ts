@@ -3032,7 +3032,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         }
 
         return {
-            errorCode   : ClientErrorCode.SpwRobot_DoGetNextAction_01,
+            errorCode   : ClientErrorCode.NoError,
             action      : undefined,
         };
     }
@@ -3044,6 +3044,9 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
         _isCalculating = true;
         const { errorCode, action } = await doGetNextAction(war);
+        if (action) {
+            action.actionId = war.getExecutedActionManager().getExecutedActionsCount();
+        }
         _isCalculating = false;
 
         return {
