@@ -31,11 +31,11 @@ namespace TinyWars.WarMap {
             this.height = GRID_HEIGHT * mapRawData.mapHeight;
             this._tileMapView.showTileMap(mapRawData.tileDataArray);
             this._unitMapView.showUnitMap({
-                unitDataArray       : mapRawData.unitDataArray,
-                playerManagerData   : null,
+                unitDataArray   : mapRawData.unitDataArray,
+                players         : null,
             });
         }
-        public showMapByWarData(warData: ISerialWar): void {
+        public showMapByWarData(warData: ISerialWar, players?: ProtoTypes.WarSerialization.ISerialPlayer[]): void {
             const field     = warData.field;
             const tileMap   = field.tileMap;
             const mapSize   = BaseWar.BwHelpers.getMapSize(tileMap);
@@ -43,8 +43,8 @@ namespace TinyWars.WarMap {
             this.height     = GRID_HEIGHT * mapSize.height;
             this._tileMapView.showTileMap(tileMap.tiles);
             this._unitMapView.showUnitMap({
-                unitDataArray       : field.unitMap.units,
-                playerManagerData   : warData.playerManager,
+                unitDataArray   : field.unitMap.units,
+                players         : players || warData.playerManager.players,
             });
         }
 

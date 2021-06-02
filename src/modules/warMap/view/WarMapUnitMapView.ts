@@ -26,11 +26,11 @@ namespace TinyWars.WarMap {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public showUnitMap({ unitDataArray, playerManagerData }: {
-            unitDataArray       : WarSerialization.ISerialUnit[];
-            playerManagerData   : WarSerialization.ISerialPlayerManager | null;
+        public showUnitMap({ unitDataArray, players }: {
+            unitDataArray   : WarSerialization.ISerialUnit[];
+            players         : WarSerialization.ISerialPlayer[] | null;
         }): void {
-            this._initWithDataList(_createUnitViewDataList({ unitDataArray, playerManagerData }));
+            this._initWithDataList(_createUnitViewDataList({ unitDataArray, players }));
         }
         private _initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
             this.clear();
@@ -107,9 +107,9 @@ namespace TinyWars.WarMap {
         }
     }
 
-    function _createUnitViewDataList({ unitDataArray, playerManagerData }: {
-        unitDataArray       : WarSerialization.ISerialUnit[];
-        playerManagerData   : WarSerialization.ISerialPlayerManager | null;
+    function _createUnitViewDataList({ unitDataArray, players }: {
+        unitDataArray   : WarSerialization.ISerialUnit[];
+        players         : WarSerialization.ISerialPlayer[] | null;
     }): Types.WarMapUnitViewData[] {
         const dataArray: Types.WarMapUnitViewData[] = [];
         if (unitDataArray) {
@@ -123,15 +123,15 @@ namespace TinyWars.WarMap {
                 }
             }
 
-            const playerDataArray = playerManagerData ? playerManagerData.players || [] : [];
             for (const unitData of dataArray) {
                 if (loaderUnitIdSet.has(unitData.unitId)) {
                     unitData.hasLoadedUnit = true;
                 }
 
-                const playerData = playerDataArray.find(v => v.playerIndex === unitData.playerIndex);
+                const playerData = players ? players.find(v => v.playerIndex === unitData.playerIndex) : null;
                 if (playerData) {
-                    unitData.coUsingSkillType = playerData.coUsingSkillType;
+                    unitData.coUsingSkillType   = playerData.coUsingSkillType;
+                    unitData.skinId             = playerData.unitAndTileSkinId;
                 }
             }
         }

@@ -289,7 +289,8 @@ namespace TinyWars.SinglePlayerMode {
         protected async _onDataChanged(): Promise<void> {
             this._updateState();
 
-            const slotData  = SpmModel.SaveSlot.getSlotDict().get(this.data.slotIndex);
+            const slotIndex = this.data.slotIndex;
+            const slotData  = SpmModel.SaveSlot.getSlotDict().get(slotIndex);
             const labelType = this._labelType;
             const labelName = this._labelName;
             if (!slotData) {
@@ -297,7 +298,7 @@ namespace TinyWars.SinglePlayerMode {
                 labelName.text  = null;
             } else {
                 const warData   = slotData.warData;
-                labelType.text  = Lang.getWarTypeName(BwHelpers.getWarType(warData));
+                labelType.text  = `${slotIndex}. ${Lang.getWarTypeName(BwHelpers.getWarType(warData))}`;
 
                 const slotComment = slotData.extraData.slotComment;
                 if (slotComment) {

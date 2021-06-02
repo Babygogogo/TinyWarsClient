@@ -42,9 +42,9 @@ namespace TinyWars.GameUi {
             zoom.setContentHeight(mapView.height);
             zoom.setContentScale(0, true);
         }
-        public showMapByWarData(data: ProtoTypes.WarSerialization.ISerialWar): void {
+        public showMapByWarData(data: ProtoTypes.WarSerialization.ISerialWar, players?: ProtoTypes.WarSerialization.ISerialPlayer[]): void {
             const mapView = this._mapView;
-            mapView.showMapByWarData(data);
+            mapView.showMapByWarData(data, players);
 
             const zoom = this._zoomableComponent;
             zoom.setContentWidth(mapView.width);

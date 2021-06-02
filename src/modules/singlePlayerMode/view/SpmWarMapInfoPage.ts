@@ -79,7 +79,7 @@ namespace TinyWars.SinglePlayerMode {
                 zoomMap.clearMap();
                 uiMapInfo.setData(null);
             } else {
-                zoomMap.showMapByWarData(initialWarData);
+                zoomMap.showMapByWarData(initialWarData, warData.playerManager.players);
                 uiMapInfo.setData({
                     warData: initialWarData,
                 });
