@@ -829,6 +829,19 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
             focusUnit.setIsBuildingTile(targetUnit.getIsBuildingTile());
 
+            // flare ammo
+            {
+                const maxAmmo = focusUnit.getFlareMaxAmmo();
+                if (maxAmmo != null) {
+                    const focusUnitCurrentAmmo  = focusUnit.getFlareCurrentAmmo();
+                    const targetUnitCurrentAmmo = targetUnit.getFlareCurrentAmmo();
+                    focusUnit.setFlareCurrentAmmo(Math.min(
+                        maxAmmo,
+                        focusUnitCurrentAmmo + targetUnitCurrentAmmo
+                    ));
+                }
+            }
+
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
             unitMap.getView().removeUnit(targetUnit.getView());
@@ -1547,6 +1560,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             targetTile.setCurrentHp(targetNewHp);
 
             if (targetNewHp > 0) {
+                // nothing to do.
             } else {
                 if (targetTile.getType() === TileType.Meteor) {
                     for (const gridIndex of BwHelpers.getAdjacentPlasmas(tileMap, targetGridIndex)) {
@@ -1628,6 +1642,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
+            // nothing to do.
         } else {
             const destination       = pathNodes[pathNodes.length - 1];
             const tile              = war.getTileMap().getTile(destination);
@@ -1770,6 +1785,19 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             focusUnit.setIsCapturingTile(targetUnit.getIsCapturingTile());
 
             focusUnit.setIsBuildingTile(targetUnit.getIsBuildingTile());
+
+            // flare ammo
+            {
+                const maxAmmo = focusUnit.getFlareMaxAmmo();
+                if (maxAmmo != null) {
+                    const focusUnitCurrentAmmo  = focusUnit.getFlareCurrentAmmo();
+                    const targetUnitCurrentAmmo = targetUnit.getFlareCurrentAmmo();
+                    focusUnit.setFlareCurrentAmmo(Math.min(
+                        maxAmmo,
+                        focusUnitCurrentAmmo + targetUnitCurrentAmmo
+                    ));
+                }
+            }
         }
     }
 
@@ -1805,7 +1833,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
-
+            // nothing to do.
         } else {
             const targetGridIndex   = action.targetGridIndex as GridIndex;
             const tile              = war.getTileMap().getTile(pathNodes[pathNodes.length - 1]);
@@ -1872,7 +1900,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         focusUnit.setActionState(UnitActionState.Acted);
 
         if (path.isBlocked) {
-
+            // nothing to do.
         } else {
             const gridIndex         = focusUnit.getGridIndex();
             const producedUnitId    = unitMap.getNextUnitId();
@@ -1908,7 +1936,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
         const isBlocked = revisedPath.isBlocked;
         if (isBlocked) {
-
+            // nothing to do.
         } else {
             const suppliedUnits : BwUnit[] = [];
             const playerIndex   = focusUnit.getPlayerIndex();

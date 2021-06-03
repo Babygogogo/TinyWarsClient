@@ -19,7 +19,7 @@ namespace TinyWars.Utility.DestructionHelpers {
         }
 
         const player                = unit.getPlayer();
-        const destroyedCoUnitsCount = destroyedUnits.filter(unit => unit.getHasLoadedCo()).length;
+        const destroyedCoUnitsCount = destroyedUnits.filter(u => u.getHasLoadedCo()).length;
         if (destroyedCoUnitsCount > 0) {
             const currentEnergy = player.getCoCurrentEnergy();
             if (currentEnergy == null) {
@@ -82,7 +82,7 @@ namespace TinyWars.Utility.DestructionHelpers {
                 tile.setCurrentHp(hp);
                 tile.setCurrentBuildPoint(buildPoint);
                 tile.setCurrentCapturePoint(capturePoint);
-            };
+            }
         });
 
         war.getFogMap().resetAllMapsForPlayer(playerIndex);

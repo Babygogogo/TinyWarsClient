@@ -723,6 +723,19 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
 
             focusUnit.setIsBuildingTile(targetUnit.getIsBuildingTile());
 
+            // flare ammo
+            {
+                const maxAmmo = focusUnit.getFlareMaxAmmo();
+                if (maxAmmo != null) {
+                    const focusUnitCurrentAmmo  = focusUnit.getFlareCurrentAmmo();
+                    const targetUnitCurrentAmmo = targetUnit.getFlareCurrentAmmo();
+                    focusUnit.setFlareCurrentAmmo(Math.min(
+                        maxAmmo,
+                        focusUnitCurrentAmmo + targetUnitCurrentAmmo
+                    ));
+                }
+            }
+
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
             unitMap.getView().removeUnit(targetUnit.getView());
