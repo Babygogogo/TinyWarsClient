@@ -252,6 +252,17 @@ namespace TinyWars.BaseWar {
             this._isExecutingAction = isExecuting;
         }
 
+        public checkCanEnd(): boolean | undefined {
+            const aliveTeamsCount = this.getPlayerManager().getAliveOrDyingTeamsCount(false);
+            if (aliveTeamsCount == null) {
+                Logger.error(`BwWar.checkCanEnd() empty aliveTeamsCount.`);
+                return undefined;
+            }
+
+            return (aliveTeamsCount <= 1)
+                || (this.getDrawVoteManager().checkIsDraw());
+        }
+
         private _setWarId(warId: number): void {
             this._warId = warId;
         }
@@ -304,6 +315,9 @@ namespace TinyWars.BaseWar {
 
         public getEnterTurnTime(): number {
             return this.getTurnManager().getEnterTurnTime();
+        }
+        public getTurnPhaseCode(): Types.TurnPhaseCode | null | undefined {
+            return this.getTurnManager().getPhaseCode();
         }
 
         public getWatcherTeamIndexes(watcherUserId: number): Set<number> {

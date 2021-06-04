@@ -8,11 +8,11 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     import CommonConstants      = Utility.CommonConstants;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import ClientErrorCode      = Utility.ClientErrorCode;
-    import Logger               = Utility.Logger;
+    import ProtoTypes           = Utility.ProtoTypes;
     import BwTile               = BaseWar.BwTile;
     import BwHelpers            = BaseWar.BwHelpers;
     import BwUnit               = BaseWar.BwUnit;
-    import WarAction            = Types.RawWarActionContainer;
+    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import WeaponType           = Types.WeaponType;
     import GridIndex            = Types.GridIndex;
     import MovableArea          = Types.MovableArea;
@@ -37,11 +37,11 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     }
     type ErrorCodeAndAction = {
         errorCode   : ClientErrorCode;
-        action?     : WarAction;
+        action?     : IWarActionContainer;
     }
     type ScoreAndAction = {
         score   : number;
-        action  : WarAction;
+        action  : IWarActionContainer;
     }
     type DamageMapData = {
         max     : number;
@@ -679,13 +679,14 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         return {
             errorCode       : ClientErrorCode.NoError,
             reachableArea   : BwHelpers.createMovableArea({
-                origin      : unitGridIndex,
-                maxMoveCost : Math.min(moveRange, currentFuel),
+                origin          : unitGridIndex,
+                maxMoveCost     : Math.min(moveRange, currentFuel),
                 mapSize,
-                moveCostGetter: (gridIndex: GridIndex) => {
+                moveCostGetter  : (gridIndex: GridIndex) => {
                     const tile = tileMap.getTile(gridIndex);
-                    if ((!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) ||
-                        ((blockedGridIndex) && (GridIndexHelpers.checkIsEqual(gridIndex, blockedGridIndex)))) {
+                    if ((!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))                            ||
+                        ((blockedGridIndex) && (GridIndexHelpers.checkIsEqual(gridIndex, blockedGridIndex)))
+                    ) {
                         return null;
                     } else {
                         if ((passableGridIndex) && (GridIndexHelpers.checkIsEqual(gridIndex, passableGridIndex))) {
@@ -1536,14 +1537,14 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             origin          : gridIndex,
             maxMoveCost     : Number.MAX_SAFE_INTEGER,
             mapSize,
-            moveCostGetter  : gridIndex => {
-                if (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize)) {
+            moveCostGetter  : g => {
+                if (!GridIndexHelpers.checkIsInsideMap(g, mapSize)) {
                     return null;
                 } else {
-                    const tile = tileMap.getTile(gridIndex);
-                    return tile ? tile.getMoveCostByMoveType(moveType) : null;
+                    const t = tileMap.getTile(g);
+                    return t ? t.getMoveCostByMoveType(moveType) : null;
                 }
-            },
+            }
         });
 
         const {
@@ -2159,8 +2160,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             errorCode       : ClientErrorCode.NoError,
             scoreAndAction  : {
                 score,
-                action  : { UnitBeLoaded: {
-                    path        : pathNodes,
+                action  : { WarActionUnitBeLoaded: {
+                    path        : {
+                        nodes           : pathNodes,
+                        fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                        isBlocked       : false,
+                    },
                     launchUnitId: unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                 } },
             },
@@ -2201,8 +2206,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             errorCode       : ClientErrorCode.NoError,
             scoreAndAction  : {
                 score,
-                action  : { UnitJoin: {
-                    path        : pathNodes,
+                action  : { WarActionUnitJoinUnit: {
+                    path        : {
+                        nodes           : pathNodes,
+                        fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                        isBlocked       : false,
+                    },
                     launchUnitId: unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                 } },
             },
@@ -2253,13 +2262,21 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                     {
                         score,
                         action  : unitMap.getUnitOnMap(targetGridIndex) != null
-                            ? { UnitAttackUnit: {
-                                path    : pathNodes,
+                            ? { WarActionUnitAttackUnit: {
+                                path        : {
+                                    nodes           : pathNodes,
+                                    fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                                    isBlocked       : false,
+                                },
                                 targetGridIndex,
                                 launchUnitId,
                             } }
-                            : { UnitAttackTile: {
-                                path    : pathNodes,
+                            : { WarActionUnitAttackTile: {
+                                path        : {
+                                    nodes           : pathNodes,
+                                    fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                                    isBlocked       : false,
+                                },
                                 targetGridIndex,
                                 launchUnitId,
                             }, },
@@ -2299,8 +2316,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 errorCode       : ClientErrorCode.NoError,
                 scoreAndAction  : {
                     score,
-                    action  : { UnitCaptureTile: {
-                        path            : pathNodes,
+                    action  : { WarActionUnitCaptureTile: {
+                        path        : {
+                            nodes           : pathNodes,
+                            fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                            isBlocked       : false,
+                        },
                         launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                     } },
                 },
@@ -2328,8 +2349,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 errorCode       : ClientErrorCode.NoError,
                 scoreAndAction  : {
                     score,
-                    action  : { UnitDive: {
-                        path            : pathNodes,
+                    action  : { WarActionUnitDive: {
+                        path        : {
+                            nodes           : pathNodes,
+                            fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                            isBlocked       : false,
+                        },
                         launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                     } },
                 },
@@ -2419,8 +2444,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 ? {
                     score   : scoreAndGridIndex.score,
                     action  : {
-                        UnitLaunchSilo: {
-                            path            : pathNodes,
+                        WarActionUnitLaunchSilo: {
+                            path        : {
+                                nodes           : pathNodes,
+                                fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                                isBlocked       : false,
+                            },
                             launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                             targetGridIndex : scoreAndGridIndex.gridIndex,
                         }
@@ -2460,8 +2489,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
                 bestScoreAndAction = getBetterScoreAndAction(bestScoreAndAction, {
                     score,
-                    action  : { UnitLaunchFlare: {
-                        path            : pathNodes,
+                    action  : { WarActionUnitLaunchFlare: {
+                        path        : {
+                            nodes           : pathNodes,
+                            fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                            isBlocked       : false,
+                        },
                         launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                         targetGridIndex,
                     } },
@@ -2495,8 +2528,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 errorCode       : ClientErrorCode.NoError,
                 scoreAndAction  : {
                     score,
-                    action  : { UnitSurface: {
-                        path            : pathNodes,
+                    action  : { WarActionUnitSurface: {
+                        path        : {
+                            nodes           : pathNodes,
+                            fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                            isBlocked       : false,
+                        },
                         launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                     } },
                 },
@@ -2518,8 +2555,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             errorCode       : ClientErrorCode.NoError,
             scoreAndAction  : {
                 score,
-                action  : { UnitWait: {
-                    path            : pathNodes,
+                action  : { WarActionUnitWait: {
+                    path        : {
+                        nodes           : pathNodes,
+                        fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                        isBlocked       : false,
+                    },
                     launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                 } },
             },
@@ -2687,7 +2728,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                     commonParams,
                     unit        : candidateUnit,
                     gridIndex,
-                    damageMap   : ((action.UnitDive) || ((candidateUnit.getIsDiving()) && (!action.UnitSurface))) ? damageMapForDive : damageMapForSurface,
+                    damageMap   : ((action.WarActionUnitDive) || ((candidateUnit.getIsDiving()) && (!action.WarActionUnitSurface))) ? damageMapForDive : damageMapForSurface,
                 });
                 if (errorCodeForScoreForPosition) {
                     return { errorCode: errorCodeForScoreForPosition };
@@ -2754,7 +2795,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 errorCode       : ClientErrorCode.NoError,
                 scoreAndAction  : {
                     score   : bestScoreAndUnitType.score,
-                    action  : { PlayerProduceUnit: {
+                    action  : { WarActionPlayerProduceUnit: {
                         unitType    : bestScoreAndUnitType.unitType,
                         unitHp      : CommonConstants.UnitMaxHp,
                         gridIndex,
@@ -2851,7 +2892,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             }
 
             const action = scoreAndAction.action;
-            if ((action.UnitAttackUnit) || (action.UnitAttackTile)) {
+            if ((action.WarActionUnitAttackUnit) || (action.WarActionUnitAttackTile)) {
                 bestScoreAndAction = getBetterScoreAndAction(bestScoreAndAction, scoreAndAction);
             }
         }
@@ -2990,14 +3031,35 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         };
     }
 
-    // Phase 9: end turn.
+    // Phase 9: vote for draw.
     async function getActionForPhase9(commonParams: CommonParams): Promise<ErrorCodeAndAction> {
+        await checkAndCallLater();
+
+        if (commonParams.war.getDrawVoteManager().getRemainingVotes() == null) {
+            return {
+                errorCode   : ClientErrorCode.NoError,
+                action      : undefined,
+            }
+        } else {
+            return {
+                errorCode   : ClientErrorCode.NoError,
+                action      : {
+                    WarActionPlayerVoteForDraw: {
+                        isAgree : false,
+                    },
+                },
+            };
+        }
+    }
+
+    // Phase 10: end turn.
+    async function getActionForPhase10(commonParams: CommonParams): Promise<ErrorCodeAndAction> {
         await checkAndCallLater();
 
         return {
             errorCode   : ClientErrorCode.NoError,
             action      : {
-                PlayerEndTurn: {},
+                WarActionPlayerEndTurn: {},
             },
         };
     }
@@ -3008,6 +3070,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         getActionForPhase3,
         getActionForPhase8,
         getActionForPhase9,
+        getActionForPhase10,
     ];
     async function doGetNextAction(war: SpwWar): Promise<ErrorCodeAndAction> {
         _frameBeginTime = Date.now();
@@ -3017,6 +3080,10 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             return { errorCode: errorCodeForCommonParams };
         } else if (commonParams == null) {
             return { errorCode: ClientErrorCode.SpwRobot_DoGetNextAction_00 };
+        }
+
+        if (war.getPlayerIndexInTurn() === CommonConstants.WarNeutralPlayerIndex) {
+            return { errorCode: ClientErrorCode.SpwRobot_DoGetNextAction_01 };
         }
 
         for (const func of funcArray) {
@@ -3032,12 +3099,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         }
 
         return {
-            errorCode   : ClientErrorCode.NoError,
+            errorCode   : ClientErrorCode.SpwRobot_DoGetNextAction_02,
             action      : undefined,
         };
     }
 
-    export async function getNextAction(war: SpwWar): Promise< { errorCode: ClientErrorCode, action?: WarAction}> {
+    export async function getNextAction(war: SpwWar): Promise< { errorCode: ClientErrorCode, action?: IWarActionContainer}> {
         if (_isCalculating) {
             return { errorCode: ClientErrorCode.SpwRobot_GetNextAction_00 };
         }

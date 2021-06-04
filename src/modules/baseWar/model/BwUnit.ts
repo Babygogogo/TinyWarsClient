@@ -126,6 +126,7 @@ namespace TinyWars.BaseWar {
             this.getView().startRunningView();
         }
         public stopRunning(): void {
+            // nothing to do.
         }
 
         public serialize(): ISerialUnit | undefined {
@@ -700,7 +701,7 @@ namespace TinyWars.BaseWar {
             return this._getTemplateCfg().canAttackDivingUnits === 1;
         }
 
-        public checkCanAttackTargetAfterMovePath(movePath: MovePathNode[], targetGridIndex: GridIndex): boolean {
+        public checkCanAttackTargetAfterMovePath(movePath: GridIndex[], targetGridIndex: GridIndex): boolean {
             const pathLength    = movePath.length;
             const destination   = movePath[pathLength - 1];
             const distance      = GridIndexHelpers.getDistance(destination, targetGridIndex);

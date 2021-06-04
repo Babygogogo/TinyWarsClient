@@ -7,6 +7,8 @@ namespace TinyWars.BaseWar.BwHelpers {
     import Helpers                  = Utility.Helpers;
     import ConfigManager            = Utility.ConfigManager;
     import ClientErrorCode          = Utility.ClientErrorCode;
+    import CommonConstants          = Utility.CommonConstants;
+    import VisibilityHelpers        = Utility.VisibilityHelpers;
     import GridIndex                = Types.GridIndex;
     import MovableArea              = Types.MovableArea;
     import AttackableArea           = Types.AttackableArea;
@@ -17,13 +19,12 @@ namespace TinyWars.BaseWar.BwHelpers {
     import WarType                  = Types.WarType;
     import Visibility               = Types.Visibility;
     import CoSkillAreaType          = Types.CoSkillAreaType;
-    import WarSerialization         = ProtoTypes.WarSerialization;
     import ISerialUnit              = WarSerialization.ISerialUnit;
     import ISerialTile              = WarSerialization.ISerialTile;
     import ISerialWar               = WarSerialization.ISerialWar;
+    import WarSerialization         = ProtoTypes.WarSerialization;
     import IGridIndex               = ProtoTypes.Structure.IGridIndex;
     import IRuleForPlayers          = ProtoTypes.WarRule.IRuleForPlayers;
-    import CommonConstants          = Utility.CommonConstants;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
@@ -101,7 +102,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         let gridIndex   = destination;
         let movableNode = area[gridIndex.x][gridIndex.y];
 
-        while (true) {
+        for (;;) {
             reversedPath.push({
                 x               : gridIndex.x,
                 y               : gridIndex.y,
@@ -113,6 +114,199 @@ namespace TinyWars.BaseWar.BwHelpers {
                 return reversedPath.reverse();
             }
             movableNode = area[gridIndex.x][gridIndex.y];
+        }
+    }
+
+    export function getRevisedPath({ war, rawPath, launchUnitId }: {
+        war             : BwWar;
+        rawPath         : ProtoTypes.Structure.IMovePath | undefined | null;
+        launchUnitId    : number | null | undefined;
+    }): { errorCode: ClientErrorCode, revisedPath?: Types.MovePath} {
+        if (rawPath == null) {
+            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_00 };
+        }
+        const rawPathNodes = rawPath.nodes;
+        if ((rawPathNodes == null) || (!rawPathNodes.length)) {
+            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_01 };
+        }
+
+        const beginningGridIndex = convertGridIndex(rawPathNodes[0]);
+        if (beginningGridIndex == null) {
+            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_02 };
+        }
+
+        const playerInTurn  = war.getPlayerInTurn();
+        if (playerInTurn == null) {
+            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_03 };
+        }
+
+        const unitMap   = war.getUnitMap();
+        const focusUnit = launchUnitId != null ? unitMap.getUnitLoadedById(launchUnitId) : unitMap.getUnitOnMap(beginningGridIndex);
+        if ((!focusUnit)                                                    ||
+            (focusUnit.getPlayerIndex() !== playerInTurn.getPlayerIndex())  ||
+            (focusUnit.getActionState() !== Types.UnitActionState.Idle)     ||
+            (war.getTurnPhaseCode() !== Types.TurnPhaseCode.Main)
+        ) {
+            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_04 };
+        }
+
+        if (launchUnitId != null) {
+            const gridIndex = focusUnit.getGridIndex();
+            if (gridIndex == null) {
+                return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_05 };
+            }
+
+            if (!GridIndexHelpers.checkIsEqual(gridIndex, beginningGridIndex)) {
+                return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_06 };
+            }
+        }
+
+        const tileMap = war.getTileMap();
+        const mapSize = tileMap.getMapSize();
+        if (mapSize == null) {
+            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_07 };
+        }
+
+        const teamIndexInTurn = playerInTurn.getTeamIndex();
+        if (teamIndexInTurn == null) {
+            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_08 };
+        }
+
+        const maxFuelConsumption = focusUnit.getFinalMoveRange();
+        if (maxFuelConsumption == null) {
+            return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_09 };
+        }
+
+        const revisedNodes              = [GridIndexHelpers.clone(beginningGridIndex)];
+        let revisedTotalFuelConsumption = 0;
+        let rawTotalFuelConsumption     = 0;
+        let isBlocked                   = false;
+        for (let i = 1; i < rawPathNodes.length; ++i) {
+            const gridIndex = convertGridIndex(rawPathNodes[i]);
+            if ((!gridIndex)                                                                        ||
+                (!GridIndexHelpers.checkIsAdjacent(gridIndex, rawPathNodes[i - 1] as GridIndex))    ||
+                (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))                            ||
+                (revisedNodes.some(g => GridIndexHelpers.checkIsEqual(g, gridIndex)))
+            ) {
+                return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_10 };
+            }
+
+            const tile = tileMap.getTile(gridIndex);
+            if (tile == null) {
+                return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_11 };
+            }
+
+            const fuelConsumption = tile.getMoveCostByUnit(focusUnit);
+            if (fuelConsumption == null) {
+                return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_12 };
+            }
+
+            rawTotalFuelConsumption += fuelConsumption;
+            if (rawTotalFuelConsumption > maxFuelConsumption) {
+                return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_13 };
+            }
+
+            const existingUnit = unitMap.getUnitOnMap(gridIndex);
+            if ((existingUnit) && (existingUnit.getTeamIndex() !== teamIndexInTurn)) {
+                const unitType = existingUnit.getUnitType();
+                if (unitType == null) {
+                    return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_14 };
+                }
+
+                const isDiving = existingUnit.getIsDiving();
+                if (isDiving == null) {
+                    return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_15 };
+                }
+
+                const unitPlayerIndex = existingUnit.getPlayerIndex();
+                if (unitPlayerIndex == null) {
+                    return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_16 };
+                }
+
+                if (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                    war,
+                    gridIndex,
+                    unitType,
+                    isDiving,
+                    unitPlayerIndex,
+                    observerTeamIndex   : teamIndexInTurn,
+                })) {
+                    return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_17 };
+                } else {
+                    isBlocked = true;
+                }
+            }
+
+            if (!isBlocked) {
+                revisedTotalFuelConsumption = rawTotalFuelConsumption;
+                revisedNodes.push(GridIndexHelpers.clone(gridIndex));
+            }
+        }
+
+        return {
+            errorCode   : ClientErrorCode.NoError,
+            revisedPath : {
+                nodes           : revisedNodes,
+                isBlocked       : isBlocked,
+                fuelConsumption : revisedTotalFuelConsumption,
+            },
+        };
+    }
+
+    export function checkIsPathDestinationOccupiedByOtherVisibleUnit(war: BwWar, rawPath: GridIndex[]): boolean | undefined {
+        if (rawPath.length == 1) {
+            return false;
+        } else {
+            const unitMap = war.getUnitMap();
+            if (unitMap == null) {
+                Logger.error(`BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty unitMap.`);
+                return undefined;
+            }
+
+            const destination   = rawPath[rawPath.length - 1];
+            const unit          = unitMap.getUnitOnMap(destination);
+            if (unit == null) {
+                return false;
+            } else {
+                const unitType = unit.getUnitType();
+                if (unitType == null) {
+                    Logger.error(`BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty unitType.`);
+                    return undefined;
+                }
+
+                const isDiving = unit.getIsDiving();
+                if (isDiving == null) {
+                    Logger.error(`BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty isDiving.`);
+                    return undefined;
+                }
+
+                const unitPlayerIndex = unit.getPlayerIndex();
+                if (unitPlayerIndex == null) {
+                    Logger.error(`BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty unitPlayerIndex.`);
+                    return undefined;
+                }
+
+                const focusUnit = unitMap.getUnitOnMap(rawPath[0]);
+                if (focusUnit == null) {
+                    Logger.error(`BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty focusUnit.`);
+                    return undefined;
+                }
+
+                const observerTeamIndex = focusUnit.getTeamIndex();
+                if (observerTeamIndex == null) {
+                    Logger.error(`BwHelpers.checkIsPathDestinationOccupiedByOtherVisibleUnit() empty observerTeamIndex.`);
+                    return undefined;
+                }
+
+                return VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
+                    war,
+                    gridIndex           : destination,
+                    unitType,
+                    isDiving,
+                    unitPlayerIndex,
+                    observerTeamIndex,
+                });
+            }
         }
     }
 
@@ -167,7 +361,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const currentGridIndex  = availableGrid.currGridIndex;
             const totalMoveCost     = availableGrid.totalMoveCost;
             const tile              = tileMap.getTile(currentGridIndex);
-            const existingUnit      = unitMap.getUnitOnMap(currentGridIndex);
+            // const existingUnit      = unitMap.getUnitOnMap(currentGridIndex);
 
             if ((tile.getMaxCapturePoint())                                                                 &&
                 (tile.getTeamIndex() !== teamIndex)    //                                                     &&
@@ -488,10 +682,10 @@ namespace TinyWars.BaseWar.BwHelpers {
         extraData   : ProtoTypes.Structure.IDataForUseCoSkill
     ): void {
         const configVersion = war.getConfigVersion();
-        const skillCfg      = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
+        const skillCfg      = ConfigManager.getCoSkillCfg(configVersion, skillId);
         const playerIndex   = player.getPlayerIndex();
         const unitMap       = war.getUnitMap();
-        const zoneRadius    = player.getCoZoneRadius()!;
+        const zoneRadius    = player.getCoZoneRadius();
 
         if (skillCfg.selfHpGain) {
             const cfg       = skillCfg.selfHpGain;
@@ -1075,7 +1269,7 @@ namespace TinyWars.BaseWar.BwHelpers {
     export function checkCanVoteForDraw({ playerIndex, aliveState }: {
         playerIndex : number | null | undefined;
         aliveState  : Types.PlayerAliveState | null | undefined;
-    }) {
+    }): boolean {
         return (playerIndex != null)
             && (playerIndex !== CommonConstants.WarNeutralPlayerIndex)
             && (aliveState != null)

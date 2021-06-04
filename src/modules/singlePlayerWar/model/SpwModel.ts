@@ -4,6 +4,7 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
     import Logger                   = Utility.Logger;
     import Lang                     = Utility.Lang;
     import ProtoTypes               = Utility.ProtoTypes;
+    import ClientErrorCode          = Utility.ClientErrorCode;
     import CommonConstants          = Utility.CommonConstants;
     import WarSerialization         = ProtoTypes.WarSerialization;
     import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
@@ -12,6 +13,7 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
 
     let _war: SpwWar;
     export function init(): void {
+        // nothing to do.
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +78,7 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
     const _warsWithRobotRunning = new Set<SpwWar>();
 
     export async function handlePlayerActionAndAutoActions(war: SpwWar, action: IWarActionContainer): Promise<void> {
-        await handlePlayerAction(war, action);
+        await handlePlayerOrRobotAction(war, action);
 
         await checkAndHandleAutoActionsAndRobotRecursively(war);
     }
@@ -105,13 +107,17 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         }
 
         const {
-            errorCode   : errorCodeForRobot,
-            action      : actionForRobot,
+            errorCode   : errorCodeForRobotAction,
+            action      : robotAction,
         } = await SpwRobot.getNextAction(war);
-        if (errorCodeForRobot) {
-            Logger.error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() errorCodeForRobot: ${errorCodeForRobot}`);
-        } else if (actionForRobot == null) {
-            Logger.error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() empty actionForRobot!`);
+        if (errorCodeForRobotAction) {
+            Logger.error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() errorCodeForRobotAction: ${errorCodeForRobotAction}`);
+            _warsWithRobotRunning.delete(war);
+            return;
+        } else if (robotAction == null) {
+            Logger.error(`SpwModel.checkAndHandleAutoActionsAndRobotRecursively() empty robotAction!`);
+            _warsWithRobotRunning.delete(war);
+            return;
         }
 
         if (!war.getIsRunning()) {
@@ -119,26 +125,26 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
             return;
         }
 
-        await handlePlayerAction(war, SpwActionReviser.revise(war, actionForRobot));
+        await handlePlayerOrRobotAction(war, robotAction);
 
         _warsWithRobotRunning.delete(war);
         await checkAndHandleAutoActionsAndRobotRecursively(war);
     }
 
-    async function handlePlayerAction(war: SpwWar, playerAction: IWarActionContainer): Promise<void> {
+    async function handlePlayerOrRobotAction(war: SpwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
         if (!checkCanExecuteAction(war)) {
-            Logger.error(`SpwModel.handlePlayerAction() checkCanExecuteAction(war) is not true!`);
-            return;
+            Logger.error(`SpwModel.handlePlayerOrRobotAction() checkCanExecuteAction(war) is not true!`);
+            return ClientErrorCode.SpwModel_HandlePlayerOrRobotAction_00;
         }
 
-        playerAction.actionId = war.getExecutedActionManager().getExecutedActionsCount();
-        await SpwActionExecutor.checkAndExecute(war, playerAction);
+        return await reviseAndExecute(war, action);
     }
 
     function checkAndEndWar(war: SpwWar): boolean {
         if (!war.getIsEnded()) {
             return false;
         } else {
+            // TODO: show panels for srw.
             const callback = () => Utility.FlowManager.gotoLobby();
             if (war.getDrawVoteManager().checkIsDraw()) {
                 CommonAlertPanel.show({
@@ -269,38 +275,38 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         // No auto action available.
         return false;
     }
-    async function handleSystemBeginTurn(war: SpwWar): Promise<void> {
-        await SpwActionExecutor.checkAndExecute(war, {
+    async function handleSystemBeginTurn(war: SpwWar): Promise<ClientErrorCode> {
+        return await reviseAndExecute(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemBeginTurn    : {
             },
         })
     }
-    async function handleSystemCallWarEvent(war: SpwWar, warEventId: number): Promise<void> {
-        await SpwActionExecutor.checkAndExecute(war, {
+    async function handleSystemCallWarEvent(war: SpwWar, warEventId: number): Promise<ClientErrorCode> {
+        return await reviseAndExecute(war, {
             actionId                    : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemCallWarEvent : {
                 warEventId,
             },
         });
     }
-    async function handleSystemDestroyPlayerForce(war: SpwWar, playerIndex: number): Promise<void> {
-        await SpwActionExecutor.checkAndExecute(war, {
+    async function handleSystemDestroyPlayerForce(war: SpwWar, playerIndex: number): Promise<ClientErrorCode> {
+        return await reviseAndExecute(war, {
             actionId                            : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemDestroyPlayerForce   : {
                 targetPlayerIndex           : playerIndex,
             },
         });
     }
-    async function handleSystemEndWar(war: SpwWar): Promise<void> {
-        await SpwActionExecutor.checkAndExecute(war, {
+    async function handleSystemEndWar(war: SpwWar): Promise<ClientErrorCode> {
+        return await reviseAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionSystemEndWar   : {
             },
         });
     }
-    async function handlePlayerEndTurn(war: SpwWar): Promise<void> {
-        await SpwActionExecutor.checkAndExecute(war, {
+    async function handlePlayerEndTurn(war: SpwWar): Promise<ClientErrorCode> {
+        return await reviseAndExecute(war, {
             actionId                : war.getExecutedActionManager().getExecutedActionsCount(),
             WarActionPlayerEndTurn  : {
             },
@@ -312,5 +318,21 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
             (!war.getIsEnded())             &&
             (!war.getIsExecutingAction())   &&
             (war.getIsRunning());
+    }
+    async function reviseAndExecute(war: SpwWar, action: IWarActionContainer): Promise<ClientErrorCode> {
+        const {
+            errorCode   : errorCodeForRevisedAction,
+            action      : revisedAction,
+        } = BwActionReviser.revise(war, action);
+        if (errorCodeForRevisedAction) {
+            Logger.error(`SpwModel.reviseAndExecute() errorCodeForRevisedAction: ${errorCodeForRevisedAction}`);
+            return errorCodeForRevisedAction;
+        } else if (revisedAction == null) {
+            Logger.error(`SpwModel.reviseAndExecute() empty revisedAction!.`);
+            return ClientErrorCode.SpwModel_ReviseAndExecute_00;
+        }
+
+        await SpwActionExecutor.checkAndExecute(war, revisedAction);
+        return ClientErrorCode.NoError;
     }
 }

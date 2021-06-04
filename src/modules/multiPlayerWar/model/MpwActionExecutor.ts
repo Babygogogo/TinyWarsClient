@@ -7,7 +7,7 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
     import DestructionHelpers   = Utility.DestructionHelpers;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
-    import ConfigManager        = Utility.ConfigManager;
+    import CommonConstants      = Utility.CommonConstants;
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
     import WarActionCodes       = Utility.WarActionCodes;
@@ -20,7 +20,6 @@ namespace TinyWars.MultiPlayerWar.MpwActionExecutor {
     import MovePath             = Types.MovePath;
     import TileType             = Types.TileType;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
-    import CommonConstants      = Utility.CommonConstants;
 
     const _EXECUTORS = new Map<WarActionCodes, (war: MpwWar, data: IWarActionContainer) => Promise<void>>([
         [WarActionCodes.WarActionSystemBeginTurn,           _exeSystemBeginTurn],
