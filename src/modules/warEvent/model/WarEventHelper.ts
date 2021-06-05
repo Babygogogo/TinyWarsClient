@@ -11,6 +11,8 @@ namespace TinyWars.WarEvent.WarEventHelper {
     import BwHelpers                = BaseWar.BwHelpers;
     import LanguageType             = Types.LanguageType;
     import ConditionType            = Types.WarEventConditionType;
+    import ActionType               = Types.WarEventActionType;
+    import PlayerAliveState         = Types.PlayerAliveState;
     import WarEvent                 = ProtoTypes.WarEvent;
     import IWarEventFullData        = ProtoTypes.Map.IWarEventFullData;
     import IMapRawData              = ProtoTypes.Map.IMapRawData;
@@ -38,6 +40,11 @@ namespace TinyWars.WarEvent.WarEventHelper {
         ConditionType.WecPlayerAliveStateEqualTo,
     ];
 
+    const ACTION_TYPE_ARRAY = [
+        ActionType.AddUnit,
+        ActionType.SetPlayerAliveState,
+    ];
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // getter
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +58,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
         return (fullData.conditionNodeArray || []).find(v => v.nodeId === nodeId);
     }
     export function getAction(fullData: IWarEventFullData, actionId: number): IWarEventAction | undefined {
-        return (fullData.actionArray || []).find(v => v.WarEventActionCommonData.actionId === actionId);
+        return (fullData.actionArray || []).find(v => v.WeaCommonData.actionId === actionId);
     }
 
     export function getAllWarEventIdArray(fullData: IWarEventFullData | null | undefined): number[] {
@@ -94,7 +101,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
 
             for (const actionId of event.actionIdArray || []) {
                 const action = srcActionArray.find(v => {
-                    const commonData = v.WarEventActionCommonData;
+                    const commonData = v.WeaCommonData;
                     return (!!commonData) && (commonData.actionId === actionId);
                 });
                 if ((action == null) || (dstActionArray.indexOf(action) >= 0)) {
@@ -152,7 +159,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
 
         const actionDict = new Map<number, IWarEventAction>();
         for (const action of warEventFullData.actionArray || []) {
-            const commonData = action.WarEventActionCommonData;
+            const commonData = action.WeaCommonData;
             if (commonData == null) {
                 return false;
             }
@@ -257,7 +264,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
 
         const actionDict = new Map<number, IWarEventAction>();
         for (const action of warEventFullData.actionArray || []) {
-            const commonData    = action.WarEventActionCommonData;
+            const commonData    = action.WeaCommonData;
             const actionId      = commonData ? commonData.actionId : undefined;
             if ((actionId == null) || (actionDict.has(actionId))) {
                 return ClientErrorCode.WarEventFullDataValidation01;
@@ -438,9 +445,8 @@ namespace TinyWars.WarEvent.WarEventHelper {
         }
         const mapSize: Types.MapSize = { width: mapWidth, height: mapHeight };
 
-        const actionAddUnit = action.WarEventActionAddUnit;
-        if (actionAddUnit) {
-            const { unitArray } = actionAddUnit;
+        if (action.WeaAddUnit) {
+            const { unitArray } = action.WeaAddUnit;
             if ((unitArray == null)                                              ||
                 (unitArray.length <= 0)                                          ||
                 (unitArray.length > CommonConstants.WarEventActionAddUnitMaxCount)
@@ -470,6 +476,29 @@ namespace TinyWars.WarEvent.WarEventHelper {
                 })) {
                     return false;
                 }
+            }
+
+            return true;
+
+        } else if (action.WeaSetPlayerAliveState) {
+            const actionData    = action.WeaSetPlayerAliveState;
+            const playerIndex   = actionData.playerIndex;
+            if ((playerIndex == null)                                   ||
+                (playerIndex === CommonConstants.WarNeutralPlayerIndex) ||
+                (playerIndex > CommonConstants.WarMaxPlayerIndex)
+            ) {
+                return false;
+            }
+
+            const playerAliveState: PlayerAliveState | null | undefined = actionData.playerAliveState;
+            if (playerAliveState == null) {
+                return false;
+            }
+            if ((playerAliveState !== PlayerAliveState.Alive) &&
+                (playerAliveState !== PlayerAliveState.Dying) &&
+                (playerAliveState !== PlayerAliveState.Dead)
+            ) {
+                return false;
             }
 
             return true;
@@ -514,9 +543,9 @@ namespace TinyWars.WarEvent.WarEventHelper {
         if (conPlayerAliveStateEqualTo) {
             const { playerIndexEqualTo, aliveStateEqualTo } = conPlayerAliveStateEqualTo;
 
-            if ((aliveStateEqualTo !== Types.PlayerAliveState.Alive)    &&
-                (aliveStateEqualTo !== Types.PlayerAliveState.Dead)     &&
-                (aliveStateEqualTo !== Types.PlayerAliveState.Dying)
+            if ((aliveStateEqualTo !== PlayerAliveState.Alive)    &&
+                (aliveStateEqualTo !== PlayerAliveState.Dead)     &&
+                (aliveStateEqualTo !== PlayerAliveState.Dying)
             ) {
                 return false;
             }
@@ -766,9 +795,11 @@ namespace TinyWars.WarEvent.WarEventHelper {
     }
 
     export function getDescForAction(action: IWarEventAction): string | undefined {
-        return getDescForWeaAddUnit(action.WarEventActionAddUnit);
+        // TODO: add functions for other actions
+        return (getDescForWeaAddUnit(action.WeaAddUnit))
+            || (getDescForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState));
     }
-    function getDescForWeaAddUnit(data: WarEvent.IWarEventActionAddUnit): string | undefined {
+    function getDescForWeaAddUnit(data: WarEvent.IWeaAddUnit): string | undefined {
         if (!data) {
             return undefined;
         } else {
@@ -783,6 +814,13 @@ namespace TinyWars.WarEvent.WarEventHelper {
                 unitNameArray.push(`${Lang.getUnitName(unitType)} * ${count}`);
             }
             return Lang.getFormattedText(Lang.Type.F0059, unitNameArray.join(", "));
+        }
+    }
+    function getDescForWeaSetPlayerAliveState(data: WarEvent.IWeaSetPlayerAliveState): string | undefined {
+        if (!data) {
+            return undefined;
+        } else {
+            return Lang.getFormattedText(Lang.Type.F0066, data.playerIndex, Lang.getPlayerAliveStateName(data.playerAliveState));
         }
     }
 
@@ -918,9 +956,9 @@ namespace TinyWars.WarEvent.WarEventHelper {
         if ((aliveState == null) || (data.playerIndexEqualTo == null) || (data.isNot == null)) {
             return Lang.getText(Lang.Type.A0165);
         }
-        if ((aliveState !== Types.PlayerAliveState.Alive)   &&
-            (aliveState !== Types.PlayerAliveState.Dead)    &&
-            (aliveState !== Types.PlayerAliveState.Dying)
+        if ((aliveState !== PlayerAliveState.Alive)   &&
+            (aliveState !== PlayerAliveState.Dead)    &&
+            (aliveState !== PlayerAliveState.Dying)
         ) {
             return Lang.getText(Lang.Type.A0165);
         }
@@ -1009,13 +1047,15 @@ namespace TinyWars.WarEvent.WarEventHelper {
         }
 
         // TODO add more tips for the future actions.
-        if (action.WarEventActionAddUnit) {
-            return getErrorTipForWeaAddUnit(action.WarEventActionAddUnit, war);
+        if (action.WeaAddUnit) {
+            return getErrorTipForWeaAddUnit(action.WeaAddUnit, war);
+        } else if (action.WeaSetPlayerAliveState) {
+            return getErrorTipForWeaSetPlayerAliveState(action.WeaSetPlayerAliveState);
         } else {
             return Lang.getText(Lang.Type.A0177);
         }
     }
-    function getErrorTipForWeaAddUnit(data: WarEvent.IWarEventActionAddUnit, war: MapEditor.MeWar): string | undefined {
+    function getErrorTipForWeaAddUnit(data: WarEvent.IWeaAddUnit, war: MapEditor.MeWar): string | undefined {
         const unitArray     = data.unitArray || [];
         const unitsCount    = unitArray.length;
         if ((unitsCount <= 0) || (unitsCount > CommonConstants.WarEventActionAddUnitMaxCount)) {
@@ -1024,7 +1064,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
 
         const mapSize       = war.getTileMap().getMapSize();
         const configVersion = war.getConfigVersion();
-        const validator     = (v: ProtoTypes.WarEvent.WarEventActionAddUnit.IDataForAddUnit) => {
+        const validator     = (v: ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit) => {
             const unitData = v.unitData;
             return (v.canBeBlockedByUnit != null)
                 && (v.needMovableTile != null)
@@ -1038,6 +1078,29 @@ namespace TinyWars.WarEvent.WarEventHelper {
         };
         if (!unitArray.every(validator)) {
             return Lang.getText(Lang.Type.A0169);
+        }
+
+        return undefined;
+    }
+    function getErrorTipForWeaSetPlayerAliveState(data: WarEvent.IWeaSetPlayerAliveState): string | undefined {
+        const playerIndex = data.playerIndex;
+        if ((playerIndex == null)                               ||
+            (playerIndex > CommonConstants.WarMaxPlayerIndex)   ||
+            (playerIndex < CommonConstants.WarFirstPlayerIndex)
+        ) {
+            return `${Lang.getText(Lang.Type.A0212)} (${CommonConstants.WarFirstPlayerIndex} ~ ${CommonConstants.WarMaxPlayerIndex})`;
+        }
+
+        const playerAliveState: PlayerAliveState | null | undefined = data.playerAliveState;
+        if (playerAliveState == null) {
+            return Lang.getText(Lang.Type.A0213);
+        }
+
+        if ((playerAliveState !== PlayerAliveState.Alive)   &&
+            (playerAliveState !== PlayerAliveState.Dead)    &&
+            (playerAliveState !== PlayerAliveState.Dying)
+        ) {
+            return Lang.getText(Lang.Type.A0213);
         }
 
         return undefined;
@@ -1226,7 +1289,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
 
         let deletedActionsCount = 0;
         for (const action of (fullData.actionArray || []).concat()) {
-            deletedActionsCount += checkAndDeleteUnusedAction(fullData, action.WarEventActionCommonData.actionId);
+            deletedActionsCount += checkAndDeleteUnusedAction(fullData, action.WeaCommonData.actionId);
         }
 
         return {
@@ -1404,7 +1467,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
             condition.WecPlayerAliveStateEqualTo = {
                 isNot               : false,
                 playerIndexEqualTo  : CommonConstants.WarFirstPlayerIndex,
-                aliveStateEqualTo   : Types.PlayerAliveState.Alive,
+                aliveStateEqualTo   : PlayerAliveState.Alive,
             };
         } else {
             // TODO handle more condition types.
@@ -1459,14 +1522,52 @@ namespace TinyWars.WarEvent.WarEventHelper {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // action types
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export function getActionTypeArray(): ActionType[] {
+        return ACTION_TYPE_ARRAY;
+    }
+    export function getActionType(action: IWarEventAction): ActionType | undefined {
+        // TODO: handle future actions.
+        if (action.WeaAddUnit) {
+            return ActionType.AddUnit;
+        } else if (action.WeaSetPlayerAliveState) {
+            return ActionType.SetPlayerAliveState;
+        } else {
+            return undefined;
+        }
+    }
+    export function resetAction(action: IWarEventAction, actionType: ActionType): void {
+        const commonData = action.WeaCommonData;
+        for (const key in action) {
+            delete action[key];
+        }
+        action.WeaCommonData = commonData;
+
+        // TODO handle future actions.
+        if (actionType === ActionType.AddUnit) {
+            action.WeaAddUnit = {
+                unitArray   : [],
+            };
+        } else if (actionType === ActionType.SetPlayerAliveState) {
+            action.WeaSetPlayerAliveState = {
+                playerIndex     : 1,
+                playerAliveState: PlayerAliveState.Alive,
+            };
+        } else {
+            Logger.error(`WarEventHelper.resetCondition() invalid conditionType.`);
+        }
+    }
+
     export function openActionModifyPanel(war: BaseWar.BwWar, fullData: IWarEventFullData, action: IWarEventAction): void {
         // TODO handle more action types.
         WeActionModifyPanel1.hide();
+        WeActionModifyPanel2.hide();
 
-        if (action.WarEventActionAddUnit) {
+        if (action.WeaAddUnit) {
             WeActionModifyPanel1.show({ war, fullData, action });
+        } else if (action.WeaSetPlayerAliveState) {
+            WeActionModifyPanel2.show({ war, fullData, action });
         } else {
-            Logger.error(`WarEventHelper.openActionModifyPanel() invalid condition.`);
+            Logger.error(`WarEventHelper.openActionModifyPanel() invalid action.`);
         }
     }
 
@@ -1789,16 +1890,16 @@ namespace TinyWars.WarEvent.WarEventHelper {
         const actionArray           = fullData.actionArray;
         const eventActionIdArray    = event.actionIdArray;
         for (let actionId = 1; ; ++actionId) {
-            if (!actionArray.some(v => v.WarEventActionCommonData.actionId === actionId)) {
+            if (!actionArray.some(v => v.WeaCommonData.actionId === actionId)) {
                 actionArray.push({
-                    WarEventActionCommonData: {
+                    WeaCommonData: {
                         actionId,
                     },
-                    WarEventActionAddUnit: {
+                    WeaAddUnit: {
                         unitArray: [],
                     },
                 });
-                actionArray.sort((v1, v2) => v1.WarEventActionCommonData.actionId - v2.WarEventActionCommonData.actionId);
+                actionArray.sort((v1, v2) => v1.WeaCommonData.actionId - v2.WeaCommonData.actionId);
 
                 eventActionIdArray.push(actionId);
 
@@ -1806,7 +1907,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
             }
         }
     }
-    export function getDefaultAddUnitData(): ProtoTypes.WarEvent.WarEventActionAddUnit.IDataForAddUnit {
+    export function getDefaultAddUnitData(): ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit {
         return {
             canBeBlockedByUnit  : true,
             needMovableTile     : true,
@@ -1846,10 +1947,10 @@ namespace TinyWars.WarEvent.WarEventHelper {
         const actionIdArray = eventData.actionIdArray;
         const newAction     = Helpers.deepClone(srcAction);
         for (let actionId = 1; ; ++actionId) {
-            if (!actionArray.some(v => v.WarEventActionCommonData.actionId === actionId)) {
-                newAction.WarEventActionCommonData.actionId = actionId;
+            if (!actionArray.some(v => v.WeaCommonData.actionId === actionId)) {
+                newAction.WeaCommonData.actionId = actionId;
                 actionArray.push(newAction);
-                actionArray.sort((v1, v2) => v1.WarEventActionCommonData.actionId - v2.WarEventActionCommonData.actionId);
+                actionArray.sort((v1, v2) => v1.WeaCommonData.actionId - v2.WeaCommonData.actionId);
 
                 Helpers.deleteElementFromArray(actionIdArray, actionIdForDelete);
                 actionIdArray.push(actionId);

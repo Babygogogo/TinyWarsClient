@@ -554,6 +554,7 @@ namespace TinyWars.Utility.Types {
     }
 
     export const enum WarEventActionType {
-        WarEventActionAddUnit,
+        AddUnit,
+        SetPlayerAliveState,
     }
 }

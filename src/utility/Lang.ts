@@ -2,6 +2,7 @@
 namespace TinyWars.Utility.Lang {
     import LanguageType             = Types.LanguageType;
     import WarEventConditionType    = Types.WarEventConditionType;
+    import WarEventActionType       = Types.WarEventActionType;
     import PlayerRuleType           = Types.PlayerRuleType;
 
     export const enum Type {
@@ -1020,6 +1021,26 @@ namespace TinyWars.Utility.Lang {
         [Type.A0211]: [
             `请选择您的CO和颜色，并进入准备就绪状态`,
             `Please choose your CO and color, and then set ready for the match.`,
+        ],
+        [Type.A0212]: [
+            `玩家序号不合法`,
+            `The index of the player is invalid.`,
+        ],
+        [Type.A0213]: [
+            `玩家状态不合法`,
+            `The state of the player is invalid.`,
+        ],
+        [Type.A0214]: [
+            `"存活"状态下，玩家可以正常行动。可以从其他状态切换到本状态（死而复生）。`,
+            `In the Alive state, players can do anything as usual. It's possible to make a (Being) Defeated player Alive again.`,
+        ],
+        [Type.A0215]: [
+            `"即将战败"状态下，玩家无法行动。除非有其他事件把玩家状态改为"存活"，否则系统将自动清除所有该玩家的部队，建筑将变为中立，且状态将变为已战败。`,
+            `In the Being Defeated state, players can not do anything. His/her troops will be cleared, and buildings will be neutral, unless his/her state is changed to be Alive.`,
+        ],
+        [Type.A0216]: [
+            `"已战败"状态下，玩家无法行动。如果玩家是直接从存活状态切换到已战败状态，则其部队和建筑所有权都会残留。`,
+            `In the Being Defeated state, players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3477,6 +3498,14 @@ namespace TinyWars.Utility.Lang {
             `动作`,
             `Action`,
         ],
+        [Type.B0617]: [
+            `增加部队`,
+            `Add Unit(s)`,
+        ],
+        [Type.B0618]: [
+            `修改玩家状态`,
+            `Modify a Player's State`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3987,6 +4016,10 @@ namespace TinyWars.Utility.Lang {
         [Type.F0065]: [
             `您是否希望前往 %s 网站?`,
             `Do you want to go to the %s website?`,
+        ],
+        [Type.F0066]: [
+            `设置玩家 P%d 的状态为 %s`,
+            `Set P%d's state as %s.`,
         ],
     };
 
@@ -4654,6 +4687,14 @@ namespace TinyWars.Utility.Lang {
             case WarEventConditionType.WecEventCalledCountTotalLessThan     : return Lang.getText(Lang.Type.B0514);
             case WarEventConditionType.WecPlayerAliveStateEqualTo           : return Lang.getText(Lang.Type.B0515);
             default                                                         : return undefined;
+        }
+    }
+
+    export function getWarEventActionTypeName(type: WarEventActionType): string | undefined {
+        switch (type) {
+            case WarEventActionType.AddUnit                 : return Lang.getText(Lang.Type.B0617);
+            case WarEventActionType.SetPlayerAliveState     : return Lang.getText(Lang.Type.B0618);
+            default                                         : return undefined;
         }
     }
 

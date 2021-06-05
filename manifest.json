@@ -75,7 +75,7 @@
 		"bin-debug/modules/common/view/CommonConfirmPanel.js",
 		"bin-debug/modules/baseWar/model/BwTurnManagerHelper.js",
 		"bin-debug/modules/common/model/CommonModel.js",
-		"bin-debug/modules/multiRankRoom/view/MrrMyRoomListPanel.js",
+		"bin-debug/modules/multiRankRoom/view/MrrPreviewAdvancedSettingsPage.js",
 		"bin-debug/modules/broadcast/view/BroadcastPanel.js",
 		"bin-debug/modules/changeLog/model/ChangeLogProxy.js",
 		"bin-debug/modules/changeLog/view/ChangeLogAddPanel.js",
@@ -191,8 +191,8 @@
 		"bin-debug/modules/multiFreeRoom/view/MfrCreateAdvancedSettingsPage.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrCreateBasicSettingsPage.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrCreateMapInfoPage.js",
+		"bin-debug/modules/multiFreeRoom/view/MfrCreateSettingsPanel.js",
 		"bin-debug/gameui/UiButton.js",
-		"bin-debug/modules/multiFreeRoom/view/MfrJoinPasswordPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrJoinRoomListPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrMainMenuPanel.js",
 		"bin-debug/modules/multiFreeRoom/view/MfrMyRoomListPanel.js",
@@ -222,8 +222,8 @@
 		"bin-debug/modules/multiRankRoom/model/MrrModel.js",
 		"bin-debug/modules/multiRankRoom/model/MrrProxy.js",
 		"bin-debug/modules/multiRankRoom/view/MrrMainMenuPanel.js",
+		"bin-debug/modules/multiRankRoom/view/MrrMyRoomListPanel.js",
 		"bin-debug/modules/changeLog/model/ChangeLogModel.js",
-		"bin-debug/modules/multiRankRoom/view/MrrPreviewAdvancedSettingsPage.js",
 		"bin-debug/modules/multiRankRoom/view/MrrPreviewBasicSettingsPage.js",
 		"bin-debug/modules/multiRankRoom/view/MrrPreviewMapInfoPage.js",
 		"bin-debug/modules/multiRankRoom/view/MrrPreviewMapListPanel.js",
@@ -318,7 +318,9 @@
 		"bin-debug/modules/baseWar/view/BwProduceUnitPanel.js",
 		"bin-debug/modules/warEvent/view/WeActionAddUnitListPanel.js",
 		"bin-debug/modules/warEvent/view/WeActionModifyPanel1.js",
+		"bin-debug/modules/warEvent/view/WeActionModifyPanel2.js",
 		"bin-debug/modules/warEvent/view/WeActionReplacePanel.js",
+		"bin-debug/modules/warEvent/view/WeActionTypeListPanel.js",
 		"bin-debug/modules/warEvent/view/WeCommandPanel.js",
 		"bin-debug/modules/warEvent/view/WeConditionModifyPanel1.js",
 		"bin-debug/modules/warEvent/view/WeConditionModifyPanel10.js",
@@ -368,6 +370,6 @@
 		"bin-debug/gameui/UiMapInfo.js",
 		"bin-debug/gameui/UiLabel.js",
 		"bin-debug/gameui/UiCoInfo.js",
-		"bin-debug/modules/multiFreeRoom/view/MfrCreateSettingsPanel.js"
+		"bin-debug/modules/multiFreeRoom/view/MfrJoinPasswordPanel.js"
 	]
 }

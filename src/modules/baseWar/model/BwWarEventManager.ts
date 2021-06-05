@@ -105,13 +105,15 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (action.WarEventActionAddUnit) {
-                return await this._callActionAddUnit(indexForActionIdList, action.WarEventActionAddUnit, isFastExecute);
+            if (action.WeaAddUnit) {
+                return await this._callActionAddUnit(indexForActionIdList, action.WeaAddUnit, isFastExecute);
+            } else if (action.WeaSetPlayerAliveState) {
+                return await this._callActionSetPlayerAliveState(action.WeaSetPlayerAliveState);
             }
 
             // TODO add more actions.
         }
-        private async _callActionAddUnit(indexForActionIdList: number, action: WarEvent.IWarEventActionAddUnit, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | undefined> {
+        private async _callActionAddUnit(indexForActionIdList: number, action: WarEvent.IWeaAddUnit, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | undefined> {
             const unitArray = action.unitArray;
             if (unitArray == null) {
                 Logger.error(`BwWarEventManager._callActionAddUnit() empty unitArray.`);
@@ -264,6 +266,40 @@ namespace TinyWars.BaseWar {
                     unitList    : resultingUnitList,
                 },
             };
+        }
+        private async _callActionSetPlayerAliveState(action: WarEvent.IWeaSetPlayerAliveState): Promise<undefined> {
+            const war = this._getWar();
+            if (war == null) {
+                Logger.error(`BwWarEventManager._callActionSetPlayerAliveState() empty war.`);
+                return undefined;
+            }
+
+            const playerIndex = action.playerIndex;
+            if ((playerIndex == null) || (playerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+                Logger.error(`BwWarEventManager._callActionSetPlayerAliveState() invalid playerIndex.`);
+                return undefined;
+            }
+
+            const playerAliveState: Types.PlayerAliveState | null | undefined = action.playerAliveState;
+            if (playerAliveState == null) {
+                Logger.error(`BwWarEventManager._callActionSetPlayerAliveState() empty playerAliveState.`);
+                return undefined;
+            }
+
+            if ((playerAliveState !== Types.PlayerAliveState.Alive) &&
+                (playerAliveState !== Types.PlayerAliveState.Dead)  &&
+                (playerAliveState !== Types.PlayerAliveState.Dying)
+            ) {
+                Logger.error(`BwWarEventManager._callActionSetPlayerAliveState() invalid playerAliveState.`);
+                return undefined;
+            }
+
+            const player = war.getPlayer(playerIndex);
+            if (player) {
+                player.setAliveState(playerAliveState);
+            }
+
+            return undefined;
         }
 
         public updateWarEventCalledCountOnCall(eventId: number): void {                     // DONE
@@ -851,7 +887,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return arr.find(v => v.WarEventActionCommonData.actionId === actionId);
+            return arr.find(v => v.WeaCommonData.actionId === actionId);
         }
     }
 

@@ -5,33 +5,34 @@ namespace TinyWars.WarEvent {
     import Types                = Utility.Types;
     import Lang                 = Utility.Lang;
     import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
-    import IWarEventCondition   = ProtoTypes.WarEvent.IWarEventCondition;
-    import ConditionType        = Types.WarEventConditionType;
+    import IWarEventAction      = ProtoTypes.WarEvent.IWarEventAction;
+    import ActionType           = Types.WarEventActionType;
 
-    type OpenDataForWeConditionTypeListPanel = {
+    type OpenDataForWeActionTypeListPanel = {
+        war         : BaseWar.BwWar;
         fullData    : IWarEventFullData;
-        condition   : IWarEventCondition;
+        action      : IWarEventAction;
     }
-    export class WeConditionTypeListPanel extends GameUi.UiPanel<OpenDataForWeConditionTypeListPanel> {
+    export class WeActionTypeListPanel extends GameUi.UiPanel<OpenDataForWeActionTypeListPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: WeConditionTypeListPanel;
+        private static _instance: WeActionTypeListPanel;
 
         private _labelTitle : GameUi.UiLabel;
         private _btnClose   : GameUi.UiButton;
         private _listType   : GameUi.UiScrollList<DataForTypeRenderer>;
 
-        public static show(openData: OpenDataForWeConditionTypeListPanel): void {
-            if (!WeConditionTypeListPanel._instance) {
-                WeConditionTypeListPanel._instance = new WeConditionTypeListPanel();
+        public static show(openData: OpenDataForWeActionTypeListPanel): void {
+            if (!WeActionTypeListPanel._instance) {
+                WeActionTypeListPanel._instance = new WeActionTypeListPanel();
             }
-            WeConditionTypeListPanel._instance.open(openData);
+            WeActionTypeListPanel._instance.open(openData);
         }
 
         public static async hide(): Promise<void> {
-            if (WeConditionTypeListPanel._instance) {
-                await WeConditionTypeListPanel._instance.close();
+            if (WeActionTypeListPanel._instance) {
+                await WeActionTypeListPanel._instance.close();
             }
         }
 
@@ -40,7 +41,7 @@ namespace TinyWars.WarEvent {
 
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/warEvent/WeConditionTypeListPanel.exml";
+            this.skinName = "resource/skins/warEvent/WeActionTypeListPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -71,15 +72,17 @@ namespace TinyWars.WarEvent {
         }
         private _updateListType(): void {
             const openData  = this._getOpenData();
-            const condition = openData.condition;
+            const action    = openData.action;
             const fullData  = openData.fullData;
+            const war       = openData.war;
 
             const dataArray: DataForTypeRenderer[] = [];
-            for (const newConditionType of WarEventHelper.getConditionTypeArray()) {
+            for (const newActionType of WarEventHelper.getActionTypeArray()) {
                 dataArray.push({
+                    war,
                     fullData,
-                    newConditionType,
-                    condition,
+                    newActionType,
+                    action,
                 });
             }
             this._listType.bindData(dataArray);
@@ -87,9 +90,10 @@ namespace TinyWars.WarEvent {
     }
 
     type DataForTypeRenderer = {
+        war             : BaseWar.BwWar;
         fullData        : ProtoTypes.Map.IWarEventFullData;
-        newConditionType: ConditionType;
-        condition       : IWarEventCondition;
+        newActionType   : ActionType;
+        action          : IWarEventAction;
     }
     class TypeRenderer extends GameUi.UiListItemRenderer<DataForTypeRenderer> {
         private _labelType  : GameUi.UiLabel;
@@ -118,12 +122,12 @@ namespace TinyWars.WarEvent {
                 return;
             }
 
-            const conditionType = data.newConditionType;
-            const condition     = data.condition;
-            if (conditionType !== WarEventHelper.getConditionType(condition)) {
-                WarEventHelper.resetCondition(condition, conditionType);
-                WarEventHelper.openConditionModifyPanel(data.fullData, condition);
-                WeConditionTypeListPanel.hide();
+            const actionType    = data.newActionType;
+            const action        = data.action;
+            if (actionType !== WarEventHelper.getActionType(action)) {
+                WarEventHelper.resetAction(action, actionType);
+                WarEventHelper.openActionModifyPanel(data.war, data.fullData, action);
+                WeActionTypeListPanel.hide();
 
                 Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
@@ -145,7 +149,7 @@ namespace TinyWars.WarEvent {
             if (data == null) {
                 label.text = undefined;
             } else {
-                label.text = Lang.getWarEventConditionTypeName(data.newConditionType);
+                label.text = Lang.getWarEventActionTypeName(data.newActionType);
             }
         }
         private _updateLabelUsingAndSwitch(): void {
@@ -156,7 +160,7 @@ namespace TinyWars.WarEvent {
                 labelUsing.visible  = false;
                 labelSwitch.visible = false;
             } else {
-                const isUsing       = WarEventHelper.getConditionType(data.condition) === data.newConditionType;
+                const isUsing       = WarEventHelper.getActionType(data.action) === data.newActionType;
                 labelUsing.visible  = isUsing;
                 labelSwitch.visible = !isUsing;
             }

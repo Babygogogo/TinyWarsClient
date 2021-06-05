@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" locked="true" />
+    <e:Group width="500" horizontalCenter="0" height="300" verticalCenter="0">
+        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
+                        left="0" top="0" bottom="0" right="0" locked="true" />
+        <GameUi:UiLabel id="_labelTitle" text="创建战局" bold="true" size="22" top="10" textColor="0xffffff"
+                        horizontalCenter="0" locked="true" />
+        <e:Group x="0" y="0" locked="true">
+            <GameUi:UiButton id="_btnType" label="切换类型" skinName="Skins.Component.Button.ButtonSelfAdaption001"
+                             width="120" top="0" left="0" locked="true" />
+            <e:layout>
+                <e:HorizontalLayout/>
+            </e:layout>
+        </e:Group>
+        <GameUi:UiButton id="_btnBack" label="返回" skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120"
+                         right="0" top="0" locked="true" />
+        <e:Group x="20" y="60">
+            <GameUi:UiLabel id="_labelPlayerIndexTitle" text="Player:" x="0" y="78" size="20" />
+            <GameUi:UiLabel text="P1" x="10" y="88" id="_labelPlayerIndex" size="20" />
+            <GameUi:UiButton id="_btnSwitchPlayerIndex" label="Switch"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" x="589" y="0" />
+            <e:layout>
+                <e:HorizontalLayout verticalAlign="middle" gap="10" />
+            </e:layout>
+        </e:Group>
+        <e:Group x="20" y="100">
+            <GameUi:UiLabel text="Player:" x="0" y="78" id="_labelPlayerStateTitle" size="20" />
+            <GameUi:UiLabel text="P1" x="10" y="88" id="_labelPlayerState" size="20" />
+            <GameUi:UiButton id="_btnSwitchPlayerState" label="Switch"
+                             skinName="Skins.Component.Button.ButtonSelfAdaption001" width="120" x="589" y="0" />
+            <e:layout>
+                <e:HorizontalLayout verticalAlign="middle" gap="10" />
+            </e:layout>
+        </e:Group>
+        <GameUi:UiLabel text="Player:" y="140" id="_labelTips" size="16" left="20" right="20" />
+    </e:Group>
+</e:Skin>

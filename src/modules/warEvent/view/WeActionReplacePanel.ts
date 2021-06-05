@@ -81,7 +81,7 @@ namespace TinyWars.WarEvent {
                 dataArray.push({
                     eventId,
                     srcActionId,
-                    candidateActionId: action.WarEventActionCommonData.actionId,
+                    candidateActionId: action.WeaCommonData.actionId,
                     fullData,
                 });
             }
@@ -177,7 +177,7 @@ namespace TinyWars.WarEvent {
                 return;
             }
 
-            const action    = (data.fullData.actionArray || []).find(v => v.WarEventActionCommonData.actionId === data.candidateActionId);
+            const action    = (data.fullData.actionArray || []).find(v => v.WeaCommonData.actionId === data.candidateActionId);
             const label     = this._labelAction;
             if (action == null) {
                 label.text = Lang.getText(Lang.Type.A0168);

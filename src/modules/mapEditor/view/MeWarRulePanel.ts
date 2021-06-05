@@ -313,10 +313,10 @@ namespace TinyWars.MapEditor {
                 ],
                 actionArray: [                          // 动作列表
                     {
-                        WarEventActionCommonData: {
+                        WeaCommonData: {
                             actionId    : 1,            // 动作id
                         },
-                        WarEventActionAddUnit: {        // 增加部队
+                        WeaAddUnit: {        // 增加部队
                             unitArray: [
                                 {
                                     canBeBlockedByUnit  : false,    // 是否会被指定位置的已有部队阻断增援

@@ -4809,187 +4809,187 @@ export declare namespace WarEvent {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a WarEventActionCommonData. */
-    interface IWarEventActionCommonData {
+    /** Properties of a WeaCommonData. */
+    interface IWeaCommonData {
 
-        /** WarEventActionCommonData actionId */
+        /** WeaCommonData actionId */
         actionId?: (number|null);
     }
 
-    /** Represents a WarEventActionCommonData. */
-    class WarEventActionCommonData implements IWarEventActionCommonData {
+    /** Represents a WeaCommonData. */
+    class WeaCommonData implements IWeaCommonData {
 
         /**
-         * Constructs a new WarEventActionCommonData.
+         * Constructs a new WeaCommonData.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarEvent.IWarEventActionCommonData);
+        constructor(properties?: WarEvent.IWeaCommonData);
 
-        /** WarEventActionCommonData actionId. */
+        /** WeaCommonData actionId. */
         public actionId: number;
 
         /**
-         * Creates a new WarEventActionCommonData instance using the specified properties.
+         * Creates a new WeaCommonData instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns WarEventActionCommonData instance
+         * @returns WeaCommonData instance
          */
-        public static create(properties?: WarEvent.IWarEventActionCommonData): WarEvent.WarEventActionCommonData;
+        public static create(properties?: WarEvent.IWeaCommonData): WarEvent.WeaCommonData;
 
         /**
-         * Encodes the specified WarEventActionCommonData message. Does not implicitly {@link WarEvent.WarEventActionCommonData.verify|verify} messages.
-         * @param message WarEventActionCommonData message or plain object to encode
+         * Encodes the specified WeaCommonData message. Does not implicitly {@link WarEvent.WeaCommonData.verify|verify} messages.
+         * @param message WeaCommonData message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarEvent.IWarEventActionCommonData, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarEvent.IWeaCommonData, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified WarEventActionCommonData message, length delimited. Does not implicitly {@link WarEvent.WarEventActionCommonData.verify|verify} messages.
-         * @param message WarEventActionCommonData message or plain object to encode
+         * Encodes the specified WeaCommonData message, length delimited. Does not implicitly {@link WarEvent.WeaCommonData.verify|verify} messages.
+         * @param message WeaCommonData message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarEvent.IWarEventActionCommonData, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarEvent.IWeaCommonData, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a WarEventActionCommonData message from the specified reader or buffer.
+         * Decodes a WeaCommonData message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns WarEventActionCommonData
+         * @returns WeaCommonData
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WarEventActionCommonData;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaCommonData;
 
         /**
-         * Decodes a WarEventActionCommonData message from the specified reader or buffer, length delimited.
+         * Decodes a WeaCommonData message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns WarEventActionCommonData
+         * @returns WeaCommonData
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WarEventActionCommonData;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaCommonData;
 
         /**
-         * Verifies a WarEventActionCommonData message.
+         * Verifies a WeaCommonData message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a WarEventActionCommonData message from a plain object. Also converts values to their respective internal types.
+         * Creates a WeaCommonData message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns WarEventActionCommonData
+         * @returns WeaCommonData
          */
-        public static fromObject(object: { [k: string]: any }): WarEvent.WarEventActionCommonData;
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaCommonData;
 
         /**
-         * Creates a plain object from a WarEventActionCommonData message. Also converts values to other types if specified.
-         * @param message WarEventActionCommonData
+         * Creates a plain object from a WeaCommonData message. Also converts values to other types if specified.
+         * @param message WeaCommonData
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarEvent.WarEventActionCommonData, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarEvent.WeaCommonData, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this WarEventActionCommonData to JSON.
+         * Converts this WeaCommonData to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a WarEventActionAddUnit. */
-    interface IWarEventActionAddUnit {
+    /** Properties of a WeaAddUnit. */
+    interface IWeaAddUnit {
 
-        /** WarEventActionAddUnit unitArray */
-        unitArray?: (WarEvent.WarEventActionAddUnit.IDataForAddUnit[]|null);
+        /** WeaAddUnit unitArray */
+        unitArray?: (WarEvent.WeaAddUnit.IDataForAddUnit[]|null);
     }
 
-    /** Represents a WarEventActionAddUnit. */
-    class WarEventActionAddUnit implements IWarEventActionAddUnit {
+    /** Represents a WeaAddUnit. */
+    class WeaAddUnit implements IWeaAddUnit {
 
         /**
-         * Constructs a new WarEventActionAddUnit.
+         * Constructs a new WeaAddUnit.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarEvent.IWarEventActionAddUnit);
+        constructor(properties?: WarEvent.IWeaAddUnit);
 
-        /** WarEventActionAddUnit unitArray. */
-        public unitArray: WarEvent.WarEventActionAddUnit.IDataForAddUnit[];
+        /** WeaAddUnit unitArray. */
+        public unitArray: WarEvent.WeaAddUnit.IDataForAddUnit[];
 
         /**
-         * Creates a new WarEventActionAddUnit instance using the specified properties.
+         * Creates a new WeaAddUnit instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns WarEventActionAddUnit instance
+         * @returns WeaAddUnit instance
          */
-        public static create(properties?: WarEvent.IWarEventActionAddUnit): WarEvent.WarEventActionAddUnit;
+        public static create(properties?: WarEvent.IWeaAddUnit): WarEvent.WeaAddUnit;
 
         /**
-         * Encodes the specified WarEventActionAddUnit message. Does not implicitly {@link WarEvent.WarEventActionAddUnit.verify|verify} messages.
-         * @param message WarEventActionAddUnit message or plain object to encode
+         * Encodes the specified WeaAddUnit message. Does not implicitly {@link WarEvent.WeaAddUnit.verify|verify} messages.
+         * @param message WeaAddUnit message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarEvent.IWarEventActionAddUnit, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarEvent.IWeaAddUnit, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified WarEventActionAddUnit message, length delimited. Does not implicitly {@link WarEvent.WarEventActionAddUnit.verify|verify} messages.
-         * @param message WarEventActionAddUnit message or plain object to encode
+         * Encodes the specified WeaAddUnit message, length delimited. Does not implicitly {@link WarEvent.WeaAddUnit.verify|verify} messages.
+         * @param message WeaAddUnit message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarEvent.IWarEventActionAddUnit, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarEvent.IWeaAddUnit, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a WarEventActionAddUnit message from the specified reader or buffer.
+         * Decodes a WeaAddUnit message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns WarEventActionAddUnit
+         * @returns WeaAddUnit
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WarEventActionAddUnit;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaAddUnit;
 
         /**
-         * Decodes a WarEventActionAddUnit message from the specified reader or buffer, length delimited.
+         * Decodes a WeaAddUnit message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns WarEventActionAddUnit
+         * @returns WeaAddUnit
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WarEventActionAddUnit;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaAddUnit;
 
         /**
-         * Verifies a WarEventActionAddUnit message.
+         * Verifies a WeaAddUnit message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a WarEventActionAddUnit message from a plain object. Also converts values to their respective internal types.
+         * Creates a WeaAddUnit message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns WarEventActionAddUnit
+         * @returns WeaAddUnit
          */
-        public static fromObject(object: { [k: string]: any }): WarEvent.WarEventActionAddUnit;
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaAddUnit;
 
         /**
-         * Creates a plain object from a WarEventActionAddUnit message. Also converts values to other types if specified.
-         * @param message WarEventActionAddUnit
+         * Creates a plain object from a WeaAddUnit message. Also converts values to other types if specified.
+         * @param message WeaAddUnit
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarEvent.WarEventActionAddUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarEvent.WeaAddUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this WarEventActionAddUnit to JSON.
+         * Converts this WeaAddUnit to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
     }
 
-    namespace WarEventActionAddUnit {
+    namespace WeaAddUnit {
 
         /** Properties of a DataForAddUnit. */
         interface IDataForAddUnit {
@@ -5011,7 +5011,7 @@ export declare namespace WarEvent {
              * Constructs a new DataForAddUnit.
              * @param [properties] Properties to set
              */
-            constructor(properties?: WarEvent.WarEventActionAddUnit.IDataForAddUnit);
+            constructor(properties?: WarEvent.WeaAddUnit.IDataForAddUnit);
 
             /** DataForAddUnit unitData. */
             public unitData?: (WarSerialization.ISerialUnit|null);
@@ -5027,23 +5027,23 @@ export declare namespace WarEvent {
              * @param [properties] Properties to set
              * @returns DataForAddUnit instance
              */
-            public static create(properties?: WarEvent.WarEventActionAddUnit.IDataForAddUnit): WarEvent.WarEventActionAddUnit.DataForAddUnit;
+            public static create(properties?: WarEvent.WeaAddUnit.IDataForAddUnit): WarEvent.WeaAddUnit.DataForAddUnit;
 
             /**
-             * Encodes the specified DataForAddUnit message. Does not implicitly {@link WarEvent.WarEventActionAddUnit.DataForAddUnit.verify|verify} messages.
+             * Encodes the specified DataForAddUnit message. Does not implicitly {@link WarEvent.WeaAddUnit.DataForAddUnit.verify|verify} messages.
              * @param message DataForAddUnit message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encode(message: WarEvent.WarEventActionAddUnit.IDataForAddUnit, writer?: protobuf.Writer): protobuf.Writer;
+            public static encode(message: WarEvent.WeaAddUnit.IDataForAddUnit, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
-             * Encodes the specified DataForAddUnit message, length delimited. Does not implicitly {@link WarEvent.WarEventActionAddUnit.DataForAddUnit.verify|verify} messages.
+             * Encodes the specified DataForAddUnit message, length delimited. Does not implicitly {@link WarEvent.WeaAddUnit.DataForAddUnit.verify|verify} messages.
              * @param message DataForAddUnit message or plain object to encode
              * @param [writer] Writer to encode to
              * @returns Writer
              */
-            public static encodeDelimited(message: WarEvent.WarEventActionAddUnit.IDataForAddUnit, writer?: protobuf.Writer): protobuf.Writer;
+            public static encodeDelimited(message: WarEvent.WeaAddUnit.IDataForAddUnit, writer?: protobuf.Writer): protobuf.Writer;
 
             /**
              * Decodes a DataForAddUnit message from the specified reader or buffer.
@@ -5053,7 +5053,7 @@ export declare namespace WarEvent {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WarEventActionAddUnit.DataForAddUnit;
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaAddUnit.DataForAddUnit;
 
             /**
              * Decodes a DataForAddUnit message from the specified reader or buffer, length delimited.
@@ -5062,7 +5062,7 @@ export declare namespace WarEvent {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WarEventActionAddUnit.DataForAddUnit;
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaAddUnit.DataForAddUnit;
 
             /**
              * Verifies a DataForAddUnit message.
@@ -5076,7 +5076,7 @@ export declare namespace WarEvent {
              * @param object Plain object
              * @returns DataForAddUnit
              */
-            public static fromObject(object: { [k: string]: any }): WarEvent.WarEventActionAddUnit.DataForAddUnit;
+            public static fromObject(object: { [k: string]: any }): WarEvent.WeaAddUnit.DataForAddUnit;
 
             /**
              * Creates a plain object from a DataForAddUnit message. Also converts values to other types if specified.
@@ -5084,7 +5084,7 @@ export declare namespace WarEvent {
              * @param [options] Conversion options
              * @returns Plain object
              */
-            public static toObject(message: WarEvent.WarEventActionAddUnit.DataForAddUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
+            public static toObject(message: WarEvent.WeaAddUnit.DataForAddUnit, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this DataForAddUnit to JSON.
@@ -5094,14 +5094,113 @@ export declare namespace WarEvent {
         }
     }
 
+    /** Properties of a WeaSetPlayerAliveState. */
+    interface IWeaSetPlayerAliveState {
+
+        /** WeaSetPlayerAliveState playerIndex */
+        playerIndex?: (number|null);
+
+        /** WeaSetPlayerAliveState playerAliveState */
+        playerAliveState?: (number|null);
+    }
+
+    /** Represents a WeaSetPlayerAliveState. */
+    class WeaSetPlayerAliveState implements IWeaSetPlayerAliveState {
+
+        /**
+         * Constructs a new WeaSetPlayerAliveState.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarEvent.IWeaSetPlayerAliveState);
+
+        /** WeaSetPlayerAliveState playerIndex. */
+        public playerIndex: number;
+
+        /** WeaSetPlayerAliveState playerAliveState. */
+        public playerAliveState: number;
+
+        /**
+         * Creates a new WeaSetPlayerAliveState instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WeaSetPlayerAliveState instance
+         */
+        public static create(properties?: WarEvent.IWeaSetPlayerAliveState): WarEvent.WeaSetPlayerAliveState;
+
+        /**
+         * Encodes the specified WeaSetPlayerAliveState message. Does not implicitly {@link WarEvent.WeaSetPlayerAliveState.verify|verify} messages.
+         * @param message WeaSetPlayerAliveState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarEvent.IWeaSetPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WeaSetPlayerAliveState message, length delimited. Does not implicitly {@link WarEvent.WeaSetPlayerAliveState.verify|verify} messages.
+         * @param message WeaSetPlayerAliveState message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarEvent.IWeaSetPlayerAliveState, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WeaSetPlayerAliveState message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WeaSetPlayerAliveState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarEvent.WeaSetPlayerAliveState;
+
+        /**
+         * Decodes a WeaSetPlayerAliveState message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WeaSetPlayerAliveState
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarEvent.WeaSetPlayerAliveState;
+
+        /**
+         * Verifies a WeaSetPlayerAliveState message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WeaSetPlayerAliveState message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WeaSetPlayerAliveState
+         */
+        public static fromObject(object: { [k: string]: any }): WarEvent.WeaSetPlayerAliveState;
+
+        /**
+         * Creates a plain object from a WeaSetPlayerAliveState message. Also converts values to other types if specified.
+         * @param message WeaSetPlayerAliveState
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarEvent.WeaSetPlayerAliveState, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WeaSetPlayerAliveState to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WarEventAction. */
     interface IWarEventAction {
 
-        /** WarEventAction WarEventActionCommonData */
-        WarEventActionCommonData?: (WarEvent.IWarEventActionCommonData|null);
+        /** WarEventAction WeaCommonData */
+        WeaCommonData?: (WarEvent.IWeaCommonData|null);
 
-        /** WarEventAction WarEventActionAddUnit */
-        WarEventActionAddUnit?: (WarEvent.IWarEventActionAddUnit|null);
+        /** WarEventAction WeaAddUnit */
+        WeaAddUnit?: (WarEvent.IWeaAddUnit|null);
+
+        /** WarEventAction WeaSetPlayerAliveState */
+        WeaSetPlayerAliveState?: (WarEvent.IWeaSetPlayerAliveState|null);
     }
 
     /** Represents a WarEventAction. */
@@ -5113,11 +5212,14 @@ export declare namespace WarEvent {
          */
         constructor(properties?: WarEvent.IWarEventAction);
 
-        /** WarEventAction WarEventActionCommonData. */
-        public WarEventActionCommonData?: (WarEvent.IWarEventActionCommonData|null);
+        /** WarEventAction WeaCommonData. */
+        public WeaCommonData?: (WarEvent.IWeaCommonData|null);
 
-        /** WarEventAction WarEventActionAddUnit. */
-        public WarEventActionAddUnit?: (WarEvent.IWarEventActionAddUnit|null);
+        /** WarEventAction WeaAddUnit. */
+        public WeaAddUnit?: (WarEvent.IWeaAddUnit|null);
+
+        /** WarEventAction WeaSetPlayerAliveState. */
+        public WeaSetPlayerAliveState?: (WarEvent.IWeaSetPlayerAliveState|null);
 
         /**
          * Creates a new WarEventAction instance using the specified properties.

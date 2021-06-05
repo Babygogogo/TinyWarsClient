@@ -394,7 +394,7 @@ namespace TinyWars.WarEvent {
         private _updateForAction(data: DataForWarEventDescRenderer): void {                     // DONE
             const fullData  = data.war.getWarEventManager().getWarEventFullData();
             const actionId  = data.actionId;
-            const action    = (fullData.actionArray || []).find(v => v.WarEventActionCommonData.actionId === actionId);
+            const action    = (fullData.actionArray || []).find(v => v.WeaCommonData.actionId === actionId);
             if (action == null) {
                 Logger.error(`WeEventListPanel.WarEventDescRenderer._updateForAction() empty action.`);
                 this._labelDesc.text = `_updateForAction() empty action.`;

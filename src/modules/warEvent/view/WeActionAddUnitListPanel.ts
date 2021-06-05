@@ -2,13 +2,10 @@
 namespace TinyWars.WarEvent {
     import Notify               = Utility.Notify;
     import ProtoTypes           = Utility.ProtoTypes;
-    import Logger               = Utility.Logger;
     import Types                = Utility.Types;
     import Lang                 = Utility.Lang;
-    import FloatText            = Utility.FloatText;
     import ConfigManager        = Utility.ConfigManager;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
-    import IDataForAddUnit      = ProtoTypes.WarEvent.WarEventActionAddUnit.IDataForAddUnit;
+    import IDataForAddUnit      = ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
 
     type OpenDataForWeActionAddUnitListPanel = {
         configVersion   : string;
