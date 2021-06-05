@@ -269,6 +269,7 @@ namespace TinyWars.WarEvent {
                 parentNodeId: openData.parentNodeId,
                 conditionId : openData.conditionId,
             });
+            this.close();
         }
         private _onTouchedBtnDeleteCondition(e: egret.TouchEvent): void {           // DONE
             const data          = this._getOpenData();
@@ -293,8 +294,13 @@ namespace TinyWars.WarEvent {
             WarEventHelper.openActionModifyPanel(war, fullData, WarEventHelper.getAction(fullData, openData.actionId));
         }
         private _onTouchedBtnReplaceAction(e: egret.TouchEvent): void {
-            // TODO
-            FloatText.show("TODO");
+            const openData = this._getOpenData();
+            WeActionReplacePanel.show({
+                fullData    : openData.war.getWarEventManager().getWarEventFullData(),
+                eventId     : openData.eventId,
+                actionId    : openData.actionId,
+            });
+            this.close();
         }
         private _onTouchedBtnAddAction(e: egret.TouchEvent): void {                 // DONE
             const data = this._getOpenData();

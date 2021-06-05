@@ -1710,7 +1710,7 @@ namespace TinyWars.WarEvent.WarEventHelper {
         conditionIdForClone : number;
     }): number | undefined {
         const parentNode = getNode(fullData, parentNodeId);
-        if (parentNodeId == null) {
+        if (parentNode == null) {
             return undefined;
         }
 
@@ -1765,8 +1765,10 @@ namespace TinyWars.WarEvent.WarEventHelper {
 
         const conditionIdArray = parentNode.conditionIdArray;
         Helpers.deleteElementFromArray(conditionIdArray, oldConditionId);
-        conditionIdArray.push(newConditionId);
-        conditionIdArray.sort((v1, v2) => v1 - v2);
+        if (conditionIdArray.indexOf(newConditionId) < 0) {
+            conditionIdArray.push(newConditionId);
+            conditionIdArray.sort((v1, v2) => v1 - v2);
+        }
 
         return true;
     }
@@ -1814,5 +1816,75 @@ namespace TinyWars.WarEvent.WarEventHelper {
                 unitType        : Types.UnitType.Infantry,
             },
         };
+    }
+
+    export function cloneAndReplaceActionInEvent({ fullData, eventId, actionIdForDelete, actionIdForClone }: {
+        fullData            : IWarEventFullData;
+        eventId             : number;
+        actionIdForDelete   : number;
+        actionIdForClone    : number;
+    }): number | undefined {
+        const eventData = getEvent(fullData, eventId);
+        if (eventData == null) {
+            return undefined;
+        }
+
+        const actionArray = fullData.actionArray;
+        if (actionArray == null) {
+            return undefined;
+        }
+
+        const srcAction = getAction(fullData, actionIdForClone);
+        if (srcAction == null) {
+            return undefined;
+        }
+
+        if (eventData.actionIdArray == null) {
+            eventData.actionIdArray = [];
+        }
+
+        const actionIdArray = eventData.actionIdArray;
+        const newAction     = Helpers.deepClone(srcAction);
+        for (let actionId = 1; ; ++actionId) {
+            if (!actionArray.some(v => v.WarEventActionCommonData.actionId === actionId)) {
+                newAction.WarEventActionCommonData.actionId = actionId;
+                actionArray.push(newAction);
+                actionArray.sort((v1, v2) => v1.WarEventActionCommonData.actionId - v2.WarEventActionCommonData.actionId);
+
+                Helpers.deleteElementFromArray(actionIdArray, actionIdForDelete);
+                actionIdArray.push(actionId);
+                actionIdArray.sort((v1, v2) => v1 - v2);
+
+                return actionId;
+            }
+        }
+    }
+    export function replaceActionInEvent({ fullData, eventId, oldActionId, newActionId }: {
+        fullData    : IWarEventFullData;
+        eventId     : number;
+        oldActionId : number;
+        newActionId : number;
+    }): boolean {
+        if (oldActionId === newActionId) {
+            return false;
+        }
+
+        const eventData = getEvent(fullData, eventId);
+        if (eventData == null) {
+            return false;
+        }
+
+        if (eventData.actionIdArray == null) {
+            eventData.actionIdArray = [];
+        }
+
+        const actionIdArray = eventData.actionIdArray;
+        Helpers.deleteElementFromArray(actionIdArray, oldActionId);
+        if (actionIdArray.indexOf(newActionId) < 0) {
+            actionIdArray.push(newActionId);
+            actionIdArray.sort((v1, v2) => v1 - v2);
+        }
+
+        return true;
     }
 }

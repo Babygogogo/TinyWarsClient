@@ -5,6 +5,7 @@ namespace TinyWars.WarMap {
     import Helpers          = Utility.Helpers;
     import CommonConstants  = Utility.CommonConstants;
     import ConfigManager    = Utility.ConfigManager;
+    import BwHelpers        = BaseWar.BwHelpers;
     import TimeModel        = Time.TimeModel;
     import CommonModel      = Common.CommonModel;
 
@@ -77,9 +78,9 @@ namespace TinyWars.WarMap {
             const hp            = data ? data.currentHp : null;
             const normalizedHp  = hp == null ? null : BaseWar.BwHelpers.getNormalizedHp(hp);
             const imgHp         = this._imgHp;
-            if ((normalizedHp == null)                              ||
-                (normalizedHp <= 0)                                 ||
-                (normalizedHp >= this._getUnitTemplateCfg().maxHp)
+            if ((normalizedHp == null)                                                      ||
+                (normalizedHp <= 0)                                                         ||
+                (normalizedHp >= BwHelpers.getNormalizedHp(this._getUnitTemplateCfg().maxHp))
             ) {
                 imgHp.visible = false;
             } else {

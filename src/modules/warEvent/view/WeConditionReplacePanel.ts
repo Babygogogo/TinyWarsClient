@@ -117,9 +117,10 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForLanguage();
         }
 
-        protected async _onDataChanged(): Promise<void> {
+        protected _onDataChanged(): void {
             this._updateLabelConditionId();
             this._updateLabelCondition();
+            this._updateBtnSelect();
         }
 
         private _onTouchedBtnCopy(e: egret.TouchEvent): void {          // DONE
@@ -135,6 +136,7 @@ namespace TinyWars.WarEvent {
                 conditionIdForClone     : data.candidateConditionId,
             }) != null) {
                 Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                WeConditionReplacePanel.hide();
             }
         }
         private _onTouchedBtnSelect(e: egret.TouchEvent): void {        // DONE
@@ -150,6 +152,7 @@ namespace TinyWars.WarEvent {
                 newConditionId  : data.candidateConditionId,
             })) {
                 Notify.dispatch(Notify.Type.WarEventFullDataChanged);
+                WeConditionReplacePanel.hide();
             }
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {        // DONE
@@ -182,6 +185,12 @@ namespace TinyWars.WarEvent {
                 label.text = Lang.getText(Lang.Type.A0160);
             } else {
                 label.text = WarEventHelper.getDescForCondition(condition);
+            }
+        }
+        private _updateBtnSelect(): void {
+            const data = this.data;
+            if (data) {
+                this._btnSelect.visible = data.srcConditionId !== data.candidateConditionId;
             }
         }
     }

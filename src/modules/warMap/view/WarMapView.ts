@@ -7,11 +7,14 @@ namespace TinyWars.WarMap {
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
     import Types            = Utility.Types;
+    import Helpers          = Utility.Helpers;
+    import CommonConstants  = Utility.CommonConstants;
     import MapSize          = Types.MapSize;
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
-    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
-    import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
-    import CommonConstants  = Utility.CommonConstants;
+    import WarSerialization = ProtoTypes.WarSerialization;
+    import ISerialWar       = WarSerialization.ISerialWar;
+    import ISerialTile      = WarSerialization.ISerialTile;
+    import ISerialPlayer    = WarSerialization.ISerialPlayer;
 
     const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
@@ -35,16 +38,18 @@ namespace TinyWars.WarMap {
                 players         : null,
             });
         }
-        public showMapByWarData(warData: ISerialWar, players?: ProtoTypes.WarSerialization.ISerialPlayer[]): void {
+        public showMapByWarData(warData: ISerialWar, players?: ISerialPlayer[]): void {
             const field     = warData.field;
             const tileMap   = field.tileMap;
             const mapSize   = BaseWar.BwHelpers.getMapSize(tileMap);
             this.width      = GRID_WIDTH * mapSize.width;
             this.height     = GRID_HEIGHT * mapSize.height;
-            this._tileMapView.showTileMap(tileMap.tiles);
+
+            players = players || warData.playerManager.players;
+            this._tileMapView.showTileMap(tileMap.tiles, players);
             this._unitMapView.showUnitMap({
                 unitDataArray   : field.unitMap.units,
-                players         : players || warData.playerManager.players,
+                players,
             });
         }
 
@@ -74,9 +79,9 @@ namespace TinyWars.WarMap {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public showTileMap(dataList: ISerialTile[]): void {
-            this._baseLayer.updateWithTileDataList(dataList);
-            this._objectLayer.updateWithTileDataList(dataList);
+        public showTileMap(dataList: ISerialTile[], players?: ISerialPlayer[]): void {
+            this._baseLayer.updateWithTileDataList(dataList, players);
+            this._objectLayer.updateWithTileDataList(dataList, players);
             this._resetGridBorderLayer(dataList);
         }
         public clear(): void {
@@ -132,12 +137,12 @@ namespace TinyWars.WarMap {
     }
 
     abstract class TileLayerBase extends eui.Component {
-        private readonly _tileDataMap   : ISerialTile[][] = [];
+        private readonly _tileDataMap   : Types.WarMapTileViewData[][] = [];
         private readonly _imageMap      : UiImage[][] = [];
 
-        public updateWithTileDataList(tileDataArray: ISerialTile[]): void {
+        public updateWithTileDataList(tileDataArray: ISerialTile[], players?: ISerialPlayer[]): void {
             const mapSize = getMapSize(tileDataArray);
-            this._resetTileDataMap(mapSize, tileDataArray);
+            this._resetTileDataMap(mapSize, tileDataArray, players);
             this._resetImageMap(mapSize);
 
             this.updateViewOnTick();
@@ -156,7 +161,7 @@ namespace TinyWars.WarMap {
             }
         }
 
-        private _resetTileDataMap(mapSize: MapSize, tileDataArray: ISerialTile[]): void {
+        private _resetTileDataMap(mapSize: MapSize, tileDataArray: ISerialTile[], players?: ISerialPlayer[]): void {
             const map       = this._tileDataMap;
             const width     = mapSize.width;
             const height    = mapSize.height;
@@ -171,8 +176,10 @@ namespace TinyWars.WarMap {
                 column.fill(undefined);
             }
 
-            for (const tileData of tileDataArray) {
+            for (const rawTileData of tileDataArray) {
+                const tileData                  = Helpers.deepClone(rawTileData) as Types.WarMapTileViewData;
                 const gridIndex                 = tileData.gridIndex;
+                tileData.skinId                 = players ? players.find(v => v.playerIndex === tileData.playerIndex).unitAndTileSkinId : null;
                 map[gridIndex.x][gridIndex.y]   = tileData;
             }
         }
@@ -211,7 +218,7 @@ namespace TinyWars.WarMap {
             }
         }
 
-        protected abstract _getImageSource(tileData: ISerialTile, tickCount: number): string;
+        protected abstract _getImageSource(tileData: Types.WarMapTileViewData, tickCount: number): string;
         protected abstract _getImageY(gridY: number): number;
     }
 
@@ -235,7 +242,7 @@ namespace TinyWars.WarMap {
     }
 
     class TileObjectLayer extends TileLayerBase {
-        protected _getImageSource(tileData: ISerialTile, tickCount: number): string {
+        protected _getImageSource(tileData: Types.WarMapTileViewData, tickCount: number): string {
             return tileData == null
                 ? undefined
                 : CommonModel.getCachedTileObjectImageSource({
@@ -243,7 +250,7 @@ namespace TinyWars.WarMap {
                     objectType  : tileData.objectType,
                     shapeId     : tileData.objectShapeId || 0,
                     isDark      : false,
-                    skinId      : tileData.playerIndex,
+                    skinId      : tileData.skinId || tileData.playerIndex,
                     tickCount,
                 });
         }
@@ -263,5 +270,136 @@ namespace TinyWars.WarMap {
         }
 
         return { width, height };
+    }
+
+    class WarMapUnitMapView extends egret.DisplayObjectContainer {
+        private readonly _unitViews             : WarMapUnitView[] = [];
+        private readonly _airLayer              = new egret.DisplayObjectContainer();
+        private readonly _groundLayer           = new egret.DisplayObjectContainer();
+        private readonly _seaLayer              = new egret.DisplayObjectContainer();
+        private readonly _notifyListenerArray   : Notify.Listener[] = [
+            { type: Notify.Type.UnitAnimationTick, callback: this._onNotifyUnitAnimationTick }
+        ];
+
+        public constructor() {
+            super();
+
+            this.addChild(this._seaLayer);
+            this.addChild(this._groundLayer);
+            this.addChild(this._airLayer);
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+        }
+
+        public showUnitMap({ unitDataArray, players }: {
+            unitDataArray   : WarSerialization.ISerialUnit[];
+            players         : ISerialPlayer[] | null;
+        }): void {
+            this._initWithDataList(_createUnitViewDataList({ unitDataArray, players }));
+        }
+        private _initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
+            this.clear();
+
+            const tickCount = TimeModel.getUnitAnimationTickCount();
+            for (const data of dataList) {
+                this._addUnit(data, tickCount);
+            }
+            this._reviseZOrderForAllUnits();
+        }
+        public clear(): void {
+            for (const view of this._unitViews) {
+                (view.parent) && (view.parent.removeChild(view));
+            }
+            this._unitViews.length = 0;
+        }
+
+        private _onAddedToStage(e: egret.Event): void {
+            this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+            this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
+
+            Notify.addEventListeners(this._notifyListenerArray, this);
+        }
+        private _onRemovedFromStage(e: egret.Event): void {
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
+            this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
+
+            Notify.removeEventListeners(this._notifyListenerArray, this);
+        }
+        private _onNotifyUnitAnimationTick(e: egret.Event): void {
+            const tickCount = TimeModel.getUnitAnimationTickCount();
+            for (const view of this._unitViews) {
+                view.updateOnAnimationTick(tickCount);
+            }
+        }
+
+        private _reviseZOrderForAllUnits(): void {
+            this._reviseZOrderForSingleLayer(this._airLayer);
+            this._reviseZOrderForSingleLayer(this._groundLayer);
+            this._reviseZOrderForSingleLayer(this._seaLayer);
+        }
+        private _reviseZOrderForSingleLayer(layer: egret.DisplayObjectContainer): void {
+            const unitsCount    = layer.numChildren;
+            const unitViews     : WarMapUnitView[] = [];
+            for (let i = 0; i < unitsCount; ++i) {
+                unitViews.push(layer.getChildAt(i) as WarMapUnitView);
+            }
+            unitViews.sort((v1, v2): number => {
+                const g1 = v1.getData().gridIndex;
+                const g2 = v2.getData().gridIndex;
+                const y1 = g1.y;
+                const y2 = g2.y;
+                return y1 !== y2 ? y1 - y2 : g1.x - g2.x;
+            })
+
+            for (let i = 0; i < unitsCount; ++i) {
+                layer.addChildAt(unitViews[i], i);
+            }
+        }
+
+        private _addUnit(data: Types.WarMapUnitViewData, tickCount: number): void {
+            const unitType = data.unitType;
+            const view     = new WarMapUnitView(data, tickCount);
+            this._unitViews.push(view);
+
+            const configVersion = ConfigManager.getLatestFormalVersion();
+            if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Air)) {
+                this._airLayer.addChild(view);
+            } else if (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, Types.UnitCategory.Ground)) {
+                this._groundLayer.addChild(view);
+            } else {
+                this._seaLayer.addChild(view);
+            }
+        }
+    }
+
+    function _createUnitViewDataList({ unitDataArray, players }: {
+        unitDataArray   : WarSerialization.ISerialUnit[];
+        players         : ISerialPlayer[] | null;
+    }): Types.WarMapUnitViewData[] {
+        const dataArray: Types.WarMapUnitViewData[] = [];
+        if (unitDataArray) {
+            const loaderUnitIdSet = new Set<number>();
+            for (const unitData of unitDataArray) {
+                const loaderUnitId = unitData.loaderUnitId;
+                if (loaderUnitId == null) {
+                    dataArray.push(Helpers.deepClone(unitData));
+                } else {
+                    loaderUnitIdSet.add(loaderUnitId);
+                }
+            }
+
+            for (const unitData of dataArray) {
+                if (loaderUnitIdSet.has(unitData.unitId)) {
+                    unitData.hasLoadedUnit = true;
+                }
+
+                const playerData = players ? players.find(v => v.playerIndex === unitData.playerIndex) : null;
+                if (playerData) {
+                    unitData.coUsingSkillType   = playerData.coUsingSkillType;
+                    unitData.skinId             = playerData.unitAndTileSkinId;
+                }
+            }
+        }
+
+        return dataArray;
     }
 }
