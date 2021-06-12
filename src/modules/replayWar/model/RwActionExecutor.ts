@@ -150,7 +150,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         warEventManager.updateWarEventCalledCountOnCall(warEventId)
         await warEventManager.callWarEvent(warEventId, false);
 
-        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        war.updateTilesAndUnitsOnVisibilityChanged();
         actionPlanner.setStateIdle();
     }
 
@@ -163,7 +163,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
         DestructionHelpers.destroyPlayerForce(war, playerIndex, true);
 
-        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        war.updateTilesAndUnitsOnVisibilityChanged();
         actionPlanner.setStateIdle();
     }
 
@@ -193,7 +193,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         war.getFogMap().updateMapFromPathsByUnitAndPath(focusUnit, [gridIndex]);
         DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
 
-        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        war.updateTilesAndUnitsOnVisibilityChanged();
         actionPlanner.setStateIdle();
     }
 
@@ -239,7 +239,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         unitMap.setNextUnitId(unitId + 1);
         playerInTurn.setFund(playerInTurn.getFund() - cost);
 
-        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        war.updateTilesAndUnitsOnVisibilityChanged();
         actionPlanner.setStateIdle();
     }
 
@@ -254,7 +254,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
         player.setAliveState(Types.PlayerAliveState.Dying);
 
-        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        war.updateTilesAndUnitsOnVisibilityChanged();
         actionPlanner.setStateIdle();
     }
 
@@ -306,13 +306,13 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
             await attackerUnit.moveViewAlongPath(pathNodes, attackerUnit.getIsDiving(), true);
             attackerUnit.updateView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
 
         } else {
             const attackerGridIndex             = pathNodes[pathNodes.length - 1];
             const targetGridIndex               = action.targetGridIndex as GridIndex;
-            const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
+            const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
             const targetUnit                    = unitMap.getUnitOnMap(targetGridIndex);
             BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
             unitMap.setUnitOnMap(attackerUnit);
@@ -463,7 +463,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
                 attackerPlayer.setAliveState(Types.PlayerAliveState.Dying);
             }
 
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
         }
     }
@@ -487,12 +487,12 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
             await attackerUnit.moveViewAlongPath(pathNodes, attackerUnit.getIsDiving(), true);
             attackerUnit.updateView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
 
         } else {
             const targetGridIndex               = action.targetGridIndex as GridIndex;
-            const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
+            const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
             const tileMap                       = war.getTileMap();
             const targetTile                    = tileMap.getTile(targetGridIndex);
             BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -529,7 +529,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
                 gridVisionEffect.showEffectExplosion(targetGridIndex);
             }
 
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
         }
     }
@@ -552,7 +552,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
         } else {
             const loaderUnit = unitMap.getUnitOnMap(pathNodes[pathNodes.length - 1]);
@@ -563,7 +563,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             focusUnit.updateView();
             focusUnit.setViewVisible(false);
             loaderUnit.updateView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
         }
     }
@@ -610,7 +610,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
-        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        war.updateTilesAndUnitsOnVisibilityChanged();
         actionPlanner.setStateIdle();
     }
 
@@ -632,7 +632,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         if (path.isBlocked) {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), true);
             focusUnit.updateView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
 
         } else {
@@ -658,7 +658,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), false);
             focusUnit.updateView();
             tile.flushDataToView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
         }
     }
@@ -686,7 +686,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             war.getGridVisionEffect().showEffectDive(pathNodes[pathNodes.length - 1]);
         }
 
-        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        war.updateTilesAndUnitsOnVisibilityChanged();
         actionPlanner.setStateIdle();
     }
 
@@ -744,7 +744,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             })());
         }
         await Promise.all(promises);
-        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        war.updateTilesAndUnitsOnVisibilityChanged();
         actionPlanner.setStateIdle();
     }
 
@@ -768,7 +768,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
 
         } else {
@@ -845,7 +845,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
             unitMap.getView().removeUnit(targetUnit.getView());
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
         }
     }
@@ -882,7 +882,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         }
 
         focusUnit.updateView();
-        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        war.updateTilesAndUnitsOnVisibilityChanged();
         actionPlanner.setStateIdle();
     }
 
@@ -904,7 +904,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         if (path.isBlocked) {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
 
         } else {
@@ -935,7 +935,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
             focusUnit.updateView();
             tile.flushDataToView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
         }
     }
@@ -978,7 +978,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
-        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        war.updateTilesAndUnitsOnVisibilityChanged();
         actionPlanner.setStateIdle();
     }
 
@@ -1000,7 +1000,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         if (path.isBlocked) {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
 
         } else {
@@ -1025,7 +1025,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
             focusUnit.updateView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
         }
     }
@@ -1049,7 +1049,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
         if (isBlocked) {
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), isBlocked);
             focusUnit.updateView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
 
         } else {
@@ -1078,7 +1078,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
                 gridVisionEffect.showEffectSupply(unit.getGridIndex());
             }
 
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
         }
     }
@@ -1112,7 +1112,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             war.getGridVisionEffect().showEffectSurface(endingGridIndex);
         }
 
-        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        war.updateTilesAndUnitsOnVisibilityChanged();
         actionPlanner.setStateIdle();
     }
 
@@ -1168,7 +1168,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
             focusUnit.updateView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
             actionPlanner.setStateIdle();
 
         } else {
@@ -1215,7 +1215,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
             await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), revisedPath.isBlocked);
             focusUnit.updateView();
-            RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+            war.updateTilesAndUnitsOnVisibilityChanged();
 
             const gridVisionEffect  = war.getGridVisionEffect();
             const playerIndex       = focusUnit.getPlayerIndex();
@@ -1267,7 +1267,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
 
         await focusUnit.moveViewAlongPath(pathNodes, focusUnit.getIsDiving(), path.isBlocked);
         focusUnit.updateView();
-        RwUtility.updateTilesAndUnitsOnVisibilityChanged(war);
+        war.updateTilesAndUnitsOnVisibilityChanged();
         actionPlanner.setStateIdle();
     }
 
@@ -1385,7 +1385,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             attackerUnit.setActionState(UnitActionState.Acted);
         } else {
             const targetGridIndex               = action.targetGridIndex as GridIndex;
-            const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
+            const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
             const attackerGridIndex             = pathNodes[pathNodes.length - 1];
             const targetUnit                    = unitMap.getUnitOnMap(targetGridIndex);
             BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });
@@ -1542,7 +1542,7 @@ namespace TinyWars.ReplayWar.RwActionExecutor {
             attackerUnit.setActionState(UnitActionState.Acted);
         } else {
             const targetGridIndex               = action.targetGridIndex as GridIndex;
-            const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
+            const [attackDamage, counterDamage] = DamageCalculator.getFinalBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
             const tileMap                       = war.getTileMap();
             const targetTile                    = tileMap.getTile(targetGridIndex);
             BwHelpers.moveUnit({ war, pathNodes, launchUnitId, fuelConsumption: path.fuelConsumption });

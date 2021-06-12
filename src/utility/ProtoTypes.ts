@@ -10775,8 +10775,14 @@ export declare namespace WarAction {
             /** ExtraDataForUnitAttackTile actingUnits */
             actingUnits?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitAttackTile attackDamage */
-            attackDamage?: (number|null);
+            /** ExtraDataForUnitAttackTile battleDamageInfoArray */
+            battleDamageInfoArray?: (Structure.IBattleDamageInfo[]|null);
+
+            /** ExtraDataForUnitAttackTile affectedUnitsAfterAction */
+            affectedUnitsAfterAction?: (WarSerialization.ISerialUnit[]|null);
+
+            /** ExtraDataForUnitAttackTile affectedPlayersAfterAction */
+            affectedPlayersAfterAction?: (WarSerialization.ISerialPlayer[]|null);
         }
 
         /** Represents an ExtraDataForUnitAttackTile. */
@@ -10797,8 +10803,14 @@ export declare namespace WarAction {
             /** ExtraDataForUnitAttackTile actingUnits. */
             public actingUnits: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitAttackTile attackDamage. */
-            public attackDamage: number;
+            /** ExtraDataForUnitAttackTile battleDamageInfoArray. */
+            public battleDamageInfoArray: Structure.IBattleDamageInfo[];
+
+            /** ExtraDataForUnitAttackTile affectedUnitsAfterAction. */
+            public affectedUnitsAfterAction: WarSerialization.ISerialUnit[];
+
+            /** ExtraDataForUnitAttackTile affectedPlayersAfterAction. */
+            public affectedPlayersAfterAction: WarSerialization.ISerialPlayer[];
 
             /**
              * Creates a new ExtraDataForUnitAttackTile instance using the specified properties.
@@ -10994,23 +11006,14 @@ export declare namespace WarAction {
             /** ExtraDataForUnitAttackUnit actingUnits */
             actingUnits?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitAttackUnit attackDamage */
-            attackDamage?: (number|null);
+            /** ExtraDataForUnitAttackUnit battleDamageInfoArray */
+            battleDamageInfoArray?: (Structure.IBattleDamageInfo[]|null);
 
-            /** ExtraDataForUnitAttackUnit counterDamage */
-            counterDamage?: (number|null);
+            /** ExtraDataForUnitAttackUnit affectedUnitsAfterAction */
+            affectedUnitsAfterAction?: (WarSerialization.ISerialUnit[]|null);
 
-            /** ExtraDataForUnitAttackUnit attackerUnitAfterAction */
-            attackerUnitAfterAction?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitAttackUnit targetUnitAfterAction */
-            targetUnitAfterAction?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitAttackUnit attackerCoEnergyAfterAction */
-            attackerCoEnergyAfterAction?: (number|null);
-
-            /** ExtraDataForUnitAttackUnit targetCoEnergyAfterAction */
-            targetCoEnergyAfterAction?: (number|null);
+            /** ExtraDataForUnitAttackUnit affectedPlayersAfterAction */
+            affectedPlayersAfterAction?: (WarSerialization.ISerialPlayer[]|null);
         }
 
         /** Represents an ExtraDataForUnitAttackUnit. */
@@ -11031,23 +11034,14 @@ export declare namespace WarAction {
             /** ExtraDataForUnitAttackUnit actingUnits. */
             public actingUnits: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitAttackUnit attackDamage. */
-            public attackDamage: number;
+            /** ExtraDataForUnitAttackUnit battleDamageInfoArray. */
+            public battleDamageInfoArray: Structure.IBattleDamageInfo[];
 
-            /** ExtraDataForUnitAttackUnit counterDamage. */
-            public counterDamage: number;
+            /** ExtraDataForUnitAttackUnit affectedUnitsAfterAction. */
+            public affectedUnitsAfterAction: WarSerialization.ISerialUnit[];
 
-            /** ExtraDataForUnitAttackUnit attackerUnitAfterAction. */
-            public attackerUnitAfterAction?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitAttackUnit targetUnitAfterAction. */
-            public targetUnitAfterAction?: (WarSerialization.ISerialUnit|null);
-
-            /** ExtraDataForUnitAttackUnit attackerCoEnergyAfterAction. */
-            public attackerCoEnergyAfterAction: number;
-
-            /** ExtraDataForUnitAttackUnit targetCoEnergyAfterAction. */
-            public targetCoEnergyAfterAction: number;
+            /** ExtraDataForUnitAttackUnit affectedPlayersAfterAction. */
+            public affectedPlayersAfterAction: WarSerialization.ISerialPlayer[];
 
             /**
              * Creates a new ExtraDataForUnitAttackUnit instance using the specified properties.
@@ -15598,6 +15592,114 @@ export declare namespace Structure {
 
         /**
          * Converts this DataForPlayerRank to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a BattleDamageInfo. */
+    interface IBattleDamageInfo {
+
+        /** BattleDamageInfo attackerUnitId */
+        attackerUnitId?: (number|null);
+
+        /** BattleDamageInfo targetUnitId */
+        targetUnitId?: (number|null);
+
+        /** BattleDamageInfo targetTileGridIndex */
+        targetTileGridIndex?: (Structure.IGridIndex|null);
+
+        /** BattleDamageInfo damage */
+        damage?: (number|null);
+    }
+
+    /** Represents a BattleDamageInfo. */
+    class BattleDamageInfo implements IBattleDamageInfo {
+
+        /**
+         * Constructs a new BattleDamageInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: Structure.IBattleDamageInfo);
+
+        /** BattleDamageInfo attackerUnitId. */
+        public attackerUnitId: number;
+
+        /** BattleDamageInfo targetUnitId. */
+        public targetUnitId: number;
+
+        /** BattleDamageInfo targetTileGridIndex. */
+        public targetTileGridIndex?: (Structure.IGridIndex|null);
+
+        /** BattleDamageInfo damage. */
+        public damage: number;
+
+        /**
+         * Creates a new BattleDamageInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns BattleDamageInfo instance
+         */
+        public static create(properties?: Structure.IBattleDamageInfo): Structure.BattleDamageInfo;
+
+        /**
+         * Encodes the specified BattleDamageInfo message. Does not implicitly {@link Structure.BattleDamageInfo.verify|verify} messages.
+         * @param message BattleDamageInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: Structure.IBattleDamageInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified BattleDamageInfo message, length delimited. Does not implicitly {@link Structure.BattleDamageInfo.verify|verify} messages.
+         * @param message BattleDamageInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: Structure.IBattleDamageInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a BattleDamageInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns BattleDamageInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): Structure.BattleDamageInfo;
+
+        /**
+         * Decodes a BattleDamageInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns BattleDamageInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): Structure.BattleDamageInfo;
+
+        /**
+         * Verifies a BattleDamageInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a BattleDamageInfo message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns BattleDamageInfo
+         */
+        public static fromObject(object: { [k: string]: any }): Structure.BattleDamageInfo;
+
+        /**
+         * Creates a plain object from a BattleDamageInfo message. Also converts values to other types if specified.
+         * @param message BattleDamageInfo
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: Structure.BattleDamageInfo, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this BattleDamageInfo to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };

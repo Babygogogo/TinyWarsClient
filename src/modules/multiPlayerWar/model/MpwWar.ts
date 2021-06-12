@@ -1,6 +1,8 @@
 
 namespace TinyWars.MultiPlayerWar {
-    import Types = Utility.Types;
+    import Types                = Utility.Types;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import DestructionHelpers   = Utility.DestructionHelpers;
 
     export abstract class MpwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new MpwPlayerManager();
@@ -8,8 +10,6 @@ namespace TinyWars.MultiPlayerWar {
         private readonly _field                 = new MpwField();
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
-
-        private _isEnded = false;
 
         public abstract getSettingsBootTimerParams(): number[];
 
@@ -32,6 +32,33 @@ namespace TinyWars.MultiPlayerWar {
             return this._warEventManager;
         }
 
+        public updateTilesAndUnitsOnVisibilityChanged(): void {
+            const watcherTeamIndexes    = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const visibleUnitsOnMap     = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
+            this.getUnitMap().forEachUnitOnMap(unit => {
+                if (visibleUnitsOnMap.has(unit)) {
+                    unit.setViewVisible(true);
+                } else {
+                    DestructionHelpers.removeUnitOnMap(this, unit.getGridIndex());
+                }
+            });
+            DestructionHelpers.removeInvisibleLoadedUnits(this, watcherTeamIndexes);
+
+            const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(this, watcherTeamIndexes);
+            const tileMap       = this.getTileMap();
+            tileMap.forEachTile(tile => {
+                if (visibleTiles.has(tile)) {
+                    tile.setHasFog(false);
+                } else {
+                    if (!tile.getHasFog()) {
+                        MpwUtility.resetTileDataAsHasFog(tile);
+                    }
+                }
+                tile.flushDataToView();
+            });
+            tileMap.getView().updateCoZone();
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,13 +69,6 @@ namespace TinyWars.MultiPlayerWar {
             } else {
                 return (this.getEnterTurnTime() + player.getRestTimeToBoot() - Time.TimeModel.getServerTimestamp()) || null;
             }
-        }
-
-        public setIsEnded(ended: boolean): void {
-            this._isEnded = ended;
-        }
-        public getIsEnded(): boolean {
-            return this._isEnded;
         }
 
         public checkIsBoot(): boolean {

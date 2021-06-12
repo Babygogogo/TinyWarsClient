@@ -1,11 +1,11 @@
 
 namespace TinyWars.Utility.DamageCalculator {
-    import BwUnit       = BaseWar.BwUnit;
-    import BwWar        = BaseWar.BwWar;
-    import SpwWar       = SinglePlayerWar.SpwWar;
-    import BwTile       = BaseWar.BwTile;
-    import BwHelpers    = BaseWar.BwHelpers;
-    import GridIndex    = Types.GridIndex;
+    import BwUnit               = BaseWar.BwUnit;
+    import BwWar                = BaseWar.BwWar;
+    import BwTile               = BaseWar.BwTile;
+    import BwHelpers            = BaseWar.BwHelpers;
+    import GridIndex            = Types.GridIndex;
+    import IBattleDamageInfo    = ProtoTypes.Structure.IBattleDamageInfo;
 
     function checkIsInAttackRange(
         attackerGridIndex   : GridIndex,
@@ -141,9 +141,9 @@ namespace TinyWars.Utility.DamageCalculator {
             }
 
             let amountFromGlobalTiles = 0;
-            tileMap.forEachTile(tile => {
-                if (tile.getPlayerIndex() === target.getPlayerIndex()) {
-                    amountFromGlobalTiles += tile.getGlobalDefenseBonus() || 0;
+            tileMap.forEachTile(t => {
+                if (t.getPlayerIndex() === target.getPlayerIndex()) {
+                    amountFromGlobalTiles += t.getGlobalDefenseBonus() || 0;
                 }
             });
 
@@ -151,30 +151,54 @@ namespace TinyWars.Utility.DamageCalculator {
         }
     }
 
-    function checkCanAttack(
-        attacker            : BwUnit,
-        attackerMovePath    : GridIndex[] | undefined,
-        target              : BwUnit | BwTile,
-        targetMovePath      : GridIndex[] | undefined
+    function checkCanAttackTile(
+        attackerUnit        : BwUnit,
+        attackerMovePath    : GridIndex[],
+        targetTile          : BwTile,
     ): boolean {
-        if ((!attacker) || (!target) || (attacker.getTeamIndex() === target.getTeamIndex())) {
+        if ((!attackerUnit) || (!targetTile) || (attackerUnit.getTeamIndex() === targetTile.getTeamIndex())) {
             return false;
         }
 
-        const armorType         = target.getArmorType();
-        const attackerGridIndex = attackerMovePath ? attackerMovePath[attackerMovePath.length - 1] : attacker.getGridIndex();
-        const targetGridIndex   = targetMovePath   ? targetMovePath[targetMovePath.length - 1]     : target.getGridIndex();
-        if ((!attackerGridIndex)                                                                                                            ||
-            (!targetGridIndex)                                                                                                              ||
-            (armorType == null)                                                                                                             ||
-            ((!attacker.checkCanAttackAfterMove()) && (attackerMovePath) && (attackerMovePath.length > 1))                                  ||
-            (!checkIsInAttackRange(attackerGridIndex, targetGridIndex, attacker.getMinAttackRange(), attacker.getFinalMaxAttackRange()))    ||
-            ((target instanceof BwUnit) && (target.getIsDiving()) && (!attacker.checkCanAttackDivingUnits()))
+        const armorType         = targetTile.getArmorType();
+        const attackerGridIndex = attackerMovePath[attackerMovePath.length - 1];
+        const targetGridIndex   = targetTile.getGridIndex();
+        if ((!attackerGridIndex)                                                                                                                ||
+            (!targetGridIndex)                                                                                                                  ||
+            (armorType == null)                                                                                                                 ||
+            ((!attackerUnit.checkCanAttackAfterMove()) && (attackerMovePath) && (attackerMovePath.length > 1))                                  ||
+            (!checkIsInAttackRange(attackerGridIndex, targetGridIndex, attackerUnit.getMinAttackRange(), attackerUnit.getFinalMaxAttackRange()))
         ) {
             return false;
         }
 
-        return attacker.getBaseDamage(armorType) != null;
+        return attackerUnit.getBaseDamage(armorType) != null;
+    }
+
+    function checkCanAttackUnit(
+        attackerUnit        : BwUnit,
+        attackerMovePath    : GridIndex[] | null | undefined,
+        targetUnit          : BwUnit,
+        targetMovePath      : GridIndex[] | null | undefined,
+    ): boolean {
+        if ((!attackerUnit) || (!targetUnit) || (attackerUnit.getTeamIndex() === targetUnit.getTeamIndex())) {
+            return false;
+        }
+
+        const armorType         = targetUnit.getArmorType();
+        const attackerGridIndex = attackerMovePath ? attackerMovePath[attackerMovePath.length - 1] : attackerUnit.getGridIndex();
+        const targetGridIndex   = targetMovePath   ? targetMovePath[targetMovePath.length - 1]     : targetUnit.getGridIndex();
+        if ((!attackerGridIndex)                                                                                                                    ||
+            (!targetGridIndex)                                                                                                                      ||
+            (armorType == null)                                                                                                                     ||
+            ((!attackerUnit.checkCanAttackAfterMove()) && (attackerMovePath) && (attackerMovePath.length > 1))                                      ||
+            (!checkIsInAttackRange(attackerGridIndex, targetGridIndex, attackerUnit.getMinAttackRange(), attackerUnit.getFinalMaxAttackRange()))    ||
+            ((targetUnit.getIsDiving()) && (!attackerUnit.checkCanAttackDivingUnits()))
+        ) {
+            return false;
+        }
+
+        return attackerUnit.getBaseDamage(armorType) != null;
     }
 
     function getAttackDamage(
@@ -234,78 +258,167 @@ namespace TinyWars.Utility.DamageCalculator {
         ));
     }
 
-    function getBattleDamage(
-        war                 : BwWar,
-        attackerMovePath    : GridIndex[],
-        launchUnitId        : number | undefined | null,
-        targetGridIndex     : GridIndex,
-        isWithLuck          : boolean
-    ): (number | undefined)[] {
-        const unitMap = war.getUnitMap();
-        if (unitMap == null) {
-            Logger.error(`DamageCalculator.getBattleDamage() empty unitMap.`);
-            return [];
+    function getBattleDamage({ war, attackerMovePath, launchUnitId, targetGridIndex, isWithLuck }: {
+        war             : BwWar;
+        attackerMovePath: GridIndex[];
+        launchUnitId    : number | undefined | null;
+        targetGridIndex : GridIndex;
+        isWithLuck      : boolean;
+    }): { errorCode: ClientErrorCode, battleDamageInfoArray?: IBattleDamageInfo[] } {
+        const unitMap       = war.getUnitMap();
+        const attackerUnit  = unitMap.getUnit(attackerMovePath[0], launchUnitId);
+        if (attackerUnit == null) {
+            return { errorCode: ClientErrorCode.DamageCalculator_GetBattleDamage_00 };
         }
 
-        const tileMap = war.getTileMap();
-        if (tileMap == null) {
-            Logger.error(`DamageCalculator.getBattleDamage() empty tileMap.`);
-            return [];
-        }
-
-        const attacker = unitMap.getUnit(attackerMovePath[0], launchUnitId);
-        if (!attacker) {
-            Logger.error(`DamageCalculator.getBattleDamage() failed to get the attacker.`);
-            return [];
-        }
-
-        const attackerHp = attacker.getCurrentHp();
+        const attackerHp = attackerUnit.getCurrentHp();
         if (attackerHp == null) {
-            Logger.error(`DamageCalculator.getBattleDamage() failed the attacker hp is empty!`);
-            return [];
+            return { errorCode: ClientErrorCode.DamageCalculator_GetBattleDamage_01 };
         }
 
-        const target = unitMap.getUnitOnMap(targetGridIndex) || tileMap.getTile(targetGridIndex);
-        if (!target) {
-            Logger.error(`DamageCalculator.getBattleDamage() failed to get the target.`);
-            return [];
+        const attackerUnitId = attackerUnit.getUnitId();
+        if (attackerUnitId == null) {
+            return { errorCode: ClientErrorCode.DamageCalculator_GetBattleDamage_02 };
         }
 
-        const targetHp = target.getCurrentHp();
-        if (targetHp == null) {
-            return [];
-        }
+        const attackerGridIndex = attackerMovePath[attackerMovePath.length - 1];
+        const targetUnit        = unitMap.getUnitOnMap(targetGridIndex);
+        if (targetUnit) {
+            const targetUnitHp = targetUnit.getCurrentHp();
+            if (targetUnitHp == null) {
+                return { errorCode: ClientErrorCode.DamageCalculator_GetBattleDamage_03 };
+            }
 
-        if (!checkCanAttack(attacker, attackerMovePath, target, undefined)) {
-            return [];
-        } else {
-            const attackerGridIndex = attackerMovePath[attackerMovePath.length - 1];
-            const attackDamage      = getAttackDamage(war, attacker, attackerGridIndex, attackerHp, target, targetGridIndex, isWithLuck);
+            const targetUnitId = targetUnit.getUnitId();
+            if (targetUnitId == null) {
+                return { errorCode: ClientErrorCode.DamageCalculator_GetBattleDamage_04 };
+            }
+
+            if (!checkCanAttackUnit(attackerUnit, attackerMovePath, targetUnit, undefined)) {
+                return { errorCode: ClientErrorCode.DamageCalculator_GetBattleDamage_05 };
+            }
+
+            const attackDamage      = getAttackDamage(war, attackerUnit, attackerGridIndex, attackerHp, targetUnit, targetGridIndex, isWithLuck);
             if ((attackDamage == null) || (attackDamage < 0)) {
-                Logger.error(`DamageCalculator.getBattleDamage() ???`);
-                return [];
-            } else {
-                if ((target instanceof BwTile)                                              ||
-                    (GridIndexHelpers.getDistance(attackerGridIndex, targetGridIndex) > 1)  ||
-                    (!checkCanAttack(target, undefined, attacker, attackerMovePath))        ||
-                    (attackDamage >= targetHp)
+                return { errorCode: ClientErrorCode.DamageCalculator_GetBattleDamage_06 };
+            }
+
+            const damageInfoArray: IBattleDamageInfo[] = [{
+                attackerUnitId,
+                targetUnitId,
+                damage              : attackDamage,
+                targetTileGridIndex : null,
+            }];
+
+            if ((GridIndexHelpers.getDistance(attackerGridIndex, targetGridIndex) <= 1) &&
+                (attackDamage < targetUnitHp)                                               &&
+                (checkCanAttackUnit(targetUnit, undefined, attackerUnit, attackerMovePath))
+            ) {
+                const counterDamage = getAttackDamage(war, targetUnit, targetGridIndex, targetUnitHp - attackDamage, attackerUnit, attackerGridIndex, isWithLuck);
+                if ((counterDamage == null) || (counterDamage < 0)) {
+                    return { errorCode: ClientErrorCode.DamageCalculator_GetBattleDamage_07 };
+                }
+
+                damageInfoArray.push({
+                    attackerUnitId      : targetUnitId,
+                    targetUnitId        : attackerUnitId,
+                    damage              : counterDamage,
+                    targetTileGridIndex : null,
+                });
+            }
+
+            return {
+                errorCode               : ClientErrorCode.NoError,
+                battleDamageInfoArray   : damageInfoArray,
+            };
+        }
+
+        const targetTile = war.getTileMap().getTile(targetGridIndex);
+        if (targetTile) {
+            const targetTileHp = targetTile.getCurrentHp();
+            if (targetTileHp == null) {
+                return { errorCode: ClientErrorCode.DamageCalculator_GetBattleDamage_08 };
+            }
+
+            if (!checkCanAttackTile(attackerUnit, attackerMovePath, targetTile)) {
+                return { errorCode: ClientErrorCode.DamageCalculator_GetBattleDamage_09 };
+            }
+
+            const attackDamage = getAttackDamage(war, attackerUnit, attackerGridIndex, attackerHp, targetTile, targetGridIndex, isWithLuck);
+            if ((attackDamage == null) || (attackDamage < 0)) {
+                return { errorCode: ClientErrorCode.DamageCalculator_GetBattleDamage_10 };
+            }
+
+            return {
+                errorCode       : ClientErrorCode.NoError,
+                battleDamageInfoArray : [{
+                    attackerUnitId,
+                    targetUnitId        : null,
+                    targetTileGridIndex : targetGridIndex,
+                    damage              : attackDamage,
+                }],
+            };
+        }
+
+        return { errorCode: ClientErrorCode.DamageCalculator_GetBattleDamage_11 };
+    }
+
+    export function getEstimatedBattleDamage({ war, attackerMovePath, launchUnitId, targetGridIndex }: {
+        war             : BwWar;
+        attackerMovePath: GridIndex[];
+        launchUnitId    : number | undefined | null;
+        targetGridIndex : GridIndex;
+    }): { errorCode: ClientErrorCode, battleDamageInfoArray?: IBattleDamageInfo[] } {
+        return getBattleDamage({ war, attackerMovePath, launchUnitId, targetGridIndex, isWithLuck: false });
+    }
+
+    export function getFinalBattleDamage({ war, attackerMovePath, launchUnitId, targetGridIndex }: {
+        war             : BwWar;
+        attackerMovePath: GridIndex[];
+        launchUnitId    : number | undefined | null;
+        targetGridIndex : GridIndex;
+    }): { errorCode: ClientErrorCode, battleDamageInfoArray?: IBattleDamageInfo[] } {
+        return getBattleDamage({ war, attackerMovePath, launchUnitId, targetGridIndex, isWithLuck: true });
+    }
+
+    export function getTotalDamage(targetUnitId: number, damageInfoArray: IBattleDamageInfo[]): number | null {
+        let totalDamage: number | null = null;
+        for (const info of damageInfoArray) {
+            if (info.targetUnitId === targetUnitId) {
+                totalDamage = (totalDamage || 0) + (info.damage || 0);
+            }
+        }
+        return totalDamage;
+    }
+
+    type AttackAndCounterDamage = {
+        attackDamage    : number | undefined;
+        counterDamage   : number | undefined;
+    }
+    export function getAttackAndCounterDamage({ battleDamageInfoArray, attackerUnitId, targetGridIndex, unitMap }: {
+        battleDamageInfoArray   : IBattleDamageInfo[];
+        attackerUnitId          : number;
+        targetGridIndex         : GridIndex;
+        unitMap                 : BaseWar.BwUnitMap;
+    }): AttackAndCounterDamage {
+        let attackDamage    : number | undefined = undefined;
+        let counterDamage   : number | undefined = undefined;
+        for (const info of battleDamageInfoArray) {
+            const infoTargetUnitId      = info.targetUnitId;
+            const infoAttackerUnitId    = info.attackerUnitId;
+            if (attackerUnitId === infoAttackerUnitId) {
+                if ((GridIndexHelpers.checkIsEqual(targetGridIndex, info.targetTileGridIndex as GridIndex))                                             ||
+                    ((infoTargetUnitId != null) && (GridIndexHelpers.checkIsEqual(targetGridIndex, unitMap.getUnitById(infoTargetUnitId).getGridIndex())))
                 ) {
-                    return [attackDamage, undefined];
-                } else {
-                    return [
-                        attackDamage,
-                        getAttackDamage(war, target, targetGridIndex, targetHp - attackDamage, attacker, attackerGridIndex, isWithLuck)
-                    ];
+                    attackDamage = (attackDamage || 0) + info.damage;
+                }
+            } else if (attackerUnitId === infoTargetUnitId) {
+                if (GridIndexHelpers.checkIsEqual(targetGridIndex, unitMap.getUnitById(infoAttackerUnitId).getGridIndex())) {
+                    counterDamage = (counterDamage || 0) + info.damage;
                 }
             }
         }
-    }
 
-    export function getEstimatedBattleDamage(war: BwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex): (number | undefined)[] {
-        return getBattleDamage(war, attackerMovePath, launchUnitId, targetGridIndex, false);
-    }
-
-    export function getFinalBattleDamage(war: BwWar, attackerMovePath: GridIndex[], launchUnitId: number | undefined | null, targetGridIndex: GridIndex): (number | undefined)[] {
-        return getBattleDamage(war, attackerMovePath, launchUnitId, targetGridIndex, true);
+        return { attackDamage, counterDamage };
     }
 }

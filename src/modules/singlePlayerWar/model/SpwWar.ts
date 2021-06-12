@@ -1,6 +1,7 @@
 
 namespace TinyWars.SinglePlayerWar {
     import ProtoTypes               = Utility.ProtoTypes;
+    import VisibilityHelpers        = Utility.VisibilityHelpers;
     import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
 
     export abstract class SpwWar extends BaseWar.BwWar {
@@ -10,11 +11,26 @@ namespace TinyWars.SinglePlayerWar {
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
 
-        private _isEnded            = false;
         private _saveSlotIndex      : number;
         private _saveSlotExtraData  : ISpmWarSaveSlotExtraData;
 
         public abstract serialize(): ProtoTypes.WarSerialization.ISerialWar;
+
+        public updateTilesAndUnitsOnVisibilityChanged(): void {
+            const teamIndexes   = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
+            this.getUnitMap().forEachUnitOnMap(unit => {
+                unit.setViewVisible(visibleUnits.has(unit));
+            });
+
+            const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
+            const tileMap       = this.getTileMap();
+            tileMap.forEachTile(tile => {
+                tile.setHasFog(!visibleTiles.has(tile));
+                tile.flushDataToView();
+            });
+            tileMap.getView().updateCoZone();
+        }
 
         public getPlayerManager(): SpwPlayerManager {
             return this._playerManager;
@@ -30,13 +46,6 @@ namespace TinyWars.SinglePlayerWar {
         }
         public getWarEventManager(): BaseWar.BwWarEventManager {
             return this._warEventManager;
-        }
-
-        public setIsEnded(ended: boolean): void {
-            this._isEnded = ended;
-        }
-        public getIsEnded(): boolean {
-            return this._isEnded;
         }
 
         public setSaveSlotIndex(slotIndex: number): void {

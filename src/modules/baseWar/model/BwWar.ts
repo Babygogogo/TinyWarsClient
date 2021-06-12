@@ -17,6 +17,7 @@ namespace TinyWars.BaseWar {
         private _warId                  : number;
         private _isRunning              = false;
         private _isExecutingAction      = false;
+        private _isEnded                = false;
 
         public abstract init(data: ISerialWar): Promise<ClientErrorCode>;
         public abstract getWarType(): Types.WarType;
@@ -29,6 +30,7 @@ namespace TinyWars.BaseWar {
         public abstract getField(): BwField;
         public abstract getCommonSettingManager(): BwCommonSettingManager;
         public abstract getWarEventManager(): BaseWar.BwWarEventManager;
+        public abstract updateTilesAndUnitsOnVisibilityChanged(): void;
 
         protected async _baseInit(data: ISerialWar): Promise<ClientErrorCode> {
             const settingsForCommon = data.settingsForCommon;
@@ -261,6 +263,12 @@ namespace TinyWars.BaseWar {
 
             return (aliveTeamsCount <= 1)
                 || (this.getDrawVoteManager().checkIsDraw());
+        }
+        public setIsEnded(ended: boolean): void {
+            this._isEnded = ended;
+        }
+        public getIsEnded(): boolean {
+            return this._isEnded;
         }
 
         private _setWarId(warId: number): void {

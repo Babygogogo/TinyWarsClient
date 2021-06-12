@@ -20,9 +20,10 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     let _mrwPreviewingWarId     : number;
     let _mfwPreviewingWarId     : number;
     let _war                    : MpwWar;
-    let _cachedActions          : IWarActionContainer[] = [];
+    const _cachedActions        : IWarActionContainer[] = [];
 
     export function init(): void {
+        // nothing to do.
     }
 
     export function setAllMyWarInfoList(infoList: IMpwWarInfo[]): void {
@@ -219,7 +220,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                         }
                         if (!war.getIsExecutingAction()) {
                             if (cachedActionsCount) {
-                                MpwActionExecutor.checkAndRunFirstCachedAction(war, _cachedActions);
+                                checkAndRunFirstCachedAction(war, _cachedActions);
                             } else {
                                 // Nothing to do.
                             }
@@ -263,7 +264,74 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                 MpwProxy.reqMpwCommonSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
             } else {
                 _cachedActions.push(container);
-                MpwActionExecutor.checkAndRunFirstCachedAction(war, _cachedActions);
+                checkAndRunFirstCachedAction(war, _cachedActions);
+            }
+        }
+    }
+
+    async function checkAndRunFirstCachedAction(war: MpwWar, actionList: IWarActionContainer[]): Promise<void> {
+        if ((!war.getIsRunning()) || (war.getIsEnded()) || (war.getIsExecutingAction())) {
+            return;
+        }
+
+        const container = actionList.shift();
+        if (container == null) {
+            return;
+        }
+
+        war.setIsExecutingAction(true);
+        war.getExecutedActionManager().addExecutedAction(container);
+
+        const errorCode = BaseWar.BwWarActionExecutor.checkAndExecute(war, container, false);
+        if (errorCode) {
+            Logger.error(`MpwModel.checkAndRunFirstCachedAction() errorCode: ${errorCode}.`);
+        }
+        war.setIsExecutingAction(false);
+
+        const playerManager     = war.getPlayerManager();
+        const remainingVotes    = war.getDrawVoteManager().getRemainingVotes();
+        const selfPlayer        = playerManager.getPlayerByUserId(User.UserModel.getSelfUserId());
+        const callbackForGoBack = () => {
+            if (war instanceof MultiRankWar.MrwWar) {
+                Utility.FlowManager.gotoMrwMyWarListPanel();
+            } else {
+                Utility.FlowManager.gotoMcwMyWarListPanel();
+            }
+        };
+        if (war.getIsEnded()) {
+            if (remainingVotes === 0) {
+                CommonAlertPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0030),
+                    callback: callbackForGoBack,
+                });
+            } else {
+                if (selfPlayer == null) {
+                    CommonAlertPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : Lang.getText(Lang.Type.A0035),
+                        callback: callbackForGoBack,
+                    });
+                } else {
+                    CommonAlertPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : selfPlayer.getAliveState() === Types.PlayerAliveState.Alive ? Lang.getText(Lang.Type.A0022) : Lang.getText(Lang.Type.A0023),
+                        callback: callbackForGoBack,
+                    });
+                }
+            }
+        } else {
+            if (war.getIsRunning()) {
+                if (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().size) {
+                    war.setIsEnded(true);
+                    CommonAlertPanel.show({
+                        title   : Lang.getText(Lang.Type.B0035),
+                        content : selfPlayer ? Lang.getText(Lang.Type.A0023) : Lang.getText(Lang.Type.A0152),
+                        callback: callbackForGoBack,
+                    });
+                } else {
+                    checkAndRunFirstCachedAction(war, actionList);
+                }
             }
         }
     }

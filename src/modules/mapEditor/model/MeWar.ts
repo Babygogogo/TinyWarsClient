@@ -2,7 +2,6 @@
 namespace TinyWars.MapEditor {
     import Helpers          = Utility.Helpers;
     import Types            = Utility.Types;
-    import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
     import ClientErrorCode  = Utility.ClientErrorCode;
     import CommonConstants  = Utility.CommonConstants;
@@ -126,6 +125,10 @@ namespace TinyWars.MapEditor {
             return this._warEventManager;
         }
 
+        public updateTilesAndUnitsOnVisibilityChanged(): void {
+            // nothing to do.
+        }
+
         public getDrawer(): MeDrawer {
             return this._drawer;
         }
@@ -140,35 +143,35 @@ namespace TinyWars.MapEditor {
         public getMapSlotIndex(): number {
             return this._mapSlotIndex;
         }
-        public setMapSlotIndex(value: number) {
+        public setMapSlotIndex(value: number): void {
             this._mapSlotIndex = value;
         }
 
         public getMapDesignerUserId(): number {
             return this._mapDesignerUserId;
         }
-        public setMapDesignerUserId(value: number) {
+        public setMapDesignerUserId(value: number): void {
             this._mapDesignerUserId = value;
         }
 
         public getMapDesignerName(): string {
             return this._mapDesignerName;
         }
-        public setMapDesignerName(value: string) {
+        public setMapDesignerName(value: string): void {
             this._mapDesignerName = value;
         }
 
         public getMapNameArray(): ILanguageText[] {
             return this._mapNameList;
         }
-        public setMapNameArray(value: ILanguageText[]) {
+        public setMapNameArray(value: ILanguageText[]): void {
             this._mapNameList = value;
         }
 
         public getIsReviewingMap(): boolean {
             return this._isReviewingMap;
         }
-        public setIsReviewingMap(value: boolean) {
+        public setIsReviewingMap(value: boolean): void {
             this._isReviewingMap = value;
         }
 

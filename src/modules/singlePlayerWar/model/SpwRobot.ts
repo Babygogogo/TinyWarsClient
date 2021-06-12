@@ -1737,113 +1737,193 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         }
     }
 
-    async function getScoreForActionUnitAttack({ commonParams, unit, gridIndex, targetGridIndex, pathNodes, attackDamage, counterDamage }: {
-        commonParams    : CommonParams;
-        unit            : BwUnit;
-        gridIndex       : GridIndex;
-        targetGridIndex : GridIndex;
-        pathNodes       : MovePathNode[];
-        attackDamage    : number;
-        counterDamage   : number | null | undefined;
+    async function getScoreForActionUnitAttack({ commonParams, focusUnit, focusUnitGridIndex, battleDamageInfoArray }: {
+        commonParams            : CommonParams;
+        focusUnit               : BwUnit;
+        focusUnitGridIndex      : GridIndex;
+        battleDamageInfoArray   : ProtoTypes.Structure.IBattleDamageInfo[];
     }): Promise<ErrorCodeAndScore> {
         await checkAndCallLater();
 
-        const { war, unitValueRatio }   = commonParams;
-        const targetTile                = war.getTileMap().getTile(targetGridIndex);
-        if (targetTile == null) {
+        const focusTeamIndex = focusUnit.getTeamIndex();
+        if (focusTeamIndex == null) {
             return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_00 };
         }
 
-        const tileType = targetTile.getType();
-        if (tileType == null) {
-            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_01 };
-        }
+        const { war, unitValueRatio }   = commonParams;
+        const unitMap                   = war.getUnitMap();
+        const tileMap                   = war.getTileMap();
+        const unitHpDict                = new Map<BwUnit, number>();
+        const tileHpDict                = new Map<BwTile, number>();
 
-        if (tileType === TileType.Meteor) {
-            const tileHp = targetTile.getCurrentHp();
-            if (tileHp == null) {
-                return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_02 };
-            } else {
-                return {
-                    errorCode   : ClientErrorCode.NoError,
-                    score       : Math.min(attackDamage, tileHp),
-                };
-            }
-        }
-
-        const targetUnit = war.getUnitMap().getUnitOnMap(targetGridIndex);
-        if (targetUnit == null) {
-            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_03 };
-        }
-
-        const targetHp = targetUnit.getCurrentHp();
-        if (targetHp == null) {
-            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_04 };
-        }
-
-        const attackerType = unit.getUnitType();
-        if (attackerType == null) {
-            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_05 };
-        }
-
-        const targetUnitProductionCost = targetUnit.getProductionBaseCost();
-        if (targetUnitProductionCost == null) {
-            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_06 };
-        }
-
-        const targetType = targetUnit.getUnitType();
-        if (targetType == null) {
-            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_07 };
-        }
-
-        attackDamage    = Math.min(attackDamage, targetHp);
-        let score       = (attackDamage + (attackDamage >= targetHp ? 20 : 0))
-            * targetUnitProductionCost / 3000 * Math.max(1, unitValueRatio)
-            * (targetUnit.getHasLoadedCo() ? 2 : 1)
-            * (_DAMAGE_SCORE_SCALERS[attackerType][targetType] || 1);
-
-        if (targetUnit.getIsCapturingTile()) {
-            const captureAmount = targetUnit.getCaptureAmount()
-            if (captureAmount == null) {
-                return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_08 };
+        let totalScore = 0;
+        for (const battleDamageInfo of battleDamageInfoArray) {
+            const damage = battleDamageInfo.damage;
+            if (damage == null) {
+                return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_01 };
             }
 
-            const capturePoint = targetTile.getCurrentCapturePoint();
-            if (capturePoint == null) {
-                return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_09 };
+            const tileGridIndex = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+            if (tileGridIndex != null) {
+                const tile2 = tileMap.getTile(tileGridIndex);
+                if (tile2 == null) {
+                    return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_02 };
+                }
+
+                if (!tileHpDict.has(tile2)) {
+                    const tileHp2 = tile2.getCurrentHp();
+                    if (tileHp2 == null) {
+                        return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_03 };
+                    }
+                    tileHpDict.set(tile2, tileHp2);
+                }
+
+                const tileHp2 = tileHpDict.get(tile2);
+                if (tileHp2 == null) {
+                    return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_04 };
+                }
+
+                const tileTeamIndex2 = tile2.getTeamIndex();
+                if (tileTeamIndex2 == null) {
+                    return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_05 };
+                }
+
+                const actualDamage = Math.min(tileHp2, damage);
+                tileHpDict.set(tile2, tileHp2 - actualDamage);
+
+                totalScore += actualDamage * (tileTeamIndex2 === focusTeamIndex ? -1 : 1);
+                continue;
             }
 
-            score *= captureAmount >= capturePoint ? 2 : 1.1;
-            if ((tileType === TileType.Headquarters)    ||
-                (tileType === TileType.Factory)         ||
-                (tileType === TileType.Airport)         ||
-                (tileType === TileType.Seaport)
-            ) {
-                score *= 5;
-            }
-        }
+            const unitId2 = battleDamageInfo.targetUnitId;
+            if (unitId2 != null) {
+                const unit2 = unitMap.getUnitById(unitId2);
+                if (unit2 == null) {
+                    return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_06 };
+                }
 
-        if (counterDamage) {
-            const attackerHp    = unit.getCurrentHp();
-            if (attackerHp == null) {
-                return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_10 };
+                if (!unitHpDict.has(unit2)) {
+                    const unitHp2 = unit2.getCurrentHp();
+                    if (unitHp2 == null) {
+                        return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_07 };
+                    }
+                    unitHpDict.set(unit2, unitHp2);
+                }
+
+                const unitHp2 = unitHpDict.get(unit2);
+                if (unitHp2 == null) {
+                    return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_08 };
+                }
+
+                const unitTeamIndex2 = unit2.getTeamIndex();
+                if (unitTeamIndex2 == null) {
+                    return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_09 };
+                }
+
+                const unitId1 = battleDamageInfo.attackerUnitId;
+                if (unitId1 == null) {
+                    return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_10 };
+                }
+
+                const unit1 = unitMap.getUnitById(unitId1);
+                if (unit1 == null) {
+                    return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_11 };
+                }
+
+                const unitType1 = unit1.getUnitType();
+                if (unitType1 == null) {
+                    return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_12 };
+                }
+
+                const unitProductionCost2 = unit2.getProductionBaseCost();
+                if (unitProductionCost2 == null) {
+                    return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_13 };
+                }
+
+                const unitType2 = unit2.getUnitType();
+                if (unitType2 == null) {
+                    return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_14 };
+                }
+
+                const actualDamage = Math.min(unitHp2, damage);
+                unitHpDict.set(unit2, unitHp2 - actualDamage);
+
+                const isUnitDestroyed   = (actualDamage >= unitHp2) && (actualDamage > 0);
+                const isSelfDamaged     = unitTeamIndex2 === focusTeamIndex;
+                let score               = (actualDamage + (isUnitDestroyed ? 20 : 0))
+                    * unitProductionCost2 / 3000
+                    * (isSelfDamaged ? 1 / Math.max(1, unitValueRatio) : Math.max(1, unitValueRatio))
+                    * (unit2.getHasLoadedCo() ? 2 : 1)
+                    * (_DAMAGE_SCORE_SCALERS[unitType1][unitType2] || 1);
+
+                if (isUnitDestroyed) {
+                    for (const loadedUnit of unitMap.getUnitsLoadedByLoader(unit2, true)) {
+                        const loadedUnitHp = loadedUnit.getCurrentHp();
+                        if (loadedUnitHp == null) {
+                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_15 };
+                        }
+
+                        const loadedUnitProductionCost = loadedUnit.getProductionBaseCost();
+                        if (loadedUnitProductionCost == null) {
+                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_16 };
+                        }
+
+                        score += (loadedUnitHp + 20)
+                            * loadedUnitProductionCost / 3000
+                            * (isSelfDamaged ? 1 / Math.max(1, unitValueRatio) : Math.max(1, unitValueRatio))
+                            * (loadedUnit.getHasLoadedCo() ? 2 : 1);
+                    }
+                }
+
+                if (unit2.getIsCapturingTile()) {
+                    const unitOriginGridIndex2 = unit2.getGridIndex();
+                    if (unitOriginGridIndex2 == null) {
+                        return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_15 };
+                    }
+
+                    const gridIndex2 = (unit2 === focusUnit) ? focusUnitGridIndex : unitOriginGridIndex2;
+                    if (GridIndexHelpers.checkIsEqual(gridIndex2, unitOriginGridIndex2)) {
+                        const captureAmount = unit2.getCaptureAmount();
+                        if (captureAmount == null) {
+                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_16 };
+                        }
+
+                        const tile2 = tileMap.getTile(gridIndex2);
+                        if (tile2 == null) {
+                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_17 };
+                        }
+
+                        const capturePoint = tile2.getCurrentCapturePoint();
+                        if (capturePoint == null) {
+                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_18 };
+                        }
+
+                        const tileType2 = tile2.getType();
+                        if (tileType2 == null) {
+                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_19 };
+                        }
+
+                        score *= captureAmount >= capturePoint ? 2 : 1.1;
+                        if ((tileType2 === TileType.Headquarters)    ||
+                            (tileType2 === TileType.Factory)         ||
+                            (tileType2 === TileType.Airport)         ||
+                            (tileType2 === TileType.Seaport)
+                        ) {
+                            score *= 5;
+                        }
+                    }
+                }
+
+                totalScore += score * (isSelfDamaged ? -1 : 1);
+                continue;
             }
 
-            const unitProductionCost = unit.getProductionBaseCost();
-            if (unitProductionCost == null) {
-                return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_11 };
-            }
-
-            counterDamage   = Math.min(counterDamage, attackerHp);
-            score           += - (counterDamage + (counterDamage >= attackerHp ? 20 : 0))
-                * unitProductionCost / 3000 / Math.max(1, unitValueRatio)
-                * (unit.getHasLoadedCo() ? 2 : 1)
-                * (_DAMAGE_SCORE_SCALERS[targetType][attackerType] || 1);
+            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_20 };
         }
 
         return {
             errorCode   : ClientErrorCode.NoError,
-            score,
+            score       : totalScore,
         };
     }
 
@@ -2248,41 +2328,50 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 continue;
             }
 
-            const damages = DamageCalculator.getEstimatedBattleDamage(war, pathNodes, launchUnitId, targetGridIndex);
-            if (damages[0] != null) {
-                const { errorCode, score } =  await getScoreForActionUnitAttack({ commonParams, unit, gridIndex, targetGridIndex, pathNodes, attackDamage: damages[0], counterDamage: damages[1] });
-                if (errorCode) {
-                    return { errorCode };
-                } else if (score == null) {
-                    return { errorCode: ClientErrorCode.SpwRobot_GetScoreAndActionUnitAttack_01 };
-                }
-
-                bestScoreAndAction = getBetterScoreAndAction(
-                    bestScoreAndAction,
-                    {
-                        score,
-                        action  : unitMap.getUnitOnMap(targetGridIndex) != null
-                            ? { WarActionUnitAttackUnit: {
-                                path        : {
-                                    nodes           : pathNodes,
-                                    fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
-                                    isBlocked       : false,
-                                },
-                                targetGridIndex,
-                                launchUnitId,
-                            } }
-                            : { WarActionUnitAttackTile: {
-                                path        : {
-                                    nodes           : pathNodes,
-                                    fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
-                                    isBlocked       : false,
-                                },
-                                targetGridIndex,
-                                launchUnitId,
-                            }, },
-                    }
-                );
+            const { errorCode: errorCodeForDamage, battleDamageInfoArray } = DamageCalculator.getEstimatedBattleDamage({ war, attackerMovePath: pathNodes, launchUnitId, targetGridIndex });
+            if (errorCodeForDamage) {
+                continue;
+            } else if (battleDamageInfoArray == null) {
+                return { errorCode: ClientErrorCode.SpwRobot_GetScoreAndActionUnitAttack_01 };
             }
+
+            const { errorCode, score } = await getScoreForActionUnitAttack({
+                commonParams,
+                focusUnit           : unit,
+                focusUnitGridIndex  : gridIndex,
+                battleDamageInfoArray,
+            });
+            if (errorCode) {
+                return { errorCode };
+            } else if (score == null) {
+                return { errorCode: ClientErrorCode.SpwRobot_GetScoreAndActionUnitAttack_02 };
+            }
+
+            bestScoreAndAction = getBetterScoreAndAction(
+                bestScoreAndAction,
+                {
+                    score,
+                    action  : unitMap.getUnitOnMap(targetGridIndex) != null
+                        ? { WarActionUnitAttackUnit: {
+                            path        : {
+                                nodes           : pathNodes,
+                                fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                                isBlocked       : false,
+                            },
+                            targetGridIndex,
+                            launchUnitId,
+                        } }
+                        : { WarActionUnitAttackTile: {
+                            path        : {
+                                nodes           : pathNodes,
+                                fuelConsumption : pathNodes[pathNodes.length - 1].totalMoveCost,
+                                isBlocked       : false,
+                            },
+                            targetGridIndex,
+                            launchUnitId,
+                        }, },
+                }
+            );
         }
 
         return {

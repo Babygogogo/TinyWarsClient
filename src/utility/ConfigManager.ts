@@ -180,6 +180,7 @@ namespace TinyWars.Utility.ConfigManager {
     // Exports.
     ////////////////////////////////////////////////////////////////////////////////
     export function init(): void {
+        // nothing to do.
     }
 
     export function getLatestFormalVersion(): string {

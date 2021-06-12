@@ -325,14 +325,20 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
             action      : revisedAction,
         } = BwActionReviser.revise(war, action);
         if (errorCodeForRevisedAction) {
-            Logger.error(`SpwModel.reviseAndExecute() errorCodeForRevisedAction: ${errorCodeForRevisedAction}`);
+            Logger.error(`SpwModel.reviseAndExecute() errorCodeForRevisedAction: ${errorCodeForRevisedAction}.`);
             return errorCodeForRevisedAction;
         } else if (revisedAction == null) {
             Logger.error(`SpwModel.reviseAndExecute() empty revisedAction!.`);
             return ClientErrorCode.SpwModel_ReviseAndExecute_00;
         }
 
-        await SpwActionExecutor.checkAndExecute(war, revisedAction);
+        const errorCodeForExecute = await BaseWar.BwWarActionExecutor.checkAndExecute(war, revisedAction, false);
+        if (errorCodeForExecute) {
+            Logger.error(`SpwModel.reviseAndExecute() errorCodeForExecute: ${errorCodeForExecute}.`);
+            return errorCodeForExecute;
+        }
+
+        war.getExecutedActionManager().addExecutedAction(revisedAction);
         return ClientErrorCode.NoError;
     }
 }

@@ -142,6 +142,13 @@ namespace TinyWars.Utility.Types {
         cost: number;
     }
 
+    export type DamageInfo = {
+        attackerUnitId      : number;
+        targetUnitId        : number | null | undefined;
+        targetTileGridIndex : GridIndex | null | undefined;
+        damage              : number;
+    }
+
     export type DropDestination = {
         unitId      : number;
         gridIndex   : GridIndex;

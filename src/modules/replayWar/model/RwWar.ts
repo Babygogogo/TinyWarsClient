@@ -8,7 +8,7 @@ namespace TinyWars.ReplayWar {
     import Logger               = Utility.Logger;
     import ClientErrorCode      = Utility.ClientErrorCode;
     import ProtoTypes           = Utility.ProtoTypes;
-    import BwHelpers            = BaseWar.BwHelpers;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
     import WarType              = Types.WarType;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
@@ -76,6 +76,18 @@ namespace TinyWars.ReplayWar {
         }
         public getWarEventManager(): BaseWar.BwWarEventManager {
             return this._warEventManager;
+        }
+
+        public updateTilesAndUnitsOnVisibilityChanged(): void {
+            // No need to update units.
+
+            const tileMap       = this.getTileMap();
+            const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeam(this, this.getPlayerInTurn().getTeamIndex());
+            tileMap.forEachTile(tile => {
+                tile.setHasFog(!visibleTiles.has(tile));
+                tile.flushDataToView();
+            });
+            tileMap.getView().updateCoZone();
         }
 
         public serializeForCheckPoint(): CheckPointData {

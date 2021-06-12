@@ -31,7 +31,7 @@ namespace TinyWars.MultiPlayerWar {
             war.getFogMap().resetMapFromPathsForPlayer(war.getPlayerIndexInTurn());
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            MpwUtility.updateTilesAndUnitsOnVisibilityChanged(this.getWar());
+            this.getWar().updateTilesAndUnitsOnVisibilityChanged();
         }
     }
 }

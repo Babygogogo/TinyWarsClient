@@ -39,6 +39,10 @@ namespace TinyWars.TestWar {
             return this._warEventManager;
         }
 
+        public updateTilesAndUnitsOnVisibilityChanged(): void {
+            // nothing to do.
+        }
+
         public async init(data: ISerialWar): Promise<ClientErrorCode> {
             const baseInitError = await this._baseInit(data);
             if (baseInitError) {

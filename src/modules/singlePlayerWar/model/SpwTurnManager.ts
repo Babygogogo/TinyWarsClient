@@ -42,7 +42,7 @@ namespace TinyWars.SinglePlayerWar {
             war.getFogMap().resetMapFromPathsForPlayer(war.getPlayerIndexInTurn());
         }
         protected _runPhaseResetVisionForNextPlayer(): void {
-            SpwUtility.updateTilesAndUnitsOnVisibilityChanged(this.getWar());
+            this.getWar().updateTilesAndUnitsOnVisibilityChanged();
         }
     }
 }

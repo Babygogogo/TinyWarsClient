@@ -6,6 +6,7 @@ namespace TinyWars.BaseWar {
     import Notify               = Utility.Notify;
     import Lang                 = Utility.Lang;
     import DamageCalculator     = Utility.DamageCalculator;
+    import Logger               = Utility.Logger;
     import GridIndex            = Types.GridIndex;
     import ActionPlannerState   = Types.ActionPlannerState;
 
@@ -414,44 +415,80 @@ namespace TinyWars.BaseWar {
                     con.visible = false;
 
                 } else if (state === ActionPlannerState.MakingMovePath) {
-                    const war                           = cursor.getWar();
-                    const focusUnitLoaded               = actionPlanner.getFocusUnitLoaded();
-                    const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
-                        war,
-                        actionPlanner.getMovePath(),
-                        focusUnitLoaded ? focusUnitLoaded.getUnitId() : undefined,
-                        gridIndex
-                    );
-                    if (attackDamage == null) {
+                    const war           = cursor.getWar();
+                    const unitMap       = war.getUnitMap();
+                    const attackerUnit  = actionPlanner.getFocusUnit();
+                    const movePath      = actionPlanner.getMovePath();
+                    if (!attackerUnit.checkCanAttackTargetAfterMovePath(movePath, gridIndex)) {
                         con.visible = false;
                     } else {
-                        con.visible = true;
-                        const target = war.getUnitMap().getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
-                        labelDamage.text = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${target.getCurrentHp()}\n`
-                            + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${(actionPlanner.getFocusUnit()).getCurrentHp()}`;
-                        this._updatePositionForConForDamage();
+                        const attackerUnitId                        = attackerUnit.getUnitId();
+                        const { errorCode, battleDamageInfoArray }  = DamageCalculator.getEstimatedBattleDamage({
+                            war,
+                            attackerMovePath: movePath,
+                            launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
+                            targetGridIndex : gridIndex,
+                        });
+                        if (errorCode) {
+                            Logger.error(`BwCursorView._updateConForDamage() errorCode: ${errorCode}.`);
+                            con.visible = false;
+                        } else if (battleDamageInfoArray == null) {
+                            Logger.error(`BwCursorView._updateConForDamage() empty battleDamageInfoArray.`);
+                            con.visible = false;
+                        } else {
+                            con.visible = true;
+
+                            const { attackDamage, counterDamage } = DamageCalculator.getAttackAndCounterDamage({
+                                battleDamageInfoArray,
+                                attackerUnitId,
+                                targetGridIndex     : gridIndex,
+                                unitMap,
+                            });
+                            const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
+                            labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
+                                + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
+                            this._updatePositionForConForDamage();
+                        }
                     }
 
                 } else if (state === ActionPlannerState.ChoosingAction) {
                     con.visible = false;
 
                 } else if (state === ActionPlannerState.ChoosingAttackTarget) {
-                    const war                           = cursor.getWar();
-                    const focusUnitLoaded               = actionPlanner.getFocusUnitLoaded();
-                    const [attackDamage, counterDamage] = DamageCalculator.getEstimatedBattleDamage(
-                        war,
-                        actionPlanner.getMovePath(),
-                        focusUnitLoaded ? focusUnitLoaded.getUnitId() : undefined,
-                        gridIndex
-                    );
-                    if (attackDamage == null) {
+                    const war           = cursor.getWar();
+                    const unitMap       = war.getUnitMap();
+                    const attackerUnit  = actionPlanner.getFocusUnit();
+                    const movePath      = actionPlanner.getMovePath();
+                    if (!attackerUnit.checkCanAttackTargetAfterMovePath(movePath, gridIndex)) {
                         con.visible = false;
                     } else {
-                        con.visible         = true;
-                        const target        = war.getUnitMap().getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
-                        labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage} / ${target.getCurrentHp()}\n`
-                            + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${(actionPlanner.getFocusUnit()).getCurrentHp()}`;
-                        this._updatePositionForConForDamage();
+                        const attackerUnitId                        = attackerUnit.getUnitId();
+                        const { errorCode, battleDamageInfoArray }  = DamageCalculator.getEstimatedBattleDamage({
+                            war,
+                            attackerMovePath: movePath,
+                            launchUnitId    : attackerUnit.getLoaderUnitId() == null ? null : attackerUnitId,
+                            targetGridIndex : gridIndex,
+                        });
+                        if (errorCode) {
+                            Logger.error(`BwCursorView._updateConForDamage() errorCode: ${errorCode}.`);
+                            con.visible = false;
+                        } else if (battleDamageInfoArray == null) {
+                            Logger.error(`BwCursorView._updateConForDamage() empty battleDamageInfoArray.`);
+                            con.visible = false;
+                        } else {
+                            con.visible = true;
+
+                            const { attackDamage, counterDamage } = DamageCalculator.getAttackAndCounterDamage({
+                                battleDamageInfoArray,
+                                attackerUnitId,
+                                targetGridIndex     : gridIndex,
+                                unitMap,
+                            });
+                            const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
+                            labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
+                                + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
+                            this._updatePositionForConForDamage();
+                        }
                     }
 
                 } else if (state === ActionPlannerState.ChoosingDropDestination) {
@@ -473,7 +510,7 @@ namespace TinyWars.BaseWar {
                     con.visible = false;
 
                 } else {
-                    // TODO
+                    Logger.error(`BwCursorView._updateConForDamage() invalid state: ${state}.`);
                 }
             }
         }
