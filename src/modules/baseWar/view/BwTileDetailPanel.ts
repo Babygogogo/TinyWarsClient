@@ -12,9 +12,9 @@ namespace TinyWars.BaseWar {
         tile    : BwTile;
     }
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.CommonConstants.GridSize;
 
-    export class BwTileDetailPanel extends GameUi.UiPanel {
+    export class BwTileDetailPanel extends GameUi.UiPanel<OpenDataForBwTileDetailPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -24,9 +24,9 @@ namespace TinyWars.BaseWar {
         private _labelName          : GameUi.UiLabel;
         private _imgTileBase        : GameUi.UiImage;
         private _imgTileObject      : GameUi.UiImage;
-        private _listInfo           : GameUi.UiScrollList;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
         private _labelMoveCost      : GameUi.UiLabel;
-        private _listMoveCost       : GameUi.UiScrollList;
+        private _listMoveCost       : GameUi.UiScrollList<DataForMoveRangeRenderer>;
 
         private _dataForListMoveCost: DataForMoveRangeRenderer[];
 
@@ -49,7 +49,6 @@ namespace TinyWars.BaseWar {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/baseWar/BwTileDetailPanel.exml`;
@@ -58,7 +57,6 @@ namespace TinyWars.BaseWar {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
                 { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwPlannerStateChanged },
             ]);
             this._listInfo.setItemRenderer(InfoRenderer);
@@ -70,8 +68,6 @@ namespace TinyWars.BaseWar {
         }
         protected async _onClosed(): Promise<void> {
             this._dataForListMoveCost = null;
-            this._listInfo.clear();
-            this._listMoveCost.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,13 +75,6 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
-        }
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
-            const viewList = this._listMoveCost.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof MoveCostRenderer) && (child.updateOnUnitAnimationTick());
-            }
         }
         private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
             this.close();
@@ -106,7 +95,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateTileViewAndLabelName(): void {
-            const data                  = this._getOpenData<OpenDataForBwTileDetailPanel>();
+            const data                  = this._getOpenData();
             const tile                  = data.tile;
             const version               = User.UserModel.getSelfSettingsTextureVersion();
             const tickCount             = Time.TimeModel.getTileAnimationTickCount();
@@ -131,7 +120,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateListInfo(): void {
-            const data                  = this._getOpenData<OpenDataForBwTileDetailPanel>();
+            const data                  = this._getOpenData();
             const tile                  = data.tile;
             const configVersion         = tile.getConfigVersion();
             const tileType              = tile.getType();
@@ -144,8 +133,7 @@ namespace TinyWars.BaseWar {
             const globalDefenseBonus    = cfg.globalDefenseBonus;
             const repairAmount          = cfg.repairAmount;
             const war                   = tile.getWar();
-            const isCheating            = (tile instanceof MapEditor.MeTile) ||
-                ((war instanceof SingleCustomWar.ScwWar) ? war.getIsSinglePlayerCheating() : false);
+            const isCheating            = war.getCanCheat();
 
             const dataList: DataForInfoRenderer[] = [
                 {
@@ -200,7 +188,7 @@ namespace TinyWars.BaseWar {
             this._listInfo.bindData(dataList);
         }
 
-        private _createInfoHp(tile: BwTile | MapEditor.MeTile, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoHp(tile: BwTile, isCheating: boolean): DataForInfoRenderer | null {
             const maxValue  = tile.getMaxHp();
             if (maxValue == null) {
                 return null;
@@ -236,7 +224,7 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoCapturePoint(tile: BwTile | MapEditor.MeTile, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoCapturePoint(tile: BwTile, isCheating: boolean): DataForInfoRenderer | null {
             const maxValue  = tile.getMaxCapturePoint();
             if (maxValue == null) {
                 return null;
@@ -272,7 +260,7 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        private _createInfoBuildPoint(tile: BwTile | MapEditor.MeTile, isCheating: boolean): DataForInfoRenderer | null {
+        private _createInfoBuildPoint(tile: BwTile, isCheating: boolean): DataForInfoRenderer | null {
             const maxValue  = tile.getMaxBuildPoint();
             if (maxValue == null) {
                 return null;
@@ -314,13 +302,13 @@ namespace TinyWars.BaseWar {
         }
 
         private _createDataForListMoveCost(): DataForMoveRangeRenderer[] {
-            const openData          = this._getOpenData<OpenDataForBwTileDetailPanel>();
+            const openData          = this._getOpenData();
             const tile              = openData.tile;
             const configVersion     = tile.getConfigVersion();
             const tileCfg           = Utility.ConfigManager.getTileTemplateCfgByType(configVersion, tile.getType());
             const playerIndex       = tile.getPlayerIndex() || 1;
 
-            const dataList = [] as DataForMoveRangeRenderer[];
+            const dataList: DataForMoveRangeRenderer[] = [];
             for (const unitType of Utility.ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
                 dataList.push({
                     configVersion,
@@ -344,25 +332,25 @@ namespace TinyWars.BaseWar {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnTitle.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnTitle, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnTitle, callback: this._onTouchedBtnTitle },
+            ]);
         }
 
-        protected dataChanged(): void {
-            const data              = this.data as DataForInfoRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             this._btnTitle.label    = data.titleText;
             this._labelValue.text   = data.valueText;
             this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-            const data      = this.data as DataForInfoRenderer;
+            const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());
         }
@@ -375,28 +363,28 @@ namespace TinyWars.BaseWar {
         playerIndex     : number;
     }
 
-    class MoveCostRenderer extends GameUi.UiListItemRenderer {
+    class MoveCostRenderer extends GameUi.UiListItemRenderer<DataForMoveRangeRenderer> {
         private _group          : eui.Group;
         private _conView        : eui.Group;
         private _unitView       : WarMap.WarMapUnitView;
         private _labelMoveCost  : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            ]);
 
             this._unitView = new WarMap.WarMapUnitView();
             this._conView.addChild(this._unitView);
         }
 
-        public updateOnUnitAnimationTick(): void {
+        private _onNotifyUnitAnimationTick(): void {
             if (this.data) {
                 this._unitView.updateOnAnimationTick(Time.TimeModel.getUnitAnimationTickCount());
             }
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
@@ -404,7 +392,7 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data                  = this.data as DataForMoveRangeRenderer;
+            const data                  = this.data;
             const configVersion         = data.configVersion;
             const unitType              = data.unitType;
             const moveCostCfg           = Utility.ConfigManager.getMoveCostCfgByTileType(configVersion, data.tileCfg.type);
@@ -412,9 +400,9 @@ namespace TinyWars.BaseWar {
             this._labelMoveCost.text    = moveCost != null ? `${moveCost}` : `--`;
             this._unitView.update({
                 gridIndex       : { x: 0, y: 0 },
-                skinId          : data.playerIndex,
+                playerIndex     : data.playerIndex,
                 unitType        : data.unitType,
-                unitActionState : Types.UnitActionState.Idle,
+                actionState     : Types.UnitActionState.Idle,
             }, Time.TimeModel.getUnitAnimationTickCount());
         }
     }

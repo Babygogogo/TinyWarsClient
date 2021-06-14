@@ -6,13 +6,13 @@ namespace TinyWars.ChangeLog {
     import Lang         = Utility.Lang;
     import FloatText    = Utility.FloatText;
 
-    export class ChangeLogPanel extends GameUi.UiPanel {
+    export class ChangeLogPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: ChangeLogPanel;
 
-        private _listMessage    : GameUi.UiScrollList;
+        private _listMessage    : GameUi.UiScrollList<DataForMessageRenderer>;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoMessage : GameUi.UiLabel;
         private _btnAddMessage  : GameUi.UiButton;
@@ -34,7 +34,6 @@ namespace TinyWars.ChangeLog {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/changeLog/ChangeLogPanel.exml";
@@ -105,21 +104,19 @@ namespace TinyWars.ChangeLog {
     }
 
     type DataForMessageRenderer = ProtoTypes.ChangeLog.IChangeLogMessage;
-    class MessageRenderer extends GameUi.UiListItemRenderer {
+    class MessageRenderer extends GameUi.UiListItemRenderer<DataForMessageRenderer> {
         private _labelIndex     : GameUi.UiLabel;
         private _labelContent   : GameUi.UiLabel;
         private _btnModify      : GameUi.UiButton;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnModify.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnModify, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnModify,  callback: this._onTouchedBtnModify },
+            ]);
         }
 
-        protected async dataChanged(): Promise<void> {
-            super.dataChanged();
-
-            const data              = this.data as DataForMessageRenderer;
+        protected async _onDataChanged(): Promise<void> {
+            const data              = this.data;
             this._labelIndex.text   = `#${Helpers.getNumText(data.messageId, 3)} (${Helpers.getTimestampShortText(data.createTimestamp)})`;
             this._labelContent.text = Lang.getLanguageText({ textArray: data.textList });
 
@@ -130,7 +127,7 @@ namespace TinyWars.ChangeLog {
         }
 
         private _onTouchedBtnModify(e: egret.TouchEvent): void {
-            ChangeLogModifyPanel.show({ messageId: (this.data as DataForMessageRenderer).messageId });
+            ChangeLogModifyPanel.show({ messageId: this.data.messageId });
         }
     }
 }

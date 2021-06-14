@@ -1,56 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<e:Skin width="760" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
-        xmlns:w="http://ns.egret.com/wing">
-    <e:Group x="10" y="10">
-        <GameUi:UiLabel id="_labelMapNameTitle" text="地图名称：" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
-                        x="0" />
-        <GameUi:UiLabel id="_labelMapName" text="地图名称" textColor="0xFFFFFF" y="0" size="20" x="120" />
-        <e:layout>
-            <e:HorizontalLayout/>
-        </e:layout>
-    </e:Group>
-    <e:Group x="540" y="10">
-        <GameUi:UiLabel id="_labelPlayersCountTitle" text="玩家数量：" textColor="0xFFFFFF" y="0" size="20" textAlign="right"
-                        x="0" />
-        <GameUi:UiLabel id="_labelPlayersCount" text="2" textColor="0xFFFFFF" y="0" size="20" x="120" />
-        <e:layout>
-            <e:HorizontalLayout/>
-        </e:layout>
-    </e:Group>
-    <GameUi:UiLabel id="_labelPlayerList" text="玩家列表" textColor="0xFFFFFF" y="40" size="20" horizontalCenter="0"
-                    locked="true" />
-    <GameUi:UiScrollList id="_listPlayer" scaleX="1" scaleY="1" y="70" horizontalCenter="0">
-        <e:List>
-            <e:itemRendererSkinName>
-                <e:Skin width="190" currentState="up" states="down,up">
-                    <e:Group left="0" right="0" top="0" bottom="0">
-                        <GameUi:UiScrollList id="_listInfo" y="0" horizontalCenter="0">
-                            <e:List>
-                                <e:itemRendererSkinName>
-                                    <e:Skin width="190">
-                                        <e:Group scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
-                                            <GameUi:UiButton id="_btnTitle" label="Buildings" skinName="Skins.Component.Button.ButtonSelfAdaption001" x="0"
-                                                             width="120"></GameUi:UiButton>
-                                            <GameUi:UiLabel id="_labelValue" text="(Empty)" size="14"
-                                                            textColor="0xFFFFFF" x="120" verticalCenter="0"
-                                                            maxTextWidth="100" width="70" />
+<e:Skin xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*" xmlns:w="http://ns.egret.com/wing">
+    <e:Group left="0" right="0" top="0" bottom="0">
+        <e:Scroller id="_scroller" top="0" bottom="20" right="20" left="0">
+            <e:Group>
+                <GameUi:UiButton id="_btnReset" label="Reset" y="8" skinName="Skins.Component.Button.ButtonBlue001"
+                                 width="120" locked="true" />
+                <GameUi:UiButton id="_btnCustomize" label="Customize" y="8"
+                                 skinName="Skins.Component.Button.ButtonBlue001" width="120" locked="true" />
+                <GameUi:UiScrollList id="_listSetting" y="50" left="0" right="0">
+                    <e:List>
+                        <e:itemRendererSkinName>
+                            <e:Skin height="40">
+                                <e:Group left="0" right="0" top="0" bottom="0">
+                                    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000"
+                                                    alpha="0.4" scale9Grid="1,1,2,2" locked="true" />
+                                    <GameUi:UiLabel id="_labelName" text="War Name" textColor="0xFFFFFF" size="16"
+                                                    verticalCenter="0" bold="true" left="10" width="130" wordWrap="true" />
+                                    <GameUi:UiButton id="_btnHelp" verticalCenter="0" x="132">
+                                        <GameUi:skinName>
+                                            <e:Skin states="up,down,disabled">
+                                                <e:Image width="100%" height="100%" source="commonIcon0001" />
+                                                <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
+                                            </e:Skin>
+                                        </GameUi:skinName>
+                                    </GameUi:UiButton>
+                                </e:Group>
+                            </e:Skin>
+                        </e:itemRendererSkinName>
+                        <e:layout>
+                            <e:VerticalLayout paddingTop="4" horizontalAlign="contentJustify" />
+                        </e:layout>
+                    </e:List>
+                </GameUi:UiScrollList>
+                <GameUi:UiScrollList id="_listPlayer" y="0" left="160" right="0">
+                    <e:List>
+                        <e:itemRendererSkinName>
+                            <e:Skin width="120" currentState="up" states="down,up">
+                                <e:Group left="0" right="0" top="0" bottom="0">
+                                    <GameUi:UiLabel id="_labelPlayerIndex" text="P1" horizontalCenter="0" bold="true"
+                                                    size="24" y="12" />
+                                    <GameUi:UiScrollList id="_listInfo" y="50" horizontalCenter="0">
+                                        <e:List>
+                                            <e:itemRendererSkinName>
+                                                <e:Skin width="120" height="40">
+                                                    <e:Group left="0" right="0" top="0" bottom="0">
+                                                        <GameUi:UiImage source="commonRectangle0001" top="6" bottom="6"
+                                                                        left="20" right="20" scale9Grid="2,2,1,1" />
+                                                        <GameUi:UiTextInput id="_inputValue" left="20" right="20"
+                                                                            top="6" bottom="6">
+                                                            <GameUi:skinName>
+                                                                <e:Skin>
+                                                                    <e:Group left="0" right="0" top="0" bottom="0">
+                                                                        <e:EditableText id="textDisplay" size="16"
+                                                                                        left="0" right="0"
+                                                                                        textColor="0xffffff" top="0"
+                                                                                        bottom="0"
+                                                                                        verticalAlign="middle"
+                                                                                        textAlign="center" />
+                                                                        <e:Label id="promptDisplay" size="16"
+                                                                                 touchEnabled="false" left="10"
+                                                                                 right="10" text="" textColor="0x808080"
+                                                                                 verticalCenter="0" />
+                                                                    </e:Group>
+                                                                </e:Skin>
+                                                            </GameUi:skinName>
+                                                        </GameUi:UiTextInput>
+                                                        <GameUi:UiLabel id="_labelValue" text="Label" size="16"
+                                                                        verticalAlign="middle" textAlign="center"
+                                                                        left="20" right="20" top="6" bottom="6" />
+                                                        <GameUi:UiButton id="_btnCustom" label="" left="20" right="20"
+                                                                         top="6" bottom="6" visible="false">
+                                                            <GameUi:skinName>
+                                                                <e:Skin states="up,down,disabled">
+                                                                    <e:Image width="100%" height="100%"
+                                                                             source="commonColorTransparent0001" />
+                                                                    <e:Label id="labelDisplay" horizontalCenter="0"
+                                                                             verticalCenter="0" />
+                                                                </e:Skin>
+                                                            </GameUi:skinName>
+                                                        </GameUi:UiButton>
+                                                    </e:Group>
+                                                </e:Skin>
+                                            </e:itemRendererSkinName>
                                             <e:layout>
-                                                <e:HorizontalLayout verticalAlign="middle" gap="0" />
+                                                <e:VerticalLayout/>
                                             </e:layout>
-                                        </e:Group>
-                                    </e:Skin>
-                                </e:itemRendererSkinName>
-                                <e:layout>
-                                    <e:VerticalLayout gap="0" />
-                                </e:layout>
-                            </e:List>
-                        </GameUi:UiScrollList>
-                    </e:Group>
-                </e:Skin>
-            </e:itemRendererSkinName>
-            <e:layout>
-                <e:HorizontalLayout/>
-            </e:layout>
-        </e:List>
-    </GameUi:UiScrollList>
+                                        </e:List>
+                                    </GameUi:UiScrollList>
+                                </e:Group>
+                            </e:Skin>
+                        </e:itemRendererSkinName>
+                        <e:layout>
+                            <e:HorizontalLayout paddingTop="4" gap="0" />
+                        </e:layout>
+                    </e:List>
+                </GameUi:UiScrollList>
+            </e:Group>
+        </e:Scroller>
+    </e:Group>
 </e:Skin>

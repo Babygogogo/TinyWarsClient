@@ -1,35 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="400" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage scale9Grid="9,9,2,2" horizontalCenter="0" verticalCenter="-120" source="login_title_001" />
-    <e:Group horizontalCenter="0" verticalCenter="80" width="300">
-        <e:Group width="270" x="0">
-            <GameUi:UiImage id="_imgAccountTitle" source="login_text_account_002" verticalCenter="0" right="190" />
-            <GameUi:UiTextInput id="_inputAccount" anchorOffsetX="0" anchorOffsetY="0" restrict="A-Za-z0-9_" maxChars="20" left="90"
-                                right="0" skinName="Skins.Component.Input.Input001" top="0" bottom="0"></GameUi:UiTextInput>
-        </e:Group>
-        <e:Group y="44" width="270" x="0">
-            <GameUi:UiImage id="_imgPasswordTitle" verticalCenter="0" right="190" source="login_text_password_002" />
-            <GameUi:UiTextInput id="_inputPassword" y="0" anchorOffsetX="0" anchorOffsetY="0" restrict="A-Za-z0-9_" maxChars="20"
-                                displayAsPassword="true" left="90" skinName="Skins.Component.Input.Input001" right="0"></GameUi:UiTextInput>
-        </e:Group>
-        <e:Group y="94" height="16" width="240" x="30">
-            <e:Group id="_groupRememberPassword">
-                <e:Group x="0" y="0" scaleX="0.5" scaleY="0.5">
-                    <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" source="cbox_border_001" x="0" y="0" />
-                    <GameUi:UiImage id="_imgRememberPasswordCheck" anchorOffsetX="0" anchorOffsetY="0"
-                                    source="cbox_check_001" x="0" y="0" />
+    <e:Group left="0" right="0" top="0" bottom="0" touchThrough="true">
+        <GameUi:UiImage id="_imgTitle" source="login_title_001" horizontalCenter="0" verticalCenter="-120" />
+        <e:Group width="300" horizontalCenter="0" verticalCenter="80" height="170">
+            <e:Group>
+                <e:Group width="270" x="0" id="_groupAccount">
+                    <GameUi:UiImage id="_imgAccountTitle" source="login_text_account_002" verticalCenter="0" right="190" />
+                    <GameUi:UiTextInput id="_inputAccount" anchorOffsetX="0" anchorOffsetY="0" restrict="A-Za-z0-9_"
+                                        maxChars="20" left="90" right="0"
+                                        skinName="Skins.Component.TextInput.TextInput001" top="0" bottom="0" />
                 </e:Group>
-                <GameUi:UiImage id="_imgRememberPassword" anchorOffsetX="0" anchorOffsetY="0" x="10" y="10"
-                                source="login_text_remember_001" />
-                <e:layout>
-                    <e:HorizontalLayout verticalAlign="middle" />
-                </e:layout>
             </e:Group>
-            <GameUi:UiButton id="_btnForgetPassword" label="" skinName="Skins.Component.Button.ButtonConfirm001"
-                             verticalCenter="0" right="0" />
+            <e:Group y="44">
+                <e:Group width="270" id="_groupPassword">
+                    <GameUi:UiImage id="_imgPasswordTitle" verticalCenter="0" right="190"
+                                    source="login_text_password_002" />
+                    <GameUi:UiTextInput id="_inputPassword" y="0" anchorOffsetX="0" anchorOffsetY="0"
+                                        restrict="A-Za-z0-9_" maxChars="20" displayAsPassword="true" left="90"
+                                        skinName="Skins.Component.TextInput.TextInput001" right="0" />
+                </e:Group>
+            </e:Group>
+            <e:Group x="30" y="94">
+                <e:Group height="16" width="240" id="_groupPasswordCommand">
+                    <e:Group id="_groupRememberPassword">
+                        <e:Group x="0" y="0" scaleX="0.5" scaleY="0.5">
+                            <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" source="cbox_border_001" x="0" y="0" />
+                            <GameUi:UiImage id="_imgRememberPasswordCheck" anchorOffsetX="0" anchorOffsetY="0"
+                                            source="cbox_check_001" x="0" y="0" />
+                        </e:Group>
+                        <GameUi:UiImage id="_imgRememberPassword" anchorOffsetX="0" anchorOffsetY="0" x="10" y="10"
+                                        source="login_text_remember_001" />
+                        <e:layout>
+                            <e:HorizontalLayout verticalAlign="middle" />
+                        </e:layout>
+                    </e:Group>
+                    <GameUi:UiButton id="_btnForgetPassword" label="" verticalCenter="0" right="0">
+                        <GameUi:skinName>
+                            <e:Skin states="up,down,disabled">
+                                <e:Image id="_imgDisplay" width="100%" height="100%"
+                                         source="login_text_findPassword_001" />
+                                <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
+                            </e:Skin>
+                        </GameUi:skinName>
+                    </GameUi:UiButton>
+                </e:Group>
+            </e:Group>
+            <e:Group x="30" y="130">
+                <e:Group id="_groupButton">
+                    <GameUi:UiButton id="_btnLogin" label="" skinName="Skins.Component.Button.ButtonConfirm001" y="0"
+                                     x="0" />
+                    <GameUi:UiButton id="_btnRegister" label="" skinName="Skins.Component.Button.ButtonConfirm001" y="0"
+                                     x="140" />
+                </e:Group>
+            </e:Group>
         </e:Group>
-        <GameUi:UiButton id="_btnLogin" label="" skinName="Skins.Component.Button.ButtonConfirm001" y="130" x="30"></GameUi:UiButton>
-        <GameUi:UiButton id="_btnRegister" label="" skinName="Skins.Component.Button.ButtonConfirm001" y="130" x="170"></GameUi:UiButton>
     </e:Group>
 </e:Skin>

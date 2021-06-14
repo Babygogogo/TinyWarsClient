@@ -6,13 +6,13 @@ namespace TinyWars.MapEditor {
     import ProtoTypes   = Utility.ProtoTypes;
     import FlowManager  = Utility.FlowManager;
 
-    export class MeSimSettingsPanel extends GameUi.UiPanel {
+    export class MeSimSettingsPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeSimSettingsPanel;
 
-        private _tabSettings    : GameUi.UiTab;
+        private _tabSettings    : GameUi.UiTab<DataForTabItemRenderer, void>;
         private _labelMenuTitle : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
         private _btnConfirm     : GameUi.UiButton;
@@ -32,7 +32,6 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/mapEditor/MeSimSettingsPanel.exml";
         }
 
@@ -42,8 +41,8 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ]);
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgScrCreateCustomWar,  callback: this._onMsgScrCreateCustomWar },
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+                { type: Notify.Type.MsgSpmCreateSfw,    callback: this._onMsgSpmCreateSfw },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
 
@@ -62,10 +61,6 @@ namespace TinyWars.MapEditor {
             this._btnConfirm.enabled = true;
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._tabSettings.clear();
-        }
-
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             this.close();
             MeWarMenuPanel.show();
@@ -73,22 +68,21 @@ namespace TinyWars.MapEditor {
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
             if (MeModel.Sim.checkIsValidWarData()) {
-                SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(MeModel.Sim.getWarData());
+                SinglePlayerMode.SpmCreateSfwSaveSlotsPanel.show(MeModel.Sim.getWarData());
             } else {
                 FloatText.show(Lang.getText(Lang.Type.A0146));
             }
         }
 
-        private _onMsgScrCreateCustomWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
+        private _onMsgSpmCreateSfw(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
             Common.CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
-                    FlowManager.gotoSingleCustomWar({
-                        slotIndex   : data.slotIndex,
-                        slotComment : data.slotComment,
-                        warData     : data.warData,
+                    FlowManager.gotoSinglePlayerWar({
+                        slotIndex       : data.slotIndex,
+                        slotExtraData   : data.extraData,
+                        warData         : data.warData,
                     });
                 },
             });
@@ -109,12 +103,11 @@ namespace TinyWars.MapEditor {
         name: string;
     }
 
-    class TabItemRenderer extends GameUi.UiListItemRenderer {
+    class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
         private _labelName: GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            const data = (this.data as GameUi.DataForUiTab).tabItemData as DataForTabItemRenderer;
-            this._labelName.text = data.name;
+        protected _onDataChanged(): void {
+            this._labelName.text = this.data.name;
         }
     }
 }

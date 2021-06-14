@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="semi_transparent" />
+    <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001" />
     <e:Group top="60" bottom="60" right="100" left="100">
         <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
                         left="0" right="0" top="0" bottom="0" locked="true" />
         <GameUi:UiButton id="_btnAddMessage" label="新增日志" width="140" left="0" top="0" locked="true">
             <GameUi:skinName>
                 <e:Skin>
-                    <e:Group scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
-                        <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1" left="0" right="0"
+                    <e:Group left="0" right="0" top="0" bottom="0">
+                        <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" left="0" right="0"
                                  top="0" bottom="0" locked="true" />
-                        <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff" scaleX="1" scaleY="1"
+                        <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff"
                                         text="asdf" textAlign="center" verticalAlign="middle" left="8" right="8" top="8"
                                         bottom="8" wordWrap="true" />
                         <GameUi:UiImage id="_imgRed" width="14" height="14" source="c04_t01_s01_f01" right="0" top="0"
@@ -23,10 +23,10 @@
         <GameUi:UiButton id="_btnClose" label="关闭" width="140" right="0" top="0" locked="true">
             <GameUi:skinName>
                 <e:Skin>
-                    <e:Group scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0">
-                        <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" scaleX="1" scaleY="1" left="0" right="0"
+                    <e:Group left="0" right="0" top="0" bottom="0">
+                        <e:Image source="c04_t01_s02_f01" scale9Grid="9,9,2,2" left="0" right="0"
                                  top="0" bottom="0" locked="true" />
-                        <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff" scaleX="1" scaleY="1"
+                        <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff"
                                         text="asdf" textAlign="center" verticalAlign="middle" left="8" right="8" top="8"
                                         bottom="8" wordWrap="true" />
                         <GameUi:UiImage id="_imgRed" width="14" height="14" source="c04_t01_s01_f01" right="0" top="0"
@@ -44,10 +44,10 @@
                 <e:itemRendererSkinName>
                     <e:Skin currentState="up" states="down,up" width="748">
                         <e:Group left="0" right="0" top="0" bottom="0">
-                            <GameUi:UiLabel id="_labelIndex" text="日期" size="12" textColor="0xffffff" x="10" scaleX="1"
-                                            scaleY="1" y="8" />
+                            <GameUi:UiLabel id="_labelIndex" text="日期" size="12" textColor="0xffffff" x="10"
+                                            y="8" />
                             <GameUi:UiLabel id="_labelContent" text="更新内容" size="16" textColor="0xFFFFFF" y="28"
-                                            wordWrap="true" scaleX="1" scaleY="1" x="10" maxWidth="780" />
+                                            wordWrap="true" x="10" maxWidth="780" />
                             <GameUi:UiButton id="_btnModify" label="Modify" top="0" skinName="Skins.Component.Button.ButtonSelfAdaption001"
                                              right="0" width="60"></GameUi:UiButton>
                         </e:Group>

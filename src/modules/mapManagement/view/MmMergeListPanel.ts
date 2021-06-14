@@ -7,7 +7,7 @@
 //     import Helpers      = Utility.Helpers;
 //     import WarMapModel  = WarMap.WarMapModel;
 
-//     export class MmMergeListPanel extends GameUi.UiPanel {
+//     export class MmMergeListPanel extends GameUi.UiPanel<void> {
 //         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
 //         protected readonly _IS_EXCLUSIVE = true;
 
@@ -243,7 +243,7 @@
 //         panel       : MmMergeListPanel;
 //     }
 
-//     class MapNameRenderer extends GameUi.UiListItemRenderer {
+//     class MapNameRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
 //         private _btnChoose: GameUi.UiButton;
 //         private _btnNext  : GameUi.UiButton;
 //         private _labelName: GameUi.UiLabel;
@@ -258,18 +258,18 @@
 //         protected dataChanged(): void {
 //             super.dataChanged();
 
-//             const data          = this.data as DataForMapNameRenderer;
+//             const data          = this.data;
 //             this.currentState   = data.mapFileName === data.panel.getSelectedMapFileName() ? Types.UiState.Down : Types.UiState.Up;
 //             WarMapModel.getMapNameInCurrentLanguage(data.mapFileName).then(v => this._labelName.text = v);
 //         }
 
 //         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-//             const data = this.data as DataForMapNameRenderer;
+//             const data = this.data;
 //             data.panel.setSelectedMapFileName(data.mapFileName);
 //         }
 
 //         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-//             const data = this.data as DataForMapNameRenderer;
+//             const data = this.data;
 //             if (data) {
 //                 const dataList  = data.panel.getDataForList();
 //                 const srcData   = dataList ? dataList.find(d => (d.signature === data.signature) && (d.mapFileName !== data.mapFileName)) : null;

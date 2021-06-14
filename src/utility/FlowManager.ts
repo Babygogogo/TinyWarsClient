@@ -1,19 +1,18 @@
 
 namespace TinyWars.Utility.FlowManager {
-    import UserModel        = User.UserModel;
-    import MpwProxy         = MultiPlayerWar.MpwProxy;
-    import MpwModel         = MultiPlayerWar.MpwModel;
-    import ScwModel         = SingleCustomWar.ScwModel;
-    import RwModel          = ReplayWar.RwModel;
-    import MeModel          = MapEditor.MeModel;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import UserModel    = User.UserModel;
+    import MpwProxy     = MultiPlayerWar.MpwProxy;
+    import MpwModel     = MultiPlayerWar.MpwModel;
+    import SpwModel     = SinglePlayerWar.SpwModel;
+    import RwModel      = ReplayWar.RwModel;
+    import MeModel      = MapEditor.MeModel;
 
     const _NET_EVENTS = [
         { msgCode: Network.Codes.MsgCommonServerDisconnect, callback: _onMsgCommonServerDisconnect },
     ];
     const _NOTIFY_EVENTS = [
-        { type: Notify.Type.NetworkConnected,           callback: _onNotifyNetworkConnected, },
         { type: Notify.Type.ConfigLoaded,               callback: _onNotifyConfigLoaded },
+        { type: Notify.Type.NetworkConnected,           callback: _onNotifyNetworkConnected, },
         { type: Notify.Type.MsgUserLogin,               callback: _onMsgUserLogin },
         { type: Notify.Type.MsgUserLogout,              callback: _onMsgUserLogout },
         { type: Notify.Type.MsgMpwCommonContinueWar,    callback: _onMsgMpwCommonContinueWar },
@@ -22,13 +21,12 @@ namespace TinyWars.Utility.FlowManager {
     let _hasOnceWentToLobby = false;
 
     export async function startGame(stage: egret.Stage): Promise<void> {
-        _registerWindowOnError();
-        _preventBrowserBack();
-
+        CompatibilityHelper.init();
         Network.NetManager.addListeners(_NET_EVENTS, FlowManager);
         Notify.addEventListeners(_NOTIFY_EVENTS, FlowManager);
-        Utility.StageManager.init(stage);
+        StageManager.init(stage);
         await Promise.all([ResManager.init(), ProtoManager.init()]);
+        StageManager.setStageScale(LocalStorage.getStageScale());
 
         Lang.init();
         NoSleepManager.init();
@@ -43,11 +41,13 @@ namespace TinyWars.Utility.FlowManager {
         WarMap.WarMapModel.init();
         MultiCustomRoom.McrProxy.init();
         MultiRankRoom.MrrProxy.init();
+        MultiFreeRoom.MfrProxy.init();
         ReplayWar.RwProxy.init();
         RwModel.init();
-        SingleCustomRoom.ScrProxy.init();
+        SinglePlayerMode.SpmProxy.init();
+        SinglePlayerMode.SpmModel.init();
         SingleCustomRoom.ScrModel.init();
-        ScwModel.init();
+        SpwModel.init();
         MapEditor.MeProxy.init();
         MeModel.init();
         Chat.ChatProxy.init();
@@ -66,110 +66,137 @@ namespace TinyWars.Utility.FlowManager {
     export function gotoLogin(): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
-        ScwModel.unloadWar();
+        SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
         Login.LoginBackgroundPanel.show();
         Login.LoginPanel.show();
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
     }
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
 
         MpwModel.unloadWar();
         RwModel.unloadWar();
-        ScwModel.unloadWar();
+        SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
+        Lobby.LobbyBackgroundPanel.show();
         Lobby.LobbyPanel.show();
         Lobby.LobbyTopPanel.show();
+        Lobby.LobbyBottomPanel.show();
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
     }
-    export async function gotoMultiCustomWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
+
+    export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
         RwModel.unloadWar();
-        ScwModel.unloadWar();
+        SpwModel.unloadWar();
         MeModel.unloadWar();
-        await MpwModel.loadWar(data);
+        const war = await MpwModel.loadWar(data);
 
         StageManager.closeAllPanels();
-        MultiPlayerWar.McwBackgroundPanel.show();
-        MultiPlayerWar.McwTopPanel.show();
-        MultiPlayerWar.McwWarPanel.show();
-        MultiPlayerWar.McwTileBriefPanel.show();
-        MultiPlayerWar.McwUnitBriefPanel.show();
+        BaseWar.BwBackgroundPanel.show();
+        MultiPlayerWar.MpwTopPanel.show();
+        BaseWar.BwWarPanel.show({ war });
+        BaseWar.BwTileBriefPanel.show({ war });
+        BaseWar.BwUnitBriefPanel.show({ war });
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playRandomWarBgm();
     }
-    export async function gotoReplay(warData: Uint8Array, replayId: number): Promise<void> {
+    export async function gotoReplayWar(warData: Uint8Array, replayId: number): Promise<void> {
         MpwModel.unloadWar();
-        ScwModel.unloadWar();
+        SpwModel.unloadWar();
         MeModel.unloadWar();
-        await RwModel.loadWar(warData, replayId);
+        const war = await RwModel.loadWar(warData, replayId);
 
         StageManager.closeAllPanels();
-        ReplayWar.RwBackgroundPanel.show();
+        BaseWar.BwBackgroundPanel.show();
         ReplayWar.RwTopPanel.show();
-        ReplayWar.RwWarPanel.show();
-        ReplayWar.RwTileBriefPanel.show();
-        ReplayWar.RwUnitBriefPanel.show();
+        BaseWar.BwWarPanel.show({ war });
+        BaseWar.BwTileBriefPanel.show({ war });
+        BaseWar.BwUnitBriefPanel.show({ war });
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playRandomWarBgm();
     }
-    export async function gotoSingleCustomWar({ warData, slotIndex, slotComment }: {
-        warData     : ProtoTypes.WarSerialization.ISerialWar;
-        slotIndex   : number;
-        slotComment : string;
+    export async function gotoSinglePlayerWar({ warData, slotIndex, slotExtraData }: {
+        slotIndex       : number;
+        slotExtraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+        warData         : ProtoTypes.WarSerialization.ISerialWar;
     }): Promise<void> {
         MpwModel.unloadWar();
         RwModel.unloadWar();
         MeModel.unloadWar();
-        await ScwModel.loadWar({ warData, slotIndex, slotComment });
+        const war = await SpwModel.loadWar({ warData, slotIndex, slotExtraData });
 
         StageManager.closeAllPanels();
-        SingleCustomWar.ScwBackgroundPanel.show();
-        SingleCustomWar.ScwTopPanel.show();
-        SingleCustomWar.ScwWarPanel.show();
-        SingleCustomWar.ScwTileBriefPanel.show();
-        SingleCustomWar.ScwUnitBriefPanel.show();
+        BaseWar.BwBackgroundPanel.show();
+        SinglePlayerWar.SpwTopPanel.show();
+        BaseWar.BwWarPanel.show({ war });
+        BaseWar.BwTileBriefPanel.show({ war });
+        BaseWar.BwUnitBriefPanel.show({ war });
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playRandomWarBgm();
+
+        await SpwModel.checkAndHandleAutoActionsAndRobotRecursively(war);
     }
-    export async function gotoMapEditor(mapRawData: ProtoTypes.Map.IMapRawData, slotIndex: number, isReview: boolean): Promise<void> {
+    export async function gotoMapEditorWar(mapRawData: ProtoTypes.Map.IMapRawData, slotIndex: number, isReview: boolean): Promise<void> {
         MpwModel.unloadWar();
-        ScwModel.unloadWar();
+        SpwModel.unloadWar();
         RwModel.unloadWar();
-        await MeModel.loadWar(mapRawData, slotIndex, isReview);
+        const war = await MeModel.loadWar(mapRawData, slotIndex, isReview);
 
         StageManager.closeAllPanels();
-        MapEditor.MeBackgroundPanel.show();
+        BaseWar.BwBackgroundPanel.show();
         MapEditor.MeTopPanel.show();
-        MapEditor.MeWarPanel.show();
-        MapEditor.MeTileBriefPanel.show();
-        MapEditor.MeUnitBriefPanel.show();
+        BaseWar.BwWarPanel.show({ war });
+        BaseWar.BwTileBriefPanel.show({ war });
+        BaseWar.BwUnitBriefPanel.show({ war });
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(SoundManager.BgmCode.MapEditor01);
     }
 
-    export function gotoMrrMyWarListPanel(): void {
+    export function gotoMrwMyWarListPanel(): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
-        ScwModel.unloadWar();
+        SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
-        Lobby.LobbyTopPanel.show();
-        MultiRankRoom.MrrMyWarListPanel.show();
+        Lobby.LobbyBackgroundPanel.show();
+        MultiRankWar.MrwMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
     }
-    export function gotoMcrMyWarListPanel(): void {
+    export function gotoMcwMyWarListPanel(): void {
         MpwModel.unloadWar();
         RwModel.unloadWar();
-        ScwModel.unloadWar();
+        SpwModel.unloadWar();
         MeModel.unloadWar();
         StageManager.closeAllPanels();
-        Lobby.LobbyTopPanel.show();
-        MultiCustomRoom.McrMyWarListPanel.show();
+        Lobby.LobbyBackgroundPanel.show();
+        MultiCustomWar.McwMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Callbacks.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    function _onNotifyConfigLoaded(e: egret.Event): void {
+        if (_checkCanFirstGoToLobby()) {
+            gotoLobby();
+        }
+    }
+
     function _onNotifyNetworkConnected(e: egret.Event): void {
         const account   = UserModel.getSelfAccount();
         const password  = UserModel.getSelfPassword();
@@ -194,17 +221,13 @@ namespace TinyWars.Utility.FlowManager {
         });
     }
 
-    function _onNotifyConfigLoaded(e: egret.Event): void {
-        (_checkCanFirstGoToLobby()) && (gotoLobby());
-    }
-
     function _onMsgUserLogin(e: egret.Event): void {
         if (_checkCanFirstGoToLobby()) {
             gotoLobby();
         } else {
             const mcwWar = MpwModel.getWar();
             if (mcwWar) {
-                MpwProxy.reqMcwCommonSyncWar(mcwWar, Types.SyncWarRequestType.ReconnectionRequest);
+                MpwProxy.reqMpwCommonSyncWar(mcwWar, Types.SyncWarRequestType.ReconnectionRequest);
             }
         }
     }
@@ -217,7 +240,7 @@ namespace TinyWars.Utility.FlowManager {
 
     function _onMsgMpwCommonContinueWar(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgMpwCommonContinueWar.IS;
-        gotoMultiCustomWar(data.war);
+        gotoMultiPlayerWar(data.war);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -227,7 +250,7 @@ namespace TinyWars.Utility.FlowManager {
         return (!_hasOnceWentToLobby)
             && (User.UserModel.getIsLoggedIn())
             && (ResManager.checkIsLoadedMainResource())
-            && (ConfigManager.checkIsConfigLoaded(ConfigManager.getLatestFormalVersion()))
+            && (!!ConfigManager.getCachedConfig(ConfigManager.getLatestFormalVersion()));
     }
 
     function _removeLoadingDom(): void {
@@ -235,39 +258,6 @@ namespace TinyWars.Utility.FlowManager {
         if (document) {
             const outLoadingLayer = document.getElementById("outLoadingLayer");
             (outLoadingLayer) && (document.body.removeChild(outLoadingLayer));
-        }
-    }
-
-    function _registerWindowOnError(): void {
-        window.onerror = (message, filename, row, col, err) => {
-            const content = `${message}\n\n${err ? err.stack : "No available call stack."}`;
-            Common.CommonErrorPanel.show({
-                content,
-            });
-            Chat.ChatProxy.reqChatAddMessage(
-                content.substr(0, CommonConstants.ChatContentMaxLength),
-                Types.ChatMessageToCategory.Private,
-                CommonConstants.AdminUserId,
-            );
-        };
-    }
-
-    function _preventBrowserBack(): void {
-        const state = {
-            url: window.location.href,
-        };
-        try {
-            if (window.history) {
-                window.history.pushState(state, "", window.location.href);
-            }
-        } catch (e) {
-            Logger.error(e);
-        }
-
-        if (window.addEventListener) {
-            window.addEventListener("popstate", (e) => {
-                FloatText.show(Lang.getText(Lang.Type.A0194));
-            }, false);
         }
     }
 }

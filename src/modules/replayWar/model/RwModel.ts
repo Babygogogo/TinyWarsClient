@@ -3,13 +3,16 @@ namespace TinyWars.ReplayWar.RwModel {
     import Logger       = Utility.Logger;
     import ProtoManager = Utility.ProtoManager;
     import ProtoTypes   = Utility.ProtoTypes;
+    import Helpers      = Utility.Helpers;
+    import Notify       = Utility.Notify;
     import BwHelpers    = BaseWar.BwHelpers;
     import WarMapModel  = WarMap.WarMapModel;
     import IReplayInfo  = ProtoTypes.Replay.IReplayInfo;
 
-    let _replayInfoList : IReplayInfo[];
-    let _replayData     : ProtoTypes.NetMessage.MsgReplayGetData.IS;
-    let _war            : RwWar;
+    let _replayInfoList     : IReplayInfo[];
+    let _replayData         : ProtoTypes.NetMessage.MsgReplayGetData.IS;
+    let _previewingReplayId : number;
+    let _war                : RwWar;
 
     export function init(): void {
     }
@@ -20,6 +23,10 @@ namespace TinyWars.ReplayWar.RwModel {
     export function getReplayInfoList(): IReplayInfo[] | undefined {
         return _replayInfoList;
     }
+    export function getReplayInfo(replayId: number): IReplayInfo | undefined {
+        const replayInfoArray = getReplayInfoList();
+        return replayInfoArray ? replayInfoArray.find(v => v.replayBriefInfo.replayId === replayId) : undefined;
+    }
 
     export function setReplayData(data: ProtoTypes.NetMessage.MsgReplayGetData.IS): void {
         _replayData = data;
@@ -28,27 +35,46 @@ namespace TinyWars.ReplayWar.RwModel {
         return _replayData;
     }
 
+    export function setPreviewingReplayId(replayId: number): void {
+        if (getPreviewingReplayId() != replayId) {
+            _previewingReplayId = replayId;
+            Notify.dispatch(Notify.Type.RwPreviewingReplayIdChanged);
+        }
+    }
+    export function getPreviewingReplayId(): number | null | undefined {
+        return _previewingReplayId;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Functions for managing war.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function loadWar(encodedWarData: Uint8Array, replayId: number): Promise<RwWar> {
         if (_war) {
-            Logger.warn(`ReplayModel.loadWar() another war has been loaded already!`);
+            Logger.warn(`RwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
-        const warData       = ProtoManager.decodeAsSerialWar(encodedWarData);
-        const mapRawData    = await WarMapModel.getRawData(BwHelpers.getMapId(warData));
-        const unitDataArray = mapRawData.unitDataArray || [];
-        const field         = warData.field;
-        field.tileMap       = { tiles: mapRawData.tileDataArray };
-        field.unitMap       = {
+        const warData                   = ProtoManager.decodeAsSerialWar(encodedWarData);
+        const mapRawData                = await WarMapModel.getRawData(BwHelpers.getMapId(warData));
+        const unitDataArray             = mapRawData.unitDataArray || [];
+        const field                     = warData.field;
+        warData.seedRandomCurrentState  = Helpers.deepClone(warData.seedRandomInitialState);
+        field.tileMap                   = { tiles: mapRawData.tileDataArray };
+        field.unitMap                   = {
             units       : unitDataArray,
             nextUnitId  : unitDataArray.length,
         };
 
-        _war = (await new RwWar().init(warData)).startRunning().startRunningView() as RwWar;
-        _war.setReplayId(replayId);
+        const war       = new RwWar();
+        const initError = await war.init(warData);
+        if (initError) {
+            Logger.error(`RwModel.loadWar() initError: ${initError}`);
+            return undefined;
+        }
+
+        war.startRunning().startRunningView();
+        war.setReplayId(replayId);
+        _war = war;
         return _war;
     }
 

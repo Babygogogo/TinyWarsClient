@@ -2,19 +2,16 @@
 namespace TinyWars.WarEvent {
     import Notify               = Utility.Notify;
     import ProtoTypes           = Utility.ProtoTypes;
-    import Logger               = Utility.Logger;
     import Types                = Utility.Types;
     import Lang                 = Utility.Lang;
-    import FloatText            = Utility.FloatText;
     import ConfigManager        = Utility.ConfigManager;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
-    import IDataForAddUnit      = ProtoTypes.WarEvent.WarEventActionAddUnit.IDataForAddUnit;
+    import IDataForAddUnit      = ProtoTypes.WarEvent.WeaAddUnit.IDataForAddUnit;
 
     type OpenDataForWeActionAddUnitListPanel = {
         configVersion   : string;
         dataForAddUnit  : IDataForAddUnit;
     }
-    export class WeActionAddUnitListPanel extends GameUi.UiPanel {
+    export class WeActionAddUnitListPanel extends GameUi.UiPanel<OpenDataForWeActionAddUnitListPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -22,7 +19,7 @@ namespace TinyWars.WarEvent {
 
         private _labelTitle : GameUi.UiLabel;
         private _btnClose   : GameUi.UiButton;
-        private _listType   : GameUi.UiScrollList;
+        private _listType   : GameUi.UiScrollList<DataForTypeRenderer>;
 
         public static show(openData: OpenDataForWeActionAddUnitListPanel): void {
             if (!WeActionAddUnitListPanel._instance) {
@@ -40,7 +37,6 @@ namespace TinyWars.WarEvent {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/warEvent/WeActionAddUnitListPanel.exml";
@@ -73,7 +69,7 @@ namespace TinyWars.WarEvent {
             this._btnClose.label        = Lang.getText(Lang.Type.B0146);
         }
         private _updateListType(): void {
-            const openData          = this._getOpenData<OpenDataForWeActionAddUnitListPanel>();
+            const openData          = this._getOpenData();
             const dataForAddUnit    = openData.dataForAddUnit;
 
             const dataArray: DataForTypeRenderer[] = [];
@@ -91,7 +87,7 @@ namespace TinyWars.WarEvent {
         newUnitType     : Types.UnitType;
         dataForAddUnit  : IDataForAddUnit;
     }
-    class TypeRenderer extends GameUi.UiListItemRenderer {
+    class TypeRenderer extends GameUi.UiListItemRenderer<DataForTypeRenderer> {
         private _labelType  : GameUi.UiLabel;
 
         protected _onOpened(): void {
@@ -105,14 +101,12 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForLanguage();
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateLabelType();
         }
 
         private _onTouchedSelf(e: egret.TouchEvent): void {
-            const data = this.data as DataForTypeRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }
@@ -130,7 +124,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateLabelType(): void {
-            const data  = this.data as DataForTypeRenderer;
+            const data  = this.data;
             const label = this._labelType;
             if (data == null) {
                 label.text = undefined;

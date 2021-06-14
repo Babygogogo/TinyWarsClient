@@ -8,20 +8,29 @@ namespace TinyWars.Login {
     import LocalStorage     = Utility.LocalStorage;
     import NoSleepManager   = Utility.NoSleepManager;
 
-    export class LoginPanel extends GameUi.UiPanel {
+    export class LoginPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
+        private _imgTitle                   : GameUi.UiImage;
+
+        private _groupAccount               : eui.Group;
         private _imgAccountTitle            : GameUi.UiImage;
         private _inputAccount               : GameUi.UiTextInput;
+
+        private _groupPassword              : eui.Group;
         private _imgPasswordTitle           : GameUi.UiImage;
         private _inputPassword              : GameUi.UiTextInput;
-        private _btnRegister                : GameUi.UiButton;
+
+        private _groupPasswordCommand       : eui.Group;
         private _groupRememberPassword      : eui.Group;
         private _labelRememberPassword      : GameUi.UiLabel;
         private _imgRememberPasswordCheck   : GameUi.UiImage;
         private _imgRememberPassword        : GameUi.UiImage;
         private _btnForgetPassword          : GameUi.UiButton;
+
+        private _groupButton                : eui.Group;
+        private _btnRegister                : GameUi.UiButton;
         private _btnLogin                   : GameUi.UiButton;
 
         private static _instance: LoginPanel;
@@ -42,7 +51,6 @@ namespace TinyWars.Login {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/login/LoginPanel.exml";
         }
 
@@ -52,11 +60,14 @@ namespace TinyWars.Login {
                 { type: NotifyType.MsgUserLogin,    callback: this._onMsgUserLogin },
             ]);
             this._setUiListenerArray([
+                { ui: this,                         callback: this._onTouchedSelf },
                 { ui: this._btnLogin,               callback: this._onTouchedBtnLogin },
                 { ui: this._btnRegister,            callback: this._onTouchedBtnRegister },
                 { ui: this._btnForgetPassword,      callback: this._onTouchedBtnForgetPassword },
                 { ui: this._groupRememberPassword,  callback: this._onTouchedGroupRememberPassword },
             ]);
+
+            this._showOpenAnimation();
 
             const isRememberPassword                = LocalStorage.getIsRememberPassword();
             this._inputAccount.text                 = LocalStorage.getAccount();
@@ -65,6 +76,9 @@ namespace TinyWars.Login {
             this._imgRememberPasswordCheck.visible  = isRememberPassword;
             this._updateComponentsForLanguage();
         }
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+        }
 
         private _onMsgUserLogin(e: egret.Event): void {
             FloatText.show(Lang.getText(Lang.Type.A0000));
@@ -72,6 +86,10 @@ namespace TinyWars.Login {
         }
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
+        }
+
+        private _onTouchedSelf(e: egret.TouchEvent): void {
+            Utility.SoundManager.init();
         }
 
         private _onTouchedBtnLogin(e: egret.TouchEvent): void {
@@ -126,6 +144,69 @@ namespace TinyWars.Login {
                 this._btnRegister.setImgDisplaySource("login_button_register_002");
                 this._btnForgetPassword.setImgDisplaySource("login_text_findPassword_002");
             }
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgTitle,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+                tweenTime   : 1000,
+            });
+            Helpers.resetTween({
+                obj         : this._groupAccount,
+                beginProps  : { alpha: 0, y: 40 },
+                endProps    : { alpha: 1, y: 0 },
+                waitTime    : 800,
+            });
+            Helpers.resetTween({
+                obj         : this._groupPassword,
+                beginProps  : { alpha: 0, y: 40 },
+                endProps    : { alpha: 1, y: 0 },
+                waitTime    : 900,
+            });
+            Helpers.resetTween({
+                obj         : this._groupPasswordCommand,
+                beginProps  : { alpha: 0, y: 40 },
+                endProps    : { alpha: 1, y: 0 },
+                waitTime    : 1000,
+            });
+            Helpers.resetTween({
+                obj         : this._groupButton,
+                beginProps  : { alpha: 0, y: 40 },
+                endProps    : { alpha: 1, y: 0 },
+                waitTime    : 1100,
+            });
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._imgTitle,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                    callback    : resolve,
+                });
+                Helpers.resetTween({
+                    obj         : this._groupAccount,
+                    beginProps  : { alpha: 1, y: 0 },
+                    endProps    : { alpha: 0, y: 40 },
+                });
+                Helpers.resetTween({
+                    obj         : this._groupPassword,
+                    beginProps  : { alpha: 1, y: 0 },
+                    endProps    : { alpha: 0, y: 40 },
+                });
+                Helpers.resetTween({
+                    obj         : this._groupPasswordCommand,
+                    beginProps  : { alpha: 1, y: 0 },
+                    endProps    : { alpha: 0, y: 40 },
+                });
+                Helpers.resetTween({
+                    obj         : this._groupButton,
+                    beginProps  : { alpha: 1, y: 0 },
+                    endProps    : { alpha: 0, y: 40 },
+                });
+            });
         }
     }
 }

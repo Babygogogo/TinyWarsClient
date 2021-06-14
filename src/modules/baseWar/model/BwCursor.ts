@@ -1,17 +1,18 @@
 
 namespace TinyWars.BaseWar {
-    import Types        = Utility.Types;
-    import Notify       = Utility.Notify;
-    import WarMapModel  = WarMap.WarMapModel;
-    import GridIndex    = Types.GridIndex;
+    import Types            = Utility.Types;
+    import Notify           = Utility.Notify;
+    import Helpers          = Utility.Helpers;
+    import ClientErrorCode  = Utility.ClientErrorCode;
+    import GridIndex        = Types.GridIndex;
 
-    export abstract class BwCursor {
+    export class BwCursor {
         private _gridX              = 0;
         private _gridY              = 0;
         private _previousGridIndex  : GridIndex;
         private _mapSize            : Types.MapSize;
         private _isMovableByTouches = true;
-        private _view               : BwCursorView;
+        private readonly _view      = new BwCursorView();
 
         private _war    : BwWar;
 
@@ -21,21 +22,18 @@ namespace TinyWars.BaseWar {
             { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
         ];
 
-        protected abstract _getViewClass(): new () => BwCursorView;
-
-        public async init(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwCursor> {
-            this._setMapSize({ width: mapSizeAndMaxPlayerIndex.mapWidth, height: mapSizeAndMaxPlayerIndex.mapHeight });
+        public init(mapSize: Types.MapSize): ClientErrorCode {
+            this._setMapSize(Helpers.deepClone(mapSize));
             this.setGridIndex({ x: 0, y: 0 });
 
-            this._view = this._view || new (this._getViewClass())();
-            this._view.init(this);
+            this.getView().init(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
-        public async fastInit(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwCursor> {
+        public fastInit(mapSize: Types.MapSize): ClientErrorCode {
             this.getView().fastInit(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {

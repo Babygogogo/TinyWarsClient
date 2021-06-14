@@ -1,20 +1,21 @@
 
 namespace TinyWars.BaseWar {
-    import Types            = Utility.Types;
-    import Logger           = Utility.Logger;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ConfigManager    = Utility.ConfigManager;
-    import TileType         = Types.TileType;
-    import TileObjectType   = Types.TileObjectType;
-    import TileBaseType     = Types.TileBaseType;
-    import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import Types                = Utility.Types;
+    import Logger               = Utility.Logger;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import ConfigManager        = Utility.ConfigManager;
+    import ClientErrorCode      = Utility.ClientErrorCode;
+    import CommonConstants      = Utility.CommonConstants;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import TileType             = Types.TileType;
+    import TileObjectType       = Types.TileObjectType;
+    import TileBaseType         = Types.TileBaseType;
+    import TileTemplateCfg      = Types.TileTemplateCfg;
+    import UnitCategory         = Types.UnitCategory;
+    import ISerialTile          = ProtoTypes.WarSerialization.ISerialTile;
 
-    export abstract class BwTile {
-        private _configVersion  : string;
-        private _templateCfg    : ProtoTypes.Config.ITileTemplateCfg;
-        private _moveCostCfg    : { [moveType: number]: ProtoTypes.Config.IMoveCostCfg };
-
+    export class BwTile {
+        private _templateCfg    : TileTemplateCfg;
         private _gridX          : number;
         private _gridY          : number;
         private _playerIndex    : number;
@@ -27,25 +28,21 @@ namespace TinyWars.BaseWar {
         private _currentBuildPoint  : number | undefined;
         private _currentCapturePoint: number | undefined;
 
-        private _war        : BwWar;
-        private _view       : BwTileView;
-        private _hasFog     = false;
+        private _war            : BwWar;
+        private readonly _view  = new BwTileView();
+        private _hasFog         = false;
 
-        protected abstract _getViewClass(): new () => BwTileView;
-        public abstract serializeForSimulation(): ISerialTile;
-
-        public init(data: ISerialTile, configVersion: string): BwTile | undefined {
-            if (!this.deserialize(data, configVersion)) {
-                Logger.error(`BwTile.init() fail deserialize!`);
-                return undefined;
+        public init(data: ISerialTile, configVersion: string): ClientErrorCode {
+            const deserializeError = this.deserialize(data, configVersion);
+            if (deserializeError) {
+                return deserializeError;
             }
+
             this.setHasFog(false);
 
-            this._setView(this.getView() || new (this._getViewClass())());
-
-            return this;
+            return ClientErrorCode.NoError;
         }
-        public fastInit(data: ISerialTile, configVersion: string): BwTile {
+        public fastInit(data: ISerialTile, configVersion: string): ClientErrorCode {
             return this.init(data, configVersion);
         }
 
@@ -56,59 +53,113 @@ namespace TinyWars.BaseWar {
             this.flushDataToView();
         }
 
-        public deserialize(data: ISerialTile, configVersion: string): BwTile | undefined {
+        public deserialize(data: ISerialTile, configVersion: string): ClientErrorCode {
             const gridIndex = BwHelpers.convertGridIndex(data.gridIndex);
             if (gridIndex == null) {
-                Logger.error(`BwTile.deserialize() empty gridIndex.`);
-                return undefined;
+                return ClientErrorCode.BwTileDeserialize00;
+            }
+
+            const gridX = gridIndex.x;
+            const gridY = gridIndex.y;
+            if ((gridX < 0)                                                 ||
+                (gridY < 0)                                                 ||
+                ((gridX + 1) * (gridY + 1) > CommonConstants.MapMaxGridsCount)
+            ) {
+                return ClientErrorCode.BwTileDeserialize01;
             }
 
             const objectType = data.objectType as TileObjectType;
             if (objectType == null) {
-                Logger.error(`BwTile.deserialize() empty objectType.`);
-                return undefined;
+                return ClientErrorCode.BwTileDeserialize02;
             }
 
             const baseType = data.baseType as TileBaseType;
             if (baseType == null) {
-                Logger.error(`BwTile.deserialize() empty baseType.`);
-                return undefined;
+                return ClientErrorCode.BwTileDeserialize03;
             }
 
             const playerIndex = data.playerIndex;
-            if (playerIndex == null) {
-                Logger.error(`BwTile.deserialize() empty playerIndex.`);
-                return undefined;
+            if ((playerIndex == null)                                                           ||
+                (!ConfigManager.checkIsValidPlayerIndexForTile(playerIndex, baseType, objectType))
+            ) {
+                return ClientErrorCode.BwTileDeserialize04;
             }
 
             const templateCfg = ConfigManager.getTileTemplateCfg(configVersion, baseType, objectType);
             if (templateCfg == null) {
-                Logger.error(`BwTile.deserialize() no templateCfg.`);
-                return undefined;
+                return ClientErrorCode.BwTileDeserialize05;
             }
 
-            const moveCostCfg = ConfigManager.getMoveCostCfg(configVersion, baseType, objectType);
-            if (moveCostCfg == null) {
-                Logger.error(`BwTile.deserialize() no moveCostCfg.`)
-                return undefined;
+            if (ConfigManager.getMoveCostCfg(configVersion, baseType, objectType) == null) {
+                return ClientErrorCode.BwTileDeserialize06;
             }
 
-            this._setGridX(gridIndex.x);
-            this._setGridY(gridIndex.y);
+            const maxBuildPoint     = templateCfg.maxBuildPoint;
+            const currentBuildPoint = data.currentBuildPoint;
+            if (maxBuildPoint == null) {
+                if (currentBuildPoint != null) {
+                    return ClientErrorCode.BwTileDeserialize07;
+                }
+            } else {
+                if ((currentBuildPoint != null)                                     &&
+                    ((currentBuildPoint > maxBuildPoint) || (currentBuildPoint < 0))
+                ) {
+                    return ClientErrorCode.BwTileDeserialize08;
+                }
+            }
+
+            const maxCapturePoint       = templateCfg.maxCapturePoint;
+            const currentCapturePoint   = data.currentCapturePoint;
+            if (maxCapturePoint == null) {
+                if (currentCapturePoint != null) {
+                    return ClientErrorCode.BwTileDeserialize09;
+                }
+            } else {
+                if ((currentCapturePoint != null)                                       &&
+                    ((currentCapturePoint > maxCapturePoint) || (currentCapturePoint < 0))
+                ) {
+                    return ClientErrorCode.BwTileDeserialize10;
+                }
+            }
+
+            const maxHp     = templateCfg.maxHp;
+            const currentHp = data.currentHp;
+            if (maxHp == null) {
+                if (currentHp != null) {
+                    return ClientErrorCode.BwTileDeserialize11;
+                }
+            } else {
+                if ((currentHp != null)                     &&
+                    ((currentHp > maxHp) || (currentHp < 0))
+                ) {
+                    return ClientErrorCode.BwTileDeserialize12;
+                }
+            }
+
+            const baseShapeId = data.baseShapeId;
+            if (!ConfigManager.checkIsValidTileBaseShapeId(baseType, baseShapeId)) {
+                return ClientErrorCode.BwTileDeserialize13;
+            }
+
+            const objectShapeId = data.objectShapeId;
+            if (!ConfigManager.checkIsValidTileObjectShapeId(objectType, objectShapeId)) {
+                return ClientErrorCode.BwTileDeserialize14;
+            }
+
+            this._setTemplateCfg(templateCfg);
+            this._setGridX(gridX);
+            this._setGridY(gridY);
             this._setBaseType(baseType);
             this._setObjectType(objectType);
             this._setPlayerIndex(playerIndex);
 
-            this._setConfigVersion(configVersion);
-            this._setTemplateCfg(templateCfg);
-            this._setMoveCosts(moveCostCfg);
-            this.setBaseShapeId(data.baseShapeId);
-            this.setObjectShapeId(data.objectShapeId);
-            this.setCurrentHp(          data.currentHp           != null ? data.currentHp           : this.getMaxHp());
-            this.setCurrentBuildPoint(  data.currentBuildPoint   != null ? data.currentBuildPoint   : this.getMaxBuildPoint());
-            this.setCurrentCapturePoint(data.currentCapturePoint != null ? data.currentCapturePoint : this.getMaxCapturePoint());
+            this._setBaseShapeId(baseShapeId);
+            this._setObjectShapeId(objectShapeId);
+            this.setCurrentHp(getRevisedCurrentHp(currentHp, templateCfg));
+            this.setCurrentBuildPoint(getRevisedCurrentBuildPoint(currentBuildPoint, templateCfg));
+            this.setCurrentCapturePoint(getRevisedCurrentCapturePoint(currentCapturePoint, templateCfg));
 
-            return this;
+            return ClientErrorCode.NoError;
         }
         public serialize(): ISerialTile | undefined {
             const gridIndex = this.getGridIndex();
@@ -159,6 +210,63 @@ namespace TinyWars.BaseWar {
 
             return data;
         }
+        public serializeForCreateSfw(): ISerialTile | undefined {
+            const war = this.getWar();
+            if (VisibilityHelpers.checkIsTileVisibleToTeams(war, this.getGridIndex(), war.getPlayerManager().getAliveWatcherTeamIndexesForSelf())) {
+                const data = this.serialize();
+                if (data == null) {
+                    Logger.error(`BwTile.serializeForCreateSfw() empty data.`);
+                    return undefined;
+                }
+                return data;
+
+            } else {
+                const gridIndex = this.getGridIndex();
+                if (gridIndex == null) {
+                    Logger.error(`BwTile.serializeForCreateSfw() empty gridIndex.`);
+                    return undefined;
+                }
+
+                const baseType = this.getBaseType();
+                if (baseType == null) {
+                    Logger.error(`BwTile.serializeForCreateSfw() empty baseType.`);
+                    return undefined;
+                }
+
+                const objectType = this.getObjectType();
+                if (objectType == null) {
+                    Logger.error(`BwTile.serializeForCreateSfw() empty objectType.`);
+                    return undefined;
+                }
+
+                const playerIndex = this.getPlayerIndex();
+                if (playerIndex == null) {
+                    Logger.error(`BwTile.serializeForCreateSfw() empty playerIndex.`);
+                    return undefined;
+                }
+
+                const data: ISerialTile = {
+                    gridIndex,
+                    baseType,
+                    objectType,
+                    playerIndex : objectType === Types.TileObjectType.Headquarters ? playerIndex : CommonConstants.WarNeutralPlayerIndex,
+                };
+
+                const currentHp = this.getCurrentHp();
+                (currentHp !== this.getMaxHp()) && (data.currentHp = currentHp);
+
+                const baseShapeId = this.getBaseShapeId();
+                (baseShapeId !== 0) && (data.baseShapeId = baseShapeId);
+
+                const objectShapeId = this.getObjectShapeId();
+                (objectShapeId !== 0) && (data.objectShapeId = objectShapeId);
+
+                return data;
+            }
+        }
+        public serializeForCreateMfr(): ISerialTile | undefined {
+            return this.serializeForCreateSfw();
+        }
 
         private _setWar(war: BwWar): void {
             this._war = war;
@@ -167,17 +275,15 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
-        private _setConfigVersion(configVersion: string): void {
-            this._configVersion = configVersion;
-        }
         public getConfigVersion(): string | undefined {
-            return this._configVersion;
+            const cfg = this._getTemplateCfg();
+            return cfg ? cfg.version : undefined;
         }
 
-        private _setTemplateCfg(cfg: ProtoTypes.Config.ITileTemplateCfg): void {
+        private _setTemplateCfg(cfg: TileTemplateCfg): void {
             this._templateCfg = cfg;
         }
-        private _getTemplateCfg(): ProtoTypes.Config.ITileTemplateCfg | undefined {
+        private _getTemplateCfg(): TileTemplateCfg | undefined {
             return this._templateCfg;
         }
 
@@ -189,9 +295,6 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////
-        private _setView(view: BwTileView): void {
-            this._view = view;
-        }
         public getView(): BwTileView {
             return this._view;
         }
@@ -219,14 +322,14 @@ namespace TinyWars.BaseWar {
             return this._objectType;
         }
 
-        public setBaseShapeId(id: number | null | undefined): void {
+        private _setBaseShapeId(id: number | null | undefined): void {
             this._baseShapeId = id;
         }
         public getBaseShapeId(): number {
             return this._baseShapeId || 0;
         }
 
-        public setObjectShapeId(id: number | null | undefined): void {
+        private _setObjectShapeId(id: number | null | undefined): void {
             this._objectShapeId = id;
         }
         public getObjectShapeId(): number {
@@ -331,11 +434,11 @@ namespace TinyWars.BaseWar {
             return this.checkCanDefendUnit(unit) ? this.getDefenseAmount() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp() : 0;
         }
 
-        public getDefenseUnitCategory(): Types.UnitCategory {
+        public getDefenseUnitCategory(): UnitCategory {
             return this._templateCfg.defenseUnitCategory;
         }
         public checkCanDefendUnit(unit: BwUnit): boolean {
-            return Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), this.getDefenseUnitCategory());
+            return Utility.ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), this.getDefenseUnitCategory());
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -394,7 +497,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (!this.init({
+            if (this.init({
                 gridIndex,
                 objectType,
                 baseType,
@@ -427,7 +530,7 @@ namespace TinyWars.BaseWar {
             if ((baseIncome == null) || (this.getPlayerIndex() !== playerIndex)) {
                 return 0;
             } else {
-                return Math.floor(baseIncome * this.getWar().getSettingsIncomeMultiplier(playerIndex) / 100);
+                return Math.floor(baseIncome * this.getWar().getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex) / 100);
             }
         }
 
@@ -464,21 +567,37 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for move cost.
         ////////////////////////////////////////////////////////////////////////////////
-        private _setMoveCosts(cfg: { [moveType: number]: ProtoTypes.Config.IMoveCostCfg }): void {
-            this._moveCostCfg = cfg;
-        }
-        public getMoveCosts(): { [moveType: number]: ProtoTypes.Config.IMoveCostCfg } | undefined {
-            return this._moveCostCfg;
+        private _getMoveCostCfg(): { [moveType: number]: ProtoTypes.Config.IMoveCostCfg } | undefined {
+            const configVersion = this.getConfigVersion();
+            if (configVersion == null) {
+                Logger.error(`BwTile._getMoveCostCfg() empty configVersion.`);
+                return undefined;
+            }
+
+            const baseType = this.getBaseType();
+            if (baseType == null) {
+                Logger.error(`BwTile._getMoveCostCfg() empty baseType.`);
+                return undefined;
+            }
+
+            const objectType = this.getObjectType();
+            if (objectType == null) {
+                Logger.error(`BwTile._getMoveCostCfg() empty objectType.`);
+                return undefined;
+            }
+
+            return ConfigManager.getMoveCostCfg(configVersion, baseType, objectType);
         }
 
         public getMoveCostByMoveType(moveType: Types.MoveType): number | undefined | null {
-            return this.getMoveCosts()[moveType].cost;
+            return this._getMoveCostCfg()[moveType].cost;
         }
         public getMoveCostByUnit(unit: BwUnit): number | undefined | null {
             const tileType = this.getType();
             if (((tileType === TileType.Seaport) || (tileType === TileType.TempSeaport))    &&
                 (this.getTeamIndex() !== unit.getTeamIndex())                               &&
-                (Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), Types.UnitCategory.LargeNaval))) {
+                (ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), UnitCategory.LargeNaval))
+            ) {
                 return undefined;
             } else {
                 return this.getMoveCostByMoveType(unit.getMoveType());
@@ -488,7 +607,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Functions for repair/supply unit.
         ////////////////////////////////////////////////////////////////////////////////
-        public getRepairUnitCategory(): Types.UnitCategory | undefined {
+        public getRepairUnitCategory(): UnitCategory | undefined {
             return this._templateCfg.repairUnitCategory;
         }
 
@@ -501,14 +620,14 @@ namespace TinyWars.BaseWar {
             return (category != null)
                 && ((attributes.hp < unit.getMaxHp()) || (unit.checkCanBeSupplied(attributes)))
                 && (unit.getTeamIndex() === this.getTeamIndex())
-                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), category));
+                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
         }
         public checkCanSupplyUnit(unit: BwUnit): boolean {
             const category = this.getRepairUnitCategory();
             return (category != null)
                 && (unit.checkCanBeSupplied())
                 && (unit.getTeamIndex() === this.getTeamIndex())
-                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this._configVersion, unit.getType(), category));
+                && (Utility.ConfigManager.checkIsUnitTypeInCategory(this.getConfigVersion(), unit.getUnitType(), category));
         }
 
         public getRepairHpAndCostForUnit(
@@ -542,7 +661,7 @@ namespace TinyWars.BaseWar {
             const category = this._templateCfg.hideUnitCategory;
             return category == null
                 ? false
-                : Utility.ConfigManager.getUnitTypesByCategory(this._configVersion, category).indexOf(unitType) >= 0;
+                : Utility.ConfigManager.getUnitTypesByCategory(this.getConfigVersion(), category).indexOf(unitType) >= 0;
         }
 
         public checkIsUnitHider(): boolean {
@@ -663,7 +782,7 @@ namespace TinyWars.BaseWar {
             if ((!this.checkIsVisionEnabledForAllPlayers()) && (this.getPlayerIndex() !== playerIndex)) {
                 return null;
             } else {
-                return Math.max(0, this.getCfgVisionRange() + this.getWar().getSettingsVisionRangeModifier(playerIndex));
+                return Math.max(0, this.getCfgVisionRange() + this.getWar().getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex));
             }
         }
         public getVisionRangeForTeamIndexes(teamIndexes: Set<number>): number | null {
@@ -671,10 +790,10 @@ namespace TinyWars.BaseWar {
                 let maxModifier = Number.MIN_VALUE;
                 const war       = this.getWar();
                 war.getPlayerManager().forEachPlayer(false, player => {
-                    if ((player.getAliveState() === Types.PlayerAliveState.Alive) &&
+                    if ((player.getAliveState() !== Types.PlayerAliveState.Dead) &&
                         (teamIndexes.has(player.getTeamIndex()))
                     ) {
-                        maxModifier = Math.max(maxModifier, war.getSettingsVisionRangeModifier(player.getPlayerIndex()));
+                        maxModifier = Math.max(maxModifier, war.getCommonSettingManager().getSettingsVisionRangeModifier(player.getPlayerIndex()));
                     }
                 });
 
@@ -682,7 +801,7 @@ namespace TinyWars.BaseWar {
             }
 
             if (teamIndexes.has(this.getTeamIndex())) {
-                return Math.max(0, this.getCfgVisionRange() + this.getWar().getSettingsVisionRangeModifier(this.getPlayerIndex()));
+                return Math.max(0, this.getCfgVisionRange() + this.getWar().getCommonSettingManager().getSettingsVisionRangeModifier(this.getPlayerIndex()));
             }
 
             return null;
@@ -714,5 +833,21 @@ namespace TinyWars.BaseWar {
         public getLoadCoUnitCategory(): Types.UnitCategory | null {
             return this._templateCfg.loadCoUnitCategory;
         }
+    }
+
+    function getRevisedCurrentHp(currentHp: number | null | undefined, templateCfg: TileTemplateCfg): number | null | undefined {
+        return currentHp != null
+            ? currentHp
+            : templateCfg.maxHp;
+    }
+    function getRevisedCurrentBuildPoint(currentBuildPoint: number | null | undefined, templateCfg: TileTemplateCfg): number | null | undefined {
+        return currentBuildPoint != null
+            ? currentBuildPoint
+            : templateCfg.maxBuildPoint;
+    }
+    function getRevisedCurrentCapturePoint(currentCapturePoint: number | null | undefined, templateCfg: TileTemplateCfg): number | null | undefined {
+        return currentCapturePoint != null
+            ? currentCapturePoint
+            : templateCfg.maxCapturePoint;
     }
 }

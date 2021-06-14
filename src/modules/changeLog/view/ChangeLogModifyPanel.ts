@@ -7,13 +7,13 @@ namespace TinyWars.ChangeLog {
     import FloatText        = Utility.FloatText;
     import ProtoTypes       = Utility.ProtoTypes;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     type OpenDataForChangeLogModifyPanel = {
         messageId   : number;
     }
 
-    export class ChangeLogModifyPanel extends GameUi.UiPanel {
+    export class ChangeLogModifyPanel extends GameUi.UiPanel<OpenDataForChangeLogModifyPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -33,7 +33,7 @@ namespace TinyWars.ChangeLog {
                 ChangeLogModifyPanel._instance = new ChangeLogModifyPanel();
             }
 
-            ChangeLogModifyPanel._instance.open(undefined);
+            ChangeLogModifyPanel._instance.open(openData);
         }
 
         public static async hide(): Promise<void> {
@@ -45,7 +45,6 @@ namespace TinyWars.ChangeLog {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
             this.skinName               = "resource/skins/changeLog/ChangeLogModifyPanel.exml";
@@ -82,7 +81,7 @@ namespace TinyWars.ChangeLog {
             } else if (textList.some(v => v.text.length > CommonConstants.ChangeLogTextMaxLength)) {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.ChangeLogTextMaxLength));
             } else {
-                ChangeLogProxy.reqChangeLogModifyMessage(this._getOpenData<OpenDataForChangeLogModifyPanel>().messageId, textList);
+                ChangeLogProxy.reqChangeLogModifyMessage(this._getOpenData().messageId, textList);
                 this.close();
             }
         }
@@ -90,7 +89,7 @@ namespace TinyWars.ChangeLog {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const textList          = ChangeLogModel.getMessage(this._getOpenData<OpenDataForChangeLogModifyPanel>().messageId).textList || [];
+            const textList          = ChangeLogModel.getMessage(this._getOpenData().messageId).textList || [];
             this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.Chinese });
             this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.English });
         }
@@ -101,7 +100,7 @@ namespace TinyWars.ChangeLog {
             this._labelChinese.text = Lang.getText(Lang.Type.B0455);
             this._labelEnglish.text = Lang.getText(Lang.Type.B0456);
             this._labelTip.text     = Lang.getText(Lang.Type.A0156);
-            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0317)} #${this._getOpenData<OpenDataForChangeLogModifyPanel>().messageId}`;
+            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0317)} #${this._getOpenData().messageId}`;
         }
     }
 }

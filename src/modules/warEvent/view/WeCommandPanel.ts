@@ -11,7 +11,7 @@ namespace TinyWars.WarEvent {
     import CommonInputPanel     = Common.CommonInputPanel;
     import ColorValue           = Types.ColorValue;
     import WarEventDescType     = Types.WarEventDescType;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     type OpenDataForWeCommandPanel = {
         war             : MapEditor.MeWar;
@@ -22,7 +22,7 @@ namespace TinyWars.WarEvent {
         parentNodeId?   : number;
         nodeId?         : number;
     }
-    export class WeCommandPanel extends GameUi.UiPanel {
+    export class WeCommandPanel extends GameUi.UiPanel<OpenDataForWeCommandPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -69,7 +69,6 @@ namespace TinyWars.WarEvent {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/warEvent/WeCommandPanel.exml";
@@ -104,14 +103,14 @@ namespace TinyWars.WarEvent {
         }
 
         private _onTouchedBtnModifyEventName(e: egret.TouchEvent): void {           // DONE
-            const data = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data = this._getOpenData();
             WeEventRenamePanel.show({
                 war         : data.war,
                 warEventId  : data.eventId,
             });
         }
         private _onTouchedBtnModifyMaxCallCountPerTurn(e: egret.TouchEvent): void { // DONE
-            const data = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data = this._getOpenData();
             if (data) {
                 const minValue  = 1;
                 const maxValue  = CommonConstants.WarEventMaxCallCountInPlayerTurn;
@@ -136,7 +135,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onTouchedBtnModifyMaxCallCountTotal(e: egret.TouchEvent): void {   // DONE
-            const data = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data = this._getOpenData();
             if (data) {
                 const minValue  = 1;
                 const maxValue  = CommonConstants.WarEventMaxCallCountTotal;
@@ -161,7 +160,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onTouchedBtnInitSubNodeToEvent(e: egret.TouchEvent): void {        // DONE
-            const data      = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data      = this._getOpenData();
             const eventId   = data.eventId;
             const fullData  =  data.war.getWarEventManager().getWarEventFullData();
             const callback  = () => {
@@ -178,14 +177,13 @@ namespace TinyWars.WarEvent {
                 callback();
             } else {
                 CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getFormattedText(Lang.Type.F0060, `N${nodeId}`),
                     callback,
                 });
             }
         }
         private _onTouchedBtnDeleteEvent(e: egret.TouchEvent): void {               // DONE
-            const data      = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data      = this._getOpenData();
             const eventId   = data.eventId;
             CommonConfirmPanel.show({
                 title   : `${Lang.getText(Lang.Type.B0479)} E${eventId}`,
@@ -208,13 +206,13 @@ namespace TinyWars.WarEvent {
             });
         }
         private _onTouchedBtnSwitchNodeAndOr(e: egret.TouchEvent): void {           // DONE
-            const data = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data = this._getOpenData();
             const node = data.war.getWarEventManager().getWarEventFullData().conditionNodeArray.find(v => v.nodeId === data.nodeId);
             node.isAnd = !node.isAnd;
             Notify.dispatch(Notify.Type.WarEventFullDataChanged);
         }
         private _onTouchedBtnReplaceNode(e: egret.TouchEvent): void {               // DONE
-            const data = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data = this._getOpenData();
             WeNodeReplacePanel.show({
                 eventId         : data.eventId,
                 parentNodeId    : data.parentNodeId,
@@ -223,7 +221,7 @@ namespace TinyWars.WarEvent {
             });
         }
         private _onTouchedBtnAddSubNodeToNode(e: egret.TouchEvent): void {          // DONE
-            const data = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data = this._getOpenData();
             if (WarEventHelper.createSubNodeInParentNode({
                 fullData        : data.war.getWarEventManager().getWarEventFullData(),
                 parentNodeId    : data.nodeId,
@@ -232,20 +230,26 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onTouchedBtnAddSubCondition(e: egret.TouchEvent): void {           // DONE
-            const data = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data = this._getOpenData();
             if (WarEventHelper.addDefaultCondition(data.war.getWarEventManager().getWarEventFullData(), data.nodeId) != null) {
                 Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
         private _onTouchedBtnDeleteNode(e: egret.TouchEvent): void {                // DONE
-            const data      = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data      = this._getOpenData();
             const nodeId    = data.nodeId;
             CommonConfirmPanel.show({
                 title   : `${Lang.getText(Lang.Type.B0481)} N${nodeId}`,
                 content : Lang.getText(Lang.Type.A0172),
                 callback: () => {
-                    const fullData = data.war.getWarEventManager().getWarEventFullData();
-                    Helpers.deleteElementFromArray(fullData.conditionNodeArray.find(v => v.nodeId === data.parentNodeId).subNodeIdArray, nodeId);
+                    const fullData      = data.war.getWarEventManager().getWarEventFullData();
+                    const parentNodeId  = data.parentNodeId;
+                    if (parentNodeId != null) {
+                        Helpers.deleteElementFromArray(fullData.conditionNodeArray.find(v => v.nodeId === data.parentNodeId).subNodeIdArray, nodeId);
+                    } else {
+                        fullData.eventArray.find(v => v.eventId === data.eventId).conditionNodeId = null;
+                    }
+
                     // WarEventHelper.checkAndDeleteUnusedNode(fullData, nodeId);
 
                     this.close();
@@ -254,20 +258,21 @@ namespace TinyWars.WarEvent {
             });
         }
         private _onTouchedBtnModifyCondition(e: egret.TouchEvent): void {           // DONE
-            const openData  = this._getOpenData<OpenDataForWeCommandPanel>();
+            const openData  = this._getOpenData();
             const fullData  = openData.war.getWarEventManager().getWarEventFullData();
             WarEventHelper.openConditionModifyPanel(fullData, WarEventHelper.getCondition(fullData, openData.conditionId));
         }
         private _onTouchedBtnReplaceCondition(e: egret.TouchEvent): void {
-            const openData = this._getOpenData<OpenDataForWeCommandPanel>();
+            const openData = this._getOpenData();
             WeConditionReplacePanel.show({
                 fullData    : openData.war.getWarEventManager().getWarEventFullData(),
                 parentNodeId: openData.parentNodeId,
                 conditionId : openData.conditionId,
             });
+            this.close();
         }
         private _onTouchedBtnDeleteCondition(e: egret.TouchEvent): void {           // DONE
-            const data          = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data          = this._getOpenData();
             const conditionId   = data.conditionId;
             CommonConfirmPanel.show({
                 title   : `${Lang.getText(Lang.Type.B0485)} C${conditionId}`,
@@ -283,23 +288,28 @@ namespace TinyWars.WarEvent {
             });
         }
         private _onTouchedBtnModifyAction(e: egret.TouchEvent): void {              // DONE
-            const openData  = this._getOpenData<OpenDataForWeCommandPanel>();
+            const openData  = this._getOpenData();
             const war       = openData.war;
             const fullData  = war.getWarEventManager().getWarEventFullData();
             WarEventHelper.openActionModifyPanel(war, fullData, WarEventHelper.getAction(fullData, openData.actionId));
         }
         private _onTouchedBtnReplaceAction(e: egret.TouchEvent): void {
-            // TODO
-            FloatText.show("TODO");
+            const openData = this._getOpenData();
+            WeActionReplacePanel.show({
+                fullData    : openData.war.getWarEventManager().getWarEventFullData(),
+                eventId     : openData.eventId,
+                actionId    : openData.actionId,
+            });
+            this.close();
         }
         private _onTouchedBtnAddAction(e: egret.TouchEvent): void {                 // DONE
-            const data = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data = this._getOpenData();
             if (WarEventHelper.addDefaultAction(data.war.getWarEventManager().getWarEventFullData(), data.eventId) != null) {
                 Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
         private _onTouchedBtnDeleteAction(e: egret.TouchEvent): void {              // DONE
-            const data      = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data      = this._getOpenData();
             const actionId  = data.actionId;
             CommonConfirmPanel.show({
                 title   : `${Lang.getText(Lang.Type.B0486)} A${actionId}`,
@@ -347,7 +357,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateLabelTitle(): void {
-            const openData  = this._getOpenData<OpenDataForWeCommandPanel>();
+            const openData  = this._getOpenData();
             const descType  = openData.descType;
             const label     = this._labelTitle;
             if (descType === WarEventDescType.Action) {
@@ -369,7 +379,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateLabelDescAndButtons(): void {                                          // DONE
-            const data      = this._getOpenData<OpenDataForWeCommandPanel>();
+            const data      = this._getOpenData();
             const descType  = data.descType;
             if (descType === WarEventDescType.EventName) {
                 this._updateForEvent(data);
@@ -501,7 +511,7 @@ namespace TinyWars.WarEvent {
         private _updateForAction(data: OpenDataForWeCommandPanel): void {                     // DONE
             const fullData  = data.war.getWarEventManager().getWarEventFullData();
             const actionId  = data.actionId;
-            const action    = (fullData.actionArray || []).find(v => v.WarEventActionCommonData.actionId === actionId);
+            const action    = (fullData.actionArray || []).find(v => v.WeaCommonData.actionId === actionId);
             if (action == null) {
                 Logger.error(`MeWeCommandPanel._updateForAction() empty action.`);
                 this._labelDesc.text = `_updateForAction() empty action.`;

@@ -8,7 +8,7 @@ namespace TinyWars.MapManagement {
     type OpenDataForMmTagChangePanel = {
         mapId   : number;
     }
-    export class MmTagChangePanel extends GameUi.UiPanel {
+    export class MmTagChangePanel extends GameUi.UiPanel<OpenDataForMmTagChangePanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -41,7 +41,6 @@ namespace TinyWars.MapManagement {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmTagChangePanel.exml";
         }
@@ -59,7 +58,7 @@ namespace TinyWars.MapManagement {
 
             this._updateComponentsForLanguage();
 
-            const mapId = this._getOpenData<OpenDataForMmTagChangePanel>().mapId;
+            const mapId = this._getOpenData().mapId;
             this._mapId = mapId;
 
             const mapTag            = (await WarMapModel.getBriefData(mapId)).mapTag || {};

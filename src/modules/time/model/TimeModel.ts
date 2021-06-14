@@ -5,18 +5,19 @@ namespace TinyWars.Time.TimeModel {
     import LocalStorage = Utility.LocalStorage;
     import NetManager   = Network.NetManager;
 
-    const TILE_ANIMATION_INTERVAL_MS = 350;
-    const UNIT_ANIMATION_INTERVAL_MS = 120;
-    const GRID_ANIMATION_INTERVAL_MS = 100;
-    const HEARTBEAT_INTERVAL_MS      = 10 * 1000;
+    const TILE_ANIMATION_INTERVAL_MS    = 350;
+    const UNIT_ANIMATION_INTERVAL_MS    = 120;
+    const GRID_ANIMATION_INTERVAL_MS    = 100;
+    const HEARTBEAT_INTERVAL_MS         = 10 * 1000;
 
-    let _isHeartbeatAnswered: boolean;
-    let _heartbeatCounter   : number;
-    let _heartbeatIntervalId: number;
-    let _serverTimestamp    : number;
+    let _isHeartbeatAnswered        : boolean;
+    let _heartbeatCounter           : number;
+    let _heartbeatIntervalId        : number;
+    let _serverTimestamp            : number;
 
     let _intervalIdForTileAnimation : number;
     let _tileAnimationTickCount     = 0;
+    let _intervalIdForUnitAnimation : number;
     let _unitAnimationTickCount     = 0;
     let _gridAnimationTickCount     = 0;
 
@@ -35,17 +36,14 @@ namespace TinyWars.Time.TimeModel {
         if (LocalStorage.getShowTileAnimation()) {
             startTileAnimationTick();
         }
+        if (LocalStorage.getShowUnitAnimation()) {
+            startUnitAnimationTick();
+        }
 
         egret.setInterval(() => {
             ++_gridAnimationTickCount;
             Notify.dispatch(Notify.Type.GridAnimationTick);
         }, TimeModel, GRID_ANIMATION_INTERVAL_MS);
-
-        egret.setInterval(() => {
-            ++_unitAnimationTickCount;
-            Common.CommonModel.tickUnitImageSources();
-            Notify.dispatch(Notify.Type.UnitAnimationTick);
-        }, TimeModel, UNIT_ANIMATION_INTERVAL_MS);
     }
 
     export function getServerTimestamp(): number {
@@ -74,6 +72,24 @@ namespace TinyWars.Time.TimeModel {
         return _tileAnimationTickCount;
     }
 
+    export function startUnitAnimationTick(): void {
+        stopUnitAnimationTick();
+
+        _intervalIdForUnitAnimation = egret.setInterval(() => {
+            ++_unitAnimationTickCount;
+            Common.CommonModel.tickUnitImageSources();
+            Notify.dispatch(Notify.Type.UnitAnimationTick);
+        }, TimeModel, UNIT_ANIMATION_INTERVAL_MS);
+    }
+    export function stopUnitAnimationTick(): void {
+        if (_intervalIdForUnitAnimation != null) {
+            egret.clearInterval(_intervalIdForUnitAnimation);
+            _intervalIdForUnitAnimation = null;
+        }
+    }
+    export function checkIsUnitAnimationTicking(): boolean {
+        return _intervalIdForUnitAnimation != null;
+    }
     export function getUnitAnimationTickCount(): number {
         return _unitAnimationTickCount;
     }

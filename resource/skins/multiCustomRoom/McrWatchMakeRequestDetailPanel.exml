@@ -14,17 +14,17 @@
                     <e:Skin width="580" height="26">
                         <e:Group left="0" right="0" top="0" bottom="0">
                             <GameUi:UiLabel id="_labelIndex" text="红方" size="20" verticalCenter="0" x="4"
-                                            maxTextWidth="36" y="3" scaleX="1" scaleY="1" />
+                                            maxTextWidth="36" y="3" />
                             <GameUi:UiLabel id="_labelTeam" text="A队" maxTextWidth="32" size="20" verticalCenter="0"
-                                            x="49" y="3" scaleX="1" scaleY="1" />
+                                            x="49" y="3" />
                             <GameUi:UiLabel id="_labelName" text="玩家名称居然有十个字" x="90" size="20" verticalCenter="0"
-                                            maxTextWidth="360" y="3" scaleX="1" scaleY="1" />
+                                            maxTextWidth="360" y="3" />
                             <GameUi:UiLabel id="_labelState" text="已请求" x="460" size="20" verticalCenter="0"
-                                            maxTextWidth="120" y="3" scaleX="1" scaleY="1" />
+                                            maxTextWidth="120" y="3" />
                             <GameUi:UiImage id="_imgAccept" source="c04_t10_s03_f00" verticalCenter="0" x="465" y="5"
-                                            scaleX="1" scaleY="1" />
+                                            />
                             <GameUi:UiImage id="_imgDecline" source="c04_t10_s03_f00" verticalCenter="0" x="535" y="5"
-                                            scaleX="1" scaleY="1" />
+                                            />
                         </e:Group>
                     </e:Skin>
                 </e:itemRendererSkinName>

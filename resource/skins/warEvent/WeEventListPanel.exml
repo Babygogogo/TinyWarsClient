@@ -17,19 +17,19 @@
                 <e:HorizontalLayout gap="0" />
             </e:layout>
         </e:Group>
-        <GameUi:UiScrollList id="_listWarEvent" scaleX="1" scaleY="1" width="950" top="40" bottom="5"
+        <GameUi:UiScrollList id="_listWarEvent" width="950" top="40" bottom="5"
                              horizontalCenter="0">
             <e:List>
                 <e:itemRendererSkinName>
                     <e:Skin currentState="up" states="down,up">
                         <e:Group>
                             <GameUi:UiLabel id="_labelPrefix" text="C99" size="18" textColor="0xFFFFFF" x="-110"
-                                            scaleX="1" scaleY="1" y="103" />
+                                            y="103" />
                             <e:Group x="22" y="5">
                                 <GameUi:UiLabel id="_labelError" text="日期" size="10" textColor="0xffffff" x="-150"
-                                                scaleX="1" scaleY="1" y="94" />
+                                                y="94" />
                                 <GameUi:UiLabel id="_labelDesc" text="日期" size="14" textColor="0xffffff" x="-120"
-                                                scaleX="1" scaleY="1" y="93" />
+                                                y="93" />
                                 <e:layout>
                                     <e:VerticalLayout gap="1" />
                                 </e:layout>

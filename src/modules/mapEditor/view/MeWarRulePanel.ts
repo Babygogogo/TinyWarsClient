@@ -6,21 +6,21 @@ namespace TinyWars.MapEditor {
     import ProtoTypes           = Utility.ProtoTypes;
     import FloatText            = Utility.FloatText;
     import ConfigManager        = Utility.ConfigManager;
-    import BwSettingsHelper     = BaseWar.BwSettingsHelper;
+    import BwWarRuleHelper      = BaseWar.BwWarRuleHelper;
     import CommonConfirmPanel   = Common.CommonConfirmPanel;
     import CommonHelpPanel      = Common.CommonHelpPanel;
     import IWarRule             = ProtoTypes.WarRule.IWarRule;
     import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
-    export class MeWarRulePanel extends GameUi.UiPanel {
+    export class MeWarRulePanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeWarRulePanel;
 
         private _labelMenuTitle         : GameUi.UiLabel;
-        private _listWarRule            : GameUi.UiScrollList;
+        private _listWarRule            : GameUi.UiScrollList<DataForWarRuleNameRenderer>;
         private _btnAddRule             : GameUi.UiButton;
         private _btnDelete              : GameUi.UiButton;
         private _btnBack                : GameUi.UiButton;
@@ -39,15 +39,17 @@ namespace TinyWars.MapEditor {
         private _imgAvailabilityScw     : GameUi.UiImage;
         private _btnAvailabilityMrw     : GameUi.UiButton;
         private _imgAvailabilityMrw     : GameUi.UiImage;
+        private _btnAvailabilitySrw     : GameUi.UiButton;
+        private _imgAvailabilitySrw     : GameUi.UiImage;
 
         private _labelWarEventListTitle : GameUi.UiLabel;
         private _btnTestWarEvent        : GameUi.UiButton;
         private _btnAddWarEvent         : GameUi.UiButton;
         private _btnEditWarEvent        : GameUi.UiButton;
-        private _listWarEvent           : GameUi.UiScrollList;
+        private _listWarEvent           : GameUi.UiScrollList<DataForWarEventRenderer>;
 
         private _labelPlayerList        : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _war                    : MeWar;
         private _dataForListWarRule     : DataForWarRuleNameRenderer[] = [];
@@ -73,7 +75,6 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapEditor/MeWarRulePanel.exml";
         }
@@ -94,6 +95,7 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnAvailabilityMcw,     callback: this._onTouchedBtnAvailabilityMcw },
                 { ui: this._btnAvailabilityScw,     callback: this._onTouchedBtnAvailabilityScw },
                 { ui: this._btnAvailabilityMrw,     callback: this._onTouchedBtnAvailabilityMrw },
+                { ui: this._btnAvailabilitySrw,     callback: this._onTouchedBtnAvailabilitySrw },
                 { ui: this._btnEditWarEvent,        callback: this._onTouchedBtnEditWarEvent },
                 { ui: this._btnAddWarEvent,         callback: this._onTouchedBtnAddWarEvent },
                 { ui: this._btnTestWarEvent,        callback: this._onTouchedBtnTestWarEvent },
@@ -109,9 +111,6 @@ namespace TinyWars.MapEditor {
         }
         protected async _onClosed(): Promise<void> {
             this._war = null;
-            this._listWarRule.clear();
-            this._listWarEvent.clear();
-            this._listPlayer.clear();
 
             Notify.dispatch(Notify.Type.BwCoListPanelClosed);
         }
@@ -165,7 +164,6 @@ namespace TinyWars.MapEditor {
                     FloatText.show(Lang.getText(Lang.Type.A0096));
                 } else {
                     CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0097),
                         callback: () => {
                             war.deleteWarRule(selectedRule.ruleId);
@@ -196,7 +194,7 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnModifyHasFog(e: egret.TouchEvent): void {
             const rule = this._selectedRule;
             if ((rule) && (!this._war.getIsReviewingMap())) {
-                BwSettingsHelper.setHasFogByDefault(rule, !BwSettingsHelper.getHasFogByDefault(rule));
+                BwWarRuleHelper.setHasFogByDefault(rule, !BwWarRuleHelper.getHasFogByDefault(rule));
                 this._updateImgHasFog(rule);
             }
         }
@@ -229,6 +227,14 @@ namespace TinyWars.MapEditor {
             if ((rule) && (!this._war.getIsReviewingMap())) {
                 rule.ruleAvailability.canMrw = !rule.ruleAvailability.canMrw;
                 this._updateImgAvailabilityMrw(rule);
+            }
+        }
+
+        private _onTouchedBtnAvailabilitySrw(e: egret.TouchEvent): void {
+            const rule = this._selectedRule;
+            if ((rule) && (!this._war.getIsReviewingMap())) {
+                rule.ruleAvailability.canSrw = !rule.ruleAvailability.canSrw;
+                this._updateImgAvailabilitySrw(rule);
             }
         }
 
@@ -307,10 +313,10 @@ namespace TinyWars.MapEditor {
                 ],
                 actionArray: [                          // 动作列表
                     {
-                        WarEventActionCommonData: {
+                        WeaCommonData: {
                             actionId    : 1,            // 动作id
                         },
-                        WarEventActionAddUnit: {        // 增加部队
+                        WeaAddUnit: {        // 增加部队
                             unitArray: [
                                 {
                                     canBeBlockedByUnit  : false,    // 是否会被指定位置的已有部队阻断增援
@@ -354,7 +360,10 @@ namespace TinyWars.MapEditor {
                 ],
             };
 
-            this._war.getWarEventManager().setWarEventFullData(testData);
+            this._war.getWarEventManager().init({
+                warEventFullData: testData,
+                calledCountList : undefined,
+            });
             this._selectedRule.warEventIdArray = [1, 2];
             this._updateListWarEvent();
         }
@@ -374,6 +383,7 @@ namespace TinyWars.MapEditor {
             this._btnAvailabilityMcw.setTextColor(colorForButtons);
             this._btnAvailabilityMrw.setTextColor(colorForButtons);
             this._btnAvailabilityScw.setTextColor(colorForButtons);
+            this._btnAvailabilitySrw.setTextColor(colorForButtons);
             this._btnModifyHasFog.setTextColor(colorForButtons);
             this._btnDelete.setTextColor(0xFF0000);
             this._btnAddRule.setTextColor(colorForButtons);
@@ -391,6 +401,7 @@ namespace TinyWars.MapEditor {
             this._btnAvailabilityMcw.label      = Lang.getText(Lang.Type.B0137);
             this._btnAvailabilityScw.label      = Lang.getText(Lang.Type.B0138);
             this._btnAvailabilityMrw.label      = Lang.getText(Lang.Type.B0404);
+            this._btnAvailabilitySrw.label      = Lang.getText(Lang.Type.B0614);
             this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
             this._btnDelete.label               = Lang.getText(Lang.Type.B0220);
             this._btnAddRule.label              = Lang.getText(Lang.Type.B0320);
@@ -423,6 +434,7 @@ namespace TinyWars.MapEditor {
             this._updateImgAvailabilityMcw(rule);
             this._updateImgAvailabilityScw(rule);
             this._updateImgAvailabilityMrw(rule);
+            this._updateImgAvailabilitySrw(rule);
             this._updateListWarEvent();
             this._updateListPlayerRule(rule);
         }
@@ -441,6 +453,9 @@ namespace TinyWars.MapEditor {
         }
         private _updateImgAvailabilityMrw(rule: IWarRule): void {
             this._imgAvailabilityMrw.visible = rule ? rule.ruleAvailability.canMrw : false;
+        }
+        private _updateImgAvailabilitySrw(rule: IWarRule): void {
+            this._imgAvailabilitySrw.visible = rule ? rule.ruleAvailability.canSrw : false;
         }
         private _updateListWarEvent(): void {
             const dataArray         : DataForWarEventRenderer[] = [];
@@ -488,27 +503,25 @@ namespace TinyWars.MapEditor {
         panel   : MeWarRulePanel;
     }
 
-    class WarRuleNameRenderer extends GameUi.UiListItemRenderer {
+    class WarRuleNameRenderer extends GameUi.UiListItemRenderer<DataForWarRuleNameRenderer> {
         private _btnChoose: GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnChoose, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data as DataForWarRuleNameRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             const index             = data.index;
             this.currentState       = index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelName.text    = `${Lang.getText(Lang.Type.B0318)} ${index}`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarRuleNameRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
     }
@@ -521,23 +534,21 @@ namespace TinyWars.MapEditor {
         panel       : MeWarRulePanel;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
-        private _listInfo   : GameUi.UiScrollList;
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.MeAvailableCoChanged, callback: this._onNotifyMeAvailableCoChanged },
+                { type: Notify.Type.MeBannedCoIdArrayChanged, callback: this._onNotifyMeBannedCoIdArrayChanged },
             ]);
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
-        private _onNotifyMeAvailableCoChanged(e: egret.Event): void {
+        private _onNotifyMeBannedCoIdArrayChanged(e: egret.Event): void {
             this._updateView();
         }
 
@@ -546,17 +557,17 @@ namespace TinyWars.MapEditor {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data as DataForPlayerRenderer;
+            const data          = this.data;
             const warRule       = data.warRule;
             const playerRule    = data.playerRule;
             const isReviewing   = data.isReviewing;
             return [
                 this._createDataPlayerIndex(warRule, playerRule, isReviewing),
                 this._createDataTeamIndex(warRule, playerRule, isReviewing),
-                this._createDataAvailableCoIdList(warRule, playerRule, isReviewing),
+                this._createDataBannedCoIdArray(warRule, playerRule, isReviewing),
                 this._createDataInitialFund(warRule, playerRule, isReviewing),
                 this._createDataIncomeMultiplier(warRule, playerRule, isReviewing),
-                this._createDataInitialEnergyPercentage(warRule, playerRule, isReviewing),
+                this._createDataEnergyAddPctOnLoadCo(warRule, playerRule, isReviewing),
                 this._createDataEnergyGrowthMultiplier(warRule, playerRule, isReviewing),
                 this._createDataMoveRangeModifier(warRule, playerRule, isReviewing),
                 this._createDataAttackPowerModifier(warRule, playerRule, isReviewing),
@@ -581,15 +592,15 @@ namespace TinyWars.MapEditor {
                 callbackOnTouchedTitle  : isReviewing
                     ? null
                     : () => {
-                        BwSettingsHelper.tickTeamIndex(warRule, playerRule.playerIndex);
+                        BwWarRuleHelper.tickTeamIndex(warRule, playerRule.playerIndex);
                         this._updateView();
                     },
             };
         }
-        private _createDataAvailableCoIdList(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        private _createDataBannedCoIdArray(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0403),
-                infoText                : `${playerRule.availableCoIdArray.length}`,
+                infoText                : `${(playerRule.bannedCoIdArray || []).length}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : isReviewing
                     ? null
@@ -625,7 +636,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setInitialFund(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setInitialFund(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -656,7 +667,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setIncomeMultiplier(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setIncomeMultiplier(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -664,17 +675,17 @@ namespace TinyWars.MapEditor {
                     },
             };
         }
-        private _createDataInitialEnergyPercentage(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue     = playerRule.initialEnergyPercentage;
+        private _createDataEnergyAddPctOnLoadCo(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const currValue = playerRule.energyAddPctOnLoadCo;
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : isReviewing
                     ? null
                     : () => {
-                        const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
-                        const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
+                        const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
+                        const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
                         Common.CommonInputPanel.show({
                             title           : Lang.getText(Lang.Type.B0180),
                             currentValue    : "" + currValue,
@@ -687,7 +698,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setInitialEnergyPercentage(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setEnergyAddPctOnLoadCo(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -718,7 +729,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setEnergyGrowthMultiplier(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setEnergyGrowthMultiplier(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -749,7 +760,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setMoveRangeModifier(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setMoveRangeModifier(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -780,7 +791,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setAttackPowerModifier(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setAttackPowerModifier(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -811,7 +822,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    BwSettingsHelper.setVisionRangeModifier(warRule, playerRule.playerIndex, value);
+                                    BwWarRuleHelper.setVisionRangeModifier(warRule, playerRule.playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -843,12 +854,12 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    const upperLimit = BwSettingsHelper.getLuckUpperLimit(warRule, playerIndex);
+                                    const upperLimit = BwWarRuleHelper.getLuckUpperLimit(warRule, playerIndex);
                                     if (value <= upperLimit) {
-                                        BwSettingsHelper.setLuckLowerLimit(warRule, playerIndex, value);
+                                        BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, value);
                                     } else {
-                                        BwSettingsHelper.setLuckUpperLimit(warRule, playerIndex, value);
-                                        BwSettingsHelper.setLuckLowerLimit(warRule, playerIndex, upperLimit);
+                                        BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, value);
+                                        BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, upperLimit);
                                     }
                                     this._updateView();
                                 }
@@ -881,12 +892,12 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    const lowerLimit = BwSettingsHelper.getLuckLowerLimit(warRule, playerIndex);
+                                    const lowerLimit = BwWarRuleHelper.getLuckLowerLimit(warRule, playerIndex);
                                     if (value >= lowerLimit) {
-                                        BwSettingsHelper.setLuckUpperLimit(warRule, playerIndex, value);
+                                        BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, value);
                                     } else {
-                                        BwSettingsHelper.setLuckLowerLimit(warRule, playerIndex, value);
-                                        BwSettingsHelper.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
+                                        BwWarRuleHelper.setLuckLowerLimit(warRule, playerIndex, value);
+                                        BwWarRuleHelper.setLuckUpperLimit(warRule, playerIndex, lowerLimit);
                                     }
                                     this._updateView();
                                 }
@@ -904,20 +915,18 @@ namespace TinyWars.MapEditor {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnTitle.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnTitle, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnTitle, callback: this._onTouchedBtnTitle },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data                  = this.data as DataForInfoRenderer;
+        protected _onDataChanged(): void {
+            const data                  = this.data;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;
@@ -925,7 +934,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-            const data      = this.data as DataForInfoRenderer;
+            const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());
         }
@@ -933,11 +942,11 @@ namespace TinyWars.MapEditor {
 
     type DataForWarEventRenderer = {
         panel           : MeWarRulePanel;
-        warEventManager : MeWarEventManager;
+        warEventManager : BaseWar.BwWarEventManager;
         warEventId      : number;
         warRule         : IWarRule;
     };
-    class WarEventRenderer extends GameUi.UiListItemRenderer {
+    class WarEventRenderer extends GameUi.UiListItemRenderer<DataForWarEventRenderer> {
         private _labelWarEventIdTitle   : GameUi.UiLabel;
         private _labelWarEventId        : GameUi.UiLabel;
         private _btnUp                  : GameUi.UiButton;
@@ -959,23 +968,23 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedBtnUp(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarEventRenderer;
+            const data = this.data;
             if (data) {
-                BwSettingsHelper.moveWarEventId(data.warRule, data.warEventId, -1);
+                BwWarRuleHelper.moveWarEventId(data.warRule, data.warEventId, -1);
                 Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDown(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarEventRenderer;
+            const data = this.data;
             if (data) {
-                BwSettingsHelper.moveWarEventId(data.warRule, data.warEventId, 1);
+                BwWarRuleHelper.moveWarEventId(data.warRule, data.warEventId, 1);
                 Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
             }
         }
         private _onTouchedBtnDelete(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarEventRenderer;
+            const data = this.data;
             if (data) {
-                BwSettingsHelper.deleteWarEventId(data.warRule, data.warEventId);
+                BwWarRuleHelper.deleteWarEventId(data.warRule, data.warEventId);
                 Notify.dispatch(Notify.Type.MeWarEventIdArrayChanged);
             }
         }
@@ -983,10 +992,8 @@ namespace TinyWars.MapEditor {
             this._updateComponentsForLanguage();
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data                  = this.data as DataForWarEventRenderer;
+        protected _onDataChanged(): void {
+            const data                  = this.data;
             this._labelWarEventId.text  = `${data.warEventId}`;
             this._updateLabelWarEventName();
         }
@@ -999,7 +1006,7 @@ namespace TinyWars.MapEditor {
             this._updateLabelWarEventName();
         }
         private _updateLabelWarEventName(): void {
-            const data = this.data as DataForWarEventRenderer;
+            const data = this.data;
             if (data) {
                 this._labelWarEventName.text = Lang.getLanguageText({ textArray: data.warEventManager.getWarEvent(data.warEventId).eventNameArray });
             }

@@ -5,7 +5,7 @@ namespace TinyWars.User {
     import NotifyType   = Utility.Notify.Type;
     import LocalStorage = Utility.LocalStorage;
 
-    export class UserSetPasswordPanel extends GameUi.UiPanel {
+    export class UserSetPasswordPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -37,7 +37,6 @@ namespace TinyWars.User {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/user/UserSetPasswordPanel.exml";

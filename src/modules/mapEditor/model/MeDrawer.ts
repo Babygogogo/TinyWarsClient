@@ -12,7 +12,7 @@ namespace TinyWars.MapEditor {
     import UnitType             = Types.UnitType;
     import TileBaseType         = Types.TileBaseType;
     import TileObjectType       = Types.TileObjectType;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     export type DataForDrawTileObject = {
         objectType  : TileObjectType;
@@ -30,8 +30,8 @@ namespace TinyWars.MapEditor {
 
     export class MeDrawer {
         private _war                            : MeWar;
-        private _tileMap                        : MeTileMap;
-        private _unitMap                        : MeUnitMap;
+        private _tileMap                        : BaseWar.BwTileMap;
+        private _unitMap                        : BaseWar.BwUnitMap;
         private _configVersion                  : string;
         private _mode                           = DrawerMode.Preview;
         private _drawTargetTileObjectData       : DataForDrawTileObject;
@@ -50,8 +50,8 @@ namespace TinyWars.MapEditor {
 
         public startRunning(war: MeWar): void {
             this._setWar(war);
-            this._tileMap       = war.getTileMap() as MeTileMap;
-            this._unitMap       = war.getUnitMap() as MeUnitMap;
+            this._tileMap       = war.getTileMap();
+            this._unitMap       = war.getUnitMap();
             this._configVersion = war.getConfigVersion();
 
             Notify.addEventListeners(this._notifyListeners, this);
@@ -123,7 +123,8 @@ namespace TinyWars.MapEditor {
 
         public setModeDrawUnit(data: DataForDrawUnit): void {
             const war   = this._getWar();
-            const unit  = new MeUnit().init({
+            const unit  = new BaseWar.BwUnit();
+            unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : data.unitType,
@@ -249,10 +250,11 @@ namespace TinyWars.MapEditor {
             const unitMap       = this._unitMap;
             const unitId        = unitMap.getNextUnitId();
             const targetUnit    = this._drawTargetUnit;
-            const unit          = new MeUnit().init({
+            const unit          = new BaseWar.BwUnit();
+            unit.init({
                 gridIndex,
                 playerIndex : targetUnit.getPlayerIndex(),
-                unitType    : targetUnit.getType(),
+                unitType    : targetUnit.getUnitType(),
                 unitId,
             }, this._configVersion);
             unit.startRunning(this._getWar());

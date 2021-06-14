@@ -16,7 +16,7 @@ namespace TinyWars.WarEvent {
     }
 
     /** WecPlayerAliveStateEqualTo */
-    export class WeConditionModifyPanel12 extends GameUi.UiPanel {
+    export class WeConditionModifyPanel12 extends GameUi.UiPanel<OpenDataForWeConditionModifyPanel12> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -51,7 +51,6 @@ namespace TinyWars.WarEvent {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/warEvent/WeConditionModifyPanel12.exml";
@@ -77,7 +76,7 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForLanguage();
         }
         private _onTouchedBtnType(e: egret.TouchEvent): void {
-            const openData = this._getOpenData<OpenDataForWeConditionModifyPanel12>();
+            const openData = this._getOpenData();
             WeConditionTypeListPanel.show({
                 fullData    : openData.fullData,
                 condition   : openData.condition,
@@ -140,7 +139,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateLabelDesc(): void {
-            const openData          = this._getOpenData<OpenDataForWeConditionModifyPanel12>();
+            const openData          = this._getOpenData();
             const condition         = openData.condition;
             const errorTip          = WarEventHelper.getErrorTipForCondition(openData.fullData, condition);
             const labelError        = this._labelError;
@@ -159,7 +158,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _getCondition(): IWarEventCondition {
-            return this._getOpenData<OpenDataForWeConditionModifyPanel12>().condition;
+            return this._getOpenData().condition;
         }
     }
 }

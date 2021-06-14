@@ -10,7 +10,7 @@ namespace TinyWars.MapManagement {
     import WarMapProxy      = WarMap.WarMapProxy;
     import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
 
-    export class MmReviewListPanel extends GameUi.UiPanel {
+    export class MmReviewListPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -20,7 +20,7 @@ namespace TinyWars.MapManagement {
         private _labelNoData    : GameUi.UiLabel;
         private _labelMenuTitle : GameUi.UiLabel;
         private _labelLoading   : GameUi.UiLabel;
-        private _listMap        : GameUi.UiScrollList;
+        private _listMap        : GameUi.UiScrollList<DataForMapRenderer>;
         private _btnBack        : GameUi.UiButton;
 
         private _dataForListMap     : DataForMapRenderer[] = [];
@@ -41,7 +41,6 @@ namespace TinyWars.MapManagement {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapManagement/MmReviewListPanel.exml";
         }
 
@@ -60,11 +59,6 @@ namespace TinyWars.MapManagement {
             this._labelNoData.visible   = false;
 
             WarMapProxy.reqMmGetReviewingMaps();
-        }
-
-        protected async _onClosed(): Promise<void> {
-            this._zoomMap.clearMap();
-            this._listMap.clear();
         }
 
         public async setSelectedIndex(newIndex: number): Promise<void> {
@@ -145,7 +139,7 @@ namespace TinyWars.MapManagement {
             if (!mapData) {
                 this._zoomMap.clearMap();
             } else {
-                this._zoomMap.showMap(mapData);
+                this._zoomMap.showMapByMapData(mapData);
             }
         }
     }
@@ -156,23 +150,21 @@ namespace TinyWars.MapManagement {
         panel   : MmReviewListPanel;
     }
 
-    class MapRenderer extends GameUi.UiListItemRenderer {
+    class MapRenderer extends GameUi.UiListItemRenderer<DataForMapRenderer> {
         private _btnChoose      : GameUi.UiButton;
         private _labelName      : GameUi.UiLabel;
         private _labelStatus    : GameUi.UiLabel;
         private _btnNext        : GameUi.UiButton;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnChoose, this);
-            this._btnNext.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnNext, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
+                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data                  = this.data as DataForMapRenderer;
+        protected _onDataChanged(): void {
+            const data                  = this.data;
             const mapEditorData         = data.mapEditorData;
             const mapRawData            = mapEditorData.mapRawData;
             const status                = mapEditorData.reviewStatus;
@@ -183,13 +175,13 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForMapRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data = (this.data as DataForMapRenderer).mapEditorData;
-            Utility.FlowManager.gotoMapEditor(data.mapRawData, data.slotIndex, true);
+            const data = this.data.mapEditorData;
+            Utility.FlowManager.gotoMapEditorWar(data.mapRawData, data.slotIndex, true);
         }
     }
 

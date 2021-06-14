@@ -4,7 +4,7 @@ namespace TinyWars.MapEditor {
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
 
-    export class MeClearPanel extends GameUi.UiPanel {
+    export class MeClearPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -41,7 +41,6 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapEditor/MeClearPanel.exml";
         }
@@ -126,7 +125,7 @@ namespace TinyWars.MapEditor {
             this._labelCurrSizeTitle.text   = Lang.getText(Lang.Type.B0291);
             this._labelNewSizeTitle.text    = Lang.getText(Lang.Type.B0292);
             this._labelTips1.text           = Lang.getText(Lang.Type.A0117);
-            this._labelTips2.text           = Lang.getFormattedText(Lang.Type.F0023, Utility.ConfigManager.COMMON_CONSTANTS.MaxGridsCount);
+            this._labelTips2.text           = Lang.getFormattedText(Lang.Type.F0023, Utility.CommonConstants.MapMaxGridsCount);
         }
     }
 }

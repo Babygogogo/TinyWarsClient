@@ -4,15 +4,15 @@ namespace TinyWars.MapEditor {
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
     import ConfigManager    = Utility.ConfigManager;
-    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
-    export class MeSimAdvancedSettingsPage extends GameUi.UiTabPage {
+    export class MeSimAdvancedSettingsPage extends GameUi.UiTabPage<void> {
         private _labelMapNameTitle      : GameUi.UiLabel;
         private _labelMapName           : GameUi.UiLabel;
         private _labelPlayersCountTitle : GameUi.UiLabel;
         private _labelPlayersCount      : GameUi.UiLabel;
         private _labelPlayerList        : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();
@@ -70,18 +70,14 @@ namespace TinyWars.MapEditor {
         playerIndex : number;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
-        private _listInfo   : GameUi.UiScrollList;
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
+        protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
@@ -91,7 +87,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data as DataForPlayerRenderer;
+            const data          = this.data;
             const playerIndex   = data.playerIndex;
             return [
                 this._createDataController(playerIndex),
@@ -100,7 +96,7 @@ namespace TinyWars.MapEditor {
                 this._createDataSkinId(playerIndex),
                 this._createDataInitialFund(playerIndex),
                 this._createDataIncomeMultiplier(playerIndex),
-                this._createDataInitialEnergyPercentage(playerIndex),
+                this._createDataEnergyAddPctOnLoadCo(playerIndex),
                 this._createDataEnergyGrowthMultiplier(playerIndex),
                 this._createDataMoveRangeModifier(playerIndex),
                 this._createDataAttackPowerModifier(playerIndex),
@@ -222,14 +218,14 @@ namespace TinyWars.MapEditor {
                 },
             };
         }
-        private _createDataInitialEnergyPercentage(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Sim.getInitialEnergyPercentage(playerIndex);
-            const minValue      = CommonConstants.WarRuleInitialEnergyPercentageMinLimit;
-            const maxValue      = CommonConstants.WarRuleInitialEnergyPercentageMaxLimit;
+        private _createDataEnergyAddPctOnLoadCo(playerIndex: number): DataForInfoRenderer {
+            const currValue     = MeModel.Sim.getEnergyAddPctOnLoadCo(playerIndex);
+            const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
+            const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
                         Common.CommonInputPanel.show({
@@ -244,7 +240,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    MeModel.Sim.setInitialEnergyPercentage(playerIndex, value);
+                                    MeModel.Sim.setEnergyAddPctOnLoadCo(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -457,7 +453,6 @@ namespace TinyWars.MapEditor {
                 callback();
             } else {
                 Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0129),
                     callback: () => {
                         MeModel.Sim.setPresetWarRuleId(null);
@@ -475,20 +470,18 @@ namespace TinyWars.MapEditor {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnTitle.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnTitle, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnTitle,   callback: this._onTouchedBtnTitle },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data                  = this.data as DataForInfoRenderer;
+        protected _onDataChanged(): void {
+            const data                  = this.data;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;
@@ -496,7 +489,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-            const data      = this.data as DataForInfoRenderer;
+            const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());
         }

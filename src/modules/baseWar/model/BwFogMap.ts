@@ -5,6 +5,8 @@ namespace TinyWars.BaseWar {
     import Helpers                  = Utility.Helpers;
     import GridIndexHelpers         = Utility.GridIndexHelpers;
     import ProtoTypes               = Utility.ProtoTypes;
+    import ClientErrorCode          = Utility.ClientErrorCode;
+    import CommonConstants          = Utility.CommonConstants;
     import ForceFogCode             = Types.ForceFogCode;
     import GridIndex                = Types.GridIndex;
     import MapSize                  = Types.MapSize;
@@ -23,41 +25,82 @@ namespace TinyWars.BaseWar {
 
         public abstract startRunning(war: BwWar): void;
 
-        public async init(data: ISerialFogMap, mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwFogMap | undefined> {
-            const forceFogCode = data.forceFogCode;
-            if (forceFogCode == null) {
-                Logger.error(`BwFogMap.init() empty forceFogCode.`);
-                return undefined;
+        public init({ data, mapSize, playersCountUnneutral }: {
+            data                    : ISerialFogMap;
+            mapSize                 : MapSize;
+            playersCountUnneutral   : number;
+        }): ClientErrorCode {
+            if (data == null) {
+                return ClientErrorCode.BwFogMapInit00;
             }
 
-            const mapSize           : MapSize = { width: mapSizeAndMaxPlayerIndex.mapWidth, height: mapSizeAndMaxPlayerIndex.mapHeight };
-            const allMapsFromPath   = createEmptyMaps<Visibility>(mapSize, mapSizeAndMaxPlayerIndex.maxPlayerIndex);
+            const forceFogCode = data.forceFogCode as ForceFogCode;
+            if ((forceFogCode !== ForceFogCode.Clear)   &&
+                (forceFogCode !== ForceFogCode.Fog)     &&
+                (forceFogCode !== ForceFogCode.None)
+            ) {
+                return ClientErrorCode.BwFogMapInit01;
+            }
+
+            const forceExpirePlayerIndex = data.forceExpirePlayerIndex;
+            if ((forceExpirePlayerIndex != null)                                                                                    &&
+                ((forceExpirePlayerIndex < CommonConstants.WarNeutralPlayerIndex) || (forceExpirePlayerIndex > playersCountUnneutral))
+            ) {
+                return ClientErrorCode.BwFogMapInit02;
+            }
+
+            const forceExpireTurnIndex = data.forceExpireTurnIndex;
+            if (((forceExpirePlayerIndex == null) && (forceExpireTurnIndex != null)) ||
+                ((forceExpirePlayerIndex != null) && (forceExpireTurnIndex == null))
+            ) {
+                return ClientErrorCode.BwFogMapInit03;
+            }
+
+            if (!BwHelpers.checkIsValidMapSize(mapSize)) {
+                return ClientErrorCode.BwFogMapInit04;
+            }
+
+            const allMapsFromPath   = createEmptyMaps<Visibility>(mapSize, playersCountUnneutral);
+            const playerIndexSet    = new Set<number>();
             for (const d of data.mapsFromPath || []) {
                 const playerIndex = d.playerIndex;
                 if (playerIndex == null) {
-                    Logger.error(`BwFogMap.init() empty playerIndex.`);
-                    return undefined;
+                    return ClientErrorCode.BwFogMapInit05;
                 }
+                if (playerIndexSet.has(playerIndex)) {
+                    return ClientErrorCode.BwFogMapInit06;
+                }
+                playerIndexSet.add(playerIndex);
 
                 const mapFromPath = allMapsFromPath.get(playerIndex);
                 if (mapFromPath == null) {
-                    Logger.error(`BwFogMap.init() empty mapFromPath.`);
-                    return undefined;
+                    return ClientErrorCode.BwFogMapInit07;
                 }
 
-                resetMapFromPath(mapFromPath, mapSize, d.visibilityArray);
+                const resetMapError = resetMapFromPath(mapFromPath, mapSize, d.visibilityArray);
+                if (resetMapError) {
+                    return resetMapError;
+                }
             }
 
-            this._setMapSize(mapSize);
+            this._setMapSize(Helpers.deepClone(mapSize));
             this._setAllMapsFromPath(allMapsFromPath);
             this.setForceFogCode(forceFogCode);
-            this.setForceExpirePlayerIndex(data.forceExpirePlayerIndex);
-            this.setForceExpireTurnIndex(data.forceExpireTurnIndex);
+            this.setForceExpirePlayerIndex(forceExpirePlayerIndex);
+            this.setForceExpireTurnIndex(forceExpireTurnIndex);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
-        public async fastInit(data: ISerialFogMap, mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwFogMap> {
-            return this.init(data, mapSizeAndMaxPlayerIndex);
+        public fastInit({ data, mapSize, playersCountUnneutral }: {
+            data                    : ISerialFogMap;
+            mapSize                 : Types.MapSize;
+            playersCountUnneutral   : number;
+        }): ClientErrorCode {
+            return this.init({
+                data,
+                mapSize,
+                playersCountUnneutral
+            });
         }
 
         public serialize(): ISerialFogMap | undefined {
@@ -97,7 +140,7 @@ namespace TinyWars.BaseWar {
                 mapsFromPath            : serialMapsFromPath,
             };
         }
-        public serializeForSimulation(): ISerialFogMap | undefined {
+        public serializeForCreateSfw(): ISerialFogMap | undefined {
             const mapSize           = this.getMapSize();
             const war               = this._getWar();
             const targetTeamIndexes = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
@@ -125,6 +168,9 @@ namespace TinyWars.BaseWar {
                 mapsFromPath,
             };
         }
+        public serializeForCreateMfr(): ISerialFogMap | undefined {
+            return this.serializeForCreateSfw();
+        }
 
         protected _setWar(war: BwWar): void {
             this._war = war;
@@ -136,7 +182,7 @@ namespace TinyWars.BaseWar {
         private _setAllMapsFromPath(mapsFromPath: Map<number, Visibility[][]>): void {
             this._allMapsFromPath = mapsFromPath;
         }
-        private _getAllMapsFromPath(): Map<number, Visibility[][]> {
+        protected _getAllMapsFromPath(): Map<number, Visibility[][]> {
             return this._allMapsFromPath;
         }
         private _getMapFromPath(playerIndex: number): Visibility[][] | undefined {
@@ -167,7 +213,7 @@ namespace TinyWars.BaseWar {
         }
 
         public checkHasFogByDefault(): boolean {
-            return this._getWar().getSettingsHasFogByDefault();
+            return this._getWar().getCommonSettingManager().getSettingsHasFogByDefault();
         }
         public checkHasFogCurrently(): boolean {
             const fogCode = this.getForceFogCode();
@@ -449,16 +495,43 @@ namespace TinyWars.BaseWar {
         }
     }
 
-    function resetMapFromPath(mapFromPath: Visibility[][], mapSize: MapSize, visibilityList: number[] | null | undefined): void {
-        if (visibilityList == null) {
-            fillMap(mapFromPath, 0);
-        } else {
-            const { width, height } = mapSize;
-            for (let x = 0; x < width; ++x) {
-                for (let y = 0; y < height; ++y) {
-                    mapFromPath[x][y] = visibilityList[x + y * width];
-                }
+    function resetMapFromPath(mapFromPath: Visibility[][], mapSize: MapSize, visibilityList: Visibility[] | null | undefined): ClientErrorCode {
+        const { width, height } = mapSize;
+        if (mapFromPath.length !== width) {
+            return ClientErrorCode.BwFogMapResetMapFromPath00;
+        }
+
+        for (let x = 0; x < width; ++x) {
+            const column = mapFromPath[x];
+            if ((column == null) || (column.length !== height)) {
+                return ClientErrorCode.BwFogMapResetMapFromPath01;
             }
         }
+
+        if (visibilityList == null) {
+            fillMap(mapFromPath, 0);
+            return ClientErrorCode.NoError;
+        }
+
+        if (visibilityList.length !== width * height) {
+            return ClientErrorCode.BwFogMapResetMapFromPath02;
+        }
+
+        for (let x = 0; x < width; ++x) {
+            const column = mapFromPath[x];
+            for (let y = 0; y < height; ++y) {
+                const visibility = visibilityList[x + y * width];
+                if ((visibility !== Visibility.InsideVision)    &&
+                    (visibility !== Visibility.OutsideVision)   &&
+                    (visibility !== Visibility.TrueVision)
+                ) {
+                    return ClientErrorCode.BwFogMapResetMapFromPath03;
+                }
+
+                column[y] = visibility;
+            }
+        }
+
+        return ClientErrorCode.NoError;
     }
 }

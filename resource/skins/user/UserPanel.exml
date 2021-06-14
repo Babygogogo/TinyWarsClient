@@ -1,158 +1,255 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group top="40" bottom="0" width="960" x="0">
-        <e:Group id="_group" scaleX="1" scaleY="1" width="100%" height="100%">
-            <GameUi:UiImage source="c04_t01_s02_f01" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0"
-                            top="0" bottom="0" scale9Grid="9,9,2,2" />
-            <GameUi:UiLabel id="_labelTitle" text="XXX的履历" y="10" horizontalCenter="0" textColor="0xffffff" size="25"
+    <GameUi:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
+                    locked="true" />
+    <e:Group width="740" horizontalCenter="0" height="410" verticalCenter="0">
+        <e:Group id="_group" width="100%" height="100%">
+            <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
                             locked="true" />
-            <GameUi:UiButton id="_btnClose" label="关闭" y="0" right="0" width="160"
-                             skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-            <e:Scroller id="_scroller" left="0" right="0" top="40" bottom="5">
-                <e:Group x="20" y="0">
-                    <e:Group x="20" y="10">
+            <GameUi:UiLabel id="_labelTitle" text="XXX的履历" y="10" horizontalCenter="0" size="24" textColor="0xffffff"
+                            bold="true" locked="true" />
+            <e:Group y="50" horizontalCenter="0">
+                <e:Group x="0" y="0">
+                    <e:Group x="0" y="0">
                         <e:Group x="0" y="0">
-                            <e:Group x="0" y="0" locked="true">
-                                <e:Group x="0" y="25">
-                                    <GameUi:UiLabel id="_labelStdRankTitle" text="明战排位积分:" textColor="0xFFFFFF"
-                                                    size="20" scaleX="1" scaleY="1" x="0" y="0" />
-                                    <GameUi:UiLabel id="_labelStdRankScore" text="9999(预备役)" textColor="0xFFFFFF"
-                                                    size="20" scaleX="1" scaleY="1" x="60" y="0" />
-                                    <e:layout>
-                                        <e:HorizontalLayout gap="10" />
-                                    </e:layout>
-                                </e:Group>
-                                <e:Group x="10" y="35">
-                                    <GameUi:UiLabel id="_labelFogRankTitle" text="雾战排位积分:" textColor="0xFFFFFF"
-                                                    size="20" scaleX="1" scaleY="1" x="0" y="0" />
-                                    <GameUi:UiLabel id="_labelFogRankScore" text="9999(预备役)" textColor="0xFFFFFF"
-                                                    size="20" scaleX="1" scaleY="1" x="60" y="0" />
-                                    <e:layout>
-                                        <e:HorizontalLayout gap="10" />
-                                    </e:layout>
-                                </e:Group>
+                            <e:Group x="0" y="0">
+                                <GameUi:UiLabel id="_labelStdRankScoreTitle" text="明战排位积分:" size="12" x="0" y="0"
+                                                textColor="0xaaaaaa" />
+                                <GameUi:UiImage width="90" height="1" x="44" y="11" source="commonColorGrey0000" />
+                                <GameUi:UiLabel id="_labelStdRankScore" text="9999(预备役)" size="20" x="60" y="0"
+                                                textColor="0x34a7de" bold="true" />
                                 <e:layout>
-                                    <e:VerticalLayout gap="6" />
+                                    <e:VerticalLayout gap="4" />
                                 </e:layout>
                             </e:Group>
-                            <e:Group x="480" y="0" locked="true">
-                                <e:Group x="0" y="0">
-                                    <GameUi:UiLabel id="_labelRegisterTimeTitle" text="注册时间:" textColor="0xFFFFFF"
-                                                    size="20" scaleX="1" scaleY="1" />
-                                    <GameUi:UiLabel id="_labelRegisterTime" text="2010年10月10日10时10分10秒"
-                                                    textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" x="140" />
-                                </e:Group>
-                                <e:Group x="480" y="0">
-                                    <GameUi:UiLabel id="_labelLastLoginTimeTitle" text="上次登陆时间:" textColor="0xFFFFFF"
-                                                    size="20" scaleX="1" scaleY="1" />
-                                    <GameUi:UiLabel id="_labelLastLoginTime" text="2010年10月10日10时10分10秒"
-                                                    textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" x="140" />
-                                </e:Group>
-                                <e:Group x="0" y="35">
-                                    <GameUi:UiLabel id="_labelOnlineTimeTitle" text="在线时长:" textColor="0xFFFFFF"
-                                                    size="20" scaleX="1" scaleY="1" />
-                                    <GameUi:UiLabel id="_labelOnlineTime" text="1000时10分10秒" textColor="0xFFFFFF"
-                                                    size="20" scaleX="1" scaleY="1" x="140" />
-                                </e:Group>
-                                <e:Group x="480" y="35">
-                                    <GameUi:UiLabel id="_labelLoginCountTitle" text="登陆次数:" textColor="0xFFFFFF"
-                                                    size="20" scaleX="1" scaleY="1" />
-                                    <GameUi:UiLabel id="_labelLoginCount" text="999" textColor="0xFFFFFF" size="20"
-                                                    scaleX="1" scaleY="1" x="140" />
-                                </e:Group>
-                                <e:Group y="80" x="10">
-                                    <GameUi:UiLabel text="User ID:" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1" />
-                                    <GameUi:UiLabel id="_labelUserId" text="123456789987654321" textColor="0xFFFFFF"
-                                                    size="20" scaleX="1" scaleY="1" x="140" />
-                                </e:Group>
-                                <e:Group y="70">
-                                    <GameUi:UiLabel text="Discord ID:" textColor="0xFFFFFF" size="20" scaleX="1"
-                                                    scaleY="1" />
-                                    <GameUi:UiLabel id="_labelDiscordId" text="123456789987654321" textColor="0xFFFFFF"
-                                                    size="20" scaleX="1" scaleY="1" x="140" />
+                            <e:Group x="150" y="0">
+                                <GameUi:UiLabel id="_labelStdRankRankTitle" text="明战排位" size="12" x="0" y="0"
+                                                textColor="0xAAAAAA" />
+                                <GameUi:UiImage width="90" height="1" x="44" y="11" source="commonColorGrey0000" />
+                                <e:Group x="0" y="21">
+                                    <GameUi:UiLabel id="_labelStdRankRank" text="1" size="20" x="0" y="16"
+                                                    textColor="0x34A7DE" bold="true" />
+                                    <GameUi:UiLabel id="_labelStdRankRankSuffix" text="st" size="12" x="0" y="0"
+                                                    textColor="0xAAAAAA" />
+                                    <e:layout>
+                                        <e:HorizontalLayout verticalAlign="bottom" gap="0" />
+                                    </e:layout>
                                 </e:Group>
                                 <e:layout>
-                                    <e:VerticalLayout/>
+                                    <e:VerticalLayout gap="4" />
                                 </e:layout>
+                            </e:Group>
+                        </e:Group>
+                        <e:Group x="0" y="61">
+                            <e:Group x="0" y="0">
+                                <GameUi:UiLabel id="_labelFogRankScoreTitle" text="雾战排位积分:" size="12" x="0" y="0"
+                                                textColor="0xaaaaaa" />
+                                <GameUi:UiImage width="90" height="1" x="54" y="21" source="commonColorGrey0000" />
+                                <GameUi:UiLabel id="_labelFogRankScore" text="9999(预备役)" size="20" x="60" y="0"
+                                                textColor="0xad74bc" bold="true" />
+                                <e:layout>
+                                    <e:VerticalLayout gap="4" />
+                                </e:layout>
+                            </e:Group>
+                            <e:Group x="150">
+                                <GameUi:UiLabel id="_labelFogRankRankTitle" text="雾战排位" size="12" x="0" y="0"
+                                                textColor="0xAAAAAA" />
+                                <GameUi:UiImage width="90" height="1" x="54" y="21" source="commonColorGrey0000" />
+                                <e:Group x="0" y="21">
+                                    <GameUi:UiLabel id="_labelFogRankRank" text="1" size="20" x="0" y="0"
+                                                    textColor="0xAD74BC" bold="true" />
+                                    <GameUi:UiLabel id="_labelFogRankRankSuffix" text="st" size="12" x="0" y="24"
+                                                    textColor="0xAAAAAA" />
+                                    <e:layout>
+                                        <e:HorizontalLayout verticalAlign="bottom" gap="0" />
+                                    </e:layout>
+                                </e:Group>
+                                <e:layout>
+                                    <e:VerticalLayout gap="4" />
+                                </e:layout>
+                            </e:Group>
+                        </e:Group>
+                        <e:layout>
+                            <e:VerticalLayout gap="20" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="480" y="0">
+                        <e:Group y="80" x="10">
+                            <GameUi:UiLabel text="User ID:" size="12" textColor="0xaaaaaa" />
+                            <GameUi:UiImage width="240" height="1" x="64" y="31" source="commonColorBlue0000" />
+                            <GameUi:UiLabel id="_labelUserId" text="123456789987654321" textColor="0xFFFFFF" size="18"
+                                            x="140" />
+                            <e:layout>
+                                <e:VerticalLayout gap="2" />
+                            </e:layout>
+                        </e:Group>
+                        <e:Group y="70">
+                            <GameUi:UiLabel text="Discord ID:" size="12" textColor="0xaaaaaa" />
+                            <GameUi:UiImage width="240" height="1" x="64" y="31" source="commonColorBlue0000" />
+                            <GameUi:UiLabel id="_labelDiscordId" text="123456789987654321" textColor="0xFFFFFF"
+                                            size="18" x="140" />
+                            <e:layout>
+                                <e:VerticalLayout gap="2" />
+                            </e:layout>
+                        </e:Group>
+                        <e:Group x="0" y="0">
+                            <GameUi:UiLabel id="_labelRegisterTimeTitle" text="注册时间:" size="12" textColor="0xaaaaaa" />
+                            <GameUi:UiImage width="240" height="1" x="54" y="21" source="commonColorBlue0000" />
+                            <e:Group x="0" y="17">
+                                <GameUi:UiLabel id="_labelRegisterTime1" text="2010/10/10" textColor="0xFFFFFF"
+                                                size="18" x="0" y="0" />
+                                <GameUi:UiLabel id="_labelRegisterTime2" text="00:00:00" textColor="0xFFFFFF" size="18"
+                                                x="140" />
                             </e:Group>
                             <e:layout>
-                                <e:VerticalLayout gap="20" />
+                                <e:VerticalLayout gap="2" />
                             </e:layout>
                         </e:Group>
                         <e:Group x="480" y="0">
-                            <e:Group x="0" y="0" locked="true">
-                                <GameUi:UiLabel id="_labelHistoryTitle" text="历史战绩:" textColor="0xFFFFFF" size="20"
-                                                scaleX="1" scaleY="1" x="0" y="0" />
-                                <GameUi:UiLabel text="(W / L / D)" textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1"
-                                                x="0" y="26" />
-                                <e:layout>
-                                    <e:HorizontalLayout/>
-                                </e:layout>
+                            <GameUi:UiLabel id="_labelLastLoginTimeTitle" text="上次登陆时间:" size="12" textColor="0xaaaaaa" />
+                            <GameUi:UiImage width="240" height="1" x="64" y="31" source="commonColorBlue0000" />
+                            <e:Group x="0" y="17">
+                                <GameUi:UiLabel id="_labelLastLoginTime1" text="2011/11/11" textColor="0xFFFFFF"
+                                                size="18" x="0" y="0" />
+                                <GameUi:UiLabel id="_labelLastLoginTime2" text="00:00:00" textColor="0xFFFFFF" size="18"
+                                                x="140" />
                             </e:Group>
-                            <GameUi:UiScrollList id="_sclHistory" x="493" y="144">
-                                <e:List>
-                                    <e:itemRendererSkinName>
-                                        <e:Skin>
-                                            <e:Group>
-                                                <GameUi:UiLabel id="_labelType" text="2人明战" textColor="0xFFFFFF"
-                                                                size="20" scaleX="1" scaleY="1" y="0" x="0"
-                                                                maxTextWidth="170" />
-                                                <GameUi:UiLabel id="_labelCount" text="100 / 100 / 100"
-                                                                textColor="0xFFFFFF" size="20" scaleX="1" scaleY="1"
-                                                                x="180" y="0" />
-                                            </e:Group>
-                                        </e:Skin>
-                                    </e:itemRendererSkinName>
-                                    <e:layout>
-                                        <e:VerticalLayout paddingTop="4" />
-                                    </e:layout>
-                                </e:List>
-                            </GameUi:UiScrollList>
                             <e:layout>
-                                <e:VerticalLayout gap="6" />
+                                <e:VerticalLayout gap="2" />
+                            </e:layout>
+                        </e:Group>
+                        <e:Group x="0" y="35">
+                            <e:Group x="0" y="0">
+                                <GameUi:UiLabel id="_labelOnlineTimeTitle" text="在线时长:" size="12" textColor="0xaaaaaa"
+                                                x="0" y="0" />
+                                <GameUi:UiLabel id="_labelLoginCountTitle" text="登陆次数:" size="12" x="140"
+                                                textColor="0xaaaaaa" />
+                            </e:Group>
+                            <GameUi:UiImage width="240" height="1" x="74" y="41" source="commonColorBlue0000" />
+                            <e:Group x="0" y="17">
+                                <GameUi:UiLabel id="_labelOnlineTime" text="999:99:99" textColor="0xFFFFFF" size="18"
+                                                x="0" y="0" />
+                                <GameUi:UiLabel id="_labelLoginCount" text="999" textColor="0xFFFFFF" size="18" x="140" />
+                            </e:Group>
+                            <e:layout>
+                                <e:VerticalLayout gap="2" />
                             </e:layout>
                         </e:Group>
                         <e:layout>
-                            <e:HorizontalLayout gap="60" />
-                        </e:layout>
-                    </e:Group>
-                    <e:Group id="_groupButtons" y="220" horizontalCenter="0">
-                        <GameUi:UiButton id="_btnRankList" label="积分排名" y="300" x="196" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnChangeNickname" label="更改昵称" y="290" x="186" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnChangePassword" label="更改密码" y="290" x="186" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnChangeDiscordId" label="更改Discord ID" y="300" x="196" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnShowOnlineUsers" label="在线玩家" y="310" x="206" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnChangeLanguage" label="Language" y="320" x="216" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnServerStatus" label="服务器状态" y="330" x="226" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnChat" label="聊天" y="340" x="236" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnComplaint" label="意见反馈" y="340" x="236" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnSwitchTexture" label="切换贴图" y="350" x="246" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnUnitsInfo" label="部队属性表" y="360" x="256" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnChangeLog" label="更新日志" y="360" x="256" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <GameUi:UiButton id="_btnSetPrivilege" label="设置权限" y="360" x="256" width="200"
-                                         skinName="Skins.Component.Button.ButtonSelfAdaption001" />
-                        <e:layout>
-                            <e:TileLayout orientation="rows" requestedColumnCount="4" />
+                            <e:VerticalLayout gap="12" />
                         </e:layout>
                     </e:Group>
                     <e:layout>
-                        <e:VerticalLayout horizontalAlign="center" gap="30" paddingTop="5" />
+                        <e:VerticalLayout gap="20" />
                     </e:layout>
                 </e:Group>
-            </e:Scroller>
+                <e:Group x="480" y="0">
+                    <e:Group x="0" y="0">
+                        <e:Group x="0" y="0" locked="true">
+                            <GameUi:UiImage alpha="0.8" scale9Grid="1,1,2,2" source="commonColorBlue0000" width="400"
+                                            height="26" y="0" x="0" />
+                            <GameUi:UiLabel id="_labelHistoryStd" text="明战" textColor="0xFFFFFF" size="14"
+                                            verticalCenter="0" horizontalCenter="-160" bold="true" />
+                            <GameUi:UiLabel id="_labelHistoryStdWin" text="胜" textColor="0xFFFFFF" size="14"
+                                            verticalCenter="0" horizontalCenter="-80" />
+                            <GameUi:UiLabel id="_labelHistoryStdLose" text="负" textColor="0xFFFFFF" size="14"
+                                            verticalCenter="0" horizontalCenter="0" />
+                            <GameUi:UiLabel id="_labelHistoryStdDraw" text="平" textColor="0xFFFFFF" size="14"
+                                            verticalCenter="0" horizontalCenter="80" />
+                            <GameUi:UiLabel id="_labelHistoryStdRatio" text="胜率" textColor="0xFFFFFF" size="14"
+                                            verticalCenter="0" horizontalCenter="160" />
+                        </e:Group>
+                        <GameUi:UiScrollList id="_sclHistoryStd" x="0" y="26">
+                            <e:List>
+                                <e:itemRendererSkinName>
+                                    <e:Skin width="400" height="26">
+                                        <e:Group left="0" right="0" top="0" bottom="0">
+                                            <GameUi:UiImage id="_imgBg" source="commonColorBlack0000" left="0" right="0"
+                                                            top="0" bottom="0" scale9Grid="1,1,2,2" />
+                                            <GameUi:UiLabel id="_labelType" text="2人明战" textColor="0xFFFFFF" size="14"
+                                                            maxTextWidth="170" verticalCenter="0"
+                                                            horizontalCenter="-160" />
+                                            <GameUi:UiLabel id="_labelWin" text="100" textColor="0xFFFFFF" size="14"
+                                                            verticalCenter="0" horizontalCenter="-80" />
+                                            <GameUi:UiLabel id="_labelLose" text="100" textColor="0xFFFFFF" size="14"
+                                                            verticalCenter="0" horizontalCenter="0" />
+                                            <GameUi:UiLabel id="_labelDraw" text="100" textColor="0xFFFFFF" size="14"
+                                                            verticalCenter="0" horizontalCenter="80" />
+                                            <GameUi:UiLabel id="_labelRatio" text="100%" textColor="0xFFFFFF" size="14"
+                                                            verticalCenter="0" horizontalCenter="160" />
+                                            <GameUi:UiImage id="_imgBottom" left="0" right="0" height="1" bottom="0"
+                                                            source="commonColorBlue0000" />
+                                        </e:Group>
+                                    </e:Skin>
+                                </e:itemRendererSkinName>
+                                <e:layout>
+                                    <e:VerticalLayout gap="0" />
+                                </e:layout>
+                            </e:List>
+                        </GameUi:UiScrollList>
+                    </e:Group>
+                    <e:Group x="0" y="32">
+                        <e:Group x="0" y="0" locked="true">
+                            <GameUi:UiImage alpha="0.8" scale9Grid="1,1,2,2" width="400" height="26" y="0" x="0"
+                                            source="commonColorPurple0000" />
+                            <GameUi:UiLabel id="_labelHistoryFog" text="雾战" textColor="0xFFFFFF" size="14"
+                                            verticalCenter="0" horizontalCenter="-160" bold="true" />
+                            <GameUi:UiLabel id="_labelHistoryFogWin" text="胜" textColor="0xFFFFFF" size="14"
+                                            verticalCenter="0" horizontalCenter="-80" />
+                            <GameUi:UiLabel id="_labelHistoryFogLose" text="负" textColor="0xFFFFFF" size="14"
+                                            verticalCenter="0" horizontalCenter="0" />
+                            <GameUi:UiLabel id="_labelHistoryFogDraw" text="平" textColor="0xFFFFFF" size="14"
+                                            verticalCenter="0" horizontalCenter="80" />
+                            <GameUi:UiLabel id="_labelHistoryFogRatio" text="胜率" textColor="0xFFFFFF" size="14"
+                                            verticalCenter="0" horizontalCenter="160" />
+                        </e:Group>
+                        <GameUi:UiScrollList id="_sclHistoryFog" x="0" y="26">
+                            <e:List>
+                                <e:itemRendererSkinName>
+                                    <e:Skin width="400" height="26">
+                                        <e:Group left="0" right="0" top="0" bottom="0">
+                                            <GameUi:UiImage id="_imgBg" source="commonColorBlack0000" left="0" right="0"
+                                                            top="0" bottom="0" scale9Grid="1,1,2,2" />
+                                            <GameUi:UiLabel id="_labelType" text="2人明战" textColor="0xFFFFFF" size="14"
+                                                            maxTextWidth="170" verticalCenter="0"
+                                                            horizontalCenter="-160" />
+                                            <GameUi:UiLabel id="_labelWin" text="100" textColor="0xFFFFFF" size="14"
+                                                            verticalCenter="0" horizontalCenter="-80" />
+                                            <GameUi:UiLabel id="_labelLose" text="100" textColor="0xFFFFFF" size="14"
+                                                            verticalCenter="0" horizontalCenter="0" />
+                                            <GameUi:UiLabel id="_labelDraw" text="100" textColor="0xFFFFFF" size="14"
+                                                            verticalCenter="0" horizontalCenter="80" />
+                                            <GameUi:UiLabel id="_labelRatio" text="100%" textColor="0xFFFFFF" size="14"
+                                                            verticalCenter="0" horizontalCenter="160" />
+                                            <GameUi:UiImage id="_imgBottom" left="0" right="0" height="1" bottom="0"
+                                                            source="commonColorPurple0000" />
+                                        </e:Group>
+                                    </e:Skin>
+                                </e:itemRendererSkinName>
+                                <e:layout>
+                                    <e:VerticalLayout gap="0" />
+                                </e:layout>
+                            </e:List>
+                        </GameUi:UiScrollList>
+                    </e:Group>
+                    <e:layout>
+                        <e:VerticalLayout gap="30" />
+                    </e:layout>
+                </e:Group>
+                <e:layout>
+                    <e:HorizontalLayout gap="60" />
+                </e:layout>
+            </e:Group>
+            <e:Group id="_groupButtons" y="360" right="20">
+                <GameUi:UiButton id="_btnChat" label="聊天" skinName="Skins.Component.Button.ButtonSetting001" x="0"
+                                 y="344" />
+                <GameUi:UiButton id="_btnClose" label="关闭" y="0" skinName="Skins.Component.Button.ButtonSetting001"
+                                 x="154" />
+                <e:layout>
+                    <e:HorizontalLayout gap="50" />
+                </e:layout>
+            </e:Group>
         </e:Group>
     </e:Group>
 </e:Skin>

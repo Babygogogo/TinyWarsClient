@@ -8,7 +8,7 @@ namespace TinyWars.MultiCustomRoom {
     type OpenDataForMcrWatchMakeRequestDetailPanel = {
         watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
     }
-    export class McrWatchMakeRequestDetailPanel extends GameUi.UiPanel {
+    export class McrWatchMakeRequestDetailPanel extends GameUi.UiPanel<OpenDataForMcrWatchMakeRequestDetailPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -17,7 +17,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelMenuTitle : GameUi.UiLabel;
         private _labelYes       : GameUi.UiLabel;
         private _labelNo        : GameUi.UiLabel;
-        private _listPlayer     : GameUi.UiScrollList;
+        private _listPlayer     : GameUi.UiScrollList<DataForPlayerRenderer>;
         private _btnConfirm     : GameUi.UiButton;
         private _btnCancel      : GameUi.UiButton;
 
@@ -38,7 +38,6 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/multiCustomRoom/McrWatchMakeRequestDetailPanel.exml";
@@ -59,7 +58,6 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected async _onClosed(): Promise<void> {
-            this._listPlayer.clear();
             this._dataForListPlayer = null;
         }
 
@@ -86,7 +84,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
             if (userIds.length > 0) {
-                MultiPlayerWar.MpwProxy.reqWatchMakeRequest(this._getOpenData<OpenDataForMcrWatchMakeRequestDetailPanel>().watchInfo.warInfo.warId, userIds);
+                MultiPlayerWar.MpwProxy.reqWatchMakeRequest(this._getOpenData().watchInfo.warInfo.warId, userIds);
             }
             this.close();
         }
@@ -108,7 +106,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _generateDataForListPlayer(): DataForPlayerRenderer[] {
-            const openData          = this._getOpenData<OpenDataForMcrWatchMakeRequestDetailPanel>().watchInfo;
+            const openData          = this._getOpenData().watchInfo;
             const warInfo           = openData.warInfo;
             const configVersion     = warInfo.settingsForCommon.configVersion;
             const ongoingDstUserIds = openData.ongoingDstUserIds || [];
@@ -142,7 +140,7 @@ namespace TinyWars.MultiCustomRoom {
         isRequesting    : boolean;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelIndex     : GameUi.UiLabel;
         private _labelTeam      : GameUi.UiLabel;
         private _labelName      : GameUi.UiLabel;
@@ -150,10 +148,8 @@ namespace TinyWars.MultiCustomRoom {
         private _imgAccept      : GameUi.UiImage;
         private _imgDecline     : GameUi.UiImage;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data as DataForPlayerRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             const playerInfo        = data.playerInfo;
             this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
             this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);
@@ -195,7 +191,7 @@ namespace TinyWars.MultiCustomRoom {
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
             if ((this._imgAccept.visible) || (this._imgDecline.visible)) {
-                const data = this.data as DataForPlayerRenderer;
+                const data = this.data;
                 data.panel.setPlayerSelected(data.playerInfo.playerIndex, !data.isRequesting);
             }
         }

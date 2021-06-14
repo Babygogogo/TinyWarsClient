@@ -5,7 +5,7 @@ namespace TinyWars.MapEditor {
     import Types        = Utility.Types;
     import SymmetryType = Types.SymmetryType;
 
-    export class MeSymmetryPanel extends GameUi.UiPanel {
+    export class MeSymmetryPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -65,7 +65,6 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName               = "resource/skins/mapEditor/MeSymmetryPanel.exml";

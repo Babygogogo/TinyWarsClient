@@ -12,7 +12,7 @@ namespace TinyWars.WarEvent {
     type OpenDataForWeEventListPanel = {
         war: MapEditor.MeWar;
     }
-    export class WeEventListPanel extends GameUi.UiPanel {
+    export class WeEventListPanel extends GameUi.UiPanel<OpenDataForWeEventListPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -23,7 +23,7 @@ namespace TinyWars.WarEvent {
         private _btnClear       : GameUi.UiButton;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoEvent   : GameUi.UiLabel;
-        private _listWarEvent   : GameUi.UiScrollList;
+        private _listWarEvent   : GameUi.UiScrollList<DataForWarEventDescRenderer>;
 
         public static show(openData: OpenDataForWeEventListPanel): void {
             if (!WeEventListPanel._instance) {
@@ -40,7 +40,6 @@ namespace TinyWars.WarEvent {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/warEvent/WeEventListPanel.exml";
         }
 
@@ -58,9 +57,6 @@ namespace TinyWars.WarEvent {
 
             this._updateView();
         }
-        protected async _onClosed(): Promise<void> {
-            this._listWarEvent.clear();
-        }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
@@ -74,16 +70,15 @@ namespace TinyWars.WarEvent {
         }
 
         private _onTouchedBtnAddEvent(e: egret.TouchEvent): void {
-            const openData = this._getOpenData<OpenDataForWeEventListPanel>();
+            const openData = this._getOpenData();
             if (WarEventHelper.addEvent(openData.war.getWarEventManager().getWarEventFullData()) != null) {
                 Notify.dispatch(Notify.Type.WarEventFullDataChanged);
             }
         }
 
         private _onTouchedBtnClear(e: egret.TouchEvent): void {
-            const openData = this._getOpenData<OpenDataForWeEventListPanel>();
+            const openData = this._getOpenData();
             Common.CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0188),
                 callback: () => {
                     const result = WarEventHelper.checkAndDeleteUnusedComponents(openData.war.getWarEventManager().getWarEventFullData());
@@ -111,7 +106,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateListWarEventAndLabelNoEvent(): void {
-            const war       = this._getOpenData<OpenDataForWeEventListPanel>().war;
+            const war       = this._getOpenData().war;
             const dataArray : DataForWarEventDescRenderer[] = [];
             for (const warEvent of (war.getWarEventManager().getWarEventFullData().eventArray || []).concat().sort((v1, v2) => v1.eventId - v2.eventId)) {
                 dataArray.push(...generateDataArrayForListWarEventDesc({
@@ -235,7 +230,7 @@ namespace TinyWars.WarEvent {
         parentNodeId?   : number;
         nodeId?         : number;
     }
-    class WarEventDescRenderer extends GameUi.UiListItemRenderer {
+    class WarEventDescRenderer extends GameUi.UiListItemRenderer<DataForWarEventDescRenderer> {
         private _btnModify  : GameUi.UiButton;
         private _labelPrefix: GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
@@ -252,7 +247,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _onTouchedBtnModify(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarEventDescRenderer;
+            const data = this.data;
             if (data) {
                 WeCommandPanel.show({
                     war             : data.war,
@@ -270,9 +265,7 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForLanguage();
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateLabelDescAndError();
         }
 
@@ -283,7 +276,7 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateLabelDescAndError(): void {
-            const data = this.data as DataForWarEventDescRenderer;
+            const data = this.data;
             if (data) {
                 const descType = data.descType;
                 if (descType === WarEventDescType.EventName) {
@@ -401,7 +394,7 @@ namespace TinyWars.WarEvent {
         private _updateForAction(data: DataForWarEventDescRenderer): void {                     // DONE
             const fullData  = data.war.getWarEventManager().getWarEventFullData();
             const actionId  = data.actionId;
-            const action    = (fullData.actionArray || []).find(v => v.WarEventActionCommonData.actionId === actionId);
+            const action    = (fullData.actionArray || []).find(v => v.WeaCommonData.actionId === actionId);
             if (action == null) {
                 Logger.error(`WeEventListPanel.WarEventDescRenderer._updateForAction() empty action.`);
                 this._labelDesc.text = `_updateForAction() empty action.`;

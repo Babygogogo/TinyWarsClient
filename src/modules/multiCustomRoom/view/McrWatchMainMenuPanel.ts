@@ -4,7 +4,7 @@ namespace TinyWars.MultiCustomRoom {
     import FlowManager  = Utility.FlowManager;
     import Notify       = Utility.Notify;
 
-    export class McrWatchMainMenuPanel extends GameUi.UiPanel {
+    export class McrWatchMainMenuPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -12,7 +12,7 @@ namespace TinyWars.MultiCustomRoom {
 
         private _labelMenuTitle : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
-        private _listCommand    : GameUi.UiScrollList;
+        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer>;
 
         public static show(): void {
             if (!McrWatchMainMenuPanel._instance) {
@@ -30,7 +30,6 @@ namespace TinyWars.MultiCustomRoom {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiCustomRoom/McrWatchMainMenuPanel.exml";
         }
 
@@ -47,16 +46,14 @@ namespace TinyWars.MultiCustomRoom {
             this._updateView();
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._listCommand.clear();
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             this.close();
             McrMainMenuPanel.show();
+            Lobby.LobbyTopPanel.show();
+            Lobby.LobbyBottomPanel.show();
         }
 
         private _onMsgUserLogout(e: egret.Event): void {
@@ -119,20 +116,18 @@ namespace TinyWars.MultiCustomRoom {
         redChecker? : () => boolean;
     }
 
-    class CommandRenderer extends GameUi.UiListItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
         private _labelCommand   : GameUi.UiLabel;
         private _imgRed         : GameUi.UiImage;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data as DataForCommandRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             this._labelCommand.text = data.name;
             this._imgRed.visible    = (!!data.redChecker) && (data.redChecker());
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data as DataForCommandRenderer).callback();
+            this.data.callback();
         }
     }
 }

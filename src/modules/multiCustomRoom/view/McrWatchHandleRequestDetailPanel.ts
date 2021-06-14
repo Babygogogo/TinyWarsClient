@@ -7,7 +7,7 @@ namespace TinyWars.MultiCustomRoom {
     type OpenDataForMcrWatchHandleRequestDetailPanel = {
         watchInfo: ProtoTypes.MultiPlayerWar.IMpwWatchInfo;
     }
-    export class McrWatchHandleRequestDetailPanel extends GameUi.UiPanel {
+    export class McrWatchHandleRequestDetailPanel extends GameUi.UiPanel<OpenDataForMcrWatchHandleRequestDetailPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -18,7 +18,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelNo                : GameUi.UiLabel;
         private _labelIsOpponent        : GameUi.UiLabel;
         private _labelIsWatchingOthers  : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList;
+        private _listPlayer             : GameUi.UiScrollList<DataForRequesterRenderer>;
         private _btnConfirm             : GameUi.UiButton;
         private _btnCancel              : GameUi.UiButton;
 
@@ -39,7 +39,6 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/multiCustomRoom/McrWatchHandleRequestDetailPanel.exml";
@@ -60,7 +59,6 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected async _onClosed(): Promise<void> {
-            this._listPlayer.clear();
             this._dataForListPlayer = null;
         }
 
@@ -88,7 +86,7 @@ namespace TinyWars.MultiCustomRoom {
                     declineUserIds.push(data.userId);
                 }
             }
-            MultiPlayerWar.MpwProxy.reqWatchHandleRequest(this._getOpenData<OpenDataForMcrWatchHandleRequestDetailPanel>().watchInfo.warInfo.warId, acceptUserIds, declineUserIds);
+            MultiPlayerWar.MpwProxy.reqWatchHandleRequest(this._getOpenData().watchInfo.warInfo.warId, acceptUserIds, declineUserIds);
             this.close();
         }
 
@@ -111,7 +109,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _generateDataForListPlayer(): DataForRequesterRenderer[] {
-            const openData          = this._getOpenData<OpenDataForMcrWatchHandleRequestDetailPanel>().watchInfo;
+            const openData          = this._getOpenData().watchInfo;
             const warInfo           = openData.warInfo;
             const playerInfoList    = warInfo.playerInfoList;
             const dataList          : DataForRequesterRenderer[] = [];
@@ -138,17 +136,15 @@ namespace TinyWars.MultiCustomRoom {
         isAccept        : boolean;
     }
 
-    class RequesterRenderer extends GameUi.UiListItemRenderer {
+    class RequesterRenderer extends GameUi.UiListItemRenderer<DataForRequesterRenderer> {
         private _labelName              : GameUi.UiLabel;
         private _labelIsOpponent        : GameUi.UiLabel;
         private _labelIsWatchingOthers  : GameUi.UiLabel;
         private _imgAccept              : GameUi.UiImage;
         private _imgDecline             : GameUi.UiImage;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data                          = this.data as DataForRequesterRenderer;
+        protected _onDataChanged(): void {
+            const data                          = this.data;
             this._labelIsOpponent.text          = data.isOpponent ? Lang.getText(Lang.Type.B0012) : "";
             this._labelIsWatchingOthers.text    = data.isWatchingOthers ? Lang.getText(Lang.Type.B0012) : "";
             this._imgAccept.visible             = data.isAccept;
@@ -158,7 +154,7 @@ namespace TinyWars.MultiCustomRoom {
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
             if ((this._imgAccept.visible) || (this._imgDecline.visible)) {
-                const data = this.data as DataForRequesterRenderer;
+                const data = this.data;
                 data.panel.setRequesterSelected(e.itemIndex, !data.isAccept);
             }
         }

@@ -8,17 +8,17 @@ namespace TinyWars.MapManagement {
     import CommonHelpPanel      = Common.CommonHelpPanel;
     import IWarRule             = ProtoTypes.WarRule.IWarRule;
     import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants      = Utility.CommonConstants;
 
     type OpenDataForMmWarRulePanel = ProtoTypes.Map.IMapRawData;
-    export class MmWarRulePanel extends GameUi.UiPanel {
+    export class MmWarRulePanel extends GameUi.UiPanel<OpenDataForMmWarRulePanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MmWarRulePanel;
 
         private _labelMenuTitle     : TinyWars.GameUi.UiLabel;
-        private _listWarRule        : TinyWars.GameUi.UiScrollList;
+        private _listWarRule        : TinyWars.GameUi.UiScrollList<DataForWarRuleNameRenderer>;
         private _btnBack            : TinyWars.GameUi.UiButton;
 
         private _btnModifyRuleName  : TinyWars.GameUi.UiButton;
@@ -37,7 +37,7 @@ namespace TinyWars.MapManagement {
         private _imgAvailabilityMrw : TinyWars.GameUi.UiImage;
 
         private _labelPlayerList    : TinyWars.GameUi.UiLabel;
-        private _listPlayer         : TinyWars.GameUi.UiScrollList;
+        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _dataForListWarRule : DataForWarRuleNameRenderer[] = [];
         private _selectedIndex      : number;
@@ -62,7 +62,6 @@ namespace TinyWars.MapManagement {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmWarRulePanel.exml";
         }
@@ -81,10 +80,6 @@ namespace TinyWars.MapManagement {
             this._updateComponentsForLanguage();
 
             this._resetView();
-        }
-        protected async _onClosed(): Promise<void> {
-            this._listWarRule.clear();
-            this._listPlayer.clear();
         }
 
         public setSelectedIndex(newIndex: number): void {
@@ -152,7 +147,7 @@ namespace TinyWars.MapManagement {
         private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
             const data  : DataForWarRuleNameRenderer[] = [];
             let index   = 0;
-            for (const rule of this._getOpenData<OpenDataForMmWarRulePanel>().warRuleArray || []) {
+            for (const rule of this._getOpenData().warRuleArray || []) {
                 data.push({
                     index,
                     rule,
@@ -218,27 +213,25 @@ namespace TinyWars.MapManagement {
         panel   : MmWarRulePanel;
     }
 
-    class WarRuleNameRenderer extends GameUi.UiListItemRenderer {
+    class WarRuleNameRenderer extends GameUi.UiListItemRenderer<DataForWarRuleNameRenderer> {
         private _btnChoose: GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnChoose, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data as DataForWarRuleNameRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             const index             = data.index;
             this.currentState       = index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelName.text    = `${Lang.getText(Lang.Type.B0318)} ${index}`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarRuleNameRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
     }
@@ -251,18 +244,14 @@ namespace TinyWars.MapManagement {
         panel       : MmWarRulePanel;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
-        private _listInfo   : GameUi.UiScrollList;
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
+        protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
@@ -271,7 +260,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data as DataForPlayerRenderer;
+            const data          = this.data;
             const warRule       = data.warRule;
             const playerRule    = data.playerRule;
             const isReviewing   = data.isReviewing;
@@ -281,7 +270,7 @@ namespace TinyWars.MapManagement {
                 this._createDataAvailableCoIdList(warRule, playerRule, isReviewing),
                 this._createDataInitialFund(warRule, playerRule, isReviewing),
                 this._createDataIncomeMultiplier(warRule, playerRule, isReviewing),
-                this._createDataInitialEnergyPercentage(warRule, playerRule, isReviewing),
+                this._createDataEnergyAddPctOnLoadCo(warRule, playerRule, isReviewing),
                 this._createDataEnergyGrowthMultiplier(warRule, playerRule, isReviewing),
                 this._createDataMoveRangeModifier(warRule, playerRule, isReviewing),
                 this._createDataAttackPowerModifier(warRule, playerRule, isReviewing),
@@ -309,7 +298,7 @@ namespace TinyWars.MapManagement {
         private _createDataAvailableCoIdList(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0403),
-                infoText                : `${playerRule.availableCoIdArray.length}`,
+                infoText                : `${(playerRule.bannedCoIdArray || []).length}`,
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     MmWarRuleAvailableCoPanel.show({
@@ -337,12 +326,12 @@ namespace TinyWars.MapManagement {
                 callbackOnTouchedTitle  : null,
             };
         }
-        private _createDataInitialEnergyPercentage(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue     = playerRule.initialEnergyPercentage;
+        private _createDataEnergyAddPctOnLoadCo(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+            const currValue = playerRule.energyAddPctOnLoadCo;
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
                 callbackOnTouchedTitle  : null,
             };
         }
@@ -409,20 +398,18 @@ namespace TinyWars.MapManagement {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnTitle.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnTitle, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnTitle, callback: this._onTouchedBtnTitle },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data                  = this.data as DataForInfoRenderer;
+        protected _onDataChanged(): void {
+            const data                  = this.data;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;
@@ -430,7 +417,7 @@ namespace TinyWars.MapManagement {
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-            const data      = this.data as DataForInfoRenderer;
+            const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());
         }

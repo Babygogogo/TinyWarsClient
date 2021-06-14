@@ -19,7 +19,6 @@ namespace TinyWars.User.UserProxy {
             { msgCode: NetMessageCodes.MsgUserGetOnlineUsers,   callback: _onMsgUserGetOnlineUsers, },
             { msgCode: NetMessageCodes.MsgUserSetPrivilege,     callback: _onMsgUserSetPrivilege, },
             { msgCode: NetMessageCodes.MsgUserSetPassword,      callback: _onMsgUserSetPassword, },
-            { msgCode: NetMessageCodes.MsgUserGetSettings,      callback: _onMsgUserGetSettings, },
             { msgCode: NetMessageCodes.MsgUserSetSettings,      callback: _onMsgUserSetSettings, },
         ]);
     }
@@ -36,7 +35,7 @@ namespace TinyWars.User.UserProxy {
     function _onMsgUserLogin(e: egret.Event): void {
         const data = e.data as NetMessage.MsgUserLogin.IS;
         if (!data.errorCode) {
-            User.UserModel.updateOnLogin(data);
+            User.UserModel.updateOnMsgUserLogin(data);
             Notify.dispatch(NotifyType.MsgUserLogin, data);
         }
     }
@@ -94,11 +93,12 @@ namespace TinyWars.User.UserProxy {
             }, },
         });
     }
-    function _onMsgUserSetNickname(e: egret.Event): void {
+    async function _onMsgUserSetNickname(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgUserSetNickname.IS;
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.MsgUserSetNicknameFailed, data);
         } else {
+            await UserModel.updateOnMsgUserSetNickname(data);
             Notify.dispatch(Notify.Type.MsgUserSetNickname, data);
         }
     }
@@ -110,11 +110,12 @@ namespace TinyWars.User.UserProxy {
             }, },
         });
     }
-    function _onMsgUserSetDiscordId(e: egret.Event): void {
+    async function _onMsgUserSetDiscordId(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgUserSetDiscordId.IS;
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.MsgUserSetDiscordIdFailed, data);
         } else {
+            await UserModel.updateOnMsgUserSetDiscordId(data);
             Notify.dispatch(Notify.Type.MsgUserSetDiscordId, data);
         }
     }
@@ -137,9 +138,10 @@ namespace TinyWars.User.UserProxy {
             userPrivilege,
         } } });
     }
-    function _onMsgUserSetPrivilege(e: egret.Event): void {
+    async function _onMsgUserSetPrivilege(e: egret.Event): Promise<void> {
         const data = e.data as ProtoTypes.NetMessage.MsgUserSetPrivilege.IS;
         if (!data.errorCode) {
+            await UserModel.updateOnMsgUserSetPrivilege(data);
             Notify.dispatch(Notify.Type.MsgUserSetPrivilege, data);
         }
     }
@@ -157,17 +159,6 @@ namespace TinyWars.User.UserProxy {
         }
     }
 
-    export function reqUserGetSettings(): void {
-        NetManager.send({ MsgUserGetSettings: { c: {} } });
-    }
-    function _onMsgUserGetSettings(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgUserGetSettings.IS;
-        if (!data.errorCode) {
-            UserModel.setSelfSettings(data.userSettings);
-            Notify.dispatch(Notify.Type.MsgUserGetSettings, data);
-        }
-    }
-
     export function reqUserSetSettings(userSettings: ProtoTypes.User.IUserSettings): void {
         NetManager.send({ MsgUserSetSettings: { c: {
             userSettings,
@@ -176,6 +167,7 @@ namespace TinyWars.User.UserProxy {
     function _onMsgUserSetSettings(e: egret.Event): void {
         const data = e.data as ProtoTypes.NetMessage.MsgUserSetSettings.IS;
         if (!data.errorCode) {
+            UserModel.updateOnMsgUserSetSettings(data);
             Notify.dispatch(Notify.Type.MsgUserSetSettings, data);
         }
     }

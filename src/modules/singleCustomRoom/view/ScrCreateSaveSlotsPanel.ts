@@ -2,9 +2,10 @@
 namespace TinyWars.SingleCustomRoom {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
-    import ProtoTypes   = Utility.ProtoTypes;
+    import Types        = Utility.Types;
+    import BwHelpers    = BaseWar.BwHelpers;
 
-    export class ScrCreateSaveSlotsPanel extends GameUi.UiPanel {
+    export class ScrCreateSaveSlotsPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -12,7 +13,7 @@ namespace TinyWars.SingleCustomRoom {
 
         private _group          : eui.Group;
         private _labelPanelTitle: GameUi.UiLabel;
-        private _srlSaveSlot    : GameUi.UiScrollList;
+        private _srlSaveSlot    : GameUi.UiScrollList<DataForSlotRenderer>;
         private _listSaveSlot   : eui.List;
         private _btnCancel      : GameUi.UiButton;
 
@@ -33,7 +34,6 @@ namespace TinyWars.SingleCustomRoom {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/singleCustomRoom/ScrCreateSaveSlotsPanel.exml`;
@@ -52,7 +52,6 @@ namespace TinyWars.SingleCustomRoom {
         }
         protected async _onClosed(): Promise<void> {
             this._dataForList = null;
-            this._srlSaveSlot.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +73,7 @@ namespace TinyWars.SingleCustomRoom {
 
             this._dataForList = this._createDataForList();
             this._srlSaveSlot.bindData(this._dataForList);
-            this._listSaveSlot.selectedIndex = ScrModel.getCreateWarSaveSlotIndex();
+            this._listSaveSlot.selectedIndex = ScrModel.Create.getSaveSlotIndex();
         }
 
         private _updateComponentsForLanguage(): void {
@@ -84,12 +83,12 @@ namespace TinyWars.SingleCustomRoom {
 
         private _createDataForList(): DataForSlotRenderer[] {
             const dataList  : DataForSlotRenderer[] = [];
-            const slotList  = ScrModel.getSaveSlotInfoList() || [];
-            for (let i = 0; i < Utility.ConfigManager.COMMON_CONSTANTS.ScwSaveSlotMaxCount; ++i) {
+            const slotDict  = SinglePlayerMode.SpmModel.SaveSlot.getSlotDict();
+            for (let slotIndex = 0; slotIndex < Utility.CommonConstants.SpwSaveSlotMaxCount; ++slotIndex) {
                 dataList.push({
-                    slotIndex   : i,
-                    slotInfo    : slotList.find(v => v.slotIndex === i),
-                })
+                    slotIndex,
+                    slotInfo    : slotDict.get(slotIndex),
+                });
             }
 
             return dataList;
@@ -98,10 +97,9 @@ namespace TinyWars.SingleCustomRoom {
 
     type DataForSlotRenderer = {
         slotIndex   : number;
-        slotInfo    : ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo | null;
+        slotInfo    : Types.SpmWarSaveSlotData | null;
     }
-
-    class SlotRenderer extends GameUi.UiListItemRenderer {
+    class SlotRenderer extends GameUi.UiListItemRenderer<DataForSlotRenderer> {
         private _group          : eui.Group;
         private _imgBg          : GameUi.UiImage;
         private _labelSlotIndex : GameUi.UiLabel;
@@ -109,49 +107,49 @@ namespace TinyWars.SingleCustomRoom {
         private _labelMapName   : GameUi.UiLabel;
         private _labelChoose    : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._imgBg,  callback: this._onTouchedImgBg },
+            ]);
 
-            this._imgBg.touchEnabled = true;
-            this._imgBg.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedImgBg, this);
+            this._imgBg.touchEnabled    = true;
+            this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
         private _onTouchedImgBg(e: egret.TouchEvent): void {
-            ScrModel.setCreateWarSaveSlotIndex((this.data as DataForSlotRenderer).slotIndex);
+            ScrModel.Create.setSaveSlotIndex(this.data.slotIndex);
             ScrCreateSaveSlotsPanel.hide();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _updateView(): void {
-            const data                  = this.data as DataForSlotRenderer;
-            const slotInfo              = data.slotInfo;
+        private async _updateView(): Promise<void> {
+            const data                  = this.data;
             this._labelSlotIndex.text   = "" + data.slotIndex;
-            this._labelType.text        = slotInfo ? Lang.getWarTypeName(slotInfo.warType) : "----";
-            this._labelChoose.text      = Lang.getText(Lang.Type.B0258);
 
-            const labelMapName = this._labelMapName;
-            if (!slotInfo) {
-                labelMapName.text = "----";
+            const slotInfo      = data.slotInfo;
+            const labelType     = this._labelType;
+            const labelMapName  = this._labelMapName;
+            if (slotInfo == null) {
+                labelType.text      = `----`;
+                labelMapName.text   = `----`;
             } else {
-                const comment = slotInfo.slotComment;
-                if (comment) {
-                    labelMapName.text = comment;
+                const warData   = slotInfo.warData;
+                labelType.text  = Lang.getWarTypeName(BwHelpers.getWarType(warData));
+
+                const slotComment = slotInfo.extraData.slotComment;
+                if (slotComment) {
+                    labelMapName.text = slotComment;
                 } else {
-                    const mapId = slotInfo.mapId;
-                    if (mapId == null) {
-                        labelMapName.text = `(${Lang.getText(Lang.Type.B0321)})`;
-                    } else {
-                        labelMapName.text = ``;
-                        WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId).then(value => labelMapName.text = value);
-                    }
+                    const mapId         = BwHelpers.getMapId(warData);
+                    labelMapName.text   = mapId == null
+                        ? `(${Lang.getText(Lang.Type.B0321)})`
+                        : await WarMap.WarMapModel.getMapNameInCurrentLanguage(mapId);
                 }
             }
         }

@@ -14,19 +14,18 @@ namespace TinyWars.MultiRankRoom.MrrProxy {
             { msgCode: ActionCode.MsgMrrSetBannedCoIdList,          callback: _onMsgMrrSetBannedCoIdList },
             { msgCode: ActionCode.MsgMrrSetMaxConcurrentCount,      callback: _onMsgMrrSetMaxConcurrentCount },
             { msgCode: ActionCode.MsgMrrSetSelfSettings,            callback: _onMsgMrrSetSelfSettings },
-            { msgCode: ActionCode.MsgMrrDeleteRoom,                 callback: _onMsgMrrDeleteRoom },
+            { msgCode: ActionCode.MsgMrrDeleteRoomByServer,         callback: _onMsgMrrDeleteRoomByServer },
         ], MrrProxy);
     }
 
-    export function reqMrrGetMaxConcurrentCount(hasFog: boolean): void {
-        NetManager.send({ MsgMrrGetMaxConcurrentCount: { c: {
-            hasFog,
-        } }, });
+    export function reqMrrGetMaxConcurrentCount(): void {
+        NetManager.send({ MsgMrrGetMaxConcurrentCount: { c: {} } });
     }
     function _onMsgMrrGetMaxConcurrentCount(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMrrGetMaxConcurrentCount.IS;
         if (!data.errorCode) {
-            MrrModel.setMaxConcurrentCount(data.hasFog, data.maxCount);
+            MrrModel.setMaxConcurrentCount(false, data.maxCountForStd);
+            MrrModel.setMaxConcurrentCount(true, data.maxCountForFog);
             Notify.dispatch(Notify.Type.MsgMrrGetMaxConcurrentCount, data);
         }
     }
@@ -36,12 +35,12 @@ namespace TinyWars.MultiRankRoom.MrrProxy {
             roomId,
         } }, });
     }
-    function _onMsgMrrGetRoomPublicInfo(e: egret.Event): void {
+    async function _onMsgMrrGetRoomPublicInfo(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMrrGetRoomPublicInfo.IS;
         if (data.errorCode) {
             Notify.dispatch(Notify.Type.MsgMrrGetRoomPublicInfoFailed, data);
         } else {
-            MrrModel.setRoomInfo(data.roomInfo, true);
+            await MrrModel.updateOnMsgMrrGetRoomPublicInfo(data);
             Notify.dispatch(Notify.Type.MsgMrrGetRoomPublicInfo, data);
         }
     }
@@ -64,23 +63,25 @@ namespace TinyWars.MultiRankRoom.MrrProxy {
             bannedCoIdList,
         } }, });
     }
-    function _onMsgMrrSetBannedCoIdList(e: egret.Event): void {
+    async function _onMsgMrrSetBannedCoIdList(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMrrSetBannedCoIdList.IS;
         if (!data.errorCode) {
+            await MrrModel.updateOnMsgMrrSetBannedCoIdList(data);
             Notify.dispatch(Notify.Type.MsgMrrSetBannedCoIdList, data);
         }
     }
 
-    export function reqMrrSetMaxConcurrentCount(hasFog: boolean, maxCount: number): void {
+    export function reqMrrSetMaxConcurrentCount(maxCountForStd: number, maxCountForFog: number): void {
         NetManager.send({ MsgMrrSetMaxConcurrentCount: { c: {
-            hasFog,
-            maxCount,
+            maxCountForStd,
+            maxCountForFog,
         } }, });
     }
     function _onMsgMrrSetMaxConcurrentCount(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMrrSetMaxConcurrentCount.IS;
         if (!data.errorCode) {
-            MrrModel.setMaxConcurrentCount(data.hasFog, data.maxCount);
+            MrrModel.setMaxConcurrentCount(false, data.maxCountForStd);
+            MrrModel.setMaxConcurrentCount(true, data.maxCountForFog);
             Notify.dispatch(Notify.Type.MsgMrrSetMaxConcurrentCount, data);
         }
     }
@@ -92,16 +93,17 @@ namespace TinyWars.MultiRankRoom.MrrProxy {
             unitAndTileSkinId,
         }, }, });
     }
-    function _onMsgMrrSetSelfSettings(e: egret.Event): void {
+    async function _onMsgMrrSetSelfSettings(e: egret.Event): Promise<void> {
         const data = e.data as NetMessage.MsgMrrSetSelfSettings.IS;
         if (!data.errorCode) {
+            await MrrModel.updateOnMsgMrrSetSelfSettings(data);
             Notify.dispatch(Notify.Type.MsgMrrSetSelfSettings, data);
         }
     }
 
-    function _onMsgMrrDeleteRoom(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMrrDeleteRoom.IS;
+    function _onMsgMrrDeleteRoomByServer(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMrrDeleteRoomByServer.IS;
         MrrModel.deleteRoomInfo(data.roomId);
-        Notify.dispatch(Notify.Type.MsgMrrDeleteRoom, data);
+        Notify.dispatch(Notify.Type.MsgMrrDeleteRoomByServer, data);
     }
 }

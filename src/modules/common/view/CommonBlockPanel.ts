@@ -5,7 +5,7 @@ namespace TinyWars.Common {
         content: string;
     }
 
-    export class CommonBlockPanel extends GameUi.UiPanel {
+    export class CommonBlockPanel extends GameUi.UiPanel<OpenDataForCommonBlockPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -31,12 +31,11 @@ namespace TinyWars.Common {
             super();
 
             this.skinName = "resource/skins/common/CommonBlockPanel.exml";
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
         }
 
         protected _onOpened(): void {
-            const openData          = this._getOpenData<OpenDataForCommonBlockPanel>();
+            const openData          = this._getOpenData();
             this._labelTitle.text   = openData.title;
             this._labelContent.setRichText(openData.content);
         }

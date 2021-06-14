@@ -3,22 +3,25 @@ namespace TinyWars.Common {
     import Notify       = Utility.Notify;
     import ProtoTypes   = Utility.ProtoTypes;
     import Lang         = Utility.Lang;
+    import Helpers      = Utility.Helpers;
 
-    export class CommonServerStatusPanel extends GameUi.UiPanel {
+    export class CommonServerStatusPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: CommonServerStatusPanel;
 
-        private _labelTitle                 : TinyWars.GameUi.UiLabel;
-        private _labelAccountsTitle         : TinyWars.GameUi.UiLabel;
-        private _labelAccounts              : TinyWars.GameUi.UiLabel;
-        private _labelOnlineTimeTitle       : TinyWars.GameUi.UiLabel;
-        private _labelOnlineTime            : TinyWars.GameUi.UiLabel;
-        private _labelNewAccountsTitle      : TinyWars.GameUi.UiLabel;
-        private _labelNewAccounts           : TinyWars.GameUi.UiLabel;
-        private _labelActiveAccountsTitle   : TinyWars.GameUi.UiLabel;
-        private _labelActiveAccounts        : TinyWars.GameUi.UiLabel;
+        private readonly _imgMask                   : GameUi.UiImage;
+        private readonly _group                     : eui.Group;
+        private readonly _labelTitle                : TinyWars.GameUi.UiLabel;
+        private readonly _labelAccountsTitle        : TinyWars.GameUi.UiLabel;
+        private readonly _labelAccounts             : TinyWars.GameUi.UiLabel;
+        private readonly _labelOnlineTimeTitle      : TinyWars.GameUi.UiLabel;
+        private readonly _labelOnlineTime           : TinyWars.GameUi.UiLabel;
+        private readonly _labelNewAccountsTitle     : TinyWars.GameUi.UiLabel;
+        private readonly _labelNewAccounts          : TinyWars.GameUi.UiLabel;
+        private readonly _labelActiveAccountsTitle  : TinyWars.GameUi.UiLabel;
+        private readonly _labelActiveAccounts       : TinyWars.GameUi.UiLabel;
 
         public static show(): void {
             if (!CommonServerStatusPanel._instance) {
@@ -36,10 +39,9 @@ namespace TinyWars.Common {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-            this.skinName               = "resource/skins/common/CommonServerStatusPanel.exml";
+            this.skinName = "resource/skins/common/CommonServerStatusPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -47,9 +49,14 @@ namespace TinyWars.Common {
                 { type: Notify.Type.MsgCommonGetServerStatus, callback: this._onMsgCommonGetServerStatus },
             ]);
 
+            this._showOpenAnimation();
+
             this._updateComponentsForLanguage();
 
             CommonProxy.reqCommonGetServerStatus();
+        }
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
         }
 
         private _onMsgCommonGetServerStatus(e: egret.Event): void {
@@ -67,6 +74,34 @@ namespace TinyWars.Common {
             this._labelOnlineTimeTitle.text     = `${Lang.getText(Lang.Type.B0329)}:`;
             this._labelNewAccountsTitle.text    = `${Lang.getText(Lang.Type.B0330)}:`;
             this._labelActiveAccountsTitle.text = `${Lang.getText(Lang.Type.B0331)}:`;
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: 40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+            });
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                    callback    : resolve,
+                });
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: 40 },
+                });
+            });
         }
     }
 }

@@ -19,10 +19,6 @@ namespace TinyWars.MultiPlayerWar {
             return (this._getWar() as MpwWar).getPlayerIndexLoggedIn();
         }
 
-        protected _getViewClass(): new () => BaseWar.BwActionPlannerView {
-            return McwActionPlannerView;
-        }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting common state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,21 +33,24 @@ namespace TinyWars.MultiPlayerWar {
 
             this._setState(State.ChoosingProductionTarget);
             this._updateView();
-            McwProduceUnitPanel.show({ gridIndex });
+            BaseWar.BwProduceUnitPanel.show({
+                gridIndex,
+                war     : this._getWar(),
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting requesting state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
-            MpwProxy.reqMcwPlayerProduceUnit(this._getWar(), gridIndex, unitType, unitHp);
+            MpwProxy.reqMpwPlayerProduceUnit(this._getWar(), gridIndex, unitType, unitHp);
 
             this._setState(State.RequestingPlayerProduceUnit);
             this._updateView();
         }
 
         public setStateRequestingPlayerVoteForDraw(isAgree: boolean): void {
-            MpwProxy.reqMcwPlayerVoteForDraw(this._getWar(), isAgree);
+            MpwProxy.reqMpwPlayerVoteForDraw(this._getWar(), isAgree);
 
             this._setState(State.RequestingPlayerVoteForDraw);
             this._updateView();
@@ -59,7 +58,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _setStateRequestingUnitProduceUnit(): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitProduceUnit(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            MpwProxy.reqMpwUnitProduceUnit(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitProduceUnit);
             this._updateView();
@@ -67,7 +66,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _setStateRequestingUnitBeLoaded(): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitBeLoaded(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            MpwProxy.reqMpwUnitBeLoaded(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitBeLoaded);
             this._updateView();
@@ -75,7 +74,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _setStateRequestingUnitJoin(): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitJoin(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            MpwProxy.reqMpwUnitJoin(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitJoin);
             this._updateView();
@@ -83,7 +82,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _setStateRequestingUnitUseCoSuperPower(): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitUseCoSkill(this._getWar(), Types.CoSkillType.SuperPower, this.getMovePath(), unit ? unit.getUnitId() : null);
+            MpwProxy.reqMpwUnitUseCoSkill(this._getWar(), Types.CoSkillType.SuperPower, this.getMovePath(), unit ? unit.getUnitId() : null);
 
             this._setState(State.RequestingUnitUseCoSuperPower);
             this._updateView();
@@ -91,7 +90,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _setStateRequestingUnitUseCoPower(): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitUseCoSkill(this._getWar(), Types.CoSkillType.Power, this.getMovePath(), unit ? unit.getUnitId() : null);
+            MpwProxy.reqMpwUnitUseCoSkill(this._getWar(), Types.CoSkillType.Power, this.getMovePath(), unit ? unit.getUnitId() : null);
 
             this._setState(State.RequestingUnitUseCoPower);
             this._updateView();
@@ -99,7 +98,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _setStateRequestingUnitLoadCo(): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitLoadCo(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : null);
+            MpwProxy.reqMpwUnitLoadCo(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : null);
 
             this._setState(State.RequestingUnitLoadCo);
             this._updateView();
@@ -107,7 +106,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _setStateRequestingUnitWait(): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitWait(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            MpwProxy.reqMpwUnitWait(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitWait);
             this._updateView();
@@ -115,7 +114,7 @@ namespace TinyWars.MultiPlayerWar {
 
         protected _setStateRequestingUnitAttackUnit(targetGridIndex: GridIndex): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitAttackUnit(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, targetGridIndex);
+            MpwProxy.reqMpwUnitAttackUnit(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, targetGridIndex);
 
             this._setState(State.RequestingUnitAttackUnit);
             this._updateView();
@@ -123,7 +122,7 @@ namespace TinyWars.MultiPlayerWar {
 
         protected _setStateRequestingUnitAttackTile(targetGridIndex: GridIndex): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitAttackTile(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, targetGridIndex);
+            MpwProxy.reqMpwUnitAttackTile(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, targetGridIndex);
 
             this._setState(State.RequestingUnitAttackTile);
             this._updateView();
@@ -131,7 +130,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _setStateRequestingUnitBuildTile(): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitBuildTile(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            MpwProxy.reqMpwUnitBuildTile(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitBuildTile);
             this._updateView();
@@ -139,7 +138,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _setStateRequestingUnitCaptureTile(): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitCaptureTile(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            MpwProxy.reqMpwUnitCaptureTile(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitCaptureTile);
             this._updateView();
@@ -147,7 +146,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _setStateRequestingUnitDive(): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitDive(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            MpwProxy.reqMpwUnitDive(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitDive);
             this._updateView();
@@ -155,7 +154,7 @@ namespace TinyWars.MultiPlayerWar {
 
         private _setStateRequestingUnitSurface(): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitSurface(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            MpwProxy.reqMpwUnitSurface(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitSurface);
             this._updateView();
@@ -173,7 +172,7 @@ namespace TinyWars.MultiPlayerWar {
             }
 
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitDrop(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, destinations);
+            MpwProxy.reqMpwUnitDrop(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, destinations);
 
             this._setState(State.RequestingUnitDrop);
             this._updateView();
@@ -185,7 +184,7 @@ namespace TinyWars.MultiPlayerWar {
             }
 
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitDrop(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, destinations);
+            MpwProxy.reqMpwUnitDrop(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, destinations);
 
             this._setState(State.RequestingUnitDrop);
             this._updateView();
@@ -193,7 +192,7 @@ namespace TinyWars.MultiPlayerWar {
 
         protected _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitLaunchFlare(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, gridIndex);
+            MpwProxy.reqMpwUnitLaunchFlare(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, gridIndex);
 
             this._setState(State.RequestingUnitLaunchFlare);
             this._updateView();
@@ -201,7 +200,7 @@ namespace TinyWars.MultiPlayerWar {
 
         protected _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitLaunchSilo(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, gridIndex);
+            MpwProxy.reqMpwUnitLaunchSilo(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined, gridIndex);
 
             this._setState(State.RequestingUnitLaunchSilo);
             this._updateView();
@@ -209,28 +208,28 @@ namespace TinyWars.MultiPlayerWar {
 
         private _setStateRequestingUnitSupply(): void {
             const unit = this.getFocusUnitLoaded();
-            MpwProxy.reqMcwUnitSupply(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
+            MpwProxy.reqMpwUnitSupply(this._getWar(), this.getMovePath(), unit ? unit.getUnitId() : undefined);
 
             this._setState(State.RequestingUnitSupply);
             this._updateView();
         }
 
         public setStateRequestingPlayerEndTurn(): void {
-            MpwProxy.reqMcwPlayerEndTurn(this._getWar());
+            MpwProxy.reqMpwPlayerEndTurn(this._getWar());
 
             this._setState(State.RequestingPlayerEndTurn);
             this._updateView();
         }
 
         public setStateRequestingPlayerSurrender(): void {
-            MpwProxy.reqMcwPlayerSurrender(this._getWar());
+            MpwProxy.reqMpwPlayerSurrender(this._getWar());
 
             this._setState(State.RequestingPlayerSurrender);
             this._updateView();
         }
 
         public setStateRequestingPlayerDeleteUnit(): void {
-            MpwProxy.reqMcwPlayerDeleteUnit(this._getWar(), this.getCursor().getGridIndex());
+            MpwProxy.reqMpwPlayerDeleteUnit(this._getWar(), this.getCursor().getGridIndex());
 
             this._setState(State.RequestingPlayerDeleteUnit);
             this._updateView();
@@ -244,9 +243,9 @@ namespace TinyWars.MultiPlayerWar {
 
             const currState = this.getState();
             if (currState === State.ChoosingAction) {
-                McwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
+                BaseWar.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
             } else {
-                McwUnitActionsPanel.hide();
+                BaseWar.BwUnitActionsPanel.hide();
             }
         }
 
@@ -425,7 +424,7 @@ namespace TinyWars.MultiPlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = this.getFocusUnit();
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -437,7 +436,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitJoin(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitJoin(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = this.getFocusUnit();
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -449,7 +448,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -459,7 +458,6 @@ namespace TinyWars.MultiPlayerWar {
                         actionType  : UnitActionType.UseCoSuperPower,
                         callback    : () => {
                             CommonConfirmPanel.show({
-                                title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0058),
                                 callback: () => this._setStateRequestingUnitUseCoSuperPower(),
                             });
@@ -467,7 +465,7 @@ namespace TinyWars.MultiPlayerWar {
                     }];
             }
         }
-        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -477,7 +475,6 @@ namespace TinyWars.MultiPlayerWar {
                         actionType  : UnitActionType.UseCoPower,
                         callback    : () => {
                             CommonConfirmPanel.show({
-                                title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0054),
                                 callback: () => this._setStateRequestingUnitUseCoPower(),
                             });
@@ -485,7 +482,7 @@ namespace TinyWars.MultiPlayerWar {
                     }];
             }
         }
-        protected _getActionUnitLoadCo(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitLoadCo(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -494,7 +491,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitCapture(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitCapture(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -503,7 +500,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitDive(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitDive(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -512,7 +509,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitSurface(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitSurface(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -521,7 +518,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitBuildTile(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitBuildTile(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -530,7 +527,7 @@ namespace TinyWars.MultiPlayerWar {
                     : [];
             }
         }
-        protected _getActionUnitSupply(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitSupply(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -548,7 +545,7 @@ namespace TinyWars.MultiPlayerWar {
                 return [];
             }
         }
-        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -589,7 +586,7 @@ namespace TinyWars.MultiPlayerWar {
                 }
             }
         }
-        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitAction[] {
             const existingUnit = this._getUnitMap().getUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];
@@ -600,7 +597,6 @@ namespace TinyWars.MultiPlayerWar {
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitDropOnChooseAction()
                             : () => CommonConfirmPanel.show({
-                                title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0055),
                                 callback: () => this._setStateRequestingUnitDropOnChooseAction(),
                             }),
@@ -611,7 +607,6 @@ namespace TinyWars.MultiPlayerWar {
                         callback    : !hasOtherAction
                             ? () => this._setStateRequestingUnitWait()
                             : () => CommonConfirmPanel.show({
-                                title   : Lang.getText(Lang.Type.B0088),
                                 content : Lang.getText(Lang.Type.A0055),
                                 callback: () => this._setStateRequestingUnitWait(),
                             }),

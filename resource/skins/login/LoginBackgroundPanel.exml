@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage source="bg_001_png" left="0" right="0" top="0" bottom="0" locked="true" />
+    <GameUi:UiImage id="_imgBackground" source="bg_001_png" left="0" right="0" top="0" bottom="0" />
     <e:Group x="0" verticalCenter="120">
-        <GameUi:UiButton id="_btnLanguage01" label="" y="0" skinName="Skins.Component.Button.ButtonConfirm001" x="0" />
-        <GameUi:UiButton id="_btnLanguage02" label="" y="10" skinName="Skins.Component.Button.ButtonConfirm001" x="0" />
+        <e:Group>
+            <GameUi:UiButton id="_btnLanguage01" label="" skinName="Skins.Component.Button.ButtonConfirm001" left="0" />
+        </e:Group>
+        <e:Group>
+            <GameUi:UiButton id="_btnLanguage02" label="" skinName="Skins.Component.Button.ButtonConfirm001" left="0" />
+        </e:Group>
         <e:layout>
             <e:VerticalLayout gap="0" />
         </e:layout>
     </e:Group>
-    <GameUi:UiLabel id="_labelVersion" text="TinyWars  v19.0118.0149" bottom="16" right="20" size="18"
-                    textColor="0x000000" italic="true" />
+    <e:Group horizontalCenter="0" bottom="10" id="_groupCopyright">
+        <GameUi:UiLabel text="Tiny Wars is a fan-made game that bases on Advance Wars: Days of Ruin." size="14" x="196"
+                        y="0" textColor="0x666666" />
+        <GameUi:UiLabel text="Advance Wars is (c) 1990-2001 Nintendo and (c) 2001 Intelligent Systems." size="14"
+                        x="206" y="10" textColor="0x666666" />
+        <GameUi:UiLabel text="All images and sounds are copyright their respective owners." size="14" x="0" y="0"
+                        textColor="0x666666" />
+        <e:layout>
+            <e:VerticalLayout horizontalAlign="center" gap="0" />
+        </e:layout>
+    </e:Group>
+    <GameUi:UiLabel id="_labelVersion" text="v19.0118.0149" bottom="16" right="20" size="18" textColor="0x000000"
+                    italic="true" />
     <e:Group id="_groupUnits" width="4000" x="0" scaleX="0.25" scaleY="0.25" height="100">
         <e:layout>
             <e:HorizontalLayout gap="0" />

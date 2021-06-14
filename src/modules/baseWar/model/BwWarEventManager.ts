@@ -6,29 +6,37 @@ namespace TinyWars.BaseWar {
     import Helpers                          = Utility.Helpers;
     import ProtoTypes                       = Utility.ProtoTypes;
     import Logger                           = Utility.Logger;
+    import ClientErrorCode                  = Utility.ClientErrorCode;
     import ISerialWarEventManager           = ProtoTypes.WarSerialization.ISerialWarEventManager;
     import IDataForWarEventCalledCount      = ProtoTypes.WarSerialization.IDataForWarEventCalledCount;
     import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
     import WarEvent                         = ProtoTypes.WarEvent;
     import IExtraDataForSystemCallWarEvent  = ProtoTypes.WarAction.WarActionSystemCallWarEvent.IExtraDataForSystemCallWarEvent;
-    import CommonConstants                  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants                  = Utility.CommonConstants;
 
-    export abstract class BwWarEventManager {
+    export class BwWarEventManager {
         private _war?               : BwWar;
         private _warEventFullData?  : IWarEventFullData | null | undefined;
         private _calledCountList?   : IDataForWarEventCalledCount[] | null | undefined;
 
-        public init(data: ISerialWarEventManager): BwWarEventManager | undefined {
-            this.setWarEventFullData(data.warEventFullData || {});
-            this._setCalledCountList(data.calledCountList);
+        public init(data: ISerialWarEventManager): ClientErrorCode {
+            if (!data) {
+                this._setWarEventFullData(null);
+                this._setCalledCountList(null);
+            } else {
+                // TODO: validate the data.
+                const warEventFullData = data.warEventFullData;
 
-            return this;
+
+
+                this._setWarEventFullData(data.warEventFullData);
+                this._setCalledCountList(data.calledCountList);
+            }
+
+            return ClientErrorCode.NoError;
         }
-        public fastInit(data: ISerialWarEventManager): BwWarEventManager {
-            this.setWarEventFullData(Helpers.deepClone(data.warEventFullData || {}));
-            this._setCalledCountList(Helpers.deepClone(data.calledCountList));
-
-            return this;
+        public fastInit(data: ISerialWarEventManager): ClientErrorCode {
+            return this.init(data);
         }
 
         public serialize(): ISerialWarEventManager | undefined {
@@ -37,11 +45,14 @@ namespace TinyWars.BaseWar {
                 calledCountList     : this._getCalledCountList(),
             };
         }
-        public serializeForSimulation(): ISerialWarEventManager | undefined {
-            return {
+        public serializeForCreateSfw(): ISerialWarEventManager | undefined {
+            return Helpers.deepClone({
                 warEventFullData    : this.getWarEventFullData(),
                 calledCountList     : this._getCalledCountList(),
-            };
+            });
+        }
+        public serializeForCreateMfr(): ISerialWarEventManager | undefined {
+            return this.serializeForCreateSfw();
         }
 
         public startRunning(war: BwWar): void {
@@ -55,44 +66,14 @@ namespace TinyWars.BaseWar {
             return this._war;
         }
 
-        public setWarEventFullData(data: IWarEventFullData): void {
+        protected _setWarEventFullData(data: IWarEventFullData): void {
             this._warEventFullData = data;
-
-            if (data.actionArray == null) {
-                data.actionArray = [];
-            }
-            if (data.conditionArray == null) {
-                data.conditionArray = [];
-            }
-            if (data.conditionNodeArray == null) {
-                data.conditionNodeArray = [];
-            }
-            if (data.eventArray == null) {
-                data.eventArray = [];
-            }
-
-            for (const node of data.conditionNodeArray) {
-                if (node.subNodeIdArray == null) {
-                    node.subNodeIdArray = [];
-                }
-                if (node.conditionIdArray == null) {
-                    node.conditionIdArray = [];
-                }
-            }
-            for (const event of data.eventArray) {
-                if (event.actionIdArray == null) {
-                    event.actionIdArray = [];
-                }
-                if (event.eventNameArray == null) {
-                    event.eventNameArray = [];
-                }
-            }
         }
         public getWarEventFullData(): IWarEventFullData | undefined | null {
             return this._warEventFullData;
         }
 
-        private _setCalledCountList(list: IDataForWarEventCalledCount[] | null | undefined): void {
+        protected _setCalledCountList(list: IDataForWarEventCalledCount[] | null | undefined): void {
             this._calledCountList = list;
         }
         private _getCalledCountList(): IDataForWarEventCalledCount[] | null | undefined {
@@ -124,13 +105,15 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            if (action.WarEventActionAddUnit) {
-                return await this._callActionAddUnit(indexForActionIdList, action.WarEventActionAddUnit, isFastExecute);
+            if (action.WeaAddUnit) {
+                return await this._callActionAddUnit(indexForActionIdList, action.WeaAddUnit, isFastExecute);
+            } else if (action.WeaSetPlayerAliveState) {
+                return await this._callActionSetPlayerAliveState(action.WeaSetPlayerAliveState);
             }
 
             // TODO add more actions.
         }
-        private async _callActionAddUnit(indexForActionIdList: number, action: WarEvent.IWarEventActionAddUnit, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | undefined> {
+        private async _callActionAddUnit(indexForActionIdList: number, action: WarEvent.IWeaAddUnit, isFastExecute: boolean): Promise<IExtraDataForSystemCallWarEvent | undefined> {
             const unitArray = action.unitArray;
             if (unitArray == null) {
                 Logger.error(`BwWarEventManager._callActionAddUnit() empty unitArray.`);
@@ -179,66 +162,66 @@ namespace TinyWars.BaseWar {
                 const { canBeBlockedByUnit, needMovableTile, unitData } = data;
                 if (canBeBlockedByUnit == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty canBeBlockedByUnit.`);
-                    break;
+                    continue;
                 }
                 if (needMovableTile == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty needMovableTile.`);
-                    break;
+                    continue;
                 }
                 if (unitData == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty unitData.`);
-                    break;
+                    continue;
                 }
 
                 if (unitData.loaderUnitId != null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() invalid unitData.loaderUnitId.`);
-                    break;
+                    continue;
                 }
 
                 const unitId = unitMap.getNextUnitId();
                 if (unitId == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty unitId.`);
-                    break;
+                    continue;
                 }
 
                 const unitType = unitData.unitType;
                 if (unitType == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty unitType.`);
-                    break;
+                    continue;
                 }
 
                 const unitCfg = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
                 if (unitCfg == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty unitCfg.`);
-                    break;
+                    continue;
                 }
 
                 const moveType = unitCfg.moveType;
                 if (moveType == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty moveType.`);
-                    break;
+                    continue;
                 }
 
                 const rawGridIndex = BwHelpers.convertGridIndex(unitData.gridIndex);
                 if (rawGridIndex == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty rawGridIndex.`);
-                    break;
+                    continue;
                 }
 
                 const playerIndex = unitData.playerIndex;
                 if (playerIndex == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty playerIndex.`);
-                    break;
+                    continue;
                 }
 
-                if (!BwHelpers.checkIsUnitDataValidIgnoringUnitId({
+                if (BwHelpers.getErrorCodeForUnitDataIgnoringUnitId({
                     unitData,
                     mapSize,
                     configVersion,
                     playersCountUnneutral   : CommonConstants.WarMaxPlayerIndex,
                 })) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() invalid unitData.`);
-                    break;
+                    continue;
                 }
 
                 const player = playerManager.getPlayer(playerIndex);
@@ -265,9 +248,10 @@ namespace TinyWars.BaseWar {
                 revisedUnitData.gridIndex   = gridIndex;
                 revisedUnitData.unitId      = unitId;
 
-                const unit = new (unitMap.getUnitClass())().init(revisedUnitData, configVersion);
-                if (unit == null) {
-                    Logger.error(`BwWarEventManager._callActionAddUnit() empty unit.`);
+                const unit      = new BwUnit();
+                const unitError = unit.init(revisedUnitData, configVersion);
+                if (unitError) {
+                    Logger.error(`BwWarEventManager._callActionAddUnit() unitError: ${unitError}`);
                     continue;
                 }
 
@@ -282,6 +266,40 @@ namespace TinyWars.BaseWar {
                     unitList    : resultingUnitList,
                 },
             };
+        }
+        private async _callActionSetPlayerAliveState(action: WarEvent.IWeaSetPlayerAliveState): Promise<undefined> {
+            const war = this._getWar();
+            if (war == null) {
+                Logger.error(`BwWarEventManager._callActionSetPlayerAliveState() empty war.`);
+                return undefined;
+            }
+
+            const playerIndex = action.playerIndex;
+            if ((playerIndex == null) || (playerIndex === CommonConstants.WarNeutralPlayerIndex)) {
+                Logger.error(`BwWarEventManager._callActionSetPlayerAliveState() invalid playerIndex.`);
+                return undefined;
+            }
+
+            const playerAliveState: Types.PlayerAliveState | null | undefined = action.playerAliveState;
+            if (playerAliveState == null) {
+                Logger.error(`BwWarEventManager._callActionSetPlayerAliveState() empty playerAliveState.`);
+                return undefined;
+            }
+
+            if ((playerAliveState !== Types.PlayerAliveState.Alive) &&
+                (playerAliveState !== Types.PlayerAliveState.Dead)  &&
+                (playerAliveState !== Types.PlayerAliveState.Dying)
+            ) {
+                Logger.error(`BwWarEventManager._callActionSetPlayerAliveState() invalid playerAliveState.`);
+                return undefined;
+            }
+
+            const player = war.getPlayer(playerIndex);
+            if (player) {
+                player.setAliveState(playerAliveState);
+            }
+
+            return undefined;
         }
 
         public updateWarEventCalledCountOnCall(eventId: number): void {                     // DONE
@@ -869,7 +887,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            return arr.find(v => v.WarEventActionCommonData.actionId === actionId);
+            return arr.find(v => v.WeaCommonData.actionId === actionId);
         }
     }
 

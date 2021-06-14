@@ -1,57 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <e:Group id="_group" top="40" bottom="0" left="0" right="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.9"
-                        left="0" right="0" top="0" bottom="0" locked="true" />
-        <GameUi:UiLabel id="_labelTitle" text="排位积分排名" y="10" size="22" horizontalCenter="0" />
-        <GameUi:UiButton id="_btnClose" label="关闭" skinName="Skins.Component.Button.ButtonSelfAdaption001" right="0" top="0"
-                         width="160" locked="true"></GameUi:UiButton>
-        <e:Group top="40" bottom="10" horizontalCenter="-240">
-            <GameUi:UiLabel id="_labelStd" text="标准模式" y="0" size="18" horizontalCenter="0" />
-            <GameUi:UiLabel id="_labelStdNoData" text="暂无数据" size="22" horizontalCenter="0" y="40" />
-            <GameUi:UiScrollList id="_listStd" width="350" x="0" top="30" bottom="0">
-                <e:List requireSelection="true" y="-1">
-                    <e:itemRendererSkinName>
-                        <e:Skin width="170" height="70" currentState="up" states="down,up">
-                            <e:Group id="_group" left="0" right="0" top="0" bottom="0">
-                                <GameUi:UiImage id="_imgBg" source="c04_t01_s02_f01" scale9Grid="9,9,2,2"
-                                                anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0"
-                                                top="0" bottom="0" visible.up="false" />
-                                <GameUi:UiLabel id="_labelName" text="部队名五字" size="18" textColor="0xffffff" left="5"
-                                                right="5" top="5" bottom="5" textAlign="center" verticalAlign="middle"
-                                                wordWrap="true" />
-                            </e:Group>
-                        </e:Skin>
-                    </e:itemRendererSkinName>
+    <GameUi:UiImage id="_imgMask" anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
+                    source="commonColorTransparent0001" scale9Grid="1,1,2,2" locked="true" />
+    <e:Group id="_group" width="620" height="430" horizontalCenter="0" verticalCenter="0">
+        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
+                        source="commonColorBlack0001" scale9Grid="1,1,2,2" />
+        <GameUi:UiLabel id="_labelTitle" text="排位积分排名" y="20" size="24" horizontalCenter="0" bold="true" />
+        <e:Group top="60" horizontalCenter="-150">
+            <e:Group y="0" left="0" right="0" height="26">
+                <GameUi:UiImage scale9Grid="1,1,2,2" source="commonColorBlue0000" left="0" right="0" top="0" bottom="0" />
+                <GameUi:UiLabel id="_labelStdTitle" text="明战" textColor="0xFFFFFF" size="14" verticalCenter="0"
+                                bold="true" x="20" />
+                <GameUi:UiLabel id="_labelStdNickname" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="60"
+                                verticalCenter="0" />
+                <GameUi:UiLabel id="_labelStdScore" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="230"
+                                verticalCenter="0" y="16" />
+            </e:Group>
+            <e:Scroller height="320" y="26" left="0" right="0">
+                <e:Group>
+                    <GameUi:UiScrollList id="_listStd" y="0" x="0">
+                        <e:List>
+                            <e:itemRendererSkinName>
+                                <e:Skin width="280" height="26">
+                                    <e:Group left="0" right="0" top="0" bottom="0">
+                                        <GameUi:UiImage id="_imgBg" source="commonColorBlack0000" left="0" right="0"
+                                                        top="0" bottom="0" scale9Grid="1,1,2,2" />
+                                        <GameUi:UiLabel id="_labelIndex" text="1st" textColor="0xFFFFFF" size="14"
+                                                        maxTextWidth="170" verticalCenter="0" x="20" />
+                                        <GameUi:UiLabel id="_labelNickname" text="aaa" textColor="0xFFFFFF" size="14"
+                                                        maxTextWidth="170" verticalCenter="0" x="60" y="16" />
+                                        <GameUi:UiLabel id="_labelScore" text="9999" textColor="0xFFFFFF" size="14"
+                                                        maxTextWidth="170" verticalCenter="0" x="230" y="26" />
+                                    </e:Group>
+                                </e:Skin>
+                            </e:itemRendererSkinName>
+                            <e:layout>
+                                <e:VerticalLayout gap="0" />
+                            </e:layout>
+                        </e:List>
+                    </GameUi:UiScrollList>
+                    <GameUi:UiImage height="1" source="commonColorBlue0000" y="259" width="280" x="0" />
                     <e:layout>
-                        <e:TileLayout orientation="rows" horizontalGap="10" verticalGap="10" requestedColumnCount="2" />
+                        <e:VerticalLayout gap="0" />
                     </e:layout>
-                </e:List>
-            </GameUi:UiScrollList>
+                </e:Group>
+            </e:Scroller>
+            <GameUi:UiLabel id="_labelStdNoData" text="暂无数据" size="22" horizontalCenter="0" y="150" />
         </e:Group>
-        <e:Group top="40" bottom="10" horizontalCenter="240">
-            <GameUi:UiLabel id="_labelFog" text="雾战" y="0" size="18" horizontalCenter="0" />
-            <GameUi:UiLabel id="_labelFogNoData" text="暂无数据" size="22" horizontalCenter="0" y="40" />
-            <GameUi:UiScrollList id="_listFog" width="350" x="0" top="30" bottom="0">
-                <e:List requireSelection="true" y="-1">
-                    <e:itemRendererSkinName>
-                        <e:Skin width="170" height="70" currentState="up" states="down,up">
-                            <e:Group id="_group0" left="0" right="0" top="0" bottom="0">
-                                <GameUi:UiImage id="_imgBg" source="c04_t01_s02_f01" scale9Grid="9,9,2,2"
-                                                anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0"
-                                                top="0" bottom="0" visible.up="false" />
-                                <GameUi:UiLabel id="_labelName" text="部队名五字" size="18" textColor="0xffffff" left="5"
-                                                right="5" top="5" bottom="5" textAlign="center" verticalAlign="middle"
-                                                wordWrap="true" />
-                            </e:Group>
-                        </e:Skin>
-                    </e:itemRendererSkinName>
+        <e:Group top="60" horizontalCenter="150" x="30" y="70">
+            <e:Group y="0" left="0" right="0" height="26">
+                <GameUi:UiImage scale9Grid="1,1,2,2" left="0" right="0" top="0" bottom="0"
+                                source="commonColorPurple0000" />
+                <GameUi:UiLabel id="_labelFogTitle" text="明战" textColor="0xFFFFFF" size="14" verticalCenter="0"
+                                bold="true" x="20" />
+                <GameUi:UiLabel id="_labelFogNickname" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="60"
+                                verticalCenter="0" />
+                <GameUi:UiLabel id="_labelFogScore" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="230"
+                                verticalCenter="0" y="16" />
+            </e:Group>
+            <e:Scroller height="320" y="26" left="0" right="0">
+                <e:Group>
+                    <GameUi:UiScrollList id="_listFog" y="0" x="0">
+                        <e:List>
+                            <e:itemRendererSkinName>
+                                <e:Skin width="280" height="26">
+                                    <e:Group left="0" right="0" top="0" bottom="0">
+                                        <GameUi:UiImage id="_imgBg" source="commonColorBlack0000" left="0" right="0"
+                                                        top="0" bottom="0" scale9Grid="1,1,2,2" />
+                                        <GameUi:UiLabel id="_labelIndex" text="1st" textColor="0xFFFFFF" size="14"
+                                                        maxTextWidth="170" verticalCenter="0" x="20" />
+                                        <GameUi:UiLabel id="_labelNickname" text="aaa" textColor="0xFFFFFF" size="14"
+                                                        maxTextWidth="170" verticalCenter="0" x="60" y="16" />
+                                        <GameUi:UiLabel id="_labelScore" text="9999" textColor="0xFFFFFF" size="14"
+                                                        maxTextWidth="170" verticalCenter="0" x="230" y="26" />
+                                    </e:Group>
+                                </e:Skin>
+                            </e:itemRendererSkinName>
+                        </e:List>
+                    </GameUi:UiScrollList>
+                    <GameUi:UiImage height="1" y="259" width="280" x="0" source="commonColorPurple0000" />
                     <e:layout>
-                        <e:TileLayout orientation="rows" horizontalGap="10" verticalGap="10" requestedColumnCount="2" />
+                        <e:VerticalLayout gap="0" />
                     </e:layout>
-                </e:List>
-            </GameUi:UiScrollList>
+                </e:Group>
+            </e:Scroller>
+            <GameUi:UiLabel id="_labelFogNoData" text="暂无数据" size="22" horizontalCenter="0" y="150" />
         </e:Group>
     </e:Group>
 </e:Skin>

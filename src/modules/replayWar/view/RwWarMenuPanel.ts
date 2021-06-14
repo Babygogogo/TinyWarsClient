@@ -8,23 +8,23 @@ namespace TinyWars.ReplayWar {
     import LocalStorage     = Utility.LocalStorage;
     import FloatText        = Utility.FloatText;
     import ProtoTypes       = Utility.ProtoTypes;
+    import CommonConstants  = Utility.CommonConstants;
     import TimeModel        = Time.TimeModel;
     import WarMapModel      = WarMap.WarMapModel;
-    import CommonConstants  = Utility.ConfigManager.COMMON_CONSTANTS;
 
     const enum MenuType {
         Main,
         Advanced,
     }
 
-    export class RwWarMenuPanel extends GameUi.UiPanel {
+    export class RwWarMenuPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: RwWarMenuPanel;
 
         private _group          : eui.Group;
-        private _listCommand    : GameUi.UiScrollList;
+        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer>;
         private _labelNoCommand : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
 
@@ -42,10 +42,10 @@ namespace TinyWars.ReplayWar {
         private _labelTurnIndex         : GameUi.UiLabel;
         private _btnActionId            : GameUi.UiButton;
         private _labelActionId          : GameUi.UiLabel;
-        private _listPlayer             : GameUi.UiScrollList;
+        private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _war        : RwWar;
-        private _unitMap    : RwUnitMap;
+        private _unitMap    : BaseWar.BwUnitMap;
         private _dataForList: DataForCommandRenderer[];
         private _menuType   = MenuType.Main;
 
@@ -68,7 +68,6 @@ namespace TinyWars.ReplayWar {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = `resource/skins/replayWar/RwWarMenuPanel.exml`;
         }
 
@@ -77,7 +76,7 @@ namespace TinyWars.ReplayWar {
                 { type: Notify.Type.LanguageChanged,                    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.BwActionPlannerStateChanged,        callback: this._onNotifyMcwPlannerStateChanged },
                 { type: Notify.Type.UnitAndTileTextureVersionChanged,   callback: this._onNotifyUnitAndTileTextureVersionChanged },
-                { type: Notify.Type.MsgScrCreateCustomWar,              callback: this._onMsgScrCreateCustomWar },
+                { type: Notify.Type.MsgSpmCreateSfw,                    callback: this._onNotifyMsgSpmCreateSfw },
                 { type: Notify.Type.MsgReplaySetRating,                 callback: this._onMsgReplaySetRating },
             ]);
             this._setUiListenerArray([
@@ -88,21 +87,19 @@ namespace TinyWars.ReplayWar {
 
             const war           = RwModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap() as RwUnitMap;
+            this._unitMap       = war.getUnitMap();
             this._menuType      = MenuType.Main;
 
             this._updateView();
 
-            Notify.dispatch(Notify.Type.McwWarMenuPanelOpened);
+            Notify.dispatch(Notify.Type.BwWarMenuPanelOpened);
         }
         protected async _onClosed(): Promise<void> {
             this._war           = null;
             this._unitMap       = null;
             this._dataForList   = null;
-            this._listCommand.clear();
-            this._listPlayer.clear();
 
-            Notify.dispatch(Notify.Type.McwWarMenuPanelClosed);
+            Notify.dispatch(Notify.Type.BwWarMenuPanelClosed);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,16 +117,15 @@ namespace TinyWars.ReplayWar {
             this._updateComponentsForLanguage();
         }
 
-        private _onMsgScrCreateCustomWar(e: egret.Event): void {
-            const data = e.data as ProtoTypes.NetMessage.MsgScrCreateCustomWar.IS;
+        private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
+            const data = e.data as ProtoTypes.NetMessage.MsgSpmCreateSfw.IS;
             Common.CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0107),
                 callback: () => {
-                    FlowManager.gotoSingleCustomWar({
-                        slotIndex   : data.slotIndex,
-                        slotComment : data.slotComment,
-                        warData     : data.warData,
+                    FlowManager.gotoSinglePlayerWar({
+                        slotIndex       : data.slotIndex,
+                        slotExtraData   : data.extraData,
+                        warData         : data.warData,
                     });
                 },
             });
@@ -192,12 +188,12 @@ namespace TinyWars.ReplayWar {
             this._labelMapDesigner.text             = await WarMapModel.getDesignerName(mapFileName) || "----";
             this._labelWarId.text                   = `${war.getReplayId()}`;
             this._labelTurnIndex.text               = `${war.getTurnManager().getTurnIndex()}`;
-            this._labelActionId.text                = `${war.getNextActionId()} / ${war.getExecutedActionsCount()}`;
+            this._labelActionId.text                = `${war.getNextActionId()} / ${war.getExecutedActionManager().getExecutedActionsCount()}`;
         }
 
         private _updateListPlayer(): void {
             const war   = this._war;
-            const data  = [] as DataForPlayerRenderer[];
+            const data  : DataForPlayerRenderer[] = [];
             war.getPlayerManager().forEachPlayer(false, player => {
                 data.push({
                     war,
@@ -234,10 +230,8 @@ namespace TinyWars.ReplayWar {
         private _createDataForAdvancedMenu(): DataForCommandRenderer[] {
             return [
                 this._createCommandSimulation(),
-                this._createCommandShowTileAnimation(),
-                this._createCommandStopTileAnimation(),
-                this._createCommandUseOriginTexture(),
-                this._createCommandUseNewTexture(),
+                this._createCommandCreateMfr(),
+                this._createCommandUserSettings(),
                 this._createCommandSetPathMode(),
             ].filter(v => !!v);
         }
@@ -307,67 +301,52 @@ namespace TinyWars.ReplayWar {
                     if (war.getIsExecutingAction()) {
                         FloatText.show(Lang.getText(Lang.Type.A0103));
                     } else {
-                        SingleCustomRoom.ScrCreateCustomSaveSlotsPanel.show(war.serializeForSimulation());
+                        SinglePlayerMode.SpmCreateSfwSaveSlotsPanel.show(war.serializeForCreateSfw());
                     }
                 },
             };
         }
 
-        private _createCommandShowTileAnimation(): DataForCommandRenderer | null {
-            if (TimeModel.checkIsTileAnimationTicking()) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(Lang.Type.B0176),
-                    callback: () => {
-                        TimeModel.startTileAnimationTick();
-                        LocalStorage.setShowTileAnimation(true);
-                        this._updateView();
-                    },
-                }
-            }
-        }
-        private _createCommandStopTileAnimation(): DataForCommandRenderer | null {
-            if (!TimeModel.checkIsTileAnimationTicking()) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(Lang.Type.B0177),
-                    callback: () => {
-                        TimeModel.stopTileAnimationTick();
-                        LocalStorage.setShowTileAnimation(false);
-                        this._updateView();
-                    },
-                }
-            }
-        }
-        private _createCommandUseOriginTexture(): DataForCommandRenderer | null {
-            if (User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V0) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(Lang.Type.B0385),
-                    callback: () => {
-                        User.UserProxy.reqUserSetSettings({
-                            unitAndTileTextureVersion   : Types.UnitAndTileTextureVersion.V0,
-                        });
+        private _createCommandCreateMfr(): DataForCommandRenderer | null {
+            const war = this._war;
+            return {
+                name    : Lang.getText(Lang.Type.B0557),
+                callback: async () => {
+                    if (war.getPlayerManager().getAliveOrDyingTeamsCount(false) < 2) {
+                        FloatText.show(Lang.getText(Lang.Type.A0199));
+                        return;
                     }
-                };
-            }
-        }
-        private _createCommandUseNewTexture(): DataForCommandRenderer | null {
-            if (User.UserModel.getSelfSettingsTextureVersion() === Types.UnitAndTileTextureVersion.V1) {
-                return null;
-            } else {
-                return {
-                    name    : Lang.getText(Lang.Type.B0386),
-                    callback: () => {
-                        User.UserProxy.reqUserSetSettings({
-                            unitAndTileTextureVersion   : Types.UnitAndTileTextureVersion.V1,
-                        });
+
+                    const warData = war.serializeForCreateMfr();
+                    if (warData == null) {
+                        FloatText.show(Lang.getText(Lang.Type.A0200));
+                        return;
                     }
-                };
-            }
+
+                    const errorCode = await (new TestWar.TwWar()).init(warData);
+                    if (errorCode) {
+                        FloatText.show(Lang.getErrorText(errorCode));
+                        return;
+                    }
+
+                    Common.CommonConfirmPanel.show({
+                        content : Lang.getText(Lang.Type.A0201),
+                        callback: () => {
+                            MultiFreeRoom.MfrModel.Create.resetDataByInitialWarData(warData);
+                            MultiFreeRoom.MfrCreateSettingsPanel.show();
+                            this.close();
+                        }
+                    });
+                }
+            };
+        }
+        private _createCommandUserSettings(): DataForCommandRenderer | null {
+            return {
+                name    : Lang.getText(Lang.Type.B0560),
+                callback: () => {
+                    User.UserSettingsPanel.show();
+                }
+            };
         }
         private _createCommandSetPathMode(): DataForCommandRenderer {
             return {
@@ -375,7 +354,6 @@ namespace TinyWars.ReplayWar {
                 callback: () => {
                     const isEnabled = User.UserModel.getSelfSettingsIsSetPathMode();
                     Common.CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getFormattedText(
                             Lang.Type.F0033,
                             Lang.getText(isEnabled ? Lang.Type.B0431 : Lang.Type.B0432),
@@ -407,22 +385,20 @@ namespace TinyWars.ReplayWar {
         callback: () => void;
     }
 
-    class CommandRenderer extends GameUi.UiListItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data as DataForCommandRenderer).callback();
+            this.data.callback();
         }
 
         private _updateView(): void {
-            const data = this.data as DataForCommandRenderer;
+            const data = this.data;
             this._labelName.text    = data.name;
         }
     }
@@ -432,23 +408,19 @@ namespace TinyWars.ReplayWar {
         player  : BaseWar.BwPlayer;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
         private _labelForce : GameUi.UiLabel;
         private _labelLost  : GameUi.UiLabel;
-        private _listInfo   : GameUi.UiScrollList;
+        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
+        protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        protected async dataChanged(): Promise<void> {
-            super.dataChanged();
-
-            const data                  = this.data as DataForPlayerRenderer;
+        protected async _onDataChanged(): Promise<void> {
+            const data                  = this.data;
             const war                   = data.war;
             const player                = data.player;
             this._labelName.text        = await player.getNickname();
@@ -468,7 +440,7 @@ namespace TinyWars.ReplayWar {
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data as DataForPlayerRenderer;
+            const data          = this.data;
             const war           = data.war;
             const player        = data.player;
             const playerIndex   = player.getPlayerIndex();
@@ -481,7 +453,7 @@ namespace TinyWars.ReplayWar {
                 this._createDataUnitAndValue(war, playerIndex, player),
                 this._createDataInitialFund(war, playerIndex, player),
                 this._createDataIncomeMultiplier(war, playerIndex, player),
-                this._createDataInitialEnergyPercentage(war, playerIndex, player),
+                this._createDataEnergyAddPctOnLoadCo(war, playerIndex, player),
                 this._createDataEnergyGrowthMultiplier(war, playerIndex, player),
                 this._createDataMoveRangeModifier(war, playerIndex, player),
                 this._createDataAttackPowerModifier(war, playerIndex, player),
@@ -493,7 +465,7 @@ namespace TinyWars.ReplayWar {
         private _createDataColor(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             return {
                 titleText   : Lang.getText(Lang.Type.B0397),
@@ -504,7 +476,7 @@ namespace TinyWars.ReplayWar {
         private _createDataFund(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0032),
@@ -515,7 +487,7 @@ namespace TinyWars.ReplayWar {
         private _createDataBuildings(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const info = this._getTilesCountAndIncome(war, playerIndex);
             return {
@@ -527,7 +499,7 @@ namespace TinyWars.ReplayWar {
         private _createDataCoName(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const cfg = Utility.ConfigManager.getCoBasicCfg(war.getConfigVersion(), player.getCoId());
             return {
@@ -541,7 +513,7 @@ namespace TinyWars.ReplayWar {
         private _createDataEnergy(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const currValue         = player.getCoCurrentEnergy();
             const powerEnergy       = player.getCoPowerEnergy();
@@ -561,7 +533,7 @@ namespace TinyWars.ReplayWar {
         private _createDataUnitAndValue(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
             const unitsCountAndValue = this._getUnitsCountAndValue(war, playerIndex);
             return {
@@ -573,9 +545,9 @@ namespace TinyWars.ReplayWar {
         private _createDataInitialFund(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
-            const currValue = war.getSettingsInitialFund(playerIndex);
+            const currValue = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0178),
                 infoText                : `${currValue}`,
@@ -585,33 +557,33 @@ namespace TinyWars.ReplayWar {
         private _createDataIncomeMultiplier(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
-            const currValue = war.getSettingsIncomeMultiplier(playerIndex);
+            const currValue = war.getCommonSettingManager().getSettingsIncomeMultiplier(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0179),
                 infoText                : `${currValue}%`,
                 infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
             };
         }
-        private _createDataInitialEnergyPercentage(
+        private _createDataEnergyAddPctOnLoadCo(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
-            const currValue = war.getSettingsInitialEnergyPercentage(playerIndex);
+            const currValue = war.getCommonSettingManager().getSettingsEnergyAddPctOnLoadCo(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0180),
                 infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
+                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
             };
         }
         private _createDataEnergyGrowthMultiplier(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
-            const currValue = war.getSettingsEnergyGrowthMultiplier(playerIndex);
+            const currValue = war.getCommonSettingManager().getSettingsEnergyGrowthMultiplier(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0181),
                 infoText                : `${currValue}%`,
@@ -621,9 +593,9 @@ namespace TinyWars.ReplayWar {
         private _createDataMoveRangeModifier(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
-            const currValue = war.getSettingsMoveRangeModifier(playerIndex);
+            const currValue = war.getCommonSettingManager().getSettingsMoveRangeModifier(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0182),
                 infoText                : `${currValue}`,
@@ -633,9 +605,9 @@ namespace TinyWars.ReplayWar {
         private _createDataAttackPowerModifier(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
-            const currValue = war.getSettingsAttackPowerModifier(playerIndex);
+            const currValue = war.getCommonSettingManager().getSettingsAttackPowerModifier(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0183),
                 infoText                : `${currValue}%`,
@@ -645,9 +617,9 @@ namespace TinyWars.ReplayWar {
         private _createDataVisionRangeModifier(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
-            const currValue = war.getSettingsVisionRangeModifier(playerIndex);
+            const currValue = war.getCommonSettingManager().getSettingsVisionRangeModifier(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0184),
                 infoText                : `${currValue}`,
@@ -657,9 +629,9 @@ namespace TinyWars.ReplayWar {
         private _createDataLuckLowerLimit(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
-            const currValue = war.getSettingsLuckLowerLimit(playerIndex);
+            const currValue = war.getCommonSettingManager().getSettingsLuckLowerLimit(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0189),
                 infoText                : `${currValue}%`,
@@ -669,9 +641,9 @@ namespace TinyWars.ReplayWar {
         private _createDataLuckUpperLimit(
             war         : RwWar,
             playerIndex : number,
-            player      : RwPlayer,
+            player      : BaseWar.BwPlayer,
         ): DataForInfoRenderer {
-            const currValue = war.getSettingsLuckUpperLimit(playerIndex);
+            const currValue = war.getCommonSettingManager().getSettingsLuckUpperLimit(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0190),
                 infoText                : `${currValue}%`,
@@ -716,14 +688,12 @@ namespace TinyWars.ReplayWar {
         infoColor               : number;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data                  = this.data as DataForInfoRenderer;
+        protected _onDataChanged(): void {
+            const data                  = this.data;
             this._labelValue.text       = data.infoText;
             this._labelValue.textColor  = data.infoColor;
             this._btnTitle.label        = data.titleText;

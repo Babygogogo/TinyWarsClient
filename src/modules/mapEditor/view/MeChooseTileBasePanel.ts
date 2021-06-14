@@ -4,18 +4,18 @@ namespace TinyWars.MapEditor {
     import Lang             = Utility.Lang;
     import Types            = Utility.Types;
     import ConfigManager    = Utility.ConfigManager;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     const MAX_RECENT_COUNT = 10;
 
-    export class MeChooseTileBasePanel extends GameUi.UiPanel {
+    export class MeChooseTileBasePanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeChooseTileBasePanel;
 
-        private _listCategory       : GameUi.UiScrollList;
-        private _listRecent         : GameUi.UiScrollList;
+        private _listCategory       : GameUi.UiScrollList<DataForCategoryRenderer>;
+        private _listRecent         : GameUi.UiScrollList<DataForTileBaseRenderer>;
         private _labelRecentTitle   : GameUi.UiLabel;
         private _btnCancel          : GameUi.UiButton;
         private _groupFill          : eui.Group;
@@ -40,7 +40,6 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/mapEditor/MeChooseTileBasePanel.exml";
@@ -49,7 +48,6 @@ namespace TinyWars.MapEditor {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
@@ -64,11 +62,6 @@ namespace TinyWars.MapEditor {
             this._updateImgFill();
             this._updateListTileObject();
             this._updateListRecent();
-        }
-
-        protected async _onClosed(): Promise<void> {
-            this._listCategory.clear();
-            this._listRecent.clear();
         }
 
         public getNeedFill(): boolean {
@@ -104,20 +97,6 @@ namespace TinyWars.MapEditor {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyTileAnimationTick(e: egret.Event): void {
-            const viewListForTileBase = this._listCategory.getViewList();
-            for (let i = 0; i < viewListForTileBase.numChildren; ++i) {
-                const child = viewListForTileBase.getChildAt(i);
-                (child instanceof CategoryRenderer) && (child.updateOnTileAnimationTick());
-            }
-
-            const viewListForRecent = this._listRecent.getViewList();
-            for (let i = 0; i < viewListForRecent.numChildren; ++i) {
-                const child = viewListForRecent.getChildAt(i);
-                (child instanceof TileBaseRenderer) && (child.updateOnTileAnimationTick());
-            }
-        }
-
         private _onTouchedGroupFill(e: egret.Event): void {
             this._needFill = !this._needFill;
             this._updateImgFill();
@@ -138,7 +117,7 @@ namespace TinyWars.MapEditor {
 
         private _createDataForListCategory(): DataForCategoryRenderer[] {
             const typeMap = new Map<number, DataForDrawTileBase[]>();
-            for (const [baseType, cfg] of ConfigManager.getTileBaseShapeCfgs()) {
+            for (const [baseType, cfg] of Utility.CommonConstants.TileBaseShapeConfigs) {
                 if (!typeMap.has(baseType)) {
                     typeMap.set(baseType, []);
                 }
@@ -179,21 +158,17 @@ namespace TinyWars.MapEditor {
         panel                   : MeChooseTileBasePanel;
     }
 
-    class CategoryRenderer extends GameUi.UiListItemRenderer {
+    class CategoryRenderer extends GameUi.UiListItemRenderer<DataForCategoryRenderer> {
         private _labelCategory  : GameUi.UiLabel;
-        private _listTileBase   : GameUi.UiScrollList;
+        private _listTileBase   : GameUi.UiScrollList<DataForTileBaseRenderer>;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
+        protected _onOpened(): void {
             this._listTileBase.setItemRenderer(TileBaseRenderer);
-            this._listTileBase.scrollPolicyH = eui.ScrollPolicy.OFF;
+            this._listTileBase.setScrollPolicyH(eui.ScrollPolicy.OFF);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data                      = this.data as DataForCategoryRenderer;
+        protected _onDataChanged(): void {
+            const data                      = this.data;
             const dataListForDrawTileBase   = data.dataListForDrawTileBase;
             this._labelCategory.text        = Lang.getTileName(Utility.ConfigManager.getTileType(dataListForDrawTileBase[0].baseType, Types.TileObjectType.Empty));
 
@@ -207,14 +182,6 @@ namespace TinyWars.MapEditor {
             }
             this._listTileBase.bindData(dataListForTileBase);
         }
-
-        public updateOnTileAnimationTick(): void {
-            const viewListForTileBase = this._listTileBase.getViewList();
-            for (let i = 0; i < viewListForTileBase.numChildren; ++i) {
-                const child = viewListForTileBase.getChildAt(i);
-                (child instanceof TileBaseRenderer) && (child.updateOnTileAnimationTick());
-            }
-        }
     }
 
     type DataForTileBaseRenderer = {
@@ -222,14 +189,16 @@ namespace TinyWars.MapEditor {
         panel               : MeChooseTileBasePanel;
     }
 
-    class TileBaseRenderer extends GameUi.UiListItemRenderer {
+    class TileBaseRenderer extends GameUi.UiListItemRenderer<DataForTileBaseRenderer> {
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
 
         private _tileView   = new MeTileSimpleView();
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.TileAnimationTick,  callback: this._onNotifyTileAnimationTick },
+            ]);
 
             const tileView = this._tileView;
             this._conTileView.addChild(tileView.getImgBase());
@@ -237,12 +206,12 @@ namespace TinyWars.MapEditor {
             tileView.startRunningView();
         }
 
-        public updateOnTileAnimationTick(): void {
+        private _onNotifyTileAnimationTick(): void {
             this._tileView.updateOnAnimationTick();
         }
 
-        protected dataChanged(): void {
-            const data                  = this.data as DataForTileBaseRenderer;
+        protected _onDataChanged(): void {
+            const data                  = this.data;
             const dataForDrawTileBase   = data.dataForDrawTileBase;
             this._tileView.init({
                 tileBaseShapeId     : dataForDrawTileBase.shapeId,
@@ -255,7 +224,7 @@ namespace TinyWars.MapEditor {
         }
 
         public onItemTapEvent(): void {
-            const data                  = this.data as DataForTileBaseRenderer;
+            const data                  = this.data;
             const panel                 = data.panel;
             const dataForDrawTileBase   = data.dataForDrawTileBase;
             if (!panel.getNeedFill()) {
@@ -264,7 +233,6 @@ namespace TinyWars.MapEditor {
                 MeModel.getWar().getDrawer().setModeDrawTileBase(dataForDrawTileBase);
             } else {
                 Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0089),
                     callback: () => {
                         const war           = MeModel.getWar();
@@ -284,7 +252,7 @@ namespace TinyWars.MapEditor {
 
                         panel.updateOnChooseTileBase(dataForDrawTileBase);
                         panel.close();
-                        Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: war.getField().getCursor().getGridIndex() } as Notify.Data.MeTileChanged);
+                        Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: war.getCursor().getGridIndex() } as Notify.Data.MeTileChanged);
                     },
                 });
             }

@@ -7,10 +7,10 @@ namespace TinyWars.Common {
     import ProtoTypes       = Utility.ProtoTypes;
     import UnitType         = Types.UnitType;
     import TileType         = Types.TileType;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
     import IUnitTemplateCfg = ProtoTypes.Config.IUnitTemplateCfg;
 
-    export class CommonDamageChartPanel extends GameUi.UiPanel {
+    export class CommonDamageChartPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -18,15 +18,15 @@ namespace TinyWars.Common {
 
         private _groupList          : eui.Group;
         private _labelTitle         : TinyWars.GameUi.UiLabel;
-        private _listUnit           : TinyWars.GameUi.UiScrollList;
+        private _listUnit           : TinyWars.GameUi.UiScrollList<DataForUnitRenderer>;
         private _btnBack            : TinyWars.GameUi.UiButton;
 
         private _groupInfo          : eui.Group;
         private _conUnitView        : eui.Group;
         private _labelName          : GameUi.UiLabel;
 
-        private _listInfo           : GameUi.UiScrollList;
-        private _listDamageChart    : GameUi.UiScrollList;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
+        private _listDamageChart    : GameUi.UiScrollList<DataForDamageRenderer>;
         private _labelDamageChart   : GameUi.UiLabel;
         private _labelOffenseMain1  : GameUi.UiLabel;
         private _labelOffenseSub1   : GameUi.UiLabel;
@@ -61,7 +61,6 @@ namespace TinyWars.Common {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/common/CommonDamageChartPanel.exml`;
@@ -96,16 +95,13 @@ namespace TinyWars.Common {
             this._selectedIndex             = null;
             this._dataForListUnit           = null;
             this._dataForListDamageChart    = null;
-            this._listUnit.clear();
-            this._listDamageChart.clear();
-            this._listInfo.clear();
         }
 
         public setSelectedIndexAndUpdateView(newIndex: number): void {
             const oldIndex      = this._selectedIndex;
             this._selectedIndex = newIndex;
             if (oldIndex !== newIndex) {
-                this._listUnit.getViewList().selectedIndex = newIndex;
+                this._listUnit.setSelectedIndex(newIndex);
                 this._updateUnitViewAndLabelName();
                 this._updateListInfo();
                 this._updateListDamageChart();
@@ -123,12 +119,6 @@ namespace TinyWars.Common {
         }
 
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
-            const viewList = this._listDamageChart.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof DamageRenderer) && (child.updateOnUnitAnimationTick());
-            }
-
             this._unitView.updateOnAnimationTick(Time.TimeModel.getUnitAnimationTickCount());
         }
         private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
@@ -190,9 +180,9 @@ namespace TinyWars.Common {
                 this._labelName.text    = Lang.getUnitName(unitType);
                 this._unitView.update({
                     gridIndex       : { x: 0, y: 0 },
-                    skinId          : CommonConstants.WarFirstPlayerIndex,
+                    playerIndex     : CommonConstants.WarFirstPlayerIndex,
                     unitType,
-                    unitActionState : Types.UnitActionState.Idle,
+                    actionState     : Types.UnitActionState.Idle,
                 }, Time.TimeModel.getUnitAnimationTickCount());
             }
         }
@@ -398,25 +388,23 @@ namespace TinyWars.Common {
         panel           : CommonDamageChartPanel;
     }
 
-    class UnitRenderer extends GameUi.UiListItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
         private _imgChoose  : eui.Image;
         private _labelName  : TinyWars.GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._imgChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedImgChoose, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._imgChoose,  callback: this._onTouchedImgChoose },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data as DataForUnitRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             this._labelName.text    = Lang.getUnitName(data.unitType);
         }
 
         private _onTouchedImgChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForUnitRenderer;
+            const data = this.data;
             data.panel.setSelectedIndexAndUpdateView(data.index);
         }
     }
@@ -426,12 +414,12 @@ namespace TinyWars.Common {
         valueText   : string;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            const data              = this.data as DataForInfoRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             this._labelValue.text   = data.valueText;
             this._btnTitle.label    = data.titleText;
         }
@@ -445,7 +433,7 @@ namespace TinyWars.Common {
         targetTileType? : TileType;
     }
 
-    class DamageRenderer extends GameUi.UiListItemRenderer {
+    class DamageRenderer extends GameUi.UiListItemRenderer<DataForDamageRenderer> {
         private _group                  : eui.Group;
         private _conView                : eui.Group;
         private _unitView               : WarMap.WarMapUnitView;
@@ -455,22 +443,22 @@ namespace TinyWars.Common {
         private _labelPrimaryDefend     : GameUi.UiLabel;
         private _labelSecondaryDefend   : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            ]);
 
             this._unitView = new WarMap.WarMapUnitView();
             this._conView.addChild(this._unitView);
         }
 
-        public updateOnUnitAnimationTick(): void {
+        private _onNotifyUnitAnimationTick(): void {
             if (this.data) {
                 this._unitView.updateOnAnimationTick(Time.TimeModel.getUnitAnimationTickCount());
             }
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
@@ -478,7 +466,7 @@ namespace TinyWars.Common {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data              = this.data as DataForDamageRenderer;
+            const data              = this.data;
             const configVersion     = data.configVersion;
             const attackUnitType    = data.attackUnitType;
             const targetUnitType    = data.targetUnitType;
@@ -488,8 +476,8 @@ namespace TinyWars.Common {
                 this._unitView.update({
                     gridIndex       : { x: 0, y: 0 },
                     unitType        : targetUnitType,
-                    skinId          : data.playerIndex,
-                    unitActionState : Types.UnitActionState.Idle,
+                    playerIndex     : data.playerIndex,
+                    actionState     : Types.UnitActionState.Idle,
                 }, Time.TimeModel.getUnitAnimationTickCount());
 
                 const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);

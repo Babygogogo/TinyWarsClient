@@ -6,7 +6,7 @@ namespace TinyWars.BaseWar {
         private _actionPlannerView      : BwActionPlannerView;
         private _unitMapView            : BwUnitMapView;
         private _cursorView             : BwCursorView;
-        private _gridVisionEffectView   : BwGridVisionEffectView;
+        private _gridVisionEffectView   : BwGridVisualEffectView;
 
         public init(field: BwField): void {
             if (!this._field) {
@@ -16,7 +16,7 @@ namespace TinyWars.BaseWar {
                 this._actionPlannerView     = field.getActionPlanner().getView();
                 this._unitMapView           = field.getUnitMap().getView();
                 this._cursorView            = field.getCursor().getView();
-                this._gridVisionEffectView  = field.getGridVisionEffect().getView();
+                this._gridVisionEffectView  = field.getGridVisualEffect().getView();
                 this.addChild(this._tileMapView);
                 this.addChild(this._actionPlannerView.getContainerForGrids());
                 this.addChild(this._unitMapView);

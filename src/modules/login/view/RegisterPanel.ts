@@ -7,7 +7,7 @@ namespace TinyWars.Login {
     import FlowManager  = Utility.FlowManager;
     import LocalStorage = Utility.LocalStorage;
 
-    export class RegisterPanel extends GameUi.UiPanel {
+    export class RegisterPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -39,7 +39,6 @@ namespace TinyWars.Login {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/login/RegisterPanel.exml";
         }
 

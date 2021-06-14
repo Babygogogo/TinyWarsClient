@@ -9,7 +9,7 @@ namespace TinyWars.MultiCustomRoom {
     import ConfigManager    = Utility.ConfigManager;
     import WarMapModel      = WarMap.WarMapModel;
 
-    export class McrWatchHandleRequestWarsPanel extends GameUi.UiPanel {
+    export class McrWatchHandleRequestWarsPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -18,7 +18,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelMenuTitle     : GameUi.UiLabel;
         private _labelPlayersTitle  : GameUi.UiLabel;
         private _labelCommentTitle  : GameUi.UiLabel;
-        private _listWar            : GameUi.UiScrollList;
+        private _listWar            : GameUi.UiScrollList<DataForWarRenderer>;
         private _labelNoWar         : GameUi.UiLabel;
         private _zoomMap            : GameUi.UiZoomableMap;
         private _btnBack            : GameUi.UiButton;
@@ -28,7 +28,7 @@ namespace TinyWars.MultiCustomRoom {
         private _labelDesigner  : GameUi.UiLabel;
         private _labelHasFog    : GameUi.UiLabel;
         private _labelWarComment: GameUi.UiLabel;
-        private _listPlayer     : GameUi.UiScrollList;
+        private _listPlayer     : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _dataForListWar     : DataForWarRenderer[] = [];
         private _selectedWarIndex   : number;
@@ -48,7 +48,6 @@ namespace TinyWars.MultiCustomRoom {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/multiCustomRoom/McrWatchHandleRequestWarsPanel.exml";
         }
 
@@ -71,9 +70,6 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         protected async _onClosed(): Promise<void> {
-            this._zoomMap.clearMap();
-            this._listWar.clear();
-            this._listPlayer.clear();
             egret.Tween.removeTweens(this._groupInfo);
         }
 
@@ -163,20 +159,31 @@ namespace TinyWars.MultiCustomRoom {
 
         private async _showMap(index: number): Promise<void> {
             const warInfo               = this._dataForListWar[index].info.warInfo;
-            const settingsForMcw        = warInfo.settingsForMcw;
-            const mapId                 = settingsForMcw ? settingsForMcw.mapId : warInfo.settingsForMrw.mapId;
-            const mapRawData            = await WarMapModel.getRawData(mapId);
-            this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-            this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-            this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(warInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0001));
-            this._labelWarComment.text  = (settingsForMcw ? settingsForMcw.warComment : null) || "----";
-            this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
+            const settingsForMfw    = warInfo.settingsForMfw;
+            if (settingsForMfw) {
+                const warData               = settingsForMfw.initialWarData;
+                this._labelMapName.text     = undefined;
+                this._labelDesigner.text    = undefined;
+                this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(warData.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0001));
+                this._labelWarComment.text  = settingsForMfw.warComment || "----";
+                this._listPlayer.bindData(this._createDataForListPlayer(warInfo, warData.playerManager.players.length - 1));
+                this._zoomMap.showMapByWarData(warData);
+            } else {
+                const settingsForMcw        = warInfo.settingsForMcw;
+                const mapId                 = settingsForMcw ? settingsForMcw.mapId : warInfo.settingsForMrw.mapId;
+                const mapRawData            = await WarMapModel.getRawData(mapId);
+                this._labelMapName.text     = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+                this._labelDesigner.text    = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
+                this._labelHasFog.text      = Lang.getFormattedText(Lang.Type.F0005, Lang.getText(warInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault ? Lang.Type.B0012 : Lang.Type.B0001));
+                this._labelWarComment.text  = (settingsForMcw ? settingsForMcw.warComment : null) || "----";
+                this._listPlayer.bindData(this._createDataForListPlayer(warInfo, mapRawData.playersCountUnneutral));
+                this._zoomMap.showMapByMapData(mapRawData);
+            }
 
             this._groupInfo.visible      = true;
             this._groupInfo.alpha        = 1;
             egret.Tween.removeTweens(this._groupInfo);
             egret.Tween.get(this._groupInfo).wait(8000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
-            this._zoomMap.showMap(mapRawData);
         }
 
         private _updateComponentsForLanguage(): void {
@@ -194,43 +201,46 @@ namespace TinyWars.MultiCustomRoom {
         panel   : McrWatchHandleRequestWarsPanel;
     }
 
-    class WarRenderer extends GameUi.UiListItemRenderer {
+    class WarRenderer extends GameUi.UiListItemRenderer<DataForWarRenderer> {
         private _btnChoose      : GameUi.UiButton;
         private _btnNext        : GameUi.UiButton;
         private _labelName      : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnChoose, this);
-            this._btnNext.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnNext, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
+                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data          = this.data as DataForWarRenderer;
+        protected _onDataChanged(): void {
+            const data          = this.data;
             const warInfo       = data.info.warInfo;
             this.currentState   = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
 
-            const settingsForMcw    = warInfo.settingsForMcw;
-            const warName           = settingsForMcw ? settingsForMcw.warName : null;
             const labelName         = this._labelName;
-            if (warName) {
-                labelName.text = warName;
+            const settingsForMfw    = warInfo.settingsForMfw;
+            if (settingsForMfw) {
+                labelName.text = settingsForMfw.warName || `----`;
             } else {
-                labelName.text = "";
-                WarMapModel.getMapNameInCurrentLanguage(settingsForMcw ? settingsForMcw.mapId : warInfo.settingsForMrw.mapId).then(v => labelName.text = v);
+                const settingsForMcw    = warInfo.settingsForMcw;
+                const warName           = settingsForMcw ? settingsForMcw.warName : null;
+                if (warName) {
+                    labelName.text = warName;
+                } else {
+                    labelName.text = "";
+                    WarMapModel.getMapNameInCurrentLanguage(settingsForMcw ? settingsForMcw.mapId : warInfo.settingsForMrw.mapId).then(v => labelName.text = v);
+                }
             }
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForWarRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
         private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
-            McrWatchHandleRequestDetailPanel.show({ watchInfo: (this.data as DataForWarRenderer).info });
+            McrWatchHandleRequestDetailPanel.show({ watchInfo: this.data.info });
         }
     }
 
@@ -239,15 +249,13 @@ namespace TinyWars.MultiCustomRoom {
         configVersion   : string;
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _labelName : GameUi.UiLabel;
         private _labelIndex: GameUi.UiLabel;
         private _labelTeam : GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data as DataForPlayerRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             const playerInfo        = data.playerInfo;
             this._labelIndex.text   = Lang.getPlayerForceName(playerInfo.playerIndex);
             this._labelTeam.text    = Lang.getPlayerTeamName(playerInfo.teamIndex);

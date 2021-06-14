@@ -3,7 +3,7 @@ namespace TinyWars.Utility.DestructionHelpers {
     import BwWar            = BaseWar.BwWar;
     import GridIndex        = Types.GridIndex;
     import TileObjectType   = Types.TileObjectType;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): void {
         const unitMap           = war.getUnitMap();
@@ -19,7 +19,7 @@ namespace TinyWars.Utility.DestructionHelpers {
         }
 
         const player                = unit.getPlayer();
-        const destroyedCoUnitsCount = destroyedUnits.filter(unit => unit.getHasLoadedCo()).length;
+        const destroyedCoUnitsCount = destroyedUnits.filter(u => u.getHasLoadedCo()).length;
         if (destroyedCoUnitsCount > 0) {
             const currentEnergy = player.getCoCurrentEnergy();
             if (currentEnergy == null) {
@@ -33,21 +33,29 @@ namespace TinyWars.Utility.DestructionHelpers {
             if (restCoUnitsCount > 0) {
                 player.setCoCurrentEnergy(Math.floor(currentEnergy * restCoUnitsCount / totalCoUnitsCount));
             } else {
-                player.setCoCurrentEnergy(undefined);
+                player.setCoCurrentEnergy(0);
                 player.setCoUsingSkillType(Types.CoSkillType.Passive);
             }
         }
 
-        const gridVisionEffect = showExplosionEffect ? war.getGridVisionEffect() : undefined;
-        (gridVisionEffect) && (gridVisionEffect.showEffectExplosion(gridIndex));
+        if (showExplosionEffect) {
+            const gridVisionEffect = war.getGridVisionEffect();
+            (gridVisionEffect) && (gridVisionEffect.showEffectExplosion(gridIndex));
+
+            const warView = war.getView();
+            (warView) && (warView.showVibration());
+        }
     }
 
     export function destroyPlayerForce(war: BwWar, playerIndex: number, showExplosionEffect: boolean): void {
         const unitMap           = war.getUnitMap();
         const tileMap           = war.getTileMap();
         const gridVisionEffect  = showExplosionEffect ? war.getGridVisionEffect() : undefined;
+        let hasRemovedUnit      = false;
         unitMap.forEachUnitOnMap(unit => {
             if (unit.getPlayerIndex() === playerIndex) {
+                hasRemovedUnit = true;
+
                 const gridIndex = unit.getGridIndex();
                 unitMap.removeUnitOnMap(gridIndex, true);
                 tileMap.getTile(gridIndex).updateOnUnitLeave();
@@ -55,6 +63,10 @@ namespace TinyWars.Utility.DestructionHelpers {
             }
         });
         unitMap.removeUnitsLoadedForPlayer(playerIndex);
+        if ((showExplosionEffect) && (hasRemovedUnit)) {
+            const warView = war.getView();
+            (warView) && (warView.showVibration());
+        }
 
         tileMap.forEachTile(tile => {
             if (tile.getPlayerIndex() === playerIndex) {
@@ -70,7 +82,7 @@ namespace TinyWars.Utility.DestructionHelpers {
                 tile.setCurrentHp(hp);
                 tile.setCurrentBuildPoint(buildPoint);
                 tile.setCurrentCapturePoint(capturePoint);
-            };
+            }
         });
 
         war.getFogMap().resetAllMapsForPlayer(playerIndex);
@@ -78,10 +90,10 @@ namespace TinyWars.Utility.DestructionHelpers {
         const player = war.getPlayer(playerIndex)!;
         player.setAliveState(Types.PlayerAliveState.Dead);
         player.setCoIsDestroyedInTurn(true);
-        player.setCoCurrentEnergy(undefined);
+        player.setCoCurrentEnergy(0);
         player.setCoUsingSkillType(Types.CoSkillType.Passive);
 
-        war.setRemainingVotesForDraw(undefined);
+        war.getDrawVoteManager().setRemainingVotes(undefined);
     }
 
     export function removeUnitOnMap(war: BwWar, gridIndex: GridIndex): void {

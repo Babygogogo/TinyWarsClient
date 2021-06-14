@@ -7,13 +7,13 @@ namespace TinyWars.MapEditor {
     import FloatText        = Utility.FloatText;
     import ProtoTypes       = Utility.ProtoTypes;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     type OpenDataForModifyRuleNamePanel = {
         ruleId  : number;
     }
 
-    export class MeModifyRuleNamePanel extends GameUi.UiPanel {
+    export class MeModifyRuleNamePanel extends GameUi.UiPanel<OpenDataForModifyRuleNamePanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -45,7 +45,6 @@ namespace TinyWars.MapEditor {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
             this.skinName               = "resource/skins/mapEditor/MeModifyRuleNamePanel.exml";
@@ -79,7 +78,7 @@ namespace TinyWars.MapEditor {
             } else if (textList.some(v => v.text.length > CommonConstants.WarRuleNameMaxLength)) {
                 FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.WarRuleNameMaxLength));
             } else {
-                MeModel.getWar().setWarRuleNameList(this._getOpenData<OpenDataForModifyRuleNamePanel>().ruleId, textList);
+                MeModel.getWar().setWarRuleNameList(this._getOpenData().ruleId, textList);
                 Notify.dispatch(Notify.Type.MeWarRuleNameChanged);
                 this.close();
             }
@@ -88,7 +87,7 @@ namespace TinyWars.MapEditor {
         private _updateView(): void {
             this._updateComponentsForLanguage();
 
-            const textList          = MeModel.getWar().getWarRuleByRuleId(this._getOpenData<OpenDataForModifyRuleNamePanel>().ruleId).ruleNameArray;
+            const textList          = MeModel.getWar().getWarRuleByRuleId(this._getOpenData().ruleId).ruleNameArray;
             this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.Chinese });
             this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.English });
         }
@@ -99,7 +98,7 @@ namespace TinyWars.MapEditor {
             this._labelChinese.text = Lang.getText(Lang.Type.B0455);
             this._labelEnglish.text = Lang.getText(Lang.Type.B0456);
             this._labelTip.text     = Lang.getText(Lang.Type.A0156);
-            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0459)} #${this._getOpenData<OpenDataForModifyRuleNamePanel>().ruleId}`;
+            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0459)} #${this._getOpenData().ruleId}`;
         }
     }
 }

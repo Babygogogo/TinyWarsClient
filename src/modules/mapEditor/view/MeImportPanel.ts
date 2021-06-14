@@ -4,14 +4,14 @@ namespace TinyWars.MapEditor {
     import Lang     = Utility.Lang;
     import Types    = Utility.Types;
 
-    export class MeImportPanel extends GameUi.UiPanel {
+    export class MeImportPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeImportPanel;
 
         private _group      : eui.Group;
-        private _listMap    : TinyWars.GameUi.UiScrollList;
+        private _listMap    : TinyWars.GameUi.UiScrollList<DataForMapRenderer>;
         private _btnCancel  : TinyWars.GameUi.UiButton;
 
         public static show(): void {
@@ -29,7 +29,6 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/mapEditor/MeImportPanel.exml";
@@ -43,15 +42,11 @@ namespace TinyWars.MapEditor {
                 { ui: this._btnCancel,  callback: this.close },
             ]);
             this._listMap.setItemRenderer(MapRenderer);
-            this._listMap.scrollPolicyH = eui.ScrollPolicy.OFF;
+            this._listMap.setScrollPolicyH(eui.ScrollPolicy.OFF);
 
             this._updateComponentsForLanguage();
 
             this._updateListMap();
-        }
-
-        protected async _onClosed(): Promise<void> {
-            this._listMap.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -68,8 +63,8 @@ namespace TinyWars.MapEditor {
             this._btnCancel.label   = Lang.getText(Lang.Type.B0154);
         }
 
-        private async _createDataForListMap(): Promise<DataForTileBaseRenderer[]> {
-            const dataList: DataForTileBaseRenderer[] = [];
+        private async _createDataForListMap(): Promise<DataForMapRenderer[]> {
+            const dataList: DataForMapRenderer[] = [];
             for (const [mapFileName] of WarMap.WarMapModel.getBriefDataDict()) {
                 dataList.push({
                     mapId: mapFileName,
@@ -86,25 +81,24 @@ namespace TinyWars.MapEditor {
         }
     }
 
-    type DataForTileBaseRenderer = {
+    type DataForMapRenderer = {
         mapId   : number;
         mapName : string;
         panel   : MeImportPanel;
     }
 
-    class MapRenderer extends GameUi.UiListItemRenderer {
+    class MapRenderer extends GameUi.UiListItemRenderer<DataForMapRenderer> {
         private _group          : eui.Group;
         private _labelName      : GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            const data              = this.data as DataForTileBaseRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             this._labelName.text    = data.mapName;
         }
 
         public onItemTapEvent(): void {
-            const data = this.data as DataForTileBaseRenderer;
+            const data = this.data;
             Common.CommonConfirmPanel.show({
-                title   : Lang.getText(Lang.Type.B0088),
                 content : Lang.getText(Lang.Type.A0095) + `\n"${data.mapName}"`,
                 callback: async () => {
                     const war = MeModel.getWar();

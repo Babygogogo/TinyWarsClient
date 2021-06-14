@@ -6,7 +6,7 @@ namespace TinyWars.MapEditor {
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
 
     export class MePlayerManager extends BaseWar.BwPlayerManager {
-        public serializeForSimulation(): ISerialPlayerManager {
+        public serializeForCreateSfw(): ISerialPlayerManager {
             const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
             const players           : ISerialPlayer[] = [];
             for (let playerIndex = 0; playerIndex <= maxPlayerIndex; ++playerIndex) {
@@ -17,9 +17,8 @@ namespace TinyWars.MapEditor {
                 players,
             };
         }
-
-        protected _getPlayerClass(): new () => BaseWar.BwPlayer {
-            return MePlayer;
+        public serializeForCreateMfr(): ISerialPlayerManager {
+            return this.serializeForCreateSfw();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

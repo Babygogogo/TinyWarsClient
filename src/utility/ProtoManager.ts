@@ -1,17 +1,17 @@
 
 namespace TinyWars.Utility.ProtoManager {
-    import IMessageContainer    = ProtoTypes.NetMessage.IMessageContainer;
-    import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
-    import IMapRawData          = ProtoTypes.Map.IMapRawData;
-    import IScrSaveSlotInfo     = ProtoTypes.SingleCustomRoom.IScrSaveSlotInfo;
+    import IMessageContainer        = ProtoTypes.NetMessage.IMessageContainer;
+    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
+    import IMapRawData              = ProtoTypes.Map.IMapRawData;
+    import ISpmWarSaveSlotExtraData = ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
 
     const PROTO_FILENAME = "resource/config/NetMessageProto.json";
 
-    let MessageContainerClass   : typeof ProtoTypes.NetMessage.MessageContainer;
-    let FullConfigClass         : typeof ProtoTypes.Config.FullConfig;
-    let SerialWarClass          : typeof ProtoTypes.WarSerialization.SerialWar;
-    let MapRawDataClass         : typeof ProtoTypes.Map.MapRawData;
-    let ScrSaveSlotInfoClass    : typeof ProtoTypes.SingleCustomRoom.ScrSaveSlotInfo;
+    let MessageContainerClass       : typeof ProtoTypes.NetMessage.MessageContainer;
+    let FullConfigClass             : typeof ProtoTypes.Config.FullConfig;
+    let SerialWarClass              : typeof ProtoTypes.WarSerialization.SerialWar;
+    let MapRawDataClass             : typeof ProtoTypes.Map.MapRawData;
+    let SpmWarSaveSlotExtraData     : typeof ProtoTypes.SinglePlayerMode.SpmWarSaveSlotExtraData;
 
     export function init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
@@ -24,7 +24,7 @@ namespace TinyWars.Utility.ProtoManager {
                         FullConfigClass         = protoRoot.lookupType("Config.FullConfig") as any;
                         SerialWarClass          = protoRoot.lookupType("WarSerialization.SerialWar") as any;
                         MapRawDataClass         = protoRoot.lookupType("Map.MapRawData") as any;
-                        ScrSaveSlotInfoClass    = protoRoot.lookupType("SingleCustomRoom.ScrSaveSlotInfo") as any;
+                        SpmWarSaveSlotExtraData = protoRoot.lookupType("SinglePlayerMode.SpmWarSaveSlotExtraData") as any;
                         resolve();
                     }
                 },
@@ -63,11 +63,11 @@ namespace TinyWars.Utility.ProtoManager {
         return MapRawDataClass.toObject(MapRawDataClass.decode(data));
     }
 
-    export function encodeAsScrSaveSlotInfo(data: IScrSaveSlotInfo): Uint8Array {
-        return ScrSaveSlotInfoClass.encode(data).finish();
+    export function encodeAsSpmWarSaveSlotExtraData(data: ISpmWarSaveSlotExtraData): Uint8Array {
+        return SpmWarSaveSlotExtraData.encode(data).finish();
     }
-    export function decodeAsScrSaveSlotInfo(data: Uint8Array): IScrSaveSlotInfo {
-        return ScrSaveSlotInfoClass.toObject(ScrSaveSlotInfoClass.decode(data));
+    export function decodeAsSpmWarSaveSlotExtraData(data: Uint8Array): ISpmWarSaveSlotExtraData {
+        return SpmWarSaveSlotExtraData.toObject(SpmWarSaveSlotExtraData.decode(data));
     }
 
     function getDataForDecode(encodedData: any): Uint8Array | protobuf.Reader {

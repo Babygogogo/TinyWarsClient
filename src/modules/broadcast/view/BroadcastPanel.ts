@@ -7,7 +7,7 @@ namespace TinyWars.Broadcast {
 
     const _FLOW_SPEED = 80;
 
-    export class BroadcastPanel extends GameUi.UiPanel {
+    export class BroadcastPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -34,7 +34,6 @@ namespace TinyWars.Broadcast {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this.skinName = "resource/skins/broadcast/BroadcastPanel.exml";
         }
 

@@ -13,13 +13,13 @@ namespace TinyWars.WarEvent {
         nodeId          : number | null | undefined;
         fullData        : IWarEventFullData;
     }
-    export class WeNodeReplacePanel extends GameUi.UiPanel {
+    export class WeNodeReplacePanel extends GameUi.UiPanel<OpenDataForWeNodeReplacePanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: WeNodeReplacePanel;
 
-        private _listNode       : GameUi.UiScrollList;
+        private _listNode       : GameUi.UiScrollList<DataForNodeRenderer>;
         private _labelTitle     : GameUi.UiLabel;
         private _labelNoNode    : GameUi.UiLabel;
         private _btnClose       : GameUi.UiButton;
@@ -40,7 +40,6 @@ namespace TinyWars.WarEvent {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/warEvent/WeNodeReplacePanel.exml";
@@ -74,7 +73,7 @@ namespace TinyWars.WarEvent {
             this._btnClose.label    = Lang.getText(Lang.Type.B0146);
         }
         private _updateListNodeAndLabelNoNode(): void {
-            const openData      = this._getOpenData<OpenDataForWeNodeReplacePanel>();
+            const openData      = this._getOpenData();
             const eventId       = openData.eventId;
             const parentNodeId  = openData.parentNodeId;
             const srcNodeId     = openData.nodeId;
@@ -103,7 +102,7 @@ namespace TinyWars.WarEvent {
         candidateNodeId : number;
         fullData        : IWarEventFullData;
     }
-    class NodeRenderer extends GameUi.UiListItemRenderer {
+    class NodeRenderer extends GameUi.UiListItemRenderer<DataForNodeRenderer> {
         private _labelNodeId        : GameUi.UiLabel;
         private _labelSubNode       : GameUi.UiLabel;
         private _labelSubCondition  : GameUi.UiLabel;
@@ -122,16 +121,14 @@ namespace TinyWars.WarEvent {
             this._updateComponentsForLanguage();
         }
 
-        protected async dataChanged(): Promise<void> {
-            super.dataChanged();
-
+        protected async _onDataChanged(): Promise<void> {
             this._updateLabelNodeId();
             this._updateLabelSubNode();
             this._updateLabelSubCondition();
         }
 
         private _onTouchedBtnCopy(e: egret.TouchEvent): void {          // DONE
-            const data = this.data as DataForNodeRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }
@@ -176,7 +173,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _onTouchedBtnSelect(e: egret.TouchEvent): void {        // DONE
-            const data = this.data as DataForNodeRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }
@@ -222,13 +219,13 @@ namespace TinyWars.WarEvent {
         }
 
         private _updateLabelNodeId(): void {
-            const data = this.data as DataForNodeRenderer;
+            const data = this.data;
             if (data) {
                 this._labelNodeId.text  = `${Lang.getText(Lang.Type.B0488)}: N${data.candidateNodeId}`;
             }
         }
         private _updateLabelSubNode(): void {
-            const data = this.data as DataForNodeRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }
@@ -247,7 +244,7 @@ namespace TinyWars.WarEvent {
             }
         }
         private _updateLabelSubCondition(): void {
-            const data = this.data as DataForNodeRenderer;
+            const data = this.data;
             if (data == null) {
                 return;
             }

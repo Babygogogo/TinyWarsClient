@@ -4,6 +4,8 @@ namespace TinyWars.BaseWar {
     import Notify               = Utility.Notify;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import Logger               = Utility.Logger;
+    import Helpers              = Utility.Helpers;
+    import ClientErrorCode      = Utility.ClientErrorCode;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import UnitState            = Types.UnitActionState;
     import GridIndex            = Types.GridIndex;
@@ -17,11 +19,7 @@ namespace TinyWars.BaseWar {
         unit        : BwUnit;
         destination : GridIndex;
     }
-    export type OpenDataForBwUnitActionsPanel   = {
-        destination : GridIndex;
-        actionList  : DataForUnitActionRenderer[];
-    }
-    export type DataForUnitActionRenderer       = {
+    export type DataForUnitAction = {
         actionType      : UnitActionType;
         callback        : () => void;
         unitForLaunch?  : BwUnit;
@@ -31,7 +29,8 @@ namespace TinyWars.BaseWar {
     }
 
     export abstract class BwActionPlanner {
-        private _view       : BwActionPlannerView;
+        private readonly _view  = new BwActionPlannerView();
+
         private _war        : BwWar;
         private _mapSize    : Types.MapSize;
 
@@ -59,18 +58,17 @@ namespace TinyWars.BaseWar {
             { type: Notify.Type.BwCursorDragEnded, callback: this._onNotifyBwCursorDragEnded },
         ];
 
-        public async init(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwActionPlanner> {
-            this._setMapSize({ width: mapSizeAndMaxPlayerIndex.mapWidth, height: mapSizeAndMaxPlayerIndex.mapHeight });
+        public init(mapSize: Types.MapSize): ClientErrorCode {
+            this._setMapSize(Helpers.deepClone(mapSize));
 
-            this._view = this._view || new (this._getViewClass())();
-            this._view.init(this);
+            this.getView().init(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
-        public async fastInit(mapSizeAndMaxPlayerIndex: Types.MapSizeAndMaxPlayerIndex): Promise<BwActionPlanner> {
+        public fastInit(mapSize: Types.MapSize): ClientErrorCode {
             this.getView().fastInit(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {
@@ -101,12 +99,11 @@ namespace TinyWars.BaseWar {
             return this._getWar().getTurnManager();
         }
         public getCursor(): BwCursor {
-            return this._getWar().getField().getCursor();
+            return this._getWar().getCursor();
         }
         protected _getMapSize(): Types.MapSize {
             return this._mapSize;
         }
-        protected abstract _getViewClass(): new () => BwActionPlannerView;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
@@ -1055,6 +1052,7 @@ namespace TinyWars.BaseWar {
         protected abstract _setStateRequestingUnitDropOnTap(gridIndex: GridIndex): void;
         protected abstract _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void;
         protected abstract _setStateRequestingUnitLaunchSilo(gridIndex: GridIndex): void;
+        public abstract setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Types.UnitType, unitHp: number): void;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
@@ -1142,11 +1140,12 @@ namespace TinyWars.BaseWar {
 
         protected _resetMovableArea(): void {
             const unit = this.getFocusUnit();
-            this._movableArea = BwHelpers.createMovableArea(
-                unit.getGridIndex(),
-                unit.getFinalMoveRange(),
-                gridIndex => this._getMoveCost(gridIndex, unit)
-            );
+            this._movableArea = BwHelpers.createMovableArea({
+                origin          : unit.getGridIndex(),
+                maxMoveCost     : unit.getFinalMoveRange(),
+                mapSize         : this._getWar().getTileMap().getMapSize(),
+                moveCostGetter  : gridIndex => this._getMoveCost(gridIndex, unit)
+            });
         }
         public getMovableArea(): MovableArea {
             return this._movableArea;
@@ -1160,21 +1159,18 @@ namespace TinyWars.BaseWar {
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
             const unitMap               = this._getUnitMap();
             this._setAttackableArea(BwHelpers.createAttackableArea(
-                this.getMovableArea(),
-                this.getMapSize(),
-                unit.getMinAttackRange(),
-                unit.getFinalMaxAttackRange(),
-                (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
-                    const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
-                    if ((!hasAmmo) || ((existingUnit) && (existingUnit !== unit))) {
-                        return false;
-                    } else {
-                        const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
-                        return ((!isLoaded) || (hasMoved))
-                            && ((canAttackAfterMove) || (!hasMoved))
+                {
+                    movableArea: this.getMovableArea(), mapSize: this.getMapSize(), minAttackRange: unit.getMinAttackRange(), maxAttackRange: unit.getFinalMaxAttackRange(), checkCanAttack: (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
+                        const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
+                        if ((!hasAmmo) || ((existingUnit) && (existingUnit !== unit))) {
+                            return false;
+                        } else {
+                            const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
+                            return ((!isLoaded) || (hasMoved))
+                                && ((canAttackAfterMove) || (!hasMoved));
+                        }
                     }
-                }
-            ));
+                }            ));
         }
         protected _setAttackableArea(area: AttackableArea): void {
             this._attackableArea = area;
@@ -1289,22 +1285,23 @@ namespace TinyWars.BaseWar {
             const hasAmmo               = (unit.getPrimaryWeaponCurrentAmmo() > 0) || (unit.checkHasSecondaryWeapon());
             const mapSize               = this.getMapSize();
             const unitMap               = this._getUnitMap();
-            const newArea               = BwHelpers.createAttackableArea(
-                BwHelpers.createMovableArea(
-                    unit.getGridIndex(),
-                    unit.getFinalMoveRange(),
-                    gridIndex => this._getMoveCost(gridIndex, unit)
-                ),
+            const newArea               = BwHelpers.createAttackableArea({
+                movableArea: BwHelpers.createMovableArea({
+                    origin          : unit.getGridIndex(),
+                    maxMoveCost     : unit.getFinalMoveRange(),
+                    mapSize,
+                    moveCostGetter  : gridIndex => this._getMoveCost(gridIndex, unit)
+                }),
                 mapSize,
-                unit.getMinAttackRange(),
-                unit.getFinalMaxAttackRange(),
-                (moveGridIndex, attackGridIndex) => {
+                minAttackRange: unit.getMinAttackRange(),
+                maxAttackRange: unit.getFinalMaxAttackRange(),
+                checkCanAttack: (moveGridIndex, attackGridIndex) => {
                     const existingUnit = unitMap.getUnitOnMap(moveGridIndex);
                     return ((!existingUnit) || (existingUnit === unit))
                         && (hasAmmo)
                         && ((canAttackAfterMove) || (GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex)));
                 }
-            );
+            });
 
             this._unitsForPreviewAttack.set(unit.getUnitId(), unit);
             if (!this._areaForPreviewAttack.length) {
@@ -1340,11 +1337,12 @@ namespace TinyWars.BaseWar {
         }
         private _setUnitForPreviewingMovableArea(unit: BwUnit): void {
             this._unitForPreviewMove = unit;
-            this._areaForPreviewMove = BwHelpers.createMovableArea(
-                unit.getGridIndex(),
-                unit.getFinalMoveRange(),
-                gridIndex => this._getMoveCost(gridIndex, unit)
-            );
+            this._areaForPreviewMove = BwHelpers.createMovableArea({
+                origin          : unit.getGridIndex(),
+                maxMoveCost     : unit.getFinalMoveRange(),
+                mapSize         : this._getWar().getTileMap().getMapSize(),
+                moveCostGetter  : gridIndex => this._getMoveCost(gridIndex, unit)
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1600,8 +1598,10 @@ namespace TinyWars.BaseWar {
         protected _getDataForUnitActionsPanel(): OpenDataForBwUnitActionsPanel {
             const destination           = this.getMovePathDestination();
             const actionUnitBeLoaded    = this._getActionUnitBeLoaded();
+            const war                   = this._getWar();
             if (actionUnitBeLoaded.length) {
                 return {
+                    war,
                     destination,
                     actionList: actionUnitBeLoaded
                 };
@@ -1610,12 +1610,13 @@ namespace TinyWars.BaseWar {
             const actionUnitJoin = this._getActionUnitJoin();
             if (actionUnitJoin.length) {
                 return {
+                    war,
                     destination,
                     actionList: actionUnitJoin
                 };
             }
 
-            const dataList = [] as DataForUnitActionRenderer[];
+            const dataList: DataForUnitAction[] = [];
             dataList.push(...this._getActionUnitUseCoSuperPower());
             dataList.push(...this._getActionUnitUseCoPower());
             dataList.push(...this._getActionUnitLoadCo());
@@ -1634,28 +1635,29 @@ namespace TinyWars.BaseWar {
 
             Logger.assert(dataList.length, `BwActionPlanner._getDataForUnitActionsPanel() no actions available?!`);
             return {
+                war,
                 destination,
                 actionList: dataList,
             };
         }
 
-        protected abstract _getActionUnitBeLoaded(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitJoin(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitUseCoSuperPower(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitUseCoPower(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitLoadCo(): DataForUnitActionRenderer[];
-        private _getActionUnitAttack(): DataForUnitActionRenderer[] {
+        protected abstract _getActionUnitBeLoaded(): DataForUnitAction[];
+        protected abstract _getActionUnitJoin(): DataForUnitAction[];
+        protected abstract _getActionUnitUseCoSuperPower(): DataForUnitAction[];
+        protected abstract _getActionUnitUseCoPower(): DataForUnitAction[];
+        protected abstract _getActionUnitLoadCo(): DataForUnitAction[];
+        private _getActionUnitAttack(): DataForUnitAction[] {
             return this._createAttackableGridsAfterMove().length
                 ? [{ actionType: UnitActionType.Attack, callback: () => this._setStateChoosingAttackTargetOnChooseAction() }]
                 : [];
         }
-        protected abstract _getActionUnitCapture(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitDive(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitSurface(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitBuildTile(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitSupply(): DataForUnitActionRenderer[];
-        private _getActionsUnitLaunchUnit(): DataForUnitActionRenderer[] {
-            const dataList  = [] as DataForUnitActionRenderer[];
+        protected abstract _getActionUnitCapture(): DataForUnitAction[];
+        protected abstract _getActionUnitDive(): DataForUnitAction[];
+        protected abstract _getActionUnitSurface(): DataForUnitAction[];
+        protected abstract _getActionUnitBuildTile(): DataForUnitAction[];
+        protected abstract _getActionUnitSupply(): DataForUnitAction[];
+        private _getActionsUnitLaunchUnit(): DataForUnitAction[] {
+            const dataList  : DataForUnitAction[] = [];
             const focusUnit = this.getFocusUnit();
             if ((focusUnit !== this.getFocusUnitLoaded()) && (this.getMovePath().length === 1) && (focusUnit.checkCanLaunchLoadedUnit())) {
                 const tile = this._getTileMap().getTile(this.getMovePathDestination());
@@ -1671,13 +1673,13 @@ namespace TinyWars.BaseWar {
             }
             return dataList;
         }
-        private _getActionsUnitDropUnit(): DataForUnitActionRenderer[] {
+        private _getActionsUnitDropUnit(): DataForUnitAction[] {
             const focusUnit                 = this.getFocusUnit();
             const destination               = this.getMovePathDestination();
             const loadedUnits               = focusUnit.getLoadedUnits();
             const chosenUnits               = this.getChosenUnitsForDrop();
             const chosenDropDestinations    = this._getChosenDropDestinations();
-            const actions                   = [] as DataForUnitActionRenderer[];
+            const actions                   : DataForUnitAction[] = [];
             if ((loadedUnits.length > chosenUnits.length) && (focusUnit.checkCanDropLoadedUnit(this._getTileMap().getTile(destination).getType()))) {
                 for (const unit of loadedUnits) {
                     if ((chosenUnits.every(value => value.unit !== unit)) && (this._calculateAvailableDropDestination(unit, chosenDropDestinations).length)) {
@@ -1691,7 +1693,7 @@ namespace TinyWars.BaseWar {
             }
             return actions;
         }
-        private _getActionUnitLaunchFlare(): DataForUnitActionRenderer[] {
+        private _getActionUnitLaunchFlare(): DataForUnitAction[] {
             if ((!this._getWar().getFogMap().checkHasFogCurrently()) ||
                 (this.getMovePath().length !== 1)               ||
                 (!this.getFocusUnit().getFlareCurrentAmmo())
@@ -1701,13 +1703,13 @@ namespace TinyWars.BaseWar {
                 return [{ actionType: UnitActionType.LaunchFlare, callback: () => this._setStateChoosingFlareDestinationOnChooseAction() }];
             }
         }
-        private _getActionUnitLaunchSilo(): DataForUnitActionRenderer[] {
+        private _getActionUnitLaunchSilo(): DataForUnitAction[] {
             return (this.getFocusUnit().checkCanLaunchSiloOnTile(this._getTileMap().getTile(this.getMovePathDestination())))
                 ? [{ actionType: UnitActionType.LaunchSilo, callback: () => this._setStateChoosingSiloDestinationOnChooseAction() }]
                 : [];
         }
-        protected abstract _getActionUnitProduceUnit(): DataForUnitActionRenderer[];
-        protected abstract _getActionUnitWait(hasOtherAction: boolean): DataForUnitActionRenderer[];
+        protected abstract _getActionUnitProduceUnit(): DataForUnitAction[];
+        protected abstract _getActionUnitWait(hasOtherAction: boolean): DataForUnitAction[];
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other functions.
@@ -1723,7 +1725,7 @@ namespace TinyWars.BaseWar {
                     (VisibilityHelpers.checkIsUnitOnMapVisibleToTeam({
                         war                 : this._war,
                         gridIndex           : targetGridIndex,
-                        unitType            : existingUnit.getType(),
+                        unitType            : existingUnit.getUnitType(),
                         isDiving            : existingUnit.getIsDiving(),
                         unitPlayerIndex     : existingUnit.getPlayerIndex(),
                         observerTeamIndex   : teamIndex,

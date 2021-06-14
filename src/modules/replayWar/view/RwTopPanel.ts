@@ -6,7 +6,7 @@ namespace TinyWars.ReplayWar {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
 
-    export class RwTopPanel extends GameUi.UiPanel {
+    export class RwTopPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -129,7 +129,11 @@ namespace TinyWars.ReplayWar {
             (userId) && (User.UserPanel.show({ userId }));
         }
         private _onTouchedGroupCo(e: egret.TouchEvent): void {
-            RwCoListPanel.show({ selectedIndex: Math.max(this._war.getPlayerIndexInTurn() - 1, 0) });
+            const war = this._war;
+            BaseWar.BwCoListPanel.show({
+                war,
+                selectedIndex: Math.max(war.getPlayerIndexInTurn() - 1, 0),
+            });
             RwWarMenuPanel.hide();
         }
         private _onTouchedBtnChat(e: egret.TouchEvent): void {
@@ -182,8 +186,9 @@ namespace TinyWars.ReplayWar {
             this._war.setIsAutoReplay(false);
         }
         private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
-            this._war.getField().getActionPlanner().setStateIdle();
-            RwUnitListPanel.show();
+            const war = this._war;
+            war.getField().getActionPlanner().setStateIdle();
+            BaseWar.BwUnitListPanel.show({ war });
         }
         private _onTouchedBtnMenu(e: egret.TouchEvent): void {
             const actionPlanner = this._war.getActionPlanner();

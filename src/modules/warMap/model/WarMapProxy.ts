@@ -70,7 +70,7 @@ namespace TinyWars.WarMap.WarMapProxy {
         }
     }
 
-    export function reqMmSetMapAvailability(mapId: number, availability: ProtoTypes.Map.IDataForMapAvailability): void {
+    export function reqMmSetMapAvailability(mapId: number, availability: ProtoTypes.Map.IMapAvailability): void {
         NetManager.send({
             MsgMmSetMapAvailability: { c: {
                 mapId,
@@ -121,7 +121,7 @@ namespace TinyWars.WarMap.WarMapProxy {
             modifiedTime    : number;
             isAccept        : boolean;
             reviewComment   : string | null;
-            availability    : ProtoTypes.Map.IDataForMapAvailability;
+            availability    : ProtoTypes.Map.IMapAvailability;
         }
     ): void {
         NetManager.send({

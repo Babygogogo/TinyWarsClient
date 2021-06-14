@@ -5,9 +5,9 @@ namespace TinyWars.MapEditor {
     import Types            = Utility.Types;
     import ConfigManager    = Utility.ConfigManager;
     import DrawerMode       = Types.MapEditorDrawerMode;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
-    export class MeTopPanel extends GameUi.UiPanel {
+    export class MeTopPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -29,7 +29,7 @@ namespace TinyWars.MapEditor {
         private _btnSymmetry            : GameUi.UiButton;
         private _btnMenu                : GameUi.UiButton;
 
-        private _unitView   = new MeUnitView();
+        private _unitView   = new BaseWar.BwUnitView();
         private _tileView   = new MeTileSimpleView();
 
         private _war    : MeWar;
@@ -307,7 +307,8 @@ namespace TinyWars.MapEditor {
         }
         private _initUnitView(): void {
             const war   = this._war;
-            const unit  = new MeUnit().init({
+            const unit  = new BaseWar.BwUnit();
+            unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType    : Types.UnitType.Infantry,

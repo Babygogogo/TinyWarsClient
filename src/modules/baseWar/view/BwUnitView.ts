@@ -9,14 +9,14 @@ namespace TinyWars.BaseWar {
     import UnitAnimationType    = Types.UnitAnimationType;
     import GridIndex            = Types.GridIndex;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = Utility.ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT }  = Utility.CommonConstants.GridSize;
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_X               = _GRID_WIDTH * 3 / 4;
     const _IMG_UNIT_STAND_ANCHOR_OFFSET_Y               = _GRID_HEIGHT / 2;
     const _IMG_UNIT_STAND_X                             = _GRID_WIDTH * 2 / 4;
     const _IMG_UNIT_STATE_WIDTH                         = 28;
     const _IMG_UNIT_STATE_HEIGHT                        = 36;
 
-    export abstract class BwUnitView extends egret.DisplayObjectContainer {
+    export class BwUnitView extends egret.DisplayObjectContainer {
         private _imgHp      = new GameUi.UiImage();
         private _imgState   = new GameUi.UiImage();
         private _imgUnit    = new GameUi.UiImage();
@@ -79,7 +79,7 @@ namespace TinyWars.BaseWar {
                 isMoving    : this._animationType === UnitAnimationType.Move,
                 tickCount   : Time.TimeModel.getUnitAnimationTickCount(),
                 skinId      : unit.getSkinId(),
-                unitType    : unit.getType(),
+                unitType    : unit.getUnitType(),
             });
         }
 
@@ -139,7 +139,7 @@ namespace TinyWars.BaseWar {
             const war                   = unit.getWar();
             const playerIndex           = unit.getPlayerIndex();
             const skinIdMod             = unit.getSkinId() % 2;
-            const unitType              = unit.getType();
+            const unitType              = unit.getUnitType();
             const watcherTeamIndexes    = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const isAlwaysVisible       = watcherTeamIndexes.has(unit.getTeamIndex());
             const tween                 = egret.Tween.get(this);
@@ -216,7 +216,7 @@ namespace TinyWars.BaseWar {
                         resolve();
                     });
                 } else {
-                    const cursor = war.getField().getCursor();
+                    const cursor = war.getCursor();
                     tween.call(() => {
                         cursor.setIsMovableByTouches(false);
                         cursor.setGridIndex(aiming);

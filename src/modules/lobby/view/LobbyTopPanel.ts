@@ -3,16 +3,19 @@ namespace TinyWars.Lobby {
     import UserModel    = User.UserModel;
     import Notify       = Utility.Notify;
 
-    export class LobbyTopPanel extends GameUi.UiPanel {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
+    export class LobbyTopPanel extends GameUi.UiPanel<void> {
+        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: LobbyTopPanel;
 
         private _group          : eui.Group;
+
+        private _groupUserInfo  : eui.Group;
         private _labelNickname  : GameUi.UiLabel;
-        private _btnMyInfo      : GameUi.UiButton;
-        private _btnChat        : GameUi.UiButton;
+        private _labelUserId    : GameUi.UiLabel;
+
+        private _btnSettings    : GameUi.UiButton;
 
         public static show(): void {
             if (!LobbyTopPanel._instance) {
@@ -39,14 +42,10 @@ namespace TinyWars.Lobby {
                 { type: Notify.Type.MsgUserLogin,                   callback: this._onMsgUserLogin },
                 { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
                 { type: Notify.Type.MsgUserSetNickname,             callback: this._onMsgUserSetNickname },
-                { type: Notify.Type.MsgChatGetAllReadProgressList,  callback: this._onMsgChatGetAllReadProgressList },
-                { type: Notify.Type.MsgChatUpdateReadProgress,      callback: this._onMsgChatUpdateReadProgress },
-                { type: Notify.Type.MsgChatGetAllMessages,          callback: this._onMsgChatGetAllMessages },
-                { type: Notify.Type.MsgChatAddMessage,              callback: this._onMsgChatAddMessages },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnMyInfo,  callback: this._onTouchedBtnMyInfo },
-                { ui: this._btnChat,    callback: this._onTouchedBtnChat },
+                { ui: this._groupUserInfo,  callback: this._onTouchedGroupUserInfo },
+                { ui: this._btnSettings,    callback: this._onTouchedBtnSettings },
             ]);
 
             this._showOpenAnimation();
@@ -69,36 +68,17 @@ namespace TinyWars.Lobby {
             this._updateLabelNickname();
         }
 
-        private _onMsgChatGetAllReadProgressList(e: egret.Event): void {
-            this._updateBtnChat();
-        }
-        private _onMsgChatUpdateReadProgress(e: egret.Event): void {
-            this._updateBtnChat();
-        }
-        private _onMsgChatGetAllMessages(e: egret.Event): void {
-            this._updateBtnChat();
-        }
-        private _onMsgChatAddMessages(e: egret.Event): void {
-            this._updateBtnChat();
-        }
-
         private _onNotifyLanguageChanged(e: egret.Event): void {
         }
 
-        private _onTouchedBtnMyInfo(e: egret.Event): void {
+        private _onTouchedGroupUserInfo(e: egret.Event): void {
             User.UserOnlineUsersPanel.hide();
             Chat.ChatPanel.hide();
             User.UserPanel.show({ userId: UserModel.getSelfUserId() });
         }
 
-        private _onTouchedBtnChat(e: egret.TouchEvent): void {
-            User.UserOnlineUsersPanel.hide();
-            User.UserPanel.hide();
-            if (!Chat.ChatPanel.getIsOpening()) {
-                Chat.ChatPanel.show({ toUserId: null });
-            } else {
-                Chat.ChatPanel.hide();
-            }
+        private _onTouchedBtnSettings(e: egret.TouchEvent): void {
+            User.UserSettingsPanel.show();
         }
 
         private _showOpenAnimation(): void {
@@ -121,15 +101,11 @@ namespace TinyWars.Lobby {
 
         private _updateView(): void {
             this._updateLabelNickname();
-            this._updateBtnChat();
+            this._labelUserId.text = `ID: ${UserModel.getSelfUserId()}`;
         }
 
         private async _updateLabelNickname(): Promise<void> {
-            this._labelNickname.text    = await UserModel.getSelfNickname();
-        }
-
-        private _updateBtnChat(): void {
-            this._btnChat.setRedVisible(Chat.ChatModel.checkHasUnreadMessage());
+            this._labelNickname.text = await UserModel.getSelfNickname();
         }
     }
 }

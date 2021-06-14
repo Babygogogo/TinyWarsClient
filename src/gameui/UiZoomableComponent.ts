@@ -4,32 +4,40 @@ namespace TinyWars.GameUi {
     import Helpers      = Utility.Helpers;
     import StageManager = Utility.StageManager;
     import Notify       = Utility.Notify;
-    import Size         = Types.Size;
     import Point        = Types.Point;
     import TouchPoints  = Types.TouchPoints;
 
-    export class UiZoomableComponent extends eui.Component {
-        private _maskForContents: UiImage;
+    export class UiZoomableComponent extends UiComponent {
+        private _maskForContents                : UiImage;
 
-        private _contents                       : egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
-        private _contentWidth                   : number = 0;
-        private _contentHeight                  : number = 0;
-        private _spacingForTop                  : number = 0;
-        private _spacingForBottom               : number = 0;
-        private _spacingForLeft                 : number = 0;
-        private _spacingForRight                : number = 0;
+        private _contents                       = new egret.DisplayObjectContainer();
+        private _contentWidth                   = 0;
+        private _contentHeight                  = 0;
+        private _spacingForTop                  = 0;
+        private _spacingForBottom               = 0;
+        private _spacingForLeft                 = 0;
+        private _spacingForRight                = 0;
         private _isMouseWheelListenerEnabled    = false;
         private _isTouchListenerEnabled         = false;
-        private _currGlobalTouchPoints          = new Map<number, Types.Point>();
-        private _prevGlobalTouchPoints          = new Map<number, Types.Point>();
+        private _currGlobalTouchPoints          = new Map<number, Point>();
+        private _prevGlobalTouchPoints          = new Map<number, Point>();
 
         public constructor() {
             super();
 
-            this.addEventListener(egret.Event.RESIZE,               this._onResize,             this);
-            this.addEventListener(egret.Event.REMOVED_FROM_STAGE,   this._onRemovedFromStage,   this);
-
             this.addChild(this._contents);
+
+            this.dispatchEventWith(egret.Event.COMPLETE);
+        }
+
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this, callback: this._onResize, eventType: egret.Event.RESIZE },
+            ]);
+        }
+        protected async _onClosed(): Promise<void> {
+            this.setMouseWheelListenerEnabled(false);
+            this.setTouchListenerEnabled(false);
         }
 
         public setMaskEnabled(enabled: boolean): void {
@@ -207,10 +215,6 @@ namespace TinyWars.GameUi {
         ////////////////////////////////////////////////////////////////////////////////
         private _onResize(e: egret.Event): void {
             this._reviseContentScaleAndPosition();
-        }
-        private _onRemovedFromStage(e: egret.Event): void {
-            this.setMouseWheelListenerEnabled(false);
-            this.setTouchListenerEnabled(false);
         }
 
         private _onNotifyMouseWheel(e: egret.Event): void {

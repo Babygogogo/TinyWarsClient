@@ -15,6 +15,7 @@ namespace TinyWars.Utility.Notify {
         UnitAnimationTick,
         GridAnimationTick,
         UnitAndTileTextureVersionChanged,
+        IsShowGridBorderChanged,
 
         MouseWheel,
         GlobalTouchBegin,
@@ -28,9 +29,41 @@ namespace TinyWars.Utility.Notify {
         ChatPanelOpened,
         ChatPanelClosed,
 
-        McrCreateAvailableCoIdListChanged,
+        McrCreateBannedCoIdArrayChanged,
+        McrCreateTeamIndexChanged,
+        McrCreateSelfCoIdChanged,
+        McrCreateSelfSkinIdChanged,
+        McrCreateSelfPlayerIndexChanged,
+        McrCreatePresetWarRuleIdChanged,
+
+        McrJoinTargetRoomIdChanged,
+        McrJoinedPreviewingRoomIdChanged,
+
+        MfrCreateSelfCoIdChanged,
+        MfrCreateTeamIndexChanged,
+        MfrCreateSelfPlayerIndexChanged,
+        MfrCreateSelfSkinIdChanged,
+
+        MfrJoinTargetRoomIdChanged,
+        MfrJoinedPreviewingRoomIdChanged,
+
         MrrMyRoomAdded,
         MrrMyRoomDeleted,
+        MrrJoinedPreviewingRoomIdChanged,
+        MrrSelfSettingsCoIdChanged,
+        MrrSelfSettingsSkinIdChanged,
+
+        ScrCreatePresetWarRuleIdChanged,
+        ScrCreateBannedCoIdArrayChanged,
+        ScrCreateWarSaveSlotChanged,
+        ScrCreatePlayerInfoChanged,
+
+        MrrPreviewingMapIdChanged,
+        McwPreviewingWarIdChanged,
+        MrwPreviewingWarIdChanged,
+        MfwPreviewingWarIdChanged,
+        RwPreviewingReplayIdChanged,
+        SpmPreviewingWarSaveSlotChanged,
 
         BroadcastOngoingMessagesChanged,
 
@@ -55,10 +88,10 @@ namespace TinyWars.Utility.Notify {
 
         BwActionPlannerStateChanged,
 
-        McwWarMenuPanelOpened,
-        McwWarMenuPanelClosed,
-        McwProduceUnitPanelOpened,
-        McwProduceUnitPanelClosed,
+        BwWarMenuPanelOpened,
+        BwWarMenuPanelClosed,
+        BwProduceUnitPanelOpened,
+        BwProduceUnitPanelClosed,
         BwCoListPanelOpened,
         BwCoListPanelClosed,
 
@@ -72,9 +105,6 @@ namespace TinyWars.Utility.Notify {
 
         BwSiloExploded,
 
-        ScrCreateWarSaveSlotChanged,
-        ScrCreateWarPlayerInfoListChanged,
-
         ReplayAutoReplayChanged,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +114,7 @@ namespace TinyWars.Utility.Notify {
         MeMapNameChanged,
         MeWarRuleNameChanged,
         MeWarEventIdArrayChanged,
-        MeAvailableCoChanged,
+        MeBannedCoIdArrayChanged,
 
         WarEventFullDataChanged,
 
@@ -151,11 +181,28 @@ namespace TinyWars.Utility.Notify {
         MsgMcrExitRoom,
         MsgMcrSetWarRule,
         MsgMcrJoinRoom,
-        MsgMcrDeleteRoom,
+        MsgMcrDeleteRoomByPlayer,
+        MsgMcrDeleteRoomByServer,
         MsgMcrDeletePlayer,
         MsgMcrSetReady,
         MsgMcrSetSelfSettings,
+        MsgMcrGetOwnerPlayerIndex,
         MsgMcrStartWar,
+
+        MsgMfrCreateRoom,
+        MsgMfrGetRoomInfo,
+        MsgMfrGetRoomInfoFailed,
+        MsgMfrGetJoinedRoomInfoList,
+        MsgMfrGetJoinableRoomInfoList,
+        MsgMfrExitRoom,
+        MsgMfrJoinRoom,
+        MsgMfrDeleteRoomByPlayer,
+        MsgMfrDeleteRoomByServer,
+        MsgMfrDeletePlayer,
+        MsgMfrSetReady,
+        MsgMfrSetSelfSettings,
+        MsgMfrGetOwnerPlayerIndex,
+        MsgMfrStartWar,
 
         MsgMrrGetMaxConcurrentCount,
         MsgMrrSetMaxConcurrentCount,
@@ -164,7 +211,7 @@ namespace TinyWars.Utility.Notify {
         MsgMrrGetMyRoomPublicInfoList,
         MsgMrrSetBannedCoIdList,
         MsgMrrSetSelfSettings,
-        MsgMrrDeleteRoom,
+        MsgMrrDeleteRoomByServer,
 
         MsgReplayGetInfoList,
         MsgReplayGetData,
@@ -216,13 +263,16 @@ namespace TinyWars.Utility.Notify {
         MsgMpwActionUnitWait,
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        MsgScrCreateWar,
-        MsgScrGetSaveInfoList,
-        MsgScrContinueWarFailed,
-        MsgScrContinueWar,
-        MsgScrSaveWar,
-        MsgScrCreateCustomWar,
-        MsgScrDeleteWar,
+        MsgSpmCreateScw,
+        MsgSpmCreateSfw,
+        MsgSpmCreateSrw,
+        MsgSpmGetWarSaveSlotFullDataArray,
+        MsgSpmDeleteWarSaveSlot,
+        MsgSpmSaveScw,
+        MsgSpmSaveSfw,
+        MsgSpmSaveSrw,
+        MsgSpmGetSrwRankInfo,
+        MsgSpmValidateSrw,
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -231,14 +281,15 @@ namespace TinyWars.Utility.Notify {
     export namespace Data {
         export type ConfigLoaded                = number;
         export type McwPlayerIndexInTurnChanged = number;
-        export type McwPlayerFundChanged        = MultiPlayerWar.MpwPlayer;
-        export type McwPlayerEnergyChanged      = MultiPlayerWar.MpwPlayer;
+        export type McwPlayerFundChanged        = BaseWar.BwPlayer;
+        export type McwPlayerEnergyChanged      = BaseWar.BwPlayer;
         export type BwCursorTapped              = { current: GridIndex, tappedOn: GridIndex };
         export type BwCursorDragged             = { current: GridIndex, draggedTo: GridIndex };
         export type BwFieldZoomed               = { previous: TouchPoints, current: TouchPoints };
         export type BwFieldDragged              = { previous: Types.Point, current: Types.Point };
         export type MeUnitChanged               = { gridIndex: GridIndex };
         export type MeTileChanged               = { gridIndex: GridIndex };
+        export type ScrCreatePlayerInfoChanged  = { playerIndex: number };
     }
 
     ////////////////////////////////////////////////////////////////////////////////

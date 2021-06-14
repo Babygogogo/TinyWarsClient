@@ -1,28 +1,20 @@
 
 namespace TinyWars.MultiCustomRoom {
-    import ProtoTypes       = Utility.ProtoTypes;
     import Lang             = Utility.Lang;
-    import ConfigManager    = Utility.ConfigManager;
+    import Types            = Utility.Types;
+    import CommonConstants  = Utility.CommonConstants;
     import Notify           = Utility.Notify;
-    import FloatText        = Utility.FloatText;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
-    import WarMapModel      = WarMap.WarMapModel;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import IMcrRoomInfo     = ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
+    import PlayerRuleType   = Types.PlayerRuleType;
 
     export type OpenDataForMcrRoomAdvancedSettingsPage = {
         roomId  : number;
     }
-
-    export class McrRoomAdvancedSettingsPage extends GameUi.UiTabPage {
-        private _btnMapNameTitle    : TinyWars.GameUi.UiButton;
-        private _labelMapName       : TinyWars.GameUi.UiLabel;
-        private _btnBuildings       : TinyWars.GameUi.UiButton;
-        private _labelPlayerList    : TinyWars.GameUi.UiLabel;
-        private _listPlayer         : TinyWars.GameUi.UiScrollList;
-
-        private _roomInfo           : IMcrRoomInfo;
+    export class McrRoomAdvancedSettingsPage extends GameUi.UiTabPage<OpenDataForMcrRoomAdvancedSettingsPage> {
+        private readonly _scroller      : eui.Scroller;
+        private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer>;
+        private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
             super();
@@ -30,239 +22,276 @@ namespace TinyWars.MultiCustomRoom {
             this.skinName = "resource/skins/multiCustomRoom/McrRoomAdvancedSettingsPage.exml";
         }
 
-        protected async _onOpened(): Promise<void> {
-            this._setUiListenerArray([
-                { ui: this._btnBuildings,   callback: this._onTouchedBtnBuildings },
-            ]);
+        protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onMsgMcrGetRoomInfo },
+                { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onNotifyMsgMcrGetRoomInfo },
             ]);
+            this._listSetting.setItemRenderer(SettingRenderer);
             this._listPlayer.setItemRenderer(PlayerRenderer);
-
-            const roomId    = this._getOpenData<OpenDataForMcrRoomAdvancedSettingsPage>().roomId;
-            this._roomInfo  = await McrModel.getRoomInfo(roomId);
+            this._scroller.scrollPolicyH = eui.ScrollPolicy.OFF;
+            this.left   = 0;
+            this.right  = 0;
+            this.top    = 0;
+            this.bottom = 0;
 
             this._updateComponentsForLanguage();
+            this._initListSetting();
+            this._updateListPlayer();
         }
 
-        protected _onClosed(): void {
-            this._listPlayer.clear();
-        }
-
-        private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                const settingsForCommon = roomInfo.settingsForCommon;
-                WarMap.WarMapBuildingListPanel.show({
-                    configVersion   : roomInfo.settingsForCommon.configVersion,
-                    mapRawData      : await WarMapModel.getRawData(roomInfo.settingsForMcw.mapId),
-                });
-            }
-        }
-
+        ////////////////////////////////////////////////////////////////////////////////
+        // Event callbacks.
+        ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onMsgMcrGetRoomInfo(e: egret.Event): void {
-            const data          = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
-            const roomId        = data.roomId;
-            const currRoomInfo  = this._roomInfo;
-            if ((currRoomInfo) && (roomId === currRoomInfo.roomId)) {
-                const newRoomInfo   = data.roomInfo;
-                const selfUserId    = User.UserModel.getSelfUserId();
-                if (newRoomInfo.playerDataList.some(v => v.userId === selfUserId)) {
-                    this._roomInfo = newRoomInfo;
-                    this._updateListPlayer();
-                }
-            }
+        private _onNotifyMsgMcrGetRoomInfo(e: egret.Event): void {
+            this._updateListPlayer();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelPlayerList.text  = Lang.getText(Lang.Type.B0395);
-            this._btnMapNameTitle.label = Lang.getText(Lang.Type.B0225);
-            this._btnBuildings.label    = Lang.getText(Lang.Type.B0333);
-            this._updateLabelMapName();
-            this._updateListPlayer();
         }
 
-        private _updateListPlayer(): void {
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                const playersCount  = BwSettingsHelper.getPlayersCount(roomInfo.settingsForCommon.warRule);
-                const dataList      : DataForPlayerRenderer[] = [];
+        private _initListSetting(): void {
+            this._listSetting.bindData([
+                { playerRuleType: PlayerRuleType.TeamIndex },
+                { playerRuleType: PlayerRuleType.BannedCoIdArray },
+                { playerRuleType: PlayerRuleType.InitialFund },
+                { playerRuleType: PlayerRuleType.IncomeMultiplier },
+                { playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
+                { playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
+                { playerRuleType: PlayerRuleType.MoveRangeModifier },
+                { playerRuleType: PlayerRuleType.AttackPowerModifier },
+                { playerRuleType: PlayerRuleType.VisionRangeModifier },
+                { playerRuleType: PlayerRuleType.LuckLowerLimit },
+                { playerRuleType: PlayerRuleType.LuckUpperLimit },
+            ]);
+        }
+
+        private async _updateListPlayer(): Promise<void> {
+            const roomId        = this._getOpenData().roomId;
+            const roomInfo      = await McrModel.getRoomInfo(roomId);
+            const playersCount  = roomInfo ? roomInfo.settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray.length : null;
+            const listPlayer    = this._listPlayer;
+            if (playersCount == null) {
+                listPlayer.clear();
+            } else {
+                const dataList: DataForPlayerRenderer[] = [];
                 for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
-                    dataList.push({
-                        playerIndex,
-                        roomInfo,
-                    });
+                    dataList.push({ roomId, playerIndex });
                 }
-                this._listPlayer.bindData(dataList);
-            }
-        }
-
-        private async _updateLabelMapName(): Promise<void> {
-            const roomInfo = this._roomInfo;
-            if (roomInfo) {
-                const mapId             = roomInfo.settingsForMcw.mapId;
-                this._labelMapName.text = `${await WarMapModel.getMapNameInCurrentLanguage(mapId) || "----"} (${Lang.getText(Lang.Type.B0163)}: ${await WarMapModel.getDesignerName(mapId) || "----"})`;
+                listPlayer.bindData(dataList);
             }
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // SettingRenderer
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    type DataForSettingRenderer = {
+        playerRuleType  : PlayerRuleType;
+    }
+    class SettingRenderer extends GameUi.UiListItemRenderer<DataForSettingRenderer> {
+        private readonly _labelName : GameUi.UiLabel;
+        private readonly _btnHelp   : GameUi.UiButton;
+
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnHelp,    callback: this._onTouchedBtnHelp },
+            ]);
+        }
+
+        protected _onDataChanged(): void {
+            const data = this.data;
+            if (data) {
+                const playerRuleType    = data.playerRuleType;
+                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType);
+                this._btnHelp.visible   = playerRuleType === PlayerRuleType.BannedCoIdArray;
+            }
+        }
+
+        private _onTouchedBtnHelp(e: egret.Event): void {
+            const data              = this.data;
+            const playerRuleType    = data ? data.playerRuleType : null;
+            if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
+                Common.CommonHelpPanel.show({
+                    title   : `CO`,
+                    content : Lang.getRichText(Lang.RichType.R0004),
+                });
+            }
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // PlayerRenderer
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForPlayerRenderer = {
+        roomId      : number;
         playerIndex : number;
-        roomInfo    : IMcrRoomInfo;
     }
+    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
+        private _labelPlayerIndex   : GameUi.UiLabel;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer {
-        private _listInfo   : GameUi.UiScrollList;
-
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
+        protected _onOpened(): void {
             this._listInfo.setItemRenderer(InfoRenderer);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
         private _updateView(): void {
-            this._listInfo.bindData(this._createDataForListInfo());
+            const data = this.data;
+            if (data) {
+                this._labelPlayerIndex.text = `P${data.playerIndex}`;
+                this._listInfo.bindData(this._createDataForListInfo());
+            }
         }
 
         private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data as DataForPlayerRenderer;
+            const data          = this.data;
+            const roomId        = data.roomId;
             const playerIndex   = data.playerIndex;
-            const roomInfo      = data.roomInfo;
             return [
-                this._createDataPlayerIndex(roomInfo, playerIndex),
-                this._createDataInitialFund(roomInfo, playerIndex),
-                this._createDataIncomeMultiplier(roomInfo, playerIndex),
-                this._createDataInitialEnergyPercentage(roomInfo, playerIndex),
-                this._createDataEnergyGrowthMultiplier(roomInfo, playerIndex),
-                this._createDataMoveRangeModifier(roomInfo, playerIndex),
-                this._createDataAttackPowerModifier(roomInfo, playerIndex),
-                this._createDataVisionRangeModifier(roomInfo, playerIndex),
-                this._createDataLuckLowerLimit(roomInfo, playerIndex),
-                this._createDataLuckUpperLimit(roomInfo, playerIndex),
+                { roomId, playerIndex, playerRuleType: PlayerRuleType.TeamIndex },
+                { roomId, playerIndex, playerRuleType: PlayerRuleType.BannedCoIdArray },
+                { roomId, playerIndex, playerRuleType: PlayerRuleType.InitialFund },
+                { roomId, playerIndex, playerRuleType: PlayerRuleType.IncomeMultiplier },
+                { roomId, playerIndex, playerRuleType: PlayerRuleType.EnergyAddPctOnLoadCo },
+                { roomId, playerIndex, playerRuleType: PlayerRuleType.EnergyGrowthMultiplier },
+                { roomId, playerIndex, playerRuleType: PlayerRuleType.MoveRangeModifier },
+                { roomId, playerIndex, playerRuleType: PlayerRuleType.AttackPowerModifier },
+                { roomId, playerIndex, playerRuleType: PlayerRuleType.VisionRangeModifier },
+                { roomId, playerIndex, playerRuleType: PlayerRuleType.LuckLowerLimit },
+                { roomId, playerIndex, playerRuleType: PlayerRuleType.LuckUpperLimit },
             ];
         }
-        private _createDataPlayerIndex(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
-            return {
-                titleText   : Lang.getText(Lang.Type.B0018),
-                infoText    : `${Lang.getPlayerForceName(playerIndex)} (${Lang.getPlayerTeamName(playerRule.teamIndex)})`,
-                infoColor   : 0xFFFFFF,
-            };
-        }
-        private _createDataInitialFund(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
-            const currValue     = playerRule.initialFund;
-            return {
-                titleText       : Lang.getText(Lang.Type.B0178),
-                infoText        : `${currValue}`,
-                infoColor       : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
-            };
-        }
-        private _createDataIncomeMultiplier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
-            const currValue     = playerRule.incomeMultiplier;
-            return {
-                titleText       : Lang.getText(Lang.Type.B0179),
-                infoText        : `${currValue}%`,
-                infoColor       : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
-            };
-        }
-        private _createDataInitialEnergyPercentage(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
-            const currValue     = playerRule.initialEnergyPercentage;
-            return {
-                titleText       : Lang.getText(Lang.Type.B0180),
-                infoText        : `${currValue}%`,
-                infoColor       : getTextColor(currValue, CommonConstants.WarRuleInitialEnergyPercentageDefault),
-            };
-        }
-        private _createDataEnergyGrowthMultiplier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
-            const currValue     = playerRule.energyGrowthMultiplier;
-            return {
-                titleText       : Lang.getText(Lang.Type.B0181),
-                infoText        : `${currValue}%`,
-                infoColor       : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
-            };
-        }
-        private _createDataMoveRangeModifier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
-            const currValue     = playerRule.moveRangeModifier;
-            return {
-                titleText       : Lang.getText(Lang.Type.B0182),
-                infoText        : `${currValue}`,
-                infoColor       : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
-            };
-        }
-        private _createDataAttackPowerModifier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
-            const currValue     = playerRule.attackPowerModifier;
-            return {
-                titleText       : Lang.getText(Lang.Type.B0183),
-                infoText        : `${currValue}%`,
-                infoColor       : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
-            };
-        }
-        private _createDataVisionRangeModifier(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
-            const currValue     = playerRule.visionRangeModifier;
-            return {
-                titleText       : Lang.getText(Lang.Type.B0184),
-                infoText        : `${currValue}`,
-                infoColor       : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
-            };
-        }
-        private _createDataLuckLowerLimit(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
-            const currValue     = playerRule.luckLowerLimit;
-            return {
-                titleText       : Lang.getText(Lang.Type.B0189),
-                infoText        : `${currValue}%`,
-                infoColor       : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
-            };
-        }
-        private _createDataLuckUpperLimit(roomInfo: IMcrRoomInfo, playerIndex: number): DataForInfoRenderer {
-            const playerRule    = BwSettingsHelper.getPlayerRule(roomInfo.settingsForCommon.warRule, playerIndex);
-            const currValue     = playerRule.luckUpperLimit;
-            return {
-                titleText       : Lang.getText(Lang.Type.B0190),
-                infoText        : `${currValue}%`,
-                infoColor       : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
-            };
-        }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // InfoRenderer
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     type DataForInfoRenderer = {
-        titleText   : string;
-        infoText    : string;
-        infoColor   : number;
+        roomId                  : number;
+        playerIndex             : number;
+        playerRuleType          : PlayerRuleType;
+        infoText?               : string;
+        infoColor?              : number;
+        callbackOnTouchedTitle? : (() => void) | null;
     }
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
+        private readonly _labelValue    : GameUi.UiLabel;
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
-        private _btnTitle   : GameUi.UiButton;
-        private _labelValue : GameUi.UiLabel;
+        protected _onDataChanged(): void {
+            this._updateComponentsForValue();
+        }
 
-        protected dataChanged(): void {
-            super.dataChanged();
+        private _updateComponentsForValue(): void {
+            const data = this.data;
+            if (data) {
+                const playerIndex = data.playerIndex;
+                switch (data.playerRuleType) {
+                    case PlayerRuleType.TeamIndex               : this._updateComponentsForValueAsTeamIndex(playerIndex);               return;
+                    case PlayerRuleType.BannedCoIdArray         : this._updateComponentsForValueAsBannedCoIdArray(playerIndex);         return;
+                    case PlayerRuleType.InitialFund             : this._updateComponentsForValueAsInitialFund(playerIndex);             return;
+                    case PlayerRuleType.IncomeMultiplier        : this._updateComponentsForValueAsIncomeMultiplier(playerIndex);        return;
+                    case PlayerRuleType.EnergyAddPctOnLoadCo    : this._updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex);    return;
+                    case PlayerRuleType.EnergyGrowthMultiplier  : this._updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex);  return;
+                    case PlayerRuleType.MoveRangeModifier       : this._updateComponentsForValueAsMoveRangeModifier(playerIndex);       return;
+                    case PlayerRuleType.AttackPowerModifier     : this._updateComponentsForValueAsAttackPowerModifier(playerIndex);     return;
+                    case PlayerRuleType.VisionRangeModifier     : this._updateComponentsForValueAsVisionRangeModifier(playerIndex);     return;
+                    case PlayerRuleType.LuckLowerLimit          : this._updateComponentsForValueAsLuckLowerLimit(playerIndex);          return;
+                    case PlayerRuleType.LuckUpperLimit          : this._updateComponentsForValueAsLuckUpperLimit(playerIndex);          return;
+                    default                                     : return;
+                }
+            }
+        }
+        private async _updateComponentsForValueAsTeamIndex(playerIndex: number): Promise<void> {
+            const roomInfo          = await this._getRoomInfo();
+            const teamIndex         = roomInfo ? BwWarRuleHelper.getTeamIndex(roomInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const labelValue        = this._labelValue;
+            labelValue.text         = teamIndex == null ? null : Lang.getPlayerTeamName(teamIndex);
+            labelValue.textColor    = 0xFFFFFF;
+        }
+        private async _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): Promise<void> {
+            const roomInfo          = await this._getRoomInfo();
+            const currValue         = roomInfo ? (BwWarRuleHelper.getBannedCoIdArray(roomInfo.settingsForCommon.warRule, playerIndex) || []).length : 0;
+            const labelValue        = this._labelValue;
+            labelValue.text         = `${currValue}`;
+            labelValue.textColor    = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
+        }
+        private async _updateComponentsForValueAsInitialFund(playerIndex: number): Promise<void> {
+            const roomInfo          = await this._getRoomInfo();
+            const currValue         = roomInfo ? BwWarRuleHelper.getInitialFund(roomInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const labelValue        = this._labelValue;
+            labelValue.text         = currValue == null ? null : `${currValue}`;
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
+        }
+        private async _updateComponentsForValueAsIncomeMultiplier(playerIndex: number): Promise<void> {
+            const roomInfo          = await this._getRoomInfo();
+            const currValue         = roomInfo ? BwWarRuleHelper.getIncomeMultiplier(roomInfo.settingsForCommon.warRule, playerIndex): undefined;
+            const labelValue        = this._labelValue;
+            labelValue.text         = currValue == null ? null : `${currValue}`;
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
+        }
+        private async _updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex: number): Promise<void> {
+            const roomInfo          = await this._getRoomInfo();
+            const currValue         = roomInfo ? BwWarRuleHelper.getEnergyAddPctOnLoadCo(roomInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const labelValue        = this._labelValue;
+            labelValue.text         = currValue == null ? null : `${currValue}`;
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
+        }
+        private async _updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex: number): Promise<void> {
+            const roomInfo          = await this._getRoomInfo();
+            const currValue         = roomInfo ? BwWarRuleHelper.getEnergyGrowthMultiplier(roomInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const labelValue        = this._labelValue;
+            labelValue.text         = currValue == null ? null : `${currValue}`;
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
+        }
+        private async _updateComponentsForValueAsMoveRangeModifier(playerIndex: number): Promise<void> {
+            const roomInfo          = await this._getRoomInfo();
+            const currValue         = roomInfo ? BwWarRuleHelper.getMoveRangeModifier(roomInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const labelValue        = this._labelValue;
+            labelValue.text         = currValue == null ? null : `${currValue}`;
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
+        }
+        private async _updateComponentsForValueAsAttackPowerModifier(playerIndex: number): Promise<void> {
+            const roomInfo          = await this._getRoomInfo();
+            const currValue         = roomInfo ? BwWarRuleHelper.getAttackPowerModifier(roomInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const labelValue        = this._labelValue;
+            labelValue.text         = currValue == null ? null : `${currValue}`;
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
+        }
+        private async _updateComponentsForValueAsVisionRangeModifier(playerIndex: number): Promise<void> {
+            const roomInfo          = await this._getRoomInfo();
+            const currValue         = roomInfo ? BwWarRuleHelper.getVisionRangeModifier(roomInfo.settingsForCommon.warRule, playerIndex): undefined;
+            const labelValue        = this._labelValue;
+            labelValue.text         = currValue == null ? null : `${currValue}`;
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
+        }
+        private async _updateComponentsForValueAsLuckLowerLimit(playerIndex: number): Promise<void> {
+            const roomInfo          = await this._getRoomInfo();
+            const currValue         = roomInfo ? BwWarRuleHelper.getLuckLowerLimit(roomInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const labelValue        = this._labelValue;
+            labelValue.text         = currValue == null ? null : `${currValue}`;
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
+        }
+        private async _updateComponentsForValueAsLuckUpperLimit(playerIndex: number): Promise<void> {
+            const roomInfo          = await this._getRoomInfo();
+            const currValue         = roomInfo ? BwWarRuleHelper.getLuckUpperLimit(roomInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const labelValue        = this._labelValue;
+            labelValue.text         = currValue == null ? null : `${currValue}`;
+            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
+        }
 
-            const data                  = this.data as DataForInfoRenderer;
-            this._labelValue.text       = data.infoText;
-            this._labelValue.textColor  = data.infoColor;
-            this._btnTitle.label        = data.titleText;
+        private _getRoomInfo(): Promise<ProtoTypes.MultiCustomRoom.IMcrRoomInfo> {
+            return McrModel.getRoomInfo(this.data.roomId);
         }
     }
 

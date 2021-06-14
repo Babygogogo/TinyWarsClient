@@ -4,6 +4,7 @@ namespace TinyWars.MapEditor {
     import Lang             = Utility.Lang;
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
+    import Helpers          = Utility.Helpers;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
     type OpenDataForSimChooseCoPanel = {
@@ -11,7 +12,7 @@ namespace TinyWars.MapEditor {
         coId        : number;
     }
 
-    export class MeSimChooseCoPanel extends GameUi.UiPanel {
+    export class MeSimChooseCoPanel extends GameUi.UiPanel<OpenDataForSimChooseCoPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -19,7 +20,7 @@ namespace TinyWars.MapEditor {
 
         private _labelChooseCo  : GameUi.UiLabel;
         private _btnHelp        : GameUi.UiButton;
-        private _listCo         : GameUi.UiScrollList;
+        private _listCo         : GameUi.UiScrollList<DataForCoRenderer>;
         private _btnBack        : GameUi.UiButton;
 
         private _imgCoPortrait                  : GameUi.UiImage;
@@ -34,15 +35,15 @@ namespace TinyWars.MapEditor {
         private _labelEnergyBarTitle            : GameUi.UiLabel;
         private _labelEnergyBar                 : GameUi.UiLabel;
 
-        private _listPassiveSkill   : GameUi.UiScrollList;
+        private _listPassiveSkill   : GameUi.UiScrollList<DataForSkillRenderer>;
         private _labelNoPassiveSkill: GameUi.UiLabel;
 
-        private _listCop            : GameUi.UiScrollList;
+        private _listCop            : GameUi.UiScrollList<DataForSkillRenderer>;
         private _labelNoCop         : GameUi.UiLabel;
         private _labelCopEnergyTitle: GameUi.UiLabel;
         private _labelCopEnergy     : GameUi.UiLabel;
 
-        private _listScop               : GameUi.UiScrollList;
+        private _listScop               : GameUi.UiScrollList<DataForSkillRenderer>;
         private _labelNoScop            : GameUi.UiLabel;
         private _labelScopEnergyTitle   : GameUi.UiLabel;
         private _labelScopEnergy        : GameUi.UiLabel;
@@ -66,7 +67,6 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapEditor/MeSimChooseCoPanel.exml";
         }
 
@@ -82,12 +82,6 @@ namespace TinyWars.MapEditor {
 
             this._initListCo();
             this._updateView();
-        }
-        protected async _onClosed(): Promise<void> {
-            this._listCo.clear();
-            this._listPassiveSkill.clear();
-            this._listCop.clear();
-            this._listScop.clear();
         }
 
         public setSelectedIndex(newIndex: number): void {
@@ -138,7 +132,7 @@ namespace TinyWars.MapEditor {
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
 
-            const openData = this._getOpenData<OpenDataForSimChooseCoPanel>();
+            const openData = this._getOpenData();
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
                 const cfg = data.coBasicCfg;
                 return cfg ? cfg.coId === openData.coId : openData == null;
@@ -147,9 +141,9 @@ namespace TinyWars.MapEditor {
 
         private _createDataForListCo(): DataForCoRenderer[] {
             const data          : DataForCoRenderer[] = [];
-            const playerIndex   = this._getOpenData<OpenDataForSimChooseCoPanel>().playerIndex;
+            const playerIndex   = this._getOpenData().playerIndex;
             let index           = 0;
-            for (const cfg of ConfigManager.getAvailableCoArray(MeModel.Sim.getWarData().settingsForCommon.configVersion)) {
+            for (const cfg of ConfigManager.getEnabledCoArray(MeModel.Sim.getWarData().settingsForCommon.configVersion)) {
                 data.push({
                     playerIndex,
                     coBasicCfg  : cfg,
@@ -188,7 +182,7 @@ namespace TinyWars.MapEditor {
                 this._listScop.clear();
 
             } else {
-                this._imgCoPortrait.source          = cfg.fullPortrait;
+                this._imgCoPortrait.source          = ConfigManager.getCoBustImageSource(cfg.coId);
                 this._labelName.text                = cfg.name;
                 this._labelDesigner.text            = cfg.designer;
                 this._labelBoardCostPercentage.text = `${cfg.boardCostPercentage}%`;
@@ -259,34 +253,32 @@ namespace TinyWars.MapEditor {
         panel       : MeSimChooseCoPanel;
     }
 
-    class CoRenderer extends GameUi.UiListItemRenderer {
+    class CoRenderer extends GameUi.UiListItemRenderer<DataForCoRenderer> {
         private _btnChoose: GameUi.UiButton;
         private _btnNext  : GameUi.UiButton;
         private _labelName: GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnChoose.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnChoose, this);
-            this._btnNext.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchTapBtnNext, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
+                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
+            ]);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data as DataForCoRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             const cfg               = data.coBasicCfg;
             this.currentState       = data.index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
             this._labelName.text    = cfg ? `${cfg.name} (T${cfg.tier})` : `(${Lang.getText(Lang.Type.B0001)} CO)`;
         }
 
         private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data as DataForCoRenderer;
+            const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
         private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            const data          = this.data as DataForCoRenderer;
+            const data          = this.data;
             const coId          = data.coBasicCfg.coId;
             const playerIndex   = data.playerIndex;
             const callback      = () => {
@@ -294,19 +286,19 @@ namespace TinyWars.MapEditor {
                 data.panel.close();
                 MeSimSettingsPanel.show();
             };
-            if (MeModel.Sim.getAvailableCoIdList(playerIndex).indexOf(coId) >= 0) {
+
+            if (!Helpers.checkHasElement(MeModel.Sim.getBannedCoIdArray(playerIndex) || [], coId)) {
                 callback();
             } else {
                 if (MeModel.Sim.getPresetWarRuleId() == null) {
-                    MeModel.Sim.addAvailableCoId(playerIndex, coId);
+                    MeModel.Sim.deleteBannedCoId(playerIndex, coId);
                     callback();
                 } else {
                     Common.CommonConfirmPanel.show({
-                        title   : Lang.getText(Lang.Type.B0088),
                         content : Lang.getText(Lang.Type.A0129),
                         callback: () => {
                             MeModel.Sim.setPresetWarRuleId(null);
-                            MeModel.Sim.addAvailableCoId(playerIndex, coId);
+                            MeModel.Sim.deleteBannedCoId(playerIndex, coId);
                             callback();
                         },
                     });
@@ -320,14 +312,12 @@ namespace TinyWars.MapEditor {
         skillId : number;
     }
 
-    class SkillRenderer extends GameUi.UiListItemRenderer {
+    class SkillRenderer extends GameUi.UiListItemRenderer<DataForSkillRenderer> {
         private _labelIndex : GameUi.UiLabel;
         private _labelDesc  : GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data as DataForSkillRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             this._labelIndex.text   = `${data.index}.`;
             this._labelDesc.text    = ConfigManager.getCoSkillCfg(ConfigManager.getLatestFormalVersion(), data.skillId).desc[Lang.getCurrentLanguageType()];
         }

@@ -99,6 +99,27 @@ namespace TinyWars.Utility.Helpers {
         return (new Array(times + 1)).join(str);
     }
 
+    export function getSuffixForRank(rank: number): string {
+        if (rank == null) {
+            return undefined;
+        } else {
+            if (Math.floor(rank / 10) % 10 === 1) {
+                return `th`;
+            } else {
+                const num = rank % 10;
+                if (num === 1) {
+                    return `st`;
+                } else if (num === 2) {
+                    return `nd`;
+                } else if (num === 3) {
+                    return `rd`;
+                } else {
+                    return `th`;
+                }
+            }
+        }
+    }
+
     export function changeColor(obj: egret.DisplayObject, color: Types.ColorType, value = 100): void {
         if (checkIsWebGl()) {
             if ((color === ColorType.Gray) || (color === ColorType.Dark)) {
@@ -135,13 +156,6 @@ namespace TinyWars.Utility.Helpers {
         return null;
     }
 
-    export function cloneObject(obj: { [key: string]: any }): { [key: string]: any } {
-        const o: { [key: string]: any } = {};
-        for (const k in obj) {
-            o[k] = obj[k];
-        }
-        return o;
-    }
     export function deepClone<T>(src: T): T {
         if ((src == null) || (typeof src != "object")) {
             return src;
@@ -186,11 +200,16 @@ namespace TinyWars.Utility.Helpers {
         const length = text.length;
         return (length >= minLength) && (length <= maxLength);
     }
-    export function checkIsValidLanguageTextArray({ list, minTextLength, maxTextLength }: {
+    export function checkIsValidLanguageTextArray({ list, minTextLength, maxTextLength, minTextCount }: {
         list            : ILanguageText[];
         minTextLength   : number;
         maxTextLength   : number;
+        minTextCount    : number;
     }): boolean {
+        if (list == null) {
+            return minTextCount <= 0;
+        }
+
         if (list.length <= 0) {
             return false;
         }
@@ -220,14 +239,6 @@ namespace TinyWars.Utility.Helpers {
         return true;
     }
 
-    export function getObjectKeysCount(obj: { [key: string]: any }): number {
-        let count = 0;
-        for (const k in obj) {
-            ++count;
-        }
-        return count;
-    }
-
     export function pickRandomElement<T>(list: T[]): T {
         if (!list) {
             return undefined;
@@ -235,7 +246,6 @@ namespace TinyWars.Utility.Helpers {
             return list[Math.floor(Math.random() * list.length)];
         }
     }
-
     export function deleteElementFromArray<T>(arr: T[], element: T, maxDeleteCount = Number.MAX_VALUE): number {
         let index       = 0;
         let deleteCount = 0;
@@ -248,6 +258,9 @@ namespace TinyWars.Utility.Helpers {
             }
         }
         return deleteCount;
+    }
+    export function checkHasElement<T>(arr: T[], element: T): boolean {
+        return arr ? arr.indexOf(element) >= 0 : undefined;
     }
 
     /** 获取一个整数的位数。不计负数的符号；0-9计为1；10-99计为2；以此类推 */
@@ -407,6 +420,25 @@ namespace TinyWars.Utility.Helpers {
 
             default:
                 return undefined;
+        }
+    }
+
+    export function resetTween<T>({ obj, beginProps, waitTime, endProps, tweenTime, callback }: {
+        obj         : T;
+        beginProps  : { [K in keyof T]?: T[K] };
+        waitTime?   : number;
+        endProps    : { [K in keyof T]?: T[K] };
+        tweenTime?  : number;
+        callback?   : () => void
+    }): void {
+        egret.Tween.removeTweens(obj);
+
+        const tween = egret.Tween.get(obj)
+            .set(beginProps)
+            .wait(waitTime || 0)
+            .to(endProps, tweenTime || 200, egret.Ease.sineOut);
+        if (callback) {
+            tween.call(callback);
         }
     }
 

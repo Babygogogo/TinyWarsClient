@@ -8,9 +8,9 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
     import ConfigManager                = Utility.ConfigManager;
     import GridIndex                    = Types.GridIndex;
     import WarAction                    = ProtoTypes.WarAction;
-    import IWarActionSystemBeginTurn   = WarAction.IWarActionSystemBeginTurn;
-    import IWarActionPlayerEndTurn     = WarAction.IWarActionPlayerEndTurn;
-    import CommonConstants              = ConfigManager.COMMON_CONSTANTS;
+    import IWarActionSystemBeginTurn    = WarAction.IWarActionSystemBeginTurn;
+    import IWarActionPlayerEndTurn      = WarAction.IWarActionPlayerEndTurn;
+    import CommonConstants              = Utility.CommonConstants;
 
     export function runPhaseGetFundWithExtraData(turnManager: BwTurnManager, data: IWarActionSystemBeginTurn): void {
         const war = turnManager.getWar();
@@ -102,7 +102,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
             }
 
             if (turnManager.getTurnIndex() === CommonConstants.WarFirstTurnIndex) {
-                const initialFund = war.getSettingsInitialFund(playerIndex);
+                const initialFund = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
                 if (initialFund == null) {
                     Logger.error(`BwTurnManagerHelper.runPhaseGetFundWithoutExtraData() empty initialFund.`);
                     return undefined;
@@ -486,7 +486,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
                     const recoverCfg    = skillCfg.selfHpRecovery;
                     const targetUnits   : BwUnit[] = [];
                     unitMap.forEachUnit(unit => {
-                        const unitType = unit.getType();
+                        const unitType = unit.getUnitType();
                         if (unitType == null) {
                             Logger.error(`BwTurnManager._runPhaseRecoverUnitByCo() empty unitType.`);
                             return;
@@ -567,7 +567,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
                 if (skillCfg.selfFuelRecovery) {
                     const recoverCfg = skillCfg.selfFuelRecovery;
                     unitMap.forEachUnit(unit => {
-                        const unitType = unit.getType();
+                        const unitType = unit.getUnitType();
                         if (unitType == null) {
                             Logger.error(`BwTurnManager._runPhaseRecoverUnitByCo() empty unitType.`);
                             return;
@@ -617,7 +617,7 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
                 if (skillCfg.selfPrimaryAmmoRecovery) {
                     const recoverCfg = skillCfg.selfPrimaryAmmoRecovery;
                     unitMap.forEachUnit(unit => {
-                        const unitType = unit.getType();
+                        const unitType = unit.getUnitType();
                         if (unitType == null) {
                             Logger.error(`BwTurnManager._runPhaseRecoverUnitByCo() empty unitType.`);
                             return;

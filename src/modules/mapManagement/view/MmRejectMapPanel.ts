@@ -2,7 +2,7 @@
 namespace TinyWars.MapManagement {
     import Lang = Utility.Lang;
 
-    export class MmRejectMapPanel extends GameUi.UiPanel {
+    export class MmRejectMapPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -30,7 +30,6 @@ namespace TinyWars.MapManagement {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmRejectMapPanel.exml";
         }
@@ -64,6 +63,7 @@ namespace TinyWars.MapManagement {
                     canMrwStd   : false,
                     canMrwFog   : false,
                     canScw      : false,
+                    canSrw      : false,
                 },
             });
             this.close();

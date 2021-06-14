@@ -9,7 +9,7 @@ namespace TinyWars.MultiCustomRoom {
     type OpenDataForMcrJoinPasswordPanel = {
         roomInfo: ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
     }
-    export class McrJoinPasswordPanel extends GameUi.UiPanel {
+    export class McrJoinPasswordPanel extends GameUi.UiPanel<OpenDataForMcrJoinPasswordPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -38,7 +38,6 @@ namespace TinyWars.MultiCustomRoom {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/multiCustomRoom/McrJoinPasswordPanel.exml";
@@ -66,7 +65,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
-            const roomInfo = this._getOpenData<OpenDataForMcrJoinPasswordPanel>().roomInfo;
+            const roomInfo = this._getOpenData().roomInfo;
             if (this._inputWarPassword.text !== roomInfo.settingsForMcw.warPassword) {
                 FloatText.show(Lang.getText(Lang.Type.A0017));
             } else {
@@ -83,7 +82,7 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            const info          = this._getOpenData<OpenDataForMcrJoinPasswordPanel>().roomInfo;
+            const info          = this._getOpenData().roomInfo;
             const warName       = info.settingsForMcw.warName;
             const labelWarName  = this._labelWarName;
             if (warName) {

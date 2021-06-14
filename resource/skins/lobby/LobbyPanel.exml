@@ -1,148 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
-    <GameUi:UiImage id="_imgBg" source="bg_002_png" left="0" right="0" top="0" bottom="0" />
-    <e:Group left="35" top="70" bottom="30" width="200" visible="false">
-        <GameUi:UiImage source="c04_t01_s02_f01" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0"
-                        top="0" bottom="0" scale9Grid="9,9,2,2" />
-        <GameUi:UiLabel text="天梯" y="15" horizontalCenter="0" textColor="0xffffff" />
-        <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
-            <e:List>
-                <e:itemRendererSkinName>
-                    <e:Skin width="200" height="40">
-                        <GameUi:UiLabel id="_bmlabelRank" anchorOffsetX="0" anchorOffsetY="0" text="1"
-                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" horizontalCenter="-88.5"
-                                        textColor="0xffffff" />
-                        <GameUi:UiLabel id="_labelName" text="赵天同" y="10" size="18" fontFamily="Arial"
-                                        textAlign="center" verticalAlign="middle" x="61" textColor="0xffffff" />
-                        <GameUi:UiLabel id="_labelDamage" text="9999" y="10" size="18" textColor="0xffffff" x="149" />
+    <e:Group id="_group" right="60" verticalCenter="0" scaleX="0.9" scaleY="0.9">
+        <e:Group x="168" y="43">
+            <GameUi:UiButton id="_btnMultiPlayer" label="" top="0" right="0">
+                <GameUi:skinName>
+                    <e:Skin states="up,down,disabled">
+                        <e:Image source="lobby0010" source.down="lobby0009" />
+                        <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
+                        <e:Image id="_imgRed" source="commonIcon0000" right="0" top="0" />
                     </e:Skin>
-                </e:itemRendererSkinName>
-                <e:ArrayCollection>
-                    <e:Array>
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                    </e:Array>
-                </e:ArrayCollection>
-            </e:List>
-        </GameUi:UiScrollList>
-    </e:Group>
-    <e:Group id="_group1" top="70" width="200" x="265" height="205" visible="false">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="我的对局" y="15" textColor="0xffffff" horizontalCenter="0" />
-        <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
-            <e:List>
-                <e:itemRendererSkinName>
-                    <e:Skin width="200" height="40">
-                        <GameUi:UiLabel id="_bmlabelRank" anchorOffsetX="0" anchorOffsetY="0" text="插座山脉"
-                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0xffffff" x="15" />
-                        <GameUi:UiLabel id="_labelDamage" text="我的回合" y="10" size="18" textColor="0xffffff" x="117" />
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
+        <e:Group x="142" y="211">
+            <GameUi:UiButton id="_btnRanking" label="" right="0" top="0">
+                <GameUi:skinName>
+                    <e:Skin states="up,down,disabled">
+                        <e:Image source="lobby0012" source.down="lobby0011" />
+                        <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
+                        <e:Image id="_imgRed" source="commonIcon0000" right="0" top="0" />
                     </e:Skin>
-                </e:itemRendererSkinName>
-                <e:ArrayCollection>
-                    <e:Array>
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                    </e:Array>
-                </e:ArrayCollection>
-            </e:List>
-        </GameUi:UiScrollList>
-    </e:Group>
-    <e:Group id="_group2" top="70" width="200" x="495" height="205" visible="false">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="单人战役" y="15" textColor="0xffffff" horizontalCenter="0" />
-        <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
-            <e:List>
-                <e:itemRendererSkinName>
-                    <e:Skin width="200" height="40">
-                        <GameUi:UiLabel id="_bmlabelRank" anchorOffsetX="0" anchorOffsetY="0" text="不存在的"
-                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0xffffff" x="15" />
-                        <GameUi:UiLabel id="_labelDamage" text="999pt" y="10" size="18" textColor="0xffffff" x="117" />
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
+        <e:Group x="102" y="202">
+            <GameUi:UiButton id="_btnSinglePlayer" label="" right="0" top="0">
+                <GameUi:skinName>
+                    <e:Skin states="up,down,disabled">
+                        <e:Image source="lobby0008" source.down="lobby0007" />
+                        <e:Label id="labelDisplay" horizontalCenter="0" verticalCenter="0" />
+                        <e:Image id="_imgRed" source="commonIcon0000" right="0" top="0" />
                     </e:Skin>
-                </e:itemRendererSkinName>
-                <e:ArrayCollection>
-                    <e:Array>
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                    </e:Array>
-                </e:ArrayCollection>
-            </e:List>
-        </GameUi:UiScrollList>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+        </e:Group>
+        <e:layout>
+            <e:VerticalLayout gap="15" horizontalAlign="right" />
+        </e:layout>
     </e:Group>
-    <e:Group id="_group3" bottom="30" width="200" x="265" height="205" visible="false">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="快速加入" y="15" textColor="0xffffff" horizontalCenter="0" />
-        <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
-            <e:List>
-                <e:itemRendererSkinName>
-                    <e:Skin width="200" height="40">
-                        <GameUi:UiLabel id="_bmlabelRank" anchorOffsetX="0" anchorOffsetY="0" text="斯潘岛"
-                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0xffffff" x="19" />
-                        <GameUi:UiLabel id="_labelDamage" text="1/2" y="10" size="18" textColor="0xffffff" x="149" />
-                    </e:Skin>
-                </e:itemRendererSkinName>
-                <e:ArrayCollection>
-                    <e:Array>
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                    </e:Array>
-                </e:ArrayCollection>
-            </e:List>
-        </GameUi:UiScrollList>
+    <e:Group id="_groupTips" verticalCenter="0" left="60">
+        <e:Group x="71" y="51">
+            <e:Group id="_groupWelcome" left="0" top="0">
+                <GameUi:UiLabel id="_labelTips0" text="感谢您游玩Tiny Wars!" textColor="0xffffff" size="22" bold="true" y="0"
+                                x="0" />
+                <GameUi:UiLabel id="_labelTips1" text="Thank you for playing Tiny Wars!" size="18" y="10" x="10"
+                                textColor="0xaaaaaa" />
+                <e:layout>
+                    <e:VerticalLayout gap="4" />
+                </e:layout>
+            </e:Group>
+        </e:Group>
+        <e:Group x="81" y="61">
+            <e:Group id="_groupQq" left="0" x="0" top="0">
+                <GameUi:UiLabel id="_labelTips2" text="感谢您游玩Tiny Wars!" textColor="0xFFFFFF" size="22" bold="true" y="0"
+                                x="0" />
+                <GameUi:UiLabel id="_labelTips3" text="Thank you for playing Tiny Wars!" textColor="0xAAAAAA" size="18"
+                                y="10" x="10" />
+                <e:layout>
+                    <e:VerticalLayout gap="4" />
+                </e:layout>
+            </e:Group>
+        </e:Group>
+        <e:Group x="91" y="71">
+            <e:Group id="_groupDiscord" left="0" x="0" top="0">
+                <GameUi:UiLabel id="_labelTips4" text="感谢您游玩Tiny Wars!" textColor="0xFFFFFF" size="22" bold="true" y="0"
+                                x="0" />
+                <GameUi:UiLabel id="_labelTips5" text="Thank you for playing Tiny Wars!" textColor="0xAAAAAA" size="18"
+                                y="10" x="10" />
+                <e:layout>
+                    <e:VerticalLayout gap="4" />
+                </e:layout>
+            </e:Group>
+        </e:Group>
+        <e:Group x="101" y="81">
+            <e:Group id="_groupGithub" left="0" top="0">
+                <GameUi:UiLabel id="_labelTips6" text="感谢您游玩Tiny Wars!" textColor="0xFFFFFF" size="22" bold="true" y="0"
+                                x="0" />
+                <GameUi:UiLabel id="_labelTips7" text="Thank you for playing Tiny Wars!" textColor="0xAAAAAA" size="18"
+                                y="10" x="10" />
+                <e:layout>
+                    <e:VerticalLayout gap="4" />
+                </e:layout>
+            </e:Group>
+        </e:Group>
+        <e:layout>
+            <e:VerticalLayout gap="18" />
+        </e:layout>
     </e:Group>
-    <e:Group id="_group4" bottom="30" width="200" x="495" height="205" visible="false">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel text="创建房间" y="15" textColor="0xffffff" horizontalCenter="0" />
-        <GameUi:UiScrollList left="0" right="0" bottom="0" top="50">
-            <e:List>
-                <e:itemRendererSkinName>
-                    <e:Skin width="200" height="40">
-                        <GameUi:UiLabel id="_bmlabelRank" anchorOffsetX="0" anchorOffsetY="0" text="王牌空军"
-                                        textAlign="center" y="7" scaleX="0.7" scaleY="0.7" textColor="0xffffff" x="19" />
-                        <GameUi:UiLabel id="_labelDamage" text="2人" y="10" size="18" textColor="0xffffff" x="149" />
-                    </e:Skin>
-                </e:itemRendererSkinName>
-                <e:ArrayCollection>
-                    <e:Array>
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                        <e:Object a="null" />
-                    </e:Array>
-                </e:ArrayCollection>
-            </e:List>
-        </GameUi:UiScrollList>
-    </e:Group>
-    <e:Group id="_group" top="40" bottom="0" width="200" right="0">
-        <GameUi:UiImage source="c04_t01_s02_f01" scale9Grid="9,9,2,2" anchorOffsetX="0" anchorOffsetY="0" alpha="0.8"
-                        left="0" right="0" top="0" bottom="0" />
-        <GameUi:UiLabel id="_labelMenuTitle" text="菜单" y="12" textColor="0xffffff" horizontalCenter="0" bold="true"
-                        size="25" />
-        <GameUi:UiScrollList id="_listCommand" left="0" right="0" bottom="0" top="50">
-            <e:List>
-                <e:itemRendererSkinName>
-                    <e:Skin width="200" height="40">
-                        <GameUi:UiLabel id="_labelCommand" anchorOffsetX="0" anchorOffsetY="0" text="氪金"
-                                        textAlign="center" textColor="0xffffff" horizontalCenter="0" verticalCenter="0"
-                                        size="20" />
-                        <GameUi:UiImage id="_imgRed" width="20" height="20" source="c04_t01_s01_f01" right="10" top="0" />
-                    </e:Skin>
-                </e:itemRendererSkinName>
-            </e:List>
-        </GameUi:UiScrollList>
-    </e:Group>
-    <GameUi:UiLabel id="_labelTips"
-                    text="Thank you for playing Tiny Wars!\nTo start, touch the scroll list to the right."
-                    textColor="0xffffff" horizontalCenter="-110" verticalCenter="0" verticalAlign="middle"
-                    textAlign="center" size="25" />
 </e:Skin>

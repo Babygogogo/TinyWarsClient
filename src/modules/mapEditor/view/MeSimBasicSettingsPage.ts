@@ -4,7 +4,7 @@ namespace TinyWars.MapEditor {
     import Notify           = Utility.Notify;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    export class MeSimBasicSettingsPage extends GameUi.UiTabPage {
+    export class MeSimBasicSettingsPage extends GameUi.UiTabPage<void> {
         private _btnMapNameTitle            : TinyWars.GameUi.UiButton;
         private _labelMapName               : TinyWars.GameUi.UiLabel;
         private _btnBuildings               : TinyWars.GameUi.UiButton;
@@ -63,7 +63,6 @@ namespace TinyWars.MapEditor {
                 callback();
             } else {
                 Common.CommonConfirmPanel.show({
-                    title   : Lang.getText(Lang.Type.B0088),
                     content : Lang.getText(Lang.Type.A0129),
                     callback: () => {
                         MeModel.Sim.setPresetWarRuleId(null);
@@ -81,9 +80,11 @@ namespace TinyWars.MapEditor {
         }
 
         private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
+            const mapRawData = MeModel.Sim.getMapRawData();
             WarMap.WarMapBuildingListPanel.show({
-                configVersion   : MeModel.Sim.getWarData().settingsForCommon.configVersion,
-                mapRawData      : MeModel.Sim.getMapRawData(),
+                configVersion           : MeModel.Sim.getWarData().settingsForCommon.configVersion,
+                tileDataArray           : mapRawData.tileDataArray,
+                playersCountUnneutral   : mapRawData.playersCountUnneutral,
             });
         }
 

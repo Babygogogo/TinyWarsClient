@@ -1,70 +1,137 @@
 
 namespace TinyWars.BaseWar {
-    import Logger                   = Utility.Logger;
-    import Types                    = Utility.Types;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import Helpers                  = Utility.Helpers;
-    import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
-    import IWarSettingsForCommon    = ProtoTypes.WarSettings.ISettingsForCommon;
-    import IWarActionContainer      = ProtoTypes.WarAction.IWarActionContainer;
+    import Logger           = Utility.Logger;
+    import Types            = Utility.Types;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import ConfigManager    = Utility.ConfigManager;
+    import ClientErrorCode  = Utility.ClientErrorCode;
+    import WarAction        = ProtoTypes.WarAction;
+    import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
 
     export abstract class BwWar {
-        private _settingsForCommon          : IWarSettingsForCommon;
+        private readonly _executedActionManager = new BwExecutedActionManager();
+        private readonly _randomNumberManager   = new BwRandomNumberManager();
+        private readonly _drawVoteManager       = new BwDrawVoteManager();
+        private readonly _view                  = new BwWarView();
 
-        private _warId                      : number;
-        private _remainingVotesForDraw      : number | null | undefined;
-        private _executedActions            : IWarActionContainer[];
-
-        private _playerManager              : BwPlayerManager;
-        private _field                      : BwField;
-        private _turnManager                : BwTurnManager;
-        private _warEventManager            : BwWarEventManager;
-
-        private _view                   : BwWarView;
+        private _warId                  : number;
         private _isRunning              = false;
         private _isExecutingAction      = false;
+        private _isEnded                = false;
 
-        public abstract init(data: ISerialWar): Promise<BwWar>;
-        public abstract serializeForSimulation(): ISerialWar | undefined;
+        public abstract init(data: ISerialWar): Promise<ClientErrorCode>;
         public abstract getWarType(): Types.WarType;
         public abstract getMapId(): number | undefined;
-        protected abstract _getPlayerManagerClass(): new () => BwPlayerManager;
-        protected abstract _getTurnManagerClass(): new () => BwTurnManager;
-        protected abstract _getFieldClass(): new () => BwField;
-        protected abstract _getViewClass(): new () => BwWarView;
-        protected abstract _getWarEventManagerClass(): new () => BwWarEventManager;
+        public abstract getIsNeedReplay(): boolean;
+        public abstract getIsWarMenuPanelOpening(): boolean;
+        public abstract getCanCheat(): boolean;
+        public abstract getPlayerManager(): BwPlayerManager;
+        public abstract getTurnManager(): BwTurnManager;
+        public abstract getField(): BwField;
+        public abstract getCommonSettingManager(): BwCommonSettingManager;
+        public abstract getWarEventManager(): BaseWar.BwWarEventManager;
+        public abstract updateTilesAndUnitsOnVisibilityChanged(): void;
+        public abstract getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | undefined>;
+        public abstract getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | undefined>;
+        public abstract getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | undefined>;
+        public abstract getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | undefined>;
+        public abstract getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | undefined>;
+        public abstract getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | undefined>;
+        public abstract getDescForExeSystemCallWarEvent(action: WarAction.IWarActionSystemCallWarEvent): Promise<string | undefined>;
+        public abstract getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | undefined>;
+        public abstract getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined>;
+        public abstract getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined>;
+        public abstract getDescForExeUnitAttackUnit(action: WarAction.IWarActionUnitAttackUnit): Promise<string | undefined>;
+        public abstract getDescForExeUnitBeLoaded(action: WarAction.IWarActionUnitBeLoaded): Promise<string | undefined>;
+        public abstract getDescForExeUnitBuildTile(action: WarAction.IWarActionUnitBuildTile): Promise<string | undefined>;
+        public abstract getDescForExeUnitCaptureTile(action: WarAction.IWarActionUnitCaptureTile): Promise<string | undefined>;
+        public abstract getDescForExeUnitDive(action: WarAction.IWarActionUnitDive): Promise<string | undefined>;
+        public abstract getDescForExeUnitDropUnit(action: WarAction.IWarActionUnitDropUnit): Promise<string | undefined>;
+        public abstract getDescForExeUnitJoinUnit(action: WarAction.IWarActionUnitJoinUnit): Promise<string | undefined>;
+        public abstract getDescForExeUnitLaunchFlare(action: WarAction.IWarActionUnitLaunchFlare): Promise<string | undefined>;
+        public abstract getDescForExeUnitLaunchSilo(action: WarAction.IWarActionUnitLaunchSilo): Promise<string | undefined>;
+        public abstract getDescForExeUnitLoadCo(action: WarAction.IWarActionUnitLoadCo): Promise<string | undefined>;
+        public abstract getDescForExeUnitProduceUnit(action: WarAction.IWarActionUnitProduceUnit): Promise<string | undefined>;
+        public abstract getDescForExeUnitSupplyUnit(action: WarAction.IWarActionUnitSupplyUnit): Promise<string | undefined>;
+        public abstract getDescForExeUnitSurface(action: WarAction.IWarActionUnitSurface): Promise<string | undefined>;
+        public abstract getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | undefined>;
+        public abstract getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | undefined>;
 
-        protected _baseInit(data: ISerialWar): BwWar {
+        protected async _baseInit(data: ISerialWar): Promise<ClientErrorCode> {
             const settingsForCommon = data.settingsForCommon;
-            if (settingsForCommon == null) {
-                Logger.error(`BwWar._baseInit() empty settingsForCommon.`);
-                return undefined;
+            if (!settingsForCommon) {
+                return ClientErrorCode.BwWarBaseInit00;
             }
 
-            const dataForWarEventManager = data.warEventManager;
-            if (dataForWarEventManager == null) {
-                Logger.error(`BwWar._baseInit() empty dataForWarEventManager.`);
-                return undefined;
+            const configVersion = settingsForCommon.configVersion;
+            if ((configVersion == null) || (!await ConfigManager.checkIsVersionValid(configVersion))) {
+                return ClientErrorCode.BwWarBaseInit01;
             }
 
-            const warEventManager = (this.getWarEventManager() || new (this._getWarEventManagerClass())()).init(dataForWarEventManager);
-            if (warEventManager == null) {
-                Logger.error(`BwWar._baseInit() empty warEventManager.`);
-                return undefined;
+            const drawVoteManagerError = this.getDrawVoteManager().init(data.playerManager, data.remainingVotesForDraw);
+            if (drawVoteManagerError) {
+                return drawVoteManagerError;
+            }
+
+            const dataForWarEventManager    = data.warEventManager;
+            const commonSettingManagerError = await this.getCommonSettingManager().init({
+                settings                : data.settingsForCommon,
+                allWarEventIdArray      : WarEvent.WarEventHelper.getAllWarEventIdArray(dataForWarEventManager ? dataForWarEventManager.warEventFullData : undefined),
+                playersCountUnneutral   : BwHelpers.getPlayersCountUnneutral(data.playerManager),
+            });
+            if (commonSettingManagerError) {
+                return commonSettingManagerError;
+            }
+
+            const warEventManagerError = this.getWarEventManager().init(dataForWarEventManager);
+            if (warEventManagerError) {
+                return warEventManagerError;
+            }
+
+            const isNeedReplay              = this.getIsNeedReplay();
+            const randomNumberManagerError  = this.getRandomNumberManager().init({
+                isNeedReplay,
+                initialState: data.seedRandomInitialState,
+                currentState: data.seedRandomCurrentState,
+            });
+            if (randomNumberManagerError) {
+                return randomNumberManagerError;
+            }
+
+            const executedActionManagerError = this.getExecutedActionManager().init(isNeedReplay, data.executedActions || []);
+            if (executedActionManagerError) {
+                return executedActionManagerError;
+            }
+
+            const playerManager         = this.getPlayerManager();
+            const playerManagerError    = playerManager.init(data.playerManager, configVersion);
+            if (playerManagerError) {
+                return playerManagerError;
+            }
+
+            const playersCountUnneutral = playerManager.getTotalPlayersCount(false);
+            const turnManagerError      = this.getTurnManager().init(data.turnManager, playersCountUnneutral);
+            if (turnManagerError) {
+                return turnManagerError;
+            }
+
+            const field         = this.getField();
+            const fieldError    = field.init({
+                data                : data.field,
+                configVersion,
+                playersCountUnneutral,
+            });
+            if (fieldError) {
+                return fieldError;
             }
 
             this._setWarId(data.warId);
-            this._setSettingsForCommon(settingsForCommon);
-            this._setAllExecutedActions(data.executedActions || []);
-            this._setWarEventManager(warEventManager);
-            this.setRemainingVotesForDraw(data.remainingVotesForDraw);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         protected _initView(): void {
-            this._view = this._view || new (this._getViewClass());
-            this._view.init(this);
+            this.getView().init(this);
         }
         protected _fastInitView(): void {
             this.getView().fastInit(this);
@@ -73,7 +140,108 @@ namespace TinyWars.BaseWar {
             return this._view;
         }
 
+        public serializeForCreateSfw(): ISerialWar | undefined {
+            const settingsForCommon = this.getCommonSettingManager().serializeForCreateSfw();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.serializeForCreateSfw() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            const serialWarEventManager = this.getWarEventManager().serializeForCreateSfw();
+            if (serialWarEventManager == null) {
+                Logger.error(`BwWar.serializeForCreateSfw() empty serialWarEventManager.`);
+                return undefined;
+            }
+
+            const serialPlayerManager = this.getPlayerManager().serializeForCreateSfw();
+            if (serialPlayerManager == null) {
+                Logger.error(`BwWar.serializeForCreateSfw() empty serialPlayerManager.`);
+                return undefined;
+            }
+
+            const serialTurnManager = this.getTurnManager().serializeForCreateSfw();
+            if (serialTurnManager == null) {
+                Logger.error(`BwWar.serializeForCreateSfw() empty serialTurnManager.`);
+                return undefined;
+            }
+
+            const serialField = this.getField().serializeForCreateSfw();
+            if (serialField == null) {
+                Logger.error(`BwWar.serializeForCreateSfw() empty serialField.`);
+                return undefined;
+            }
+
+            return {
+                settingsForCommon,
+                settingsForMcw              : null,
+                settingsForMrw              : null,
+                settingsForMfw              : null,
+                settingsForScw              : null,
+                settingsForSfw              : null,
+
+                warId                       : this.getWarId(),
+                seedRandomInitialState      : null,
+                seedRandomCurrentState      : null,
+                executedActions             : [],
+                remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
+                warEventManager             : serialWarEventManager,
+                playerManager               : serialPlayerManager,
+                turnManager                 : serialTurnManager,
+                field                       : serialField,
+            };
+        }
+        public serializeForCreateMfr(): ISerialWar | undefined {
+            const settingsForCommon = this.getCommonSettingManager().serializeForCreateMfr();
+            if (settingsForCommon == null) {
+                Logger.error(`BwWar.serializeForCreateMfr() empty settingsForCommon.`);
+                return undefined;
+            }
+
+            const serialWarEventManager = this.getWarEventManager().serializeForCreateMfr();
+            if (serialWarEventManager == null) {
+                Logger.error(`BwWar.serializeForCreateMfr() empty serialWarEventManager.`);
+                return undefined;
+            }
+
+            const serialPlayerManager = this.getPlayerManager().serializeForCreateMfr();
+            if (serialPlayerManager == null) {
+                Logger.error(`BwWar.serializeForCreateMfr() empty serialPlayerManager.`);
+                return undefined;
+            }
+
+            const serialTurnManager = this.getTurnManager().serializeForCreateMfr();
+            if (serialTurnManager == null) {
+                Logger.error(`BwWar.serializeForCreateMfr() empty serialTurnManager.`);
+                return undefined;
+            }
+
+            const serialField = this.getField().serializeForCreateMfr();
+            if (serialField == null) {
+                Logger.error(`BwWar.serializeForCreateMfr() empty serialField.`);
+                return undefined;
+            }
+
+            return {
+                settingsForCommon,
+                settingsForMcw              : null,
+                settingsForMrw              : null,
+                settingsForMfw              : null,
+                settingsForScw              : null,
+
+                warId                       : this.getWarId(),
+                seedRandomInitialState      : null,
+                seedRandomCurrentState      : null,
+                executedActions             : [],
+                remainingVotesForDraw       : this.getDrawVoteManager().getRemainingVotes(),
+                warEventManager             : serialWarEventManager,
+                playerManager               : serialPlayerManager,
+                turnManager                 : serialTurnManager,
+                field                       : serialField,
+            };
+        }
+
         public startRunning(): BwWar {
+            this.getCommonSettingManager().startRunning(this);
             this.getWarEventManager().startRunning(this);
             this.getTurnManager().startRunning(this);
             this.getPlayerManager().startRunning(this);
@@ -111,6 +279,23 @@ namespace TinyWars.BaseWar {
             this._isExecutingAction = isExecuting;
         }
 
+        public checkCanEnd(): boolean | undefined {
+            const aliveTeamsCount = this.getPlayerManager().getAliveOrDyingTeamsCount(false);
+            if (aliveTeamsCount == null) {
+                Logger.error(`BwWar.checkCanEnd() empty aliveTeamsCount.`);
+                return undefined;
+            }
+
+            return (aliveTeamsCount <= 1)
+                || (this.getDrawVoteManager().checkIsDraw());
+        }
+        public setIsEnded(ended: boolean): void {
+            this._isEnded = ended;
+        }
+        public getIsEnded(): boolean {
+            return this._isEnded;
+        }
+
         private _setWarId(warId: number): void {
             this._warId = warId;
         }
@@ -119,24 +304,11 @@ namespace TinyWars.BaseWar {
         }
 
         public getConfigVersion(): string {
-            const settingsForCommon = this.getSettingsForCommon();
-            if (settingsForCommon == null) {
-                Logger.error(`BwWar.getConfigVersion() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            return settingsForCommon.configVersion;
-        }
-
-        private _setSettingsForCommon(settings: IWarSettingsForCommon): void {
-            this._settingsForCommon = settings;
-        }
-        public getSettingsForCommon(): IWarSettingsForCommon | undefined {
-            return this._settingsForCommon;
+            return this.getCommonSettingManager().getConfigVersion();
         }
 
         public getWarRule(): ProtoTypes.WarRule.IWarRule {
-            const settingsForCommon = this.getSettingsForCommon();
+            const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
             if (settingsForCommon == null) {
                 Logger.error(`BwWar.getWarRule() empty settingsForCommon.`);
                 return undefined;
@@ -145,143 +317,6 @@ namespace TinyWars.BaseWar {
             return settingsForCommon.warRule;
         }
 
-        public getSettingsHasFogByDefault(): boolean | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsHasFogByDefault() empty warRule.`);
-                return undefined;
-            }
-
-            return BwSettingsHelper.getHasFogByDefault(warRule);
-        }
-        public getSettingsIncomeMultiplier(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsIncomeMultiplier() empty warRule.`);
-                return undefined;
-            }
-
-            return BwSettingsHelper.getIncomeMultiplier(warRule, playerIndex);
-        }
-        public getSettingsEnergyGrowthMultiplier(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsEnergyGrowthMultiplier() empty warRule.`);
-                return undefined;
-            }
-
-            return BwSettingsHelper.getEnergyGrowthMultiplier(warRule, playerIndex);
-        }
-        public getSettingsAttackPowerModifier(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsAttackPowerModifier() empty warRule.`);
-                return undefined;
-            }
-
-            return BwSettingsHelper.getAttackPowerModifier(warRule, playerIndex);
-        }
-        public getSettingsMoveRangeModifier(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsMoveRangeModifier() empty warRule.`);
-                return undefined;
-            }
-
-            return BwSettingsHelper.getMoveRangeModifier(warRule, playerIndex);
-        }
-        public getSettingsVisionRangeModifier(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsVisionRangeModifier() empty warRule.`);
-                return undefined;
-            }
-
-            return BwSettingsHelper.getVisionRangeModifier(warRule, playerIndex);
-        }
-        public getSettingsInitialFund(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsInitialFund() empty warRule.`);
-                return undefined;
-            }
-
-            return BwSettingsHelper.getInitialFund(warRule, playerIndex);
-        }
-        public getSettingsInitialEnergyPercentage(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsInitialEnergyPercentage() empty warRule.`);
-                return undefined;
-            }
-
-            return BwSettingsHelper.getInitialEnergyPercentage(warRule, playerIndex);
-        }
-        public getSettingsLuckLowerLimit(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsLuckLowerLimit() empty warRule.`);
-                return undefined;
-            }
-
-            return BwSettingsHelper.getLuckLowerLimit(warRule, playerIndex);
-        }
-        public getSettingsLuckUpperLimit(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsLuckUpperLimit() empty warRule.`);
-                return undefined;
-            }
-
-            return BwSettingsHelper.getLuckUpperLimit(warRule, playerIndex);
-        }
-        public getSettingsTeamIndex(playerIndex: number): number | null | undefined {
-            const warRule = this.getWarRule();
-            if (warRule == null) {
-                Logger.error(`BwWar.getSettingsTeamIndex() empty warRule.`);
-                return undefined;
-            }
-
-            return BwSettingsHelper.getTeamIndex(warRule, playerIndex);
-        }
-
-        public setRemainingVotesForDraw(votes: number | undefined): void {
-            this._remainingVotesForDraw = votes;
-        }
-        public getRemainingVotesForDraw(): number | undefined {
-            return this._remainingVotesForDraw;
-        }
-
-        public getExecutedActionsCount(): number {
-            return this._getAllExecutedActions().length;
-        }
-        private _setAllExecutedActions(actions: IWarActionContainer[]): void {
-            this._executedActions = actions;
-        }
-        protected _getAllExecutedActions(): IWarActionContainer[] | null {
-            return this._executedActions;
-        }
-        public addExecutedAction(action: IWarActionContainer): void {
-            if (this.getExecutedActionsCount() !== action.actionId) {
-                Logger.error(`BwWar.addExecutedAction() invalid actionId.`);
-                return;
-            }
-
-            this._getAllExecutedActions().push(Helpers.deepClone(action));
-        }
-        public addEmptyExecutedAction(): void {
-            this._getAllExecutedActions().push({});
-        }
-        public getExecutedAction(actionId: number): IWarActionContainer | undefined {
-            return this._getAllExecutedActions()[actionId];
-        }
-
-        protected _setPlayerManager(manager: BwPlayerManager): void {
-            this._playerManager = manager;
-        }
-        public getPlayerManager(): BwPlayerManager {
-            return this._playerManager;
-        }
         public getPlayer(playerIndex: number): BwPlayer | undefined {
             return this.getPlayerManager().getPlayer(playerIndex);
         }
@@ -290,13 +325,6 @@ namespace TinyWars.BaseWar {
         }
         public getPlayerIndexInTurn(): number {
             return this.getTurnManager().getPlayerIndexInTurn();
-        }
-
-        protected _setField(field: BwField): void {
-            this._field = field;
-        }
-        public getField(): BwField {
-            return this._field;
         }
 
         public getFogMap(): BwFogMap {
@@ -311,29 +339,32 @@ namespace TinyWars.BaseWar {
         public getActionPlanner(): BwActionPlanner {
             return this.getField().getActionPlanner();
         }
-        public getGridVisionEffect(): BwGridVisionEffect {
-            return this.getField().getGridVisionEffect();
+        public getGridVisionEffect(): BwGridVisualEffect {
+            return this.getField().getGridVisualEffect();
+        }
+        public getCursor(): BwCursor {
+            return this.getField().getCursor();
         }
 
-        protected _setTurnManager(manager: BwTurnManager): void {
-            this._turnManager = manager;
-        }
-        public getTurnManager(): BwTurnManager {
-            return this._turnManager;
-        }
         public getEnterTurnTime(): number {
             return this.getTurnManager().getEnterTurnTime();
         }
-
-        private _setWarEventManager(manager: BwWarEventManager): void {
-            this._warEventManager = manager;
-        }
-        public getWarEventManager(): BwWarEventManager | undefined {
-            return this._warEventManager;
+        public getTurnPhaseCode(): Types.TurnPhaseCode | null | undefined {
+            return this.getTurnManager().getPhaseCode();
         }
 
         public getWatcherTeamIndexes(watcherUserId: number): Set<number> {
             return this.getPlayerManager().getAliveWatcherTeamIndexes(watcherUserId);
+        }
+
+        public getDrawVoteManager(): BwDrawVoteManager {
+            return this._drawVoteManager;
+        }
+        public getRandomNumberManager(): BwRandomNumberManager {
+            return this._randomNumberManager;
+        }
+        public getExecutedActionManager(): BwExecutedActionManager {
+            return this._executedActionManager;
         }
     }
 }

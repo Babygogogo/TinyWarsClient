@@ -3,6 +3,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     import Types                = Utility.Types;
     import Logger               = Utility.Logger;
     import ProtoTypes           = Utility.ProtoTypes;
+    import Notify               = Utility.Notify;
     import Lang                 = Utility.Lang;
     import FloatText            = Utility.FloatText;
     import CommonAlertPanel     = Common.CommonAlertPanel;
@@ -15,10 +16,14 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     let _watchOngoingWarInfos   : IMpwWatchInfo[];
     let _watchRequestedWarInfos : IMpwWatchInfo[];
     let _watchedWarInfos        : IMpwWatchInfo[];
+    let _mcwPreviewingWarId     : number;
+    let _mrwPreviewingWarId     : number;
+    let _mfwPreviewingWarId     : number;
     let _war                    : MpwWar;
-    let _cachedActions          : IWarActionContainer[] = [];
+    const _cachedActions        : IWarActionContainer[] = [];
 
     export function init(): void {
+        // nothing to do.
     }
 
     export function setAllMyWarInfoList(infoList: IMpwWarInfo[]): void {
@@ -27,24 +32,65 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     function getAllMyWarInfoList(): IMpwWarInfo[] {
         return _allWarInfoList;
     }
-    export function getMyMcwWarInfoList(): IMpwWarInfo[] {
+    export function getMyMcwWarInfoArray(): IMpwWarInfo[] {
         return getAllMyWarInfoList().filter(v => v.settingsForMcw != null);
     }
-    export function getMyMrwWarInfoList(): IMpwWarInfo[] {
+    export function getMyMrwWarInfoArray(): IMpwWarInfo[] {
         return getAllMyWarInfoList().filter(v => v.settingsForMrw != null);
+    }
+    export function getMyMfwWarInfoArray(): IMpwWarInfo[] {
+        return getAllMyWarInfoList().filter(v => v.settingsForMfw != null);
+    }
+    export function getMyWarInfo(warId: number): IMpwWarInfo | null {
+        return getAllMyWarInfoList().find(v => v.warId === warId);
+    }
+
+    export function getMcwPreviewingWarId(): number | null {
+        return _mcwPreviewingWarId;
+    }
+    export function setMcwPreviewingWarId(warId: number | null): void {
+        if (getMcwPreviewingWarId() != warId) {
+            _mcwPreviewingWarId = warId;
+            Notify.dispatch(Notify.Type.McwPreviewingWarIdChanged);
+        }
+    }
+
+    export function getMrwPreviewingWarId(): number | null {
+        return _mrwPreviewingWarId;
+    }
+    export function setMrwPreviewingWarId(warId: number | null): void {
+        if (getMrwPreviewingWarId() != warId) {
+            _mrwPreviewingWarId = warId;
+            Notify.dispatch(Notify.Type.MrwPreviewingWarIdChanged);
+        }
+    }
+
+    export function getMfwPreviewingWarId(): number | null {
+        return _mfwPreviewingWarId;
+    }
+    export function setMfwPreviewingWarId(warId: number | null): void {
+        if (getMfwPreviewingWarId() != warId) {
+            _mfwPreviewingWarId = warId;
+            Notify.dispatch(Notify.Type.MfwPreviewingWarIdChanged);
+        }
     }
 
     export function checkIsRedForMyMcwWars(): boolean {
-        const selfUserId = User.UserModel.getSelfUserId();
-        return getMyMcwWarInfoList().some(warInfo => {
-            return warInfo.playerInfoList.some(v => (v.playerIndex === warInfo.playerIndexInTurn) && (v.userId === selfUserId));
-        });
+        return checkIsRedForMyWars(getMyMcwWarInfoArray());
     }
     export function checkIsRedForMyMrwWars(): boolean {
-        const selfUserId = User.UserModel.getSelfUserId();
-        return getMyMrwWarInfoList().some(warInfo => {
-            return warInfo.playerInfoList.some(v => (v.playerIndex === warInfo.playerIndexInTurn) && (v.userId === selfUserId));
-        });
+        return checkIsRedForMyWars(getMyMrwWarInfoArray());
+    }
+    export function checkIsRedForMyMfwWars(): boolean {
+        return checkIsRedForMyWars(getMyMfwWarInfoArray());
+    }
+    export function checkIsRedForMyWar(warInfo: IMpwWarInfo | null): boolean {
+        const selfUserId        = User.UserModel.getSelfUserId();
+        const playerInfoList    = warInfo ? warInfo.playerInfoList || [] : [];
+        return playerInfoList.some(v => (v.playerIndex === warInfo.playerIndexInTurn) && (v.userId === selfUserId));
+    }
+    function checkIsRedForMyWars(wars: IMpwWarInfo[]): boolean {
+        return wars.some(warInfo => checkIsRedForMyWar(warInfo));
     }
 
     export function setUnwatchedWarInfos(infos: IMpwWatchInfo[]): void {
@@ -80,13 +126,23 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function loadWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<MpwWar> {
         if (getWar()) {
-            Logger.warn(`McwModel.loadWar() another war has been loaded already!`);
+            Logger.warn(`MpwModel.loadWar() another war has been loaded already!`);
             unloadWar();
         }
 
         const war = data.settingsForMcw
-            ? (await new MultiCustomWar.McwWar().init(data)).startRunning().startRunningView() as MpwWar
-            : (await new MultiRankWar.MrwWar().init(data)).startRunning().startRunningView() as MpwWar;
+            ? new MultiCustomWar.McwWar()
+            : (data.settingsForMrw
+                ? new MultiRankWar.MrwWar()
+                : new MultiFreeWar.MfwWar()
+            );
+        const initError = await war.init(data);
+        if (initError) {
+            Logger.error(`MpwModel.loadWar() initError: ${initError}`);
+            return undefined;
+        }
+
+        war.startRunning().startRunningView();
         _setWar(war);
 
         return war;
@@ -121,9 +177,9 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                     content : Lang.getText(Lang.Type.A0023),
                     callback: () => {
                         if (war instanceof MultiRankWar.MrwWar) {
-                            Utility.FlowManager.gotoMrrMyWarListPanel();
+                            Utility.FlowManager.gotoMrwMyWarListPanel();
                         } else {
-                            Utility.FlowManager.gotoMcrMyWarListPanel();
+                            Utility.FlowManager.gotoMcwMyWarListPanel();
                         }
                     },
                 });
@@ -135,9 +191,9 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                     content : Lang.getText(Lang.Type.A0035),
                     callback: () => {
                         if (war instanceof MultiRankWar.MrwWar) {
-                            Utility.FlowManager.gotoMrrMyWarListPanel();
+                            Utility.FlowManager.gotoMrwMyWarListPanel();
                         } else {
-                            Utility.FlowManager.gotoMcrMyWarListPanel();
+                            Utility.FlowManager.gotoMcwMyWarListPanel();
                         }
                     },
                 });
@@ -146,14 +202,14 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                 const requestType = data.requestType as Types.SyncWarRequestType;
                 if (requestType === Types.SyncWarRequestType.PlayerForce) {
                     war.setIsEnded(true);
-                    await Utility.FlowManager.gotoMultiCustomWar(data.war),
+                    await Utility.FlowManager.gotoMultiPlayerWar(data.war),
                     FloatText.show(Lang.getText(Lang.Type.A0038));
 
                 } else {
                     const cachedActionsCount = _cachedActions.length;
-                    if (data.executedActionsCount !== war.getExecutedActionsCount() + cachedActionsCount) {
+                    if (data.executedActionsCount !== war.getExecutedActionManager().getExecutedActionsCount() + cachedActionsCount) {
                         war.setIsEnded(true);
-                        await Utility.FlowManager.gotoMultiCustomWar(data.war);
+                        await Utility.FlowManager.gotoMultiPlayerWar(data.war);
                         FloatText.show(Lang.getText(Lang.Type.A0036));
 
                     } else {
@@ -164,7 +220,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                         }
                         if (!war.getIsExecutingAction()) {
                             if (cachedActionsCount) {
-                                MpwActionExecutor.checkAndRunFirstCachedAction(war, _cachedActions);
+                                checkAndRunFirstCachedAction(war, _cachedActions);
                             } else {
                                 // Nothing to do.
                             }
@@ -204,11 +260,76 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     export function updateByActionContainer(container: IWarActionContainer, warId: number): void {
         const war = getWar();
         if ((war) && (war.getWarId() === warId)) {
-            if (container.actionId !== war.getExecutedActionsCount() + _cachedActions.length) {
-                MpwProxy.reqMcwCommonSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
+            if (container.actionId !== war.getExecutedActionManager().getExecutedActionsCount() + _cachedActions.length) {
+                MpwProxy.reqMpwCommonSyncWar(war, Types.SyncWarRequestType.ReconnectionRequest);
             } else {
                 _cachedActions.push(container);
-                MpwActionExecutor.checkAndRunFirstCachedAction(war, _cachedActions);
+                checkAndRunFirstCachedAction(war, _cachedActions);
+            }
+        }
+    }
+
+    async function checkAndRunFirstCachedAction(war: MpwWar, actionList: IWarActionContainer[]): Promise<void> {
+        if ((!war.getIsRunning()) || (war.getIsEnded()) || (war.getIsExecutingAction())) {
+            return;
+        }
+
+        const container = actionList.shift();
+        if (container == null) {
+            return;
+        }
+
+        war.getExecutedActionManager().addExecutedAction(container);
+
+        const errorCode = await BaseWar.BwWarActionExecutor.checkAndExecute(war, container, false);
+        if (errorCode) {
+            Logger.error(`MpwModel.checkAndRunFirstCachedAction() errorCode: ${errorCode}.`);
+        }
+
+        const playerManager     = war.getPlayerManager();
+        const remainingVotes    = war.getDrawVoteManager().getRemainingVotes();
+        const selfPlayer        = playerManager.getPlayerByUserId(User.UserModel.getSelfUserId());
+        const callbackForGoBack = () => {
+            if (war instanceof MultiRankWar.MrwWar) {
+                Utility.FlowManager.gotoMrwMyWarListPanel();
+            } else {
+                Utility.FlowManager.gotoMcwMyWarListPanel();
+            }
+        };
+        if (war.getIsEnded()) {
+            if (remainingVotes === 0) {
+                CommonAlertPanel.show({
+                    title   : Lang.getText(Lang.Type.B0088),
+                    content : Lang.getText(Lang.Type.A0030),
+                    callback: callbackForGoBack,
+                });
+            } else {
+                if (selfPlayer == null) {
+                    CommonAlertPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : Lang.getText(Lang.Type.A0035),
+                        callback: callbackForGoBack,
+                    });
+                } else {
+                    CommonAlertPanel.show({
+                        title   : Lang.getText(Lang.Type.B0088),
+                        content : selfPlayer.getAliveState() === Types.PlayerAliveState.Alive ? Lang.getText(Lang.Type.A0022) : Lang.getText(Lang.Type.A0023),
+                        callback: callbackForGoBack,
+                    });
+                }
+            }
+        } else {
+            if (war.getIsRunning()) {
+                if (!war.getPlayerManager().getAliveWatcherTeamIndexesForSelf().size) {
+                    war.setIsEnded(true);
+                    CommonAlertPanel.show({
+                        title   : Lang.getText(Lang.Type.B0035),
+                        content : selfPlayer ? Lang.getText(Lang.Type.A0023) : Lang.getText(Lang.Type.A0152),
+                        callback: callbackForGoBack,
+                    });
+                } else {
+                    checkAndRunFirstCachedAction(war, actionList);
+                }
             }
         }
     }

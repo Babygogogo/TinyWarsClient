@@ -4,19 +4,19 @@ namespace TinyWars.MapEditor {
     import Lang             = Utility.Lang;
     import ConfigManager    = Utility.ConfigManager;
     import Types            = Utility.Types;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     const MAX_RECENT_COUNT = 10;
 
-    export class MeChooseUnitPanel extends GameUi.UiPanel {
+    export class MeChooseUnitPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
         private static _instance: MeChooseUnitPanel;
 
         private _labelRecentTitle   : GameUi.UiLabel;
-        private _listRecent         : GameUi.UiScrollList;
-        private _listCategory       : GameUi.UiScrollList;
+        private _listRecent         : GameUi.UiScrollList<DataForUnitRenderer>;
+        private _listCategory       : GameUi.UiScrollList<DataForCategoryRenderer>;
         private _btnCancel          : GameUi.UiButton;
 
         private _dataListForRecent   : DataForUnitRenderer[] = [];
@@ -36,7 +36,6 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/mapEditor/MeChooseUnitPanel.exml";
@@ -45,7 +44,6 @@ namespace TinyWars.MapEditor {
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
             ]);
             this._setUiListenerArray([
                 { ui: this._btnCancel,  callback: this.close },
@@ -57,11 +55,6 @@ namespace TinyWars.MapEditor {
 
             this._updateListCategory();
             this._updateListRecent();
-        }
-
-        protected async _onClosed(): Promise<void> {
-            this._listCategory.clear();
-            this._listRecent.clear();
         }
 
         public updateOnChooseUnit(data: DataForDrawUnit): void {
@@ -91,14 +84,6 @@ namespace TinyWars.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////
         private _onNotifyLanguageChanged(e: egret.Event): void {
             this._updateComponentsForLanguage();
-        }
-
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
-            const viewListForCategory = this._listCategory.getViewList();
-            for (let i = 0; i < viewListForCategory.numChildren; ++i) {
-                const child = viewListForCategory.getChildAt(i);
-                (child instanceof CategoryRenderer) && (child.updateOnUnitAnimationTick());
-            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -152,20 +137,16 @@ namespace TinyWars.MapEditor {
         panel               : MeChooseUnitPanel;
     }
 
-    class CategoryRenderer extends GameUi.UiListItemRenderer {
-        private _listUnit: GameUi.UiScrollList;
+    class CategoryRenderer extends GameUi.UiListItemRenderer<DataForCategoryRenderer> {
+        private _listUnit: GameUi.UiScrollList<DataForUnitRenderer>;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
+        protected _onOpened(): void {
             this._listUnit.setItemRenderer(UnitRenderer);
-            this._listUnit.scrollPolicyH = eui.ScrollPolicy.OFF;
+            this._listUnit.setScrollPolicyH(eui.ScrollPolicy.OFF);
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data              = this.data as DataForCategoryRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             const unitViewIdList    = data.dataListForDrawUnit;
             const dataListForUnit   : DataForUnitRenderer[] = [];
             const panel             = data.panel;
@@ -177,14 +158,6 @@ namespace TinyWars.MapEditor {
             }
             this._listUnit.bindData(dataListForUnit);
         }
-
-        public updateOnUnitAnimationTick(): void {
-            const viewList = this._listUnit.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof UnitRenderer) && (child.updateOnUnitAnimationTick());
-            }
-        }
     }
 
     type DataForUnitRenderer = {
@@ -192,34 +165,37 @@ namespace TinyWars.MapEditor {
         panel           : MeChooseUnitPanel;
     }
 
-    class UnitRenderer extends GameUi.UiListItemRenderer {
+    class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
         private _group          : eui.Group;
         private _labelName      : GameUi.UiLabel;
         private _conUnitView    : eui.Group;
 
-        private _unitView   = new MeUnitView();
+        private _unitView   = new BaseWar.BwUnitView();
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            ]);
 
             this._conUnitView.addChild(this._unitView);
         }
 
-        public updateOnUnitAnimationTick(): void {
+        private _onNotifyUnitAnimationTick(): void {
             const unitView = this._unitView;
             unitView.tickStateAnimationFrame();
             unitView.tickUnitAnimationFrame();
         }
 
-        protected dataChanged(): void {
-            const data              = this.data as DataForUnitRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             const dataForDrawUnit   = data.dataForDrawUnit;
             const unitType          = dataForDrawUnit.unitType;
             const war               = MeModel.getWar();
             this._labelName.text    = Lang.getUnitName(unitType);
 
             const unitView  = this._unitView;
-            const unit      = new MeUnit().init({
+            const unit      = new BaseWar.BwUnit();
+            unit.init({
                 gridIndex   : { x: 0, y: 0 },
                 unitId      : 0,
                 unitType,
@@ -231,7 +207,7 @@ namespace TinyWars.MapEditor {
         }
 
         public onItemTapEvent(): void {
-            const data              = this.data as DataForUnitRenderer;
+            const data              = this.data;
             const panel             = data.panel;
             const dataForDrawUnit   = data.dataForDrawUnit;
             panel.updateOnChooseUnit(dataForDrawUnit);

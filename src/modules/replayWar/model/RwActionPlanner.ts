@@ -13,10 +13,6 @@ namespace TinyWars.ReplayWar {
     import BwHelpers        = BaseWar.BwHelpers;
 
     export class RwActionPlanner extends BaseWar.BwActionPlanner {
-        protected _getViewClass(): new () => BaseWar.BwActionPlannerView {
-            return RwActionPlannerView;
-        }
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for setting common state.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +27,10 @@ namespace TinyWars.ReplayWar {
 
             this._setState(State.ChoosingProductionTarget);
             this._updateView();
-            RwProduceUnitPanel.show({ gridIndex });
+            BaseWar.BwProduceUnitPanel.show({
+                gridIndex,
+                war     : this._getWar(),
+            });
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,9 +41,9 @@ namespace TinyWars.ReplayWar {
 
             const currState = this.getState();
             if (currState === State.ChoosingAction) {
-                RwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
+                BaseWar.BwUnitActionsPanel.show(this._getDataForUnitActionsPanel());
             } else {
-                RwUnitActionsPanel.hide();
+                BaseWar.BwUnitActionsPanel.hide();
             }
         }
 
@@ -68,6 +67,9 @@ namespace TinyWars.ReplayWar {
         }
 
         protected _setStateRequestingUnitLaunchFlare(gridIndex: GridIndex): void {
+        }
+
+        public setStateRequestingPlayerProduceUnit(gridIndex: GridIndex, unitType: Types.UnitType, unitHp: number): void {
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,7 +221,7 @@ namespace TinyWars.ReplayWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Functions for generating actions for the focused unit.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitBeLoaded(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = this.getFocusUnit();
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -231,7 +233,7 @@ namespace TinyWars.ReplayWar {
                     : [];
             }
         }
-        protected _getActionUnitJoin(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitJoin(): BaseWar.DataForUnitAction[] {
             const destination   = this.getMovePathDestination();
             const focusUnit     = this.getFocusUnit();
             if (GridIndexHelpers.checkIsEqual(focusUnit.getGridIndex(), destination)) {
@@ -243,7 +245,7 @@ namespace TinyWars.ReplayWar {
                     : [];
             }
         }
-        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitUseCoSuperPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -252,7 +254,7 @@ namespace TinyWars.ReplayWar {
                     : [];
             }
         }
-        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitUseCoPower(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -261,7 +263,7 @@ namespace TinyWars.ReplayWar {
                     : [];
             }
         }
-        protected _getActionUnitLoadCo(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitLoadCo(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -270,7 +272,7 @@ namespace TinyWars.ReplayWar {
                     : [];
             }
         }
-        protected _getActionUnitCapture(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitCapture(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -279,7 +281,7 @@ namespace TinyWars.ReplayWar {
                     : [];
             }
         }
-        protected _getActionUnitDive(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitDive(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -288,7 +290,7 @@ namespace TinyWars.ReplayWar {
                     : [];
             }
         }
-        protected _getActionUnitSurface(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitSurface(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -297,7 +299,7 @@ namespace TinyWars.ReplayWar {
                     : [];
             }
         }
-        protected _getActionUnitBuildTile(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitBuildTile(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -306,7 +308,7 @@ namespace TinyWars.ReplayWar {
                     : [];
             }
         }
-        protected _getActionUnitSupply(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitSupply(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -324,7 +326,7 @@ namespace TinyWars.ReplayWar {
                 return [];
             }
         }
-        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitProduceUnit(): BaseWar.DataForUnitAction[] {
             if (this.getChosenUnitsForDrop().length) {
                 return [];
             } else {
@@ -365,7 +367,7 @@ namespace TinyWars.ReplayWar {
                 }
             }
         }
-        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitActionRenderer[] {
+        protected _getActionUnitWait(hasOtherAction: boolean): BaseWar.DataForUnitAction[] {
             const existingUnit = this._getUnitMap().getUnitOnMap(this.getMovePathDestination());
             if ((existingUnit) && (existingUnit !== this.getFocusUnit())) {
                 return [];

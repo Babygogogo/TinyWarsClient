@@ -1,25 +1,38 @@
 
 namespace TinyWars.Lobby {
+    import Tween        = egret.Tween;
     import Lang         = Utility.Lang;
-    import FloatText    = Utility.FloatText;
+    import Helpers      = Utility.Helpers;
     import Notify       = Utility.Notify;
     import UserModel    = User.UserModel;
 
-    export class LobbyPanel extends GameUi.UiPanel {
+    const DISCORD_URL   = `https://discord.gg/jdtRpY9`;
+    const GITHUB_URL    = `https://github.com/Babygogogo/TinyWarsClient`;
+
+    export class LobbyPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: LobbyPanel;
 
-        private _group1: eui.Group;
-        private _group2: eui.Group;
-        private _group3: eui.Group;
-        private _group4: eui.Group;
+        private _groupTips      : eui.Group;
+        private _groupWelcome   : eui.Group;
+        private _labelTips0     : GameUi.UiLabel;
+        private _labelTips1     : GameUi.UiLabel;
+        private _groupQq        : eui.Group;
+        private _labelTips2     : GameUi.UiLabel;
+        private _labelTips3     : GameUi.UiLabel;
+        private _groupDiscord   : eui.Group;
+        private _labelTips4     : GameUi.UiLabel;
+        private _labelTips5     : GameUi.UiLabel;
+        private _groupGithub    : eui.Group;
+        private _labelTips6     : GameUi.UiLabel;
+        private _labelTips7     : GameUi.UiLabel;
 
         private _group          : eui.Group;
-        private _labelTips      : GameUi.UiLabel;
-        private _labelMenuTitle : GameUi.UiLabel;
-        private _listCommand    : GameUi.UiScrollList;
+        private _btnSinglePlayer: GameUi.UiButton;
+        private _btnMultiPlayer : GameUi.UiButton;
+        private _btnRanking     : GameUi.UiButton;
 
         public static show(): void {
             if (!LobbyPanel._instance) {
@@ -37,41 +50,74 @@ namespace TinyWars.Lobby {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/lobby/LobbyPanel.exml";
         }
 
         protected _onOpened(): void {
             this._setUiListenerArray([
-                { ui: this, callback: this._onResize, eventType: egret.Event.RESIZE },
+                { ui: this._groupDiscord,       callback: this._onTouchedGroupDiscord },
+                { ui: this._groupGithub,        callback: this._onTouchedGroupGithub },
+                { ui: this._btnMultiPlayer,     callback: this._onTouchedBtnMultiPlayer },
+                { ui: this._btnSinglePlayer,    callback: this._onTouchedBtnSinglePlayer },
+                { ui: this._btnRanking,         callback: this._onTouchedBtnRanking },
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,                callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
                 { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
+                { type: Notify.Type.MsgMfrGetJoinedRoomInfoList,    callback: this._onMsgMfrGetJoinedRoomInfoList },
                 { type: Notify.Type.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
             ]);
-            this._listCommand.setItemRenderer(CommandRenderer);
 
             this._showOpenAnimation();
 
             this._updateComponentsForLanguage();
+            this._updateBtnMultiPlayer();
+            this._updateBtnRanking();
         }
 
         protected async _onClosed(): Promise<void> {
             await this._showCloseAnimation();
-
-            this._listCommand.clear();
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onResize(e: egret.Event): void {
-            this._group1.height = (this.height - 40 - 90) / 2;
-            this._group2.height = (this.height - 40 - 90) / 2;
-            this._group3.height = (this.height - 40 - 90) / 2;
-            this._group4.height = (this.height - 40 - 90) / 2;
+        private _onTouchedGroupDiscord(e: egret.TouchEvent): void {
+            if ((window) && (window.open)) {
+                Common.CommonConfirmPanel.show({
+                    content : Lang.getFormattedText(Lang.Type.F0065, `Discord`),
+                    callback: () => {
+                        window.open(DISCORD_URL);
+                    },
+                })
+            }
+        }
+
+        private _onTouchedGroupGithub(e: egret.TouchEvent): void {
+            if ((window) && (window.open)) {
+                Common.CommonConfirmPanel.show({
+                    content : Lang.getFormattedText(Lang.Type.F0065, `GitHub`),
+                    callback: () => {
+                        window.open(GITHUB_URL);
+                    },
+                })
+            }
+        }
+
+        private _onTouchedBtnMultiPlayer(e: egret.TouchEvent): void {
+            this.close();
+            MultiCustomRoom.McrMainMenuPanel.show();
+        }
+
+        private _onTouchedBtnSinglePlayer(e: egret.TouchEvent): void {
+            this.close();
+            SinglePlayerMode.SpmMainMenuPanel.show();
+        }
+
+        private _onTouchedBtnRanking(e: egret.TouchEvent): void {
+            this.close();
+            MultiRankRoom.MrrMainMenuPanel.show();
         }
 
         private _onMsgUserLogout(e: egret.Event): void {
@@ -79,11 +125,15 @@ namespace TinyWars.Lobby {
         }
 
         private _onMsgMcrGetJoinedRoomInfoList(e: egret.Event): void {
-            this._listCommand.refresh();
+            this._updateBtnMultiPlayer();
+        }
+
+        private _onMsgMfrGetJoinedRoomInfoList(e: egret.Event): void {
+            this._updateBtnMultiPlayer();
         }
 
         private _onMsgMrrGetMyRoomPublicInfoList(e: egret.Event): void {
-            this._listCommand.refresh();
+            this._updateBtnRanking();
         }
 
         private _onNotifyLanguageChanged(e: egret.Event): void {
@@ -94,115 +144,108 @@ namespace TinyWars.Lobby {
         // Private functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _showOpenAnimation(): void {
+            // const group = this._group;
+            // Tween.removeTweens(group);
+            // Tween.get(group)
+            //     .set({ alpha: 0, right: 20 })
+            //     .to({ alpha: 1, right: 60 }, 200);
             const group = this._group;
-            egret.Tween.removeTweens(group);
-            egret.Tween.get(group)
-                .set({ alpha: 0, right: -40 })
-                .to({ alpha: 1, right: 0 }, 200);
+            group.alpha = 1;
+            group.right = 60;
 
-            const labelTips = this._labelTips;
-            egret.Tween.removeTweens(labelTips);
-            egret.Tween.get(labelTips)
-                .set({ alpha: 0 })
-                .to({ alpha: 1 }, 200);
+            Helpers.resetTween({
+                obj         : this._btnMultiPlayer,
+                beginProps  : { alpha: 0, right: -40 },
+                endProps    : { alpha: 1, right: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnRanking,
+                beginProps  : { alpha: 0, right: -40 },
+                waitTime    : 100,
+                endProps    : { alpha: 1, right: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnSinglePlayer,
+                beginProps  : { alpha: 0, right: -40 },
+                waitTime    : 200,
+                endProps    : { alpha: 1, right: 0 },
+            });
+
+            // const groupTips = this._groupTips;
+            // Tween.removeTweens(groupTips);
+            // Tween.get(groupTips)
+            //     .set({ alpha: 0, left: 20 })
+            //     .to({ alpha: 1, left: 60 }, 200);
+            const groupTips = this._groupTips;
+            groupTips.alpha = 1;
+            groupTips.left  = 60;
+
+            Helpers.resetTween({
+                obj         : this._groupWelcome,
+                beginProps  : { alpha: 0, left: -40 },
+                endProps    : { alpha: 1, left: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupQq,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 66,
+                endProps    : { alpha: 1, left: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupDiscord,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 132,
+                endProps    : { alpha: 1, left: 0 },
+            });
+            Helpers.resetTween({
+                obj         : this._groupGithub,
+                beginProps  : { alpha: 0, left: -40 },
+                waitTime    : 200,
+                endProps    : { alpha: 1, left: 0 },
+            });
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
                 const group = this._group;
-                egret.Tween.removeTweens(group);
-                egret.Tween.get(group)
-                    .set({ alpha: 1, right: 0 })
-                    .to({ alpha: 0, right: -40 }, 200);
+                Tween.removeTweens(group);
+                Tween.get(group)
+                    .set({ alpha: 1, right: 60 })
+                    .to({ alpha: 0, right: 20 }, 200);
 
-                const labelTips = this._labelTips;
-                egret.Tween.removeTweens(labelTips);
-                egret.Tween.get(labelTips)
-                    .set({ alpha: 1 })
-                    .to({ alpha: 0 }, 200)
+                const groupTips = this._groupTips;
+                Tween.removeTweens(groupTips);
+                Tween.get(groupTips)
+                    .set({ alpha: 1, left: 60 })
+                    .to({ alpha: 0, left: 20 }, 200)
                     .call(resolve);
             });
         }
 
         private async _updateComponentsForLanguage(): Promise<void> {
-            this._labelTips.text        = Lang.getRichText(Lang.RichType.R0007),
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0155);
-            this._listCommand.bindData(await this._createDataForListCommand());
+            this._labelTips0.text   = Lang.getText(Lang.Type.A0195);
+            this._labelTips1.text   = ` `;
+            this._labelTips2.text   = `${Lang.getText(Lang.Type.B0537)}:`;
+            this._labelTips3.text   = `368142455`;
+            this._labelTips4.text   = `${Lang.getText(Lang.Type.B0538)}:`;
+            this._labelTips5.text   = DISCORD_URL;
+            this._labelTips6.text   = `${Lang.getText(Lang.Type.B0539)}:`;
+            this._labelTips7.text   = GITHUB_URL;
         }
 
-        private async _createDataForListCommand(): Promise<DataForCommandRenderer[]> {
-            const dataList: DataForCommandRenderer[] = [
-                {
-                    name    : Lang.getText(Lang.Type.B0137),
-                    callback: (): void => {
-                        this.close();
-                        MultiCustomRoom.McrMainMenuPanel.show();
-                    },
-                    redChecker  : async () => {
-                        return (MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars())
-                            || (await MultiCustomRoom.McrModel.checkIsRed());
-                    },
-                },
-                {
-                    name        : Lang.getText(Lang.Type.B0404),
-                    callback    : () => {
-                        this.close();
-                        MultiRankRoom.MrrMainMenuPanel.show();
-                    },
-                    redChecker  : async () => {
-                        return (MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars())
-                            || (await MultiRankRoom.MrrModel.checkIsRed());
-                    }
-                },
-                {
-                    name    : Lang.getText(Lang.Type.B0138),
-                    callback: (): void => {
-                        this.close();
-                        SinglePlayerLobby.SinglePlayerLobbyPanel.show();
-                    },
-                },
-                {
-                    name    : Lang.getText(Lang.Type.B0271),
-                    callback: (): void => {
-                        this.close();
-                        MapEditor.MeMapListPanel.show();
-                    },
-                }
-            ];
-
-            if ((await UserModel.getIsSelfAdmin()) || (await UserModel.getIsSelfMapCommittee())) {
-                dataList.push({
-                    name    : Lang.getText(Lang.Type.B0192),
-                    callback: (): void => {
-                        this.close();
-                        MapManagement.MmMainMenuPanel.show();
-                    },
-                });
-            }
-
-            return dataList;
-        }
-    }
-
-    type DataForCommandRenderer = {
-        name        : string;
-        callback    : () => void;
-        redChecker? : () => Promise<boolean>;
-    }
-
-    class CommandRenderer extends GameUi.UiListItemRenderer {
-        private _labelCommand   : GameUi.UiLabel;
-        private _imgRed         : GameUi.UiImage;
-
-        protected async dataChanged(): Promise<void> {
-            super.dataChanged();
-
-            const data              = this.data as DataForCommandRenderer;
-            this._labelCommand.text = data.name;
-            this._imgRed.visible    = (data.redChecker != null) && (await data.redChecker());
+        private async _updateBtnMultiPlayer(): Promise<void> {
+            this._btnMultiPlayer.setRedVisible(
+                (MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars())  ||
+                (MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars())  ||
+                (await MultiCustomRoom.McrModel.checkIsRed())       ||
+                (await MultiFreeRoom.MfrModel.checkIsRed())
+            );
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data as DataForCommandRenderer).callback();
+        private async _updateBtnRanking(): Promise<void> {
+            this._btnRanking.setRedVisible(
+                (MultiPlayerWar.MpwModel.checkIsRedForMyMrwWars()) ||
+                (await MultiRankRoom.MrrModel.checkIsRed())
+            );
         }
     }
 }

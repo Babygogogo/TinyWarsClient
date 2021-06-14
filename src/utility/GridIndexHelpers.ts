@@ -5,7 +5,7 @@ namespace TinyWars.Utility.GridIndexHelpers {
     import Direction    = Types.Direction;
     import Point        = Types.Point;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;
     const _ADJACENT_OFFSETS = [
         { offset: { x: -1, y:  0 }, direction: Direction.Left,  clockwiseOffset: { x:  1, y:  1 }, },
         { offset: { x:  1, y:  0 }, direction: Direction.Right, clockwiseOffset: { x: -1, y: -1 }, },
@@ -79,7 +79,7 @@ namespace TinyWars.Utility.GridIndexHelpers {
         return (x >= 0) && (y >= 0) && (x < mapSize.width) && (y < mapSize.height);
     }
 
-    export function getAdjacentGrids(g: GridIndex, mapSize?: MapSize): GridIndex[] {
+    export function getAdjacentGrids(g: GridIndex, mapSize: MapSize): GridIndex[] {
         const grids: GridIndex[] = [];
         for (const o of _ADJACENT_OFFSETS) {
             const adjacentGrid = add(g, o.offset);

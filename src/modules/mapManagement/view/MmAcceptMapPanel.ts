@@ -3,7 +3,7 @@ namespace TinyWars.MapManagement {
     import Lang     = Utility.Lang;
     import Notify   = Utility.Notify;
 
-    export class MmAcceptMapPanel extends GameUi.UiPanel {
+    export class MmAcceptMapPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -22,6 +22,10 @@ namespace TinyWars.MapManagement {
         private _groupScw       : eui.Group;
         private _labelScw       : GameUi.UiLabel;
         private _imgScw         : GameUi.UiImage;
+
+        private _groupSrw       : eui.Group;
+        private _labelSrw       : GameUi.UiLabel;
+        private _imgSrw         : GameUi.UiImage;
 
         private _groupMrwStd    : eui.Group;
         private _labelMrwStd    : GameUi.UiLabel;
@@ -48,7 +52,6 @@ namespace TinyWars.MapManagement {
             super();
 
             this.skinName = "resource/skins/mapManagement/MmAcceptMapPanel.exml";
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
         }
 
@@ -61,14 +64,16 @@ namespace TinyWars.MapManagement {
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm, },
                 { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
                 { ui: this._groupScw,       callback: this._onTouchedGroupScw },
-                { ui: this._groupMrwStd,      callback: this._onTouchedGroupMrwStd },
-                { ui: this._groupMrwFog,   callback: this._onTouchedGroupMrwFog },
+                { ui: this._groupSrw,       callback: this._onTouchedGroupSrw },
+                { ui: this._groupMrwStd,    callback: this._onTouchedGroupMrwStd },
+                { ui: this._groupMrwFog,    callback: this._onTouchedGroupMrwFog },
             ]);
 
             this._updateComponentsForLanguage();
 
             this._imgMcw.visible    = false;
             this._imgScw.visible    = false;
+            this._imgSrw.visible    = false;
             this._imgMrwStd.visible = false;
             this._imgMrwFog.visible = false;
         }
@@ -91,6 +96,7 @@ namespace TinyWars.MapManagement {
                 availability    : {
                     canMcw      : this._imgMcw.visible,
                     canScw      : this._imgScw.visible,
+                    canSrw      : this._imgSrw.visible,
                     canMrwStd   : this._imgMrwStd.visible,
                     canMrwFog   : this._imgMrwFog.visible,
                 },
@@ -102,6 +108,9 @@ namespace TinyWars.MapManagement {
         }
         private _onTouchedGroupScw(e: egret.TouchEvent): void {
             this._imgScw.visible = !this._imgScw.visible;
+        }
+        private _onTouchedGroupSrw(e: egret.TouchEvent): void {
+            this._imgSrw.visible = !this._imgSrw.visible;
         }
         private _onTouchedGroupMrwStd(e: egret.TouchEvent): void {
             this._imgMrwStd.visible = !this._imgMrwStd.visible;
@@ -119,6 +128,7 @@ namespace TinyWars.MapManagement {
             this._labelMrwStd.text  = Lang.getText(Lang.Type.B0404);
             this._labelMrwFog.text  = Lang.getText(Lang.Type.B0408);
             this._labelScw.text     = Lang.getText(Lang.Type.B0409);
+            this._labelSrw.text     = Lang.getText(Lang.Type.B0614);
         }
     }
 }

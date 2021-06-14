@@ -4,7 +4,7 @@ namespace TinyWars.MapManagement {
     import Lang       = Utility.Lang;
     import Notify     = Utility.Notify;
 
-    export class MmTagSearchPanel extends GameUi.UiPanel {
+    export class MmTagSearchPanel extends GameUi.UiPanel<void> {
         protected _IS_EXCLUSIVE = false;
         protected _LAYER_TYPE   = Types.LayerType.Hud2;
 
@@ -41,7 +41,6 @@ namespace TinyWars.MapManagement {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this.skinName = "resource/skins/mapManagement/MmTagSearchPanel.exml";
         }

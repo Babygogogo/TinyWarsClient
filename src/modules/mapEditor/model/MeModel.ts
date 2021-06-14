@@ -5,12 +5,12 @@ namespace TinyWars.MapEditor.MeModel {
     import ConfigManager    = Utility.ConfigManager;
     import Logger           = Utility.Logger;
     import Helpers          = Utility.Helpers;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import MapReviewStatus  = Types.MapReviewStatus;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import IMapEditorData   = ProtoTypes.Map.IMapEditorData;
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     const MAP_DICT  = new Map<number, IMapEditorData>();
     let _war        : MeWar;
@@ -137,7 +137,7 @@ namespace TinyWars.MapEditor.MeModel {
             const playersCount      = mapRawData.playersCountUnneutral;
 
             if (ruleId == null) {
-                settingsForCommon.warRule = BwSettingsHelper.createDefaultWarRule(ruleId, playersCount);
+                settingsForCommon.warRule = BwWarRuleHelper.createDefaultWarRule(ruleId, playersCount);
             } else {
                 const warRule = mapRawData.warRuleArray.find(warRule => warRule.ruleId === ruleId);
                 if (warRule == null) {
@@ -150,7 +150,7 @@ namespace TinyWars.MapEditor.MeModel {
 
             setPresetWarRuleId(ruleId);
             for (let playerIndex = CommonConstants.WarFirstPlayerIndex; playerIndex <= playersCount; ++playerIndex) {
-                setCoId(playerIndex, BwSettingsHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, playerIndex));
+                setCoId(playerIndex, BwWarRuleHelper.getRandomCoIdWithSettingsForCommon(settingsForCommon, playerIndex));
             }
         }
         export function setPresetWarRuleId(ruleId: number | null | undefined): void {
@@ -212,83 +212,83 @@ namespace TinyWars.MapEditor.MeModel {
         }
 
         export function tickTeamIndex(playerIndex: number): void {
-            BwSettingsHelper.tickTeamIndex(getWarRule(), playerIndex);
+            BwWarRuleHelper.tickTeamIndex(getWarRule(), playerIndex);
         }
         export function getTeamIndex(playerIndex: number): number {
-            return BwSettingsHelper.getTeamIndex(getWarRule(), playerIndex);
+            return BwWarRuleHelper.getTeamIndex(getWarRule(), playerIndex);
         }
 
         export function setInitialFund(playerIndex: number, fund: number): void {
-            BwSettingsHelper.setInitialFund(getWarRule(), playerIndex, fund);
+            BwWarRuleHelper.setInitialFund(getWarRule(), playerIndex, fund);
         }
         export function getInitialFund(playerIndex: number): number {
-            return BwSettingsHelper.getInitialFund(getWarRule(), playerIndex);
+            return BwWarRuleHelper.getInitialFund(getWarRule(), playerIndex);
         }
 
         export function setIncomeMultiplier(playerIndex: number, multiplier: number): void {
-            BwSettingsHelper.setIncomeMultiplier(getWarRule(), playerIndex, multiplier);
+            BwWarRuleHelper.setIncomeMultiplier(getWarRule(), playerIndex, multiplier);
         }
         export function getIncomeMultiplier(playerIndex: number): number {
-            return BwSettingsHelper.getIncomeMultiplier(getWarRule(), playerIndex);
+            return BwWarRuleHelper.getIncomeMultiplier(getWarRule(), playerIndex);
         }
 
-        export function setInitialEnergyPercentage(playerIndex: number, percentage: number): void {
-            BwSettingsHelper.setInitialEnergyPercentage(getWarRule(), playerIndex, percentage);
+        export function setEnergyAddPctOnLoadCo(playerIndex: number, percentage: number): void {
+            BwWarRuleHelper.setEnergyAddPctOnLoadCo(getWarRule(), playerIndex, percentage);
         }
-        export function getInitialEnergyPercentage(playerIndex: number): number {
-            return BwSettingsHelper.getInitialEnergyPercentage(getWarRule(), playerIndex);
+        export function getEnergyAddPctOnLoadCo(playerIndex: number): number {
+            return BwWarRuleHelper.getEnergyAddPctOnLoadCo(getWarRule(), playerIndex);
         }
 
         export function setEnergyGrowthMultiplier(playerIndex: number, multiplier: number): void {
-            BwSettingsHelper.setEnergyGrowthMultiplier(getWarRule(), playerIndex, multiplier);
+            BwWarRuleHelper.setEnergyGrowthMultiplier(getWarRule(), playerIndex, multiplier);
         }
         export function getEnergyGrowthMultiplier(playerIndex: number): number {
-            return BwSettingsHelper.getEnergyGrowthMultiplier(getWarRule(), playerIndex);
+            return BwWarRuleHelper.getEnergyGrowthMultiplier(getWarRule(), playerIndex);
         }
 
-        export function getAvailableCoIdList(playerIndex: number): number[] {
-            return BwSettingsHelper.getAvailableCoIdList(getWarRule(), playerIndex);
+        export function getBannedCoIdArray(playerIndex: number): number[] {
+            return BwWarRuleHelper.getBannedCoIdArray(getWarRule(), playerIndex);
         }
-        export function addAvailableCoId(playerIndex: number, coId: number): void {
-            BwSettingsHelper.addAvailableCoId(getWarRule(), playerIndex, coId);
+        export function addBannedCoId(playerIndex: number, coId: number): void {
+            BwWarRuleHelper.addBannedCoId(getWarRule(), playerIndex, coId);
         }
-        export function removeAvailableCoId(playerIndex: number, coId: number): void {
-            BwSettingsHelper.removeAvailableCoId(getWarRule(), playerIndex, coId);
+        export function deleteBannedCoId(playerIndex: number, coId: number): void {
+            BwWarRuleHelper.deleteBannedCoId(getWarRule(), playerIndex, coId);
         }
 
         export function setLuckLowerLimit(playerIndex: number, limit: number): void {
-            BwSettingsHelper.setLuckLowerLimit(getWarRule(), playerIndex, limit);
+            BwWarRuleHelper.setLuckLowerLimit(getWarRule(), playerIndex, limit);
         }
         export function getLuckLowerLimit(playerIndex: number): number {
-            return BwSettingsHelper.getLuckLowerLimit(getWarRule(), playerIndex);
+            return BwWarRuleHelper.getLuckLowerLimit(getWarRule(), playerIndex);
         }
 
         export function setLuckUpperLimit(playerIndex: number, limit: number): void {
-            BwSettingsHelper.setLuckUpperLimit(getWarRule(), playerIndex, limit);
+            BwWarRuleHelper.setLuckUpperLimit(getWarRule(), playerIndex, limit);
         }
         export function getLuckUpperLimit(playerIndex: number): number {
-            return BwSettingsHelper.getLuckUpperLimit(getWarRule(), playerIndex);
+            return BwWarRuleHelper.getLuckUpperLimit(getWarRule(), playerIndex);
         }
 
         export function setMoveRangeModifier(playerIndex: number, modifier: number): void {
-            BwSettingsHelper.setMoveRangeModifier(getWarRule(), playerIndex, modifier);
+            BwWarRuleHelper.setMoveRangeModifier(getWarRule(), playerIndex, modifier);
         }
         export function getMoveRangeModifier(playerIndex: number): number {
-            return BwSettingsHelper.getMoveRangeModifier(getWarRule(), playerIndex);
+            return BwWarRuleHelper.getMoveRangeModifier(getWarRule(), playerIndex);
         }
 
         export function setAttackPowerModifier(playerIndex: number, modifier: number): void {
-            BwSettingsHelper.setAttackPowerModifier(getWarRule(), playerIndex, modifier);
+            BwWarRuleHelper.setAttackPowerModifier(getWarRule(), playerIndex, modifier);
         }
         export function getAttackPowerModifier(playerIndex: number): number {
-            return BwSettingsHelper.getAttackPowerModifier(getWarRule(), playerIndex);
+            return BwWarRuleHelper.getAttackPowerModifier(getWarRule(), playerIndex);
         }
 
         export function setVisionRangeModifier(playerIndex: number, modifier: number): void {
-            BwSettingsHelper.setVisionRangeModifier(getWarRule(), playerIndex, modifier);
+            BwWarRuleHelper.setVisionRangeModifier(getWarRule(), playerIndex, modifier);
         }
         export function getVisionRangeModifier(playerIndex: number): number {
-            return BwSettingsHelper.getVisionRangeModifier(getWarRule(), playerIndex);
+            return BwWarRuleHelper.getVisionRangeModifier(getWarRule(), playerIndex);
         }
     }
 

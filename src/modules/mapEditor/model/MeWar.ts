@@ -2,20 +2,25 @@
 namespace TinyWars.MapEditor {
     import Helpers          = Utility.Helpers;
     import Types            = Utility.Types;
-    import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
-    import ConfigManager    = Utility.ConfigManager;
-    import BwSettingsHelper = BaseWar.BwSettingsHelper;
-    import BwHelpers        = BaseWar.BwHelpers;
+    import ClientErrorCode  = Utility.ClientErrorCode;
+    import CommonConstants  = Utility.CommonConstants;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
+    import WarAction        = ProtoTypes.WarAction;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
     import IWarRule         = ProtoTypes.WarRule.IWarRule;
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
     import IDataForMapTag   = ProtoTypes.Map.IDataForMapTag;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
 
     export class MeWar extends BaseWar.BwWar {
-        private _drawer             : MeDrawer;
+        private readonly _playerManager         = new MePlayerManager();
+        private readonly _turnManager           = new MeTurnManager();
+        private readonly _field                 = new MeField();
+        private readonly _commonSettingManager  = new MeCommonSettingManager();
+        private readonly _drawer                = new MeDrawer();
+        private readonly _warEventManager       = new MeWarEventManager();
+
         private _mapModifiedTime    : number;
         private _mapSlotIndex       : number;
         private _mapDesignerUserId  : number;
@@ -26,74 +31,17 @@ namespace TinyWars.MapEditor {
         private _isMapModified      = false;
         private _mapTag             : IDataForMapTag;
 
-        public async init(data: ISerialWar): Promise<MeWar> {
-            if (!this._baseInit(data)) {
-                Logger.error(`MeWar.init() failed this._baseInit().`);
-                return undefined;
+        public async init(data: ISerialWar): Promise<ClientErrorCode> {
+            const baseInitError = await this._baseInit(data);
+            if (baseInitError) {
+                return baseInitError;
             }
 
-            const mapSizeAndMaxPlayerIndex = await BwHelpers.getMapSizeAndMaxPlayerIndex(data);
-            if (!mapSizeAndMaxPlayerIndex) {
-                Logger.error(`MeWar.init() invalid war data! ${JSON.stringify(data)}`);
-                return undefined;
-            }
-
-            const settingsForCommon = data.settingsForCommon;
-            if (!settingsForCommon) {
-                Logger.error(`MeWar.init() empty settingsForCommon! ${JSON.stringify(data)}`);
-                return undefined;
-            }
-
-            const configVersion = settingsForCommon.configVersion;
-            if (configVersion == null) {
-                Logger.error(`MeWar.init() empty configVersion.`);
-                return undefined;
-            }
-
-            const dataForPlayerManager = data.playerManager;
-            if (dataForPlayerManager == null) {
-                Logger.error(`MeWar.init() empty dataForPlayerManager.`);
-                return undefined;
-            }
-
-            const dataForTurnManager = data.turnManager;
-            if (dataForTurnManager == null) {
-                Logger.error(`MeWar.init() empty dataForTurnManager.`);
-                return undefined;
-            }
-
-            const dataForField = data.field;
-            if (dataForField == null) {
-                Logger.error(`MeWar.init() empty dataForField.`);
-                return undefined;
-            }
-
-            const playerManager = (this.getPlayerManager() || new (this._getPlayerManagerClass())()).init(dataForPlayerManager);
-            if (playerManager == null) {
-                Logger.error(`MeWar.init() empty playerManager.`);
-                return undefined;
-            }
-
-            const turnManager = (this.getTurnManager() || new (this._getTurnManagerClass())()).init(dataForTurnManager);
-            if (turnManager == null) {
-                Logger.error(`MeWar.init() empty turnManager.`);
-                return undefined;
-            }
-
-            const field = await (this.getField() || new (this._getFieldClass())()).init(dataForField, configVersion, mapSizeAndMaxPlayerIndex);
-            if (field == null) {
-                Logger.error(`MeWar.init() empty field.`);
-                return undefined;
-            }
-
-            this._setPlayerManager(playerManager);
-            this._setTurnManager(turnManager);
-            this._setField(field);
-            this._setDrawer((this.getDrawer() || new MeDrawer()).init());
+            this.getDrawer().init();
 
             this._initView();
 
-            return this;
+            return ClientErrorCode.NoError;
         }
         public async initWithMapEditorData(data: ProtoTypes.Map.IMapEditorData): Promise<void> {
             const warData = MeUtility.createISerialWar(data);
@@ -105,7 +53,7 @@ namespace TinyWars.MapEditor {
             this.setMapDesignerUserId(mapRawData.designerUserId);
             this.setMapDesignerName(mapRawData.designerName);
             this.setMapNameArray(mapRawData.mapNameArray);
-            this.setWarRuleArray(mapRawData.warRuleArray || [warData.settingsForCommon.warRule]);
+            this._setWarRuleArray(mapRawData.warRuleArray || [warData.settingsForCommon.warRule]);
             this.setMapTag(mapRawData.mapTag);
         }
 
@@ -124,92 +72,11 @@ namespace TinyWars.MapEditor {
             return this;
         }
 
-        public serializeForSimulation(): ISerialWar | undefined {
-            const settingsForCommon = Helpers.deepClone(this.getSettingsForCommon());
-            if (settingsForCommon == null) {
-                Logger.error(`MeWar.serializeForSimulation() empty settingsForCommon.`);
-                return undefined;
-            }
-
-            const warEventManager = this.getWarEventManager();
-            if (warEventManager == null) {
-                Logger.error(`MeWar.serializeForSimulation() empty warEventManager.`);
-                return undefined;
-            }
-
-            const playerManager = this.getPlayerManager();
-            if (playerManager == null) {
-                Logger.error(`MeWar.serializeForSimulation() empty playerManager.`);
-                return undefined;
-            }
-
-            const turnManager = this.getTurnManager();
-            if (turnManager == null) {
-                Logger.error(`MeWar.serializeForSimulation() empty turnManager.`);
-                return undefined;
-            }
-
-            const field = this.getField();
-            if (field == null) {
-                Logger.error(`MeWar.serializeForSimulation() empty field.`);
-                return undefined;
-            }
-
-            const serialWarEventManager = warEventManager.serializeForSimulation();
-            if (serialWarEventManager == null) {
-                Logger.error(`MeWar.serializeForSimulation() empty serialWarEventManager.`);
-                return undefined;
-            }
-
-            const serialPlayerManager = playerManager.serializeForSimulation();
-            if (serialPlayerManager == null) {
-                Logger.error(`MeWar.serializeForSimulation() empty serialPlayerManager.`);
-                return undefined;
-            }
-
-            const serialTurnManager = turnManager.serializeForSimulation();
-            if (serialTurnManager == null) {
-                Logger.error(`MeWar.serializeForSimulation() empty serialTurnManager.`);
-                return undefined;
-            }
-
-            const serialField = field.serializeForSimulation();
-            if (serialField == null) {
-                Logger.error(`MeWar.serializeForSimulation() empty serialField.`);
-                return undefined;
-            }
-
-            const playerRules           = settingsForCommon.warRule.ruleForPlayers;
-            const playersCountUnneutral = (field as MeField).getMaxPlayerIndex();
-            playerRules.playerRuleDataArray = playerRules.playerRuleDataArray.filter(v => {
-                const playerIndex = v.playerIndex;
-                return (playerIndex <= playersCountUnneutral)
-                    && (playerIndex >= CommonConstants.WarFirstPlayerIndex);
-            }).sort((v1, v2) => v1.playerIndex - v2.playerIndex);
-
-            return {
-                settingsForCommon,
-                settingsForMcw              : null,
-                settingsForMrw              : null,
-                settingsForScw              : { isCheating: true },
-
-                warId                       : this.getWarId(),
-                seedRandomInitialState      : new Math.seedrandom("" + Math.random(), { state: true }).state(),
-                seedRandomCurrentState      : null,
-                executedActions             : [],
-                remainingVotesForDraw       : this.getRemainingVotesForDraw(),
-                warEventManager             : serialWarEventManager,
-                playerManager               : serialPlayerManager,
-                turnManager                 : serialTurnManager,
-                field                       : serialField,
-            };
-        }
-
         public serializeForMap(): IMapRawData {
-            const unitMap               = this.getUnitMap() as MeUnitMap;
+            const unitMap               = this.getUnitMap();
             const mapSize               = unitMap.getMapSize();
             const playersCountUnneutral = (this.getField() as MeField).getMaxPlayerIndex();
-            unitMap.reviseAllUnitIds();
+            MeUtility.reviseAllUnitIds(unitMap);
 
             return {
                 designerName            : this.getMapDesignerName(),
@@ -221,39 +88,124 @@ namespace TinyWars.MapEditor {
                 modifiedTime            : Time.TimeModel.getServerTimestamp(),
                 tileDataArray           : this.getTileMap().serialize().tiles,
                 unitDataArray           : unitMap.serialize().units,
-                warRuleArray            : this._getRevisedWarRuleArray(playersCountUnneutral),
+                warRuleArray            : this.getRevisedWarRuleArray(playersCountUnneutral),
                 mapTag                  : this.getMapTag(),
                 warEventFullData        : this.getWarEventManager().getWarEventFullData(),
             };
         }
 
+        public getCanCheat(): boolean {
+            return true;
+        }
         public getWarType(): Types.WarType {
             return Types.WarType.Me;
         }
-
+        public getIsNeedReplay(): boolean {
+            return false;
+        }
         public getMapId(): number | undefined {
             return undefined;
         }
-
-        protected _getViewClass(): new () => MeWarView {
-            return MeWarView;
-        }
-        protected _getFieldClass(): new () => MeField {
-            return MeField;
-        }
-        protected _getPlayerManagerClass(): new () => MePlayerManager {
-            return MePlayerManager;
-        }
-        protected _getTurnManagerClass(): new () => MeTurnManager {
-            return MeTurnManager;
-        }
-        protected _getWarEventManagerClass(): new () => MeWarEventManager {
-            return MeWarEventManager;
+        public getIsWarMenuPanelOpening(): boolean {
+            return MeWarMenuPanel.getIsOpening();
         }
 
-        private _setDrawer(drawer: MeDrawer): void {
-            this._drawer = drawer;
+        public getPlayerManager(): MePlayerManager {
+            return this._playerManager;
         }
+        public getTurnManager(): MeTurnManager {
+            return this._turnManager;
+        }
+        public getField(): MeField {
+            return this._field;
+        }
+        public getCommonSettingManager(): MeCommonSettingManager {
+            return this._commonSettingManager;
+        }
+        public getWarEventManager(): MeWarEventManager {
+            return this._warEventManager;
+        }
+
+        public updateTilesAndUnitsOnVisibilityChanged(): void {
+            // nothing to do.
+        }
+
+        public async getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeSystemCallWarEvent(action: WarAction.IWarActionSystemCallWarEvent): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitAttackUnit(action: WarAction.IWarActionUnitAttackUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitBeLoaded(action: WarAction.IWarActionUnitBeLoaded): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitBuildTile(action: WarAction.IWarActionUnitBuildTile): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitCaptureTile(action: WarAction.IWarActionUnitCaptureTile): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitDive(action: WarAction.IWarActionUnitDive): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitDropUnit(action: WarAction.IWarActionUnitDropUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitJoinUnit(action: WarAction.IWarActionUnitJoinUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitLaunchFlare(action: WarAction.IWarActionUnitLaunchFlare): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitLaunchSilo(action: WarAction.IWarActionUnitLaunchSilo): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitLoadCo(action: WarAction.IWarActionUnitLoadCo): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitProduceUnit(action: WarAction.IWarActionUnitProduceUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitSupplyUnit(action: WarAction.IWarActionUnitSupplyUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitSurface(action: WarAction.IWarActionUnitSurface): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | undefined> {
+            return undefined;
+        }
+
         public getDrawer(): MeDrawer {
             return this._drawer;
         }
@@ -268,35 +220,35 @@ namespace TinyWars.MapEditor {
         public getMapSlotIndex(): number {
             return this._mapSlotIndex;
         }
-        public setMapSlotIndex(value: number) {
+        public setMapSlotIndex(value: number): void {
             this._mapSlotIndex = value;
         }
 
         public getMapDesignerUserId(): number {
             return this._mapDesignerUserId;
         }
-        public setMapDesignerUserId(value: number) {
+        public setMapDesignerUserId(value: number): void {
             this._mapDesignerUserId = value;
         }
 
         public getMapDesignerName(): string {
             return this._mapDesignerName;
         }
-        public setMapDesignerName(value: string) {
+        public setMapDesignerName(value: string): void {
             this._mapDesignerName = value;
         }
 
         public getMapNameArray(): ILanguageText[] {
             return this._mapNameList;
         }
-        public setMapNameArray(value: ILanguageText[]) {
+        public setMapNameArray(value: ILanguageText[]): void {
             this._mapNameList = value;
         }
 
         public getIsReviewingMap(): boolean {
             return this._isReviewingMap;
         }
-        public setIsReviewingMap(value: boolean) {
+        public setIsReviewingMap(value: boolean): void {
             this._isReviewingMap = value;
         }
 
@@ -310,13 +262,13 @@ namespace TinyWars.MapEditor {
         public getWarRuleArray(): IWarRule[] {
             return this._warRuleList;
         }
-        public setWarRuleArray(value: IWarRule[]) {
+        private _setWarRuleArray(value: IWarRule[]): void {
             this._warRuleList = value;
         }
         public getWarRuleByRuleId(ruleId: number): IWarRule {
             return this.getWarRuleArray().find(v => v.ruleId === ruleId);
         }
-        private _getRevisedWarRuleArray(playersCountUnneutral: number): IWarRule[] {
+        public getRevisedWarRuleArray(playersCountUnneutral: number): IWarRule[] {
             const ruleArray: IWarRule[] = [];
             for (const rule of this.getWarRuleArray() || []) {
                 const revisedRule = Helpers.deepClone(rule);
@@ -334,7 +286,7 @@ namespace TinyWars.MapEditor {
 
         public addWarRule(): void {
             const ruleList = this.getWarRuleArray();
-            ruleList.push(BwSettingsHelper.createDefaultWarRule(ruleList.length, CommonConstants.WarMaxPlayerIndex));
+            ruleList.push(BwWarRuleHelper.createDefaultWarRule(ruleList.length, CommonConstants.WarMaxPlayerIndex));
         }
         public deleteWarRule(ruleId: number): void {
             const ruleList  = this.getWarRuleArray();

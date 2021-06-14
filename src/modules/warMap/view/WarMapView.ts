@@ -7,16 +7,20 @@ namespace TinyWars.WarMap {
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
     import Types            = Utility.Types;
+    import Helpers          = Utility.Helpers;
+    import CommonConstants  = Utility.CommonConstants;
     import MapSize          = Types.MapSize;
     import IMapRawData      = ProtoTypes.Map.IMapRawData;
-    import ISerialTile      = ProtoTypes.WarSerialization.ISerialTile;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import WarSerialization = ProtoTypes.WarSerialization;
+    import ISerialWar       = WarSerialization.ISerialWar;
+    import ISerialTile      = WarSerialization.ISerialTile;
+    import ISerialPlayer    = WarSerialization.ISerialPlayer;
 
-    const { width: GRID_WIDTH, height: GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
+    const { width: GRID_WIDTH, height: GRID_HEIGHT } = CommonConstants.GridSize;
 
     export class WarMapView extends egret.DisplayObjectContainer {
         private readonly _tileMapView   = new TileMapView();
-        private readonly _unitMapView   = new UnitMapView();
+        private readonly _unitMapView   = new WarMapUnitMapView();
 
         public constructor() {
             super();
@@ -25,12 +29,30 @@ namespace TinyWars.WarMap {
             this.addChild(this._unitMapView);
         }
 
-        public showMap(mapRawData: IMapRawData): void {
+        public showMapByMapData(mapRawData: IMapRawData): void {
             this.width  = GRID_WIDTH  * mapRawData.mapWidth;
             this.height = GRID_HEIGHT * mapRawData.mapHeight;
             this._tileMapView.showTileMap(mapRawData.tileDataArray);
-            this._unitMapView.showUnitMap(mapRawData);
+            this._unitMapView.showUnitMap({
+                unitDataArray   : mapRawData.unitDataArray,
+                players         : null,
+            });
         }
+        public showMapByWarData(warData: ISerialWar, players?: ISerialPlayer[]): void {
+            const field     = warData.field;
+            const tileMap   = field.tileMap;
+            const mapSize   = BaseWar.BwHelpers.getMapSize(tileMap);
+            this.width      = GRID_WIDTH * mapSize.width;
+            this.height     = GRID_HEIGHT * mapSize.height;
+
+            players = players || warData.playerManager.players;
+            this._tileMapView.showTileMap(tileMap.tiles, players);
+            this._unitMapView.showUnitMap({
+                unitDataArray   : field.unitMap.units,
+                players,
+            });
+        }
+
         public clear(): void {
             this._tileMapView.clear();
             this._unitMapView.clear();
@@ -39,24 +61,28 @@ namespace TinyWars.WarMap {
 
     class TileMapView extends egret.DisplayObjectContainer {
         private readonly _baseLayer             = new TileBaseLayer();
+        private readonly _gridBorderLayer       = new egret.DisplayObjectContainer();
         private readonly _objectLayer           = new TileObjectLayer();
+
         private readonly _notifyListenerArray   : Notify.Listener[] = [
-            { type: Notify.Type.TileAnimationTick, callback: this._onNotifyTileAnimationTick }
+            { type: Notify.Type.TileAnimationTick,          callback: this._onNotifyTileAnimationTick },
+            { type: Notify.Type.IsShowGridBorderChanged,    callback: this._onNotifyIsShowGridBorderChanged },
         ];
 
         public constructor() {
             super();
 
+            this._gridBorderLayer.alpha = 0.3;
             this.addChild(this._baseLayer);
+            this.addChild(this._gridBorderLayer);
             this.addChild(this._objectLayer);
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
-
-            // this._initTest();
         }
 
-        public showTileMap(dataList: ISerialTile[]): void {
-            this._baseLayer.updateWithTileDataList(dataList);
-            this._objectLayer.updateWithTileDataList(dataList);
+        public showTileMap(dataList: ISerialTile[], players?: ISerialPlayer[]): void {
+            this._baseLayer.updateWithTileDataList(dataList, players);
+            this._objectLayer.updateWithTileDataList(dataList, players);
+            this._resetGridBorderLayer(dataList);
         }
         public clear(): void {
             this.showTileMap([]);
@@ -79,29 +105,44 @@ namespace TinyWars.WarMap {
             this._objectLayer.updateViewOnTick();
         }
 
-        // private _initTest(): void {
-        //     const ids1: number[][] = new Array(this._colCount);
-        //     const ids2: number[][] = new Array(this._colCount);
-        //     for (let x = 0; x < this._colCount; ++x) {
-        //         ids1[x] = new Array(this._rowCount);
-        //         ids2[x] = new Array(this._rowCount);
-        //         for (let y = 0; y < this._rowCount; ++y) {
-        //             ids1[x][y] = Math.floor(Math.random() * 100);
-        //             ids2[x][y] = Math.floor(Math.random() * 109);
-        //         }
-        //     }
-        //     this.updateWithBaseViewIdMatrix(ids1);
-        //     this.updateWithObjectViewIdMatrix(ids2);
-        // }
+        private _onNotifyIsShowGridBorderChanged(e: egret.Event): void {
+            this._updateGridBorderLayerVisible();
+        }
+
+        private _resetGridBorderLayer(tileDataArray: ISerialTile[]): void {
+            const { width: mapWidth, height: mapHeight }    = getMapSize(tileDataArray);
+            const borderWidth                               = mapWidth * GRID_WIDTH;
+            const borderHeight                              = mapHeight * GRID_HEIGHT;
+            const gridBorderLayer                           = this._gridBorderLayer;
+            gridBorderLayer.removeChildren();
+            for (let x = 0; x <= mapWidth; ++x) {
+                const img   = new GameUi.UiImage(`commonColorBlack0000`);
+                img.width   = 2;
+                img.height  = borderHeight;
+                img.x       = (x * GRID_WIDTH) - 1;
+                gridBorderLayer.addChild(img);
+            }
+            for (let y = 0; y <= mapHeight; ++y) {
+                const img   = new GameUi.UiImage(`commonColorBlack0000`);
+                img.width   = borderWidth;
+                img.height  = 2;
+                img.y       = (y * GRID_HEIGHT) - 1;
+                gridBorderLayer.addChild(img);
+            }
+            this._updateGridBorderLayerVisible();
+        }
+        private _updateGridBorderLayerVisible(): void {
+            this._gridBorderLayer.visible = User.UserModel.getSelfSettingsIsShowGridBorder();
+        }
     }
 
     abstract class TileLayerBase extends eui.Component {
-        private readonly _tileDataMap   : ISerialTile[][] = [];
+        private readonly _tileDataMap   : Types.WarMapTileViewData[][] = [];
         private readonly _imageMap      : UiImage[][] = [];
 
-        public updateWithTileDataList(tileDataArray: ISerialTile[]): void {
+        public updateWithTileDataList(tileDataArray: ISerialTile[], players?: ISerialPlayer[]): void {
             const mapSize = getMapSize(tileDataArray);
-            this._resetTileDataMap(mapSize, tileDataArray);
+            this._resetTileDataMap(mapSize, tileDataArray, players);
             this._resetImageMap(mapSize);
 
             this.updateViewOnTick();
@@ -120,7 +161,7 @@ namespace TinyWars.WarMap {
             }
         }
 
-        private _resetTileDataMap(mapSize: MapSize, tileDataArray: ISerialTile[]): void {
+        private _resetTileDataMap(mapSize: MapSize, tileDataArray: ISerialTile[], players?: ISerialPlayer[]): void {
             const map       = this._tileDataMap;
             const width     = mapSize.width;
             const height    = mapSize.height;
@@ -135,8 +176,10 @@ namespace TinyWars.WarMap {
                 column.fill(undefined);
             }
 
-            for (const tileData of tileDataArray) {
+            for (const rawTileData of tileDataArray) {
+                const tileData                  = Helpers.deepClone(rawTileData) as Types.WarMapTileViewData;
                 const gridIndex                 = tileData.gridIndex;
+                tileData.skinId                 = players ? players.find(v => v.playerIndex === tileData.playerIndex).unitAndTileSkinId : null;
                 map[gridIndex.x][gridIndex.y]   = tileData;
             }
         }
@@ -175,7 +218,7 @@ namespace TinyWars.WarMap {
             }
         }
 
-        protected abstract _getImageSource(tileData: ISerialTile, tickCount: number): string;
+        protected abstract _getImageSource(tileData: Types.WarMapTileViewData, tickCount: number): string;
         protected abstract _getImageY(gridY: number): number;
     }
 
@@ -199,7 +242,7 @@ namespace TinyWars.WarMap {
     }
 
     class TileObjectLayer extends TileLayerBase {
-        protected _getImageSource(tileData: ISerialTile, tickCount: number): string {
+        protected _getImageSource(tileData: Types.WarMapTileViewData, tickCount: number): string {
             return tileData == null
                 ? undefined
                 : CommonModel.getCachedTileObjectImageSource({
@@ -207,7 +250,7 @@ namespace TinyWars.WarMap {
                     objectType  : tileData.objectType,
                     shapeId     : tileData.objectShapeId || 0,
                     isDark      : false,
-                    skinId      : tileData.playerIndex,
+                    skinId      : tileData.skinId || tileData.playerIndex,
                     tickCount,
                 });
         }
@@ -217,8 +260,20 @@ namespace TinyWars.WarMap {
         }
     }
 
-    class UnitMapView extends egret.DisplayObjectContainer {
-        private readonly _unitViews             : UnitView[] = [];
+    function getMapSize(tileDataArray: ISerialTile[]): MapSize {
+        let width   = 0;
+        let height  = 0;
+        for (const tile of tileDataArray) {
+            const gridIndex = tile.gridIndex;
+            width           = Math.max(gridIndex.x + 1, width);
+            height          = Math.max(gridIndex.y + 1, height);
+        }
+
+        return { width, height };
+    }
+
+    class WarMapUnitMapView extends egret.DisplayObjectContainer {
+        private readonly _unitViews             : WarMapUnitView[] = [];
         private readonly _airLayer              = new egret.DisplayObjectContainer();
         private readonly _groundLayer           = new egret.DisplayObjectContainer();
         private readonly _seaLayer              = new egret.DisplayObjectContainer();
@@ -235,8 +290,11 @@ namespace TinyWars.WarMap {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
         }
 
-        public showUnitMap(mapRawData: ProtoTypes.Map.IMapRawData): void {
-            this._initWithDataList(_createUnitViewDataList(mapRawData.unitDataArray));
+        public showUnitMap({ unitDataArray, players }: {
+            unitDataArray   : WarSerialization.ISerialUnit[];
+            players         : ISerialPlayer[] | null;
+        }): void {
+            this._initWithDataList(_createUnitViewDataList({ unitDataArray, players }));
         }
         private _initWithDataList(dataList: Types.WarMapUnitViewData[]): void {
             this.clear();
@@ -279,10 +337,10 @@ namespace TinyWars.WarMap {
             this._reviseZOrderForSingleLayer(this._seaLayer);
         }
         private _reviseZOrderForSingleLayer(layer: egret.DisplayObjectContainer): void {
-            const unitsCount = layer.numChildren;
-            const unitViews: UnitView[] = [];
+            const unitsCount    = layer.numChildren;
+            const unitViews     : WarMapUnitView[] = [];
             for (let i = 0; i < unitsCount; ++i) {
-                unitViews.push(layer.getChildAt(i) as UnitView);
+                unitViews.push(layer.getChildAt(i) as WarMapUnitView);
             }
             unitViews.sort((v1, v2): number => {
                 const g1 = v1.getData().gridIndex;
@@ -299,7 +357,7 @@ namespace TinyWars.WarMap {
 
         private _addUnit(data: Types.WarMapUnitViewData, tickCount: number): void {
             const unitType = data.unitType;
-            const view     = new UnitView(data, tickCount);
+            const view     = new WarMapUnitView(data, tickCount);
             this._unitViews.push(view);
 
             const configVersion = ConfigManager.getLatestFormalVersion();
@@ -313,76 +371,35 @@ namespace TinyWars.WarMap {
         }
     }
 
-    class UnitView extends egret.DisplayObjectContainer {
-        private _unitImage: UiImage;
-
-        private _data   : Types.WarMapUnitViewData;
-
-        public constructor(data?: Types.WarMapUnitViewData, tickCount?: number) {
-            super();
-
-            const unitImage  = new UiImage();
-            unitImage.bottom = -GRID_HEIGHT;
-            this._unitImage  = unitImage;
-            this.addChild(unitImage);
-
-            (data) && (this.update(data, tickCount));
-        }
-
-        public update(data: Types.WarMapUnitViewData, tickCount?: number): void {
-            const gridIndex = data.gridIndex;
-            this._data = data;
-            this.updateOnAnimationTick(tickCount || TimeModel.getUnitAnimationTickCount());
-            this.x = gridIndex.x * GRID_WIDTH - GRID_WIDTH / 4;
-            this.y = gridIndex.y * GRID_HEIGHT - GRID_HEIGHT / 2;
-        }
-
-        public getData(): Types.WarMapUnitViewData {
-            return this._data;
-        }
-
-        public updateOnAnimationTick(tickCount: number): void {
-            const data = this._data;
-            if (data) {
-                this._unitImage.source = CommonModel.getCachedUnitImageSource({
-                    version     : User.UserModel.getSelfSettingsTextureVersion(),
-                    skinId      : data.skinId,
-                    unitType    : data.unitType,
-                    isMoving    : false,
-                    isDark      : data.unitActionState === Types.UnitActionState.Acted,
-                    tickCount,
-                });
+    function _createUnitViewDataList({ unitDataArray, players }: {
+        unitDataArray   : WarSerialization.ISerialUnit[];
+        players         : ISerialPlayer[] | null;
+    }): Types.WarMapUnitViewData[] {
+        const dataArray: Types.WarMapUnitViewData[] = [];
+        if (unitDataArray) {
+            const loaderUnitIdSet = new Set<number>();
+            for (const unitData of unitDataArray) {
+                const loaderUnitId = unitData.loaderUnitId;
+                if (loaderUnitId == null) {
+                    dataArray.push(Helpers.deepClone(unitData));
+                } else {
+                    loaderUnitIdSet.add(loaderUnitId);
+                }
             }
-        }
-    }
 
-    function _createUnitViewDataList(unitDataList: ProtoTypes.WarSerialization.ISerialUnit[]): Types.WarMapUnitViewData[] {
-        const dataList: Types.WarMapUnitViewData[] = [];
-        if (unitDataList) {
-            for (const unitData of unitDataList) {
-                if (unitData.loaderUnitId == null) {
-                    dataList.push({
-                        gridIndex       : unitData.gridIndex as Types.GridIndex,
-                        skinId          : ConfigManager.getUnitAndTileDefaultSkinId(unitData.playerIndex),
-                        unitType        : unitData.unitType,
-                        unitActionState : unitData.actionState,
-                    });
+            for (const unitData of dataArray) {
+                if (loaderUnitIdSet.has(unitData.unitId)) {
+                    unitData.hasLoadedUnit = true;
+                }
+
+                const playerData = players ? players.find(v => v.playerIndex === unitData.playerIndex) : null;
+                if (playerData) {
+                    unitData.coUsingSkillType   = playerData.coUsingSkillType;
+                    unitData.skinId             = playerData.unitAndTileSkinId;
                 }
             }
         }
 
-        return dataList;
-    }
-
-    function getMapSize(tileDataArray: ISerialTile[]): MapSize {
-        let width   = 0;
-        let height  = 0;
-        for (const tile of tileDataArray) {
-            const gridIndex = tile.gridIndex;
-            width           = Math.max(gridIndex.x + 1, width);
-            height          = Math.max(gridIndex.y + 1, height);
-        }
-
-        return { width, height };
+        return dataArray;
     }
 }

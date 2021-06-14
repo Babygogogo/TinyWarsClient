@@ -7,9 +7,9 @@ namespace TinyWars.ChangeLog {
     import ProtoTypes       = Utility.ProtoTypes;
     import Types            = Utility.Types;
     import ILanguageText    = ProtoTypes.Structure.ILanguageText;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
-    export class ChangeLogAddPanel extends GameUi.UiPanel {
+    export class ChangeLogAddPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -41,7 +41,6 @@ namespace TinyWars.ChangeLog {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight(true);
             this._setIsTouchMaskEnabled(true);
             this._setIsCloseOnTouchedMask();
             this.skinName               = "resource/skins/changeLog/ChangeLogAddPanel.exml";

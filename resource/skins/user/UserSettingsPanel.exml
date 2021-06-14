@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <GameUi:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
+                    scale9Grid="1,1,2,2" />
+    <e:Group id="_group" width="480" height="400" horizontalCenter="0" verticalCenter="0">
+        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
+                        source="commonColorBlack0001" scale9Grid="1,1,2,2" />
+        <e:Scroller id="_scroller" left="0" right="0" top="10" bottom="10">
+            <e:Group x="20" y="0">
+                <e:Group x="10" y="2">
+                    <e:Group x="0" y="0">
+                        <GameUi:UiRadioButton id="_uiRadioLanguage" width="220" height="24" x="90" y="17"
+                                              skinName="Skins.Component.RadioButton.RadioButton001" />
+                        <GameUi:UiRadioButton id="_uiRadioTexture" width="220" height="24" x="100" y="27"
+                                              skinName="Skins.Component.RadioButton.RadioButton001" />
+                        <e:layout>
+                            <e:HorizontalLayout gap="20" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="0" y="44">
+                        <GameUi:UiRadioButton id="_uiRadioUnitAnimation" width="220" height="24" x="80" y="7"
+                                              skinName="Skins.Component.RadioButton.RadioButton001" />
+                        <GameUi:UiRadioButton id="_uiRadioTileAnimation" width="220" height="24" x="90" y="17"
+                                              skinName="Skins.Component.RadioButton.RadioButton001" />
+                        <e:layout>
+                            <e:HorizontalLayout gap="20" />
+                        </e:layout>
+                    </e:Group>
+                    <e:Group x="10" y="54">
+                        <GameUi:UiRadioButton id="_uiRadioShowGridBorder" width="220" height="24" x="80" y="7"
+                                              skinName="Skins.Component.RadioButton.RadioButton001" />
+                        <e:layout>
+                            <e:HorizontalLayout gap="20" />
+                        </e:layout>
+                    </e:Group>
+                    <e:layout>
+                        <e:VerticalLayout gap="10" />
+                    </e:layout>
+                </e:Group>
+                <e:Group id="_groupButtons" y="220" horizontalCenter="0" locked="true">
+                    <GameUi:UiButton id="_btnRankList" label="积分排名" y="300" x="196"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnChangeNickname" label="更改昵称" y="290" x="186"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnChangePassword" label="更改密码" y="290" x="186"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnChangeDiscordId" label="更改Discord ID" y="300" x="196"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnShowOnlineUsers" label="在线玩家" y="310" x="206"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnServerStatus" label="服务器状态" y="330" x="226"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnChat" label="聊天" y="340" x="236"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnComplaint" label="意见反馈" y="340" x="236"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnUnitsInfo" label="部队属性表" y="360" x="256"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnChangeLog" label="更新日志" y="360" x="256"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnSetPrivilege" label="设置权限" y="360" x="256"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnMapManagement" label="管理地图" y="360" x="256"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnSetSound" label="声音设置" y="360" x="256"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnSetStageScaler" label="分辨率设置" y="360" x="256"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
+                    <e:layout>
+                        <e:TileLayout orientation="rows" requestedColumnCount="3" horizontalGap="20" verticalGap="20" />
+                    </e:layout>
+                </e:Group>
+                <e:layout>
+                    <e:VerticalLayout horizontalAlign="center" gap="20" paddingTop="2" />
+                </e:layout>
+            </e:Group>
+        </e:Scroller>
+    </e:Group>
+</e:Skin>

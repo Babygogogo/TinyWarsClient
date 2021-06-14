@@ -2,144 +2,189 @@
 namespace TinyWars.GameUi {
     import Logger = Utility.Logger;
 
-    export class UiTab extends eui.Component {
-        private _bar     : eui.TabBar;  // 页签栏
-        private _page    : eui.Group;   // 页面内容，仅用于占位
+    export class UiTab<DataForTabItemRenderer, DataForPage> extends UiComponent {
+        private readonly _bar           : eui.TabBar;  // 页签栏
+        private readonly _page          : eui.Group;   // 页面内容，仅用于占位
 
-        private _dataProvider    : eui.ArrayCollection;
-        private _barItemRenderer : new () => GameUi.UiListItemRenderer;
-        private _selectedIndex   : number = -1;
+        private _tabDataArray           : DataForUiTab<DataForTabItemRenderer, DataForPage>[] = [];
+        private _selectedIndex          : number;
 
-        public constructor() {
-            super();
+        private _cachedItemRenderer     : new () => UiTabItemRenderer<DataForTabItemRenderer>;
+        private _cachedTabDataArray     : DataForUiTab<DataForTabItemRenderer, DataForPage>[];
+        private _cachedPageDataDict     = new Map<number, DataForPage>();
+        private _cachedSelectedIndex    : number;
 
-            this.addEventListener(egret.Event.COMPLETE, this._onAllSkinPartsAdded, this);
-        }
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._bar,    callback: this._onItemTapBar,       eventType: eui.ItemTapEvent.ITEM_TAP },
+                { ui: this._bar,    callback: this._onTouchBeginBar,    eventType: egret.TouchEvent.TOUCH_BEGIN },
+            ]);
 
-        protected _onAllSkinPartsAdded(e : egret.Event) {
-            if (e.target === this) {
-                this.removeEventListener(egret.Event.COMPLETE, this._onAllSkinPartsAdded, this);
+            const bar               = this._bar;
+            bar.dataProvider        = new eui.ArrayCollection();
+            bar.requireSelection    = true;
 
-                this._bar.addEventListener(eui.ItemTapEvent.ITEM_TAP, this._onTouchedBarItem, this);
-                this._bar.itemRenderer     = this._barItemRenderer;
-                this._bar.dataProvider     = this._dataProvider;
-                this._bar.requireSelection = true;
+            if (this._cachedItemRenderer) {
+                bar.itemRenderer            = this._cachedItemRenderer;
+                this._cachedItemRenderer    = null;
+            }
 
-                if (this._dataProvider) {
-                    this.setSelectedIndex(0);
+            if (this._cachedTabDataArray) {
+                const tabDataArray  = this._cachedTabDataArray;
+                const pageDataDict  = this._cachedPageDataDict;
+                for (const [index, pageData] of pageDataDict) {
+                    if (tabDataArray[index]) {
+                        tabDataArray[index].pageData = pageData;
+                    }
                 }
+                this.bindData(tabDataArray, this._cachedSelectedIndex);
+
+                this._cachedTabDataArray    = null;
+                this._cachedSelectedIndex   = null;
+                pageDataDict.clear();
             }
         }
 
-        private _onTouchedBarItem(e: eui.ItemTapEvent): void {
+        protected async _onClosed(): Promise<void> {
+            this.clear();
+        }
+
+        private _onItemTapBar(e: eui.ItemTapEvent): void {
             const index = e.itemIndex;
-            const data  = (this._dataProvider.getItemAt(index)) as DataForUiTab;
+            const data  = this._getTabDataArray()[index];
             if ((data.callbackOnTouchedItem == null) || (data.callbackOnTouchedItem())) {
-                this.setSelectedIndex(index);
+                this._setSelectedIndex(index);
             } else {
-                this._bar.selectedIndex = this._selectedIndex;
+                this._bar.selectedIndex = this.getSelectedIndex();
             }
         }
+        private _onTouchBeginBar(e: egret.Event): void {
+            Utility.SoundManager.playEffect("button.mp3");
+        }
 
-        public setSelectedIndex(index: number): void {
+        private _setSelectedIndex(index: number): void {
+            if (!this.getIsOpening()) {
+                Logger.error(`UiTab._setSelectedIndex() not opening.`);
+                return;
+            }
+
+            const data = this._getTabDataArray()[index];
+            if (!data) {
+                Logger.error(`UiTab.setSelectedIndex() empty data.`);
+                return;
+            }
+
             this._removeAllCachedPagesFromParent();
             this._bar.selectedIndex = index;
             this._selectedIndex     = index;
 
-            const data = (this._dataProvider.getItemAt(index)) as DataForUiTab;
-            if (data) {
-                data.pageInstance = data.pageInstance || this._createPageInstance(data);
-
-                const pageInstance = data.pageInstance;
-                if (!pageInstance) {
-                    Logger.error("pageInstance is null");
-                } else {
-                    pageInstance.open(this._page, data.pageData);
-                }
+            if (!data.pageInstance) {
+                data.pageInstance = new data.pageClass();
             }
+            data.pageInstance.open(this._page, data.pageData);
         }
-
         public getSelectedIndex() : number {
             return this._selectedIndex;
         }
 
-        public getPageInstance(index : number) : UiTabPage {
-            const data = this._dataProvider.getItemAt(index) as DataForUiTab;
-            if (!data.pageInstance) {
-                data.pageInstance = this._createPageInstance(data);
+        public getPageInstance(index: number) : UiTabPage<DataForPage> {
+            const tabData = this._getTabDataArray()[index];
+            if (!tabData) {
+                return undefined;
+            } else {
+                if (!tabData.pageInstance) {
+                    tabData.pageInstance = new tabData.pageClass();
+                }
+                return tabData.pageInstance;
             }
-            return data.pageInstance;
         }
 
-        public setBarItemRenderer(itemRenderer: new () => GameUi.UiListItemRenderer ): void {
-            this._barItemRenderer = itemRenderer;
-            if (this._bar) {
+        public setBarItemRenderer(itemRenderer: new () => UiTabItemRenderer<DataForTabItemRenderer>): void {
+            if (this.getIsOpening()) {
                 this._bar.itemRenderer = itemRenderer;
+            } else {
+                this._cachedItemRenderer = itemRenderer;
             }
         }
 
-        public bindData(data : DataForUiTab[], selectedIndex : number = 0): void {
-            egret.assert(data.length > 0, "UiTab.bindData() empty data is not allowed!");
-            this.clear();
-
-            this._dataProvider     = new eui.ArrayCollection(data.concat());
-            this._bar.dataProvider = this._dataProvider;
-            this.setSelectedIndex(selectedIndex);
-        }
-
-        public getData() : eui.ArrayCollection {
-            return this._dataProvider;
-        }
-
-        public updateSingleData(index : number, data : DataForUiTab, refreshPage : boolean = true) : void {
-            let dataProvider = this._dataProvider;
-            if (!dataProvider) {
+        public bindData(dataArray: DataForUiTab<DataForTabItemRenderer, DataForPage>[], selectedIndex = 0): void {
+            if (!dataArray.length) {
+                Logger.error(`UiTab.bindData() empty data.`);
                 return;
             }
-            egret.assert(index >= 0 && index <= dataProvider.length, "UiTab.updateSingleData() 索引越界!");
 
-            const oldData = dataProvider.getItemAt(index) as DataForUiTab;
-            if (oldData.pageClass == data.pageClass) {
-                data.pageInstance = oldData.pageInstance;
+            if (!this.getIsOpening()) {
+                this._cachedTabDataArray    = dataArray;
+                this._cachedSelectedIndex   = selectedIndex;
+            } else {
+                this.clear();
+                this._getTabDataArray().push(...dataArray);
+
+                const itemDataArray: DataForTabItemRenderer[] = [];
+                for (const tabData of dataArray) {
+                    itemDataArray.push(tabData.tabItemData);
+                }
+                (this._bar.dataProvider as eui.ArrayCollection).source = itemDataArray;
+
+                this._setSelectedIndex(selectedIndex);
+            }
+        }
+
+        private _getTabDataArray(): DataForUiTab<DataForTabItemRenderer, DataForPage>[] {
+            return this._tabDataArray;
+        }
+
+        public updatePageData(index: number, pageData: DataForPage, refreshPage = true): void {
+            if (!this.getIsOpening()) {
+                this._cachedPageDataDict.set(index, pageData);
+                return;
             }
 
-            dataProvider.replaceItemAt(data, index);
+            const tabData = this._getTabDataArray()[index];
+            if (!tabData) {
+                Logger.error(`UiTab.updatePageData() invalid index.`);
+                return;
+            }
+
+            tabData.pageData = pageData;
             if ((index === this.getSelectedIndex()) && (refreshPage)) {
-                this.setSelectedIndex(index);
+                this._setSelectedIndex(index);
             }
         }
 
         public clear() : void {
             this._removeAllCachedPagesFromParent();
-        }
+            this._getTabDataArray().length  = 0;
+            this._selectedIndex             = null;
+            this._cachedItemRenderer        = null;
+            this._cachedSelectedIndex       = null;
+            this._cachedTabDataArray        = null;
+            this._cachedPageDataDict.clear();
 
-        private _createPageInstance(data : DataForUiTab) : UiTabPage | undefined {
-            return new data.pageClass();
+            if (this.getIsOpening()) {
+                (this._bar.dataProvider as eui.ArrayCollection).removeAll();
+            }
         }
 
         private _removeAllCachedPagesFromParent() : void {
-            const dataProvider = this._dataProvider;
-            if (dataProvider) {
-                for (let i = 0; i < dataProvider.length; ++i) {
-                    const pageInstance = (dataProvider.getItemAt(i) as DataForUiTab).pageInstance;
-                    if (pageInstance) {
-                        pageInstance.close();
-                    }
-                }
+            for (const data of this._getTabDataArray()) {
+                const pageInstance = data.pageInstance;
+                (pageInstance) && (pageInstance.close());
             }
         }
     }
 
-    export type DataForUiTab = {
-        callbackOnTouchedItem?: () => boolean;
-        tabItemData          ?: any;
+    type DataForUiTab<DataForTabItemRenderer, DataForPage> = {
+        callbackOnTouchedItem?  : () => boolean;
+        tabItemData?            : DataForTabItemRenderer;
 
-        pageClass : new() => UiTabPage;
-        pageData ?: any;
+        pageClass               : new () => UiTabPage<DataForPage>;
+        pageData?               : DataForPage;
+
         /**
          * 页面的实例。设计意图是作为UiTab的页面缓存使用，因此外部不必提供此值；
          * 但如果提供了，则UiTab会直接使用此实例，而忽略掉pageClassName和pageSkinName属性。
          */
-        pageInstance?: UiTabPage;
+        pageInstance?           : UiTabPage<DataForPage>;
     }
 }

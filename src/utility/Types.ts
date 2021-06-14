@@ -1,114 +1,100 @@
 
 namespace TinyWars.Utility.Types {
-    ////////////////////////////////////////////////////////////////////////////////
-    // Raw war action types.
-    ////////////////////////////////////////////////////////////////////////////////
-    export type RawWarActionContainer = {
-        actionId?                   : number;
-        PlayerDeleteUnit?           : RawWarActionPlayerDeleteUnit;
-        PlayerEndTurn?              : RawWarActionPlayerEndTurn;
-        PlayerProduceUnit?          : RawWarActionPlayerProduceUnit;
-        UnitAttackUnit?             : RawWarActionUnitAttackUnit;
-        UnitAttackTile?             : RawWarActionUnitAttackTile;
-        UnitBeLoaded?               : RawWarActionUnitBeLoaded;
-        UnitBuildTile?              : RawWarActionUnitBuildTile;
-        UnitCaptureTile?            : RawWarActionUnitCaptureTile;
-        UnitDive?                   : RawWarActionUnitDive;
-        UnitDrop?                   : RawWarActionUnitDrop;
-        UnitJoin?                   : RawWarActionUnitJoin;
-        UnitLaunchFlare?            : RawWarActionUnitLaunchFlare;
-        UnitLaunchSilo?             : RawWarActionUnitLaunchSilo;
-        UnitLoadCo?                 : RawWarActionUnitLoadCo;
-        UnitProduceUnit?            : RawWarActionUnitProduceUnit;
-        UnitSupply?                 : RawWarActionUnitSupply;
-        UnitSurface?                : RawWarActionUnitSurface;
-        UnitUseCoSkill?             : RawWarActionUnitUseCoSkill;
-        UnitWait?                   : RawWarActionUnitWait;
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Config types.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    export interface TileCategoryCfg extends ProtoTypes.Config.ITileCategoryCfg {
+        category: TileCategory;
     }
-    export type RawWarActionPlayerDeleteUnit = {
-        gridIndex: GridIndex;
+    export interface UnitCategoryCfg extends ProtoTypes.Config.IUnitCategoryCfg {
+        category: UnitCategory;
     }
-    export type RawWarActionPlayerEndTurn = {
+    export interface TileTemplateCfg extends ProtoTypes.Config.ITileTemplateCfg {
+        version             : string;
+        type                : TileType;
+        defenseAmount       : number;
+        defenseUnitCategory : UnitCategory;
+        visionRange         : number;
     }
-    export type RawWarActionPlayerProduceUnit = {
-        gridIndex   : GridIndex;
+    export interface UnitTemplateCfg extends ProtoTypes.Config.IUnitTemplateCfg {
+        version                 : string;
+        type                    : UnitType;
+        maxHp                   : number;
+        armorType               : ArmorType;
+        isAffectedByLuck        : number;
+        moveRange               : number;
+        moveType                : MoveType;
+        maxFuel                 : number;
+        fuelConsumptionPerTurn  : number;
+        productionCost          : number;
+        visionRange             : number;
+    }
+    export interface DamageChartCfg extends ProtoTypes.Config.IDamageChartCfg {
+        attackerType: UnitType;
+        armorType   : ArmorType;
+        weaponType  : WeaponType;
+    }
+    export interface MoveCostCfg extends ProtoTypes.Config.IMoveCostCfg {
+        tileType    : TileType;
+        moveType    : MoveType;
+    }
+    export interface UnitPromotionCfg extends ProtoTypes.Config.IUnitPromotionCfg {
+        promotion   : number;
+        attackBonus : number;
+        defenseBonus: number;
+    }
+    export interface VisionBonusCfg extends ProtoTypes.Config.IVisionBonusCfg {
         unitType    : UnitType;
-        unitHp      : number;
+        tileType    : TileType;
+        visionBonus : number;
     }
-    export type RawWarActionUnitAttackUnit = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
-        targetGridIndex : GridIndex;
+    export interface BuildableTileCfg extends ProtoTypes.Config.IBuildableTileCfg {
+        unitType        : UnitType;
+        srcBaseType     : TileBaseType;
+        srcObjectType   : TileObjectType;
+        dstBaseType     : TileBaseType;
+        dstObjectType   : TileObjectType;
     }
-    export type RawWarActionUnitAttackTile = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
-        targetGridIndex : GridIndex;
+    export interface PlayerRankCfg extends ProtoTypes.Config.PlayerRankCfg {
+        minScore    : number;
+        rank        : number;
     }
-    export type RawWarActionUnitBeLoaded = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
+    export interface CoBasicCfg extends ProtoTypes.Config.ICoBasicCfg {
+        coId                : number;
+        name                : string;
+        zoneRadius          : number;
+        boardCostPercentage : number;
+        maxLoadCount        : number;
     }
-    export type RawWarActionUnitBuildTile = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
+    export interface CoSkillCfg extends ProtoTypes.Config.ICoSkillCfg {
+        skillId     : number;
+        name        : string;
     }
-    export type RawWarActionUnitCaptureTile = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
-    }
-    export type RawWarActionUnitDive = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
-    }
-    export type RawWarActionUnitDrop = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
-        dropDestinations: DropDestination[];
-    }
-    export type RawWarActionUnitJoin = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
-    }
-    export type RawWarActionUnitLaunchFlare = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
-        targetGridIndex : GridIndex;
-    }
-    export type RawWarActionUnitLaunchSilo = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
-        targetGridIndex : GridIndex;
-    }
-    export type RawWarActionUnitLoadCo = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
-    }
-    export type RawWarActionUnitProduceUnit = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
-    }
-    export type RawWarActionUnitSupply = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
-    }
-    export type RawWarActionUnitSurface = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
-    }
-    export type RawWarActionUnitUseCoSkill = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
-        skillType       : CoSkillType;
-    }
-    export type RawWarActionUnitWait = {
-        path            : GridIndex[];
-        launchUnitId    : number | null;
+    export interface FullConfig extends ProtoTypes.Config.FullConfig {
+        TileCategory    : TileCategoryCfg[];
+        UnitCategory    : UnitCategoryCfg[];
+        TileTemplate    : TileTemplateCfg[];
+        UnitTemplate    : UnitTemplateCfg[];
+        DamageChart     : DamageChartCfg[];
+        MoveCost        : MoveCostCfg[];
+        UnitPromotion   : UnitPromotionCfg[];
+        VisionBonus     : VisionBonusCfg[];
+        BuildableTile   : BuildableTileCfg[];
+        PlayerRank      : PlayerRankCfg[];
+        CoBasic         : CoBasicCfg[];
+        CoSkill         : CoSkillCfg[];
     }
 
     ////////////////////////////////////////////////////////////////////////////////
     // Other types.
     ////////////////////////////////////////////////////////////////////////////////
+    export type UiListener = {
+        ui          : egret.DisplayObject,
+        callback    : (e: egret.Event) => void,
+        eventType?  : string,
+        thisObject? : any,
+    }
+
     export type Size = {
         width : number;
         height: number;
@@ -156,6 +142,13 @@ namespace TinyWars.Utility.Types {
         cost: number;
     }
 
+    export type DamageInfo = {
+        attackerUnitId      : number;
+        targetUnitId        : number | null | undefined;
+        targetTileGridIndex : GridIndex | null | undefined;
+        damage              : number;
+    }
+
     export type DropDestination = {
         unitId      : number;
         gridIndex   : GridIndex;
@@ -167,11 +160,14 @@ namespace TinyWars.Utility.Types {
         TrueVision      = 2,
     }
 
-    export type WarMapUnitViewData = {
-        gridIndex       : GridIndex;
-        skinId          : number;
-        unitType        : UnitType;
-        unitActionState : UnitActionState;
+    export interface WarMapUnitViewData extends ProtoTypes.WarSerialization.ISerialUnit {
+        skinId?             : number;
+        hasLoadedUnit?      : boolean;
+        coUsingSkillType?   : CoSkillType;
+    }
+
+    export interface WarMapTileViewData extends ProtoTypes.WarSerialization.ISerialTile {
+        skinId? : number;
     }
 
     export type MovableArea = {
@@ -190,10 +186,10 @@ namespace TinyWars.Utility.Types {
         flareAmmo   : number | null;
     }
 
-    export type MapSizeAndMaxPlayerIndex = {
-        mapWidth        : number;
-        mapHeight       : number;
-        maxPlayerIndex  : number;
+    export type SpmWarSaveSlotData = {
+        slotIndex   : number;
+        extraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
+        warData     : ProtoTypes.WarSerialization.ISerialWar;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -225,6 +221,11 @@ namespace TinyWars.Utility.Types {
         Red     = 0xFF0000,
         White   = 0xFFFFFF,
         Green   = 0x00FF00,
+    }
+
+    export const enum SoundType {
+        Bgm,
+        Effect,
     }
 
     export const UiState = {
@@ -353,18 +354,18 @@ namespace TinyWars.Utility.Types {
     export const enum TurnPhaseCode {
         WaitBeginTurn       = 0,
         Main                = 1,
-        GetFund,
-        ConsumeFuel,
-        RepairUnitByTile,
-        DestroyUnitsOutOfFuel,
-        RepairUnitByUnit,
-        ActivateMapWeapon,
-        ResetUnitState,
-        ResetVisionForCurrentPlayer,
-        TickTurnAndPlayerIndex,
-        ResetSkillState,
-        ResetVisionForNextPlayer,
-        ResetVotesForDraw,
+        // GetFund,
+        // ConsumeFuel,
+        // RepairUnitByTile,
+        // DestroyUnitsOutOfFuel,
+        // RepairUnitByUnit,
+        // ActivateMapWeapon,
+        // ResetUnitState,
+        // ResetVisionForCurrentPlayer,
+        // TickTurnAndPlayerIndex,
+        // ResetSkillState,
+        // ResetVisionForNextPlayer,
+        // ResetVotesForDraw,
     }
 
     export const enum ActionPlannerState {
@@ -451,6 +452,7 @@ namespace TinyWars.Utility.Types {
     }
 
     export const enum WarType {
+        Undefined   = 0,
         McwStd      = 1,
         McwFog      = 2,
         MrwStd      = 3,
@@ -458,6 +460,13 @@ namespace TinyWars.Utility.Types {
         ScwStd      = 5,
         ScwFog      = 6,
         Me          = 7,
+        Test        = 8,
+        MfwStd      = 9,
+        MfwFog      = 10,
+        SfwStd      = 11,
+        SfwFog      = 12,
+        SrwStd      = 13,
+        SrwFog      = 14,
     }
 
     export const enum MapReviewStatus {
@@ -496,6 +505,7 @@ namespace TinyWars.Utility.Types {
         WarAndTeam      = 2,
         PublicChannel   = 3,
         McrRoom         = 4,
+        MfrRoom         = 5,
     }
 
     export const enum UnitAndTileTextureVersion {
@@ -508,15 +518,18 @@ namespace TinyWars.Utility.Types {
         Incremental = 2,
     }
 
-    export const enum CustomMapInvalidationType {
-        Valid,
-        InvalidMapDesigner,
-        InvalidMapName,
-        InvalidPlayersCount,
-        InvalidUnits,
-        InvalidTiles,
-        InvalidWarRuleList,
-        InvalidWarEventData,
+    export const enum PlayerRuleType {
+        TeamIndex,
+        BannedCoIdArray,
+        InitialFund,
+        IncomeMultiplier,
+        EnergyAddPctOnLoadCo,
+        EnergyGrowthMultiplier,
+        MoveRangeModifier,
+        AttackPowerModifier,
+        VisionRangeModifier,
+        LuckLowerLimit,
+        LuckUpperLimit,
     }
 
     export const enum WarEventDescType {
@@ -548,6 +561,7 @@ namespace TinyWars.Utility.Types {
     }
 
     export const enum WarEventActionType {
-        WarEventActionAddUnit,
+        AddUnit,
+        SetPlayerAliveState,
     }
 }

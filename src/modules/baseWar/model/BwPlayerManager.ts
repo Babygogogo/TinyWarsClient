@@ -1,54 +1,81 @@
 
 namespace TinyWars.BaseWar {
     import Types                = Utility.Types;
-    import ConfigManager        = Utility.ConfigManager;
+    import ClientErrorCode      = Utility.ClientErrorCode;
     import Logger               = Utility.Logger;
+    import CommonConstants      = Utility.CommonConstants;
     import WarSerialization     = Utility.ProtoTypes.WarSerialization;
     import ISerialPlayerManager = WarSerialization.ISerialPlayerManager;
     import ISerialPlayer        = WarSerialization.ISerialPlayer;
     import PlayerAliveState     = Types.PlayerAliveState;
-    import CommonConstants      = ConfigManager.COMMON_CONSTANTS;
 
     export abstract class BwPlayerManager {
         private _players        = new Map<number, BwPlayer>();
         private _war            : BwWar;
 
-        protected abstract _getPlayerClass(): new () => BwPlayer;
         public abstract getAliveWatcherTeamIndexesForSelf(): Set<number>;
 
-        public init(data: ISerialPlayerManager): BwPlayerManager | undefined {
-            const playersMap = this._getPlayersMap();
-            playersMap.clear();
-
-            const playerList = data.players;
-            if ((!playerList) || (!playerList.length)) {
-                Logger.error(`BwPlayerManager.init() empty players! data: ${JSON.stringify(data)}`);
-                return undefined;
+        public init(data: ISerialPlayerManager, configVersion: string): ClientErrorCode {
+            if (data == null) {
+                return ClientErrorCode.BwPlayerManagerInit00;
             }
 
-            for (const d of playerList) {
-                const playerIndex = d.playerIndex;
-                if (playerIndex == null) {
-                    Logger.error(`BwPlayerManager.init() empty playerIndex.`);
-                    return undefined;
-                }
-
-                const player = (new (this._getPlayerClass())()).init(d);
-                if (player == null) {
-                    Logger.error(`BwPlayerManager.init() empty player.`);
-                    return undefined;
-                }
-
-                playersMap.set(playerIndex, player);
+            const playerArray = data.players;
+            if ((!playerArray)                                              ||
+                (playerArray.length < 3)                                    ||
+                (playerArray.length > CommonConstants.WarMaxPlayerIndex + 1)
+            ) {
+                return ClientErrorCode.BwPlayerManagerInit01;
             }
 
-            return this;
+            const newPlayerMap  = new Map<number, BwPlayer>();
+            const skinIdSet     = new Set<number>();
+            for (const playerData of playerArray) {
+                const playerIndex = playerData.playerIndex;
+                if ((playerIndex == null) || (newPlayerMap.has(playerIndex))) {
+                    return ClientErrorCode.BwPlayerManagerInit02;
+                }
+
+                const skinId = playerData.unitAndTileSkinId;
+                if ((skinId == null) || (skinIdSet.has(skinId))) {
+                    return ClientErrorCode.BwPlayerManagerInit03;
+                }
+                skinIdSet.add(skinId);
+
+                const player        = new BwPlayer();
+                const playerError   = player.init(playerData, configVersion);
+                if (playerError) {
+                    return playerError;
+                }
+
+                newPlayerMap.set(playerIndex, player);
+            }
+
+            if (!newPlayerMap.has(CommonConstants.WarNeutralPlayerIndex)) {
+                return ClientErrorCode.BwPlayerManagerInit04;
+            }
+            for (const [playerIndex] of newPlayerMap) {
+                if ((playerIndex > CommonConstants.WarNeutralPlayerIndex) && (!newPlayerMap.has(playerIndex - 1))) {
+                    return ClientErrorCode.BwPlayerManagerInit05;
+                }
+            }
+            if ((newPlayerMap.size < 3) || (newPlayerMap.size > CommonConstants.WarMaxPlayerIndex + 1)) {
+                return ClientErrorCode.BwPlayerManagerInit06;
+            }
+
+            const playerMap = this._getPlayersMap();
+            playerMap.clear();
+            for (const [playerIndex, player] of newPlayerMap) {
+                playerMap.set(playerIndex, player);
+            }
+
+            return ClientErrorCode.NoError;
         }
-        public fastInit(data: ISerialPlayerManager): BwPlayerManager {
+        public fastInit(data: ISerialPlayerManager, configVersion: string): ClientErrorCode {
             for (const d of data.players) {
-                this.getPlayer(d.playerIndex).init(d);
+                this.getPlayer(d.playerIndex).init(d, configVersion);
             }
-            return this;
+            return ClientErrorCode.NoError;
         }
 
         public startRunning(war: BwWar): void {
@@ -72,12 +99,26 @@ namespace TinyWars.BaseWar {
 
             return { players };
         }
-        public serializeForSimulation(): ISerialPlayerManager | undefined {
+        public serializeForCreateSfw(): ISerialPlayerManager | undefined {
             const players: ISerialPlayer[] = [];
             for (const [, player] of this._getPlayersMap()) {
-                const serialPlayer = player.serializeForSimulation();
+                const serialPlayer = player.serializeForCreateSfw();
                 if (serialPlayer == null) {
-                    Logger.error(`BwPlayerManager.serializeForSimulation() empty serialPlayer.`);
+                    Logger.error(`BwPlayerManager.serializeForCreateSfw() empty serialPlayer.`);
+                    return undefined;
+                }
+
+                players.push(serialPlayer);
+            }
+
+            return { players };
+        }
+        public serializeForCreateMfr(): ISerialPlayerManager | undefined {
+            const players: ISerialPlayer[] = [];
+            for (const [, player] of this._getPlayersMap()) {
+                const serialPlayer = player.serializeForCreateMfr();
+                if (serialPlayer == null) {
+                    Logger.error(`BwPlayerManager.serializeForCreateMfr() empty serialPlayer.`);
                     return undefined;
                 }
 
@@ -102,6 +143,13 @@ namespace TinyWars.BaseWar {
         }
         protected _getPlayersMap(): Map<number, BwPlayer> {
             return this._players;
+        }
+        public getAllPlayers(): BwPlayer[] {
+            const players: BwPlayer[] = [];
+            for (const [, player] of this._getPlayersMap()) {
+                players.push(player);
+            }
+            return players;
         }
 
         public getPlayerByUserId(userId: number): BwPlayer | undefined {
@@ -147,7 +195,7 @@ namespace TinyWars.BaseWar {
         public getAlivePlayersCount(includeNeutral: boolean): number {
             let count = 0;
             for (const [playerIndex, player] of this._players) {
-                if ((player.getAliveState() === PlayerAliveState.Alive)                         &&
+                if ((player.getAliveState() !== PlayerAliveState.Dead)                          &&
                     ((includeNeutral) || (playerIndex !== CommonConstants.WarNeutralPlayerIndex))
                 ) {
                     ++count;
@@ -172,11 +220,16 @@ namespace TinyWars.BaseWar {
         public getAliveTeamIndexes(includeNeutral: boolean, ignoredPlayerIndex?: number): Set<number> {
             const indexes = new Set<number>();
             for (const [playerIndex, player] of this._players) {
-                if ((player.getAliveState() === PlayerAliveState.Alive) &&
+                if ((player.getAliveState() !== PlayerAliveState.Dead)  &&
                     (playerIndex !== ignoredPlayerIndex)                &&
                     ((includeNeutral) || (playerIndex !== 0))
                 ) {
-                    indexes.add(player.getTeamIndex());
+                    const teamIndex = player.getTeamIndex();
+                    if (teamIndex == null) {
+                        Logger.error(`BwPlayerManager.getAliveTeamIndexes() empty teamIndex.`);
+                    } else {
+                        indexes.add(teamIndex);
+                    }
                 }
             }
             return indexes;
@@ -197,7 +250,7 @@ namespace TinyWars.BaseWar {
         public getAliveWatcherTeamIndexes(watcherUserId: number): Set<number> {
             const indexes = new Set<number>();
             this.forEachPlayer(false, player => {
-                if (player.getAliveState() === PlayerAliveState.Alive) {
+                if (player.getAliveState() !== PlayerAliveState.Dead) {
                     if ((player.getUserId() === watcherUserId)                  ||
                         (player.getWatchOngoingSrcUserIds().has(watcherUserId))
                     ) {
@@ -210,7 +263,7 @@ namespace TinyWars.BaseWar {
         public checkHasAliveWatcherTeam(watcherUserId: number): boolean {
             for (const [playerIndex, player] of this._players) {
                 if ((playerIndex !== CommonConstants.WarNeutralPlayerIndex) &&
-                    (player.getAliveState() === PlayerAliveState.Alive)
+                    (player.getAliveState() !== PlayerAliveState.Dead)
                 ) {
                     if ((player.getUserId() === watcherUserId) || (player.getWatchOngoingSrcUserIds().has(watcherUserId))) {
                         return true;

@@ -6,20 +6,18 @@ namespace TinyWars.BaseWar {
     import UnitCategory         = Types.UnitCategory;
     import ActionPlannerState   = Types.ActionPlannerState;
 
-    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.ConfigManager.getGridSize();
+    const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = Utility.CommonConstants.GridSize;
 
-    export abstract class BwUnitMapView extends egret.DisplayObjectContainer {
-        private _layerForNaval  = new egret.DisplayObjectContainer();
-        private _layerForGround = new egret.DisplayObjectContainer();
-        private _layerForAir    = new egret.DisplayObjectContainer();
-
-        private _unitMap        : BwUnitMap;
-        private _actionPlanner  : BwActionPlanner;
-
-        private _notifyListeners = [
+    export class BwUnitMapView extends egret.DisplayObjectContainer {
+        private readonly _layerForNaval     = new egret.DisplayObjectContainer();
+        private readonly _layerForGround    = new egret.DisplayObjectContainer();
+        private readonly _layerForAir       = new egret.DisplayObjectContainer();
+        private readonly _notifyListeners   = [
             { type: Notify.Type.UnitAnimationTick,              callback: this._onNotifyUnitAnimationTick },
             { type: Notify.Type.BwActionPlannerStateChanged,    callback: this._onNotifyBwActionPlannerStateChanged },
         ];
+
+        private _unitMap                    : BwUnitMap;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Initializers.
@@ -33,18 +31,16 @@ namespace TinyWars.BaseWar {
         }
 
         public init(unitMap: BwUnitMap): void {
-            this._unitMap = unitMap;
+            this._setUnitMap(unitMap);
 
-            this._layerForAir.removeChildren();
-            this._layerForGround.removeChildren();
-            this._layerForNaval.removeChildren();
-
-            unitMap.forEachUnit(unit => this.addUnit(unit.getView(), false));
+            this._clearAllUnits();
             this._resetZOrderForAllLayers();
         }
 
         public startRunningView(): void {
-            this._actionPlanner = this._unitMap.getWar().getField().getActionPlanner();
+            this._clearAllUnits();
+            this._getUnitMap().forEachUnit(unit => this.addUnit(unit.getView(), false));
+
             Notify.addEventListeners(this._notifyListeners, this);
         }
         public stopRunningView(): void {
@@ -53,6 +49,9 @@ namespace TinyWars.BaseWar {
 
         protected _getUnitMap(): BwUnitMap {
             return this._unitMap;
+        }
+        private _setUnitMap(unitMap: BwUnitMap): void {
+            this._unitMap = unitMap;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +64,7 @@ namespace TinyWars.BaseWar {
             view.y = _GRID_HEIGHT * model.getGridY();
             (model.getLoaderUnitId() != null) && (view.visible = false);
 
-            const layer = this._getLayerByUnitType(model.getType());
+            const layer = this._getLayerByUnitType(model.getUnitType());
             layer.addChild(view);
             (needResetZOrder) && (this._resetZOrderForLayer(layer));
         }
@@ -88,7 +87,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
-            const actionPlanner = this._actionPlanner;
+            const actionPlanner = this._getUnitMap().getWar().getActionPlanner();
             const state         = actionPlanner.getState();
 
             if (state === ActionPlannerState.Idle) {
@@ -154,6 +153,12 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other private functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
+        private _clearAllUnits(): void {
+            this._layerForAir.removeChildren();
+            this._layerForGround.removeChildren();
+            this._layerForNaval.removeChildren();
+        }
+
         private _resetZOrderForLayer(layer: egret.DisplayObjectContainer): void {
             const viewsCount    = layer.numChildren;
             const views         = new Array<BwUnitView>(viewsCount);
@@ -181,7 +186,7 @@ namespace TinyWars.BaseWar {
         }
 
         private _getLayerByUnitType(unitType: Types.UnitType): egret.DisplayObjectContainer | undefined {
-            const version = this._unitMap.getConfigVersion();
+            const version = this._getUnitMap().getWar().getConfigVersion();
             if (Utility.ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Air)) {
                 return this._layerForAir;
             } else if (Utility.ConfigManager.checkIsUnitTypeInCategory(version, unitType, UnitCategory.Ground)) {

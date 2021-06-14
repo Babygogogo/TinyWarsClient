@@ -1,87 +1,149 @@
 
 namespace TinyWars.BaseWar {
-    import Types                    = Utility.Types;
-    import Helpers                  = Utility.Helpers;
-    import GridIndexHelpers         = Utility.GridIndexHelpers;
-    import Logger                   = Utility.Logger;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import VisibilityHelpers        = Utility.VisibilityHelpers;
-    import MapSizeAndMaxPlayerIndex = Types.MapSizeAndMaxPlayerIndex;
-    import GridIndex                = Types.GridIndex;
-    import WarSerialization         = ProtoTypes.WarSerialization;
-    import ISerialUnitMap           = WarSerialization.ISerialUnitMap;
-    import ISerialUnit              = WarSerialization.ISerialUnit;
+    import Types                = Utility.Types;
+    import Helpers              = Utility.Helpers;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
+    import Logger               = Utility.Logger;
+    import ClientErrorCode      = Utility.ClientErrorCode;
+    import ProtoTypes           = Utility.ProtoTypes;
+    import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import ConfigManager        = Utility.ConfigManager;
+    import GridIndex            = Types.GridIndex;
+    import WarSerialization     = ProtoTypes.WarSerialization;
+    import ISerialUnitMap       = WarSerialization.ISerialUnitMap;
+    import ISerialUnit          = WarSerialization.ISerialUnit;
 
-    export abstract class BwUnitMap {
+    export class BwUnitMap {
         private _war            : BwWar;
-        private _configVersion  : string;
         private _nextUnitId     : number;
         private _map            : (BwUnit | undefined)[][];
         private _mapSize        : Types.MapSize;
         private _loadedUnits    : Map<number, BwUnit>;
 
-        private _view   : BwUnitMapView;
+        private readonly _view  = new BwUnitMapView();
 
-        protected abstract _getViewClass(): new () => BwUnitMapView;
-        public abstract getUnitClass(): new () => BwUnit;
-
-        public init(
-            data                    : ISerialUnitMap,
-            configVersion           : string,
-            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
-        ): BwUnitMap | undefined {
-            const nextUnitId = data.nextUnitId;
-            if (nextUnitId == null) {
-                Logger.error(`BwUnitMap.init() empty nextUnitId.`);
-                return undefined;
+        public init({ data, configVersion, mapSize, playersCountUnneutral }: {
+            data                    : ISerialUnitMap;
+            configVersion           : string;
+            mapSize                 : Types.MapSize;
+            playersCountUnneutral   : number;
+        }): ClientErrorCode {
+            if (data == null) {
+                return ClientErrorCode.BwUnitMapInit00;
             }
 
-            const { mapWidth, mapHeight }   = mapSizeAndMaxPlayerIndex;
-            const map                       = Helpers.createEmptyMap<BwUnit>(mapWidth);
-            const loadedUnits               = new Map<number, BwUnit>();
+            const nextUnitId = data.nextUnitId;
+            if (nextUnitId == null) {
+                return ClientErrorCode.BwUnitMapInit01;
+            }
+
+            if (!BwHelpers.checkIsValidMapSize(mapSize)) {
+                return ClientErrorCode.BwUnitMapInit02;
+            }
+
+            const mapWidth      = mapSize.width;
+            const map           = Helpers.createEmptyMap<BwUnit>(mapWidth);
+            const loadedUnits   = new Map<number, BwUnit>();
+            const allUnits      = new Map<number, BwUnit>();
+
             for (const unitData of data.units || []) {
-                const unit = new (this.getUnitClass())().init(unitData, configVersion);
-                if (!unit) {
-                    Logger.error(`BwUnitMap.init() failed to create a unit! unitData: ${JSON.stringify(unitData)}`);
-                    return undefined;
+                const unit      = new BwUnit();
+                const unitError = unit.init(unitData, configVersion);
+                if (unitError) {
+                    return unitError;
                 }
 
                 const gridIndex = unit.getGridIndex();
-                if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, { width: mapWidth, height: mapHeight }))) {
-                    Logger.error(`BwUnitMap.init() invalid gridIndex: ${JSON.stringify(gridIndex)}`);
-                    return undefined;
+                if ((!gridIndex) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
+                    return ClientErrorCode.BwUnitMapInit03;
                 }
 
-                if (unit.getLoaderUnitId() == null) {
-                    map[gridIndex.x][gridIndex.y] = unit;
-                } else {
-                    const unitId = unit.getUnitId();
-                    if (unitId == null) {
-                        Logger.error(`BwUnitMap.init() empty unitId! unitData: ${JSON.stringify(unitData)}`);
-                        return;
-                    }
+                const unitId = unit.getUnitId();
+                if (unitId == null) {
+                    return ClientErrorCode.BwUnitMapInit04;
+                }
+                if (allUnits.has(unitId)) {
+                    return ClientErrorCode.BwUnitMapInit05;
+                }
+                if (unitId >= nextUnitId) {
+                    return ClientErrorCode.BwUnitMapInit06;
+                }
+                allUnits.set(unitId, unit);
+
+                const playerIndex = unit.getPlayerIndex();
+                if ((playerIndex == null) || (playerIndex > playersCountUnneutral)) {
+                    return ClientErrorCode.BwUnitMapInit07;
+                }
+
+                if (unit.getLoaderUnitId() != null) {
                     loadedUnits.set(unitId, unit);
+                } else {
+                    const { x, y } = gridIndex;
+                    if (map[x][y]) {
+                        return ClientErrorCode.BwUnitMapInit08;
+                    }
+
+                    map[x][y] = unit;
                 }
             }
 
-            this._setConfigVersion(configVersion);
+            const loadUnitCounts = new Map<number, number>();
+            for (const [, loadedUnit] of loadedUnits) {
+                const loaderId = loadedUnit.getLoaderUnitId();
+                if (loaderId == null) {
+                    return ClientErrorCode.BwUnitMapInit09;
+                }
+
+                const loader = allUnits.get(loaderId);
+                if (loader == null) {
+                    return ClientErrorCode.BwUnitMapInit10;
+                }
+                if (loader.getPlayerIndex() !== loadedUnit.getPlayerIndex()) {
+                    return ClientErrorCode.BwUnitMapInit11;
+                }
+
+                const gridIndex1 = loader.getGridIndex();
+                const gridIndex2 = loadedUnit.getGridIndex();
+                if ((!gridIndex1) || (!gridIndex2) || (!GridIndexHelpers.checkIsEqual(gridIndex1, gridIndex2))) {
+                    return ClientErrorCode.BwUnitMapInit12;
+                }
+
+                const maxLoadCount  = loader.getMaxLoadUnitsCount();
+                const loadCount     = (loadUnitCounts.get(loaderId) || 0) + 1;
+                if ((maxLoadCount == null) || (loadCount > maxLoadCount)) {
+                    return ClientErrorCode.BwUnitMapInit13;
+                }
+                loadUnitCounts.set(loaderId, loadCount);
+
+                const unitType = loadedUnit.getUnitType();
+                if (unitType == null) {
+                    return ClientErrorCode.BwUnitMapInit14;
+                }
+
+                const loadUnitCategory = loader.getLoadUnitCategory();
+                if ((loadUnitCategory == null)                                                          ||
+                    (!ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, loadUnitCategory))
+                ) {
+                    return ClientErrorCode.BwUnitMapInit15;
+                }
+            }
+
             this._setMap(map);
             this._setLoadedUnits(loadedUnits);
-            this._setMapSize(mapWidth, mapHeight);
+            this._setMapSize(mapWidth, mapSize.height);
             this.setNextUnitId(nextUnitId);
 
-            const view = this.getView() || new (this._getViewClass())();
-            view.init(this);
-            this._setView(view);
+            this.getView().init(this);
 
-            return this;
+            return ClientErrorCode.NoError;
         }
-        public async fastInit(
-            data                    : ISerialUnitMap | null | undefined,
-            configVersion           : string,
-            mapSizeAndMaxPlayerIndex: MapSizeAndMaxPlayerIndex,
-        ): Promise<BwUnitMap> {
-            return this.init(data, configVersion, mapSizeAndMaxPlayerIndex);
+        public fastInit({ data, configVersion, mapSize, playersCountUnneutral }: {
+            data                    : ISerialUnitMap | null | undefined;
+            configVersion           : string;
+            mapSize                 : Types.MapSize;
+            playersCountUnneutral   : number;
+        }): ClientErrorCode {
+            return this.init({ data, configVersion, mapSize, playersCountUnneutral });
         }
 
         public startRunning(war: BwWar): void {
@@ -107,7 +169,7 @@ namespace TinyWars.BaseWar {
             }
 
             const units: ISerialUnit[] = [];
-            for (const unit of this._getAllUnits()) {
+            for (const unit of this.getAllUnits()) {
                 const serializedUnit = unit.serialize();
                 if (!serializedUnit) {
                     Logger.error(`BwUnitMap.serialize() empty serializedUnit.`);
@@ -122,10 +184,10 @@ namespace TinyWars.BaseWar {
                 nextUnitId,
             };
         }
-        public serializeForSimulation(): ISerialUnitMap | undefined {
+        public serializeForCreateSfw(): ISerialUnitMap | undefined {
             const nextUnitId = this.getNextUnitId();
             if (nextUnitId == null) {
-                Logger.error(`BwUnitMap.serializeForSimulation() empty nextUnitId.`);
+                Logger.error(`BwUnitMap.serializeForCreateSfw() empty nextUnitId.`);
                 return undefined;
             }
 
@@ -133,11 +195,36 @@ namespace TinyWars.BaseWar {
             const units         : ISerialUnit[] = [];
             const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             for (const unit of VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
-                units.push(unit.serializeForSimulation());
+                units.push(unit.serializeForCreateSfw());
 
                 if (teamIndexes.has(unit.getTeamIndex())) {
                     for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
-                        units.push(loadedUnit.serializeForSimulation());
+                        units.push(loadedUnit.serializeForCreateSfw());
+                    }
+                }
+            }
+
+            return {
+                units,
+                nextUnitId,
+            };
+        }
+        public serializeForCreateMfr(): ISerialUnitMap | undefined {
+            const nextUnitId = this.getNextUnitId();
+            if (nextUnitId == null) {
+                Logger.error(`BwUnitMap.serializeForCreateMfr() empty nextUnitId.`);
+                return undefined;
+            }
+
+            const war           = this.getWar();
+            const units         : ISerialUnit[] = [];
+            const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+            for (const unit of VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes)) {
+                units.push(unit.serializeForCreateMfr());
+
+                if (teamIndexes.has(unit.getTeamIndex())) {
+                    for (const loadedUnit of this.getUnitsLoadedByLoader(unit, true)) {
+                        units.push(loadedUnit.serializeForCreateMfr());
                     }
                 }
             }
@@ -158,9 +245,6 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Other public functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _setView(view: BwUnitMapView): void {
-            this._view = view;
-        }
         public getView(): BwUnitMapView {
             return this._view;
         }
@@ -170,13 +254,6 @@ namespace TinyWars.BaseWar {
         }
         public getWar(): BwWar {
             return this._war;
-        }
-
-        private _setConfigVersion(configVersion: string): void {
-            this._configVersion = configVersion;
-        }
-        public getConfigVersion(): string {
-            return this._configVersion;
         }
 
         private _setMapSize(width: number, height: number): void {
@@ -241,7 +318,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            const unitType = unit.getType();
+            const unitType = unit.getUnitType();
             if (unitType == null) {
                 Logger.error(`BwUnitMap.getVisibleUnitOnMap() empty unitType.`);
                 return undefined;
@@ -308,7 +385,7 @@ namespace TinyWars.BaseWar {
             this.forEachUnitOnMap(unit => units.push(unit));
             return units;
         }
-        protected _getAllUnits(): BwUnit[] {
+        public getAllUnits(): BwUnit[] {
             const units = this._getAllUnitsOnMap();
             this.forEachUnitLoaded(unit => units.push(unit));
             return units;

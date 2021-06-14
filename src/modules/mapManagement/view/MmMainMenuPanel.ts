@@ -5,7 +5,7 @@ namespace TinyWars.MapManagement {
     import Notify       = Utility.Notify;
     import FloatText    = Utility.FloatText;
 
-    export class MmMainMenuPanel extends GameUi.UiPanel {
+    export class MmMainMenuPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -13,7 +13,7 @@ namespace TinyWars.MapManagement {
 
         private _labelMenuTitle : GameUi.UiLabel;
         private _btnBack        : GameUi.UiButton;
-        private _listCommand    : GameUi.UiScrollList;
+        private _listCommand    : GameUi.UiScrollList<DataForCommandRenderer>;
 
         public static show(): void {
             if (!MmMainMenuPanel._instance) {
@@ -31,7 +31,6 @@ namespace TinyWars.MapManagement {
         private constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this.skinName = "resource/skins/mapManagement/MmMainMenuPanel.exml";
         }
 
@@ -50,16 +49,12 @@ namespace TinyWars.MapManagement {
             this._listCommand.bindData(await this._createDataForListCommand());
         }
 
-        protected async _onClosed(): Promise<void> {
-            this._listCommand.clear();
-        }
-
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
         private _onTouchedBtnBack(e: egret.TouchEvent): void {
             this.close();
-            Lobby.LobbyPanel.show();
+            FlowManager.gotoLobby();
         }
         private _onMsgUserLogout(e: egret.Event): void {
             this.close();
@@ -114,18 +109,16 @@ namespace TinyWars.MapManagement {
         callback: () => void;
     }
 
-    class CommandRenderer extends GameUi.UiListItemRenderer {
+    class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
         private _labelCommand: GameUi.UiLabel;
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
-            const data = this.data as DataForCommandRenderer;
+        protected _onDataChanged(): void {
+            const data = this.data;
             this._labelCommand.text = data.name;
         }
 
         public onItemTapEvent(e: eui.ItemTapEvent): void {
-            (this.data as DataForCommandRenderer).callback();
+            this.data.callback();
         }
     }
 }

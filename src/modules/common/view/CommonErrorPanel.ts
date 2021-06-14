@@ -7,7 +7,7 @@ namespace TinyWars.Common {
         callback?   : () => any;
     }
 
-    export class CommonErrorPanel extends GameUi.UiPanel {
+    export class CommonErrorPanel extends GameUi.UiPanel<OpenDataForCommonErrorPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Top;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -34,7 +34,6 @@ namespace TinyWars.Common {
             super();
 
             this.skinName = "resource/skins/common/CommonErrorPanel.exml";
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
         }
 
@@ -45,11 +44,11 @@ namespace TinyWars.Common {
 
             this._btnClose.label    = Lang.getText(Lang.Type.B0026);
             this._labelTitle.text   = Lang.getText(Lang.Type.A0056);
-            this._labelContent.setRichText(this._getOpenData<OpenDataForCommonErrorPanel>().content);
+            this._labelContent.setRichText(this._getOpenData().content);
         }
 
         private _onTouchedBtnClose(e: egret.TouchEvent): void {
-            const openData = this._getOpenData<OpenDataForCommonErrorPanel>();
+            const openData = this._getOpenData();
             (openData.callback) && (openData.callback());
 
             this.close();

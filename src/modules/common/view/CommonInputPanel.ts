@@ -12,7 +12,7 @@ namespace TinyWars.Common {
         callback        : (panel: CommonInputPanel) => any;
     }
 
-    export class CommonInputPanel extends GameUi.UiPanel {
+    export class CommonInputPanel extends GameUi.UiPanel<OpenDataForCommonInputPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -42,7 +42,6 @@ namespace TinyWars.Common {
             super();
 
             this.skinName = "resource/skins/common/CommonInputPanel.exml";
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
         }
 
@@ -59,7 +58,7 @@ namespace TinyWars.Common {
             this._showOpenAnimation();
             this._updateComponentsForLanguage();
 
-            const openData          = this._getOpenData<OpenDataForCommonInputPanel>();
+            const openData          = this._getOpenData();
             this._labelTitle.text   = openData.title;
             this._labelTips.text    = openData.tips;
             this._input.text        = openData.currentValue;
@@ -79,13 +78,13 @@ namespace TinyWars.Common {
         }
 
         private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            this._getOpenData<OpenDataForCommonInputPanel>().callback(this);
+            this._getOpenData().callback(this);
             this.close();
         }
 
         private _onFocusOutInput(e: egret.Event): void {
             if (!this._input.text) {
-                this._input.text = this._getOpenData<OpenDataForCommonInputPanel>().currentValue;
+                this._input.text = this._getOpenData().currentValue;
             }
         }
 

@@ -1,15 +1,9 @@
 
 namespace TinyWars.GameUi {
-    import Notify   = Utility.Notify;
+    import Notify       = Utility.Notify;
+    import UiListener   = Utility.Types.UiListener;
 
-    type UiListener = {
-        ui         : egret.DisplayObject,
-        callback   : (e: egret.Event) => void,
-        eventType ?: string,
-        thisObject?: any,
-    }
-
-    export class UiListItemRenderer extends eui.ItemRenderer {
+    export class UiListItemRenderer<DataForRenderer> extends eui.ItemRenderer {
         private _isChildrenCreated  = false;
         private _isSkinLoaded       = false;
         private _isOpening          = false;
@@ -17,12 +11,17 @@ namespace TinyWars.GameUi {
         private _notifyListenerArray: Notify.Listener[];
         private _uiListenerArray    : UiListener[];
 
+        private _isDataChangedBeforeOpen    = false;
+        public data                         : DataForRenderer;
+
         public constructor() {
             super();
 
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.once(egret.Event.COMPLETE, this._onSkinLoaded, this);
         }
+
+        public onItemTapEvent(e: eui.ItemTapEvent): void {}
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -61,6 +60,11 @@ namespace TinyWars.GameUi {
 
                 this._onOpened();
                 this._registerListeners();
+
+                if (this._getIsDataChangedBeforeOpen()) {
+                    this._setIsDataChangedBeforeOpen(false);
+                    this._onDataChanged();
+                }
             }
         }
         private _doClose(): void {
@@ -87,6 +91,23 @@ namespace TinyWars.GameUi {
         }
         private _setIsOpening(opening: boolean): void {
             this._isOpening = opening;
+        }
+
+        protected _onDataChanged(): void {}
+        protected dataChanged(): void {
+            super.dataChanged();
+
+            if (this._getIsOpening()) {
+                this._onDataChanged();
+            } else {
+                this._setIsDataChangedBeforeOpen(true);
+            }
+        }
+        private _getIsDataChangedBeforeOpen(): boolean {
+            return this._isDataChangedBeforeOpen;
+        }
+        private _setIsDataChangedBeforeOpen(isChanged: boolean): void {
+            this._isDataChangedBeforeOpen = isChanged;
         }
 
         protected _setNotifyListenerArray(array: Notify.Listener[]): void {

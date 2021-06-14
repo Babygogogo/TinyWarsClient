@@ -8,13 +8,13 @@ namespace TinyWars.BaseWar {
     import ProtoTypes       = Utility.ProtoTypes;
     import UnitType         = Types.UnitType;
     import TileType         = Types.TileType;
-    import CommonConstants  = ConfigManager.COMMON_CONSTANTS;
+    import CommonConstants  = Utility.CommonConstants;
 
     export type OpenDataForBwUnitDetailPanel = {
         unit: BwUnit;
     }
 
-    export class BwUnitDetailPanel extends GameUi.UiPanel {
+    export class BwUnitDetailPanel extends GameUi.UiPanel<OpenDataForBwUnitDetailPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
@@ -25,8 +25,8 @@ namespace TinyWars.BaseWar {
         private _labelName          : GameUi.UiLabel;
         private _btnUnitsInfo       : GameUi.UiButton;
 
-        private _listInfo           : GameUi.UiScrollList;
-        private _listDamageChart    : GameUi.UiScrollList;
+        private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
+        private _listDamageChart    : GameUi.UiScrollList<DataForDamageRenderer>;
         private _labelDamageChart   : GameUi.UiLabel;
         private _labelOffenseMain1  : GameUi.UiLabel;
         private _labelOffenseSub1   : GameUi.UiLabel;
@@ -59,7 +59,6 @@ namespace TinyWars.BaseWar {
         public constructor() {
             super();
 
-            this._setIsAutoAdjustHeight();
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
             this.skinName = `resource/skins/baseWar/BwUnitDetailPanel.exml`;
@@ -82,8 +81,6 @@ namespace TinyWars.BaseWar {
             this._updateView();
         }
         protected async _onClosed(): Promise<void> {
-            this._listDamageChart.clear();
-            this._listInfo.clear();
             this._dataForList = null;
         }
 
@@ -95,12 +92,6 @@ namespace TinyWars.BaseWar {
         }
 
         private _onNotifyUnitAnimationTick(e: egret.Event): void {
-            const viewList = this._listDamageChart.getViewList();
-            for (let i = 0; i < viewList.numChildren; ++i) {
-                const child = viewList.getChildAt(i);
-                (child instanceof DamageRenderer) && (child.updateOnUnitAnimationTick());
-            }
-
             this._unitView.updateOnAnimationTick(Time.TimeModel.getUnitAnimationTickCount());
         }
         private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
@@ -136,24 +127,23 @@ namespace TinyWars.BaseWar {
         }
 
         private _updateUnitViewAndLabelName(): void {
-            const unit              = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
-            this._labelName.text    = Lang.getUnitName(unit.getType());
+            const unit              = this._getOpenData().unit;
+            this._labelName.text    = Lang.getUnitName(unit.getUnitType());
             this._unitView.update({
                 gridIndex       : { x: 0, y: 0},
                 skinId          : unit.getSkinId(),
-                unitType        : unit.getType(),
-                unitActionState : unit.getActionState(),
+                unitType        : unit.getUnitType(),
+                actionState     : unit.getActionState(),
             }, Time.TimeModel.getUnitAnimationTickCount());
         }
 
         private _updateListInfo(): void {
-            const unit          = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
+            const unit          = this._getOpenData().unit;
             const configVersion = unit.getConfigVersion();
-            const unitType      = unit.getType();
+            const unitType      = unit.getUnitType();
             const cfg           = ConfigManager.getUnitTemplateCfg(configVersion, unitType);
             const war           = unit.getWar();
-            const isCheating    = (unit instanceof MapEditor.MeUnit)
-                || ((war instanceof SingleCustomWar.ScwWar) && (war.getIsSinglePlayerCheating()));
+            const isCheating    = war.getCanCheat();
 
             const dataList: DataForInfoRenderer[] = [
                 this._createInfoHp(unit, cfg, isCheating),
@@ -555,14 +545,7 @@ namespace TinyWars.BaseWar {
                         unit.updateView();
                         this._updateListInfo();
 
-                        const war       = unit.getWar();
-                        const player    = unit.getPlayer();
-                        war.getTileMap().getView().updateCoZone();
-                        if (war.getUnitMap().checkIsCoLoadedByAnyUnit(player.getPlayerIndex())) {
-                            player.setCoCurrentEnergy(player.getCoCurrentEnergy() || 0);
-                        } else {
-                            player.setCoCurrentEnergy(null);
-                        }
+                        unit.getWar().getTileMap().getView().updateCoZone();
                     },
             };
         }
@@ -573,12 +556,12 @@ namespace TinyWars.BaseWar {
         }
 
         private _createDataForListDamageChart(): DataForDamageRenderer[] {
-            const unit              = this._getOpenData<OpenDataForBwUnitDetailPanel>().unit;
+            const unit              = this._getOpenData().unit;
             const configVersion     = unit.getConfigVersion();
-            const attackUnitType    = unit.getType();
+            const attackUnitType    = unit.getUnitType();
             const playerIndex       = unit.getPlayerIndex();
 
-            const dataList = [] as DataForDamageRenderer[];
+            const dataList: DataForDamageRenderer[] = [];
             for (const targetUnitType of ConfigManager.getUnitTypesByCategory(configVersion, Types.UnitCategory.All)) {
                 dataList.push({
                     configVersion,
@@ -609,25 +592,25 @@ namespace TinyWars.BaseWar {
         callbackOnTouchedTitle  : (() => void) | null;
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer {
+    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
         private _labelValue : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
-
-            this._btnTitle.addEventListener(egret.TouchEvent.TOUCH_TAP, this._onTouchedBtnTitle, this);
+        protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnTitle, callback: this._onTouchedBtnTitle },
+            ]);
         }
 
-        protected dataChanged(): void {
-            const data              = this.data as DataForInfoRenderer;
+        protected _onDataChanged(): void {
+            const data              = this.data;
             this._labelValue.text   = data.valueText;
             this._btnTitle.label    = data.titleText;
             this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
         }
 
         private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-            const data      = this.data as DataForInfoRenderer;
+            const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());
         }
@@ -641,7 +624,7 @@ namespace TinyWars.BaseWar {
         targetTileType? : TileType;
     }
 
-    class DamageRenderer extends GameUi.UiListItemRenderer {
+    class DamageRenderer extends GameUi.UiListItemRenderer<DataForDamageRenderer> {
         private _group                  : eui.Group;
         private _conView                : eui.Group;
         private _unitView               : WarMap.WarMapUnitView;
@@ -651,22 +634,22 @@ namespace TinyWars.BaseWar {
         private _labelPrimaryDefend     : GameUi.UiLabel;
         private _labelSecondaryDefend   : GameUi.UiLabel;
 
-        protected childrenCreated(): void {
-            super.childrenCreated();
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.UnitAnimationTick,  callback: this._onNotifyUnitAnimationTick },
+            ]);
 
             this._unitView = new WarMap.WarMapUnitView();
             this._conView.addChild(this._unitView);
         }
 
-        public updateOnUnitAnimationTick(): void {
+        private _onNotifyUnitAnimationTick(): void {
             if (this.data) {
                 this._unitView.updateOnAnimationTick(Time.TimeModel.getUnitAnimationTickCount());
             }
         }
 
-        protected dataChanged(): void {
-            super.dataChanged();
-
+        protected _onDataChanged(): void {
             this._updateView();
         }
 
@@ -674,7 +657,7 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateView(): void {
-            const data              = this.data as DataForDamageRenderer;
+            const data              = this.data;
             const configVersion     = data.configVersion;
             const attackUnitType    = data.attackUnitType;
             const targetUnitType    = data.targetUnitType;
@@ -684,8 +667,8 @@ namespace TinyWars.BaseWar {
                 this._unitView.update({
                     gridIndex       : { x: 0, y: 0 },
                     unitType        : targetUnitType,
-                    skinId          : data.playerIndex,
-                    unitActionState : Types.UnitActionState.Idle,
+                    playerIndex     : data.playerIndex,
+                    actionState     : Types.UnitActionState.Idle,
                 }, Time.TimeModel.getUnitAnimationTickCount());
 
                 const attackCfg                 = ConfigManager.getDamageChartCfgs(configVersion, attackUnitType);

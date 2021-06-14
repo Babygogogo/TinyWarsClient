@@ -1,26 +1,22 @@
 
 namespace TinyWars.MapEditor {
     export class MeField extends BaseWar.BwField {
-        protected _getFogMapClass(): new () => BaseWar.BwFogMap {
-            return MeFogMap;
+        private readonly _fogMap        = new MeFogMap();
+        private readonly _tileMap       = new BaseWar.BwTileMap();
+        private readonly _unitMap       = new BaseWar.BwUnitMap();
+        private readonly _actionPlanner = new MeActionPlanner();
+
+        public getFogMap(): MeFogMap {
+            return this._fogMap;
         }
-        protected _getTileMapClass(): new () => BaseWar.BwTileMap {
-            return MeTileMap;
+        public getTileMap(): BaseWar.BwTileMap {
+            return this._tileMap;
         }
-        protected _getUnitMapClass(): new () => BaseWar.BwUnitMap {
-            return MeUnitMap;
+        public getUnitMap(): BaseWar.BwUnitMap {
+            return this._unitMap;
         }
-        protected _getCursorClass(): new () => BaseWar.BwCursor {
-            return MeCursor;
-        }
-        protected _getActionPlannerClass(): new () => BaseWar.BwActionPlanner {
-            return MeActionPlanner;
-        }
-        protected _getGridVisionEffectClass(): new () => BaseWar.BwGridVisionEffect {
-            return MeGridVisionEffect;
-        }
-        protected _getViewClass(): new () => BaseWar.BwFieldView {
-            return MeFieldView;
+        public getActionPlanner(): MeActionPlanner {
+            return this._actionPlanner;
         }
 
         public getMaxPlayerIndex(): number {
