@@ -3822,16 +3822,16 @@ namespace TinyWars.Utility.Lang {
             `Player [%s] is defeated!`,
         ],
         [Type.F0017]: [
-            `玩家[%s]已拒绝和局！`,
-            `Player [%s] declines to end the game in draw!`,
+            `P%d [%s] 已拒绝和局！`,
+            `P%d [%s] declines to end the game in draw!`,
         ],
         [Type.F0018]: [
-            `玩家[%s]已同意和局！`,
-            `Player [%s] agrees to end the game in draw!`,
+            `P%d [%s] 已同意和局！`,
+            `P%d [%s] agrees to end the game in draw!`,
         ],
         [Type.F0019]: [
-            `玩家[%s]求和！`,
-            `Player [%s] requests to end the game in draw!`,
+            `P%d [%s] 求和！`,
+            `P%d [%s] requests to end the game in draw!`,
         ],
         [Type.F0020]: [
             `最多%d字，可留空`,

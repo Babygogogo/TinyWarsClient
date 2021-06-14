@@ -12,6 +12,7 @@ namespace TinyWars.TestWar {
     import WarSerialization         = ProtoTypes.WarSerialization;
     import ISerialWar               = WarSerialization.ISerialWar;
     import IMapRawData              = ProtoTypes.Map.IMapRawData;
+    import WarAction                = ProtoTypes.WarAction;
 
     export class TwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new TwPlayerManager();
@@ -41,6 +42,82 @@ namespace TinyWars.TestWar {
 
         public updateTilesAndUnitsOnVisibilityChanged(): void {
             // nothing to do.
+        }
+
+        public async getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeSystemCallWarEvent(action: WarAction.IWarActionSystemCallWarEvent): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitAttackUnit(action: WarAction.IWarActionUnitAttackUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitBeLoaded(action: WarAction.IWarActionUnitBeLoaded): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitBuildTile(action: WarAction.IWarActionUnitBuildTile): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitCaptureTile(action: WarAction.IWarActionUnitCaptureTile): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitDive(action: WarAction.IWarActionUnitDive): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitDropUnit(action: WarAction.IWarActionUnitDropUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitJoinUnit(action: WarAction.IWarActionUnitJoinUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitLaunchFlare(action: WarAction.IWarActionUnitLaunchFlare): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitLaunchSilo(action: WarAction.IWarActionUnitLaunchSilo): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitLoadCo(action: WarAction.IWarActionUnitLoadCo): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitProduceUnit(action: WarAction.IWarActionUnitProduceUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitSupplyUnit(action: WarAction.IWarActionUnitSupplyUnit): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitSurface(action: WarAction.IWarActionUnitSurface): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | undefined> {
+            return undefined;
         }
 
         public async init(data: ISerialWar): Promise<ClientErrorCode> {

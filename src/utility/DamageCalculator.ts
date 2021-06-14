@@ -406,8 +406,9 @@ namespace TinyWars.Utility.DamageCalculator {
         for (const info of battleDamageInfoArray) {
             const infoTargetUnitId      = info.targetUnitId;
             const infoAttackerUnitId    = info.attackerUnitId;
+            const targetTileGridIndex   = info.targetTileGridIndex;
             if (attackerUnitId === infoAttackerUnitId) {
-                if ((GridIndexHelpers.checkIsEqual(targetGridIndex, info.targetTileGridIndex as GridIndex))                                             ||
+                if ((targetTileGridIndex != null) && (GridIndexHelpers.checkIsEqual(targetGridIndex, targetTileGridIndex as GridIndex))                     ||
                     ((infoTargetUnitId != null) && (GridIndexHelpers.checkIsEqual(targetGridIndex, unitMap.getUnitById(infoTargetUnitId).getGridIndex())))
                 ) {
                     attackDamage = (attackDamage || 0) + info.damage;

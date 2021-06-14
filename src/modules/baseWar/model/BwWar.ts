@@ -3,9 +3,9 @@ namespace TinyWars.BaseWar {
     import Logger           = Utility.Logger;
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
-    import Helpers          = Utility.Helpers;
     import ConfigManager    = Utility.ConfigManager;
     import ClientErrorCode  = Utility.ClientErrorCode;
+    import WarAction        = ProtoTypes.WarAction;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
 
     export abstract class BwWar {
@@ -31,6 +31,31 @@ namespace TinyWars.BaseWar {
         public abstract getCommonSettingManager(): BwCommonSettingManager;
         public abstract getWarEventManager(): BaseWar.BwWarEventManager;
         public abstract updateTilesAndUnitsOnVisibilityChanged(): void;
+        public abstract getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | undefined>;
+        public abstract getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | undefined>;
+        public abstract getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | undefined>;
+        public abstract getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | undefined>;
+        public abstract getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | undefined>;
+        public abstract getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | undefined>;
+        public abstract getDescForExeSystemCallWarEvent(action: WarAction.IWarActionSystemCallWarEvent): Promise<string | undefined>;
+        public abstract getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | undefined>;
+        public abstract getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined>;
+        public abstract getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined>;
+        public abstract getDescForExeUnitAttackUnit(action: WarAction.IWarActionUnitAttackUnit): Promise<string | undefined>;
+        public abstract getDescForExeUnitBeLoaded(action: WarAction.IWarActionUnitBeLoaded): Promise<string | undefined>;
+        public abstract getDescForExeUnitBuildTile(action: WarAction.IWarActionUnitBuildTile): Promise<string | undefined>;
+        public abstract getDescForExeUnitCaptureTile(action: WarAction.IWarActionUnitCaptureTile): Promise<string | undefined>;
+        public abstract getDescForExeUnitDive(action: WarAction.IWarActionUnitDive): Promise<string | undefined>;
+        public abstract getDescForExeUnitDropUnit(action: WarAction.IWarActionUnitDropUnit): Promise<string | undefined>;
+        public abstract getDescForExeUnitJoinUnit(action: WarAction.IWarActionUnitJoinUnit): Promise<string | undefined>;
+        public abstract getDescForExeUnitLaunchFlare(action: WarAction.IWarActionUnitLaunchFlare): Promise<string | undefined>;
+        public abstract getDescForExeUnitLaunchSilo(action: WarAction.IWarActionUnitLaunchSilo): Promise<string | undefined>;
+        public abstract getDescForExeUnitLoadCo(action: WarAction.IWarActionUnitLoadCo): Promise<string | undefined>;
+        public abstract getDescForExeUnitProduceUnit(action: WarAction.IWarActionUnitProduceUnit): Promise<string | undefined>;
+        public abstract getDescForExeUnitSupplyUnit(action: WarAction.IWarActionUnitSupplyUnit): Promise<string | undefined>;
+        public abstract getDescForExeUnitSurface(action: WarAction.IWarActionUnitSurface): Promise<string | undefined>;
+        public abstract getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | undefined>;
+        public abstract getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | undefined>;
 
         protected async _baseInit(data: ISerialWar): Promise<ClientErrorCode> {
             const settingsForCommon = data.settingsForCommon;

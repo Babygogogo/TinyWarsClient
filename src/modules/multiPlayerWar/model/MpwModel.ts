@@ -279,14 +279,12 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
             return;
         }
 
-        war.setIsExecutingAction(true);
         war.getExecutedActionManager().addExecutedAction(container);
 
-        const errorCode = BaseWar.BwWarActionExecutor.checkAndExecute(war, container, false);
+        const errorCode = await BaseWar.BwWarActionExecutor.checkAndExecute(war, container, false);
         if (errorCode) {
             Logger.error(`MpwModel.checkAndRunFirstCachedAction() errorCode: ${errorCode}.`);
         }
-        war.setIsExecutingAction(false);
 
         const playerManager     = war.getPlayerManager();
         const remainingVotes    = war.getDrawVoteManager().getRemainingVotes();

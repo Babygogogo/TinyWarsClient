@@ -10,7 +10,8 @@ namespace TinyWars.ReplayWar {
     import ProtoTypes           = Utility.ProtoTypes;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
     import WarType              = Types.WarType;
-    import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
+    import WarAction            = ProtoTypes.WarAction;
+    import IWarActionContainer  = WarAction.IWarActionContainer;
     import ISerialWar           = ProtoTypes.WarSerialization.ISerialWar;
 
     type CheckPointData = {
@@ -88,6 +89,97 @@ namespace TinyWars.ReplayWar {
                 tile.flushDataToView();
             });
             tileMap.getView().updateCoZone();
+        }
+
+        public async getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0081)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | undefined> {
+            return `${Lang.getFormattedText(Lang.Type.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn())} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExePlayerProduceUnit(action: WarAction.IWarActionPlayerProduceUnit): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(action.unitType)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | undefined> {
+            return `${await this.getPlayerInTurn().getNickname()} ${Lang.getText(action.isBoot ? Lang.Type.B0396: Lang.Type.B0055)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | undefined> {
+            const nickname      = await this.getPlayerInTurn().getNickname();
+            const playerIndex   = this.getPlayerIndexInTurn();
+            const suffix        = this._getDescSuffix();
+            if (!action.isAgree) {
+                return `${Lang.getFormattedText(Lang.Type.F0017, playerIndex, nickname)} ${suffix}`;
+            } else {
+                if (this.getDrawVoteManager().getRemainingVotes()) {
+                    return `${Lang.getFormattedText(Lang.Type.F0018, playerIndex, nickname)} ${suffix}`;
+                } else {
+                    return `${Lang.getFormattedText(Lang.Type.F0019, playerIndex, nickname)} ${suffix}`;
+                }
+            }
+        }
+        public async getDescForExeSystemBeginTurn(action: WarAction.IWarActionSystemBeginTurn): Promise<string | undefined> {
+            return `P${this.getPlayerIndexInTurn()} ${await this.getPlayerInTurn().getNickname()} ${Lang.getText(Lang.Type.B0094)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeSystemCallWarEvent(action: WarAction.IWarActionSystemCallWarEvent): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0451)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeSystemDestroyPlayerForce(action: WarAction.IWarActionSystemDestroyPlayerForce): Promise<string | undefined> {
+            const playerIndex = action.targetPlayerIndex;
+            return `P${playerIndex} ${await this.getPlayer(playerIndex).getNickname()}${Lang.getText(Lang.Type.B0450)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0087)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0097)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitAttackUnit(action: WarAction.IWarActionUnitAttackUnit): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0097)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitBeLoaded(action: WarAction.IWarActionUnitBeLoaded): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0098)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitBuildTile(action: WarAction.IWarActionUnitBuildTile): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0099)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitCaptureTile(action: WarAction.IWarActionUnitCaptureTile): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0100)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitDive(action: WarAction.IWarActionUnitDive): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0101)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitDropUnit(action: WarAction.IWarActionUnitDropUnit): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0102)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitJoinUnit(action: WarAction.IWarActionUnitJoinUnit): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0103)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitLaunchFlare(action: WarAction.IWarActionUnitLaunchFlare): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0104)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitLaunchSilo(action: WarAction.IWarActionUnitLaunchSilo): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0105)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitLoadCo(action: WarAction.IWarActionUnitLoadCo): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0139)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitProduceUnit(action: WarAction.IWarActionUnitProduceUnit): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0106)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitSupplyUnit(action: WarAction.IWarActionUnitSupplyUnit): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0107)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitSurface(action: WarAction.IWarActionUnitSurface): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0108)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitUseCoSkill(action: WarAction.IWarActionUnitUseCoSkill): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0142)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeUnitWait(action: WarAction.IWarActionUnitWait): Promise<string | undefined> {
+            return `${Lang.getText(Lang.Type.B0109)} ${this._getDescSuffix()}`;
+        }
+        private _getDescSuffix(): string {
+            return `(${this.getNextActionId()} / ${this.getTotalActionsCount()} ${Lang.getText(Lang.Type.B0191)}: ${this.getTurnManager().getTurnIndex()})`;
         }
 
         public serializeForCheckPoint(): CheckPointData {
@@ -256,7 +348,7 @@ namespace TinyWars.ReplayWar {
                 Notify.dispatch(Notify.Type.ReplayAutoReplayChanged);
 
                 if ((isAuto) && (!this.getIsExecutingAction()) && (!this.checkIsInEnd())) {
-                    RwActionExecutor.executeNextAction(this, false);
+                    this._executeNextAction(false);
                 }
             }
         }
@@ -292,7 +384,7 @@ namespace TinyWars.ReplayWar {
 
             while (!this.getCheckPointData(checkPointId)) {
                 await Helpers.checkAndCallLater();
-                await RwActionExecutor.executeNextAction(this, true);
+                await this._executeNextAction(true);
             }
             this.stopRunning();
             await Helpers.checkAndCallLater();
@@ -338,6 +430,7 @@ namespace TinyWars.ReplayWar {
                 initialState    : warData.seedRandomInitialState,
                 currentState    : warData.seedRandomCurrentState,
             });
+            this.setIsEnded(this.checkIsInEnd());
 
             await Helpers.checkAndCallLater();
             this._fastInitView();
@@ -348,6 +441,52 @@ namespace TinyWars.ReplayWar {
         }
         public getNextAction(): IWarActionContainer {
             return this.getExecutedActionManager().getExecutedAction(this.getNextActionId());
+        }
+
+        private async _executeNextAction(isFastExecute: boolean): Promise<void> {
+            const action = this.getNextAction();
+            if ((action == null)            ||
+                (!this.getIsRunning())       ||
+                (this.checkIsInEnd())        ||
+                (this.getIsExecutingAction())
+            ) {
+                FloatText.show(Lang.getText(Lang.Type.B0110));
+            } else {
+                await this._doExecuteAction(action, isFastExecute);
+            }
+        }
+        private async _doExecuteAction(action: IWarActionContainer, isFastExecute: boolean): Promise<void> {
+            this.setNextActionId(this.getNextActionId() + 1);
+            const errorCode = await BaseWar.BwWarActionExecutor.checkAndExecute(this, action, isFastExecute);
+            if (errorCode) {
+                Logger.error(`RwWar._doExecuteAction() errorCode: ${errorCode}`);
+            }
+
+            const isInEnd = this.checkIsInEnd();
+            if (isInEnd) {
+                this.setIsAutoReplay(false);
+            }
+
+            const actionId          = this.getNextActionId();
+            const turnManager       = this.getTurnManager();
+            const prevCheckPointId  = this.getCheckPointId(actionId - 1);
+            const prevTurnData      = this.getCheckPointData(prevCheckPointId).warData.turnManager;
+            const isNewCheckPoint   = (isInEnd) || (turnManager.getTurnIndex() !== prevTurnData.turnIndex) || (turnManager.getPlayerIndexInTurn() !== prevTurnData.playerIndex);
+            const checkPointId      = isNewCheckPoint ? prevCheckPointId + 1 : prevCheckPointId;
+            if (this.getCheckPointId(actionId) == null) {
+                this.setCheckPointId(actionId, checkPointId);
+            }
+            if (this.getCheckPointData(checkPointId) == null) {
+                this.setCheckPointData(checkPointId, this.serializeForCheckPoint());
+            }
+
+            if ((!isInEnd) && (this.getIsAutoReplay()) && (!this.getIsExecutingAction()) && (this.getIsRunning())) {
+                egret.setTimeout(() => {
+                    if ((!this.checkIsInEnd()) && (this.getIsAutoReplay()) && (!this.getIsExecutingAction()) && (this.getIsRunning())) {
+                        this._doExecuteAction(this.getNextAction(), isFastExecute);
+                    }
+                }, undefined, 1000);
+            }
         }
     }
 }

@@ -357,10 +357,8 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     // Helpers.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function checkAndCallLater(): Promise<void> {
-        if (Date.now() - _frameBeginTime <= 13) {
-            return;
-        } else {
-            return new Promise<void>((resolve, reject) => {
+        if (Date.now() - _frameBeginTime > 13) {
+            await new Promise<void>((resolve, reject) => {
                 egret.callLater(() => {
                     _frameBeginTime = Date.now();
                     resolve();
@@ -1856,25 +1854,6 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                     * (unit2.getHasLoadedCo() ? 2 : 1)
                     * (_DAMAGE_SCORE_SCALERS[unitType1][unitType2] || 1);
 
-                if (isUnitDestroyed) {
-                    for (const loadedUnit of unitMap.getUnitsLoadedByLoader(unit2, true)) {
-                        const loadedUnitHp = loadedUnit.getCurrentHp();
-                        if (loadedUnitHp == null) {
-                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_15 };
-                        }
-
-                        const loadedUnitProductionCost = loadedUnit.getProductionBaseCost();
-                        if (loadedUnitProductionCost == null) {
-                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_16 };
-                        }
-
-                        score += (loadedUnitHp + 20)
-                            * loadedUnitProductionCost / 3000
-                            * (isSelfDamaged ? 1 / Math.max(1, unitValueRatio) : Math.max(1, unitValueRatio))
-                            * (loadedUnit.getHasLoadedCo() ? 2 : 1);
-                    }
-                }
-
                 if (unit2.getIsCapturingTile()) {
                     const unitOriginGridIndex2 = unit2.getGridIndex();
                     if (unitOriginGridIndex2 == null) {
@@ -1911,6 +1890,25 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                         ) {
                             score *= 5;
                         }
+                    }
+                }
+
+                if (isUnitDestroyed) {
+                    for (const loadedUnit of unitMap.getUnitsLoadedByLoader(unit2, true)) {
+                        const loadedUnitHp = loadedUnit.getCurrentHp();
+                        if (loadedUnitHp == null) {
+                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_15 };
+                        }
+
+                        const loadedUnitProductionCost = loadedUnit.getProductionBaseCost();
+                        if (loadedUnitProductionCost == null) {
+                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_16 };
+                        }
+
+                        score += (loadedUnitHp + 20)
+                            * loadedUnitProductionCost / 3000
+                            * (isSelfDamaged ? 1 / Math.max(1, unitValueRatio) : Math.max(1, unitValueRatio))
+                            * (loadedUnit.getHasLoadedCo() ? 2 : 1);
                     }
                 }
 

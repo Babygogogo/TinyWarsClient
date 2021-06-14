@@ -356,7 +356,6 @@ namespace TinyWars.BaseWar {
             const actionPlanner = this._actionPlanner;
             if (actionPlanner) {
                 const con       = this._conForSiloArea;
-                const gridIndex = this._cursor.getGridIndex();
                 const state     = actionPlanner.getState();
 
                 if (state === ActionPlannerState.Idle) {
@@ -408,13 +407,7 @@ namespace TinyWars.BaseWar {
                 const labelDamage   = this._getLabelDamage();
                 const state         = actionPlanner.getState();
 
-                if (state === ActionPlannerState.Idle) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.ExecutingAction) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.MakingMovePath) {
+                if (state === ActionPlannerState.MakingMovePath) {
                     const war           = cursor.getWar();
                     const unitMap       = war.getUnitMap();
                     const attackerUnit  = actionPlanner.getFocusUnit();
@@ -450,9 +443,6 @@ namespace TinyWars.BaseWar {
                             this._updatePositionForConForDamage();
                         }
                     }
-
-                } else if (state === ActionPlannerState.ChoosingAction) {
-                    con.visible = false;
 
                 } else if (state === ActionPlannerState.ChoosingAttackTarget) {
                     const war           = cursor.getWar();
@@ -491,26 +481,8 @@ namespace TinyWars.BaseWar {
                         }
                     }
 
-                } else if (state === ActionPlannerState.ChoosingDropDestination) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.ChoosingFlareDestination) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.ChoosingSiloDestination) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.ChoosingProductionTarget) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.PreviewingAttackableArea) {
-                    con.visible = false;
-
-                } else if (state === ActionPlannerState.PreviewingMovableArea) {
-                    con.visible = false;
-
                 } else {
-                    Logger.error(`BwCursorView._updateConForDamage() invalid state: ${state}.`);
+                    con.visible = false;
                 }
             }
         }
