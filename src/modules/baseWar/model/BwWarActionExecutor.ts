@@ -455,7 +455,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const targetTileGridIndex = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const targetTileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (targetTileGridIndex == null) {
                         return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_00;
                     }
@@ -632,7 +632,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const gridIndex2 = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2 = tileMap.getTile(gridIndex2);
                         if (tile2 == null) {
@@ -749,7 +749,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const targetTileGridIndex = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const targetTileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (targetTileGridIndex == null) {
                         return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_00;
                     }
@@ -980,7 +980,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const gridIndex2 = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2 = tileMap.getTile(gridIndex2);
                         if (tile2 == null) {
@@ -1113,7 +1113,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const targetTileGridIndex = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const targetTileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (targetTileGridIndex == null) {
                         return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_00;
                     }
@@ -1290,7 +1290,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const gridIndex2 = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2 = tileMap.getTile(gridIndex2);
                         if (tile2 == null) {
@@ -1407,7 +1407,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const targetTileGridIndex = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const targetTileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (targetTileGridIndex == null) {
                         return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_00;
                     }
@@ -1638,7 +1638,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const gridIndex2 = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2 = tileMap.getTile(gridIndex2);
                         if (tile2 == null) {

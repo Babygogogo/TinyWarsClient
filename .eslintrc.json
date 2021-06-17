@@ -15,8 +15,9 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "no-shadow": "warn",
+        "no-shadow": "error",
         "no-inner-declarations": "off",
-        "@typescript-eslint/no-namespace": "off"
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/ban-ts-comment": "off"
     }
 }

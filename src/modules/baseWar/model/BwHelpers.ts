@@ -36,21 +36,21 @@ namespace TinyWars.BaseWar.BwHelpers {
         origin          : GridIndex;
         maxMoveCost     : number;
         mapSize         : MapSize;
-        moveCostGetter  : (g: GridIndex) => number | undefined;
+        moveCostGetter  : (g: GridIndex) => number | undefined | null;
     }): MovableArea {
         const area              = [] as MovableArea;
         const availableGrids    = [] as AvailableMovableGrid[];
-        _updateAvailableGrids(availableGrids, 0, origin, undefined, 0);
+        _updateAvailableGrids({ grids: availableGrids, index: 0, gridIndex: origin, prev: undefined, totalMoveCost: 0 });
 
         let index = 0;
         while (index < availableGrids.length) {
             const availableGrid                     = _sortAvailableMovableGrids(availableGrids, index);
             const { currGridIndex, totalMoveCost }  = availableGrid;
-            if (_checkAndUpdateMovableArea(area, currGridIndex, availableGrid.prevGridIndex, totalMoveCost)) {
+            if (_checkAndUpdateMovableArea({ area, gridIndex: currGridIndex, prev: availableGrid.prevGridIndex, totalMoveCost })) {
                 for (const nextGridIndex of GridIndexHelpers.getAdjacentGrids(currGridIndex, mapSize)) {
                     const nextMoveCost = moveCostGetter(nextGridIndex);
                     if ((nextMoveCost != null) && (nextMoveCost + totalMoveCost <= maxMoveCost)) {
-                        _updateAvailableGrids(availableGrids, index + 1, nextGridIndex, currGridIndex, nextMoveCost + totalMoveCost);
+                        _updateAvailableGrids({ grids: availableGrids, index: index + 1, gridIndex: nextGridIndex, prev: currGridIndex, totalMoveCost: nextMoveCost + totalMoveCost });
                     }
                 }
             }
@@ -98,9 +98,9 @@ namespace TinyWars.BaseWar.BwHelpers {
     }
 
     export function createShortestMovePath(area: MovableArea, destination: GridIndex): MovePathNode[] {
-        const reversedPath = [] as MovePathNode[];
-        let gridIndex   = destination;
-        let movableNode = area[gridIndex.x][gridIndex.y];
+        const reversedPath  : MovePathNode[] = [];
+        let gridIndex       : GridIndex | undefined = destination;
+        let movableNode     = area[gridIndex.x][gridIndex.y];
 
         for (;;) {
             reversedPath.push({
@@ -130,7 +130,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_01 };
         }
 
-        const beginningGridIndex = convertGridIndex(rawPathNodes[0]);
+        const beginningGridIndex = GridIndexHelpers.convertGridIndex(rawPathNodes[0]);
         if (beginningGridIndex == null) {
             return { errorCode: ClientErrorCode.BwHelpers_GetRevisedPath_02 };
         }
@@ -182,7 +182,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         let rawTotalFuelConsumption     = 0;
         let isBlocked                   = false;
         for (let i = 1; i < rawPathNodes.length; ++i) {
-            const gridIndex = convertGridIndex(rawPathNodes[i]);
+            const gridIndex = GridIndexHelpers.convertGridIndex(rawPathNodes[i]);
             if ((!gridIndex)                                                                        ||
                 (!GridIndexHelpers.checkIsAdjacent(gridIndex, rawPathNodes[i - 1] as GridIndex))    ||
                 (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))                            ||
@@ -313,7 +313,7 @@ namespace TinyWars.BaseWar.BwHelpers {
     export function createDistanceMap(tileMap: BwTileMap, unit: BwUnit, destination: GridIndex): { distanceMap: (number | null)[][], maxDistance: number } {
         const area          : MovableArea = [];
         const availableGrids: AvailableMovableGrid[] = [];
-        _updateAvailableGrids(availableGrids, 0, destination, null, 0);
+        _updateAvailableGrids({ grids: availableGrids, index: 0, gridIndex: destination, prev: undefined, totalMoveCost: 0 });
 
         const mapSize   = tileMap.getMapSize();
         let index       = 0;
@@ -321,11 +321,11 @@ namespace TinyWars.BaseWar.BwHelpers {
             const availableGrid     = _sortAvailableMovableGrids(availableGrids, index);
             const currentGridIndex  = availableGrid.currGridIndex;
             const totalMoveCost     = availableGrid.totalMoveCost;
-            if (_checkAndUpdateMovableArea(area, currentGridIndex, availableGrid.prevGridIndex, totalMoveCost)) {
+            if (_checkAndUpdateMovableArea({ area, gridIndex: currentGridIndex, prev: availableGrid.prevGridIndex, totalMoveCost })) {
                 const nextMoveCost = tileMap.getTile(currentGridIndex).getMoveCostByUnit(unit);
                 if (nextMoveCost != null) {
                     for (const nextGridIndex of GridIndexHelpers.getAdjacentGrids(currentGridIndex, mapSize)) {
-                        _updateAvailableGrids(availableGrids, index, nextGridIndex, currentGridIndex, totalMoveCost + nextMoveCost);
+                        _updateAvailableGrids({ grids: availableGrids, index, gridIndex: nextGridIndex, prev: currentGridIndex, totalMoveCost: totalMoveCost + nextMoveCost });
                     }
                 }
             }
@@ -351,7 +351,7 @@ namespace TinyWars.BaseWar.BwHelpers {
     export function findNearestCapturableTile(tileMap: BwTileMap, unitMap: BwUnitMap, unit: BwUnit): BwTile | null {
         const area          : MovableArea = [];
         const availableGrids: AvailableMovableGrid[] = [];
-        _updateAvailableGrids(availableGrids, 0, unit.getGridIndex(), null, 0);
+        _updateAvailableGrids({ grids: availableGrids, index: 0, gridIndex: unit.getGridIndex(), prev: undefined, totalMoveCost: 0 });
 
         const teamIndex = unit.getTeamIndex();
         const mapSize   = tileMap.getMapSize();
@@ -369,11 +369,11 @@ namespace TinyWars.BaseWar.BwHelpers {
             ) {
                 return tile;
             } else {
-                if (_checkAndUpdateMovableArea(area, currentGridIndex, availableGrid.prevGridIndex, totalMoveCost)) {
+                if (_checkAndUpdateMovableArea({ area, gridIndex: currentGridIndex, prev: availableGrid.prevGridIndex, totalMoveCost })) {
                     for (const nextGridIndex of GridIndexHelpers.getAdjacentGrids(currentGridIndex, mapSize)) {
                         const nextMoveCost = tileMap.getTile(nextGridIndex).getMoveCostByUnit(unit);
                         if (nextMoveCost != null) {
-                            _updateAvailableGrids(availableGrids, index, nextGridIndex, currentGridIndex, totalMoveCost + nextMoveCost);
+                            _updateAvailableGrids({ grids: availableGrids, index, gridIndex: nextGridIndex, prev: currentGridIndex, totalMoveCost: totalMoveCost + nextMoveCost });
                         }
                     }
                 }
@@ -385,7 +385,13 @@ namespace TinyWars.BaseWar.BwHelpers {
         return null;
     }
 
-    function _updateAvailableGrids(grids: AvailableMovableGrid[], index: number, gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): void {
+    function _updateAvailableGrids({ grids, index, gridIndex, prev, totalMoveCost }: {
+        grids           : AvailableMovableGrid[];
+        index           : number;
+        gridIndex       : GridIndex;
+        prev            : GridIndex | undefined;
+        totalMoveCost   : number;
+    }): void {
         const newNode: AvailableMovableGrid = {
             currGridIndex: gridIndex,
             prevGridIndex: prev ? { x: prev.x, y: prev.y } : undefined,
@@ -403,7 +409,12 @@ namespace TinyWars.BaseWar.BwHelpers {
 
         grids.push(newNode);
     }
-    function _checkAndUpdateMovableArea(area: MovableArea, gridIndex: GridIndex, prev: GridIndex, totalMoveCost: number): boolean {
+    function _checkAndUpdateMovableArea({ area, gridIndex, prev, totalMoveCost }: {
+        area            : MovableArea;
+        gridIndex       : GridIndex;
+        prev            : GridIndex | undefined;
+        totalMoveCost   : number;
+    }): boolean {
         const { x, y } = gridIndex;
         area[x] = area[x] || [];
 
@@ -454,12 +465,6 @@ namespace TinyWars.BaseWar.BwHelpers {
             Logger.error(`BwHelpers.checkIsGridIndexInsideSkillArea() invalid areaType: ${coSkillAreaType}`);
             return undefined;
         }
-    }
-
-    export function convertGridIndex(raw: IGridIndex | undefined | null): GridIndex | undefined {
-        return ((!raw) || (raw.x == null) || (raw.y == null))
-            ? undefined
-            : raw as GridIndex;
     }
 
     export function getNormalizedHp(hp: number): number {
@@ -638,7 +643,13 @@ namespace TinyWars.BaseWar.BwHelpers {
             const unitMap       = war.getUnitMap();
             const configVersion = war.getConfigVersion();
             for (const unitData of unitsData) {
-                if (!unitMap.getUnitById(unitData.unitId)) {
+                const unitId = unitData.unitId;
+                if (unitId == null) {
+                    Logger.error(`BwHelpers.addUnitsBeforeExecutingAction() empty unitId.`);
+                    continue;
+                }
+
+                if (!unitMap.getUnitById(unitId)) {
                     const unit = new BaseWar.BwUnit();
                     unit.init(unitData, configVersion);
 
@@ -659,16 +670,22 @@ namespace TinyWars.BaseWar.BwHelpers {
         if ((tilesData) && (tilesData.length)) {
             const tileMap   = war.getTileMap();
             for (const tileData of tilesData) {
-                const gridIndex = BwHelpers.convertGridIndex(tileData.gridIndex);
+                const gridIndex = GridIndexHelpers.convertGridIndex(tileData.gridIndex);
                 if (gridIndex == null) {
                     Logger.error(`BwHelpers.updateTilesBeforeExecutingAction() empty gridIndex.`);
                     return undefined;
                 }
 
-                const tile = tileMap.getTile(gridIndex);
+                const tile          = tileMap.getTile(gridIndex);
+                const configVersion = tile.getConfigVersion();
+                if (configVersion == null) {
+                    Logger.error(`BwHelpers.updateTilesBeforeExecutingAction() empty configVersion.`);
+                    return undefined;
+                }
+
                 if (tile.getHasFog()) {
                     tile.setHasFog(false);
-                    tile.deserialize(tileData, tile.getConfigVersion());
+                    tile.deserialize(tileData, configVersion);
                 }
             }
         }
@@ -680,12 +697,19 @@ namespace TinyWars.BaseWar.BwHelpers {
         gridIndex   : GridIndex,
         skillId     : number,
         extraData   : ProtoTypes.Structure.IDataForUseCoSkill
-    ): void {
+    ): ClientErrorCode {
         const configVersion = war.getConfigVersion();
         const skillCfg      = ConfigManager.getCoSkillCfg(configVersion, skillId);
+        if (skillCfg == null) {
+            return ClientErrorCode.BwHelpers_ExeInstantSkill_00;
+        }
+
         const playerIndex   = player.getPlayerIndex();
         const unitMap       = war.getUnitMap();
         const zoneRadius    = player.getCoZoneRadius();
+        if (zoneRadius == null) {
+            return ClientErrorCode.BwHelpers_ExeInstantSkill_01;
+        }
 
         if (skillCfg.selfHpGain) {
             const cfg       = skillCfg.selfHpGain;
@@ -981,6 +1005,8 @@ namespace TinyWars.BaseWar.BwHelpers {
                 }
             });
         }
+
+        return ClientErrorCode.NoError;
     }
 
     export function getAdjacentPlasmas(tileMap: BwTileMap, origin: GridIndex): GridIndex[] {
@@ -1081,7 +1107,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         return needSerialize ? data : undefined;
     }
 
-    export function getMapId(warData: ISerialWar): number | undefined {
+    export function getMapId(warData: ISerialWar): number | undefined | null {
         if (warData.settingsForMcw) {
             return warData.settingsForMcw.mapId;
         } else if (warData.settingsForMrw) {
@@ -1134,7 +1160,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         );
     }
 
-    export function getImageSourceForSkinId(skinId: number, isSelected: boolean): string {
+    export function getImageSourceForSkinId(skinId: number, isSelected: boolean): string | undefined {
         if (skinId === 1) {
             return isSelected ? `commonCircle0000` : `commonCircle0001`;
         } else if (skinId === 2) {
@@ -1157,7 +1183,7 @@ namespace TinyWars.BaseWar.BwHelpers {
         mapSize                 : Types.MapSize | null | undefined;
         playersCountUnneutral   : number | null | undefined;
     }): ClientErrorCode {
-        const gridIndex = convertGridIndex(unitData.gridIndex);
+        const gridIndex = GridIndexHelpers.convertGridIndex(unitData.gridIndex);
         if (gridIndex == null) {
             return ClientErrorCode.UnitDataValidation00;
         }

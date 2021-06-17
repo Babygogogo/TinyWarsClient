@@ -68,7 +68,7 @@ namespace TinyWars.Utility.StageManager {
         return _mouseY;
     }
 
-    export function getLayer(layer: LayerType): UiLayer {
+    export function getLayer(layer: LayerType): UiLayer | undefined {
         return _LAYERS.get(layer);
     }
 
@@ -91,9 +91,14 @@ namespace TinyWars.Utility.StageManager {
     }
 
     function _addLayer(layerType: LayerType): void {
-        egret.assert(!_LAYERS.has(layerType), "LayerManager.addLayer() duplicated layer: " + layerType);
-        _LAYERS.set(layerType, new UiLayer());
-        StageManager.getStage().addChild(_LAYERS.get(layerType));
+        if (_LAYERS.has(layerType)) {
+            Logger.error(`StageManager._addLayer() duplicated layer: ${layerType}.`);
+            return;
+        }
+
+        const layer = new UiLayer();
+        _LAYERS.set(layerType, layer);
+        StageManager.getStage().addChild(layer);
     }
 
     function _onMouseMove(e: egret.TouchEvent): void {

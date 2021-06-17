@@ -51,7 +51,7 @@ namespace TinyWars.Utility.Helpers {
     }
 
     export function formatString(...args: (number | string)[]): string {
-        let i = 0, a, f = args[i++] as string, o = [], m, p, c, x, s = '';
+        let i = 0, a: any, f = args[i++] as string, o = [], m: any[] | null, p, c, x, s = '';
         while (f) {
             if (m = /^[^\x25]+/.exec(f)) {
                 o.push(m[0]);
@@ -99,7 +99,7 @@ namespace TinyWars.Utility.Helpers {
         return (new Array(times + 1)).join(str);
     }
 
-    export function getSuffixForRank(rank: number): string {
+    export function getSuffixForRank(rank: number): string | undefined {
         if (rank == null) {
             return undefined;
         } else {
@@ -125,6 +125,7 @@ namespace TinyWars.Utility.Helpers {
             if ((color === ColorType.Gray) || (color === ColorType.Dark)) {
                 obj.filters = [COLOR_MATRIX_FILTERS[color]];
             } else if (color === ColorType.Origin) {
+                // @ts-ignore
                 obj.filters = undefined;
             } else {
                 obj.filters = [new egret.ColorMatrixFilter(getColorMatrix(color, value))];
@@ -136,17 +137,13 @@ namespace TinyWars.Utility.Helpers {
         const name = getMessageName(container);
         return name == null ? undefined : MessageCodes[name as any] as any;
     }
-    export function getMessageName(container: IMessageContainer): string | undefined {
+    export function getMessageName(container: IMessageContainer): (keyof IMessageContainer) | undefined {
         for (const k in container) {
-            return k;
+            return k as keyof IMessageContainer;
         }
         return undefined;
     }
 
-    export function getWarActionCode(container: IWarActionContainer): WarActionCodes | null {
-        const name = getWarActionName(container);
-        return name == null ? null : WarActionCodes[name];
-    }
     export function getWarActionName(container: IWarActionContainer): string | null {
         for (const k in container) {
             if (k !== "actionId") {
@@ -240,11 +237,7 @@ namespace TinyWars.Utility.Helpers {
     }
 
     export function pickRandomElement<T>(list: T[]): T {
-        if (!list) {
-            return undefined;
-        } else {
-            return list[Math.floor(Math.random() * list.length)];
-        }
+        return list[Math.floor(Math.random() * list.length)];
     }
     export function deleteElementFromArray<T>(arr: T[], element: T, maxDeleteCount = Number.MAX_VALUE): number {
         let index       = 0;
@@ -260,7 +253,7 @@ namespace TinyWars.Utility.Helpers {
         return deleteCount;
     }
     export function checkHasElement<T>(arr: T[], element: T): boolean {
-        return arr ? arr.indexOf(element) >= 0 : undefined;
+        return arr.indexOf(element) >= 0;
     }
 
     /** 获取一个整数的位数。不计负数的符号；0-9计为1；10-99计为2；以此类推 */
@@ -371,11 +364,9 @@ namespace TinyWars.Utility.Helpers {
     }
 
     let _frameBeginTime = 0;
-    export function checkAndCallLater(): Promise<void> {  // DONE
-        if (Date.now() - _frameBeginTime <= 13) {
-            return;
-        } else {
-            return new Promise<void>((resolve, reject) => {
+    export async function checkAndCallLater(): Promise<void> {  // DONE
+        if (Date.now() - _frameBeginTime > 13) {
+            await new Promise<void>((resolve, reject) => {
                 egret.callLater(() => {
                     _frameBeginTime = Date.now();
                     resolve();
@@ -384,7 +375,7 @@ namespace TinyWars.Utility.Helpers {
         }
     }
 
-    function getColorMatrix(color: Types.ColorType, value = 100): number[] {
+    function getColorMatrix(color: Types.ColorType, value = 100): number[] | undefined {
         switch (color) {
             case Types.ColorType.Blue:
                 return [
@@ -464,27 +455,27 @@ namespace TinyWars.Utility.Helpers {
          * These are the functions you'll usually want to call
          * They take string arguments and return either hex or base-64 encoded strings
          */
-        export function hex_sha1(s) {
+        export function hex_sha1(s: string) {
             return rstr2hex(rstr_sha1(str2rstr_utf8(s)));
         }
 
-        export function b64_sha1(s) {
+        export function b64_sha1(s: string) {
             return rstr2b64(rstr_sha1(str2rstr_utf8(s)));
         }
 
-        export function any_sha1(s, e) {
+        export function any_sha1(s: string, e: string) {
             return rstr2any(rstr_sha1(str2rstr_utf8(s)), e);
         }
 
-        export function hex_hmac_sha1(k, d) {
+        export function hex_hmac_sha1(k: string, d: string) {
             return rstr2hex(rstr_hmac_sha1(str2rstr_utf8(k), str2rstr_utf8(d)));
         }
 
-        export function b64_hmac_sha1(k, d) {
+        export function b64_hmac_sha1(k: string, d: string) {
             return rstr2b64(rstr_hmac_sha1(str2rstr_utf8(k), str2rstr_utf8(d)));
         }
 
-        export function any_hmac_sha1(k, d, e) {
+        export function any_hmac_sha1(k: string, d: string, e: string) {
             return rstr2any(rstr_hmac_sha1(str2rstr_utf8(k), str2rstr_utf8(d)), e);
         }
 
@@ -498,14 +489,14 @@ namespace TinyWars.Utility.Helpers {
         /*
          * Calculate the SHA1 of a raw string
          */
-        function rstr_sha1(s) {
+        function rstr_sha1(s: string) {
             return binb2rstr(binb_sha1(rstr2binb(s), s.length * 8));
         }
 
         /*
          * Calculate the HMAC-SHA1 of a key and some data (raw strings)
          */
-        function rstr_hmac_sha1(key, data) {
+        function rstr_hmac_sha1(key: string, data: string) {
             var bkey = rstr2binb(key);
             if (bkey.length > 16) bkey = binb_sha1(bkey, key.length * 8);
 
@@ -523,7 +514,7 @@ namespace TinyWars.Utility.Helpers {
         /*
          * Convert a raw string to a hex string
          */
-        function rstr2hex(input) {
+        function rstr2hex(input: string) {
             try {
                 hexcase
             } catch (e) {
@@ -543,7 +534,7 @@ namespace TinyWars.Utility.Helpers {
         /*
          * Convert a raw string to a base-64 string
          */
-        function rstr2b64(input) {
+        function rstr2b64(input: string) {
             try {
                 b64pad
             } catch (e) {
@@ -567,7 +558,7 @@ namespace TinyWars.Utility.Helpers {
         /*
          * Convert a raw string to an arbitrary string encoding
          */
-        function rstr2any(input, encoding) {
+        function rstr2any(input: string, encoding: string) {
             var divisor = encoding.length;
             var remainders = Array();
             var i, q, x, quotient;
@@ -616,7 +607,7 @@ namespace TinyWars.Utility.Helpers {
          * Encode a string as utf-8.
          * For efficiency, this assumes the input is valid utf-16.
          */
-        function str2rstr_utf8(input) {
+        function str2rstr_utf8(input: string) {
             var output = "";
             var i = -1;
             var x, y;
@@ -652,7 +643,7 @@ namespace TinyWars.Utility.Helpers {
         /*
          * Encode a string as utf-16
          */
-        function str2rstr_utf16le(input) {
+        function str2rstr_utf16le(input: string) {
             var output = "";
             for (var i = 0; i < input.length; i++)
                 output += String.fromCharCode(input.charCodeAt(i) & 0xFF,
@@ -660,7 +651,7 @@ namespace TinyWars.Utility.Helpers {
             return output;
         }
 
-        function str2rstr_utf16be(input) {
+        function str2rstr_utf16be(input: string) {
             var output = "";
             for (var i = 0; i < input.length; i++)
                 output += String.fromCharCode((input.charCodeAt(i) >>> 8) & 0xFF,
@@ -672,7 +663,7 @@ namespace TinyWars.Utility.Helpers {
          * Convert a raw string to an array of big-endian words
          * Characters >255 have their high-byte silently ignored.
          */
-        function rstr2binb(input) {
+        function rstr2binb(input: string) {
             var output = Array(input.length >> 2);
             for (var i = 0; i < output.length; i++)
                 output[i] = 0;
@@ -684,7 +675,7 @@ namespace TinyWars.Utility.Helpers {
         /*
          * Convert an array of big-endian words to a string
          */
-        function binb2rstr(input) {
+        function binb2rstr(input: number[]) {
             var output = "";
             for (var i = 0; i < input.length * 32; i += 8)
                 output += String.fromCharCode((input[i >> 5] >>> (24 - i % 32)) & 0xFF);
@@ -694,7 +685,7 @@ namespace TinyWars.Utility.Helpers {
         /*
          * Calculate the SHA-1 of an array of big-endian words, and a bit length
          */
-        function binb_sha1(x, len) {
+        function binb_sha1(x: number[], len: number) {
             /* append padding */
             x[len >> 5] |= 0x80 << (24 - len % 32);
             x[((len + 64 >> 9) << 4) + 15] = len;
@@ -739,7 +730,7 @@ namespace TinyWars.Utility.Helpers {
          * Perform the appropriate triplet combination function for the current
          * iteration
          */
-        function sha1_ft(t, b, c, d) {
+        function sha1_ft(t: number, b: number, c: number, d: number) {
             if (t < 20) return (b & c) | ((~b) & d);
             if (t < 40) return b ^ c ^ d;
             if (t < 60) return (b & c) | (b & d) | (c & d);
@@ -749,7 +740,7 @@ namespace TinyWars.Utility.Helpers {
         /*
          * Determine the appropriate additive constant for the current iteration
          */
-        function sha1_kt(t) {
+        function sha1_kt(t: number) {
             return (t < 20) ? 1518500249 : (t < 40) ? 1859775393 :
                 (t < 60) ? -1894007588 : -899497514;
         }
@@ -758,7 +749,7 @@ namespace TinyWars.Utility.Helpers {
          * Add integers, wrapping at 2^32. This uses 16-bit operations internally
          * to work around bugs in some JS interpreters.
          */
-        function safe_add(x, y) {
+        function safe_add(x: number, y: number) {
             var lsw = (x & 0xFFFF) + (y & 0xFFFF);
             var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
             return (msw << 16) | (lsw & 0xFFFF);
@@ -767,7 +758,7 @@ namespace TinyWars.Utility.Helpers {
         /*
          * Bitwise rotate a 32-bit number to the left.
          */
-        function bit_rol(num, cnt) {
+        function bit_rol(num: number, cnt: number) {
             return (num << cnt) | (num >>> (32 - cnt));
         }
     }

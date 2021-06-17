@@ -84,14 +84,14 @@ declare interface Math {
         significance = math.pow(2, digits),
         overflow = significance * 2,
         mask = width - 1,
-        nodecrypto;         // node.js crypto module, initialized at the bottom.
+        nodecrypto: any;    // node.js crypto module, initialized at the bottom.
 
     //
     // seedrandom()
     // This is the seedrandom function described above.
     //
-    function seedrandom(seed, options, callback) {
-        var key = [];
+    function seedrandom(seed: any, options: any, callback: any) {
+        var key: any[] = [];
         options = (options == true) ? { entropy: true } : (options || {});
 
         // Flatten the seed string or build one from local entropy if needed.
@@ -100,6 +100,7 @@ declare interface Math {
                 (seed == null) ? autoseed() : seed, 3), key);
 
         // Use the seed to initialize an ARC4 generator.
+        // @ts-ignore
         var arc4 = new ARC4(key);
 
         // This function returns a random double in [0, 1) that contains
@@ -130,7 +131,7 @@ declare interface Math {
 
         // Calling convention: what to return as a function of prng, seed, is_math.
         return (options.pass || callback ||
-            function (prng, seed, is_math_call, state) {
+            function (prng: any, seed: any, is_math_call: any, state: any) {
                 if (state) {
                     // Load the arc4 state from the given state if it has an S array.
                     if (state.S) { copy(state, arc4); }
@@ -140,7 +141,7 @@ declare interface Math {
 
                 // If called as a method of Math (Math.seedrandom()), mutate
                 // Math.random because that is how seedrandom.js has worked since v1.0.
-                if (is_math_call) { math[rngname] = prng; return seed; }
+                if (is_math_call) { (math as any)[rngname] = prng; return seed; }
 
                 // Otherwise, it is a newer calling convention, so return the
                 // prng directly.
@@ -148,6 +149,7 @@ declare interface Math {
             })(
             prng,
             shortseed,
+            // @ts-ignore
             'global' in options ? options.global : (this == math),
             options.state);
     }
@@ -162,9 +164,10 @@ declare interface Math {
     // the next (count) outputs from ARC4.  Its return value is a number x
     // that is in the range 0 <= x < (width ^ count).
     //
-    function ARC4(key) {
+    function ARC4(key: any) {
         var t, keylen = key.length,
-            me = this, i = 0, j = me.i = me.j = 0, s = me.S = [];
+            // @ts-ignore
+            me = this, i = 0, j = me.i = me.j = 0, s: any[] = me.S = [];
 
         // The empty key [] is treated as [0].
         if (!keylen) { key = [keylen++]; }
@@ -179,7 +182,7 @@ declare interface Math {
         }
 
         // The "g" method returns the next (count) outputs as one number.
-        (me.g = function (count) {
+        (me.g = function (count: number) {
             // Using instance members instead of closure state nearly doubles speed.
             var t, r = 0,
                 i = me.i, j = me.j, s = me.S;
@@ -199,7 +202,7 @@ declare interface Math {
     // copy()
     // Copies internal state of ARC4 to or from a plain object.
     //
-    function copy(f, t) {
+    function copy(f: any, t: any) {
         t.i = f.i;
         t.j = f.j;
         t.S = f.S.slice();
@@ -210,7 +213,7 @@ declare interface Math {
     // flatten()
     // Converts an object tree to nested arrays of strings.
     //
-    function flatten(obj, depth) {
+    function flatten(obj: any, depth: any): any {
         var result = [], typ = (typeof obj), prop;
         if (depth && typ == 'object') {
             for (prop in obj) {
@@ -225,8 +228,8 @@ declare interface Math {
     // Mixes a string seed into a key that is an array of integers, and
     // returns a shortened string seed that is equivalent to the result key.
     //
-    function mixkey(seed, key) {
-        var stringseed = seed + '', smear, j = 0;
+    function mixkey(seed: any, key: any) {
+        var stringseed = seed + '', smear: any, j = 0;
         while (j < stringseed.length) {
             key[mask & j] =
                 mask & ((smear ^= key[mask & j] * 19) + stringseed.charCodeAt(j++));
@@ -261,7 +264,7 @@ declare interface Math {
     // tostring()
     // Converts an array of charcodes to a string
     //
-    function tostring(a) {
+    function tostring(a: any) {
         return String.fromCharCode.apply(0, a);
     }
 
@@ -290,10 +293,10 @@ declare interface Math {
     //   // When included as a plain script, set up Math.seedrandom global.
     //   math['seed' + rngname] = seedrandom;
     // }
-    math['seed' + rngname] = seedrandom;
+    (math as any)['seed' + rngname] = seedrandom;
 
     // End anonymous scope, and pass initial values.
 })(
     [],     // pool: entropy pool starts empty
     Math    // math: package containing random, pow, and seedrandom
-    );
+);

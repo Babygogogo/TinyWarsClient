@@ -277,7 +277,10 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
         }
-        public getIsNeedReplay(): boolean {
+        public getIsNeedExecutedAction(): boolean {
+            return true;
+        }
+        public getIsNeedSeedRandom(): boolean {
             return true;
         }
         public getMapId(): number | undefined {
@@ -426,9 +429,9 @@ namespace TinyWars.ReplayWar {
             });
             this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw);
             this.getRandomNumberManager().init({
-                isNeedReplay    : this.getIsNeedReplay(),
-                initialState    : warData.seedRandomInitialState,
-                currentState    : warData.seedRandomCurrentState,
+                isNeedSeedRandom    : this.getIsNeedSeedRandom(),
+                initialState        : warData.seedRandomInitialState,
+                currentState        : warData.seedRandomCurrentState,
             });
             this.setIsEnded(this.checkIsInEnd());
 

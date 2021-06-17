@@ -7,6 +7,7 @@ namespace TinyWars.BaseWar {
     import ClientErrorCode      = Utility.ClientErrorCode;
     import CommonConstants      = Utility.CommonConstants;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
+    import GridIndexHelpers     = Utility.GridIndexHelpers;
     import TileType             = Types.TileType;
     import TileObjectType       = Types.TileObjectType;
     import TileBaseType         = Types.TileBaseType;
@@ -54,7 +55,7 @@ namespace TinyWars.BaseWar {
         }
 
         public deserialize(data: ISerialTile, configVersion: string): ClientErrorCode {
-            const gridIndex = BwHelpers.convertGridIndex(data.gridIndex);
+            const gridIndex = GridIndexHelpers.convertGridIndex(data.gridIndex);
             if (gridIndex == null) {
                 return ClientErrorCode.BwTileDeserialize00;
             }

@@ -36,7 +36,10 @@ namespace TinyWars.MultiCustomWar {
                 ? Types.WarType.McwFog
                 : Types.WarType.McwStd;
         }
-        public getIsNeedReplay(): boolean {
+        public getIsNeedExecutedAction(): boolean {
+            return false;
+        }
+        public getIsNeedSeedRandom(): boolean {
             return false;
         }
         public getMapId(): number | undefined {

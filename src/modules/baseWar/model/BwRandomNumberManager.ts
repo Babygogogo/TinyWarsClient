@@ -10,14 +10,14 @@ namespace TinyWars.BaseWar {
         private _seedRandomInitialState?    : ProtoTypes.Structure.ISeedRandomState;
         private _randomNumberGenerator?     : seedrandom.prng;
 
-        public init({ isNeedReplay, initialState, currentState }: {
-            isNeedReplay: boolean;
-            initialState: ISeedRandomState | null | undefined;
-            currentState: ISeedRandomState | null | undefined;
+        public init({ isNeedSeedRandom, initialState, currentState }: {
+            isNeedSeedRandom: boolean;
+            initialState    : ISeedRandomState | null | undefined;
+            currentState    : ISeedRandomState | null | undefined;
         }): ClientErrorCode {
-            this._setIsNeedReplay(isNeedReplay);
+            this._setIsNeedReplay(isNeedSeedRandom);
 
-            if (isNeedReplay) {
+            if (isNeedSeedRandom) {
                 // TODO: check if the states are valid.
                 if (initialState == null) {
                     return ClientErrorCode.BwRandomNumberManager00;

@@ -173,7 +173,10 @@ namespace TinyWars.SingleRankWar {
             };
         }
 
-        public getIsNeedReplay(): boolean {
+        public getIsNeedExecutedAction(): boolean {
+            return true;
+        }
+        public getIsNeedSeedRandom(): boolean {
             return true;
         }
         public getIsWarMenuPanelOpening(): boolean {

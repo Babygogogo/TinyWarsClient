@@ -37,7 +37,10 @@ namespace TinyWars.MultiRankWar {
                 ? Types.WarType.MrwFog
                 : Types.WarType.MrwStd;
         }
-        public getIsNeedReplay(): boolean {
+        public getIsNeedExecutedAction(): boolean {
+            return false;
+        }
+        public getIsNeedSeedRandom(): boolean {
             return false;
         }
         public getMapId(): number | undefined {

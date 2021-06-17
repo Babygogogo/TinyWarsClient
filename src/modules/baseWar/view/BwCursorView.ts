@@ -431,12 +431,23 @@ namespace TinyWars.BaseWar {
                         } else {
                             con.visible = true;
 
-                            const { attackDamage, counterDamage } = DamageCalculator.getAttackAndCounterDamage({
+                            const { errorCode: errorCodeForDamages, damages } = DamageCalculator.getAttackAndCounterDamage({
                                 battleDamageInfoArray,
                                 attackerUnitId,
                                 targetGridIndex     : gridIndex,
                                 unitMap,
                             });
+                            if (errorCodeForDamages) {
+                                Logger.error(`BwCursorView._updateConForDamage() errorCodeForDamages: ${errorCodeForDamages}.`);
+                                con.visible = false;
+                                return;
+                            } else if (damages == null) {
+                                Logger.error(`BwCursorView._updateConForDamage() empty damages.`);
+                                con.visible = false;
+                                return;
+                            }
+
+                            const { attackDamage, counterDamage } = damages;
                             const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
                             labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
                                 + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
@@ -468,12 +479,23 @@ namespace TinyWars.BaseWar {
                         } else {
                             con.visible = true;
 
-                            const { attackDamage, counterDamage } = DamageCalculator.getAttackAndCounterDamage({
+                            const { errorCode: errorCodeForDamages, damages } = DamageCalculator.getAttackAndCounterDamage({
                                 battleDamageInfoArray,
                                 attackerUnitId,
                                 targetGridIndex     : gridIndex,
                                 unitMap,
                             });
+                            if (errorCodeForDamages) {
+                                Logger.error(`BwCursorView._updateConForDamage() errorCodeForDamages: ${errorCodeForDamages}.`);
+                                con.visible = false;
+                                return;
+                            } else if (damages == null) {
+                                Logger.error(`BwCursorView._updateConForDamage() empty damages.`);
+                                con.visible = false;
+                                return;
+                            }
+
+                            const { attackDamage, counterDamage } = damages;
                             const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
                             labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
                                 + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;

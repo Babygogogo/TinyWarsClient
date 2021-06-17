@@ -89,24 +89,66 @@ namespace TinyWars.Utility.VisibilityHelpers {
         return false;
     }
 
-    export function getAllUnitsOnMapVisibleToTeams(war: BaseWar.BwWar, teamIndexes: Set<number>): Set<BaseWar.BwUnit> {
+    export function getAllUnitsOnMapVisibleToTeams(war: BaseWar.BwWar, teamIndexes: Set<number>): Set<BaseWar.BwUnit> | undefined {
         const fogMap                = war.getFogMap();
         const visibilityFromPaths   = fogMap.getVisibilityMapFromPathsForTeams(teamIndexes);
-        const visibilityFromTiles   = fogMap.getVisibilityMapFromTilesForTeams(teamIndexes);
-        const visibilityFromUnits   = fogMap.getVisibilityMapFromUnitsForTeams(teamIndexes);
-        const unitMap               = war.getUnitMap();
-        const tileMap               = war.getTileMap();
-        const units                 = new Set<BaseWar.BwUnit>();
+        if (visibilityFromPaths == null) {
+            Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty visibilityFromPaths.`);
+            return undefined;
+        }
 
+        const visibilityFromTiles = fogMap.getVisibilityMapFromTilesForTeams(teamIndexes);
+        if (visibilityFromTiles == null) {
+            Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty visibilityFromTiles.`);
+            return undefined;
+        }
+
+        const visibilityFromUnits = fogMap.getVisibilityMapFromUnitsForTeams(teamIndexes);
+        if (visibilityFromUnits == null) {
+            Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty visibilityFromUnits.`);
+            return undefined;
+        }
+
+        const unitMap   = war.getUnitMap();
+        const tileMap   = war.getTileMap();
+        const units     = new Set<BaseWar.BwUnit>();
         unitMap.forEachUnitOnMap(unit => {
             const gridIndex = unit.getGridIndex();
-            const tile      = tileMap.getTile(gridIndex);
-            if ((teamIndexes.has(unit.getTeamIndex()))                                          ||
+            if (gridIndex == null) {
+                Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty gridIndex.`);
+                return undefined;
+            }
+
+            const tile = tileMap.getTile(gridIndex);
+            if (tile == null) {
+                Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty tile.`);
+                return undefined;
+            }
+
+            const unitTeamIndex = unit.getTeamIndex();
+            if (unitTeamIndex == null) {
+                Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty unitTeamIndex.`);
+                return undefined;
+            }
+
+            const tileTeamIndex = tile.getTeamIndex();
+            if (tileTeamIndex == null) {
+                Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty tileTeamIndex.`);
+                return undefined;
+            }
+
+            if ((teamIndexes.has(unitTeamIndex))                                                ||
                 (_checkHasUnitWithTeamIndexesOnAdjacentGrids(unitMap, gridIndex, teamIndexes))  ||
-                (teamIndexes.has(tile.getTeamIndex()))
+                (teamIndexes.has(tileTeamIndex))
             ) {
                 units.add(unit);
             } else {
+                const unitType = unit.getUnitType();
+                if (unitType == null) {
+                    Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty unitType.`);
+                    return undefined;
+                }
+
                 if (unit.getIsDiving()) {
                     // Do nothing.
                 } else {
@@ -116,8 +158,8 @@ namespace TinyWars.Utility.VisibilityHelpers {
                         visibilityFromTiles[x][y],
                         visibilityFromUnits[x][y],
                     );
-                    if ((visibility === Visibility.TrueVision)                                                  ||
-                        ((visibility === Visibility.InsideVision) && (!tile.checkCanHideUnit(unit.getUnitType())))
+                    if ((visibility === Visibility.TrueVision)                                          ||
+                        ((visibility === Visibility.InsideVision) && (!tile.checkCanHideUnit(unitType)))
                     ) {
                         units.add(unit);
                     }

@@ -179,10 +179,10 @@ namespace TinyWars.MultiPlayerWar {
         }
 
         public getPlayerIndexLoggedIn(): number | undefined {
-            return (this.getPlayerManager() as MpwPlayerManager).getPlayerIndexLoggedIn();
+            return this.getPlayerManager().getPlayerIndexLoggedIn();
         }
         public getPlayerLoggedIn(): BaseWar.BwPlayer {
-            return (this.getPlayerManager() as MpwPlayerManager).getPlayerLoggedIn();
+            return this.getPlayerManager().getPlayerLoggedIn();
         }
     }
 }

@@ -44,7 +44,7 @@ namespace TinyWars.BaseWar {
 
             const map = Helpers.createEmptyMap<BwTile>(mapWidth, mapHeight);
             for (const tileData of tiles) {
-                const gridIndex = BwHelpers.convertGridIndex(tileData.gridIndex);
+                const gridIndex = GridIndexHelpers.convertGridIndex(tileData.gridIndex);
                 if (gridIndex == null) {
                     return ClientErrorCode.BwTileMapInit03;
                 }

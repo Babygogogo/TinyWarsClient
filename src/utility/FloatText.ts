@@ -6,25 +6,31 @@ namespace TinyWars.Utility.FloatText {
     const END_Y             = 0;
     const MAX_CACHE_COUNT   = 6;
 
-    const dataList        : string[] = [];
-    let   timeoutIdForLock: number;
+    const _dataArray        : string[] = [];
+    let   _timeoutIdForLock : number | undefined;
 
     export function show(text: string): void {
-        dataList.push(text);
-        const exceedCount = dataList.length - MAX_CACHE_COUNT;
-        (exceedCount > 0) && (dataList.splice(0, exceedCount));
+        _dataArray.push(text);
+        const exceedCount = _dataArray.length - MAX_CACHE_COUNT;
+        (exceedCount > 0) && (_dataArray.splice(0, exceedCount));
 
-        if (timeoutIdForLock == null) {
+        if (_timeoutIdForLock == null) {
             showFloatText();
         }
     }
 
     function showFloatText(): void {
-        if ((dataList.length > 0) && (timeoutIdForLock == null)) {
-            timeoutIdForLock = egret.setTimeout(onTimerComplete, FloatText, LOCK_TIME_MS);
+        if ((_dataArray.length > 0) && (_timeoutIdForLock == null)) {
+            _timeoutIdForLock = egret.setTimeout(onTimerComplete, FloatText, LOCK_TIME_MS);
 
-            const floatText = new UiFloatText(dataList.splice(0, 1)[0]);
-            StageManager.getLayer(Types.LayerType.Notify2).addChild(floatText);
+            const layer = StageManager.getLayer(Types.LayerType.Notify2);
+            if (layer == null) {
+                Logger.error(`FloatText.showFloatText() empty layer.`);
+                return;
+            }
+
+            const floatText = new UiFloatText(_dataArray.splice(0, 1)[0]);
+            layer.addChild(floatText);
             floatText.y      = START_Y;
             floatText.scaleX = 0.5;
             floatText.scaleY = 0.5;
@@ -41,7 +47,7 @@ namespace TinyWars.Utility.FloatText {
     }
 
     function onTimerComplete(e: egret.TimerEvent): void {
-        timeoutIdForLock = undefined;
+        _timeoutIdForLock = undefined;
         showFloatText();
     }
 

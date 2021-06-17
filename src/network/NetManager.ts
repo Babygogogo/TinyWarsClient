@@ -25,23 +25,30 @@ namespace TinyWars.Network.NetManager {
         thisObject? : any;
     }
 
-    class NetMessageDispatcherCls extends egret.EventDispatcher {
+    class NetMessageDispatcher extends egret.EventDispatcher {
         public dispatchWithContainer(container: ProtoTypes.NetMessage.IMessageContainer): void {
-            const name      = Helpers.getMessageName(container);
-            const action    = container[name].s;
-            if (action == null) {
-                Logger.error(`NetManager.NetMessageDispatcherCls.dispatchWithContainer() empty action.`);
+            const messageName = Helpers.getMessageName(container);
+            if (messageName == null) {
+                Logger.error(`NetManager.NetMessageDispatcher.dispatchWithContainer() empty messageName.`);
+                return;
+            }
+
+            const message       = container[messageName];
+            const messageData   = message ? message.s : null;
+            if (messageData == null) {
+                Logger.error(`NetManager.NetMessageDispatcher.dispatchWithContainer() empty messageData.`);
                 return undefined;
             }
 
             if (container.MsgMpwCommonHandleBoot) {
                 // Don't show the error text.
             } else {
-                if (action.errorCode) {
-                    FloatText.show(Utility.Lang.getErrorText(action.errorCode));
+                const errorCode = (messageData as any).errorCode;
+                if (errorCode) {
+                    FloatText.show(Utility.Lang.getErrorText(errorCode));
                 }
             }
-            this.dispatchEventWith(name, false, action);
+            this.dispatchEventWith(messageName, false, messageData);
         }
 
         public addListener(code: Codes, callback: Function, thisObject: any): void {
@@ -56,10 +63,10 @@ namespace TinyWars.Network.NetManager {
     ////////////////////////////////////////////////////////////////////////////////
     // Local variables.
     ////////////////////////////////////////////////////////////////////////////////
-    let _socket             : egret.WebSocket;
+    let _socket             : egret.WebSocket | undefined;
     let _canAutoReconnect   = true;
 
-    const dispatcher = new NetMessageDispatcherCls();
+    const dispatcher = new NetMessageDispatcher();
 
     ////////////////////////////////////////////////////////////////////////////////
     // Exports.
@@ -82,11 +89,22 @@ namespace TinyWars.Network.NetManager {
 
     export function send(container: ProtoTypes.NetMessage.IMessageContainer): void {
         if ((!_socket) || (!_socket.connected)) {
-            FloatText.show(Lang.getText(Lang.Type.A0014));
+            const errorText = Lang.getText(Lang.Type.A0014);
+            (errorText) && (FloatText.show(errorText));
         } else {
-            const name          = Helpers.getMessageName(container);
-            const encodedData   = ProtoManager.encodeAsMessageContainer(container);
-            Logger.log("%cNetManager send: ", "background:#97FF4F;", name, ", length: ", encodedData.byteLength, "\n", container[name]);
+            const messageName = Helpers.getMessageName(container);
+            if (messageName == null) {
+                Logger.error(`NetManager.send() empty name.`);
+                return;
+            }
+
+            const encodedData = ProtoManager.encodeAsMessageContainer(container);
+            if (encodedData == null) {
+                Logger.error(`NetManager.send() empty encodedData.`);
+                return;
+            }
+
+            Logger.log("%cNetManager send: ", "background:#97FF4F;", messageName, ", length: ", encodedData.byteLength, "\n", container[messageName]);
             _socket.writeBytes(new egret.ByteArray(encodedData));
             _socket.flush();
         }
@@ -122,12 +140,14 @@ namespace TinyWars.Network.NetManager {
             _socket.removeEventListener(egret.ProgressEvent.SOCKET_DATA,    onSocketData,       NetManager);
             _socket.close();
 
-            _socket = null;
+            _socket = undefined;
         }
     }
 
     function onSocketConnect(e: egret.Event): void {
-        FloatText.show(Lang.getText(Lang.Type.A0007));
+        const successText = Lang.getText(Lang.Type.A0007);
+        (successText) && (FloatText.show(successText));
+
         Notify.dispatch(Notify.Type.NetworkConnected);
     }
     function onSocketClose(e: egret.Event): void {
@@ -135,17 +155,33 @@ namespace TinyWars.Network.NetManager {
         if (!checkCanAutoReconnect()) {
             // FloatText.show(Lang.getText(Lang.Type.A0013));
         } else {
-            FloatText.show(Lang.getText(Lang.Type.A0008));
+            const tips = Lang.getText(Lang.Type.A0008);
+            (tips) && (FloatText.show(tips));
+
+            if (_socket == null) {
+                Logger.error(`NetManager.onSocketClose() empty _socket.`);
+                return;
+            }
             _socket.connectByUrl(FULL_URL);
         }
     }
     function onSocketData(e: egret.Event): void {
+        if (_socket == null) {
+            Logger.error(`NetManager.onSocketData() empty _socket.`);
+            return;
+        }
+
         const data = new egret.ByteArray();
         _socket.readBytes(data);
 
-        const container = ProtoManager.decodeAsMessageContainer(data.rawBuffer);
-        const name      = Helpers.getMessageName(container);
-        Logger.log("%cNetManager receive: ", "background:#FFD777", name, ", length: ", data.length, "\n", container[name]);
+        const container     = ProtoManager.decodeAsMessageContainer(data.rawBuffer);
+        const messageName   = Helpers.getMessageName(container);
+        if (messageName == null) {
+            Logger.error(`NetManager.onSocketData() empty messageName.`);
+            return;
+        }
+
+        Logger.log("%cNetManager receive: ", "background:#FFD777", messageName, ", length: ", data.length, "\n", container[messageName]);
 
         if (container.MsgCommonServerDisconnect) {
             setCanAutoReconnect(false);

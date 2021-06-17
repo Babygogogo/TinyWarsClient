@@ -92,11 +92,16 @@ namespace TinyWars.Utility.FlowManager {
         SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
     }
 
-    export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
+    export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<ClientErrorCode> {
         RwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        const war = await MpwModel.loadWar(data);
+        const { errorCode, war } = await MpwModel.loadWar(data);
+        if (errorCode) {
+            return errorCode;
+        } else if (war == null) {
+            return ClientErrorCode.FlowManager_GotoMultiPlayerWar_00;
+        }
 
         StageManager.closeAllPanels();
         BaseWar.BwBackgroundPanel.show();
@@ -107,6 +112,8 @@ namespace TinyWars.Utility.FlowManager {
         Broadcast.BroadcastPanel.show();
 
         SoundManager.playRandomWarBgm();
+
+        return ClientErrorCode.NoError;
     }
     export async function gotoReplayWar(warData: Uint8Array, replayId: number): Promise<void> {
         MpwModel.unloadWar();
@@ -215,9 +222,15 @@ namespace TinyWars.Utility.FlowManager {
         UserModel.clearLoginInfo();
         FlowManager.gotoLogin();
 
+        const title     = Lang.getText(Lang.Type.B0025);
+        const content   = Lang.getText(Lang.Type.A0020);
+        if ((title == null) || (content == null)) {
+            Logger.error(`FlowManager._onMsgCommonServerDisconnect() empty title/content.`);
+            return;
+        }
         Common.CommonAlertPanel.show({
-            title   : Lang.getText(Lang.Type.B0025),
-            content : Lang.getText(Lang.Type.A0020),
+            title,
+            content,
         });
     }
 
@@ -239,8 +252,14 @@ namespace TinyWars.Utility.FlowManager {
     }
 
     function _onMsgMpwCommonContinueWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgMpwCommonContinueWar.IS;
-        gotoMultiPlayerWar(data.war);
+        const data      = e.data as ProtoTypes.NetMessage.MsgMpwCommonContinueWar.IS;
+        const warData   = data.war;
+        if (warData == null) {
+            Logger.error(`FlowManager._onMsgMpwCommonContinueWar() empty warData.`);
+            return;
+        }
+
+        gotoMultiPlayerWar(warData);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

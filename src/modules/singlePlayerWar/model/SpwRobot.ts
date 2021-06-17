@@ -20,6 +20,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     import TileType             = Types.TileType;
     import UnitType             = Types.UnitType;
     import UnitActionState      = Types.UnitActionState;
+    import checkAndCallLater    = Helpers.checkAndCallLater;
 
     type AttackInfo = {
         baseDamage      : number | null | undefined;
@@ -351,21 +352,11 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     };
 
     let _isCalculating = false;
-    let _frameBeginTime: number;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Helpers.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    async function checkAndCallLater(): Promise<void> {
-        if (Date.now() - _frameBeginTime > 13) {
-            await new Promise<void>((resolve, reject) => {
-                egret.callLater(() => {
-                    _frameBeginTime = Date.now();
-                    resolve();
-                }, null);
-            });
-        }
-    }
+
 
     async function getCommonParams(war: SpwWar): Promise<{ errorCode: ClientErrorCode, commonParams?: CommonParams }> {
         await checkAndCallLater();
@@ -1761,7 +1752,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_01 };
             }
 
-            const tileGridIndex = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+            const tileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
             if (tileGridIndex != null) {
                 const tile2 = tileMap.getTile(tileGridIndex);
                 if (tile2 == null) {
@@ -3160,8 +3151,6 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         getActionForPhase10,
     ];
     async function doGetNextAction(war: SpwWar): Promise<ErrorCodeAndAction> {
-        _frameBeginTime = Date.now();
-
         const { errorCode: errorCodeForCommonParams, commonParams } = await getCommonParams(war);
         if (errorCodeForCommonParams) {
             return { errorCode: errorCodeForCommonParams };

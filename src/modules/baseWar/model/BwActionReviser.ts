@@ -81,7 +81,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerDeleteUnit_00 };
         }
 
-        const gridIndex = BwHelpers.convertGridIndex(rawAction.gridIndex);
+        const gridIndex = GridIndexHelpers.convertGridIndex(rawAction.gridIndex);
         if (gridIndex == null) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerDeleteUnit_01 };
         }
@@ -157,7 +157,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_02 };
         }
 
-        const gridIndex = BwHelpers.convertGridIndex(rawAction.gridIndex);
+        const gridIndex = GridIndexHelpers.convertGridIndex(rawAction.gridIndex);
         if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_03 };
         }
@@ -388,7 +388,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_02 };
         }
 
-        const targetGridIndex = BwHelpers.convertGridIndex(rawAction.targetGridIndex);
+        const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
         if ((targetGridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_03 };
         }
@@ -448,7 +448,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackUnit_02 };
         }
 
-        const targetGridIndex = BwHelpers.convertGridIndex(rawAction.targetGridIndex);
+        const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
         if ((targetGridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackUnit_03 };
         }
@@ -802,7 +802,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_06 };
         }
 
-        const targetGridIndex = BwHelpers.convertGridIndex(rawAction.targetGridIndex);
+        const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
         if (targetGridIndex == null) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_07 };
         }
@@ -868,7 +868,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchSilo_06 };
         }
 
-        const targetGridIndex = BwHelpers.convertGridIndex(rawAction.targetGridIndex);
+        const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
         if ((targetGridIndex == null)                                       ||
             (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))
         ) {
@@ -1180,8 +1180,13 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return false;
         }
 
+        const path = action.path;
+        if (path == null) {
+            return false;
+        }
+
         const unitMap       = war.getUnitMap();
-        const pathNodes     = action.path as GridIndex[];
+        const pathNodes     = (path.nodes || []) as GridIndex[];
         const loaderUnit    = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         if (loaderUnit == null) {
             return false;
@@ -1215,7 +1220,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
 
         for (let i = 0; i < destinationsCount; ++i) {
             const data              = destinations[i];
-            const droppingGridIndex = BwHelpers.convertGridIndex(data.gridIndex);
+            const droppingGridIndex = GridIndexHelpers.convertGridIndex(data.gridIndex);
             if ((!droppingGridIndex)                                                        ||
                 (!GridIndexHelpers.checkIsInsideMap(droppingGridIndex, mapSize))            ||
                 (!GridIndexHelpers.checkIsAdjacent(droppingGridIndex, loaderEndingGridIndex))
@@ -1273,7 +1278,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
 
             for (let j = i + 1; j < destinationsCount; ++j) {
                 const nextData  = destinations[j];
-                const gridIndex = BwHelpers.convertGridIndex(nextData.gridIndex);
+                const gridIndex = GridIndexHelpers.convertGridIndex(nextData.gridIndex);
                 if ((!gridIndex)                                                    ||
                     (droppingUnitId === nextData.unitId)                            ||
                     (GridIndexHelpers.checkIsEqual(droppingGridIndex, gridIndex))

@@ -76,7 +76,7 @@ namespace TinyWars.Utility {
             }
         }
 
-        export function dump(obj): void {
+        export function dump(obj: any): void {
             Logger.log(JSON.stringify(obj));
         }
 

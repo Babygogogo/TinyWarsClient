@@ -105,7 +105,10 @@ namespace TinyWars.SingleFreeWar {
             };
         }
 
-        public getIsNeedReplay(): boolean {
+        public getIsNeedExecutedAction(): boolean {
+            return false;
+        }
+        public getIsNeedSeedRandom(): boolean {
             return false;
         }
         public getIsWarMenuPanelOpening(): boolean {

@@ -1,9 +1,12 @@
 
 declare interface Window {
-    CLIENT_VERSION  : string;
-    GAME_SERVER_PORT: number;
-    browser         : any;
-    Main            : typeof egret.DisplayObject;
+    CLIENT_VERSION      : string;
+    GAME_SERVER_PORT    : number;
+    browser             : any;
+    Main                : typeof egret.DisplayObject;
+    JSONParseClass      : {
+        setData : (data: any) => void;
+    };
 }
 
 class Main extends egret.DisplayObjectContainer {

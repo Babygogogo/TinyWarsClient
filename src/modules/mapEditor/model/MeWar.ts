@@ -100,7 +100,10 @@ namespace TinyWars.MapEditor {
         public getWarType(): Types.WarType {
             return Types.WarType.Me;
         }
-        public getIsNeedReplay(): boolean {
+        public getIsNeedExecutedAction(): boolean {
+            return false;
+        }
+        public getIsNeedSeedRandom(): boolean {
             return false;
         }
         public getMapId(): number | undefined {

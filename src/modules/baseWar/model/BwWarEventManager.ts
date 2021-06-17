@@ -202,7 +202,7 @@ namespace TinyWars.BaseWar {
                     continue;
                 }
 
-                const rawGridIndex = BwHelpers.convertGridIndex(unitData.gridIndex);
+                const rawGridIndex = GridIndexHelpers.convertGridIndex(unitData.gridIndex);
                 if (rawGridIndex == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty rawGridIndex.`);
                     continue;

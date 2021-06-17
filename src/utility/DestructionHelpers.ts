@@ -1,18 +1,26 @@
 
 namespace TinyWars.Utility.DestructionHelpers {
+    import CommonConstants  = Utility.CommonConstants;
     import BwWar            = BaseWar.BwWar;
     import GridIndex        = Types.GridIndex;
     import TileObjectType   = Types.TileObjectType;
-    import CommonConstants  = Utility.CommonConstants;
 
-    export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): void {
-        const unitMap           = war.getUnitMap();
-        const unit              = unitMap.getUnitOnMap(gridIndex)!;
-        const destroyedUnits    = [unit];
-        const allCoUnits        = unitMap.getAllCoUnits(unit.getPlayerIndex());
+    export function destroyUnitOnMap(war: BwWar, gridIndex: GridIndex, showExplosionEffect: boolean): ClientErrorCode {
+        const unitMap   = war.getUnitMap();
+        const unit      = unitMap.getUnitOnMap(gridIndex);
+        if (unit == null) {
+            return ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_00;
+        }
+
+        const allCoUnits = unitMap.getAllCoUnits(unit.getPlayerIndex());
+        if (allCoUnits == null) {
+            return ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_01;
+        }
+
         unitMap.removeUnitOnMap(gridIndex, true);
         war.getTileMap().getTile(gridIndex).updateOnUnitLeave();
 
+        const destroyedUnits = [unit];
         for (const u of unitMap.getUnitsLoadedByLoader(unit, true)) {
             unitMap.removeUnitLoaded(u.getUnitId());
             destroyedUnits.push(u);
@@ -23,8 +31,7 @@ namespace TinyWars.Utility.DestructionHelpers {
         if (destroyedCoUnitsCount > 0) {
             const currentEnergy = player.getCoCurrentEnergy();
             if (currentEnergy == null) {
-                Logger.error(`DestructionHelpers.destroyUnitOnMap() empty currentEnergy.`);
-                return undefined;
+                return ClientErrorCode.DestructionHelpers_DestroyUnitOnMap_02;
             }
 
             const totalCoUnitsCount = allCoUnits.length;
@@ -45,6 +52,8 @@ namespace TinyWars.Utility.DestructionHelpers {
             const warView = war.getView();
             (warView) && (warView.showVibration());
         }
+
+        return ClientErrorCode.NoError;
     }
 
     export function destroyPlayerForce(war: BwWar, playerIndex: number, showExplosionEffect: boolean): void {
@@ -68,14 +77,25 @@ namespace TinyWars.Utility.DestructionHelpers {
             (warView) && (warView.showVibration());
         }
 
-        tileMap.forEachTile(tile => {
+        for (const tile of tileMap.getAllTiles()) {
             if (tile.getPlayerIndex() === playerIndex) {
-                const objectType    = tile.getObjectType();
+                const baseType = tile.getBaseType();
+                if (baseType == null) {
+                    Logger.error(`DestructionHelpers.destroyPlayerForce() empty baseType.`);
+                    continue;
+                }
+
+                const objectType = tile.getObjectType();
+                if (objectType == null) {
+                    Logger.error(`DestructionHelpers.destroyPlayerForce() empty objectType.`);
+                    continue;
+                }
+
                 const hp            = tile.getCurrentHp();
                 const buildPoint    = tile.getCurrentBuildPoint();
                 const capturePoint  = tile.getCurrentCapturePoint();
                 tile.resetByTypeAndPlayerIndex({
-                    baseType        : tile.getBaseType(),
+                    baseType,
                     objectType      : objectType === TileObjectType.Headquarters ? TileObjectType.City : objectType,
                     playerIndex     : CommonConstants.WarNeutralPlayerIndex,
                 });
@@ -83,7 +103,7 @@ namespace TinyWars.Utility.DestructionHelpers {
                 tile.setCurrentBuildPoint(buildPoint);
                 tile.setCurrentCapturePoint(capturePoint);
             }
-        });
+        }
 
         war.getFogMap().resetAllMapsForPlayer(playerIndex);
 
@@ -111,7 +131,13 @@ namespace TinyWars.Utility.DestructionHelpers {
         const unitMap = war.getUnitMap();
         if (war.getFogMap().checkHasFogCurrently()) {
             for (const [unitId, unit] of unitMap.getLoadedUnits()) {
-                if (!watcherTeamIndexes.has(unit.getTeamIndex())) {
+                const teamIndex = unit.getTeamIndex();
+                if (teamIndex == null) {
+                    Logger.error(`DestructionHelpers.removeInvisibleLoadedUnits() empty teamIndex.`);
+                    continue;
+                }
+
+                if (!watcherTeamIndexes.has(teamIndex)) {
                     unitMap.removeUnitLoaded(unitId);
                 }
             }

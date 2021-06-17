@@ -140,7 +140,7 @@ namespace TinyWars.Utility.Lang {
         R0000, R0001, R0002, R0003, R0004, R0005, R0006, R0007, R0008, R0009,
     }
 
-    const _LANG_DATA = {
+    const _LANG_DATA: { [type: number]: string [] } = {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Long strings.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4183,7 +4183,7 @@ namespace TinyWars.Utility.Lang {
         ],
     };
 
-    const RICH_DATA = {
+    const RICH_DATA: { [richType: number]: string[] } = {
         [RichType.R0000]: [
             [
                 `本选项影响您在回合中的行动顺序，以及您所属的队伍（由地图规则设定）`,
@@ -4389,12 +4389,14 @@ namespace TinyWars.Utility.Lang {
         _languageType = language;
     }
 
-    export function getText(t: Type, languageType = getCurrentLanguageType()): string {
-        return _LANG_DATA[t][languageType];
+    export function getText(t: Type, languageType = getCurrentLanguageType()): string | undefined {
+        const data = _LANG_DATA[t];
+        return data ? data[languageType] : undefined;
     }
 
-    export function getFormattedText(t: Type, ...params: any[]): string {
-        return Helpers.formatString(getText(t), ...params);
+    export function getFormattedText(t: Type, ...params: any[]): string | undefined {
+        const data = getText(t);
+        return data ? Helpers.formatString(data, ...params) : undefined;
     }
 
     export function getErrorText(code: ServerErrorCode | ClientErrorCode): string {
@@ -4403,15 +4405,16 @@ namespace TinyWars.Utility.Lang {
         return `${getText(Type.B0452)} ${code}: ${text || getText(Type.A0153)}`;
     }
 
-    export function getRichText(richType: RichType): string {
-        return RICH_DATA[richType][_languageType];
+    export function getRichText(richType: RichType): string | undefined {
+        const data = RICH_DATA[richType];
+        return data ? data[_languageType] : undefined;
     }
 
     export function getPlayerForceName(playerIndex: number): string {
         return `P${playerIndex}`;
     }
 
-    export function getPlayerTeamName(teamIndex: number): string {
+    export function getPlayerTeamName(teamIndex: number): string | undefined {
         switch (teamIndex) {
             case 1  : return getText(Type.B0008);
             case 2  : return getText(Type.B0009);
@@ -4421,7 +4424,7 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getTileName(tileType: Types.TileType): string {
+    export function getTileName(tileType: Types.TileType): string | undefined {
         switch (tileType) {
             case Types.TileType.Plain           : return getText(Type.B1000);
             case Types.TileType.River           : return getText(Type.B1001);
@@ -4461,7 +4464,7 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getUnitName(unitType: Types.UnitType): string {
+    export function getUnitName(unitType: Types.UnitType): string | undefined {
         switch (unitType) {
             case Types.UnitType.Infantry        : return getText(Type.B1200);
             case Types.UnitType.Mech            : return getText(Type.B1201);
@@ -4493,7 +4496,7 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getUnitActionName(actionType: Types.UnitActionType): string {
+    export function getUnitActionName(actionType: Types.UnitActionType): string | undefined{
         switch (actionType) {
             case Types.UnitActionType.BeLoaded          : return getText(Type.B0037);
             case Types.UnitActionType.Join              : return getText(Type.B0038);
@@ -4516,7 +4519,7 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getRankName(playerRank: number): string {
+    export function getRankName(playerRank: number): string | undefined {
         switch (playerRank) {
             case 0  : return getText(Type.B0061);
             case 1  : return getText(Type.B0062);
@@ -4538,7 +4541,7 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getMoveTypeName(t: Types.MoveType): string {
+    export function getMoveTypeName(t: Types.MoveType): string | undefined {
         switch (t) {
             case Types.MoveType.Air         : return getText(Type.B0117);
             case Types.MoveType.Infantry    : return getText(Type.B0112);
@@ -4552,7 +4555,7 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getUnitCategoryName(t: Types.UnitCategory): string {
+    export function getUnitCategoryName(t: Types.UnitCategory): string | undefined {
         switch (t) {
             case Types.UnitCategory.All                 : return getText(Type.B0120);
             case Types.UnitCategory.Ground              : return getText(Type.B0121);
@@ -4571,11 +4574,11 @@ namespace TinyWars.Utility.Lang {
             case Types.UnitCategory.Copter              : return getText(Type.B0134);
             case Types.UnitCategory.Tank                : return getText(Type.B0135);
             case Types.UnitCategory.AirExceptSeaplane   : return getText(Type.B0136);
-            default                                     : return null;
+            default                                     : return undefined;
         }
     }
 
-    export function getWarTypeName(type: Types.WarType): string {
+    export function getWarTypeName(type: Types.WarType): string | undefined {
         switch (type) {
             case Types.WarType.McwStd   : return getText(Type.B0417);
             case Types.WarType.McwFog   : return getText(Type.B0418);
@@ -4586,21 +4589,21 @@ namespace TinyWars.Utility.Lang {
             case Types.WarType.ScwFog   : return getText(Type.B0611);
             case Types.WarType.SfwStd   : return getText(Type.B0612);
             case Types.WarType.SfwFog   : return getText(Type.B0613);
-            default                     : return null;
+            default                     : return undefined;
         }
     }
 
-    export function getMapReviewStatusText(status: Types.MapReviewStatus): string {
+    export function getMapReviewStatusText(status: Types.MapReviewStatus): string | undefined{
         switch (status) {
             case Types.MapReviewStatus.None         : return getText(Type.B0273);
             case Types.MapReviewStatus.Reviewing    : return getText(Type.B0274);
             case Types.MapReviewStatus.Rejected     : return getText(Type.B0275);
             case Types.MapReviewStatus.Accepted     : return getText(Type.B0276);
-            default                                 : return null;
+            default                                 : return undefined;
         }
     }
 
-    export function getMapEditorDrawerModeText(mode: Types.MapEditorDrawerMode): string {
+    export function getMapEditorDrawerModeText(mode: Types.MapEditorDrawerMode): string | undefined{
         switch (mode) {
             case Types.MapEditorDrawerMode.Preview          : return getText(Type.B0286);
             case Types.MapEditorDrawerMode.DrawUnit         : return getText(Type.B0281);
@@ -4608,35 +4611,35 @@ namespace TinyWars.Utility.Lang {
             case Types.MapEditorDrawerMode.DrawTileObject   : return getText(Type.B0283);
             case Types.MapEditorDrawerMode.DeleteUnit       : return getText(Type.B0284);
             case Types.MapEditorDrawerMode.DeleteTileObject : return getText(Type.B0285);
-            default                                         : return null;
+            default                                         : return undefined;
         }
     }
 
-    export function getUnitActionStateText(state: Types.UnitActionState): string {
+    export function getUnitActionStateText(state: Types.UnitActionState): string | undefined{
         switch (state) {
             case Types.UnitActionState.Acted    : return getText(Type.B0368);
             case Types.UnitActionState.Idle     : return getText(Type.B0369);
-            default                             : return null;
+            default                             : return undefined;
         }
     }
 
-    export function getChatChannelName(channel: Types.ChatChannel): string {
+    export function getChatChannelName(channel: Types.ChatChannel): string | undefined {
         switch (channel) {
             case Types.ChatChannel.System   : return getText(Type.B0374);
             case Types.ChatChannel.PublicEn : return getText(Type.B0373);
             case Types.ChatChannel.PublicCn : return getText(Type.B0384);
-            default                         : return null;
+            default                         : return undefined;
         }
     }
 
-    export function getUnitAndTileSkinName(skinId: number): string {
+    export function getUnitAndTileSkinName(skinId: number): string | undefined {
         switch (skinId) {
             case 0  : return "";
             case 1  : return getText(Type.B0004);
             case 2  : return getText(Type.B0005);
             case 3  : return getText(Type.B0006);
             case 4  : return getText(Type.B0007);
-            default : return null;
+            default : return undefined;
         }
     }
 
@@ -4666,10 +4669,13 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined {
-        return (warRule.ruleId == null)
-            ? getText(Type.B0321)
-            : getLanguageText({ textArray: warRule.ruleNameArray });
+    export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined | null {
+        if (warRule.ruleId == null) {
+            return getText(Type.B0321);
+        } else {
+            const ruleNameArray = warRule.ruleNameArray;
+            return ruleNameArray ? getLanguageText({ textArray: ruleNameArray }) : undefined;
+        }
     }
 
     export function getWarEventConditionTypeName(type: WarEventConditionType): string | undefined {
@@ -4728,7 +4734,7 @@ namespace TinyWars.Utility.Lang {
         textArray       : ProtoTypes.Structure.ILanguageText[];
         languageType?   : LanguageType;
         useAlternate?   : boolean;
-    }): string | undefined {
+    }): string | undefined | null {
         const data = (textArray || []).find(v => v.languageType === languageType);
         if (data) {
             return data.text;
@@ -4742,19 +4748,19 @@ namespace TinyWars.Utility.Lang {
     export function concatLanguageTextList(textList: ProtoTypes.Structure.ILanguageText[]): string {
         const strList: string[] = [];
         for (const data of textList || []) {
-            strList.push(data.text);
+            strList.push(data.text || `??`);
         }
         return strList.join(`, `);
     }
 
-    export function getBootTimerTypeName(type: Types.BootTimerType): string {
+    export function getBootTimerTypeName(type: Types.BootTimerType): string | undefined {
         switch (type) {
             case Types.BootTimerType.Regular    : return getText(Type.B0387);
             case Types.BootTimerType.Incremental: return getText(Type.B0388);
-            default                             : return null;
+            default                             : return undefined;
         }
     }
-    export function getBootTimerDesc(params: number[]): string {
+    export function getBootTimerDesc(params: number[]): string | undefined {
         params          = params || [];
         const timerType = params[0] as Types.BootTimerType;
         if (timerType === Types.BootTimerType.Regular) {
@@ -4762,13 +4768,13 @@ namespace TinyWars.Utility.Lang {
         } else if (timerType === Types.BootTimerType.Incremental) {
             return `${getText(Type.B0388)} ${Helpers.getTimeDurationText2(params[1])} + ${Helpers.getTimeDurationText2(params[2])}`;
         } else {
-            return null;
+            return undefined;
         }
     }
     export async function getGameStartDesc(data: ProtoTypes.NetMessage.MsgMpwCommonBroadcastGameStart.IS): Promise<string> {
         const playerArray   : string[] = [];
         let playerIndex     = CommonConstants.WarFirstPlayerIndex;
-        for (const playerInfo of data.playerInfoList) {
+        for (const playerInfo of data.playerInfoList || []) {
             const userId = playerInfo.userId;
             playerArray.push(`P${playerIndex}: ${userId != null ? await User.UserModel.getUserNickname(userId) : `----`}`);
             ++playerIndex;

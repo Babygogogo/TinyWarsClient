@@ -22,7 +22,8 @@ namespace TinyWars.BaseWar {
         public abstract init(data: ISerialWar): Promise<ClientErrorCode>;
         public abstract getWarType(): Types.WarType;
         public abstract getMapId(): number | undefined;
-        public abstract getIsNeedReplay(): boolean;
+        public abstract getIsNeedExecutedAction(): boolean;
+        public abstract getIsNeedSeedRandom(): boolean;
         public abstract getIsWarMenuPanelOpening(): boolean;
         public abstract getCanCheat(): boolean;
         public abstract getPlayerManager(): BwPlayerManager;
@@ -88,17 +89,16 @@ namespace TinyWars.BaseWar {
                 return warEventManagerError;
             }
 
-            const isNeedReplay              = this.getIsNeedReplay();
             const randomNumberManagerError  = this.getRandomNumberManager().init({
-                isNeedReplay,
-                initialState: data.seedRandomInitialState,
-                currentState: data.seedRandomCurrentState,
+                isNeedSeedRandom: this.getIsNeedSeedRandom(),
+                initialState    : data.seedRandomInitialState,
+                currentState    : data.seedRandomCurrentState,
             });
             if (randomNumberManagerError) {
                 return randomNumberManagerError;
             }
 
-            const executedActionManagerError = this.getExecutedActionManager().init(isNeedReplay, data.executedActions || []);
+            const executedActionManagerError = this.getExecutedActionManager().init(this.getIsNeedExecutedAction(), data.executedActions || []);
             if (executedActionManagerError) {
                 return executedActionManagerError;
             }
