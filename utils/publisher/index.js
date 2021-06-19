@@ -5,6 +5,7 @@ const PublishConfig = require("../../../TinyWarsExternals/utils/Publisher/Publis
 
 const INDEX_PATH            = "bin-release/web/twc/index.html";
 const TSCONFIG_PATH         = "tsconfig.json";
+const COMMON_CONSTANTS_PATH = "src/utility/CommonConstants.ts";
 const TSCONFIG_FOR_PUBLISH  = {
     "compilerOptions": {
         "target": "es5",
@@ -26,7 +27,7 @@ const TSCONFIG_FOR_PUBLISH  = {
         "src",
         "libs"
     ]
-}
+};
 
 const publishConfig = PublishConfig[process.argv[2]];
 if (publishConfig == null) {
@@ -34,10 +35,14 @@ if (publishConfig == null) {
     return;
 }
 
-const currConfig = fs.readFileSync(TSCONFIG_PATH, "utf8");
+const currTsConfig          = fs.readFileSync(TSCONFIG_PATH, "utf8");
+const currCommonConstants   = fs.readFileSync(COMMON_CONSTANTS_PATH, "utf8");
+
 fs.writeFileSync(TSCONFIG_PATH, JSON.stringify(TSCONFIG_FOR_PUBLISH), { encoding: "utf8", flag: "w+" });
+fs.writeFileSync(COMMON_CONSTANTS_PATH, getCommonConstantsForPublish(currCommonConstants), { encoding: "utf8", flag: "w+" });
 console.log(execSync(`egret publish --version twc`, {encoding: "utf8"}));
-fs.writeFileSync(TSCONFIG_PATH, currConfig, { encoding: "utf8", flag: "w+" });
+fs.writeFileSync(TSCONFIG_PATH, currTsConfig, { encoding: "utf8", flag: "w+" });
+fs.writeFileSync(COMMON_CONSTANTS_PATH, currCommonConstants, { encoding: "utf8", flag: "w+" });
 
 fs.writeFileSync(
     INDEX_PATH,
@@ -68,4 +73,8 @@ function getDigitsCount(num) {
 
 function getNumText(num, targetLength = 2) {
     return repeatString("0", targetLength - getDigitsCount(num)) + num;
+}
+
+function getCommonConstantsForPublish(currData) {
+    return currData.replace(/= Types\.GameVersion\..*/, `= Types.GameVersion.${publishConfig.gameVersion};`);
 }

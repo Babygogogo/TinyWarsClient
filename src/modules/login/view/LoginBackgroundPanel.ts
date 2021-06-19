@@ -1,9 +1,11 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Login {
-    import Notify   = Utility.Notify;
-    import Lang     = Utility.Lang;
-    import Types    = Utility.Types;
-    import Helpers  = Utility.Helpers;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import Types            = Utility.Types;
+    import CommonConstants  = Utility.CommonConstants;
+    import Helpers          = Utility.Helpers;
 
     export class LoginBackgroundPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Bottom;
@@ -11,11 +13,19 @@ namespace TinyWars.Login {
 
         private static _instance: LoginBackgroundPanel;
 
+        // @ts-ignore
         private _imgBackground      : GameUi.UiImage;
+        // @ts-ignore
+        private _btnVersion         : GameUi.UiButton;
+        // @ts-ignore
         private _labelVersion       : GameUi.UiLabel;
+        // @ts-ignore
         private _btnLanguage01      : GameUi.UiButton;
+        // @ts-ignore
         private _btnLanguage02      : GameUi.UiButton;
+        // @ts-ignore
         private _groupCopyright     : eui.Group;
+        // @ts-ignore
         private _groupUnits         : eui.Group;
 
         public static show(): void {
@@ -47,6 +57,7 @@ namespace TinyWars.Login {
                 { ui: this,                 callback: this._onTouchedSelf },
                 { ui: this._btnLanguage01,  callback: this._onTouchedBtnLanguage01 },
                 { ui: this._btnLanguage02,  callback: this._onTouchedBtnLanguage02 },
+                { ui: this._btnVersion,     callback: this._onTouchedBtnVersion },
             ]);
 
             this._showOpenAnimation();
@@ -55,8 +66,7 @@ namespace TinyWars.Login {
             this._btnLanguage01.setImgDisplaySource("login_button_language_003");
             this._btnLanguage01.setImgExtraSource("login_button_language_001");
 
-            this._labelVersion.text = `v.${window.CLIENT_VERSION}`;
-            this._updateBtnLanguages();
+            this._updateComponentsForLanguage();
 
             if (Utility.ConfigManager.getLatestFormalVersion()) {
                 // this._initGroupUnits();
@@ -69,36 +79,39 @@ namespace TinyWars.Login {
             this._clearGroupUnits();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateBtnLanguages();
+        private _onNotifyLanguageChanged(): void {
+            this._updateComponentsForLanguage();
         }
-        private _onNotifyUnitAnimationTick(e: egret.Event): void {
+        private _onNotifyUnitAnimationTick(): void {
             const group = this._groupUnits;
             const tick  = Time.TimeModel.getUnitAnimationTickCount();
             for (let i = group.numChildren - 1; i >= 0; --i) {
                 ((group.getChildAt(i) as eui.Component).getChildAt(0) as WarMap.WarMapUnitView).updateOnAnimationTick(tick);
             }
         }
-        private _onMsgCommonLatestConfigVersion(e: egret.Event): void {
+        private _onMsgCommonLatestConfigVersion(): void {
             // this._initGroupUnits();
         }
-        private _onTouchedSelf(e: egret.TouchEvent): void {
+        private _onTouchedSelf(): void {
             Utility.SoundManager.init();
         }
-        private _onTouchedBtnLanguage01(e: egret.TouchEvent): void {
+        private _onTouchedBtnLanguage01(): void {
             if (Lang.getCurrentLanguageType() !== Types.LanguageType.Chinese) {
                 Lang.setLanguageType(Types.LanguageType.Chinese);
                 Notify.dispatch(Notify.Type.LanguageChanged);
             }
         }
-        private _onTouchedBtnLanguage02(e: egret.TouchEvent): void {
+        private _onTouchedBtnLanguage02(): void {
             if (Lang.getCurrentLanguageType() !== Types.LanguageType.English) {
                 Lang.setLanguageType(Types.LanguageType.English);
                 Notify.dispatch(Notify.Type.LanguageChanged);
             }
         }
+        private _onTouchedBtnVersion(): void {
+            Common.CommonChangeVersionPanel.show();
+        }
 
-        private _updateBtnLanguages(): void {
+        private _updateComponentsForLanguage(): void {
             const languageType = Lang.getCurrentLanguageType();
             this._btnLanguage01.setImgDisplaySource(languageType === Types.LanguageType.Chinese
                 ? "login_button_language_001"
@@ -108,6 +121,8 @@ namespace TinyWars.Login {
                 ? "login_button_language_002"
                 : "login_button_language_004"
             );
+            this._btnVersion.label = Lang.getText(Lang.Type.B0620);
+            this._labelVersion.text = `${Lang.getGameVersionName(CommonConstants.GameVersion)}\nv.${window.CLIENT_VERSION}`;
         }
 
         private _showOpenAnimation(): void {
@@ -127,6 +142,12 @@ namespace TinyWars.Login {
                 waitTime    : 1500,
                 beginProps  : { left: -40, alpha: 0 },
                 endProps    : { left: 0, alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._btnVersion,
+                waitTime    : 1600,
+                beginProps  : { right: -40, alpha: 0 },
+                endProps    : { right: 0, alpha: 1 },
             });
             Helpers.resetTween({
                 obj         : this._labelVersion,
@@ -163,6 +184,11 @@ namespace TinyWars.Login {
                     obj         : this._labelVersion,
                     beginProps  : { right: 20, alpha: 1 },
                     endProps    : { right: -20, alpha: 0 },
+                });
+                Helpers.resetTween({
+                    obj         : this._btnVersion,
+                    beginProps  : { right: 0, alpha: 1 },
+                    endProps    : { right: -40, alpha: 0 },
                 });
                 Helpers.resetTween({
                     obj         : this._groupCopyright,

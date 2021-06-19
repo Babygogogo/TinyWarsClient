@@ -1,45 +1,76 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapManagement {
     import Lang     = Utility.Lang;
     import Notify   = Utility.Notify;
 
-    export class MmAcceptMapPanel extends GameUi.UiPanel<void> {
+    type OpenData = {
+        war: MapEditor.MeWar;
+    }
+    export class MmAcceptMapPanel extends GameUi.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: MmAcceptMapPanel;
 
+        // @ts-ignore
         private _labelTitle     : GameUi.UiLabel;
+        // @ts-ignore
         private _labelTips      : GameUi.UiLabel;
+        // @ts-ignore
         private _inputReason    : GameUi.UiTextInput;
+        // @ts-ignore
         private _btnCancel      : GameUi.UiButton;
+        // @ts-ignore
         private _btnConfirm     : GameUi.UiButton;
 
+        // @ts-ignore
         private _groupMcw       : eui.Group;
+        // @ts-ignore
         private _labelMcw       : GameUi.UiLabel;
+        // @ts-ignore
         private _imgMcw         : GameUi.UiImage;
 
+        // @ts-ignore
+        private _groupCcw       : eui.Group;
+        // @ts-ignore
+        private _labelCcw       : GameUi.UiLabel;
+        // @ts-ignore
+        private _imgCcw         : GameUi.UiImage;
+
+        // @ts-ignore
         private _groupScw       : eui.Group;
+        // @ts-ignore
         private _labelScw       : GameUi.UiLabel;
+        // @ts-ignore
         private _imgScw         : GameUi.UiImage;
 
+        // @ts-ignore
         private _groupSrw       : eui.Group;
+        // @ts-ignore
         private _labelSrw       : GameUi.UiLabel;
+        // @ts-ignore
         private _imgSrw         : GameUi.UiImage;
 
+        // @ts-ignore
         private _groupMrwStd    : eui.Group;
+        // @ts-ignore
         private _labelMrwStd    : GameUi.UiLabel;
+        // @ts-ignore
         private _imgMrwStd      : GameUi.UiImage;
 
+        // @ts-ignore
         private _groupMrwFog    : eui.Group;
+        // @ts-ignore
         private _labelMrwFog    : GameUi.UiLabel;
+        // @ts-ignore
         private _imgMrwFog      : GameUi.UiImage;
 
-        public static show(): void {
+        public static show(openData: OpenData): void {
             if (!MmAcceptMapPanel._instance) {
                 MmAcceptMapPanel._instance = new MmAcceptMapPanel();
             }
-            MmAcceptMapPanel._instance.open(undefined);
+            MmAcceptMapPanel._instance.open(openData);
         }
 
         public static async hide(): Promise<void> {
@@ -63,6 +94,7 @@ namespace TinyWars.MapManagement {
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel, },
                 { ui: this._btnConfirm,     callback: this._onTouchedBtnConfirm, },
                 { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
+                { ui: this._groupCcw,       callback: this._onTouchedGroupCcw },
                 { ui: this._groupScw,       callback: this._onTouchedGroupScw },
                 { ui: this._groupSrw,       callback: this._onTouchedGroupSrw },
                 { ui: this._groupMrwStd,    callback: this._onTouchedGroupMrwStd },
@@ -72,21 +104,22 @@ namespace TinyWars.MapManagement {
             this._updateComponentsForLanguage();
 
             this._imgMcw.visible    = false;
+            this._imgCcw.visible    = false;
             this._imgScw.visible    = false;
             this._imgSrw.visible    = false;
             this._imgMrwStd.visible = false;
             this._imgMrwFog.visible = false;
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const war = MapEditor.MeModel.getWar();
+        private _onTouchedBtnConfirm(): void {
+            const war = this._getOpenData().war;
             WarMap.WarMapProxy.reqMmReviewMap({
                 designerUserId  : war.getMapDesignerUserId(),
                 slotIndex       : war.getMapSlotIndex(),
@@ -95,6 +128,7 @@ namespace TinyWars.MapManagement {
                 reviewComment   : this._inputReason.text,
                 availability    : {
                     canMcw      : this._imgMcw.visible,
+                    canCcw      : this._imgCcw.visible,
                     canScw      : this._imgScw.visible,
                     canSrw      : this._imgSrw.visible,
                     canMrwStd   : this._imgMrwStd.visible,
@@ -103,19 +137,22 @@ namespace TinyWars.MapManagement {
             });
             this.close();
         }
-        private _onTouchedGroupMcw(e: egret.TouchEvent): void {
+        private _onTouchedGroupMcw(): void {
             this._imgMcw.visible = !this._imgMcw.visible;
         }
-        private _onTouchedGroupScw(e: egret.TouchEvent): void {
+        private _onTouchedGroupCcw(): void {
+            this._imgCcw.visible = !this._imgCcw.visible;
+        }
+        private _onTouchedGroupScw(): void {
             this._imgScw.visible = !this._imgScw.visible;
         }
-        private _onTouchedGroupSrw(e: egret.TouchEvent): void {
+        private _onTouchedGroupSrw(): void {
             this._imgSrw.visible = !this._imgSrw.visible;
         }
-        private _onTouchedGroupMrwStd(e: egret.TouchEvent): void {
+        private _onTouchedGroupMrwStd(): void {
             this._imgMrwStd.visible = !this._imgMrwStd.visible;
         }
-        private _onTouchedGroupMrwFog(e: egret.TouchEvent): void {
+        private _onTouchedGroupMrwFog(): void {
             this._imgMrwFog.visible = !this._imgMrwFog.visible;
         }
 
@@ -125,6 +162,7 @@ namespace TinyWars.MapManagement {
             this._labelTitle.text   = Lang.getText(Lang.Type.B0296);
             this._labelTips.text    = Lang.getText(Lang.Type.A0105);
             this._labelMcw.text     = Lang.getText(Lang.Type.B0200);
+            this._labelCcw.text     = Lang.getText(Lang.Type.B0619);
             this._labelMrwStd.text  = Lang.getText(Lang.Type.B0404);
             this._labelMrwFog.text  = Lang.getText(Lang.Type.B0408);
             this._labelScw.text     = Lang.getText(Lang.Type.B0409);

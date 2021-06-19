@@ -1,6 +1,9 @@
 
-namespace TinyWars.Utility {
- export namespace ProtoTypes {
+/* eslint-disable no-shadow */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-empty-interface */
+namespace TinyWars.Utility.ProtoTypes {
+
 /** Properties of a Config. */
 export declare interface IConfig {
 }
@@ -2069,6 +2072,9 @@ export declare namespace Map {
 
         /** MapAvailability canSrw */
         canSrw?: (boolean|null);
+
+        /** MapAvailability canCcw */
+        canCcw?: (boolean|null);
     }
 
     /** Represents a MapAvailability. */
@@ -2094,6 +2100,9 @@ export declare namespace Map {
 
         /** MapAvailability canSrw. */
         public canSrw: boolean;
+
+        /** MapAvailability canCcw. */
+        public canCcw: boolean;
 
         /**
          * Creates a new MapAvailability instance using the specified properties.
@@ -5675,6 +5684,9 @@ export declare namespace WarRule {
 
         /** DataForWarRuleAvailability canSrw */
         canSrw?: (boolean|null);
+
+        /** DataForWarRuleAvailability canCcw */
+        canCcw?: (boolean|null);
     }
 
     /** Represents a DataForWarRuleAvailability. */
@@ -5697,6 +5709,9 @@ export declare namespace WarRule {
 
         /** DataForWarRuleAvailability canSrw. */
         public canSrw: boolean;
+
+        /** DataForWarRuleAvailability canCcw. */
+        public canCcw: boolean;
 
         /**
          * Creates a new DataForWarRuleAvailability instance using the specified properties.
@@ -6955,6 +6970,120 @@ export declare namespace WarSettings {
 
         /**
          * Converts this SettingsForSrw to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a SettingsForCcw. */
+    interface ISettingsForCcw {
+
+        /** SettingsForCcw mapId */
+        mapId?: (number|null);
+
+        /** SettingsForCcw warName */
+        warName?: (string|null);
+
+        /** SettingsForCcw warPassword */
+        warPassword?: (string|null);
+
+        /** SettingsForCcw warComment */
+        warComment?: (string|null);
+
+        /** SettingsForCcw bootTimerParams */
+        bootTimerParams?: (number[]|null);
+    }
+
+    /** Represents a SettingsForCcw. */
+    class SettingsForCcw implements ISettingsForCcw {
+
+        /**
+         * Constructs a new SettingsForCcw.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarSettings.ISettingsForCcw);
+
+        /** SettingsForCcw mapId. */
+        public mapId: number;
+
+        /** SettingsForCcw warName. */
+        public warName: string;
+
+        /** SettingsForCcw warPassword. */
+        public warPassword: string;
+
+        /** SettingsForCcw warComment. */
+        public warComment: string;
+
+        /** SettingsForCcw bootTimerParams. */
+        public bootTimerParams: number[];
+
+        /**
+         * Creates a new SettingsForCcw instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns SettingsForCcw instance
+         */
+        public static create(properties?: WarSettings.ISettingsForCcw): WarSettings.SettingsForCcw;
+
+        /**
+         * Encodes the specified SettingsForCcw message. Does not implicitly {@link WarSettings.SettingsForCcw.verify|verify} messages.
+         * @param message SettingsForCcw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarSettings.ISettingsForCcw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified SettingsForCcw message, length delimited. Does not implicitly {@link WarSettings.SettingsForCcw.verify|verify} messages.
+         * @param message SettingsForCcw message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarSettings.ISettingsForCcw, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a SettingsForCcw message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns SettingsForCcw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarSettings.SettingsForCcw;
+
+        /**
+         * Decodes a SettingsForCcw message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns SettingsForCcw
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarSettings.SettingsForCcw;
+
+        /**
+         * Verifies a SettingsForCcw message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a SettingsForCcw message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns SettingsForCcw
+         */
+        public static fromObject(object: { [k: string]: any }): WarSettings.SettingsForCcw;
+
+        /**
+         * Creates a plain object from a SettingsForCcw message. Also converts values to other types if specified.
+         * @param message SettingsForCcw
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarSettings.SettingsForCcw, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this SettingsForCcw to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -8451,6 +8580,9 @@ export declare namespace WarSerialization {
         /** SerialWar settingsForSrw */
         settingsForSrw?: (WarSettings.ISettingsForSrw|null);
 
+        /** SerialWar settingsForCcw */
+        settingsForCcw?: (WarSettings.ISettingsForCcw|null);
+
         /** SerialWar warId */
         warId?: (number|null);
 
@@ -8508,6 +8640,9 @@ export declare namespace WarSerialization {
 
         /** SerialWar settingsForSrw. */
         public settingsForSrw?: (WarSettings.ISettingsForSrw|null);
+
+        /** SerialWar settingsForCcw. */
+        public settingsForCcw?: (WarSettings.ISettingsForCcw|null);
 
         /** SerialWar warId. */
         public warId: number;
@@ -16449,6 +16584,9 @@ export declare namespace MultiPlayerWar {
         /** MpwWarInfo settingsForMfw */
         settingsForMfw?: (WarSettings.ISettingsForMfw|null);
 
+        /** MpwWarInfo settingsForCcw */
+        settingsForCcw?: (WarSettings.ISettingsForCcw|null);
+
         /** MpwWarInfo warId */
         warId?: (number|null);
 
@@ -16485,6 +16623,9 @@ export declare namespace MultiPlayerWar {
 
         /** MpwWarInfo settingsForMfw. */
         public settingsForMfw?: (WarSettings.ISettingsForMfw|null);
+
+        /** MpwWarInfo settingsForCcw. */
+        public settingsForCcw?: (WarSettings.ISettingsForCcw|null);
 
         /** MpwWarInfo warId. */
         public warId: number;
@@ -57267,4 +57408,4 @@ export declare namespace NetMessage {
         }
     }
 }
-}}
+}

@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Utility.Types {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Config types.
@@ -154,6 +155,7 @@ namespace TinyWars.Utility.Types {
         gridIndex   : GridIndex;
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum Visibility {
         OutsideVision   = 0,
         InsideVision    = 1,
@@ -195,6 +197,7 @@ namespace TinyWars.Utility.Types {
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.
     ////////////////////////////////////////////////////////////////////////////////
+    // eslint-disable-next-line no-shadow
     export const enum LayerType {
         Top,
         Notify2,    // FloatText
@@ -208,6 +211,7 @@ namespace TinyWars.Utility.Types {
         Bottom,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum ColorType {
         Origin,
         Gray,
@@ -217,12 +221,14 @@ namespace TinyWars.Utility.Types {
         Blue,
         White,
     }
+    // eslint-disable-next-line no-shadow
     export const enum ColorValue {
         Red     = 0xFF0000,
         White   = 0xFFFFFF,
         Green   = 0x00FF00,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum SoundType {
         Bgm,
         Effect,
@@ -233,18 +239,21 @@ namespace TinyWars.Utility.Types {
         Down: "down",
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum LogoutType {
         SelfRequest,
         LoginCollision,
         NetworkFailure,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum SyncWarRequestType {
         PlayerRequest,
         PlayerForce,
         ReconnectionRequest,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum SyncWarStatus {
         NoError,
         NotJoined,
@@ -253,16 +262,19 @@ namespace TinyWars.Utility.Types {
         EndedOrNotExists,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum MoveType {
         Infantry,  /* 0 */            Mech,      /* 1 */            TireA,     /* 2 */            TireB,     /* 3 */
         Tank,      /* 4 */            Air,       /* 5 */            Ship,      /* 6 */            Transport, /* 7 */
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum TileBaseType {
         Empty,  /* 0 */            Plain,  /* 1 */            River,  /* 2 */            Sea,    /* 3 */
         Beach,  /* 4 */
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum TileObjectType {
         Empty,        /* 0 */             Road,         /* 1 */             Bridge,       /* 2 */             Wood,         /* 3 */
         Mountain,     /* 4 */             Wasteland,    /* 5 */             Ruins,        /* 6 */             Fire,         /* 7 */
@@ -273,6 +285,7 @@ namespace TinyWars.Utility.Types {
         GreenPlasma,  /* 24 */
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum TileType {
         Plain,         /* 0 */      River,         /* 1 */      Sea,           /* 2 */      Beach,         /* 3 */
         Road,          /* 4 */      BridgeOnPlain, /* 5 */      BridgeOnRiver, /* 6 */      BridgeOnBeach, /* 7 */
@@ -285,6 +298,7 @@ namespace TinyWars.Utility.Types {
         MistOnRiver,   /* 32 */     MistOnBeach,   /* 33 */
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum UnitType {
         Infantry,        /* 0 */            Mech,            /* 1 */            Bike,            /* 2 */            Recon,           /* 3 */
         Flare,           /* 4 */            AntiAir,         /* 5 */            Tank,            /* 6 */            MediumTank,      /* 7 */
@@ -295,6 +309,7 @@ namespace TinyWars.Utility.Types {
         Lander,          /* 24 */           Gunboat,         /* 25 */
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum UnitCategory {
         None,          /* 0 */            All,               /* 1 */            Ground,        /* 2 */            Naval,         /* 3 */
         Air,           /* 4 */            GroundOrNaval,     /* 5 */            GroundOrAir,   /* 6 */            Direct,        /* 7 */
@@ -303,10 +318,12 @@ namespace TinyWars.Utility.Types {
         Tank,          /* 16 */           AirExceptSeaplane, /* 17 */
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum TileCategory {
         None,          /* 0 */              All,               /* 1 */          LoadableForSeaTransports, /* 2 */   Destroyable,    /* 3 */
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum ArmorType {
         Infantry,        /* 0 */            Mech,            /* 1 */            Bike,            /* 2 */            Recon,           /* 3 */
         Flare,           /* 4 */            AntiAir,         /* 5 */            Tank,            /* 6 */            MediumTank,      /* 7 */
@@ -317,32 +334,38 @@ namespace TinyWars.Utility.Types {
         Lander,          /* 24 */           Gunboat,         /* 25 */           Meteor,          /* 26 */
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum UnitActionState {
         Idle,   /* 0 */         Acted,  /* 1 */
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum PlayerAliveState {
         Alive   = 0,
         Dying   = 1,
         Dead    = 2,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum UnitAnimationType {
         Stand,
         Move,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum WeaponType {
         Primary     = 0,
         Secondary   = 1,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum ForceFogCode {
         None,
         Clear,
         Fog,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum Direction {
         Undefined,
         Left,
@@ -351,6 +374,7 @@ namespace TinyWars.Utility.Types {
         Down,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum TurnPhaseCode {
         WaitBeginTurn       = 0,
         Main                = 1,
@@ -368,6 +392,7 @@ namespace TinyWars.Utility.Types {
         // ResetVotesForDraw,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum ActionPlannerState {
         Idle,
         ExecutingAction,
@@ -407,6 +432,7 @@ namespace TinyWars.Utility.Types {
         RequestingUnitWait,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum UnitActionType {
         BeLoaded,
         Join,
@@ -427,23 +453,27 @@ namespace TinyWars.Utility.Types {
         Wait,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum CoSkillType {
         Passive     = 0,
         Power       = 1,
         SuperPower  = 2,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum LanguageType {
         Chinese = 0,
         English = 1,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum CoSkillAreaType {
         Zone    = 0,
         OnMap   = 1,
         Halo    = 2,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum McwWatchRequestWatcherStatus {
         Succeed,
         TargetPlayerLost,
@@ -451,6 +481,7 @@ namespace TinyWars.Utility.Types {
         AlreadyAccepted,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum WarType {
         Undefined   = 0,
         McwStd      = 1,
@@ -467,8 +498,11 @@ namespace TinyWars.Utility.Types {
         SfwFog      = 12,
         SrwStd      = 13,
         SrwFog      = 14,
+        CcwStd      = 15,
+        CcwFog      = 16,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum MapReviewStatus {
         None        = 0,
         Reviewing   = 1,
@@ -476,6 +510,7 @@ namespace TinyWars.Utility.Types {
         Accepted    = 3,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum MapEditorDrawerMode {
         Preview,
         DrawUnit,
@@ -485,6 +520,7 @@ namespace TinyWars.Utility.Types {
         DeleteTileObject,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum SymmetryType {
         None                = -1,
         UpToDown            = 0,
@@ -494,12 +530,14 @@ namespace TinyWars.Utility.Types {
         Rotation            = 4,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum ChatChannel {
         System      = 1,
         PublicEn    = 2,
         PublicCn    = 3,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum ChatMessageToCategory {
         Private         = 1,
         WarAndTeam      = 2,
@@ -508,16 +546,19 @@ namespace TinyWars.Utility.Types {
         MfrRoom         = 5,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum UnitAndTileTextureVersion {
         V0  = 0,
         V1  = 1,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum BootTimerType {
         Regular     = 1,
         Incremental = 2,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum PlayerRuleType {
         TeamIndex,
         BannedCoIdArray,
@@ -532,6 +573,7 @@ namespace TinyWars.Utility.Types {
         LuckUpperLimit,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum WarEventDescType {
         EventName,
         EventMaxCallCountInPlayerTurn,
@@ -541,6 +583,7 @@ namespace TinyWars.Utility.Types {
         Action,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum WarEventConditionType {
         WecTurnIndexEqualTo,
         WecTurnIndexGreaterThan,
@@ -560,8 +603,15 @@ namespace TinyWars.Utility.Types {
         WecPlayerAliveStateEqualTo,
     }
 
+    // eslint-disable-next-line no-shadow
     export const enum WarEventActionType {
         AddUnit,
         SetPlayerAliveState,
+    }
+
+    // eslint-disable-next-line no-shadow
+    export const enum GameVersion {
+        Legacy,
+        Test,
     }
 }

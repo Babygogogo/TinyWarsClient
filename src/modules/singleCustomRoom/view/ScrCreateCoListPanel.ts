@@ -106,7 +106,7 @@ namespace TinyWars.SingleCustomRoom {
         private _onTouchedBtnHelp(e: egret.TouchEvent): void {
             Common.CommonHelpPanel.show({
                 title   : Lang.getText(Lang.Type.B0147),
-                content : Lang.getRichText(Lang.RichType.R0004),
+                content : Lang.getText(Lang.Type.R0004),
             });
         }
 

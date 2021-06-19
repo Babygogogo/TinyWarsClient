@@ -85,7 +85,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     export function checkIsRedForMyMfwWars(): boolean {
         return checkIsRedForMyWars(getMyMfwWarInfoArray());
     }
-    export function checkIsRedForMyWar(warInfo: IMpwWarInfo | null): boolean {
+    export function checkIsRedForMyWar(warInfo: IMpwWarInfo | null | undefined): boolean {
         if (warInfo == null) {
             return false;
         } else {

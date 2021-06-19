@@ -19,7 +19,7 @@ namespace TinyWars.BaseWar {
         private _warEventFullData?  : IWarEventFullData | null | undefined;
         private _calledCountList?   : IDataForWarEventCalledCount[] | null | undefined;
 
-        public init(data: ISerialWarEventManager): ClientErrorCode {
+        public init(data: ISerialWarEventManager | null | undefined): ClientErrorCode {
             if (!data) {
                 this._setWarEventFullData(null);
                 this._setCalledCountList(null);

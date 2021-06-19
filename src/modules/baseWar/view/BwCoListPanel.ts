@@ -304,7 +304,7 @@ namespace TinyWars.BaseWar {
                 this._scrHelp.visible = false;
             } else {
                 this._scrHelp.visible = true;
-                this._labelHelp.setRichText(Lang.getRichText(Lang.RichType.R0004));
+                this._labelHelp.setRichText(Lang.getText(Lang.Type.R0004));
             }
         }
 

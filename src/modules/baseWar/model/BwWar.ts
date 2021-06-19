@@ -14,14 +14,14 @@ namespace TinyWars.BaseWar {
         private readonly _drawVoteManager       = new BwDrawVoteManager();
         private readonly _view                  = new BwWarView();
 
-        private _warId                  : number;
+        private _warId                  : number | null | undefined;
         private _isRunning              = false;
         private _isExecutingAction      = false;
         private _isEnded                = false;
 
         public abstract init(data: ISerialWar): Promise<ClientErrorCode>;
         public abstract getWarType(): Types.WarType;
-        public abstract getMapId(): number | undefined;
+        public abstract getMapId(): number | null | undefined;
         public abstract getIsNeedExecutedAction(): boolean;
         public abstract getIsNeedSeedRandom(): boolean;
         public abstract getIsWarMenuPanelOpening(): boolean;
@@ -296,18 +296,18 @@ namespace TinyWars.BaseWar {
             return this._isEnded;
         }
 
-        private _setWarId(warId: number): void {
+        private _setWarId(warId: number | null | undefined): void {
             this._warId = warId;
         }
-        public getWarId(): number {
+        public getWarId(): number | null | undefined{
             return this._warId;
         }
 
-        public getConfigVersion(): string {
+        public getConfigVersion(): string | null | undefined {
             return this.getCommonSettingManager().getConfigVersion();
         }
 
-        public getWarRule(): ProtoTypes.WarRule.IWarRule {
+        public getWarRule(): ProtoTypes.WarRule.IWarRule | null | undefined {
             const settingsForCommon = this.getCommonSettingManager().getSettingsForCommon();
             if (settingsForCommon == null) {
                 Logger.error(`BwWar.getWarRule() empty settingsForCommon.`);

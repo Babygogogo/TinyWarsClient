@@ -24,8 +24,21 @@
             <e:VerticalLayout horizontalAlign="center" gap="0" />
         </e:layout>
     </e:Group>
+    <GameUi:UiButton id="_btnVersion" label="Button" right="0" verticalCenter="120">
+        <GameUi:skinName>
+            <e:Skin>
+                <e:Group left="0" right="0" top="0" bottom="0">
+                    <e:Image source="loginButtonVersion0000" verticalCenter="0" horizontalCenter="0" />
+                    <GameUi:UiLabel id="labelDisplay" size="16" text="Change Password" textAlign="center"
+                                    verticalAlign="middle" wordWrap="true" width="120" horizontalCenter="0"
+                                    verticalCenter="0" textColor="0x666666" />
+                    <GameUi:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16" height="16" />
+                </e:Group>
+            </e:Skin>
+        </GameUi:skinName>
+    </GameUi:UiButton>
     <GameUi:UiLabel id="_labelVersion" text="v19.0118.0149" bottom="16" right="20" size="18" textColor="0x000000"
-                    italic="true" />
+                    textAlign="right" lineSpacing="2" />
     <e:Group id="_groupUnits" width="4000" x="0" scaleX="0.25" scaleY="0.25" height="100">
         <e:layout>
             <e:HorizontalLayout gap="0" />

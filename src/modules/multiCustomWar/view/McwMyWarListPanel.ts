@@ -1,9 +1,11 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiCustomWar {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
+    import Logger           = Utility.Logger;
     import WarMapModel      = WarMap.WarMapModel;
     import MpwModel         = MultiPlayerWar.MpwModel;
     import MpwProxy         = MultiPlayerWar.MpwProxy;
@@ -14,20 +16,32 @@ namespace TinyWars.MultiCustomWar {
 
         private static _instance: McwMyWarListPanel;
 
+        // @ts-ignore
         private readonly _groupTab              : eui.Group;
+        // @ts-ignore
         private readonly _tabSettings           : GameUi.UiTab<DataForTabItemRenderer, OpenDataForMcwWarMapInfoPage | OpenDataForMcwWarPlayerInfoPage | OpenDataForMcwWarAdvancedSettingsPage | OpenDataForMcwWarBasicSettingsPage>;
 
+        // @ts-ignore
         private readonly _groupNavigator        : eui.Group;
+        // @ts-ignore
         private readonly _labelMultiPlayer      : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelMyWar            : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelChooseWar        : GameUi.UiLabel;
 
+        // @ts-ignore
         private readonly _btnBack               : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnNextStep           : GameUi.UiButton;
 
+        // @ts-ignore
         private readonly _groupWarList          : eui.Group;
+        // @ts-ignore
         private readonly _listWar               : GameUi.UiScrollList<DataForWarRenderer>;
+        // @ts-ignore
         private readonly _labelNoWar            : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelLoading          : GameUi.UiLabel;
 
         private _hasReceivedData    = false;
@@ -81,28 +95,28 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyMcwPreviewingWarIdChanged(e: egret.Event): void {
+        private _onNotifyMcwPreviewingWarIdChanged(): void {
             this._updateComponentsForPreviewingWarInfo();
         }
 
-        private _onNotifyMsgMpwCommonGetMyWarInfoList(e: egret.Event): void {
+        private _onNotifyMsgMpwCommonGetMyWarInfoList(): void {
             this._hasReceivedData = true;
             this._updateGroupWarList();
             this._updateComponentsForPreviewingWarInfo();
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        private _onTouchTapBtnBack(): void {
             this.close();
             MultiCustomRoom.McrMainMenuPanel.show();
             Lobby.LobbyTopPanel.show();
             Lobby.LobbyBottomPanel.show();
         }
 
-        private _onTouchedBtnNextStep(e: egret.TouchEvent): void {
+        private _onTouchedBtnNextStep(): void {
             const warId = MpwModel.getMcwPreviewingWarId();
             if (warId != null) {
                 MpwProxy.reqMpwCommonContinueWar(warId);
@@ -164,7 +178,7 @@ namespace TinyWars.MultiCustomWar {
 
                 const warId = MpwModel.getMcwPreviewingWarId();
                 if (dataArray.every(v => v.warId != warId)) {
-                    MpwModel.setMcwPreviewingWarId(dataArray.length ? dataArray[0].warId : null);
+                    MpwModel.setMcwPreviewingWarId(dataArray.length ? dataArray[0].warId : undefined);
                 }
             }
         }
@@ -192,8 +206,13 @@ namespace TinyWars.MultiCustomWar {
         private _createDataForListWar(): DataForWarRenderer[] {
             const dataArray: DataForWarRenderer[] = [];
             for (const warInfo of MpwModel.getMyMcwWarInfoArray()) {
+                const warId = warInfo.warId;
+                if (warId == null) {
+                    Logger.error(`McwMyWarListPanel._createDataForListWar() empty warId.`);
+                    continue;
+                }
                 dataArray.push({
-                    warId: warInfo.warId,
+                    warId,
                 });
             }
 
@@ -263,6 +282,7 @@ namespace TinyWars.MultiCustomWar {
         name: string;
     }
     class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
+        // @ts-ignore
         private _labelName: GameUi.UiLabel;
 
         protected _onDataChanged(): void {
@@ -274,9 +294,13 @@ namespace TinyWars.MultiCustomWar {
         warId: number;
     }
     class WarRenderer extends GameUi.UiListItemRenderer<DataForWarRenderer> {
+        // @ts-ignore
         private readonly _btnChoose     : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnNext       : GameUi.UiButton;
+        // @ts-ignore
         private readonly _labelName     : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _imgRed        : GameUi.UiLabel;
 
         protected _onOpened(): void {
@@ -298,23 +322,46 @@ namespace TinyWars.MultiCustomWar {
             const labelName = this._labelName;
             if (!warInfo) {
                 imgRed.visible  = false;
-                labelName.text  = null;
+                labelName.text  = ``;
             } else {
-                const settingsForMcw    = warInfo.settingsForMcw;
-                imgRed.visible          = MpwModel.checkIsRedForMyWar(warInfo);
-                labelName.text          = (settingsForMcw.warName) || (await WarMapModel.getMapNameInCurrentLanguage(settingsForMcw.mapId));
+                imgRed.visible = MpwModel.checkIsRedForMyWar(warInfo);
+
+                const settingsForMcw = warInfo.settingsForMcw;
+                if (settingsForMcw == null) {
+                    Logger.error(`McwMyWarListPanel.WarRenderer._onDataChanged() empty settingsForMcw.`);
+                    labelName.text = ``;
+                } else {
+                    const warName = settingsForMcw.warName;
+                    if (warName) {
+                        labelName.text = warName;
+                    } else {
+                        const mapId = settingsForMcw.mapId;
+                        if (mapId == null) {
+                            Logger.error(`McwMyWarListPanel.WarRenderer._onDataChanged() empty mapId.`);
+                            labelName.text = ``;
+                        } else {
+                            const mapName = await WarMapModel.getMapNameInCurrentLanguage(mapId);
+                            if (mapName == null) {
+                                Logger.error(`McwMyWarListPanel.WarRenderer._onDataChanged() empty mapName.`);
+                                labelName.text = ``;
+                            } else {
+                                labelName.text = mapName;
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        private _onNotifyMcwPreviewingWarIdChanged(e: egret.Event): void {
+        private _onNotifyMcwPreviewingWarIdChanged(): void {
             this._updateState();
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+        private _onTouchTapBtnChoose(): void {
             MpwModel.setMcwPreviewingWarId(this.data.warId);
         }
 
-        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
+        private _onTouchTapBtnNext(): void {
             MpwProxy.reqMpwCommonContinueWar(this.data.warId);
         }
 

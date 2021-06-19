@@ -15,7 +15,7 @@ namespace TinyWars.BaseWar {
 
         public abstract getAliveWatcherTeamIndexesForSelf(): Set<number>;
 
-        public init(data: ISerialPlayerManager, configVersion: string): ClientErrorCode {
+        public init(data: ISerialPlayerManager | null | undefined, configVersion: string): ClientErrorCode {
             if (data == null) {
                 return ClientErrorCode.BwPlayerManagerInit00;
             }

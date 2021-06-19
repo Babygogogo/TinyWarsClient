@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.GameUi {
     import Notify       = Utility.Notify;
     import Logger       = Utility.Logger;
@@ -9,13 +10,16 @@ namespace TinyWars.GameUi {
         private _isChildrenCreated  = false;
         private _isOpening          = false;
 
-        private _notifyListenerArray: Notify.Listener[];
-        private _uiListenerArray    : UiListener[];
+        private _notifyListenerArray: Notify.Listener[] | undefined;
+        private _uiListenerArray    : UiListener[] | undefined;
 
+        // @ts-ignore
         private _list                   : eui.List;
 
-        private _cachedItemRenderer     : new () => GameUi.UiListItemRenderer<DataForRenderer>;
-        private _cachedListDataArray    : DataForRenderer[];
+        private _cachedItemRenderer     : (new () => GameUi.UiListItemRenderer<DataForRenderer>) | undefined;
+        private _cachedListDataArray    : DataForRenderer[] | undefined;
+        private _cachedSelectedIndex    : number | undefined;
+
         private readonly _mousePoint    = new egret.Point();
 
         public constructor() {
@@ -31,14 +35,14 @@ namespace TinyWars.GameUi {
             this._doOpen();
         }
 
-        private _onAddedToStage(e: egret.Event): void {
+        private _onAddedToStage(): void {
             this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
             this._doOpen();
         }
 
-        private _onRemovedFromStage(e: egret.Event): void {
+        private _onRemovedFromStage(): void {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
@@ -93,12 +97,17 @@ namespace TinyWars.GameUi {
 
             if (this._cachedItemRenderer) {
                 list.itemRenderer           = this._cachedItemRenderer;
-                this._cachedItemRenderer    = null;
+                this._cachedItemRenderer    = undefined;
             }
 
             if (this._cachedListDataArray) {
                 this.bindData(this._cachedListDataArray);
-                this._cachedListDataArray = null;
+                this._cachedListDataArray = undefined;
+            }
+
+            if (this._cachedSelectedIndex != null) {
+                this.setSelectedIndex(this._cachedSelectedIndex);
+                this._cachedSelectedIndex = undefined;
             }
         }
         private _onClosed(): void {
@@ -116,13 +125,13 @@ namespace TinyWars.GameUi {
             this._isOpening = opening;
         }
 
-        private _setNotifyListenerArray(array: Notify.Listener[]): void {
+        private _setNotifyListenerArray(array: Notify.Listener[] | undefined): void {
             this._notifyListenerArray = array;
         }
         private _getNotifyListenerArray(): Notify.Listener[] | undefined {
             return this._notifyListenerArray;
         }
-        private _setUiListenerArray(array: UiListener[]): void {
+        private _setUiListenerArray(array: UiListener[] | undefined): void {
             this._uiListenerArray = array;
         }
         private _getUiListenerArray(): UiListener[] | undefined {
@@ -157,17 +166,18 @@ namespace TinyWars.GameUi {
             }
         }
 
-        private _onItemTapList(e: eui.ItemTapEvent): void {
+        private _onItemTapList(e: egret.Event): void {
             if (!this.getIsOpening()) {
                 return;
             }
 
-            const item = this._list.getElementAt(e.itemIndex);
+            const data = e as eui.ItemTapEvent;
+            const item = this._list.getElementAt(data.itemIndex);
             if (item instanceof UiListItemRenderer) {
-                item.onItemTapEvent(e);
+                item.onItemTapEvent(data);
             }
         }
-        private _onTouchBeginList(e: egret.TouchEvent): void {
+        private _onTouchBeginList(): void {
             Utility.SoundManager.playEffect("button.mp3");
         }
         private _onNotifyMouseWheel(e: egret.Event): void {
@@ -197,19 +207,31 @@ namespace TinyWars.GameUi {
         public bindData(dataArray: DataForRenderer[]): void {
             if (!this.getIsOpening()) {
                 this._cachedListDataArray = dataArray;
-            } else {
-                this._getDataProvider().replaceAll(dataArray);
-
-                // 修正从多子项切换到少子项时，且曾经拖动到比较远的的情况下，切换后可能没有显示子项的问题
-                this.validateNow();
-                const list      = this._list;
-                list.scrollV    = Math.max(0, Math.min(list.scrollV, list.contentHeight - list.height));
-                list.scrollH    = Math.max(0, Math.min(list.scrollH, list.contentWidth - list.width));
+                return;
             }
+
+            const dataProvider = this._getDataProvider();
+            if (dataProvider == null) {
+                Logger.error(`UiScrollList.bindData() empty dataProvider.`);
+                return;
+            }
+
+            dataProvider.replaceAll(dataArray);
+
+            // 修正从多子项切换到少子项时，且曾经拖动到比较远的的情况下，切换后可能没有显示子项的问题
+            this.validateNow();
+            const list      = this._list;
+            list.scrollV    = Math.max(0, Math.min(list.scrollV, list.contentHeight - list.height));
+            list.scrollH    = Math.max(0, Math.min(list.scrollH, list.contentWidth - list.width));
         }
         public updateSingleData(index: number, data: DataForRenderer): void {
             if (this.getIsOpening()) {
                 const dataProvider = this._getDataProvider();
+                if (dataProvider == null) {
+                    Logger.error(`UiScrollList.updateSingleData() empty dataProvider.`);
+                    return;
+                }
+
                 if ((index < 0) || (index >= dataProvider.length)) {
                     Logger.error(`UiScrollList.updateSingleData() invalid index.`);
                 } else {
@@ -227,26 +249,44 @@ namespace TinyWars.GameUi {
         }
         public refresh(): void {
             if (this.getIsOpening()) {
-                this._getDataProvider().refresh();
+                const dataProvider = this._getDataProvider();
+                if (dataProvider == null) {
+                    Logger.error(`UiScrollList.refresh() empty dataProvider.`);
+                    return;
+                }
+
+                dataProvider.refresh();
             }
         }
 
         public clear() : void {
-            this._cachedItemRenderer    = null;
-            this._cachedListDataArray   = null;
+            this._cachedItemRenderer    = undefined;
+            this._cachedListDataArray   = undefined;
+            this._cachedSelectedIndex   = undefined;
 
             if (this.getIsOpening()) {
-                this._getDataProvider().removeAll();
+                const dataProvider = this._getDataProvider();
+                if (dataProvider == null) {
+                    Logger.error(`UiScrollList.clear() empty dataProvider.`);
+                    return;
+                }
+
+                dataProvider.removeAll();
             }
         }
 
         public setSelectedIndex(index: number): void {
             if (this.getIsOpening()) {
                 this._list.selectedIndex = index;
+            } else {
+                this._cachedSelectedIndex = index;
             }
         }
         public getSelectedIndex(): number | undefined {
             return this.getIsOpening() ? this._list.selectedIndex : undefined;
+        }
+        public getSelectedData(): DataForRenderer | undefined {
+            return this.getIsOpening() ? this._list.selectedItem : undefined;
         }
 
         public scrollVerticalTo(percentage: number) : void {

@@ -1,7 +1,7 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Utility.Helpers {
     import ColorType            = Types.ColorType;
-    import MessageCodes         = Network.Codes;
     import ILanguageText        = ProtoTypes.Structure.ILanguageText;
     import IMessageContainer    = ProtoTypes.NetMessage.IMessageContainer;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
@@ -50,23 +50,36 @@ namespace TinyWars.Utility.Helpers {
         return (typeof str == "string") && (str.length === 18);
     }
 
-    export function formatString(...args: (number | string)[]): string {
-        let i = 0, a: any, f = args[i++] as string, o = [], m: any[] | null, p, c, x, s = '';
+    export function formatString(...args: (number | string | null | undefined)[]): string {
+        let i = 0, a: any, f = args[i++] as string, m: any[] | null, p, c, x;
+        const o = [], s = '';
+
         while (f) {
-            if (m = /^[^\x25]+/.exec(f)) {
+            m = /^[^\x25]+/.exec(f);
+            if (m) {
                 o.push(m[0]);
-            } else if (m = /^\x25{2}/.exec(f)) {
+                f = f.substring(m[0].length);
+                continue;
+            }
+
+            m = /^\x25{2}/.exec(f);
+            if (m) {
                 o.push('%');
-            } else if (m = /^\x25(?:(\d+)\$)?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-fosuxX])/.exec(f)) {
+                f = f.substring(m[0].length);
+                continue;
+            }
+
+            m = /^\x25(?:(\d+)\$)?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-fosuxX])/.exec(f);
+            if (m) {
                 if (((a = args[m[1] || i++]) == null) || (a == undefined)) {
                     throw ('Too few arguments.');
                 }
                 if (/[^s]/.test(m[7])) {
-                    let aa = Number(a);
+                    const aa = Number(a);
                     if (isNaN(aa)) {
                         throw ('Expecting number but found ' + typeof (a));
                     } else {
-                        a = aa
+                        a = aa;
                     }
                 }
                 switch (m[7]) {
@@ -87,11 +100,13 @@ namespace TinyWars.Utility.Helpers {
                 x = m[5] - String(a).length - s.length;
                 p = m[5] ? repeatString(c, x) : '';
                 o.push(s + (m[4] ? a + p : p + a));
-            } else {
-                throw ('Huh ?!');
+                f = f.substring(m[0].length);
+                continue;
             }
-            f = f.substring(m[0].length);
+
+            throw ('Huh ?!');
         }
+
         return o.join('');
     }
 
@@ -133,10 +148,10 @@ namespace TinyWars.Utility.Helpers {
         }
     }
 
-    export function getMessageCode(container: IMessageContainer): MessageCodes | undefined {
-        const name = getMessageName(container);
-        return name == null ? undefined : MessageCodes[name as any] as any;
-    }
+    // export function getMessageCode(container: IMessageContainer): MessageCodes | undefined {
+    //     const name = getMessageName(container);
+    //     return name == null ? undefined : MessageCodes[name as any] as any;
+    // }
     export function getMessageName(container: IMessageContainer): (keyof IMessageContainer) | undefined {
         for (const k in container) {
             return k as keyof IMessageContainer;
@@ -172,6 +187,7 @@ namespace TinyWars.Utility.Helpers {
         return true;
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     export function checkIsNumber(value: any): boolean {
         return value === +value;
     }
@@ -288,7 +304,7 @@ namespace TinyWars.Utility.Helpers {
             const hours   = Math.floor(totalSeconds / (60 * 60)) % 24;
             const days    = Math.floor(totalSeconds / (60 * 60 * 24));
 
-            let text: string = "";
+            let text = "";
             (days    > 0) && (text = `${text}${days}${Lang.getText(Lang.Type.B0014)}`);
             (hours   > 0) && (text = `${text}${hours}${Lang.getText(Lang.Type.B0015)}`);
             (minutes > 0) && (text = `${text}${minutes}${Lang.getText(Lang.Type.B0016)}`);
@@ -366,7 +382,7 @@ namespace TinyWars.Utility.Helpers {
     let _frameBeginTime = 0;
     export async function checkAndCallLater(): Promise<void> {  // DONE
         if (Date.now() - _frameBeginTime > 13) {
-            await new Promise<void>((resolve, reject) => {
+            await new Promise<void>((resolve) => {
                 egret.callLater(() => {
                     _frameBeginTime = Date.now();
                     resolve();

@@ -15,7 +15,7 @@ namespace TinyWars.MultiPlayerWar {
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
 
-        public abstract getSettingsBootTimerParams(): number[];
+        public abstract getSettingsBootTimerParams(): number[] | null | undefined;
 
         public getField(): MpwField {
             return this._field;

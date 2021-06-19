@@ -412,7 +412,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         return playerRuleDataArray.find(v => v.playerIndex === playerIndex);
     }
 
-    export function getPlayersCount(warRule: IWarRule): number {
+    export function getPlayersCount(warRule: IWarRule): number | undefined {
         const ruleForPlayers = warRule.ruleForPlayers;
         if (ruleForPlayers == null) {
             Logger.error(`BwWarRuleHelper.getPlayersCount() empty ruleForPlayers.`);

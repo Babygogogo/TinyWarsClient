@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiCustomWar {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
@@ -6,11 +7,14 @@ namespace TinyWars.MultiCustomWar {
     import MpwModel     = MultiPlayerWar.MpwModel;
 
     export type OpenDataForMcwWarMapInfoPage = {
-        warId   : number;
+        warId   : number | null | undefined;
     }
     export class McwWarMapInfoPage extends GameUi.UiTabPage<OpenDataForMcwWarMapInfoPage> {
+        // @ts-ignore
         private readonly _zoomMap       : GameUi.UiZoomableMap;
+        // @ts-ignore
         private readonly _uiMapInfo     : GameUi.UiMapInfo;
+        // @ts-ignore
         private readonly _labelLoading  : GameUi.UiLabel;
 
         public constructor() {
@@ -34,7 +38,7 @@ namespace TinyWars.MultiCustomWar {
             this._updateComponentsForWarInfo();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -50,19 +54,24 @@ namespace TinyWars.MultiCustomWar {
             this._labelLoading.text = Lang.getText(Lang.Type.A0150);
         }
         private async _updateComponentsForWarInfo(): Promise<void> {
-            const warInfo       = MpwModel.getMyWarInfo(this._getOpenData().warId);
-            const mapRawData    = warInfo ? await WarMap.WarMapModel.getRawData(warInfo.settingsForMcw.mapId) : null;
-            const zoomMap       = this._zoomMap;
-            const uiMapInfo     = this._uiMapInfo;
-            if (!mapRawData) {
+            const warId             = this._getOpenData().warId;
+            const warInfo           = warId != null ? MpwModel.getMyWarInfo(warId) : undefined;
+            const settingsForMcw    = warInfo ? warInfo.settingsForMcw : undefined;
+            const settingsForCommon = warInfo ? warInfo.settingsForCommon : undefined;
+            const configVersion     = settingsForCommon ? settingsForCommon.configVersion : undefined;
+            const mapId             = settingsForMcw ? settingsForMcw.mapId : undefined;
+            const mapRawData        = mapId != null ? await WarMap.WarMapModel.getRawData(mapId) : undefined;
+            const zoomMap           = this._zoomMap;
+            const uiMapInfo         = this._uiMapInfo;
+            if ((mapId == null) || (mapRawData == null) || (configVersion == null)) {
                 zoomMap.clearMap();
                 uiMapInfo.setData(null);
             } else {
                 zoomMap.showMapByMapData(mapRawData);
                 uiMapInfo.setData({
                     mapInfo: {
-                        mapId           : mapRawData.mapId,
-                        configVersion   : warInfo.settingsForCommon.configVersion,
+                        mapId,
+                        configVersion,
                     },
                 });
             }

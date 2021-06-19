@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Utility.ConfigManager {
     import TileBaseType     = Types.TileBaseType;
     import TileObjectType   = Types.TileObjectType;

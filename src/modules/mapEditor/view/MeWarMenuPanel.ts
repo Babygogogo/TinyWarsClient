@@ -6,13 +6,12 @@ namespace TinyWars.MapEditor {
     import FlowManager      = Utility.FlowManager;
     import Logger           = Utility.Logger;
     import FloatText        = Utility.FloatText;
-    import LocalStorage     = Utility.LocalStorage;
     import ProtoTypes       = Utility.ProtoTypes;
     import UnitType         = Types.UnitType;
     import TileBaseType     = Types.TileBaseType;
     import TileObjectType   = Types.TileObjectType;
-    import TimeModel        = Time.TimeModel;
 
+    // eslint-disable-next-line no-shadow
     const enum MenuType {
         Main,
         Advanced,
@@ -481,26 +480,28 @@ namespace TinyWars.MapEditor {
         }
 
         private _createCommandReviewAccept(): DataForCommandRenderer | null {
-            if (!this._war.getIsReviewingMap()) {
+            const war = this._war;
+            if (!war.getIsReviewingMap()) {
                 return null;
             } else {
                 return {
                     name    : Lang.getText(Lang.Type.B0296),
                     callback: () => {
-                        MapManagement.MmAcceptMapPanel.show();
+                        MapManagement.MmAcceptMapPanel.show({ war });
                     },
                 };
             }
         }
 
         private _createCommandReviewReject(): DataForCommandRenderer | null {
-            if (!this._war.getIsReviewingMap()) {
+            const war = this._war;
+            if (!war.getIsReviewingMap()) {
                 return null;
             } else {
                 return {
                     name    : Lang.getText(Lang.Type.B0297),
                     callback: () => {
-                        MapManagement.MmRejectMapPanel.show();
+                        MapManagement.MmRejectMapPanel.show({ war });
                     },
                 };
             }

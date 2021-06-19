@@ -107,7 +107,7 @@ namespace TinyWars.MultiFreeRoom {
         private _onTouchedBtnHelp(e: egret.TouchEvent): void {
             Common.CommonAlertPanel.show({
                 title   : Lang.getText(Lang.Type.B0143),
-                content : Lang.getRichText(Lang.RichType.R0007),
+                content : Lang.getText(Lang.Type.R0007),
             });
         }
         private _onTouchedBtnNormalMode(e: egret.TouchEvent): void {

@@ -1,9 +1,12 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Utility.SoundManager {
     import SoundType            = Types.SoundType;
 
     export const DEFAULT_MUTE   = false;
     export const DEFAULT_VOLUME = 1;
+
+    // eslint-disable-next-line no-shadow
     export const enum BgmCode {
         None        = 0,
         Lobby01,
@@ -80,8 +83,7 @@ namespace TinyWars.Utility.SoundManager {
             _bgmGain        = _audioContext.createGain();
             _bgmGain.connect(_audioContext.destination);
         } catch (e) {
-            const errorText = Lang.getText(Lang.Type.A0196);
-            (errorText) && (FloatText.show(errorText));
+            FloatText.show(Lang.getText(Lang.Type.A0196));
         }
 
         _initBgmMute();
@@ -97,6 +99,7 @@ namespace TinyWars.Utility.SoundManager {
         try {
             _audioContext.resume();
         } catch (e) {
+            Logger.error(`SoundManager.resume() error.`);
         }
     }
     export function pause(): void {
@@ -105,6 +108,7 @@ namespace TinyWars.Utility.SoundManager {
         try {
             _audioContext.suspend();
         } catch (e) {
+            Logger.error(`SoundManager.pause() error.`);
         }
         _stopAllEffects();
     }
@@ -244,7 +248,9 @@ namespace TinyWars.Utility.SoundManager {
             try {
                 _bgmSourceNode.stop();
                 _bgmSourceNode.disconnect();
-            } catch (e) {};
+            } catch (e) {
+                Logger.error(`SoundManager._stopBgmForNormal() error.`);
+            }
             _bgmSourceNode = undefined;
         }
     }
@@ -297,7 +303,11 @@ namespace TinyWars.Utility.SoundManager {
         for (const name in effects) {
             const eff = effects[name];
             if (eff) {
-                try { eff.volume = volume; } catch (e) {};
+                try {
+                    eff.volume = volume;
+                } catch (e) {
+                    Logger.error(`SoundManager._updateEffectVolumeForNormal() error.`);
+                }
             }
         }
     }
@@ -348,7 +358,11 @@ namespace TinyWars.Utility.SoundManager {
         const effects   = _effectsForNormal;
         const eff       = effects[musicName];
         if (eff) {
-            try { eff.stop(); } catch (e) {};
+            try {
+                eff.stop();
+            } catch (e) {
+                Logger.error(`SoundManager._stopEffectForNormal() error.`);
+            }
             effects[musicName] = undefined;
         }
     }
@@ -361,7 +375,11 @@ namespace TinyWars.Utility.SoundManager {
         for (const name in effects) {
             const eff = effects[name];
             if (eff) {
-                try { eff.stop(); } catch (e) {};
+                try {
+                    eff.stop();
+                } catch (e) {
+                    Logger.error(`SoundManager._stopAllEffectsForNormal() error.`);
+                }
             }
         }
         _effectsForNormal = {};
@@ -370,7 +388,7 @@ namespace TinyWars.Utility.SoundManager {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // 资源回收
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    export function dispose() {
+    export function dispose(): void {
         _disposeAllBgm();
         _disposeAllEffects();
     }
@@ -381,7 +399,9 @@ namespace TinyWars.Utility.SoundManager {
             try {
                 _bgmSourceNode.stop();
                 _bgmSourceNode.disconnect();
-            } catch (e) {};
+            } catch (e) {
+                Logger.error(`SoundManager._disposeAllBgm() error.`);
+            }
             _bgmSourceNode = undefined;
         }
     }
@@ -397,7 +417,11 @@ namespace TinyWars.Utility.SoundManager {
         for (const name in effects) {
             const eff = effects[name];
             if (eff) {
-                try { eff.stop(); } catch (e) {};
+                try {
+                    eff.stop();
+                } catch (e) {
+                    Logger.error(`SoundManager._disposeAllEffects() error.`);
+                }
             }
         }
         _effectsForNormal = {};
@@ -418,7 +442,9 @@ namespace TinyWars.Utility.SoundManager {
 
         const arrayBuffer = await RES.getResByUrl(
             fullName,
-            () => {},
+            () => {
+                // nothing to do.
+            },
             SoundManager,
             RES.ResourceItem.TYPE_BIN
         );

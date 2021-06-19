@@ -31,7 +31,7 @@ namespace TinyWars.BaseWar {
         protected abstract _runPhaseTickTurnAndPlayerIndex(data: IWarActionPlayerEndTurn): void;
         protected abstract _runPhaseResetVisionForNextPlayer(): void;
 
-        public init(data: ISerialTurnManager, playersCountUnneutral: number): ClientErrorCode {
+        public init(data: ISerialTurnManager | null | undefined, playersCountUnneutral: number): ClientErrorCode {
             if (data == null) {
                 return ClientErrorCode.BwTurnManagerInit00;
             }

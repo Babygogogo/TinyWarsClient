@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.User {
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
@@ -11,19 +12,29 @@ namespace TinyWars.User {
 
         private static _instance: UserOnlineUsersPanel;
 
-        private readonly _imgMask               : TinyWars.GameUi.UiImage;
+        // @ts-ignore
+        private readonly _imgMask               : GameUi.UiImage;
+        // @ts-ignore
         private readonly _group                 : eui.Group;
-        private readonly _labelTitle            : TinyWars.GameUi.UiLabel;
-        private readonly _labelTips             : TinyWars.GameUi.UiLabel;
-        private readonly _labelUsersCountTitle  : TinyWars.GameUi.UiLabel;
-        private readonly _labelUsersCount       : TinyWars.GameUi.UiLabel;
-        private readonly _labelNameTitle1       : TinyWars.GameUi.UiLabel;
-        private readonly _labelNameTitle2       : TinyWars.GameUi.UiLabel;
-        private readonly _listUser              : TinyWars.GameUi.UiScrollList<DataForUserRenderer>;
-        private readonly _labelLoading          : TinyWars.GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelTitle            : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelTips             : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelUsersCountTitle  : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelUsersCount       : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelNameTitle1       : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelNameTitle2       : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _listUser              : GameUi.UiScrollList<DataForUserRenderer>;
+        // @ts-ignore
+        private readonly _labelLoading          : GameUi.UiLabel;
 
-        private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUsers.IS;
-        private _dataForList: DataForUserRenderer[];
+        private _msg        : ProtoTypes.NetMessage.MsgUserGetOnlineUsers.IS | null | undefined;
+        private _dataForList: DataForUserRenderer[] | null | undefined;
 
         public static show(): void {
             if (!UserOnlineUsersPanel._instance) {
@@ -73,7 +84,7 @@ namespace TinyWars.User {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -109,7 +120,17 @@ namespace TinyWars.User {
                     nickname: userInfo.nickname,
                 });
             }
-            dataArray.sort((v1, v2) => v1.nickname.localeCompare(v2.nickname, "zh"));
+            dataArray.sort((v1, v2) => {
+                const nickname1 = v1.nickname;
+                const nickname2 = v2.nickname;
+                if (nickname1 == null) {
+                    return 1;
+                } else if (nickname2 == null) {
+                    return -1;
+                } else {
+                    return nickname1.localeCompare(nickname2, "zh")
+                }
+            });
 
             if (dataArray.length % 2 !== 0) {
                 dataArray.push({
@@ -167,12 +188,14 @@ namespace TinyWars.User {
 
     type DataForUserRenderer = {
         index       : number;
-        userId      : number | null;
-        nickname    : string | null;
+        userId      : number | null | undefined;
+        nickname    : string | null | undefined;
     }
 
     class UserRenderer extends GameUi.UiListItemRenderer<DataForUserRenderer> {
+        // @ts-ignore
         private readonly _imgBg     : GameUi.UiImage;
+        // @ts-ignore
         private readonly _labelName : GameUi.UiLabel;
 
         protected _onOpened(): void {
@@ -189,10 +212,10 @@ namespace TinyWars.User {
             }
 
             this._imgBg.alpha       = data.index % 4 < 2 ? 0.2 : 0.5;
-            this._labelName.text    = data.nickname;
+            this._labelName.text    = data.nickname || ``;
         }
 
-        private _onTouchedImgBg(e: egret.TouchEvent): void {
+        private _onTouchedImgBg(): void {
             const data = this.data;
             if (data) {
                 const userId = data.userId;

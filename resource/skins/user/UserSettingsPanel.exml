@@ -47,6 +47,8 @@
                                      skinName="Skins.Component.Button.ButtonSetting001" />
                     <GameUi:UiButton id="_btnChangeDiscordId" label="更改Discord ID" y="300" x="196"
                                      skinName="Skins.Component.Button.ButtonSetting001" />
+                    <GameUi:UiButton id="_btnChangeGameVersion" label="更改Discord ID" y="300" x="196"
+                                     skinName="Skins.Component.Button.ButtonSetting001" />
                     <GameUi:UiButton id="_btnShowOnlineUsers" label="在线玩家" y="310" x="206"
                                      skinName="Skins.Component.Button.ButtonSetting001" />
                     <GameUi:UiButton id="_btnServerStatus" label="服务器状态" y="330" x="226"

@@ -1,7 +1,9 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapManagement {
     import Lang         = Utility.Lang;
     import NotifyType   = Utility.Notify.Type;
+    import Logger       = Utility.Logger;
     import WarMapModel  = WarMap.WarMapModel;
     import WarMapProxy  = WarMap.WarMapProxy;
 
@@ -14,32 +16,56 @@ namespace TinyWars.MapManagement {
 
         private static _instance: MmAvailabilityChangePanel;
 
+        // @ts-ignore
         private _groupMcw       : eui.Group;
+        // @ts-ignore
         private _labelMcw       : GameUi.UiLabel;
+        // @ts-ignore
         private _imgMcw         : GameUi.UiImage;
 
+        // @ts-ignore
+        private _groupCcw       : eui.Group;
+        // @ts-ignore
+        private _labelCcw       : GameUi.UiLabel;
+        // @ts-ignore
+        private _imgCcw         : GameUi.UiImage;
+
+        // @ts-ignore
         private _groupScw       : eui.Group;
+        // @ts-ignore
         private _labelScw       : GameUi.UiLabel;
+        // @ts-ignore
         private _imgScw         : GameUi.UiImage;
 
+        // @ts-ignore
         private _groupSrw       : eui.Group;
+        // @ts-ignore
         private _labelSrw       : GameUi.UiLabel;
+        // @ts-ignore
         private _imgSrw         : GameUi.UiImage;
 
+        // @ts-ignore
         private _groupMrwStd    : eui.Group;
+        // @ts-ignore
         private _labelMrwStd    : GameUi.UiLabel;
+        // @ts-ignore
         private _imgMrwStd      : GameUi.UiImage;
 
+        // @ts-ignore
         private _groupMrwFog    : eui.Group;
+        // @ts-ignore
         private _labelMrwFog    : GameUi.UiLabel;
+        // @ts-ignore
         private _imgMrwFog      : GameUi.UiImage;
 
+        // @ts-ignore
         private _btnDelete      : GameUi.UiButton;
+        // @ts-ignore
         private _btnWarRule     : GameUi.UiButton;
+        // @ts-ignore
         private _btnCancel      : GameUi.UiButton;
+        // @ts-ignore
         private _btnConfirm     : GameUi.UiButton;
-
-        private _mapId          : number;
 
         public static show(openData: OpenDataForMmAvailabilityChangePanel): void {
             if (!MmAvailabilityChangePanel._instance) {
@@ -71,6 +97,7 @@ namespace TinyWars.MapManagement {
                 { ui: this._btnCancel,      callback: this._onTouchedBtnCancel },
                 { ui: this._btnWarRule,     callback: this._onTouchedBtnWarRule },
                 { ui: this._groupMcw,       callback: this._onTouchedGroupMcw },
+                { ui: this._groupCcw,       callback: this._onTouchedGroupCcw },
                 { ui: this._groupScw,       callback: this._onTouchedGroupScw },
                 { ui: this._groupSrw,       callback: this._onTouchedGroupSrw },
                 { ui: this._groupMrwStd,    callback: this._onTouchedGroupMrwStd },
@@ -79,25 +106,17 @@ namespace TinyWars.MapManagement {
 
             this._btnDelete.setTextColor(0xFF0000);
             this._updateComponentsForLanguage();
-
-            const mapId = this._getOpenData().mapId;
-            this._mapId = mapId;
-
-            const availability          = (await WarMapModel.getBriefData(mapId)).mapExtraData.mapComplexInfo.availability;
-            this._imgMcw.visible        = !!availability.canMcw;
-            this._imgScw.visible        = !!availability.canScw;
-            this._imgSrw.visible        = !!availability.canSrw;
-            this._imgMrwStd.visible     = !!availability.canMrwStd;
-            this._imgMrwFog.visible     = !!availability.canMrwFog;
+            this._updateImages();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            WarMapProxy.reqMmSetMapAvailability(this._mapId, {
+        private _onTouchedBtnConfirm(): void {
+            WarMapProxy.reqMmSetMapAvailability(this._getOpenData().mapId, {
                 canMcw      : this._imgMcw.visible,
+                canCcw      : this._imgCcw.visible,
                 canScw      : this._imgScw.visible,
                 canSrw      : this._imgSrw.visible,
                 canMrwStd   : this._imgMrwStd.visible,
@@ -106,39 +125,66 @@ namespace TinyWars.MapManagement {
             this.close();
         }
 
-        private _onTouchedBtnDelete(e: egret.TouchEvent): void {
+        private _onTouchedBtnDelete(): void {
             Common.CommonConfirmPanel.show({
                 content : Lang.getText(Lang.Type.A0080),
                 callback: () => {
-                    WarMapProxy.reqMmSetMapEnabled(this._mapId, false);
+                    WarMapProxy.reqMmSetMapEnabled(this._getOpenData().mapId, false);
                     this.close();
                 },
             });
         }
 
-        private async _onTouchedBtnWarRule(e: egret.TouchEvent): Promise<void> {
-            MmWarRulePanel.show(await WarMapModel.getRawData(this._mapId));
+        private async _onTouchedBtnWarRule(): Promise<void> {
+            const mapRawData = await WarMapModel.getRawData(this._getOpenData().mapId);
+            if (mapRawData == null) {
+                Logger.error(`MmAvailabilityChangePanel._onTouchedBtnWarRule() empty mapRawData.`);
+                return;
+            }
+
+            MmWarRulePanel.show(mapRawData);
             this.close();
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
 
-        private _onTouchedGroupMcw(e: egret.TouchEvent): void {
+        private _onTouchedGroupMcw(): void {
             this._imgMcw.visible = !this._imgMcw.visible;
         }
-        private _onTouchedGroupScw(e: egret.TouchEvent): void {
+        private _onTouchedGroupCcw(): void {
+            this._imgCcw.visible = !this._imgCcw.visible;
+        }
+        private _onTouchedGroupScw(): void {
             this._imgScw.visible = !this._imgScw.visible;
         }
-        private _onTouchedGroupSrw(e: egret.TouchEvent): void {
+        private _onTouchedGroupSrw(): void {
             this._imgSrw.visible = !this._imgSrw.visible;
         }
-        private _onTouchedGroupMrwStd(e: egret.TouchEvent): void {
+        private _onTouchedGroupMrwStd(): void {
             this._imgMrwStd.visible = !this._imgMrwStd.visible;
         }
-        private _onTouchedGroupMrwFog(e: egret.TouchEvent): void {
+        private _onTouchedGroupMrwFog(): void {
             this._imgMrwFog.visible = !this._imgMrwFog.visible;
+        }
+
+        private async _updateImages(): Promise<void> {
+            const briefData     = await WarMapModel.getBriefData(this._getOpenData().mapId);
+            const extraData     = briefData ? briefData.mapExtraData : null;
+            const complexInfo   = extraData ? extraData.mapComplexInfo : null;
+            const availability  = complexInfo ? complexInfo.availability : null;
+            if (availability == null) {
+                Logger.error(`MmAvailabilityChangePanel._updateImages() empty availability.`);
+                return;
+            }
+
+            this._imgMcw.visible        = !!availability.canMcw;
+            this._imgCcw.visible        = !!availability.canCcw;
+            this._imgScw.visible        = !!availability.canScw;
+            this._imgSrw.visible        = !!availability.canSrw;
+            this._imgMrwStd.visible     = !!availability.canMrwStd;
+            this._imgMrwFog.visible     = !!availability.canMrwFog;
         }
 
         private _updateComponentsForLanguage(): void {
@@ -147,6 +193,7 @@ namespace TinyWars.MapManagement {
             this._btnDelete.label   = Lang.getText(Lang.Type.B0270);
             this._btnWarRule.label  = Lang.getText(Lang.Type.B0314);
             this._labelMcw.text     = Lang.getText(Lang.Type.B0200);
+            this._labelCcw.text     = Lang.getText(Lang.Type.B0619);
             this._labelMrwStd.text  = Lang.getText(Lang.Type.B0404);
             this._labelMrwFog.text  = Lang.getText(Lang.Type.B0408);
             this._labelScw.text     = Lang.getText(Lang.Type.B0409);

@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiCustomWar {
     import Logger           = Utility.Logger;
     import Types            = Utility.Types;
@@ -42,7 +43,7 @@ namespace TinyWars.MultiCustomWar {
         public getIsNeedSeedRandom(): boolean {
             return false;
         }
-        public getMapId(): number | undefined {
+        public getMapId(): number | null | undefined {
             const settingsForMcw = this.getSettingsForMcw();
             return settingsForMcw ? settingsForMcw.mapId : undefined;
         }
@@ -57,7 +58,7 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getWarName(): string {
+        public getWarName(): string | null | undefined {
             const settingsForMcw = this.getSettingsForMcw();
             if (settingsForMcw == null) {
                 Logger.error(`McwWar.getWarName() empty settingsForMcw.`);
@@ -66,7 +67,7 @@ namespace TinyWars.MultiCustomWar {
 
             return settingsForMcw.warName;
         }
-        public getWarPassword(): string {
+        public getWarPassword(): string | null | undefined {
             const settingsForMcw = this.getSettingsForMcw();
             if (settingsForMcw == null) {
                 Logger.error(`McwWar.getWarPassword() empty settingsForMcw.`);
@@ -75,7 +76,7 @@ namespace TinyWars.MultiCustomWar {
 
             return settingsForMcw.warPassword;
         }
-        public getWarComment(): string {
+        public getWarComment(): string | null | undefined {
             const settingsForMcw = this.getSettingsForMcw();
             if (settingsForMcw == null) {
                 Logger.error(`McwWar.getWarComment() empty settingsForMcw.`);
@@ -85,7 +86,7 @@ namespace TinyWars.MultiCustomWar {
             return settingsForMcw.warComment;
         }
 
-        public getSettingsBootTimerParams(): number[] {
+        public getSettingsBootTimerParams(): number[] | null | undefined {
             const settingsForMcw = this.getSettingsForMcw();
             if (settingsForMcw == null) {
                 Logger.error(`McwWar.getSettingsBootTimerParams() empty settingsForMcw.`);

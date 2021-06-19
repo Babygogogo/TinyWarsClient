@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.GameUi {
     import Notify       = Utility.Notify;
     import UiListener   = Utility.Types.UiListener;
@@ -8,11 +9,12 @@ namespace TinyWars.GameUi {
         private _isSkinLoaded       = false;
         private _isOpening          = false;
 
-        private _notifyListenerArray: Notify.Listener[];
-        private _uiListenerArray    : UiListener[];
+        private _notifyListenerArray: Notify.Listener[] | undefined;
+        private _uiListenerArray    : UiListener[] | undefined;
 
-        private _isDataChangedBeforeOpen    = false;
+        // @ts-ignore
         public data                         : DataForRenderer;
+        private _isDataChangedBeforeOpen    = false;
 
         public constructor() {
             super();
@@ -21,7 +23,10 @@ namespace TinyWars.GameUi {
             this.once(egret.Event.COMPLETE, this._onSkinLoaded, this);
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {}
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        public onItemTapEvent(e: eui.ItemTapEvent): void {
+            // to be overridden
+        }
 
         protected childrenCreated(): void {
             super.childrenCreated();
@@ -30,20 +35,20 @@ namespace TinyWars.GameUi {
             this._doOpen();
         }
 
-        private _onSkinLoaded(e: egret.Event): void {
+        private _onSkinLoaded(): void {
             this._isSkinLoaded = true;
 
             this._doOpen();
         }
 
-        private _onAddedToStage(e: egret.Event): void {
+        private _onAddedToStage(): void {
             this.removeEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
             this._doOpen();
         }
 
-        private _onRemovedFromStage(e: egret.Event): void {
+        private _onRemovedFromStage(): void {
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this._onAddedToStage, this);
             this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this._onRemovedFromStage, this);
 
@@ -78,22 +83,28 @@ namespace TinyWars.GameUi {
             }
         }
 
-        protected _onOpened(): void {}
-        protected _onClosed(): void {}
+        protected _onOpened(): void {
+            // to be overridden
+        }
+        protected _onClosed(): void {
+            // to be overridden
+        }
 
         private _checkIsReadyForOpen(): boolean {
             return (this.stage != null)
                 && (this._isChildrenCreated)
                 && (this._isSkinLoaded);
         }
-        private _getIsOpening(): boolean {
+        protected _getIsOpening(): boolean {
             return this._isOpening;
         }
         private _setIsOpening(opening: boolean): void {
             this._isOpening = opening;
         }
 
-        protected _onDataChanged(): void {}
+        protected _onDataChanged(): void {
+            // to be overridden
+        }
         protected dataChanged(): void {
             super.dataChanged();
 
@@ -110,13 +121,13 @@ namespace TinyWars.GameUi {
             this._isDataChangedBeforeOpen = isChanged;
         }
 
-        protected _setNotifyListenerArray(array: Notify.Listener[]): void {
+        protected _setNotifyListenerArray(array: Notify.Listener[] | undefined): void {
             this._notifyListenerArray = array;
         }
         protected _getNotifyListenerArray(): Notify.Listener[] | undefined {
             return this._notifyListenerArray;
         }
-        protected _setUiListenerArray(array: UiListener[]): void {
+        protected _setUiListenerArray(array: UiListener[] | undefined): void {
             this._uiListenerArray = array;
         }
         protected _getUiListenerArray(): UiListener[] | undefined {

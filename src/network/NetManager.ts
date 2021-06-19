@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Network.NetManager {
     import Logger       = Utility.Logger;
     import Notify       = Utility.Notify;
@@ -23,7 +24,7 @@ namespace TinyWars.Network.NetManager {
         msgCode     : Codes;
         callback    : (e: egret.Event) => void;
         thisObject? : any;
-    }
+    };
 
     class NetMessageDispatcher extends egret.EventDispatcher {
         public dispatchWithContainer(container: ProtoTypes.NetMessage.IMessageContainer): void {
@@ -51,13 +52,13 @@ namespace TinyWars.Network.NetManager {
             this.dispatchEventWith(messageName, false, messageData);
         }
 
-        public addListener(code: Codes, callback: Function, thisObject: any): void {
-            this.addEventListener(Codes[code], callback, thisObject);
-        }
+        // public addListener(code: Codes, callback: () => void, thisObject: any): void {
+        //     this.addEventListener(Codes[code], callback, thisObject);
+        // }
 
-        public removeListener(code: Codes, callback: Function, thisObject: any): void {
-            this.removeEventListener(Codes[code], callback, thisObject);
-        }
+        // public removeListener(code: Codes, callback: () => void, thisObject: any): void {
+        //     this.removeEventListener(Codes[code], callback, thisObject);
+        // }
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -75,12 +76,14 @@ namespace TinyWars.Network.NetManager {
         resetSocket();
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     export function addListeners(listeners: MsgListener[], thisObject?: any): void {
         for (const one of listeners) {
             dispatcher.addEventListener(Codes[one.msgCode], one.callback, one.thisObject || thisObject);
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     export function removeListeners(listeners: MsgListener[], thisObject?: any): void {
         for (const one of listeners) {
             dispatcher.removeEventListener(Codes[one.msgCode], one.callback, one.thisObject || thisObject);
@@ -144,13 +147,13 @@ namespace TinyWars.Network.NetManager {
         }
     }
 
-    function onSocketConnect(e: egret.Event): void {
+    function onSocketConnect(): void {
         const successText = Lang.getText(Lang.Type.A0007);
         (successText) && (FloatText.show(successText));
 
         Notify.dispatch(Notify.Type.NetworkConnected);
     }
-    function onSocketClose(e: egret.Event): void {
+    function onSocketClose(): void {
         Notify.dispatch(Notify.Type.NetworkDisconnected);
         if (!checkCanAutoReconnect()) {
             // FloatText.show(Lang.getText(Lang.Type.A0013));
@@ -165,7 +168,7 @@ namespace TinyWars.Network.NetManager {
             _socket.connectByUrl(FULL_URL);
         }
     }
-    function onSocketData(e: egret.Event): void {
+    function onSocketData(): void {
         if (_socket == null) {
             Logger.error(`NetManager.onSocketData() empty _socket.`);
             return;

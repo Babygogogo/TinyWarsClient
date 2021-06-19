@@ -1,8 +1,10 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.User {
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
     import Helpers          = Utility.Helpers;
+    import Logger           = Utility.Logger;
     import Types            = Utility.Types;
     import LocalStorage     = Utility.LocalStorage;
     import CommonConstants  = Utility.CommonConstants;
@@ -13,29 +15,53 @@ namespace TinyWars.User {
 
         private static _instance: UserSettingsPanel;
 
+        // @ts-ignore
         private readonly _imgMask               : GameUi.UiImage;
+        // @ts-ignore
         private readonly _group                 : eui.Group;
+        // @ts-ignore
         private readonly _scroller              : eui.Scroller;
 
+        // @ts-ignore
         private readonly _uiRadioLanguage       : GameUi.UiRadioButton;
+        // @ts-ignore
         private readonly _uiRadioTexture        : GameUi.UiRadioButton;
+        // @ts-ignore
         private readonly _uiRadioUnitAnimation  : GameUi.UiRadioButton;
+        // @ts-ignore
         private readonly _uiRadioTileAnimation  : GameUi.UiRadioButton;
+        // @ts-ignore
         private readonly _uiRadioShowGridBorder : GameUi.UiRadioButton;
 
+        // @ts-ignore
         private readonly _groupButtons          : eui.Group;
+        // @ts-ignore
         private readonly _btnChangeNickname     : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnChangePassword     : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnChangeDiscordId    : GameUi.UiButton;
+        // @ts-ignore
+        private readonly _btnChangeGameVersion  : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnRankList           : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnShowOnlineUsers    : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnSetSound           : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnSetStageScaler     : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnServerStatus       : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnComplaint          : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnUnitsInfo          : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnChangeLog          : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnSetPrivilege       : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnMapManagement      : GameUi.UiButton;
 
         public static show(): void {
@@ -72,6 +98,7 @@ namespace TinyWars.User {
                 { ui: this._btnChangeNickname,      callback: this._onTouchedBtnChangeNickname },
                 { ui: this._btnChangePassword,      callback: this._onTouchedBtnChangePassword },
                 { ui: this._btnChangeDiscordId,     callback: this._onTouchedBtnChangeDiscordId },
+                { ui: this._btnChangeGameVersion,   callback: this._onTouchedBtnChangeGameVersion },
                 { ui: this._btnRankList,            callback: this._onTouchedBtnRankList },
                 { ui: this._btnShowOnlineUsers,     callback: this._onTouchedBtnShowOnlineUsers },
                 { ui: this._btnSetSound,            callback: this._onTouchedBtnSetSound },
@@ -174,7 +201,12 @@ namespace TinyWars.User {
 
             this._showOpenAnimation();
 
-            UserProxy.reqUserGetPublicInfo(UserModel.getSelfUserId());
+            const selfUserId = UserModel.getSelfUserId();
+            if (selfUserId == null) {
+                Logger.error(`UserSettingsPanel._onOpened() empty selfUserId.`);
+            } else {
+                UserProxy.reqUserGetPublicInfo(selfUserId);
+            }
 
             this._scroller.viewport.scrollV = 0;
             this._updateView();
@@ -183,62 +215,80 @@ namespace TinyWars.User {
             await this._showCloseAnimation();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
+        private _onNotifyUnitAndTileTextureVersionChanged(): void {
             this._uiRadioTexture.updateView();
         }
-        private _onNotifyIsShowGridBorderChanged(e: egret.Event): void {
+        private _onNotifyIsShowGridBorderChanged(): void {
             this._uiRadioShowGridBorder.updateView();
         }
-        private _onMsgUserGetPublicInfo(e: egret.Event): void {
+        private _onMsgUserGetPublicInfo(): void {
             this._updateView();
         }
-        private _onMsgUserSetNickname(e: egret.Event): void {
-            UserProxy.reqUserGetPublicInfo(UserModel.getSelfUserId());
+        private _onMsgUserSetNickname(): void {
+            const selfUserId = UserModel.getSelfUserId();
+            if (selfUserId == null) {
+                Logger.error(`UserSettingsPanel._onMsgUserSetNickname() empty selfUserId.`);
+            } else {
+                UserProxy.reqUserGetPublicInfo(selfUserId);
+            }
         }
-        private _onMsgUserSetDiscordId(e: egret.Event): void {
-            UserProxy.reqUserGetPublicInfo(UserModel.getSelfUserId());
+        private _onMsgUserSetDiscordId(): void {
+            const selfUserId = UserModel.getSelfUserId();
+            if (selfUserId == null) {
+                Logger.error(`UserSettingsPanel._onMsgUserSetDiscordId() empty selfUserId.`);
+            } else {
+                UserProxy.reqUserGetPublicInfo(selfUserId);
+            }
         }
-        private _onTouchedBtnChangeNickname(e: egret.TouchEvent): void {
+        private _onTouchedBtnChangeNickname(): void {
             UserChangeNicknamePanel.show();
         }
-        private _onTouchedBtnChangePassword(e: egret.TouchEvent): void {
+        private _onTouchedBtnChangePassword(): void {
             UserSetPasswordPanel.show();
         }
-        private _onTouchedBtnChangeDiscordId(e: egret.TouchEvent): void {
+        private _onTouchedBtnChangeDiscordId(): void {
             UserChangeDiscordIdPanel.show();
         }
-        private _onTouchedBtnRankList(e: egret.TouchEvent): void {
+        private _onTouchedBtnChangeGameVersion(): void {
+            Common.CommonChangeVersionPanel.show();
+        }
+        private _onTouchedBtnRankList(): void {
             Common.CommonRankListPanel.show();
         }
-        private _onTouchedBtnShowOnlineUsers(e: egret.TouchEvent): void {
+        private _onTouchedBtnShowOnlineUsers(): void {
             UserOnlineUsersPanel.show();
         }
-        private _onTouchedBtnSetSound(e: egret.TouchEvent): void {
+        private _onTouchedBtnSetSound(): void {
             UserSetSoundPanel.show();
         }
-        private _onTouchedBtnSetStageScaler(e: egret.TouchEvent): void {
+        private _onTouchedBtnSetStageScaler(): void {
             UserSetStageScalePanel.show();
         }
-        private _onTouchedBtnServerStatus(e: egret.TouchEvent): void {
+        private _onTouchedBtnServerStatus(): void {
             Common.CommonServerStatusPanel.show();
         }
-        private _onTouchedBtnComplaint(e: egret.TouchEvent): void {
+        private _onTouchedBtnComplaint(): void {
             this.close();
             Chat.ChatPanel.show({ toUserId: CommonConstants.AdminUserId });
         }
-        private _onTouchedBtnUnitsInfo(e: egret.TouchEvent): void {
+        private _onTouchedBtnUnitsInfo(): void {
             Common.CommonDamageChartPanel.show();
         }
-        private _onTouchedBtnChangeLog(e: egret.TouchEvent): void {
+        private _onTouchedBtnChangeLog(): void {
             ChangeLog.ChangeLogPanel.show();
         }
-        private _onTouchedBtnSetPrivilege(e: egret.TouchEvent): void {
-            UserSetPrivilegePanel.show({ userId: UserModel.getSelfUserId() });
+        private _onTouchedBtnSetPrivilege(): void {
+            const selfUserId = UserModel.getSelfUserId();
+            if (selfUserId == null) {
+                Logger.error(`UserSettingsPanel._onTouchedBtnSetPrivilege() empty selfUserId.`);
+            } else {
+                UserSetPrivilegePanel.show({ userId: selfUserId });
+            }
         }
-        private _onTouchedBtnMapManagement(e: egret.TouchEvent): void {
+        private _onTouchedBtnMapManagement(): void {
             Utility.StageManager.closeAllPanels();
             Lobby.LobbyBackgroundPanel.show();
             MapManagement.MmMainMenuPanel.show();
@@ -257,7 +307,7 @@ namespace TinyWars.User {
             });
         }
         private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve, reject) => {
+            return new Promise<void>((resolve) => {
                 Helpers.resetTween({
                     obj         : this._imgMask,
                     beginProps  : { alpha: 1 },
@@ -283,6 +333,7 @@ namespace TinyWars.User {
             group.addChild(this._btnChangePassword);
             group.addChild(this._btnChangeNickname);
             group.addChild(this._btnChangeDiscordId);
+            group.addChild(this._btnChangeGameVersion);
             group.addChild(this._btnSetSound);
             group.addChild(this._btnSetStageScaler);
             group.addChild(this._btnRankList);
@@ -303,6 +354,7 @@ namespace TinyWars.User {
             this._updateBtnChangeNickname();
             this._updateBtnChangePassword();
             this._updateBtnChangeDiscordId();
+            this._updateBtnChangeGameVersion();
             this._updateBtnRankList();
             this._updateBtnShowOnlineUsers();
             this._updateBtnSetSound();
@@ -323,6 +375,9 @@ namespace TinyWars.User {
         }
         private _updateBtnChangeDiscordId(): void {
             this._btnChangeDiscordId.label = Lang.getText(Lang.Type.B0150);
+        }
+        private _updateBtnChangeGameVersion(): void {
+            this._btnChangeGameVersion.label = Lang.getText(Lang.Type.B0620);
         }
         private _updateBtnRankList(): void {
             this._btnRankList.label = Lang.getText(Lang.Type.B0436);

@@ -187,7 +187,7 @@ namespace TinyWars.MapEditor {
         private _onTouchedBtnHelpHasFog(e: egret.TouchEvent): void {
             CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
-                content: Lang.getRichText(Lang.RichType.R0002),
+                content: Lang.getText(Lang.Type.R0002),
             });
         }
 

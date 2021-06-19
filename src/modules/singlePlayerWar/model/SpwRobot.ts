@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.SinglePlayerWar.SpwRobot {
     import Types                = Utility.Types;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
@@ -965,7 +966,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 mapSize,
                 minAttackRange,
                 maxAttackRange,
-                checkCanAttack: (moveGridIndex: GridIndex, attackGridIndex: GridIndex): boolean => {
+                checkCanAttack: (moveGridIndex: GridIndex): boolean => {
                     const hasMoved = !GridIndexHelpers.checkIsEqual(moveGridIndex, beginningGridIndex);
                     return ((attacker.getLoaderUnitId() == null) || (hasMoved))
                         && ((attacker.checkCanAttackAfterMove()) || (!hasMoved));
@@ -1958,7 +1959,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         }
     }
 
-    async function getScoreForActionUnitDive(unit: BwUnit, gridIndex: GridIndex): Promise<ErrorCodeAndScore> {
+    async function getScoreForActionUnitDive(unit: BwUnit): Promise<ErrorCodeAndScore> {
         await checkAndCallLater();
 
         const fuel = unit.getCurrentFuel();
@@ -1998,24 +1999,24 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         const unitMap                           = war.getUnitMap();
         let score                               = 0;
         for (const gridIndex of GridIndexHelpers.getGridsWithinDistance(targetGridIndex, 0, flareRadius, mapSize)) {
-            const unit = unitMap.getUnitOnMap(gridIndex);
-            if ((unit) && (!unit.getIsDiving()) && (!visibleUnits.has(unit))) {
-                const productionCost = unit.getProductionBaseCost();
+            const u = unitMap.getUnitOnMap(gridIndex);
+            if ((u) && (!u.getIsDiving()) && (!visibleUnits.has(u))) {
+                const productionCost = u.getProductionBaseCost();
                 if (productionCost == null) {
                     return { errorCode: ClientErrorCode.SpwRobot_GetScoreForUnitLaunchFlare_01 };
                 }
 
-                const currentHp = unit.getCurrentHp();
+                const currentHp = u.getCurrentHp();
                 if (currentHp == null) {
                     return { errorCode: ClientErrorCode.SpwRobot_GetScoreForUnitLaunchFlare_02 };
                 }
 
-                const maxHp = unit.getMaxHp();
+                const maxHp = u.getMaxHp();
                 if (maxHp == null) {
                     return { errorCode: ClientErrorCode.SpwRobot_GetScoreForUnitLaunchFlare_03 };
                 }
 
-                score += 3 + productionCost * currentHp / maxHp / 3000 * (unit.getHasLoadedCo() ? 2 : 1) * 2;
+                score += 3 + productionCost * currentHp / maxHp / 3000 * (u.getHasLoadedCo() ? 2 : 1) * 2;
             }
         }
 
@@ -2025,7 +2026,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         };
     }
 
-    async function getScoreForActionUnitSurface(unit: BwUnit, gridIndex: GridIndex): Promise<ErrorCodeAndScore> {
+    async function getScoreForActionUnitSurface(unit: BwUnit): Promise<ErrorCodeAndScore> {
         await checkAndCallLater();
 
         const fuel = unit.getCurrentFuel();
@@ -2039,7 +2040,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         };
     }
 
-    async function getScoreForActionUnitWait(unit: BwUnit, gridIndex: GridIndex): Promise<ErrorCodeAndScore> {
+    async function getScoreForActionUnitWait(): Promise<ErrorCodeAndScore> {
         await checkAndCallLater();
 
         // const tile = war.getTileMap().getTile(gridIndex);
@@ -2134,15 +2135,10 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                     score += - unitCurrentHp * productionCost / 3000 / 1.5;
                 }
             } else {
-                const unitCurrentHp = unit.getCurrentHp();
-                if (unitCurrentHp == null) {
-                    return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_07 };
-                }
-
                 if (targetUnit.getMinAttackRange()) {
                     const unitArmorType = unit.getArmorType();
                     if (unitArmorType == null) {
-                        return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_08 };
+                        return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_07 };
                     }
 
                     const baseDamage = targetUnit.getBaseDamage(unitArmorType);
@@ -2150,7 +2146,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
                         const unitProductionCost = unit.getProductionBaseCost();
                         if (unitProductionCost == null) {
-                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_09 };
+                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_08 };
                         }
 
                         const damage    = Math.min(baseDamage, unitCurrentHp);
@@ -2161,19 +2157,19 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 if (unit.getMinAttackRange()) {
                     const targetUnitArmorType = targetUnit.getArmorType();
                     if (targetUnitArmorType == null) {
-                        return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_10 };
+                        return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_09 };
                     }
 
                     const baseDamage = unit.getBaseDamage(targetUnitArmorType);
                     if (baseDamage != null) {
                         const unitNormalizedMaxHp = unit.getNormalizedMaxHp();
                         if (unitNormalizedMaxHp == null) {
-                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_11 };
+                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_10 };
                         }
 
                         const targetUnitCurrentHp = targetUnit.getCurrentHp();
                         if (targetUnitCurrentHp == null) {
-                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_12 };
+                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionPlayerProduceUnit_11 };
                         }
 
                         const damage    = Math.min(baseDamage * BwHelpers.getNormalizedHp(unitCurrentHp) / unitNormalizedMaxHp, targetUnitCurrentHp);
@@ -2416,7 +2412,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 scoreAndAction  : undefined,
             };
         } else {
-            const { errorCode, score } = await getScoreForActionUnitDive(unit, gridIndex);
+            const { errorCode, score } = await getScoreForActionUnitDive(unit);
             if (errorCode) {
                 return { errorCode };
             } else if (score == null) {
@@ -2595,7 +2591,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 scoreAndAction  : undefined,
             };
         } else {
-            const { errorCode, score } = await getScoreForActionUnitSurface(unit, gridIndex);
+            const { errorCode, score } = await getScoreForActionUnitSurface(unit);
             if (errorCode) {
                 return { errorCode };
             } else if (score == null) {
@@ -2619,10 +2615,10 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         }
     }
 
-    async function getScoreAndActionUnitWait(unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ErrorCodeAndScoreAndAction> {
+    async function getScoreAndActionUnitWait(unit: BwUnit, pathNodes: MovePathNode[]): Promise<ErrorCodeAndScoreAndAction> {
         await checkAndCallLater();
 
-        const { errorCode, score } = await getScoreForActionUnitWait(unit, gridIndex);
+        const { errorCode, score } = await getScoreForActionUnitWait();
         if (errorCode) {
             return { errorCode };
         } else if (score == null) {
@@ -2694,7 +2690,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             getScoreAndActionUnitLaunchSilo(commonParams, unit, gridIndex, pathNodes),
             getScoreAndActionUnitLaunchFlare(commonParams, unit, gridIndex, pathNodes),
             getScoreAndActionUnitSurface(unit, gridIndex, pathNodes),
-            getScoreAndActionUnitWait(unit, gridIndex, pathNodes),
+            getScoreAndActionUnitWait(unit, pathNodes),
         ]);
 
         let bestScoreAndAction: ScoreAndAction | null | undefined = null;
@@ -3131,7 +3127,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     }
 
     // Phase 10: end turn.
-    async function getActionForPhase10(commonParams: CommonParams): Promise<ErrorCodeAndAction> {
+    async function getActionForPhase10(): Promise<ErrorCodeAndAction> {
         await checkAndCallLater();
 
         return {

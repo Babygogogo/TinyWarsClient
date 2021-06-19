@@ -15,7 +15,7 @@ namespace TinyWars.BaseWar {
         public abstract getActionPlanner(): BwActionPlanner;
 
         public init({ data, configVersion, playersCountUnneutral }: {
-            data                    : ISerialField;
+            data                    : ISerialField | null | undefined;
             configVersion           : string;
             playersCountUnneutral   : number;
         }): ClientErrorCode {
