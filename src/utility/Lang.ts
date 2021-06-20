@@ -4365,19 +4365,19 @@ namespace TinyWars.Utility.Lang {
             `您未参与该战局，或已经被击败`,
             `You have not joined the game, or you have been defeated.`,
         ],
-        [ServerErrorCode.MsgMpwActionPlayerEndTurn0003]: [
+        [ServerErrorCode.ExeMpwActionPlayerEndTurn_DoExecute_0001]: [
             `战局不存在`,
             `The game doesn't exist.`,
         ],
-        [ServerErrorCode.MsgMpwActionPlayerEndTurn0004]: [
+        [ServerErrorCode.ExeMpwActionPlayerEndTurn_DoExecute_0002]: [
             `战局数据不同步，请刷新`,
             `The local data is out of synchronization. Please refresh.`,
         ],
-        [ServerErrorCode.MsgMpwActionPlayerEndTurn0006]: [
+        [ServerErrorCode.ExeMpwActionPlayerEndTurn_DoExecute_0005]: [
             `当前无法结束您的回合`,
             `Unable to end turn.`,
         ],
-        [ServerErrorCode.MsgMpwActionPlayerEndTurn0009]: [
+        [ServerErrorCode.ExeMpwActionPlayerEndTurn_DoExecute_0007]: [
             `您尚未完成关于和局的投票`,
             `You haven't voted for the draw of game.`,
         ],

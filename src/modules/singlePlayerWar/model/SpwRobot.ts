@@ -13,6 +13,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
     import BwTile               = BaseWar.BwTile;
     import BwHelpers            = BaseWar.BwHelpers;
     import BwUnit               = BaseWar.BwUnit;
+    import BwWar                = BaseWar.BwWar;
     import IWarActionContainer  = ProtoTypes.WarAction.IWarActionContainer;
     import WeaponType           = Types.WeaponType;
     import GridIndex            = Types.GridIndex;
@@ -28,29 +29,29 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         normalizedHp    : number;
         fuel            : number;
         luckValue       : number;
-    }
+    };
     type ErrorCodeAndScore = {
         errorCode   : ClientErrorCode;
         score?      : number;
-    }
+    };
     type ErrorCodeAndScoreAndAction = {
         errorCode       : ClientErrorCode;
         scoreAndAction? : ScoreAndAction;
-    }
+    };
     type ErrorCodeAndAction = {
         errorCode   : ClientErrorCode;
         action?     : IWarActionContainer;
-    }
+    };
     type ScoreAndAction = {
         score   : number;
         action  : IWarActionContainer;
-    }
+    };
     type DamageMapData = {
         max     : number;
         total   : number;
-    }
+    };
     type CommonParams = {
-        war                     : SpwWar;
+        war                     : BwWar;
         playerIndexInTurn       : number;
         mapSize                 : Types.MapSize;
         unitValues              : Map<number, number>;
@@ -59,7 +60,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         globalOffenseBonuses    : Map<number, number>;
         globalDefenseBonuses    : Map<number, number>;
         luckValues              : Map<number, number>;
-    }
+    };
 
     const _IS_NEED_VISIBILITY = true;
     const _TILE_VALUE: { [tileType: number]: number } = {
@@ -352,14 +353,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         [TileType.Seaport]      : 1.15,
     };
 
-    let _isCalculating = false;
+    const _calculatingWars = new Set<BwWar>();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Helpers.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    async function getCommonParams(war: SpwWar): Promise<{ errorCode: ClientErrorCode, commonParams?: CommonParams }> {
+    async function getCommonParams(war: BwWar): Promise<{ errorCode: ClientErrorCode, commonParams?: CommonParams }> {
         await checkAndCallLater();
 
         const playerIndexInTurn = war.getPlayerIndexInTurn();
@@ -434,7 +433,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         };
     }
 
-    async function getUnitValues(war: SpwWar): Promise<{ errorCode: ClientErrorCode, unitValues?: Map<number, number> }> {
+    async function getUnitValues(war: BwWar): Promise<{ errorCode: ClientErrorCode, unitValues?: Map<number, number> }> {
         await checkAndCallLater();
 
         const unitValues = new Map<number, number>();
@@ -468,7 +467,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         };
     }
 
-    async function getUnitValueRatio(war: SpwWar, unitValues: Map<number, number>, playerIndexInTurn: number): Promise<{ errorCode: ClientErrorCode, unitValueRatio?: number }> {
+    async function getUnitValueRatio(war: BwWar, unitValues: Map<number, number>, playerIndexInTurn: number): Promise<{ errorCode: ClientErrorCode, unitValueRatio?: number }> {
         await checkAndCallLater();
 
         const playerManager = war.getPlayerManager();
@@ -503,7 +502,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         };
     }
 
-    async function getGlobalOffenseBonuses(war: SpwWar): Promise<{ errorCode: ClientErrorCode, globalOffenseBonuses?: Map<number, number> }> {
+    async function getGlobalOffenseBonuses(war: BwWar): Promise<{ errorCode: ClientErrorCode, globalOffenseBonuses?: Map<number, number> }> {
         await checkAndCallLater();
 
         const globalOffenseBonuses  = new Map<number, number>();
@@ -552,7 +551,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         };
     }
 
-    async function getGlobalDefenseBonuses(war: SpwWar): Promise<{ errorCode: ClientErrorCode, globalDefenseBonuses?: Map<number, number> }> {
+    async function getGlobalDefenseBonuses(war: BwWar): Promise<{ errorCode: ClientErrorCode, globalDefenseBonuses?: Map<number, number> }> {
         await checkAndCallLater();
 
         const globalDefenseBonuses = new Map<number, number>();
@@ -591,7 +590,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         };
     }
 
-    async function getLuckValues(war: SpwWar): Promise<{ errorCode: ClientErrorCode, luckValues?: Map<number, number> }> {
+    async function getLuckValues(war: BwWar): Promise<{ errorCode: ClientErrorCode, luckValues?: Map<number, number> }> {
         await checkAndCallLater();
 
         const luckValues            = new Map<number, number>();
@@ -788,7 +787,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 if ((tile.checkCanSupplyUnit(attacker))                                             ||
                     (GridIndexHelpers.getAdjacentGrids(attackerGridIndex, mapSize).some(g => {
                         const supplier = unitMap.getUnitOnMap(g);
-                        return (!!supplier) && (supplier.checkCanSupplyAdjacentUnit(attacker))
+                        return (!!supplier) && (supplier.checkCanSupplyAdjacentUnit(attacker));
                     }))
                 ) {
                     return {
@@ -864,7 +863,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                                 fuel        : attackerCurrentFuel,
                                 luckValue,
                             },
-                        }
+                        };
                     }
                 }
             }
@@ -1613,7 +1612,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             return {
                 errorCode   : ClientErrorCode.NoError,
                 score       : scoreForMovePath,
-            }
+            };
         }
     }
 
@@ -2234,7 +2233,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                     launchUnitId: unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                 } },
             },
-        }
+        };
     }
 
     async function getScoreAndActionUnitJoin(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ErrorCodeAndScoreAndAction> {
@@ -2399,7 +2398,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                         launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                     } },
                 },
-            }
+            };
         }
     }
 
@@ -2611,7 +2610,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                         launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                     } },
                 },
-            }
+            };
         }
     }
 
@@ -2638,7 +2637,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                     launchUnitId    : unit.getLoaderUnitId() == null ? null : unit.getUnitId(),
                 } },
             },
-        }
+        };
     }
 
     async function getBestScoreAndActionForUnitAndPath(commonParams: CommonParams, unit: BwUnit, gridIndex: GridIndex, pathNodes: MovePathNode[]): Promise<ErrorCodeAndScoreAndAction> {
@@ -2875,7 +2874,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                         gridIndex,
                     } },
                 },
-            }
+            };
         }
     }
 
@@ -3113,7 +3112,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             return {
                 errorCode   : ClientErrorCode.NoError,
                 action      : undefined,
-            }
+            };
         } else {
             return {
                 errorCode   : ClientErrorCode.NoError,
@@ -3146,7 +3145,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         getActionForPhase9,
         getActionForPhase10,
     ];
-    async function doGetNextAction(war: SpwWar): Promise<ErrorCodeAndAction> {
+    async function doGetNextAction(war: BwWar): Promise<ErrorCodeAndAction> {
         const { errorCode: errorCodeForCommonParams, commonParams } = await getCommonParams(war);
         if (errorCodeForCommonParams) {
             return { errorCode: errorCodeForCommonParams };
@@ -3176,17 +3175,17 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
         };
     }
 
-    export async function getNextAction(war: SpwWar): Promise< { errorCode: ClientErrorCode, action?: IWarActionContainer}> {
-        if (_isCalculating) {
+    export async function getNextAction(war: BwWar): Promise< { errorCode: ClientErrorCode, action?: IWarActionContainer}> {
+        if (_calculatingWars.has(war)) {
             return { errorCode: ClientErrorCode.SpwRobot_GetNextAction_00 };
         }
 
-        _isCalculating = true;
+        _calculatingWars.add(war);
         const { errorCode, action } = await doGetNextAction(war);
         if (action) {
             action.actionId = war.getExecutedActionManager().getExecutedActionsCount();
         }
-        _isCalculating = false;
+        _calculatingWars.delete(war);
 
         return {
             errorCode,

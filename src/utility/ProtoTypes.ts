@@ -9288,6 +9288,90 @@ export declare namespace WarAction {
         public toJSON(): { [k: string]: any };
     }
 
+    /** Properties of a WarActionSystemHandleBootPlayer. */
+    interface IWarActionSystemHandleBootPlayer {
+    }
+
+    /** Represents a WarActionSystemHandleBootPlayer. */
+    class WarActionSystemHandleBootPlayer implements IWarActionSystemHandleBootPlayer {
+
+        /**
+         * Constructs a new WarActionSystemHandleBootPlayer.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarAction.IWarActionSystemHandleBootPlayer);
+
+        /**
+         * Creates a new WarActionSystemHandleBootPlayer instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarActionSystemHandleBootPlayer instance
+         */
+        public static create(properties?: WarAction.IWarActionSystemHandleBootPlayer): WarAction.WarActionSystemHandleBootPlayer;
+
+        /**
+         * Encodes the specified WarActionSystemHandleBootPlayer message. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.verify|verify} messages.
+         * @param message WarActionSystemHandleBootPlayer message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarAction.IWarActionSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarActionSystemHandleBootPlayer message, length delimited. Does not implicitly {@link WarAction.WarActionSystemHandleBootPlayer.verify|verify} messages.
+         * @param message WarActionSystemHandleBootPlayer message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarAction.IWarActionSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarActionSystemHandleBootPlayer message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarActionSystemHandleBootPlayer
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemHandleBootPlayer;
+
+        /**
+         * Decodes a WarActionSystemHandleBootPlayer message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarActionSystemHandleBootPlayer
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemHandleBootPlayer;
+
+        /**
+         * Verifies a WarActionSystemHandleBootPlayer message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarActionSystemHandleBootPlayer message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarActionSystemHandleBootPlayer
+         */
+        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemHandleBootPlayer;
+
+        /**
+         * Creates a plain object from a WarActionSystemHandleBootPlayer message. Also converts values to other types if specified.
+         * @param message WarActionSystemHandleBootPlayer
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarAction.WarActionSystemHandleBootPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarActionSystemHandleBootPlayer to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
     /** Properties of a WarActionSystemBeginTurn. */
     interface IWarActionSystemBeginTurn {
 
@@ -9489,6 +9573,189 @@ export declare namespace WarAction {
         }
     }
 
+    /** Properties of a WarActionSystemEndTurn. */
+    interface IWarActionSystemEndTurn {
+
+        /** WarActionSystemEndTurn extraData */
+        extraData?: (WarAction.WarActionSystemEndTurn.IExtraDataForSystemEndTurn|null);
+    }
+
+    /** Represents a WarActionSystemEndTurn. */
+    class WarActionSystemEndTurn implements IWarActionSystemEndTurn {
+
+        /**
+         * Constructs a new WarActionSystemEndTurn.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: WarAction.IWarActionSystemEndTurn);
+
+        /** WarActionSystemEndTurn extraData. */
+        public extraData?: (WarAction.WarActionSystemEndTurn.IExtraDataForSystemEndTurn|null);
+
+        /**
+         * Creates a new WarActionSystemEndTurn instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns WarActionSystemEndTurn instance
+         */
+        public static create(properties?: WarAction.IWarActionSystemEndTurn): WarAction.WarActionSystemEndTurn;
+
+        /**
+         * Encodes the specified WarActionSystemEndTurn message. Does not implicitly {@link WarAction.WarActionSystemEndTurn.verify|verify} messages.
+         * @param message WarActionSystemEndTurn message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: WarAction.IWarActionSystemEndTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified WarActionSystemEndTurn message, length delimited. Does not implicitly {@link WarAction.WarActionSystemEndTurn.verify|verify} messages.
+         * @param message WarActionSystemEndTurn message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: WarAction.IWarActionSystemEndTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a WarActionSystemEndTurn message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns WarActionSystemEndTurn
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemEndTurn;
+
+        /**
+         * Decodes a WarActionSystemEndTurn message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns WarActionSystemEndTurn
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemEndTurn;
+
+        /**
+         * Verifies a WarActionSystemEndTurn message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a WarActionSystemEndTurn message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns WarActionSystemEndTurn
+         */
+        public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemEndTurn;
+
+        /**
+         * Creates a plain object from a WarActionSystemEndTurn message. Also converts values to other types if specified.
+         * @param message WarActionSystemEndTurn
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: WarAction.WarActionSystemEndTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this WarActionSystemEndTurn to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace WarActionSystemEndTurn {
+
+        /** Properties of an ExtraDataForSystemEndTurn. */
+        interface IExtraDataForSystemEndTurn {
+
+            /** ExtraDataForSystemEndTurn restTimeToBootForCurrentPlayer */
+            restTimeToBootForCurrentPlayer?: (number|null);
+        }
+
+        /** Represents an ExtraDataForSystemEndTurn. */
+        class ExtraDataForSystemEndTurn implements IExtraDataForSystemEndTurn {
+
+            /**
+             * Constructs a new ExtraDataForSystemEndTurn.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: WarAction.WarActionSystemEndTurn.IExtraDataForSystemEndTurn);
+
+            /** ExtraDataForSystemEndTurn restTimeToBootForCurrentPlayer. */
+            public restTimeToBootForCurrentPlayer: number;
+
+            /**
+             * Creates a new ExtraDataForSystemEndTurn instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns ExtraDataForSystemEndTurn instance
+             */
+            public static create(properties?: WarAction.WarActionSystemEndTurn.IExtraDataForSystemEndTurn): WarAction.WarActionSystemEndTurn.ExtraDataForSystemEndTurn;
+
+            /**
+             * Encodes the specified ExtraDataForSystemEndTurn message. Does not implicitly {@link WarAction.WarActionSystemEndTurn.ExtraDataForSystemEndTurn.verify|verify} messages.
+             * @param message ExtraDataForSystemEndTurn message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: WarAction.WarActionSystemEndTurn.IExtraDataForSystemEndTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified ExtraDataForSystemEndTurn message, length delimited. Does not implicitly {@link WarAction.WarActionSystemEndTurn.ExtraDataForSystemEndTurn.verify|verify} messages.
+             * @param message ExtraDataForSystemEndTurn message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: WarAction.WarActionSystemEndTurn.IExtraDataForSystemEndTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes an ExtraDataForSystemEndTurn message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns ExtraDataForSystemEndTurn
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarAction.WarActionSystemEndTurn.ExtraDataForSystemEndTurn;
+
+            /**
+             * Decodes an ExtraDataForSystemEndTurn message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns ExtraDataForSystemEndTurn
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarAction.WarActionSystemEndTurn.ExtraDataForSystemEndTurn;
+
+            /**
+             * Verifies an ExtraDataForSystemEndTurn message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an ExtraDataForSystemEndTurn message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ExtraDataForSystemEndTurn
+             */
+            public static fromObject(object: { [k: string]: any }): WarAction.WarActionSystemEndTurn.ExtraDataForSystemEndTurn;
+
+            /**
+             * Creates a plain object from an ExtraDataForSystemEndTurn message. Also converts values to other types if specified.
+             * @param message ExtraDataForSystemEndTurn
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: WarAction.WarActionSystemEndTurn.ExtraDataForSystemEndTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ExtraDataForSystemEndTurn to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Properties of a WarActionPlayerEndTurn. */
     interface IWarActionPlayerEndTurn {
 
@@ -9675,8 +9942,8 @@ export declare namespace WarAction {
     /** Properties of a WarActionPlayerSurrender. */
     interface IWarActionPlayerSurrender {
 
-        /** WarActionPlayerSurrender isBoot */
-        isBoot?: (boolean|null);
+        /** WarActionPlayerSurrender deprecatedIsBoot */
+        deprecatedIsBoot?: (boolean|null);
     }
 
     /** Represents a WarActionPlayerSurrender. */
@@ -9688,8 +9955,8 @@ export declare namespace WarAction {
          */
         constructor(properties?: WarAction.IWarActionPlayerSurrender);
 
-        /** WarActionPlayerSurrender isBoot. */
-        public isBoot: boolean;
+        /** WarActionPlayerSurrender deprecatedIsBoot. */
+        public deprecatedIsBoot: boolean;
 
         /**
          * Creates a new WarActionPlayerSurrender instance using the specified properties.
@@ -13593,6 +13860,12 @@ export declare namespace WarAction {
         /** WarActionContainer WarActionSystemEndWar */
         WarActionSystemEndWar?: (WarAction.IWarActionSystemEndWar|null);
 
+        /** WarActionContainer WarActionSystemEndTurn */
+        WarActionSystemEndTurn?: (WarAction.IWarActionSystemEndTurn|null);
+
+        /** WarActionContainer WarActionSystemHandleBootPlayer */
+        WarActionSystemHandleBootPlayer?: (WarAction.IWarActionSystemHandleBootPlayer|null);
+
         /** WarActionContainer WarActionPlayerEndTurn */
         WarActionPlayerEndTurn?: (WarAction.IWarActionPlayerEndTurn|null);
 
@@ -13680,6 +13953,12 @@ export declare namespace WarAction {
 
         /** WarActionContainer WarActionSystemEndWar. */
         public WarActionSystemEndWar?: (WarAction.IWarActionSystemEndWar|null);
+
+        /** WarActionContainer WarActionSystemEndTurn. */
+        public WarActionSystemEndTurn?: (WarAction.IWarActionSystemEndTurn|null);
+
+        /** WarActionContainer WarActionSystemHandleBootPlayer. */
+        public WarActionSystemHandleBootPlayer?: (WarAction.IWarActionSystemHandleBootPlayer|null);
 
         /** WarActionContainer WarActionPlayerEndTurn. */
         public WarActionPlayerEndTurn?: (WarAction.IWarActionPlayerEndTurn|null);
@@ -19848,6 +20127,12 @@ export declare namespace NetMessage {
         /** MessageContainer MsgMpwActionSystemEndWar */
         MsgMpwActionSystemEndWar?: (NetMessage.IMsgMpwActionSystemEndWar|null);
 
+        /** MessageContainer MsgMpwActionSystemEndTurn */
+        MsgMpwActionSystemEndTurn?: (NetMessage.IMsgMpwActionSystemEndTurn|null);
+
+        /** MessageContainer MsgMpwActionSystemHandleBootPlayer */
+        MsgMpwActionSystemHandleBootPlayer?: (NetMessage.IMsgMpwActionSystemHandleBootPlayer|null);
+
         /** MessageContainer MsgMpwActionPlayerEndTurn */
         MsgMpwActionPlayerEndTurn?: (NetMessage.IMsgMpwActionPlayerEndTurn|null);
 
@@ -20241,6 +20526,12 @@ export declare namespace NetMessage {
 
         /** MessageContainer MsgMpwActionSystemEndWar. */
         public MsgMpwActionSystemEndWar?: (NetMessage.IMsgMpwActionSystemEndWar|null);
+
+        /** MessageContainer MsgMpwActionSystemEndTurn. */
+        public MsgMpwActionSystemEndTurn?: (NetMessage.IMsgMpwActionSystemEndTurn|null);
+
+        /** MessageContainer MsgMpwActionSystemHandleBootPlayer. */
+        public MsgMpwActionSystemHandleBootPlayer?: (NetMessage.IMsgMpwActionSystemHandleBootPlayer|null);
 
         /** MessageContainer MsgMpwActionPlayerEndTurn. */
         public MsgMpwActionPlayerEndTurn?: (NetMessage.IMsgMpwActionPlayerEndTurn|null);
@@ -41925,6 +42216,396 @@ export declare namespace NetMessage {
              * @returns Plain object
              */
             public static toObject(message: NetMessage.MsgMpwActionSystemEndWar.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgMpwActionSystemEndTurn. */
+    interface IMsgMpwActionSystemEndTurn {
+
+        /** MsgMpwActionSystemEndTurn s */
+        s?: (NetMessage.MsgMpwActionSystemEndTurn.IS|null);
+    }
+
+    /** Represents a MsgMpwActionSystemEndTurn. */
+    class MsgMpwActionSystemEndTurn implements IMsgMpwActionSystemEndTurn {
+
+        /**
+         * Constructs a new MsgMpwActionSystemEndTurn.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMpwActionSystemEndTurn);
+
+        /** MsgMpwActionSystemEndTurn s. */
+        public s?: (NetMessage.MsgMpwActionSystemEndTurn.IS|null);
+
+        /**
+         * Creates a new MsgMpwActionSystemEndTurn instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMpwActionSystemEndTurn instance
+         */
+        public static create(properties?: NetMessage.IMsgMpwActionSystemEndTurn): NetMessage.MsgMpwActionSystemEndTurn;
+
+        /**
+         * Encodes the specified MsgMpwActionSystemEndTurn message. Does not implicitly {@link NetMessage.MsgMpwActionSystemEndTurn.verify|verify} messages.
+         * @param message MsgMpwActionSystemEndTurn message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMpwActionSystemEndTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMpwActionSystemEndTurn message, length delimited. Does not implicitly {@link NetMessage.MsgMpwActionSystemEndTurn.verify|verify} messages.
+         * @param message MsgMpwActionSystemEndTurn message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMpwActionSystemEndTurn, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMpwActionSystemEndTurn message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMpwActionSystemEndTurn
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwActionSystemEndTurn;
+
+        /**
+         * Decodes a MsgMpwActionSystemEndTurn message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMpwActionSystemEndTurn
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwActionSystemEndTurn;
+
+        /**
+         * Verifies a MsgMpwActionSystemEndTurn message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMpwActionSystemEndTurn message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMpwActionSystemEndTurn
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwActionSystemEndTurn;
+
+        /**
+         * Creates a plain object from a MsgMpwActionSystemEndTurn message. Also converts values to other types if specified.
+         * @param message MsgMpwActionSystemEndTurn
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMpwActionSystemEndTurn, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMpwActionSystemEndTurn to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMpwActionSystemEndTurn {
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S warId */
+            warId?: (number|null);
+
+            /** S actionContainer */
+            actionContainer?: (WarAction.IWarActionContainer|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMpwActionSystemEndTurn.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S warId. */
+            public warId: number;
+
+            /** S actionContainer. */
+            public actionContainer?: (WarAction.IWarActionContainer|null);
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMpwActionSystemEndTurn.IS): NetMessage.MsgMpwActionSystemEndTurn.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMpwActionSystemEndTurn.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMpwActionSystemEndTurn.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMpwActionSystemEndTurn.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMpwActionSystemEndTurn.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwActionSystemEndTurn.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwActionSystemEndTurn.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwActionSystemEndTurn.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMpwActionSystemEndTurn.S, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this S to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
+    /** Properties of a MsgMpwActionSystemHandleBootPlayer. */
+    interface IMsgMpwActionSystemHandleBootPlayer {
+
+        /** MsgMpwActionSystemHandleBootPlayer s */
+        s?: (NetMessage.MsgMpwActionSystemHandleBootPlayer.IS|null);
+    }
+
+    /** Represents a MsgMpwActionSystemHandleBootPlayer. */
+    class MsgMpwActionSystemHandleBootPlayer implements IMsgMpwActionSystemHandleBootPlayer {
+
+        /**
+         * Constructs a new MsgMpwActionSystemHandleBootPlayer.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: NetMessage.IMsgMpwActionSystemHandleBootPlayer);
+
+        /** MsgMpwActionSystemHandleBootPlayer s. */
+        public s?: (NetMessage.MsgMpwActionSystemHandleBootPlayer.IS|null);
+
+        /**
+         * Creates a new MsgMpwActionSystemHandleBootPlayer instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns MsgMpwActionSystemHandleBootPlayer instance
+         */
+        public static create(properties?: NetMessage.IMsgMpwActionSystemHandleBootPlayer): NetMessage.MsgMpwActionSystemHandleBootPlayer;
+
+        /**
+         * Encodes the specified MsgMpwActionSystemHandleBootPlayer message. Does not implicitly {@link NetMessage.MsgMpwActionSystemHandleBootPlayer.verify|verify} messages.
+         * @param message MsgMpwActionSystemHandleBootPlayer message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: NetMessage.IMsgMpwActionSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified MsgMpwActionSystemHandleBootPlayer message, length delimited. Does not implicitly {@link NetMessage.MsgMpwActionSystemHandleBootPlayer.verify|verify} messages.
+         * @param message MsgMpwActionSystemHandleBootPlayer message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: NetMessage.IMsgMpwActionSystemHandleBootPlayer, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a MsgMpwActionSystemHandleBootPlayer message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns MsgMpwActionSystemHandleBootPlayer
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwActionSystemHandleBootPlayer;
+
+        /**
+         * Decodes a MsgMpwActionSystemHandleBootPlayer message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns MsgMpwActionSystemHandleBootPlayer
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwActionSystemHandleBootPlayer;
+
+        /**
+         * Verifies a MsgMpwActionSystemHandleBootPlayer message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a MsgMpwActionSystemHandleBootPlayer message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns MsgMpwActionSystemHandleBootPlayer
+         */
+        public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwActionSystemHandleBootPlayer;
+
+        /**
+         * Creates a plain object from a MsgMpwActionSystemHandleBootPlayer message. Also converts values to other types if specified.
+         * @param message MsgMpwActionSystemHandleBootPlayer
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: NetMessage.MsgMpwActionSystemHandleBootPlayer, options?: protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this MsgMpwActionSystemHandleBootPlayer to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    namespace MsgMpwActionSystemHandleBootPlayer {
+
+        /** Properties of a S. */
+        interface IS {
+
+            /** S errorCode */
+            errorCode?: (number|null);
+
+            /** S warId */
+            warId?: (number|null);
+
+            /** S actionContainer */
+            actionContainer?: (WarAction.IWarActionContainer|null);
+        }
+
+        /** Represents a S. */
+        class S implements IS {
+
+            /**
+             * Constructs a new S.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: NetMessage.MsgMpwActionSystemHandleBootPlayer.IS);
+
+            /** S errorCode. */
+            public errorCode: number;
+
+            /** S warId. */
+            public warId: number;
+
+            /** S actionContainer. */
+            public actionContainer?: (WarAction.IWarActionContainer|null);
+
+            /**
+             * Creates a new S instance using the specified properties.
+             * @param [properties] Properties to set
+             * @returns S instance
+             */
+            public static create(properties?: NetMessage.MsgMpwActionSystemHandleBootPlayer.IS): NetMessage.MsgMpwActionSystemHandleBootPlayer.S;
+
+            /**
+             * Encodes the specified S message. Does not implicitly {@link NetMessage.MsgMpwActionSystemHandleBootPlayer.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encode(message: NetMessage.MsgMpwActionSystemHandleBootPlayer.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Encodes the specified S message, length delimited. Does not implicitly {@link NetMessage.MsgMpwActionSystemHandleBootPlayer.S.verify|verify} messages.
+             * @param message S message or plain object to encode
+             * @param [writer] Writer to encode to
+             * @returns Writer
+             */
+            public static encodeDelimited(message: NetMessage.MsgMpwActionSystemHandleBootPlayer.IS, writer?: protobuf.Writer): protobuf.Writer;
+
+            /**
+             * Decodes a S message from the specified reader or buffer.
+             * @param reader Reader or buffer to decode from
+             * @param [length] Message length if known beforehand
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): NetMessage.MsgMpwActionSystemHandleBootPlayer.S;
+
+            /**
+             * Decodes a S message from the specified reader or buffer, length delimited.
+             * @param reader Reader or buffer to decode from
+             * @returns S
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {protobuf.util.ProtocolError} If required fields are missing
+             */
+            public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): NetMessage.MsgMpwActionSystemHandleBootPlayer.S;
+
+            /**
+             * Verifies a S message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a S message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns S
+             */
+            public static fromObject(object: { [k: string]: any }): NetMessage.MsgMpwActionSystemHandleBootPlayer.S;
+
+            /**
+             * Creates a plain object from a S message. Also converts values to other types if specified.
+             * @param message S
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: NetMessage.MsgMpwActionSystemHandleBootPlayer.S, options?: protobuf.IConversionOptions): { [k: string]: any };
 
             /**
              * Converts this S to JSON.

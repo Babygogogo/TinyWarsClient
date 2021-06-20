@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.SinglePlayerWar.BwActionReviser {
     import Types                    = Utility.Types;
     import ProtoTypes               = Utility.ProtoTypes;
@@ -21,7 +22,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
     type ErrorCodeAndAction = {
         errorCode   : ClientErrorCode;
         action?     : IWarActionContainer;
-    }
+    };
 
     export function revise(war: BwWar, rawAction: IWarActionContainer): ErrorCodeAndAction {
         if (Object.keys(rawAction).length !== 2) {
@@ -57,6 +58,8 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
         else if (rawAction.WarActionSystemCallWarEvent)         { return reviseSystemCallWarEvent(war, rawAction.WarActionSystemCallWarEvent); }
         else if (rawAction.WarActionSystemDestroyPlayerForce)   { return reviseSystemDestroyPlayerForce(war, rawAction.WarActionSystemDestroyPlayerForce); }
         else if (rawAction.WarActionSystemEndWar)               { return reviseSystemEndWar(war, rawAction.WarActionSystemEndWar); }
+        else if (rawAction.WarActionSystemEndTurn)              { return reviseSystemEndTurn(war, rawAction.WarActionSystemEndTurn); }
+        else if (rawAction.WarActionSystemHandleBootPlayer)     { return reviseSystemHandleBootPlayer(war, rawAction.WarActionSystemHandleBootPlayer); }
         else if (rawAction.WarActionUnitAttackTile)             { return reviseUnitAttackTile(war, rawAction.WarActionUnitAttackTile); }
         else if (rawAction.WarActionUnitAttackUnit)             { return reviseUnitAttackUnit(war, rawAction.WarActionUnitAttackUnit); }
         else if (rawAction.WarActionUnitBeLoaded)               { return reviseUnitBeLoaded(war, rawAction.WarActionUnitBeLoaded); }
@@ -113,7 +116,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
                     gridIndex,
                 },
             }
-        }
+        };
     }
 
     function revisePlayerEndTurn(war: BwWar, rawAction: WarAction.IWarActionPlayerEndTurn): ErrorCodeAndAction {
@@ -251,16 +254,10 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerSurrender_01 };
         }
 
-        const isBoot = rawAction.isBoot;
-        if (isBoot == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerSurrender_02 };
-        }
-
         return {
             errorCode   : ClientErrorCode.NoError,
             action      : {
                 WarActionPlayerSurrender: {
-                    isBoot,
                 },
             },
         };
@@ -367,6 +364,45 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             errorCode   : ClientErrorCode.NoError,
             action      : {
                 WarActionSystemEndWar: {
+                },
+            },
+        };
+    }
+
+    function reviseSystemEndTurn(war: BwWar, rawAction: WarAction.IWarActionSystemEndTurn): ErrorCodeAndAction {
+        const playerInTurn = war.getPlayerInTurn();
+        if (playerInTurn == null) {
+            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemEndTurn_00 };
+        }
+
+        if (war.getTurnPhaseCode() !== Types.TurnPhaseCode.Main) {
+            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemEndTurn_01 };
+        }
+
+        if ((playerInTurn.getPlayerIndex() !== CommonConstants.WarNeutralPlayerIndex)   &&
+            (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
+        ) {
+            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemEndTurn_02 };
+        }
+
+        return {
+            errorCode   : ClientErrorCode.NoError,
+            action      : {
+                WarActionSystemEndTurn: {
+                },
+            },
+        };
+    }
+
+    function reviseSystemHandleBootPlayer(war: BwWar, rawAction: WarAction.IWarActionSystemHandleBootPlayer): ErrorCodeAndAction {
+        if (!war.checkIsBoot()) {
+            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemHandleBootPlayer_00 };
+        }
+
+        return {
+            errorCode   : ClientErrorCode.NoError,
+            action      : {
+                WarActionSystemHandleBootPlayer: {
                 },
             },
         };

@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiPlayerWar.MpwProxy {
     import NetManager   = Network.NetManager;
     import Codes        = Network.Codes;
@@ -32,6 +33,8 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
             { msgCode: Codes.MsgMpwActionSystemCallWarEvent,        callback: _onMsgMpwActionSystemCallWarEvent },
             { msgCode: Codes.MsgMpwActionSystemDestroyPlayerForce,  callback: _onMsgMpwActionSystemDestroyPlayerForce },
             { msgCode: Codes.MsgMpwActionSystemEndWar,              callback: _onMsgMpwActionSystemEndWar },
+            { msgCode: Codes.MsgMpwActionSystemEndTurn,             callback: _onMsgMpwActionSystemEndTurn },
+            { msgCode: Codes.MsgMpwActionSystemHandleBootPlayer,    callback: _onMsgMpwActionSystemHandleBootPlayer },
 
             { msgCode: Codes.MsgMpwActionPlayerDeleteUnit,          callback: _onMsgMpwActionPlayerDeleteUnit },
             { msgCode: Codes.MsgMpwActionPlayerEndTurn,             callback: _onMsgMpwActionPlayerEndTurn },
@@ -133,7 +136,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwWatchGetOngoingWarInfos: { c: {
             } },
-        })
+        });
     }
     function _onMsgMpwWatchGetOngoingWarInfos(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetOngoingWarInfos.IS;
@@ -279,6 +282,22 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         }
     }
 
+    function _onMsgMpwActionSystemEndTurn(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwActionSystemEndTurn.IS;
+        if (!data.errorCode) {
+            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
+            Notify.dispatch(Notify.Type.MsgMpwActionSystemEndTurn, data);
+        }
+    }
+
+    function _onMsgMpwActionSystemHandleBootPlayer(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwActionSystemHandleBootPlayer.IS;
+        if (!data.errorCode) {
+            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
+            Notify.dispatch(Notify.Type.MsgMpwActionSystemHandleBootPlayer, data);
+        }
+    }
+
     export function reqMpwPlayerDeleteUnit(war: BwWar, gridIndex: GridIndex): void {
         NetManager.send({
             MsgMpwActionPlayerDeleteUnit: { c: {
@@ -338,7 +357,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
                 actionId: war.getExecutedActionManager().getExecutedActionsCount(),
                 isBoot  : false,
             }, }
-        })
+        });
     }
     function _onMsgMpwActionPlayerSurrender(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwActionPlayerSurrender.IS;

@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar {
     import Helpers              = Utility.Helpers;
     import Logger               = Utility.Logger;

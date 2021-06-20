@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar.BwWarActionExecutor {
     import Types                                = Utility.Types;
     import ProtoTypes                           = Utility.ProtoTypes;
@@ -28,6 +29,8 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
     import IWarActionSystemCallWarEvent         = WarAction.IWarActionSystemCallWarEvent;
     import IWarActionSystemDestroyPlayerForce   = WarAction.IWarActionSystemDestroyPlayerForce;
     import IWarActionSystemEndWar               = WarAction.IWarActionSystemEndWar;
+    import IWarActionSystemEndTurn              = WarAction.IWarActionSystemEndTurn;
+    import IWarActionSystemHandleBootPlayer     = WarAction.IWarActionSystemHandleBootPlayer;
     import IWarActionUnitAttackTile             = WarAction.IWarActionUnitAttackTile;
     import IWarActionUnitAttackUnit             = WarAction.IWarActionUnitAttackUnit;
     import IWarActionUnitBeLoaded               = WarAction.IWarActionUnitBeLoaded;
@@ -84,6 +87,8 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
         else if (action.WarActionSystemCallWarEvent)        { return await exeSystemCallWarEvent(war, action.WarActionSystemCallWarEvent, isFast); }
         else if (action.WarActionSystemDestroyPlayerForce)  { return await exeSystemDestroyPlayerForce(war, action.WarActionSystemDestroyPlayerForce, isFast); }
         else if (action.WarActionSystemEndWar)              { return await exeSystemEndWar(war, action.WarActionSystemEndWar, isFast); }
+        else if (action.WarActionSystemEndTurn)             { return await exeSystemEndTurn(war, action.WarActionSystemEndTurn, isFast); }
+        else if (action.WarActionSystemHandleBootPlayer)    { return await exeSystemHandleBootPlayer(war, action.WarActionSystemHandleBootPlayer, isFast); }
         else if (action.WarActionUnitAttackTile)            { return await exeUnitAttackTile(war, action.WarActionUnitAttackTile, isFast); }
         else if (action.WarActionUnitAttackUnit)            { return await exeUnitAttackUnit(war, action.WarActionUnitAttackUnit, isFast); }
         else if (action.WarActionUnitBeLoaded)              { return await exeUnitBeLoaded(war, action.WarActionUnitBeLoaded, isFast); }
@@ -328,7 +333,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
     async function fastExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<ClientErrorCode> {
         const warEventManager   = war.getWarEventManager();
         const warEventId        = action.warEventId;
-        warEventManager.updateWarEventCalledCountOnCall(warEventId)
+        warEventManager.updateWarEventCalledCountOnCall(warEventId);
         await warEventManager.callWarEvent(warEventId, true);
 
         return ClientErrorCode.NoError;
@@ -414,6 +419,45 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
         (desc) && (FloatText.show(desc));
 
         war.setIsEnded(true);
+        return ClientErrorCode.NoError;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    async function exeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn, isFast: boolean): Promise<ClientErrorCode> {
+        return isFast
+            ? fastExeSystemEndTurn(war, action)
+            : normalExeSystemEndTurn(war, action);
+    }
+    async function fastExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<ClientErrorCode> {
+        war.getTurnManager().endPhaseMain(action);
+
+        return ClientErrorCode.NoError;
+    }
+    async function normalExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<ClientErrorCode> {
+        const desc = await war.getDescForExeSystemEndTurn(action);
+        (desc) && (FloatText.show(desc));
+
+        war.getTurnManager().endPhaseMain(action);
+        return ClientErrorCode.NoError;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    async function exeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer, isFast: boolean): Promise<ClientErrorCode> {
+        return isFast
+            ? fastExeSystemHandleBootPlayer(war, action)
+            : normalExeSystemHandleBootPlayer(war, action);
+    }
+    async function fastExeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer): Promise<ClientErrorCode> {
+        war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+
+        return ClientErrorCode.NoError;
+    }
+    async function normalExeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer): Promise<ClientErrorCode> {
+        const desc = await war.getDescForExeSystemHandleBootPlayer(action);
+        (desc) && (FloatText.show(desc));
+
+        war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+
         return ClientErrorCode.NoError;
     }
 
@@ -2215,7 +2259,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                 focusUnit.setCurrentProduceMaterial(Math.min(
                     maxProduceMaterial,
                     focusUnit.getCurrentProduceMaterial()! + targetUnit.getCurrentProduceMaterial()!
-                ))
+                ));
             }
 
             focusUnit.setCurrentPromotion(Math.max(focusUnit.getCurrentPromotion(), targetUnit.getCurrentPromotion()));

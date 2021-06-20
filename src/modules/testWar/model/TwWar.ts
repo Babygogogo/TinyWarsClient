@@ -71,6 +71,12 @@ namespace TinyWars.TestWar {
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
             return undefined;
         }
+        public async getDescForExeSystemEndTurn(action: WarAction.IWarActionSystemEndTurn): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeSystemHandleBootPlayer(action: WarAction.IWarActionSystemHandleBootPlayer): Promise<string | undefined> {
+            return undefined;
+        }
         public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined> {
             return undefined;
         }
@@ -311,7 +317,7 @@ namespace TinyWars.TestWar {
         coId                : number | null | undefined;
         restTimeToBoot      : number;
         unitAndTileSkinId   : number;
-    }
+    };
     function _createInitialSinglePlayerData(data: DataForCreateSinglePlayerData): WarSerialization.ISerialPlayer {
         return {
             fund                        : 0,
