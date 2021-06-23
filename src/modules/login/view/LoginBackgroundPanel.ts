@@ -20,9 +20,7 @@ namespace TinyWars.Login {
         // @ts-ignore
         private _labelVersion       : GameUi.UiLabel;
         // @ts-ignore
-        private _btnLanguage01      : GameUi.UiButton;
-        // @ts-ignore
-        private _btnLanguage02      : GameUi.UiButton;
+        private _listLanguage       : GameUi.UiScrollList<DataForLanguageRenderer>;
         // @ts-ignore
         private _groupCopyright     : eui.Group;
         // @ts-ignore
@@ -55,18 +53,16 @@ namespace TinyWars.Login {
             ]);
             this._setUiListenerArray([
                 { ui: this,                 callback: this._onTouchedSelf },
-                { ui: this._btnLanguage01,  callback: this._onTouchedBtnLanguage01 },
-                { ui: this._btnLanguage02,  callback: this._onTouchedBtnLanguage02 },
                 { ui: this._btnVersion,     callback: this._onTouchedBtnVersion },
             ]);
+            this._listLanguage.setItemRenderer(LanguageRenderer);
 
             this._showOpenAnimation();
 
             this._imgBackground.touchEnabled = true;
-            this._btnLanguage01.setImgDisplaySource("login_button_language_003");
-            this._btnLanguage01.setImgExtraSource("login_button_language_001");
 
             this._updateComponentsForLanguage();
+            this._initListLanguage();
 
             if (Utility.ConfigManager.getLatestFormalVersion()) {
                 // this._initGroupUnits();
@@ -95,34 +91,23 @@ namespace TinyWars.Login {
         private _onTouchedSelf(): void {
             Utility.SoundManager.init();
         }
-        private _onTouchedBtnLanguage01(): void {
-            if (Lang.getCurrentLanguageType() !== Types.LanguageType.Chinese) {
-                Lang.setLanguageType(Types.LanguageType.Chinese);
-                Notify.dispatch(Notify.Type.LanguageChanged);
-            }
-        }
-        private _onTouchedBtnLanguage02(): void {
-            if (Lang.getCurrentLanguageType() !== Types.LanguageType.English) {
-                Lang.setLanguageType(Types.LanguageType.English);
-                Notify.dispatch(Notify.Type.LanguageChanged);
-            }
-        }
         private _onTouchedBtnVersion(): void {
             Common.CommonChangeVersionPanel.show();
         }
 
         private _updateComponentsForLanguage(): void {
-            const languageType = Lang.getCurrentLanguageType();
-            this._btnLanguage01.setImgDisplaySource(languageType === Types.LanguageType.Chinese
-                ? "login_button_language_001"
-                : "login_button_language_003"
-            );
-            this._btnLanguage02.setImgDisplaySource(languageType === Types.LanguageType.English
-                ? "login_button_language_002"
-                : "login_button_language_004"
-            );
             this._btnVersion.label = Lang.getText(Lang.Type.B0620);
             this._labelVersion.text = `${Lang.getGameVersionName(CommonConstants.GameVersion)}\nv.${window.CLIENT_VERSION}`;
+        }
+        private _initListLanguage(): void {
+            const listLanguage  = this._listLanguage;
+            const languageType  = Lang.getCurrentLanguageType();
+            const dataArray     : DataForLanguageRenderer[] = [
+                { languageType: Types.LanguageType.Chinese },
+                { languageType: Types.LanguageType.English },
+            ];
+            listLanguage.bindData(dataArray);
+            listLanguage.setSelectedIndex(dataArray.findIndex(v => v.languageType === languageType));
         }
 
         private _showOpenAnimation(): void {
@@ -132,20 +117,14 @@ namespace TinyWars.Login {
                 endProps    : { alpha: 1 },
             });
             Helpers.resetTween({
-                obj         : this._btnLanguage01,
+                obj         : this._listLanguage,
                 waitTime    : 1400,
                 beginProps  : { left: -40, alpha: 0 },
                 endProps    : { left: 0, alpha: 1 },
             });
             Helpers.resetTween({
-                obj         : this._btnLanguage02,
-                waitTime    : 1500,
-                beginProps  : { left: -40, alpha: 0 },
-                endProps    : { left: 0, alpha: 1 },
-            });
-            Helpers.resetTween({
                 obj         : this._btnVersion,
-                waitTime    : 1600,
+                waitTime    : 1500,
                 beginProps  : { right: -40, alpha: 0 },
                 endProps    : { right: 0, alpha: 1 },
             });
@@ -171,12 +150,7 @@ namespace TinyWars.Login {
                     callback    : resolve,
                 });
                 Helpers.resetTween({
-                    obj         : this._btnLanguage01,
-                    beginProps  : { left: 0, alpha: 1 },
-                    endProps    : { left: -40, alpha: 0 },
-                });
-                Helpers.resetTween({
-                    obj         : this._btnLanguage02,
+                    obj         : this._listLanguage,
                     beginProps  : { left: 0, alpha: 1 },
                     endProps    : { left: -40, alpha: 0 },
                 });
@@ -220,6 +194,43 @@ namespace TinyWars.Login {
         private _clearGroupUnits(): void {
             this._groupUnits.removeChildren();
             egret.Tween.removeTweens(this._groupUnits);
+        }
+    }
+
+    type DataForLanguageRenderer = {
+        languageType: Types.LanguageType;
+    };
+    class LanguageRenderer extends GameUi.UiListItemRenderer<DataForLanguageRenderer> {
+        // @ts-ignore
+        private _labelLanguage  : GameUi.UiLabel;
+
+        protected _onOpened(): void {
+            this._setNotifyListenerArray([
+                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            ]);
+            this._setUiListenerArray([
+                { ui: this, callback: this._onTouchedSelf, },
+            ]);
+        }
+        protected _onDataChanged(): void {
+            this._labelLanguage.text = Lang.getLanguageTypeName(this.data.languageType) || `??`;
+
+            this._updateCurrentState();
+        }
+
+        private _onNotifyLanguageChanged(): void {
+            this._updateCurrentState();
+        }
+        private _onTouchedSelf(): void {
+            const languageType = this.data.languageType;
+            if (Lang.getCurrentLanguageType() !== languageType) {
+                Lang.setLanguageType(languageType);
+                Notify.dispatch(Notify.Type.LanguageChanged);
+            }
+        }
+
+        private _updateCurrentState(): void {
+            // this.currentState = Lang.getCurrentLanguageType() === this.data.languageType ? Types.UiState.Down : Types.UiState.Up;
         }
     }
 

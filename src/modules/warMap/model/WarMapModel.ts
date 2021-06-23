@@ -21,6 +21,7 @@ namespace TinyWars.WarMap {
         const _briefDataRequests    = new Map<number, ((info: MsgMapGetBriefDataIs | undefined | null) => void)[]>();
 
         export function init(): void {
+            // nothing to do.
         }
 
         export function resetBriefDataDict(dataList: IMapBriefData[]): void {

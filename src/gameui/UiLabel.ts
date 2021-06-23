@@ -1,8 +1,10 @@
 
-module TinyWars.GameUi {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+namespace TinyWars.GameUi {
     export class UiLabel extends eui.Label {
         public touchEnabled = false;
         public maxTextWidth = 0;
+        public wordWrap     = true;
 
         public $setText(value: string): boolean {
             const result = super.$setText(value);
@@ -26,7 +28,7 @@ module TinyWars.GameUi {
             }
         }
 
-        private _onEnterFrameForApplyMaxTextWidth(e: egret.Event): void {
+        private _onEnterFrameForApplyMaxTextWidth(): void {
             const maxWidth = this.maxTextWidth;
             if (maxWidth > 0) {
                 const currWidth = this.textWidth;

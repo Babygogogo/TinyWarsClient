@@ -2,17 +2,23 @@
 <e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage id="_imgBackground" source="bg_001_png" left="0" right="0" top="0" bottom="0" />
-    <e:Group x="0" verticalCenter="120">
-        <e:Group>
-            <GameUi:UiButton id="_btnLanguage01" label="" skinName="Skins.Component.Button.ButtonConfirm001" left="0" />
-        </e:Group>
-        <e:Group>
-            <GameUi:UiButton id="_btnLanguage02" label="" skinName="Skins.Component.Button.ButtonConfirm001" left="0" />
-        </e:Group>
-        <e:layout>
-            <e:VerticalLayout gap="0" />
-        </e:layout>
-    </e:Group>
+    <GameUi:UiScrollList id="_listLanguage" width="140" left="0" x="0" scaleX="1" scaleY="1" verticalCenter="120">
+        <e:List>
+            <e:itemRendererSkinName>
+                <e:Skin states="down,up" currentState="up">
+                    <e:Group y="0" width="140" x="0" height="40" alpha.up="0.5">
+                        <e:Image left="0" right="0" top="0" bottom="0" scale9Grid="4,4,1,1" source="commonPentagon0002" />
+                        <GameUi:UiLabel id="_labelLanguage" size="22" textColor="0xffffff" text="English"
+                                        wordWrap="true" left="10" right="20" bold="true" top="8" bottom="8"
+                                        verticalAlign="middle" textAlign="right" />
+                    </e:Group>
+                </e:Skin>
+            </e:itemRendererSkinName>
+            <e:layout>
+                <e:VerticalLayout gap="10" />
+            </e:layout>
+        </e:List>
+    </GameUi:UiScrollList>
     <e:Group horizontalCenter="0" bottom="10" id="_groupCopyright">
         <GameUi:UiLabel text="Tiny Wars is a fan-made game that bases on Advance Wars: Days of Ruin." size="14" x="196"
                         y="0" textColor="0x666666" />

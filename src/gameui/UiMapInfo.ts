@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.GameUi {
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
@@ -15,7 +16,7 @@ namespace TinyWars.GameUi {
             configVersion   : string;
         };
         warData?    : ProtoTypes.WarSerialization.ISerialWar;
-    }
+    };
 
     export class UiMapInfo extends UiComponent {
         private readonly _groupTile             : eui.Group;
@@ -53,7 +54,7 @@ namespace TinyWars.GameUi {
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -145,11 +146,11 @@ namespace TinyWars.GameUi {
         configVersion   : string;
         tileType        : Types.TileType;
         num             : number;
-    }
+    };
     class TileRenderer extends GameUi.UiListItemRenderer<DataForTileRenderer> {
         private _group          : eui.Group;
         private _conTileView    : eui.Group;
-        private _labelNum       : TinyWars.GameUi.UiLabel;
+        private _labelNum       : GameUi.UiLabel;
 
         private _tileView       = new MapEditor.MeTileSimpleView();
 

@@ -3540,6 +3540,14 @@ namespace TinyWars.Utility.Lang {
             `当前版本`,
             `Current Version`,
         ],
+        [Type.B0624]: [
+            `中文`,
+            `Chinese`,
+        ],
+        [Type.B0625]: [
+            `英文`,
+            `English`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -4422,6 +4430,13 @@ namespace TinyWars.Utility.Lang {
     }
     export function setLanguageType(language: LanguageType): void {
         _languageType = language;
+    }
+    export function getLanguageTypeName(type: LanguageType): string | undefined {
+        switch (type) {
+            case LanguageType.Chinese   : return getText(Type.B0624, LanguageType.Chinese);
+            case LanguageType.English   : return getText(Type.B0625, LanguageType.English);
+            default                     : return undefined;
+        }
     }
 
     export function getText(t: Type, languageType = getCurrentLanguageType()): string {
