@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar.BwWarRuleHelper {
     import ConfigManager        = Utility.ConfigManager;
     import Logger               = Utility.Logger;
@@ -495,9 +496,11 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 { languageType: LanguageType.English, text: Lang.getText(Lang.Type.B0001, LanguageType.English) },
             ],
             ruleAvailability: {
-                canMcw  : true,
-                canScw  : true,
+                canMcw  : false,
+                canScw  : false,
                 canMrw  : false,
+                canSrw  : false,
+                canCcw  : false,
             },
             ruleForGlobalParams : {
                 hasFogByDefault : false,
@@ -505,7 +508,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
             ruleForPlayers: {
                 playerRuleDataArray: createDefaultPlayerRuleList(playersCount),
             },
-        }
+        };
     }
     export function createDefaultPlayerRuleList(playersCount: number): IDataForPlayerRule[] {
         const playerRuleDataList: IDataForPlayerRule[] = [];
@@ -528,7 +531,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
             luckLowerLimit          : CommonConstants.WarRuleLuckDefaultLowerLimit,
             luckUpperLimit          : CommonConstants.WarRuleLuckDefaultUpperLimit,
             bannedCoIdArray         : [],
-        }
+        };
     }
     export function reviseWarRule(warRule: IWarRule, playersCount: number): void {
         const ruleForPlayers = warRule.ruleForPlayers;
@@ -775,7 +778,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         ruleForPlayers          : IRuleForPlayers;
         configVersion           : string;
         playersCountUnneutral   : number;
-        ruleAvailability        : WarRule.IDataForWarRuleAvailability;
+        ruleAvailability        : WarRule.IRuleAvailability;
     }): ClientErrorCode {
         const ruleArray = ruleForPlayers.playerRuleDataArray;
         if ((ruleArray == null) || (ruleArray.length !== playersCountUnneutral)) {
@@ -924,14 +927,15 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         return ClientErrorCode.NoError;
     }
 
-    function checkIsValidWarRuleAvailability(availability: WarRule.IDataForWarRuleAvailability): boolean {
+    function checkIsValidWarRuleAvailability(availability: WarRule.IRuleAvailability): boolean {
         const {
-            canMcw,     canScw,     canMrw,     canSrw,
+            canMcw,     canScw,     canMrw,     canSrw,     canCcw
         } = availability;
         return (!!canMcw)
             || (!!canScw)
             || (!!canMrw)
-            || (!!canSrw);
+            || (!!canSrw)
+            || (!!canCcw);
     }
 
     function getErrorCodeForRuleForGlobalParams(rule: IRuleForGlobalParams): ClientErrorCode {

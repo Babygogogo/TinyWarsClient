@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Utility.VisibilityHelpers {
     import GridIndex    = Types.GridIndex;
     import Visibility   = Types.Visibility;

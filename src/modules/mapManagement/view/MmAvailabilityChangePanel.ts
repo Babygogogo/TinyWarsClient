@@ -173,7 +173,7 @@ namespace TinyWars.MapManagement {
             const briefData     = await WarMapModel.getBriefData(this._getOpenData().mapId);
             const extraData     = briefData ? briefData.mapExtraData : null;
             const complexInfo   = extraData ? extraData.mapComplexInfo : null;
-            const availability  = complexInfo ? complexInfo.availability : null;
+            const availability  = complexInfo ? complexInfo.mapAvailability : null;
             if (availability == null) {
                 Logger.error(`MmAvailabilityChangePanel._updateImages() empty availability.`);
                 return;

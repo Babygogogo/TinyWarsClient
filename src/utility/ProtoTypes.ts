@@ -2376,8 +2376,8 @@ export declare namespace Map {
     /** Properties of a MapComplexInfo. */
     interface IMapComplexInfo {
 
-        /** MapComplexInfo availability */
-        availability?: (Map.IMapAvailability|null);
+        /** MapComplexInfo mapAvailability */
+        mapAvailability?: (Map.IMapAvailability|null);
 
         /** MapComplexInfo warStatisticsArray */
         warStatisticsArray?: (Map.MapComplexInfo.IWarStatistics[]|null);
@@ -2392,8 +2392,8 @@ export declare namespace Map {
          */
         constructor(properties?: Map.IMapComplexInfo);
 
-        /** MapComplexInfo availability. */
-        public availability?: (Map.IMapAvailability|null);
+        /** MapComplexInfo mapAvailability. */
+        public mapAvailability?: (Map.IMapAvailability|null);
 
         /** MapComplexInfo warStatisticsArray. */
         public warStatisticsArray: Map.MapComplexInfo.IWarStatistics[];
@@ -2984,6 +2984,9 @@ export declare namespace Map {
 
         /** MapBriefData mapTag */
         mapTag?: (Map.IDataForMapTag|null);
+
+        /** MapBriefData ruleAvailability */
+        ruleAvailability?: (WarRule.IRuleAvailability|null);
     }
 
     /** Represents a MapBriefData. */
@@ -3009,6 +3012,9 @@ export declare namespace Map {
 
         /** MapBriefData mapTag. */
         public mapTag?: (Map.IDataForMapTag|null);
+
+        /** MapBriefData ruleAvailability. */
+        public ruleAvailability?: (WarRule.IRuleAvailability|null);
 
         /**
          * Creates a new MapBriefData instance using the specified properties.
@@ -5670,115 +5676,115 @@ export declare namespace WarRule {
         public toJSON(): { [k: string]: any };
     }
 
-    /** Properties of a DataForWarRuleAvailability. */
-    interface IDataForWarRuleAvailability {
+    /** Properties of a RuleAvailability. */
+    interface IRuleAvailability {
 
-        /** DataForWarRuleAvailability canMcw */
+        /** RuleAvailability canMcw */
         canMcw?: (boolean|null);
 
-        /** DataForWarRuleAvailability canScw */
+        /** RuleAvailability canScw */
         canScw?: (boolean|null);
 
-        /** DataForWarRuleAvailability canMrw */
+        /** RuleAvailability canMrw */
         canMrw?: (boolean|null);
 
-        /** DataForWarRuleAvailability canSrw */
+        /** RuleAvailability canSrw */
         canSrw?: (boolean|null);
 
-        /** DataForWarRuleAvailability canCcw */
+        /** RuleAvailability canCcw */
         canCcw?: (boolean|null);
     }
 
-    /** Represents a DataForWarRuleAvailability. */
-    class DataForWarRuleAvailability implements IDataForWarRuleAvailability {
+    /** Represents a RuleAvailability. */
+    class RuleAvailability implements IRuleAvailability {
 
         /**
-         * Constructs a new DataForWarRuleAvailability.
+         * Constructs a new RuleAvailability.
          * @param [properties] Properties to set
          */
-        constructor(properties?: WarRule.IDataForWarRuleAvailability);
+        constructor(properties?: WarRule.IRuleAvailability);
 
-        /** DataForWarRuleAvailability canMcw. */
+        /** RuleAvailability canMcw. */
         public canMcw: boolean;
 
-        /** DataForWarRuleAvailability canScw. */
+        /** RuleAvailability canScw. */
         public canScw: boolean;
 
-        /** DataForWarRuleAvailability canMrw. */
+        /** RuleAvailability canMrw. */
         public canMrw: boolean;
 
-        /** DataForWarRuleAvailability canSrw. */
+        /** RuleAvailability canSrw. */
         public canSrw: boolean;
 
-        /** DataForWarRuleAvailability canCcw. */
+        /** RuleAvailability canCcw. */
         public canCcw: boolean;
 
         /**
-         * Creates a new DataForWarRuleAvailability instance using the specified properties.
+         * Creates a new RuleAvailability instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns DataForWarRuleAvailability instance
+         * @returns RuleAvailability instance
          */
-        public static create(properties?: WarRule.IDataForWarRuleAvailability): WarRule.DataForWarRuleAvailability;
+        public static create(properties?: WarRule.IRuleAvailability): WarRule.RuleAvailability;
 
         /**
-         * Encodes the specified DataForWarRuleAvailability message. Does not implicitly {@link WarRule.DataForWarRuleAvailability.verify|verify} messages.
-         * @param message DataForWarRuleAvailability message or plain object to encode
+         * Encodes the specified RuleAvailability message. Does not implicitly {@link WarRule.RuleAvailability.verify|verify} messages.
+         * @param message RuleAvailability message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: WarRule.IDataForWarRuleAvailability, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: WarRule.IRuleAvailability, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified DataForWarRuleAvailability message, length delimited. Does not implicitly {@link WarRule.DataForWarRuleAvailability.verify|verify} messages.
-         * @param message DataForWarRuleAvailability message or plain object to encode
+         * Encodes the specified RuleAvailability message, length delimited. Does not implicitly {@link WarRule.RuleAvailability.verify|verify} messages.
+         * @param message RuleAvailability message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: WarRule.IDataForWarRuleAvailability, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: WarRule.IRuleAvailability, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a DataForWarRuleAvailability message from the specified reader or buffer.
+         * Decodes a RuleAvailability message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns DataForWarRuleAvailability
+         * @returns RuleAvailability
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarRule.DataForWarRuleAvailability;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): WarRule.RuleAvailability;
 
         /**
-         * Decodes a DataForWarRuleAvailability message from the specified reader or buffer, length delimited.
+         * Decodes a RuleAvailability message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns DataForWarRuleAvailability
+         * @returns RuleAvailability
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarRule.DataForWarRuleAvailability;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): WarRule.RuleAvailability;
 
         /**
-         * Verifies a DataForWarRuleAvailability message.
+         * Verifies a RuleAvailability message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
 
         /**
-         * Creates a DataForWarRuleAvailability message from a plain object. Also converts values to their respective internal types.
+         * Creates a RuleAvailability message from a plain object. Also converts values to their respective internal types.
          * @param object Plain object
-         * @returns DataForWarRuleAvailability
+         * @returns RuleAvailability
          */
-        public static fromObject(object: { [k: string]: any }): WarRule.DataForWarRuleAvailability;
+        public static fromObject(object: { [k: string]: any }): WarRule.RuleAvailability;
 
         /**
-         * Creates a plain object from a DataForWarRuleAvailability message. Also converts values to other types if specified.
-         * @param message DataForWarRuleAvailability
+         * Creates a plain object from a RuleAvailability message. Also converts values to other types if specified.
+         * @param message RuleAvailability
          * @param [options] Conversion options
          * @returns Plain object
          */
-        public static toObject(message: WarRule.DataForWarRuleAvailability, options?: protobuf.IConversionOptions): { [k: string]: any };
+        public static toObject(message: WarRule.RuleAvailability, options?: protobuf.IConversionOptions): { [k: string]: any };
 
         /**
-         * Converts this DataForWarRuleAvailability to JSON.
+         * Converts this RuleAvailability to JSON.
          * @returns JSON object
          */
         public toJSON(): { [k: string]: any };
@@ -5974,7 +5980,7 @@ export declare namespace WarRule {
         ruleNameArray?: (Structure.ILanguageText[]|null);
 
         /** WarRule ruleAvailability */
-        ruleAvailability?: (WarRule.IDataForWarRuleAvailability|null);
+        ruleAvailability?: (WarRule.IRuleAvailability|null);
 
         /** WarRule ruleForGlobalParams */
         ruleForGlobalParams?: (WarRule.IRuleForGlobalParams|null);
@@ -6002,7 +6008,7 @@ export declare namespace WarRule {
         public ruleNameArray: Structure.ILanguageText[];
 
         /** WarRule ruleAvailability. */
-        public ruleAvailability?: (WarRule.IDataForWarRuleAvailability|null);
+        public ruleAvailability?: (WarRule.IRuleAvailability|null);
 
         /** WarRule ruleForGlobalParams. */
         public ruleForGlobalParams?: (WarRule.IRuleForGlobalParams|null);

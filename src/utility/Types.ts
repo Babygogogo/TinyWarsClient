@@ -94,66 +94,71 @@ namespace TinyWars.Utility.Types {
         callback    : (e: egret.Event) => void,
         eventType?  : string,
         thisObject? : any,
-    }
+    };
 
     export type Size = {
         width : number;
         height: number;
-    }
+    };
 
     export type GridIndex = {
         x: number;
         y: number;
-    }
+    };
 
     export type MapSize = {
         width   : number;
         height  : number;
-    }
+    };
 
     export type Point = {
         x: number;
         y: number;
-    }
+    };
 
     export type TouchEvents = {
         [touchId: number]: egret.TouchEvent;
-    }
+    };
 
     export type TouchPoints = Map<number, Point>;
 
     export type MoveCosts = {
         [moveType: number]: number | undefined;
-    }
+    };
 
     export type MovePath = {
         nodes           : GridIndex[];
         fuelConsumption : number;
         isBlocked       : boolean;
-    }
+    };
 
     export type MovePathNode = {
         x               : number;
         y               : number;
         totalMoveCost   : number;
-    }
+    };
 
     export type RepairHpAndCost = {
         hp  : number;
         cost: number;
-    }
+    };
 
     export type DamageInfo = {
         attackerUnitId      : number;
         targetUnitId        : number | null | undefined;
         targetTileGridIndex : GridIndex | null | undefined;
         damage              : number;
-    }
+    };
 
     export type DropDestination = {
         unitId      : number;
         gridIndex   : GridIndex;
-    }
+    };
+
+    export type TurnAndPlayerIndex = {
+        turnIndex   : number;
+        playerIndex : number;
+    };
 
     // eslint-disable-next-line no-shadow
     export const enum Visibility {
@@ -186,13 +191,13 @@ namespace TinyWars.Utility.Types {
         fuel        : number;
         primaryAmmo : number | null;
         flareAmmo   : number | null;
-    }
+    };
 
     export type SpmWarSaveSlotData = {
         slotIndex   : number;
         extraData   : ProtoTypes.SinglePlayerMode.ISpmWarSaveSlotExtraData;
         warData     : ProtoTypes.WarSerialization.ISerialWar;
-    }
+    };
 
     ////////////////////////////////////////////////////////////////////////////////
     // Enums.
@@ -237,7 +242,7 @@ namespace TinyWars.Utility.Types {
     export const UiState = {
         Up  : "up",
         Down: "down",
-    }
+    };
 
     // eslint-disable-next-line no-shadow
     export const enum LogoutType {

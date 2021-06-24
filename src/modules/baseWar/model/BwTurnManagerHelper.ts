@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar.BwTurnManagerHelper {
     import Logger                       = Utility.Logger;
     import ProtoTypes                   = Utility.ProtoTypes;
@@ -6,11 +7,12 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
     import VisibilityHelpers            = Utility.VisibilityHelpers;
     import GridIndexHelpers             = Utility.GridIndexHelpers;
     import ConfigManager                = Utility.ConfigManager;
+    import CommonConstants              = Utility.CommonConstants;
+    import ClientErrorCode              = Utility.ClientErrorCode;
     import GridIndex                    = Types.GridIndex;
     import WarAction                    = ProtoTypes.WarAction;
     import IWarActionSystemBeginTurn    = WarAction.IWarActionSystemBeginTurn;
     import IWarActionPlayerEndTurn      = WarAction.IWarActionPlayerEndTurn;
-    import CommonConstants              = Utility.CommonConstants;
 
     export function runPhaseGetFundWithExtraData(turnManager: BwTurnManager, data: IWarActionSystemBeginTurn): void {
         const war = turnManager.getWar();
@@ -114,18 +116,24 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
         }
     }
 
-    export function runPhaseRepairUnitByTileWithExtraData(turnManager: BwTurnManager, data: IWarActionSystemBeginTurn): void {
+    export function runPhaseRepairUnitByTileWithExtraData(turnManager: BwTurnManager, data: IWarActionSystemBeginTurn): ClientErrorCode {
         const extraData = data.extraData;
         if (extraData == null) {
-            Logger.error(`BwTurnManagerHelper.runPhaseRepairUnitByTileWithExtraData() empty extraData.`);
-            return undefined;
+            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithExtraData_00;
         }
 
-        const war               = turnManager.getWar();
+        const war = turnManager.getWar();
+        if (war == null) {
+            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithExtraData_01;
+        }
+
+        const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+        if (visibleUnits == null) {
+            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithExtraData_02;
+        }
+
         const unitMap           = war.getUnitMap();
         const gridVisionEffect  = war.getGridVisionEffect();
-        const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
-
         for (const repairData of extraData.recoveryDataByTile || []) {
             const gridIndex = repairData.gridIndex as GridIndex;
             const unit      = unitMap.getUnit(gridIndex, repairData.unitId);
@@ -141,71 +149,59 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
                 }
             }
         }
+
+        return ClientErrorCode.NoError;
     }
-    export function runPhaseRepairUnitByTileWithoutExtraData(turnManager: BwTurnManager): void {
+    export function runPhaseRepairUnitByTileWithoutExtraData(turnManager: BwTurnManager): ClientErrorCode {
         const playerIndex = turnManager.getPlayerIndexInTurn();
         if (playerIndex == null) {
-            Logger.error(`BwTurnManagerHelper.runPhaseRepairUnitByTileWithoutExtraData() empty playerIndex.`);
-            return undefined;
+            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_00;
         }
 
         const war = turnManager.getWar();
         if (war == null) {
-            Logger.error(`BwTurnManagerHelper.runPhaseRepairUnitByTileWithoutExtraData() empty war.`);
-            return undefined;
+            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_01;
         }
 
-        const unitMap = war.getUnitMap();
-        if (unitMap == null) {
-            Logger.error(`BwTurnManagerHelper.runPhaseRepairUnitByTileWithoutExtraData() empty unitMap.`);
-            return undefined;
-        }
-
-        const tileMap = war.getTileMap();
-        if (tileMap == null) {
-            Logger.error(`BwTurnManagerHelper.runPhaseRepairUnitByTileWithoutExtraData() empty tileMap.`);
-            return undefined;
-        }
-
-        if (playerIndex !== 0) {
+        if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
             const player = war.getPlayer(playerIndex);
             if (player == null) {
-                Logger.error(`BwTurnManagerHelper.runPhaseRepairUnitByTileWithoutExtraData() empty player.`);
-                return undefined;
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_02;
             }
 
             const allUnitsOnMap: BwUnit[] = [];
-            unitMap.forEachUnitOnMap(unit => {
+            war.getUnitMap().forEachUnitOnMap(unit => {
                 (unit.getPlayerIndex() === playerIndex) && (allUnitsOnMap.push(unit));
             });
 
+            const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            if (visibleUnits == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_03;
+            }
+
+            const tileMap           = war.getTileMap();
             const gridVisionEffect  = war.getGridVisionEffect();
-            const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             for (const unit of allUnitsOnMap.sort(sorterForRepairUnits)) {
                 const gridIndex = unit.getGridIndex();
                 if (gridIndex == null) {
-                    Logger.error(`BwTurnManagerHelper.runPhaseRepairUnitByTileWithoutExtraData() empty gridIndex.`);
-                    return undefined;
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_04;
                 }
 
                 const tile = tileMap.getTile(gridIndex);
                 if (tile == null) {
-                    Logger.error(`BwTurnManagerHelper.runPhaseRepairUnitByTileWithoutExtraData() empty tile.`);
-                    return undefined;
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_05;
                 }
 
                 const repairData = tile.getRepairHpAndCostForUnit(unit);
                 if (repairData) {
                     const fund = player.getFund();
                     if (fund == null) {
-                        Logger.error(`BwTurnManagerHelper.runPhaseRepairUnitByTileWithoutExtraData() empty fund.`);
-                        return undefined;
+                        return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_06;
                     }
 
                     const deltaFuel = unit.getUsedFuel();
                     if (deltaFuel == null) {
-                        Logger.error(`BwTurnManagerHelper.runPhaseRepairUnitByTileWithoutExtraData() empty deltaFuel.`);
-                        return undefined;
+                        return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_07;
                     }
 
                     const deltaHp                   = repairData.hp > 0 ? repairData.hp : undefined;
@@ -231,17 +227,31 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
                 }
             }
         }
+
+        return ClientErrorCode.NoError;
     }
 
-    export function runPhaseRepairUnitByUnitWithExtraData(turnManager: BwTurnManager, data: IWarActionSystemBeginTurn): void {
-        const war               = turnManager.getWar();
+    export function runPhaseRepairUnitByUnitWithExtraData(turnManager: BwTurnManager, data: IWarActionSystemBeginTurn): ClientErrorCode {
+        const war = turnManager.getWar();
+        if (war == null) {
+            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithExtraData_00;
+        }
+
+        const extraData = data.extraData;
+        if (extraData == null) {
+            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithExtraData_01;
+        }
+
+        const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+        if (visibleUnits == null) {
+            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithExtraData_02;
+        }
+
         const unitMap           = war.getUnitMap();
         const gridVisionEffect  = war.getGridVisionEffect();
-        const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
-
-        for (const repairData of data.extraData.recoveryDataByUnit || []) {
+        for (const repairData of extraData.recoveryDataByUnit || []) {
             const gridIndex = repairData.gridIndex as GridIndex;
-            const unit      = unitMap.getUnit(gridIndex, repairData.unitId)
+            const unit      = unitMap.getUnit(gridIndex, repairData.unitId);
             if (unit) {
                 unit.updateByRepairData(repairData);
 
@@ -254,6 +264,8 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
                 }
             }
         }
+
+        return ClientErrorCode.NoError;
     }
     export function runPhaseRepairUnitByUnitWithoutExtraData(turnManager: BwTurnManager): void {
         const playerIndex = turnManager.getPlayerIndexInTurn();
@@ -480,7 +492,11 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
             const gridVisionEffect  = war.getGridVisionEffect();
             const visibleUnits      = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
             for (const skillId of player.getCoCurrentSkills() || []) {
-                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId)!;
+                const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
+                if (skillCfg == null) {
+                    Logger.error(`BwTurnManagerHelper._runPhaseRecoverUnitByCoWithoutExtraData() empty skillCfg.`);
+                    return undefined;
+                }
 
                 if (skillCfg.selfHpRecovery) {
                     const recoverCfg    = skillCfg.selfHpRecovery;
@@ -664,21 +680,37 @@ namespace TinyWars.BaseWar.BwTurnManagerHelper {
         }
     }
 
-    export function runPhaseTickTurnAndPlayerIndexWithExtraData(turnManager: BwTurnManager, data: IWarActionPlayerEndTurn): void {
+    export function runPhaseTickTurnAndPlayerIndexWithExtraData(turnManager: BwTurnManager, data: IWarActionPlayerEndTurn): ClientErrorCode {
         turnManager.getWar().getPlayerInTurn().setRestTimeToBoot(data.extraData.restTimeToBootForCurrentPlayer);
 
-        const nextTurnAndPlayerIndex = turnManager.getNextTurnAndPlayerIndex();
-        turnManager.setTurnIndex(nextTurnAndPlayerIndex.turnIndex);
-        turnManager.setPlayerIndexInTurn(nextTurnAndPlayerIndex.playerIndex);
+        const { errorCode, info } = turnManager.getNextTurnAndPlayerIndex();
+        if (errorCode) {
+            return errorCode;
+        } else if (info == null) {
+            return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithExtraData_00;
+        }
+
+        turnManager.setTurnIndex(info.turnIndex);
+        turnManager.setPlayerIndexInTurn(info.playerIndex);
         turnManager.setEnterTurnTime(Time.TimeModel.getServerTimestamp());
         turnManager.getWar().getWarEventManager().updateWarEventCalledCountOnPlayerTurnSwitched();
+
+        return ClientErrorCode.NoError;
     }
-    export function runPhaseTickTurnAndPlayerIndexWithoutExtraData(turnManager: BwTurnManager): void {
-        const nextTurnAndPlayerIndex = turnManager.getNextTurnAndPlayerIndex();
-        turnManager.setTurnIndex(nextTurnAndPlayerIndex.turnIndex);
-        turnManager.setPlayerIndexInTurn(nextTurnAndPlayerIndex.playerIndex);
+    export function runPhaseTickTurnAndPlayerIndexWithoutExtraData(turnManager: BwTurnManager): ClientErrorCode {
+        const { errorCode, info } = turnManager.getNextTurnAndPlayerIndex();
+        if (errorCode) {
+            return errorCode;
+        } else if (info == null) {
+            return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_00;
+        }
+
+        turnManager.setTurnIndex(info.turnIndex);
+        turnManager.setPlayerIndexInTurn(info.playerIndex);
         turnManager.setEnterTurnTime(Time.TimeModel.getServerTimestamp());
         turnManager.getWar().getWarEventManager().updateWarEventCalledCountOnPlayerTurnSwitched();
+
+        return ClientErrorCode.NoError;
     }
 
     function sorterForRepairUnits(unit1: BwUnit, unit2: BwUnit): number {

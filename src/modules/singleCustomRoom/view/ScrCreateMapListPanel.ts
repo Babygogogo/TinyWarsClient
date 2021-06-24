@@ -180,8 +180,9 @@ namespace TinyWars.SingleCustomRoom {
                 const mapTag        = mapBriefData.mapTag || {};
                 const realMapName   = await WarMapModel.getMapNameInCurrentLanguage(mapId);
                 const rating        = await WarMapModel.getAverageRating(mapId);
-                if ((!mapExtraData.isEnabled)                                                                           ||
-                    (!mapExtraData.mapComplexInfo.availability.canScw)                                                  ||
+                if ((!mapBriefData.ruleAvailability.canScw)                                                             ||
+                    (!mapExtraData.isEnabled)                                                                           ||
+                    (!mapExtraData.mapComplexInfo.mapAvailability.canScw)                                               ||
                     ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                                     ||
                     ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))               ||
                     ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                           ||

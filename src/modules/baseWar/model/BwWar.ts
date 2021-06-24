@@ -330,7 +330,7 @@ namespace TinyWars.BaseWar {
         public getPlayerInTurn(): BwPlayer {
             return this.getPlayerManager().getPlayerInTurn();
         }
-        public getPlayerIndexInTurn(): number {
+        public getPlayerIndexInTurn(): number | undefined {
             return this.getTurnManager().getPlayerIndexInTurn();
         }
 

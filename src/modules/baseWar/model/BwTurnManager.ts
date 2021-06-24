@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar {
     import Types                        = Utility.Types;
     import DestructionHelpers           = Utility.DestructionHelpers;
@@ -8,18 +9,19 @@ namespace TinyWars.BaseWar {
     import ClientErrorCode              = Utility.ClientErrorCode;
     import CommonConstants              = Utility.CommonConstants;
     import TurnPhaseCode                = Types.TurnPhaseCode;
+    import TurnAndPlayerIndex           = Types.TurnAndPlayerIndex;
     import ISerialTurnManager           = ProtoTypes.WarSerialization.ISerialTurnManager;
     import WarAction                    = ProtoTypes.WarAction;
     import IWarActionSystemBeginTurn    = WarAction.IWarActionSystemBeginTurn;
     import IWarActionPlayerEndTurn      = WarAction.IWarActionPlayerEndTurn;
 
     export abstract class BwTurnManager {
-        private _turnIndex          : number;
-        private _playerIndexInTurn  : number;
-        private _phaseCode          : TurnPhaseCode;
-        private _enterTurnTime      : number;
+        private _turnIndex          : number | undefined;
+        private _playerIndexInTurn  : number | undefined;
+        private _phaseCode          : TurnPhaseCode | undefined;
+        private _enterTurnTime      : number | undefined;
 
-        private _war                    : BwWar;
+        private _war                    : BwWar | undefined;
         private _hasUnitOnBeginningTurn = false;
 
         protected abstract _runPhaseGetFund(data: IWarActionSystemBeginTurn): void;
@@ -94,7 +96,7 @@ namespace TinyWars.BaseWar {
         private _setWar(war: BwWar): void {
             this._war = war;
         }
-        public getWar(): BwWar {
+        public getWar(): BwWar | undefined {
             return this._war;
         }
 
@@ -110,10 +112,10 @@ namespace TinyWars.BaseWar {
             this._runPhaseGetFund(action);
             this._runPhaseConsumeFuel();
             this._runPhaseRepairUnitByTile(action);
-            this._runPhaseDestroyUnitsOutOfFuel(action);
+            this._runPhaseDestroyUnitsOutOfFuel();
             this._runPhaseRepairUnitByUnit(action);
             this._runPhaseRecoverUnitByCo(action);
-            this._runPhaseActivateMapWeapon(action);
+            this._runPhaseActivateMapWeapon();
             this._runPhaseMain(action);
 
             this._setPhaseCode(TurnPhaseCode.Main);
@@ -180,7 +182,7 @@ namespace TinyWars.BaseWar {
                 });
             }
         }
-        private _runPhaseDestroyUnitsOutOfFuel(data: IWarActionSystemBeginTurn): void {
+        private _runPhaseDestroyUnitsOutOfFuel(): void {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== 0) {
                 const war = this.getWar();
@@ -221,7 +223,8 @@ namespace TinyWars.BaseWar {
                 });
             }
         }
-        private _runPhaseActivateMapWeapon(data: IWarActionSystemBeginTurn): void {
+        private _runPhaseActivateMapWeapon(): void {
+            // nothing to do for now.
         }
 
         private _runPhaseResetUnitState(): void {
@@ -248,8 +251,13 @@ namespace TinyWars.BaseWar {
             }
         }
         private _runPhaseResetSkillState(): void {
-            const war       = this.getWar();
-            const player    = war.getPlayerInTurn();
+            const war = this.getWar();
+            if (war == null) {
+                Logger.error(`BwTurnManager._runPhaseResetSkillState() empty war.`);
+                return undefined;
+            }
+
+            const player = war.getPlayerInTurn();
             player.setCoIsDestroyedInTurn(false);
 
             if (player.checkCoIsUsingActiveSkill()) {
@@ -258,7 +266,19 @@ namespace TinyWars.BaseWar {
             }
         }
         private _runPhaseResetVotesForDraw(): void {
-            this.getWar().getPlayer(this.getPlayerIndexInTurn())!.setHasVotedForDraw(false);
+            const war = this.getWar();
+            if (war == null) {
+                Logger.error(`BwTurnManager._runPhaseResetVotesForDraw() empty war.`);
+                return;
+            }
+
+            const player = war.getPlayerInTurn();
+            if (player == null) {
+                Logger.error(`BwTurnManager._runPhaseResetVotesForDraw() empty player.`);
+                return;
+            }
+
+            player.setHasVotedForDraw(false);
         }
         private _runPhaseWaitBeginTurn(): void {
             // Do nothing.
@@ -267,7 +287,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The other functions.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public getTurnIndex(): number {
+        public getTurnIndex(): number | undefined {
             return this._turnIndex;
         }
         public setTurnIndex(index: number): void {
@@ -277,7 +297,7 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public getPlayerIndexInTurn(): number {
+        public getPlayerIndexInTurn(): number | undefined {
             return this._playerIndexInTurn;
         }
         public setPlayerIndexInTurn(index: number): void {
@@ -286,16 +306,22 @@ namespace TinyWars.BaseWar {
                 Notify.dispatch(Notify.Type.BwPlayerIndexInTurnChanged);
             }
         }
-        public getNextPlayerIndex(playerIndex: number, includeNeutral = false): number {
-            const data = this.getNextTurnAndPlayerIndex(undefined, playerIndex);
-            if ((data.playerIndex !== 0) || (includeNeutral)) {
-                return data.playerIndex;
+        public getNextPlayerIndex(playerIndex: number, includeNeutral = false): number | undefined {
+            const data = this.getNextTurnAndPlayerIndex(undefined, playerIndex).info;
+            if (data == null) {
+                return undefined;
+            }
+
+            const playerIndex1 = data.playerIndex;
+            if ((playerIndex1 !== CommonConstants.WarNeutralPlayerIndex) || (includeNeutral)) {
+                return playerIndex1;
             } else {
-                return this.getNextTurnAndPlayerIndex(data.turnIndex, data.playerIndex).playerIndex;
+                const nextData = this.getNextTurnAndPlayerIndex(data.turnIndex, playerIndex1).info;
+                return nextData ? nextData.playerIndex : undefined;
             }
         }
 
-        public getPhaseCode(): TurnPhaseCode {
+        public getPhaseCode(): TurnPhaseCode | undefined {
             return this._phaseCode;
         }
         private _setPhaseCode(code: TurnPhaseCode): void {
@@ -305,26 +331,53 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public getEnterTurnTime(): number {
+        public getEnterTurnTime(): number | undefined {
             return this._enterTurnTime;
         }
         public setEnterTurnTime(time: number): void {
             this._enterTurnTime = time;
         }
 
-        public getNextTurnAndPlayerIndex(currTurnIndex = this.getTurnIndex(), currPlayerIndex = this.getPlayerIndexInTurn()): { turnIndex: number, playerIndex: number } {
-            const playerManager = this.getWar().getPlayerManager();
+        public getNextTurnAndPlayerIndex(
+            currTurnIndex   = this.getTurnIndex(),
+            currPlayerIndex = this.getPlayerIndexInTurn(),
+        ): { errorCode: ClientErrorCode, info?: TurnAndPlayerIndex } {
+            const war = this.getWar();
+            if (war == null) {
+                return { errorCode: ClientErrorCode.BwTurnManager_GetNextTurnAndPlayerIndex_00 };
+            }
+
+            if (currTurnIndex == null) {
+                return { errorCode: ClientErrorCode.BwTurnManager_GetNextTurnAndPlayerIndex_01 };
+            }
+
+            if (currPlayerIndex == null) {
+                return { errorCode: ClientErrorCode.BwTurnManager_GetNextTurnAndPlayerIndex_02 };
+            }
+
+            const playerManager = war.getPlayerManager();
             const playersCount  = playerManager.getTotalPlayersCount(true);
             let nextTurnIndex   = currTurnIndex;
             let nextPlayerIndex = currPlayerIndex + 1;
-            while (true) {
+            for (;;) {
                 if (nextPlayerIndex >= playersCount) {
                     nextPlayerIndex = 0;
                     nextTurnIndex   += 1;
                 }
 
-                if (playerManager.getPlayer(nextPlayerIndex)!.getAliveState() === Types.PlayerAliveState.Alive) {
-                    return { turnIndex: nextTurnIndex, playerIndex: nextPlayerIndex };
+                const player = playerManager.getPlayer(nextPlayerIndex);
+                if (player == null) {
+                    return { errorCode: ClientErrorCode.BwTurnManager_GetNextTurnAndPlayerIndex_03 };
+                }
+
+                if (player.getAliveState() !== Types.PlayerAliveState.Dead) {
+                    return {
+                        errorCode   : ClientErrorCode.NoError,
+                        info        : {
+                            turnIndex   : nextTurnIndex,
+                            playerIndex : nextPlayerIndex
+                        },
+                    };
                 } else {
                     ++nextPlayerIndex;
                 }

@@ -252,10 +252,10 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender, isFast: boolean): Promise<ClientErrorCode> {
         return isFast
-            ? await fastExePlayerSurrender(war, action)
+            ? await fastExePlayerSurrender(war)
             : await normalExePlayerSurrender(war, action);
     }
-    async function fastExePlayerSurrender(war: BwWar, data: IWarActionPlayerSurrender): Promise<ClientErrorCode> {
+    async function fastExePlayerSurrender(war: BwWar): Promise<ClientErrorCode> {
         war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
 
         return ClientErrorCode.NoError;
@@ -406,10 +406,10 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemEndWar(war: BwWar, action: IWarActionSystemEndWar, isFast: boolean): Promise<ClientErrorCode> {
         return isFast
-            ? fastExeSystemEndWar(war, action)
+            ? fastExeSystemEndWar(war)
             : normalExeSystemEndWar(war, action);
     }
-    async function fastExeSystemEndWar(war: BwWar, action: IWarActionSystemEndWar): Promise<ClientErrorCode> {
+    async function fastExeSystemEndWar(war: BwWar): Promise<ClientErrorCode> {
         war.setIsEnded(true);
 
         return ClientErrorCode.NoError;
@@ -444,10 +444,10 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer, isFast: boolean): Promise<ClientErrorCode> {
         return isFast
-            ? fastExeSystemHandleBootPlayer(war, action)
+            ? fastExeSystemHandleBootPlayer(war)
             : normalExeSystemHandleBootPlayer(war, action);
     }
-    async function fastExeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer): Promise<ClientErrorCode> {
+    async function fastExeSystemHandleBootPlayer(war: BwWar): Promise<ClientErrorCode> {
         war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
 
         return ClientErrorCode.NoError;

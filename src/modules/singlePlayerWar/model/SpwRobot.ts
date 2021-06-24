@@ -1888,12 +1888,12 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                     for (const loadedUnit of unitMap.getUnitsLoadedByLoader(unit2, true)) {
                         const loadedUnitHp = loadedUnit.getCurrentHp();
                         if (loadedUnitHp == null) {
-                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_15 };
+                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_20 };
                         }
 
                         const loadedUnitProductionCost = loadedUnit.getProductionBaseCost();
                         if (loadedUnitProductionCost == null) {
-                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_16 };
+                            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_21 };
                         }
 
                         score += (loadedUnitHp + 20)
@@ -1907,7 +1907,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                 continue;
             }
 
-            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_20 };
+            return { errorCode: ClientErrorCode.SpwRobot_GetScoreForActionUnitAttack_22 };
         }
 
         return {

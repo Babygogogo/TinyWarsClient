@@ -171,19 +171,21 @@ namespace TinyWars.MultiCustomRoom {
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const data: DataForMapNameRenderer[] = [];
-            let { mapName, mapDesigner, playersCount, playedTimes, minRating } = this._mapFilters;
-            const filterTag = this._mapFilters.mapTag || {};
-            (mapName)       && (mapName     = mapName.toLowerCase());
-            (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
+            const dataArray                                 : DataForMapNameRenderer[] = [];
+            const mapFilters                                = this._mapFilters;
+            const filterTag                                 = mapFilters.mapTag || {};
+            const mapName                                   = (mapFilters.mapName || "").toLowerCase();
+            const mapDesigner                               = (mapFilters.mapDesigner || "").toLowerCase();
+            const { playersCount, playedTimes, minRating }  = mapFilters;
 
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
                 const mapExtraData  = mapBriefData.mapExtraData;
                 const mapTag        = mapBriefData.mapTag || {};
                 const realMapName   = await WarMapModel.getMapNameInCurrentLanguage(mapId);
                 const rating        = await WarMapModel.getAverageRating(mapId);
-                if ((!mapExtraData.isEnabled)                                                                           ||
-                    (!mapExtraData.mapComplexInfo.availability.canMcw)                                                  ||
+                if ((!mapBriefData.ruleAvailability.canMcw)                                                             ||
+                    (!mapExtraData.isEnabled)                                                                           ||
+                    (!mapExtraData.mapComplexInfo.mapAvailability.canMcw)                                               ||
                     ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                                     ||
                     ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))               ||
                     ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                           ||
@@ -193,7 +195,7 @@ namespace TinyWars.MultiCustomRoom {
                 ) {
                     continue;
                 } else {
-                    data.push({
+                    dataArray.push({
                         mapId,
                         mapName : realMapName,
                         panel   : this,
@@ -201,7 +203,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
 
-            return data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
+            return dataArray.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
         private async _showMap(mapId: number): Promise<void> {
