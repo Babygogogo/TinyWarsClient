@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Login {
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
@@ -80,19 +81,19 @@ namespace TinyWars.Login {
             await this._showCloseAnimation();
         }
 
-        private _onMsgUserLogin(e: egret.Event): void {
+        private _onMsgUserLogin(): void {
             FloatText.show(Lang.getText(Lang.Type.A0000));
             this._btnLogin.enabled = false;
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedSelf(e: egret.TouchEvent): void {
+        private _onTouchedSelf(): void {
             Utility.SoundManager.init();
         }
 
-        private _onTouchedBtnLogin(e: egret.TouchEvent): void {
+        private _onTouchedBtnLogin(): void {
             NoSleepManager.enable();
 
             const account  = this._inputAccount.text;
@@ -129,19 +130,18 @@ namespace TinyWars.Login {
         }
 
         private _updateComponentsForLanguage(): void {
+            this._btnLogin.label    = Lang.getText(Lang.Type.B0173);
+            this._btnRegister.label = Lang.getText(Lang.Type.B0174);
+
             if (Lang.getCurrentLanguageType() === Types.LanguageType.Chinese) {
                 this._imgAccountTitle.source        = "login_text_account_001";
                 this._imgPasswordTitle.source       = "login_text_password_001";
                 this._imgRememberPassword.source    = "login_text_remember_001";
-                this._btnLogin.setImgDisplaySource("login_button_login_001");
-                this._btnRegister.setImgDisplaySource("login_button_register_001");
                 this._btnForgetPassword.setImgDisplaySource("login_text_findPassword_001");
             } else {
                 this._imgAccountTitle.source        = "login_text_account_002";
                 this._imgPasswordTitle.source       = "login_text_password_002";
                 this._imgRememberPassword.source    = "login_text_remember_002";
-                this._btnLogin.setImgDisplaySource("login_button_login_002");
-                this._btnRegister.setImgDisplaySource("login_button_register_002");
                 this._btnForgetPassword.setImgDisplaySource("login_text_findPassword_002");
             }
         }

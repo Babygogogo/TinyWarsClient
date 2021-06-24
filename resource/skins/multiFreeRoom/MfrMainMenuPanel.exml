@@ -45,15 +45,13 @@
                 <GameUi:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
-                            <e:Image scale9Grid="9,9,2,2" source="common0004" />
+                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" text="Create Rooms" textAlign="center"
-                                                verticalAlign="middle" wordWrap="true" y="2" x="-172"
-                                                textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="创建房间"
-                                                textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
-                                                x="-162" />
+                                <GameUi:UiLabel size="20" text="Create Rooms" textAlign="center" verticalAlign="middle"
+                                                wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="创建房间" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
                                 </e:layout>
@@ -68,15 +66,13 @@
                 <GameUi:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
-                            <e:Image scale9Grid="9,9,2,2" source="common0004" />
+                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" text="Join Rooms" textAlign="center"
-                                                verticalAlign="middle" wordWrap="true" y="2" x="-172"
-                                                textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="加入房间"
-                                                textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
-                                                x="-162" />
+                                <GameUi:UiLabel size="20" text="Join Rooms" textAlign="center" verticalAlign="middle"
+                                                wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="加入房间" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
                                 </e:layout>
@@ -91,15 +87,13 @@
                 <GameUi:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
-                            <e:Image scale9Grid="9,9,2,2" source="common0004" />
+                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" text="My Rooms" textAlign="center"
-                                                verticalAlign="middle" wordWrap="true" y="2" x="-172"
-                                                textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="我的房间"
-                                                textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
-                                                x="-162" />
+                                <GameUi:UiLabel size="20" text="My Rooms" textAlign="center" verticalAlign="middle"
+                                                wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="我的房间" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
                                 </e:layout>
@@ -117,12 +111,10 @@
                             <e:Image scale9Grid="9,9,2,2" source="common0002" />
                             <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" text="Continue Wars" textAlign="center"
-                                                verticalAlign="middle" wordWrap="true" y="2" x="-172"
-                                                textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="继续战斗"
-                                                textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
-                                                x="-162" />
+                                <GameUi:UiLabel size="20" text="Continue Wars" textAlign="center" verticalAlign="middle"
+                                                wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="继续战斗" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
                                 </e:layout>
@@ -137,15 +129,13 @@
                 <GameUi:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
-                            <e:Image scale9Grid="9,9,2,2" source="common0004" />
+                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" text="Help" textAlign="center"
-                                                verticalAlign="middle" wordWrap="true" y="2" x="-172"
-                                                textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="帮助"
-                                                textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
-                                                x="-162" />
+                                <GameUi:UiLabel size="20" text="Help" textAlign="center" verticalAlign="middle"
+                                                wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="帮助" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
                                 </e:layout>
@@ -160,15 +150,13 @@
                 <GameUi:skinName>
                     <e:Skin>
                         <e:Group left="0" right="0" y="0">
-                            <e:Image scale9Grid="9,9,2,2" source="common0004" />
+                            <e:Image source="commonPentagon0010" width="480" height="34" scale9Grid="3,3,1,1" />
                             <GameUi:UiImage id="_imgRed" right="14" source="commonIcon0000" verticalCenter="0" />
                             <e:Group verticalCenter="0" right="40">
-                                <GameUi:UiLabel size="20" text="Normal Mode" textAlign="center"
-                                                verticalAlign="middle" wordWrap="true" y="2" x="-172"
-                                                textColor="0xaaaaaa" />
-                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="常规模式"
-                                                textAlign="center" verticalAlign="middle" wordWrap="true" y="12"
-                                                x="-162" />
+                                <GameUi:UiLabel size="20" text="Normal Mode" textAlign="center" verticalAlign="middle"
+                                                wordWrap="true" y="2" x="-172" textColor="0xaaaaaa" />
+                                <GameUi:UiLabel size="22" textColor="0xFFFFFF" text="常规模式" textAlign="center"
+                                                verticalAlign="middle" wordWrap="true" y="12" x="-162" />
                                 <e:layout>
                                     <e:HorizontalLayout verticalAlign="bottom" gap="10" />
                                 </e:layout>
