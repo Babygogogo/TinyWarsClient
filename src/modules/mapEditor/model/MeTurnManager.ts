@@ -1,26 +1,33 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapEditor {
-    import ProtoTypes                   = Utility.ProtoTypes;
-    import IWarActionSystemBeginTurn    = ProtoTypes.WarAction.IWarActionSystemBeginTurn;
-    import IWarActionPlayerEndTurn      = ProtoTypes.WarAction.IWarActionPlayerEndTurn;
+    import ClientErrorCode = Utility.ClientErrorCode;
 
     export class MeTurnManager extends BaseWar.BwTurnManager {
-        protected _runPhaseGetFund(data: IWarActionSystemBeginTurn): void {
+        protected _runPhaseGetFund(): ClientErrorCode {
+            return ClientErrorCode.NoError;
         }
-        protected _runPhaseRepairUnitByTile(data: IWarActionSystemBeginTurn): void {
+        protected _runPhaseRepairUnitByTile(): ClientErrorCode {
+            return ClientErrorCode.NoError;
         }
-        protected _runPhaseRepairUnitByUnit(data: IWarActionSystemBeginTurn): void {
+        protected _runPhaseRepairUnitByUnit(): ClientErrorCode {
+            return ClientErrorCode.NoError;
         }
-        protected _runPhaseRecoverUnitByCo(data: IWarActionSystemBeginTurn): void {
+        protected _runPhaseRecoverUnitByCo(): ClientErrorCode {
+            return ClientErrorCode.NoError;
         }
-        protected _runPhaseMain(data: IWarActionSystemBeginTurn): void {
+        protected _runPhaseMain(): ClientErrorCode {
+            return ClientErrorCode.NoError;
         }
 
-        protected _runPhaseTickTurnAndPlayerIndex(data: IWarActionPlayerEndTurn): void {
+        protected _runPhaseTickTurnAndPlayerIndex(): ClientErrorCode {
+            return ClientErrorCode.NoError;
         }
-        protected _runPhaseResetVisionForCurrentPlayer(): void {
+        protected _runPhaseResetVisionForCurrentPlayer(): ClientErrorCode {
+            return ClientErrorCode.NoError;
         }
-        protected _runPhaseResetVisionForNextPlayer(): void {
+        protected _runPhaseResetVisionForNextPlayer(): ClientErrorCode {
+            return ClientErrorCode.NoError;
         }
     }
 }

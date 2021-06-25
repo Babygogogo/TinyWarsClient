@@ -327,7 +327,7 @@ namespace TinyWars.BaseWar {
         public getPlayer(playerIndex: number): BwPlayer | undefined {
             return this.getPlayerManager().getPlayer(playerIndex);
         }
-        public getPlayerInTurn(): BwPlayer {
+        public getPlayerInTurn(): BwPlayer | undefined {
             return this.getPlayerManager().getPlayerInTurn();
         }
         public getPlayerIndexInTurn(): number | undefined {
@@ -353,7 +353,7 @@ namespace TinyWars.BaseWar {
             return this.getField().getCursor();
         }
 
-        public getEnterTurnTime(): number {
+        public getEnterTurnTime(): number | undefined {
             return this.getTurnManager().getEnterTurnTime();
         }
         public getTurnPhaseCode(): Types.TurnPhaseCode | null | undefined {

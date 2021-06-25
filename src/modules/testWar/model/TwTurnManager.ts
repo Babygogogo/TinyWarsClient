@@ -1,18 +1,32 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.TestWar {
-    import ProtoTypes                   = Utility.ProtoTypes;
-    import WarAction                    = ProtoTypes.WarAction;
-    import IWarActionSystemBeginTurn    = WarAction.IWarActionSystemBeginTurn;
-    import IWarActionPlayerEndTurn      = WarAction.IWarActionPlayerEndTurn;
+    import ClientErrorCode = Utility.ClientErrorCode;
 
     export class TwTurnManager extends BaseWar.BwTurnManager {
-        protected _runPhaseGetFund(data: IWarActionSystemBeginTurn): void {}
-        protected _runPhaseRepairUnitByTile(data: IWarActionSystemBeginTurn): void {}
-        protected _runPhaseRepairUnitByUnit(data: IWarActionSystemBeginTurn): void {}
-        protected _runPhaseRecoverUnitByCo(data: IWarActionSystemBeginTurn): void {}
-        protected _runPhaseMain(data: IWarActionSystemBeginTurn): void {}
-        protected _runPhaseResetVisionForCurrentPlayer(): void {}
-        protected _runPhaseTickTurnAndPlayerIndex(data: IWarActionPlayerEndTurn): void {}
-        protected _runPhaseResetVisionForNextPlayer(): void {}
+        protected _runPhaseGetFund(): ClientErrorCode {
+            return ClientErrorCode.NoError;
+        }
+        protected _runPhaseRepairUnitByTile(): ClientErrorCode {
+            return ClientErrorCode.NoError;
+        }
+        protected _runPhaseRepairUnitByUnit(): ClientErrorCode {
+            return ClientErrorCode.NoError;
+        }
+        protected _runPhaseRecoverUnitByCo(): ClientErrorCode {
+            return ClientErrorCode.NoError;
+        }
+        protected _runPhaseMain(): ClientErrorCode {
+            return ClientErrorCode.NoError;
+        }
+        protected _runPhaseResetVisionForCurrentPlayer(): ClientErrorCode {
+            return ClientErrorCode.NoError;
+        }
+        protected _runPhaseTickTurnAndPlayerIndex(): ClientErrorCode {
+            return ClientErrorCode.NoError;
+        }
+        protected _runPhaseResetVisionForNextPlayer(): ClientErrorCode {
+            return ClientErrorCode.NoError;
+        }
     }
 }

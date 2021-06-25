@@ -3,7 +3,6 @@
 namespace TinyWars.BaseWar {
     import Types                        = Utility.Types;
     import DestructionHelpers           = Utility.DestructionHelpers;
-    import Logger                       = Utility.Logger;
     import Notify                       = Utility.Notify;
     import ProtoTypes                   = Utility.ProtoTypes;
     import ClientErrorCode              = Utility.ClientErrorCode;
@@ -24,14 +23,14 @@ namespace TinyWars.BaseWar {
         private _war                    : BwWar | undefined;
         private _hasUnitOnBeginningTurn = false;
 
-        protected abstract _runPhaseGetFund(data: IWarActionSystemBeginTurn): void;
-        protected abstract _runPhaseRepairUnitByTile(data: IWarActionSystemBeginTurn): void;
-        protected abstract _runPhaseRepairUnitByUnit(data: IWarActionSystemBeginTurn): void;
-        protected abstract _runPhaseRecoverUnitByCo(data: IWarActionSystemBeginTurn): void;
-        protected abstract _runPhaseMain(data: IWarActionSystemBeginTurn): void;
-        protected abstract _runPhaseResetVisionForCurrentPlayer(): void;
-        protected abstract _runPhaseTickTurnAndPlayerIndex(data: IWarActionPlayerEndTurn): void;
-        protected abstract _runPhaseResetVisionForNextPlayer(): void;
+        protected abstract _runPhaseGetFund(data: IWarActionSystemBeginTurn): ClientErrorCode;
+        protected abstract _runPhaseRepairUnitByTile(data: IWarActionSystemBeginTurn): ClientErrorCode;
+        protected abstract _runPhaseRepairUnitByUnit(data: IWarActionSystemBeginTurn): ClientErrorCode;
+        protected abstract _runPhaseRecoverUnitByCo(data: IWarActionSystemBeginTurn): ClientErrorCode;
+        protected abstract _runPhaseMain(data: IWarActionSystemBeginTurn): ClientErrorCode;
+        protected abstract _runPhaseResetVisionForCurrentPlayer(): ClientErrorCode;
+        protected abstract _runPhaseTickTurnAndPlayerIndex(data: IWarActionPlayerEndTurn): ClientErrorCode;
+        protected abstract _runPhaseResetVisionForNextPlayer(): ClientErrorCode;
 
         public init(data: ISerialTurnManager | null | undefined, playersCountUnneutral: number): ClientErrorCode {
             if (data == null) {
@@ -103,185 +102,238 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        public endPhaseWaitBeginTurn(action: IWarActionSystemBeginTurn): void {
+        public endPhaseWaitBeginTurn(action: IWarActionSystemBeginTurn): ClientErrorCode {
             if (this.getPhaseCode() !== TurnPhaseCode.WaitBeginTurn) {
-                Logger.error(`BwTurnManager.endPhaseWaitBeginTurn() invalid current phase code: ${this.getPhaseCode()}`);
-                return;
+                return ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurn_00;
             }
 
-            this._runPhaseGetFund(action);
-            this._runPhaseConsumeFuel();
-            this._runPhaseRepairUnitByTile(action);
-            this._runPhaseDestroyUnitsOutOfFuel();
-            this._runPhaseRepairUnitByUnit(action);
-            this._runPhaseRecoverUnitByCo(action);
-            this._runPhaseActivateMapWeapon();
-            this._runPhaseMain(action);
+            let errorCode = this._runPhaseGetFund(action);
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseConsumeFuel();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseRepairUnitByTile(action);
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseDestroyUnitsOutOfFuel();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseRepairUnitByUnit(action);
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseRecoverUnitByCo(action);
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseActivateMapWeapon();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseMain(action);
+            if (errorCode) {
+                return errorCode;
+            }
 
             this._setPhaseCode(TurnPhaseCode.Main);
+
+            return ClientErrorCode.NoError;
         }
-        public endPhaseMain(action: IWarActionPlayerEndTurn): void {
+        public endPhaseMain(action: IWarActionPlayerEndTurn): ClientErrorCode {
             if (this.getPhaseCode() !== TurnPhaseCode.Main) {
-                Logger.error("BwTurnManager.endPhaseMain() invalid current phase code: ", this.getPhaseCode());
-                return;
+                return ClientErrorCode.BwTurnManager_EndPhaseMain_00;
             }
 
-            this._runPhaseResetUnitState();
-            this._runPhaseResetVisionForCurrentPlayer();
-            this._runPhaseTickTurnAndPlayerIndex(action);
-            this._runPhaseResetSkillState();
-            this._runPhaseResetVisionForNextPlayer();
-            this._runPhaseResetVotesForDraw();
-            this._runPhaseWaitBeginTurn();
+            let errorCode = this._runPhaseResetUnitState();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseResetVisionForCurrentPlayer();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseTickTurnAndPlayerIndex(action);
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseResetSkillState();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseResetVisionForNextPlayer();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseResetVotesForDraw();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseWaitBeginTurn();
+            if (errorCode) {
+                return errorCode;
+            }
 
             this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
+
+            return ClientErrorCode.NoError;
         }
 
-        private _runPhaseConsumeFuel(): void {
+        private _runPhaseConsumeFuel(): ClientErrorCode {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex == null) {
-                Logger.error(`BwTurnManager._runPhaseConsumeFuel() empty playerIndex.`);
-                return undefined;
+                return ClientErrorCode.BwTurnManager_RunPhaseConsumeFuel_00;
             }
 
             const turnIndex = this.getTurnIndex();
             if (turnIndex == null) {
-                Logger.error(`BwTurnManager._runPhaseConsumeFuel() empty turnIndex.`);
-                return undefined;
+                return ClientErrorCode.BwTurnManager_RunPhaseConsumeFuel_01;
             }
 
             const war = this.getWar();
             if (war == null) {
-                Logger.error(`BwTurnManager._runPhaseConsumeFuel() empty war.`);
-                return undefined;
+                return ClientErrorCode.BwTurnManager_RunPhaseConsumeFuel_02;
             }
 
-            const unitMap = war.getUnitMap();
-            if (unitMap == null) {
-                Logger.error(`BwTurnManager._runPhaseConsumeFuel() empty unitMap.`);
-                return undefined;
-            }
+            if ((playerIndex !== CommonConstants.WarNeutralPlayerIndex) && (turnIndex > CommonConstants.WarFirstTurnIndex)) {
+                const unitArray: BwUnit[] = [];
+                war.getUnitMap().forEachUnitOnMap(unit => unitArray.push(unit));
 
-            if ((playerIndex !== 0) && (turnIndex > CommonConstants.WarFirstTurnIndex)) {
-                unitMap.forEachUnitOnMap(unit => {
+                for (const unit of unitArray) {
                     if (unit.getPlayerIndex() === playerIndex) {
                         const currentFuel = unit.getCurrentFuel();
                         if (currentFuel == null) {
-                            Logger.error(`BwTurnManager._runPhaseConsumeFuel() empty currentFuel.`);
-                            return undefined;
+                            return ClientErrorCode.BwTurnManager_RunPhaseConsumeFuel_03;
                         }
 
                         const consumption = unit.getFuelConsumptionPerTurn();
                         if (consumption == null) {
-                            Logger.error(`BwTurnManager._runPhaseConsumeFuel() empty consumption.`);
-                            return undefined;
+                            return ClientErrorCode.BwTurnManager_RunPhaseConsumeFuel_04;
                         }
 
                         unit.setCurrentFuel(Math.max(0, currentFuel - consumption));
                     }
-                });
+                }
             }
+
+            return ClientErrorCode.NoError;
         }
-        private _runPhaseDestroyUnitsOutOfFuel(): void {
+        private _runPhaseDestroyUnitsOutOfFuel(): ClientErrorCode {
             const playerIndex = this.getPlayerIndexInTurn();
-            if (playerIndex !== 0) {
+            if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
                 const war = this.getWar();
                 if (war == null) {
-                    Logger.error(`BwTurnManager._runPhaseDestroyUnitsOutOfFuel() empty war.`);
-                    return undefined;
+                    return ClientErrorCode.BwTurnManager_RunPhaseDestroyUnitOutOfFuel_00;
                 }
+
+                const unitArray: BwUnit[] = [];
+                war.getUnitMap().forEachUnitOnMap(unit => unitArray.push(unit));
 
                 const fogMap = war.getFogMap();
-                if (fogMap == null) {
-                    Logger.error(`BwTurnManager._runPhaseDestroyUnitsOutOfFuel() empty fogMap.`);
-                    return undefined;
-                }
-
-                const unitMap = war.getUnitMap();
-                if (unitMap == null) {
-                    Logger.error(`BwTurnManager._runPhaseDestroyUnitsOutOfFuel() empty unitMap.`);
-                    return undefined;
-                }
-
-                unitMap.forEachUnitOnMap(unit => {
+                for (const unit of unitArray) {
                     const currentFuel = unit.getCurrentFuel();
                     if (currentFuel == null) {
-                        Logger.error(`BwTurnManager._runPhaseDestroyUnitsOutOfFuel() empty currentFuel.`);
-                        return undefined;
+                        return ClientErrorCode.BwTurnManager_RunPhaseDestroyUnitOutOfFuel_01;
                     }
 
                     if ((unit.checkIsDestroyedOnOutOfFuel()) && (currentFuel <= 0) && (unit.getPlayerIndex() === playerIndex)) {
                         const gridIndex = unit.getGridIndex();
                         if (gridIndex == null) {
-                            Logger.error(`BwTurnManager._runPhaseDestroyUnitsOutOfFuel() empty gridIndex.`);
-                            return undefined;
+                            return ClientErrorCode.BwTurnManager_RunPhaseDestroyUnitOutOfFuel_02;
                         }
 
                         fogMap.updateMapFromPathsByUnitAndPath(unit, [gridIndex]);
                         DestructionHelpers.destroyUnitOnMap(war, gridIndex, true);
                     }
-                });
+                }
             }
+
+            return ClientErrorCode.NoError;
         }
-        private _runPhaseActivateMapWeapon(): void {
+        private _runPhaseActivateMapWeapon(): ClientErrorCode {
             // nothing to do for now.
+
+            return ClientErrorCode.NoError;
         }
 
-        private _runPhaseResetUnitState(): void {
+        private _runPhaseResetUnitState(): ClientErrorCode {
             const playerIndex = this.getPlayerIndexInTurn();
-            if (playerIndex !== 0) {
+            if (playerIndex == null) {
+                return ClientErrorCode.BwTurnManager_RunPhaseResetUnitState_00;
+            }
+
+            if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
                 const war = this.getWar();
                 if (war == null) {
-                    Logger.error(`BwTurnManager._runPhaseResetUnitState() empty war.`);
-                    return undefined;
+                    return ClientErrorCode.BwTurnManager_RunPhaseResetUnitState_01;
                 }
 
-                const unitMap = war.getUnitMap();
-                if (unitMap == null) {
-                    Logger.error(`BwTurnManager._runPhaseResetUnitState() empty unitMap.`);
-                    return undefined;
-                }
-
-                unitMap.forEachUnit(unit => {
+                war.getUnitMap().forEachUnit(unit => {
                     if (unit.getPlayerIndex() === playerIndex) {
                         unit.setActionState(Types.UnitActionState.Idle);
                         unit.updateView();
                     }
                 });
             }
+
+            return ClientErrorCode.NoError;
         }
-        private _runPhaseResetSkillState(): void {
+        private _runPhaseResetSkillState(): ClientErrorCode {
             const war = this.getWar();
             if (war == null) {
-                Logger.error(`BwTurnManager._runPhaseResetSkillState() empty war.`);
-                return undefined;
+                return ClientErrorCode.BwTurnManager_RunPhaseResetSkillState_00;
             }
 
             const player = war.getPlayerInTurn();
+            if (player == null) {
+                return ClientErrorCode.BwTurnManager_RunPhaseResetSkillState_01;
+            }
+
             player.setCoIsDestroyedInTurn(false);
 
             if (player.checkCoIsUsingActiveSkill()) {
                 player.setCoUsingSkillType(Types.CoSkillType.Passive);
                 war.getTileMap().getView().updateCoZone();
             }
+
+            return ClientErrorCode.NoError;
         }
-        private _runPhaseResetVotesForDraw(): void {
+        private _runPhaseResetVotesForDraw(): ClientErrorCode {
             const war = this.getWar();
             if (war == null) {
-                Logger.error(`BwTurnManager._runPhaseResetVotesForDraw() empty war.`);
-                return;
+                return ClientErrorCode.BwTurnManager_RunPhaseResetVotesForDraw_00;
             }
 
             const player = war.getPlayerInTurn();
             if (player == null) {
-                Logger.error(`BwTurnManager._runPhaseResetVotesForDraw() empty player.`);
-                return;
+                return ClientErrorCode.BwTurnManager_RunPhaseResetVotesForDraw_01;
             }
 
             player.setHasVotedForDraw(false);
+
+            return ClientErrorCode.NoError;
         }
-        private _runPhaseWaitBeginTurn(): void {
+        private _runPhaseWaitBeginTurn(): ClientErrorCode {
             // Do nothing.
+
+            return ClientErrorCode.NoError;
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////

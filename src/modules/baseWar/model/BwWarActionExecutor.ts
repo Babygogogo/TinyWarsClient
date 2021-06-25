@@ -146,16 +146,13 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
             : await normalExePlayerEndTurn(war, action);
     }
     async function fastExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<ClientErrorCode> {
-        war.getTurnManager().endPhaseMain(action);
-
-        return ClientErrorCode.NoError;
+        return war.getTurnManager().endPhaseMain(action);
     }
     async function normalExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<ClientErrorCode> {
         const desc = await war.getDescForExePlayerEndTurn(action);
         (desc) && (FloatText.show(desc));
 
-        war.getTurnManager().endPhaseMain(action);
-        return ClientErrorCode.NoError;
+        return war.getTurnManager().endPhaseMain(action);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -312,16 +309,13 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
             : await normalExeSystemBeginTurn(war, action);
     }
     async function fastExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<ClientErrorCode> {
-        war.getTurnManager().endPhaseWaitBeginTurn(action);
-
-        return ClientErrorCode.NoError;
+        return war.getTurnManager().endPhaseWaitBeginTurn(action);
     }
     async function normalExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<ClientErrorCode> {
         const desc = await war.getDescForExeSystemBeginTurn(action);
         (desc) && (FloatText.show(desc));
 
-        await war.getTurnManager().endPhaseWaitBeginTurn(action);
-        return ClientErrorCode.NoError;
+        return war.getTurnManager().endPhaseWaitBeginTurn(action);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -429,16 +423,13 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
             : normalExeSystemEndTurn(war, action);
     }
     async function fastExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<ClientErrorCode> {
-        war.getTurnManager().endPhaseMain(action);
-
-        return ClientErrorCode.NoError;
+        return war.getTurnManager().endPhaseMain(action);
     }
     async function normalExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<ClientErrorCode> {
         const desc = await war.getDescForExeSystemEndTurn(action);
         (desc) && (FloatText.show(desc));
 
-        war.getTurnManager().endPhaseMain(action);
-        return ClientErrorCode.NoError;
+        return war.getTurnManager().endPhaseMain(action);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
