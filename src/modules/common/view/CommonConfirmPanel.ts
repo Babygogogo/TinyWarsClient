@@ -19,13 +19,20 @@ namespace TinyWars.Common {
 
         private static _instance: CommonConfirmPanel;
 
+        // @ts-ignore
         private readonly _imgMask       : GameUi.UiImage;
 
+        // @ts-ignore
         private readonly _group         : eui.Group;
+        // @ts-ignore
         private readonly _labelTitle    : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _scrContent    : eui.Scroller;
+        // @ts-ignore
         private readonly _labelContent  : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _btnCancel     : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnConfirm    : GameUi.UiButton;
 
         public static show(openData: OpenDataForCommonConfirmPanel): void {

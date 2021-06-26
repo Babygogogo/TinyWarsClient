@@ -1,23 +1,38 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.User {
     import FloatText    = Utility.FloatText;
     import Lang         = Utility.Lang;
     import NotifyType   = Utility.Notify.Type;
+    import Helpers      = Utility.Helpers;
     import LocalStorage = Utility.LocalStorage;
 
     export class UserSetPasswordPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private _labelTitle             : GameUi.UiLabel;
-        private _labelOldPasswordTitle  : GameUi.UiLabel;
-        private _inputOldPassword       : GameUi.UiTextInput;
-        private _labelNewPasswordTitle0 : GameUi.UiLabel;
-        private _inputNewPassword0      : GameUi.UiTextInput;
-        private _labelNewPasswordTitle1 : GameUi.UiLabel;
-        private _inputNewPassword1      : GameUi.UiTextInput;
-        private _btnConfirm             : GameUi.UiButton;
-        private _btnCancel              : GameUi.UiButton;
+        // @ts-ignore
+        private readonly _imgMask                   : GameUi.UiImage;
+        // @ts-ignore
+        private readonly _group                     : eui.Group;
+        // @ts-ignore
+        private readonly _labelTitle                : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelOldPasswordTitle     : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _inputOldPassword          : GameUi.UiTextInput;
+        // @ts-ignore
+        private readonly _labelNewPasswordTitle0    : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _inputNewPassword0         : GameUi.UiTextInput;
+        // @ts-ignore
+        private readonly _labelNewPasswordTitle1    : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _inputNewPassword1         : GameUi.UiTextInput;
+        // @ts-ignore
+        private readonly _btnConfirm                : GameUi.UiButton;
+        // @ts-ignore
+        private readonly _btnCancel                 : GameUi.UiButton;
 
         private static _instance: UserSetPasswordPanel;
 
@@ -52,10 +67,14 @@ namespace TinyWars.User {
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
             ]);
 
+            this._showOpenAnimation();
             this._updateOnLanguageChanged();
         }
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+        }
 
-        private _onMsgUserSetPassword(e: egret.Event): void {
+        private _onMsgUserSetPassword(): void {
             FloatText.show(Lang.getText(Lang.Type.A0148));
 
             const password = this._inputNewPassword0.text;
@@ -63,11 +82,11 @@ namespace TinyWars.User {
             User.UserModel.setSelfPassword(password);
             this.close();
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateOnLanguageChanged();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private _onTouchedBtnConfirm(): void {
             const newPassword = this._inputNewPassword0.text;
             if (!Utility.Helpers.checkIsPasswordValid(newPassword)) {
                 FloatText.show(Lang.getText(Lang.Type.A0003));
@@ -85,6 +104,34 @@ namespace TinyWars.User {
             this._labelNewPasswordTitle1.text   = Lang.getText(Lang.Type.B0429);
             this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
             this._btnCancel.label               = Lang.getText(Lang.Type.B0154);
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: 40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+            });
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve) => {
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                });
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: 40 },
+                    callback    : resolve,
+                });
+            });
         }
     }
 }

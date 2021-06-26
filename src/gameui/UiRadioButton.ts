@@ -1,9 +1,13 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.GameUi {
+    import Lang = Utility.Lang;
+
     type DataForUiRadioButton = {
-        leftTextType            : Utility.Lang.Type;
+        titleTextType           : Lang.Type;
+        leftTextType            : Lang.Type;
         leftLangType?           : Utility.Types.LanguageType;
-        rightTextType           : Utility.Lang.Type;
+        rightTextType           : Lang.Type;
         rightLangType?          : Utility.Types.LanguageType;
         callbackOnLeft          : () => void;
         callbackOnRight         : () => void;
@@ -12,14 +16,22 @@ namespace TinyWars.GameUi {
     };
 
     export class UiRadioButton extends UiComponent {
+        // @ts-ignore
+        private readonly _labelTitle    : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _imgLeftOn     : GameUi.UiImage;
+        // @ts-ignore
         private readonly _imgLeftOff    : GameUi.UiImage;
+        // @ts-ignore
         private readonly _labelLeft     : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _imgRightOn    : GameUi.UiImage;
+        // @ts-ignore
         private readonly _imgRightOff   : GameUi.UiImage;
+        // @ts-ignore
         private readonly _labelRight    : GameUi.UiLabel;
 
-        private _data                   : DataForUiRadioButton;
+        private _data                   : DataForUiRadioButton | undefined;
 
         protected _onOpened(): void {
             this._setUiListenerArray([
@@ -43,7 +55,7 @@ namespace TinyWars.GameUi {
 
             this.updateView();
         }
-        private _getData(): DataForUiRadioButton {
+        private _getData(): DataForUiRadioButton | undefined {
             return this._data;
         }
         private _clearData(): void {
@@ -53,7 +65,7 @@ namespace TinyWars.GameUi {
                 (notifyListenerArray) && (Utility.Notify.removeEventListeners(notifyListenerArray));
             }
 
-            this._data = null;
+            this._data = undefined;
         }
 
         public updateView(): void {
@@ -76,26 +88,38 @@ namespace TinyWars.GameUi {
                 return;
             }
 
-            this._labelLeft.text    = Utility.Lang.getText(data.leftTextType, data.leftLangType);
-            this._labelRight.text   = Utility.Lang.getText(data.rightTextType, data.rightLangType);
+            this._labelTitle.text   = Lang.getText(data.titleTextType);
+
+            const isLeftOn          = data.checkerForLeftOn();
+            const labelLeft         = this._labelLeft;
+            labelLeft.text          = Lang.getText(data.leftTextType, data.leftLangType);
+            labelLeft.textColor     = getTextColor(isLeftOn);
+
+            const labelRight        = this._labelRight;
+            labelRight.text         = Lang.getText(data.rightTextType, data.rightLangType);
+            labelRight.textColor    = getTextColor(!isLeftOn);
         }
 
-        private _onTouchedImgLeftOff(e: egret.TouchEvent): void {
+        private _onTouchedImgLeftOff(): void {
             const data = this._getData();
             if (data) {
                 data.callbackOnLeft();
                 this.updateView();
             }
         }
-        private _onTouchedImgRightOff(e: egret.TouchEvent): void {
+        private _onTouchedImgRightOff(): void {
             const data = this._getData();
             if (data) {
                 data.callbackOnRight();
                 this.updateView();
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateLabels();
         }
+    }
+
+    function getTextColor(isOn: boolean): number {
+        return isOn ? 0xFFFFFF : 0x889988;
     }
 }

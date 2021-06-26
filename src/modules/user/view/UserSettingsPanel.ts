@@ -18,6 +18,10 @@ namespace TinyWars.User {
         // @ts-ignore
         private readonly _imgMask               : GameUi.UiImage;
         // @ts-ignore
+        private readonly _labelTitle            : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _btnClose              : GameUi.UiButton;
+        // @ts-ignore
         private readonly _group                 : eui.Group;
         // @ts-ignore
         private readonly _scroller              : eui.Scroller;
@@ -95,6 +99,7 @@ namespace TinyWars.User {
                 { type: Notify.Type.MsgUserSetDiscordId,                callback: this._onMsgUserSetDiscordId },
             ]);
             this._setUiListenerArray([
+                { ui: this._btnClose,               callback: this.close },
                 { ui: this._btnChangeNickname,      callback: this._onTouchedBtnChangeNickname },
                 { ui: this._btnChangePassword,      callback: this._onTouchedBtnChangePassword },
                 { ui: this._btnChangeDiscordId,     callback: this._onTouchedBtnChangeDiscordId },
@@ -112,9 +117,10 @@ namespace TinyWars.User {
             ]);
 
             this._uiRadioLanguage.setData({
-                leftTextType    : Lang.Type.B0563,
+                titleTextType   : Lang.Type.B0627,
+                leftTextType    : Lang.Type.B0624,
                 leftLangType    : Types.LanguageType.Chinese,
-                rightTextType   : Lang.Type.B0564,
+                rightTextType   : Lang.Type.B0625,
                 rightLangType   : Types.LanguageType.English,
                 callbackOnLeft  : () => {
                     const languageType = Types.LanguageType.Chinese;
@@ -135,6 +141,7 @@ namespace TinyWars.User {
                 },
             });
             this._uiRadioTexture.setData({
+                titleTextType   : Lang.Type.B0628,
                 leftTextType    : Lang.Type.B0385,
                 rightTextType   : Lang.Type.B0386,
                 callbackOnLeft  : () => {
@@ -152,6 +159,7 @@ namespace TinyWars.User {
                 },
             });
             this._uiRadioUnitAnimation.setData({
+                titleTextType   : Lang.Type.B0629,
                 leftTextType    : Lang.Type.B0561,
                 rightTextType   : Lang.Type.B0562,
                 callbackOnLeft  : () => {
@@ -167,8 +175,9 @@ namespace TinyWars.User {
                 },
             });
             this._uiRadioTileAnimation.setData({
-                leftTextType    : Lang.Type.B0176,
-                rightTextType   : Lang.Type.B0177,
+                titleTextType   : Lang.Type.B0630,
+                leftTextType    : Lang.Type.B0561,
+                rightTextType   : Lang.Type.B0562,
                 callbackOnLeft  : () => {
                     Time.TimeModel.startTileAnimationTick();
                     LocalStorage.setShowTileAnimation(true);
@@ -182,20 +191,21 @@ namespace TinyWars.User {
                 },
             });
             this._uiRadioShowGridBorder.setData({
-                leftTextType    : Lang.Type.B0584,
-                rightTextType   : Lang.Type.B0585,
+                titleTextType   : Lang.Type.B0584,
+                leftTextType    : Lang.Type.B0561,
+                rightTextType   : Lang.Type.B0562,
                 callbackOnLeft  : () => {
-                    User.UserProxy.reqUserSetSettings({
-                        isShowGridBorder: false,
-                    });
-                },
-                callbackOnRight : () => {
                     User.UserProxy.reqUserSetSettings({
                         isShowGridBorder: true,
                     });
                 },
+                callbackOnRight : () => {
+                    User.UserProxy.reqUserSetSettings({
+                        isShowGridBorder: false,
+                    });
+                },
                 checkerForLeftOn: () => {
-                    return !User.UserModel.getSelfSettingsIsShowGridBorder();
+                    return User.UserModel.getSelfSettingsIsShowGridBorder();
                 },
             });
 
@@ -351,6 +361,7 @@ namespace TinyWars.User {
         }
 
         private _updateComponentsForLanguage(): void {
+            this._labelTitle.text = Lang.getText(Lang.Type.B0560);
             this._updateBtnChangeNickname();
             this._updateBtnChangePassword();
             this._updateBtnChangeDiscordId();

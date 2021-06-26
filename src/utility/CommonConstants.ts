@@ -19,6 +19,9 @@ namespace TinyWars.Utility.CommonConstants {
         shapesCount     : number;
     };
 
+    export const DiscordUrl                             = `https://discord.gg/jdtRpY9`;
+    export const GithubUrl                              = `https://github.com/Babygogogo/TinyWarsClient`;
+
     export const ErrorTextForLang                       = `LangError`;
     export const ErrorTextForUndefined                  = `UndefinedError`;
     export const GameVersion                            = Types.GameVersion.Legacy;

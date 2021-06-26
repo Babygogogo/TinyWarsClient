@@ -101,6 +101,7 @@ namespace TinyWars.Common {
                     Logger.error(`CommonChangeVersionPanel._onTouchedBtnConfirm() window.open() error: `, e);
                 }
             }
+            this.close();
         }
 
         private _onNotifyLanguageChanged(): void {
@@ -112,7 +113,7 @@ namespace TinyWars.Common {
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
             this._labelTitle.text   = Lang.getText(Lang.Type.B0620);
-            this._btnBack.label     = Lang.getText(Lang.Type.B0146);
+            this._btnBack.label     = Lang.getText(Lang.Type.B0154);
             this._btnConfirm.label  = Lang.getText(Lang.Type.B0026);
             this._labelTips.text    = Lang.getText(Lang.Type.A0219);
         }

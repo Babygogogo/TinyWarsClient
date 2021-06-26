@@ -411,12 +411,12 @@ namespace TinyWars.Utility.Lang {
             `The settings affect all players in the game.`,
         ],
         [Type.A0066]: [
-            `注意:\n昵称可使用任意字符，长度不小于4位`,
-            `Note:\n You can use any character for the nickname, \n and the nickname should consist of at least 4 characters.`,
+            `昵称可使用任意字符，长度不小于4位`,
+            `You can use any character for the nickname, and the nickname should consist of at least 4 characters.`,
         ],
         [Type.A0067]: [
-            `输入正确的Discord ID，并加入以下游戏频道（可点击链接复制）\n 即可实时收到游戏相关消息，如回合轮转等。`,
-            `By entering your correct discord ID \n and joining the following discord server (the link can be copied)\n you can receive tinywars-related information, including turn notification.`,
+            `输入正确的Discord ID，并加入以下游戏频道即可实时收到游戏相关消息，如回合轮转等。`,
+            `By entering your correct discord ID and joining the following discord server you can receive tinywars-related information, including turn notification.`,
         ],
         [Type.A0068]: [
             `可点击以下各个文字以更改设置`,
@@ -2585,12 +2585,12 @@ namespace TinyWars.Utility.Lang {
             `Public(CN)`,
         ],
         [Type.B0385]: [
-            `使用原版贴图`,
-            `Use Origin Texture`,
+            `原版`,
+            `Legacy`,
         ],
         [Type.B0386]: [
-            `使用新版贴图`,
-            `Use New Texture`,
+            `新版`,
+            `New`,
         ],
         [Type.B0387]: [
             `常规`,
@@ -3289,12 +3289,12 @@ namespace TinyWars.Utility.Lang {
             `Settings`,
         ],
         [Type.B0561]: [
-            `打开部队动画`,
-            `Unit Animation On`,
+            `打开`,
+            `On`,
         ],
         [Type.B0562]: [
-            `关闭部队动画`,
-            `Unit Animation Off`,
+            `关闭`,
+            `Off`,
         ],
         [Type.B0563]: [
             `使用中文`,
@@ -3381,8 +3381,8 @@ namespace TinyWars.Utility.Lang {
             `Join`,
         ],
         [Type.B0584]: [
-            `隐藏棋盘格子`,
-            `Hide Border`,
+            `棋盘网格线`,
+            `Border Lines`,
         ],
         [Type.B0585]: [
             `显示棋盘格子`,
@@ -3551,6 +3551,22 @@ namespace TinyWars.Utility.Lang {
         [Type.B0626]: [
             `找回密码`,
             `Forget?`,
+        ],
+        [Type.B0627]: [
+            `语言`,
+            `Language`,
+        ],
+        [Type.B0628]: [
+            `贴图`,
+            `Texture`,
+        ],
+        [Type.B0629]: [
+            `部队动画`,
+            `Unit Animation`,
+        ],
+        [Type.B0630]: [
+            `地形动画`,
+            `Tile Animation`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
