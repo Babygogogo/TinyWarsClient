@@ -21,11 +21,11 @@
     </GameUi:UiScrollList>
     <e:Group horizontalCenter="0" bottom="10" id="_groupCopyright">
         <GameUi:UiLabel text="Tiny Wars is a fan-made game that bases on Advance Wars: Days of Ruin." size="14" x="196"
-                        y="0" textColor="0xAAAAAA" />
+                        y="0" textColor="0xffffff" />
         <GameUi:UiLabel text="Advance Wars is (c) 1990-2001 Nintendo and (c) 2001 Intelligent Systems." size="14"
-                        x="206" y="10" textColor="0xAAAAAA" />
+                        x="206" y="10" textColor="0xffffff" />
         <GameUi:UiLabel text="All images and sounds are copyright their respective owners." size="14" x="0" y="0"
-                        textColor="0xAAAAAA" />
+                        textColor="0xffffff" />
         <e:layout>
             <e:VerticalLayout horizontalAlign="center" gap="0" />
         </e:layout>

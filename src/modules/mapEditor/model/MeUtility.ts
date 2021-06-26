@@ -31,7 +31,7 @@ namespace TinyWars.MapEditor.MeUtility {
         LeftToRight         : number | null;
         UpLeftToDownRight   : number | null;
         Rotation            : number | null;
-    }
+    };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function createDefaultMapRawData(slotIndex: number): Promise<IMapRawData> {
@@ -240,7 +240,7 @@ namespace TinyWars.MapEditor.MeUtility {
             unitDataArray           : getNewUnitDataListForOffset(mapRawData, offsetX, offsetY),
             warRuleArray            : mapRawData.warRuleArray,
             warEventFullData        : mapRawData.warEventFullData,
-        }
+        };
     }
     function getNewTileDataListForOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): ISerialTile[] {
         const width         = mapRawData.mapWidth;
@@ -352,7 +352,7 @@ namespace TinyWars.MapEditor.MeUtility {
             Rotation            : totalGrids - countRotational,
             UpLeftToDownRight   : isSquare ? totalGrids - countUpLeftDownRight : null,
             UpRightToDownLeft   : isSquare ? totalGrids - countUpRightDownLeft : null,
-        }
+        };
     }
     export function getSymmetricalGridIndex(gridIndex: GridIndex, symmetryType: SymmetryType, mapSize: Types.MapSize): GridIndex {
         const { width, height } = mapSize;

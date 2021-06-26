@@ -16,10 +16,11 @@
     "commonColorBlack0001": {"x":6,"y":234,"w":4,"h":4},
     "commonColorBlue0000": {"x":12,"y":234,"w":4,"h":4},
     "commonColorGrey0000": {"x":17,"y":201,"w":3,"h":3},
+    "commonColorGrey0001": {"x":17,"y":206,"w":3,"h":3},
     "commonColorPurple0000": {"x":42,"y":218,"w":4,"h":4},
-    "commonColorTransparent0000": {"x":17,"y":206,"w":3,"h":3,"offX":0,"offY":0,"sourceW":4,"sourceH":4},
+    "commonColorTransparent0000": {"x":17,"y":211,"w":3,"h":3,"offX":0,"offY":0,"sourceW":4,"sourceH":4},
     "commonColorTransparent0001": {"x":42,"y":224,"w":4,"h":4},
-    "commonColorWhite0000": {"x":17,"y":211,"w":3,"h":3},
+    "commonColorWhite0000": {"x":17,"y":216,"w":3,"h":3},
     "commonLine0000": {"x":35,"y":235,"w":8,"h":1},
     "commonPentagon0000": {"x":0,"y":0,"w":24,"h":24},
     "commonPentagon0001": {"x":0,"y":77,"w":22,"h":23},
@@ -44,6 +45,6 @@
     "app": "https://www.codeandweb.com/texturepacker",
     "exporter": "egret",
     "sheetsize": "46x238",
-    "smartupdate": "$TexturePacker:SmartUpdate:bb1f47ee7b9a863b7222e8613c3e22a1:8f44bf1e3403fd86f0063bd4702511a4:06603b7443b9482a9c04b2c0ab5118a4$"
+    "smartupdate": "$TexturePacker:SmartUpdate:71b45ea21e33ece8101a1c9dd3a140c1:2f7ab71698722c4d02e5681d87108a43:06603b7443b9482a9c04b2c0ab5118a4$"
   }
 }

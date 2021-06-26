@@ -54,7 +54,7 @@ namespace TinyWars.Utility.ResManager {
             time        : number;
             bitmapData  : MyBitmapData;
             callback    : (data: MyBitmapData) => void;
-        }
+        };
 
         let _releaseTime    = 0;
         const _releaseDict  : { [key:string]: ReleaseData } = {};
@@ -84,11 +84,11 @@ namespace TinyWars.Utility.ResManager {
                     }
                 }
                 if (RES.hasRes(url)) {
-                    return RES.getResAsync(url, (data)=>{compFunc && compFunc.call(thisObject, data, src)}, thisObject);
+                    return RES.getResAsync(url, (data)=>{compFunc && compFunc.call(thisObject, data, src);}, thisObject);
                 } else {
                     return getResByUrl.call(RES, url, compFunc, thisObject, type);
                 }
-            }
+            };
 
             _releaseTime = new Date().getTime();
             const timer = new egret.Timer(3000);
@@ -124,7 +124,7 @@ namespace TinyWars.Utility.ResManager {
                 this._image_ && BitmapData.$removeDisplayObject(this, this._image_);
                 this._image_ = this.$texture && this.$texture.$bitmapData;
                 this._image_ && BitmapData.$addDisplayObject(this, this._image_);
-            }
+            };
 
             const onRemoveFromStageMC = MovieClip.$onRemoveFromStage;
             MovieClip.$onRemoveFromStage = function() {
@@ -132,7 +132,7 @@ namespace TinyWars.Utility.ResManager {
 
                 this._image_ && BitmapData.$removeDisplayObject(this, this._image_);
                 this._image_ = null;
-            }
+            };
 
             const setMovieClipData = MovieClip["setMovieClipData"];
             MovieClip["setMovieClipData"] = function(value: egret.MovieClipData) {
@@ -144,7 +144,7 @@ namespace TinyWars.Utility.ResManager {
                 this._image_ && BitmapData.$removeDisplayObject(this, this._image_);
                 this._image_ = this.$stage && this.$texture && this.$texture.$bitmapData;
                 this._image_ && BitmapData.$addDisplayObject(this, this._image_);
-            }
+            };
 
             interface MyImageLoader extends egret.ImageLoader {
                 _url_           : string;
@@ -162,7 +162,7 @@ namespace TinyWars.Utility.ResManager {
             ImageLoader.onImageComplete = function (event: egret.Event) {
                 onImageComplete.call(this, event);
                 (this.data as MyBitmapData)._url_ = this._url_;
-            }
+            };
 
             function loadBitmapData(url: string, succeed: (t: egret.BitmapData) => egret.Texture | void, loadNum = 3) {
                 if (!url) {
@@ -205,12 +205,12 @@ namespace TinyWars.Utility.ResManager {
                 }
 
                 return loadResource.call(this, r, p);
-            }
+            };
 
             const save = (RES as any)["host"].save;
             (RES as any)["host"].save = function (resource: any, data: any) {
-                !resource["_image_"] && save.call(this, resource, data)
-            }
+                !resource["_image_"] && save.call(this, resource, data);
+            };
 
             const BitmapData = egret.BitmapData;
             BitmapData.$addDisplayObject = function (displayObject: egret.DisplayObject, bitmapData: MyBitmapData) {
@@ -255,7 +255,7 @@ namespace TinyWars.Utility.ResManager {
                 } else if (!bitmapData.format) {
                     bitmapData.format = "image";
                 }
-            }
+            };
 
             BitmapData.$removeDisplayObject = function (displayObject: egret.DisplayObject, bitmapData: MyBitmapData) {
                 const hashCode: number = bitmapData && bitmapData.hashCode;
@@ -292,7 +292,7 @@ namespace TinyWars.Utility.ResManager {
                         bitmapData.format = "";
                     }
                 });
-            }
+            };
         }
 
         function addDelayRelease(key: string | number, data: MyBitmapData, finish: () => void, delay?: number) {
@@ -352,14 +352,14 @@ namespace TinyWars.Utility.ResManager {
             } else {
                 const onResGet = function (e: string): void {
                     onSuccess.call(thisObject, e);
-                }
+                };
                 const onResError = function (e: egret.Event): void {
                     const resItem = (e as RES.ResourceEvent).resItem;
                     if ((resItem) && (resItem.url == url)) {
                         RES.removeEventListener(RES.ResourceEvent.ITEM_LOAD_ERROR, onResError, null);
                         onError.call(thisObject);
                     }
-                }
+                };
 
                 if (typeof generateEUI2 != "undefined") {
                     RES.getResByUrl("resource/gameEui.json", (data: string) => {

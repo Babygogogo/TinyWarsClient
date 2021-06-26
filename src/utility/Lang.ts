@@ -3548,6 +3548,10 @@ namespace TinyWars.Utility.Lang {
             `英文`,
             `English`,
         ],
+        [Type.B0626]: [
+            `找回密码`,
+            `Forget?`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -4212,14 +4216,18 @@ namespace TinyWars.Utility.Lang {
         [Type.R0005]: [
             [
                 `1.账号和密码都只能使用数字、字母、下划线，长度不小于6位`,
+                ``,
                 `2.昵称可使用任意字符，长度不小于4位`,
+                ``,
                 `3.注册后，账号不可修改，密码和昵称可修改`,
             ].join("\n"),
 
             [
-                `1 Usernames and passwords should only consist of numbers, english characters and "_". It should not be shorter than 6 characters. `,
-                `2 You can use any characters for nickname. The length should be no shorter than 4 characters. `,
-                `3 After the registry you cannot change your username, but the password and nickname can be changed.`,
+                `1. Usernames and passwords should only consist of numbers, english characters and "_". It should not be shorter than 6 characters. `,
+                ``,
+                `2. You can use any characters for nickname. The length should be no shorter than 4 characters. `,
+                ``,
+                `3. After the registry you cannot change your username, but the password and nickname can be changed.`,
             ].join("\n"),
         ],
 
@@ -4410,6 +4418,10 @@ namespace TinyWars.Utility.Lang {
             `The server is under maintenance.`,
         ],
 
+        [ClientErrorCode.MapRawDataValidation04]: [
+            `势力数量不合法`,
+            `The number of forces is not valid.`,
+        ],
         [ClientErrorCode.WarEventFullDataValidation09]: [
             `存在未被引用的事件动作`,
             `There is a redundant event action.`,
@@ -4417,6 +4429,10 @@ namespace TinyWars.Utility.Lang {
         [ClientErrorCode.WarEventFullDataValidation12]: [
             `存在未被引用的事件`,
             `There is a redundant event.`,
+        ],
+        [ClientErrorCode.WarRuleValidation02]: [
+            `尚未设置预设规则的可用性`,
+            `The availability of the preset rule has not been set.`,
         ],
     };
 

@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Common {
     import Helpers  = Utility.Helpers;
     import Lang     = Utility.Lang;
@@ -10,7 +11,7 @@ namespace TinyWars.Common {
         callbackOnCancel?   : () => any;
         textForConfirm?     : string;
         textForCancel?      : string;
-    }
+    };
 
     export class CommonConfirmPanel extends GameUi.UiPanel<OpenDataForCommonConfirmPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
@@ -66,14 +67,14 @@ namespace TinyWars.Common {
             await this._showCloseAnimation();
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             const openData = this._getOpenData();
             (openData.callbackOnCancel) && (openData.callbackOnCancel());
 
             this.close();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private _onTouchedBtnConfirm(): void {
             this._getOpenData().callback();
             this.close();
         }
