@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.User {
     import Lang             = Utility.Lang;
     import NotifyType       = Utility.Notify.Type;
@@ -15,20 +16,33 @@ namespace TinyWars.User {
 
         private static _instance: UserSetStageScalePanel;
 
-        private readonly _labelTitle        : TinyWars.GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _imgMask           : GameUi.UiImage;
+        // @ts-ignore
+        private readonly _group             : eui.Group;
+        // @ts-ignore
+        private readonly _labelTitle        : GameUi.UiLabel;
 
-        private readonly _labelScaleTitle   : TinyWars.GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelScaleTitle   : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _groupScale        : eui.Group;
-        private readonly _imgScaleBar       : TinyWars.GameUi.UiImage;
-        private readonly _imgScalePoint     : TinyWars.GameUi.UiImage;
-        private readonly _labelScale        : TinyWars.GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _imgScaleBar       : GameUi.UiImage;
+        // @ts-ignore
+        private readonly _imgScalePoint     : GameUi.UiImage;
+        // @ts-ignore
+        private readonly _labelScale        : GameUi.UiLabel;
 
-        private readonly _btnCancel         : TinyWars.GameUi.UiButton;
-        private readonly _btnDefault        : TinyWars.GameUi.UiButton;
-        private readonly _btnConfirm        : TinyWars.GameUi.UiButton;
+        // @ts-ignore
+        private readonly _btnCancel         : GameUi.UiButton;
+        // @ts-ignore
+        private readonly _btnDefault        : GameUi.UiButton;
+        // @ts-ignore
+        private readonly _btnConfirm        : GameUi.UiButton;
 
-        private _prevScale                  : number;
-        private _selectedScale              : number;
+        private _prevScale                  : number | undefined;
+        private _selectedScale              : number | undefined;
 
         public static show(): void {
             if (!UserSetStageScalePanel._instance) {
@@ -70,57 +84,61 @@ namespace TinyWars.User {
             this._prevScale     = scale;
             this._selectedScale = scale;
 
+            this._showOpenAnimation();
             this._updateView();
+        }
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // callbacks
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedGroupScale(e: egret.TouchEvent): void {
+        private _onTouchedGroupScale(e: egret.Event): void {
             const width         = this._groupScale.width;
-            const scale         = Math.floor(Math.max(0, Math.min(e.localX, width)) / width * (StageMaxScale - StageMinScale) + StageMinScale);
+            const scale         = Math.floor(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (StageMaxScale - StageMinScale) + StageMinScale);
             this._selectedScale = scale;
             StageManager.setStageScale(scale);
             this._updateGroupScale();
         }
-        private _onTouchMoveGroupScale(e: egret.TouchEvent): void {
+        private _onTouchMoveGroupScale(e: egret.Event): void {
             // const width         = this._groupScale.width;
             // this._selectedScale = Math.floor(Math.max(0, Math.min(e.localX, width)) / width * (StageMaxScale - StageMinScale) + StageMinScale);
             // this._updateGroupScale();
             const width         = this._groupScale.width;
-            const scale         = Math.floor(Math.max(0, Math.min(e.localX, width)) / width * (StageMaxScale - StageMinScale) + StageMinScale);
+            const scale         = Math.floor(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width * (StageMaxScale - StageMinScale) + StageMinScale);
             this._selectedScale = scale;
             StageManager.setStageScale(scale);
             this._updateGroupScale();
         }
-        private _onTouchEndGroupScale(e: egret.TouchEvent): void {
-            StageManager.setStageScale(this._selectedScale);
+        private _onTouchEndGroupScale(): void {
+            StageManager.setStageScale(this._selectedScale || CommonConstants.StageMinScale);
         }
-        private _onTouchReleaseOutsideGroupScale(e: egret.TouchEvent): void {
-            StageManager.setStageScale(this._selectedScale);
+        private _onTouchReleaseOutsideGroupScale(): void {
+            StageManager.setStageScale(this._selectedScale || CommonConstants.StageMinScale);
         }
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            StageManager.setStageScale(this._prevScale);
+        private _onTouchedBtnCancel(): void {
+            StageManager.setStageScale(this._prevScale || CommonConstants.StageMinScale);
 
             this.close();
         }
-        private _onTouchedBtnDefault(e: egret.TouchEvent): void {
+        private _onTouchedBtnDefault(): void {
             this._selectedScale = StageMinScale;
             StageManager.setStageScale(StageMinScale);
 
             this._updateView();
         }
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            LocalStorage.setStageScale(this._selectedScale);
+        private _onTouchedBtnConfirm(): void {
+            LocalStorage.setStageScale(this._selectedScale || CommonConstants.StageMinScale);
 
             this.close();
         }
         private _onTouchedPanelMask(): void {
-            StageManager.setStageScale(this._prevScale);
+            StageManager.setStageScale(this._prevScale || CommonConstants.StageMinScale);
 
             this.close();
         }
@@ -140,13 +158,40 @@ namespace TinyWars.User {
         }
 
         private _updateGroupScale(): void {
-            const scale                 = this._selectedScale;
+            const scale                 = this._selectedScale || CommonConstants.StageMinScale;
             const width                 = this._groupScale.width;
             const pos                   = width * (scale - StageMinScale) / (StageMaxScale - StageMinScale);
             this._imgScalePoint.x       = pos;
-            // this._imgScaleBar.width     = pos;
-            this._imgScaleBar.width     = width;
+            this._imgScaleBar.width     = pos;
             this._labelScale.text       = `${Helpers.formatString("%.2f", 10000 / scale)}%`;
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: 40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+            });
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve) => {
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                });
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: 40 },
+                    callback    : resolve,
+                });
+            });
         }
     }
 }

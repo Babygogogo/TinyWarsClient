@@ -19,6 +19,9 @@ namespace TinyWars.User {
         // @ts-ignore
         private readonly _labelTitle            : GameUi.UiLabel;
         // @ts-ignore
+        private readonly _btnClose              : GameUi.UiButton;
+
+        // @ts-ignore
         private readonly _labelTips             : GameUi.UiLabel;
         // @ts-ignore
         private readonly _labelUsersCountTitle  : GameUi.UiLabel;
@@ -64,6 +67,9 @@ namespace TinyWars.User {
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgUserGetOnlineUsers,  callback: this._onNotifySUserGetOnlineUsers },
+            ]);
+            this._setUiListenerArray([
+                { ui: this._btnClose,   callback: this.close },
             ]);
             this._listUser.setItemRenderer(UserRenderer);
 
@@ -128,7 +134,7 @@ namespace TinyWars.User {
                 } else if (nickname2 == null) {
                     return -1;
                 } else {
-                    return nickname1.localeCompare(nickname2, "zh")
+                    return nickname1.localeCompare(nickname2, "zh");
                 }
             });
 
@@ -190,7 +196,7 @@ namespace TinyWars.User {
         index       : number;
         userId      : number | null | undefined;
         nickname    : string | null | undefined;
-    }
+    };
 
     class UserRenderer extends GameUi.UiListItemRenderer<DataForUserRenderer> {
         // @ts-ignore

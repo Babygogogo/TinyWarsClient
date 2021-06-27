@@ -6,6 +6,7 @@ namespace TinyWars.Utility.Lang {
     import WarEventActionType       = Types.WarEventActionType;
     import PlayerRuleType           = Types.PlayerRuleType;
     import GameVersion              = Types.GameVersion;
+    import BgmCode                  = Types.BgmCode;
 
     // eslint-disable-next-line no-shadow
     export const enum Type {
@@ -2789,7 +2790,7 @@ namespace TinyWars.Utility.Lang {
             `No Rank`,
         ],
         [Type.B0436]: [
-            `排位积分排名`,
+            `排位积分榜`,
             `Rank List`,
         ],
         [Type.B0437]: [
@@ -3567,6 +3568,46 @@ namespace TinyWars.Utility.Lang {
         [Type.B0630]: [
             `地形动画`,
             `Tile Animation`,
+        ],
+        [Type.B0631]: [
+            `切换BGM`,
+            `Switch BGM`,
+        ],
+        [Type.B0632]: [
+            `Wandering Path`,
+            `Wandering Path`,
+        ],
+        [Type.B0633]: [
+            `Design Time`,
+            `Design Time`,
+        ],
+        [Type.B0634]: [
+            `We Will Prevail`,
+            `We Will Prevail`,
+        ],
+        [Type.B0635]: [
+            `Hope Never Dies`,
+            `Hope Never Dies`,
+        ],
+        [Type.B0636]: [
+            `Lost Memories`,
+            `Lost Memories`,
+        ],
+        [Type.B0637]: [
+            `Proud Soldier`,
+            `Proud Soldier`,
+        ],
+        [Type.B0638]: [
+            `Days of Ruin`,
+            `Days of Ruin`,
+        ],
+        [Type.B0639]: [
+            `Rutty`,
+            `Rutty`,
+        ],
+        [Type.B0640]: [
+            `用户ID`,
+            `User ID`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4751,6 +4792,21 @@ namespace TinyWars.Utility.Lang {
             case Types.TurnPhaseCode.WaitBeginTurn  : return getText(Type.B0474);
             case Types.TurnPhaseCode.Main           : return getText(Type.B0475);
             default                                 : return undefined;
+        }
+    }
+
+    export function getBgmName(code: BgmCode): string | undefined {
+        switch (code) {
+            case BgmCode.None       : return getText(Type.B0001);
+            case BgmCode.Lobby01    : return getText(Type.B0632);
+            case BgmCode.MapEditor01: return getText(Type.B0633);
+            case BgmCode.War01      : return getText(Type.B0634);
+            case BgmCode.War02      : return getText(Type.B0635);
+            case BgmCode.War03      : return getText(Type.B0636);
+            case BgmCode.War04      : return getText(Type.B0637);
+            case BgmCode.War05      : return getText(Type.B0638);
+            case BgmCode.War06      : return getText(Type.B0639);
+            default                 : return undefined;
         }
     }
 

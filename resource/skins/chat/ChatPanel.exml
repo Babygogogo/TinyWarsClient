@@ -5,7 +5,7 @@
                     scale9Grid="1,1,2,2" locked="true" />
     <e:Group width="920" scaleX="1" scaleY="1" height="500" horizontalCenter="0" verticalCenter="0">
         <e:Group id="_groupChannel" width="160" top="0" bottom="0" left="0">
-            <GameUi:UiScrollList id="_listChat" left="0" right="0" bottom="40" top="0">
+            <GameUi:UiScrollList id="_listChat" left="0" right="0" bottom="80" top="0">
                 <e:List>
                     <e:itemRendererSkinName>
                         <e:Skin width="160" height="50" currentState="up" states="down,up">
@@ -28,32 +28,10 @@
                     </e:layout>
                 </e:List>
             </GameUi:UiScrollList>
-            <GameUi:UiButton id="_btnRefresh" label="Refresh" width="70" bottom="0" right="0">
-                <GameUi:skinName>
-                    <e:Skin>
-                        <e:Group left="0" right="0" y="0">
-                            <e:Image left="0" right="0" top="0" bottom="0" source="commonPentagon0000"
-                                     scale9Grid="4,4,1,1" />
-                            <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="asdf"
-                                            textAlign="center" verticalAlign="middle" left="10" top="8" bottom="8"
-                                            wordWrap="true" bold="true" />
-                        </e:Group>
-                    </e:Skin>
-                </GameUi:skinName>
-            </GameUi:UiButton>
-            <GameUi:UiButton id="_btnClose" label="Close" width="70" bottom="0" left="0">
-                <GameUi:skinName>
-                    <e:Skin>
-                        <e:Group left="0" right="0" y="0">
-                            <e:Image left="0" right="0" top="0" bottom="0" source="commonPentagon0009"
-                                     scale9Grid="2,3,1,1" />
-                            <GameUi:UiLabel id="labelDisplay" size="12" text="asdf" textAlign="center"
-                                            verticalAlign="middle" left="10" top="8" bottom="8" wordWrap="true"
-                                            bold="true" textColor="0x000000" />
-                        </e:Group>
-                    </e:Skin>
-                </GameUi:skinName>
-            </GameUi:UiButton>
+            <GameUi:UiButton id="_btnRefresh" label="Refresh" bottom="40" right="0" skinName="Skins.Component.Button.ButtonGrey001"
+                             left="0"></GameUi:UiButton>
+            <GameUi:UiButton id="_btnClose" label="Close" bottom="0" left="0" skinName="Skins.Component.Button.ButtonYellow001"
+                             right="0"></GameUi:UiButton>
         </e:Group>
         <e:Group id="_groupMessage" width="740" top="0" bottom="50" right="0">
             <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="0" right="0" top="0" bottom="0"

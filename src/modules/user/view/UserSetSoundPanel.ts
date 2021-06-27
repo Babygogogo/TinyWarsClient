@@ -1,8 +1,11 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.User {
-    import Lang         = Utility.Lang;
-    import NotifyType   = Utility.Notify.Type;
-    import SoundManager = Utility.SoundManager;
+    import Lang             = Utility.Lang;
+    import Helpers          = Utility.Helpers;
+    import NotifyType       = Utility.Notify.Type;
+    import CommonConstants  = Utility.CommonConstants;
+    import SoundManager     = Utility.SoundManager;
 
     export class UserSetSoundPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -10,33 +13,59 @@ namespace TinyWars.User {
 
         private static _instance: UserSetSoundPanel;
 
-        private readonly _labelTitle        : TinyWars.GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _imgMask           : GameUi.UiImage;
+        // @ts-ignore
+        private readonly _group             : eui.Group;
+        // @ts-ignore
+        private readonly _labelTitle        : GameUi.UiLabel;
 
-        private readonly _labelBgmTitle     : TinyWars.GameUi.UiLabel;
-        private readonly _imgBgmMute        : TinyWars.GameUi.UiImage;
+        // @ts-ignore
+        private readonly _labelBgmTitle     : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _imgBgmMute        : GameUi.UiImage;
+        // @ts-ignore
         private readonly _groupBgmVolume    : eui.Group;
-        private readonly _imgBgmBar         : TinyWars.GameUi.UiImage;
-        private readonly _imgBgmPoint       : TinyWars.GameUi.UiImage;
-        private readonly _labelBgmVolume    : TinyWars.GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _imgBgmBar         : GameUi.UiImage;
+        // @ts-ignore
+        private readonly _imgBgmPoint       : GameUi.UiImage;
+        // @ts-ignore
+        private readonly _labelBgmVolume    : GameUi.UiLabel;
 
-        private readonly _labelEffectTitle  : TinyWars.GameUi.UiLabel;
-        private readonly _imgEffectMute     : TinyWars.GameUi.UiImage;
+        // @ts-ignore
+        private readonly _labelEffectTitle  : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _imgEffectMute     : GameUi.UiImage;
+        // @ts-ignore
         private readonly _groupEffectVolume : eui.Group;
-        private readonly _imgEffectBar      : TinyWars.GameUi.UiImage;
-        private readonly _imgEffectPoint    : TinyWars.GameUi.UiImage;
-        private readonly _labelEffectVolume : TinyWars.GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _imgEffectBar      : GameUi.UiImage;
+        // @ts-ignore
+        private readonly _imgEffectPoint    : GameUi.UiImage;
+        // @ts-ignore
+        private readonly _labelEffectVolume : GameUi.UiLabel;
 
+        // @ts-ignore
+        private readonly _labelSwitchBgm    : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelBgmName      : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _btnPrevBgm        : GameUi.UiButton;
+        // @ts-ignore
         private readonly _btnNextBgm        : GameUi.UiButton;
 
-        private readonly _btnCancel         : TinyWars.GameUi.UiButton;
-        private readonly _btnDefault        : TinyWars.GameUi.UiButton;
-        private readonly _btnConfirm        : TinyWars.GameUi.UiButton;
+        // @ts-ignore
+        private readonly _btnCancel         : GameUi.UiButton;
+        // @ts-ignore
+        private readonly _btnDefault        : GameUi.UiButton;
+        // @ts-ignore
+        private readonly _btnConfirm        : GameUi.UiButton;
 
-        private _prevBgmMute                : boolean;
-        private _prevBgmVolume              : number;
-        private _prevEffectMute             : boolean;
-        private _prevEffectVolume           : number;
+        private _prevBgmMute                : boolean | undefined;
+        private _prevBgmVolume              : number | undefined;
+        private _prevEffectMute             : boolean | undefined;
+        private _prevEffectVolume           : number | undefined;
 
         public static show(): void {
             if (!UserSetSoundPanel._instance) {
@@ -89,27 +118,31 @@ namespace TinyWars.User {
             this._prevEffectMute                = SoundManager.getIsEffectMute();
             this._prevEffectVolume              = SoundManager.getEffectVolume();
 
+            this._showOpenAnimation();
             this._updateView();
+        }
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // callbacks
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedGroupBgmVolume(e: egret.TouchEvent): void {
+        private _onTouchedGroupBgmVolume(e: egret.Event): void {
             const width = this._groupBgmVolume.width;
-            SoundManager.setBgmVolume(Math.max(0, Math.min(e.localX, width)) / width);
+            SoundManager.setBgmVolume(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width);
             this._updateGroupBgmVolume();
         }
-        private _onTouchMoveGroupBgmVolume(e: egret.TouchEvent): void {
+        private _onTouchMoveGroupBgmVolume(e: egret.Event): void {
             const width = this._groupBgmVolume.width;
-            SoundManager.setBgmVolume(Math.max(0, Math.min(e.localX, width)) / width);
+            SoundManager.setBgmVolume(Math.max(0, Math.min((e as egret.TouchEvent).localX, width)) / width);
             this._updateGroupBgmVolume();
         }
-        private _onTouchedGroupBgmMute(e: egret.TouchEvent): void {
+        private _onTouchedGroupBgmMute(): void {
             const soundManager = SoundManager;
             soundManager.playEffect("button.mp3");
             soundManager.setIsBgmMute(!soundManager.getIsBgmMute());
@@ -125,33 +158,42 @@ namespace TinyWars.User {
             SoundManager.setEffectVolume(Math.max(0, Math.min(e.localX, width)) / width);
             this._updateGroupEffectVolume();
         }
-        private _onTouchEndGroupEffectVolume(e: egret.TouchEvent): void {
+        private _onTouchEndGroupEffectVolume(): void {
             SoundManager.playEffect("button.mp3");
         }
-        private _onTouchReleaseOutsideGroupEffectVolume(e: egret.TouchEvent): void {
+        private _onTouchReleaseOutsideGroupEffectVolume(): void {
             SoundManager.playEffect("button.mp3");
         }
-        private _onTouchedGroupEffectMute(e: egret.TouchEvent): void {
+        private _onTouchedGroupEffectMute(): void {
             const soundManager = SoundManager;
             soundManager.playEffect("button.mp3");
             soundManager.setIsEffectMute(!soundManager.getIsEffectMute());
             this._updateGroupEffectMute();
         }
-        private _onTouchedBtnPrevBgm(e: egret.TouchEvent): void {
+        private _onTouchedBtnPrevBgm(): void {
             SoundManager.playPreviousBgm();
+            this._updateLabelBgmName();
         }
-        private _onTouchedBtnNextBgm(e: egret.TouchEvent): void {
+        private _onTouchedBtnNextBgm(): void {
             SoundManager.playNextBgm();
+            this._updateLabelBgmName();
         }
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
-            SoundManager.setBgmVolume(this._prevBgmVolume);
-            SoundManager.setEffectVolume(this._prevEffectVolume);
-            SoundManager.setIsBgmMute(this._prevBgmMute);
-            SoundManager.setIsEffectMute(this._prevEffectMute);
+        private _onTouchedBtnCancel(): void {
+            const prevBgmVolume = this._prevBgmVolume;
+            (prevBgmVolume != null) && (SoundManager.setBgmVolume(prevBgmVolume));
+
+            const prevEffectVolume = this._prevEffectVolume;
+            (prevEffectVolume != null) && (SoundManager.setEffectVolume(prevEffectVolume));
+
+            const prevBgmMute = this._prevBgmMute;
+            (prevBgmMute != null) && (SoundManager.setIsBgmMute(prevBgmMute));
+
+            const prevEffectMute = this._prevEffectMute;
+            (prevEffectMute != null) && (SoundManager.setIsEffectMute(prevEffectMute));
 
             this.close();
         }
-        private _onTouchedBtnDefault(e: egret.TouchEvent): void {
+        private _onTouchedBtnDefault(): void {
             const defaultVolume = SoundManager.DEFAULT_VOLUME;
             const defaultMute   = SoundManager.DEFAULT_MUTE;
             SoundManager.setBgmVolume(defaultVolume);
@@ -161,7 +203,7 @@ namespace TinyWars.User {
 
             this._updateView();
         }
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private _onTouchedBtnConfirm(): void {
             SoundManager.setBgmVolumeToStore();
             SoundManager.setEffectVolumeToStore();
             SoundManager.setIsBgmMuteToStore();
@@ -183,18 +225,18 @@ namespace TinyWars.User {
             this._labelTitle.text       = Lang.getText(Lang.Type.B0540);
             this._labelBgmTitle.text    = Lang.getText(Lang.Type.B0541);
             this._labelEffectTitle.text = Lang.getText(Lang.Type.B0542);
-            this._btnPrevBgm.label      = Lang.getText(Lang.Type.B0544);
-            this._btnNextBgm.label      = Lang.getText(Lang.Type.B0545);
+            this._labelSwitchBgm.text   = Lang.getText(Lang.Type.B0631);
             this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
             this._btnDefault.label      = Lang.getText(Lang.Type.B0543);
             this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
+            this._updateLabelBgmName();
         }
 
         private _updateGroupBgmMute(): void {
-            this._imgBgmMute.source = SoundManager.getIsBgmMute() ? "icon_sound_001" : "icon_sound_002";
+            this._imgBgmMute.source = SoundManager.getIsBgmMute() ? "commonIconSound0001" : "commonIconSound0000";
         }
         private _updateGroupEffectMute(): void {
-            this._imgEffectMute.source = SoundManager.getIsEffectMute() ? "icon_sound_001" : "icon_sound_002";
+            this._imgEffectMute.source = SoundManager.getIsEffectMute() ? "commonIconSound0001" : "commonIconSound0000";
         }
         private _updateGroupBgmVolume(): void {
             const volume                = SoundManager.getBgmVolume();
@@ -209,6 +251,37 @@ namespace TinyWars.User {
             this._imgEffectPoint.x          = pos;
             this._imgEffectBar.width        = pos;
             this._labelEffectVolume.text    = `${Math.floor(volume * 100)}`;
+        }
+        private _updateLabelBgmName(): void {
+            this._labelBgmName.text = Lang.getBgmName(SoundManager.getPlayingBgmCode()) || CommonConstants.ErrorTextForUndefined;
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: 40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+            });
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve) => {
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                });
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: 40 },
+                    callback    : resolve,
+                });
+            });
         }
     }
 }

@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Utility.FlowManager {
     import UserModel    = User.UserModel;
     import MpwProxy     = MultiPlayerWar.MpwProxy;
@@ -73,7 +74,7 @@ namespace TinyWars.Utility.FlowManager {
         Login.LoginPanel.show();
         Broadcast.BroadcastPanel.show();
 
-        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
@@ -89,7 +90,7 @@ namespace TinyWars.Utility.FlowManager {
         Lobby.LobbyBottomPanel.show();
         Broadcast.BroadcastPanel.show();
 
-        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
     export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<ClientErrorCode> {
@@ -167,7 +168,7 @@ namespace TinyWars.Utility.FlowManager {
         BaseWar.BwUnitBriefPanel.show({ war });
         Broadcast.BroadcastPanel.show();
 
-        SoundManager.playBgm(SoundManager.BgmCode.MapEditor01);
+        SoundManager.playBgm(Types.BgmCode.MapEditor01);
     }
 
     export function gotoMrwMyWarListPanel(): void {
@@ -180,7 +181,7 @@ namespace TinyWars.Utility.FlowManager {
         MultiRankWar.MrwMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
 
-        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
     export function gotoMcwMyWarListPanel(): void {
         MpwModel.unloadWar();
@@ -192,19 +193,19 @@ namespace TinyWars.Utility.FlowManager {
         MultiCustomWar.McwMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
 
-        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Callbacks.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function _onNotifyConfigLoaded(e: egret.Event): void {
+    function _onNotifyConfigLoaded(): void {
         if (_checkCanFirstGoToLobby()) {
             gotoLobby();
         }
     }
 
-    function _onNotifyNetworkConnected(e: egret.Event): void {
+    function _onNotifyNetworkConnected(): void {
         const account   = UserModel.getSelfAccount();
         const password  = UserModel.getSelfPassword();
         if ((!UserModel.getIsLoggedIn())    &&
@@ -215,9 +216,7 @@ namespace TinyWars.Utility.FlowManager {
         }
     }
 
-    function _onMsgCommonServerDisconnect(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgCommonServerDisconnect.IS;
-
+    function _onMsgCommonServerDisconnect(): void {
         _hasOnceWentToLobby = false;
         UserModel.clearLoginInfo();
         FlowManager.gotoLogin();
@@ -234,7 +233,7 @@ namespace TinyWars.Utility.FlowManager {
         });
     }
 
-    function _onMsgUserLogin(e: egret.Event): void {
+    function _onMsgUserLogin(): void {
         if (_checkCanFirstGoToLobby()) {
             gotoLobby();
         } else {
@@ -245,7 +244,7 @@ namespace TinyWars.Utility.FlowManager {
         }
     }
 
-    function _onMsgUserLogout(e: egret.Event): void {
+    function _onMsgUserLogout(): void {
         _hasOnceWentToLobby = false;
         UserModel.clearLoginInfo();
         gotoLogin();

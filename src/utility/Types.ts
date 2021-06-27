@@ -239,6 +239,19 @@ namespace TinyWars.Utility.Types {
         Effect,
     }
 
+    // eslint-disable-next-line no-shadow
+    export const enum BgmCode {
+        None        = 0,
+        Lobby01,
+        MapEditor01,
+        War01,
+        War02,
+        War03,
+        War04,
+        War05,
+        War06,
+    }
+
     export const UiState = {
         Up  : "up",
         Down: "down",

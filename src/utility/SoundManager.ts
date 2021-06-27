@@ -1,23 +1,12 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Utility.SoundManager {
-    import SoundType            = Types.SoundType;
+    import SoundType    = Types.SoundType;
+    import BgmCode      = Types.BgmCode;
 
     export const DEFAULT_MUTE   = false;
     export const DEFAULT_VOLUME = 1;
 
-    // eslint-disable-next-line no-shadow
-    export const enum BgmCode {
-        None        = 0,
-        Lobby01,
-        MapEditor01,
-        War01,
-        War02,
-        War03,
-        War04,
-        War05,
-        War06,
-    }
     const AllBgmMinCode = BgmCode.Lobby01;
     const AllBgmMaxCode = BgmCode.War06;
     const WarBgmMinCode = BgmCode.War01;
@@ -47,7 +36,7 @@ namespace TinyWars.Utility.SoundManager {
 
     let _bgmMute                = DEFAULT_MUTE;
     let _bgmVolume              = DEFAULT_VOLUME;    // 音量范围是0～1，1为最大音量
-    let _bgmPrevCode            = BgmCode.None;
+    let _playingBgmCode         = BgmCode.None;
 
     const _bgmBufferCache       = new Map<BgmCode, AudioBuffer>();
     let _bgmGain                : GainNode;
@@ -114,11 +103,11 @@ namespace TinyWars.Utility.SoundManager {
     }
 
     export function playPreviousBgm(): void {
-        const code = _getBgmPrevCode() - 1;
+        const code = getPlayingBgmCode() - 1;
         playBgm(code >= AllBgmMinCode ? code : AllBgmMaxCode);
     }
     export function playNextBgm(): void {
-        const code = _getBgmPrevCode() + 1;
+        const code = getPlayingBgmCode() + 1;
         playBgm(code <= AllBgmMaxCode ? code : AllBgmMinCode);
     }
     export function playRandomWarBgm(): void {
@@ -174,11 +163,11 @@ namespace TinyWars.Utility.SoundManager {
         }
     }
 
-    function _setBgmPrevCode(bgmCode: BgmCode): void {
-        _bgmPrevCode = bgmCode;
+    function _setPlayingBgmCode(bgmCode: BgmCode): void {
+        _playingBgmCode = bgmCode;
     }
-    function _getBgmPrevCode(): BgmCode {
-        return _bgmPrevCode;
+    export function getPlayingBgmCode(): BgmCode {
+        return _playingBgmCode;
     }
     /** 播放背景音乐，同时只能有一个在播放 */
     export function playBgm(bgmCode: BgmCode, forcePlayFromBeginning = false): void {
@@ -187,12 +176,13 @@ namespace TinyWars.Utility.SoundManager {
         }
 
         if (!bgmCode) {
+            _setPlayingBgmCode(bgmCode);
             _stopBgm();
             return;
         }
 
-        if ((_getBgmPrevCode() !== bgmCode) || (forcePlayFromBeginning)) {
-            _setBgmPrevCode(bgmCode);
+        if ((getPlayingBgmCode() !== bgmCode) || (forcePlayFromBeginning)) {
+            _setPlayingBgmCode(bgmCode);
             _playBgmForNormal(bgmCode);
         }
     }
@@ -306,7 +296,7 @@ namespace TinyWars.Utility.SoundManager {
                 try {
                     eff.volume = volume;
                 } catch (e) {
-                    Logger.error(`SoundManager._updateEffectVolumeForNormal() error.`);
+                    // Logger.error(`SoundManager._updateEffectVolumeForNormal() error.`);
                 }
             }
         }

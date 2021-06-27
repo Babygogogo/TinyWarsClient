@@ -3,24 +3,19 @@
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage id="_imgMask" anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
                     source="commonColorTransparent0001" scale9Grid="1,1,2,2" locked="true" />
-    <e:Group id="_group" width="600" height="420" verticalCenter="0" horizontalCenter="0">
-        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
-                        source="commonColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
-        <GameUi:UiLabel id="_labelTitle" text="在线玩家列表" y="10" size="22" horizontalCenter="0" bold="true" locked="true" />
-        <e:Group y="40" horizontalCenter="0" locked="true">
-            <GameUi:UiLabel id="_labelTips" text="双击玩家名称，可以查看其详细信息" y="0" size="14" x="0" />
-            <e:Group x="262" y="0">
-                <GameUi:UiLabel id="_labelUsersCountTitle" text="当前在线人数:" y="0" size="14" x="0" />
-                <GameUi:UiLabel id="_labelUsersCount" text="0" y="0" size="14" x="108" />
-                <e:layout>
-                    <e:HorizontalLayout/>
-                </e:layout>
+    <e:Group id="_group" width="620" height="420" verticalCenter="0" horizontalCenter="0">
+        <e:Group left="0" right="0" top="0" bottom="0" locked="true">
+            <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
+                            left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                source="commonColorGrey0001" y="0" left="0" right="0" />
+                <GameUi:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <GameUi:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001" verticalCenter="0"
+                                 right="30" />
             </e:Group>
-            <e:layout>
-                <e:HorizontalLayout gap="20" />
-            </e:layout>
         </e:Group>
-        <e:Group y="60" left="20" right="20">
+        <e:Group y="50" left="30" right="30">
             <e:Group y="0" left="0" right="0" height="26">
                 <GameUi:UiImage scale9Grid="1,1,2,2" source="commonColorBlue0000" left="0" right="0" top="0" bottom="0" />
                 <GameUi:UiLabel id="_labelNameTitle1" text="明战" textColor="0xFFFFFF" size="14" verticalCenter="0"
@@ -28,7 +23,7 @@
                 <GameUi:UiLabel id="_labelNameTitle2" text="明战" textColor="0xFFFFFF" size="14" bold="true" x="300"
                                 verticalCenter="0" />
             </e:Group>
-            <e:Scroller height="320" y="26" left="0" right="0">
+            <e:Scroller height="300" y="26" left="0" right="0">
                 <e:Group>
                     <GameUi:UiScrollList id="_listUser" y="0" x="0">
                         <e:List>
@@ -54,6 +49,19 @@
                     </e:layout>
                 </e:Group>
             </e:Scroller>
+        </e:Group>
+        <e:Group y="390" horizontalCenter="0">
+            <GameUi:UiLabel id="_labelTips" text="双击玩家名称，可以查看其详细信息" y="0" size="14" x="0" />
+            <e:Group x="262" y="0">
+                <GameUi:UiLabel id="_labelUsersCountTitle" text="当前在线人数:" y="0" size="14" x="0" />
+                <GameUi:UiLabel id="_labelUsersCount" text="0" y="0" size="14" x="108" />
+                <e:layout>
+                    <e:HorizontalLayout/>
+                </e:layout>
+            </e:Group>
+            <e:layout>
+                <e:HorizontalLayout gap="20" />
+            </e:layout>
         </e:Group>
         <GameUi:UiLabel id="_labelLoading" text="正在加载数据，请稍候" size="20" horizontalCenter="0" verticalCenter="20" />
     </e:Group>

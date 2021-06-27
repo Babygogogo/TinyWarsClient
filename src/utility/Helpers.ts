@@ -114,7 +114,7 @@ namespace TinyWars.Utility.Helpers {
         return (new Array(times + 1)).join(str);
     }
 
-    export function getSuffixForRank(rank: number): string | undefined {
+    export function getSuffixForRank(rank: number | null | undefined): string | undefined {
         if (rank == null) {
             return undefined;
         } else {
