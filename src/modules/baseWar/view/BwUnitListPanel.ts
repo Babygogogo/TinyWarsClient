@@ -10,7 +10,7 @@ namespace TinyWars.BaseWar {
 
     type OpenDataForBwUnitListPanel = {
         war : BwWar;
-    }
+    };
     export class BwUnitListPanel extends GameUi.UiPanel<OpenDataForBwUnitListPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -124,19 +124,20 @@ namespace TinyWars.BaseWar {
         }
 
         private _adjustPositionOnTouch(e: egret.TouchEvent): void {
+            // do nothing
         }
 
         private _createDataForList(): DataForUnitRenderer[] {
             const dataList      : DataForUnitRenderer[]= [];
             const playerIndex   = this._playerIndex;
-            this._unitMap.forEachUnit(unit => {
+            for (const unit of this._unitMap.getAllUnits()) {
                 if (unit.getPlayerIndex() === playerIndex) {
                     dataList.push({
                         cursor  : this._cursor,
                         unit    : unit,
                     });
                 }
-            });
+            }
             return dataList.sort(sorterForDataForList);
         }
     }
@@ -164,7 +165,7 @@ namespace TinyWars.BaseWar {
     type DataForUnitRenderer = {
         unit    : BaseWar.BwUnit;
         cursor  : BaseWar.BwCursor;
-    }
+    };
 
     class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
         private _group          : eui.Group;

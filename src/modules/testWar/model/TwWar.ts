@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.TestWar {
     import Logger                   = Utility.Logger;
     import ProtoTypes               = Utility.ProtoTypes;
@@ -160,6 +161,10 @@ namespace TinyWars.TestWar {
 
         public getIsWarMenuPanelOpening(): boolean {
             return false;
+        }
+
+        public getSettingsBootTimerParams(): number[] | null | undefined {
+            return [Types.BootTimerType.NoBoot];
         }
     }
 

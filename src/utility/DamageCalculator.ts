@@ -85,11 +85,11 @@ namespace TinyWars.Utility.DamageCalculator {
         }
 
         let amountFromGlobalTiles   = 0;
-        tileMap.forEachTile(tile => {
+        for (const tile of tileMap.getAllTiles()) {
             if (tile.getPlayerIndex() === playerIndex) {
                 amountFromGlobalTiles += tile.getGlobalAttackBonus() || 0;
             }
-        });
+        }
 
         const totalAmount = settingsModifier
             + amountFromPromotion
@@ -139,11 +139,11 @@ namespace TinyWars.Utility.DamageCalculator {
             }
 
             let amountFromGlobalTiles = 0;
-            tileMap.forEachTile(t => {
+            for (const t of tileMap.getAllTiles()) {
                 if (t.getPlayerIndex() === target.getPlayerIndex()) {
                     amountFromGlobalTiles += t.getGlobalDefenseBonus() || 0;
                 }
-            });
+            }
 
             return getDamageMultiplierForDefenseBonus(amountFromTile + amountFromPromotion + amountFromCo + amountFromGlobalTiles);
         }

@@ -3058,12 +3058,12 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
 
                 const gridVisionEffect  = war.getGridVisionEffect();
                 const playerIndex       = focusUnit.getPlayerIndex();
-                unitMap.forEachUnitOnMap(unit => {
+                for (const unit of unitMap.getAllUnitsOnMap()) {
                     unit.updateView();
                     if (unit.getPlayerIndex() === playerIndex) {
                         gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
                     }
-                });
+                }
 
                 const configVersion = war.getConfigVersion();
                 const mapSize       = unitMap.getMapSize();
@@ -3158,12 +3158,12 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
 
                 const gridVisionEffect  = war.getGridVisionEffect();
                 const playerIndex       = focusUnit.getPlayerIndex();
-                unitMap.forEachUnitOnMap(unit => {
+                for (const unit of unitMap.getAllUnitsOnMap()) {
                     unit.updateView();
                     if (unit.getPlayerIndex() === playerIndex) {
                         gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
                     }
-                });
+                }
 
                 const configVersion = war.getConfigVersion();
                 const mapSize       = unitMap.getMapSize();

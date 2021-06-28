@@ -61,7 +61,7 @@ namespace TinyWars.Utility.DestructionHelpers {
         const tileMap           = war.getTileMap();
         const gridVisionEffect  = showExplosionEffect ? war.getGridVisionEffect() : undefined;
         let hasRemovedUnit      = false;
-        unitMap.forEachUnitOnMap(unit => {
+        for (const unit of unitMap.getAllUnitsOnMap()) {
             if (unit.getPlayerIndex() === playerIndex) {
                 hasRemovedUnit = true;
 
@@ -70,7 +70,7 @@ namespace TinyWars.Utility.DestructionHelpers {
                 tileMap.getTile(gridIndex).updateOnUnitLeave();
                 (gridVisionEffect) && (gridVisionEffect.showEffectExplosion(gridIndex));
             }
-        });
+        }
         unitMap.removeUnitsLoadedForPlayer(playerIndex);
         if ((showExplosionEffect) && (hasRemovedUnit)) {
             const warView = war.getView();

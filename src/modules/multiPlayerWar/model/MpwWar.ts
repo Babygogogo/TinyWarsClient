@@ -15,8 +15,6 @@ namespace TinyWars.MultiPlayerWar {
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
 
-        public abstract getSettingsBootTimerParams(): number[] | null | undefined;
-
         public getField(): MpwField {
             return this._field;
         }
@@ -39,18 +37,18 @@ namespace TinyWars.MultiPlayerWar {
         public updateTilesAndUnitsOnVisibilityChanged(): void {
             const watcherTeamIndexes    = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const visibleUnitsOnMap     = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
-            this.getUnitMap().forEachUnitOnMap(unit => {
+            for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 if (visibleUnitsOnMap.has(unit)) {
                     unit.setViewVisible(true);
                 } else {
                     DestructionHelpers.removeUnitOnMap(this, unit.getGridIndex());
                 }
-            });
+            }
             DestructionHelpers.removeInvisibleLoadedUnits(this, watcherTeamIndexes);
 
             const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(this, watcherTeamIndexes);
             const tileMap       = this.getTileMap();
-            tileMap.forEachTile(tile => {
+            for (const tile of tileMap.getAllTiles()) {
                 if (visibleTiles.has(tile)) {
                     tile.setHasFog(false);
                 } else {
@@ -59,7 +57,7 @@ namespace TinyWars.MultiPlayerWar {
                     }
                 }
                 tile.flushDataToView();
-            });
+            }
             tileMap.getView().updateCoZone();
         }
 
@@ -170,17 +168,6 @@ namespace TinyWars.MultiPlayerWar {
                 return null;
             } else {
                 return (this.getEnterTurnTime() + player.getRestTimeToBoot() - Time.TimeModel.getServerTimestamp()) || null;
-            }
-        }
-
-        public checkIsBoot(): boolean {
-            if (this.getIsEnded()) {
-                return false;
-            } else {
-                const player = this.getPlayerInTurn();
-                return (player.getAliveState() === Types.PlayerAliveState.Alive)
-                    && (!player.checkIsNeutral())
-                    && (Time.TimeModel.getServerTimestamp() > this.getEnterTurnTime() + player.getRestTimeToBoot());
             }
         }
 

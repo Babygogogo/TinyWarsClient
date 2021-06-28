@@ -43,7 +43,7 @@ namespace TinyWars.BaseWar {
             baseLayer.removeChildren();
             objectLayer.removeChildren();
 
-            tileMap.forEachTile(tile => {
+            for (const tile of tileMap.getAllTiles()) {
                 const view  = tile.getView();
                 const x     = GRID_WIDTH * tile.getGridX();
                 const y     = GRID_HEIGHT * (tile.getGridY() + 1);
@@ -58,7 +58,7 @@ namespace TinyWars.BaseWar {
                 imgObject.x     = x;
                 imgObject.y     = y;
                 objectLayer.addChild(imgObject);
-            });
+            }
 
             const { width: mapWidth, height: mapHeight }    = tileMap.getMapSize();
             const borderWidth                               = mapWidth * GRID_WIDTH;

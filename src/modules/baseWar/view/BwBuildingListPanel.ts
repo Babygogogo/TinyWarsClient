@@ -59,7 +59,7 @@ namespace TinyWars.BaseWar {
         private _updateListTile(): void {
             const dict  = new Map<number, Map<number, number>>();
             const war   = this._getOpenData().war;
-            war.getTileMap().forEachTile(tile => {
+            for (const tile of war.getTileMap().getAllTiles()) {
                 if (tile.getMaxCapturePoint() != null) {
                     const tileType = tile.getType();
                     if (!dict.has(tileType)) {
@@ -69,7 +69,7 @@ namespace TinyWars.BaseWar {
                     const subDict       = dict.get(tileType);
                     subDict.set(playerIndex, (subDict.get(playerIndex) || 0) + 1);
                 }
-            });
+            }
 
             const dataList      : DataForTileRenderer[] = [];
             const playerManager = war.getPlayerManager();

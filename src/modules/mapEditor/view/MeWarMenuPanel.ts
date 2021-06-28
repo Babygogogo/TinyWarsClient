@@ -253,7 +253,7 @@ namespace TinyWars.MapEditor {
         private _updateListTile(): void {
             const dictForTileBases      = new Map<TileBaseType, DataForTileRenderer>();
             const dictForTileObjects    = new Map<TileObjectType, DataForTileRenderer>();
-            this._war.getTileMap().forEachTile(tile => {
+            for (const tile of this._war.getTileMap().getAllTiles()) {
                 const tileObjectType    = tile.getObjectType();
                 const tileBaseType      = tile.getBaseType();
                 const tileType          = tile.getType();
@@ -284,7 +284,7 @@ namespace TinyWars.MapEditor {
                         });
                     }
                 }
-            });
+            }
 
             const dataList : DataForTileRenderer[] = [];
             for (const [k, v] of dictForTileBases) {
@@ -304,7 +304,7 @@ namespace TinyWars.MapEditor {
 
         private _updateListUnit(): void {
             const dict = new Map<UnitType, Map<number, DataForUnitRenderer>>();
-            this._war.getUnitMap().forEachUnit(unit => {
+            for (const unit of this._war.getUnitMap().getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (!dict.has(unitType)) {
                     dict.set(unitType, new Map());
@@ -323,7 +323,7 @@ namespace TinyWars.MapEditor {
                         },
                     });
                 }
-            });
+            }
 
             const dataList: DataForUnitRenderer[] = [];
             for (const [, subDict] of dict) {
@@ -455,7 +455,7 @@ namespace TinyWars.MapEditor {
                         }
                     }
                 },
-            }
+            };
         }
 
         private _createCommandWarEvent(): DataForCommandRenderer | null {
@@ -467,7 +467,7 @@ namespace TinyWars.MapEditor {
                     });
                     this.close();
                 },
-            }
+            };
         }
 
         private _createCommandMapTag(): DataForCommandRenderer | null {
@@ -476,7 +476,7 @@ namespace TinyWars.MapEditor {
                 callback: () => {
                     MeMapTagPanel.show();
                 },
-            }
+            };
         }
 
         private _createCommandReviewAccept(): DataForCommandRenderer | null {
@@ -514,7 +514,7 @@ namespace TinyWars.MapEditor {
                     this.close();
                     Chat.ChatPanel.show({});
                 },
-            }
+            };
         }
 
         private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
@@ -527,7 +527,7 @@ namespace TinyWars.MapEditor {
                         callback: () => FlowManager.gotoLobby(),
                     });
                 },
-            }
+            };
         }
 
         private _createCommandSimulation(): DataForCommandRenderer | null {
@@ -678,7 +678,7 @@ namespace TinyWars.MapEditor {
     type DataForCommandRenderer = {
         name    : string;
         callback: () => void;
-    }
+    };
 
     class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
         private _group      : eui.Group;
@@ -704,7 +704,7 @@ namespace TinyWars.MapEditor {
         count       : number;
         tileType    : Types.TileType;
         playerIndex : number;
-    }
+    };
 
     class TileRenderer extends GameUi.UiListItemRenderer<DataForTileRenderer> {
         private _group          : eui.Group;
@@ -745,7 +745,7 @@ namespace TinyWars.MapEditor {
     type DataForUnitRenderer = {
         count           : number;
         dataForDrawUnit : DataForDrawUnit;
-    }
+    };
 
     class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
         private _group          : eui.Group;

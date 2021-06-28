@@ -114,6 +114,10 @@ namespace TinyWars.MapEditor {
             return MeWarMenuPanel.getIsOpening();
         }
 
+        public getSettingsBootTimerParams(): number[] | null | undefined {
+            return [Types.BootTimerType.NoBoot];
+        }
+
         public getPlayerManager(): MePlayerManager {
             return this._playerManager;
         }

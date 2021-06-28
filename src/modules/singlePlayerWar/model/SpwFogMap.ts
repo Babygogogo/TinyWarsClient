@@ -8,16 +8,15 @@ namespace TinyWars.SinglePlayerWar {
 
             const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes);
-            war.getUnitMap().forEachUnitOnMap(unit => {
+            for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
-            });
+            }
 
-            const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(war, teamIndexes);
-            const tileMap       = war.getTileMap();
-            tileMap.forEachTile(tile => {
+            const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeams(war, teamIndexes);
+            for (const tile of war.getTileMap().getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
                 tile.flushDataToView();
-            });
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ namespace TinyWars.BaseWar {
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
+    import TimeModel        = Time.TimeModel;
     import ClientErrorCode  = Utility.ClientErrorCode;
     import WarAction        = ProtoTypes.WarAction;
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
@@ -32,6 +33,7 @@ namespace TinyWars.BaseWar {
         public abstract getField(): BwField;
         public abstract getCommonSettingManager(): BwCommonSettingManager;
         public abstract getWarEventManager(): BaseWar.BwWarEventManager;
+        public abstract getSettingsBootTimerParams(): number[] | null | undefined;
         public abstract updateTilesAndUnitsOnVisibilityChanged(): void;
         public abstract getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | undefined>;
         public abstract getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | undefined>;
@@ -299,8 +301,40 @@ namespace TinyWars.BaseWar {
             return this._isEnded;
         }
 
-        public checkIsBoot(): boolean {
-            return false;
+        public checkIsBoot(): boolean | undefined {
+            if (this.getIsEnded()) {
+                return false;
+            }
+
+            const player = this.getPlayerInTurn();
+            if (player == null) {
+                Logger.error(`BwWar.checkIsBoot() empty player.`);
+                return undefined;
+            }
+
+            const restTimeToBoot = player.getRestTimeToBoot();
+            if (restTimeToBoot == null) {
+                Logger.error(`BwWar.checkIsBoot() empty restTimeToBoot.`);
+                return undefined;
+            }
+
+            const enterTurnTime = this.getEnterTurnTime();
+            if (enterTurnTime == null) {
+                Logger.error(`BwWar.checkIsBoot() empty enterTurnTime.`);
+                return undefined;
+            }
+
+            const bootTimeParams = this.getSettingsBootTimerParams();
+            if ((bootTimeParams == null) || (!bootTimeParams.length)) {
+                Logger.error(`BwWar.checkIsBoot() empty bootTimeParams.`);
+                return undefined;
+            }
+
+            return (bootTimeParams[0] !== Types.BootTimerType.NoBoot)
+                && (player.getUserId() != null)
+                && (player.getAliveState() === Types.PlayerAliveState.Alive)
+                && (!player.checkIsNeutral())
+                && (TimeModel.getServerTimestamp() > enterTurnTime + restTimeToBoot);
         }
 
         private _setWarId(warId: number | null | undefined): void {

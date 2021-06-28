@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar.BwCoSkillHelper {
     import Types                    = Utility.Types;
     import ProtoTypes               = Utility.ProtoTypes;
@@ -14,12 +15,12 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
     type DamageMaps = {
         hpMap   : number[][];
         fundMap : number[][];
-    }
+    };
     type ValueMaps = {
         hpMap       : number[][];
         fundMap     : number[][];
         sameTeamMap : boolean[][];
-    }
+    };
 
     export function exeInstantSkill(war: BwWar, player: BwPlayer, gridIndex: GridIndex, skillId: number, extraData: IDataForUseCoSkill): void {
         const configVersion = war.getConfigVersion();
@@ -87,7 +88,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
             const category  = cfg[1];
             const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeSelfHpGain() empty unitType.`);
@@ -124,7 +125,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
                         ),
                     ));
                 }
-            });
+            }
         }
     }
 
@@ -151,7 +152,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
             const category  = cfg[1];
             const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeEnemyHpGain() empty unitType.`);
@@ -188,7 +189,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
                         ),
                     ));
                 }
-            });
+            }
         }
     }
 
@@ -215,7 +216,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
             const category  = cfg[1];
             const modifier  = cfg[2];
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeSelfFuelGain() empty unitType.`);
@@ -256,7 +257,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
                         ));
                     }
                 }
-            });
+            }
         }
     }
 
@@ -283,7 +284,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
             const category  = cfg[1];
             const modifier  = cfg[2];
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeEnemyFuelGain() empty unitType.`);
@@ -324,7 +325,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
                         ));
                     }
                 }
-            });
+            }
         }
     }
 
@@ -351,7 +352,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
             const category  = cfg[1];
             const modifier  = cfg[2];
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 const maxBuildMaterial      = unit.getMaxBuildMaterial();
                 const maxProduceMaterial    = unit.getMaxProduceMaterial();
                 if ((maxBuildMaterial == null) && (maxProduceMaterial == null)) {
@@ -414,7 +415,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
                         }
                     }
                 }
-            });
+            }
         }
     }
 
@@ -441,7 +442,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
             const category  = cfg[1];
             const modifier  = cfg[2];
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 const maxBuildMaterial      = unit.getMaxBuildMaterial();
                 const maxProduceMaterial    = unit.getMaxProduceMaterial();
                 if ((maxBuildMaterial == null) && (maxProduceMaterial == null)) {
@@ -504,7 +505,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
                         }
                     }
                 }
-            });
+            }
         }
     }
 
@@ -531,7 +532,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
             const category  = cfg[1];
             const modifier  = cfg[2];
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                 if (maxAmmo == null) {
                     return;
@@ -571,7 +572,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
                         ));
                     }
                 }
-            });
+            }
         }
     }
 
@@ -598,7 +599,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
             const category  = cfg[1];
             const modifier  = cfg[2];
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
                 if (maxAmmo == null) {
                     return;
@@ -638,7 +639,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
                         ));
                     }
                 }
-            });
+            }
         }
     }
 
@@ -709,7 +710,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
 
             const category  = cfg[1];
             const modifier  = cfg[2];
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (unitType == null) {
                     Logger.error(`BwCoSkillHelpers.exeSelfPromotionGain() empty unitType.`);
@@ -740,7 +741,7 @@ namespace TinyWars.BaseWar.BwCoSkillHelper {
                         ),
                     ));
                 }
-            });
+            }
         }
     }
 

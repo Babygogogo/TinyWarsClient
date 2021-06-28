@@ -9473,9 +9473,6 @@ export declare namespace WarAction {
         /** Properties of an ExtraDataForSystemBeginTurn. */
         interface IExtraDataForSystemBeginTurn {
 
-            /** ExtraDataForSystemBeginTurn remainingFund */
-            remainingFund?: (number|null);
-
             /** ExtraDataForSystemBeginTurn recoveryDataByTile */
             recoveryDataByTile?: (Structure.IDataForModifyUnit[]|null);
 
@@ -9484,6 +9481,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForSystemBeginTurn recoveryDataByCo */
             recoveryDataByCo?: (Structure.IDataForModifyUnit[]|null);
+
+            /** ExtraDataForSystemBeginTurn playerData */
+            playerData?: (WarSerialization.ISerialPlayer|null);
         }
 
         /** Represents an ExtraDataForSystemBeginTurn. */
@@ -9495,9 +9495,6 @@ export declare namespace WarAction {
              */
             constructor(properties?: WarAction.WarActionSystemBeginTurn.IExtraDataForSystemBeginTurn);
 
-            /** ExtraDataForSystemBeginTurn remainingFund. */
-            public remainingFund: number;
-
             /** ExtraDataForSystemBeginTurn recoveryDataByTile. */
             public recoveryDataByTile: Structure.IDataForModifyUnit[];
 
@@ -9506,6 +9503,9 @@ export declare namespace WarAction {
 
             /** ExtraDataForSystemBeginTurn recoveryDataByCo. */
             public recoveryDataByCo: Structure.IDataForModifyUnit[];
+
+            /** ExtraDataForSystemBeginTurn playerData. */
+            public playerData?: (WarSerialization.ISerialPlayer|null);
 
             /**
              * Creates a new ExtraDataForSystemBeginTurn instance using the specified properties.

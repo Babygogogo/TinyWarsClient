@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar {
     import Types                = Utility.Types;
     import Helpers              = Utility.Helpers;
@@ -14,16 +15,16 @@ namespace TinyWars.BaseWar {
     import ISerialUnit          = WarSerialization.ISerialUnit;
 
     export class BwUnitMap {
-        private _war            : BwWar;
-        private _nextUnitId     : number;
-        private _map            : (BwUnit | undefined)[][];
-        private _mapSize        : Types.MapSize;
-        private _loadedUnits    : Map<number, BwUnit>;
+        private _war            : BwWar | undefined;
+        private _nextUnitId     : number | undefined;
+        private _map            : (BwUnit | undefined)[][] | undefined;
+        private _mapSize        : Types.MapSize | undefined;
+        private _loadedUnits    : Map<number, BwUnit> | undefined;
 
         private readonly _view  = new BwUnitMapView();
 
         public init({ data, configVersion, mapSize, playersCountUnneutral }: {
-            data                    : ISerialUnitMap;
+            data                    : ISerialUnitMap | null | undefined;
             configVersion           : string;
             mapSize                 : Types.MapSize;
             playersCountUnneutral   : number;
@@ -148,16 +149,16 @@ namespace TinyWars.BaseWar {
 
         public startRunning(war: BwWar): void {
             this._setWar(war);
-            this.forEachUnitOnMap(unit => unit.startRunning(war));
-            this.forEachUnitLoaded(unit => unit.startRunning(war));
+            this._forEachUnitOnMap(unit => unit.startRunning(war));
+            this._forEachUnitLoaded(unit => unit.startRunning(war));
         }
         public startRunningView(): void {
             this.getView().startRunningView();
-            this.forEachUnitOnMap(unit => unit.startRunningView());
-            this.forEachUnitLoaded(unit => unit.startRunningView());
+            this._forEachUnitOnMap(unit => unit.startRunningView());
+            this._forEachUnitLoaded(unit => unit.startRunningView());
         }
         public stopRunning(): void {
-            this.forEachUnit(unit => unit.stopRunning());
+            this._forEachUnit(unit => unit.stopRunning());
             this.getView().stopRunningView();
         }
 
@@ -371,7 +372,7 @@ namespace TinyWars.BaseWar {
         }
         public getUnitsLoadedByLoader(loader: BwUnit, isRecursive: boolean): BwUnit[] {
             const units: BwUnit[] = [];
-            this.forEachUnitLoaded((unit: BwUnit) => {
+            this._forEachUnitLoaded((unit: BwUnit) => {
                 if (unit.getLoaderUnitId() === loader.getUnitId()) {
                     units.push(unit);
                     (isRecursive) && (units.push(...this.getUnitsLoadedByLoader(unit, isRecursive)));
@@ -380,14 +381,19 @@ namespace TinyWars.BaseWar {
             return units;
         }
 
-        private _getAllUnitsOnMap(): BwUnit[] {
+        public getAllUnitsOnMap(): BwUnit[] {
             const units: BwUnit[] = [];
-            this.forEachUnitOnMap(unit => units.push(unit));
+            this._forEachUnitOnMap(unit => units.push(unit));
+            return units;
+        }
+        public getAllUnitsLoaded(): BwUnit[] {
+            const units: BwUnit[] = [];
+            this._forEachUnitLoaded(unit => units.push(unit));
             return units;
         }
         public getAllUnits(): BwUnit[] {
-            const units = this._getAllUnitsOnMap();
-            this.forEachUnitLoaded(unit => units.push(unit));
+            const units = this.getAllUnitsOnMap();
+            this._forEachUnitLoaded(unit => units.push(unit));
             return units;
         }
 
@@ -468,18 +474,18 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public forEachUnit(func: (unit: BwUnit) => any): void {
-            this.forEachUnitOnMap(func);
-            this.forEachUnitLoaded(func);
+        private _forEachUnit(func: (unit: BwUnit) => any): void {
+            this._forEachUnitOnMap(func);
+            this._forEachUnitLoaded(func);
         }
-        public forEachUnitOnMap(func: (unit: BwUnit) => any): void {
+        private _forEachUnitOnMap(func: (unit: BwUnit) => any): void {
             for (const column of this._map) {
                 for (const unit of column) {
                     (unit) && (func(unit));
                 }
             }
         }
-        public forEachUnitLoaded(func: (unit: BwUnit) => any): void {
+        private _forEachUnitLoaded(func: (unit: BwUnit) => any): void {
             for (const [, unit] of this._loadedUnits) {
                 func(unit);
             }
@@ -487,7 +493,7 @@ namespace TinyWars.BaseWar {
 
         public countUnitsOnMapForPlayer(playerIndex: number): number {
             let count = 0;
-            this.forEachUnitOnMap(unit => {
+            this._forEachUnitOnMap(unit => {
                 (unit.getPlayerIndex() === playerIndex) && (++count);
             });
             return count;
@@ -506,7 +512,7 @@ namespace TinyWars.BaseWar {
 
         public checkIsCoLoadedByAnyUnit(playerIndex: number): boolean | undefined {
             return (this.checkIsCoLoadedByAnyUnitOnMap(playerIndex))
-                || (this.checkIsCoLoadedByAnyUnitLoaded(playerIndex))
+                || (this.checkIsCoLoadedByAnyUnitLoaded(playerIndex));
         }
         public checkIsCoLoadedByAnyUnitLoaded(playerIndex: number): boolean | undefined {
             const units = this.getLoadedUnits();
@@ -515,7 +521,7 @@ namespace TinyWars.BaseWar {
                 return undefined;
             }
 
-            for (const [_, unit] of units) {
+            for (const [, unit] of units) {
                 if ((unit.getPlayerIndex() === playerIndex) && (unit.getHasLoadedCo())) {
                     return true;
                 }
@@ -570,7 +576,7 @@ namespace TinyWars.BaseWar {
             }
 
             const coUnits: BwUnit[] = [];
-            for (const [_, unit] of loadedUnits) {
+            for (const [, unit] of loadedUnits) {
                 if ((unit.getPlayerIndex() === playerIndex) && (unit.getHasLoadedCo())) {
                     coUnits.push(unit);
                 }

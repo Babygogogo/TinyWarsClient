@@ -572,6 +572,7 @@ namespace TinyWars.Utility.Types {
 
     // eslint-disable-next-line no-shadow
     export const enum BootTimerType {
+        NoBoot      = 0,
         Regular     = 1,
         Incremental = 2,
     }

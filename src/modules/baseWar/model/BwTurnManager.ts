@@ -213,10 +213,7 @@ namespace TinyWars.BaseWar {
             }
 
             if ((playerIndex !== CommonConstants.WarNeutralPlayerIndex) && (turnIndex > CommonConstants.WarFirstTurnIndex)) {
-                const unitArray: BwUnit[] = [];
-                war.getUnitMap().forEachUnitOnMap(unit => unitArray.push(unit));
-
-                for (const unit of unitArray) {
+                for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
                     if (unit.getPlayerIndex() === playerIndex) {
                         const currentFuel = unit.getCurrentFuel();
                         if (currentFuel == null) {
@@ -243,11 +240,8 @@ namespace TinyWars.BaseWar {
                     return ClientErrorCode.BwTurnManager_RunPhaseDestroyUnitOutOfFuel_00;
                 }
 
-                const unitArray: BwUnit[] = [];
-                war.getUnitMap().forEachUnitOnMap(unit => unitArray.push(unit));
-
                 const fogMap = war.getFogMap();
-                for (const unit of unitArray) {
+                for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
                     const currentFuel = unit.getCurrentFuel();
                     if (currentFuel == null) {
                         return ClientErrorCode.BwTurnManager_RunPhaseDestroyUnitOutOfFuel_01;
@@ -285,12 +279,12 @@ namespace TinyWars.BaseWar {
                     return ClientErrorCode.BwTurnManager_RunPhaseResetUnitState_01;
                 }
 
-                war.getUnitMap().forEachUnit(unit => {
+                for (const unit of war.getUnitMap().getAllUnits()) {
                     if (unit.getPlayerIndex() === playerIndex) {
                         unit.setActionState(Types.UnitActionState.Idle);
                         unit.updateView();
                     }
-                });
+                }
             }
 
             return ClientErrorCode.NoError;
@@ -436,7 +430,7 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        protected _getHasUnitOnBeginningTurn(): boolean {
+        public getHasUnitOnBeginningTurn(): boolean {
             return this._hasUnitOnBeginningTurn;
         }
         public setHasUnitOnBeginningTurn(hasUnit: boolean): void {

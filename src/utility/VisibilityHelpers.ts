@@ -113,7 +113,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
         const unitMap   = war.getUnitMap();
         const tileMap   = war.getTileMap();
         const units     = new Set<BaseWar.BwUnit>();
-        unitMap.forEachUnitOnMap(unit => {
+        for (const unit of unitMap.getAllUnitsOnMap()) {
             const gridIndex = unit.getGridIndex();
             if (gridIndex == null) {
                 Logger.error(`VisibilityHelpers.getAllUnitsOnMapVisibleToTeams() empty gridIndex.`);
@@ -166,7 +166,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
                     }
                 }
             }
-        });
+        }
         return units;
     }
     // export function getAllUnitsOnMapVisibleToUser(war: BaseWar.BwWar, userId: number): Set<BaseWar.BwUnit> {
@@ -278,7 +278,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
         const tiles                 = new Set<BaseWar.BwTile>();
         const hasFog                = fogMap.checkHasFogCurrently();
 
-        tileMap.forEachTile(tile => {
+        for (const tile of tileMap.getAllTiles()) {
             const gridIndex = tile.getGridIndex();
             if ((!hasFog)                                                                               ||
                 (observerTeamIndexes.has(tile.getTeamIndex()))                                          ||
@@ -299,7 +299,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
                     tiles.add(tile);
                 }
             }
-        });
+        }
         return tiles;
     }
     export function getAllTilesVisibleToTeams(war: BaseWar.BwWar, teamIndexes: Set<number>): Set<BaseWar.BwTile> {
@@ -312,7 +312,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
         const tiles                 = new Set<BaseWar.BwTile>();
         const hasFog                = fogMap.checkHasFogCurrently();
 
-        tileMap.forEachTile(tile => {
+        for (const tile of tileMap.getAllTiles()) {
             const gridIndex = tile.getGridIndex();
             if ((!hasFog)                                                                       ||
                 (teamIndexes.has(tile.getTeamIndex()))                                          ||
@@ -333,7 +333,7 @@ namespace TinyWars.Utility.VisibilityHelpers {
                     tiles.add(tile);
                 }
             }
-        });
+        }
         return tiles;
     }
     // export function getAllTilesVisibleToUser(war: BaseWar.BwWar, userId: number): Set<BaseWar.BwTile> {

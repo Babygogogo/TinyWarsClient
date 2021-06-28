@@ -20,16 +20,8 @@ namespace TinyWars.MultiPlayerWar {
         protected _runPhaseRecoverUnitByCo(data: IWarActionSystemBeginTurn): ClientErrorCode {
             return BwTurnManagerHelper.runPhaseRecoverUnitByCoWithExtraData(this, data);
         }
-        protected _runPhaseMain(): ClientErrorCode {
-            const war = this.getWar();
-            if (war == null) {
-                return ClientErrorCode.MpwTurnManager_RunPhaseMain_00;
-            }
-
-            const playerIndex = this.getPlayerIndexInTurn();
-            war.getUnitMap().forEachUnitOnMap(unit => (unit.getPlayerIndex() === playerIndex) && (unit.updateView()));
-
-            return ClientErrorCode.NoError;
+        protected _runPhaseMain(data: IWarActionSystemBeginTurn): ClientErrorCode {
+            return BwTurnManagerHelper.runPhaseMainWithExtraData(this, data);
         }
 
         protected _runPhaseTickTurnAndPlayerIndex(data: IWarActionPlayerEndTurn): ClientErrorCode {

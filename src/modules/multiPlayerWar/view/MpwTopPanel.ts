@@ -333,19 +333,19 @@ namespace TinyWars.MultiPlayerWar {
             const hints         = new Array<string>();
 
             let idleUnitsCount = 0;
-            unitMap.forEachUnitOnMap(unit => {
+            for (const unit of unitMap.getAllUnitsOnMap()) {
                 if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
                     ++idleUnitsCount;
                 }
-            });
+            }
             (idleUnitsCount) && (hints.push(Lang.getFormattedText(Lang.Type.F0006, idleUnitsCount)));
 
             let idleBuildingsCount = 0;
-            war.getTileMap().forEachTile(tile => {
+            for (const tile of war.getTileMap().getAllTiles()) {
                 if ((tile.checkIsUnitProducerForPlayer(playerIndex)) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
                     ++idleBuildingsCount;
                 }
-            });
+            }
             (idleBuildingsCount) && (hints.push(Lang.getFormattedText(Lang.Type.F0007, idleBuildingsCount)));
 
             hints.push(Lang.getText(Lang.Type.A0024));

@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.SingleRankWar {
     import Types            = Utility.Types;
     import ClientErrorCode  = Utility.ClientErrorCode;
@@ -199,6 +200,10 @@ namespace TinyWars.SingleRankWar {
 
         public getCanCheat(): boolean {
             return false;
+        }
+
+        public getSettingsBootTimerParams(): number[] | null | undefined {
+            return [Types.BootTimerType.NoBoot];
         }
 
         private _setSettingsForSrw(settings: ISettingsForSrw): void {

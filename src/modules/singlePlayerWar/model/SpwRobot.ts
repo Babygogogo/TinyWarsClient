@@ -559,9 +559,6 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
             globalDefenseBonuses.set(playerIndex, 0);
         }
 
-        const tileArray: BwTile[] = [];
-        war.getTileMap().forEachTile(tile => tileArray.push(tile));
-
         for (const tile of war.getTileMap().getAllTiles()) {
             const playerIndex = tile.getPlayerIndex();
             if (playerIndex == null) {
@@ -1027,7 +1024,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
         const { war, playerIndexInTurn }    = commonParams;
         const units                         : BwUnit[] = [];
-        war.getUnitMap().forEachUnitOnMap((unit: BwUnit) => {
+        for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
             if ((unit.getPlayerIndex() === playerIndexInTurn) &&
                 (unit.getActionState() === UnitActionState.Idle)
             ) {
@@ -1036,7 +1033,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                     units.push(unit);
                 }
             }
-        });
+        }
         return units;
     }
     // async function _getCandidateUnitsForPhase1a(commonParams: CommonParams): Promise<BwUnit[]> {
@@ -1059,14 +1056,14 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
         const { war, playerIndexInTurn }    = commonParams;
         const units                         : BwUnit[] = [];
-        war.getUnitMap().forEachUnitOnMap((unit: BwUnit) => {
+        for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
             if ((unit.getPlayerIndex() === playerIndexInTurn)       &&
                 (unit.getActionState() === UnitActionState.Idle)    &&
                 (unit.getIsCapturingTile())
             ) {
                 units.push(unit);
             }
-        });
+        }
 
         return units;
     }
@@ -1091,7 +1088,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
 
         const { war, playerIndexInTurn }    = commonParams;
         const units                         : BwUnit[] = [];
-        war.getUnitMap().forEachUnitOnMap((unit: BwUnit) => {
+        for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
             if ((unit.getPlayerIndex() === playerIndexInTurn)   &&
                 (unit.getActionState() === UnitActionState.Idle)
             ) {
@@ -1105,7 +1102,7 @@ namespace TinyWars.SinglePlayerWar.SpwRobot {
                     }
                 }
             }
-        });
+        }
 
         return units;
     }

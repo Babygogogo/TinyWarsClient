@@ -293,10 +293,10 @@ namespace TinyWars.MapEditor.MeUtility {
     export function reviseAllUnitIds(unitMap: BaseWar.BwUnitMap): void {
         const allUnits  = new Map<number, { unit: BaseWar.BwUnit, newUnitId: number }>();
         let nextUnitId  = 0;
-        unitMap.forEachUnit(unit => {
+        for (const unit of unitMap.getAllUnits()) {
             allUnits.set(unit.getUnitId(), { unit, newUnitId: nextUnitId } );
             ++nextUnitId;
-        });
+        }
         for (const [, value] of allUnits) {
             const unit = value.unit;
             unit.setUnitId(value.newUnitId);

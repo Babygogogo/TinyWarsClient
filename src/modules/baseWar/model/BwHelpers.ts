@@ -715,7 +715,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const cfg       = skillCfg.selfHpGain;
             const category  = cfg[1];
             const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
                 ) {
@@ -731,14 +731,14 @@ namespace TinyWars.BaseWar.BwHelpers {
                         ));
                     }
                 }
-            });
+            }
         }
 
         if (skillCfg.enemyHpGain) {
             const cfg       = skillCfg.enemyHpGain;
             const category  = cfg[1];
             const modifier  = cfg[2] * CommonConstants.UnitHpNormalizer;
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
                 ) {
@@ -754,14 +754,14 @@ namespace TinyWars.BaseWar.BwHelpers {
                         ));
                     }
                 }
-            });
+            }
         }
 
         if (skillCfg.selfFuelGain) {
             const cfg       = skillCfg.selfFuelGain;
             const category  = cfg[1];
             const modifier  = cfg[2];
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
                 ) {
@@ -784,14 +784,14 @@ namespace TinyWars.BaseWar.BwHelpers {
                         }
                     }
                 }
-            });
+            }
         }
 
         if (skillCfg.enemyFuelGain) {
             const cfg       = skillCfg.enemyFuelGain;
             const category  = cfg[1];
             const modifier  = cfg[2];
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
                 ) {
@@ -814,14 +814,14 @@ namespace TinyWars.BaseWar.BwHelpers {
                         }
                     }
                 }
-            });
+            }
         }
 
         if (skillCfg.selfMaterialGain) {
             const cfg       = skillCfg.selfMaterialGain;
             const category  = cfg[1];
             const modifier  = cfg[2];
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
                 ) {
@@ -859,14 +859,14 @@ namespace TinyWars.BaseWar.BwHelpers {
                         }
                     }
                 }
-            });
+            }
         }
 
         if (skillCfg.enemyMaterialGain) {
             const cfg       = skillCfg.enemyMaterialGain;
             const category  = cfg[1];
             const modifier  = cfg[2];
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
                 ) {
@@ -904,14 +904,14 @@ namespace TinyWars.BaseWar.BwHelpers {
                         }
                     }
                 }
-            });
+            }
         }
 
         if (skillCfg.selfPrimaryAmmoGain) {
             const cfg       = skillCfg.selfPrimaryAmmoGain;
             const category  = cfg[1];
             const modifier  = cfg[2];
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
                 ) {
@@ -934,14 +934,14 @@ namespace TinyWars.BaseWar.BwHelpers {
                         }
                     }
                 }
-            });
+            }
         }
 
         if (skillCfg.enemyPrimaryAmmoGain) {
             const cfg       = skillCfg.enemyPrimaryAmmoGain;
             const category  = cfg[1];
             const modifier  = cfg[2];
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 if ((unit.getPlayerIndex() !== playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
                 ) {
@@ -964,7 +964,7 @@ namespace TinyWars.BaseWar.BwHelpers {
                         }
                     }
                 }
-            });
+            }
         }
 
         if (skillCfg.indiscriminateAreaDamage) {
@@ -987,7 +987,7 @@ namespace TinyWars.BaseWar.BwHelpers {
             const category      = cfg[1];
             const modifier      = cfg[2];
             const maxPromotion  = ConfigManager.getUnitMaxPromotion(configVersion);
-            unitMap.forEachUnit(unit => {
+            for (const unit of unitMap.getAllUnits()) {
                 if ((unit.getPlayerIndex() === playerIndex)                                         &&
                     (ConfigManager.checkIsUnitTypeInCategory(configVersion, unit.getUnitType(), category))
                 ) {
@@ -1003,7 +1003,7 @@ namespace TinyWars.BaseWar.BwHelpers {
                         ));
                     }
                 }
-            });
+            }
         }
 
         return ClientErrorCode.NoError;

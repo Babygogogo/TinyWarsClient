@@ -84,10 +84,10 @@ namespace TinyWars.ReplayWar {
 
             const tileMap       = this.getTileMap();
             const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeam(this, this.getPlayerInTurn().getTeamIndex());
-            tileMap.forEachTile(tile => {
+            for (const tile of tileMap.getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
                 tile.flushDataToView();
-            });
+            }
             tileMap.getView().updateCoZone();
         }
 
@@ -309,6 +309,10 @@ namespace TinyWars.ReplayWar {
         }
         public getIsWarMenuPanelOpening(): boolean {
             return RwWarMenuPanel.getIsOpening();
+        }
+
+        public getSettingsBootTimerParams(): number[] | null | undefined {
+            return [Types.BootTimerType.NoBoot];
         }
 
         private _getSettingsForMcw(): ProtoTypes.WarSettings.ISettingsForMcw {

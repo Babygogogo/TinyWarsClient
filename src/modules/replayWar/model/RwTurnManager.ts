@@ -18,15 +18,7 @@ namespace TinyWars.ReplayWar {
             return BwTurnManagerHelper.runPhaseRecoverUnitByCoWithoutExtraData(this);
         }
         protected _runPhaseMain(): ClientErrorCode {
-            const war = this.getWar();
-            if (war == null) {
-                return ClientErrorCode.RwTurnManager_RunPhaseMain_00;
-            }
-
-            const playerIndex = this.getPlayerIndexInTurn();
-            war.getUnitMap().forEachUnitOnMap(unit => (unit.getPlayerIndex() === playerIndex) && (unit.updateView()));
-
-            return ClientErrorCode.NoError;
+            return BwTurnManagerHelper.runPhaseMainWithoutExtraData(this);
         }
 
         protected _runPhaseTickTurnAndPlayerIndex(): ClientErrorCode {

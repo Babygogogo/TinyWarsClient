@@ -22,16 +22,16 @@ namespace TinyWars.SinglePlayerWar {
         public updateTilesAndUnitsOnVisibilityChanged(): void {
             const teamIndexes   = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
-            this.getUnitMap().forEachUnitOnMap(unit => {
+            for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
-            });
+            }
 
             const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
             const tileMap       = this.getTileMap();
-            tileMap.forEachTile(tile => {
+            for (const tile of tileMap.getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
                 tile.flushDataToView();
-            });
+            }
             tileMap.getView().updateCoZone();
         }
 
