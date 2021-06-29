@@ -11,6 +11,7 @@ namespace TinyWars.BaseWar {
     import ISerialWar       = ProtoTypes.WarSerialization.ISerialWar;
 
     export abstract class BwWar {
+        private readonly _turnManager           = new BwTurnManager();
         private readonly _executedActionManager = new BwExecutedActionManager();
         private readonly _randomNumberManager   = new BwRandomNumberManager();
         private readonly _drawVoteManager       = new BwDrawVoteManager();
@@ -29,11 +30,11 @@ namespace TinyWars.BaseWar {
         public abstract getIsWarMenuPanelOpening(): boolean;
         public abstract getCanCheat(): boolean;
         public abstract getPlayerManager(): BwPlayerManager;
-        public abstract getTurnManager(): BwTurnManager;
         public abstract getField(): BwField;
         public abstract getCommonSettingManager(): BwCommonSettingManager;
         public abstract getWarEventManager(): BaseWar.BwWarEventManager;
         public abstract getSettingsBootTimerParams(): number[] | null | undefined;
+        public abstract getIsRunTurnPhaseWithExtraData(): boolean;
         public abstract updateTilesAndUnitsOnVisibilityChanged(): void;
         public abstract getDescForExePlayerDeleteUnit(action: WarAction.IWarActionPlayerDeleteUnit): Promise<string | undefined>;
         public abstract getDescForExePlayerEndTurn(action: WarAction.IWarActionPlayerEndTurn): Promise<string | undefined>;
@@ -368,6 +369,9 @@ namespace TinyWars.BaseWar {
             return this.getTurnManager().getPlayerIndexInTurn();
         }
 
+        public getTurnManager(): BwTurnManager {
+            return this._turnManager;
+        }
         public getFogMap(): BwFogMap {
             return this.getField().getFogMap();
         }

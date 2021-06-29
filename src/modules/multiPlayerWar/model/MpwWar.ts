@@ -10,7 +10,6 @@ namespace TinyWars.MultiPlayerWar {
 
     export abstract class MpwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new MpwPlayerManager();
-        private readonly _turnManager           = new MpwTurnManager();
         private readonly _field                 = new MpwField();
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
@@ -20,9 +19,6 @@ namespace TinyWars.MultiPlayerWar {
         }
         public getPlayerManager(): MpwPlayerManager {
             return this._playerManager;
-        }
-        public getTurnManager(): MpwTurnManager {
-            return this._turnManager;
         }
         public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
@@ -169,6 +165,10 @@ namespace TinyWars.MultiPlayerWar {
             } else {
                 return (this.getEnterTurnTime() + player.getRestTimeToBoot() - Time.TimeModel.getServerTimestamp()) || null;
             }
+        }
+
+        public getIsRunTurnPhaseWithExtraData(): boolean {
+            return true;
         }
 
         public getPlayerIndexLoggedIn(): number | undefined {

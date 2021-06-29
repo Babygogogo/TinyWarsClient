@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.ReplayWar {
     import Types                = Utility.Types;
     import Notify               = Utility.Notify;
@@ -21,7 +22,6 @@ namespace TinyWars.ReplayWar {
 
     export class RwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new RwPlayerManager();
-        private readonly _turnManager           = new RwTurnManager();
         private readonly _field                 = new RwField();
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
@@ -68,9 +68,6 @@ namespace TinyWars.ReplayWar {
         }
         public getPlayerManager(): RwPlayerManager {
             return this._playerManager;
-        }
-        public getTurnManager(): RwTurnManager {
-            return this._turnManager;
         }
         public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
@@ -313,6 +310,10 @@ namespace TinyWars.ReplayWar {
 
         public getSettingsBootTimerParams(): number[] | null | undefined {
             return [Types.BootTimerType.NoBoot];
+        }
+
+        public getIsRunTurnPhaseWithExtraData(): boolean {
+            return false;
         }
 
         private _getSettingsForMcw(): ProtoTypes.WarSettings.ISettingsForMcw {

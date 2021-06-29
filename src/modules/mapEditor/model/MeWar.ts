@@ -16,7 +16,6 @@ namespace TinyWars.MapEditor {
 
     export class MeWar extends BaseWar.BwWar {
         private readonly _playerManager         = new MePlayerManager();
-        private readonly _turnManager           = new MeTurnManager();
         private readonly _field                 = new MeField();
         private readonly _commonSettingManager  = new MeCommonSettingManager();
         private readonly _drawer                = new MeDrawer();
@@ -121,9 +120,6 @@ namespace TinyWars.MapEditor {
         public getPlayerManager(): MePlayerManager {
             return this._playerManager;
         }
-        public getTurnManager(): MeTurnManager {
-            return this._turnManager;
-        }
         public getField(): MeField {
             return this._field;
         }
@@ -132,6 +128,10 @@ namespace TinyWars.MapEditor {
         }
         public getWarEventManager(): MeWarEventManager {
             return this._warEventManager;
+        }
+
+        public getIsRunTurnPhaseWithExtraData(): boolean {
+            return false;
         }
 
         public updateTilesAndUnitsOnVisibilityChanged(): void {

@@ -5,8 +5,12 @@ namespace TinyWars.BaseWar {
     import DestructionHelpers           = Utility.DestructionHelpers;
     import Notify                       = Utility.Notify;
     import ProtoTypes                   = Utility.ProtoTypes;
+    import Logger                       = Utility.Logger;
+    import ConfigManager                = Utility.ConfigManager;
+    import GridIndexHelpers             = Utility.GridIndexHelpers;
     import ClientErrorCode              = Utility.ClientErrorCode;
     import CommonConstants              = Utility.CommonConstants;
+    import VisibilityHelpers            = Utility.VisibilityHelpers;
     import TurnPhaseCode                = Types.TurnPhaseCode;
     import TurnAndPlayerIndex           = Types.TurnAndPlayerIndex;
     import ISerialTurnManager           = ProtoTypes.WarSerialization.ISerialTurnManager;
@@ -14,7 +18,7 @@ namespace TinyWars.BaseWar {
     import IWarActionSystemBeginTurn    = WarAction.IWarActionSystemBeginTurn;
     import IWarActionPlayerEndTurn      = WarAction.IWarActionPlayerEndTurn;
 
-    export abstract class BwTurnManager {
+    export class BwTurnManager {
         private _turnIndex          : number | undefined;
         private _playerIndexInTurn  : number | undefined;
         private _phaseCode          : TurnPhaseCode | undefined;
@@ -22,15 +26,6 @@ namespace TinyWars.BaseWar {
 
         private _war                    : BwWar | undefined;
         private _hasUnitOnBeginningTurn = false;
-
-        protected abstract _runPhaseGetFund(data: IWarActionSystemBeginTurn): ClientErrorCode;
-        protected abstract _runPhaseRepairUnitByTile(data: IWarActionSystemBeginTurn): ClientErrorCode;
-        protected abstract _runPhaseRepairUnitByUnit(data: IWarActionSystemBeginTurn): ClientErrorCode;
-        protected abstract _runPhaseRecoverUnitByCo(data: IWarActionSystemBeginTurn): ClientErrorCode;
-        protected abstract _runPhaseMain(data: IWarActionSystemBeginTurn): ClientErrorCode;
-        protected abstract _runPhaseResetVisionForCurrentPlayer(): ClientErrorCode;
-        protected abstract _runPhaseTickTurnAndPlayerIndex(data: IWarActionPlayerEndTurn): ClientErrorCode;
-        protected abstract _runPhaseResetVisionForNextPlayer(): ClientErrorCode;
 
         public init(data: ISerialTurnManager | null | undefined, playersCountUnneutral: number): ClientErrorCode {
             if (data == null) {
@@ -62,10 +57,10 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwTurnManagerInit04;
             }
 
-            this.setTurnIndex(turnIndex);
-            this.setPlayerIndexInTurn(playerIndex);
+            this._setTurnIndex(turnIndex);
+            this._setPlayerIndexInTurn(playerIndex);
             this._setPhaseCode(turnPhaseCode);
-            this.setEnterTurnTime(enterTurnTime);
+            this._setEnterTurnTime(enterTurnTime);
 
             return ClientErrorCode.NoError;
         }
@@ -103,11 +98,32 @@ namespace TinyWars.BaseWar {
         // The functions for running turn.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         public endPhaseWaitBeginTurn(action: IWarActionSystemBeginTurn): ClientErrorCode {
-            if (this.getPhaseCode() !== TurnPhaseCode.WaitBeginTurn) {
+            const war = this.getWar();
+            if (war == null) {
                 return ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurn_00;
             }
 
-            let errorCode = this._runPhaseGetFund(action);
+            return war.getIsRunTurnPhaseWithExtraData()
+                ? this._endPhaseWaitBeginTurnWithExtraData(action)
+                : this._endPhaseWaitBeginTurnWithoutExtraData();
+        }
+        public endPhaseMain(action: IWarActionPlayerEndTurn): ClientErrorCode {
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManager_EndPhaseMain_00;
+            }
+
+            return war.getIsRunTurnPhaseWithExtraData()
+                ? this._endPhaseMainWithExtraData(action)
+                : this._endPhaseMainWithoutExtraData();
+        }
+
+        private _endPhaseWaitBeginTurnWithExtraData(action: IWarActionSystemBeginTurn): ClientErrorCode {
+            if (this.getPhaseCode() !== TurnPhaseCode.WaitBeginTurn) {
+                return ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithExtraData_00;
+            }
+
+            let errorCode = this._runPhaseGetFundWithExtraData(action);
             if (errorCode) {
                 return errorCode;
             }
@@ -117,7 +133,7 @@ namespace TinyWars.BaseWar {
                 return errorCode;
             }
 
-            errorCode = this._runPhaseRepairUnitByTile(action);
+            errorCode = this._runPhaseRepairUnitByTileWithExtraData(action);
             if (errorCode) {
                 return errorCode;
             }
@@ -127,12 +143,12 @@ namespace TinyWars.BaseWar {
                 return errorCode;
             }
 
-            errorCode = this._runPhaseRepairUnitByUnit(action);
+            errorCode = this._runPhaseRepairUnitByUnitWithExtraData(action);
             if (errorCode) {
                 return errorCode;
             }
 
-            errorCode = this._runPhaseRecoverUnitByCo(action);
+            errorCode = this._runPhaseRecoverUnitByCoWithExtraData(action);
             if (errorCode) {
                 return errorCode;
             }
@@ -142,7 +158,7 @@ namespace TinyWars.BaseWar {
                 return errorCode;
             }
 
-            errorCode = this._runPhaseMain(action);
+            errorCode = this._runPhaseMainWithExtraData(action);
             if (errorCode) {
                 return errorCode;
             }
@@ -151,9 +167,59 @@ namespace TinyWars.BaseWar {
 
             return ClientErrorCode.NoError;
         }
-        public endPhaseMain(action: IWarActionPlayerEndTurn): ClientErrorCode {
+        private _endPhaseWaitBeginTurnWithoutExtraData(): ClientErrorCode {
+            if (this.getPhaseCode() !== TurnPhaseCode.WaitBeginTurn) {
+                return ClientErrorCode.BwTurnManager_EndPhaseWaitBeginTurnWithoutExtraData_00;
+            }
+
+            let errorCode = this._runPhaseGetFundWithoutExtraData();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseConsumeFuel();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseRepairUnitByTileWithoutExtraData();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseDestroyUnitsOutOfFuel();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseRepairUnitByUnitWithoutExtraData();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseRecoverUnitByCoWithoutExtraData();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseActivateMapWeapon();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseMainWithoutExtraData();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            this._setPhaseCode(TurnPhaseCode.Main);
+
+            return ClientErrorCode.NoError;
+        }
+
+        private _endPhaseMainWithExtraData(action: IWarActionPlayerEndTurn): ClientErrorCode {
             if (this.getPhaseCode() !== TurnPhaseCode.Main) {
-                return ClientErrorCode.BwTurnManager_EndPhaseMain_00;
+                return ClientErrorCode.BwTurnManager_EndPhaseMainWithExtraData_00;
             }
 
             let errorCode = this._runPhaseResetUnitState();
@@ -166,7 +232,7 @@ namespace TinyWars.BaseWar {
                 return errorCode;
             }
 
-            errorCode = this._runPhaseTickTurnAndPlayerIndex(action);
+            errorCode = this._runPhaseTickTurnAndPlayerIndexWithExtraData(action);
             if (errorCode) {
                 return errorCode;
             }
@@ -192,6 +258,132 @@ namespace TinyWars.BaseWar {
             }
 
             this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
+
+            return ClientErrorCode.NoError;
+        }
+        private _endPhaseMainWithoutExtraData(): ClientErrorCode {
+            if (this.getPhaseCode() !== TurnPhaseCode.Main) {
+                return ClientErrorCode.BwTurnManager_EndPhaseMainWithoutExtraData_00;
+            }
+
+            let errorCode = this._runPhaseResetUnitState();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseResetVisionForCurrentPlayer();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseTickTurnAndPlayerIndexWithoutExtraData();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseResetSkillState();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseResetVisionForNextPlayer();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseResetVotesForDraw();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            errorCode = this._runPhaseWaitBeginTurn();
+            if (errorCode) {
+                return errorCode;
+            }
+
+            this._setPhaseCode(TurnPhaseCode.WaitBeginTurn);
+
+            return ClientErrorCode.NoError;
+        }
+
+        private _runPhaseGetFundWithExtraData(data: IWarActionSystemBeginTurn): ClientErrorCode {
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseGetFundWithExtraData_00;
+            }
+
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseGetFundWithExtraData_01;
+            }
+
+            if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
+                const player = war.getPlayer(playerIndex);
+                if (player == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseGetFundWithExtraData_02;
+                }
+
+                const extraData = data.extraData;
+                if (extraData == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseGetFundWithExtraData_03;
+                }
+
+                const playerData = extraData.playerData;
+                if (playerData == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseGetFundWithExtraData_04;
+                }
+
+                const remainingFund = playerData.fund;
+                if (remainingFund == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseGetFundWithExtraData_05;
+                }
+
+                player.setFund(remainingFund);
+            }
+
+            return ClientErrorCode.NoError;
+        }
+        private _runPhaseGetFundWithoutExtraData(): ClientErrorCode {
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseGetFundWithoutExtraData_00;
+            }
+
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseGetFundWithoutExtraData_01;
+            }
+
+            const player = war.getPlayer(playerIndex);
+            if (player == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseGetFundWithoutExtraData_02;
+            }
+
+            const currentFund = player.getFund();
+            if (currentFund == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseGetFundWithoutExtraData_03;
+            }
+
+            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+                this._setHasUnitOnBeginningTurn(false);
+            } else {
+                this._setHasUnitOnBeginningTurn(war.getUnitMap().checkHasUnit(playerIndex));
+
+                let totalIncome = war.getTileMap().getTotalIncomeForPlayer(playerIndex);
+                if (totalIncome == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseGetFundWithoutExtraData_04;
+                }
+
+                if (this.getTurnIndex() === CommonConstants.WarFirstTurnIndex) {
+                    const initialFund = war.getCommonSettingManager().getSettingsInitialFund(playerIndex);
+                    if (initialFund == null) {
+                        return ClientErrorCode.BwTurnManagerHelper_RunPhaseGetFundWithoutExtraData_05;
+                    }
+                    totalIncome += initialFund;
+                }
+
+                player.setFund(currentFund + totalIncome);
+            }
 
             return ClientErrorCode.NoError;
         }
@@ -232,6 +424,122 @@ namespace TinyWars.BaseWar {
 
             return ClientErrorCode.NoError;
         }
+
+        private _runPhaseRepairUnitByTileWithExtraData(data: IWarActionSystemBeginTurn): ClientErrorCode {
+            const extraData = data.extraData;
+            if (extraData == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithExtraData_00;
+            }
+
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithExtraData_01;
+            }
+
+            const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            if (visibleUnits == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithExtraData_02;
+            }
+
+            const unitMap           = war.getUnitMap();
+            const gridVisionEffect  = war.getGridVisionEffect();
+            for (const repairData of extraData.recoveryDataByTile || []) {
+                const gridIndex = repairData.gridIndex as Types.GridIndex;
+                const unit      = unitMap.getUnit(gridIndex, repairData.unitId);
+                if (unit) {
+                    unit.updateByRepairData(repairData);
+
+                    if (visibleUnits.has(unit)) {
+                        if (repairData.deltaHp) {
+                            gridVisionEffect.showEffectRepair(gridIndex);
+                        } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
+                            gridVisionEffect.showEffectSupply(gridIndex);
+                        }
+                    }
+                }
+            }
+
+            return ClientErrorCode.NoError;
+        }
+        private _runPhaseRepairUnitByTileWithoutExtraData(): ClientErrorCode {
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_00;
+            }
+
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_01;
+            }
+
+            if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
+                const player = war.getPlayer(playerIndex);
+                if (player == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_02;
+                }
+
+                const allUnitsOnMap: BwUnit[] = [];
+                for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
+                    (unit.getPlayerIndex() === playerIndex) && (allUnitsOnMap.push(unit));
+                }
+
+                const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                if (visibleUnits == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_03;
+                }
+
+                const tileMap           = war.getTileMap();
+                const gridVisionEffect  = war.getGridVisionEffect();
+                for (const unit of allUnitsOnMap.sort(sorterForRepairUnits)) {
+                    const gridIndex = unit.getGridIndex();
+                    if (gridIndex == null) {
+                        return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_04;
+                    }
+
+                    const tile = tileMap.getTile(gridIndex);
+                    if (tile == null) {
+                        return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_05;
+                    }
+
+                    const repairData = tile.getRepairHpAndCostForUnit(unit);
+                    if (repairData) {
+                        const fund = player.getFund();
+                        if (fund == null) {
+                            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_06;
+                        }
+
+                        const deltaFuel = unit.getUsedFuel();
+                        if (deltaFuel == null) {
+                            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByTileWithoutExtraData_07;
+                        }
+
+                        const deltaHp                   = repairData.hp > 0 ? repairData.hp : undefined;
+                        const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
+                        const deltaFlareAmmo            = unit.getFlareUsedAmmo();
+                        unit.updateByRepairData({
+                            gridIndex,
+                            unitId                  : unit.getUnitId(),
+                            deltaHp,
+                            deltaFuel,
+                            deltaPrimaryWeaponAmmo,
+                            deltaFlareAmmo,
+                        });
+                        player.setFund(fund - repairData.cost);
+
+                        if (visibleUnits.has(unit)) {
+                            if (deltaHp) {
+                                gridVisionEffect.showEffectRepair(gridIndex);
+                            } else if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
+                                gridVisionEffect.showEffectSupply(gridIndex);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return ClientErrorCode.NoError;
+        }
+
         private _runPhaseDestroyUnitsOutOfFuel(): ClientErrorCode {
             const playerIndex = this.getPlayerIndexInTurn();
             if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
@@ -261,8 +569,522 @@ namespace TinyWars.BaseWar {
 
             return ClientErrorCode.NoError;
         }
+
+        private _runPhaseRepairUnitByUnitWithExtraData(data: IWarActionSystemBeginTurn): ClientErrorCode {
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithExtraData_00;
+            }
+
+            const extraData = data.extraData;
+            if (extraData == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithExtraData_01;
+            }
+
+            const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            if (visibleUnits == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithExtraData_02;
+            }
+
+            const unitMap           = war.getUnitMap();
+            const gridVisionEffect  = war.getGridVisionEffect();
+            for (const repairData of extraData.recoveryDataByUnit || []) {
+                const gridIndex = repairData.gridIndex as Types.GridIndex;
+                const unit      = unitMap.getUnit(gridIndex, repairData.unitId);
+                if (unit) {
+                    unit.updateByRepairData(repairData);
+
+                    if (visibleUnits.has(unit)) {
+                        if (repairData.deltaHp) {
+                            gridVisionEffect.showEffectRepair(gridIndex);
+                        } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
+                            gridVisionEffect.showEffectSupply(gridIndex);
+                        }
+                    }
+                }
+            }
+
+            return ClientErrorCode.NoError;
+        }
+        private _runPhaseRepairUnitByUnitWithoutExtraData(): ClientErrorCode {
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_00;
+            }
+
+            if (playerIndex !== CommonConstants.WarNeutralPlayerIndex) {
+                const war = this.getWar();
+                if (war == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_01;
+                }
+
+                const player = war.getPlayer(playerIndex);
+                if (player == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_02;
+                }
+
+                const unitMap = war.getUnitMap();
+                const mapSize = unitMap.getMapSize();
+                if (mapSize == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_03;
+                }
+
+                const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                if (visibleUnits == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_04;
+                }
+
+                const gridVisionEffect  = war.getGridVisionEffect();
+                const allUnitsLoaded    : BwUnit[] = [];
+                for (const unit of unitMap.getAllUnitsLoaded()) {
+                    (unit.getPlayerIndex() === playerIndex) && (allUnitsLoaded.push(unit));
+                }
+
+                for (const unit of allUnitsLoaded.sort(sorterForRepairUnits)) {
+                    const loader = unit.getLoaderUnit();
+                    if (loader == null) {
+                        return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_05;
+                    }
+
+                    const gridIndex = loader.getGridIndex();
+                    if (gridIndex == null) {
+                        return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_06;
+                    }
+
+                    const repairData = loader.getRepairHpAndCostForLoadedUnit(unit);
+                    if (repairData) {
+                        const deltaFuel = unit.getUsedFuel();
+                        if (deltaFuel == null) {
+                            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_07;
+                        }
+
+                        const fund = player.getFund();
+                        if (fund == null) {
+                            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_08;
+                        }
+
+                        const deltaHp                   = repairData.hp > 0 ? repairData.hp : undefined;
+                        const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
+                        const deltaFlareAmmo            = unit.getFlareUsedAmmo();
+                        unit.updateByRepairData({
+                            gridIndex               : unit.getGridIndex(),
+                            unitId                  : unit.getUnitId(),
+                            deltaHp,
+                            deltaFuel,
+                            deltaPrimaryWeaponAmmo,
+                            deltaFlareAmmo,
+                        });
+                        player.setFund(fund - repairData.cost);
+
+                        if (visibleUnits.has(loader)) {
+                            if (deltaHp) {
+                                gridVisionEffect.showEffectRepair(gridIndex);
+                            } else if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
+                                gridVisionEffect.showEffectSupply(gridIndex);
+                            }
+                        }
+
+                    } else if (loader.checkCanSupplyLoadedUnit()) {
+                        const deltaFuel = unit.getUsedFuel();
+                        if (deltaFuel == null) {
+                            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_09;
+                        }
+
+                        const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
+                        const deltaFlareAmmo            = unit.getFlareUsedAmmo();
+                        unit.updateByRepairData({
+                            gridIndex               : unit.getGridIndex(),
+                            unitId                  : unit.getUnitId(),
+                            deltaHp                 : null,
+                            deltaFuel,
+                            deltaPrimaryWeaponAmmo,
+                            deltaFlareAmmo,
+                        });
+
+                        if (visibleUnits.has(loader)) {
+                            if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
+                                gridVisionEffect.showEffectSupply(gridIndex);
+                            }
+                        }
+                    }
+                }
+
+                const suppliedUnitIds = new Set<number>();
+                for (const supplier of unitMap.getAllUnitsOnMap()) {
+                    if ((supplier.getPlayerIndex() === playerIndex) && (supplier.checkIsAdjacentUnitSupplier())) {
+                        const supplierGridIndex = supplier.getGridIndex();
+                        if (supplierGridIndex == null) {
+                            return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_10;
+                        }
+
+                        for (const gridIndex of GridIndexHelpers.getAdjacentGrids(supplierGridIndex, mapSize)) {
+                            const unit      = unitMap.getUnitOnMap(gridIndex);
+                            const unitId    = unit ? unit.getUnitId() : undefined;
+                            if ((unitId != null) && (unit) && (!suppliedUnitIds.has(unitId)) && (supplier.checkCanSupplyAdjacentUnit(unit))) {
+                                const deltaFuel = unit.getUsedFuel();
+                                if (deltaFuel == null) {
+                                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRepairUnitByUnitWithoutExtraData_11;
+                                }
+
+                                const deltaPrimaryWeaponAmmo    = unit.getPrimaryWeaponUsedAmmo();
+                                const deltaFlareAmmo            = unit.getFlareUsedAmmo();
+                                unit.updateByRepairData({
+                                    gridIndex,
+                                    unitId,
+                                    deltaHp                 : null,
+                                    deltaFuel,
+                                    deltaPrimaryWeaponAmmo,
+                                    deltaFlareAmmo,
+                                });
+                                suppliedUnitIds.add(unitId);
+
+                                if (visibleUnits.has(unit)) {
+                                    if ((deltaFlareAmmo) || (deltaFuel) || (deltaPrimaryWeaponAmmo)) {
+                                        gridVisionEffect.showEffectSupply(gridIndex);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return ClientErrorCode.NoError;
+        }
+
+        private _runPhaseRecoverUnitByCoWithExtraData(data: IWarActionSystemBeginTurn): ClientErrorCode {
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithExtraData_00;
+            }
+
+            const extraData = data.extraData;
+            if (extraData == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithExtraData_01;
+            }
+
+            const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+            if (visibleUnits == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithExtraData_02;
+            }
+
+            const unitMap           = war.getUnitMap();
+            const gridVisionEffect  = war.getGridVisionEffect();
+            for (const repairData of extraData.recoveryDataByCo || []) {
+                const gridIndex = repairData.gridIndex as Types.GridIndex;
+                const unit      = unitMap.getUnit(gridIndex, repairData.unitId);
+                if (unit) {
+                    unit.updateByRepairData(repairData);
+
+                    if (visibleUnits.has(unit)) {
+                        if (repairData.deltaHp) {
+                            gridVisionEffect.showEffectRepair(gridIndex);
+                        } else if ((repairData.deltaFlareAmmo) || (repairData.deltaFuel) || (repairData.deltaPrimaryWeaponAmmo)) {
+                            gridVisionEffect.showEffectSupply(gridIndex);
+                        }
+                    }
+                }
+            }
+
+            return ClientErrorCode.NoError;
+        }
+        private _runPhaseRecoverUnitByCoWithoutExtraData(): ClientErrorCode {
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_00;
+            }
+
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_01;
+            }
+
+            const player = war.getPlayer(playerIndex);
+            if (player == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_02;
+            }
+
+            if (player.getCoId()) {
+                const coGridIndexListOnMap = player.getCoGridIndexListOnMap();
+                if (coGridIndexListOnMap == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_03;
+                }
+
+                const configVersion = war.getConfigVersion();
+                if (configVersion == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_04;
+                }
+
+                const coZoneRadius = player.getCoZoneRadius();
+                if (coZoneRadius == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_05;
+                }
+
+                const visibleUnits = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
+                if (visibleUnits == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_06;
+                }
+
+                const unitMap           = war.getUnitMap();
+                const gridVisionEffect  = war.getGridVisionEffect();
+                for (const skillId of player.getCoCurrentSkills() || []) {
+                    const skillCfg = ConfigManager.getCoSkillCfg(configVersion, skillId);
+                    if (skillCfg == null) {
+                        return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_07;
+                    }
+
+                    if (skillCfg.selfHpRecovery) {
+                        const recoverCfg    = skillCfg.selfHpRecovery;
+                        const targetUnits   : BwUnit[] = [];
+                        for (const unit of unitMap.getAllUnits()) {
+                            const unitType = unit.getUnitType();
+                            if (unitType == null) {
+                                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_08;
+                            }
+
+                            const unitGridIndex = unit.getGridIndex();
+                            if (unitGridIndex == null) {
+                                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_09;
+                            }
+
+                            if ((unit.getPlayerIndex() === playerIndex)                                                                         &&
+                                (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, recoverCfg[1]))                               &&
+                                (BwHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
+                            ) {
+                                targetUnits.push(unit);
+                            }
+                        }
+
+                        const recoverAmount = recoverCfg[2];
+                        for (const unit of targetUnits.sort(sorterForRepairUnits)) {
+                            const normalizedMaxHp = unit.getNormalizedMaxHp();
+                            if (normalizedMaxHp == null) {
+                                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_10;
+                            }
+
+                            const normalizedCurrentHp = unit.getNormalizedCurrentHp();
+                            if (normalizedCurrentHp == null) {
+                                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_11;
+                            }
+
+                            const currentFund = player.getFund();
+                            if (currentFund == null) {
+                                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_12;
+                            }
+
+                            const productionCost = unit.getProductionFinalCost();
+                            if (productionCost == null) {
+                                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_13;
+                            }
+
+                            const currentHp = unit.getCurrentHp();
+                            if (currentHp == null) {
+                                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_14;
+                            }
+
+                            const normalizedRepairHp = Math.min(
+                                normalizedMaxHp - normalizedCurrentHp,
+                                recoverAmount,
+                                Math.floor(currentFund * normalizedMaxHp / productionCost)
+                            );
+                            const repairAmount = (normalizedRepairHp + normalizedCurrentHp) * CommonConstants.UnitHpNormalizer - currentHp;
+
+                            if (repairAmount > 0) {
+                                const gridIndex = unit.getGridIndex();
+                                unit.updateByRepairData({
+                                    gridIndex,
+                                    unitId                  : unit.getUnitId(),
+                                    deltaHp                 : repairAmount,
+                                    deltaFuel               : null,
+                                    deltaFlareAmmo          : null,
+                                    deltaPrimaryWeaponAmmo  : null,
+                                });
+                                player.setFund(currentFund - Math.floor(normalizedRepairHp * productionCost / normalizedMaxHp));
+
+                                if (visibleUnits.has(unit)) {
+                                    gridVisionEffect.showEffectRepair(gridIndex);
+                                }
+                            }
+                        }
+                    }
+
+                    if (skillCfg.selfFuelRecovery) {
+                        const recoverCfg = skillCfg.selfFuelRecovery;
+                        for (const unit of unitMap.getAllUnits()) {
+                            const unitType = unit.getUnitType();
+                            if (unitType == null) {
+                                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_15;
+                            }
+
+                            const unitGridIndex = unit.getGridIndex();
+                            if (unitGridIndex == null) {
+                                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_16;
+                            }
+
+                            if ((unit.getPlayerIndex() === playerIndex)                                                                         &&
+                                (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, recoverCfg[1]))                               &&
+                                (BwHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
+                            ) {
+                                const maxFuel = unit.getMaxFuel();
+                                if (maxFuel == null) {
+                                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_17;
+                                }
+
+                                const currentFuel = unit.getCurrentFuel();
+                                if (currentFuel == null) {
+                                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_18;
+                                }
+
+                                const deltaFuel = Math.min(Math.floor(maxFuel * recoverCfg[2] / 100), maxFuel - currentFuel);
+                                unit.updateByRepairData({
+                                    gridIndex               : unitGridIndex,
+                                    unitId                  : unit.getUnitId(),
+                                    deltaHp                 : null,
+                                    deltaFuel,
+                                    deltaFlareAmmo          : null,
+                                    deltaPrimaryWeaponAmmo  : null,
+                                });
+
+                                if (visibleUnits.has(unit)) {
+                                    if (deltaFuel > 0) {
+                                        gridVisionEffect.showEffectSupply(unitGridIndex);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (skillCfg.selfPrimaryAmmoRecovery) {
+                        const recoverCfg = skillCfg.selfPrimaryAmmoRecovery;
+                        for (const unit of unitMap.getAllUnits()) {
+                            const unitType = unit.getUnitType();
+                            if (unitType == null) {
+                                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_19;
+                            }
+
+                            const unitGridIndex = unit.getGridIndex();
+                            if (unitGridIndex == null) {
+                                return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_20;
+                            }
+
+                            if ((unit.getPlayerIndex() === playerIndex)                                                                         &&
+                                (ConfigManager.checkIsUnitTypeInCategory(configVersion, unitType, recoverCfg[1]))                               &&
+                                (BwHelpers.checkIsGridIndexInsideCoSkillArea(unitGridIndex, recoverCfg[0], coGridIndexListOnMap, coZoneRadius))
+                            ) {
+                                const maxAmmo = unit.getPrimaryWeaponMaxAmmo();
+                                if (maxAmmo) {
+                                    const currentAmmo = unit.getPrimaryWeaponCurrentAmmo();
+                                    if (currentAmmo == null) {
+                                        return ClientErrorCode.BwTurnManagerHelper_RunPhaseRecoverUnitByCoWithoutExtraData_21;
+                                    }
+
+                                    const deltaPrimaryWeaponAmmo = Math.min(Math.floor(maxAmmo * recoverCfg[2] / 100), maxAmmo - currentAmmo);
+                                    unit.updateByRepairData({
+                                        gridIndex               : unitGridIndex,
+                                        unitId                  : unit.getUnitId(),
+                                        deltaHp                 : null,
+                                        deltaFuel               : null,
+                                        deltaFlareAmmo          : null,
+                                        deltaPrimaryWeaponAmmo,
+                                    });
+
+                                    if (visibleUnits.has(unit)) {
+                                        if (deltaPrimaryWeaponAmmo > 0) {
+                                            gridVisionEffect.showEffectSupply(unitGridIndex);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return ClientErrorCode.NoError;
+        }
+
         private _runPhaseActivateMapWeapon(): ClientErrorCode {
             // nothing to do for now.
+
+            return ClientErrorCode.NoError;
+        }
+
+        private _runPhaseMainWithExtraData(data: IWarActionSystemBeginTurn): ClientErrorCode {
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseMainWithExtraData_00;
+            }
+
+            const playerIndex = war.getPlayerIndexInTurn();
+            if (playerIndex == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseMainWithExtraData_01;
+            }
+
+            const extraData = data.extraData;
+            if (extraData == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseMainWithExtraData_02;
+            }
+
+            const playerData = extraData.playerData;
+            if (playerData == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseMainWithExtraData_03;
+            }
+
+            if (playerData.playerIndex !== playerIndex) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseMainWithExtraData_04;
+            }
+
+            const player = war.getPlayer(playerIndex);
+            if (player == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseMainWithExtraData_05;
+            }
+
+            const configVersion = war.getConfigVersion();
+            if (configVersion == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseMainWithExtraData_06;
+            }
+
+            const errorCodeForPlayerInit = player.init(playerData, configVersion);
+            if (errorCodeForPlayerInit) {
+                return errorCodeForPlayerInit;
+            }
+
+            for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
+                (unit.getPlayerIndex() === playerIndex) && (unit.updateView());
+            }
+
+            return ClientErrorCode.NoError;
+        }
+        private _runPhaseMainWithoutExtraData(): ClientErrorCode {
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseMainWithoutExtraData_00;
+            }
+
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseMainWithoutExtraData_01;
+            }
+
+            const player = war.getPlayer(playerIndex);
+            if (player == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseMainWithoutExtraData_02;
+            }
+
+            const unitMap = war.getUnitMap();
+            const hasUnit = unitMap.checkHasUnit(playerIndex);
+            if ((playerIndex !== CommonConstants.WarNeutralPlayerIndex) &&
+                (this._getHasUnitOnBeginningTurn())                     &&
+                (!hasUnit)
+            ) {
+                player.setAliveState(Types.PlayerAliveState.Dying);
+            }
+
+            if (hasUnit) {
+                for (const unit of unitMap.getAllUnitsOnMap()) {
+                    (unit.getPlayerIndex() === playerIndex) && (unit.updateView());
+                }
+            }
 
             return ClientErrorCode.NoError;
         }
@@ -289,6 +1111,75 @@ namespace TinyWars.BaseWar {
 
             return ClientErrorCode.NoError;
         }
+        private _runPhaseResetVisionForCurrentPlayer(): ClientErrorCode {
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManager_RunPhaseResetVisionForCurrentPlayer_00;
+            }
+
+            const playerIndex = war.getPlayerIndexInTurn();
+            if (playerIndex == null) {
+                return ClientErrorCode.BwTurnManager_RunPhaseResetVisionForCurrentPlayer_01;
+            }
+
+            war.getFogMap().resetMapFromPathsForPlayer(playerIndex);
+
+            return ClientErrorCode.NoError;
+        }
+
+        private _runPhaseTickTurnAndPlayerIndexWithExtraData(data: IWarActionPlayerEndTurn): ClientErrorCode {
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithExtraData_00;
+            }
+
+            const extraData = data.extraData;
+            if (extraData == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithExtraData_01;
+            }
+
+            const restTime = extraData.restTimeToBootForCurrentPlayer;
+            if (restTime == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithExtraData_02;
+            }
+
+            war.getPlayerInTurn().setRestTimeToBoot(restTime);
+
+            const { errorCode, info } = this._getNextTurnAndPlayerIndex();
+            if (errorCode) {
+                return errorCode;
+            } else if (info == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithExtraData_03;
+            }
+
+            this._setTurnIndex(info.turnIndex);
+            this._setPlayerIndexInTurn(info.playerIndex);
+            this._setEnterTurnTime(Time.TimeModel.getServerTimestamp());
+            war.getWarEventManager().updateWarEventCalledCountOnPlayerTurnSwitched();
+
+            return ClientErrorCode.NoError;
+        }
+        private _runPhaseTickTurnAndPlayerIndexWithoutExtraData(): ClientErrorCode {
+            const { errorCode, info } = this._getNextTurnAndPlayerIndex();
+            if (errorCode) {
+                return errorCode;
+            } else if (info == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_00;
+            }
+
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_01;
+            }
+
+            this._setTurnIndex(info.turnIndex);
+            this._setPlayerIndexInTurn(info.playerIndex);
+            this._setEnterTurnTime(Time.TimeModel.getServerTimestamp());
+            war.getWarEventManager().updateWarEventCalledCountOnPlayerTurnSwitched();
+
+            return ClientErrorCode.NoError;
+        }
+
         private _runPhaseResetSkillState(): ClientErrorCode {
             const war = this.getWar();
             if (war == null) {
@@ -306,6 +1197,16 @@ namespace TinyWars.BaseWar {
                 player.setCoUsingSkillType(Types.CoSkillType.Passive);
                 war.getTileMap().getView().updateCoZone();
             }
+
+            return ClientErrorCode.NoError;
+        }
+        private _runPhaseResetVisionForNextPlayer(): ClientErrorCode {
+            const war = this.getWar();
+            if (war == null) {
+                return ClientErrorCode.BwTurnManager_RunPhaseResetVisionForNextPlayer_00;
+            }
+
+            war.updateTilesAndUnitsOnVisibilityChanged();
 
             return ClientErrorCode.NoError;
         }
@@ -336,7 +1237,7 @@ namespace TinyWars.BaseWar {
         public getTurnIndex(): number | undefined {
             return this._turnIndex;
         }
-        public setTurnIndex(index: number): void {
+        private _setTurnIndex(index: number): void {
             if (this._turnIndex !== index){
                 this._turnIndex = index;
                 Notify.dispatch(Notify.Type.BwTurnIndexChanged);
@@ -346,14 +1247,14 @@ namespace TinyWars.BaseWar {
         public getPlayerIndexInTurn(): number | undefined {
             return this._playerIndexInTurn;
         }
-        public setPlayerIndexInTurn(index: number): void {
+        private _setPlayerIndexInTurn(index: number): void {
             if (this._playerIndexInTurn !== index) {
                 this._playerIndexInTurn = index;
                 Notify.dispatch(Notify.Type.BwPlayerIndexInTurnChanged);
             }
         }
         public getNextPlayerIndex(playerIndex: number, includeNeutral = false): number | undefined {
-            const data = this.getNextTurnAndPlayerIndex(undefined, playerIndex).info;
+            const data = this._getNextTurnAndPlayerIndex(undefined, playerIndex).info;
             if (data == null) {
                 return undefined;
             }
@@ -362,7 +1263,7 @@ namespace TinyWars.BaseWar {
             if ((playerIndex1 !== CommonConstants.WarNeutralPlayerIndex) || (includeNeutral)) {
                 return playerIndex1;
             } else {
-                const nextData = this.getNextTurnAndPlayerIndex(data.turnIndex, playerIndex1).info;
+                const nextData = this._getNextTurnAndPlayerIndex(data.turnIndex, playerIndex1).info;
                 return nextData ? nextData.playerIndex : undefined;
             }
         }
@@ -380,11 +1281,11 @@ namespace TinyWars.BaseWar {
         public getEnterTurnTime(): number | undefined {
             return this._enterTurnTime;
         }
-        public setEnterTurnTime(time: number): void {
+        private _setEnterTurnTime(time: number): void {
             this._enterTurnTime = time;
         }
 
-        public getNextTurnAndPlayerIndex(
+        private _getNextTurnAndPlayerIndex(
             currTurnIndex   = this.getTurnIndex(),
             currPlayerIndex = this.getPlayerIndexInTurn(),
         ): { errorCode: ClientErrorCode, info?: TurnAndPlayerIndex } {
@@ -430,11 +1331,43 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public getHasUnitOnBeginningTurn(): boolean {
+        private _getHasUnitOnBeginningTurn(): boolean {
             return this._hasUnitOnBeginningTurn;
         }
-        public setHasUnitOnBeginningTurn(hasUnit: boolean): void {
+        private _setHasUnitOnBeginningTurn(hasUnit: boolean): void {
             this._hasUnitOnBeginningTurn = hasUnit;
+        }
+    }
+
+    function sorterForRepairUnits(unit1: BwUnit, unit2: BwUnit): number {
+        const cost1 = unit1.getProductionFinalCost();
+        if (cost1 == null) {
+            Logger.error(`BwTurnManagerHelper.sorterForRepairUnit empty cost1.`);
+            return 0;
+        }
+
+        const cost2 = unit2.getProductionFinalCost();
+        if (cost2 == null) {
+            Logger.error(`BwTurnManagerHelper.sorterForRepairUnit empty cost2.`);
+            return 0;
+        }
+
+        if (cost1 !== cost2) {
+            return cost2 - cost1;
+        } else {
+            const unitId1 = unit1.getUnitId();
+            if (unitId1 == null) {
+                Logger.error(`BwTurnManagerHelper.sorterForRepairUnit empty unitId1.`);
+                return 0;
+            }
+
+            const unitId2 = unit2.getUnitId();
+            if (unitId2 == null) {
+                Logger.error(`BwTurnManagerHelper.sorterForRepairUnit empty unitId2.`);
+                return 0;
+            }
+
+            return unitId1 - unitId2;
         }
     }
 }

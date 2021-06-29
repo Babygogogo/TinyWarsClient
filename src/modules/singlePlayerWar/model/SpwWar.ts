@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.SinglePlayerWar {
     import ProtoTypes               = Utility.ProtoTypes;
     import Lang                     = Utility.Lang;
@@ -9,7 +10,6 @@ namespace TinyWars.SinglePlayerWar {
 
     export abstract class SpwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new SpwPlayerManager();
-        private readonly _turnManager           = new SpwTurnManager();
         private readonly _field                 = new SpwField();
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
@@ -139,14 +139,15 @@ namespace TinyWars.SinglePlayerWar {
         public getField(): SpwField {
             return this._field;
         }
-        public getTurnManager(): SpwTurnManager {
-            return this._turnManager;
-        }
         public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
         public getWarEventManager(): BaseWar.BwWarEventManager {
             return this._warEventManager;
+        }
+
+        public getIsRunTurnPhaseWithExtraData(): boolean {
+            return false;
         }
 
         public setSaveSlotIndex(slotIndex: number): void {
