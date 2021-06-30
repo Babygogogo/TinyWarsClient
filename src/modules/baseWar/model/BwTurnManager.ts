@@ -1160,16 +1160,83 @@ namespace TinyWars.BaseWar {
             return ClientErrorCode.NoError;
         }
         private _runPhaseTickTurnAndPlayerIndexWithoutExtraData(): ClientErrorCode {
-            const { errorCode, info } = this._getNextTurnAndPlayerIndex();
-            if (errorCode) {
-                return errorCode;
-            } else if (info == null) {
+            const playerIndex = this.getPlayerIndexInTurn();
+            if (playerIndex == null) {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_00;
             }
 
             const war = this.getWar();
             if (war == null) {
                 return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_01;
+            }
+
+            const currTime      = Time.TimeModel.getServerTimestamp();
+            let restTimeToBoot  : number | null | undefined;
+            if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
+                restTimeToBoot = 0;
+            } else {
+                const player = war.getPlayer(playerIndex);
+                if (player == null) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_02;
+                }
+
+                const bootTimerParams = war.getSettingsBootTimerParams();
+                if ((bootTimerParams == null) || (!bootTimerParams.length)) {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_03;
+                }
+
+                const timerType: Types.BootTimerType = bootTimerParams[0];
+                if (timerType === Types.BootTimerType.NoBoot) {
+                    restTimeToBoot = 0;
+                    player.setRestTimeToBoot(restTimeToBoot);
+
+                } else if (timerType === Types.BootTimerType.Regular) {
+                    restTimeToBoot = bootTimerParams[1];
+                    if (restTimeToBoot == null) {
+                        return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_04;
+                    }
+
+                    player.setRestTimeToBoot(restTimeToBoot);
+
+                } else if (timerType === Types.BootTimerType.Incremental) {
+                    const oldRestTimeToBoot = player.getRestTimeToBoot();
+                    if (oldRestTimeToBoot == null) {
+                        return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_05;
+                    }
+
+                    const enterTurnTime = this.getEnterTurnTime();
+                    if (enterTurnTime == null) {
+                        return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_06;
+                    }
+
+                    const incrementalTime = bootTimerParams[2];
+                    if (incrementalTime == null) {
+                        return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_07;
+                    }
+
+                    restTimeToBoot = Math.max(
+                        0,
+                        Math.min(
+                            CommonConstants.WarBootTimerIncrementalMaxLimit,
+                            oldRestTimeToBoot - (currTime - enterTurnTime) + incrementalTime * war.getUnitMap().countAllUnitsForPlayer(playerIndex),
+                        ),
+                    );
+                    player.setRestTimeToBoot(restTimeToBoot);
+
+                } else {
+                    return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_08;
+                }
+            }
+
+            if (restTimeToBoot == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_09;
+            }
+
+            const { errorCode, info } = this._getNextTurnAndPlayerIndex();
+            if (errorCode) {
+                return errorCode;
+            } else if (info == null) {
+                return ClientErrorCode.BwTurnManagerHelper_RunPhaseTickTurnAndPlayerIndexWithoutExtraData_10;
             }
 
             this._setTurnIndex(info.turnIndex);

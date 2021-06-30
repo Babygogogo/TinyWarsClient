@@ -244,7 +244,7 @@ namespace TinyWars.Utility.Notify {
         MsgMpwActionSystemEndTurn,
         MsgMpwActionSystemHandleBootPlayer,
 
-        MsgMpwActionPlayerDeleteUnit,
+        MsgMpwExecuteWarAction,
         MsgMpwActionPlayerEndTurn,
         MsgMpwActionPlayerProduceUnit,
         MsgMpwActionPlayerSurrender,

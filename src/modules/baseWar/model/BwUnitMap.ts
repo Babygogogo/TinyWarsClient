@@ -498,6 +498,16 @@ namespace TinyWars.BaseWar {
             });
             return count;
         }
+        public countUnitsLoadedForPlayer(playerIndex: number): number {
+            let count = 0;
+            this._forEachUnitLoaded(unit => {
+                (unit.getPlayerIndex() === playerIndex) && (++count);
+            });
+            return count;
+        }
+        public countAllUnitsForPlayer(playerIndex: number): number {
+            return this.countUnitsLoadedForPlayer(playerIndex) + this.countUnitsOnMapForPlayer(playerIndex);
+        }
 
         public checkHasUnit(playerIndex: number): boolean {
             for (const column of this._map) {

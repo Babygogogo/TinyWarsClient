@@ -38,7 +38,7 @@ namespace TinyWars.BaseWar {
         private _prevState  : State;
 
         private _focusUnitOnMap             : BwUnit;
-        private _focusUnitLoaded            : BwUnit;
+        private _focusUnitLoaded            : BwUnit | undefined;
         private _choosingUnitForDrop        : BwUnit;
         private _chosenUnitsForDrop         : ChosenUnitForDrop[] = [];
         private _availableDropDestinations  : GridIndex[];
@@ -86,7 +86,7 @@ namespace TinyWars.BaseWar {
             this.getView().stopRunningView();
         }
 
-        protected _getWar(): BwWar {
+        protected _getWar(): BwWar | undefined {
             return this._war;
         }
         protected _getUnitMap(): BwUnitMap {
@@ -98,8 +98,9 @@ namespace TinyWars.BaseWar {
         protected _getTurnManager(): BwTurnManager {
             return this._getWar().getTurnManager();
         }
-        public getCursor(): BwCursor {
-            return this._getWar().getCursor();
+        public getCursor(): BwCursor | undefined {
+            const war = this._getWar();
+            return war ? war.getCursor() : undefined;
         }
         protected _getMapSize(): Types.MapSize {
             return this._mapSize;
@@ -1081,7 +1082,7 @@ namespace TinyWars.BaseWar {
         public getFocusUnitOnMap(): BwUnit | undefined {
             return this._focusUnitOnMap;
         }
-        protected _setFocusUnitOnMap(unit: BwUnit): void {
+        private _setFocusUnitOnMap(unit: BwUnit): void {
             this._focusUnitOnMap = unit;
         }
         protected _clearFocusUnitOnMap(): void {
@@ -1091,11 +1092,15 @@ namespace TinyWars.BaseWar {
         public getFocusUnitLoaded(): BwUnit | undefined {
             return this._focusUnitLoaded;
         }
-        private _setFocusUnitLoaded(unit: BwUnit): void {
+        private _setFocusUnitLoaded(unit: BwUnit | undefined): void {
             this._focusUnitLoaded = unit;
         }
         protected _clearFocusUnitLoaded(): void {
-            this._focusUnitLoaded = null;
+            this._setFocusUnitLoaded(undefined);
+        }
+        protected _getUnitIdForFocusUnitLoaded(): number | null | undefined {
+            const unit = this.getFocusUnitLoaded();
+            return unit ? unit.getUnitId() : undefined;
         }
 
         public getAvailableDropDestinations(): GridIndex[] | undefined {
