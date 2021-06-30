@@ -785,18 +785,20 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
             return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_00;
         }
 
-        const canSrw                = ruleAvailability.canSrw;
-        const playerIndexSet        = new Set<number>();
-        const teamIndexSet          = new Set<number>();
-        let srwAiCount              = 0;
-        let teamIndexForPlayerInSrw : number | null = null;
+        const { canSrw, canCcw }            = ruleAvailability;
+        const allPlayerIndexSet             = new Set<number>();
+        const allTeamIndexSet               = new Set<number>();
+        const teamIndexSetForHumanInSrw     = new Set<number>();
+        const teamIndexSetForAiInSrw        = new Set<number>();
+        const playerIndexSetForHumanInCcw   = new Set<number>();
+        const playerIndexSetForAiInCcw      = new Set<number>();
 
         for (const data of ruleArray) {
             const playerIndex = data.playerIndex;
             if ((playerIndex == null)                                   ||
                 (playerIndex <  CommonConstants.WarFirstPlayerIndex)    ||
                 (playerIndex >  playersCountUnneutral)                  ||
-                (playerIndexSet.has(playerIndex))
+                (allPlayerIndexSet.has(playerIndex))
             ) {
                 return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_01;
             }
@@ -809,8 +811,8 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_02;
             }
 
-            playerIndexSet.add(playerIndex);
-            teamIndexSet.add(teamIndex);
+            allPlayerIndexSet.add(playerIndex);
+            allTeamIndexSet.add(teamIndex);
 
             const initialFund = data.initialFund;
             if ((initialFund == null)                                       ||
@@ -892,36 +894,66 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_12;
             }
 
-            const fixedCoIdInSrw = data.fixedCoIdInSrw;
-            if (fixedCoIdInSrw == null) {
-                if (canSrw) {
-                    if ((teamIndexForPlayerInSrw != null) && (teamIndex !== teamIndexForPlayerInSrw)) {
-                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_13;
+            {
+                const fixedCoIdInSrw = data.fixedCoIdInSrw;
+                if (fixedCoIdInSrw == null) {
+                    if (canSrw) {
+                        teamIndexSetForHumanInSrw.add(teamIndex);
                     }
-                    teamIndexForPlayerInSrw = teamIndex;
-                }
-            } else {
-                if (!canSrw) {
-                    return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_14;
                 } else {
-                    if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInSrw) == null) {
-                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_15;
+                    if (!canSrw) {
+                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_14;
+                    } else {
+                        if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInSrw) == null) {
+                            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_15;
+                        }
+                        teamIndexSetForAiInSrw.add(teamIndex);
                     }
-                    ++srwAiCount;
+                }
+            }
+
+            {
+                const fixedCoIdInCcw = data.fixedCoIdInCcw;
+                if (fixedCoIdInCcw == null) {
+                    if (canCcw) {
+                        playerIndexSetForHumanInCcw.add(playerIndex);
+                    }
+                } else {
+                    if (!canCcw) {
+                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_16;
+                    } else {
+                        if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInCcw) == null) {
+                            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_17;
+                        }
+                        playerIndexSetForAiInCcw.add(playerIndex);
+                    }
                 }
             }
         }
 
-        if (playerIndexSet.size !== playersCountUnneutral) {
-            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_16;
-        }
-        if (teamIndexSet.size <= 1) {
-            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_17;
-        }
-        if ((canSrw)                                                                                        &&
-            ((srwAiCount <= 0) || (srwAiCount >= playersCountUnneutral) || (teamIndexForPlayerInSrw == null))
-        ) {
+        if (allPlayerIndexSet.size !== playersCountUnneutral) {
             return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_18;
+        }
+        if (allTeamIndexSet.size <= 1) {
+            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_19;
+        }
+
+        if (canSrw) {
+            if (!teamIndexSetForAiInSrw.size) {
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_20;
+            }
+            if (teamIndexSetForHumanInSrw.size !== 1) {
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_21;
+            }
+        }
+
+        if (canCcw) {
+            if (!playerIndexSetForAiInCcw.size) {
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_22;
+            }
+            if (playerIndexSetForHumanInCcw.size <= 1) {
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_23;
+            }
         }
 
         return ClientErrorCode.NoError;

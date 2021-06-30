@@ -5555,6 +5555,9 @@ export declare namespace WarRule {
 
         /** DataForPlayerRule fixedCoIdInSrw */
         fixedCoIdInSrw?: (number|null);
+
+        /** DataForPlayerRule fixedCoIdInCcw */
+        fixedCoIdInCcw?: (number|null);
     }
 
     /** Represents a DataForPlayerRule. */
@@ -5604,6 +5607,9 @@ export declare namespace WarRule {
 
         /** DataForPlayerRule fixedCoIdInSrw. */
         public fixedCoIdInSrw: number;
+
+        /** DataForPlayerRule fixedCoIdInCcw. */
+        public fixedCoIdInCcw: number;
 
         /**
          * Creates a new DataForPlayerRule instance using the specified properties.

@@ -181,13 +181,7 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         }
 
         // Handle war events.
-        const warEventManager = war.getWarEventManager();
-        if (warEventManager == null) {
-            Logger.error(`SpwModel.checkAndHandleSystemActions() empty warEventManager.`);
-            return undefined;
-        }
-
-        const callableWarEventId = warEventManager.getCallableWarEventId();
+        const callableWarEventId = war.getWarEventManager().getCallableWarEventId();
         if (callableWarEventId != null) {
             await handleSystemCallWarEvent(war, callableWarEventId);
             await checkAndHandleSystemActions(war);
@@ -202,13 +196,7 @@ namespace TinyWars.SinglePlayerWar.SpwModel {
         }
 
         // Handle the WaitBeginTurn phase.
-        const turnManager = war.getTurnManager();
-        if (turnManager == null) {
-            Logger.error(`SpwModel.checkAndHandleSystemActions() empty turnManager.`);
-            return false;
-        }
-
-        const turnPhaseCode = turnManager.getPhaseCode();
+        const turnPhaseCode = war.getTurnPhaseCode();
         if (turnPhaseCode == null) {
             Logger.error(`SpwModel.checkAndHandleSystemActions() empty turnPhaseCode.`);
             return false;
