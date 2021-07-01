@@ -49,6 +49,16 @@ namespace TinyWars.Utility.Notify {
         MfrJoinTargetRoomIdChanged,
         MfrJoinedPreviewingRoomIdChanged,
 
+        CcrCreateBannedCoIdArrayChanged,
+        CcrCreateTeamIndexChanged,
+        CcrCreateSelfCoIdChanged,
+        CcrCreateSelfSkinIdChanged,
+        CcrCreateSelfPlayerIndexChanged,
+        CcrCreatePresetWarRuleIdChanged,
+
+        CcrJoinTargetRoomIdChanged,
+        CcrJoinedPreviewingRoomIdChanged,
+
         MrrMyRoomAdded,
         MrrMyRoomDeleted,
         MrrJoinedPreviewingRoomIdChanged,
@@ -205,6 +215,21 @@ namespace TinyWars.Utility.Notify {
         MsgMfrSetSelfSettings,
         MsgMfrGetOwnerPlayerIndex,
         MsgMfrStartWar,
+
+        MsgCcrCreateRoom,
+        MsgCcrGetRoomInfo,
+        MsgCcrGetRoomInfoFailed,
+        MsgCcrGetJoinedRoomInfoList,
+        MsgCcrGetJoinableRoomInfoList,
+        MsgCcrExitRoom,
+        MsgCcrJoinRoom,
+        MsgCcrDeleteRoomByPlayer,
+        MsgCcrDeleteRoomByServer,
+        MsgCcrDeletePlayer,
+        MsgCcrSetReady,
+        MsgCcrSetSelfSettings,
+        MsgCcrGetOwnerPlayerIndex,
+        MsgCcrStartWar,
 
         MsgMrrGetMaxConcurrentCount,
         MsgMrrSetMaxConcurrentCount,

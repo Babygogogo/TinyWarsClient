@@ -20,6 +20,17 @@ namespace TinyWars.Utility {
 
         MfwWarInit00,
 
+        CcwWar_Init_00,
+        CcwWar_Init_01,
+        CcwWar_Init_02,
+        CcwWar_Init_03,
+        CcwWar_Init_04,
+        CcwWar_Init_05,
+        CcwWar_Init_06,
+        CcwWar_Init_07,
+        CcwWar_Init_08,
+        CcwWar_Init_09,
+
         TwWarInitByMapRawData00,
 
         BwDrawVoteManagerInit00,
@@ -936,6 +947,17 @@ namespace TinyWars.Utility {
         BwWarActionReviser_ReviseUnknownAction_07,
         BwWarActionReviser_ReviseUnknownAction_08,
         BwWarActionReviser_ReviseUnknownAction_09,
+
+        MpwModel_LoadWar_00,
+        MpwModel_LoadWar_01,
+        MpwModel_LoadWar_02,
+        MpwModel_LoadWar_03,
+        MpwModel_LoadWar_04,
+        MpwModel_LoadWar_05,
+        MpwModel_LoadWar_06,
+        MpwModel_LoadWar_07,
+        MpwModel_LoadWar_08,
+        MpwModel_LoadWar_09,
 
         SpwModel_HandlePlayerOrRobotAction_00,
         SpwModel_HandlePlayerOrRobotAction_01,

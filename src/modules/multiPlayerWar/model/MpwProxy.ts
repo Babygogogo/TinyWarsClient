@@ -7,8 +7,6 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
     import ProtoTypes   = Utility.ProtoTypes;
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
-    import GridIndex    = Types.GridIndex;
-    import UnitType     = Types.UnitType;
     import BwWar        = BaseWar.BwWar;
     import NetMessage   = ProtoTypes.NetMessage;
 

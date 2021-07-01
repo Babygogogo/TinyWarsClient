@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiPlayerWar.MpwModel {
     import Types                = Utility.Types;
     import Logger               = Utility.Logger;
@@ -134,12 +135,11 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
             unloadWar();
         }
 
-        const war = data.settingsForMcw
-            ? new MultiCustomWar.McwWar()
-            : (data.settingsForMrw
-                ? new MultiRankWar.MrwWar()
-                : new MultiFreeWar.MfwWar()
-            );
+        const war = createWarByWarData(data);
+        if (war == null) {
+            return { errorCode: ClientErrorCode.MpwModel_LoadWar_00 };
+        }
+
         const initError = await war.init(data);
         if (initError) {
             return { errorCode: initError };
@@ -362,6 +362,20 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                     checkAndRunFirstCachedAction(war, actionList);
                 }
             }
+        }
+    }
+
+    function createWarByWarData(data: ProtoTypes.WarSerialization.ISerialWar): MpwWar | undefined {
+        if (data.settingsForMcw) {
+            return new MultiCustomWar.McwWar();
+        } else if (data.settingsForMrw) {
+            return new MultiRankWar.MrwWar();
+        } else if (data.settingsForMfw) {
+            return new MultiFreeWar.MfwWar();
+        } else if (data.settingsForCcw) {
+            return new CoopCustomWar.CcwWar();
+        } else {
+            return undefined;
         }
     }
 }

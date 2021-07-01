@@ -562,6 +562,7 @@ namespace TinyWars.Utility.Types {
         PublicChannel   = 3,
         McrRoom         = 4,
         MfrRoom         = 5,
+        CcrRoom         = 6,
     }
 
     // eslint-disable-next-line no-shadow
