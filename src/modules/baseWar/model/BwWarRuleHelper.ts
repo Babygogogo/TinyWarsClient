@@ -348,6 +348,25 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         }
     }
 
+    export function setFixedCoIdInCcw(warRule: IWarRule, playerIndex: number, coId: number | null | undefined): void {
+        const playerRule = getPlayerRule(warRule, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwWarRuleHelper.setFixedCoIdInCcw() empty playerRule.`);
+            return;
+        }
+
+        playerRule.fixedCoIdInCcw = coId;
+    }
+    export function getFixedCoIdInCcw(warRule: IWarRule, playerIndex: number): number | null | undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwWarRuleHelper.getFixedCoIdInCcw() empty playerRule.`);
+            return undefined;
+        }
+
+        return playerRule.fixedCoIdInCcw;
+    }
+
     export function getTeamIndex(warRule: IWarRule, playerIndex: number): number {
         if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
             return CommonConstants.WarNeutralTeamIndex;
@@ -476,7 +495,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
 
         return getRandomCoIdWithCoIdList(availableCoIdArray);
     }
-    export function getRandomCoIdWithCoIdList(coIdList: number[]): number {
+    export function getRandomCoIdWithCoIdList(coIdList: number[]): number | undefined {
         if (coIdList == null) {
             return undefined;
         } else {

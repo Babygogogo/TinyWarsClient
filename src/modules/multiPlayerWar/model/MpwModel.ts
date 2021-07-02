@@ -21,6 +21,7 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     let _mcwPreviewingWarId     : number | undefined;
     let _mrwPreviewingWarId     : number | undefined;
     let _mfwPreviewingWarId     : number | undefined;
+    let _ccwPreviewingWarId     : number | undefined;
     let _war                    : MpwWar | undefined;
     const _cachedActions        : IWarActionContainer[] = [];
 
@@ -42,6 +43,9 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     }
     export function getMyMfwWarInfoArray(): IMpwWarInfo[] {
         return getAllMyWarInfoList().filter(v => v.settingsForMfw != null);
+    }
+    export function getMyCcwWarInfoArray(): IMpwWarInfo[] {
+        return getAllMyWarInfoList().filter(v => v.settingsForCcw != null);
     }
     export function getMyWarInfo(warId: number): IMpwWarInfo | undefined {
         return getAllMyWarInfoList().find(v => v.warId === warId);
@@ -77,6 +81,16 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
         }
     }
 
+    export function getCcwPreviewingWarId(): number | undefined {
+        return _ccwPreviewingWarId;
+    }
+    export function setCcwPreviewingWarId(warId: number | undefined): void {
+        if (getCcwPreviewingWarId() != warId) {
+            _ccwPreviewingWarId = warId;
+            Notify.dispatch(Notify.Type.CcwPreviewingWarIdChanged);
+        }
+    }
+
     export function checkIsRedForMyMcwWars(): boolean {
         return checkIsRedForMyWars(getMyMcwWarInfoArray());
     }
@@ -85,6 +99,9 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
     }
     export function checkIsRedForMyMfwWars(): boolean {
         return checkIsRedForMyWars(getMyMfwWarInfoArray());
+    }
+    export function checkIsRedForMyCcwWars(): boolean {
+        return checkIsRedForMyWars(getMyCcwWarInfoArray());
     }
     export function checkIsRedForMyWar(warInfo: IMpwWarInfo | null | undefined): boolean {
         if (warInfo == null) {
@@ -185,7 +202,11 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                     callback: () => {
                         if (war instanceof MultiRankWar.MrwWar) {
                             Utility.FlowManager.gotoMrwMyWarListPanel();
-                        } else {
+                        } else if (war instanceof MultiFreeWar.MfwWar) {
+                            Utility.FlowManager.gotoMfwMyWarListPanel();
+                        } else if (war instanceof CoopCustomWar.CcwWar) {
+                            Utility.FlowManager.gotoCcwMyWarListPanel();
+                        } else if (war instanceof MultiCustomWar.McwWar) {
                             Utility.FlowManager.gotoMcwMyWarListPanel();
                         }
                     },
@@ -199,7 +220,11 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
                     callback: () => {
                         if (war instanceof MultiRankWar.MrwWar) {
                             Utility.FlowManager.gotoMrwMyWarListPanel();
-                        } else {
+                        } else if (war instanceof MultiFreeWar.MfwWar) {
+                            Utility.FlowManager.gotoMfwMyWarListPanel();
+                        } else if (war instanceof CoopCustomWar.CcwWar) {
+                            Utility.FlowManager.gotoCcwMyWarListPanel();
+                        } else if (war instanceof MultiCustomWar.McwWar) {
                             Utility.FlowManager.gotoMcwMyWarListPanel();
                         }
                     },
@@ -323,7 +348,11 @@ namespace TinyWars.MultiPlayerWar.MpwModel {
         const callbackForGoBack = () => {
             if (war instanceof MultiRankWar.MrwWar) {
                 Utility.FlowManager.gotoMrwMyWarListPanel();
-            } else {
+            } else if (war instanceof MultiFreeWar.MfwWar) {
+                Utility.FlowManager.gotoMfwMyWarListPanel();
+            } else if (war instanceof CoopCustomWar.CcwWar) {
+                Utility.FlowManager.gotoCcwMyWarListPanel();
+            } else if (war instanceof MultiCustomWar.McwWar) {
                 Utility.FlowManager.gotoMcwMyWarListPanel();
             }
         };

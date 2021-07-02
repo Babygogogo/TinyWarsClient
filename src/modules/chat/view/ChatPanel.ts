@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Chat {
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
@@ -16,8 +17,8 @@ namespace TinyWars.Chat {
         toUserId?       : number;
         toMcrRoomId?    : number;
         toMfrRoomId?    : number;
-    }
-
+        toCcrRoomId?    : number;
+    };
     export class ChatPanel extends GameUi.UiPanel<OpenDataForChatPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -27,15 +28,15 @@ namespace TinyWars.Chat {
         private readonly _imgMask           : GameUi.UiImage;
 
         private readonly _groupChannel      : eui.Group;
-        private readonly _listChat          : TinyWars.GameUi.UiScrollList<DataForChatPageRenderer>;
-        private readonly _btnClose          : TinyWars.GameUi.UiButton;
-        private readonly _btnRefresh        : TinyWars.GameUi.UiButton;
+        private readonly _listChat          : GameUi.UiScrollList<DataForChatPageRenderer>;
+        private readonly _btnClose          : GameUi.UiButton;
+        private readonly _btnRefresh        : GameUi.UiButton;
         private readonly _groupMessage      : eui.Group;
-        private readonly _labelNoMessage    : TinyWars.GameUi.UiLabel;
-        private readonly _listMessage       : TinyWars.GameUi.UiScrollList<DataForMessageRenderer>;
+        private readonly _labelNoMessage    : GameUi.UiLabel;
+        private readonly _listMessage       : GameUi.UiScrollList<DataForMessageRenderer>;
         private readonly _groupInput        : eui.Group;
-        private readonly _inputMessage      : TinyWars.GameUi.UiTextInput;
-        private readonly _btnSend           : TinyWars.GameUi.UiButton;
+        private readonly _inputMessage      : GameUi.UiTextInput;
+        private readonly _btnSend           : GameUi.UiButton;
 
         private _dataForListChat: DataForChatPageRenderer[] = [];
         private _selectedIndex  : number;
@@ -128,7 +129,7 @@ namespace TinyWars.Chat {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -167,13 +168,13 @@ namespace TinyWars.Chat {
             this._listChat.bindData(newDataList);
         }
 
-        private async _onMsgChatGetAllMessages(e: egret.Event): Promise<void> {
+        private async _onMsgChatGetAllMessages(): Promise<void> {
             this._dataForListChat = await this._createDataForListChat();
             this._listChat.bindData(this._dataForListChat);
             this.setSelectedIndex(0);
         }
 
-        private _onTouchedBtnRefresh(e: egret.TouchEvent): void {
+        private _onTouchedBtnRefresh(): void {
             const currTime  = Time.TimeModel.getServerTimestamp();
             const cdTime    = ChatModel.getTimestampForNextReqAllMessages() - currTime;
             if (cdTime > 0) {
@@ -184,7 +185,7 @@ namespace TinyWars.Chat {
             }
         }
 
-        private _onTouchedBtnSend(e: egret.TouchEvent): void {
+        private _onTouchedBtnSend(): void {
             const content = this._inputMessage.text;
             if (content) {
                 if (content.length > CommonConstants.ChatContentMaxLength) {
@@ -304,6 +305,18 @@ namespace TinyWars.Chat {
                     ++indexForSort;
                 }
             }
+            for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.CcrRoom)) {
+                if (await CoopCustomRoom.CcrModel.getRoomInfo(toRoomId)) {
+                    dataDict.set(indexForSort, {
+                        index       : indexForSort,
+                        panel       : this,
+                        toCategory  : ChatCategory.CcrRoom,
+                        toTarget    : toRoomId,
+                    });
+                    timestampList.push(getLatestTimestamp(indexForSort, msgList));
+                    ++indexForSort;
+                }
+            }
             for (const [toRoomId, msgList] of ChatModel.getMessagesForCategory(ChatCategory.MfrRoom)) {
                 if (await MultiFreeRoom.MfrModel.getRoomInfo(toRoomId)) {
                     dataDict.set(indexForSort, {
@@ -368,28 +381,46 @@ namespace TinyWars.Chat {
                 ++indexForSort;
             }
 
-            const toMcrRoomId = openData.toMcrRoomId;
-            if ((toMcrRoomId != null) && (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.McrRoom, toTarget: toMcrRoomId }))) {
-                dataDict.set(indexForSort, {
-                    index       : indexForSort,
-                    panel       : this,
-                    toCategory  : ChatCategory.McrRoom,
-                    toTarget    : toMcrRoomId,
-                });
-                timestampList.push(getLatestTimestamp(indexForSort, null));
-                ++indexForSort;
+            {
+                const toMcrRoomId = openData.toMcrRoomId;
+                if ((toMcrRoomId != null) && (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.McrRoom, toTarget: toMcrRoomId }))) {
+                    dataDict.set(indexForSort, {
+                        index       : indexForSort,
+                        panel       : this,
+                        toCategory  : ChatCategory.McrRoom,
+                        toTarget    : toMcrRoomId,
+                    });
+                    timestampList.push(getLatestTimestamp(indexForSort, null));
+                    ++indexForSort;
+                }
             }
 
-            const toMfrRoomId = openData.toMfrRoomId;
-            if ((toMfrRoomId != null) && (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.MfrRoom, toTarget: toMfrRoomId }))) {
-                dataDict.set(indexForSort, {
-                    index       : indexForSort,
-                    panel       : this,
-                    toCategory  : ChatCategory.MfrRoom,
-                    toTarget    : toMfrRoomId,
-                });
-                timestampList.push(getLatestTimestamp(indexForSort, null));
-                ++indexForSort;
+            {
+                const toCcrRoomId = openData.toCcrRoomId;
+                if ((toCcrRoomId != null) && (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.CcrRoom, toTarget: toCcrRoomId }))) {
+                    dataDict.set(indexForSort, {
+                        index       : indexForSort,
+                        panel       : this,
+                        toCategory  : ChatCategory.CcrRoom,
+                        toTarget    : toCcrRoomId,
+                    });
+                    timestampList.push(getLatestTimestamp(indexForSort, null));
+                    ++indexForSort;
+                }
+            }
+
+            {
+                const toMfrRoomId = openData.toMfrRoomId;
+                if ((toMfrRoomId != null) && (!checkHasDataForChatCategoryAndTarget({ dict: dataDict, toCategory: ChatCategory.MfrRoom, toTarget: toMfrRoomId }))) {
+                    dataDict.set(indexForSort, {
+                        index       : indexForSort,
+                        panel       : this,
+                        toCategory  : ChatCategory.MfrRoom,
+                        toTarget    : toMfrRoomId,
+                    });
+                    timestampList.push(getLatestTimestamp(indexForSort, null));
+                    ++indexForSort;
+                }
             }
 
             timestampList.sort((a, b) => b.timestamp - a.timestamp);
@@ -436,20 +467,35 @@ namespace TinyWars.Chat {
                 }
             }
 
-            const toMcrRoomId = openData.toMcrRoomId;
-            if (toMcrRoomId != null) {
-                for (const data of dataForListChat) {
-                    if ((data.toCategory === ChatCategory.McrRoom) && (data.toTarget === toMcrRoomId)) {
-                        return data.index;
+            {
+                const toMcrRoomId = openData.toMcrRoomId;
+                if (toMcrRoomId != null) {
+                    for (const data of dataForListChat) {
+                        if ((data.toCategory === ChatCategory.McrRoom) && (data.toTarget === toMcrRoomId)) {
+                            return data.index;
+                        }
                     }
                 }
             }
 
-            const toMfrRoomId = openData.toMfrRoomId;
-            if (toMfrRoomId != null) {
-                for (const data of dataForListChat) {
-                    if ((data.toCategory === ChatCategory.MfrRoom) && (data.toTarget === toMfrRoomId)) {
-                        return data.index;
+            {
+                const toCcrRoomId = openData.toCcrRoomId;
+                if (toCcrRoomId != null) {
+                    for (const data of dataForListChat) {
+                        if ((data.toCategory === ChatCategory.CcrRoom) && (data.toTarget === toCcrRoomId)) {
+                            return data.index;
+                        }
+                    }
+                }
+            }
+
+            {
+                const toMfrRoomId = openData.toMfrRoomId;
+                if (toMfrRoomId != null) {
+                    for (const data of dataForListChat) {
+                        if ((data.toCategory === ChatCategory.MfrRoom) && (data.toTarget === toMfrRoomId)) {
+                            return data.index;
+                        }
                     }
                 }
             }
@@ -486,7 +532,7 @@ namespace TinyWars.Chat {
         panel       : ChatPanel;
         toCategory  : ChatCategory;
         toTarget    : number;
-    }
+    };
 
     class ChatPageRenderer extends GameUi.UiListItemRenderer<DataForChatPageRenderer> {
         private _labelName      : GameUi.UiLabel;
@@ -502,21 +548,21 @@ namespace TinyWars.Chat {
             ]);
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             const data = this.data;
             data.panel.setSelectedIndex(data.index);
         }
 
-        private _onMsgChatGetAllMessages(e: egret.Event): void {
+        private _onMsgChatGetAllMessages(): void {
             this._updateImgRed();
         }
-        private _onMsgChatAddMessage(e: egret.Event): void {
+        private _onMsgChatAddMessage(): void {
             this._updateImgRed();
         }
-        private _onMsgChatGetAllReadProgressList(e: egret.Event): void {
+        private _onMsgChatGetAllReadProgressList(): void {
             this._updateImgRed();
         }
-        private _onMsgChatUpdateReadProgress(e: egret.Event): void {
+        private _onMsgChatUpdateReadProgress(): void {
             this._updateImgRed();
         }
 
@@ -561,6 +607,18 @@ namespace TinyWars.Chat {
                     }
                 });
 
+            } else if (toCategory === ChatCategory.CcrRoom) {
+                labelType.text = `${Lang.getText(Lang.Type.B0643)} #${toTarget}`;
+                labelName.text = null;
+                CoopCustomRoom.CcrModel.getRoomInfo(toTarget).then(async (v) => {
+                    const warName = v ? v.settingsForCcw.warName : null;
+                    if (warName) {
+                        labelName.text = warName;
+                    } else {
+                        labelName.text = await WarMap.WarMapModel.getMapNameInCurrentLanguage(v.settingsForCcw.mapId);
+                    }
+                });
+
             } else if (toCategory === ChatCategory.MfrRoom) {
                 labelType.text = `${Lang.getText(Lang.Type.B0556)} #${toTarget}`;
                 labelName.text = null;
@@ -581,10 +639,10 @@ namespace TinyWars.Chat {
 
     type DataForMessageRenderer = {
         message: ProtoTypes.Chat.IChatMessage;
-    }
+    };
     class MessageRenderer extends GameUi.UiListItemRenderer<DataForMessageRenderer> {
-        private _labelName      : TinyWars.GameUi.UiLabel;
-        private _labelContent   : TinyWars.GameUi.UiLabel;
+        private _labelName      : GameUi.UiLabel;
+        private _labelContent   : GameUi.UiLabel;
 
         protected _onDataChanged(): void {
             const message               = this.data.message;
@@ -600,7 +658,7 @@ namespace TinyWars.Chat {
             });
         }
 
-        public async onItemTapEvent(e: eui.ItemTapEvent): Promise<void> {
+        public async onItemTapEvent(): Promise<void> {
             const message = this.data.message;
             if (message.toCategory !== ChatCategory.Private) {
                 const userId = message.fromUserId;

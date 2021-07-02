@@ -1057,6 +1057,10 @@ namespace TinyWars.Utility.Lang {
             `注意：各版本的玩家数据不互通。您可能需要重新注册账户。`,
             `Note: The user data is not interchangeable between the versions. You may need to register again.`,
         ],
+        [Type.A0220]: [
+            `您已选择由自己控制此势力，无法修改为AI控制。`,
+            `You have chosen to use this force.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.
@@ -3609,6 +3613,18 @@ namespace TinyWars.Utility.Lang {
             `用户ID`,
             `User ID`,
         ],
+        [Type.B0641]: [
+            `由AI控制`,
+            `Controlled by A.I.`,
+        ],
+        [Type.B0642]: [
+            `AI使用的CO`,
+            `CO for A.I.`,
+        ],
+        [Type.B0643]: [
+            `合作房间`,
+            `Coop Room`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -4858,6 +4874,8 @@ namespace TinyWars.Utility.Lang {
             case PlayerRuleType.VisionRangeModifier     : return getText(Type.B0184);
             case PlayerRuleType.LuckLowerLimit          : return getText(Type.B0189);
             case PlayerRuleType.LuckUpperLimit          : return getText(Type.B0190);
+            case PlayerRuleType.AiCoIdInCcw             : return getText(Type.B0641);
+            case PlayerRuleType.AiControlInCcw          : return getText(Type.B0642);
             default                                     : return undefined;
         }
     }

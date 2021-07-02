@@ -5,6 +5,7 @@ namespace TinyWars.CoopCustomRoom.CcrModel {
     import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
     import Notify           = Utility.Notify;
+    import ClientErrorCode  = Utility.ClientErrorCode;
     import Helpers          = Utility.Helpers;
     import CommonConstants  = Utility.CommonConstants;
     import WarMapModel      = WarMap.WarMapModel;
@@ -278,7 +279,7 @@ namespace TinyWars.CoopCustomRoom.CcrModel {
         export function getData(): DataForCreateRoom {
             return _dataForCreateRoom;
         }
-        export function getWarRule(): ProtoTypes.WarRule.IWarRule {
+        export function getWarRule(): ProtoTypes.WarRule.IWarRule | null | undefined {
             return getData().settingsForCommon.warRule;
         }
 
@@ -293,55 +294,72 @@ namespace TinyWars.CoopCustomRoom.CcrModel {
             getData().settingsForCommon.configVersion = version;
         }
 
-        export async function resetDataByWarRuleId(ruleId: number): Promise<void> {
+        export async function resetDataByWarRuleId(ruleId: number): Promise<ClientErrorCode> {
             if (ruleId == null) {
-                Logger.error(`CcwModel.resetDataByPresetWarRuleId() empty ruleId.`);
-                return undefined;
+                return ClientErrorCode.CcrModel_ResetDataByWarRuleId_00;
             }
 
-            const warRule = (await getMapRawData()).warRuleArray.find(r => r.ruleId === ruleId);
+            const mapRawData        = await getMapRawData();
+            const warRuleArray      = mapRawData ? mapRawData.warRuleArray : undefined;
+            const warRule           = warRuleArray ? warRuleArray.find(r => r.ruleId === ruleId) : undefined;
             if (warRule == null) {
-                Logger.error(`CcwModel.resetDataByPresetWarRuleId() empty warRule.`);
-                return undefined;
+                return ClientErrorCode.CcrModel_ResetDataByWarRuleId_01;
             }
 
-            const ruleForPlayers    = warRule.ruleForPlayers;
+            const ruleForPlayers    = warRule ? warRule.ruleForPlayers : undefined;
             const playerRuleArray   = ruleForPlayers ? ruleForPlayers.playerRuleDataArray : null;
             if (playerRuleArray == null) {
-                Logger.error(`CcwModel.resetDataByPresetWarRuleId() empty playerRuleArray.`);
-                return undefined;
+                return ClientErrorCode.CcrModel_ResetDataByWarRuleId_02;
             }
 
-            const humanPlayerIndexArray: number[] = [];
-            const robotPlayerIndexArray: number[] = [];
+            const humanPlayerIndexArray : number[] = [];
+            const aiPlayerIndexArray    : number[] = [];
             for (const playerRule of playerRuleArray) {
                 const playerIndex = playerRule.playerIndex;
                 if (playerIndex == null) {
-                    Logger.error(`CcwModel.resetDataByPresetWarRuleId() empty playerIndex.`);
-                    return undefined;
+                    return ClientErrorCode.CcrModel_ResetDataByWarRuleId_03;
                 }
 
                 if (playerRule.fixedCoIdInCcw == null) {
                     humanPlayerIndexArray.push(playerIndex);
                 } else {
-                    robotPlayerIndexArray.push(playerIndex);
+                    aiPlayerIndexArray.push(playerIndex);
                 }
             }
 
+            const settingsForCommon = getData().settingsForCommon;
+            if (settingsForCommon == null) {
+                return ClientErrorCode.CcrModel_ResetDataByWarRuleId_04;
+            }
+
+            const configVersion = settingsForCommon.configVersion;
+            if (configVersion == null) {
+                return ClientErrorCode.CcrModel_ResetDataByWarRuleId_05;
+            }
+
             const selfPlayerIndex       = Math.min(...humanPlayerIndexArray);
-            const settingsForCommon     = getData().settingsForCommon;
-            settingsForCommon.warRule   = Helpers.deepClone(warRule);
+            const availableCoIdArray    = BwWarRuleHelper.getAvailableCoIdArrayForPlayer(warRule, selfPlayerIndex, configVersion);
+            if (availableCoIdArray == null) {
+                return ClientErrorCode.CcrModel_ResetDataByWarRuleId_06;
+            }
+
+            settingsForCommon.warRule = Helpers.deepClone(warRule);
             setPresetWarRuleId(ruleId);
             setSelfPlayerIndex(selfPlayerIndex);
             setSelfUnitAndTileSkinId(selfPlayerIndex);
-            resetAiSkinInfoArray(robotPlayerIndexArray);
+            resetAiSkinInfoArray(aiPlayerIndexArray);
 
-            const availableCoIdArray = BwWarRuleHelper.getAvailableCoIdArrayForPlayer(warRule, selfPlayerIndex, settingsForCommon.configVersion);
-            if (availableCoIdArray.indexOf(getSelfCoId()) < 0) {
-                setSelfCoId(BwWarRuleHelper.getRandomCoIdWithCoIdList(availableCoIdArray));
+            const selfCoId = getSelfCoId();
+            if ((selfCoId == null) || (availableCoIdArray.indexOf(selfCoId) < 0)) {
+                const coId = BwWarRuleHelper.getRandomCoIdWithCoIdList(availableCoIdArray);
+                if (coId == null) {
+                    return ClientErrorCode.CcrModel_ResetDataByWarRuleId_07;
+                }
+                setSelfCoId(coId);
             }
 
             Notify.dispatch(Notify.Type.CcrCreateTeamIndexChanged);
+            return ClientErrorCode.NoError;
         }
         function setPresetWarRuleId(ruleId: number | null | undefined): void {
             const settingsForCommon             = getData().settingsForCommon;
@@ -439,7 +457,7 @@ namespace TinyWars.CoopCustomRoom.CcrModel {
             return getData().selfUnitAndTileSkinId;
         }
 
-        function resetAiSkinInfoArray(robotPlayerIndexArray: number[]): void {
+        function resetAiSkinInfoArray(aiPlayerIndexArray: number[]): void {
             const infoArray = getAiSkinInfoArray();
             if (infoArray == null) {
                 Logger.error(`CcrModel.resetAiSkinInfoArray() empty infoArray.`);
@@ -447,15 +465,72 @@ namespace TinyWars.CoopCustomRoom.CcrModel {
             }
 
             infoArray.length = 0;
-            for (const playerIndex of robotPlayerIndexArray) {
+            for (const playerIndex of aiPlayerIndexArray) {
                 infoArray.push({
                     playerIndex,
                     unitAndTileSkinId   : playerIndex,
                 });
             }
         }
-        export function getAiSkinInfoArray(): ProtoTypes.NetMessage.MsgCcrCreateRoom.IAiSkinInfo[] {
+        function getAiSkinInfoArray(): ProtoTypes.NetMessage.MsgCcrCreateRoom.IAiSkinInfo[] {
             return getData().aiSkinInfoArray;
+        }
+        export function getAiSkinId(playerIndex: number): number | null | undefined {
+            const infoArray = getAiSkinInfoArray();
+            if (infoArray == null) {
+                Logger.error(`CcrModel.getAiSkinId() empty infoArray.`);
+                return undefined;
+            }
+
+            const info = infoArray.find(v => v.playerIndex === playerIndex);
+            return info ? info.unitAndTileSkinId : undefined;
+        }
+        export function setAiSkinId(playerIndex: number, skinId: number): void {
+            const infoArray = getAiSkinInfoArray();
+            if (infoArray == null) {
+                Logger.error(`CcrModel.setAiSkinId() empty infoArray.`);
+                return;
+            }
+
+            const info = infoArray.find(v => v.playerIndex === playerIndex);
+            if (info) {
+                info.unitAndTileSkinId = skinId;
+            } else {
+                infoArray.push({
+                    playerIndex,
+                    unitAndTileSkinId   : skinId,
+                });
+            }
+        }
+        export function deleteAiSkinId(playerIndex: number): void {
+            const infoArray = getAiSkinInfoArray();
+            if (infoArray == null) {
+                Logger.error(`CcrModel.deleteAiSkinId() empty infoArray.`);
+                return;
+            }
+
+            infoArray.splice(infoArray.findIndex(v => v.playerIndex === playerIndex), 1);
+            Notify.dispatch(Notify.Type.CcrCreateAiCoIdChanged);
+        }
+
+        export function setAiCoId(playerIndex: number, coId: number | null | undefined): void {
+            const warRule = getWarRule();
+            if (warRule == null) {
+                Logger.error(`CcrModel.setAiCoId() empty warRule.`);
+                return;
+            }
+
+            BwWarRuleHelper.setFixedCoIdInCcw(warRule, playerIndex, coId);
+            Notify.dispatch(Notify.Type.CcrCreateAiCoIdChanged);
+        }
+        export function getAiCoId(playerIndex: number): number | null | undefined {
+            const warRule = getWarRule();
+            if (warRule == null) {
+                Logger.error(`CcrModel.getAiCoId() empty warRule.`);
+                return undefined;
+            }
+
+            return BwWarRuleHelper.getFixedCoIdInCcw(warRule, playerIndex);
         }
 
         export function setHasFog(hasFog: boolean): void {

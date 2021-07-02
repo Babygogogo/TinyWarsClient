@@ -51,6 +51,7 @@ namespace TinyWars.Utility.Notify {
 
         CcrCreateBannedCoIdArrayChanged,
         CcrCreateTeamIndexChanged,
+        CcrCreateAiCoIdChanged,
         CcrCreateSelfCoIdChanged,
         CcrCreateSelfSkinIdChanged,
         CcrCreateSelfPlayerIndexChanged,
@@ -74,6 +75,7 @@ namespace TinyWars.Utility.Notify {
         McwPreviewingWarIdChanged,
         MrwPreviewingWarIdChanged,
         MfwPreviewingWarIdChanged,
+        CcwPreviewingWarIdChanged,
         RwPreviewingReplayIdChanged,
         SpmPreviewingWarSaveSlotChanged,
 

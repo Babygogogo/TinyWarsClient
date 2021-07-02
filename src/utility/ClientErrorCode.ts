@@ -599,6 +599,17 @@ namespace TinyWars.Utility {
         BwHelpers_ExeInstantSkill_08,
         BwHelpers_ExeInstantSkill_09,
 
+        CcrModel_ResetDataByWarRuleId_00,
+        CcrModel_ResetDataByWarRuleId_01,
+        CcrModel_ResetDataByWarRuleId_02,
+        CcrModel_ResetDataByWarRuleId_03,
+        CcrModel_ResetDataByWarRuleId_04,
+        CcrModel_ResetDataByWarRuleId_05,
+        CcrModel_ResetDataByWarRuleId_06,
+        CcrModel_ResetDataByWarRuleId_07,
+        CcrModel_ResetDataByWarRuleId_08,
+        CcrModel_ResetDataByWarRuleId_09,
+
         WarRuleGlobalParamsValidation00,
 
         UnitDataValidation00,

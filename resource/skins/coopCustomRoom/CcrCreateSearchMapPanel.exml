@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin width="960" height="540" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
+        xmlns:w="http://ns.egret.com/wing">
+    <GameUi:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
+                    scale9Grid="1,1,2,2" locked="true" />
+    <e:Group id="_group" width="450" height="360" horizontalCenter="0" verticalCenter="0">
+        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
+                        source="commonColorBlack0001" scale9Grid="1,1,2,2" />
+        <GameUi:UiLabel id="_labelName" text="查找地图" textColor="0xffffff" y="20" size="20" x="20" bold="true" />
+        <GameUi:UiImage width="410" height="2" x="20" y="50" source="commonColorWhite0000" />
+        <GameUi:UiLabel id="_labelDesc" text="注:任意条件均可留空,等同于不限查找结果" size="12" lineSpacing="3" wordWrap="true"
+                        textAlign="center" x="20" y="56" textColor="0xAAAAAA" />
+        <e:Group x="20" y="80">
+            <e:Group x="0" y="0" height="32" width="410">
+                <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
+                                scale9Grid="1,1,2,2" />
+                <GameUi:UiLabel id="_labelMapNameTitle" text="Map Name" textColor="0xFFFFFF" size="16"
+                                maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
+                <GameUi:UiTextInput id="_inputMapName" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" verticalCenter="0"
+                                    height="24" right="6" skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
+            </e:Group>
+            <e:Group x="0" y="0" height="32" width="410">
+                <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
+                                scale9Grid="1,1,2,2" />
+                <GameUi:UiLabel id="_labelDesignerTitle" text="Designer" textColor="0xFFFFFF" size="16"
+                                maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
+                <GameUi:UiTextInput id="_inputDesigner" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="20" verticalCenter="0"
+                                    height="24" right="6" skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
+            </e:Group>
+            <e:Group x="0" y="0" height="32" width="410">
+                <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
+                                scale9Grid="1,1,2,2" />
+                <GameUi:UiLabel id="_labelPlayersCountTitle" text="Players" textColor="0xFFFFFF" size="16"
+                                maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
+                <GameUi:UiTextInput id="_inputPlayersCount" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="1"
+                                    verticalCenter="0" height="24" right="6" restrict="2-4"
+                                    skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
+            </e:Group>
+            <e:Group x="0" y="0" height="32" width="410">
+                <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
+                                scale9Grid="1,1,2,2" />
+                <GameUi:UiLabel id="_labelPlayedTimesTitle" text="Min. Popularity" textColor="0xFFFFFF" size="16"
+                                maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
+                <GameUi:UiTextInput id="_inputPlayedTimes" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="10"
+                                    verticalCenter="0" height="24" right="6" restrict="0-9"
+                                    skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
+            </e:Group>
+            <e:Group x="0" y="0" height="32" width="410">
+                <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
+                                scale9Grid="1,1,2,2" />
+                <GameUi:UiLabel id="_labelMinRatingTitle" text="Min. Rating" textColor="0xFFFFFF" size="16"
+                                maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
+                <GameUi:UiTextInput id="_inputMinRating" width="270" anchorOffsetX="0" anchorOffsetY="0" maxChars="4" verticalCenter="0"
+                                    height="24" right="6" restrict="0-9."
+                                    skinName="Skins.Component.TextInput.TextInput002"></GameUi:UiTextInput>
+            </e:Group>
+            <e:Group x="0" y="0" height="32" width="410">
+                <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000" alpha="0.4"
+                                scale9Grid="1,1,2,2" />
+                <GameUi:UiLabel id="_labelTagFogTitle" text="FoW Tagged" textColor="0xFFFFFF" size="16"
+                                maxTextWidth="100" x="10" verticalCenter="0" bold="true" />
+                <e:Group verticalCenter="0" height="24" right="6" width="270">
+                    <GameUi:UiImage source="commonRectangle0001" scale9Grid="2,2,1,1" left="0" right="0" top="0"
+                                    bottom="0" />
+                    <GameUi:UiLabel id="_labelTagFog" size="16" touchEnabled="false" text="Yes" x="10"
+                                    verticalCenter="0" textColor="0xFFFFFF" />
+                </e:Group>
+                <GameUi:UiButton id="_btnTagFog" top="0" bottom="0" width="40" right="0"
+                                 skinName="Skins.Component.Button.ButtonTriangle001"></GameUi:UiButton>
+            </e:Group>
+            <e:layout>
+                <e:VerticalLayout gap="4" />
+            </e:layout>
+        </e:Group>
+        <e:Group bottom="20" right="20">
+            <GameUi:UiButton id="_btnSearch" label="确定" width="80" x="0" y="0">
+                <GameUi:skinName>
+                    <e:Skin>
+                        <e:Group left="0" right="0" y="0">
+                            <e:Image left="0" right="0" top="0" bottom="0" source="commonPentagon0000"
+                                     scale9Grid="4,4,1,1" />
+                            <GameUi:UiLabel id="labelDisplay" size="12" textColor="0xffffff" text="asdf"
+                                            textAlign="center" verticalAlign="middle" left="10" top="8" bottom="8"
+                                            wordWrap="true" bold="true" />
+                        </e:Group>
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+            <GameUi:UiButton id="_btnReset" label="全部显示" width="80" x="10" y="10">
+                <GameUi:skinName>
+                    <e:Skin>
+                        <e:Group left="0" right="0" y="0">
+                            <e:Image left="0" right="0" top="0" bottom="0" source="commonPentagon0009"
+                                     scale9Grid="2,3,1,1" />
+                            <GameUi:UiLabel id="labelDisplay" size="12" text="asdf" textAlign="center"
+                                            verticalAlign="middle" left="10" top="8" bottom="8" wordWrap="true"
+                                            bold="true" textColor="0x000000" />
+                        </e:Group>
+                    </e:Skin>
+                </GameUi:skinName>
+            </GameUi:UiButton>
+            <e:layout>
+                <e:HorizontalLayout gap="30" />
+            </e:layout>
+        </e:Group>
+    </e:Group>
+</e:Skin>

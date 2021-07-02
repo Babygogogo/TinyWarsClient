@@ -196,6 +196,30 @@ namespace TinyWars.Utility.FlowManager {
 
         SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
+    export function gotoMfwMyWarListPanel(): void {
+        MpwModel.unloadWar();
+        RwModel.unloadWar();
+        SpwModel.unloadWar();
+        MeModel.unloadWar();
+        StageManager.closeAllPanels();
+        Lobby.LobbyBackgroundPanel.show();
+        MultiFreeWar.MfwMyWarListPanel.show();
+        Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
+    }
+    export function gotoCcwMyWarListPanel(): void {
+        MpwModel.unloadWar();
+        RwModel.unloadWar();
+        SpwModel.unloadWar();
+        MeModel.unloadWar();
+        StageManager.closeAllPanels();
+        Lobby.LobbyBackgroundPanel.show();
+        CoopCustomWar.CcwMyWarListPanel.show();
+        Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Callbacks.

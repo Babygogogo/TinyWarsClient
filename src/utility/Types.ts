@@ -591,6 +591,8 @@ namespace TinyWars.Utility.Types {
         VisionRangeModifier,
         LuckLowerLimit,
         LuckUpperLimit,
+        AiControlInCcw,
+        AiCoIdInCcw,
     }
 
     // eslint-disable-next-line no-shadow
