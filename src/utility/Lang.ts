@@ -500,8 +500,8 @@ namespace TinyWars.Utility.Lang {
             `Are you sure to save the map?`,
         ],
         [Type.A0083]: [
-            `此地图存在问题，暂不能提审`,
-            `This map is not playable.`,
+            `此地图存在以下问题，暂不能提审，但可以正常保存以备后续编辑。`,
+            `This map is not playable (see below), but you can save it and edit it later.`,
         ],
         [Type.A0084]: [
             `您已提审过其他地图。若提审此地图，则其他地图将被自动撤销提审。确定要继续吗？`,
@@ -1060,6 +1060,14 @@ namespace TinyWars.Utility.Lang {
         [Type.A0220]: [
             `您已选择由自己控制此势力，无法修改为AI控制。`,
             `You have chosen to use this force.`,
+        ],
+        [Type.A0221]: [
+            `此规则已被设定为不可用于合作模式，因此无法修改此选项。`,
+            `The war rule is not available for the Coop mode. Please change that first.`,
+        ],
+        [Type.A0222]: [
+            `无法切换控制权，因为其他势力都由AI控制。`,
+            `All other forces are controlled by the A.I. already.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3625,6 +3633,26 @@ namespace TinyWars.Utility.Lang {
             `合作房间`,
             `Coop Room`,
         ],
+        [Type.B0644]: [
+            `合作模式中AI的CO`,
+            `CO for A.I. in Coop`,
+        ],
+        [Type.B0645]: [
+            `合作模式中由AI控制`,
+            `Controlled by A.I. in Coop`,
+        ],
+        [Type.B0646]: [
+            `合作模式`,
+            `Coop Mode`,
+        ],
+        [Type.B0647]: [
+            `我`,
+            `Me`,
+        ],
+        [Type.B0648]: [
+            `其他玩家`,
+            `Others`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -4339,6 +4367,17 @@ namespace TinyWars.Utility.Lang {
                 `The results of the Free Mode will not affect the statistics in your profile. Just relax and enjoy :)`,
             ].join(`\n`),
         ],
+
+        [Type.R0008]: [
+            [
+                `合作模式是一个多人游戏模式。`,
+                `与常规模式不同的是，AI会参与游戏。您可以与AI和/或其他玩家组队，对抗其他AI和/或玩家。`,
+            ].join(`\n`),
+            [
+                `The Coop Mode is a multi-player mode.`,
+                `Unlike the Normal Mode, A.I. plays in this mode. You can team up with A.I. and/or other players to play against other A.I. and/or players.`,
+            ].join(`\n`),
+        ],
     };
 
     const ERROR_TEXT: { [errorCode: number]: string[] } = {
@@ -4349,6 +4388,14 @@ namespace TinyWars.Utility.Lang {
         [ServerErrorCode.IllegalRequest0000]: [
             "非法请求",
             "Illegal request.",
+        ],
+        [ServerErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_0022]: [
+            `合作模式下，至少要有一个势力由AI控制`,
+            `There must be at least 1 A.I. player in the Coop Mode.`,
+        ],
+        [ServerErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_0023]: [
+            `合作模式下，至少要有两个势力由真人玩家控制`,
+            `There must be at least 2 human players in the Coop Mode.`,
         ],
         [ServerErrorCode.MsgUserLogin0001]: [
             "账号不合法，请检查后重试",
@@ -4454,6 +4501,14 @@ namespace TinyWars.Utility.Lang {
             `您未参与该战局，或已经被击败`,
             `You have not joined the game, or you have been defeated.`,
         ],
+        [ServerErrorCode.ExeCcrCreateRoom_DoExecute_0019]: [
+            `AI玩家的颜色设置不合法`,
+            `The colors of the A.I. players are invalid.`,
+        ],
+        [ServerErrorCode.ExeCcrCreateRoom_DoExecute_0022]: [
+            `AI玩家的颜色与您自己的势力颜色冲突`,
+            `The colors of you and the A.I. players are invalid.`,
+        ],
         [ServerErrorCode.ExeMpwActionPlayerEndTurn_DoExecute_0001]: [
             `战局不存在`,
             `The game doesn't exist.`,
@@ -4493,7 +4548,11 @@ namespace TinyWars.Utility.Lang {
 
         [ClientErrorCode.MapRawDataValidation04]: [
             `势力数量不合法`,
-            `The number of forces is not valid.`,
+            `The number of the forces is not valid.`,
+        ],
+        [ClientErrorCode.MapRawDataValidation07]: [
+            `势力颜色不合法`,
+            `The colors of the forces are invalid.`,
         ],
         [ClientErrorCode.WarEventFullDataValidation09]: [
             `存在未被引用的事件动作`,
@@ -4506,6 +4565,14 @@ namespace TinyWars.Utility.Lang {
         [ClientErrorCode.WarRuleValidation02]: [
             `尚未设置预设规则的可用性`,
             `The availability of the preset rule has not been set.`,
+        ],
+        [ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_22]: [
+            `合作模式下，至少要有一个势力由AI控制`,
+            `There must be at least 1 A.I. player in the Coop Mode.`,
+        ],
+        [ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_23]: [
+            `合作模式下，至少要有两个势力由真人玩家控制`,
+            `There must be at least 2 human players in the Coop Mode.`,
         ],
     };
 

@@ -4,6 +4,7 @@ namespace TinyWars.CoopCustomRoom {
     import Tween        = egret.Tween;
     import Notify       = Utility.Notify;
     import Helpers      = Utility.Helpers;
+    import Lang         = Utility.Lang;
 
     export class CcrMainMenuPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -21,8 +22,7 @@ namespace TinyWars.CoopCustomRoom {
         private readonly _btnJoinRoom       : GameUi.UiButton;
         private readonly _btnMyRoom         : GameUi.UiButton;
         private readonly _btnContinueWar    : GameUi.UiButton;
-        private readonly _btnWatchWar       : GameUi.UiButton;
-        private readonly _btnReplayWar      : GameUi.UiButton;
+        private readonly _btnHelp           : GameUi.UiButton;
         private readonly _btnFreeMode       : GameUi.UiButton;
 
         public static show(): void {
@@ -52,7 +52,7 @@ namespace TinyWars.CoopCustomRoom {
                 { ui: this._btnJoinRoom,        callback: this._onTouchedBtnJoinRoom },
                 { ui: this._btnMyRoom,          callback: this._onTouchedBtnMyRoom },
                 { ui: this._btnContinueWar,     callback: this._onTouchedBtnContinueWar },
-                { ui: this._btnReplayWar,       callback: this._onTouchedBtnReplayWar },
+                { ui: this._btnHelp,            callback: this._onTouchedBtnHelp },
                 { ui: this._btnFreeMode,        callback: this._onTouchedBtnFreeMode },
             ]);
             this._setNotifyListenerArray([
@@ -103,11 +103,11 @@ namespace TinyWars.CoopCustomRoom {
             Lobby.LobbyBottomPanel.hide();
             CoopCustomWar.CcwMyWarListPanel.show();
         }
-        private _onTouchedBtnReplayWar(): void {
-            this.close();
-            Lobby.LobbyTopPanel.hide();
-            Lobby.LobbyBottomPanel.hide();
-            ReplayWar.RwReplayListPanel.show();
+        private _onTouchedBtnHelp(): void {
+            Common.CommonAlertPanel.show({
+                title   : Lang.getText(Lang.Type.B0143),
+                content : Lang.getText(Lang.Type.R0008),
+            });
         }
         private _onTouchedBtnFreeMode(): void {
             this.close();
@@ -158,31 +158,25 @@ namespace TinyWars.CoopCustomRoom {
             Helpers.resetTween({
                 obj         : this._btnJoinRoom,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 33,
+                waitTime    : 40,
                 endProps    : { alpha: 1, left: 0 },
             });
             Helpers.resetTween({
                 obj         : this._btnMyRoom,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 66,
+                waitTime    : 80,
                 endProps    : { alpha: 1, left: 0 },
             });
             Helpers.resetTween({
                 obj         : this._btnContinueWar,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 100,
+                waitTime    : 120,
                 endProps    : { alpha: 1, left: 0 },
             });
             Helpers.resetTween({
-                obj         : this._btnWatchWar,
+                obj         : this._btnHelp,
                 beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 133,
-                endProps    : { alpha: 1, left: 0 },
-            });
-            Helpers.resetTween({
-                obj         : this._btnReplayWar,
-                beginProps  : { alpha: 0, left: -40 },
-                waitTime    : 166,
+                waitTime    : 160,
                 endProps    : { alpha: 1, left: 0 },
             });
             Helpers.resetTween({
@@ -209,10 +203,8 @@ namespace TinyWars.CoopCustomRoom {
         }
 
         private async _updateView(): Promise<void> {
-            const watchInfos = MultiPlayerWar.MpwModel.getWatchRequestedWarInfos();
             this._btnMyRoom.setRedVisible(await CcrModel.checkIsRed());
             this._btnContinueWar.setRedVisible(MultiPlayerWar.MpwModel.checkIsRedForMyCcwWars());
-            this._btnWatchWar.setRedVisible((!!watchInfos) && (watchInfos.length > 0));
             this._btnFreeMode.setRedVisible(MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars() || await MultiFreeRoom.MfrModel.checkIsRed());
         }
     }

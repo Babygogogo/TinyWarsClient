@@ -69,7 +69,7 @@ namespace TinyWars.CoopCustomRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/multiCustomRoom/CcrRoomInfoPanel.exml";
+            this.skinName = "resource/skins/coopCustomRoom/CcrRoomInfoPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -321,7 +321,7 @@ namespace TinyWars.CoopCustomRoom {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMultiPlayer.text         = Lang.getText(Lang.Type.B0137);
+            this._labelMultiPlayer.text         = Lang.getText(Lang.Type.B0646);
             this._labelMyRoom.text              = Lang.getText(Lang.Type.B0410);
             this._labelRoomInfo.text            = Lang.getText(Lang.Type.B0398);
             this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
@@ -423,7 +423,7 @@ namespace TinyWars.CoopCustomRoom {
 
     type DataForTabItemRenderer = {
         name: string;
-    }
+    };
     class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
         private _labelName: GameUi.UiLabel;
 
@@ -435,7 +435,7 @@ namespace TinyWars.CoopCustomRoom {
     type DataForPlayerIndexRenderer = {
         roomId      : number;
         playerIndex : number;
-    }
+    };
     class PlayerIndexRenderer extends GameUi.UiListItemRenderer<DataForPlayerIndexRenderer> {
         private readonly _labelName : GameUi.UiLabel;
 
@@ -524,7 +524,7 @@ namespace TinyWars.CoopCustomRoom {
     type DataForSkinIdRenderer = {
         roomId  : number;
         skinId  : number;
-    }
+    };
     class SkinIdRenderer extends GameUi.UiListItemRenderer<DataForSkinIdRenderer> {
         private readonly _imgColor  : GameUi.UiImage;
 
@@ -599,7 +599,7 @@ namespace TinyWars.CoopCustomRoom {
     type DataForReadyRenderer = {
         roomId      : number;
         isReady     : boolean;
-    }
+    };
     class ReadyRenderer extends GameUi.UiListItemRenderer<DataForReadyRenderer> {
         private readonly _labelName : GameUi.UiLabel;
         private readonly _imgRed    : GameUi.UiImage;

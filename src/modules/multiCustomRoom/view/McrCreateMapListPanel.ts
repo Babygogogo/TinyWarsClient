@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
@@ -164,6 +165,7 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMultiPlayer.text         = Lang.getText(Lang.Type.B0137);
             this._labelChooseMap.text           = Lang.getText(Lang.Type.B0227);
             this._labelLoading.text             = Lang.getText(Lang.Type.A0150);
+            this._labelNoMap.text               = Lang.getText(Lang.Type.A0010);
             this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
             this._btnSearch.label               = Lang.getText(Lang.Type.B0228);
             this._btnMapInfo.label              = Lang.getText(Lang.Type.B0298);

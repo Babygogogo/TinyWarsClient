@@ -88,7 +88,7 @@ namespace TinyWars.Utility.SoundManager {
         try {
             _audioContext.resume();
         } catch (e) {
-            Logger.error(`SoundManager.resume() error.`);
+            // Logger.error(`SoundManager.resume() error.`);
         }
     }
     export function pause(): void {
@@ -97,7 +97,7 @@ namespace TinyWars.Utility.SoundManager {
         try {
             _audioContext.suspend();
         } catch (e) {
-            Logger.error(`SoundManager.pause() error.`);
+            // Logger.error(`SoundManager.pause() error.`);
         }
         _stopAllEffects();
     }

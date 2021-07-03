@@ -5,6 +5,7 @@ namespace TinyWars.CoopCustomRoom {
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
     import Types            = Utility.Types;
+    import ConfigManager    = Utility.ConfigManager;
     import CommonConstants  = Utility.CommonConstants;
     import Notify           = Utility.Notify;
     import PlayerRuleType   = Types.PlayerRuleType;
@@ -568,16 +569,22 @@ namespace TinyWars.CoopCustomRoom {
 
             const labelValue    = this._labelValue;
             const coId          = CreateModel.getAiCoId(playerIndex);
+            const configVersion = CreateModel.getData().settingsForCommon.configVersion;
             labelValue.visible  = true;
-            labelValue.text     = coId == null ? `--` : Utility.ConfigManager.getCoNameAndTierText(CreateModel.getData().settingsForCommon.configVersion, coId);
+            labelValue.text     = coId == null ? `--` : ConfigManager.getCoNameAndTierText(configVersion, coId);
 
             this._callbackForTouchLabelValue = () => {
                 if (playerIndex === CreateModel.getSelfPlayerIndex()) {
                     FloatText.show(Lang.getText(Lang.Type.A0220));
                 } else {
-                    CcrCreateChooseCoPanel.show({
-                        playerIndex,
-                        coId,
+                    Common.CommonChooseCoPanel.show({
+                        currentCoId         : coId,
+                        availableCoIdArray  : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                        callbackOnConfirm   : (newCoId) => {
+                            if (newCoId !== coId) {
+                                CreateModel.setAiCoId(playerIndex, newCoId);
+                            }
+                        },
                     });
                 }
             };

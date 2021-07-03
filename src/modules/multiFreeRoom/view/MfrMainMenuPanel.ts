@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiFreeRoom {
     import Tween    = egret.Tween;
     import Lang     = Utility.Lang;
@@ -12,17 +13,17 @@ namespace TinyWars.MultiFreeRoom {
         private static _instance: MfrMainMenuPanel;
 
         private readonly _group             : eui.Group;
-        private readonly _btnMultiPlayer    : TinyWars.GameUi.UiButton;
-        private readonly _btnRanking        : TinyWars.GameUi.UiButton;
-        private readonly _btnSinglePlayer   : TinyWars.GameUi.UiButton;
+        private readonly _btnMultiPlayer    : GameUi.UiButton;
+        private readonly _btnRanking        : GameUi.UiButton;
+        private readonly _btnSinglePlayer   : GameUi.UiButton;
 
         private readonly _groupLeft         : eui.Group;
-        private readonly _btnCreateRoom     : TinyWars.GameUi.UiButton;
-        private readonly _btnJoinRoom       : TinyWars.GameUi.UiButton;
-        private readonly _btnMyRoom         : TinyWars.GameUi.UiButton;
-        private readonly _btnContinueWar    : TinyWars.GameUi.UiButton;
-        private readonly _btnHelp           : TinyWars.GameUi.UiButton;
-        private readonly _btnNormalMode     : TinyWars.GameUi.UiButton;
+        private readonly _btnCreateRoom     : GameUi.UiButton;
+        private readonly _btnJoinRoom       : GameUi.UiButton;
+        private readonly _btnMyRoom         : GameUi.UiButton;
+        private readonly _btnContinueWar    : GameUi.UiButton;
+        private readonly _btnHelp           : GameUi.UiButton;
+        private readonly _btnNormalMode     : GameUi.UiButton;
 
         public static show(): void {
             if (!MfrMainMenuPanel._instance) {

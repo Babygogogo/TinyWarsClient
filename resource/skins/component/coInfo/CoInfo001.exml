@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <e:Skin width="360" height="400" xmlns:e="http://ns.egret.com/eui" xmlns:GameUi="TinyWars.GameUi.*"
         xmlns:w="http://ns.egret.com/wing" class="Skins.Component.CoInfo.CoInfo001">
-    <e:Group id="_group" horizontalCenter="0" verticalCenter="0">
-        <e:Group width="360" height="40" y="0">
-            <GameUi:UiImage source="commonColorBlack0001" scale9Grid="1,1,2,2" left="0" right="0" top="0" bottom="0" />
-            <GameUi:UiLabel id="_labelCoName" text="Brenner" textColor="0xFFFFFF" size="24" x="20" bold="true"
-                            verticalCenter="0" />
+    <e:Group id="_group" horizontalCenter="0" verticalCenter="0" width="360" height="400">
+        <e:Group left="0" right="0" top="0" bottom="0">
+            <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
+                            left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                source="commonColorGrey0001" y="0" left="0" right="0" />
+                <GameUi:UiLabel id="_labelCoName" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+            </e:Group>
         </e:Group>
-        <e:Group width="360" height="350" right="0" x="10" y="50">
-            <GameUi:UiImage source="commonColorBlack0001" scale9Grid="1,1,2,2" left="0" right="0" top="0" bottom="0"
-                            locked="true" />
+        <e:Group width="360" height="360" right="0" x="10" y="40">
             <GameUi:UiImage id="_imgCoPortrait" alpha="0.5" right="0" bottom="0" scaleX="0.75" scaleY="0.75"
                             source="coBust0001" />
             <e:Group x="20" y="20">
@@ -120,8 +122,5 @@
                 </e:layout>
             </e:Group>
         </e:Group>
-        <e:layout>
-            <e:VerticalLayout gap="10" />
-        </e:layout>
     </e:Group>
 </e:Skin>

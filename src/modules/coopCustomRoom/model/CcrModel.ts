@@ -217,8 +217,8 @@ namespace TinyWars.CoopCustomRoom.CcrModel {
                 return true;
             }
 
-            if ((playerDataList.length === BwWarRuleHelper.getPlayersCount(roomInfo.settingsForCommon.warRule))    &&
-                (playerDataList.every(v => (v.isReady) && (v.userId != null)))                                      &&
+            if ((playerDataList.length === BwWarRuleHelper.getPlayersCount(roomInfo.settingsForCommon.warRule))     &&
+                (playerDataList.every(v => v.isReady))                                                              &&
                 (selfPlayerData)                                                                                    &&
                 (roomInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
             ) {
@@ -239,7 +239,7 @@ namespace TinyWars.CoopCustomRoom.CcrModel {
         return (selfPlayerData != null)
             && (selfPlayerData.playerIndex === roomInfo.ownerPlayerIndex)
             && (playerDataList.length == BwWarRuleHelper.getPlayersCount(roomInfo.settingsForCommon.warRule))
-            && (playerDataList.every(v => (v.isReady) && (v.userId != null)));
+            && (playerDataList.every(v => v.isReady));
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -450,11 +450,21 @@ namespace TinyWars.CoopCustomRoom.CcrModel {
                 Notify.dispatch(Notify.Type.CcrCreateSelfSkinIdChanged);
             }
         }
-        export function tickSelfUnitAndTileSkinId(): void {
-            setSelfUnitAndTileSkinId(getSelfUnitAndTileSkinId() % CommonConstants.UnitAndTileMaxSkinId + 1);
-        }
         export function getSelfUnitAndTileSkinId(): number {
             return getData().selfUnitAndTileSkinId;
+        }
+        export function tickUnitAndTileSkinId(playerIndex: number): void {
+            if (playerIndex === getSelfPlayerIndex()) {
+                setSelfUnitAndTileSkinId(getSelfUnitAndTileSkinId() % CommonConstants.UnitAndTileMaxSkinId + 1);
+            } else {
+                const aiSkinId = getAiSkinId(playerIndex);
+                if (aiSkinId == null) {
+                    Logger.error(`CcrModel.tickUnitAndTileSkinId() empty aiSkinId.`);
+                    return;
+                }
+
+                setAiSkinId(playerIndex, aiSkinId % CommonConstants.UnitAndTileMaxSkinId + 1);
+            }
         }
 
         function resetAiSkinInfoArray(aiPlayerIndexArray: number[]): void {

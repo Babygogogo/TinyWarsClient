@@ -165,7 +165,7 @@ namespace TinyWars.CoopCustomRoom {
 
         private _updateComponentsForLanguage(): void {
             this._labelLoading.text         = Lang.getText(Lang.Type.A0040);
-            this._labelMultiPlayer.text     = Lang.getText(Lang.Type.B0137);
+            this._labelMultiPlayer.text     = Lang.getText(Lang.Type.B0646);
             this._labelMyRoom.text          = Lang.getText(Lang.Type.B0410);
             this._btnBack.label             = Lang.getText(Lang.Type.B0146);
             this._labelNoRoom.text          = Lang.getText(Lang.Type.B0582);

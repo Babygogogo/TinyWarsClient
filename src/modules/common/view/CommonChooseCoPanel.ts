@@ -1,24 +1,23 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.CoopCustomRoom {
+namespace TinyWars.Common {
     import Types            = Utility.Types;
     import Lang             = Utility.Lang;
     import ProtoTypes       = Utility.ProtoTypes;
     import ConfigManager    = Utility.ConfigManager;
     import Helpers          = Utility.Helpers;
     import Notify           = Utility.Notify;
-    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
-    import CreateModel      = CcrModel.Create;
 
-    type OpenDataForCcrCreateChooseCoPanel = {
-        playerIndex : number;
-        coId        : number | undefined | null;
+    type OpenData = {
+        currentCoId         : number | undefined | null;
+        availableCoIdArray  : number[];
+        callbackOnConfirm   : (coId: number) => void;
     };
-    export class CcrCreateChooseCoPanel extends GameUi.UiPanel<OpenDataForCcrCreateChooseCoPanel> {
+    export class CommonChooseCoPanel extends GameUi.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: CcrCreateChooseCoPanel;
+        private static _instance: CommonChooseCoPanel;
 
         private readonly _imgMask       : GameUi.UiImage;
         private readonly _group         : eui.Group;
@@ -32,16 +31,16 @@ namespace TinyWars.CoopCustomRoom {
         private _dataForListCo          : DataForCoRenderer[] = [];
         private _selectedIndex          : number;
 
-        public static show(openData: OpenDataForCcrCreateChooseCoPanel): void {
-            if (!CcrCreateChooseCoPanel._instance) {
-                CcrCreateChooseCoPanel._instance = new CcrCreateChooseCoPanel();
+        public static show(openData: OpenData): void {
+            if (!CommonChooseCoPanel._instance) {
+                CommonChooseCoPanel._instance = new CommonChooseCoPanel();
             }
 
-            CcrCreateChooseCoPanel._instance.open(openData);
+            CommonChooseCoPanel._instance.open(openData);
         }
         public static async hide(): Promise<void> {
-            if (CcrCreateChooseCoPanel._instance) {
-                await CcrCreateChooseCoPanel._instance.close();
+            if (CommonChooseCoPanel._instance) {
+                await CommonChooseCoPanel._instance.close();
             }
         }
 
@@ -50,7 +49,7 @@ namespace TinyWars.CoopCustomRoom {
 
             this._setIsTouchMaskEnabled();
             this._setIsCloseOnTouchedMask();
-            this.skinName = "resource/skins/coopCustomRoom/CcrCreateChooseCoPanel.exml";
+            this.skinName = "resource/skins/common/CommonChooseCoPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -101,12 +100,7 @@ namespace TinyWars.CoopCustomRoom {
         private _onTouchedBtnConfirm(): void {
             const coId = this._getSelectedCoId();
             if (coId != null) {
-                const playerIndex = this._getOpenData().playerIndex;
-                if (playerIndex === CreateModel.getSelfPlayerIndex()) {
-                    CreateModel.setSelfCoId(coId);
-                } else {
-                    CreateModel.setAiCoId(playerIndex, coId);
-                }
+                this._getOpenData().callbackOnConfirm(coId);
 
                 this.close();
             }
@@ -136,7 +130,7 @@ namespace TinyWars.CoopCustomRoom {
             this._listCo.bindData(this._dataForListCo);
             this._listCo.scrollVerticalTo(0);
 
-            const coId = this._getOpenData().coId;
+            const coId = this._getOpenData().currentCoId;
             this.setSelectedIndex(this._dataForListCo.findIndex(data => {
                 const cfg = data.coBasicCfg;
                 return cfg ? cfg.coId === coId : coId == null;
@@ -144,29 +138,18 @@ namespace TinyWars.CoopCustomRoom {
         }
 
         private _createDataForListCo(): DataForCoRenderer[] {
-            const configVersion     = ConfigManager.getLatestFormalVersion();
-            const dataArray         : DataForCoRenderer[] = [];
-            const selfPlayerIndex   = CreateModel.getSelfPlayerIndex();
-            let index               = 0;
-            if (this._getOpenData().playerIndex === selfPlayerIndex) {
-                for (const coId of BwWarRuleHelper.getAvailableCoIdArrayForPlayer(CreateModel.getWarRule(), selfPlayerIndex, configVersion)) {
-                    dataArray.push({
-                        coBasicCfg  : ConfigManager.getCoBasicCfg(configVersion, coId),
-                        index,
-                        panel       : this,
-                    });
-                    ++index;
-                }
-            } else {
-                for (const coBasicCfg of ConfigManager.getEnabledCoArray(configVersion)) {
-                    dataArray.push({
-                        coBasicCfg,
-                        index,
-                        panel       : this,
-                    });
-                    ++index;
-                }
+            const configVersion = ConfigManager.getLatestFormalVersion();
+            const dataArray     : DataForCoRenderer[] = [];
+            let index           = 0;
+            for (const coId of this._getOpenData().availableCoIdArray) {
+                dataArray.push({
+                    coBasicCfg  : ConfigManager.getCoBasicCfg(configVersion, coId),
+                    index,
+                    panel       : this,
+                });
+                ++index;
             }
+
             return dataArray;
         }
 
@@ -215,7 +198,7 @@ namespace TinyWars.CoopCustomRoom {
     type DataForCoRenderer = {
         coBasicCfg  : ProtoTypes.Config.ICoBasicCfg;
         index       : number;
-        panel       : CcrCreateChooseCoPanel;
+        panel       : CommonChooseCoPanel;
     };
     class CoRenderer extends GameUi.UiListItemRenderer<DataForCoRenderer> {
         private _labelName: GameUi.UiLabel;

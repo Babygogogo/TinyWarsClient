@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar.BwHelpers {
     import Types                    = Utility.Types;
     import GridIndexHelpers         = Utility.GridIndexHelpers;
@@ -23,14 +24,13 @@ namespace TinyWars.BaseWar.BwHelpers {
     import ISerialTile              = WarSerialization.ISerialTile;
     import ISerialWar               = WarSerialization.ISerialWar;
     import WarSerialization         = ProtoTypes.WarSerialization;
-    import IGridIndex               = ProtoTypes.Structure.IGridIndex;
     import IRuleForPlayers          = ProtoTypes.WarRule.IRuleForPlayers;
 
     type AvailableMovableGrid = {
         currGridIndex   : GridIndex;
         prevGridIndex   : GridIndex | undefined;
         totalMoveCost   : number;
-    }
+    };
 
     export function createMovableArea({ origin, maxMoveCost, mapSize, moveCostGetter }: {
         origin          : GridIndex;
@@ -1054,7 +1054,7 @@ namespace TinyWars.BaseWar.BwHelpers {
                 }
             }
             return false;
-        }
+        };
 
         for (let y = currY; y < height; ++y) {
             for (let x = 0; x < width; ++x) {
@@ -1114,6 +1114,8 @@ namespace TinyWars.BaseWar.BwHelpers {
             return warData.settingsForMrw.mapId;
         } else if (warData.settingsForScw) {
             return warData.settingsForScw.mapId;
+        } else if (warData.settingsForCcw) {
+            return warData.settingsForCcw.mapId;
         } else {
             return undefined;
         }
