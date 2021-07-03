@@ -182,6 +182,7 @@ namespace TinyWars.BaseWar {
                 settingsForMcw              : null,
                 settingsForMrw              : null,
                 settingsForMfw              : null,
+                settingsForCcw              : null,
                 settingsForScw              : null,
                 settingsForSfw              : null,
 
@@ -232,7 +233,9 @@ namespace TinyWars.BaseWar {
                 settingsForMcw              : null,
                 settingsForMrw              : null,
                 settingsForMfw              : null,
+                settingsForCcw              : null,
                 settingsForScw              : null,
+                settingsForSfw              : null,
 
                 warId                       : this.getWarId(),
                 seedRandomInitialState      : null,

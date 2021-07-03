@@ -6,8 +6,9 @@ namespace TinyWars.MapEditor {
     import Notify           = Utility.Notify;
     import ConfigManager    = Utility.ConfigManager;
     import CommonConstants  = Utility.CommonConstants;
+    import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
 
-    export class MeSimAdvancedSettingsPage extends GameUi.UiTabPage<void> {
+    export class MeMfwAdvancedSettingsPage extends GameUi.UiTabPage<void> {
         private _labelMapNameTitle      : GameUi.UiLabel;
         private _labelMapName           : GameUi.UiLabel;
         private _labelPlayersCountTitle : GameUi.UiLabel;
@@ -18,7 +19,7 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/mapEditor/MeSimAdvancedSettingsPage.exml";
+            this.skinName = "resource/skins/mapEditor/MeMfwAdvancedSettingsPage.exml";
         }
 
         protected _onOpened(): void {
@@ -50,15 +51,15 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.getLanguageText({ textArray: MeModel.Sim.getMapRawData().mapNameArray });
+            this._labelMapName.text = Lang.getLanguageText({ textArray: MeModel.Mfw.getMapRawData().mapNameArray });
         }
 
         private _updateLabelPlayersCount(): void {
-            this._labelPlayersCount.text = "" + MeModel.Sim.getMapRawData().playersCountUnneutral;
+            this._labelPlayersCount.text = "" + MeModel.Mfw.getMapRawData().playersCountUnneutral;
         }
 
         private _updateListPlayer(): void {
-            const playersCount  = MeModel.Sim.getMapRawData().playersCountUnneutral;
+            const playersCount  = MeModel.Mfw.getMapRawData().playersCountUnneutral;
             const dataList      : DataForPlayerRenderer[] = [];
             for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
                 dataList.push({ playerIndex });
@@ -106,33 +107,36 @@ namespace TinyWars.MapEditor {
             ];
         }
         private _createDataController(playerIndex: number): DataForInfoRenderer {
-            const isControlledByPlayer = MeModel.Sim.getIsControlledByPlayer(playerIndex);
+            const isControlledByPlayer = MeModel.Mfw.getIsControlledByHuman(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0424),
                 infoText                : isControlledByPlayer ? Lang.getText(Lang.Type.B0031) : Lang.getText(Lang.Type.B0256),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    MeModel.Sim.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
-                    this._updateView();
+                    this._confirmUseCustomRule(() => {
+                        MeModel.Mfw.setIsControlledByPlayer(playerIndex, !isControlledByPlayer);
+                        MeModel.Mfw.setCoId(playerIndex, CommonConstants.CoEmptyId);
+                        this._updateView();
+                    });
                 },
             };
         }
         private _createDataTeamIndex(playerIndex: number): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0019),
-                infoText                : Lang.getPlayerTeamName(MeModel.Sim.getTeamIndex(playerIndex)),
+                infoText                : Lang.getPlayerTeamName(MeModel.Mfw.getTeamIndex(playerIndex)),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
                     this._confirmUseCustomRule(() => {
-                        MeModel.Sim.tickTeamIndex(playerIndex);
+                        MeModel.Mfw.tickTeamIndex(playerIndex);
                         this._updateView();
                     });
                 },
             };
         }
         private _createDataCo(playerIndex: number): DataForInfoRenderer {
-            const coId          = MeModel.Sim.getCoId(playerIndex);
-            const configVersion = MeModel.Sim.getWarData().settingsForCommon.configVersion;
+            const coId          = MeModel.Mfw.getCoId(playerIndex);
+            const configVersion = MeModel.Mfw.getWarData().settingsForCommon.configVersion;
             return {
                 titleText               : Lang.getText(Lang.Type.B0425),
                 infoText                : ConfigManager.getCoNameAndTierText(configVersion, coId),
@@ -140,10 +144,12 @@ namespace TinyWars.MapEditor {
                 callbackOnTouchedTitle  : () => {
                     Common.CommonChooseCoPanel.show({
                         currentCoId         : coId,
-                        availableCoIdArray  : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                        availableCoIdArray  : MeModel.Mfw.getIsControlledByHuman(playerIndex)
+                            ? BwWarRuleHelper.getAvailableCoIdArrayForPlayer(MeModel.Mfw.getWarRule(), playerIndex, configVersion)
+                            : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
                         callbackOnConfirm   : newCoId => {
                             if (newCoId !== coId) {
-                                MeModel.Sim.setCoId(playerIndex, newCoId);
+                                MeModel.Mfw.setCoId(playerIndex, newCoId);
                                 this._updateView();
                             }
                         },
@@ -154,16 +160,16 @@ namespace TinyWars.MapEditor {
         private _createDataSkinId(playerIndex: number): DataForInfoRenderer {
             return {
                 titleText               : Lang.getText(Lang.Type.B0397),
-                infoText                : Lang.getUnitAndTileSkinName(MeModel.Sim.getUnitAndTileSkinId(playerIndex)),
+                infoText                : Lang.getUnitAndTileSkinName(MeModel.Mfw.getUnitAndTileSkinId(playerIndex)),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    MeModel.Sim.tickUnitAndTileSkinId(playerIndex);
+                    MeModel.Mfw.tickUnitAndTileSkinId(playerIndex);
                     this._updateView();
                 },
             };
         }
         private _createDataInitialFund(playerIndex: number): DataForInfoRenderer {
-            const currValue = MeModel.Sim.getInitialFund(playerIndex);
+            const currValue = MeModel.Mfw.getInitialFund(playerIndex);
             return {
                 titleText               : Lang.getText(Lang.Type.B0178),
                 infoText                : `${currValue}`,
@@ -184,7 +190,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    MeModel.Sim.setInitialFund(playerIndex, value);
+                                    MeModel.Mfw.setInitialFund(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -194,7 +200,7 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataIncomeMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue = MeModel.Sim.getIncomeMultiplier(playerIndex);
+            const currValue = MeModel.Mfw.getIncomeMultiplier(playerIndex);
             const maxValue  = CommonConstants.WarRuleIncomeMultiplierMaxLimit;
             const minValue  = CommonConstants.WarRuleIncomeMultiplierMinLimit;
             return {
@@ -215,7 +221,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    MeModel.Sim.setIncomeMultiplier(playerIndex, value);
+                                    MeModel.Mfw.setIncomeMultiplier(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -225,7 +231,7 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataEnergyAddPctOnLoadCo(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Sim.getEnergyAddPctOnLoadCo(playerIndex);
+            const currValue     = MeModel.Mfw.getEnergyAddPctOnLoadCo(playerIndex);
             const minValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMinLimit;
             const maxValue      = CommonConstants.WarRuleEnergyAddPctOnLoadCoMaxLimit;
             return {
@@ -246,7 +252,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    MeModel.Sim.setEnergyAddPctOnLoadCo(playerIndex, value);
+                                    MeModel.Mfw.setEnergyAddPctOnLoadCo(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -256,7 +262,7 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataEnergyGrowthMultiplier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Sim.getEnergyGrowthMultiplier(playerIndex);
+            const currValue     = MeModel.Mfw.getEnergyGrowthMultiplier(playerIndex);
             const minValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMinLimit;
             const maxValue      = CommonConstants.WarRuleEnergyGrowthMultiplierMaxLimit;
             return {
@@ -277,7 +283,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    MeModel.Sim.setEnergyGrowthMultiplier(playerIndex, value);
+                                    MeModel.Mfw.setEnergyGrowthMultiplier(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -287,7 +293,7 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataMoveRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Sim.getMoveRangeModifier(playerIndex);
+            const currValue     = MeModel.Mfw.getMoveRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleMoveRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleMoveRangeModifierMaxLimit;
             return {
@@ -308,7 +314,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    MeModel.Sim.setMoveRangeModifier(playerIndex, value);
+                                    MeModel.Mfw.setMoveRangeModifier(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -318,7 +324,7 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataAttackPowerModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Sim.getAttackPowerModifier(playerIndex);
+            const currValue     = MeModel.Mfw.getAttackPowerModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleOffenseBonusMinLimit;
             const maxValue      = CommonConstants.WarRuleOffenseBonusMaxLimit;
             return {
@@ -339,7 +345,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    MeModel.Sim.setAttackPowerModifier(playerIndex, value);
+                                    MeModel.Mfw.setAttackPowerModifier(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -349,7 +355,7 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataVisionRangeModifier(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Sim.getVisionRangeModifier(playerIndex);
+            const currValue     = MeModel.Mfw.getVisionRangeModifier(playerIndex);
             const minValue      = CommonConstants.WarRuleVisionRangeModifierMinLimit;
             const maxValue      = CommonConstants.WarRuleVisionRangeModifierMaxLimit;
             return {
@@ -370,7 +376,7 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    MeModel.Sim.setVisionRangeModifier(playerIndex, value);
+                                    MeModel.Mfw.setVisionRangeModifier(playerIndex, value);
                                     this._updateView();
                                 }
                             },
@@ -380,7 +386,7 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataLuckLowerLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Sim.getLuckLowerLimit(playerIndex);
+            const currValue     = MeModel.Mfw.getLuckLowerLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
@@ -401,12 +407,12 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    const upperLimit = MeModel.Sim.getLuckUpperLimit(playerIndex);
+                                    const upperLimit = MeModel.Mfw.getLuckUpperLimit(playerIndex);
                                     if (value <= upperLimit) {
-                                        MeModel.Sim.setLuckLowerLimit(playerIndex, value);
+                                        MeModel.Mfw.setLuckLowerLimit(playerIndex, value);
                                     } else {
-                                        MeModel.Sim.setLuckUpperLimit(playerIndex, value);
-                                        MeModel.Sim.setLuckLowerLimit(playerIndex, upperLimit);
+                                        MeModel.Mfw.setLuckUpperLimit(playerIndex, value);
+                                        MeModel.Mfw.setLuckLowerLimit(playerIndex, upperLimit);
                                     }
                                     this._updateView();
                                 }
@@ -417,7 +423,7 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataLuckUpperLimit(playerIndex: number): DataForInfoRenderer {
-            const currValue     = MeModel.Sim.getLuckUpperLimit(playerIndex);
+            const currValue     = MeModel.Mfw.getLuckUpperLimit(playerIndex);
             const minValue      = CommonConstants.WarRuleLuckMinLimit;
             const maxValue      = CommonConstants.WarRuleLuckMaxLimit;
             return {
@@ -438,12 +444,12 @@ namespace TinyWars.MapEditor {
                                 if ((isNaN(value)) || (value > maxValue) || (value < minValue)) {
                                     FloatText.show(Lang.getText(Lang.Type.A0098));
                                 } else {
-                                    const lowerLimit = MeModel.Sim.getLuckLowerLimit(playerIndex);
+                                    const lowerLimit = MeModel.Mfw.getLuckLowerLimit(playerIndex);
                                     if (value >= lowerLimit) {
-                                        MeModel.Sim.setLuckUpperLimit(playerIndex, value);
+                                        MeModel.Mfw.setLuckUpperLimit(playerIndex, value);
                                     } else {
-                                        MeModel.Sim.setLuckLowerLimit(playerIndex, value);
-                                        MeModel.Sim.setLuckUpperLimit(playerIndex, lowerLimit);
+                                        MeModel.Mfw.setLuckLowerLimit(playerIndex, value);
+                                        MeModel.Mfw.setLuckUpperLimit(playerIndex, lowerLimit);
                                     }
                                     this._updateView();
                                 }
@@ -455,17 +461,18 @@ namespace TinyWars.MapEditor {
         }
 
         private _confirmUseCustomRule(callback: () => void): void {
-            if (MeModel.Sim.getPresetWarRuleId() == null) {
-                callback();
-            } else {
-                Common.CommonConfirmPanel.show({
-                    content : Lang.getText(Lang.Type.A0129),
-                    callback: () => {
-                        MeModel.Sim.setPresetWarRuleId(null);
-                        callback();
-                    },
-                });
-            }
+            // if (MeModel.Mfw.getPresetWarRuleId() == null) {
+            //     callback();
+            // } else {
+            //     Common.CommonConfirmPanel.show({
+            //         content : Lang.getText(Lang.Type.A0129),
+            //         callback: () => {
+            //             MeModel.Mfw.setPresetWarRuleId(null);
+            //             callback();
+            //         },
+            //     });
+            // }
+            callback();
         }
     }
 

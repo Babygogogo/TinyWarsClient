@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapEditor {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
@@ -28,16 +29,16 @@ namespace TinyWars.MapEditor {
         private _labelNoCommand         : GameUi.UiLabel;
         private _btnBack                : GameUi.UiButton;
         private _labelMenuTitle         : GameUi.UiLabel;
-        private _labelMapInfoTitle      : TinyWars.GameUi.UiLabel;
+        private _labelMapInfoTitle      : GameUi.UiLabel;
 
-        private _btnModifyMapName       : TinyWars.GameUi.UiButton;
-        private _labelMapName           : TinyWars.GameUi.UiLabel;
+        private _btnModifyMapName       : GameUi.UiButton;
+        private _labelMapName           : GameUi.UiLabel;
 
-        private _btnModifyMapDesigner   : TinyWars.GameUi.UiButton;
-        private _labelMapDesigner       : TinyWars.GameUi.UiLabel;
+        private _btnModifyMapDesigner   : GameUi.UiButton;
+        private _labelMapDesigner       : GameUi.UiLabel;
 
-        private _btnModifyMapSize       : TinyWars.GameUi.UiButton;
-        private _labelMapSize           : TinyWars.GameUi.UiLabel;
+        private _btnModifyMapSize       : GameUi.UiButton;
+        private _labelMapSize           : GameUi.UiLabel;
 
         private _listTile               : GameUi.UiScrollList<DataForTileRenderer>;
         private _listUnit               : GameUi.UiScrollList<DataForUnitRenderer>;
@@ -140,19 +141,19 @@ namespace TinyWars.MapEditor {
             });
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
+        private _onNotifyUnitAndTileTextureVersionChanged(): void {
             this._updateView();
         }
 
-        private _onNotifyMeMapNameChanged(e: egret.Event): void {
+        private _onNotifyMeMapNameChanged(): void {
             this._updateLabelMapName();
         }
 
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             const type = this._menuType;
             if (type === MenuType.Main) {
                 this.close();
@@ -165,20 +166,20 @@ namespace TinyWars.MapEditor {
             }
         }
 
-        private _onTouchedBtnModifyMapName(e: egret.TouchEvent): void {
+        private _onTouchedBtnModifyMapName(): void {
             const war = this._war;
             if (!war.getIsReviewingMap()) {
                 MeModifyMapNamePanel.show();
             }
         }
 
-        private _onTouchedBtnModifyMapSize(e: egret.TouchEvent): void {
+        private _onTouchedBtnModifyMapSize(): void {
             if (!this._war.getIsReviewingMap()) {
                 MeResizePanel.show();
             }
         }
 
-        private _onTouchedBtnModifyMapDesigner(e: egret.TouchEvent): void {
+        private _onTouchedBtnModifyMapDesigner(): void {
             const war = this._war;
             if (!war.getIsReviewingMap()) {
                 Common.CommonInputPanel.show({
@@ -287,10 +288,10 @@ namespace TinyWars.MapEditor {
             }
 
             const dataList : DataForTileRenderer[] = [];
-            for (const [k, v] of dictForTileBases) {
+            for (const [, v] of dictForTileBases) {
                 dataList.push(v);
             }
-            for (const [k, v] of dictForTileObjects) {
+            for (const [, v] of dictForTileObjects) {
                 dataList.push(v);
             }
             this._listTile.bindData(dataList.sort((v1, v2) => {
@@ -535,14 +536,15 @@ namespace TinyWars.MapEditor {
             return {
                 name    : Lang.getText(Lang.Type.B0325),
                 callback: async () => {
-                    const errorCode = await MeUtility.getErrorCodeForMapRawData(war.serializeForMap());
+                    const mapRawData    = war.serializeForMap();
+                    const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
                     }
 
                     const cb = () => {
-                        MeModel.Sim.resetData(war.serializeForMap(), war.serializeForCreateSfw());
+                        MeModel.Sim.resetData(mapRawData, war.serializeForCreateSfw());
                         MeSimSettingsPanel.show();
                         this.close();
                     };
@@ -569,35 +571,17 @@ namespace TinyWars.MapEditor {
             return {
                 name    : Lang.getText(Lang.Type.B0557),
                 callback: async () => {
-                    if ((war.getField() as MeField).getMaxPlayerIndex() < 2) {
-                        FloatText.show(Lang.getText(Lang.Type.A0199));
-                        return;
-                    }
-
-                    const warData = war.serializeForCreateMfr();
-                    if (warData == null) {
-                        FloatText.show(Lang.getText(Lang.Type.A0200));
-                        return;
-                    }
-
-                    const errorCode = await (new TestWar.TwWar()).init(warData);
+                    const mapRawData    = war.serializeForMap();
+                    const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
                     }
 
                     const cb = () => {
-                        Common.CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0201),
-                            callback: () => {
-                                MultiFreeRoom.MfrModel.Create.resetDataByInitialWarData(warData);
-                                MeModel.unloadWar();
-                                Utility.StageManager.closeAllPanels();
-                                Lobby.LobbyBackgroundPanel.show();
-                                Broadcast.BroadcastPanel.show();
-                                MultiFreeRoom.MfrCreateSettingsPanel.show();
-                            },
-                        });
+                        MeModel.Mfw.resetData(mapRawData, war.serializeForCreateMfr());
+                        MeMfwSettingsPanel.show();
+                        this.close();
                     };
 
                     if (!war.getIsMapModified()) {
@@ -688,7 +672,7 @@ namespace TinyWars.MapEditor {
             this._updateView();
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             this.data.callback();
         }
 

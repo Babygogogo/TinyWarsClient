@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapEditor {
     import ProtoTypes           = Utility.ProtoTypes;
     import WarSerialization     = ProtoTypes.WarSerialization;
@@ -16,9 +17,6 @@ namespace TinyWars.MapEditor {
             return {
                 players,
             };
-        }
-        public serializeForCreateMfr(): ISerialPlayerManager {
-            return this.serializeForCreateSfw();
         }
 
         ////////////////////////////////////////////////////////////////////////////////

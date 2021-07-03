@@ -5,7 +5,7 @@ namespace TinyWars.MapEditor {
     import Notify           = Utility.Notify;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
-    export class MeSimBasicSettingsPage extends GameUi.UiTabPage<void> {
+    export class MeMfwBasicSettingsPage extends GameUi.UiTabPage<void> {
         private _btnMapNameTitle            : GameUi.UiButton;
         private _labelMapName               : GameUi.UiLabel;
         private _btnBuildings               : GameUi.UiButton;
@@ -20,7 +20,7 @@ namespace TinyWars.MapEditor {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/mapEditor/MeSimBasicSettingsPage.exml";
+            this.skinName = "resource/skins/mapEditor/MeMfwBasicSettingsPage.exml";
         }
 
         protected _onOpened(): void {
@@ -50,23 +50,23 @@ namespace TinyWars.MapEditor {
         }
 
         private _onTouchedBtnModifyWarRule(): void {
-            MeModel.Sim.tickPresetWarRuleId();
+            MeModel.Mfw.tickPresetWarRuleId();
             this._updateComponentsForWarRule();
         }
 
         private _onTouchedBtnModifyHasFog(): void {
             const callback = () => {
-                MeModel.Sim.setHasFog(!MeModel.Sim.getHasFog());
+                MeModel.Mfw.setHasFog(!MeModel.Mfw.getHasFog());
                 this._updateImgHasFog();
                 this._updateLabelWarRule();
             };
-            if (MeModel.Sim.getPresetWarRuleId() == null) {
+            if (MeModel.Mfw.getPresetWarRuleId() == null) {
                 callback();
             } else {
                 Common.CommonConfirmPanel.show({
                     content : Lang.getText(Lang.Type.A0129),
                     callback: () => {
-                        MeModel.Sim.setPresetWarRuleId(null);
+                        MeModel.Mfw.setPresetWarRuleId(null);
                         callback();
                     },
                 });
@@ -81,9 +81,9 @@ namespace TinyWars.MapEditor {
         }
 
         private async _onTouchedBtnBuildings(): Promise<void> {
-            const mapRawData = MeModel.Sim.getMapRawData();
+            const mapRawData = MeModel.Mfw.getMapRawData();
             WarMap.WarMapBuildingListPanel.show({
-                configVersion           : MeModel.Sim.getWarData().settingsForCommon.configVersion,
+                configVersion           : MeModel.Mfw.getWarData().settingsForCommon.configVersion,
                 tileDataArray           : mapRawData.tileDataArray,
                 playersCountUnneutral   : mapRawData.playersCountUnneutral,
             });
@@ -105,18 +105,18 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateLabelMapName(): void {
-            this._labelMapName.text = Lang.getLanguageText({ textArray: MeModel.Sim.getMapRawData().mapNameArray });
+            this._labelMapName.text = Lang.getLanguageText({ textArray: MeModel.Mfw.getMapRawData().mapNameArray });
         }
 
         private async _updateLabelWarRule(): Promise<void> {
             const label             = this._labelWarRule;
-            const settingsForCommon = MeModel.Sim.getWarData().settingsForCommon;
+            const settingsForCommon = MeModel.Mfw.getWarData().settingsForCommon;
             label.text              = Lang.getWarRuleNameInLanguage(settingsForCommon.warRule);
             label.textColor         = settingsForCommon.presetWarRuleId == null ? 0xFF0000 : 0x00FF00;
         }
 
         private _updateImgHasFog(): void {
-            this._imgHasFog.visible = MeModel.Sim.getHasFog();
+            this._imgHasFog.visible = MeModel.Mfw.getHasFog();
         }
     }
 }

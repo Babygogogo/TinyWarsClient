@@ -7,11 +7,11 @@ namespace TinyWars.MapEditor {
     import ProtoTypes   = Utility.ProtoTypes;
     import FlowManager  = Utility.FlowManager;
 
-    export class MeSimSettingsPanel extends GameUi.UiPanel<void> {
+    export class MeMfwSettingsPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: MeSimSettingsPanel;
+        private static _instance: MeMfwSettingsPanel;
 
         private _tabSettings    : GameUi.UiTab<DataForTabItemRenderer, void>;
         private _labelMenuTitle : GameUi.UiLabel;
@@ -19,21 +19,21 @@ namespace TinyWars.MapEditor {
         private _btnConfirm     : GameUi.UiButton;
 
         public static show(): void {
-            if (!MeSimSettingsPanel._instance) {
-                MeSimSettingsPanel._instance = new MeSimSettingsPanel();
+            if (!MeMfwSettingsPanel._instance) {
+                MeMfwSettingsPanel._instance = new MeMfwSettingsPanel();
             }
-            MeSimSettingsPanel._instance.open(undefined);
+            MeMfwSettingsPanel._instance.open(undefined);
         }
         public static async hide(): Promise<void> {
-            if (MeSimSettingsPanel._instance) {
-                await MeSimSettingsPanel._instance.close();
+            if (MeMfwSettingsPanel._instance) {
+                await MeMfwSettingsPanel._instance.close();
             }
         }
 
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/mapEditor/MeSimSettingsPanel.exml";
+            this.skinName = "resource/skins/mapEditor/MeMfwSettingsPanel.exml";
         }
 
         protected _onOpened(): void {
@@ -50,11 +50,11 @@ namespace TinyWars.MapEditor {
             this._tabSettings.bindData([
                 {
                     tabItemData: { name: Lang.getText(Lang.Type.B0002) },
-                    pageClass  : MeSimBasicSettingsPage,
+                    pageClass  : MeMfwBasicSettingsPage,
                 },
                 {
                     tabItemData: { name: Lang.getText(Lang.Type.B0003) },
-                    pageClass  : MeSimAdvancedSettingsPage,
+                    pageClass  : MeMfwAdvancedSettingsPage,
                 },
             ]);
 
@@ -67,11 +67,24 @@ namespace TinyWars.MapEditor {
             MeWarMenuPanel.show();
         }
 
-        private _onTouchedBtnConfirm(): void {
-            if (MeModel.Sim.checkIsValidWarData()) {
-                SinglePlayerMode.SpmCreateSfwSaveSlotsPanel.show(MeModel.Sim.getWarData());
+        private async _onTouchedBtnConfirm(): Promise<void> {
+            MeModel.Mfw.reviseWarRuleForAi();
+            const warData   = MeModel.Mfw.getWarData();
+            const errorCode = await (new TestWar.TwWar().init(warData));
+            if (errorCode) {
+                FloatText.show(Lang.getErrorText(errorCode));
             } else {
-                FloatText.show(Lang.getText(Lang.Type.A0146));
+                Common.CommonConfirmPanel.show({
+                    content : Lang.getText(Lang.Type.A0201),
+                    callback: () => {
+                        MultiFreeRoom.MfrModel.Create.resetDataByInitialWarData(warData);
+                        MeModel.unloadWar();
+                        Utility.StageManager.closeAllPanels();
+                        Lobby.LobbyBackgroundPanel.show();
+                        Broadcast.BroadcastPanel.show();
+                        MultiFreeRoom.MfrCreateSettingsPanel.show();
+                    },
+                });
             }
         }
 
@@ -94,7 +107,7 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0325);
+            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0557);
             this._btnBack.label         = Lang.getText(Lang.Type.B0146);
             this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
         }

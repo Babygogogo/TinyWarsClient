@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiFreeRoom {
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
@@ -109,13 +110,13 @@ namespace TinyWars.MultiFreeRoom {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             this.close();
             MfrMainMenuPanel.show();
             Lobby.LobbyTopPanel.show();
             Lobby.LobbyBottomPanel.show();
         }
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private _onTouchedBtnConfirm(): void {
             const data = MfrModel.Create.getData();
             MfrProxy.reqCreateRoom(data);
 
@@ -123,13 +124,13 @@ namespace TinyWars.MultiFreeRoom {
             this._resetTimeoutForBtnConfirm();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyMfrCreateSelfCoIdChanged(e: egret.Event): void {
+        private _onNotifyMfrCreateSelfCoIdChanged(): void {
             this._updateBtnChooseCo();
         }
-        private _onNotifyMsgMfrCreateRoom(e: egret.Event): void {
+        private _onNotifyMsgMfrCreateRoom(): void {
             FloatText.show(Lang.getText(Lang.Type.A0015));
             Utility.FlowManager.gotoLobby();
         }
@@ -254,7 +255,7 @@ namespace TinyWars.MultiFreeRoom {
 
     type DataForTabItemRenderer = {
         name: string;
-    }
+    };
     class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
         private _labelName: GameUi.UiLabel;
 
@@ -265,7 +266,7 @@ namespace TinyWars.MultiFreeRoom {
 
     type DataForPlayerIndexRenderer = {
         playerIndex: number;
-    }
+    };
     class PlayerIndexRenderer extends GameUi.UiListItemRenderer<DataForPlayerIndexRenderer> {
         private readonly _labelName : GameUi.UiLabel;
 
@@ -282,26 +283,29 @@ namespace TinyWars.MultiFreeRoom {
             this._updateState();
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             const data = this.data;
             if (data) {
                 const creator       = MfrModel.Create;
                 const playerIndex   = data.playerIndex;
                 const playerData    = creator.getInitialWarData().playerManager.players.find(v => v.playerIndex === playerIndex);
-                if ((playerData == null) || (playerData.aliveState === Types.PlayerAliveState.Dead)) {
+                if ((playerData == null)                                    ||
+                    (playerData.aliveState === Types.PlayerAliveState.Dead) ||
+                    (playerData.userId == null)
+                ) {
                     FloatText.show(Lang.getText(Lang.Type.A0204));
                 } else {
                     creator.setSelfPlayerIndex(playerIndex);
                 }
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateLabelName();
         }
-        private _onNotifyMfrCreateTeamIndexChanged(e: egret.Event): void {
+        private _onNotifyMfrCreateTeamIndexChanged(): void {
             this._updateLabelName();
         }
-        private _onNotifyMfrCreateSelfPlayerIndexChanged(e: egret.Event): void {
+        private _onNotifyMfrCreateSelfPlayerIndexChanged(): void {
             this._updateState();
         }
 
@@ -320,7 +324,7 @@ namespace TinyWars.MultiFreeRoom {
 
     type DataForSkinIdRenderer = {
         skinId: number;
-    }
+    };
     class SkinIdRenderer extends GameUi.UiListItemRenderer<DataForSkinIdRenderer> {
         private readonly _imgColor  : GameUi.UiImage;
 
@@ -334,7 +338,7 @@ namespace TinyWars.MultiFreeRoom {
             this._updateImgColor();
         }
 
-        private _onNotifyMfrCreateSelfPlayerIndexChanged(e: egret.Event): void {
+        private _onNotifyMfrCreateSelfPlayerIndexChanged(): void {
             this._updateImgColor();
         }
 

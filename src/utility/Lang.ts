@@ -1069,6 +1069,14 @@ namespace TinyWars.Utility.Lang {
             `无法切换控制权，因为其他势力都由AI控制。`,
             `All other forces are controlled by the A.I. already.`,
         ],
+        [Type.A0223]: [
+            `请确保此地图已包含预设规则。`,
+            `Please make sure that there is at least one preset war rule.`,
+        ],
+        [Type.A0224]: [
+            `请检查第一条预设规则的可用性，并确保其可用并仅可用于一个游戏模式。`,
+            `Please make sure that the first preset rule is available in one and only one mode.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Short strings.

@@ -152,13 +152,15 @@
 		"bin-debug/modules/mapEditor/view/MeImportPanel.js",
 		"bin-debug/modules/mapEditor/view/MeMapListPanel.js",
 		"bin-debug/modules/mapEditor/view/MeMapTagPanel.js",
+		"bin-debug/modules/mapEditor/view/MeMfwAdvancedSettingsPage.js",
+		"bin-debug/modules/mapEditor/view/MeMfwBasicSettingsPage.js",
+		"bin-debug/modules/mapEditor/view/MeMfwSettingsPanel.js",
 		"bin-debug/modules/mapEditor/view/MeModifyMapNamePanel.js",
 		"bin-debug/modules/mapEditor/view/MeModifyRuleNamePanel.js",
 		"bin-debug/modules/mapEditor/view/MeOffsetPanel.js",
 		"bin-debug/modules/mapEditor/view/MeResizePanel.js",
 		"bin-debug/modules/mapEditor/view/MeSimAdvancedSettingsPage.js",
 		"bin-debug/modules/mapEditor/view/MeSimBasicSettingsPage.js",
-		"bin-debug/modules/mapEditor/view/MeSimChooseCoPanel.js",
 		"bin-debug/modules/mapEditor/view/MeSimSettingsPanel.js",
 		"bin-debug/modules/mapEditor/view/MeSymmetryPanel.js",
 		"bin-debug/modules/mapEditor/view/MeTileSimpleView.js",
@@ -200,8 +202,8 @@
 		"bin-debug/modules/multiCustomRoom/view/McrRoomMapInfoPage.js",
 		"bin-debug/modules/multiCustomRoom/view/McrRoomPlayerInfoPage.js",
 		"bin-debug/modules/multiCustomRoom/view/McrWatchDeleteWatcherDetailPanel.js",
-		"bin-debug/modules/multiCustomRoom/view/McrWatchDeleteWatcherWarsPanel.js",
 		"bin-debug/gameui/UiButton.js",
+		"bin-debug/modules/multiCustomRoom/view/McrWatchHandleRequestDetailPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrWatchHandleRequestWarsPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrWatchMainMenuPanel.js",
 		"bin-debug/modules/multiCustomRoom/view/McrWatchMakeRequestDetailPanel.js",
@@ -388,6 +390,6 @@
 		"bin-debug/modules/baseWar/view/BwUnitView.js",
 		"bin-debug/modules/baseWar/view/BwWarPanel.js",
 		"bin-debug/modules/baseWar/view/BwWarView.js",
-		"bin-debug/modules/multiCustomRoom/view/McrWatchHandleRequestDetailPanel.js"
+		"bin-debug/modules/multiCustomRoom/view/McrWatchDeleteWatcherWarsPanel.js"
 	]
 }
