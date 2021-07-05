@@ -154,6 +154,7 @@
 		"resource/skins/multiFreeRoom/MfrCreateAdvancedSettingsPage.exml",
 		"resource/skins/multiFreeRoom/MfrCreateBasicSettingsPage.exml",
 		"resource/skins/multiFreeRoom/MfrCreateMapInfoPage.exml",
+		"resource/skins/multiFreeRoom/MfrCreatePlayerInfoPage.exml",
 		"resource/skins/multiFreeRoom/MfrCreateSettingsPanel.exml",
 		"resource/skins/multiFreeRoom/MfrJoinPasswordPanel.exml",
 		"resource/skins/multiFreeRoom/MfrJoinRoomListPanel.exml",

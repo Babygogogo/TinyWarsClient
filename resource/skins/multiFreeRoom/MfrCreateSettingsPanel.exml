@@ -65,27 +65,6 @@
         <GameUi:UiButton id="_btnBack" label="Back" y="20" height="30" width="80"
                          skinName="Skins.Component.Button.ButtonYellow001" left="0"></GameUi:UiButton>
         <e:Group id="_groupSettings" left="20" top="80">
-            <e:Group id="_groupChooseCo" x="0" y="0" locked="true">
-                <GameUi:UiLabel id="_labelChooseCo" text="选择CO" x="0" y="-58" bold="true" size="20" />
-                <GameUi:UiButton id="_btnChooseCo" label="Brenner" height="30" width="160" x="0" y="-34">
-                    <GameUi:skinName>
-                        <e:Skin>
-                            <e:Group left="0" right="0" top="0" bottom="0">
-                                <e:Image left="0" right="0" top="0" bottom="0" source="commonPentagon0000"
-                                         scale9Grid="4,4,1,1" />
-                                <GameUi:UiLabel id="labelDisplay" size="16" text="Change Password" textAlign="center"
-                                                verticalAlign="middle" wordWrap="true" verticalCenter="0" x="20"
-                                                textColor="0xFFFFFF" />
-                                <GameUi:UiImage id="_imgRed" right="0" top="0" source="commonIcon0000" width="16"
-                                                height="16" />
-                            </e:Group>
-                        </e:Skin>
-                    </GameUi:skinName>
-                </GameUi:UiButton>
-                <e:layout>
-                    <e:VerticalLayout gap="4" />
-                </e:layout>
-            </e:Group>
             <e:Group id="_groupChoosePlayerIndex" x="0" y="84" locked="true">
                 <GameUi:UiLabel id="_labelChoosePlayerIndex" text="选择势力" x="0" y="-82" bold="true" size="20" />
                 <GameUi:UiScrollList id="_sclPlayerIndex" x="0">

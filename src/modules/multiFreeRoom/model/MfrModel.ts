@@ -19,8 +19,11 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
         60 * 60 * 24 * 7,   // 7 days
     ];
 
-    export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgMfrCreateRoom.IC;
-    export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgMfrJoinRoom.IC;
+    export type DataForJoinRoom = ProtoTypes.NetMessage.MsgMfrJoinRoom.IC;
+    type DataForCreateRoom      = {
+        settingsForMfw  : ProtoTypes.WarSettings.ISettingsForMfw;
+        selfPlayerIndex : number | null;
+    };
 
     const _roomInfoDict         = new Map<number, IMfrRoomInfo>();
     const _roomInfoRequests     = new Map<number, ((info: NetMessage.MsgMfrGetRoomInfo.IS | undefined | null) => void)[]>();
@@ -267,7 +270,7 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
         export function getData(): DataForCreateRoom {
             return _dataForCreateRoom;
         }
-        export function getWarRule(): ProtoTypes.WarRule.IWarRule {
+        export function getWarRule(): ProtoTypes.WarRule.IWarRule | null | undefined {
             return getSettingsForMfw().initialWarData.settingsForCommon.warRule;
         }
         function getSettingsForMfw(): ProtoTypes.WarSettings.ISettingsForMfw {

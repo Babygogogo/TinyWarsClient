@@ -5,7 +5,6 @@ namespace TinyWars.MultiFreeRoom {
     import Notify           = Utility.Notify;
     import FloatText        = Utility.FloatText;
     import Helpers          = Utility.Helpers;
-    import ConfigManager    = Utility.ConfigManager;
     import CommonConstants  = Utility.CommonConstants;
     import Types            = Utility.Types;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
@@ -26,10 +25,6 @@ namespace TinyWars.MultiFreeRoom {
         private readonly _labelRoomSettings     : GameUi.UiLabel;
 
         private readonly _groupSettings         : eui.Group;
-        private readonly _groupChooseCo         : eui.Group;
-        private readonly _labelChooseCo         : GameUi.UiLabel;
-        private readonly _btnChooseCo           : GameUi.UiButton;
-
         private readonly _groupChoosePlayerIndex: eui.Group;
         private readonly _labelChoosePlayerIndex: GameUi.UiLabel;
         private readonly _sclPlayerIndex        : GameUi.UiScrollList<DataForPlayerIndexRenderer>;
@@ -71,7 +66,6 @@ namespace TinyWars.MultiFreeRoom {
             ]);
             this._setNotifyListenerArray([
                 { type: Notify.Type.LanguageChanged,            callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MfrCreateSelfCoIdChanged,   callback: this._onNotifyMfrCreateSelfCoIdChanged },
                 { type: Notify.Type.MsgMfrCreateRoom,           callback: this._onNotifyMsgMfrCreateRoom },
             ]);
             this._tabSettings.setBarItemRenderer(TabItemRenderer);
@@ -88,6 +82,10 @@ namespace TinyWars.MultiFreeRoom {
                     pageClass   : MfrCreateAdvancedSettingsPage,
                 },
                 {
+                    tabItemData : { name: Lang.getText(Lang.Type.B0224) },
+                    pageClass   : MfrCreatePlayerInfoPage,
+                },
+                {
                     tabItemData : { name: Lang.getText(Lang.Type.B0298) },
                     pageClass   : MfrCreateMapInfoPage,
                 },
@@ -98,7 +96,6 @@ namespace TinyWars.MultiFreeRoom {
             this._updateComponentsForLanguage();
             this._initSclPlayerIndex();
             this._initSclSkinId();
-            this._updateBtnChooseCo();
             this._btnConfirm.enabled = true;
         }
 
@@ -126,9 +123,6 @@ namespace TinyWars.MultiFreeRoom {
 
         private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
-        }
-        private _onNotifyMfrCreateSelfCoIdChanged(): void {
-            this._updateBtnChooseCo();
         }
         private _onNotifyMsgMfrCreateRoom(): void {
             FloatText.show(Lang.getText(Lang.Type.A0015));
@@ -158,16 +152,10 @@ namespace TinyWars.MultiFreeRoom {
             this._labelFreeMode.text            = Lang.getText(Lang.Type.B0557);
             this._labelCreateRoom.text          = Lang.getText(Lang.Type.B0000);
             this._labelRoomSettings.text        = Lang.getText(Lang.Type.B0571);
-            this._labelChooseCo.text            = Lang.getText(Lang.Type.B0587);
             this._labelChoosePlayerIndex.text   = Lang.getText(Lang.Type.B0572);
             this._labelChooseSkinId.text        = Lang.getText(Lang.Type.B0586);
             this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
             this._btnConfirm.label              = Lang.getText(Lang.Type.B0026);
-        }
-
-        private _updateBtnChooseCo(): void {
-            const creator           = MfrModel.Create;
-            this._btnChooseCo.label = ConfigManager.getCoBasicCfg(creator.getInitialWarData().settingsForCommon.configVersion, creator.getSelfPlayerData().coId).name;
         }
 
         private async _initSclPlayerIndex(): Promise<void> {

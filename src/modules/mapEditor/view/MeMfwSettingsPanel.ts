@@ -59,7 +59,6 @@ namespace TinyWars.MapEditor {
             ]);
 
             this._updateComponentsForLanguage();
-            this._btnConfirm.enabled = true;
         }
 
         private _onTouchedBtnBack(): void {
