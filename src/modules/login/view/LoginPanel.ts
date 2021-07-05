@@ -144,7 +144,7 @@ namespace TinyWars.Login {
 
         private _updateComponentsForLanguage(): void {
             this._btnLogin.label                = Lang.getText(Lang.Type.B0173);
-            this._btnRegister.label             = Lang.getText(Lang.Type.B0174);
+            this._btnRegister.label             = `${Lang.getText(Lang.Type.B0174)}*`;
             this._btnForgetPassword.label       = Lang.getText(Lang.Type.B0626);
             this._labelRememberPassword.text    = Lang.getText(Lang.Type.B0172);
             this._labelAccount.text             = `${Lang.getText(Lang.Type.B0170)}:`;

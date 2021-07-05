@@ -19,15 +19,20 @@
             </e:layout>
         </e:List>
     </GameUi:UiScrollList>
-    <e:Group horizontalCenter="0" bottom="10" id="_groupCopyright">
-        <GameUi:UiLabel text="Tiny Wars is a fan-made game that bases on Advance Wars: Days of Ruin." size="14" x="196"
-                        y="0" textColor="0xffffff" />
-        <GameUi:UiLabel text="Advance Wars is (c) 1990-2001 Nintendo and (c) 2001 Intelligent Systems." size="14"
-                        x="206" y="10" textColor="0xffffff" />
-        <GameUi:UiLabel text="All images and sounds are copyright their respective owners." size="14" x="0" y="0"
-                        textColor="0xffffff" />
+    <e:Group horizontalCenter="0" bottom="4" id="_groupCopyright">
+        <GameUi:UiLabel text="* No personal information is required to make an account and/or to play games here."
+                        size="14" x="0" y="0" textColor="0xFFFF88" />
+        <e:Group x="0" y="0">
+            <GameUi:UiLabel text="Tiny Wars is a fan-made game that bases on Advance Wars: Days of Ruin, and is absolutely free."
+                            size="12" x="-232" y="-42" textColor="0xffffff" />
+            <GameUi:UiLabel text="Advance Wars is (c) 1990-2001 Nintendo and (c) 2001 Intelligent Systems. All images and sounds are copyright their respective owners."
+                            size="12" x="-116" y="-28" textColor="0xffffff" />
+            <e:layout>
+                <e:VerticalLayout gap="0" horizontalAlign="center" />
+            </e:layout>
+        </e:Group>
         <e:layout>
-            <e:VerticalLayout horizontalAlign="center" gap="0" />
+            <e:VerticalLayout horizontalAlign="center" gap="4" />
         </e:layout>
     </e:Group>
     <GameUi:UiButton id="_btnVersion" label="Button" right="0" verticalCenter="120">
@@ -42,7 +47,7 @@
             </e:Skin>
         </GameUi:skinName>
     </GameUi:UiButton>
-    <GameUi:UiLabel id="_labelVersion" text="v19.0118.0149" bottom="16" right="20" size="18" textColor="0xFFFFFF"
+    <GameUi:UiLabel id="_labelVersion" text="v19.0118.0149" bottom="20" right="20" size="18" textColor="0xFFFFFF"
                     textAlign="right" lineSpacing="2" />
     <e:Group id="_groupUnits" width="4000" x="0" scaleX="0.25" scaleY="0.25" height="100">
         <e:layout>

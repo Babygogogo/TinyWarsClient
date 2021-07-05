@@ -3,7 +3,7 @@
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage id="_imgMask" source="commonColorTransparent0001" left="0" right="0" top="0" bottom="0"
                     scale9Grid="1,1,2,2" />
-    <e:Group id="_group" width="620" horizontalCenter="0" height="360" verticalCenter="0">
+    <e:Group id="_group" width="620" horizontalCenter="0" height="400" verticalCenter="0">
         <e:Group left="0" right="0" top="0" bottom="0">
             <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
                             left="0" right="0" top="38" bottom="0" />
@@ -13,10 +13,10 @@
                 <GameUi:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
             </e:Group>
         </e:Group>
-        <GameUi:UiScrollList id="_listVersion" horizontalCenter="0" height="200" y="50" width="560">
+        <GameUi:UiScrollList id="_listVersion" horizontalCenter="0" height="250" y="50" width="560">
             <e:List>
                 <e:itemRendererSkinName>
-                    <e:Skin width="560" height="80" currentState="up" states="up,down">
+                    <e:Skin width="560" height="70" currentState="up" states="up,down">
                         <GameUi:UiImage source="commonPentagon0002" left="0" right="0" top="0" bottom="0"
                                         visible.down="false" scale9Grid="4,4,1,1" />
                         <GameUi:UiImage left="0" right="0" top="0" bottom="0" x="10" y="10" source="commonPentagon0003"
@@ -41,7 +41,7 @@
                 </e:layout>
             </e:List>
         </GameUi:UiScrollList>
-        <GameUi:UiLabel id="_labelTips" text="Change Version" y="260" size="14" right="30" left="30" wordWrap="true"
+        <GameUi:UiLabel id="_labelTips" text="Change Version" y="310" size="14" right="30" left="30" wordWrap="true"
                         textAlign="left" />
         <e:Group horizontalCenter="0" bottom="20">
             <GameUi:UiButton id="_btnConfirm" label="下一步" height="30" width="120"

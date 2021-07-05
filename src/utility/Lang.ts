@@ -1074,8 +1074,8 @@ namespace TinyWars.Utility.Lang {
             `Please make sure that there is at least one preset war rule.`,
         ],
         [Type.A0224]: [
-            `请检查第一条预设规则的可用性，并确保其可用并仅可用于一个游戏模式。`,
-            `Please make sure that the first preset rule is available in one and only one mode.`,
+            `这是《高级战争》1、2、DS版的网络对战版。主要维护者：Amarriner、Walker、Matsuzen。`,
+            `This is a web version of Advance Wars 1/2/Dual Strike. Maintained by Amarriner, Walker and Matsuzen.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3661,6 +3661,10 @@ namespace TinyWars.Utility.Lang {
             `其他玩家`,
             `Others`,
         ],
+        [Type.B0649]: [
+            `Advance Wars by Web`,
+            `Advance Wars by Web`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Type.B1000]: [
@@ -3934,11 +3938,11 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.F0006]: [
             `%d个部队尚未行动。`,
-            `%d unit(s) have taken no action yet.`
+            `%d unit(s) is(are) idle.`
         ],
         [Type.F0007]: [
-            `%d个建筑尚未生产部队。`,
-            `%d building(s) have built nothing yet.`
+            `%d个%s空闲，位置：%s。`,
+            `%d %s(s) is(are) idle. Position(s): %s.`
         ],
         [Type.F0008]: [
             `玩家[%s]已投降！`,
@@ -4959,6 +4963,7 @@ namespace TinyWars.Utility.Lang {
         switch (type) {
             case GameVersion.Legacy : return getText(Lang.Type.B0621);
             case GameVersion.Test   : return getText(Lang.Type.B0622);
+            case GameVersion.Awbw   : return getText(Lang.Type.B0649);
             default                 : return undefined;
         }
     }
@@ -4966,6 +4971,7 @@ namespace TinyWars.Utility.Lang {
         switch (type) {
             case GameVersion.Legacy : return getText(Lang.Type.A0217);
             case GameVersion.Test   : return getText(Lang.Type.A0218);
+            case GameVersion.Awbw   : return getText(Lang.Type.A0224);
             default                 : return undefined;
         }
     }

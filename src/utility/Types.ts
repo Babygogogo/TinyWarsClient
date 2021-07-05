@@ -635,5 +635,6 @@ namespace TinyWars.Utility.Types {
     export const enum GameVersion {
         Legacy,
         Test,
+        Awbw,
     }
 }

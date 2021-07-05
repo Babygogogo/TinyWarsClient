@@ -16,7 +16,7 @@ namespace TinyWars.CoopCustomRoom {
         public constructor() {
             super();
 
-            this.skinName = "resource/skins/CoopCustomRoom/CcrRoomMapInfoPage.exml";
+            this.skinName = "resource/skins/coopCustomRoom/CcrRoomMapInfoPage.exml";
         }
 
         protected _onOpened(): void {

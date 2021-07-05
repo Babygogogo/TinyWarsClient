@@ -299,24 +299,42 @@ namespace TinyWars.SinglePlayerWar {
             const unitMap       = war.getUnitMap();
             const hints         = new Array<string>();
 
-            let idleUnitsCount = 0;
-            for (const unit of unitMap.getAllUnitsOnMap()) {
-                if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
-                    ++idleUnitsCount;
+            {
+                let idleUnitsCount = 0;
+                for (const unit of unitMap.getAllUnitsOnMap()) {
+                    if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
+                        ++idleUnitsCount;
+                    }
                 }
+                (idleUnitsCount) && (hints.push(Lang.getFormattedText(Lang.Type.F0006, idleUnitsCount)));
             }
-            (idleUnitsCount) && (hints.push(Lang.getFormattedText(Lang.Type.F0006, idleUnitsCount)));
 
-            let idleBuildingsCount = 0;
-            for (const tile of war.getTileMap().getAllTiles()) {
-                if ((tile.checkIsUnitProducerForPlayer(playerIndex)) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
-                    ++idleBuildingsCount;
+            {
+                const idleBuildingsDict = new Map<Types.TileType, Types.GridIndex[]>();
+                for (const tile of war.getTileMap().getAllTiles()) {
+                    if ((tile.checkIsUnitProducerForPlayer(playerIndex)) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
+                        const tileType  = tile.getType();
+                        const gridIndex = tile.getGridIndex();
+                        if (!idleBuildingsDict.has(tileType)) {
+                            idleBuildingsDict.set(tileType, [gridIndex]);
+                        } else {
+                            idleBuildingsDict.get(tileType).push(gridIndex);
+                        }
+                    }
                 }
+                const textArrayForBuildings: string[] = [];
+                for (const [tileType, gridIndexArray] of idleBuildingsDict) {
+                    textArrayForBuildings.push(Lang.getFormattedText(
+                        Lang.Type.F0007, gridIndexArray.length,
+                        Lang.getTileName(tileType),
+                        gridIndexArray.map(v => `(${v.x}, ${v.y})`).join(`, `)),
+                    );
+                }
+                (textArrayForBuildings.length) && (hints.push(textArrayForBuildings.join(`\n`)));
             }
-            (idleBuildingsCount) && (hints.push(Lang.getFormattedText(Lang.Type.F0007, idleBuildingsCount)));
 
             hints.push(Lang.getText(Lang.Type.A0024));
-            return hints.join(`\n`);
+            return hints.join(`\n\n`);
         }
     }
 }

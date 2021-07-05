@@ -132,7 +132,10 @@ namespace TinyWars.Common {
                 },
                 {
                     gameVersion : GameVersion.Test,
-                }
+                },
+                {
+                    gameVersion : GameVersion.Awbw,
+                },
             ];
         }
 
@@ -210,6 +213,7 @@ namespace TinyWars.Common {
         switch (version) {
             case GameVersion.Legacy : return `https://www.tinywars.online`;
             case GameVersion.Test   : return `https://www.tinywars.online/test`;
+            case GameVersion.Awbw   : return `https://awbw.amarriner.com/`;
             default                 : return undefined;
         }
     }
