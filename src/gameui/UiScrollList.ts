@@ -16,9 +16,11 @@ namespace TinyWars.GameUi {
         // @ts-ignore
         private _list                   : eui.List;
 
-        private _cachedItemRenderer     : (new () => GameUi.UiListItemRenderer<DataForRenderer>) | undefined;
-        private _cachedListDataArray    : DataForRenderer[] | undefined;
-        private _cachedSelectedIndex    : number | undefined;
+        private _cachedItemRenderer         : (new () => GameUi.UiListItemRenderer<DataForRenderer>) | undefined;
+        private _cachedListDataArray        : DataForRenderer[] | undefined;
+        private _cachedSelectedIndex        : number | undefined;
+        private _cachedScrollVerPercentage  : number | undefined;
+        private _cachedScrollHorPercentage  : number | undefined;
 
         private readonly _mousePoint    = new egret.Point();
 
@@ -88,8 +90,9 @@ namespace TinyWars.GameUi {
                 { type: Notify.Type.MouseWheel, callback: this._onNotifyMouseWheel },
             ]);
             this._setUiListenerArray([
-                { ui: list, callback: this._onItemTapList,      eventType: eui.ItemTapEvent.ITEM_TAP },
-                { ui: list, callback: this._onTouchBeginList,   eventType: egret.TouchEvent.TOUCH_BEGIN },
+                { ui: list,     callback: this._onResizeList,       eventType: egret.Event.RESIZE },
+                { ui: list,     callback: this._onItemTapList,      eventType: eui.ItemTapEvent.ITEM_TAP },
+                { ui: list,     callback: this._onTouchBeginList,   eventType: egret.TouchEvent.TOUCH_BEGIN },
             ]);
 
             this._list          = list;
@@ -166,6 +169,14 @@ namespace TinyWars.GameUi {
             }
         }
 
+        private _onResizeList(): void {
+            if (this._cachedScrollHorPercentage != null) {
+                this.scrollHorizontalTo(this._cachedScrollHorPercentage);
+            }
+            if (this._cachedScrollVerPercentage != null) {
+                this.scrollVerticalTo(this._cachedScrollVerPercentage);
+            }
+        }
         private _onItemTapList(e: egret.Event): void {
             if (!this.getIsOpening()) {
                 return;
@@ -176,6 +187,9 @@ namespace TinyWars.GameUi {
             if (item instanceof UiListItemRenderer) {
                 item.onItemTapEvent(data);
             }
+
+            this._cachedScrollHorPercentage = undefined;
+            this._cachedScrollVerPercentage = undefined;
         }
         private _onTouchBeginList(): void {
             Utility.SoundManager.playEffect("button.mp3");
@@ -260,9 +274,11 @@ namespace TinyWars.GameUi {
         }
 
         public clear() : void {
-            this._cachedItemRenderer    = undefined;
-            this._cachedListDataArray   = undefined;
-            this._cachedSelectedIndex   = undefined;
+            this._cachedItemRenderer        = undefined;
+            this._cachedListDataArray       = undefined;
+            this._cachedSelectedIndex       = undefined;
+            this._cachedScrollHorPercentage = undefined;
+            this._cachedScrollVerPercentage = undefined;
 
             if (this.getIsOpening()) {
                 const dataProvider = this._getDataProvider();
@@ -290,20 +306,18 @@ namespace TinyWars.GameUi {
         }
 
         public scrollVerticalTo(percentage: number) : void {
-            egret.callLater(() => {
-                if (this.getIsOpening()) {
-                    const list      = this._list;
-                    list.scrollV    = percentage / 100 * Math.max(0, list.contentHeight - list.height);
-                }
-            }, this);
+            this._cachedScrollVerPercentage = percentage;
+            if (this.getIsOpening()) {
+                const list      = this._list;
+                list.scrollV    = percentage / 100 * Math.max(0, list.contentHeight - list.height);
+            }
         }
         public scrollHorizontalTo(percentage : number) : void {
-            egret.callLater(() => {
-                if (this.getIsOpening()) {
-                    const list      = this._list;
-                    list.scrollH    = percentage / 100 * Math.max(0, list.contentWidth - list.width);
-                }
-            }, this);
+            this._cachedScrollHorPercentage = percentage;
+            if (this.getIsOpening()) {
+                const list      = this._list;
+                list.scrollH    = percentage / 100 * Math.max(0, list.contentWidth - list.width);
+            }
         }
         public setScrollPolicyV(policy: string): void {
             this.scrollPolicyV = policy;

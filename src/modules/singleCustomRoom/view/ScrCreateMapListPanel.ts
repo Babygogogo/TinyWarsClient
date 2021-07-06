@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.SingleCustomRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
@@ -15,7 +16,7 @@ namespace TinyWars.SingleCustomRoom {
         playersCount?   : number;
         minRating?      : number;
         mapTag?         : IDataForMapTag;
-    }
+    };
     export class ScrCreateMapListPanel extends GameUi.UiPanel<FiltersForMapList> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
@@ -110,38 +111,36 @@ namespace TinyWars.SingleCustomRoom {
 
         public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
             this._mapFilters            = mapFilters;
-            this._dataForList           = await this._createDataForListMap();
+            const dataArray             = await this._createDataForListMap();
+            this._dataForList           = dataArray;
 
-            const length                = this._dataForList.length;
+            const length                = dataArray.length;
+            const listMap               = this._listMap;
             this._labelNoMap.visible    = length <= 0;
-            this._listMap.bindData(this._dataForList);
+            listMap.bindData(dataArray);
             this.setSelectedMapId(this._selectedMapId);
 
-            if (length) {
-                for (let index = 0; index < length; ++index) {
-                    if (this._dataForList[index].mapId === this._selectedMapId) {
-                        this._listMap.scrollVerticalTo((index + 1) / length * 100);
-                        break;
-                    }
-                }
+            if (length > 1) {
+                const index = dataArray.findIndex(v => v.mapId === this._selectedMapId);
+                (index >= 0) && (listMap.scrollVerticalTo(index / (length - 1) * 100));
             }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
+        private _onTouchTapBtnSearch(): void {
             ScrCreateSearchMapPanel.show();
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        private _onTouchTapBtnBack(): void {
             this.close();
             SinglePlayerMode.SpmMainMenuPanel.show();
             Lobby.LobbyTopPanel.show();
             Lobby.LobbyBottomPanel.show();
         }
 
-        private async _onTouchedBtnNextStep(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnNextStep(): Promise<void> {
             const selectedMapId = this.getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
@@ -150,7 +149,7 @@ namespace TinyWars.SingleCustomRoom {
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -169,9 +168,11 @@ namespace TinyWars.SingleCustomRoom {
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const data: DataForMapNameRenderer[] = [];
-            let { mapName, mapDesigner, playersCount, minRating } = this._mapFilters;
-            const filterTag = this._mapFilters.mapTag || {};
+            const data                          : DataForMapNameRenderer[] = [];
+            const mapFilters                    = this._mapFilters;
+            const { playersCount, minRating }   = mapFilters;
+            const filterTag                     = mapFilters.mapTag || {};
+            let { mapName, mapDesigner }        = mapFilters;
             (mapName)       && (mapName     = mapName.toLowerCase());
             (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
 
@@ -306,7 +307,7 @@ namespace TinyWars.SingleCustomRoom {
         mapId   : number;
         mapName : string;
         panel   : ScrCreateMapListPanel;
-    }
+    };
 
     class MapNameRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
         private _btnChoose: GameUi.UiButton;
@@ -326,12 +327,12 @@ namespace TinyWars.SingleCustomRoom {
             WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v);
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+        private _onTouchTapBtnChoose(): void {
             const data = this.data;
             data.panel.setSelectedMapId(data.mapId);
         }
 
-        private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchTapBtnNext(): Promise<void> {
             const data = this.data;
             data.panel.close();
             await ScrModel.Create.resetDataByMapId(data.mapId);

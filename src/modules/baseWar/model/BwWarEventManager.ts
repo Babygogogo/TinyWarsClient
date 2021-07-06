@@ -922,21 +922,23 @@ namespace TinyWars.BaseWar {
                 distance,
                 distance,
                 mapSize,
-                (gridIndex): boolean => {
-                    if (unitMap.getUnitOnMap(gridIndex)) {
+                (g): boolean => {
+                    if (unitMap.getUnitOnMap(g)) {
                         return false;
                     }
 
-                    if (needMovableTile) {
-                        const tile = tileMap.getTile(gridIndex);
-                        if (tile == null) {
-                            Logger.error(`BwWarEventManager.getGridIndexForAddUnit() empty tile.`);
-                            return false;
-                        }
+                    const tile = tileMap.getTile(g);
+                    if (tile == null) {
+                        Logger.error(`BwWarEventManager.getGridIndexForAddUnit() empty tile.`);
+                        return false;
+                    }
 
-                        if (tile.getMoveCostByMoveType(moveType) == null) {
-                            return false;
-                        }
+                    if (tile.getMaxHp() != null) {
+                        return false;
+                    }
+
+                    if ((needMovableTile) && (tile.getMoveCostByMoveType(moveType) == null)) {
+                        return false;
                     }
 
                     return true;

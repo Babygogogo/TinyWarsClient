@@ -4,7 +4,7 @@
         <GameUi:UiScrollList id="_listPlayer" left="0" right="20" top="0" bottom="20">
             <e:List>
                 <e:itemRendererSkinName>
-                    <e:Skin width="140" height="320" currentState="up" states="up,down">
+                    <e:Skin width="140" currentState="up" states="up,down">
                         <e:Group left="0" right="0" top="0" bottom="0">
                             <GameUi:UiImage scaleX="1" scaleY="1" left="0" right="0" top="0" bottom="0"
                                             source="commonColorBlack0001" scale9Grid="1,1,2,2" locked="true" />
@@ -92,7 +92,7 @@
                     </e:Skin>
                 </e:itemRendererSkinName>
                 <e:layout>
-                    <e:HorizontalLayout gap="10" />
+                    <e:HorizontalLayout gap="10" verticalAlign="contentJustify" />
                 </e:layout>
             </e:List>
         </GameUi:UiScrollList>

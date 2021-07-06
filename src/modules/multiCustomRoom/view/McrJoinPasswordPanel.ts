@@ -1,29 +1,33 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiCustomRoom {
     import ProtoTypes   = Utility.ProtoTypes;
     import Lang         = Utility.Lang;
     import FloatText    = Utility.FloatText;
     import Notify       = Utility.Notify;
+    import Helpers      = Utility.Helpers;
     import WarMapModel  = WarMap.WarMapModel;
 
-    type OpenDataForMcrJoinPasswordPanel = {
+    type OpenData = {
         roomInfo: ProtoTypes.MultiCustomRoom.IMcrRoomInfo;
-    }
-    export class McrJoinPasswordPanel extends GameUi.UiPanel<OpenDataForMcrJoinPasswordPanel> {
+    };
+    export class McrJoinPasswordPanel extends GameUi.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: McrJoinPasswordPanel;
 
-        private _labelTitle         : TinyWars.GameUi.UiLabel;
-        private _labelRoomTitle     : TinyWars.GameUi.UiLabel;
-        private _labelPasswordTitle : TinyWars.GameUi.UiLabel;
-        private _labelWarName       : TinyWars.GameUi.UiLabel;
-        private _inputWarPassword   : TinyWars.GameUi.UiTextInput;
-        private _btnCancel          : TinyWars.GameUi.UiButton;
-        private _btnConfirm         : TinyWars.GameUi.UiButton;
+        private readonly _imgMask               : GameUi.UiImage;
+        private readonly _group                 : eui.Group;
+        private readonly _labelTitle            : GameUi.UiLabel;
+        private readonly _labelRoomTitle        : GameUi.UiLabel;
+        private readonly _labelPasswordTitle    : GameUi.UiLabel;
+        private readonly _labelWarName          : GameUi.UiLabel;
+        private readonly _inputWarPassword      : GameUi.UiTextInput;
+        private readonly _btnCancel             : GameUi.UiButton;
+        private readonly _btnConfirm            : GameUi.UiButton;
 
-        public static show(openData: OpenDataForMcrJoinPasswordPanel): void {
+        public static show(openData: OpenData): void {
             if (!McrJoinPasswordPanel._instance) {
                 McrJoinPasswordPanel._instance = new McrJoinPasswordPanel();
             }
@@ -52,19 +56,23 @@ namespace TinyWars.MultiCustomRoom {
                 { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
             ]);
 
+            this._showOpenAnimation();
             this._updateComponentsForLanguage();
             this._inputWarPassword.text = "";
         }
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+        }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
 
-        private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnConfirm(): Promise<void> {
             const roomInfo = this._getOpenData().roomInfo;
             if (this._inputWarPassword.text !== roomInfo.settingsForMcw.warPassword) {
                 FloatText.show(Lang.getText(Lang.Type.A0017));
@@ -97,6 +105,35 @@ namespace TinyWars.MultiCustomRoom {
             this._labelPasswordTitle.text   = `${Lang.getText(Lang.Type.B0171)}:`;
             this._btnCancel.label           = Lang.getText(Lang.Type.B0154);
             this._btnConfirm.label          = Lang.getText(Lang.Type.B0026);
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: -40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+            });
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                });
+
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: -40 },
+                    callback    : resolve,
+                });
+            });
         }
     }
 }

@@ -4180,6 +4180,10 @@ namespace TinyWars.Utility.Lang {
             `设置玩家 P%d 的状态为 %s`,
             `Set P%d's state as %s.`,
         ],
+        [Type.F0067]: [
+            `无法在 %s 上放置部队。`,
+            `It's not allowed to place units on %s.`,
+        ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Rich strings.

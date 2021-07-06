@@ -112,20 +112,18 @@ namespace TinyWars.CoopCustomRoom {
 
         public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
             this._mapFilters            = mapFilters;
-            this._dataForList           = await this._createDataForListMap();
+            const dataArray             = await this._createDataForListMap();
+            this._dataForList           = dataArray;
 
-            const length                = this._dataForList.length;
+            const length                = dataArray.length;
+            const listMap               = this._listMap;
             this._labelNoMap.visible    = length <= 0;
-            this._listMap.bindData(this._dataForList);
+            listMap.bindData(dataArray);
             this.setSelectedMapId(this._selectedMapId);
 
-            if (length) {
-                for (let index = 0; index < length; ++index) {
-                    if (this._dataForList[index].mapId === this._selectedMapId) {
-                        this._listMap.scrollVerticalTo((index + 1) / length * 100);
-                        break;
-                    }
-                }
+            if (length > 1) {
+                const index = dataArray.findIndex(v => v.mapId === this._selectedMapId);
+                (index >= 0) && (listMap.scrollVerticalTo(index / (length - 1) * 100));
             }
         }
 

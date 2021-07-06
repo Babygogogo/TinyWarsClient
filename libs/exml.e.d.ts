@@ -43,6 +43,10 @@ declare module Skins.Component.Button{
 	}
 }
 declare module Skins.Component.Button{
+	class ButtonTriangle002 extends eui.Skin{
+	}
+}
+declare module Skins.Component.Button{
 	class ButtonYellow001 extends eui.Skin{
 	}
 }

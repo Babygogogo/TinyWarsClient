@@ -6,29 +6,17 @@ namespace TinyWars.GameUi {
         public maxTextWidth = 0;
         public wordWrap     = true;
 
-        public $setText(value: string): boolean {
-            const result = super.$setText(value);
-            this.applyMaxTextWidth();
-            return result;
-        }
+        public constructor() {
+            super();
 
-        public $setTextColor(color: number): boolean {
-            const result = super.$setTextColor(color);
-            this.applyMaxTextWidth();
-            return result;
+            this.addEventListener(egret.Event.RESIZE, this._onResize, this);
         }
 
         public setRichText(str: string): void {
             this.textFlow = (new egret.HtmlTextParser()).parser(str);
         }
 
-        public applyMaxTextWidth(): void {
-            if (this.maxWidth > 0) {
-                this.once(egret.Event.ENTER_FRAME, this._onEnterFrameForApplyMaxTextWidth, this);
-            }
-        }
-
-        private _onEnterFrameForApplyMaxTextWidth(): void {
+        private _onResize(): void {
             const maxWidth = this.maxTextWidth;
             if (maxWidth > 0) {
                 const currWidth = this.textWidth;

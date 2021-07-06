@@ -1,13 +1,13 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Common {
     import Helpers = Utility.Helpers;
 
-    type OpenDataForCommonHelpPanel = {
+    type OpenData = {
         title  : string;
         content: string;
-    }
-
-    export class CommonHelpPanel extends GameUi.UiPanel<OpenDataForCommonHelpPanel> {
+    };
+    export class CommonHelpPanel extends GameUi.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Notify1;
         protected readonly _IS_EXCLUSIVE = true;
 
@@ -15,11 +15,12 @@ namespace TinyWars.Common {
 
         private readonly _imgMask       : GameUi.UiImage;
         private readonly _group         : eui.Group;
+        private readonly _btnClose      : GameUi.UiButton;
         private readonly _labelTitle    : GameUi.UiLabel;
         private readonly _scrContent    : eui.Scroller;
         private readonly _labelContent  : GameUi.UiLabel;
 
-        public static show(openData: OpenDataForCommonHelpPanel): void {
+        public static show(openData: OpenData): void {
             if (!CommonHelpPanel._instance) {
                 CommonHelpPanel._instance = new CommonHelpPanel();
             }
@@ -41,6 +42,10 @@ namespace TinyWars.Common {
         }
 
         protected _onOpened(): void {
+            this._setUiListenerArray([
+                { ui: this._btnClose,   callback: this.close },
+            ]);
+
             const openData                      = this._getOpenData();
             this._labelTitle.text               = openData.title;
             this._scrContent.viewport.scrollV   = 0;

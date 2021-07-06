@@ -32,7 +32,7 @@
                 </e:skinName>
             </GameUi:UiTab>
         </e:Group>
-        <e:Group id="_groupNavigator" x="100" y="20">
+        <e:Group id="_groupNavigator" x="200" y="20">
             <e:Group x="0" y="0">
                 <GameUi:UiLabel id="_labelMultiPlayer" text="Multi Player" size="14" width="80" wordWrap="true"
                                 textAlign="center" x="0" y="0" textColor="0xAAAAAA" />
@@ -62,7 +62,7 @@
                 <e:VerticalLayout horizontalAlign="center" gap="4" />
             </e:layout>
         </e:Group>
-        <GameUi:UiButton id="_btnBack" label="Back" y="20" height="30" width="80"
+        <GameUi:UiButton id="_btnBack" label="Back" y="20" height="30" width="180"
                          skinName="Skins.Component.Button.ButtonYellow001" left="0"></GameUi:UiButton>
         <e:Group id="_groupSettings" left="20" top="80">
             <e:Group id="_groupChooseCo" x="0" y="0" locked="true">
