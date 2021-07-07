@@ -64,7 +64,7 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwPlayerManagerInit06;
             }
 
-            const playerMap = this._getPlayersMap();
+            const playerMap = this.getAllPlayersDict();
             playerMap.clear();
             for (const [playerIndex, player] of newPlayerMap) {
                 playerMap.set(playerIndex, player);
@@ -102,7 +102,7 @@ namespace TinyWars.BaseWar {
 
         public serialize(): ISerialPlayerManager | undefined {
             const players: ISerialPlayer[] = [];
-            for (const [, player] of this._getPlayersMap()) {
+            for (const [, player] of this.getAllPlayersDict()) {
                 const serialPlayer = player.serialize();
                 if (serialPlayer == null) {
                     Logger.error(`BwPlayerManager.serialize() empty serialPlayer.`);
@@ -116,7 +116,7 @@ namespace TinyWars.BaseWar {
         }
         public serializeForCreateSfw(): ISerialPlayerManager | undefined {
             const players: ISerialPlayer[] = [];
-            for (const [, player] of this._getPlayersMap()) {
+            for (const [, player] of this.getAllPlayersDict()) {
                 const serialPlayer = player.serializeForCreateSfw();
                 if (serialPlayer == null) {
                     Logger.error(`BwPlayerManager.serializeForCreateSfw() empty serialPlayer.`);
@@ -130,7 +130,7 @@ namespace TinyWars.BaseWar {
         }
         public serializeForCreateMfr(): ISerialPlayerManager | undefined {
             const players: ISerialPlayer[] = [];
-            for (const [, player] of this._getPlayersMap()) {
+            for (const [, player] of this.getAllPlayersDict()) {
                 const serialPlayer = player.serializeForCreateMfr();
                 if (serialPlayer == null) {
                     Logger.error(`BwPlayerManager.serializeForCreateMfr() empty serialPlayer.`);
@@ -156,12 +156,12 @@ namespace TinyWars.BaseWar {
         public getPlayer(playerIndex: number): BwPlayer | undefined {
             return this._players.get(playerIndex);
         }
-        protected _getPlayersMap(): Map<number, BwPlayer> {
+        public getAllPlayersDict(): Map<number, BwPlayer> {
             return this._players;
         }
         public getAllPlayers(): BwPlayer[] {
             const players: BwPlayer[] = [];
-            for (const [, player] of this._getPlayersMap()) {
+            for (const [, player] of this.getAllPlayersDict()) {
                 players.push(player);
             }
             return players;

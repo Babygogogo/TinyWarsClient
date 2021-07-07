@@ -8,7 +8,7 @@ namespace TinyWars.SinglePlayerWar {
         ////////////////////////////////////////////////////////////////////////////////
         public getHumanPlayers(): BaseWar.BwPlayer[] {
             const players: BaseWar.BwPlayer[] = [];
-            for (const [, player] of this._getPlayersMap()) {
+            for (const [, player] of this.getAllPlayersDict()) {
                 if (player.getUserId() != null) {
                     players.push(player);
                 }

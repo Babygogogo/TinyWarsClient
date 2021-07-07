@@ -289,13 +289,31 @@ namespace TinyWars.BaseWar {
         }
 
         public checkCanEnd(): boolean | undefined {
-            const aliveTeamsCount = this.getPlayerManager().getAliveOrDyingTeamsCount(false);
-            if (aliveTeamsCount == null) {
-                Logger.error(`BwWar.checkCanEnd() empty aliveTeamsCount.`);
-                return undefined;
+            if (this.getWarEventManager().getCallableWarEventId() != null) {
+                return false;
             }
 
-            return (aliveTeamsCount <= 1)
+            const aliveTeamIndexSet = new Set<number>();
+            let hasAliveHumanPlayer = false;
+            for (const [, player] of this.getPlayerManager().getAllPlayersDict()) {
+                if ((player.checkIsNeutral()) || (player.getAliveState() === Types.PlayerAliveState.Dead)) {
+                    continue;
+                }
+
+                const teamIndex = player.getTeamIndex();
+                if (teamIndex == null) {
+                    Logger.error(`BwWar.checkCanEnd() empty teamIndex.`);
+                    return undefined;
+                }
+
+                aliveTeamIndexSet.add(teamIndex);
+                if (player.getUserId() != null) {
+                    hasAliveHumanPlayer = true;
+                }
+            }
+
+            return (!hasAliveHumanPlayer)
+                || (aliveTeamIndexSet.size <= 1)
                 || (this.getDrawVoteManager().checkIsDraw());
         }
         public setIsEnded(ended: boolean): void {

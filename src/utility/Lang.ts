@@ -968,8 +968,8 @@ namespace TinyWars.Utility.Lang {
             `Please ensure that there're at least 2 alive forces.`,
         ],
         [Type.A0200]: [
-            `请确保地图上至少有两个存活的势力`,
-            `Please ensure that there're at least 2 alive forces.`,
+            `创建自由模式游戏失败`,
+            `Failed to create the free mode game.`,
         ],
         [Type.A0201]: [
             `将离开战局并前往创建自由模式房间的页面。\n您确定要继续吗？`,
