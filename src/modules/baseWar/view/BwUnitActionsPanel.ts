@@ -1,20 +1,17 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar {
     import Helpers          = Utility.Helpers;
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
-    import StageManager     = Utility.StageManager;
     import Types            = Utility.Types;
     import UnitActionType   = Types.UnitActionType;
-
-    const _LEFT_X       = 0;
-    const _RIGHT_X      = 860;
 
     export type OpenDataForBwUnitActionsPanel = {
         war         : BwWar;
         destination : Types.GridIndex;
         actionList  : DataForUnitAction[];
-    }
+    };
     export class BwUnitActionsPanel extends GameUi.UiPanel<OpenDataForBwUnitActionsPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -62,15 +59,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyGlobalTouchBegin(e: egret.Event): void {
-            this._adjustPositionOnTouch(e.data);
-        }
-        private _onNotifyGlobalTouchMove(e: egret.Event): void {
-            this._adjustPositionOnTouch(e.data);
-        }
-        private _onNotifyTileAnimationTick(e: egret.Event): void {
-        }
-        private _onNotifyZoomableContentsMoved(e: egret.Event): void {
+        private _onNotifyZoomableContentsMoved(): void {
             this._updatePosition();
         }
 
@@ -85,6 +74,7 @@ namespace TinyWars.BaseWar {
                 const produceUnitType = data.produceUnitType;
                 if (produceUnitType == null) {
                     dataArray.push({
+                        war,
                         actionType      : data.actionType,
                         callback        : data.callback,
                         unit            : data.unitForDrop || data.unitForLaunch,
@@ -101,6 +91,7 @@ namespace TinyWars.BaseWar {
                     unitForProduce.startRunning(war);
 
                     dataArray.push({
+                        war,
                         actionType      : data.actionType,
                         callback        : data.callback,
                         unit            : unitForProduce,
@@ -130,12 +121,6 @@ namespace TinyWars.BaseWar {
             group.y         = Math.max(40, Math.min(point.y, stage.stageHeight - group.height));
         }
 
-        private _adjustPositionOnTouch(e: egret.TouchEvent): void {
-            if (e.target !== this._group) {
-                this._group.x = (e.stageX >= StageManager.getStage().stageWidth / 2) ? _LEFT_X : _RIGHT_X;
-            }
-        }
-
         private _showOpenAnimation(): void {
             Helpers.resetTween({
                 obj         : this._group,
@@ -158,11 +143,12 @@ namespace TinyWars.BaseWar {
     }
 
     type DataForUnitActionRenderer = {
+        war             : BwWar;
         actionType      : UnitActionType;
         callback        : () => void;
         unit?           : BaseWar.BwUnit;
         canProduceUnit? : boolean;
-    }
+    };
 
     class UnitActionRenderer extends GameUi.UiListItemRenderer<DataForUnitActionRenderer> {
         private _labelAction: GameUi.UiLabel;
@@ -197,8 +183,11 @@ namespace TinyWars.BaseWar {
             }
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
-            this.data.callback();
+        public onItemTapEvent(): void {
+            const data = this.data;
+            if (!data.war.getActionPlanner().checkIsStateRequesting()) {
+                data.callback();
+            }
         }
 
         private _onNotifyUnitAnimationTick(): void {
