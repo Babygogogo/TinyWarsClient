@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Utility.FlowManager {
     import UserModel    = User.UserModel;
     import MpwProxy     = MultiPlayerWar.MpwProxy;
@@ -42,6 +43,7 @@ namespace TinyWars.Utility.FlowManager {
         MultiCustomRoom.McrProxy.init();
         MultiRankRoom.MrrProxy.init();
         MultiFreeRoom.MfrProxy.init();
+        CoopCustomRoom.CcrProxy.init();
         ReplayWar.RwProxy.init();
         RwModel.init();
         SinglePlayerMode.SpmProxy.init();
@@ -73,7 +75,7 @@ namespace TinyWars.Utility.FlowManager {
         Login.LoginPanel.show();
         Broadcast.BroadcastPanel.show();
 
-        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
     export function gotoLobby(): void {
         _hasOnceWentToLobby = true;
@@ -89,14 +91,19 @@ namespace TinyWars.Utility.FlowManager {
         Lobby.LobbyBottomPanel.show();
         Broadcast.BroadcastPanel.show();
 
-        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
-    export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<void> {
+    export async function gotoMultiPlayerWar(data: ProtoTypes.WarSerialization.ISerialWar): Promise<ClientErrorCode> {
         RwModel.unloadWar();
         SpwModel.unloadWar();
         MeModel.unloadWar();
-        const war = await MpwModel.loadWar(data);
+        const { errorCode, war } = await MpwModel.loadWar(data);
+        if (errorCode) {
+            return errorCode;
+        } else if (war == null) {
+            return ClientErrorCode.FlowManager_GotoMultiPlayerWar_00;
+        }
 
         StageManager.closeAllPanels();
         BaseWar.BwBackgroundPanel.show();
@@ -107,6 +114,8 @@ namespace TinyWars.Utility.FlowManager {
         Broadcast.BroadcastPanel.show();
 
         SoundManager.playRandomWarBgm();
+
+        return ClientErrorCode.NoError;
     }
     export async function gotoReplayWar(warData: Uint8Array, replayId: number): Promise<void> {
         MpwModel.unloadWar();
@@ -160,7 +169,7 @@ namespace TinyWars.Utility.FlowManager {
         BaseWar.BwUnitBriefPanel.show({ war });
         Broadcast.BroadcastPanel.show();
 
-        SoundManager.playBgm(SoundManager.BgmCode.MapEditor01);
+        SoundManager.playBgm(Types.BgmCode.MapEditor01);
     }
 
     export function gotoMrwMyWarListPanel(): void {
@@ -173,7 +182,7 @@ namespace TinyWars.Utility.FlowManager {
         MultiRankWar.MrwMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
 
-        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
     export function gotoMcwMyWarListPanel(): void {
         MpwModel.unloadWar();
@@ -185,19 +194,43 @@ namespace TinyWars.Utility.FlowManager {
         MultiCustomWar.McwMyWarListPanel.show();
         Broadcast.BroadcastPanel.show();
 
-        SoundManager.playBgm(SoundManager.BgmCode.Lobby01);
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
+    }
+    export function gotoMfwMyWarListPanel(): void {
+        MpwModel.unloadWar();
+        RwModel.unloadWar();
+        SpwModel.unloadWar();
+        MeModel.unloadWar();
+        StageManager.closeAllPanels();
+        Lobby.LobbyBackgroundPanel.show();
+        MultiFreeWar.MfwMyWarListPanel.show();
+        Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
+    }
+    export function gotoCcwMyWarListPanel(): void {
+        MpwModel.unloadWar();
+        RwModel.unloadWar();
+        SpwModel.unloadWar();
+        MeModel.unloadWar();
+        StageManager.closeAllPanels();
+        Lobby.LobbyBackgroundPanel.show();
+        CoopCustomWar.CcwMyWarListPanel.show();
+        Broadcast.BroadcastPanel.show();
+
+        SoundManager.playBgm(Types.BgmCode.Lobby01);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Callbacks.
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    function _onNotifyConfigLoaded(e: egret.Event): void {
+    function _onNotifyConfigLoaded(): void {
         if (_checkCanFirstGoToLobby()) {
             gotoLobby();
         }
     }
 
-    function _onNotifyNetworkConnected(e: egret.Event): void {
+    function _onNotifyNetworkConnected(): void {
         const account   = UserModel.getSelfAccount();
         const password  = UserModel.getSelfPassword();
         if ((!UserModel.getIsLoggedIn())    &&
@@ -208,20 +241,24 @@ namespace TinyWars.Utility.FlowManager {
         }
     }
 
-    function _onMsgCommonServerDisconnect(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgCommonServerDisconnect.IS;
-
+    function _onMsgCommonServerDisconnect(): void {
         _hasOnceWentToLobby = false;
         UserModel.clearLoginInfo();
         FlowManager.gotoLogin();
 
+        const title     = Lang.getText(Lang.Type.B0025);
+        const content   = Lang.getText(Lang.Type.A0020);
+        if ((title == null) || (content == null)) {
+            Logger.error(`FlowManager._onMsgCommonServerDisconnect() empty title/content.`);
+            return;
+        }
         Common.CommonAlertPanel.show({
-            title   : Lang.getText(Lang.Type.B0025),
-            content : Lang.getText(Lang.Type.A0020),
+            title,
+            content,
         });
     }
 
-    function _onMsgUserLogin(e: egret.Event): void {
+    function _onMsgUserLogin(): void {
         if (_checkCanFirstGoToLobby()) {
             gotoLobby();
         } else {
@@ -232,15 +269,21 @@ namespace TinyWars.Utility.FlowManager {
         }
     }
 
-    function _onMsgUserLogout(e: egret.Event): void {
+    function _onMsgUserLogout(): void {
         _hasOnceWentToLobby = false;
         UserModel.clearLoginInfo();
         gotoLogin();
     }
 
     function _onMsgMpwCommonContinueWar(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgMpwCommonContinueWar.IS;
-        gotoMultiPlayerWar(data.war);
+        const data      = e.data as ProtoTypes.NetMessage.MsgMpwCommonContinueWar.IS;
+        const warData   = data.war;
+        if (warData == null) {
+            Logger.error(`FlowManager._onMsgMpwCommonContinueWar() empty warData.`);
+            return;
+        }
+
+        gotoMultiPlayerWar(warData);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

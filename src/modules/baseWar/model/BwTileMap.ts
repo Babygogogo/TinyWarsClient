@@ -44,7 +44,7 @@ namespace TinyWars.BaseWar {
 
             const map = Helpers.createEmptyMap<BwTile>(mapWidth, mapHeight);
             for (const tileData of tiles) {
-                const gridIndex = BwHelpers.convertGridIndex(tileData.gridIndex);
+                const gridIndex = GridIndexHelpers.convertGridIndex(tileData.gridIndex);
                 if (gridIndex == null) {
                     return ClientErrorCode.BwTileMapInit03;
                 }
@@ -102,11 +102,11 @@ namespace TinyWars.BaseWar {
 
         public startRunning(war: BwWar): void {
             this._setWar(war);
-            this.forEachTile(tile => tile.startRunning(war));
+            this._forEachTile(tile => tile.startRunning(war));
         }
         public startRunningView(): void {
             this.getView().startRunningView();
-            this.forEachTile(tile => tile.startRunningView());
+            this._forEachTile(tile => tile.startRunningView());
         }
         public stopRunning(): void {
             this.getView().stopRunningView();
@@ -218,7 +218,7 @@ namespace TinyWars.BaseWar {
             return this._view;
         }
 
-        public forEachTile(func: (t: BwTile) => any): void {
+        private _forEachTile(func: (t: BwTile) => any): void {
             for (const column of this._getMap()) {
                 for (const tile of column) {
                     func(tile);
@@ -230,7 +230,7 @@ namespace TinyWars.BaseWar {
         }
         public getAllTiles(): BwTile[] {
             const tileArray: BwTile[] = [];
-            this.forEachTile(tile => tileArray.push(tile));
+            this._forEachTile(tile => tileArray.push(tile));
             return tileArray;
         }
 

@@ -1,9 +1,11 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Common {
-    import Notify       = Utility.Notify;
-    import ProtoTypes   = Utility.ProtoTypes;
-    import Lang         = Utility.Lang;
-    import Helpers      = Utility.Helpers;
+    import Notify           = Utility.Notify;
+    import ProtoTypes       = Utility.ProtoTypes;
+    import Lang             = Utility.Lang;
+    import CommonConstants  = Utility.CommonConstants;
+    import Helpers          = Utility.Helpers;
 
     export class CommonServerStatusPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
@@ -11,17 +13,31 @@ namespace TinyWars.Common {
 
         private static _instance: CommonServerStatusPanel;
 
+        // @ts-ignore
         private readonly _imgMask                   : GameUi.UiImage;
+        // @ts-ignore
         private readonly _group                     : eui.Group;
-        private readonly _labelTitle                : TinyWars.GameUi.UiLabel;
-        private readonly _labelAccountsTitle        : TinyWars.GameUi.UiLabel;
-        private readonly _labelAccounts             : TinyWars.GameUi.UiLabel;
-        private readonly _labelOnlineTimeTitle      : TinyWars.GameUi.UiLabel;
-        private readonly _labelOnlineTime           : TinyWars.GameUi.UiLabel;
-        private readonly _labelNewAccountsTitle     : TinyWars.GameUi.UiLabel;
-        private readonly _labelNewAccounts          : TinyWars.GameUi.UiLabel;
-        private readonly _labelActiveAccountsTitle  : TinyWars.GameUi.UiLabel;
-        private readonly _labelActiveAccounts       : TinyWars.GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelTitle                : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _btnClose                  : GameUi.UiButton;
+
+        // @ts-ignore
+        private readonly _labelAccountsTitle        : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelAccounts             : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelOnlineTimeTitle      : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelOnlineTime           : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelNewAccountsTitle     : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelNewAccounts          : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelActiveAccountsTitle  : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelActiveAccounts       : GameUi.UiLabel;
 
         public static show(): void {
             if (!CommonServerStatusPanel._instance) {
@@ -48,6 +64,9 @@ namespace TinyWars.Common {
             this._setNotifyListenerArray([
                 { type: Notify.Type.MsgCommonGetServerStatus, callback: this._onMsgCommonGetServerStatus },
             ]);
+            this._setUiListenerArray([
+                { ui: this._btnClose,   callback: this.close },
+            ]);
 
             this._showOpenAnimation();
 
@@ -63,9 +82,15 @@ namespace TinyWars.Common {
             const data = e.data as ProtoTypes.NetMessage.MsgCommonGetServerStatus.IS;
 
             this._labelAccounts.text        = "" + data.totalAccounts;
-            this._labelOnlineTime.text      = Utility.Helpers.getTimeDurationText(data.totalOnlineTime);
-            this._labelActiveAccounts.text  = data.activeAccounts.join(" / ");
-            this._labelNewAccounts.text     = data.newAccounts.join(" / ");
+
+            const totalOnlineTime           = data.totalOnlineTime;
+            this._labelOnlineTime.text      = totalOnlineTime == null ? CommonConstants.ErrorTextForUndefined : Utility.Helpers.getTimeDurationText(totalOnlineTime);
+
+            const activeAccounts            = data.activeAccounts;
+            this._labelActiveAccounts.text  = activeAccounts == null ? CommonConstants.ErrorTextForUndefined : activeAccounts.join(" / ");
+
+            const newAccounts               = data.newAccounts;
+            this._labelNewAccounts.text     = newAccounts == null ? CommonConstants.ErrorTextForUndefined : newAccounts.join(" / ");
         }
 
         private _updateComponentsForLanguage(): void {

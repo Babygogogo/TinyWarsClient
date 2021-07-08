@@ -75,7 +75,7 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwUnitInit02;
             }
 
-            const gridIndex = BwHelpers.convertGridIndex(unitData.gridIndex);
+            const gridIndex = GridIndexHelpers.convertGridIndex(unitData.gridIndex);
             if (gridIndex == null) {
                 return ClientErrorCode.BwUnitInit03;
             }

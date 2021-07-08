@@ -9,7 +9,7 @@ namespace TinyWars.MultiPlayerWar {
         public getPlayerLoggedIn(): BaseWar.BwPlayer | undefined {
             if (!this._loggedInPlayer) {
                 const userId = User.UserModel.getSelfUserId();
-                for (const [, player] of this._getPlayersMap()) {
+                for (const [, player] of this.getAllPlayersDict()) {
                     if (player.getUserId() === userId) {
                         this._loggedInPlayer = player;
                         break;

@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.SinglePlayerWar.BwActionReviser {
     import Types                    = Utility.Types;
     import ProtoTypes               = Utility.ProtoTypes;
@@ -21,7 +22,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
     type ErrorCodeAndAction = {
         errorCode   : ClientErrorCode;
         action?     : IWarActionContainer;
-    }
+    };
 
     export function revise(war: BwWar, rawAction: IWarActionContainer): ErrorCodeAndAction {
         if (Object.keys(rawAction).length !== 2) {
@@ -57,6 +58,8 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
         else if (rawAction.WarActionSystemCallWarEvent)         { return reviseSystemCallWarEvent(war, rawAction.WarActionSystemCallWarEvent); }
         else if (rawAction.WarActionSystemDestroyPlayerForce)   { return reviseSystemDestroyPlayerForce(war, rawAction.WarActionSystemDestroyPlayerForce); }
         else if (rawAction.WarActionSystemEndWar)               { return reviseSystemEndWar(war, rawAction.WarActionSystemEndWar); }
+        else if (rawAction.WarActionSystemEndTurn)              { return reviseSystemEndTurn(war, rawAction.WarActionSystemEndTurn); }
+        else if (rawAction.WarActionSystemHandleBootPlayer)     { return reviseSystemHandleBootPlayer(war, rawAction.WarActionSystemHandleBootPlayer); }
         else if (rawAction.WarActionUnitAttackTile)             { return reviseUnitAttackTile(war, rawAction.WarActionUnitAttackTile); }
         else if (rawAction.WarActionUnitAttackUnit)             { return reviseUnitAttackUnit(war, rawAction.WarActionUnitAttackUnit); }
         else if (rawAction.WarActionUnitBeLoaded)               { return reviseUnitBeLoaded(war, rawAction.WarActionUnitBeLoaded); }
@@ -81,7 +84,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerDeleteUnit_00 };
         }
 
-        const gridIndex = BwHelpers.convertGridIndex(rawAction.gridIndex);
+        const gridIndex = GridIndexHelpers.convertGridIndex(rawAction.gridIndex);
         if (gridIndex == null) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerDeleteUnit_01 };
         }
@@ -113,7 +116,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
                     gridIndex,
                 },
             }
-        }
+        };
     }
 
     function revisePlayerEndTurn(war: BwWar, rawAction: WarAction.IWarActionPlayerEndTurn): ErrorCodeAndAction {
@@ -157,7 +160,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_02 };
         }
 
-        const gridIndex = BwHelpers.convertGridIndex(rawAction.gridIndex);
+        const gridIndex = GridIndexHelpers.convertGridIndex(rawAction.gridIndex);
         if ((gridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(gridIndex, mapSize))) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerProduceUnit_03 };
         }
@@ -251,16 +254,10 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerSurrender_01 };
         }
 
-        const isBoot = rawAction.isBoot;
-        if (isBoot == null) {
-            return { errorCode: ClientErrorCode.BwWarActionReviser_RevisePlayerSurrender_02 };
-        }
-
         return {
             errorCode   : ClientErrorCode.NoError,
             action      : {
                 WarActionPlayerSurrender: {
-                    isBoot,
                 },
             },
         };
@@ -372,6 +369,45 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
         };
     }
 
+    function reviseSystemEndTurn(war: BwWar, rawAction: WarAction.IWarActionSystemEndTurn): ErrorCodeAndAction {
+        const playerInTurn = war.getPlayerInTurn();
+        if (playerInTurn == null) {
+            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemEndTurn_00 };
+        }
+
+        if (war.getTurnPhaseCode() !== Types.TurnPhaseCode.Main) {
+            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemEndTurn_01 };
+        }
+
+        if ((playerInTurn.getPlayerIndex() !== CommonConstants.WarNeutralPlayerIndex)   &&
+            (playerInTurn.getAliveState() !== Types.PlayerAliveState.Dead)
+        ) {
+            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemEndTurn_02 };
+        }
+
+        return {
+            errorCode   : ClientErrorCode.NoError,
+            action      : {
+                WarActionSystemEndTurn: {
+                },
+            },
+        };
+    }
+
+    function reviseSystemHandleBootPlayer(war: BwWar, rawAction: WarAction.IWarActionSystemHandleBootPlayer): ErrorCodeAndAction {
+        if (!war.checkIsBoot()) {
+            return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseSystemHandleBootPlayer_00 };
+        }
+
+        return {
+            errorCode   : ClientErrorCode.NoError,
+            action      : {
+                WarActionSystemHandleBootPlayer: {
+                },
+            },
+        };
+    }
+
     function reviseUnitAttackTile(war: BwWar, rawAction: WarAction.IWarActionUnitAttackTile): ErrorCodeAndAction {
         if (war.getTurnPhaseCode() !== TurnPhaseCode.Main) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_00 };
@@ -388,7 +424,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_02 };
         }
 
-        const targetGridIndex = BwHelpers.convertGridIndex(rawAction.targetGridIndex);
+        const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
         if ((targetGridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackTile_03 };
         }
@@ -448,7 +484,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackUnit_02 };
         }
 
-        const targetGridIndex = BwHelpers.convertGridIndex(rawAction.targetGridIndex);
+        const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
         if ((targetGridIndex == null) || (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitAttackUnit_03 };
         }
@@ -802,7 +838,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_06 };
         }
 
-        const targetGridIndex = BwHelpers.convertGridIndex(rawAction.targetGridIndex);
+        const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
         if (targetGridIndex == null) {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchFlare_07 };
         }
@@ -868,7 +904,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return { errorCode: ClientErrorCode.BwWarActionReviser_ReviseUnitLaunchSilo_06 };
         }
 
-        const targetGridIndex = BwHelpers.convertGridIndex(rawAction.targetGridIndex);
+        const targetGridIndex = GridIndexHelpers.convertGridIndex(rawAction.targetGridIndex);
         if ((targetGridIndex == null)                                       ||
             (!GridIndexHelpers.checkIsInsideMap(targetGridIndex, mapSize))
         ) {
@@ -1180,8 +1216,13 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
             return false;
         }
 
+        const path = action.path;
+        if (path == null) {
+            return false;
+        }
+
         const unitMap       = war.getUnitMap();
-        const pathNodes     = action.path as GridIndex[];
+        const pathNodes     = (path.nodes || []) as GridIndex[];
         const loaderUnit    = unitMap.getUnit(pathNodes[0], action.launchUnitId);
         if (loaderUnit == null) {
             return false;
@@ -1215,7 +1256,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
 
         for (let i = 0; i < destinationsCount; ++i) {
             const data              = destinations[i];
-            const droppingGridIndex = BwHelpers.convertGridIndex(data.gridIndex);
+            const droppingGridIndex = GridIndexHelpers.convertGridIndex(data.gridIndex);
             if ((!droppingGridIndex)                                                        ||
                 (!GridIndexHelpers.checkIsInsideMap(droppingGridIndex, mapSize))            ||
                 (!GridIndexHelpers.checkIsAdjacent(droppingGridIndex, loaderEndingGridIndex))
@@ -1273,7 +1314,7 @@ namespace TinyWars.SinglePlayerWar.BwActionReviser {
 
             for (let j = i + 1; j < destinationsCount; ++j) {
                 const nextData  = destinations[j];
-                const gridIndex = BwHelpers.convertGridIndex(nextData.gridIndex);
+                const gridIndex = GridIndexHelpers.convertGridIndex(nextData.gridIndex);
                 if ((!gridIndex)                                                    ||
                     (droppingUnitId === nextData.unitId)                            ||
                     (GridIndexHelpers.checkIsEqual(droppingGridIndex, gridIndex))

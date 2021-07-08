@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar {
     import Types                = Utility.Types;
     import ClientErrorCode      = Utility.ClientErrorCode;
@@ -11,11 +12,11 @@ namespace TinyWars.BaseWar {
 
     export abstract class BwPlayerManager {
         private _players        = new Map<number, BwPlayer>();
-        private _war            : BwWar;
+        private _war            : BwWar | undefined;
 
         public abstract getAliveWatcherTeamIndexesForSelf(): Set<number>;
 
-        public init(data: ISerialPlayerManager, configVersion: string): ClientErrorCode {
+        public init(data: ISerialPlayerManager | null | undefined, configVersion: string): ClientErrorCode {
             if (data == null) {
                 return ClientErrorCode.BwPlayerManagerInit00;
             }
@@ -63,7 +64,7 @@ namespace TinyWars.BaseWar {
                 return ClientErrorCode.BwPlayerManagerInit06;
             }
 
-            const playerMap = this._getPlayersMap();
+            const playerMap = this.getAllPlayersDict();
             playerMap.clear();
             for (const [playerIndex, player] of newPlayerMap) {
                 playerMap.set(playerIndex, player);
@@ -72,9 +73,23 @@ namespace TinyWars.BaseWar {
             return ClientErrorCode.NoError;
         }
         public fastInit(data: ISerialPlayerManager, configVersion: string): ClientErrorCode {
-            for (const d of data.players) {
-                this.getPlayer(d.playerIndex).init(d, configVersion);
+            for (const playerData of data ? data.players || [] : []) {
+                const playerIndex = playerData.playerIndex;
+                if (playerIndex == null) {
+                    return ClientErrorCode.BwPlayerManager_FastInit_00;
+                }
+
+                const player = this.getPlayer(playerIndex);
+                if (player == null) {
+                    return ClientErrorCode.BwPlayerManager_FastInit_01;
+                }
+
+                const errorCode = player.init(playerData, configVersion);
+                if (errorCode) {
+                    return errorCode;
+                }
             }
+
             return ClientErrorCode.NoError;
         }
 
@@ -87,7 +102,7 @@ namespace TinyWars.BaseWar {
 
         public serialize(): ISerialPlayerManager | undefined {
             const players: ISerialPlayer[] = [];
-            for (const [, player] of this._getPlayersMap()) {
+            for (const [, player] of this.getAllPlayersDict()) {
                 const serialPlayer = player.serialize();
                 if (serialPlayer == null) {
                     Logger.error(`BwPlayerManager.serialize() empty serialPlayer.`);
@@ -101,7 +116,7 @@ namespace TinyWars.BaseWar {
         }
         public serializeForCreateSfw(): ISerialPlayerManager | undefined {
             const players: ISerialPlayer[] = [];
-            for (const [, player] of this._getPlayersMap()) {
+            for (const [, player] of this.getAllPlayersDict()) {
                 const serialPlayer = player.serializeForCreateSfw();
                 if (serialPlayer == null) {
                     Logger.error(`BwPlayerManager.serializeForCreateSfw() empty serialPlayer.`);
@@ -115,7 +130,7 @@ namespace TinyWars.BaseWar {
         }
         public serializeForCreateMfr(): ISerialPlayerManager | undefined {
             const players: ISerialPlayer[] = [];
-            for (const [, player] of this._getPlayersMap()) {
+            for (const [, player] of this.getAllPlayersDict()) {
                 const serialPlayer = player.serializeForCreateMfr();
                 if (serialPlayer == null) {
                     Logger.error(`BwPlayerManager.serializeForCreateMfr() empty serialPlayer.`);
@@ -131,7 +146,7 @@ namespace TinyWars.BaseWar {
         private _setWar(war: BwWar): void {
             this._war = war;
         }
-        protected _getWar(): BwWar {
+        protected _getWar(): BwWar | undefined {
             return this._war;
         }
 
@@ -141,12 +156,12 @@ namespace TinyWars.BaseWar {
         public getPlayer(playerIndex: number): BwPlayer | undefined {
             return this._players.get(playerIndex);
         }
-        protected _getPlayersMap(): Map<number, BwPlayer> {
+        public getAllPlayersDict(): Map<number, BwPlayer> {
             return this._players;
         }
         public getAllPlayers(): BwPlayer[] {
             const players: BwPlayer[] = [];
-            for (const [, player] of this._getPlayersMap()) {
+            for (const [, player] of this.getAllPlayersDict()) {
                 players.push(player);
             }
             return players;
@@ -161,12 +176,21 @@ namespace TinyWars.BaseWar {
             return undefined;
         }
 
-        public getPlayerInTurn(): BwPlayer {
-            return this.getPlayer(this._getWar().getTurnManager().getPlayerIndexInTurn());
+        public getPlayerInTurn(): BwPlayer | undefined {
+            const war = this._getWar();
+            if (war == null) {
+                return undefined;
+            }
+
+            const playerIndex = war.getPlayerIndexInTurn();
+            return playerIndex == null
+                ? undefined
+                : this.getPlayer(playerIndex);
         }
 
-        public getTeamIndex(playerIndex: number): number {
-            return this.getPlayer(playerIndex)!.getTeamIndex();
+        public getTeamIndex(playerIndex: number): number | undefined {
+            const player = this.getPlayer(playerIndex);
+            return player ? player.getTeamIndex() : undefined;
         }
 
         public getPlayerIndexesInTeam(teamIndex: number): number[] {

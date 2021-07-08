@@ -1186,12 +1186,12 @@ namespace TinyWars.SinglePlayerWar {
     function getTilesCountAndIncome(war: SpwWar, playerIndex: number): { count: number, income: number } {
         let count   = 0;
         let income  = 0;
-        war.getTileMap().forEachTile(tile => {
+        for (const tile of war.getTileMap().getAllTiles()) {
             if (tile.getPlayerIndex() === playerIndex) {
                 ++count;
                 income += tile.getIncomeForPlayer(playerIndex);
             }
-        });
+        }
         return { count, income };
     }
 
@@ -1200,7 +1200,7 @@ namespace TinyWars.SinglePlayerWar {
         const unitMap       = war.getUnitMap();
         let count           = 0;
         let value           = 0;
-        unitMap.forEachUnitOnMap(unit => {
+        for (const unit of unitMap.getAllUnitsOnMap()) {
             if (unit.getPlayerIndex() === playerIndex) {
                 ++count;
                 value += Math.floor(unit.getProductionFinalCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp());
@@ -1212,7 +1212,7 @@ namespace TinyWars.SinglePlayerWar {
                     }
                 }
             }
-        });
+        }
         return { count, value };
     }
 }

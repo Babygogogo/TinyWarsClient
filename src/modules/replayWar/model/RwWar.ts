@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.ReplayWar {
     import Types                = Utility.Types;
     import Notify               = Utility.Notify;
@@ -17,11 +18,10 @@ namespace TinyWars.ReplayWar {
     type CheckPointData = {
         warData     : ISerialWar;
         nextActionId: number;
-    }
+    };
 
     export class RwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new RwPlayerManager();
-        private readonly _turnManager           = new RwTurnManager();
         private readonly _field                 = new RwField();
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
@@ -69,9 +69,6 @@ namespace TinyWars.ReplayWar {
         public getPlayerManager(): RwPlayerManager {
             return this._playerManager;
         }
-        public getTurnManager(): RwTurnManager {
-            return this._turnManager;
-        }
         public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
@@ -84,10 +81,10 @@ namespace TinyWars.ReplayWar {
 
             const tileMap       = this.getTileMap();
             const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeam(this, this.getPlayerInTurn().getTeamIndex());
-            tileMap.forEachTile(tile => {
+            for (const tile of tileMap.getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
                 tile.flushDataToView();
-            });
+            }
             tileMap.getView().updateCoZone();
         }
 
@@ -101,7 +98,7 @@ namespace TinyWars.ReplayWar {
             return `${Lang.getText(Lang.Type.B0095)} ${Lang.getUnitName(action.unitType)} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | undefined> {
-            return `${await this.getPlayerInTurn().getNickname()} ${Lang.getText(action.isBoot ? Lang.Type.B0396: Lang.Type.B0055)} ${this._getDescSuffix()}`;
+            return `${await this.getPlayerInTurn().getNickname()} ${Lang.getText(action.deprecatedIsBoot ? Lang.Type.B0396: Lang.Type.B0055)} ${this._getDescSuffix()}`;
         }
         public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | undefined> {
             const nickname      = await this.getPlayerInTurn().getNickname();
@@ -129,6 +126,12 @@ namespace TinyWars.ReplayWar {
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
             return `${Lang.getText(Lang.Type.B0087)} ${this._getDescSuffix()}`;
+        }
+        public async getDescForExeSystemEndTurn(action: WarAction.IWarActionSystemEndTurn): Promise<string | undefined> {
+            return Lang.getFormattedText(Lang.Type.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
+        }
+        public async getDescForExeSystemHandleBootPlayer(action: WarAction.IWarActionSystemHandleBootPlayer): Promise<string | undefined> {
+            return Lang.getFormattedText(Lang.Type.F0028, await this.getPlayerInTurn().getNickname());
         }
         public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined> {
             return `${Lang.getText(Lang.Type.B0097)} ${this._getDescSuffix()}`;
@@ -277,7 +280,10 @@ namespace TinyWars.ReplayWar {
                 return undefined;
             }
         }
-        public getIsNeedReplay(): boolean {
+        public getIsNeedExecutedAction(): boolean {
+            return true;
+        }
+        public getIsNeedSeedRandom(): boolean {
             return true;
         }
         public getMapId(): number | undefined {
@@ -300,6 +306,14 @@ namespace TinyWars.ReplayWar {
         }
         public getIsWarMenuPanelOpening(): boolean {
             return RwWarMenuPanel.getIsOpening();
+        }
+
+        public getSettingsBootTimerParams(): number[] | null | undefined {
+            return [Types.BootTimerType.NoBoot];
+        }
+
+        public getIsRunTurnPhaseWithExtraData(): boolean {
+            return false;
         }
 
         private _getSettingsForMcw(): ProtoTypes.WarSettings.ISettingsForMcw {
@@ -426,9 +440,9 @@ namespace TinyWars.ReplayWar {
             });
             this.getDrawVoteManager().setRemainingVotes(warData.remainingVotesForDraw);
             this.getRandomNumberManager().init({
-                isNeedReplay    : this.getIsNeedReplay(),
-                initialState    : warData.seedRandomInitialState,
-                currentState    : warData.seedRandomCurrentState,
+                isNeedSeedRandom    : this.getIsNeedSeedRandom(),
+                initialState        : warData.seedRandomInitialState,
+                currentState        : warData.seedRandomCurrentState,
             });
             this.setIsEnded(this.checkIsInEnd());
 

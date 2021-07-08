@@ -1,18 +1,34 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.User {
-    import FloatText    = Utility.FloatText;
-    import Lang         = Utility.Lang;
-    import NotifyType   = Utility.Notify.Type;
+    import FloatText        = Utility.FloatText;
+    import CommonConstants  = Utility.CommonConstants;
+    import Helpers          = Utility.Helpers;
+    import Lang             = Utility.Lang;
+    import NotifyType       = Utility.Notify.Type;
 
     export class UserChangeDiscordIdPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private _labelName      : GameUi.UiLabel;
-        private _labelDiscordId : GameUi.UiLabel;
-        private _labelNote      : GameUi.UiLabel;
-        private _inputDiscordId : GameUi.UiTextInput;
-        private _btnConfirm     : GameUi.UiButton;
+        // @ts-ignore
+        private readonly _imgMask           : GameUi.UiImage;
+        // @ts-ignore
+        private readonly _group             : eui.Group;
+        // @ts-ignore
+        private readonly _labelTitle        : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelDiscordId    : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelNote         : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _inputDiscordId    : GameUi.UiTextInput;
+        // @ts-ignore
+        private readonly _labelUrl          : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _btnConfirm        : GameUi.UiButton;
+        // @ts-ignore
+        private readonly _btnClose          : GameUi.UiButton;
 
         private _isRequesting   = false;
 
@@ -47,14 +63,28 @@ namespace TinyWars.User {
             ]);
             this._setUiListenerArray([
                 { ui: this._btnConfirm, callback: this._onTouchedBtnConfirm },
+                { ui: this._btnClose,   callback: this.close },
+                { ui: this._labelUrl,   callback: this._onTouchedLabelUrl },
             ]);
 
             this._isRequesting          = false;
-            this._inputDiscordId.text   = await UserModel.getSelfDiscordId();
+            this._inputDiscordId.text   = UserModel.getSelfDiscordId();
+
+            const labelUrl          = this._labelUrl;
+            labelUrl.touchEnabled   = true;
+            labelUrl.textFlow       = [{
+                text    : CommonConstants.DiscordUrl,
+                style   : { underline: true },
+            }];
+
+            this._showOpenAnimation();
             this._updateComponentsForLanguage();
         }
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
+        }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private _onTouchedBtnConfirm(): void {
             if (this._isRequesting) {
                 FloatText.show(Lang.getText(Lang.Type.A0046));
             } else {
@@ -68,15 +98,26 @@ namespace TinyWars.User {
             }
         }
 
-        private _onMsgUserSetDiscordId(e: egret.Event): void {
+        private _onTouchedLabelUrl(): void {
+            if ((window) && (window.open)) {
+                Common.CommonConfirmPanel.show({
+                    content : Lang.getFormattedText(Lang.Type.F0065, `Discord`),
+                    callback: () => {
+                        window.open(CommonConstants.DiscordUrl);
+                    },
+                });
+            }
+        }
+
+        private _onMsgUserSetDiscordId(): void {
             FloatText.show(Lang.getText(Lang.Type.A0049));
             this.close();
         }
-        private _onMsgUserSetDiscordIdFailed(e: egret.Event): void {
+        private _onMsgUserSetDiscordIdFailed(): void {
             this._isRequesting = false;
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -84,10 +125,39 @@ namespace TinyWars.User {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
-            this._labelName.text        = Lang.getText(Lang.Type.B0150);
-            this._labelDiscordId.text   = `${Lang.getText(Lang.Type.B0243)}:`;
+            this._labelTitle.text       = Lang.getText(Lang.Type.B0150);
+            this._labelDiscordId.text   = Lang.getText(Lang.Type.B0243);
             this._labelNote.text        = Lang.getText(Lang.Type.A0067);
             this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
+            this._btnClose.label        = Lang.getText(Lang.Type.B0154);
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: 40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+            });
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>((resolve) => {
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                });
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: 40 },
+                    callback    : resolve,
+                });
+            });
         }
     }
 }

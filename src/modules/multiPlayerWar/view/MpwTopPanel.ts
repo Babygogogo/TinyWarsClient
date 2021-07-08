@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiPlayerWar {
     import BwHelpers        = BaseWar.BwHelpers;
     import FloatText        = Utility.FloatText;
@@ -89,10 +90,10 @@ namespace TinyWars.MultiPlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyTimeTick(e: egret.Event): void {
+        private _onNotifyTimeTick(): void {
             this._updateGroupTimer();
 
             const war = this._war;
@@ -103,58 +104,58 @@ namespace TinyWars.MultiPlayerWar {
                 MpwProxy.reqMpwCommonHandleBoot(war.getWarId());
             }
         }
-        private _onNotifyBwTurnPhaseCodeChanged(e: egret.Event): void {
+        private _onNotifyBwTurnPhaseCodeChanged(): void {
             this._updateBtnEndTurn();
             this._updateBtnFindBuilding();
             this._updateBtnCancel();
         }
-        private _onNotifyBwPlayerFundChanged(e: egret.Event): void {
+        private _onNotifyBwPlayerFundChanged(): void {
             this._updateLabelFund();
         }
-        private _onNotifyBwPlayerIndexInTurnChanged(e: egret.Event): void {
+        private _onNotifyBwPlayerIndexInTurnChanged(): void {
             this._updateView();
         }
-        private _onNotifyBwCoEnergyChanged(e: egret.Event): void {
+        private _onNotifyBwCoEnergyChanged(): void {
             this._updateLabelCoAndEnergy();
         }
-        private _onNotifyBwCoUsingSkillChanged(e: egret.Event): void {
+        private _onNotifyBwCoUsingSkillChanged(): void {
             this._updateLabelCoAndEnergy();
         }
-        private _onNotifyBwActionPlannerStateChanged(e: egret.Event): void {
+        private _onNotifyBwActionPlannerStateChanged(): void {
             this._updateBtnUnitList();
             this._updateBtnEndTurn();
             this._updateBtnCancel();
         }
 
-        private _onMsgChatGetAllReadProgressList(e: egret.Event): void {
+        private _onMsgChatGetAllReadProgressList(): void {
             this._updateBtnChat();
         }
-        private _onMsgChatUpdateReadProgress(e: egret.Event): void {
+        private _onMsgChatUpdateReadProgress(): void {
             this._updateBtnChat();
         }
-        private _onMsgChatGetAllMessages(e: egret.Event): void {
+        private _onMsgChatGetAllMessages(): void {
             this._updateBtnChat();
         }
-        private _onMsgChatAddMessage(e: egret.Event): void {
+        private _onMsgChatAddMessage(): void {
             this._updateBtnChat();
         }
 
-        private _onTouchedGroupPlayer(e: egret.TouchEvent): void {
+        private _onTouchedGroupPlayer(): void {
             const userId = this._war.getPlayerInTurn().getUserId();
             (userId) && (User.UserPanel.show({ userId }));
         }
-        private _onTouchedGroupCo(e: egret.TouchEvent): void {
+        private _onTouchedGroupCo(): void {
             BaseWar.BwCoListPanel.show({
                 war             : this._war,
                 selectedIndex   : Math.max(this._war.getPlayerIndexInTurn() - 1, 0),
             });
             MpwWarMenuPanel.hide();
         }
-        private _onTouchedBtnChat(e: egret.TouchEvent): void {
+        private _onTouchedBtnChat(): void {
             MpwWarMenuPanel.hide();
             Chat.ChatPanel.show({});
         }
-        private _onTouchedBtnUnitList(e: egret.TouchEvent): void {
+        private _onTouchedBtnUnitList(): void {
             const war           = this._war;
             const actionPlanner = war.getField().getActionPlanner();
             if ((!actionPlanner.checkIsStateRequesting()) && (actionPlanner.getState() !== Types.ActionPlannerState.ExecutingAction)) {
@@ -162,7 +163,7 @@ namespace TinyWars.MultiPlayerWar {
                 BaseWar.BwUnitListPanel.show({ war });
             }
         }
-        private _onTouchedBtnFindBuilding(e: egret.TouchEvent): void {
+        private _onTouchedBtnFindBuilding(): void {
             const war           = this._war;
             const field         = war.getField();
             const actionPlanner = field.getActionPlanner();
@@ -180,7 +181,7 @@ namespace TinyWars.MultiPlayerWar {
                 }
             }
         }
-        private _onTouchedBtnEndTurn(e: egret.TouchEvent): void {
+        private _onTouchedBtnEndTurn(): void {
             const war = this._war;
             if ((war.getDrawVoteManager().getRemainingVotes()) && (!war.getPlayerInTurn().getHasVotedForDraw())) {
                 FloatText.show(Lang.getText(Lang.Type.A0034));
@@ -192,10 +193,10 @@ namespace TinyWars.MultiPlayerWar {
                 });
             }
         }
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this._war.getField().getActionPlanner().setStateIdle();
         }
-        private _onTouchedBtnMenu(e: egret.TouchEvent): void {
+        private _onTouchedBtnMenu(): void {
             const actionPlanner = this._war.getActionPlanner();
             if (!actionPlanner.checkIsStateRequesting()) {
                 actionPlanner.setStateIdle();
@@ -332,24 +333,42 @@ namespace TinyWars.MultiPlayerWar {
             const unitMap       = war.getUnitMap();
             const hints         = new Array<string>();
 
-            let idleUnitsCount = 0;
-            unitMap.forEachUnitOnMap(unit => {
-                if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
-                    ++idleUnitsCount;
+            {
+                let idleUnitsCount = 0;
+                for (const unit of unitMap.getAllUnitsOnMap()) {
+                    if ((unit.getPlayerIndex() === playerIndex) && (unit.getActionState() === Types.UnitActionState.Idle)) {
+                        ++idleUnitsCount;
+                    }
                 }
-            });
-            (idleUnitsCount) && (hints.push(Lang.getFormattedText(Lang.Type.F0006, idleUnitsCount)));
+                (idleUnitsCount) && (hints.push(Lang.getFormattedText(Lang.Type.F0006, idleUnitsCount)));
+            }
 
-            let idleBuildingsCount = 0;
-            war.getTileMap().forEachTile(tile => {
-                if ((tile.checkIsUnitProducerForPlayer(playerIndex)) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
-                    ++idleBuildingsCount;
+            {
+                const idleBuildingsDict = new Map<Types.TileType, Types.GridIndex[]>();
+                for (const tile of war.getTileMap().getAllTiles()) {
+                    if ((tile.checkIsUnitProducerForPlayer(playerIndex)) && (!unitMap.getUnitOnMap(tile.getGridIndex()))) {
+                        const tileType  = tile.getType();
+                        const gridIndex = tile.getGridIndex();
+                        if (!idleBuildingsDict.has(tileType)) {
+                            idleBuildingsDict.set(tileType, [gridIndex]);
+                        } else {
+                            idleBuildingsDict.get(tileType).push(gridIndex);
+                        }
+                    }
                 }
-            });
-            (idleBuildingsCount) && (hints.push(Lang.getFormattedText(Lang.Type.F0007, idleBuildingsCount)));
+                const textArrayForBuildings: string[] = [];
+                for (const [tileType, gridIndexArray] of idleBuildingsDict) {
+                    textArrayForBuildings.push(Lang.getFormattedText(
+                        Lang.Type.F0007, gridIndexArray.length,
+                        Lang.getTileName(tileType),
+                        gridIndexArray.map(v => `(${v.x}, ${v.y})`).join(`, `)),
+                    );
+                }
+                (textArrayForBuildings.length) && (hints.push(textArrayForBuildings.join(`\n`)));
+            }
 
             hints.push(Lang.getText(Lang.Type.A0024));
-            return hints.join(`\n`);
+            return hints.join(`\n\n`);
         }
     }
 }

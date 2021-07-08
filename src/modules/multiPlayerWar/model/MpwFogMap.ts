@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiPlayerWar {
     import Logger               = Utility.Logger;
     import VisibilityHelpers    = Utility.VisibilityHelpers;
@@ -8,7 +9,7 @@ namespace TinyWars.MultiPlayerWar {
             this._setWar(war);
 
             const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
-            war.getTileMap().forEachTile(tile => {
+            for (const tile of war.getTileMap().getAllTiles()) {
                 if (visibleTiles.has(tile)) {
                     tile.setHasFog(false);
                 } else {
@@ -16,7 +17,7 @@ namespace TinyWars.MultiPlayerWar {
                         MpwUtility.resetTileDataAsHasFog(tile);
                     }
                 }
-            });
+            }
         }
     }
 }

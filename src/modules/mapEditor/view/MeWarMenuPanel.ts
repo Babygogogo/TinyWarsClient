@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapEditor {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
@@ -6,13 +7,12 @@ namespace TinyWars.MapEditor {
     import FlowManager      = Utility.FlowManager;
     import Logger           = Utility.Logger;
     import FloatText        = Utility.FloatText;
-    import LocalStorage     = Utility.LocalStorage;
     import ProtoTypes       = Utility.ProtoTypes;
     import UnitType         = Types.UnitType;
     import TileBaseType     = Types.TileBaseType;
     import TileObjectType   = Types.TileObjectType;
-    import TimeModel        = Time.TimeModel;
 
+    // eslint-disable-next-line no-shadow
     const enum MenuType {
         Main,
         Advanced,
@@ -29,16 +29,16 @@ namespace TinyWars.MapEditor {
         private _labelNoCommand         : GameUi.UiLabel;
         private _btnBack                : GameUi.UiButton;
         private _labelMenuTitle         : GameUi.UiLabel;
-        private _labelMapInfoTitle      : TinyWars.GameUi.UiLabel;
+        private _labelMapInfoTitle      : GameUi.UiLabel;
 
-        private _btnModifyMapName       : TinyWars.GameUi.UiButton;
-        private _labelMapName           : TinyWars.GameUi.UiLabel;
+        private _btnModifyMapName       : GameUi.UiButton;
+        private _labelMapName           : GameUi.UiLabel;
 
-        private _btnModifyMapDesigner   : TinyWars.GameUi.UiButton;
-        private _labelMapDesigner       : TinyWars.GameUi.UiLabel;
+        private _btnModifyMapDesigner   : GameUi.UiButton;
+        private _labelMapDesigner       : GameUi.UiLabel;
 
-        private _btnModifyMapSize       : TinyWars.GameUi.UiButton;
-        private _labelMapSize           : TinyWars.GameUi.UiLabel;
+        private _btnModifyMapSize       : GameUi.UiButton;
+        private _labelMapSize           : GameUi.UiLabel;
 
         private _listTile               : GameUi.UiScrollList<DataForTileRenderer>;
         private _listUnit               : GameUi.UiScrollList<DataForUnitRenderer>;
@@ -141,19 +141,19 @@ namespace TinyWars.MapEditor {
             });
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
+        private _onNotifyUnitAndTileTextureVersionChanged(): void {
             this._updateView();
         }
 
-        private _onNotifyMeMapNameChanged(e: egret.Event): void {
+        private _onNotifyMeMapNameChanged(): void {
             this._updateLabelMapName();
         }
 
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             const type = this._menuType;
             if (type === MenuType.Main) {
                 this.close();
@@ -166,20 +166,20 @@ namespace TinyWars.MapEditor {
             }
         }
 
-        private _onTouchedBtnModifyMapName(e: egret.TouchEvent): void {
+        private _onTouchedBtnModifyMapName(): void {
             const war = this._war;
             if (!war.getIsReviewingMap()) {
                 MeModifyMapNamePanel.show();
             }
         }
 
-        private _onTouchedBtnModifyMapSize(e: egret.TouchEvent): void {
+        private _onTouchedBtnModifyMapSize(): void {
             if (!this._war.getIsReviewingMap()) {
                 MeResizePanel.show();
             }
         }
 
-        private _onTouchedBtnModifyMapDesigner(e: egret.TouchEvent): void {
+        private _onTouchedBtnModifyMapDesigner(): void {
             const war = this._war;
             if (!war.getIsReviewingMap()) {
                 Common.CommonInputPanel.show({
@@ -254,7 +254,7 @@ namespace TinyWars.MapEditor {
         private _updateListTile(): void {
             const dictForTileBases      = new Map<TileBaseType, DataForTileRenderer>();
             const dictForTileObjects    = new Map<TileObjectType, DataForTileRenderer>();
-            this._war.getTileMap().forEachTile(tile => {
+            for (const tile of this._war.getTileMap().getAllTiles()) {
                 const tileObjectType    = tile.getObjectType();
                 const tileBaseType      = tile.getBaseType();
                 const tileType          = tile.getType();
@@ -285,13 +285,13 @@ namespace TinyWars.MapEditor {
                         });
                     }
                 }
-            });
+            }
 
             const dataList : DataForTileRenderer[] = [];
-            for (const [k, v] of dictForTileBases) {
+            for (const [, v] of dictForTileBases) {
                 dataList.push(v);
             }
-            for (const [k, v] of dictForTileObjects) {
+            for (const [, v] of dictForTileObjects) {
                 dataList.push(v);
             }
             this._listTile.bindData(dataList.sort((v1, v2) => {
@@ -305,7 +305,7 @@ namespace TinyWars.MapEditor {
 
         private _updateListUnit(): void {
             const dict = new Map<UnitType, Map<number, DataForUnitRenderer>>();
-            this._war.getUnitMap().forEachUnit(unit => {
+            for (const unit of this._war.getUnitMap().getAllUnits()) {
                 const unitType = unit.getUnitType();
                 if (!dict.has(unitType)) {
                     dict.set(unitType, new Map());
@@ -324,7 +324,7 @@ namespace TinyWars.MapEditor {
                         },
                     });
                 }
-            });
+            }
 
             const dataList: DataForUnitRenderer[] = [];
             for (const [, subDict] of dict) {
@@ -456,7 +456,7 @@ namespace TinyWars.MapEditor {
                         }
                     }
                 },
-            }
+            };
         }
 
         private _createCommandWarEvent(): DataForCommandRenderer | null {
@@ -468,7 +468,7 @@ namespace TinyWars.MapEditor {
                     });
                     this.close();
                 },
-            }
+            };
         }
 
         private _createCommandMapTag(): DataForCommandRenderer | null {
@@ -477,30 +477,32 @@ namespace TinyWars.MapEditor {
                 callback: () => {
                     MeMapTagPanel.show();
                 },
-            }
+            };
         }
 
         private _createCommandReviewAccept(): DataForCommandRenderer | null {
-            if (!this._war.getIsReviewingMap()) {
+            const war = this._war;
+            if (!war.getIsReviewingMap()) {
                 return null;
             } else {
                 return {
                     name    : Lang.getText(Lang.Type.B0296),
                     callback: () => {
-                        MapManagement.MmAcceptMapPanel.show();
+                        MapManagement.MmAcceptMapPanel.show({ war });
                     },
                 };
             }
         }
 
         private _createCommandReviewReject(): DataForCommandRenderer | null {
-            if (!this._war.getIsReviewingMap()) {
+            const war = this._war;
+            if (!war.getIsReviewingMap()) {
                 return null;
             } else {
                 return {
                     name    : Lang.getText(Lang.Type.B0297),
                     callback: () => {
-                        MapManagement.MmRejectMapPanel.show();
+                        MapManagement.MmRejectMapPanel.show({ war });
                     },
                 };
             }
@@ -513,7 +515,7 @@ namespace TinyWars.MapEditor {
                     this.close();
                     Chat.ChatPanel.show({});
                 },
-            }
+            };
         }
 
         private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
@@ -526,7 +528,7 @@ namespace TinyWars.MapEditor {
                         callback: () => FlowManager.gotoLobby(),
                     });
                 },
-            }
+            };
         }
 
         private _createCommandSimulation(): DataForCommandRenderer | null {
@@ -534,14 +536,15 @@ namespace TinyWars.MapEditor {
             return {
                 name    : Lang.getText(Lang.Type.B0325),
                 callback: async () => {
-                    const errorCode = await MeUtility.getErrorCodeForMapRawData(war.serializeForMap());
+                    const mapRawData    = war.serializeForMap();
+                    const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
                     }
 
                     const cb = () => {
-                        MeModel.Sim.resetData(war.serializeForMap(), war.serializeForCreateSfw());
+                        MeModel.Sim.resetData(mapRawData, war.serializeForCreateSfw());
                         MeSimSettingsPanel.show();
                         this.close();
                     };
@@ -568,35 +571,17 @@ namespace TinyWars.MapEditor {
             return {
                 name    : Lang.getText(Lang.Type.B0557),
                 callback: async () => {
-                    if ((war.getField() as MeField).getMaxPlayerIndex() < 2) {
-                        FloatText.show(Lang.getText(Lang.Type.A0199));
-                        return;
-                    }
-
-                    const warData = war.serializeForCreateMfr();
-                    if (warData == null) {
-                        FloatText.show(Lang.getText(Lang.Type.A0200));
-                        return;
-                    }
-
-                    const errorCode = await (new TestWar.TwWar()).init(warData);
+                    const mapRawData    = war.serializeForMap();
+                    const errorCode     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
                     if (errorCode) {
                         FloatText.show(Lang.getErrorText(errorCode));
                         return;
                     }
 
                     const cb = () => {
-                        Common.CommonConfirmPanel.show({
-                            content : Lang.getText(Lang.Type.A0201),
-                            callback: () => {
-                                MultiFreeRoom.MfrModel.Create.resetDataByInitialWarData(warData);
-                                MeModel.unloadWar();
-                                Utility.StageManager.closeAllPanels();
-                                Lobby.LobbyBackgroundPanel.show();
-                                Broadcast.BroadcastPanel.show();
-                                MultiFreeRoom.MfrCreateSettingsPanel.show();
-                            },
-                        });
+                        MeModel.Mfw.resetData(mapRawData, war.serializeForCreateMfr());
+                        MeMfwSettingsPanel.show();
+                        this.close();
                     };
 
                     if (!war.getIsMapModified()) {
@@ -677,7 +662,7 @@ namespace TinyWars.MapEditor {
     type DataForCommandRenderer = {
         name    : string;
         callback: () => void;
-    }
+    };
 
     class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
         private _group      : eui.Group;
@@ -687,7 +672,7 @@ namespace TinyWars.MapEditor {
             this._updateView();
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             this.data.callback();
         }
 
@@ -703,7 +688,7 @@ namespace TinyWars.MapEditor {
         count       : number;
         tileType    : Types.TileType;
         playerIndex : number;
-    }
+    };
 
     class TileRenderer extends GameUi.UiListItemRenderer<DataForTileRenderer> {
         private _group          : eui.Group;
@@ -744,7 +729,7 @@ namespace TinyWars.MapEditor {
     type DataForUnitRenderer = {
         count           : number;
         dataForDrawUnit : DataForDrawUnit;
-    }
+    };
 
     class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
         private _group          : eui.Group;

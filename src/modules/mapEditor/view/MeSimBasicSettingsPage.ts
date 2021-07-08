@@ -1,20 +1,21 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapEditor {
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
     export class MeSimBasicSettingsPage extends GameUi.UiTabPage<void> {
-        private _btnMapNameTitle            : TinyWars.GameUi.UiButton;
-        private _labelMapName               : TinyWars.GameUi.UiLabel;
-        private _btnBuildings               : TinyWars.GameUi.UiButton;
+        private _btnMapNameTitle            : GameUi.UiButton;
+        private _labelMapName               : GameUi.UiLabel;
+        private _btnBuildings               : GameUi.UiButton;
 
-        private _btnModifyWarRule           : TinyWars.GameUi.UiButton;
-        private _labelWarRule               : TinyWars.GameUi.UiLabel;
+        private _btnModifyWarRule           : GameUi.UiButton;
+        private _labelWarRule               : GameUi.UiLabel;
 
-        private _btnModifyHasFog            : TinyWars.GameUi.UiButton;
-        private _imgHasFog                  : TinyWars.GameUi.UiImage;
-        private _btnHelpHasFog              : TinyWars.GameUi.UiButton;
+        private _btnModifyHasFog            : GameUi.UiButton;
+        private _imgHasFog                  : GameUi.UiImage;
+        private _btnHelpHasFog              : GameUi.UiButton;
 
         public constructor() {
             super();
@@ -44,16 +45,16 @@ namespace TinyWars.MapEditor {
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnModifyWarRule(e: egret.TouchEvent): void {
+        private _onTouchedBtnModifyWarRule(): void {
             MeModel.Sim.tickPresetWarRuleId();
             this._updateComponentsForWarRule();
         }
 
-        private _onTouchedBtnModifyHasFog(e: egret.TouchEvent): void {
+        private _onTouchedBtnModifyHasFog(): void {
             const callback = () => {
                 MeModel.Sim.setHasFog(!MeModel.Sim.getHasFog());
                 this._updateImgHasFog();
@@ -72,14 +73,14 @@ namespace TinyWars.MapEditor {
             }
         }
 
-        private _onTouchedBtnHelpHasFog(e: egret.TouchEvent): void {
+        private _onTouchedBtnHelpHasFog(): void {
             CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
-                content: Lang.getRichText(Lang.RichType.R0002),
+                content: Lang.getText(Lang.Type.R0002),
             });
         }
 
-        private async _onTouchedBtnBuildings(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnBuildings(): Promise<void> {
             const mapRawData = MeModel.Sim.getMapRawData();
             WarMap.WarMapBuildingListPanel.show({
                 configVersion           : MeModel.Sim.getWarData().settingsForCommon.configVersion,

@@ -4,13 +4,18 @@
     <GameUi:UiImage id="_imgMask" left="0" right="0" top="0" bottom="0" source="commonColorTransparent0001"
                     scale9Grid="1,1,2,2" locked="true" />
     <e:Group id="_group" width="340" height="170" horizontalCenter="0" verticalCenter="0">
-        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
-                        source="commonColorBlack0001" scale9Grid="1,1,2,2" />
-        <GameUi:UiLabel id="_labelTitle" text="服务器状态" textColor="0xffffff" y="12" horizontalCenter="0" size="24"
-                        bold="true" />
-        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" alpha="0.8" left="20" right="20" x="10" y="40"
-                        source="commonColorWhite0000" height="2" />
-        <e:Group y="50" horizontalCenter="0">
+        <e:Group left="0" right="0" top="0" bottom="0">
+            <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
+                            left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                source="commonColorGrey0001" y="0" left="0" right="0" />
+                <GameUi:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <GameUi:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001" verticalCenter="0"
+                                 right="30" />
+            </e:Group>
+        </e:Group>
+        <e:Group y="60" x="30">
             <e:Group x="0" y="4">
                 <GameUi:UiLabel id="_labelAccountsTitle" text="账号总数:" x="0" y="0" size="16" maxTextWidth="150" />
                 <GameUi:UiLabel id="_labelAccounts" text="0" x="150" size="16" maxTextWidth="150" />

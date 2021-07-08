@@ -1,10 +1,14 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Utility.Lang {
     import LanguageType             = Types.LanguageType;
     import WarEventConditionType    = Types.WarEventConditionType;
     import WarEventActionType       = Types.WarEventActionType;
     import PlayerRuleType           = Types.PlayerRuleType;
+    import GameVersion              = Types.GameVersion;
+    import BgmCode                  = Types.BgmCode;
 
+    // eslint-disable-next-line no-shadow
     export const enum Type {
         A0000, A0001, A0002, A0003, A0004, A0005, A0006, A0007, A0008, A0009,
         A0010, A0011, A0012, A0013, A0014, A0015, A0016, A0017, A0018, A0019,
@@ -135,12 +139,11 @@ namespace TinyWars.Utility.Lang {
         F0070, F0071, F0072, F0073, F0074, F0075, F0076, F0077, F0078, F0079,
         F0080, F0081, F0082, F0083, F0084, F0085, F0086, F0087, F0088, F0089,
         F0090, F0091, F0092, F0093, F0094, F0095, F0096, F0097, F0098, F0099,
-    }
-    export const enum RichType {
+
         R0000, R0001, R0002, R0003, R0004, R0005, R0006, R0007, R0008, R0009,
     }
 
-    const _LANG_DATA = {
+    const _LANG_DATA: { [type: number]: string [] } = {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Long strings.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -409,12 +412,12 @@ namespace TinyWars.Utility.Lang {
             `The settings affect all players in the game.`,
         ],
         [Type.A0066]: [
-            `注意:\n昵称可使用任意字符，长度不小于4位`,
-            `Note:\n You can use any character for the nickname, \n and the nickname should consist of at least 4 characters.`,
+            `昵称可使用任意字符，长度不小于4位`,
+            `You can use any character for the nickname, and the nickname should consist of at least 4 characters.`,
         ],
         [Type.A0067]: [
-            `输入正确的Discord ID，并加入以下游戏频道（可点击链接复制）\n 即可实时收到游戏相关消息，如回合轮转等。`,
-            `By entering your correct discord ID \n and joining the following discord server (the link can be copied)\n you can receive tinywars-related information, including turn notification.`,
+            `输入正确的Discord ID，并加入以下游戏频道即可实时收到游戏相关消息，如回合轮转等。`,
+            `By entering your correct discord ID and joining the following discord server you can receive tinywars-related information, including turn notification.`,
         ],
         [Type.A0068]: [
             `可点击以下各个文字以更改设置`,
@@ -497,8 +500,8 @@ namespace TinyWars.Utility.Lang {
             `Are you sure to save the map?`,
         ],
         [Type.A0083]: [
-            `此地图存在问题，暂不能提审`,
-            `This map is not playable.`,
+            `此地图存在以下问题，暂不能提审，但可以正常保存以备后续编辑。`,
+            `This map is not playable (see below), but you can save it and edit it later.`,
         ],
         [Type.A0084]: [
             `您已提审过其他地图。若提审此地图，则其他地图将被自动撤销提审。确定要继续吗？`,
@@ -965,8 +968,8 @@ namespace TinyWars.Utility.Lang {
             `Please ensure that there're at least 2 alive forces.`,
         ],
         [Type.A0200]: [
-            `请确保地图上至少有两个存活的势力`,
-            `Please ensure that there're at least 2 alive forces.`,
+            `创建自由模式游戏失败`,
+            `Failed to create the free mode game.`,
         ],
         [Type.A0201]: [
             `将离开战局并前往创建自由模式房间的页面。\n您确定要继续吗？`,
@@ -1041,6 +1044,38 @@ namespace TinyWars.Utility.Lang {
         [Type.A0216]: [
             `"已战败"状态下，玩家无法行动。如果玩家是直接从存活状态切换到已战败状态，则其部队和建筑所有权都会残留。`,
             `In the Being Defeated state, players can not do anything. If his/her previous state is Alive, his/her troops will remain.`,
+        ],
+        [Type.A0217]: [
+            `所有数值设定与《高级战争：毁灭之日》保持一致。`,
+            `All data of units and tiles is the same as Advance Wars: Days of Ruin.`,
+        ],
+        [Type.A0218]: [
+            `相比原版，部分兵种的数据已被重新设计。设计者：NGC6240。`,
+            `Some units' data is rebalanced. Designed by NGC6240.`,
+        ],
+        [Type.A0219]: [
+            `注意：各版本的玩家数据不互通。您可能需要重新注册账户。`,
+            `Note: The user data is not interchangeable between the versions. You may need to register again.`,
+        ],
+        [Type.A0220]: [
+            `您已选择由自己控制此势力，无法修改为AI控制。`,
+            `You have chosen to use this force.`,
+        ],
+        [Type.A0221]: [
+            `此规则已被设定为不可用于合作模式，因此无法修改此选项。`,
+            `The war rule is not available for the Coop mode. Please change that first.`,
+        ],
+        [Type.A0222]: [
+            `无法切换控制权，因为其他势力都由AI控制。`,
+            `All other forces are controlled by the A.I. already.`,
+        ],
+        [Type.A0223]: [
+            `请确保此地图已包含预设规则。`,
+            `Please make sure that there is at least one preset war rule.`,
+        ],
+        [Type.A0224]: [
+            `这是《高级战争》1、2、DS版的网络对战版。主要维护者：Amarriner、Walker、Matsuzen。`,
+            `This is a web version of Advance Wars 1/2/Dual Strike. Maintained by Amarriner, Walker and Matsuzen.`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2571,12 +2606,12 @@ namespace TinyWars.Utility.Lang {
             `Public(CN)`,
         ],
         [Type.B0385]: [
-            `使用原版贴图`,
-            `Use Origin Texture`,
+            `原版`,
+            `Legacy`,
         ],
         [Type.B0386]: [
-            `使用新版贴图`,
-            `Use New Texture`,
+            `新版`,
+            `New`,
         ],
         [Type.B0387]: [
             `常规`,
@@ -2775,7 +2810,7 @@ namespace TinyWars.Utility.Lang {
             `No Rank`,
         ],
         [Type.B0436]: [
-            `排位积分排名`,
+            `排位积分榜`,
             `Rank List`,
         ],
         [Type.B0437]: [
@@ -3275,12 +3310,12 @@ namespace TinyWars.Utility.Lang {
             `Settings`,
         ],
         [Type.B0561]: [
-            `打开部队动画`,
-            `Unit Animation On`,
+            `打开`,
+            `On`,
         ],
         [Type.B0562]: [
-            `关闭部队动画`,
-            `Unit Animation Off`,
+            `关闭`,
+            `Off`,
         ],
         [Type.B0563]: [
             `使用中文`,
@@ -3367,8 +3402,8 @@ namespace TinyWars.Utility.Lang {
             `Join`,
         ],
         [Type.B0584]: [
-            `隐藏棋盘格子`,
-            `Hide Border`,
+            `棋盘网格线`,
+            `Border Lines`,
         ],
         [Type.B0585]: [
             `显示棋盘格子`,
@@ -3505,6 +3540,130 @@ namespace TinyWars.Utility.Lang {
         [Type.B0618]: [
             `修改玩家状态`,
             `Modify a Player's State`,
+        ],
+        [Type.B0619]: [
+            `多人合作自定义游戏`,
+            `Coop Custom Games`,
+        ],
+        [Type.B0620]: [
+            `切换游戏版本`,
+            `Switch Game Version`,
+        ],
+        [Type.B0621]: [
+            `原版`,
+            `Legacy Version`,
+        ],
+        [Type.B0622]: [
+            `测试版`,
+            `Test Version`,
+        ],
+        [Type.B0623]: [
+            `当前版本`,
+            `Current Version`,
+        ],
+        [Type.B0624]: [
+            `中文`,
+            `Chinese`,
+        ],
+        [Type.B0625]: [
+            `英文`,
+            `English`,
+        ],
+        [Type.B0626]: [
+            `找回密码`,
+            `Forget?`,
+        ],
+        [Type.B0627]: [
+            `语言`,
+            `Language`,
+        ],
+        [Type.B0628]: [
+            `贴图`,
+            `Texture`,
+        ],
+        [Type.B0629]: [
+            `部队动画`,
+            `Unit Animation`,
+        ],
+        [Type.B0630]: [
+            `地形动画`,
+            `Tile Animation`,
+        ],
+        [Type.B0631]: [
+            `切换BGM`,
+            `Switch BGM`,
+        ],
+        [Type.B0632]: [
+            `Wandering Path`,
+            `Wandering Path`,
+        ],
+        [Type.B0633]: [
+            `Design Time`,
+            `Design Time`,
+        ],
+        [Type.B0634]: [
+            `We Will Prevail`,
+            `We Will Prevail`,
+        ],
+        [Type.B0635]: [
+            `Hope Never Dies`,
+            `Hope Never Dies`,
+        ],
+        [Type.B0636]: [
+            `Lost Memories`,
+            `Lost Memories`,
+        ],
+        [Type.B0637]: [
+            `Proud Soldier`,
+            `Proud Soldier`,
+        ],
+        [Type.B0638]: [
+            `Days of Ruin`,
+            `Days of Ruin`,
+        ],
+        [Type.B0639]: [
+            `Rutty`,
+            `Rutty`,
+        ],
+        [Type.B0640]: [
+            `用户ID`,
+            `User ID`,
+        ],
+        [Type.B0641]: [
+            `由AI控制`,
+            `Controlled by A.I.`,
+        ],
+        [Type.B0642]: [
+            `AI使用的CO`,
+            `CO for A.I.`,
+        ],
+        [Type.B0643]: [
+            `合作房间`,
+            `Coop Room`,
+        ],
+        [Type.B0644]: [
+            `合作模式中AI的CO`,
+            `CO for A.I. in Coop`,
+        ],
+        [Type.B0645]: [
+            `合作模式中由AI控制`,
+            `Controlled by A.I. in Coop`,
+        ],
+        [Type.B0646]: [
+            `合作模式`,
+            `Coop Mode`,
+        ],
+        [Type.B0647]: [
+            `我`,
+            `Me`,
+        ],
+        [Type.B0648]: [
+            `其他玩家`,
+            `Others`,
+        ],
+        [Type.B0649]: [
+            `Advance Wars by Web`,
+            `Advance Wars by Web`,
         ],
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3779,11 +3938,11 @@ namespace TinyWars.Utility.Lang {
         ],
         [Type.F0006]: [
             `%d个部队尚未行动。`,
-            `%d unit(s) have taken no action yet.`
+            `%d unit(s) is(are) idle.`
         ],
         [Type.F0007]: [
-            `%d个建筑尚未生产部队。`,
-            `%d building(s) have built nothing yet.`
+            `%d个%s空闲，位置：%s。`,
+            `%d %s(s) is(are) idle. Position(s): %s.`
         ],
         [Type.F0008]: [
             `玩家[%s]已投降！`,
@@ -4021,6 +4180,220 @@ namespace TinyWars.Utility.Lang {
             `设置玩家 P%d 的状态为 %s`,
             `Set P%d's state as %s.`,
         ],
+        [Type.F0067]: [
+            `无法在 %s 上放置部队。`,
+            `It's not allowed to place units on %s.`,
+        ],
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Rich strings.
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        [Type.R0000]: [
+            [
+                `本选项影响您在回合中的行动顺序，以及您所属的队伍（由地图规则设定）`,
+                ``,
+                `战局中，属于同一队伍的玩家共享视野，部队能够相互穿越，不能相互攻击/装载/用后勤车补给。`,
+                `此外，可以使用队友的建筑来维修/补给自己的部队（消耗自己的金钱），但不能占领队友的建筑。`,
+                ``,
+                `预览地图时，各个势力的颜色与行动顺序的对应关系如下（您可以在创建/加入房间时选择您想要的颜色）：`,
+                `红=1，蓝=2，黄=3，黑=4`,
+                ``,
+                `默认为当前可用选项中的第一项。`,
+            ].join("\n"),
+
+            [
+                `This option determines your turn order and your team. `,
+                ``,
+                `In the game players in the same team share the vision. Their troops will not block and attack each other. It is not possible to supply your allies' troops with Rigs or load into allies' transports. `,
+                `You may use allies' properties to repair (use your own funds) and supply your troops and you cannot capture allies' properties`,
+                ``,
+                `When previewing the map, the colors of the forces correspond to the order of action as follows (you can choose the color you want when creating/adding rooms)`,
+                `Red = 1, Blue = 2, Yellow = 3, Black = 4`,
+                ``,
+                `By default you will be given the first choice among the available ones.`,
+            ].join("\n"),
+        ],
+
+        [Type.R0001]: [
+            [
+                `本选项影响您部队和建筑的外观（颜色）。`,
+            ].join("\n"),
+
+            [
+                `This option determines the color of your troops and properties.`,
+            ].join("\n"),
+        ],
+
+        [Type.R0002]: [
+            [
+                `本选项影响战局是明战或雾战。`,
+                ``,
+                `明战下，您可以观察到整个战场的情况。雾战下，您只能看到自己军队的视野内的战场情况。`,
+                `雾战难度相对较大。如果您是新手，建议先通过明战熟悉游戏系统，再尝试雾战模式。`,
+                ``,
+                `默认为“否”（即明战）。`,
+            ].join("\n"),
+
+            [
+                `This option determines whether this game is FOW or not. `,
+                ``,
+                `When FOW is off you have the view of the whole battlefield. When FOW is on you can only see the battlefield within the vision of your troops. `,
+                `FOW is relatively difficult and it is recommended that new players should start from no FOW to learn the basics of the game before advancing to FOW mode. `,
+                ``,
+                `By default this option is disabled (no FOW). `,
+            ].join("\n"),
+        ],
+
+        [Type.R0003]: [
+            [
+                `本选项影响所有玩家的每回合的时限。`,
+                ``,
+                `如果某个玩家的回合时间超出了限制，则服务器将自动为该玩家执行投降操作。`,
+                `当战局正式开始，或某个玩家结束回合后，则服务器自动开始下个玩家回合的倒计时（无论该玩家是否在线）。`,
+                `当前有“常规”和“增量”两种计时模式可选。`,
+                ``,
+                `常规计时：每回合的可用时间是固定不变的。`,
+                ``,
+                `增量计时：玩家每回合可用的时间将受到前面回合所消耗的时间的影响。此模式有两个参数，分别为“初始时间”和“增量时间”。`,
+                `第一回合，玩家拥有的时间就是“初始时间”。`,
+                `第二及后续所有回合，玩家拥有的时间=上一个回合的剩余时间+（上回合结束时的剩余部队数*增量时间）。`,
+                ``,
+                `默认为“常规计时-3天”。`,
+            ].join("\n"),
+
+            [
+                `This option determines the boot timer, aka time available for each turn. `,
+                ``,
+                `If a player hits the boot timer, the player will resign automatically. `,
+                `When the game starts, or a player ends his turn, the timer of the first (or the next) player will start to countdown, no matter that player is online or not. `,
+                `Currently, there are two timing modes available: regular and incremental.`,
+                ``,
+                `Regular timing: the available time for each round is fixed.`,
+                ``,
+                `Incremental timing: The time available for each round will be affected by the time consumed in the previous round. This mode has two parameters, namely "Initial Time" and "Incremental Time".`,
+                `For the first round, the time the player has is "Initial Time".`,
+                `For the second round and all subsequent rounds, the time the player has equals the remaining time of the previous round plus (the number of troops remaining in the previous round multiplies the "increment time").`,
+                ``,
+                `By default this option is selected as "regular timer with 3 days per round". `,
+            ].join("\n"),
+        ],
+
+        [Type.R0004]: [
+            [
+                `CO能够搭乘到部队中，并改变临近区域的部队的战斗能力。此外，部分CO能通过战斗积累能量，并以此释放强大的power，从而进一步制造优势。`,
+                `CO详细规则如下：`,
+                `- CO需要搭乘到部队中才能发挥作用，包括日常能力和power（如果有的话）。power又分为COP和SCOP两种`,
+                `- 同一势力，CO无法同时搭乘到两个或以上的部队中`,
+                `- CO只能在工厂、机场、海港、大本营进行搭乘，其中工厂可搭乘陆军，机场可搭乘空军，海港可搭乘海军，大本营可搭乘任意类型部队`,
+                `- CO搭乘前，目标部队必须是未行动的状态，且正处在可搭乘的地形上；搭乘后部队可以再次行动`,
+                `- 若自己回合内，CO所在部队被摧毁（无论是自毁还是被击毁），则当回合内无法再搭乘`,
+                `- 搭乘需要花费资金，数量为目标部队原价的特定百分比值（各个CO的比例可能不同）`,
+                `- 搭乘瞬间，目标部队立刻升到满级，且CO日常能力立刻生效`,
+                `- CO的日常能力，通常情况下只对CO所在部队的特定距离（即CO zone，下称COZ）内的部队生效；若有例外，以CO技能描述为准`,
+                `- 若CO所在部队被装载，则COZ消失，直到该部队被卸载到地图上`,
+                `- 只有部分CO有能量和COP/SCOP，具体以CO描述为准`,
+                `- 处于我方COZ内的我方部队对任意敌方部队发起攻击，造成伤害时会累积我方能量，每打掉1HP则增加1能量，与部队价值无关；自身受伤时不积累能量`,
+                `- 处于我方COZ内的敌方部队对任意我方部队发起攻击，我方部队反击造成对方受伤时会累积我方能量，累积规则同上`,
+                `- 部分CO可以扩张COZ，以"zone扩张能量值"列表决定；能量每达到列表中的一个值，则COZ+1。也就是说，如果该列表为空，则COZ无法扩张；如果列表有三个数值，则COZ最多可以扩张三次`,
+                `- 有能量的CO，其能量最大值是SCOP所需能量及"zone扩张能量值"中的最大值`,
+                `- COP/SCOP（如果有的话）需要消耗相应的能量才能发动；发动后，直到我方下回合开始之前，我方能量无法累积`,
+                `- 若能量足够，CO所在部队可以在未行动时发动COP/SCOP；发动COP/SCOP需要消耗该部队的行动机会，也就是说不能发动后再攻击（但是允许移动后发COP/SCOP）`,
+                `- COP/SCOP持续一回合，直到我方下回合开始时消失；其效果对全地图所有部队都生效（即使在视野外），具体以CO技能描述为准`,
+                `- COP/SCOP生效期间，日常能力失效`,
+                `- 即使发动过COP/SCOP，能量累积速度也不变`,
+                `- 若CO所在部队被击毁，则能量清零；若该CO正在发动COP/SCOP，则该COP/SCOP效果立刻消失`,
+            ].join("\n\n"),
+
+            [
+                `COs can board onto the troops and provide buffs for troops around. Besides, some COs can charge CO power metre in the battle and use CO power to achieve a bigger advantage. `,
+                `The detailed rules of COs are listed below: `,
+                `01. COs needs to board onto the troops to use their d2d abilities and powers. Powers may include cop and sp. `,
+                `02. There can be only 1 CO for each side. `,
+                `03. COs can board onto troops from bases, airports, ports and HQs. Bases are for land forces. Airports are for air forces. Ports are for navies while COs can board onto any troops from HQs. `,
+                `04. COs can only board onto troops ready to move. Troops can move again after that. `,
+                `05. If unit with CO on board is destroyed in your turn(i.e. killed by counter attack & crash after using up fuels), COs cannot board onto another unit in that turn. `,
+                `06. It takes funds for CO to board onto troops, which equals to a modifier(CO specific) multiplied by the cost of the full HP unit. `,
+                `07. Upon the boarding of CO the unit got veteran status and CO's d2d takes effect at once. `,
+                `08. In usual cases CO's d2d works only on troops within the CO zone. `,
+                `09. If units with CO on board are loaded the CO zone will not appear until it is unloaded again. `,
+                `10. Only certain COs got cop and scop. `,
+                `11. CO power metre is charged when units within CO zone deal damage to enemy units. 1 HP damage is converted to 1 unit of metre charge. `,
+                `12. CO metre can also be charged by counterattack if target enemy units are in the COZ. The rule is the same as above. `,
+                `13. Some COs can expand their CO zone, which is showed in the coz expansion chart. COZ expands by 1 tile for reaching a number in the chart. The coz cannot be expanded if the chart is "--". The coz can be expanded for 3 times if there are 3 numbers in the chart (a/b/c). `,
+                `14. The maximum amount of metre of a CO is the larger number of SCOP cost and the largest COZ expansion cost. `,
+                `15. COP/SCOP takes corresponding amount of power to activate. The power metre cannot be charged when cop/scop is active. `,
+                `16. To activate COP/SCOP the unit with CO on board should be ready to move. You may use power after moving, but it is not possible to do so after attacking. `,
+                `17. COP/SCOP lasts a turn, which means it ends at the beginning of your next turn. It works on all units in the map. `,
+                `18. When COP/SCOP is active d2d does not work. `,
+                `19. After using COP/SCOP the power metre charges at the same rate. `,
+                `20. If units with CO on board are destroyed the power metre is reset to 0. If a COP/SCOP is active the COP/SCOP will also end.`,
+            ].join("\n\n"),
+        ],
+
+        [Type.R0005]: [
+            [
+                `1.账号和密码都只能使用数字、字母、下划线，长度不小于6位`,
+                ``,
+                `2.昵称可使用任意字符，长度不小于4位`,
+                ``,
+                `3.注册后，账号不可修改，密码和昵称可修改`,
+            ].join("\n"),
+
+            [
+                `1. Usernames and passwords should only consist of numbers, english characters and "_". It should not be shorter than 6 characters. `,
+                ``,
+                `2. You can use any characters for nickname. The length should be no shorter than 4 characters. `,
+                ``,
+                `3. After the registry you cannot change your username, but the password and nickname can be changed.`,
+            ].join("\n"),
+        ],
+
+        [Type.R0006]: [
+            [
+                `模拟战是一种辅助您进行战局规划/地图测试的工具。`,
+                `该工具允许您把当前所见到的战局信息原样复制到单人战局中。您可以在该单人战局中随意操作，还可以无限制地存档、读档，直到您找到最好的走法为止。`,
+                `在该模式下，游戏规则仍然正常生效。换言之，您可以结束回合，或者做其他任何常规操作，游戏会为您正常结算相关数据。`,
+                ``,
+                `另：上帝模式开发中，敬请期待！`,
+            ].join("\n"),
+            [
+                `Simulation (or Move Planner) is a tool to plan game moves and test maps.`,
+                `It enables you to copy the game screen to a single player game. You may move any unit and save/load for unlimited times till you're satisfied with the move.`,
+                `In this mode the game rule works normally. For example, you may end your turn and the fund will be added as usual.`,
+                ``,
+                `Sandbox Mode (where you can set unit HP for a better planning purpose) is now under development, and it may be online SOOOON.`,
+            ].join("\n"),
+        ],
+
+        [Type.R0007]: [
+            [
+                `自由模式是一个多人对战模式，但与常规模式不同的是，您可以以任意战局局面为战局起点。`,
+                `常见的应用场景包括：`,
+                `1. 自行任意设计地图并直接用于对战，而不必经过审核`,
+                `2. 从某个回放的某个步骤直接开打，以便探讨战局发展的各种可能性`,
+                ``,
+                `自由模式的战绩不会计入您的履历，您可以无忧无虑地轻松游戏。`,
+            ].join(`\n`),
+            [
+                `The Free Mode is a multi-player mode. But unlike Normal Mode you can start the game from any game state.`,
+                `Examples include:`,
+                `1. Design a custom map and use the map for battles, skipping the map review process.`,
+                `2. Start a game from a certain step of a replay to study the possibilities.`,
+                ``,
+                `The results of the Free Mode will not affect the statistics in your profile. Just relax and enjoy :)`,
+            ].join(`\n`),
+        ],
+
+        [Type.R0008]: [
+            [
+                `合作模式是一个多人游戏模式。`,
+                `与常规模式不同的是，AI会参与游戏。您可以与AI和/或其他玩家组队，对抗其他AI和/或玩家。`,
+            ].join(`\n`),
+            [
+                `The Coop Mode is a multi-player mode.`,
+                `Unlike the Normal Mode, A.I. plays in this mode. You can team up with A.I. and/or other players to play against other A.I. and/or players.`,
+            ].join(`\n`),
+        ],
     };
 
     const ERROR_TEXT: { [errorCode: number]: string[] } = {
@@ -4031,6 +4404,14 @@ namespace TinyWars.Utility.Lang {
         [ServerErrorCode.IllegalRequest0000]: [
             "非法请求",
             "Illegal request.",
+        ],
+        [ServerErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_0022]: [
+            `合作模式下，至少要有一个势力由AI控制`,
+            `There must be at least 1 A.I. player in the Coop Mode.`,
+        ],
+        [ServerErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_0023]: [
+            `合作模式下，至少要有两个势力由真人玩家控制`,
+            `There must be at least 2 human players in the Coop Mode.`,
         ],
         [ServerErrorCode.MsgUserLogin0001]: [
             "账号不合法，请检查后重试",
@@ -4136,19 +4517,27 @@ namespace TinyWars.Utility.Lang {
             `您未参与该战局，或已经被击败`,
             `You have not joined the game, or you have been defeated.`,
         ],
-        [ServerErrorCode.MsgMpwActionPlayerEndTurn0003]: [
+        [ServerErrorCode.ExeCcrCreateRoom_DoExecute_0019]: [
+            `AI玩家的颜色设置不合法`,
+            `The colors of the A.I. players are invalid.`,
+        ],
+        [ServerErrorCode.ExeCcrCreateRoom_DoExecute_0022]: [
+            `AI玩家的颜色与您自己的势力颜色冲突`,
+            `The colors of you and the A.I. players are invalid.`,
+        ],
+        [ServerErrorCode.ExeMpwActionPlayerEndTurn_DoExecute_0001]: [
             `战局不存在`,
             `The game doesn't exist.`,
         ],
-        [ServerErrorCode.MsgMpwActionPlayerEndTurn0004]: [
+        [ServerErrorCode.ExeMpwActionPlayerEndTurn_DoExecute_0002]: [
             `战局数据不同步，请刷新`,
             `The local data is out of synchronization. Please refresh.`,
         ],
-        [ServerErrorCode.MsgMpwActionPlayerEndTurn0006]: [
+        [ServerErrorCode.ExeMpwActionPlayerEndTurn_DoExecute_0005]: [
             `当前无法结束您的回合`,
             `Unable to end turn.`,
         ],
-        [ServerErrorCode.MsgMpwActionPlayerEndTurn0009]: [
+        [ServerErrorCode.ExeMpwActionPlayerEndTurn_DoExecute_0007]: [
             `您尚未完成关于和局的投票`,
             `You haven't voted for the draw of game.`,
         ],
@@ -4173,6 +4562,14 @@ namespace TinyWars.Utility.Lang {
             `The server is under maintenance.`,
         ],
 
+        [ClientErrorCode.MapRawDataValidation04]: [
+            `势力数量不合法`,
+            `The number of the forces is not valid.`,
+        ],
+        [ClientErrorCode.MapRawDataValidation07]: [
+            `势力颜色不合法`,
+            `The colors of the forces are invalid.`,
+        ],
         [ClientErrorCode.WarEventFullDataValidation09]: [
             `存在未被引用的事件动作`,
             `There is a redundant event action.`,
@@ -4181,199 +4578,17 @@ namespace TinyWars.Utility.Lang {
             `存在未被引用的事件`,
             `There is a redundant event.`,
         ],
-    };
-
-    const RICH_DATA = {
-        [RichType.R0000]: [
-            [
-                `本选项影响您在回合中的行动顺序，以及您所属的队伍（由地图规则设定）`,
-                ``,
-                `战局中，属于同一队伍的玩家共享视野，部队能够相互穿越，不能相互攻击/装载/用后勤车补给。`,
-                `此外，可以使用队友的建筑来维修/补给自己的部队（消耗自己的金钱），但不能占领队友的建筑。`,
-                ``,
-                `预览地图时，各个势力的颜色与行动顺序的对应关系如下（您可以在创建/加入房间时选择您想要的颜色）：`,
-                `红=1，蓝=2，黄=3，黑=4`,
-                ``,
-                `默认为当前可用选项中的第一项。`,
-            ].join("\n"),
-
-            [
-                `This option determines your turn order and your team. `,
-                ``,
-                `In the game players in the same team share the vision. Their troops will not block and attack each other. It is not possible to supply your allies' troops with Rigs or load into allies' transports. `,
-                `You may use allies' properties to repair (use your own funds) and supply your troops and you cannot capture allies' properties`,
-                ``,
-                `When previewing the map, the colors of the forces correspond to the order of action as follows (you can choose the color you want when creating/adding rooms)`,
-                `Red = 1, Blue = 2, Yellow = 3, Black = 4`,
-                ``,
-                `By default you will be given the first choice among the available ones.`,
-            ].join("\n"),
+        [ClientErrorCode.WarRuleValidation02]: [
+            `尚未设置预设规则的可用性`,
+            `The availability of the preset rule has not been set.`,
         ],
-
-        [RichType.R0001]: [
-            [
-                `本选项影响您部队和建筑的外观（颜色）。`,
-            ].join("\n"),
-
-            [
-                `This option determines the color of your troops and properties.`,
-            ].join("\n"),
+        [ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_22]: [
+            `合作模式下，至少要有一个势力由AI控制`,
+            `There must be at least 1 A.I. player in the Coop Mode.`,
         ],
-
-        [RichType.R0002]: [
-            [
-                `本选项影响战局是明战或雾战。`,
-                ``,
-                `明战下，您可以观察到整个战场的情况。雾战下，您只能看到自己军队的视野内的战场情况。`,
-                `雾战难度相对较大。如果您是新手，建议先通过明战熟悉游戏系统，再尝试雾战模式。`,
-                ``,
-                `默认为“否”（即明战）。`,
-            ].join("\n"),
-
-            [
-                `This option determines whether this game is FOW or not. `,
-                ``,
-                `When FOW is off you have the view of the whole battlefield. When FOW is on you can only see the battlefield within the vision of your troops. `,
-                `FOW is relatively difficult and it is recommended that new players should start from no FOW to learn the basics of the game before advancing to FOW mode. `,
-                ``,
-                `By default this option is disabled (no FOW). `,
-            ].join("\n"),
-        ],
-
-        [RichType.R0003]: [
-            [
-                `本选项影响所有玩家的每回合的时限。`,
-                ``,
-                `如果某个玩家的回合时间超出了限制，则服务器将自动为该玩家执行投降操作。`,
-                `当战局正式开始，或某个玩家结束回合后，则服务器自动开始下个玩家回合的倒计时（无论该玩家是否在线）。`,
-                `当前有“常规”和“增量”两种计时模式可选。`,
-                ``,
-                `常规计时：每回合的可用时间是固定不变的。`,
-                ``,
-                `增量计时：玩家每回合可用的时间将受到前面回合所消耗的时间的影响。此模式有两个参数，分别为“初始时间”和“增量时间”。`,
-                `第一回合，玩家拥有的时间就是“初始时间”。`,
-                `第二及后续所有回合，玩家拥有的时间=上一个回合的剩余时间+（上回合结束时的剩余部队数*增量时间）。`,
-                ``,
-                `默认为“常规计时-3天”。`,
-            ].join("\n"),
-
-            [
-                `This option determines the boot timer, aka time available for each turn. `,
-                ``,
-                `If a player hits the boot timer, the player will resign automatically. `,
-                `When the game starts, or a player ends his turn, the timer of the first (or the next) player will start to countdown, no matter that player is online or not. `,
-                `Currently, there are two timing modes available: regular and incremental.`,
-                ``,
-                `Regular timing: the available time for each round is fixed.`,
-                ``,
-                `Incremental timing: The time available for each round will be affected by the time consumed in the previous round. This mode has two parameters, namely "Initial Time" and "Incremental Time".`,
-                `For the first round, the time the player has is "Initial Time".`,
-                `For the second round and all subsequent rounds, the time the player has equals the remaining time of the previous round plus (the number of troops remaining in the previous round multiplies the "increment time").`,
-                ``,
-                `By default this option is selected as "regular timer with 3 days per round". `,
-            ].join("\n"),
-        ],
-
-        [RichType.R0004]: [
-            [
-                `CO能够搭乘到部队中，并改变临近区域的部队的战斗能力。此外，部分CO能通过战斗积累能量，并以此释放强大的power，从而进一步制造优势。`,
-                `CO详细规则如下：`,
-                `- CO需要搭乘到部队中才能发挥作用，包括日常能力和power（如果有的话）。power又分为COP和SCOP两种`,
-                `- 同一势力，CO无法同时搭乘到两个或以上的部队中`,
-                `- CO只能在工厂、机场、海港、大本营进行搭乘，其中工厂可搭乘陆军，机场可搭乘空军，海港可搭乘海军，大本营可搭乘任意类型部队`,
-                `- CO搭乘前，目标部队必须是未行动的状态，且正处在可搭乘的地形上；搭乘后部队可以再次行动`,
-                `- 若自己回合内，CO所在部队被摧毁（无论是自毁还是被击毁），则当回合内无法再搭乘`,
-                `- 搭乘需要花费资金，数量为目标部队原价的特定百分比值（各个CO的比例可能不同）`,
-                `- 搭乘瞬间，目标部队立刻升到满级，且CO日常能力立刻生效`,
-                `- CO的日常能力，通常情况下只对CO所在部队的特定距离（即CO zone，下称COZ）内的部队生效；若有例外，以CO技能描述为准`,
-                `- 若CO所在部队被装载，则COZ消失，直到该部队被卸载到地图上`,
-                `- 只有部分CO有能量和COP/SCOP，具体以CO描述为准`,
-                `- 处于我方COZ内的我方部队对任意敌方部队发起攻击，造成伤害时会累积我方能量，每打掉1HP则增加1能量，与部队价值无关；自身受伤时不积累能量`,
-                `- 处于我方COZ内的敌方部队对任意我方部队发起攻击，我方部队反击造成对方受伤时会累积我方能量，累积规则同上`,
-                `- 部分CO可以扩张COZ，以"zone扩张能量值"列表决定；能量每达到列表中的一个值，则COZ+1。也就是说，如果该列表为空，则COZ无法扩张；如果列表有三个数值，则COZ最多可以扩张三次`,
-                `- 有能量的CO，其能量最大值是SCOP所需能量及"zone扩张能量值"中的最大值`,
-                `- COP/SCOP（如果有的话）需要消耗相应的能量才能发动；发动后，直到我方下回合开始之前，我方能量无法累积`,
-                `- 若能量足够，CO所在部队可以在未行动时发动COP/SCOP；发动COP/SCOP需要消耗该部队的行动机会，也就是说不能发动后再攻击（但是允许移动后发COP/SCOP）`,
-                `- COP/SCOP持续一回合，直到我方下回合开始时消失；其效果对全地图所有部队都生效（即使在视野外），具体以CO技能描述为准`,
-                `- COP/SCOP生效期间，日常能力失效`,
-                `- 即使发动过COP/SCOP，能量累积速度也不变`,
-                `- 若CO所在部队被击毁，则能量清零；若该CO正在发动COP/SCOP，则该COP/SCOP效果立刻消失`,
-            ].join("\n\n"),
-
-            [
-                `COs can board onto the troops and provide buffs for troops around. Besides, some COs can charge CO power metre in the battle and use CO power to achieve a bigger advantage. `,
-                `The detailed rules of COs are listed below: `,
-                `01. COs needs to board onto the troops to use their d2d abilities and powers. Powers may include cop and sp. `,
-                `02. There can be only 1 CO for each side. `,
-                `03. COs can board onto troops from bases, airports, ports and HQs. Bases are for land forces. Airports are for air forces. Ports are for navies while COs can board onto any troops from HQs. `,
-                `04. COs can only board onto troops ready to move. Troops can move again after that. `,
-                `05. If unit with CO on board is destroyed in your turn(i.e. killed by counter attack & crash after using up fuels), COs cannot board onto another unit in that turn. `,
-                `06. It takes funds for CO to board onto troops, which equals to a modifier(CO specific) multiplied by the cost of the full HP unit. `,
-                `07. Upon the boarding of CO the unit got veteran status and CO's d2d takes effect at once. `,
-                `08. In usual cases CO's d2d works only on troops within the CO zone. `,
-                `09. If units with CO on board are loaded the CO zone will not appear until it is unloaded again. `,
-                `10. Only certain COs got cop and scop. `,
-                `11. CO power metre is charged when units within CO zone deal damage to enemy units. 1 HP damage is converted to 1 unit of metre charge. `,
-                `12. CO metre can also be charged by counterattack if target enemy units are in the COZ. The rule is the same as above. `,
-                `13. Some COs can expand their CO zone, which is showed in the coz expansion chart. COZ expands by 1 tile for reaching a number in the chart. The coz cannot be expanded if the chart is "--". The coz can be expanded for 3 times if there are 3 numbers in the chart (a/b/c). `,
-                `14. The maximum amount of metre of a CO is the larger number of SCOP cost and the largest COZ expansion cost. `,
-                `15. COP/SCOP takes corresponding amount of power to activate. The power metre cannot be charged when cop/scop is active. `,
-                `16. To activate COP/SCOP the unit with CO on board should be ready to move. You may use power after moving, but it is not possible to do so after attacking. `,
-                `17. COP/SCOP lasts a turn, which means it ends at the beginning of your next turn. It works on all units in the map. `,
-                `18. When COP/SCOP is active d2d does not work. `,
-                `19. After using COP/SCOP the power metre charges at the same rate. `,
-                `20. If units with CO on board are destroyed the power metre is reset to 0. If a COP/SCOP is active the COP/SCOP will also end.`,
-            ].join("\n\n"),
-        ],
-
-        [RichType.R0005]: [
-            [
-                `1.账号和密码都只能使用数字、字母、下划线，长度不小于6位`,
-                `2.昵称可使用任意字符，长度不小于4位`,
-                `3.注册后，账号不可修改，密码和昵称可修改`,
-            ].join("\n"),
-
-            [
-                `1 Usernames and passwords should only consist of numbers, english characters and "_". It should not be shorter than 6 characters. `,
-                `2 You can use any characters for nickname. The length should be no shorter than 4 characters. `,
-                `3 After the registry you cannot change your username, but the password and nickname can be changed.`,
-            ].join("\n"),
-        ],
-
-        [RichType.R0006]: [
-            [
-                `模拟战是一种辅助您进行战局规划/地图测试的工具。`,
-                `该工具允许您把当前所见到的战局信息原样复制到单人战局中。您可以在该单人战局中随意操作，还可以无限制地存档、读档，直到您找到最好的走法为止。`,
-                `在该模式下，游戏规则仍然正常生效。换言之，您可以结束回合，或者做其他任何常规操作，游戏会为您正常结算相关数据。`,
-                ``,
-                `另：上帝模式开发中，敬请期待！`,
-            ].join("\n"),
-            [
-                `Simulation (or Move Planner) is a tool to plan game moves and test maps.`,
-                `It enables you to copy the game screen to a single player game. You may move any unit and save/load for unlimited times till you're satisfied with the move.`,
-                `In this mode the game rule works normally. For example, you may end your turn and the fund will be added as usual.`,
-                ``,
-                `Sandbox Mode (where you can set unit HP for a better planning purpose) is now under development, and it may be online SOOOON.`,
-            ].join("\n"),
-        ],
-
-        [RichType.R0007]: [
-            [
-                `自由模式是一个多人对战模式，但与常规模式不同的是，您可以以任意战局局面为战局起点。`,
-                `常见的应用场景包括：`,
-                `1. 自行任意设计地图并直接用于对战，而不必经过审核`,
-                `2. 从某个回放的某个步骤直接开打，以便探讨战局发展的各种可能性`,
-                ``,
-                `自由模式的战绩不会计入您的履历，您可以无忧无虑地轻松游戏。`,
-            ].join(`\n`),
-            [
-                `The Free Mode is a multi-player mode. But unlike Normal Mode you can start the game from any game state.`,
-                `Examples include:`,
-                `1. Design a custom map and use the map for battles, skipping the map review process.`,
-                `2. Start a game from a certain step of a replay to study the possibilities.`,
-                ``,
-                `The results of the Free Mode will not affect the statistics in your profile. Just relax and enjoy :)`,
-            ].join(`\n`),
+        [ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_23]: [
+            `合作模式下，至少要有两个势力由真人玩家控制`,
+            `There must be at least 2 human players in the Coop Mode.`,
         ],
     };
 
@@ -4388,13 +4603,30 @@ namespace TinyWars.Utility.Lang {
     export function setLanguageType(language: LanguageType): void {
         _languageType = language;
     }
-
-    export function getText(t: Type, languageType = getCurrentLanguageType()): string {
-        return _LANG_DATA[t][languageType];
+    export function getLanguageTypeName(type: LanguageType): string | undefined {
+        switch (type) {
+            case LanguageType.Chinese   : return getText(Type.B0624, LanguageType.Chinese);
+            case LanguageType.English   : return getText(Type.B0625, LanguageType.English);
+            default                     : return undefined;
+        }
     }
 
-    export function getFormattedText(t: Type, ...params: any[]): string {
-        return Helpers.formatString(getText(t), ...params);
+    export function getText(t: Type, languageType = getCurrentLanguageType()): string {
+        const data = _LANG_DATA[t];
+        const text = data ? data[languageType] : null;
+        if (text != null) {
+            return text;
+        } else {
+            Logger.error(`Lang.getText() empty text: ${t} ${languageType}`);
+            return CommonConstants.ErrorTextForLang;
+        }
+    }
+
+    export function getFormattedText(t: Type, ...params: (number | string | undefined | null)[]): string {
+        const data = getText(t);
+        return data === CommonConstants.ErrorTextForLang
+            ? CommonConstants.ErrorTextForLang
+            : Helpers.formatString(data, ...params);
     }
 
     export function getErrorText(code: ServerErrorCode | ClientErrorCode): string {
@@ -4403,15 +4635,11 @@ namespace TinyWars.Utility.Lang {
         return `${getText(Type.B0452)} ${code}: ${text || getText(Type.A0153)}`;
     }
 
-    export function getRichText(richType: RichType): string {
-        return RICH_DATA[richType][_languageType];
-    }
-
     export function getPlayerForceName(playerIndex: number): string {
         return `P${playerIndex}`;
     }
 
-    export function getPlayerTeamName(teamIndex: number): string {
+    export function getPlayerTeamName(teamIndex: number): string | undefined {
         switch (teamIndex) {
             case 1  : return getText(Type.B0008);
             case 2  : return getText(Type.B0009);
@@ -4421,7 +4649,7 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getTileName(tileType: Types.TileType): string {
+    export function getTileName(tileType: Types.TileType): string | undefined {
         switch (tileType) {
             case Types.TileType.Plain           : return getText(Type.B1000);
             case Types.TileType.River           : return getText(Type.B1001);
@@ -4461,7 +4689,7 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getUnitName(unitType: Types.UnitType): string {
+    export function getUnitName(unitType: Types.UnitType): string | undefined {
         switch (unitType) {
             case Types.UnitType.Infantry        : return getText(Type.B1200);
             case Types.UnitType.Mech            : return getText(Type.B1201);
@@ -4493,7 +4721,7 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getUnitActionName(actionType: Types.UnitActionType): string {
+    export function getUnitActionName(actionType: Types.UnitActionType): string | undefined{
         switch (actionType) {
             case Types.UnitActionType.BeLoaded          : return getText(Type.B0037);
             case Types.UnitActionType.Join              : return getText(Type.B0038);
@@ -4516,7 +4744,7 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getRankName(playerRank: number): string {
+    export function getRankName(playerRank: number): string | undefined {
         switch (playerRank) {
             case 0  : return getText(Type.B0061);
             case 1  : return getText(Type.B0062);
@@ -4538,7 +4766,7 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getMoveTypeName(t: Types.MoveType): string {
+    export function getMoveTypeName(t: Types.MoveType): string | undefined {
         switch (t) {
             case Types.MoveType.Air         : return getText(Type.B0117);
             case Types.MoveType.Infantry    : return getText(Type.B0112);
@@ -4552,7 +4780,7 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getUnitCategoryName(t: Types.UnitCategory): string {
+    export function getUnitCategoryName(t: Types.UnitCategory): string | undefined {
         switch (t) {
             case Types.UnitCategory.All                 : return getText(Type.B0120);
             case Types.UnitCategory.Ground              : return getText(Type.B0121);
@@ -4571,11 +4799,11 @@ namespace TinyWars.Utility.Lang {
             case Types.UnitCategory.Copter              : return getText(Type.B0134);
             case Types.UnitCategory.Tank                : return getText(Type.B0135);
             case Types.UnitCategory.AirExceptSeaplane   : return getText(Type.B0136);
-            default                                     : return null;
+            default                                     : return undefined;
         }
     }
 
-    export function getWarTypeName(type: Types.WarType): string {
+    export function getWarTypeName(type: Types.WarType): string | undefined {
         switch (type) {
             case Types.WarType.McwStd   : return getText(Type.B0417);
             case Types.WarType.McwFog   : return getText(Type.B0418);
@@ -4586,21 +4814,21 @@ namespace TinyWars.Utility.Lang {
             case Types.WarType.ScwFog   : return getText(Type.B0611);
             case Types.WarType.SfwStd   : return getText(Type.B0612);
             case Types.WarType.SfwFog   : return getText(Type.B0613);
-            default                     : return null;
+            default                     : return undefined;
         }
     }
 
-    export function getMapReviewStatusText(status: Types.MapReviewStatus): string {
+    export function getMapReviewStatusText(status: Types.MapReviewStatus): string | undefined{
         switch (status) {
             case Types.MapReviewStatus.None         : return getText(Type.B0273);
             case Types.MapReviewStatus.Reviewing    : return getText(Type.B0274);
             case Types.MapReviewStatus.Rejected     : return getText(Type.B0275);
             case Types.MapReviewStatus.Accepted     : return getText(Type.B0276);
-            default                                 : return null;
+            default                                 : return undefined;
         }
     }
 
-    export function getMapEditorDrawerModeText(mode: Types.MapEditorDrawerMode): string {
+    export function getMapEditorDrawerModeText(mode: Types.MapEditorDrawerMode): string | undefined{
         switch (mode) {
             case Types.MapEditorDrawerMode.Preview          : return getText(Type.B0286);
             case Types.MapEditorDrawerMode.DrawUnit         : return getText(Type.B0281);
@@ -4608,35 +4836,35 @@ namespace TinyWars.Utility.Lang {
             case Types.MapEditorDrawerMode.DrawTileObject   : return getText(Type.B0283);
             case Types.MapEditorDrawerMode.DeleteUnit       : return getText(Type.B0284);
             case Types.MapEditorDrawerMode.DeleteTileObject : return getText(Type.B0285);
-            default                                         : return null;
+            default                                         : return undefined;
         }
     }
 
-    export function getUnitActionStateText(state: Types.UnitActionState): string {
+    export function getUnitActionStateText(state: Types.UnitActionState): string | undefined{
         switch (state) {
             case Types.UnitActionState.Acted    : return getText(Type.B0368);
             case Types.UnitActionState.Idle     : return getText(Type.B0369);
-            default                             : return null;
+            default                             : return undefined;
         }
     }
 
-    export function getChatChannelName(channel: Types.ChatChannel): string {
+    export function getChatChannelName(channel: Types.ChatChannel): string | undefined {
         switch (channel) {
             case Types.ChatChannel.System   : return getText(Type.B0374);
             case Types.ChatChannel.PublicEn : return getText(Type.B0373);
             case Types.ChatChannel.PublicCn : return getText(Type.B0384);
-            default                         : return null;
+            default                         : return undefined;
         }
     }
 
-    export function getUnitAndTileSkinName(skinId: number): string {
+    export function getUnitAndTileSkinName(skinId: number): string | undefined {
         switch (skinId) {
             case 0  : return "";
             case 1  : return getText(Type.B0004);
             case 2  : return getText(Type.B0005);
             case 3  : return getText(Type.B0006);
             case 4  : return getText(Type.B0007);
-            default : return null;
+            default : return undefined;
         }
     }
 
@@ -4666,10 +4894,28 @@ namespace TinyWars.Utility.Lang {
         }
     }
 
-    export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined {
-        return (warRule.ruleId == null)
-            ? getText(Type.B0321)
-            : getLanguageText({ textArray: warRule.ruleNameArray });
+    export function getBgmName(code: BgmCode): string | undefined {
+        switch (code) {
+            case BgmCode.None       : return getText(Type.B0001);
+            case BgmCode.Lobby01    : return getText(Type.B0632);
+            case BgmCode.MapEditor01: return getText(Type.B0633);
+            case BgmCode.War01      : return getText(Type.B0634);
+            case BgmCode.War02      : return getText(Type.B0635);
+            case BgmCode.War03      : return getText(Type.B0636);
+            case BgmCode.War04      : return getText(Type.B0637);
+            case BgmCode.War05      : return getText(Type.B0638);
+            case BgmCode.War06      : return getText(Type.B0639);
+            default                 : return undefined;
+        }
+    }
+
+    export function getWarRuleNameInLanguage(warRule: ProtoTypes.WarRule.IWarRule): string | undefined | null {
+        if (warRule.ruleId == null) {
+            return getText(Type.B0321);
+        } else {
+            const ruleNameArray = warRule.ruleNameArray;
+            return ruleNameArray ? getLanguageText({ textArray: ruleNameArray }) : undefined;
+        }
     }
 
     export function getWarEventConditionTypeName(type: WarEventConditionType): string | undefined {
@@ -4711,7 +4957,26 @@ namespace TinyWars.Utility.Lang {
             case PlayerRuleType.VisionRangeModifier     : return getText(Type.B0184);
             case PlayerRuleType.LuckLowerLimit          : return getText(Type.B0189);
             case PlayerRuleType.LuckUpperLimit          : return getText(Type.B0190);
+            case PlayerRuleType.AiCoIdInCcw             : return getText(Type.B0641);
+            case PlayerRuleType.AiControlInCcw          : return getText(Type.B0642);
             default                                     : return undefined;
+        }
+    }
+
+    export function getGameVersionName(type: GameVersion): string | undefined {
+        switch (type) {
+            case GameVersion.Legacy : return getText(Lang.Type.B0621);
+            case GameVersion.Test   : return getText(Lang.Type.B0622);
+            case GameVersion.Awbw   : return getText(Lang.Type.B0649);
+            default                 : return undefined;
+        }
+    }
+    export function getGameVersionDesc(type: GameVersion): string | undefined {
+        switch (type) {
+            case GameVersion.Legacy : return getText(Lang.Type.A0217);
+            case GameVersion.Test   : return getText(Lang.Type.A0218);
+            case GameVersion.Awbw   : return getText(Lang.Type.A0224);
+            default                 : return undefined;
         }
     }
 
@@ -4728,7 +4993,7 @@ namespace TinyWars.Utility.Lang {
         textArray       : ProtoTypes.Structure.ILanguageText[];
         languageType?   : LanguageType;
         useAlternate?   : boolean;
-    }): string | undefined {
+    }): string | undefined | null {
         const data = (textArray || []).find(v => v.languageType === languageType);
         if (data) {
             return data.text;
@@ -4742,19 +5007,19 @@ namespace TinyWars.Utility.Lang {
     export function concatLanguageTextList(textList: ProtoTypes.Structure.ILanguageText[]): string {
         const strList: string[] = [];
         for (const data of textList || []) {
-            strList.push(data.text);
+            strList.push(data.text || `??`);
         }
         return strList.join(`, `);
     }
 
-    export function getBootTimerTypeName(type: Types.BootTimerType): string {
+    export function getBootTimerTypeName(type: Types.BootTimerType): string | undefined {
         switch (type) {
             case Types.BootTimerType.Regular    : return getText(Type.B0387);
             case Types.BootTimerType.Incremental: return getText(Type.B0388);
-            default                             : return null;
+            default                             : return undefined;
         }
     }
-    export function getBootTimerDesc(params: number[]): string {
+    export function getBootTimerDesc(params: number[]): string | undefined {
         params          = params || [];
         const timerType = params[0] as Types.BootTimerType;
         if (timerType === Types.BootTimerType.Regular) {
@@ -4762,13 +5027,13 @@ namespace TinyWars.Utility.Lang {
         } else if (timerType === Types.BootTimerType.Incremental) {
             return `${getText(Type.B0388)} ${Helpers.getTimeDurationText2(params[1])} + ${Helpers.getTimeDurationText2(params[2])}`;
         } else {
-            return null;
+            return undefined;
         }
     }
     export async function getGameStartDesc(data: ProtoTypes.NetMessage.MsgMpwCommonBroadcastGameStart.IS): Promise<string> {
         const playerArray   : string[] = [];
         let playerIndex     = CommonConstants.WarFirstPlayerIndex;
-        for (const playerInfo of data.playerInfoList) {
+        for (const playerInfo of data.playerInfoList || []) {
             const userId = playerInfo.userId;
             playerArray.push(`P${playerIndex}: ${userId != null ? await User.UserModel.getUserNickname(userId) : `----`}`);
             ++playerIndex;

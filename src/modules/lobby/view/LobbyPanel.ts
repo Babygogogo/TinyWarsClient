@@ -1,13 +1,11 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Lobby {
-    import Tween        = egret.Tween;
-    import Lang         = Utility.Lang;
-    import Helpers      = Utility.Helpers;
-    import Notify       = Utility.Notify;
-    import UserModel    = User.UserModel;
-
-    const DISCORD_URL   = `https://discord.gg/jdtRpY9`;
-    const GITHUB_URL    = `https://github.com/Babygogogo/TinyWarsClient`;
+    import Tween            = egret.Tween;
+    import Lang             = Utility.Lang;
+    import Helpers          = Utility.Helpers;
+    import Notify           = Utility.Notify;
+    import CommonConstants  = Utility.CommonConstants;
 
     export class LobbyPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
@@ -15,23 +13,40 @@ namespace TinyWars.Lobby {
 
         private static _instance: LobbyPanel;
 
+        // @ts-ignore
         private _groupTips      : eui.Group;
+        // @ts-ignore
         private _groupWelcome   : eui.Group;
+        // @ts-ignore
         private _labelTips0     : GameUi.UiLabel;
+        // @ts-ignore
         private _labelTips1     : GameUi.UiLabel;
+        // @ts-ignore
         private _groupQq        : eui.Group;
+        // @ts-ignore
         private _labelTips2     : GameUi.UiLabel;
+        // @ts-ignore
         private _labelTips3     : GameUi.UiLabel;
+        // @ts-ignore
         private _groupDiscord   : eui.Group;
+        // @ts-ignore
         private _labelTips4     : GameUi.UiLabel;
+        // @ts-ignore
         private _labelTips5     : GameUi.UiLabel;
+        // @ts-ignore
         private _groupGithub    : eui.Group;
+        // @ts-ignore
         private _labelTips6     : GameUi.UiLabel;
+        // @ts-ignore
         private _labelTips7     : GameUi.UiLabel;
 
+        // @ts-ignore
         private _group          : eui.Group;
+        // @ts-ignore
         private _btnSinglePlayer: GameUi.UiButton;
+        // @ts-ignore
         private _btnMultiPlayer : GameUi.UiButton;
+        // @ts-ignore
         private _btnRanking     : GameUi.UiButton;
 
         public static show(): void {
@@ -66,6 +81,7 @@ namespace TinyWars.Lobby {
                 { type: Notify.Type.MsgUserLogout,                  callback: this._onMsgUserLogout },
                 { type: Notify.Type.MsgMcrGetJoinedRoomInfoList,    callback: this._onMsgMcrGetJoinedRoomInfoList },
                 { type: Notify.Type.MsgMfrGetJoinedRoomInfoList,    callback: this._onMsgMfrGetJoinedRoomInfoList },
+                { type: Notify.Type.MsgCcrGetJoinedRoomInfoList,    callback: this._onMsgCcrGetJoinedRoomInfoList },
                 { type: Notify.Type.MsgMrrGetMyRoomPublicInfoList,  callback: this._onMsgMrrGetMyRoomPublicInfoList },
             ]);
 
@@ -83,60 +99,64 @@ namespace TinyWars.Lobby {
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchedGroupDiscord(e: egret.TouchEvent): void {
+        private _onTouchedGroupDiscord(): void {
             if ((window) && (window.open)) {
                 Common.CommonConfirmPanel.show({
                     content : Lang.getFormattedText(Lang.Type.F0065, `Discord`),
                     callback: () => {
-                        window.open(DISCORD_URL);
+                        window.open(CommonConstants.DiscordUrl);
                     },
-                })
+                });
             }
         }
 
-        private _onTouchedGroupGithub(e: egret.TouchEvent): void {
+        private _onTouchedGroupGithub(): void {
             if ((window) && (window.open)) {
                 Common.CommonConfirmPanel.show({
                     content : Lang.getFormattedText(Lang.Type.F0065, `GitHub`),
                     callback: () => {
-                        window.open(GITHUB_URL);
+                        window.open(CommonConstants.GithubUrl);
                     },
-                })
+                });
             }
         }
 
-        private _onTouchedBtnMultiPlayer(e: egret.TouchEvent): void {
+        private _onTouchedBtnMultiPlayer(): void {
             this.close();
             MultiCustomRoom.McrMainMenuPanel.show();
         }
 
-        private _onTouchedBtnSinglePlayer(e: egret.TouchEvent): void {
+        private _onTouchedBtnSinglePlayer(): void {
             this.close();
             SinglePlayerMode.SpmMainMenuPanel.show();
         }
 
-        private _onTouchedBtnRanking(e: egret.TouchEvent): void {
+        private _onTouchedBtnRanking(): void {
             this.close();
             MultiRankRoom.MrrMainMenuPanel.show();
         }
 
-        private _onMsgUserLogout(e: egret.Event): void {
+        private _onMsgUserLogout(): void {
             this.close();
         }
 
-        private _onMsgMcrGetJoinedRoomInfoList(e: egret.Event): void {
+        private _onMsgMcrGetJoinedRoomInfoList(): void {
             this._updateBtnMultiPlayer();
         }
 
-        private _onMsgMfrGetJoinedRoomInfoList(e: egret.Event): void {
+        private _onMsgMfrGetJoinedRoomInfoList(): void {
             this._updateBtnMultiPlayer();
         }
 
-        private _onMsgMrrGetMyRoomPublicInfoList(e: egret.Event): void {
+        private _onMsgCcrGetJoinedRoomInfoList(): void {
+            this._updateBtnMultiPlayer();
+        }
+
+        private _onMsgMrrGetMyRoomPublicInfoList(): void {
             this._updateBtnRanking();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -205,7 +225,7 @@ namespace TinyWars.Lobby {
             });
         }
         private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve, reject) => {
+            return new Promise<void>((resolve) => {
                 const group = this._group;
                 Tween.removeTweens(group);
                 Tween.get(group)
@@ -227,17 +247,19 @@ namespace TinyWars.Lobby {
             this._labelTips2.text   = `${Lang.getText(Lang.Type.B0537)}:`;
             this._labelTips3.text   = `368142455`;
             this._labelTips4.text   = `${Lang.getText(Lang.Type.B0538)}:`;
-            this._labelTips5.text   = DISCORD_URL;
+            this._labelTips5.text   = CommonConstants.DiscordUrl;
             this._labelTips6.text   = `${Lang.getText(Lang.Type.B0539)}:`;
-            this._labelTips7.text   = GITHUB_URL;
+            this._labelTips7.text   = CommonConstants.GithubUrl;
         }
 
         private async _updateBtnMultiPlayer(): Promise<void> {
             this._btnMultiPlayer.setRedVisible(
                 (MultiPlayerWar.MpwModel.checkIsRedForMyMcwWars())  ||
                 (MultiPlayerWar.MpwModel.checkIsRedForMyMfwWars())  ||
+                (MultiPlayerWar.MpwModel.checkIsRedForMyCcwWars())  ||
                 (await MultiCustomRoom.McrModel.checkIsRed())       ||
-                (await MultiFreeRoom.MfrModel.checkIsRed())
+                (await MultiFreeRoom.MfrModel.checkIsRed())         ||
+                (await CoopCustomRoom.CcrModel.checkIsRed())
             );
         }
 

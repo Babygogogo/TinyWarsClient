@@ -1,11 +1,11 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapEditor.MeUtility {
     import ProtoTypes           = Utility.ProtoTypes;
     import Types                = Utility.Types;
     import Lang                 = Utility.Lang;
     import Helpers              = Utility.Helpers;
     import ConfigManager        = Utility.ConfigManager;
-    import GridIndexHelpers     = Utility.GridIndexHelpers;
     import ClientErrorCode      = Utility.ClientErrorCode;
     import BwWarRuleHelper      = BaseWar.BwWarRuleHelper;
     import BwHelpers            = BaseWar.BwHelpers;
@@ -17,8 +17,6 @@ namespace TinyWars.MapEditor.MeUtility {
     import SymmetryType         = Types.SymmetryType;
     import LanguageType         = Types.LanguageType;
     import IMapRawData          = ProtoTypes.Map.IMapRawData;
-    import IWarEventFullData    = ProtoTypes.Map.IWarEventFullData;
-    import IWarRule             = ProtoTypes.WarRule.IWarRule;
     import WarSerialization     = ProtoTypes.WarSerialization;
     import ISerialTile          = WarSerialization.ISerialTile;
     import ISerialUnit          = WarSerialization.ISerialUnit;
@@ -31,7 +29,7 @@ namespace TinyWars.MapEditor.MeUtility {
         LeftToRight         : number | null;
         UpLeftToDownRight   : number | null;
         Rotation            : number | null;
-    }
+    };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export async function createDefaultMapRawData(slotIndex: number): Promise<IMapRawData> {
@@ -240,7 +238,7 @@ namespace TinyWars.MapEditor.MeUtility {
             unitDataArray           : getNewUnitDataListForOffset(mapRawData, offsetX, offsetY),
             warRuleArray            : mapRawData.warRuleArray,
             warEventFullData        : mapRawData.warEventFullData,
-        }
+        };
     }
     function getNewTileDataListForOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): ISerialTile[] {
         const width         = mapRawData.mapWidth;
@@ -274,7 +272,7 @@ namespace TinyWars.MapEditor.MeUtility {
     function getNewUnitDataListForOffset(mapRawData: IMapRawData, offsetX: number, offsetY: number): ISerialUnit[] {
         const width         = mapRawData.mapWidth;
         const height        = mapRawData.mapHeight;
-        const unitDataList  : ISerialUnit[] = [];
+        const unitDataArray : ISerialUnit[] = [];
         for (const unitData of mapRawData.unitDataArray || []) {
             const gridIndex = unitData.gridIndex;
             const newX      = gridIndex.x + offsetX;
@@ -282,21 +280,37 @@ namespace TinyWars.MapEditor.MeUtility {
             if ((newX >= 0) && (newX < width) && (newY >= 0) && (newY < height)) {
                 const newData       = Helpers.deepClone(unitData);
                 newData.gridIndex   = { x: newX, y: newY };
-                unitDataList.push(newData);
+                unitDataArray.push(newData);
             }
         }
 
-        return unitDataList;
+        const allUnitsDict  = new Map<number, { unit: ISerialUnit, newUnitId: number }>();
+        let nextUnitId      = 0;
+        for (const unit of unitDataArray) {
+            allUnitsDict.set(unit.unitId, { unit, newUnitId: nextUnitId } );
+            ++nextUnitId;
+        }
+        for (const [, value] of allUnitsDict) {
+            const unit = value.unit;
+            unit.unitId = value.newUnitId;
+
+            const loaderUnitId = unit.loaderUnitId;
+            if (loaderUnitId != null) {
+                unit.loaderUnitId = allUnitsDict.get(loaderUnitId).newUnitId;
+            }
+        }
+
+        return unitDataArray;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function reviseAllUnitIds(unitMap: BaseWar.BwUnitMap): void {
         const allUnits  = new Map<number, { unit: BaseWar.BwUnit, newUnitId: number }>();
         let nextUnitId  = 0;
-        unitMap.forEachUnit(unit => {
+        for (const unit of unitMap.getAllUnits()) {
             allUnits.set(unit.getUnitId(), { unit, newUnitId: nextUnitId } );
             ++nextUnitId;
-        });
+        }
         for (const [, value] of allUnits) {
             const unit = value.unit;
             unit.setUnitId(value.newUnitId);
@@ -352,7 +366,7 @@ namespace TinyWars.MapEditor.MeUtility {
             Rotation            : totalGrids - countRotational,
             UpLeftToDownRight   : isSquare ? totalGrids - countUpLeftDownRight : null,
             UpRightToDownLeft   : isSquare ? totalGrids - countUpRightDownLeft : null,
-        }
+        };
     }
     export function getSymmetricalGridIndex(gridIndex: GridIndex, symmetryType: SymmetryType, mapSize: Types.MapSize): GridIndex {
         const { width, height } = mapSize;

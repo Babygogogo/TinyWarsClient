@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar {
     import Helpers              = Utility.Helpers;
     import Logger               = Utility.Logger;
@@ -10,9 +11,9 @@ namespace TinyWars.BaseWar {
         private _isNeedReplay?      : boolean;
         private _executedActions?   : IWarActionContainer[];
 
-        public init(isNeedReplay: boolean, executedActions: IWarActionContainer[]): ClientErrorCode {
-            this._setIsNeedReplay(isNeedReplay);
-            if (isNeedReplay) {
+        public init(isNeedExecutedAction: boolean, executedActions: IWarActionContainer[]): ClientErrorCode {
+            this._setIsNeedReplay(isNeedExecutedAction);
+            if (isNeedExecutedAction) {
                 this._setAllExecutedActions(executedActions);
             } else {
                 this._setAllExecutedActions(new Array(executedActions.length).fill({}));

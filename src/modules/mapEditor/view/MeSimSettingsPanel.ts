@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapEditor {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
@@ -61,12 +62,12 @@ namespace TinyWars.MapEditor {
             this._btnConfirm.enabled = true;
         }
 
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             this.close();
             MeWarMenuPanel.show();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private _onTouchedBtnConfirm(): void {
             if (MeModel.Sim.checkIsValidWarData()) {
                 SinglePlayerMode.SpmCreateSfwSaveSlotsPanel.show(MeModel.Sim.getWarData());
             } else {
@@ -88,7 +89,7 @@ namespace TinyWars.MapEditor {
             });
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -101,7 +102,7 @@ namespace TinyWars.MapEditor {
 
     type DataForTabItemRenderer = {
         name: string;
-    }
+    };
 
     class TabItemRenderer extends GameUi.UiTabItemRenderer<DataForTabItemRenderer> {
         private _labelName: GameUi.UiLabel;

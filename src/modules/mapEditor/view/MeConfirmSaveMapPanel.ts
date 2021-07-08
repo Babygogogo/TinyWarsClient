@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapEditor {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
@@ -10,14 +11,15 @@ namespace TinyWars.MapEditor {
 
         private static _instance: MeConfirmSaveMapPanel;
 
-        private _labelTitle         : GameUi.UiLabel;
-        private _labelContent       : GameUi.UiLabel;
-        private _labelReviewDesc    : GameUi.UiLabel;
-        private _groupNeedReview    : eui.Group;
-        private _imgNeedReview      : GameUi.UiImage;
-        private _labelNeedReview    : GameUi.UiLabel;
-        private _btnCancel          : GameUi.UiButton;
-        private _btnConfirm         : GameUi.UiButton;
+        private _labelTitle             : GameUi.UiLabel;
+        private _labelContent           : GameUi.UiLabel;
+        private _labelReviewDescTitle   : GameUi.UiLabel;
+        private _labelReviewDesc        : GameUi.UiLabel;
+        private _groupNeedReview        : eui.Group;
+        private _imgNeedReview          : GameUi.UiImage;
+        private _labelNeedReview        : GameUi.UiLabel;
+        private _btnCancel              : GameUi.UiButton;
+        private _btnConfirm             : GameUi.UiButton;
 
         private _slotIndex  : number;
         private _mapRawData : ProtoTypes.Map.IMapRawData;
@@ -57,13 +59,14 @@ namespace TinyWars.MapEditor {
             this._needReview = false;
             this._updateImgNeedReview();
 
-            const war                       = MeModel.getWar();
-            const mapRawData                = war.serializeForMap();
-            const errorCode                 = await MeUtility.getErrorCodeForMapRawData(mapRawData);
-            this._mapRawData                = mapRawData;
-            this._slotIndex                 = war.getMapSlotIndex();
-            this._groupNeedReview.visible   = !errorCode;
-            this._labelReviewDesc.text      = errorCode ? Lang.getErrorText(errorCode) : undefined;
+            const war                           = MeModel.getWar();
+            const mapRawData                    = war.serializeForMap();
+            const errorCode                     = await MeUtility.getErrorCodeForMapRawData(mapRawData);
+            this._mapRawData                    = mapRawData;
+            this._slotIndex                     = war.getMapSlotIndex();
+            this._groupNeedReview.visible       = !errorCode;
+            this._labelReviewDescTitle.visible  = !!errorCode;
+            this._labelReviewDesc.text          = errorCode ? Lang.getErrorText(errorCode) : undefined;
         }
 
         private _onTouchedBtnCancel(e: egret.TouchEvent): void {
@@ -96,11 +99,12 @@ namespace TinyWars.MapEditor {
         }
 
         private _updateComponentsForLanguage(): void {
-            this._btnConfirm.label      = Lang.getText(Lang.Type.B0026);
-            this._btnCancel.label       = Lang.getText(Lang.Type.B0154);
-            this._labelTitle.text       = Lang.getText(Lang.Type.B0088);
-            this._labelReviewDesc.text  = Lang.getText(Lang.Type.A0083);
-            this._labelNeedReview.text  = Lang.getText(Lang.Type.B0289);
+            this._btnConfirm.label          = Lang.getText(Lang.Type.B0026);
+            this._btnCancel.label           = Lang.getText(Lang.Type.B0154);
+            this._labelTitle.text           = Lang.getText(Lang.Type.B0088);
+            this._labelReviewDescTitle.text = Lang.getText(Lang.Type.A0083);
+            this._labelReviewDesc.text      = Lang.getText(Lang.Type.A0083);
+            this._labelNeedReview.text      = Lang.getText(Lang.Type.B0289);
             this._labelContent.setRichText(Lang.getText(Lang.Type.A0082));
         }
 

@@ -1,9 +1,8 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapEditor {
     import Lang         = Utility.Lang;
     import Notify       = Utility.Notify;
-    import Types        = Utility.Types;
-    import FloatText    = Utility.FloatText;
 
     export class MeOffsetPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -54,18 +53,17 @@ namespace TinyWars.MapEditor {
 
             this._updateComponentsForLanguage();
 
-            const war               = MeModel.getWar();
             this._inputOffsetY.text = "" + 0;
             this._inputOffsetX.text = "" + 0;
             this._offsetX           = 0;
             this._offsetY           = 0;
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
 
-        private async _onTouchedBtnConfirm(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnConfirm(): Promise<void> {
             const offsetX   = this._offsetX;
             const offsetY   = this._offsetY;
             const war       = MeModel.getWar();
@@ -84,7 +82,7 @@ namespace TinyWars.MapEditor {
             MeWarMenuPanel.hide();
         }
 
-        private _onFocusOutInputOffsetX(e: egret.Event): void {
+        private _onFocusOutInputOffsetX(): void {
             const input = this._inputOffsetX;
             let offsetX = Number(input.text);
             if (isNaN(offsetX)) {
@@ -94,7 +92,7 @@ namespace TinyWars.MapEditor {
             input.text      = "" + offsetX;
         }
 
-        private _onFocusOutInputOffsetY(e: egret.Event): void {
+        private _onFocusOutInputOffsetY(): void {
             const input = this._inputOffsetY;
             let offsetY = Number(input.text);
             if (isNaN(offsetY)) {
@@ -104,7 +102,7 @@ namespace TinyWars.MapEditor {
             input.text      = "" + offsetY;
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 

@@ -21,12 +21,12 @@ namespace TinyWars.MapEditor {
 
         public getMaxPlayerIndex(): number {
             let maxPlayerIndex = 0;
-            this.getTileMap().forEachTile(tile => {
+            for (const tile of this.getTileMap().getAllTiles()) {
                 maxPlayerIndex = Math.max(maxPlayerIndex, tile.getPlayerIndex());
-            });
-            this.getUnitMap().forEachUnit(unit => {
+            }
+            for (const unit of this.getUnitMap().getAllUnits()) {
                 maxPlayerIndex = Math.max(maxPlayerIndex, unit.getPlayerIndex());
-            });
+            }
             return maxPlayerIndex;
         }
     }

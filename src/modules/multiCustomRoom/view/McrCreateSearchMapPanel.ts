@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiCustomRoom {
     import Types        = Utility.Types;
     import Lang         = Utility.Lang;
@@ -15,6 +16,7 @@ namespace TinyWars.MultiCustomRoom {
         private readonly _imgMask                   : GameUi.UiImage;
 
         private readonly _group                     : eui.Group;
+        private readonly _btnClose                  : GameUi.UiButton;
         private readonly _btnReset                  : GameUi.UiButton;
         private readonly _btnSearch                 : GameUi.UiButton;
         private readonly _labelName                 : GameUi.UiLabel;
@@ -58,6 +60,7 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onOpened(): void {
             this._setUiListenerArray([
+                { ui: this._btnClose,   callback: this.close },
                 { ui: this._btnReset,   callback: this._onTouchedBtnReset },
                 { ui: this._btnSearch,  callback: this._onTouchedBtnSearch },
                 { ui: this._btnTagFog,  callback: this._onTouchedBtnTagFog },
@@ -74,12 +77,12 @@ namespace TinyWars.MultiCustomRoom {
             await this._showCloseAnimation();
         }
 
-        private _onTouchedBtnReset(e: egret.TouchEvent): void {
+        private _onTouchedBtnReset(): void {
             McrCreateMapListPanel.getInstance().setMapFilters({});
             this.close();
         }
 
-        private _onTouchedBtnSearch(e: egret.TouchEvent): void {
+        private _onTouchedBtnSearch(): void {
             const minRatingText = this._inputMinRating.text;
             const minRating     = minRatingText ? Number(minRatingText) : null;
             McrCreateMapListPanel.getInstance().setMapFilters({
@@ -94,7 +97,7 @@ namespace TinyWars.MultiCustomRoom {
             this.close();
         }
 
-        private _onTouchedBtnTagFog(e: egret.TouchEvent): void {
+        private _onTouchedBtnTagFog(): void {
             const mapTag = this._mapTag;
             const hasFog = mapTag.fog;
             if (hasFog == true) {
@@ -107,7 +110,7 @@ namespace TinyWars.MultiCustomRoom {
             this._updateLabelTagFog();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 

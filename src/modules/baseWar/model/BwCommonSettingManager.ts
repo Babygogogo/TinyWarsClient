@@ -45,10 +45,10 @@ namespace TinyWars.BaseWar {
             return ClientErrorCode.NoError;
         }
 
-        public serializeForCreateSfw(): ISettingsForCommon {
+        public serializeForCreateSfw(): ISettingsForCommon | undefined {
             return Helpers.deepClone(this.getSettingsForCommon());
         }
-        public serializeForCreateMfr(): ISettingsForCommon {
+        public serializeForCreateMfr(): ISettingsForCommon | undefined {
             return this.serializeForCreateSfw();
         }
 

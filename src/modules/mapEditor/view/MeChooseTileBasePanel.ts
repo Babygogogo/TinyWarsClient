@@ -237,7 +237,7 @@ namespace TinyWars.MapEditor {
                     callback: () => {
                         const war           = MeModel.getWar();
                         const configVersion = war.getConfigVersion();
-                        war.getTileMap().forEachTile(tile => {
+                        for (const tile of war.getTileMap().getAllTiles()) {
                             tile.init({
                                 gridIndex       : tile.getGridIndex(),
                                 objectShapeId   : tile.getObjectShapeId(),
@@ -248,7 +248,7 @@ namespace TinyWars.MapEditor {
                             }, configVersion);
                             tile.startRunning(war);
                             tile.flushDataToView();
-                        });
+                        }
 
                         panel.updateOnChooseTileBase(dataForDrawTileBase);
                         panel.close();

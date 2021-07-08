@@ -1,50 +1,77 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiCustomWar {
     import Helpers          = Utility.Helpers;
     import Lang             = Utility.Lang;
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
     import ProtoTypes       = Utility.ProtoTypes;
+    import CommonConstants  = Utility.CommonConstants;
     import MpwModel         = MultiPlayerWar.MpwModel;
     import WarMapModel      = WarMap.WarMapModel;
     import CommonHelpPanel  = Common.CommonHelpPanel;
 
     export type OpenDataForMcwWarBasicSettingsPage = {
-        warId  : number | null;
+        warId  : number | null | undefined;
     }
     export class McwWarBasicSettingsPage extends GameUi.UiTabPage<OpenDataForMcwWarBasicSettingsPage> {
+        // @ts-ignore
         private readonly _labelMapNameTitle             : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelMapName                  : GameUi.UiLabel;
 
+        // @ts-ignore
         private readonly _labelWarNameTitle             : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelWarName                  : GameUi.UiLabel;
 
+        // @ts-ignore
         private readonly _labelWarPasswordTitle         : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelWarPassword              : GameUi.UiLabel;
 
+        // @ts-ignore
         private readonly _labelWarCommentTitle          : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelWarComment               : GameUi.UiLabel;
 
+        // @ts-ignore
         private readonly _labelWarRuleTitle             : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelWarRule                  : GameUi.UiLabel;
 
+        // @ts-ignore
         private readonly _labelHasFogTitle              : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelHasFog                   : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _btnHasFogHelp                 : GameUi.UiButton;
 
+        // @ts-ignore
         private readonly _groupTimer                    : eui.Group;
+        // @ts-ignore
         private readonly _labelTimerTypeTitle           : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelTimerType                : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _btnTimerTypeHelp              : GameUi.UiButton;
 
+        // @ts-ignore
         private readonly _groupTimerRegular             : eui.Group;
+        // @ts-ignore
         private readonly _labelTimerRegularTitle        : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelTimerRegular             : GameUi.UiLabel;
 
+        // @ts-ignore
         private readonly _groupTimerIncremental         : eui.Group;
+        // @ts-ignore
         private readonly _labelTimerIncrementalTitle1   : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelTimerIncremental1        : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelTimerIncrementalTitle2   : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelTimerIncremental2        : GameUi.UiLabel;
 
         public constructor() {
@@ -74,7 +101,7 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -86,17 +113,17 @@ namespace TinyWars.MultiCustomWar {
             }
         }
 
-        private _onTouchedBtnHasFogHelp(e: egret.TouchEvent): void {
+        private _onTouchedBtnHasFogHelp(): void {
             CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0020),
-                content: Lang.getRichText(Lang.RichType.R0002),
+                content: Lang.getText(Lang.Type.R0002),
             });
         }
 
-        private _onTouchedBtnTimerTypeHelp(e: egret.TouchEvent): void {
+        private _onTouchedBtnTimerTypeHelp(): void {
             CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0574),
-                content: Lang.getRichText(Lang.RichType.R0003),
+                content: Lang.getText(Lang.Type.R0003),
             });
         }
 
@@ -126,47 +153,63 @@ namespace TinyWars.MultiCustomWar {
             this._updateGroupTimer();
         }
 
-        private async _updateLabelWarName(): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            this._labelWarName.text = warInfo ? warInfo.settingsForMcw.warName : undefined;
+        private _updateLabelWarName(): void {
+            const settingsForMcw    = this._getSettingsForMcw();
+            this._labelWarName.text = settingsForMcw ? settingsForMcw.warName || `` : ``;
         }
 
         private async _updateLabelWarPassword(): Promise<void> {
-            const warInfo               = await this._getWarInfo();
-            this._labelWarPassword.text = (warInfo && warInfo.settingsForMcw.warPassword) ? `****` : undefined;
+            const settingsForMcw        = this._getSettingsForMcw();
+            this._labelWarPassword.text = (settingsForMcw && settingsForMcw.warPassword) ? `****` : ``;
         }
 
         private async _updateLabelWarComment(): Promise<void> {
-            const warInfo               = await this._getWarInfo();
-            this._labelWarComment.text  = warInfo ? warInfo.settingsForMcw.warComment : undefined;
+            const settingsForMcw        = this._getSettingsForMcw();
+            this._labelWarComment.text  = settingsForMcw ? settingsForMcw.warComment || `` : ``;
         }
 
         private async _updateLabelMapName(): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            this._labelMapName.text = warInfo ? await WarMapModel.getMapNameInCurrentLanguage(warInfo.settingsForMcw.mapId) : undefined;
+            const settingsForMcw    = this._getSettingsForMcw();
+            const mapId             = settingsForMcw ? settingsForMcw.mapId : undefined;
+            const labelMapName      = this._labelMapName;
+            if (mapId == null) {
+                labelMapName.text = ``;
+            } else {
+                labelMapName.text = (await WarMapModel.getMapNameInCurrentLanguage(mapId)) || CommonConstants.ErrorTextForUndefined;
+            }
         }
 
         private async _updateLabelWarRule(): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            const settingsForCommon = warInfo ? warInfo.settingsForCommon : undefined;
-            const label             = this._labelWarRule;
-            if (!settingsForCommon) {
-                label.text      = undefined;
+            const labelWarRule      = this._labelWarRule;
+            const settingsForCommon = this._getSettingsForCommon();
+            if (settingsForCommon == null) {
+                labelWarRule.text       = ``;
+                labelWarRule.textColor  = 0xFFFFFF;
+                return;
+            }
+
+            const warRule = settingsForCommon.warRule;
+            if (warRule == null) {
+                labelWarRule.text       = CommonConstants.ErrorTextForUndefined;
+                labelWarRule.textColor  = 0xFFFFFF;
             } else {
-                label.text      = Lang.getWarRuleNameInLanguage(settingsForCommon.warRule);
-                label.textColor = settingsForCommon.presetWarRuleId == null ? 0xFFFF00 : 0xFFFFFF;
+                labelWarRule.text       = Lang.getWarRuleNameInLanguage(warRule) || CommonConstants.ErrorTextForUndefined;
+                labelWarRule.textColor  = settingsForCommon.presetWarRuleId == null ? 0xFFFF00 : 0xFFFFFF;
             }
         }
 
         private async _updateLabelHasFog(): Promise<void> {
-            const warInfo       = await this._getWarInfo();
-            const labelHasFog   = this._labelHasFog;
-            if (!warInfo) {
-                labelHasFog.text = undefined;
+            const settingsForCommon = this._getSettingsForCommon();
+            const labelHasFog       = this._labelHasFog;
+            if (!settingsForCommon) {
+                labelHasFog.text        = ``;
+                labelHasFog.textColor   = 0xFFFFFF;
             } else {
-                const hasFog            = !!warInfo.settingsForCommon.warRule.ruleForGlobalParams.hasFogByDefault;
-                labelHasFog.text        = Lang.getText(hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
-                labelHasFog.textColor   = hasFog ? 0xFFFF00 : 0xFFFFFF;
+                const warRule               = settingsForCommon.warRule;
+                const ruleForGlobalParams   = warRule ? warRule.ruleForGlobalParams : undefined;
+                const hasFog                = ruleForGlobalParams ? !!ruleForGlobalParams.hasFogByDefault : false;
+                labelHasFog.text            = Lang.getText(hasFog ? Lang.Type.B0012 : Lang.Type.B0013);
+                labelHasFog.textColor       = hasFog ? 0xFFFF00 : 0xFFFFFF;
             }
         }
 
@@ -177,14 +220,14 @@ namespace TinyWars.MultiCustomWar {
             (groupRegular.parent) && (groupRegular.parent.removeChild(groupRegular));
             (groupIncremental.parent) && (groupIncremental.parent.removeChild(groupIncremental));
 
-            const warInfo           = await this._getWarInfo();
-            const params            = warInfo ? warInfo.settingsForMcw.bootTimerParams : undefined;
+            const settingsForMcw    = this._getSettingsForMcw();
+            const params            = settingsForMcw ? settingsForMcw.bootTimerParams : undefined;
             const labelTimerType    = this._labelTimerType;
             if (!params) {
-                labelTimerType.text = undefined;
+                labelTimerType.text = ``;
             } else {
                 const timerType     : Types.BootTimerType = params[0];
-                labelTimerType.text = Lang.getBootTimerTypeName(timerType);
+                labelTimerType.text = Lang.getBootTimerTypeName(timerType) || CommonConstants.ErrorTextForUndefined;
 
                 if (timerType === Types.BootTimerType.Regular) {
                     groupTimer.addChild(groupRegular);
@@ -198,8 +241,21 @@ namespace TinyWars.MultiCustomWar {
             }
         }
 
-        private _getWarInfo(): ProtoTypes.MultiPlayerWar.IMpwWarInfo {
-            return MpwModel.getMyWarInfo(this._getOpenData().warId);
+        private _getSettingsForMcw(): ProtoTypes.WarSettings.ISettingsForMcw | null | undefined {
+            const warId = this._getOpenData().warId;
+            if (warId == null) {
+                return undefined;
+            }
+            const warInfo = MpwModel.getMyWarInfo(warId);
+            return warInfo ? warInfo.settingsForMcw : undefined;
+        }
+        private _getSettingsForCommon(): ProtoTypes.WarSettings.ISettingsForCommon | null | undefined {
+            const warId = this._getOpenData().warId;
+            if (warId == null) {
+                return undefined;
+            }
+            const warInfo = MpwModel.getMyWarInfo(warId);
+            return warInfo ? warInfo.settingsForCommon : undefined;
         }
     }
 }

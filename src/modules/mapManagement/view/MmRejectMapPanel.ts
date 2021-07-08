@@ -1,24 +1,33 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapManagement {
     import Lang = Utility.Lang;
 
-    export class MmRejectMapPanel extends GameUi.UiPanel<void> {
+    type OpenData = {
+        war: MapEditor.MeWar;
+    }
+    export class MmRejectMapPanel extends GameUi.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: MmRejectMapPanel;
 
+        // @ts-ignore
         private _labelTitle     : GameUi.UiLabel;
+        // @ts-ignore
         private _labelTips      : GameUi.UiLabel;
+        // @ts-ignore
         private _inputReason    : GameUi.UiTextInput;
+        // @ts-ignore
         private _btnCancel      : GameUi.UiButton;
+        // @ts-ignore
         private _btnConfirm     : GameUi.UiButton;
 
-        public static show(): void {
+        public static show(openData: OpenData): void {
             if (!MmRejectMapPanel._instance) {
                 MmRejectMapPanel._instance = new MmRejectMapPanel();
             }
-            MmRejectMapPanel._instance.open(undefined);
+            MmRejectMapPanel._instance.open(openData);
         }
 
         public static async hide(): Promise<void> {
@@ -46,12 +55,12 @@ namespace TinyWars.MapManagement {
             this._labelTips.text    = Lang.getText(Lang.Type.A0094);
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
-            const war = MapEditor.MeModel.getWar();
+        private _onTouchedBtnConfirm(): void {
+            const war = this._getOpenData().war;
             WarMap.WarMapProxy.reqMmReviewMap({
                 designerUserId  : war.getMapDesignerUserId(),
                 slotIndex       : war.getMapSlotIndex(),
@@ -60,6 +69,7 @@ namespace TinyWars.MapManagement {
                 reviewComment   : this._inputReason.text,
                 availability    : {
                     canMcw      : false,
+                    canCcw      : false,
                     canMrwStd   : false,
                     canMrwFog   : false,
                     canScw      : false,

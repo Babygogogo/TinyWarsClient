@@ -1,25 +1,41 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Login {
     import FloatText    = Utility.FloatText;
     import Lang         = Utility.Lang;
     import NotifyType   = Utility.Notify.Type;
-    import Types        = Utility.Types;
-    import FlowManager  = Utility.FlowManager;
+    import Logger       = Utility.Logger;
     import LocalStorage = Utility.LocalStorage;
+    import Helpers      = Utility.Helpers;
 
     export class RegisterPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
-        private _imgAccountTitle    : GameUi.UiImage;
+        // @ts-ignore
+        private _imgMask            : GameUi.UiImage;
+        // @ts-ignore
+        private _group              : eui.Group;
+        // @ts-ignore
+        private _labelTitle         : GameUi.UiLabel;
+        // @ts-ignore
+        private _labelAccount       : GameUi.UiLabel;
+        // @ts-ignore
         private _inputAccount       : GameUi.UiTextInput;
-        private _imgPasswordTitle   : GameUi.UiImage;
+        // @ts-ignore
+        private _labelPassword      : GameUi.UiLabel;
+        // @ts-ignore
         private _inputPassword      : GameUi.UiTextInput;
-        private _imgNicknameTitle   : GameUi.UiImage;
+        // @ts-ignore
+        private _labelNickname      : GameUi.UiLabel;
+        // @ts-ignore
         private _inputNickname      : GameUi.UiTextInput;
+        // @ts-ignore
         private _btnRegister        : GameUi.UiButton;
-        private _btnLogin           : GameUi.UiButton;
-        private _imgTips            : GameUi.UiImage;
+        // @ts-ignore
+        private _btnClose           : GameUi.UiButton;
+        // @ts-ignore
+        private _labelTips          : GameUi.UiLabel;
 
         private static _instance: RegisterPanel;
 
@@ -39,31 +55,38 @@ namespace TinyWars.Login {
         private constructor() {
             super();
 
+            this._setIsTouchMaskEnabled();
+            this._setIsCloseOnTouchedMask();
             this.skinName = "resource/skins/login/RegisterPanel.exml";
         }
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
                 { type: NotifyType.LanguageChanged, callback: this._onNotifyLanguageChanged },
-                { type: NotifyType.MsgUserLogin,    callback: this._onMsgUserLogin },
                 { type: NotifyType.MsgUserRegister, callback: this._onMsgUserRegister },
             ]);
             this._setUiListenerArray([
-                { ui: this._btnLogin,    callback: this._onTouchedBtnLogin },
+                { ui: this._btnClose,    callback: this.close },
                 { ui: this._btnRegister, callback: this._onTouchedBtnRegister },
             ]);
 
-            this._updateOnLanguageChanged();
+            this._showOpenAnimation();
+            this._updateComponentsForLanguage();
+        }
+        protected async _onClosed(): Promise<void> {
+            await this._showCloseAnimation();
         }
 
-        private _onMsgUserLogin(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0000));
-        }
         private _onMsgUserRegister(e: egret.Event): void {
             const data = e.data as Utility.ProtoTypes.NetMessage.MsgUserRegister.IS;
             FloatText.show(Lang.getText(Lang.Type.A0004));
 
-            const account   = data.account;
+            const account = data.account;
+            if (account == null) {
+                Logger.error(`RegisterPanel._onMsgUserRegister() empty account!`);
+                return;
+            }
+
             const password  = this._inputPassword.text;
             LocalStorage.setAccount(account);
             LocalStorage.setPassword(password);
@@ -71,15 +94,11 @@ namespace TinyWars.Login {
             User.UserModel.setSelfPassword(password);
             User.UserProxy.reqLogin(account, password, false);
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateOnLanguageChanged();
+        private _onNotifyLanguageChanged(): void {
+            this._updateComponentsForLanguage();
         }
 
-        private _onTouchedBtnLogin(e: egret.TouchEvent): void {
-            FlowManager.gotoLogin();
-        }
-
-        private _onTouchedBtnRegister(e: egret.TouchEvent): void {
+        private _onTouchedBtnRegister(): void {
             const account  = this._inputAccount.text;
             const password = this._inputPassword.text;
             const nickname = this._inputNickname.text;
@@ -94,20 +113,43 @@ namespace TinyWars.Login {
             }
         }
 
-        private _updateOnLanguageChanged(): void {
-            if (Lang.getCurrentLanguageType() === Types.LanguageType.Chinese) {
-                this._imgAccountTitle.source    = "login_text_account_001";
-                this._imgPasswordTitle.source   = "login_text_password_001";
-                this._imgNicknameTitle.source   = "login_text_nickname_001";
-                this._imgTips.source            = "login_text_registerTips_001";
-                this._btnRegister.setImgDisplaySource("login_button_register_003");
-            } else {
-                this._imgAccountTitle.source    = "login_text_account_002";
-                this._imgPasswordTitle.source   = "login_text_password_002";
-                this._imgNicknameTitle.source   = "login_text_nickname_002";
-                this._imgTips.source            = "login_text_registerTips_002";
-                this._btnRegister.setImgDisplaySource("login_button_register_004");
-            }
+        private _updateComponentsForLanguage(): void {
+            this._btnRegister.label     = Lang.getText(Lang.Type.B0174);
+            this._btnClose.label        = Lang.getText(Lang.Type.B0154);
+            this._labelTitle.text       = Lang.getText(Lang.Type.B0174);
+            this._labelAccount.text     = `${Lang.getText(Lang.Type.B0170)}:`;
+            this._labelPassword.text    = `${Lang.getText(Lang.Type.B0171)}:`;
+            this._labelNickname.text    = `${Lang.getText(Lang.Type.B0175)}:`;
+            this._labelTips.setRichText(Lang.getText(Lang.Type.R0005));
+        }
+
+        private _showOpenAnimation(): void {
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: 40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+            });
+        }
+        private _showCloseAnimation(): Promise<void> {
+            return new Promise<void>(resolve => {
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                });
+
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: 40 },
+                    callback    : resolve,
+                });
+            });
         }
     }
 }

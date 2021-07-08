@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Utility.Notify {
     import GridIndex    = Types.GridIndex;
     import TouchPoints  = Types.TouchPoints;
@@ -6,6 +7,7 @@ namespace TinyWars.Utility.Notify {
     ////////////////////////////////////////////////////////////////////////////////
     // Notify types.
     ////////////////////////////////////////////////////////////////////////////////
+    // eslint-disable-next-line no-shadow
     export const enum Type {
         NetworkConnected,
         NetworkDisconnected,
@@ -47,6 +49,17 @@ namespace TinyWars.Utility.Notify {
         MfrJoinTargetRoomIdChanged,
         MfrJoinedPreviewingRoomIdChanged,
 
+        CcrCreateBannedCoIdArrayChanged,
+        CcrCreateTeamIndexChanged,
+        CcrCreateAiCoIdChanged,
+        CcrCreateSelfCoIdChanged,
+        CcrCreateSelfSkinIdChanged,
+        CcrCreateSelfPlayerIndexChanged,
+        CcrCreatePresetWarRuleIdChanged,
+
+        CcrJoinTargetRoomIdChanged,
+        CcrJoinedPreviewingRoomIdChanged,
+
         MrrMyRoomAdded,
         MrrMyRoomDeleted,
         MrrJoinedPreviewingRoomIdChanged,
@@ -62,6 +75,7 @@ namespace TinyWars.Utility.Notify {
         McwPreviewingWarIdChanged,
         MrwPreviewingWarIdChanged,
         MfwPreviewingWarIdChanged,
+        CcwPreviewingWarIdChanged,
         RwPreviewingReplayIdChanged,
         SpmPreviewingWarSaveSlotChanged,
 
@@ -204,6 +218,21 @@ namespace TinyWars.Utility.Notify {
         MsgMfrGetOwnerPlayerIndex,
         MsgMfrStartWar,
 
+        MsgCcrCreateRoom,
+        MsgCcrGetRoomInfo,
+        MsgCcrGetRoomInfoFailed,
+        MsgCcrGetJoinedRoomInfoList,
+        MsgCcrGetJoinableRoomInfoList,
+        MsgCcrExitRoom,
+        MsgCcrJoinRoom,
+        MsgCcrDeleteRoomByPlayer,
+        MsgCcrDeleteRoomByServer,
+        MsgCcrDeletePlayer,
+        MsgCcrSetReady,
+        MsgCcrSetSelfSettings,
+        MsgCcrGetOwnerPlayerIndex,
+        MsgCcrStartWar,
+
         MsgMrrGetMaxConcurrentCount,
         MsgMrrSetMaxConcurrentCount,
         MsgMrrGetRoomPublicInfo,
@@ -239,8 +268,10 @@ namespace TinyWars.Utility.Notify {
         MsgMpwActionSystemCallWarEvent,
         MsgMpwActionSystemDestroyPlayerForce,
         MsgMpwActionSystemEndWar,
+        MsgMpwActionSystemEndTurn,
+        MsgMpwActionSystemHandleBootPlayer,
 
-        MsgMpwActionPlayerDeleteUnit,
+        MsgMpwExecuteWarAction,
         MsgMpwActionPlayerEndTurn,
         MsgMpwActionPlayerProduceUnit,
         MsgMpwActionPlayerSurrender,
@@ -305,13 +336,16 @@ namespace TinyWars.Utility.Notify {
         priority?   : number;
     };
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     export function dispatch(t: Type, data?: any): void {
         _DISPATCHER.dispatchEventWith(getTypeName(t), false, data);
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     export function addEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any, useCapture?: boolean, priority?: number): void {
         _DISPATCHER.addEventListener(getTypeName(type), callback, thisObject, useCapture, priority);
     }
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     export function addEventListeners(listeners: Listener[], thisObject?: any, useCapture?: boolean, priority?: number): void {
         for (const l of listeners) {
             addEventListener(
@@ -324,9 +358,11 @@ namespace TinyWars.Utility.Notify {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     export function removeEventListener(type: Type, callback: (e: egret.Event) => void, thisObject?: any, useCapture?: boolean): void {
         _DISPATCHER.removeEventListener(getTypeName(type), callback, thisObject, useCapture);
     }
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     export function removeEventListeners(listeners: Listener[], thisObject?: any, useCapture?: boolean): void {
         for (const l of listeners) {
             removeEventListener(

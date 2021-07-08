@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapEditor {
     import Helpers          = Utility.Helpers;
     import Types            = Utility.Types;
@@ -15,7 +16,6 @@ namespace TinyWars.MapEditor {
 
     export class MeWar extends BaseWar.BwWar {
         private readonly _playerManager         = new MePlayerManager();
-        private readonly _turnManager           = new MeTurnManager();
         private readonly _field                 = new MeField();
         private readonly _commonSettingManager  = new MeCommonSettingManager();
         private readonly _drawer                = new MeDrawer();
@@ -100,7 +100,10 @@ namespace TinyWars.MapEditor {
         public getWarType(): Types.WarType {
             return Types.WarType.Me;
         }
-        public getIsNeedReplay(): boolean {
+        public getIsNeedExecutedAction(): boolean {
+            return false;
+        }
+        public getIsNeedSeedRandom(): boolean {
             return false;
         }
         public getMapId(): number | undefined {
@@ -110,11 +113,12 @@ namespace TinyWars.MapEditor {
             return MeWarMenuPanel.getIsOpening();
         }
 
+        public getSettingsBootTimerParams(): number[] | null | undefined {
+            return [Types.BootTimerType.NoBoot];
+        }
+
         public getPlayerManager(): MePlayerManager {
             return this._playerManager;
-        }
-        public getTurnManager(): MeTurnManager {
-            return this._turnManager;
         }
         public getField(): MeField {
             return this._field;
@@ -124,6 +128,10 @@ namespace TinyWars.MapEditor {
         }
         public getWarEventManager(): MeWarEventManager {
             return this._warEventManager;
+        }
+
+        public getIsRunTurnPhaseWithExtraData(): boolean {
+            return false;
         }
 
         public updateTilesAndUnitsOnVisibilityChanged(): void {
@@ -155,6 +163,12 @@ namespace TinyWars.MapEditor {
             return undefined;
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeSystemEndTurn(action: WarAction.IWarActionSystemEndTurn): Promise<string | undefined> {
+            return undefined;
+        }
+        public async getDescForExeSystemHandleBootPlayer(action: WarAction.IWarActionSystemHandleBootPlayer): Promise<string | undefined> {
             return undefined;
         }
         public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined> {

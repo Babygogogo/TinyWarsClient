@@ -19,7 +19,7 @@ namespace TinyWars.BaseWar {
         private _warEventFullData?  : IWarEventFullData | null | undefined;
         private _calledCountList?   : IDataForWarEventCalledCount[] | null | undefined;
 
-        public init(data: ISerialWarEventManager): ClientErrorCode {
+        public init(data: ISerialWarEventManager | null | undefined): ClientErrorCode {
             if (!data) {
                 this._setWarEventFullData(null);
                 this._setCalledCountList(null);
@@ -202,7 +202,7 @@ namespace TinyWars.BaseWar {
                     continue;
                 }
 
-                const rawGridIndex = BwHelpers.convertGridIndex(unitData.gridIndex);
+                const rawGridIndex = GridIndexHelpers.convertGridIndex(unitData.gridIndex);
                 if (rawGridIndex == null) {
                     Logger.error(`BwWarEventManager._callActionAddUnit() empty rawGridIndex.`);
                     continue;
@@ -922,21 +922,23 @@ namespace TinyWars.BaseWar {
                 distance,
                 distance,
                 mapSize,
-                (gridIndex): boolean => {
-                    if (unitMap.getUnitOnMap(gridIndex)) {
+                (g): boolean => {
+                    if (unitMap.getUnitOnMap(g)) {
                         return false;
                     }
 
-                    if (needMovableTile) {
-                        const tile = tileMap.getTile(gridIndex);
-                        if (tile == null) {
-                            Logger.error(`BwWarEventManager.getGridIndexForAddUnit() empty tile.`);
-                            return false;
-                        }
+                    const tile = tileMap.getTile(g);
+                    if (tile == null) {
+                        Logger.error(`BwWarEventManager.getGridIndexForAddUnit() empty tile.`);
+                        return false;
+                    }
 
-                        if (tile.getMoveCostByMoveType(moveType) == null) {
-                            return false;
-                        }
+                    if (tile.getMaxHp() != null) {
+                        return false;
+                    }
+
+                    if ((needMovableTile) && (tile.getMoveCostByMoveType(moveType) == null)) {
+                        return false;
                     }
 
                     return true;

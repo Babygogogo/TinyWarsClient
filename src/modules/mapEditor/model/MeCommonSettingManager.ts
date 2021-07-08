@@ -1,8 +1,8 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapEditor {
     import ProtoTypes           = Utility.ProtoTypes;
     import ConfigManager        = Utility.ConfigManager;
-    import CommonConstants      = Utility.CommonConstants;
     import Helpers              = Utility.Helpers;
     import ClientErrorCode      = Utility.ClientErrorCode;
     import ISettingsForCommon   = ProtoTypes.WarSettings.ISettingsForCommon;
@@ -34,7 +34,7 @@ namespace TinyWars.MapEditor {
 
         public serializeForCreateSfw(): ISettingsForCommon | undefined {
             const war       = this._getWar() as MeWar;
-            const warRule   = war.getRevisedWarRuleArray((war.getField() as MeField).getMaxPlayerIndex())[0];
+            const warRule   = war.getRevisedWarRuleArray(war.getField().getMaxPlayerIndex())[0];
             return {
                 configVersion   : this.getSettingsForCommon().configVersion,
                 presetWarRuleId : warRule.ruleId,

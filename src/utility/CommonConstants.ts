@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Utility.CommonConstants {
     import TileBaseType     = Types.TileBaseType;
     import TileObjectType   = Types.TileObjectType;
@@ -8,47 +9,53 @@ namespace TinyWars.Utility.CommonConstants {
     type FrameCfg = {
         framesCount     : number;
         ticksPerFrame   : number;
-    }
+    };
     type TileObjectShapeCfg = {
         minPlayerIndex  : number;
         maxPlayerIndex  : number;
         shapesCount     : number;
-    }
+    };
     type TileBaseShapeCfg = {
         shapesCount     : number;
-    }
+    };
 
-    export const AdminUserId                        = 1000001;
-    export const NameListMaxLength                  = 5;
+    export const DiscordUrl                             = `https://discord.gg/jdtRpY9`;
+    export const GithubUrl                              = `https://github.com/Babygogogo/TinyWarsClient`;
 
-    export const ChangeLogTextMaxLength             = 200;
-    export const ChangeLogTextListMaxLength         = 2;
-    export const ChangeLogMessageListMaxLength      = 100;
+    export const ErrorTextForLang                       = `LangError`;
+    export const ErrorTextForUndefined                  = `UndefinedError`;
+    export const GameVersion                            = Types.GameVersion.Legacy;
+    export const AdminUserId                            = 1000001;
+    export const NameListMaxLength                      = 5;
 
-    export const MapMaxGridsCount                   = 1000;
-    export const MapMaxNameLength                   = 30;
-    export const MapMaxDesignerLength               = 30;
+    export const ChangeLogTextMaxLength                 = 200;
+    export const ChangeLogTextListMaxLength             = 2;
+    export const ChangeLogMessageListMaxLength          = 100;
 
-    export const WarEventNameMaxLength              = 150;
-    export const WarEventMaxEventsPerMap            = 10;
-    export const WarEventMaxConditionNodesPerMap    = 50;
-    export const WarEventMaxConditionsPerMap        = 100;
-    export const WarEventMaxActionsPerMap           = 100;
-    export const WarEventMaxActionsPerEvent         = 10;
-    export const WarEventMaxCallCountTotal          = 100;
-    export const WarEventMaxCallCountInPlayerTurn   = 10;
-    export const WarEventActionAddUnitMaxCount      = 50;
+    export const MapMaxGridsCount                       = 1000;
+    export const MapMaxNameLength                       = 30;
+    export const MapMaxDesignerLength                   = 30;
 
-    export const MapEditorSlotMaxCountForNormal     = 3;
-    export const MapEditorSlotMaxCountForCommittee  = 100;
-    export const SpwSaveSlotMaxCount                = 10;
-    export const SpmSaveSlotCommentMaxLength        = 15;
+    export const WarEventNameMaxLength                  = 150;
+    export const WarEventMaxEventsPerMap                = 10;
+    export const WarEventMaxConditionNodesPerMap        = 50;
+    export const WarEventMaxConditionsPerMap            = 100;
+    export const WarEventMaxActionsPerMap               = 100;
+    export const WarEventMaxActionsPerEvent             = 10;
+    export const WarEventMaxCallCountTotal              = 100;
+    export const WarEventMaxCallCountInPlayerTurn       = 10;
+    export const WarEventActionAddUnitMaxCount          = 50;
 
-    export const RankInitialScore                   = 1200;
-    export const RankMaxConcurrentCount             = 5;
-    export const RankMinConcurrentCount             = 0;
-    export const RankMaxBanCoCount                  = 3;
-    export const RankRoomPhaseTime                  = 3600 * 24;
+    export const MapEditorSlotMaxCountForNormal         = 3;
+    export const MapEditorSlotMaxCountForCommittee      = 100;
+    export const SpwSaveSlotMaxCount                    = 10;
+    export const SpmSaveSlotCommentMaxLength            = 15;
+
+    export const RankInitialScore                       = 1200;
+    export const RankMaxConcurrentCount                 = 5;
+    export const RankMinConcurrentCount                 = 0;
+    export const RankMaxBanCoCount                      = 3;
+    export const RankRoomPhaseTime                      = 3600 * 24;
 
     export const ChatContentMaxLength                   = 200;
     export const ChatTeamDivider                        = 100;

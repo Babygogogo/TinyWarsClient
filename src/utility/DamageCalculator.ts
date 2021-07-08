@@ -49,13 +49,11 @@ namespace TinyWars.Utility.DamageCalculator {
             : 1 - bonus / 100;
     }
 
-    function getAttackBonusMultiplier(
-        war                 : BwWar,
-        attacker            : BwUnit,
-        attackerGridIndex   : GridIndex,
-        target              : BwUnit | BwTile,
-        targetGridIndex     : GridIndex
-    ): number | undefined {
+    function getAttackBonusMultiplier({ war, attacker, attackerGridIndex }: {
+        war                 : BwWar;
+        attacker            : BwUnit;
+        attackerGridIndex   : GridIndex;
+    }): number | undefined {
         const amountFromPromotion = attacker.getPromotionAttackBonus();
         if (amountFromPromotion == null) {
             Logger.error(`DamageCalculator.getAttackBonusMultiplier() empty amountFromPromotion.`);
@@ -87,11 +85,11 @@ namespace TinyWars.Utility.DamageCalculator {
         }
 
         let amountFromGlobalTiles   = 0;
-        tileMap.forEachTile(tile => {
+        for (const tile of tileMap.getAllTiles()) {
             if (tile.getPlayerIndex() === playerIndex) {
                 amountFromGlobalTiles += tile.getGlobalAttackBonus() || 0;
             }
-        });
+        }
 
         const totalAmount = settingsModifier
             + amountFromPromotion
@@ -141,11 +139,11 @@ namespace TinyWars.Utility.DamageCalculator {
             }
 
             let amountFromGlobalTiles = 0;
-            tileMap.forEachTile(t => {
+            for (const t of tileMap.getAllTiles()) {
                 if (t.getPlayerIndex() === target.getPlayerIndex()) {
                     amountFromGlobalTiles += t.getGlobalDefenseBonus() || 0;
                 }
-            });
+            }
 
             return getDamageMultiplierForDefenseBonus(amountFromTile + amountFromPromotion + amountFromCo + amountFromGlobalTiles);
         }
@@ -231,7 +229,7 @@ namespace TinyWars.Utility.DamageCalculator {
             return 0;
         }
 
-        const attackBonusMultiplier = getAttackBonusMultiplier(war, attacker, attackerGridIndex, target, targetGridIndex);
+        const attackBonusMultiplier = getAttackBonusMultiplier({ war, attacker, attackerGridIndex });
         if (attackBonusMultiplier == null) {
             Logger.error(`DamageCalculator.getAttackDamage() empty attackBonusMultiplier.`);
             return undefined;
@@ -400,26 +398,57 @@ namespace TinyWars.Utility.DamageCalculator {
         attackerUnitId          : number;
         targetGridIndex         : GridIndex;
         unitMap                 : BaseWar.BwUnitMap;
-    }): AttackAndCounterDamage {
+    }): { errorCode: ClientErrorCode, damages?: AttackAndCounterDamage } {
         let attackDamage    : number | undefined = undefined;
         let counterDamage   : number | undefined = undefined;
         for (const info of battleDamageInfoArray) {
+            const damage = info.damage;
+            if (damage == null) {
+                return { errorCode: ClientErrorCode.DamageCalculator_GetAttackAndCounterDamage_00 };
+            }
+
+            const infoAttackerUnitId = info.attackerUnitId;
+            if (infoAttackerUnitId == null) {
+                return { errorCode: ClientErrorCode.DamageCalculator_GetAttackAndCounterDamage_01 };
+            }
+
             const infoTargetUnitId      = info.targetUnitId;
-            const infoAttackerUnitId    = info.attackerUnitId;
             const targetTileGridIndex   = info.targetTileGridIndex;
             if (attackerUnitId === infoAttackerUnitId) {
-                if ((targetTileGridIndex != null) && (GridIndexHelpers.checkIsEqual(targetGridIndex, targetTileGridIndex as GridIndex))                     ||
-                    ((infoTargetUnitId != null) && (GridIndexHelpers.checkIsEqual(targetGridIndex, unitMap.getUnitById(infoTargetUnitId).getGridIndex())))
-                ) {
-                    attackDamage = (attackDamage || 0) + info.damage;
+                if (targetTileGridIndex != null) {
+                    if (GridIndexHelpers.checkIsEqual(targetGridIndex, targetTileGridIndex as GridIndex)) {
+                        attackDamage = (attackDamage || 0) + damage;
+                    }
+                } else {
+                    if (infoTargetUnitId == null) {
+                        return { errorCode: ClientErrorCode.DamageCalculator_GetAttackAndCounterDamage_02 };
+                    }
+
+                    const unit = unitMap.getUnitById(infoTargetUnitId);
+                    if (unit == null) {
+                        return { errorCode: ClientErrorCode.DamageCalculator_GetAttackAndCounterDamage_03 };
+                    }
+
+                    if (unitMap.getUnitOnMap(targetGridIndex) === unit) {
+                        attackDamage = (attackDamage || 0) + damage;
+                    }
                 }
+
             } else if (attackerUnitId === infoTargetUnitId) {
-                if (GridIndexHelpers.checkIsEqual(targetGridIndex, unitMap.getUnitById(infoAttackerUnitId).getGridIndex())) {
-                    counterDamage = (counterDamage || 0) + info.damage;
+                const unit = unitMap.getUnitById(infoAttackerUnitId);
+                if (unit == null) {
+                    return { errorCode: ClientErrorCode.DamageCalculator_GetAttackAndCounterDamage_04 };
+                }
+
+                if (unitMap.getUnitOnMap(targetGridIndex) === unit) {
+                    counterDamage = (counterDamage || 0) + damage;
                 }
             }
         }
 
-        return { attackDamage, counterDamage };
+        return {
+            errorCode   : ClientErrorCode.NoError,
+            damages     : { attackDamage, counterDamage },
+        };
     }
 }

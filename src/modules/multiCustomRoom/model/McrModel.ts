@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiCustomRoom.McrModel {
     import Types            = Utility.Types;
     import Logger           = Utility.Logger;
@@ -33,7 +34,7 @@ namespace TinyWars.MultiCustomRoom.McrModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getRoomInfo(roomId: number): Promise<IMcrRoomInfo | undefined | null> {
         if (roomId == null) {
-            return new Promise((resolve, reject) => resolve(null));
+            return new Promise((resolve) => resolve(null));
         }
 
         const localData = _roomInfoDict.get(roomId);
@@ -42,12 +43,12 @@ namespace TinyWars.MultiCustomRoom.McrModel {
         }
 
         if (_roomInfoRequests.has(roomId)) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 _roomInfoRequests.get(roomId).push(info => resolve(info.roomInfo));
             });
         }
 
-        new Promise<void>((resolve, reject) => {
+        new Promise<void>((resolve) => {
             const callbackOnSucceed = (e: egret.Event): void => {
                 const data = e.data as NetMessage.MsgMcrGetRoomInfo.IS;
                 if (data.roomId === roomId) {
@@ -83,7 +84,7 @@ namespace TinyWars.MultiCustomRoom.McrModel {
             McrProxy.reqMcrGetRoomInfo(roomId);
         });
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo)]);
         });
     }
@@ -313,7 +314,7 @@ namespace TinyWars.MultiCustomRoom.McrModel {
                 return undefined;
             }
 
-            const warRule = (await getMapRawData()).warRuleArray.find(warRule => warRule.ruleId === ruleId);
+            const warRule = (await getMapRawData()).warRuleArray.find(r => r.ruleId === ruleId);
             if (warRule == null) {
                 Logger.error(`McwModel.resetDataByPresetWarRuleId() empty warRule.`);
                 return undefined;
@@ -472,7 +473,7 @@ namespace TinyWars.MultiCustomRoom.McrModel {
             return BwWarRuleHelper.getTeamIndex(getWarRule(), playerIndex);
         }
 
-        export function setInitialFund(playerIndex, fund: number): void {
+        export function setInitialFund(playerIndex: number, fund: number): void {
             BwWarRuleHelper.setInitialFund(getWarRule(), playerIndex, fund);
         }
         export function getInitialFund(playerIndex: number): number {

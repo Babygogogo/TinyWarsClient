@@ -175,7 +175,7 @@ namespace TinyWars.MultiRankRoom {
                     continue;
                 }
 
-                const mapAvailability = mapExtraData.mapComplexInfo.availability;
+                const mapAvailability = mapExtraData.mapComplexInfo.mapAvailability;
                 if (((hasFog) && (mapAvailability.canMrwFog))   ||
                     ((!hasFog) && (mapAvailability.canMrwStd))
                 ) {

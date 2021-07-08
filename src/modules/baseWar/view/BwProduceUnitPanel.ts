@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
@@ -14,7 +15,7 @@ namespace TinyWars.BaseWar {
     type OpenDataForBwProduceUnitPanel = {
         gridIndex   : GridIndex;
         war         : BaseWar.BwWar;
-    }
+    };
     export class BwProduceUnitPanel extends GameUi.UiPanel<OpenDataForBwProduceUnitPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
@@ -81,18 +82,18 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
+        private _onNotifyBwPlannerStateChanged(): void {
             this.close();
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this._getOpenData().war.getActionPlanner().setStateIdle();
         }
-        private _onTouchedBtnDetail(e: egret.TouchEvent): void {
+        private _onTouchedBtnDetail(): void {
             const selectedIndex = this._listUnit.getSelectedIndex();
             const data          = selectedIndex != null ? this._dataForList[selectedIndex] : null;
             if (data) {
@@ -153,6 +154,7 @@ namespace TinyWars.BaseWar {
                     minCost                 : skillCfg
                         ? Math.floor(cfgCost * minNormalizedHp * skillCfg[5] / CommonConstants.UnitHpNormalizer / 100)
                         : cfgCost,
+                    panel: this,
                 });
             }
 
@@ -202,7 +204,8 @@ namespace TinyWars.BaseWar {
         actionPlanner           : BaseWar.BwActionPlanner;
         gridIndex               : GridIndex;
         unitProductionSkillCfg  : number[] | null;
-    }
+        panel                   : BwProduceUnitPanel;
+    };
 
     class UnitRenderer extends GameUi.UiListItemRenderer<DataForUnitRenderer> {
         private _group          : eui.Group;
@@ -241,45 +244,54 @@ namespace TinyWars.BaseWar {
             this._updateView();
         }
 
-        private _onTouchedImgBg(e: egret.TouchEvent): void {
+        private _onTouchedImgBg(): void {
             const data = this.data;
             if (data.currentFund < data.minCost) {
                 FloatText.show(Lang.getText(Lang.Type.B0053));
+                return;
+            }
+
+            if (!data.panel.getIsOpening()) {
+                return;
+            }
+
+            const actionPlanner = data.actionPlanner;
+            if (actionPlanner.checkIsStateRequesting()) {
+                return;
+            }
+
+            const skillCfg  = data.unitProductionSkillCfg;
+            const unitType  = data.unitType;
+            const gridIndex = data.gridIndex;
+            if (!skillCfg) {
+                actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, CommonConstants.UnitMaxHp);
             } else {
-                const skillCfg      = data.unitProductionSkillCfg;
-                const unitType      = data.unitType;
-                const gridIndex     = data.gridIndex;
-                const actionPlanner = data.actionPlanner;
-                if (!skillCfg) {
-                    actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, CommonConstants.UnitMaxHp);
+                const rawMinHp = skillCfg[3];
+                const rawMaxHp = skillCfg[4];
+                if (rawMinHp === rawMaxHp) {
+                    actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, rawMinHp);
                 } else {
-                    const rawMinHp = skillCfg[3];
-                    const rawMaxHp = skillCfg[4];
-                    if (rawMinHp === rawMaxHp) {
-                        actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, rawMinHp);
-                    } else {
-                        const normalizer    = CommonConstants.UnitHpNormalizer;
-                        const minHp         = rawMinHp;
-                        const maxHp         = Math.min(
-                            rawMaxHp,
-                            Math.floor(data.currentFund * CommonConstants.UnitMaxHp / (data.cfgCost * skillCfg[5] / 100) / normalizer) * normalizer
-                        );
-                        Common.CommonInputPanel.show({
-                            title           : `${Lang.getUnitName(unitType)} HP`,
-                            currentValue    : "" + maxHp,
-                            maxChars        : 3,
-                            charRestrict    : "0-9",
-                            tips            : `${Lang.getText(Lang.Type.B0319)}: [${minHp}, ${maxHp}]`,
-                            callback        : panel => {
-                                const value = Number(panel.getInputText());
-                                if ((isNaN(value)) || (value > maxHp) || (value < minHp)) {
-                                    FloatText.show(Lang.getText(Lang.Type.A0098));
-                                } else {
-                                    actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, value);
-                                }
-                            },
-                        });
-                    }
+                    const normalizer    = CommonConstants.UnitHpNormalizer;
+                    const minHp         = rawMinHp;
+                    const maxHp         = Math.min(
+                        rawMaxHp,
+                        Math.floor(data.currentFund * CommonConstants.UnitMaxHp / (data.cfgCost * skillCfg[5] / 100) / normalizer) * normalizer
+                    );
+                    Common.CommonInputPanel.show({
+                        title           : `${Lang.getUnitName(unitType)} HP`,
+                        currentValue    : "" + maxHp,
+                        maxChars        : 3,
+                        charRestrict    : "0-9",
+                        tips            : `${Lang.getText(Lang.Type.B0319)}: [${minHp}, ${maxHp}]`,
+                        callback        : panel => {
+                            const value = Number(panel.getInputText());
+                            if ((isNaN(value)) || (value > maxHp) || (value < minHp)) {
+                                FloatText.show(Lang.getText(Lang.Type.A0098));
+                            } else {
+                                actionPlanner.setStateRequestingPlayerProduceUnit(gridIndex, unitType, value);
+                            }
+                        },
+                    });
                 }
             }
         }

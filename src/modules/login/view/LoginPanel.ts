@@ -1,9 +1,9 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Login {
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
     import Helpers          = Utility.Helpers;
-    import Types            = Utility.Types;
     import NotifyType       = Utility.Notify.Type;
     import LocalStorage     = Utility.LocalStorage;
     import NoSleepManager   = Utility.NoSleepManager;
@@ -12,25 +12,39 @@ namespace TinyWars.Login {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
         protected readonly _IS_EXCLUSIVE = false;
 
+        // @ts-ignore
         private _imgTitle                   : GameUi.UiImage;
 
+        // @ts-ignore
         private _groupAccount               : eui.Group;
-        private _imgAccountTitle            : GameUi.UiImage;
+        // @ts-ignore
+        private _labelAccount               : GameUi.UiLabel;
+        // @ts-ignore
         private _inputAccount               : GameUi.UiTextInput;
 
+        // @ts-ignore
         private _groupPassword              : eui.Group;
-        private _imgPasswordTitle           : GameUi.UiImage;
+        // @ts-ignore
+        private _labelPassword              : GameUi.UiLabel;
+        // @ts-ignore
         private _inputPassword              : GameUi.UiTextInput;
 
+        // @ts-ignore
         private _groupPasswordCommand       : eui.Group;
+        // @ts-ignore
         private _groupRememberPassword      : eui.Group;
+        // @ts-ignore
         private _labelRememberPassword      : GameUi.UiLabel;
+        // @ts-ignore
         private _imgRememberPasswordCheck   : GameUi.UiImage;
-        private _imgRememberPassword        : GameUi.UiImage;
+        // @ts-ignore
         private _btnForgetPassword          : GameUi.UiButton;
 
+        // @ts-ignore
         private _groupButton                : eui.Group;
+        // @ts-ignore
         private _btnRegister                : GameUi.UiButton;
+        // @ts-ignore
         private _btnLogin                   : GameUi.UiButton;
 
         private static _instance: LoginPanel;
@@ -71,7 +85,7 @@ namespace TinyWars.Login {
 
             const isRememberPassword                = LocalStorage.getIsRememberPassword();
             this._inputAccount.text                 = LocalStorage.getAccount();
-            this._inputPassword.text                = isRememberPassword ? LocalStorage.getPassword() : null;
+            this._inputPassword.text                = isRememberPassword ? LocalStorage.getPassword() : ``;
             this._btnLogin.enabled                  = true;
             this._imgRememberPasswordCheck.visible  = isRememberPassword;
             this._updateComponentsForLanguage();
@@ -80,19 +94,19 @@ namespace TinyWars.Login {
             await this._showCloseAnimation();
         }
 
-        private _onMsgUserLogin(e: egret.Event): void {
+        private _onMsgUserLogin(): void {
             FloatText.show(Lang.getText(Lang.Type.A0000));
             this._btnLogin.enabled = false;
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onTouchedSelf(e: egret.TouchEvent): void {
+        private _onTouchedSelf(): void {
             Utility.SoundManager.init();
         }
 
-        private _onTouchedBtnLogin(e: egret.TouchEvent): void {
+        private _onTouchedBtnLogin(): void {
             NoSleepManager.enable();
 
             const account  = this._inputAccount.text;
@@ -112,38 +126,29 @@ namespace TinyWars.Login {
             }
         }
 
-        private _onTouchedBtnRegister(e: egret.TouchEvent): void {
+        private _onTouchedBtnRegister(): void {
             NoSleepManager.enable();
 
             RegisterPanel.show();
         }
 
-        private _onTouchedBtnForgetPassword(e: egret.TouchEvent): void {
+        private _onTouchedBtnForgetPassword(): void {
             FloatText.show(Lang.getText(Lang.Type.A0115));
         }
 
-        private _onTouchedGroupRememberPassword(e: egret.TouchEvent): void {
+        private _onTouchedGroupRememberPassword(): void {
             const isRemember = LocalStorage.getIsRememberPassword();
             LocalStorage.setIsRememberPassword(!isRemember);
             this._imgRememberPasswordCheck.visible = !isRemember;
         }
 
         private _updateComponentsForLanguage(): void {
-            if (Lang.getCurrentLanguageType() === Types.LanguageType.Chinese) {
-                this._imgAccountTitle.source        = "login_text_account_001";
-                this._imgPasswordTitle.source       = "login_text_password_001";
-                this._imgRememberPassword.source    = "login_text_remember_001";
-                this._btnLogin.setImgDisplaySource("login_button_login_001");
-                this._btnRegister.setImgDisplaySource("login_button_register_001");
-                this._btnForgetPassword.setImgDisplaySource("login_text_findPassword_001");
-            } else {
-                this._imgAccountTitle.source        = "login_text_account_002";
-                this._imgPasswordTitle.source       = "login_text_password_002";
-                this._imgRememberPassword.source    = "login_text_remember_002";
-                this._btnLogin.setImgDisplaySource("login_button_login_002");
-                this._btnRegister.setImgDisplaySource("login_button_register_002");
-                this._btnForgetPassword.setImgDisplaySource("login_text_findPassword_002");
-            }
+            this._btnLogin.label                = Lang.getText(Lang.Type.B0173);
+            this._btnRegister.label             = `${Lang.getText(Lang.Type.B0174)}*`;
+            this._btnForgetPassword.label       = Lang.getText(Lang.Type.B0626);
+            this._labelRememberPassword.text    = Lang.getText(Lang.Type.B0172);
+            this._labelAccount.text             = `${Lang.getText(Lang.Type.B0170)}:`;
+            this._labelPassword.text            = `${Lang.getText(Lang.Type.B0171)}:`;
         }
 
         private _showOpenAnimation(): void {

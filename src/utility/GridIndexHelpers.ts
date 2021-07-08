@@ -13,6 +13,12 @@ namespace TinyWars.Utility.GridIndexHelpers {
         { offset: { x:  0, y:  1 }, direction: Direction.Down,  clockwiseOffset: { x:  1, y: -1 }, },
     ];
 
+    export function convertGridIndex(raw: ProtoTypes.Structure.IGridIndex | undefined | null): GridIndex | undefined {
+        return ((!raw) || (raw.x == null) || (raw.y == null))
+            ? undefined
+            : raw as GridIndex;
+    }
+
     export function createGridIndexByPoint(p: Point): GridIndex {
         return {
             x: Math.floor(p.x / _GRID_WIDTH),
@@ -76,7 +82,12 @@ namespace TinyWars.Utility.GridIndexHelpers {
 
     export function checkIsInsideMap(g: ProtoTypes.Structure.IGridIndex, mapSize: MapSize): boolean {
         const { x, y } = g;
-        return (x >= 0) && (y >= 0) && (x < mapSize.width) && (y < mapSize.height);
+        return (x != null)
+            && (y != null)
+            && (x >= 0)
+            && (y >= 0)
+            && (x < mapSize.width)
+            && (y < mapSize.height);
     }
 
     export function getAdjacentGrids(g: GridIndex, mapSize: MapSize): GridIndex[] {

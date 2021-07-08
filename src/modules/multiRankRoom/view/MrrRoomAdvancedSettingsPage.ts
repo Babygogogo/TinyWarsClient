@@ -121,7 +121,7 @@ namespace TinyWars.MultiRankRoom {
             if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
                 Common.CommonHelpPanel.show({
                     title   : `CO`,
-                    content : Lang.getRichText(Lang.RichType.R0004),
+                    content : Lang.getText(Lang.Type.R0004),
                 });
             }
         }

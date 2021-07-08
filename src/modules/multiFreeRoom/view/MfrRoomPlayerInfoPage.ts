@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiFreeRoom {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
@@ -11,7 +12,7 @@ namespace TinyWars.MultiFreeRoom {
 
     export type OpenDataForMfrRoomPlayerInfoPage = {
         roomId  : number;
-    }
+    };
     export class MfrRoomPlayerInfoPage extends GameUi.UiTabPage<OpenDataForMfrRoomPlayerInfoPage> {
         private readonly _groupInfo     : eui.Group;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
@@ -39,14 +40,15 @@ namespace TinyWars.MultiFreeRoom {
             this._updateComponentsForRoomInfo();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyMsgMfrGetRoomInfo(e: egret.Event): void {
+        private _onNotifyMsgMfrGetRoomInfo(): void {
             this._updateComponentsForRoomInfo();
         }
 
         private _updateComponentsForLanguage(): void {
+            // nothing to do
         }
         private async _updateComponentsForRoomInfo(): Promise<void> {
             const roomInfo      = await MfrModel.getRoomInfo(this._getOpenData().roomId);
@@ -75,8 +77,7 @@ namespace TinyWars.MultiFreeRoom {
     type DataForPlayerRenderer = {
         roomId          : number;
         playerIndex     : number;
-    }
-
+    };
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private readonly _groupCo           : eui.Group;
         private readonly _imgSkin           : GameUi.UiImage;
@@ -118,7 +119,7 @@ namespace TinyWars.MultiFreeRoom {
             this._updateComponentsForLanguage();
         }
 
-        private async _onTouchedGroupCo(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedGroupCo(): Promise<void> {
             const data          = this.data;
             const roomInfo      = await MfrModel.getRoomInfo(data.roomId);
             const playerData    = roomInfo ? (roomInfo.playerDataList || []).find(v => v.playerIndex === data.playerIndex) : null;
@@ -131,7 +132,7 @@ namespace TinyWars.MultiFreeRoom {
             }
         }
 
-        private async _onTouchedBtnChat(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnChat(): Promise<void> {
             const playerData    = await this._getPlayerData();
             const userId        = playerData ? playerData.userId : undefined;
             if (userId != null) {
@@ -139,7 +140,7 @@ namespace TinyWars.MultiFreeRoom {
             }
         }
 
-        private async _onTouchedBtnInfo(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnInfo(): Promise<void> {
             const playerData    = await this._getPlayerData();
             const userId        = playerData ? playerData.userId : undefined;
             if (userId != null) {
@@ -147,7 +148,7 @@ namespace TinyWars.MultiFreeRoom {
             }
         }
 
-        private async _onTouchedBtnDelete(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnDelete(): Promise<void> {
             const data          = this.data;
             const roomId        = data.roomId;
             const playerData    = await this._getPlayerData();
@@ -171,7 +172,7 @@ namespace TinyWars.MultiFreeRoom {
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -272,7 +273,16 @@ namespace TinyWars.MultiFreeRoom {
 
             const userId                = playerData ? playerData.userId : null;
             const userInfo              = userId == null ? null : await User.UserModel.getUserPublicInfo(userId);
-            this._labelNickname.text    = userInfo ? userInfo.nickname : `??`;
+            const labelNickname         = this._labelNickname;
+            if (playerData == null) {
+                labelNickname.text = `??`;
+            } else {
+                if (userId == null) {
+                    labelNickname.text = Lang.getText(Lang.Type.B0607);
+                } else {
+                    labelNickname.text = userInfo ? (userInfo.nickname || CommonConstants.ErrorTextForUndefined) : (CommonConstants.ErrorTextForUndefined);
+                }
+            }
 
             const groupButton           = this._groupButton;
             groupButton.removeChildren();

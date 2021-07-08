@@ -1,9 +1,12 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Common {
-    import Notify       = Utility.Notify;
-    import Lang         = Utility.Lang;
-    import Helpers      = Utility.Helpers;
-    import Types        = Utility.Types;
+    import Notify           = Utility.Notify;
+    import Lang             = Utility.Lang;
+    import Helpers          = Utility.Helpers;
+    import Types            = Utility.Types;
+    import Logger           = Utility.Logger;
+    import CommonConstants  = Utility.CommonConstants;
 
     export class CommonRankListPanel extends GameUi.UiPanel<void> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
@@ -11,20 +14,35 @@ namespace TinyWars.Common {
 
         private static _instance: CommonRankListPanel;
 
+        // @ts-ignore
         private readonly _imgMask           : GameUi.UiImage;
+        // @ts-ignore
         private readonly _group             : eui.Group;
-        private readonly _labelTitle        : TinyWars.GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _labelTitle        : GameUi.UiLabel;
+        // @ts-ignore
+        private readonly _btnClose          : GameUi.UiButton;
 
+        // @ts-ignore
         private readonly _labelStdTitle     : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelStdNoData    : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelStdNickname  : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelStdScore     : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _listStd           : GameUi.UiScrollList<DataForUserRenderer>;
 
+        // @ts-ignore
         private readonly _labelFogTitle     : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelFogNoData    : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelFogNickname  : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _labelFogScore     : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _listFog           : GameUi.UiScrollList<DataForUserRenderer>;
 
         public static show(): void {
@@ -52,6 +70,9 @@ namespace TinyWars.Common {
                 { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgCommonGetRankList,   callback: this._onMsgCommonGetRankList },
             ]);
+            this._setUiListenerArray([
+                { ui: this._btnClose,   callback: this.close },
+            ]);
             this._listStd.setItemRenderer(UserRenderer);
             this._listFog.setItemRenderer(UserRenderer);
 
@@ -69,11 +90,11 @@ namespace TinyWars.Common {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
-        private _onMsgCommonGetRankList(e: egret.Event): void {
+        private _onMsgCommonGetRankList(): void {
             this._updateView();
         }
 
@@ -103,9 +124,15 @@ namespace TinyWars.Common {
             const dataList      : DataForUserRenderer[] = [];
             for (const data of CommonModel.getRankList() || []) {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
+                    const userId = data.userId;
+                    if (userId == null) {
+                        Logger.error(`CommonRankListPanel._updateComponentsForStd() empty userId.`);
+                        continue;
+                    }
+
                     dataList.push({
                         rank    : dataList.length + 1,
-                        userId  : data.userId,
+                        userId,
                         warType,
                         playersCount,
                     });
@@ -122,9 +149,15 @@ namespace TinyWars.Common {
             const dataList      : DataForUserRenderer[] = [];
             for (const data of CommonModel.getRankList() || []) {
                 if ((data.playersCountUnneutral === playersCount) && (data.warType === warType)) {
+                    const userId = data.userId;
+                    if (userId == null) {
+                        Logger.error(`CommonRankListPanel._updateComponentsForFog() empty userId.`);
+                        continue;
+                    }
+
                     dataList.push({
                         rank    : dataList.length + 1,
-                        userId  : data.userId,
+                        userId,
                         warType,
                         playersCount,
                     });
@@ -169,13 +202,18 @@ namespace TinyWars.Common {
         userId      : number;
         playersCount: number;
         warType     : Types.WarType;
-    }
+    };
 
     class UserRenderer extends GameUi.UiListItemRenderer<DataForUserRenderer> {
+        // @ts-ignore
         private _group          : eui.Group;
+        // @ts-ignore
         private _imgBg          : GameUi.UiImage;
+        // @ts-ignore
         private _labelIndex     : GameUi.UiLabel;
+        // @ts-ignore
         private _labelNickname  : GameUi.UiLabel;
+        // @ts-ignore
         private _labelScore     : GameUi.UiLabel;
 
         protected _onOpened(): void {
@@ -189,7 +227,7 @@ namespace TinyWars.Common {
             this._updateView();
         }
 
-        private _onTouchedImgBg(e: egret.TouchEvent): void {
+        private _onTouchedImgBg(): void {
             const data = this.data;
             if (data) {
                 User.UserPanel.show({ userId: data.userId });
@@ -209,16 +247,26 @@ namespace TinyWars.Common {
             const labelNickname     = this._labelNickname;
             const labelScore        = this._labelScore;
             labelNickname.text      = Lang.getText(Lang.Type.B0029);
-            labelScore.text         = undefined;
+            labelScore.text         = ``;
             this._labelIndex.text   = `${rank}${Helpers.getSuffixForRank(rank)}`;
             this._imgBg.alpha       = rank % 2 == 1 ? 0.2 : 0.5;
 
             const userInfo = await User.UserModel.getUserPublicInfo(data.userId);
-            const rankInfo = userInfo.userMrwRankInfoArray.find(v => {
+            if (userInfo == null) {
+                Logger.error(`UserRenderer._updateView() empty userInfo.`);
+                return;
+            }
+            labelNickname.text = userInfo.nickname || CommonConstants.ErrorTextForUndefined;
+
+            const rankInfo = (userInfo.userMrwRankInfoArray || []).find(v => {
                 return (v.playersCountUnneutral === data.playersCount) && (v.warType === data.warType);
             });
-            labelNickname.text  = userInfo.nickname;
-            labelScore.text     = `${rankInfo.currentScore}`;
+            if (rankInfo == null) {
+                Logger.error(`UserRenderer._updateView() empty rankInfo.`);
+                labelScore.text = CommonConstants.ErrorTextForUndefined;
+            } else {
+                labelScore.text = `${rankInfo.currentScore}`;
+            }
         }
     }
 }

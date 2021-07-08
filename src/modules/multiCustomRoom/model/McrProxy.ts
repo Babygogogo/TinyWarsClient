@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiCustomRoom.McrProxy {
     import NetManager   = Network.NetManager;
     import ActionCode   = Network.Codes;

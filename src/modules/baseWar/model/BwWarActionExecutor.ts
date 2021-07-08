@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar.BwWarActionExecutor {
     import Types                                = Utility.Types;
     import ProtoTypes                           = Utility.ProtoTypes;
@@ -28,6 +29,8 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
     import IWarActionSystemCallWarEvent         = WarAction.IWarActionSystemCallWarEvent;
     import IWarActionSystemDestroyPlayerForce   = WarAction.IWarActionSystemDestroyPlayerForce;
     import IWarActionSystemEndWar               = WarAction.IWarActionSystemEndWar;
+    import IWarActionSystemEndTurn              = WarAction.IWarActionSystemEndTurn;
+    import IWarActionSystemHandleBootPlayer     = WarAction.IWarActionSystemHandleBootPlayer;
     import IWarActionUnitAttackTile             = WarAction.IWarActionUnitAttackTile;
     import IWarActionUnitAttackUnit             = WarAction.IWarActionUnitAttackUnit;
     import IWarActionUnitBeLoaded               = WarAction.IWarActionUnitBeLoaded;
@@ -84,6 +87,8 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
         else if (action.WarActionSystemCallWarEvent)        { return await exeSystemCallWarEvent(war, action.WarActionSystemCallWarEvent, isFast); }
         else if (action.WarActionSystemDestroyPlayerForce)  { return await exeSystemDestroyPlayerForce(war, action.WarActionSystemDestroyPlayerForce, isFast); }
         else if (action.WarActionSystemEndWar)              { return await exeSystemEndWar(war, action.WarActionSystemEndWar, isFast); }
+        else if (action.WarActionSystemEndTurn)             { return await exeSystemEndTurn(war, action.WarActionSystemEndTurn, isFast); }
+        else if (action.WarActionSystemHandleBootPlayer)    { return await exeSystemHandleBootPlayer(war, action.WarActionSystemHandleBootPlayer, isFast); }
         else if (action.WarActionUnitAttackTile)            { return await exeUnitAttackTile(war, action.WarActionUnitAttackTile, isFast); }
         else if (action.WarActionUnitAttackUnit)            { return await exeUnitAttackUnit(war, action.WarActionUnitAttackUnit, isFast); }
         else if (action.WarActionUnitBeLoaded)              { return await exeUnitBeLoaded(war, action.WarActionUnitBeLoaded, isFast); }
@@ -141,16 +146,13 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
             : await normalExePlayerEndTurn(war, action);
     }
     async function fastExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<ClientErrorCode> {
-        war.getTurnManager().endPhaseMain(action);
-
-        return ClientErrorCode.NoError;
+        return war.getTurnManager().endPhaseMain(action);
     }
     async function normalExePlayerEndTurn(war: BwWar, action: IWarActionPlayerEndTurn): Promise<ClientErrorCode> {
         const desc = await war.getDescForExePlayerEndTurn(action);
         (desc) && (FloatText.show(desc));
 
-        war.getTurnManager().endPhaseMain(action);
-        return ClientErrorCode.NoError;
+        return war.getTurnManager().endPhaseMain(action);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -247,10 +249,10 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exePlayerSurrender(war: BwWar, action: IWarActionPlayerSurrender, isFast: boolean): Promise<ClientErrorCode> {
         return isFast
-            ? await fastExePlayerSurrender(war, action)
+            ? await fastExePlayerSurrender(war)
             : await normalExePlayerSurrender(war, action);
     }
-    async function fastExePlayerSurrender(war: BwWar, data: IWarActionPlayerSurrender): Promise<ClientErrorCode> {
+    async function fastExePlayerSurrender(war: BwWar): Promise<ClientErrorCode> {
         war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
 
         return ClientErrorCode.NoError;
@@ -307,16 +309,13 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
             : await normalExeSystemBeginTurn(war, action);
     }
     async function fastExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<ClientErrorCode> {
-        war.getTurnManager().endPhaseWaitBeginTurn(action);
-
-        return ClientErrorCode.NoError;
+        return war.getTurnManager().endPhaseWaitBeginTurn(action);
     }
     async function normalExeSystemBeginTurn(war: BwWar, action: IWarActionSystemBeginTurn): Promise<ClientErrorCode> {
         const desc = await war.getDescForExeSystemBeginTurn(action);
         (desc) && (FloatText.show(desc));
 
-        await war.getTurnManager().endPhaseWaitBeginTurn(action);
-        return ClientErrorCode.NoError;
+        return war.getTurnManager().endPhaseWaitBeginTurn(action);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -328,7 +327,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
     async function fastExeSystemCallWarEvent(war: BwWar, action: IWarActionSystemCallWarEvent): Promise<ClientErrorCode> {
         const warEventManager   = war.getWarEventManager();
         const warEventId        = action.warEventId;
-        warEventManager.updateWarEventCalledCountOnCall(warEventId)
+        warEventManager.updateWarEventCalledCountOnCall(warEventId);
         await warEventManager.callWarEvent(warEventId, true);
 
         return ClientErrorCode.NoError;
@@ -401,10 +400,10 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     async function exeSystemEndWar(war: BwWar, action: IWarActionSystemEndWar, isFast: boolean): Promise<ClientErrorCode> {
         return isFast
-            ? fastExeSystemEndWar(war, action)
+            ? fastExeSystemEndWar(war)
             : normalExeSystemEndWar(war, action);
     }
-    async function fastExeSystemEndWar(war: BwWar, action: IWarActionSystemEndWar): Promise<ClientErrorCode> {
+    async function fastExeSystemEndWar(war: BwWar): Promise<ClientErrorCode> {
         war.setIsEnded(true);
 
         return ClientErrorCode.NoError;
@@ -414,6 +413,42 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
         (desc) && (FloatText.show(desc));
 
         war.setIsEnded(true);
+        return ClientErrorCode.NoError;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    async function exeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn, isFast: boolean): Promise<ClientErrorCode> {
+        return isFast
+            ? fastExeSystemEndTurn(war, action)
+            : normalExeSystemEndTurn(war, action);
+    }
+    async function fastExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<ClientErrorCode> {
+        return war.getTurnManager().endPhaseMain(action);
+    }
+    async function normalExeSystemEndTurn(war: BwWar, action: IWarActionSystemEndTurn): Promise<ClientErrorCode> {
+        const desc = await war.getDescForExeSystemEndTurn(action);
+        (desc) && (FloatText.show(desc));
+
+        return war.getTurnManager().endPhaseMain(action);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    async function exeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer, isFast: boolean): Promise<ClientErrorCode> {
+        return isFast
+            ? fastExeSystemHandleBootPlayer(war)
+            : normalExeSystemHandleBootPlayer(war, action);
+    }
+    async function fastExeSystemHandleBootPlayer(war: BwWar): Promise<ClientErrorCode> {
+        war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+
+        return ClientErrorCode.NoError;
+    }
+    async function normalExeSystemHandleBootPlayer(war: BwWar, action: IWarActionSystemHandleBootPlayer): Promise<ClientErrorCode> {
+        const desc = await war.getDescForExeSystemHandleBootPlayer(action);
+        (desc) && (FloatText.show(desc));
+
+        war.getPlayerInTurn().setAliveState(Types.PlayerAliveState.Dying);
+
         return ClientErrorCode.NoError;
     }
 
@@ -455,7 +490,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const targetTileGridIndex = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const targetTileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (targetTileGridIndex == null) {
                         return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackTile_00;
                     }
@@ -632,7 +667,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const gridIndex2 = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2 = tileMap.getTile(gridIndex2);
                         if (tile2 == null) {
@@ -749,7 +784,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const targetTileGridIndex = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const targetTileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (targetTileGridIndex == null) {
                         return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackTile_00;
                     }
@@ -980,7 +1015,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const gridIndex2 = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2 = tileMap.getTile(gridIndex2);
                         if (tile2 == null) {
@@ -1113,7 +1148,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const targetTileGridIndex = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const targetTileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (targetTileGridIndex == null) {
                         return ClientErrorCode.BwWarActionExecutor_FastExeUnitAttackUnit_00;
                     }
@@ -1290,7 +1325,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const gridIndex2 = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2 = tileMap.getTile(gridIndex2);
                         if (tile2 == null) {
@@ -1407,7 +1442,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const targetTileGridIndex = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const targetTileGridIndex = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (targetTileGridIndex == null) {
                         return ClientErrorCode.BwWarActionExecutor_NormalExeUnitAttackUnit_00;
                     }
@@ -1638,7 +1673,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                         continue;
                     }
 
-                    const gridIndex2 = BwHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
+                    const gridIndex2 = GridIndexHelpers.convertGridIndex(battleDamageInfo.targetTileGridIndex);
                     if (gridIndex2 != null) {
                         const tile2 = tileMap.getTile(gridIndex2);
                         if (tile2 == null) {
@@ -2215,7 +2250,7 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
                 focusUnit.setCurrentProduceMaterial(Math.min(
                     maxProduceMaterial,
                     focusUnit.getCurrentProduceMaterial()! + targetUnit.getCurrentProduceMaterial()!
-                ))
+                ));
             }
 
             focusUnit.setCurrentPromotion(Math.max(focusUnit.getCurrentPromotion(), targetUnit.getCurrentPromotion()));
@@ -3023,12 +3058,12 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
 
                 const gridVisionEffect  = war.getGridVisionEffect();
                 const playerIndex       = focusUnit.getPlayerIndex();
-                unitMap.forEachUnitOnMap(unit => {
+                for (const unit of unitMap.getAllUnitsOnMap()) {
                     unit.updateView();
                     if (unit.getPlayerIndex() === playerIndex) {
                         gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
                     }
-                });
+                }
 
                 const configVersion = war.getConfigVersion();
                 const mapSize       = unitMap.getMapSize();
@@ -3123,12 +3158,12 @@ namespace TinyWars.BaseWar.BwWarActionExecutor {
 
                 const gridVisionEffect  = war.getGridVisionEffect();
                 const playerIndex       = focusUnit.getPlayerIndex();
-                unitMap.forEachUnitOnMap(unit => {
+                for (const unit of unitMap.getAllUnitsOnMap()) {
                     unit.updateView();
                     if (unit.getPlayerIndex() === playerIndex) {
                         gridVisionEffect.showEffectSkillActivation(unit.getGridIndex());
                     }
-                });
+                }
 
                 const configVersion = war.getConfigVersion();
                 const mapSize       = unitMap.getMapSize();

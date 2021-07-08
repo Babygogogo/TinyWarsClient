@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiPlayerWar {
     import CommonConfirmPanel   = Common.CommonConfirmPanel;
     import Notify               = Utility.Notify;
@@ -7,12 +8,11 @@ namespace TinyWars.MultiPlayerWar {
     import FlowManager          = Utility.FlowManager;
     import Logger               = Utility.Logger;
     import FloatText            = Utility.FloatText;
-    import LocalStorage         = Utility.LocalStorage;
     import CommonConstants      = Utility.CommonConstants;
     import ProtoTypes           = Utility.ProtoTypes;
     import WarMapModel          = WarMap.WarMapModel;
-    import TimeModel            = Time.TimeModel;
 
+    // eslint-disable-next-line no-shadow
     const enum MenuType {
         Main,
         Advanced,
@@ -41,7 +41,6 @@ namespace TinyWars.MultiPlayerWar {
         private _listPlayer             : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         private _war            : MpwWar;
-        private _unitMap        : BaseWar.BwUnitMap;
         private _actionPlanner  : MpwActionPlanner;
         private _dataForList    : DataForCommandRenderer[];
         private _menuType       = MenuType.Main;
@@ -90,7 +89,6 @@ namespace TinyWars.MultiPlayerWar {
 
             const war           = MpwModel.getWar();
             this._war           = war;
-            this._unitMap       = war.getUnitMap();
             this._actionPlanner = war.getActionPlanner() as MpwActionPlanner;
             this._menuType      = MenuType.Main;
 
@@ -102,7 +100,6 @@ namespace TinyWars.MultiPlayerWar {
             await this._showCloseAnimation();
 
             this._war           = null;
-            this._unitMap       = null;
             this._dataForList   = null;
 
             Notify.dispatch(Notify.Type.BwWarMenuPanelClosed);
@@ -111,7 +108,7 @@ namespace TinyWars.MultiPlayerWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyBwPlannerStateChanged(e: egret.Event): void {
+        private _onNotifyBwPlannerStateChanged(): void {
             const war = this._war;
             if (war.getPlayerInTurn() === war.getPlayerLoggedIn()) {
                 this.close();
@@ -119,10 +116,10 @@ namespace TinyWars.MultiPlayerWar {
                 this._updateListPlayer();
             }
         }
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
-        private _onNotifyUnitAndTileTextureVersionChanged(e: egret.Event): void {
+        private _onNotifyUnitAndTileTextureVersionChanged(): void {
             this._updateView();
         }
         private _onNotifyMsgSpmCreateSfw(e: egret.Event): void {
@@ -139,7 +136,7 @@ namespace TinyWars.MultiPlayerWar {
             });
         }
 
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        private _onTouchedBtnBack(): void {
             const type = this._menuType;
             if (type === MenuType.Main) {
                 this.close();
@@ -152,7 +149,7 @@ namespace TinyWars.MultiPlayerWar {
             }
         }
 
-        private _onTouchedBtnHome(e: egret.TouchEvent): void {
+        private _onTouchedBtnHome(): void {
             CommonConfirmPanel.show({
                 title   : Lang.getText(Lang.Type.B0054),
                 content : Lang.getText(Lang.Type.A0025),
@@ -160,7 +157,7 @@ namespace TinyWars.MultiPlayerWar {
             });
         }
 
-        private _onTouchedBtnBuildings(e: egret.TouchEvent): void {
+        private _onTouchedBtnBuildings(): void {
             BaseWar.BwBuildingListPanel.show({ war: this._war });
         }
 
@@ -181,7 +178,7 @@ namespace TinyWars.MultiPlayerWar {
                 .to({ alpha: 1, right: 0 }, 200);
         }
         private _showCloseAnimation(): Promise<void> {
-            return new Promise<void>((resolve, reject) => {
+            return new Promise<void>((resolve) => {
                 const group = this._group;
                 egret.Tween.removeTweens(group);
                 egret.Tween.get(group)
@@ -338,7 +335,7 @@ namespace TinyWars.MultiPlayerWar {
                     this.close();
                     Chat.ChatPanel.show({});
                 },
-            }
+            };
         }
 
         private _createCommandPlayerSurrender(): DataForCommandRenderer | undefined {
@@ -358,7 +355,7 @@ namespace TinyWars.MultiPlayerWar {
                             callback: () => this._actionPlanner.setStateRequestingPlayerSurrender(),
                         });
                     },
-                }
+                };
             }
         }
 
@@ -488,7 +485,7 @@ namespace TinyWars.MultiPlayerWar {
                             });
                         }
                     },
-                }
+                };
             }
         }
         private _createCommandUserSettings(): DataForCommandRenderer | null {
@@ -544,8 +541,7 @@ namespace TinyWars.MultiPlayerWar {
     type DataForCommandRenderer = {
         name    : string;
         callback: () => void;
-    }
-
+    };
     class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
         private _group      : eui.Group;
         private _labelName  : GameUi.UiLabel;
@@ -554,7 +550,7 @@ namespace TinyWars.MultiPlayerWar {
             this._updateView();
         }
 
-        public onItemTapEvent(e: eui.ItemTapEvent): void {
+        public onItemTapEvent(): void {
             this.data.callback();
         }
 
@@ -567,8 +563,7 @@ namespace TinyWars.MultiPlayerWar {
     type DataForPlayerRenderer = {
         war     : MpwWar;
         player  : BaseWar.BwPlayer;
-    }
-
+    };
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _group          : eui.Group;
         private _labelName      : GameUi.UiLabel;
@@ -822,12 +817,12 @@ namespace TinyWars.MultiPlayerWar {
         private _getTilesCountAndIncome(war: MpwWar, playerIndex: number): { count: number, income: number } {
             let count   = 0;
             let income  = 0;
-            war.getTileMap().forEachTile(tile => {
+            for (const tile of war.getTileMap().getAllTiles()) {
                 if (tile.getPlayerIndex() === playerIndex) {
                     ++count;
                     income += tile.getIncomeForPlayer(playerIndex);
                 }
-            });
+            }
             return { count, income };
         }
 
@@ -836,7 +831,7 @@ namespace TinyWars.MultiPlayerWar {
             const unitMap       = war.getUnitMap();
             let count           = 0;
             let value           = 0;
-            unitMap.forEachUnitOnMap(unit => {
+            for (const unit of unitMap.getAllUnitsOnMap()) {
                 if (unit.getPlayerIndex() === playerIndex) {
                     ++count;
                     value += Math.floor(unit.getProductionFinalCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp());
@@ -848,7 +843,7 @@ namespace TinyWars.MultiPlayerWar {
                         }
                     }
                 }
-            });
+            }
             return { count, value };
         }
     }
@@ -857,7 +852,7 @@ namespace TinyWars.MultiPlayerWar {
         titleText   : string;
         infoText    : string;
         infoColor   : number;
-    }
+    };
 
     class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;

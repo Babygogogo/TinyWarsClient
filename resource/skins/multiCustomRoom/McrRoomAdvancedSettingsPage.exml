@@ -9,7 +9,7 @@
                             <e:Skin height="40">
                                 <e:Group left="0" right="0" top="0" bottom="0">
                                     <GameUi:UiImage left="0" right="0" top="0" bottom="0" source="commonColorBlack0000"
-                                                    alpha="0.4" scale9Grid="1,1,2,2" locked="true" />
+                                                    scale9Grid="1,1,2,2" locked="true" />
                                     <GameUi:UiLabel id="_labelName" text="War Name" textColor="0xFFFFFF" size="16"
                                                     verticalCenter="0" bold="true" left="10" width="130" wordWrap="true" />
                                     <GameUi:UiButton id="_btnHelp" verticalCenter="0" x="132">
@@ -24,7 +24,7 @@
                             </e:Skin>
                         </e:itemRendererSkinName>
                         <e:layout>
-                            <e:VerticalLayout paddingTop="4" horizontalAlign="contentJustify" />
+                            <e:VerticalLayout horizontalAlign="contentJustify" gap="4" />
                         </e:layout>
                     </e:List>
                 </GameUi:UiScrollList>
@@ -35,21 +35,21 @@
                                 <e:Group left="0" right="0" top="0" bottom="0">
                                     <GameUi:UiLabel id="_labelPlayerIndex" text="P1" horizontalCenter="0" bold="true"
                                                     size="24" y="12" />
-                                    <GameUi:UiScrollList id="_listInfo" y="50" horizontalCenter="0">
+                                    <GameUi:UiScrollList id="_listInfo" y="46" horizontalCenter="0">
                                         <e:List>
                                             <e:itemRendererSkinName>
                                                 <e:Skin width="120" height="40">
                                                     <e:Group left="0" right="0" top="0" bottom="0">
-                                                        <GameUi:UiImage source="commonRectangle0001" top="6" bottom="6"
+                                                        <GameUi:UiImage source="commonRectangle0001" top="4" bottom="4"
                                                                         left="20" right="20" scale9Grid="2,2,1,1" />
                                                         <GameUi:UiLabel id="_labelValue" text="Label" size="16"
                                                                         verticalAlign="middle" textAlign="center"
-                                                                        left="20" right="20" top="6" bottom="6" />
+                                                                        left="20" right="20" top="4" bottom="4" />
                                                     </e:Group>
                                                 </e:Skin>
                                             </e:itemRendererSkinName>
                                             <e:layout>
-                                                <e:VerticalLayout/>
+                                                <e:VerticalLayout gap="4" />
                                             </e:layout>
                                         </e:List>
                                     </GameUi:UiScrollList>

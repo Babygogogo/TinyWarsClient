@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar.BwWarRuleHelper {
     import ConfigManager        = Utility.ConfigManager;
     import Logger               = Utility.Logger;
@@ -347,6 +348,25 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         }
     }
 
+    export function setFixedCoIdInCcw(warRule: IWarRule, playerIndex: number, coId: number | null | undefined): void {
+        const playerRule = getPlayerRule(warRule, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwWarRuleHelper.setFixedCoIdInCcw() empty playerRule.`);
+            return;
+        }
+
+        playerRule.fixedCoIdInCcw = coId;
+    }
+    export function getFixedCoIdInCcw(warRule: IWarRule, playerIndex: number): number | null | undefined {
+        const playerRule = getPlayerRule(warRule, playerIndex);
+        if (playerRule == null) {
+            Logger.error(`BwWarRuleHelper.getFixedCoIdInCcw() empty playerRule.`);
+            return undefined;
+        }
+
+        return playerRule.fixedCoIdInCcw;
+    }
+
     export function getTeamIndex(warRule: IWarRule, playerIndex: number): number {
         if (playerIndex === CommonConstants.WarNeutralPlayerIndex) {
             return CommonConstants.WarNeutralTeamIndex;
@@ -412,7 +432,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         return playerRuleDataArray.find(v => v.playerIndex === playerIndex);
     }
 
-    export function getPlayersCount(warRule: IWarRule): number {
+    export function getPlayersCount(warRule: IWarRule): number | undefined {
         const ruleForPlayers = warRule.ruleForPlayers;
         if (ruleForPlayers == null) {
             Logger.error(`BwWarRuleHelper.getPlayersCount() empty ruleForPlayers.`);
@@ -475,7 +495,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
 
         return getRandomCoIdWithCoIdList(availableCoIdArray);
     }
-    export function getRandomCoIdWithCoIdList(coIdList: number[]): number {
+    export function getRandomCoIdWithCoIdList(coIdList: number[]): number | undefined {
         if (coIdList == null) {
             return undefined;
         } else {
@@ -495,9 +515,11 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 { languageType: LanguageType.English, text: Lang.getText(Lang.Type.B0001, LanguageType.English) },
             ],
             ruleAvailability: {
-                canMcw  : true,
-                canScw  : true,
+                canMcw  : false,
+                canScw  : false,
                 canMrw  : false,
+                canSrw  : false,
+                canCcw  : false,
             },
             ruleForGlobalParams : {
                 hasFogByDefault : false,
@@ -505,7 +527,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
             ruleForPlayers: {
                 playerRuleDataArray: createDefaultPlayerRuleList(playersCount),
             },
-        }
+        };
     }
     export function createDefaultPlayerRuleList(playersCount: number): IDataForPlayerRule[] {
         const playerRuleDataList: IDataForPlayerRule[] = [];
@@ -528,7 +550,7 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
             luckLowerLimit          : CommonConstants.WarRuleLuckDefaultLowerLimit,
             luckUpperLimit          : CommonConstants.WarRuleLuckDefaultUpperLimit,
             bannedCoIdArray         : [],
-        }
+        };
     }
     export function reviseWarRule(warRule: IWarRule, playersCount: number): void {
         const ruleForPlayers = warRule.ruleForPlayers;
@@ -775,25 +797,27 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
         ruleForPlayers          : IRuleForPlayers;
         configVersion           : string;
         playersCountUnneutral   : number;
-        ruleAvailability        : WarRule.IDataForWarRuleAvailability;
+        ruleAvailability        : WarRule.IRuleAvailability;
     }): ClientErrorCode {
         const ruleArray = ruleForPlayers.playerRuleDataArray;
         if ((ruleArray == null) || (ruleArray.length !== playersCountUnneutral)) {
             return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_00;
         }
 
-        const canSrw                = ruleAvailability.canSrw;
-        const playerIndexSet        = new Set<number>();
-        const teamIndexSet          = new Set<number>();
-        let srwAiCount              = 0;
-        let teamIndexForPlayerInSrw : number | null = null;
+        const { canSrw, canCcw }            = ruleAvailability;
+        const allPlayerIndexSet             = new Set<number>();
+        const allTeamIndexSet               = new Set<number>();
+        const teamIndexSetForHumanInSrw     = new Set<number>();
+        const teamIndexSetForAiInSrw        = new Set<number>();
+        const playerIndexSetForHumanInCcw   = new Set<number>();
+        const playerIndexSetForAiInCcw      = new Set<number>();
 
         for (const data of ruleArray) {
             const playerIndex = data.playerIndex;
             if ((playerIndex == null)                                   ||
                 (playerIndex <  CommonConstants.WarFirstPlayerIndex)    ||
                 (playerIndex >  playersCountUnneutral)                  ||
-                (playerIndexSet.has(playerIndex))
+                (allPlayerIndexSet.has(playerIndex))
             ) {
                 return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_01;
             }
@@ -806,8 +830,8 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_02;
             }
 
-            playerIndexSet.add(playerIndex);
-            teamIndexSet.add(teamIndex);
+            allPlayerIndexSet.add(playerIndex);
+            allTeamIndexSet.add(teamIndex);
 
             const initialFund = data.initialFund;
             if ((initialFund == null)                                       ||
@@ -889,49 +913,80 @@ namespace TinyWars.BaseWar.BwWarRuleHelper {
                 return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_12;
             }
 
-            const fixedCoIdInSrw = data.fixedCoIdInSrw;
-            if (fixedCoIdInSrw == null) {
-                if (canSrw) {
-                    if ((teamIndexForPlayerInSrw != null) && (teamIndex !== teamIndexForPlayerInSrw)) {
-                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_13;
+            {
+                const fixedCoIdInSrw = data.fixedCoIdInSrw;
+                if (fixedCoIdInSrw == null) {
+                    if (canSrw) {
+                        teamIndexSetForHumanInSrw.add(teamIndex);
                     }
-                    teamIndexForPlayerInSrw = teamIndex;
-                }
-            } else {
-                if (!canSrw) {
-                    return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_14;
                 } else {
-                    if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInSrw) == null) {
-                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_15;
+                    if (!canSrw) {
+                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_14;
+                    } else {
+                        if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInSrw) == null) {
+                            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_15;
+                        }
+                        teamIndexSetForAiInSrw.add(teamIndex);
                     }
-                    ++srwAiCount;
+                }
+            }
+
+            {
+                const fixedCoIdInCcw = data.fixedCoIdInCcw;
+                if (fixedCoIdInCcw == null) {
+                    if (canCcw) {
+                        playerIndexSetForHumanInCcw.add(playerIndex);
+                    }
+                } else {
+                    if (!canCcw) {
+                        return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_16;
+                    } else {
+                        if (ConfigManager.getCoBasicCfg(configVersion, fixedCoIdInCcw) == null) {
+                            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_17;
+                        }
+                        playerIndexSetForAiInCcw.add(playerIndex);
+                    }
                 }
             }
         }
 
-        if (playerIndexSet.size !== playersCountUnneutral) {
-            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_16;
-        }
-        if (teamIndexSet.size <= 1) {
-            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_17;
-        }
-        if ((canSrw)                                                                                        &&
-            ((srwAiCount <= 0) || (srwAiCount >= playersCountUnneutral) || (teamIndexForPlayerInSrw == null))
-        ) {
+        if (allPlayerIndexSet.size !== playersCountUnneutral) {
             return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_18;
+        }
+        if (allTeamIndexSet.size <= 1) {
+            return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_19;
+        }
+
+        if (canSrw) {
+            if (!teamIndexSetForAiInSrw.size) {
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_20;
+            }
+            if (teamIndexSetForHumanInSrw.size !== 1) {
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_21;
+            }
+        }
+
+        if (canCcw) {
+            if (!playerIndexSetForAiInCcw.size) {
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_22;
+            }
+            if (playerIndexSetForHumanInCcw.size <= 1) {
+                return ClientErrorCode.BwWarRuleHelper_GetErrorCodeForRuleForPlayers_23;
+            }
         }
 
         return ClientErrorCode.NoError;
     }
 
-    function checkIsValidWarRuleAvailability(availability: WarRule.IDataForWarRuleAvailability): boolean {
+    function checkIsValidWarRuleAvailability(availability: WarRule.IRuleAvailability): boolean {
         const {
-            canMcw,     canScw,     canMrw,     canSrw,
+            canMcw,     canScw,     canMrw,     canSrw,     canCcw
         } = availability;
         return (!!canMcw)
             || (!!canScw)
             || (!!canMrw)
-            || (!!canSrw);
+            || (!!canSrw)
+            || (!!canCcw);
     }
 
     function getErrorCodeForRuleForGlobalParams(rule: IRuleForGlobalParams): ClientErrorCode {

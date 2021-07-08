@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import Types            = Utility.Types;
@@ -16,8 +17,7 @@ namespace TinyWars.MultiCustomRoom {
         playedTimes?    : number;
         minRating?      : number;
         mapTag?         : IDataForMapTag;
-    }
-
+    };
     export class McrCreateMapListPanel extends GameUi.UiPanel<FiltersForMapList> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
         protected readonly _IS_EXCLUSIVE = true;
@@ -35,7 +35,6 @@ namespace TinyWars.MultiCustomRoom {
 
         private readonly _btnBack               : GameUi.UiButton;
         private readonly _btnSearch             : GameUi.UiButton;
-        private readonly _btnMapInfo            : GameUi.UiButton;
         private readonly _btnNextStep           : GameUi.UiButton;
 
         private readonly _groupMapList          : eui.Group;
@@ -112,38 +111,36 @@ namespace TinyWars.MultiCustomRoom {
 
         public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
             this._mapFilters            = mapFilters;
-            this._dataForList           = await this._createDataForListMap();
+            const dataArray             = await this._createDataForListMap();
+            this._dataForList           = dataArray;
 
-            const length                = this._dataForList.length;
+            const length                = dataArray.length;
+            const listMap               = this._listMap;
             this._labelNoMap.visible    = length <= 0;
-            this._listMap.bindData(this._dataForList);
+            listMap.bindData(dataArray);
             this.setSelectedMapId(this._selectedMapId);
 
-            if (length) {
-                for (let index = 0; index < length; ++index) {
-                    if (this._dataForList[index].mapId === this._selectedMapId) {
-                        this._listMap.scrollVerticalTo((index + 1) / length * 100);
-                        break;
-                    }
-                }
+            if (length > 1) {
+                const index = dataArray.findIndex(v => v.mapId === this._selectedMapId);
+                (index >= 0) && (listMap.scrollVerticalTo(index / (length - 1) * 100));
             }
         }
 
         ////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
+        private _onTouchTapBtnSearch(): void {
             McrCreateSearchMapPanel.show();
         }
 
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        private _onTouchTapBtnBack(): void {
             this.close();
             McrMainMenuPanel.show();
             Lobby.LobbyTopPanel.show();
             Lobby.LobbyBottomPanel.show();
         }
 
-        private async _onTouchedBtnNextStep(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnNextStep(): Promise<void> {
             const selectedMapId = this.getSelectedMapId();
             if (selectedMapId != null) {
                 this.close();
@@ -152,7 +149,7 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -164,26 +161,28 @@ namespace TinyWars.MultiCustomRoom {
             this._labelMultiPlayer.text         = Lang.getText(Lang.Type.B0137);
             this._labelChooseMap.text           = Lang.getText(Lang.Type.B0227);
             this._labelLoading.text             = Lang.getText(Lang.Type.A0150);
+            this._labelNoMap.text               = Lang.getText(Lang.Type.A0010);
             this._btnBack.label                 = Lang.getText(Lang.Type.B0146);
             this._btnSearch.label               = Lang.getText(Lang.Type.B0228);
-            this._btnMapInfo.label              = Lang.getText(Lang.Type.B0298);
             this._btnNextStep.label             = Lang.getText(Lang.Type.B0566);
         }
 
         private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const data: DataForMapNameRenderer[] = [];
-            let { mapName, mapDesigner, playersCount, playedTimes, minRating } = this._mapFilters;
-            const filterTag = this._mapFilters.mapTag || {};
-            (mapName)       && (mapName     = mapName.toLowerCase());
-            (mapDesigner)   && (mapDesigner = mapDesigner.toLowerCase());
+            const dataArray                                 : DataForMapNameRenderer[] = [];
+            const mapFilters                                = this._mapFilters;
+            const filterTag                                 = mapFilters.mapTag || {};
+            const mapName                                   = (mapFilters.mapName || "").toLowerCase();
+            const mapDesigner                               = (mapFilters.mapDesigner || "").toLowerCase();
+            const { playersCount, playedTimes, minRating }  = mapFilters;
 
             for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
                 const mapExtraData  = mapBriefData.mapExtraData;
                 const mapTag        = mapBriefData.mapTag || {};
                 const realMapName   = await WarMapModel.getMapNameInCurrentLanguage(mapId);
                 const rating        = await WarMapModel.getAverageRating(mapId);
-                if ((!mapExtraData.isEnabled)                                                                           ||
-                    (!mapExtraData.mapComplexInfo.availability.canMcw)                                                  ||
+                if ((!mapBriefData.ruleAvailability.canMcw)                                                             ||
+                    (!mapExtraData.isEnabled)                                                                           ||
+                    (!mapExtraData.mapComplexInfo.mapAvailability.canMcw)                                               ||
                     ((mapName) && (realMapName.toLowerCase().indexOf(mapName) < 0))                                     ||
                     ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))               ||
                     ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                           ||
@@ -193,7 +192,7 @@ namespace TinyWars.MultiCustomRoom {
                 ) {
                     continue;
                 } else {
-                    data.push({
+                    dataArray.push({
                         mapId,
                         mapName : realMapName,
                         panel   : this,
@@ -201,7 +200,7 @@ namespace TinyWars.MultiCustomRoom {
                 }
             }
 
-            return data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
+            return dataArray.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
         }
 
         private async _showMap(mapId: number): Promise<void> {
@@ -233,11 +232,6 @@ namespace TinyWars.MultiCustomRoom {
             });
             Helpers.resetTween({
                 obj         : this._btnSearch,
-                beginProps  : { alpha: 0, y: 40 },
-                endProps    : { alpha: 1, y: 80 },
-            });
-            Helpers.resetTween({
-                obj         : this._btnMapInfo,
                 beginProps  : { alpha: 0, y: 40 },
                 endProps    : { alpha: 1, y: 80 },
             });
@@ -281,11 +275,6 @@ namespace TinyWars.MultiCustomRoom {
                     endProps    : { alpha: 0, y: 40 },
                 });
                 Helpers.resetTween({
-                    obj         : this._btnMapInfo,
-                    beginProps  : { alpha: 1, y: 80 },
-                    endProps    : { alpha: 0, y: 40 },
-                });
-                Helpers.resetTween({
                     obj         : this._btnNextStep,
                     beginProps  : { alpha: 1, left: 20 },
                     endProps    : { alpha: 0, left: -20 },
@@ -308,7 +297,7 @@ namespace TinyWars.MultiCustomRoom {
         mapId   : number;
         mapName : string;
         panel   : McrCreateMapListPanel;
-    }
+    };
 
     class MapNameRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
         private _btnChoose: GameUi.UiButton;
@@ -328,12 +317,12 @@ namespace TinyWars.MultiCustomRoom {
             WarMapModel.getMapNameInCurrentLanguage(data.mapId).then(v => this._labelName.text = v);
         }
 
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+        private _onTouchTapBtnChoose(): void {
             const data = this.data;
             data.panel.setSelectedMapId(data.mapId);
         }
 
-        private async _onTouchTapBtnNext(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchTapBtnNext(): Promise<void> {
             const data = this.data;
             data.panel.close();
             await McrModel.Create.resetDataByMapId(data.mapId);

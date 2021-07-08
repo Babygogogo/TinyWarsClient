@@ -1,7 +1,7 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiFreeRoom.MfrModel {
     import Types            = Utility.Types;
-    import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
     import Notify           = Utility.Notify;
     import Helpers          = Utility.Helpers;
@@ -19,8 +19,11 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
         60 * 60 * 24 * 7,   // 7 days
     ];
 
-    export type DataForCreateRoom   = ProtoTypes.NetMessage.MsgMfrCreateRoom.IC;
-    export type DataForJoinRoom     = ProtoTypes.NetMessage.MsgMfrJoinRoom.IC;
+    export type DataForJoinRoom = ProtoTypes.NetMessage.MsgMfrJoinRoom.IC;
+    type DataForCreateRoom      = {
+        settingsForMfw  : ProtoTypes.WarSettings.ISettingsForMfw;
+        selfPlayerIndex : number | null;
+    };
 
     const _roomInfoDict         = new Map<number, IMfrRoomInfo>();
     const _roomInfoRequests     = new Map<number, ((info: NetMessage.MsgMfrGetRoomInfo.IS | undefined | null) => void)[]>();
@@ -33,7 +36,7 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     export function getRoomInfo(roomId: number): Promise<IMfrRoomInfo | undefined | null> {
         if (roomId == null) {
-            return new Promise((resolve, reject) => resolve(null));
+            return new Promise((resolve) => resolve(null));
         }
 
         const localData = _roomInfoDict.get(roomId);
@@ -42,12 +45,12 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
         }
 
         if (_roomInfoRequests.has(roomId)) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 _roomInfoRequests.get(roomId).push(info => resolve(info.roomInfo));
             });
         }
 
-        new Promise<void>((resolve, reject) => {
+        new Promise<void>((resolve) => {
             const callbackOnSucceed = (e: egret.Event): void => {
                 const data = e.data as NetMessage.MsgMfrGetRoomInfo.IS;
                 if (data.roomId === roomId) {
@@ -83,7 +86,7 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
             MfrProxy.reqMfrGetRoomInfo(roomId);
         });
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             _roomInfoRequests.set(roomId, [info => resolve(info.roomInfo)]);
         });
     }
@@ -217,9 +220,9 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
                 return true;
             }
 
-            if ((playerDataList.length === getNeededPlayersCount(roomInfo))     &&
-                (playerDataList.every(v => (v.isReady) && (v.userId != null)))  &&
-                (selfPlayerData)                                                &&
+            if ((playerDataList.length === BwWarRuleHelper.getPlayersCount(roomInfo.settingsForMfw.initialWarData.settingsForCommon.warRule))   &&
+                (playerDataList.every(v => v.isReady))                                                                                          &&
+                (selfPlayerData)                                                                                                                &&
                 (roomInfo.ownerPlayerIndex === selfPlayerData.playerIndex)
             ) {
                 return true;
@@ -238,8 +241,8 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
         const selfPlayerData    = playerDataList.find(v => v.userId === selfUserId);
         return (selfPlayerData != null)
             && (selfPlayerData.playerIndex === roomInfo.ownerPlayerIndex)
-            && (playerDataList.length === getNeededPlayersCount(roomInfo))
-            && (playerDataList.every(v => (v.isReady) && (v.userId != null)));
+            && (playerDataList.length === BwWarRuleHelper.getPlayersCount(roomInfo.settingsForMfw.initialWarData.settingsForCommon.warRule))
+            && (playerDataList.every(v => v.isReady));
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -259,13 +262,15 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
             setWarComment("");
             setBootTimerParams([BootTimerType.Regular, CommonConstants.WarBootTimerRegularDefaultValue]);
             setSelfPlayerIndex(warData.playerManager.players.find(v => {
-                return (v.aliveState !== Types.PlayerAliveState.Dead) && (v.playerIndex !== CommonConstants.WarNeutralPlayerIndex)
+                return (v.aliveState !== Types.PlayerAliveState.Dead)
+                    && (v.playerIndex !== CommonConstants.WarNeutralPlayerIndex)
+                    && (v.userId != null);
             }).playerIndex);
         }
         export function getData(): DataForCreateRoom {
             return _dataForCreateRoom;
         }
-        export function getWarRule(): ProtoTypes.WarRule.IWarRule {
+        export function getWarRule(): ProtoTypes.WarRule.IWarRule | null | undefined {
             return getSettingsForMfw().initialWarData.settingsForCommon.warRule;
         }
         function getSettingsForMfw(): ProtoTypes.WarSettings.ISettingsForMfw {
@@ -366,7 +371,7 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
             return BwWarRuleHelper.getTeamIndex(getWarRule(), playerIndex);
         }
 
-        export function setInitialFund(playerIndex, fund: number): void {
+        export function setInitialFund(playerIndex: number, fund: number): void {
             BwWarRuleHelper.setInitialFund(getWarRule(), playerIndex, fund);
         }
         export function getInitialFund(playerIndex: number): number {
@@ -556,18 +561,5 @@ namespace TinyWars.MultiFreeRoom.MfrModel {
         }
 
         return indexArray;
-    }
-
-    export function getNeededPlayersCount(roomInfo: IMfrRoomInfo): number {
-        let count = 0;
-        for (const player of roomInfo.settingsForMfw.initialWarData.playerManager.players) {
-            if ((player.aliveState !== Types.PlayerAliveState.Dead)             &&
-                (player.playerIndex !== CommonConstants.WarNeutralPlayerIndex)
-            ) {
-                ++count;
-            }
-        }
-
-        return count;
     }
 }

@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapEditor {
     import FloatText        = Utility.FloatText;
     import Lang             = Utility.Lang;
@@ -68,8 +69,7 @@ namespace TinyWars.MapEditor {
 
     type DataForPlayerRenderer = {
         playerIndex : number;
-    }
-
+    };
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
 
@@ -131,17 +131,23 @@ namespace TinyWars.MapEditor {
             };
         }
         private _createDataCo(playerIndex: number): DataForInfoRenderer {
-            const coId = MeModel.Sim.getCoId(playerIndex);
+            const coId          = MeModel.Sim.getCoId(playerIndex);
+            const configVersion = MeModel.Sim.getWarData().settingsForCommon.configVersion;
             return {
                 titleText               : Lang.getText(Lang.Type.B0425),
-                infoText                : ConfigManager.getCoNameAndTierText(MeModel.Sim.getWarData().settingsForCommon.configVersion, coId),
+                infoText                : ConfigManager.getCoNameAndTierText(configVersion, coId),
                 infoColor               : 0xFFFFFF,
                 callbackOnTouchedTitle  : () => {
-                    MeSimChooseCoPanel.show({
-                        playerIndex,
-                        coId,
+                    Common.CommonChooseCoPanel.show({
+                        currentCoId         : coId,
+                        availableCoIdArray  : ConfigManager.getEnabledCoArray(configVersion).map(v => v.coId),
+                        callbackOnConfirm   : newCoId => {
+                            if (newCoId !== coId) {
+                                MeModel.Sim.setCoId(playerIndex, newCoId);
+                                this._updateView();
+                            }
+                        },
                     });
-                    MeSimSettingsPanel.hide();
                 },
             };
         }
@@ -468,7 +474,7 @@ namespace TinyWars.MapEditor {
         infoText                : string;
         infoColor               : number;
         callbackOnTouchedTitle  : (() => void) | null;
-    }
+    };
 
     class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;
@@ -488,7 +494,7 @@ namespace TinyWars.MapEditor {
             this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
         }
 
-        private _onTouchedBtnTitle(e: egret.TouchEvent): void {
+        private _onTouchedBtnTitle(): void {
             const data      = this.data;
             const callback  = data ? data.callbackOnTouchedTitle : null;
             (callback) && (callback());

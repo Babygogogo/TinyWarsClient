@@ -70,7 +70,7 @@ namespace TinyWars.ReplayWar {
         private _onTouchedBtnTimerTypeHelp(e: egret.TouchEvent): void {
             CommonHelpPanel.show({
                 title  : Lang.getText(Lang.Type.B0574),
-                content: Lang.getRichText(Lang.RichType.R0003),
+                content: Lang.getText(Lang.Type.R0003),
             });
         }
 

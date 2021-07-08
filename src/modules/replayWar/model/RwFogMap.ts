@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.ReplayWar {
     import VisibilityHelpers = Utility.VisibilityHelpers;
 
@@ -7,9 +8,9 @@ namespace TinyWars.ReplayWar {
             this._setWar(war);
 
             const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeam(war, war.getPlayerInTurn().getTeamIndex());
-            war.getTileMap().forEachTile(tile => {
+            for (const tile of war.getTileMap().getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
-            });
+            }
         }
     }
 }

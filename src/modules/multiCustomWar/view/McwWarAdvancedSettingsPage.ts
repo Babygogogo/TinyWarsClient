@@ -1,20 +1,25 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiCustomWar {
     import Lang             = Utility.Lang;
     import Types            = Utility.Types;
     import CommonConstants  = Utility.CommonConstants;
     import Notify           = Utility.Notify;
+    import Logger           = Utility.Logger;
     import ProtoTypes       = Utility.ProtoTypes;
     import BwWarRuleHelper  = BaseWar.BwWarRuleHelper;
     import MpwModel         = MultiPlayerWar.MpwModel;
     import PlayerRuleType   = Types.PlayerRuleType;
 
     export type OpenDataForMcwWarAdvancedSettingsPage = {
-        warId  : number;
+        warId  : number | null | undefined;
     }
     export class McwWarAdvancedSettingsPage extends GameUi.UiTabPage<OpenDataForMcwWarAdvancedSettingsPage> {
+        // @ts-ignore
         private readonly _scroller      : eui.Scroller;
+        // @ts-ignore
         private readonly _listSetting   : GameUi.UiScrollList<DataForSettingRenderer>;
+        // @ts-ignore
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
 
         public constructor() {
@@ -44,7 +49,7 @@ namespace TinyWars.MultiCustomWar {
         ////////////////////////////////////////////////////////////////////////////////
         // Event callbacks.
         ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
@@ -60,6 +65,7 @@ namespace TinyWars.MultiCustomWar {
         // View functions.
         ////////////////////////////////////////////////////////////////////////////////
         private _updateComponentsForLanguage(): void {
+            // nothing to do.
         }
 
         private _initListSetting(): void {
@@ -79,19 +85,28 @@ namespace TinyWars.MultiCustomWar {
         }
 
         private async _updateListPlayer(): Promise<void> {
-            const warId         = this._getOpenData().warId;
-            const warInfo       = await MpwModel.getMyWarInfo(warId);
-            const playersCount  = warInfo ? warInfo.settingsForCommon.warRule.ruleForPlayers.playerRuleDataArray.length : null;
             const listPlayer    = this._listPlayer;
-            if (playersCount == null) {
+            const warId         = this._getOpenData().warId;
+            if (warId == null) {
                 listPlayer.clear();
-            } else {
-                const dataList: DataForPlayerRenderer[] = [];
-                for (let playerIndex = 1; playerIndex <= playersCount; ++playerIndex) {
-                    dataList.push({ warId, playerIndex });
-                }
-                listPlayer.bindData(dataList);
+                return;
             }
+
+            const warInfo               = MpwModel.getMyWarInfo(warId);
+            const settingsForCommon     = warInfo ? warInfo.settingsForCommon : null;
+            const warRule               = settingsForCommon ? settingsForCommon.warRule : null;
+            const playersCountUnneutral = warRule ? BwWarRuleHelper.getPlayersCount(warRule) : undefined;
+            if (playersCountUnneutral == null) {
+                Logger.error(`McwWarAdvancedSettingsPage._updateListPlayer() empty playersCountUnneutral.`);
+                listPlayer.clear();
+                return;
+            }
+
+            const dataArray: DataForPlayerRenderer[] = [];
+            for (let playerIndex = 1; playerIndex <= playersCountUnneutral; ++playerIndex) {
+                dataArray.push({ warId, playerIndex });
+            }
+            listPlayer.bindData(dataArray);
         }
     }
 
@@ -102,7 +117,9 @@ namespace TinyWars.MultiCustomWar {
         playerRuleType  : PlayerRuleType;
     }
     class SettingRenderer extends GameUi.UiListItemRenderer<DataForSettingRenderer> {
+        // @ts-ignore
         private readonly _labelName : GameUi.UiLabel;
+        // @ts-ignore
         private readonly _btnHelp   : GameUi.UiButton;
 
         protected _onOpened(): void {
@@ -115,18 +132,18 @@ namespace TinyWars.MultiCustomWar {
             const data = this.data;
             if (data) {
                 const playerRuleType    = data.playerRuleType;
-                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType);
                 this._btnHelp.visible   = playerRuleType === PlayerRuleType.BannedCoIdArray;
+                this._labelName.text    = Lang.getPlayerRuleName(playerRuleType) || CommonConstants.ErrorTextForUndefined;
             }
         }
 
-        private _onTouchedBtnHelp(e: egret.Event): void {
+        private _onTouchedBtnHelp(): void {
             const data              = this.data;
             const playerRuleType    = data ? data.playerRuleType : null;
             if (playerRuleType === PlayerRuleType.BannedCoIdArray) {
                 Common.CommonHelpPanel.show({
                     title   : `CO`,
-                    content : Lang.getRichText(Lang.RichType.R0004),
+                    content : Lang.getText(Lang.Type.R0004),
                 });
             }
         }
@@ -140,7 +157,9 @@ namespace TinyWars.MultiCustomWar {
         playerIndex : number;
     }
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
+        // @ts-ignore
         private _labelPlayerIndex   : GameUi.UiLabel;
+        // @ts-ignore
         private _listInfo           : GameUi.UiScrollList<DataForInfoRenderer>;
 
         protected _onOpened(): void {
@@ -191,6 +210,7 @@ namespace TinyWars.MultiCustomWar {
         callbackOnTouchedTitle? : (() => void) | null;
     }
     class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
+        // @ts-ignore
         private readonly _labelValue    : GameUi.UiLabel;
 
         protected _onDataChanged(): void {
@@ -218,85 +238,153 @@ namespace TinyWars.MultiCustomWar {
             }
         }
         private async _updateComponentsForValueAsTeamIndex(playerIndex: number): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            const teamIndex         = warInfo ? BwWarRuleHelper.getTeamIndex(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const warRule           = this._getWarRule();
+            const teamIndex         = warRule ? BwWarRuleHelper.getTeamIndex(warRule, playerIndex) : undefined;
             const labelValue        = this._labelValue;
-            labelValue.text         = teamIndex == null ? null : Lang.getPlayerTeamName(teamIndex);
             labelValue.textColor    = 0xFFFFFF;
+
+            if (teamIndex == null) {
+                Logger.error(`McwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsTeamIndex() empty teamIndex.`);
+                labelValue.text = CommonConstants.ErrorTextForUndefined;
+            } else {
+                const teamName = Lang.getPlayerTeamName(teamIndex);
+                if (teamName == null) {
+                    Logger.error(`McwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsTeamIndex() empty teamName.`);
+                    labelValue.text = CommonConstants.ErrorTextForUndefined;
+                } else {
+                    labelValue.text = teamName;
+                }
+            }
         }
         private async _updateComponentsForValueAsBannedCoIdArray(playerIndex: number): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            const currValue         = warInfo ? (BwWarRuleHelper.getBannedCoIdArray(warInfo.settingsForCommon.warRule, playerIndex) || []).length : 0;
+            const warRule           = this._getWarRule();
+            const currValue         = warRule ? (BwWarRuleHelper.getBannedCoIdArray(warRule, playerIndex) || []).length : 0;
             const labelValue        = this._labelValue;
             labelValue.text         = `${currValue}`;
             labelValue.textColor    = currValue > 0 ? 0xFF0000 : 0xFFFFFF;
         }
         private async _updateComponentsForValueAsInitialFund(playerIndex: number): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            const currValue         = warInfo ? BwWarRuleHelper.getInitialFund(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const warRule           = this._getWarRule();
+            const currValue         = warRule ? BwWarRuleHelper.getInitialFund(warRule, playerIndex) : undefined;
             const labelValue        = this._labelValue;
-            labelValue.text         = currValue == null ? null : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
+            if (currValue == null) {
+                Logger.error(`McwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsInitialFund() empty currValue.`);
+                labelValue.text         = CommonConstants.ErrorTextForUndefined;
+                labelValue.textColor    = 0xFFFFFF;
+            } else {
+                labelValue.text         = `${currValue}`;
+                labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault);
+            }
         }
         private async _updateComponentsForValueAsIncomeMultiplier(playerIndex: number): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            const currValue         = warInfo ? BwWarRuleHelper.getIncomeMultiplier(warInfo.settingsForCommon.warRule, playerIndex): undefined;
+            const warRule           = this._getWarRule();
+            const currValue         = warRule ? BwWarRuleHelper.getIncomeMultiplier(warRule, playerIndex): undefined;
             const labelValue        = this._labelValue;
-            labelValue.text         = currValue == null ? null : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
+            if (currValue == null) {
+                Logger.error(`McwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsIncomeMultiplier() empty currValue.`);
+                labelValue.text         = CommonConstants.ErrorTextForUndefined;
+                labelValue.textColor    = 0xFFFFFF;
+            } else {
+                labelValue.text         = `${currValue}`;
+                labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault);
+            }
         }
         private async _updateComponentsForValueAsEnergyAddPctOnLoadCo(playerIndex: number): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            const currValue         = warInfo ? BwWarRuleHelper.getEnergyAddPctOnLoadCo(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const warRule           = this._getWarRule();
+            const currValue         = warRule ? BwWarRuleHelper.getEnergyAddPctOnLoadCo(warRule, playerIndex) : undefined;
             const labelValue        = this._labelValue;
-            labelValue.text         = currValue == null ? null : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
+            if (currValue == null) {
+                Logger.error(`McwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsEnergyAddPctOnLoadCo() empty currValue.`);
+                labelValue.text         = CommonConstants.ErrorTextForUndefined;
+                labelValue.textColor    = 0xFFFFFF;
+            } else {
+                labelValue.text         = `${currValue}`;
+                labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault);
+            }
         }
         private async _updateComponentsForValueAsEnergyGrowthMultiplier(playerIndex: number): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            const currValue         = warInfo ? BwWarRuleHelper.getEnergyGrowthMultiplier(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const warRule           = this._getWarRule();
+            const currValue         = warRule ? BwWarRuleHelper.getEnergyGrowthMultiplier(warRule, playerIndex) : undefined;
             const labelValue        = this._labelValue;
-            labelValue.text         = currValue == null ? null : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
+            if (currValue == null) {
+                Logger.error(`McwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsEnergyGrowthMultiplier() empty currValue.`);
+                labelValue.text         = CommonConstants.ErrorTextForUndefined;
+                labelValue.textColor    = 0xFFFFFF;
+            } else {
+                labelValue.text         = `${currValue}`;
+                labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault);
+            }
         }
         private async _updateComponentsForValueAsMoveRangeModifier(playerIndex: number): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            const currValue         = warInfo ? BwWarRuleHelper.getMoveRangeModifier(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const warRule           = this._getWarRule();
+            const currValue         = warRule ? BwWarRuleHelper.getMoveRangeModifier(warRule, playerIndex) : undefined;
             const labelValue        = this._labelValue;
-            labelValue.text         = currValue == null ? null : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
+            if (currValue == null) {
+                Logger.error(`McwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsMoveRangeModifier() empty currValue.`);
+                labelValue.text         = CommonConstants.ErrorTextForUndefined;
+                labelValue.textColor    = 0xFFFFFF;
+            } else {
+                labelValue.text         = `${currValue}`;
+                labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault);
+            }
         }
         private async _updateComponentsForValueAsAttackPowerModifier(playerIndex: number): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            const currValue         = warInfo ? BwWarRuleHelper.getAttackPowerModifier(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const warRule           = this._getWarRule();
+            const currValue         = warRule ? BwWarRuleHelper.getAttackPowerModifier(warRule, playerIndex) : undefined;
             const labelValue        = this._labelValue;
-            labelValue.text         = currValue == null ? null : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
+            if (currValue == null) {
+                Logger.error(`McwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsAttackPowerModifier() empty currValue.`);
+                labelValue.text         = CommonConstants.ErrorTextForUndefined;
+                labelValue.textColor    = 0xFFFFFF;
+            } else {
+                labelValue.text         = `${currValue}`;
+                labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault);
+            }
         }
         private async _updateComponentsForValueAsVisionRangeModifier(playerIndex: number): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            const currValue         = warInfo ? BwWarRuleHelper.getVisionRangeModifier(warInfo.settingsForCommon.warRule, playerIndex): undefined;
+            const warRule           = this._getWarRule();
+            const currValue         = warRule ? BwWarRuleHelper.getVisionRangeModifier(warRule, playerIndex): undefined;
             const labelValue        = this._labelValue;
-            labelValue.text         = currValue == null ? null : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
+            if (currValue == null) {
+                Logger.error(`McwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsVisionRangeModifier() empty currValue.`);
+                labelValue.text         = CommonConstants.ErrorTextForUndefined;
+                labelValue.textColor    = 0xFFFFFF;
+            } else {
+                labelValue.text         = `${currValue}`;
+                labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault);
+            }
         }
         private async _updateComponentsForValueAsLuckLowerLimit(playerIndex: number): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            const currValue         = warInfo ? BwWarRuleHelper.getLuckLowerLimit(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const warRule           = this._getWarRule();
+            const currValue         = warRule ? BwWarRuleHelper.getLuckLowerLimit(warRule, playerIndex) : undefined;
             const labelValue        = this._labelValue;
-            labelValue.text         = currValue == null ? null : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
+            if (currValue == null) {
+                Logger.error(`McwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsLuckLowerLimit() empty currValue.`);
+                labelValue.text         = CommonConstants.ErrorTextForUndefined;
+                labelValue.textColor    = 0xFFFFFF;
+            } else {
+                labelValue.text         = `${currValue}`;
+                labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit);
+            }
         }
         private async _updateComponentsForValueAsLuckUpperLimit(playerIndex: number): Promise<void> {
-            const warInfo           = await this._getWarInfo();
-            const currValue         = warInfo ? BwWarRuleHelper.getLuckUpperLimit(warInfo.settingsForCommon.warRule, playerIndex) : undefined;
+            const warRule           = this._getWarRule();
+            const currValue         = warRule ? BwWarRuleHelper.getLuckUpperLimit(warRule, playerIndex) : undefined;
             const labelValue        = this._labelValue;
-            labelValue.text         = currValue == null ? null : `${currValue}`;
-            labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
+            if (currValue == null) {
+                Logger.error(`McwWarAdvancedSettingsPage.InfoRenderer._updateComponentsForValueAsLuckUpperLimit() empty currValue.`);
+                labelValue.text         = CommonConstants.ErrorTextForUndefined;
+                labelValue.textColor    = 0xFFFFFF;
+            } else {
+                labelValue.text         = `${currValue}`;
+                labelValue.textColor    = getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit);
+            }
         }
 
-        private _getWarInfo(): ProtoTypes.MultiPlayerWar.IMpwWarInfo {
-            return MpwModel.getMyWarInfo(this.data.warId);
+        private _getWarRule(): ProtoTypes.WarRule.IWarRule | null | undefined {
+            const warInfo           = MpwModel.getMyWarInfo(this.data.warId);
+            const settingsForCommon = warInfo ? warInfo.settingsForCommon : null;
+            return settingsForCommon ? settingsForCommon.warRule : undefined;
         }
     }
 

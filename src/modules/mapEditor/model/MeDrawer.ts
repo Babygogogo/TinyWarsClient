@@ -1,10 +1,14 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MapEditor {
     import Types                = Utility.Types;
     import Notify               = Utility.Notify;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
     import ConfigManager        = Utility.ConfigManager;
+    import FloatText            = Utility.FloatText;
     import DestructionHelpers   = Utility.DestructionHelpers;
+    import Lang                 = Utility.Lang;
+    import Logger               = Utility.Logger;
     import BwUnit               = BaseWar.BwUnit;
     import DrawerMode           = Types.MapEditorDrawerMode;
     import GridIndex            = Types.GridIndex;
@@ -12,21 +16,20 @@ namespace TinyWars.MapEditor {
     import UnitType             = Types.UnitType;
     import TileBaseType         = Types.TileBaseType;
     import TileObjectType       = Types.TileObjectType;
-    import CommonConstants      = Utility.CommonConstants;
 
     export type DataForDrawTileObject = {
         objectType  : TileObjectType;
         shapeId     : number;
         playerIndex : number;
-    }
+    };
     export type DataForDrawTileBase = {
         baseType    : TileBaseType;
         shapeId     : number;
-    }
+    };
     export type DataForDrawUnit = {
         unitType    : UnitType;
         playerIndex : number;
-    }
+    };
 
     export class MeDrawer {
         private _war                            : MeWar;
@@ -247,6 +250,16 @@ namespace TinyWars.MapEditor {
         private _handleDrawUnit(gridIndex: GridIndex): void {
             this._handleDeleteUnit(gridIndex);
 
+            const tile = this._tileMap.getTile(gridIndex);
+            if (tile == null) {
+                Logger.error(`MeDrawer._handleDrawUnit() empty tile.`);
+                return;
+            }
+            if (tile.getMaxHp() != null) {
+                FloatText.show(Lang.getFormattedText(Lang.Type.F0067, Lang.getTileName(tile.getType())));
+                return;
+            }
+
             const unitMap       = this._unitMap;
             const unitId        = unitMap.getNextUnitId();
             const targetUnit    = this._drawTargetUnit;
@@ -277,7 +290,7 @@ namespace TinyWars.MapEditor {
             const symGridIndex = MeUtility.getSymmetricalGridIndex(gridIndex, symmetryType, tileMap.getMapSize());
             if ((symGridIndex) && (!GridIndexHelpers.checkIsEqual(symGridIndex, gridIndex))) {
                 const t2 = tileMap.getTile(symGridIndex);
-                t2.destroyTileObject()
+                t2.destroyTileObject();
                 t2.flushDataToView();
 
                 Notify.dispatch(Notify.Type.MeTileChanged, { gridIndex: symGridIndex } as Notify.Data.MeTileChanged);

@@ -1,31 +1,33 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Common {
     import Lang     = Utility.Lang;
     import Notify   = Utility.Notify;
+    import Helpers  = Utility.Helpers;
 
-    type OpenDataForCommonInputPanel = {
+    type OpenData = {
         title           : string;
         currentValue    : string;
         tips            : string | null;
         maxChars        : number | null;
         charRestrict    : string | null;
         callback        : (panel: CommonInputPanel) => any;
-    }
-
-    export class CommonInputPanel extends GameUi.UiPanel<OpenDataForCommonInputPanel> {
+    };
+    export class CommonInputPanel extends GameUi.UiPanel<OpenData> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud3;
         protected readonly _IS_EXCLUSIVE = true;
 
         private static _instance: CommonInputPanel;
 
-        private _group          : eui.Group;
-        private _labelTitle     : GameUi.UiLabel;
-        private _labelTips      : GameUi.UiLabel;
-        private _input          : GameUi.UiTextInput;
-        private _btnCancel      : GameUi.UiButton;
-        private _btnConfirm     : GameUi.UiButton;
+        private readonly _imgMask       : GameUi.UiImage;
+        private readonly _group         : eui.Group;
+        private readonly _labelTitle    : GameUi.UiLabel;
+        private readonly _labelTips     : GameUi.UiLabel;
+        private readonly _input         : GameUi.UiTextInput;
+        private readonly _btnCancel     : GameUi.UiButton;
+        private readonly _btnConfirm    : GameUi.UiButton;
 
-        public static show(openData: OpenDataForCommonInputPanel): void {
+        public static show(openData: OpenData): void {
             if (!CommonInputPanel._instance) {
                 CommonInputPanel._instance = new CommonInputPanel();
             }
@@ -73,40 +75,51 @@ namespace TinyWars.Common {
             return this._input.text;
         }
 
-        private _onTouchedBtnCancel(e: egret.TouchEvent): void {
+        private _onTouchedBtnCancel(): void {
             this.close();
         }
 
-        private _onTouchedBtnConfirm(e: egret.TouchEvent): void {
+        private _onTouchedBtnConfirm(): void {
             this._getOpenData().callback(this);
             this.close();
         }
 
-        private _onFocusOutInput(e: egret.Event): void {
+        private _onFocusOutInput(): void {
             if (!this._input.text) {
                 this._input.text = this._getOpenData().currentValue;
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 
         private _showOpenAnimation(): void {
-            const group = this._group;
-            egret.Tween.removeTweens(group);
-            egret.Tween.get(group)
-                .set({ alpha: 0, verticalCenter: -40 })
-                .to({ alpha: 1, verticalCenter: 0 }, 200);
+            Helpers.resetTween({
+                obj         : this._imgMask,
+                beginProps  : { alpha: 0 },
+                endProps    : { alpha: 1 },
+            });
+            Helpers.resetTween({
+                obj         : this._group,
+                beginProps  : { alpha: 0, verticalCenter: -40 },
+                endProps    : { alpha: 1, verticalCenter: 0 },
+            });
         }
         private _showCloseAnimation(): Promise<void> {
             return new Promise<void>(resolve => {
-                const group = this._group;
-                egret.Tween.removeTweens(group);
-                egret.Tween.get(group)
-                    .set({ alpha: 1, verticalCenter: 0 })
-                    .to({ alpha: 0, verticalCenter: -40 }, 200)
-                    .call(resolve);
+                Helpers.resetTween({
+                    obj         : this._imgMask,
+                    beginProps  : { alpha: 1 },
+                    endProps    : { alpha: 0 },
+                });
+
+                Helpers.resetTween({
+                    obj         : this._group,
+                    beginProps  : { alpha: 1, verticalCenter: 0 },
+                    endProps    : { alpha: 0, verticalCenter: -40 },
+                    callback    : resolve,
+                });
             });
         }
 

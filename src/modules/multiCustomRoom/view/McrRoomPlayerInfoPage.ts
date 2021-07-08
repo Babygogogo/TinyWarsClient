@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiCustomRoom {
     import Notify           = Utility.Notify;
     import Lang             = Utility.Lang;
@@ -11,7 +12,7 @@ namespace TinyWars.MultiCustomRoom {
 
     export type OpenDataForMcrRoomPlayerInfoPage = {
         roomId  : number;
-    }
+    };
     export class McrRoomPlayerInfoPage extends GameUi.UiTabPage<OpenDataForMcrRoomPlayerInfoPage> {
         private readonly _groupInfo     : eui.Group;
         private readonly _listPlayer    : GameUi.UiScrollList<DataForPlayerRenderer>;
@@ -24,7 +25,6 @@ namespace TinyWars.MultiCustomRoom {
 
         protected _onOpened(): void {
             this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
                 { type: Notify.Type.MsgMcrGetRoomInfo,  callback: this._onNotifyMsgMcrGetRoomInfo },
             ]);
 
@@ -35,19 +35,13 @@ namespace TinyWars.MultiCustomRoom {
 
             this._listPlayer.setItemRenderer(PlayerRenderer);
 
-            this._updateComponentsForLanguage();
             this._updateComponentsForRoomInfo();
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateComponentsForLanguage();
-        }
-        private _onNotifyMsgMcrGetRoomInfo(e: egret.Event): void {
+        private _onNotifyMsgMcrGetRoomInfo(): void {
             this._updateComponentsForRoomInfo();
         }
 
-        private _updateComponentsForLanguage(): void {
-        }
         private async _updateComponentsForRoomInfo(): Promise<void> {
             const roomInfo      = await McrModel.getRoomInfo(this._getOpenData().roomId);
             const mapRawData    = roomInfo ? await WarMap.WarMapModel.getRawData(roomInfo.settingsForMcw.mapId) : null;
@@ -75,8 +69,7 @@ namespace TinyWars.MultiCustomRoom {
     type DataForPlayerRenderer = {
         roomId          : number;
         playerIndex     : number;
-    }
-
+    };
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private readonly _groupCo           : eui.Group;
         private readonly _imgSkin           : GameUi.UiImage;
@@ -118,7 +111,7 @@ namespace TinyWars.MultiCustomRoom {
             this._updateComponentsForLanguage();
         }
 
-        private async _onTouchedGroupCo(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedGroupCo(): Promise<void> {
             const data          = this.data;
             const roomInfo      = await McrModel.getRoomInfo(data.roomId);
             const playerData    = roomInfo ? (roomInfo.playerDataList || []).find(v => v.playerIndex === data.playerIndex) : null;
@@ -131,7 +124,7 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private async _onTouchedBtnChat(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnChat(): Promise<void> {
             const playerData    = await this._getPlayerData();
             const userId        = playerData ? playerData.userId : undefined;
             if (userId != null) {
@@ -139,7 +132,7 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private async _onTouchedBtnInfo(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnInfo(): Promise<void> {
             const playerData    = await this._getPlayerData();
             const userId        = playerData ? playerData.userId : undefined;
             if (userId != null) {
@@ -147,7 +140,7 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private async _onTouchedBtnDelete(e: egret.TouchEvent): Promise<void> {
+        private async _onTouchedBtnDelete(): Promise<void> {
             const data          = this.data;
             const roomId        = data.roomId;
             const playerData    = await this._getPlayerData();
@@ -171,7 +164,7 @@ namespace TinyWars.MultiCustomRoom {
             }
         }
 
-        private _onNotifyLanguageChanged(e: egret.Event): void {
+        private _onNotifyLanguageChanged(): void {
             this._updateComponentsForLanguage();
         }
 

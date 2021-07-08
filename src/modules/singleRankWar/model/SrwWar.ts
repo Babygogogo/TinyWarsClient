@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.SingleRankWar {
     import Types            = Utility.Types;
     import ClientErrorCode  = Utility.ClientErrorCode;
@@ -173,7 +174,10 @@ namespace TinyWars.SingleRankWar {
             };
         }
 
-        public getIsNeedReplay(): boolean {
+        public getIsNeedExecutedAction(): boolean {
+            return true;
+        }
+        public getIsNeedSeedRandom(): boolean {
             return true;
         }
         public getIsWarMenuPanelOpening(): boolean {
@@ -196,6 +200,10 @@ namespace TinyWars.SingleRankWar {
 
         public getCanCheat(): boolean {
             return false;
+        }
+
+        public getSettingsBootTimerParams(): number[] | null | undefined {
+            return [Types.BootTimerType.NoBoot];
         }
 
         private _setSettingsForSrw(settings: ISettingsForSrw): void {

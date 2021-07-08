@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar {
     import Tween                = egret.Tween;
     import Notify               = Utility.Notify;
@@ -13,7 +14,7 @@ namespace TinyWars.BaseWar {
 
     type OpenDataForBwUnitBriefPanel = {
         war : BwWar;
-    }
+    };
 
     export class BwUnitBriefPanel extends GameUi.UiPanel<OpenDataForBwUnitBriefPanel> {
         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;

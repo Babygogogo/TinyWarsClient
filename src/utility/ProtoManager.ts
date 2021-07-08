@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.Utility.ProtoManager {
     import IMessageContainer        = ProtoTypes.NetMessage.IMessageContainer;
     import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;
@@ -34,32 +35,32 @@ namespace TinyWars.Utility.ProtoManager {
     }
 
     export function encodeAsMessageContainer(action: IMessageContainer): Uint8Array | undefined {
-        if (Helpers.getMessageCode(action) != null) {
+        if (Helpers.getMessageName(action) != null) {
             return MessageContainerClass.encode(action).finish();
         } else {
             Logger.assert(false, "ProtoManager.encodeAsMessageContainer() invalid message! ", JSON.stringify(action));
             return undefined;
         }
     }
-    export function decodeAsMessageContainer(data: any): IMessageContainer {
+    export function decodeAsMessageContainer(data: Uint8Array | ArrayBuffer): IMessageContainer {
         return MessageContainerClass.toObject(MessageContainerClass.decode(getDataForDecode(data)));
     }
 
-    export function decodeAsFullConfig(data: any): ProtoTypes.Config.IFullConfig {
+    export function decodeAsFullConfig(data: Uint8Array): ProtoTypes.Config.IFullConfig {
         return FullConfigClass.toObject(FullConfigClass.decode(getDataForDecode(data)));
     }
 
     export function encodeAsSerialWar(data: ISerialWar): Uint8Array {
         return SerialWarClass.encode(data).finish();
     }
-    export function decodeAsSerialWar(data: any): ISerialWar {
+    export function decodeAsSerialWar(data: Uint8Array): ISerialWar {
         return SerialWarClass.toObject(SerialWarClass.decode(data)) as any;
     }
 
     export function encodeAsMapRawData(data: IMapRawData): Uint8Array {
         return MapRawDataClass.encode(data).finish();
     }
-    export function decodeAsMapRawData(data: any): IMapRawData {
+    export function decodeAsMapRawData(data: Uint8Array): IMapRawData {
         return MapRawDataClass.toObject(MapRawDataClass.decode(data));
     }
 

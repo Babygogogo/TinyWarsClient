@@ -10,21 +10,15 @@ namespace TinyWars.MultiPlayerWar {
 
     export abstract class MpwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new MpwPlayerManager();
-        private readonly _turnManager           = new MpwTurnManager();
         private readonly _field                 = new MpwField();
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
-
-        public abstract getSettingsBootTimerParams(): number[];
 
         public getField(): MpwField {
             return this._field;
         }
         public getPlayerManager(): MpwPlayerManager {
             return this._playerManager;
-        }
-        public getTurnManager(): MpwTurnManager {
-            return this._turnManager;
         }
         public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
@@ -39,18 +33,18 @@ namespace TinyWars.MultiPlayerWar {
         public updateTilesAndUnitsOnVisibilityChanged(): void {
             const watcherTeamIndexes    = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const visibleUnitsOnMap     = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, watcherTeamIndexes);
-            this.getUnitMap().forEachUnitOnMap(unit => {
+            for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 if (visibleUnitsOnMap.has(unit)) {
                     unit.setViewVisible(true);
                 } else {
                     DestructionHelpers.removeUnitOnMap(this, unit.getGridIndex());
                 }
-            });
+            }
             DestructionHelpers.removeInvisibleLoadedUnits(this, watcherTeamIndexes);
 
             const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(this, watcherTeamIndexes);
             const tileMap       = this.getTileMap();
-            tileMap.forEachTile(tile => {
+            for (const tile of tileMap.getAllTiles()) {
                 if (visibleTiles.has(tile)) {
                     tile.setHasFog(false);
                 } else {
@@ -59,7 +53,7 @@ namespace TinyWars.MultiPlayerWar {
                     }
                 }
                 tile.flushDataToView();
-            });
+            }
             tileMap.getView().updateCoZone();
         }
 
@@ -73,7 +67,7 @@ namespace TinyWars.MultiPlayerWar {
             return undefined;
         }
         public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | undefined> {
-            return Lang.getFormattedText(action.isBoot ? Lang.Type.F0028 : Lang.Type.F0008, await this.getPlayerInTurn().getNickname());
+            return Lang.getFormattedText(action.deprecatedIsBoot ? Lang.Type.F0028 : Lang.Type.F0008, await this.getPlayerInTurn().getNickname());
         }
         public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | undefined> {
             const nickname      = await this.getPlayerInTurn().getNickname();
@@ -105,6 +99,12 @@ namespace TinyWars.MultiPlayerWar {
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
             return `${Lang.getText(Lang.Type.B0087)}`;
+        }
+        public async getDescForExeSystemEndTurn(action: WarAction.IWarActionSystemEndTurn): Promise<string | undefined> {
+            return Lang.getFormattedText(Lang.Type.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
+        }
+        public async getDescForExeSystemHandleBootPlayer(action: WarAction.IWarActionSystemHandleBootPlayer): Promise<string | undefined> {
+            return Lang.getFormattedText(Lang.Type.F0028, await this.getPlayerInTurn().getNickname());
         }
         public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined> {
             return undefined;
@@ -167,22 +167,15 @@ namespace TinyWars.MultiPlayerWar {
             }
         }
 
-        public checkIsBoot(): boolean {
-            if (this.getIsEnded()) {
-                return false;
-            } else {
-                const player = this.getPlayerInTurn();
-                return (player.getAliveState() === Types.PlayerAliveState.Alive)
-                    && (!player.checkIsNeutral())
-                    && (Time.TimeModel.getServerTimestamp() > this.getEnterTurnTime() + player.getRestTimeToBoot());
-            }
+        public getIsRunTurnPhaseWithExtraData(): boolean {
+            return true;
         }
 
         public getPlayerIndexLoggedIn(): number | undefined {
-            return (this.getPlayerManager() as MpwPlayerManager).getPlayerIndexLoggedIn();
+            return this.getPlayerManager().getPlayerIndexLoggedIn();
         }
         public getPlayerLoggedIn(): BaseWar.BwPlayer {
-            return (this.getPlayerManager() as MpwPlayerManager).getPlayerLoggedIn();
+            return this.getPlayerManager().getPlayerLoggedIn();
         }
     }
 }

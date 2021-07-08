@@ -50,12 +50,12 @@ namespace TinyWars.MapEditor {
             };
         }
 
-        public startRunning(war: MeWar): void {
+        public startRunning(war: BaseWar.BwWar): void {
             this._setWar(war);
 
-            war.getTileMap().forEachTile(tile => {
+            for (const tile of war.getTileMap().getAllTiles()) {
                 tile.setHasFog(false);
-            });
+            }
         }
     }
 }

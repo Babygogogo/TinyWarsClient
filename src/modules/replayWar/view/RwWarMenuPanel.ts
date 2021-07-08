@@ -277,7 +277,7 @@ namespace TinyWars.ReplayWar {
                     this.close();
                     Chat.ChatPanel.show({});
                 },
-            }
+            };
         }
 
         private _createCommandGotoLobby(): DataForCommandRenderer | undefined {
@@ -290,7 +290,7 @@ namespace TinyWars.ReplayWar {
                         callback: () => FlowManager.gotoLobby(),
                     });
                 },
-            }
+            };
         }
 
         private _createCommandSimulation(): DataForCommandRenderer | null {
@@ -383,7 +383,7 @@ namespace TinyWars.ReplayWar {
     type DataForCommandRenderer = {
         name    : string;
         callback: () => void;
-    }
+    };
 
     class CommandRenderer extends GameUi.UiListItemRenderer<DataForCommandRenderer> {
         private _group      : eui.Group;
@@ -406,7 +406,7 @@ namespace TinyWars.ReplayWar {
     type DataForPlayerRenderer = {
         war     : RwWar;
         player  : BaseWar.BwPlayer;
-    }
+    };
 
     class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
         private _group      : eui.Group;
@@ -654,12 +654,12 @@ namespace TinyWars.ReplayWar {
         private _getTilesCountAndIncome(war: RwWar, playerIndex: number): { count: number, income: number } {
             let count   = 0;
             let income  = 0;
-            war.getTileMap().forEachTile(tile => {
+            for (const tile of war.getTileMap().getAllTiles()) {
                 if (tile.getPlayerIndex() === playerIndex) {
                     ++count;
                     income += tile.getIncomeForPlayer(playerIndex);
                 }
-            });
+            }
             return { count, income };
         }
 
@@ -667,7 +667,7 @@ namespace TinyWars.ReplayWar {
             const unitMap   = war.getUnitMap();
             let count       = 0;
             let value       = 0;
-            unitMap.forEachUnitOnMap(unit => {
+            for (const unit of unitMap.getAllUnitsOnMap()) {
                 if (unit.getPlayerIndex() === playerIndex) {
                     ++count;
                     value += Math.floor(unit.getProductionFinalCost() * unit.getNormalizedCurrentHp() / unit.getNormalizedMaxHp());
@@ -677,7 +677,7 @@ namespace TinyWars.ReplayWar {
                         value += Math.floor(unitLoaded.getProductionFinalCost() * unitLoaded.getNormalizedCurrentHp() / unitLoaded.getNormalizedMaxHp());
                     }
                 }
-            });
+            }
             return { count, value };
         }
     }
@@ -686,7 +686,7 @@ namespace TinyWars.ReplayWar {
         titleText               : string;
         infoText                : string;
         infoColor               : number;
-    }
+    };
 
     class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
         private _btnTitle   : GameUi.UiButton;

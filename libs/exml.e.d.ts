@@ -1,4 +1,8 @@
 declare module Skins.Component.Button{
+	class ButtonBlack001 extends eui.Skin{
+	}
+}
+declare module Skins.Component.Button{
 	class ButtonBlue001 extends eui.Skin{
 	}
 }
@@ -11,7 +15,11 @@ declare module Skins.Component.Button{
 	}
 }
 declare module Skins.Component.Button{
-	class ButtonConfirm001 extends eui.Skin{
+	class ButtonGrey001 extends eui.Skin{
+	}
+}
+declare module Skins.Component.Button{
+	class ButtonGrey002 extends eui.Skin{
 	}
 }
 declare module Skins.Component.Button{
@@ -35,7 +43,15 @@ declare module Skins.Component.Button{
 	}
 }
 declare module Skins.Component.Button{
+	class ButtonTriangle002 extends eui.Skin{
+	}
+}
+declare module Skins.Component.Button{
 	class ButtonYellow001 extends eui.Skin{
+	}
+}
+declare module Skins.Component.Button{
+	class ButtonYellow002 extends eui.Skin{
 	}
 }
 declare module Skins.Component.CheckBox{
@@ -60,5 +76,9 @@ declare module Skins.Component.TextInput{
 }
 declare module Skins.Component.TextInput{
 	class TextInput002 extends eui.Skin{
+	}
+}
+declare module Skins.Component.TextInput{
+	class TextInput003 extends eui.Skin{
 	}
 }

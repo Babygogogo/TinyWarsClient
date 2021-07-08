@@ -39,7 +39,9 @@ namespace TinyWars.BaseWar {
 
         public startRunningView(): void {
             this._clearAllUnits();
-            this._getUnitMap().forEachUnit(unit => this.addUnit(unit.getView(), false));
+            for (const unit of this._getUnitMap().getAllUnits()) {
+                this.addUnit(unit.getView(), false);
+            }
 
             Notify.addEventListeners(this._notifyListeners, this);
         }
@@ -202,9 +204,9 @@ namespace TinyWars.BaseWar {
             const unitMap       = this._getUnitMap();
             const war           = unitMap.getWar();
             const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, war.getPlayerManager().getAliveWatcherTeamIndexesForSelf());
-            unitMap.forEachUnitOnMap(unit => {
+            for (const unit of unitMap.getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
-            });
+            }
         }
     }
 }

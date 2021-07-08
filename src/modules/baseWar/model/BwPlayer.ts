@@ -374,12 +374,6 @@ namespace TinyWars.BaseWar {
         public removeWatchRequestSrcUserId(userId: number): void {
             this.getWatchRequestSrcUserIds().delete(userId);
         }
-        public checkCanAddWatchRequestSrcUserId(userId: number): boolean {
-            return (this.getAliveState() === Types.PlayerAliveState.Alive)
-                && (this.getUserId() !== userId)
-                && (!this.getWatchRequestSrcUserIds().has(userId))
-                && (!this.getWatchOngoingSrcUserIds().has(userId));
-        }
 
         public setUserId(id: number | undefined | null): void {
             this._userId = id;

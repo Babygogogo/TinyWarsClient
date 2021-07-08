@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.BaseWar {
     import Types                = Utility.Types;
     import GridIndexHelpers     = Utility.GridIndexHelpers;
@@ -145,7 +146,7 @@ namespace TinyWars.BaseWar {
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Callbacks.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyZoomableContentsMoved(e: egret.Event): void {
+        private _onNotifyZoomableContentsMoved(): void {
             const touchPoints = this._currGlobalTouchPoints;
             if ((this._touchIdForTouchingCursor != null) && (touchPoints.size === 1)) {
                 const point         = touchPoints.values().next().value as Types.Point;
@@ -169,7 +170,7 @@ namespace TinyWars.BaseWar {
                 this._isTouchMovedOrMultiple    = false;
                 this._touchIdForTouchingCursor  = GridIndexHelpers.checkIsEqual(this._cursor.getGridIndex(), this._getGridIndexByLocalXY(e.localX, e.localY))
                     ? touchId
-                    : undefined
+                    : undefined;
             }
 
             if (this._currGlobalTouchPoints.size <= 1) {
@@ -258,8 +259,11 @@ namespace TinyWars.BaseWar {
         // Functions for view.
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         private _updatePos(): void {
-            this._conForAll.x = this._cursor.getGridX() * _GRID_WIDTH;
-            this._conForAll.y = this._cursor.getGridY() * _GRID_HEIGHT;
+            const cursor = this._cursor;
+            if (cursor) {
+                this._conForAll.x = cursor.getGridX() * _GRID_WIDTH;
+                this._conForAll.y = cursor.getGridY() * _GRID_HEIGHT;
+            }
         }
 
         private _updateConForNormal(): void {
@@ -431,12 +435,23 @@ namespace TinyWars.BaseWar {
                         } else {
                             con.visible = true;
 
-                            const { attackDamage, counterDamage } = DamageCalculator.getAttackAndCounterDamage({
+                            const { errorCode: errorCodeForDamages, damages } = DamageCalculator.getAttackAndCounterDamage({
                                 battleDamageInfoArray,
                                 attackerUnitId,
                                 targetGridIndex     : gridIndex,
                                 unitMap,
                             });
+                            if (errorCodeForDamages) {
+                                Logger.error(`BwCursorView._updateConForDamage() errorCodeForDamages: ${errorCodeForDamages}.`);
+                                con.visible = false;
+                                return;
+                            } else if (damages == null) {
+                                Logger.error(`BwCursorView._updateConForDamage() empty damages.`);
+                                con.visible = false;
+                                return;
+                            }
+
+                            const { attackDamage, counterDamage } = damages;
                             const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
                             labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
                                 + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;
@@ -468,12 +483,23 @@ namespace TinyWars.BaseWar {
                         } else {
                             con.visible = true;
 
-                            const { attackDamage, counterDamage } = DamageCalculator.getAttackAndCounterDamage({
+                            const { errorCode: errorCodeForDamages, damages } = DamageCalculator.getAttackAndCounterDamage({
                                 battleDamageInfoArray,
                                 attackerUnitId,
                                 targetGridIndex     : gridIndex,
                                 unitMap,
                             });
+                            if (errorCodeForDamages) {
+                                Logger.error(`BwCursorView._updateConForDamage() errorCodeForDamages: ${errorCodeForDamages}.`);
+                                con.visible = false;
+                                return;
+                            } else if (damages == null) {
+                                Logger.error(`BwCursorView._updateConForDamage() empty damages.`);
+                                con.visible = false;
+                                return;
+                            }
+
+                            const { attackDamage, counterDamage } = damages;
                             const target        = unitMap.getUnitOnMap(gridIndex) || war.getTileMap().getTile(gridIndex);
                             labelDamage.text    = `${Lang.getText(Lang.Type.B0077)}: ${attackDamage == null ? `---` : attackDamage} / ${target.getCurrentHp()}\n`
                                 + `${Lang.getText(Lang.Type.B0078)}: ${counterDamage == null ? `---` : counterDamage} / ${attackerUnit.getCurrentHp()}`;

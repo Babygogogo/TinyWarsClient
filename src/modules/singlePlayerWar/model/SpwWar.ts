@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.SinglePlayerWar {
     import ProtoTypes               = Utility.ProtoTypes;
     import Lang                     = Utility.Lang;
@@ -9,7 +10,6 @@ namespace TinyWars.SinglePlayerWar {
 
     export abstract class SpwWar extends BaseWar.BwWar {
         private readonly _playerManager         = new SpwPlayerManager();
-        private readonly _turnManager           = new SpwTurnManager();
         private readonly _field                 = new SpwField();
         private readonly _commonSettingManager  = new BaseWar.BwCommonSettingManager();
         private readonly _warEventManager       = new BaseWar.BwWarEventManager();
@@ -22,16 +22,16 @@ namespace TinyWars.SinglePlayerWar {
         public updateTilesAndUnitsOnVisibilityChanged(): void {
             const teamIndexes   = this.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
             const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(this, teamIndexes);
-            this.getUnitMap().forEachUnitOnMap(unit => {
+            for (const unit of this.getUnitMap().getAllUnitsOnMap()) {
                 unit.setViewVisible(visibleUnits.has(unit));
-            });
+            }
 
             const visibleTiles  = VisibilityHelpers.getAllTilesVisibleToTeams(this, teamIndexes);
             const tileMap       = this.getTileMap();
-            tileMap.forEachTile(tile => {
+            for (const tile of tileMap.getAllTiles()) {
                 tile.setHasFog(!visibleTiles.has(tile));
                 tile.flushDataToView();
-            });
+            }
             tileMap.getView().updateCoZone();
         }
 
@@ -45,7 +45,7 @@ namespace TinyWars.SinglePlayerWar {
             return undefined;
         }
         public async getDescForExePlayerSurrender(action: WarAction.IWarActionPlayerSurrender): Promise<string | undefined> {
-            return Lang.getFormattedText(action.isBoot ? Lang.Type.F0028 : Lang.Type.F0008, await this.getPlayerInTurn().getNickname());
+            return Lang.getFormattedText(action.deprecatedIsBoot ? Lang.Type.F0028 : Lang.Type.F0008, await this.getPlayerInTurn().getNickname());
         }
         public async getDescForExePlayerVoteForDraw(action: WarAction.IWarActionPlayerVoteForDraw): Promise<string | undefined> {
             const nickname      = await this.getPlayerInTurn().getNickname();
@@ -77,6 +77,12 @@ namespace TinyWars.SinglePlayerWar {
         }
         public async getDescForExeSystemEndWar(action: WarAction.IWarActionSystemEndWar): Promise<string | undefined> {
             return `${Lang.getText(Lang.Type.B0087)}`;
+        }
+        public async getDescForExeSystemEndTurn(action: WarAction.IWarActionSystemEndTurn): Promise<string | undefined> {
+            return Lang.getFormattedText(Lang.Type.F0030, await this.getPlayerInTurn().getNickname(), this.getPlayerIndexInTurn());
+        }
+        public async getDescForExeSystemHandleBootPlayer(action: WarAction.IWarActionSystemHandleBootPlayer): Promise<string | undefined> {
+            return Lang.getFormattedText(Lang.Type.F0028, await this.getPlayerInTurn().getNickname());
         }
         public async getDescForExeUnitAttackTile(action: WarAction.IWarActionUnitAttackTile): Promise<string | undefined> {
             return undefined;
@@ -133,14 +139,15 @@ namespace TinyWars.SinglePlayerWar {
         public getField(): SpwField {
             return this._field;
         }
-        public getTurnManager(): SpwTurnManager {
-            return this._turnManager;
-        }
         public getCommonSettingManager(): BaseWar.BwCommonSettingManager {
             return this._commonSettingManager;
         }
         public getWarEventManager(): BaseWar.BwWarEventManager {
             return this._warEventManager;
+        }
+
+        public getIsRunTurnPhaseWithExtraData(): boolean {
+            return false;
         }
 
         public setSaveSlotIndex(slotIndex: number): void {

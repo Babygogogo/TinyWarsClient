@@ -3,10 +3,18 @@
         xmlns:w="http://ns.egret.com/wing">
     <GameUi:UiImage id="_imgMask" anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
                     source="commonColorTransparent0001" scale9Grid="1,1,2,2" locked="true" />
-    <e:Group id="_group" width="620" height="430" horizontalCenter="0" verticalCenter="0">
-        <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" left="0" right="0" top="0" bottom="0"
-                        source="commonColorBlack0001" scale9Grid="1,1,2,2" />
-        <GameUi:UiLabel id="_labelTitle" text="排位积分排名" y="20" size="24" horizontalCenter="0" bold="true" />
+    <e:Group id="_group" width="640" height="430" horizontalCenter="0" verticalCenter="0">
+        <e:Group left="0" right="0" top="0" bottom="0" locked="true">
+            <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" source="commonColorBlack0001" scale9Grid="1,1,2,2"
+                            left="0" right="0" top="38" bottom="0" />
+            <e:Group y="0" left="0" right="0">
+                <GameUi:UiImage anchorOffsetX="0" anchorOffsetY="0" scale9Grid="1,1,1,1" height="40"
+                                source="commonColorGrey0001" y="0" left="0" right="0" />
+                <GameUi:UiLabel id="_labelTitle" text="注册" x="30" size="22" bold="true" verticalCenter="2" />
+                <GameUi:UiButton id="_btnClose" skinName="Skins.Component.Button.ButtonClose001" verticalCenter="0"
+                                 right="30" />
+            </e:Group>
+        </e:Group>
         <e:Group top="60" horizontalCenter="-150">
             <e:Group y="0" left="0" right="0" height="26">
                 <GameUi:UiImage scale9Grid="1,1,2,2" source="commonColorBlue0000" left="0" right="0" top="0" bottom="0" />

@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 namespace TinyWars.MultiPlayerWar.MpwProxy {
     import NetManager   = Network.NetManager;
     import Codes        = Network.Codes;
@@ -6,8 +7,6 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
     import ProtoTypes   = Utility.ProtoTypes;
     import Notify       = Utility.Notify;
     import Lang         = Utility.Lang;
-    import GridIndex    = Types.GridIndex;
-    import UnitType     = Types.UnitType;
     import BwWar        = BaseWar.BwWar;
     import NetMessage   = ProtoTypes.NetMessage;
 
@@ -28,33 +27,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
             { msgCode: Codes.MsgMpwWatchDeleteWatcher,              callback: _onMsgMpwWatchDeleteWatcher },
             { msgCode: Codes.MsgMpwWatchContinueWar,                callback: _onMsgMpwWatchContinueWar },
 
-            { msgCode: Codes.MsgMpwActionSystemBeginTurn,           callback: _onMsgMpwActionSystemBeginTurn },
-            { msgCode: Codes.MsgMpwActionSystemCallWarEvent,        callback: _onMsgMpwActionSystemCallWarEvent },
-            { msgCode: Codes.MsgMpwActionSystemDestroyPlayerForce,  callback: _onMsgMpwActionSystemDestroyPlayerForce },
-            { msgCode: Codes.MsgMpwActionSystemEndWar,              callback: _onMsgMpwActionSystemEndWar },
-
-            { msgCode: Codes.MsgMpwActionPlayerDeleteUnit,          callback: _onMsgMpwActionPlayerDeleteUnit },
-            { msgCode: Codes.MsgMpwActionPlayerEndTurn,             callback: _onMsgMpwActionPlayerEndTurn },
-            { msgCode: Codes.MsgMpwActionPlayerProduceUnit,         callback: _onMsgMpwActionPlayerProduceUnit },
-            { msgCode: Codes.MsgMpwActionPlayerSurrender,           callback: _onMsgMpwActionPlayerSurrender },
-            { msgCode: Codes.MsgMpwActionPlayerVoteForDraw,         callback: _onMsgMpwActionPlayerVoteForDraw },
-
-            { msgCode: Codes.MsgMpwActionUnitAttackUnit,            callback: _onMsgMpwActionUnitAttackUnit },
-            { msgCode: Codes.MsgMpwActionUnitAttackTile,            callback: _onMsgMpwActionUnitAttackTile },
-            { msgCode: Codes.MsgMpwActionUnitBeLoaded,              callback: _onMsgMpwActionUnitBeLoaded },
-            { msgCode: Codes.MsgMpwActionUnitBuildTile,             callback: _onMsgMpwActionUnitBuildTile },
-            { msgCode: Codes.MsgMpwActionUnitCaptureTile,           callback: _onMsgMpwActionUnitCaptureTile },
-            { msgCode: Codes.MsgMpwActionUnitDive,                  callback: _onMsgMpwActionUnitDive },
-            { msgCode: Codes.MsgMpwActionUnitDropUnit,              callback: _onMsgMpwActionUnitDropUnit },
-            { msgCode: Codes.MsgMpwActionUnitJoinUnit,              callback: _onMsgMpwActionUnitJoinUnit },
-            { msgCode: Codes.MsgMpwActionUnitLaunchFlare,           callback: _onMsgMpwActionUnitLaunchFlare },
-            { msgCode: Codes.MsgMpwActionUnitLaunchSilo,            callback: _onMsgMpwActionUnitLaunchSilo },
-            { msgCode: Codes.MsgMpwActionUnitLoadCo,                callback: _onMsgMpwActionUnitLoadCo },
-            { msgCode: Codes.MsgMpwActionUnitProduceUnit,           callback: _onMsgMpwActionUnitProduceUnit },
-            { msgCode: Codes.MsgMpwActionUnitSupplyUnit,            callback: _onMsgMpwActionUnitSupplyUnit },
-            { msgCode: Codes.MsgMpwActionUnitSurface,               callback: _onMsgMpwActionUnitSurface },
-            { msgCode: Codes.MsgMpwActionUnitUseCoSkill,            callback: _onMsgMpwActionUnitUseCoSkill },
-            { msgCode: Codes.MsgMpwActionUnitWait,                  callback: _onMsgMpwActionUnitWait },
+            { msgCode: Codes.MsgMpwExecuteWarAction,                callback: _onMsgMpwExecuteWarAction },
         ], MpwProxy);
     }
 
@@ -133,7 +106,7 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         NetManager.send({
             MsgMpwWatchGetOngoingWarInfos: { c: {
             } },
-        })
+        });
     }
     function _onMsgMpwWatchGetOngoingWarInfos(e: egret.Event): void {
         const data = e.data as NetMessage.MsgMpwWatchGetOngoingWarInfos.IS;
@@ -247,415 +220,19 @@ namespace TinyWars.MultiPlayerWar.MpwProxy {
         }
     }
 
-    function _onMsgMpwActionSystemBeginTurn(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionSystemBeginTurn.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionSystemBeginTurn, data);
-        }
-    }
-
-    function _onMsgMpwActionSystemCallWarEvent(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionSystemCallWarEvent.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionSystemCallWarEvent, data);
-        }
-    }
-
-    function _onMsgMpwActionSystemDestroyPlayerForce(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionSystemDestroyPlayerForce.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionSystemDestroyPlayerForce, data);
-        }
-    }
-
-    function _onMsgMpwActionSystemEndWar(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionSystemEndWar.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionSystemEndWar, data);
-        }
-    }
-
-    export function reqMpwPlayerDeleteUnit(war: BwWar, gridIndex: GridIndex): void {
+    export function reqMpwExecuteWarAction(war: BwWar, actionContainer: ProtoTypes.WarAction.IWarActionContainer): void {
         NetManager.send({
-            MsgMpwActionPlayerDeleteUnit: { c: {
-                warId   : war.getWarId(),
-                actionId: war.getExecutedActionManager().getExecutedActionsCount(),
-                gridIndex,
-            }, }
+            MsgMpwExecuteWarAction: { c: {
+                warId           : war.getWarId(),
+                actionContainer,
+            }, },
         });
     }
-    function _onMsgMpwActionPlayerDeleteUnit(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionPlayerDeleteUnit.IS;
+    function _onMsgMpwExecuteWarAction(e: egret.Event): void {
+        const data = e.data as NetMessage.MsgMpwExecuteWarAction.IS;
         if (!data.errorCode) {
             MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionPlayerDeleteUnit);
-        }
-    }
-
-    export function reqMpwPlayerEndTurn(war: BwWar): void {
-        NetManager.send({
-            MsgMpwActionPlayerEndTurn: { c: {
-                warId   : war.getWarId(),
-                actionId: war.getExecutedActionManager().getExecutedActionsCount(),
-            }, }
-        });
-    }
-    function _onMsgMpwActionPlayerEndTurn(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionPlayerEndTurn.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionPlayerEndTurn, data);
-        }
-    }
-
-    export function reqMpwPlayerProduceUnit(war: BwWar, gridIndex: GridIndex, unitType: UnitType, unitHp: number): void {
-        NetManager.send({
-            MsgMpwActionPlayerProduceUnit: { c: {
-                warId   : war.getWarId(),
-                actionId: war.getExecutedActionManager().getExecutedActionsCount(),
-                gridIndex,
-                unitType,
-                unitHp,
-            }, }
-        });
-    }
-    function _onMsgMpwActionPlayerProduceUnit(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionPlayerProduceUnit.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionPlayerProduceUnit);
-        }
-    }
-
-    export function reqMpwPlayerSurrender(war: BwWar): void {
-        NetManager.send({
-            MsgMpwActionPlayerSurrender: { c: {
-                warId   : war.getWarId(),
-                actionId: war.getExecutedActionManager().getExecutedActionsCount(),
-                isBoot  : false,
-            }, }
-        })
-    }
-    function _onMsgMpwActionPlayerSurrender(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionPlayerSurrender.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionPlayerSurrender);
-        }
-    }
-
-    export function reqMpwPlayerVoteForDraw(war: BwWar, isAgree: boolean): void {
-        NetManager.send({
-            MsgMpwActionPlayerVoteForDraw: { c: {
-                warId   : war.getWarId(),
-                actionId: war.getExecutedActionManager().getExecutedActionsCount(),
-                isAgree,
-            }, }
-        });
-    }
-    function _onMsgMpwActionPlayerVoteForDraw(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionPlayerVoteForDraw.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionPlayerVoteForDraw);
-        }
-    }
-
-    export function reqMpwUnitAttackUnit(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
-        NetManager.send({
-            MsgMpwActionUnitAttackUnit: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-                targetGridIndex,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitAttackUnit(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitAttackUnit.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitAttackUnit);
-        }
-    }
-
-    export function reqMpwUnitAttackTile(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
-        NetManager.send({
-            MsgMpwActionUnitAttackTile: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-                targetGridIndex,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitAttackTile(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitAttackTile.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitAttackTile);
-        }
-    }
-
-    export function reqMpwUnitBeLoaded(war: BwWar, path: GridIndex[], launchUnitId?: number): void {
-        NetManager.send({
-            MsgMpwActionUnitBeLoaded: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitBeLoaded(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitBeLoaded.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitBeLoaded);
-        }
-    }
-
-    export function reqMpwUnitBuildTile(war: BwWar, path: GridIndex[], launchUnitId?: number): void {
-        NetManager.send({
-            MsgMpwActionUnitBuildTile: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitBuildTile(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitBuildTile.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitBuildTile);
-        }
-    }
-
-    export function reqMpwUnitCaptureTile(war: BwWar, path: GridIndex[], launchUnitId?: number): void {
-        NetManager.send({
-            MsgMpwActionUnitCaptureTile: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitCaptureTile(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitCaptureTile.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitCaptureTile);
-        }
-    }
-
-    export function reqMpwUnitDive(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
-        NetManager.send({
-            MsgMpwActionUnitDive: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitDive(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitDive.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitDive);
-        }
-    }
-
-    export function reqMpwUnitDrop(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, dropDestinations: Types.DropDestination[]): void {
-        NetManager.send({
-            MsgMpwActionUnitDropUnit: { c: {
-                warId   : war.getWarId(),
-                actionId: war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-                dropDestinations,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitDropUnit(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitDropUnit.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitDropUnit);
-        }
-    }
-
-    export function reqMpwUnitJoin(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
-        NetManager.send({
-            MsgMpwActionUnitJoinUnit: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitJoinUnit(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitJoinUnit.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitJoinUnit);
-        }
-    }
-
-    export function reqMpwUnitLaunchFlare(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
-        NetManager.send({
-            MsgMpwActionUnitLaunchFlare: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-                targetGridIndex,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitLaunchFlare(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitLaunchFlare.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitLaunchFlare);
-        }
-    }
-
-    export function reqMpwUnitLaunchSilo(war: BwWar, path: GridIndex[], launchUnitId: number | undefined, targetGridIndex: GridIndex): void {
-        NetManager.send({
-            MsgMpwActionUnitLaunchSilo: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-                targetGridIndex,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitLaunchSilo(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitLaunchSilo.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitLaunchSilo);
-        }
-    }
-
-    export function reqMpwUnitLoadCo(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
-        NetManager.send({
-            MsgMpwActionUnitLoadCo: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitLoadCo(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitLoadCo.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitLoadCo);
-        }
-    }
-
-    export function reqMpwUnitProduceUnit(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
-        NetManager.send({
-            MsgMpwActionUnitProduceUnit: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitProduceUnit(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitProduceUnit.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitProduceUnit);
-        }
-    }
-
-    export function reqMpwUnitSupply(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
-        NetManager.send({
-            MsgMpwActionUnitSupplyUnit: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitSupplyUnit(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitSupplyUnit.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitSupplyUnit);
-        }
-    }
-
-    export function reqMpwUnitSurface(war: BwWar, path: GridIndex[], launchUnitId: number | undefined): void {
-        NetManager.send({
-            MsgMpwActionUnitSurface: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitSurface(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitSurface.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitSurface);
-        }
-    }
-
-    export function reqMpwUnitUseCoSkill(war: BwWar, skillType: Types.CoSkillType, path: GridIndex[], launchUnitId: number | null): void {
-        NetManager.send({
-            MsgMpwActionUnitUseCoSkill: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                skillType,
-                path,
-                launchUnitId,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitUseCoSkill(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitUseCoSkill.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitUseCoSkill);
-        }
-    }
-
-    export function reqMpwUnitWait(war: BwWar, path: GridIndex[], launchUnitId?: number): void {
-        NetManager.send({
-            MsgMpwActionUnitWait: { c: {
-                warId       : war.getWarId(),
-                actionId    : war.getExecutedActionManager().getExecutedActionsCount(),
-                path,
-                launchUnitId,
-            }, }
-        });
-    }
-    function _onMsgMpwActionUnitWait(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgMpwActionUnitWait.IS;
-        if (!data.errorCode) {
-            MpwModel.updateByActionContainer(data.actionContainer, data.warId);
-            Notify.dispatch(Notify.Type.MsgMpwActionUnitWait, data);
+            Notify.dispatch(Notify.Type.MsgMpwExecuteWarAction, data);
         }
     }
 }
