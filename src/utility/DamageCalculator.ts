@@ -1,9 +1,9 @@
 
 import { ClientErrorCode }      from "./ClientErrorCode";
 import * as GridIndexHelpers    from "./GridIndexHelpers";
-import * as Logger              from "./Logger";
+import { Logger }               from "./Logger";
 import * as ProtoTypes          from "./ProtoTypes";
-import * as Types               from "./Types";
+import { Types }                from "./Types";
 import * as BwHelpers           from "../modules/baseWar/model/BwHelpers";
 import { BwTile }               from "../modules/baseWar/model/BwTile";
 import { BwUnit }               from "../modules/baseWar/model/BwUnit";

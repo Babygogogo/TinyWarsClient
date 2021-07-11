@@ -9,7 +9,7 @@ import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
 import * as SoundManager        from "../../../utility/SoundManager";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 
 export class UserSetSoundPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;

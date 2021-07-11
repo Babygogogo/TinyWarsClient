@@ -1,9 +1,9 @@
 
-import * as Types           from "./Types";
+import { Types }            from "./Types";
 import * as CommonConstants from "./CommonConstants";
-import * as Notify          from "./Notify";
+import { Notify }           from "./Notify";
 import { NotifyType } from "./NotifyType";
-import * as Logger          from "./Logger";
+import { Logger }           from "./Logger";
 import * as UiPanel         from "../gameui/UiPanel";
 import LayerType            = Types.LayerType;
 

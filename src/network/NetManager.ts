@@ -1,6 +1,6 @@
 
-import * as Logger          from "../utility/Logger";
-import * as Notify          from "../utility/Notify";
+import { Logger }           from "../utility/Logger";
+import { Notify }           from "../utility/Notify";
 import { NotifyType } from "../utility/NotifyType";
 import * as FloatText       from "../utility/FloatText";
 import * as Lang            from "../utility/Lang";

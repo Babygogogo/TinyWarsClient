@@ -6,9 +6,9 @@ import { UiTextInput }              from "../../../gameui/UiTextInput";
 import { MmAvailabilityListPanel }  from "./MmAvailabilityListPanel";
 import * as Lang                    from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Notify                  from "../../../utility/Notify";
+import { Notify }                   from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types                   from "../../../utility/Types";
+import { Types }                    from "../../../utility/Types";
 
 export class MmAvailabilitySearchPanel extends UiPanel<void> {
     protected _IS_EXCLUSIVE = false;

@@ -1,7 +1,7 @@
 
 import { BwUnit }                               from "../../baseWar/model/BwUnit";
 import { BwActionPlanner, DataForUnitAction }   from "../../baseWar/model/BwActionPlanner";
-import * as Types                               from "../../../utility/Types";
+import { Types }                                from "../../../utility/Types";
 import GridIndex                                = Types.GridIndex;
 import State                                    = Types.ActionPlannerState;
 

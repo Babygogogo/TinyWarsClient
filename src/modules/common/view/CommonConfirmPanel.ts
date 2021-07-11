@@ -6,7 +6,7 @@ import { UiImage }              from "../../../gameui/UiImage";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 
 type OpenDataForCommonConfirmPanel = {
     title?              : string;

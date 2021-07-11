@@ -1,6 +1,6 @@
 
-import * as Types               from "./Types";
-import * as Logger              from "./Logger";
+import { Types }                from "./Types";
+import { Logger }               from "./Logger";
 import * as Helpers             from "./Helpers";
 import * as CommonConstants     from "./CommonConstants";
 import * as ProtoTypes          from "./ProtoTypes";

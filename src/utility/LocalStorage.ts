@@ -1,6 +1,6 @@
 
 import * as ProtoTypes      from "./ProtoTypes";
-import * as Types           from "./Types";
+import { Types }            from "./Types";
 import * as CommonConstants from "./CommonConstants";
 import storage              = egret.localStorage;
 

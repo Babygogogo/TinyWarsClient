@@ -11,7 +11,7 @@ import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Lang                        from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as ScrModel                    from "../model/ScrModel";
 
 type OpenDataForScrCreateCoListPanel = {

@@ -7,7 +7,7 @@ import * as FloatText                           from "../../../utility/FloatText
 import * as GridIndexHelpers                    from "../../../utility/GridIndexHelpers";
 import * as Lang                                from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Types                               from "../../../utility/Types";
+import { Types }                                from "../../../utility/Types";
 import TurnPhaseCode                            = Types.TurnPhaseCode;
 import UnitState                                = Types.UnitActionState;
 import GridIndex                                = Types.GridIndex;

@@ -11,7 +11,7 @@ import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Lang                        from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Notify                      from "../../../utility/Notify";
+import { Notify }                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
 import * as MeModel                     from "../model/MeModel";

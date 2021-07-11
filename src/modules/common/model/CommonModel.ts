@@ -1,5 +1,5 @@
 
-import * as Types           from "../../../utility/Types";
+import { Types }            from "../../../utility/Types";
 import * as ConfigManager   from "../../../utility/ConfigManager";
 import * as Helpers         from "../../../utility/Helpers";
 import * as ProtoTypes      from "../../../utility/ProtoTypes";

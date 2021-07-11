@@ -1,9 +1,9 @@
 
-import * as Types           from "./Types";
+import { Types }            from "./Types";
 import * as FloatText       from "./FloatText";
 import * as Lang            from "./Lang";
 import { LangTextType } from "./LangTextType";
-import * as Logger          from "./Logger";
+import { Logger }           from "./Logger";
 import * as LocalStorage    from "./LocalStorage";
 import SoundType            = Types.SoundType;
 import BgmCode              = Types.BgmCode;

@@ -1,7 +1,7 @@
 
 import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
 import * as Helpers                     from "../../../utility/Helpers";
-import * as Logger                      from "../../../utility/Logger";
+import { Logger }                       from "../../../utility/Logger";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import IWarActionContainer              = ProtoTypes.WarAction.IWarActionContainer;
 

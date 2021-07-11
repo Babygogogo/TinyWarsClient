@@ -10,7 +10,7 @@ import * as Lang                from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
 import * as LocalStorage        from "../../../utility/LocalStorage";
 import * as StageManager        from "../../../utility/StageManager";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 import StageMinScale            = CommonConstants.StageMinScale;
 import StageMaxScale            = CommonConstants.StageMaxScale;
 

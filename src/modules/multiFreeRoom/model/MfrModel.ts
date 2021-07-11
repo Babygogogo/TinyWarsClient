@@ -1,10 +1,10 @@
 
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as Helpers             from "../../../utility/Helpers";
-import * as Notify              from "../../../utility/Notify";
+import { Notify }               from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 import * as BwWarRuleHelper     from "../../baseWar/model/BwWarRuleHelper";
 import * as MfrModel            from "../../multiFreeRoom/model/MfrModel";
 import * as MfrProxy            from "../../multiFreeRoom/model/MfrProxy";

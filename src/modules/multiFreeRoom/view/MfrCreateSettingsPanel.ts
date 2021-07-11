@@ -16,13 +16,13 @@ import { LobbyBottomPanel }                 from "../../lobby/view/LobbyBottomPa
 import { LobbyTopPanel }                    from "../../lobby/view/LobbyTopPanel";
 import * as CommonConstants                 from "../../../utility/CommonConstants";
 import * as FloatText                       from "../../../utility/FloatText";
-import * as FlowManager                     from "../../../utility/FlowManager";
+import { FlowManager }                      from "../../../utility/FlowManager";
 import * as Helpers                         from "../../../utility/Helpers";
 import * as Lang                            from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Notify                          from "../../../utility/Notify";
+import { Notify }                           from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types                           from "../../../utility/Types";
+import { Types }                            from "../../../utility/Types";
 import * as BwHelpers                       from "../../baseWar/model/BwHelpers";
 import * as BwWarRuleHelper                 from "../../baseWar/model/BwWarRuleHelper";
 import * as MfrModel                        from "../../multiFreeRoom/model/MfrModel";

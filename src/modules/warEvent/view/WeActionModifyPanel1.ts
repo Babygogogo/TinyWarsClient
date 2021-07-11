@@ -17,10 +17,10 @@ import * as GridIndexHelpers            from "../../../utility/GridIndexHelpers"
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Notify                      from "../../../utility/Notify";
+import { Notify }                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as WarEventHelper              from "../model/WarEventHelper";
 import ColorValue                       = Types.ColorValue;
 import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;

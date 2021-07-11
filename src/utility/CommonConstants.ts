@@ -1,5 +1,5 @@
 
-import * as Types       from "./Types";
+import { Types }        from "./Types";
 import TileBaseType     = Types.TileBaseType;
 import TileObjectType   = Types.TileObjectType;
 import TileType         = Types.TileType;

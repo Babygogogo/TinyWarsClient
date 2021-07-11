@@ -1,13 +1,13 @@
 
-import * as Types           from "./Types";
+import { Types }            from "./Types";
 import * as ProtoTypes      from "./ProtoTypes";
 import * as ProtoManager    from "./ProtoManager";
-import * as Notify          from "./Notify";
+import { Notify }           from "./Notify";
 import { NotifyType } from "./NotifyType";
 import * as CommonConstants from "./CommonConstants";
 import * as Helpers         from "./Helpers";
 import * as Lang            from "./Lang";
-import * as Logger          from "./Logger";
+import { Logger }           from "./Logger";
 import TileBaseType         = Types.TileBaseType;
 import TileObjectType       = Types.TileObjectType;
 import TileType             = Types.TileType;

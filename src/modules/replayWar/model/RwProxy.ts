@@ -1,7 +1,7 @@
 
 import { NetMessageCodes }              from "../../../network/NetMessageCodes";
 import * as NetManager                  from "../../../network/NetManager";
-import * as Notify                      from "../../../utility/Notify";
+import { Notify }                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as RwModel                     from "./RwModel";

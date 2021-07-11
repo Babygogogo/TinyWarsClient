@@ -11,10 +11,10 @@ import * as Lang                        from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
 import * as LocalStorage                from "../../../utility/LocalStorage";
 import * as NoSleepManager              from "../../../utility/NoSleepManager";
-import * as Notify                      from "../../../utility/Notify";
+import { Notify }                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as SoundManager                from "../../../utility/SoundManager";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as UserModel                   from "../../user/model/UserModel";
 import * as UserProxy                   from "../../user/model/UserProxy";
 

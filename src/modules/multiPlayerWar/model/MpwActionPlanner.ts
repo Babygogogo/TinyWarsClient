@@ -9,8 +9,8 @@ import * as FloatText                           from "../../../utility/FloatText
 import * as GridIndexHelpers                    from "../../../utility/GridIndexHelpers";
 import * as Lang                                from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Logger                              from "../../../utility/Logger";
-import * as Types                               from "../../../utility/Types";
+import { Logger }                               from "../../../utility/Logger";
+import { Types }                                from "../../../utility/Types";
 import * as MpwProxy                            from "../../multiPlayerWar/model/MpwProxy";
 import * as UserModel                           from "../../user/model/UserModel";
 import TurnPhaseCode                            = Types.TurnPhaseCode;

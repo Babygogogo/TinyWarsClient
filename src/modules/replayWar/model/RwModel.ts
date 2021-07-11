@@ -1,8 +1,8 @@
 
 import { RwWar }                        from "./RwWar";
 import * as Helpers                     from "../../../utility/Helpers";
-import * as Logger                      from "../../../utility/Logger";
-import * as Notify                      from "../../../utility/Notify";
+import { Logger }                       from "../../../utility/Logger";
+import { Notify }                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as ProtoManager                from "../../../utility/ProtoManager";

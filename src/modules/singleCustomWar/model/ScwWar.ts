@@ -2,9 +2,9 @@
 import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
 import { SpwWar }                       from "../../singlePlayerWar/model/SpwWar";
 import { SpwWarMenuPanel }              from "../../singlePlayerWar/view/SpwWarMenuPanel";
-import * as Logger                      from "../../../utility/Logger";
+import { Logger }                       from "../../../utility/Logger";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;
 import ISettingsForScw                  = ProtoTypes.WarSettings.ISettingsForScw;
 

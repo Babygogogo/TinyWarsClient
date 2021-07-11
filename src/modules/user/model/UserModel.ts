@@ -2,9 +2,9 @@
 import * as UserProxy           from "./UserProxy";
 import * as CommonModel         from "../../common/model/CommonModel";
 import * as FloatText           from "../../../utility/FloatText";
-import * as Notify              from "../../../utility/Notify";
+import { Notify }               from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 import * as Lang                from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";

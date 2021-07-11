@@ -2,9 +2,9 @@
 import { ClientErrorCode }          from "../../../utility/ClientErrorCode";
 import { BwGridVisualEffectView }   from "../view/BwGridVisualEffectView";
 import { BwWar }                    from "./BwWar";
-import * as Notify                  from "../../../utility/Notify";
+import { Notify }                   from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types                   from "../../../utility/Types";
+import { Types }                    from "../../../utility/Types";
 import GridIndex                    = Types.GridIndex;
 
 export class BwGridVisualEffect {

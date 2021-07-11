@@ -1,12 +1,12 @@
 
 import { ClientErrorCode }      from "../../../utility/ClientErrorCode";
 import * as ConfigManager       from "../../../utility/ConfigManager";
-import * as Logger              from "../../../utility/Logger";
+import { Logger }               from "../../../utility/Logger";
 import * as Helpers             from "../../../utility/Helpers";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as Lang                from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import LanguageType         = Types.LanguageType;
 import BootTimerType        = Types.BootTimerType;

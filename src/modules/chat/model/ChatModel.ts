@@ -1,9 +1,9 @@
 
 import { ChatPanel }            from "../view/ChatPanel";
 import * as FloatText           from "../../../utility/FloatText";
-import * as Logger              from "../../../utility/Logger";
+import { Logger }               from "../../../utility/Logger";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 import * as UserModel           from "../../user/model/UserModel";
 import ChatCategory             = Types.ChatMessageToCategory;
 import IChatMessage             = ProtoTypes.Chat.IChatMessage;

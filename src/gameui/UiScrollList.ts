@@ -1,8 +1,8 @@
 
-import * as Types               from "../utility/Types";
-import * as Notify              from "../utility/Notify";
+import { Types }                from "../utility/Types";
+import { Notify }               from "../utility/Notify";
 import { NotifyType } from "../utility/NotifyType";
-import * as Logger              from "../utility/Logger";
+import { Logger }               from "../utility/Logger";
 import * as StageManager        from "../utility/StageManager";
 import * as SoundManager        from "../utility/SoundManager";
 import { UiListItemRenderer }   from "./UiListItemRenderer";

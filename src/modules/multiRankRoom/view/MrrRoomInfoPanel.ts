@@ -21,10 +21,10 @@ import * as FloatText                                                           
 import * as Helpers                                                             from "../../../utility/Helpers";
 import * as Lang                                                                from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Notify                                                              from "../../../utility/Notify";
+import { Notify }                                                               from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                                                          from "../../../utility/ProtoTypes";
-import * as Types                                                               from "../../../utility/Types";
+import { Types }                                                                from "../../../utility/Types";
 import * as BwHelpers                                                           from "../../baseWar/model/BwHelpers";
 import * as BwWarRuleHelper                                                     from "../../baseWar/model/BwWarRuleHelper";
 import * as TimeModel                                                           from "../../time/model/TimeModel";

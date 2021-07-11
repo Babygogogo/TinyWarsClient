@@ -1,6 +1,6 @@
 
 import { UiPanel }              from "../../../gameui/UiPanel";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 
 export class LobbyBackgroundPanel extends UiPanel<void> {
     protected readonly _LAYER_TYPE   = Types.LayerType.Bottom;

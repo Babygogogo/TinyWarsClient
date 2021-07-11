@@ -12,7 +12,7 @@ import * as DestructionHelpers          from "../../../utility/DestructionHelper
 import * as FloatText                   from "../../../utility/FloatText";
 import * as GridIndexHelpers            from "../../../utility/GridIndexHelpers";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as VisibilityHelpers           from "../../../utility/VisibilityHelpers";
 import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
 import GridIndex                            = Types.GridIndex;

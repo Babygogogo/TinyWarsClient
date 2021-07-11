@@ -11,9 +11,9 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
-import * as Notify                      from "../../../utility/Notify";
+import { Notify }                       from "../../../utility/Notify";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
 import WarRule                          = ProtoTypes.WarRule;
 

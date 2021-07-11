@@ -1,5 +1,5 @@
 
-import * as Types           from "./Types";
+import { Types }            from "./Types";
 import * as ProtoTypes      from "./ProtoTypes";
 import * as Lang            from "./Lang";
 import { LangTextType } from "./LangTextType";

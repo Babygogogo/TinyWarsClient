@@ -1,7 +1,7 @@
 
 import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as Logger                      from "../../../utility/Logger";
-import * as Notify                      from "../../../utility/Notify";
+import { Logger }                       from "../../../utility/Logger";
+import { Notify }                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";

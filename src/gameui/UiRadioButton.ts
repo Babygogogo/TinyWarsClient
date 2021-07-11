@@ -5,8 +5,8 @@ import { UiLabel }                      from "../gameui/UiLabel";
 import { LangTextType }                 from "../utility/LangTextType";
 import { NotifyType }                   from "../utility/NotifyType";
 import * as Lang                        from "../utility/Lang";
-import * as Notify                      from "../utility/Notify";
-import * as Types                       from "../utility/Types";
+import { Notify }                       from "../utility/Notify";
+import { Types }                        from "../utility/Types";
 
 type DataForUiRadioButton = {
     titleTextType           : LangTextType;

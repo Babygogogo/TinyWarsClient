@@ -3,9 +3,9 @@ import { UiImage }              from "../../../gameui/UiImage";
 import { UiPanel }              from "../../../gameui/UiPanel";
 import { UiCoInfo }             from "../../../gameui/UiCoInfo";
 import * as Helpers             from "../../../utility/Helpers";
-import * as Notify              from "../../../utility/Notify";
+import { Notify }               from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 
 type OpenDataForCommonCoInfoPanel = {
     configVersion   : string;

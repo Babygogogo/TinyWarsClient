@@ -11,7 +11,7 @@ import * as FloatText           from "../../../utility/FloatText";
 import * as Helpers             from "../../../utility/Helpers";
 import * as Lang                from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 import * as UserModel           from "../../user/model/UserModel";
 import * as UserProxy           from "../../user/model/UserProxy";
 

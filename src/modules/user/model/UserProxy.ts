@@ -3,7 +3,7 @@ import { NetMessageCodes }  from "../../../network/NetMessageCodes";
 import { NotifyType }       from "../../../utility/NotifyType";
 import * as NetManager      from "../../../network/NetManager";
 import * as ProtoTypes      from "../../../utility/ProtoTypes";
-import * as Notify          from "../../../utility/Notify";
+import { Notify }           from "../../../utility/Notify";
 import * as Helpers         from "../../../utility/Helpers";
 import * as UserModel       from "../../user/model/UserModel";
 import NetMessage           = ProtoTypes.NetMessage;

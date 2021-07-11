@@ -8,9 +8,9 @@ import { UserOnlineUsersPanel }         from "../../user/view/UserOnlineUsersPan
 import { LobbyTopPanel }                from "./LobbyTopPanel";
 import { MeMapListPanel }               from "../../mapEditor/view/MeMapListPanel";
 import * as Helpers                     from "../../../utility/Helpers";
-import * as Notify                      from "../../../utility/Notify";
+import { Notify }                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as ChatModel                   from "../../chat/model/ChatModel";
 import * as UserModel                   from "../../user/model/UserModel";
 import Tween                            = egret.Tween;

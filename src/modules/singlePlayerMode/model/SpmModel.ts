@@ -1,10 +1,10 @@
 
 import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as Notify              from "../../../utility/Notify";
+import { Notify }               from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";
 import * as ProtoManager        from "../../../utility/ProtoManager";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 import NetMessage           = ProtoTypes.NetMessage;
 import SpmWarSaveSlotData   = Types.SpmWarSaveSlotData;
 

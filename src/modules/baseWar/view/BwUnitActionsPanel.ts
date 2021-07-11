@@ -1,11 +1,11 @@
 
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as Helpers             from "../../../utility/Helpers";
-import * as Notify              from "../../../utility/Notify";
+import { Notify }               from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as Lang                from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 import * as StageManager        from "../../../utility/StageManager";
 import { BwUnitView }           from "./BwUnitView";
 import { DataForUnitAction }    from "../model/BwActionPlanner";

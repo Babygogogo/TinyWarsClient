@@ -1,7 +1,7 @@
 
 import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
 import { BwWar }                        from "../../baseWar/model/BwWar";
-import * as Logger                      from "../../../utility/Logger";
+import { Logger }                       from "../../../utility/Logger";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
 import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
 import ISerialPlayerManager             = ProtoTypes.WarSerialization.ISerialPlayerManager;

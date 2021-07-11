@@ -1,8 +1,8 @@
 
 import { UiImage }              from "../../../gameui/UiImage";
 import * as CommonConstants     from "../../../utility/CommonConstants";
-import * as Logger              from "../../../utility/Logger";
-import * as Types               from "../../../utility/Types";
+import { Logger }               from "../../../utility/Logger";
+import { Types }                from "../../../utility/Types";
 import * as CommonModel         from "../../common/model/CommonModel";
 import * as TimeModel           from "../../time/model/TimeModel";
 import * as UserModel           from "../../user/model/UserModel";

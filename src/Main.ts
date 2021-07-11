@@ -7,7 +7,7 @@ import "./gameui/UiTab";
 import "./gameui/UiCoInfo";
 import "./gameui/UiMapInfo";
 import "./gameui/UiRadioButton";
-import * as FlowManager from "./utility/FlowManager";
+import { FlowManager }  from "./utility/FlowManager";
 
 // export declare interface Window {
 //     CLIENT_VERSION      : string;

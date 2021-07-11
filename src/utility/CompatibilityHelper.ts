@@ -4,9 +4,9 @@ import * as CommonConstants             from "./CommonConstants";
 import * as FloatText                   from "./FloatText";
 import * as Lang                        from "./Lang";
 import { LangTextType } from "./LangTextType";
-import * as Logger                      from "./Logger";
+import { Logger }                       from "./Logger";
 import * as SoundManager                from "./SoundManager";
-import * as Types                       from "./Types";
+import { Types }                        from "./Types";
 import * as ChatProxy                   from "../modules/chat/model/ChatProxy";
 
 export function init(): void {

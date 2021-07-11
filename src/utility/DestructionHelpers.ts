@@ -1,7 +1,7 @@
 
 import * as CommonConstants     from "./CommonConstants";
-import * as Types               from "./Types";
-import * as Logger              from "./Logger";
+import { Types }                from "./Types";
+import { Logger }               from "./Logger";
 import { BwWar }                from "../modules/baseWar/model/BwWar";
 import { ClientErrorCode }      from "./ClientErrorCode";
 import GridIndex                = Types.GridIndex;

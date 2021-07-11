@@ -1,6 +1,6 @@
 
 import * as FloatText                   from "./FloatText";
-import * as Logger                      from "./Logger";
+import { Logger }                       from "./Logger";
 import * as StageManager                from "./StageManager";
 
 let _isLoadedMainResource = false;

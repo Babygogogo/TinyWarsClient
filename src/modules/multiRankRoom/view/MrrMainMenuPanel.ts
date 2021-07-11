@@ -10,9 +10,9 @@ import { LobbyTopPanel }                    from "../../lobby/view/LobbyTopPanel
 import { MrrPreviewMapListPanel }           from "./MrrPreviewMapListPanel";
 import { McrMainMenuPanel }                 from "../../multiCustomRoom/view/McrMainMenuPanel";
 import * as Helpers                         from "../../../utility/Helpers";
-import * as Notify                          from "../../../utility/Notify";
+import { Notify }                           from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types                           from "../../../utility/Types";
+import { Types }                            from "../../../utility/Types";
 import * as MpwModel                        from "../../multiPlayerWar/model/MpwModel";
 import * as MrrModel                        from "../model/MrrModel";
 import Tween                                = egret.Tween;

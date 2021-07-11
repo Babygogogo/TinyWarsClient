@@ -1,7 +1,7 @@
 
-import * as Notify              from "../../../utility/Notify";
+import { Notify }               from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 import * as VisibilityHelpers   from "../../../utility/VisibilityHelpers";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as ConfigManager       from "../../../utility/ConfigManager";

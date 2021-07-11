@@ -1,5 +1,5 @@
 
-import * as Types           from "./Types";
+import { Types }            from "./Types";
 import * as CommonConstants from "./CommonConstants";
 import * as ProtoTypes      from "./ProtoTypes";
 import GridIndex            = Types.GridIndex;

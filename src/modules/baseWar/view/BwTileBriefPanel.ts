@@ -1,7 +1,7 @@
 
 import Tween                    = egret.Tween;
-import * as Types               from "../../../utility/Types";
-import * as Notify              from "../../../utility/Notify";
+import { Types }                from "../../../utility/Types";
+import { Notify }               from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as Lang                from "../../../utility/Lang";
 import * as StageManager        from "../../../utility/StageManager";

@@ -1,9 +1,9 @@
 
 import { ClientErrorCode }      from "../../../utility/ClientErrorCode";
-import * as Types               from "../../../utility/Types";
-import * as Notify              from "../../../utility/Notify";
+import { Types }                from "../../../utility/Types";
+import { Notify }               from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Logger              from "../../../utility/Logger";
+import { Logger }               from "../../../utility/Logger";
 import * as ConfigManager       from "../../../utility/ConfigManager";
 import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
 import * as ProtoTypes          from "../../../utility/ProtoTypes";

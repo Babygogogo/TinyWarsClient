@@ -3,7 +3,7 @@ import { MpwWar }                       from "../../multiPlayerWar/model/MpwWar"
 import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;
 import ISettingsForMrw                  = ProtoTypes.WarSettings.ISettingsForMrw;
 

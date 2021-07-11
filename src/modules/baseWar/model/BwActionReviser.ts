@@ -7,7 +7,7 @@ import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as ConfigManager               from "../../../utility/ConfigManager";
 import * as GridIndexHelpers            from "../../../utility/GridIndexHelpers";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as VisibilityHelpers           from "../../../utility/VisibilityHelpers";
 import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
 import TurnPhaseCode                    = Types.TurnPhaseCode;

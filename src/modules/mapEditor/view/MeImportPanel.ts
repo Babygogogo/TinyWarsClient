@@ -7,9 +7,9 @@ import { UiScrollList }                 from "../../../gameui/UiScrollList";
 import { CommonConfirmPanel }           from "../../common/view/CommonConfirmPanel";
 import * as Lang                        from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Notify                      from "../../../utility/Notify";
+import { Notify }                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as WarMapModel                 from "../../warMap/model/WarMapModel";
 import * as MeModel                     from "../model/MeModel";
 

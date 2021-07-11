@@ -1,9 +1,9 @@
 
 import * as Lang                from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Notify              from "../../../utility/Notify";
+import { Notify }               from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 import * as Helpers             from "../../../utility/Helpers";
 import { UiPanel }              from "../../../gameui/UiPanel";
 import { UiButton }             from "../../../gameui/UiButton";

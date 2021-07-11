@@ -1,11 +1,11 @@
 
 import * as GridIndexHelpers                from "../../../utility/GridIndexHelpers";
 import * as Helpers                         from "../../../utility/Helpers";
-import * as Logger                          from "../../../utility/Logger";
-import * as Notify                          from "../../../utility/Notify";
+import { Logger }                           from "../../../utility/Logger";
+import { Notify }                           from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as UserModel                       from "../../user/model/UserModel";
-import * as Types                           from "../../../utility/Types";
+import { Types }                            from "../../../utility/Types";
 import * as VisibilityHelpers               from "../../../utility/VisibilityHelpers";
 import * as BwHelpers                       from "./BwHelpers";
 import { ClientErrorCode }                  from "../../../utility/ClientErrorCode";
@@ -1650,7 +1650,7 @@ export abstract class BwActionPlanner {
         dataList.push(...this._getActionUnitProduceUnit());
         dataList.push(...this._getActionUnitWait(dataList.length > 0));
 
-        Logger.assert(dataList.length, `BwActionPlanner._getDataForUnitActionsPanel() no actions available?!`);
+        Logger.assert(!!dataList.length, `BwActionPlanner._getDataForUnitActionsPanel() no actions available?!`);
         return {
             war,
             destination,

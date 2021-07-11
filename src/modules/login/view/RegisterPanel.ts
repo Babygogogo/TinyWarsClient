@@ -9,11 +9,11 @@ import * as Helpers                     from "../../../utility/Helpers";
 import * as Lang                        from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
 import * as LocalStorage                from "../../../utility/LocalStorage";
-import * as Logger                      from "../../../utility/Logger";
-import * as Notify                      from "../../../utility/Notify";
+import { Logger }                       from "../../../utility/Logger";
+import { Notify }                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as UserModel                   from "../../user/model/UserModel";
 import * as UserProxy                   from "../../user/model/UserProxy";
 

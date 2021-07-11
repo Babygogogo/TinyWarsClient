@@ -1,7 +1,7 @@
 
 import * as ProtoTypes          from "./ProtoTypes";
 import * as Helpers             from "./Helpers";
-import * as Logger              from "./Logger";
+import { Logger }               from "./Logger";
 import * as protobuf            from "../../libs/modules/ProtobufJs/ProtobufJs";
 import IMessageContainer        = ProtoTypes.NetMessage.IMessageContainer;
 import ISerialWar               = ProtoTypes.WarSerialization.ISerialWar;

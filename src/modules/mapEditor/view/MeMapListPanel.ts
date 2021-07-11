@@ -9,13 +9,13 @@ import { CommonAlertPanel }             from "../../common/view/CommonAlertPanel
 import { LobbyBottomPanel }             from "../../lobby/view/LobbyBottomPanel";
 import { LobbyPanel }                   from "../../lobby/view/LobbyPanel";
 import { LobbyTopPanel }                from "../../lobby/view/LobbyTopPanel";
-import * as FlowManager                 from "../../../utility/FlowManager";
+import { FlowManager }                  from "../../../utility/FlowManager";
 import * as Lang                        from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Notify                      from "../../../utility/Notify";
+import { Notify }                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as MeModel                     from "../model/MeModel";
 import * as MeProxy                     from "../model/MeProxy";
 import IMapEditorData                   = ProtoTypes.Map.IMapEditorData;

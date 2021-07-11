@@ -4,7 +4,7 @@ import { UiPanel }              from "../../../gameui/UiPanel";
 import { UiButton }             from "../../../gameui/UiButton";
 import { UiLabel }              from "../../../gameui/UiLabel";
 import * as Helpers             from "../../../utility/Helpers";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 
 type OpenData = {
     title  : string;

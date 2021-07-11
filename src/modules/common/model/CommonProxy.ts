@@ -1,6 +1,6 @@
 
 import * as CommonModel     from "./CommonModel";
-import * as Notify          from "../../../utility/Notify";
+import { Notify }           from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes      from "../../../utility/ProtoTypes";
 import * as ConfigManager   from "../../../utility/ConfigManager";

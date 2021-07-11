@@ -2,7 +2,7 @@
 import { UiLabel }          from "./UiLabel";
 import { UiImage }          from "./UiImage";
 import * as Helpers         from "../utility/Helpers";
-import * as Types           from "../utility/Types";
+import { Types }            from "../utility/Types";
 import * as SoundManager    from "../utility/SoundManager";
 
 export class UiButton extends eui.Button {

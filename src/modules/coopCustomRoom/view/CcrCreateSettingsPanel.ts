@@ -10,13 +10,13 @@ import { CcrCreateBasicSettingsPage }       from "./CcrCreateBasicSettingsPage";
 import { CcrCreateMapInfoPage }             from "./CcrCreateMapInfoPage";
 import { CcrCreatePlayerInfoPage }          from "./CcrCreatePlayerInfoPage";
 import * as FloatText                       from "../../../utility/FloatText";
-import * as FlowManager                     from "../../../utility/FlowManager";
+import { FlowManager }                      from "../../../utility/FlowManager";
 import * as Helpers                         from "../../../utility/Helpers";
 import * as Lang                            from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Notify                          from "../../../utility/Notify";
+import { Notify }                           from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types                           from "../../../utility/Types";
+import { Types }                            from "../../../utility/Types";
 import * as CcrModel                        from "../../coopCustomRoom/model/CcrModel";
 import * as CcrProxy                        from "../model/CcrProxy";
 

@@ -1,9 +1,9 @@
 
 import * as CommonConstants             from "../../../utility/CommonConstants";
 import * as Helpers                     from "../../../utility/Helpers";
-import * as Logger                      from "../../../utility/Logger";
+import { Logger }                       from "../../../utility/Logger";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as BwWarRuleHelper             from "../../baseWar/model/BwWarRuleHelper";
 import * as UserModel                   from "../../user/model/UserModel";
 import * as MeUtility                   from "./MeUtility";

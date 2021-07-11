@@ -7,11 +7,11 @@ import { UiScrollList }                 from "../../../gameui/UiScrollList";
 import * as FloatText                   from "../../../utility/FloatText";
 import * as Lang                        from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Logger                      from "../../../utility/Logger";
-import * as Notify                      from "../../../utility/Notify";
+import { Logger }                       from "../../../utility/Logger";
+import { Notify }                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as WarEventHelper              from "../model/WarEventHelper";
 import IWarEventFullData                = ProtoTypes.Map.IWarEventFullData;
 

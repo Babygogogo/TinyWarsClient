@@ -1,6 +1,6 @@
 
-import * as Logger          from "../utility/Logger";
-import * as Types           from "../utility/Types";
+import { Logger }           from "../utility/Logger";
+import { Types }            from "../utility/Types";
 import * as StageManager    from "../utility/StageManager";
 import * as UiComponent     from "./UiComponent";
 

@@ -1,5 +1,5 @@
 
-import * as Logger          from "../../../utility/Logger";
+import { Logger }           from "../../../utility/Logger";
 import { BwPlayerManager }  from "../../baseWar/model/BwPlayerManager";
 import { BwPlayer }         from "../../baseWar/model/BwPlayer";
 

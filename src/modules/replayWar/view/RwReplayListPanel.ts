@@ -14,13 +14,13 @@ import { LobbyBottomPanel }                                             from "..
 import { LobbyTopPanel }                                                from "../../lobby/view/LobbyTopPanel";
 import { OpenDataForRwReplayMapInfoPage, RwReplayMapInfoPage }          from "./RwReplayMapInfoPage";
 import { OpenDataForRwReplayPlayerInfoPage, RwReplayPlayerInfoPage }    from "./RwReplayPlayerInfoPage";
-import * as FlowManager                                                 from "../../../utility/FlowManager";
+import { FlowManager }                                                  from "../../../utility/FlowManager";
 import * as Helpers                                                     from "../../../utility/Helpers";
 import * as Lang                                                        from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Notify                                                      from "../../../utility/Notify";
+import { Notify }                                                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types                                                       from "../../../utility/Types";
+import { Types }                                                        from "../../../utility/Types";
 import * as WarMapModel                                                 from "../../warMap/model/WarMapModel";
 import * as RwModel                                                     from "../model/RwModel";
 import * as RwProxy                                                     from "../model/RwProxy";

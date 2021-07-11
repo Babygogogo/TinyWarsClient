@@ -6,9 +6,9 @@ import { ChatPanel }                    from "../../chat/view/ChatPanel";
 import { UserPanel }                    from "../../user/view/UserPanel";
 import { UserSettingsPanel }            from "../../user/view/UserSettingsPanel";
 import { UserOnlineUsersPanel }         from "../../user/view/UserOnlineUsersPanel";
-import * as Notify                      from "../../../utility/Notify";
+import { Notify }                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as UserModel                   from "../../user/model/UserModel";
 
 export class LobbyTopPanel extends UiPanel<void> {

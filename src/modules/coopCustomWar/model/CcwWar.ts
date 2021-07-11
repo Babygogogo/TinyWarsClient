@@ -1,9 +1,9 @@
 
 import { ClientErrorCode }              from "../../../utility/ClientErrorCode";
 import { MpwWar }                       from "../../multiPlayerWar/model/MpwWar";
-import * as Logger                      from "../../../utility/Logger";
+import { Logger }                       from "../../../utility/Logger";
 import * as ProtoTypes                  from "../../../utility/ProtoTypes";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import ISerialWar                       = ProtoTypes.WarSerialization.ISerialWar;
 import ISettingsForCcw                  = ProtoTypes.WarSettings.ISettingsForCcw;
 

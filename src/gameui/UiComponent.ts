@@ -1,6 +1,6 @@
 
-import * as Notify  from "../utility/Notify";
-import * as Types   from "../utility/Types";
+import { Notify }   from "../utility/Notify";
+import { Types }    from "../utility/Types";
 import UiListener   = Types.UiListener;
 
 export class UiComponent extends eui.Component {

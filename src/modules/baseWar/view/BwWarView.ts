@@ -2,10 +2,10 @@
 import { UiZoomableComponent }          from "../../../gameui/UiZoomableComponent";
 import { BwWar }                        from "../../baseWar/model/BwWar";
 import * as CommonConstants             from "../../../utility/CommonConstants";
-import * as Notify                      from "../../../utility/Notify";
+import { Notify }                       from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as StageManager                from "../../../utility/StageManager";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import GridIndex                        = Types.GridIndex;
 import Point                            = Types.Point;
 const PADDING_HORIZONTAL                = 150;

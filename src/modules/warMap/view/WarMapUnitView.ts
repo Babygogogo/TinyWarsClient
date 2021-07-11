@@ -1,6 +1,6 @@
 
 import { UiImage }              from "../../../gameui/UiImage";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 import * as Helpers             from "../../../utility/Helpers";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as ConfigManager       from "../../../utility/ConfigManager";

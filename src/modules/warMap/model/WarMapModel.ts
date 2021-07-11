@@ -1,7 +1,7 @@
 
-import * as Types           from "../../../utility/Types";
+import { Types }            from "../../../utility/Types";
 import * as ProtoTypes      from "../../../utility/ProtoTypes";
-import * as Notify          from "../../../utility/Notify";
+import { Notify }           from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as Lang            from "../../../utility/Lang";
 import * as WarMapProxy     from "./WarMapProxy";

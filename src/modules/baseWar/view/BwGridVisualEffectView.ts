@@ -4,7 +4,7 @@ import { BwGridVisualEffect }   from "../model/BwGridVisualEffect";
 import * as CommonConstants     from "../../../utility/CommonConstants";
 import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
 import * as Helpers             from "../../../utility/Helpers";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 import GridIndex                = Types.GridIndex;
 
 const { width: _GRID_WIDTH, height: _GRID_HEIGHT } = CommonConstants.GridSize;

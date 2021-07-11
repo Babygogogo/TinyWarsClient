@@ -4,7 +4,7 @@ import { UiButton }                     from "../../../gameui/UiButton";
 import { UiLabel }                      from "../../../gameui/UiLabel";
 import * as Lang                        from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 
 type OpenDataForCommonErrorPanel = {
     content     : string;

@@ -3,7 +3,7 @@ import { BwTileView }           from "./BwTileView";
 import { BwTileMap }            from "../model/BwTileMap";
 import { UiImage }              from "../../../gameui/UiImage";
 import * as UserModel           from "../../user/model/UserModel";
-import * as Notify              from "../../../utility/Notify";
+import { Notify }               from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
 import * as Helpers             from "../../../utility/Helpers";
 import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";

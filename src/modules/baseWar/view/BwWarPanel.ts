@@ -1,7 +1,7 @@
 
 import { UiPanel }  from "../../../gameui/UiPanel";
 import { BwWar }    from "../model/BwWar";
-import * as Types   from "../../../utility/Types";
+import { Types }    from "../../../utility/Types";
 
 type OpenDataForBwWarPanel = {
     war: BwWar;

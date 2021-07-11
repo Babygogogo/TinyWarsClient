@@ -6,7 +6,7 @@ import { UiTextInput }                  from "../../../gameui/UiTextInput";
 import { MeWar }                        from "../../mapEditor/model/MeWar";
 import * as Lang                        from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Types                       from "../../../utility/Types";
+import { Types }                        from "../../../utility/Types";
 import * as WarMapProxy                 from "../../warMap/model/WarMapProxy";
 
 type OpenData = {

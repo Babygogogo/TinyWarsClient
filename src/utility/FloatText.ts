@@ -1,7 +1,7 @@
 
-import * as Types           from "./Types";
+import { Types }            from "./Types";
 import * as StageManager    from "./StageManager";
-import * as Logger          from "./Logger";
+import { Logger }           from "./Logger";
 import { UiLabel }          from "../gameui/UiLabel";
 
 const SHOW_TIME_MS      = 3000;

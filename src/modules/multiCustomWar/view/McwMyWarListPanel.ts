@@ -16,10 +16,10 @@ import { McwWarBasicSettingsPage, OpenDataForMcwWarBasicSettingsPage }          
 import * as Helpers                                                             from "../../../utility/Helpers";
 import * as Lang                                                                from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
-import * as Logger                                                              from "../../../utility/Logger";
-import * as Notify                                                              from "../../../utility/Notify";
+import { Logger }                                                               from "../../../utility/Logger";
+import { Notify }                                                               from "../../../utility/Notify";
 import { NotifyType } from "../../../utility/NotifyType";
-import * as Types                                                               from "../../../utility/Types";
+import { Types }                                                                from "../../../utility/Types";
 import * as MpwModel                                                            from "../../multiPlayerWar/model/MpwModel";
 import * as MpwProxy                                                            from "../../multiPlayerWar/model/MpwProxy";
 import * as WarMapModel                                                         from "../../warMap/model/WarMapModel";

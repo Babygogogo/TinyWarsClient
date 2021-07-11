@@ -2,7 +2,7 @@
 import { UiComponent }          from "../gameui/UiComponent";
 import { UiTabItemRenderer }    from "./UiTabItemRenderer";
 import { UiTabPage }            from "./UiTabPage";
-import * as Logger              from "../utility/Logger";
+import { Logger }               from "../utility/Logger";
 import * as SoundManager        from "../utility/SoundManager";
 
 export class UiTab<DataForTabItemRenderer, DataForPage> extends UiComponent {

@@ -4,7 +4,7 @@ import { UiImage }              from "../../../gameui/UiImage";
 import * as TimeModel           from "../../time/model/TimeModel";
 import * as CommonModel         from "../../common/model/CommonModel";
 import * as UserModel           from "../../user/model/UserModel";
-import * as Types               from "../../../utility/Types";
+import { Types }                from "../../../utility/Types";
 import * as VisibilityHelpers   from "../../../utility/VisibilityHelpers";
 import * as GridIndexHelpers    from "../../../utility/GridIndexHelpers";
 import * as Helpers             from "../../../utility/Helpers";

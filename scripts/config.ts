@@ -1,4 +1,5 @@
 /// 阅读 api.d.ts 查看文档
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 ///<reference path="api.d.ts"/>
 
 import * as path from 'path';
@@ -101,17 +102,17 @@ const config: ResourceManagerConfig = {
         }
     },
 
-    mergeSelector: (path) => {
-        if (path.indexOf("assets/bitmap/") >= 0) {
+    mergeSelector: (p) => {
+        if (p.indexOf("assets/bitmap/") >= 0) {
             return "assets/bitmap/sheet.sheet";
         }
-        else if (path.indexOf("armature") >= 0 && path.indexOf(".json") >= 0) {
+        else if (p.indexOf("armature") >= 0 && p.indexOf(".json") >= 0) {
             return "assets/armature/1.zip";
         }
     },
 
-    typeSelector: (path) => {
-        const ext = path.substr(path.lastIndexOf(".") + 1);
+    typeSelector: (p) => {
+        const ext = p.substr(p.lastIndexOf(".") + 1);
         const typeMap = {
             "jpg": "image",
             "png": "image",
@@ -126,9 +127,9 @@ const config: ResourceManagerConfig = {
         };
         let type = typeMap[ext];
         if (type == "json") {
-            if (path.indexOf("sheet") >= 0) {
+            if (p.indexOf("sheet") >= 0) {
                 type = "sheet";
-            } else if (path.indexOf("movieclip") >= 0) {
+            } else if (p.indexOf("movieclip") >= 0) {
                 type = "movieclip";
             }
         }

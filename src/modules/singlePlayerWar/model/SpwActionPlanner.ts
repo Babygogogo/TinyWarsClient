@@ -10,7 +10,7 @@ import * as GridIndexHelpers                    from "../../../utility/GridIndex
 import * as Lang                                from "../../../utility/Lang";
 import { LangTextType } from "../../../utility/LangTextType";
 import * as ProtoTypes                          from "../../../utility/ProtoTypes";
-import * as Types                               from "../../../utility/Types";
+import { Types }                                from "../../../utility/Types";
 import * as BwHelpers                           from "../../baseWar/model/BwHelpers";
 import * as SpwLocalProxy                       from "./SpwLocalProxy";
 import TurnPhaseCode                            = Types.TurnPhaseCode;
