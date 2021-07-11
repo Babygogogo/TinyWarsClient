@@ -1,73 +1,71 @@
 
-namespace TinyWars.Broadcast.BroadcastProxy {
-    import Notify           = Utility.Notify;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import NetManager       = Network.NetManager;
-    import NetworkCodes     = Network.Codes;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
+import { NetMessageCodes }      from "../../../network/NetMessageCodes";
+import * as NetManager          from "../../../network/NetManager";
+import * as BroadcastModel      from "./BroadcastModel";
+import * as Notify              from "../../../utility/Notify";
+import * as ProtoTypes          from "../../../utility/ProtoTypes";
+import ILanguageText            = ProtoTypes.Structure.ILanguageText;
 
-    export function init(): void {
-        NetManager.addListeners([
-            { msgCode: NetworkCodes.MsgBroadcastAddMessage,         callback: _onMsgBroadcastAddMessage },
-            { msgCode: NetworkCodes.MsgBroadcastDeleteMessage,      callback: _onMsgBroadcastDeleteMessage, },
-            { msgCode: NetworkCodes.MsgBroadcastDoBroadcast,        callback: _onMsgBroadcastDoBroadcast },
-            { msgCode: NetworkCodes.MsgBroadcastGetMessageList,     callback: _onMsgBroadcastGetMessageList, },
-        ], BroadcastProxy);
-    }
+export function init(): void {
+    NetManager.addListeners([
+        { msgCode: NetMessageCodes.MsgBroadcastAddMessage,         callback: _onMsgBroadcastAddMessage },
+        { msgCode: NetMessageCodes.MsgBroadcastDeleteMessage,      callback: _onMsgBroadcastDeleteMessage, },
+        { msgCode: NetMessageCodes.MsgBroadcastDoBroadcast,        callback: _onMsgBroadcastDoBroadcast },
+        { msgCode: NetMessageCodes.MsgBroadcastGetMessageList,     callback: _onMsgBroadcastGetMessageList, },
+    ], undefined);
+}
 
-    export function reqBroadcastAddMessage(textList: ILanguageText[], startTime: number, endTime: number): void {
-        NetManager.send({
-            MsgBroadcastAddMessage: { c: {
-                textList,
-                startTime,
-                endTime,
-            } },
-        });
+export function reqBroadcastAddMessage(textList: ILanguageText[], startTime: number, endTime: number): void {
+    NetManager.send({
+        MsgBroadcastAddMessage: { c: {
+            textList,
+            startTime,
+            endTime,
+        } },
+    });
+}
+function _onMsgBroadcastAddMessage(e: egret.Event): void {
+    const data = e.data as ProtoTypes.NetMessage.MsgBroadcastAddMessage.IS;
+    if (!data.errorCode) {
+        Notify.dispatch(Notify.Type.MsgBroadcastAddMessage, data);
     }
-    function _onMsgBroadcastAddMessage(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgBroadcastAddMessage.IS;
-        if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgBroadcastAddMessage, data);
-        }
-    }
+}
 
-    export function reqBroadcastDeleteMessage(messageId: number): void {
-        NetManager.send({
-            MsgBroadcastDeleteMessage: { c: {
-                messageId,
-            } },
-        });
+export function reqBroadcastDeleteMessage(messageId: number): void {
+    NetManager.send({
+        MsgBroadcastDeleteMessage: { c: {
+            messageId,
+        } },
+    });
+}
+function _onMsgBroadcastDeleteMessage(e: egret.Event): void {
+    const data = e.data as ProtoTypes.NetMessage.MsgBroadcastDeleteMessage.IS;
+    if (!data.errorCode) {
+        Notify.dispatch(Notify.Type.MsgBroadcastDeleteMessage, data);
     }
-    function _onMsgBroadcastDeleteMessage(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgBroadcastDeleteMessage.IS;
-        if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgBroadcastDeleteMessage, data);
-        }
-    }
+}
 
-    export function reqBroadcastDoBroadcast(): void {
-        NetManager.send({
-            MsgBroadcastDoBroadcast: { c: {
-            } },
-        })
+export function reqBroadcastDoBroadcast(): void {
+    NetManager.send({
+        MsgBroadcastDoBroadcast: { c: {
+        } },
+    });
+}
+function _onMsgBroadcastDoBroadcast(e: egret.Event): void {
+    const data = e.data as ProtoTypes.NetMessage.MsgBroadcastDoBroadcast.IS;
+    if (!data.errorCode) {
+        Notify.dispatch(Notify.Type.MsgBroadcastDoBroadcast, data);
     }
-    function _onMsgBroadcastDoBroadcast(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgBroadcastDoBroadcast.IS;
-        if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgBroadcastDoBroadcast, data);
-        }
-    }
+}
 
-    export function reqBroadcastGetMessageList(): void {
-        NetManager.send({ MsgBroadcastGetMessageList: { c: {
-        } }, });
-    }
-    function _onMsgBroadcastGetMessageList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgBroadcastGetMessageList.IS;
-        if (!data.errorCode) {
-            BroadcastModel.setAllMessageList(data.messageList);
-            Notify.dispatch(Notify.Type.MsgBroadcastGetMessageList, data);
-        }
+export function reqBroadcastGetMessageList(): void {
+    NetManager.send({ MsgBroadcastGetMessageList: { c: {
+    } }, });
+}
+function _onMsgBroadcastGetMessageList(e: egret.Event): void {
+    const data = e.data as ProtoTypes.NetMessage.MsgBroadcastGetMessageList.IS;
+    if (!data.errorCode) {
+        BroadcastModel.setAllMessageList(data.messageList);
+        Notify.dispatch(Notify.Type.MsgBroadcastGetMessageList, data);
     }
 }

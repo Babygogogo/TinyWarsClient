@@ -1,6 +1,6 @@
 
-namespace TinyWars.Network {
-export enum Codes {
+// eslint-disable-next-line no-shadow
+export enum NetMessageCodes {
 MsgCommonHeartbeat = 0,
 MsgCommonError = 1,
 MsgCommonServerDisconnect = 2,
@@ -118,4 +118,4 @@ MsgCcrStartWar = 349,
 MsgCcrGetJoinedRoomInfoList = 350,
 MsgCcrGetRoomInfo = 351,
 MsgCcrGetJoinableRoomInfoList = 352,
-}}
+}

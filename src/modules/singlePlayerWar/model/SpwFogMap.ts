@@ -1,22 +1,22 @@
 
-namespace TinyWars.SinglePlayerWar {
-    import VisibilityHelpers = Utility.VisibilityHelpers;
+import * as VisibilityHelpers           from "../../../utility/VisibilityHelpers";
+import { BwFogMap }                     from "../../baseWar/model/BwFogMap";
+import { SpwWar }                       from "./SpwWar";
 
-    export class SpwFogMap extends BaseWar.BwFogMap {
-        public startRunning(war: SpwWar): void {
-            this._setWar(war);
+export class SpwFogMap extends BwFogMap {
+    public startRunning(war: SpwWar): void {
+        this._setWar(war);
 
-            const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
-            const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes);
-            for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
-                unit.setViewVisible(visibleUnits.has(unit));
-            }
+        const teamIndexes   = war.getPlayerManager().getAliveWatcherTeamIndexesForSelf();
+        const visibleUnits  = VisibilityHelpers.getAllUnitsOnMapVisibleToTeams(war, teamIndexes);
+        for (const unit of war.getUnitMap().getAllUnitsOnMap()) {
+            unit.setViewVisible(visibleUnits.has(unit));
+        }
 
-            const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeams(war, teamIndexes);
-            for (const tile of war.getTileMap().getAllTiles()) {
-                tile.setHasFog(!visibleTiles.has(tile));
-                tile.flushDataToView();
-            }
+        const visibleTiles = VisibilityHelpers.getAllTilesVisibleToTeams(war, teamIndexes);
+        for (const tile of war.getTileMap().getAllTiles()) {
+            tile.setHasFog(!visibleTiles.has(tile));
+            tile.flushDataToView();
         }
     }
 }

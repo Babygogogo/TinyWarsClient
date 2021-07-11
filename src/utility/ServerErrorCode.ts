@@ -1,6 +1,4 @@
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-namespace TinyWars.Utility {
 // eslint-disable-next-line no-shadow
 export const enum ServerErrorCode {
     NoError = 0,
@@ -3958,5 +3956,4 @@ export const enum ServerErrorCode {
     MsgUserSetSettings0000,
     MsgUserSetSettings0001,
     MsgUserSetSettings0002,
-}
 }

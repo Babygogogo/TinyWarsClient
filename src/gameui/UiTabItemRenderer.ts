@@ -1,4 +1,4 @@
 
-namespace TinyWars.GameUi {
-    export class UiTabItemRenderer<DataForTabItem> extends UiListItemRenderer<DataForTabItem> {}
-}
+import { UiListItemRenderer } from "./UiListItemRenderer";
+
+export class UiTabItemRenderer<DataForTabItem> extends UiListItemRenderer<DataForTabItem> {}

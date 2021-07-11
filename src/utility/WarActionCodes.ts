@@ -1,5 +1,5 @@
 
-namespace TinyWars.Utility {
+namespace Utility {
 export enum WarActionCodes {
 WarActionSystemBeginTurn = 10,
 WarActionSystemCallWarEvent = 11,

@@ -1,28 +1,29 @@
 
-namespace TinyWars.Lobby {
-    export class LobbyBackgroundPanel extends GameUi.UiPanel<void> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Bottom;
-        protected readonly _IS_EXCLUSIVE = false;
+import { UiPanel }              from "../../../gameui/UiPanel";
+import * as Types               from "../../../utility/Types";
 
-        private static _instance: LobbyBackgroundPanel;
+export class LobbyBackgroundPanel extends UiPanel<void> {
+    protected readonly _LAYER_TYPE   = Types.LayerType.Bottom;
+    protected readonly _IS_EXCLUSIVE = false;
 
-        public static show(): void {
-            if (!LobbyBackgroundPanel._instance) {
-                LobbyBackgroundPanel._instance = new LobbyBackgroundPanel();
-            }
-            LobbyBackgroundPanel._instance.open(undefined);
+    private static _instance: LobbyBackgroundPanel;
+
+    public static show(): void {
+        if (!LobbyBackgroundPanel._instance) {
+            LobbyBackgroundPanel._instance = new LobbyBackgroundPanel();
         }
+        LobbyBackgroundPanel._instance.open(undefined);
+    }
 
-        public static async hide(): Promise<void> {
-            if (LobbyBackgroundPanel._instance) {
-                await LobbyBackgroundPanel._instance.close();
-            }
+    public static async hide(): Promise<void> {
+        if (LobbyBackgroundPanel._instance) {
+            await LobbyBackgroundPanel._instance.close();
         }
+    }
 
-        private constructor() {
-            super();
+    private constructor() {
+        super();
 
-            this.skinName = "resource/skins/lobby/LobbyBackgroundPanel.exml";
-        }
+        this.skinName = "resource/skins/lobby/LobbyBackgroundPanel.exml";
     }
 }

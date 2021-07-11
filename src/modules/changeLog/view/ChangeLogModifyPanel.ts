@@ -1,106 +1,108 @@
 
-namespace TinyWars.ChangeLog {
-    import Notify           = Utility.Notify;
-    import Lang             = Utility.Lang;
-    import ConfigManager    = Utility.ConfigManager;
-    import Types            = Utility.Types;
-    import FloatText        = Utility.FloatText;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
-    import CommonConstants  = Utility.CommonConstants;
+import { UiPanel }              from "../../../gameui/UiPanel";
+import { UiButton }             from "../../../gameui/UiButton";
+import { UiLabel }              from "../../../gameui/UiLabel";
+import { UiTextInput }          from "../../../gameui/UiTextInput";
+import * as CommonConstants     from "../../../utility/CommonConstants";
+import * as FloatText           from "../../../utility/FloatText";
+import * as Lang                from "../../../utility/Lang";
+import * as Notify              from "../../../utility/Notify";
+import * as ProtoTypes          from "../../../utility/ProtoTypes";
+import * as Types               from "../../../utility/Types";
+import * as ChangeLogModel      from "../../changeLog/model/ChangeLogModel";
+import * as ChangeLogProxy      from "../../changeLog/model/ChangeLogProxy";
+import ILanguageText            = ProtoTypes.Structure.ILanguageText;
 
-    type OpenDataForChangeLogModifyPanel = {
-        messageId   : number;
+type OpenDataForChangeLogModifyPanel = {
+    messageId   : number;
+};
+export class ChangeLogModifyPanel extends UiPanel<OpenDataForChangeLogModifyPanel> {
+    protected readonly _LAYER_TYPE   = Types.LayerType.Hud1;
+    protected readonly _IS_EXCLUSIVE = false;
+
+    private static _instance: ChangeLogModifyPanel;
+
+    private _inputChinese   : UiTextInput;
+    private _inputEnglish   : UiTextInput;
+    private _labelTip       : UiLabel;
+    private _labelTitle     : UiLabel;
+    private _labelChinese   : UiLabel;
+    private _labelEnglish   : UiLabel;
+    private _btnModify      : UiButton;
+    private _btnClose       : UiButton;
+
+    public static show(openData: OpenDataForChangeLogModifyPanel): void {
+        if (!ChangeLogModifyPanel._instance) {
+            ChangeLogModifyPanel._instance = new ChangeLogModifyPanel();
+        }
+
+        ChangeLogModifyPanel._instance.open(openData);
     }
 
-    export class ChangeLogModifyPanel extends GameUi.UiPanel<OpenDataForChangeLogModifyPanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud1;
-        protected readonly _IS_EXCLUSIVE = false;
-
-        private static _instance: ChangeLogModifyPanel;
-
-        private _inputChinese   : GameUi.UiTextInput;
-        private _inputEnglish   : GameUi.UiTextInput;
-        private _labelTip       : GameUi.UiLabel;
-        private _labelTitle     : GameUi.UiLabel;
-        private _labelChinese   : GameUi.UiLabel;
-        private _labelEnglish   : GameUi.UiLabel;
-        private _btnModify      : GameUi.UiButton;
-        private _btnClose       : GameUi.UiButton;
-
-        public static show(openData: OpenDataForChangeLogModifyPanel): void {
-            if (!ChangeLogModifyPanel._instance) {
-                ChangeLogModifyPanel._instance = new ChangeLogModifyPanel();
-            }
-
-            ChangeLogModifyPanel._instance.open(openData);
+    public static async hide(): Promise<void> {
+        if (ChangeLogModifyPanel._instance) {
+            await ChangeLogModifyPanel._instance.close();
         }
+    }
 
-        public static async hide(): Promise<void> {
-            if (ChangeLogModifyPanel._instance) {
-                await ChangeLogModifyPanel._instance.close();
-            }
+    private constructor() {
+        super();
+
+        this._setIsTouchMaskEnabled(true);
+        this._setIsCloseOnTouchedMask();
+        this.skinName               = "resource/skins/changeLog/ChangeLogModifyPanel.exml";
+    }
+
+    protected _onOpened(): void {
+        this._setNotifyListenerArray([
+            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+        ]);
+        this._setUiListenerArray([
+            { ui: this._btnClose,   callback: this.close },
+            { ui: this._btnModify,  callback: this._onTouchedBtnModify },
+        ]);
+
+        this._inputChinese.maxChars = CommonConstants.ChangeLogTextMaxLength;
+        this._inputEnglish.maxChars = CommonConstants.ChangeLogTextMaxLength;
+
+        this._updateView();
+    }
+
+    private _onNotifyLanguageChanged(e: egret.Event): void {
+        this._updateComponentsForLanguage();
+    }
+
+    private _onTouchedBtnModify(e: egret.TouchEvent): void {
+        const chineseText   = this._inputChinese.text || ``;
+        const englishText   = this._inputEnglish.text || ``;
+        const textList      : ILanguageText[] = [
+            { languageType: Types.LanguageType.Chinese, text: chineseText || englishText },
+            { languageType: Types.LanguageType.English, text: englishText || chineseText },
+        ];
+        if (textList.every(v => v.text.length <= 0)) {
+            FloatText.show(Lang.getText(Lang.Type.A0155));
+        } else if (textList.some(v => v.text.length > CommonConstants.ChangeLogTextMaxLength)) {
+            FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.ChangeLogTextMaxLength));
+        } else {
+            ChangeLogProxy.reqChangeLogModifyMessage(this._getOpenData().messageId, textList);
+            this.close();
         }
+    }
 
-        private constructor() {
-            super();
+    private _updateView(): void {
+        this._updateComponentsForLanguage();
 
-            this._setIsTouchMaskEnabled(true);
-            this._setIsCloseOnTouchedMask();
-            this.skinName               = "resource/skins/changeLog/ChangeLogModifyPanel.exml";
-        }
+        const textList          = ChangeLogModel.getMessage(this._getOpenData().messageId).textList || [];
+        this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.Chinese });
+        this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.English });
+    }
 
-        protected _onOpened(): void {
-            this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-            ]);
-            this._setUiListenerArray([
-                { ui: this._btnClose,   callback: this.close },
-                { ui: this._btnModify,  callback: this._onTouchedBtnModify },
-            ]);
-
-            this._inputChinese.maxChars = CommonConstants.ChangeLogTextMaxLength;
-            this._inputEnglish.maxChars = CommonConstants.ChangeLogTextMaxLength;
-
-            this._updateView();
-        }
-
-        private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateComponentsForLanguage();
-        }
-
-        private _onTouchedBtnModify(e: egret.TouchEvent): void {
-            const chineseText   = this._inputChinese.text || ``;
-            const englishText   = this._inputEnglish.text || ``;
-            const textList      : ILanguageText[] = [
-                { languageType: Types.LanguageType.Chinese, text: chineseText || englishText },
-                { languageType: Types.LanguageType.English, text: englishText || chineseText },
-            ];
-            if (textList.every(v => v.text.length <= 0)) {
-                FloatText.show(Lang.getText(Lang.Type.A0155));
-            } else if (textList.some(v => v.text.length > CommonConstants.ChangeLogTextMaxLength)) {
-                FloatText.show(Lang.getFormattedText(Lang.Type.F0034, CommonConstants.ChangeLogTextMaxLength));
-            } else {
-                ChangeLogProxy.reqChangeLogModifyMessage(this._getOpenData().messageId, textList);
-                this.close();
-            }
-        }
-
-        private _updateView(): void {
-            this._updateComponentsForLanguage();
-
-            const textList          = ChangeLogModel.getMessage(this._getOpenData().messageId).textList || [];
-            this._inputChinese.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.Chinese });
-            this._inputEnglish.text = Lang.getLanguageText({ textArray: textList, languageType: Types.LanguageType.English });
-        }
-
-        private _updateComponentsForLanguage(): void {
-            this._btnClose.label    = Lang.getText(Lang.Type.B0146);
-            this._btnModify.label   = Lang.getText(Lang.Type.B0317);
-            this._labelChinese.text = Lang.getText(Lang.Type.B0455);
-            this._labelEnglish.text = Lang.getText(Lang.Type.B0456);
-            this._labelTip.text     = Lang.getText(Lang.Type.A0156);
-            this._labelTitle.text   = `${Lang.getText(Lang.Type.B0317)} #${this._getOpenData().messageId}`;
-        }
+    private _updateComponentsForLanguage(): void {
+        this._btnClose.label    = Lang.getText(Lang.Type.B0146);
+        this._btnModify.label   = Lang.getText(Lang.Type.B0317);
+        this._labelChinese.text = Lang.getText(Lang.Type.B0455);
+        this._labelEnglish.text = Lang.getText(Lang.Type.B0456);
+        this._labelTip.text     = Lang.getText(Lang.Type.A0156);
+        this._labelTitle.text   = `${Lang.getText(Lang.Type.B0317)} #${this._getOpenData().messageId}`;
     }
 }

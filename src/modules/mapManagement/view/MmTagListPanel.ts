@@ -1,216 +1,225 @@
 
-namespace TinyWars.MapManagement {
-    import Types        = Utility.Types;
-    import Lang         = Utility.Lang;
-    import Notify       = Utility.Notify;
-    import FloatText    = Utility.FloatText;
-    import WarMapModel  = WarMap.WarMapModel;
+import { UiListItemRenderer }   from "../../../gameui/UiListItemRenderer";
+import { UiPanel }              from "../../../gameui/UiPanel";
+import { UiButton }             from "../../../gameui/UiButton";
+import { UiLabel }              from "../../../gameui/UiLabel";
+import { UiScrollList }         from "../../../gameui/UiScrollList";
+import { UiZoomableMap }        from "../../../gameui/UiZoomableMap";
+import { FiltersForMapList }    from "./MmAvailabilityListPanel";
+import { MmTagSearchPanel }     from "./MmTagSearchPanel";
+import { MmMainMenuPanel }      from "./MmMainMenuPanel";
+import { MmTagChangePanel }     from "./MmTagChangePanel";
+import * as FloatText           from "../../../utility/FloatText";
+import * as Lang                from "../../../utility/Lang";
+import * as Notify              from "../../../utility/Notify";
+import * as Types               from "../../../utility/Types";
+import * as WarMapModel         from "../../warMap/model/WarMapModel";
 
-    export class MmTagListPanel extends GameUi.UiPanel<FiltersForMapList> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
-        protected readonly _IS_EXCLUSIVE = true;
+export class MmTagListPanel extends UiPanel<FiltersForMapList> {
+    protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
+    protected readonly _IS_EXCLUSIVE = true;
 
-        private static _instance: MmTagListPanel;
+    private static _instance: MmTagListPanel;
 
-        private _listMap        : GameUi.UiScrollList<DataForMapNameRenderer>;
-        private _zoomMap        : GameUi.UiZoomableMap;
-        private _labelMenuTitle : GameUi.UiLabel;
-        private _btnSearch      : GameUi.UiButton;
-        private _btnBack        : GameUi.UiButton;
-        private _labelNoMap     : GameUi.UiLabel;
+    private _listMap        : UiScrollList<DataForMapNameRenderer>;
+    private _zoomMap        : UiZoomableMap;
+    private _labelMenuTitle : UiLabel;
+    private _btnSearch      : UiButton;
+    private _btnBack        : UiButton;
+    private _labelNoMap     : UiLabel;
 
-        private _groupInfo          : eui.Group;
-        private _labelMapName       : GameUi.UiLabel;
-        private _labelDesigner      : GameUi.UiLabel;
-        private _labelRating        : GameUi.UiLabel;
-        private _labelPlayedTimes   : GameUi.UiLabel;
-        private _labelPlayersCount  : GameUi.UiLabel;
+    private _groupInfo          : eui.Group;
+    private _labelMapName       : UiLabel;
+    private _labelDesigner      : UiLabel;
+    private _labelRating        : UiLabel;
+    private _labelPlayedTimes   : UiLabel;
+    private _labelPlayersCount  : UiLabel;
 
-        private _mapFilters         : FiltersForMapList = {};
-        private _dataForList        : DataForMapNameRenderer[] = [];
-        private _selectedMapId      : number;
+    private _mapFilters         : FiltersForMapList = {};
+    private _dataForList        : DataForMapNameRenderer[] = [];
+    private _selectedMapId      : number;
 
-        public static show(mapFilters?: FiltersForMapList): void {
-            if (!MmTagListPanel._instance) {
-                MmTagListPanel._instance = new MmTagListPanel();
-            }
-
-            MmTagListPanel._instance.open(mapFilters);
-        }
-        public static async hide(): Promise<void> {
-            if (MmTagListPanel._instance) {
-                await MmTagListPanel._instance.close();
-            }
-        }
-        public static getInstance(): MmTagListPanel {
-            return MmTagListPanel._instance;
+    public static show(mapFilters?: FiltersForMapList): void {
+        if (!MmTagListPanel._instance) {
+            MmTagListPanel._instance = new MmTagListPanel();
         }
 
-        public constructor() {
-            super();
-
-            this.skinName = "resource/skins/mapManagement/MmTagListPanel.exml";
+        MmTagListPanel._instance.open(mapFilters);
+    }
+    public static async hide(): Promise<void> {
+        if (MmTagListPanel._instance) {
+            await MmTagListPanel._instance.close();
         }
+    }
+    public static getInstance(): MmTagListPanel {
+        return MmTagListPanel._instance;
+    }
 
-        protected _onOpened(): void {
-            this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
-                { type: Notify.Type.MsgMmSetMapTag,     callback: this._onMsgMmSetMapTag },
-            ]);
-            this._setUiListenerArray([
-                { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
-                { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
-            ]);
-            this._listMap.setItemRenderer(MapNameRenderer);
+    public constructor() {
+        super();
 
-            this._groupInfo.visible = false;
-            this._updateComponentsForLanguage();
+        this.skinName = "resource/skins/mapManagement/MmTagListPanel.exml";
+    }
 
-            this.setMapFilters(this._getOpenData() || this._mapFilters);
+    protected _onOpened(): void {
+        this._setNotifyListenerArray([
+            { type: Notify.Type.LanguageChanged,    callback: this._onNotifyLanguageChanged },
+            { type: Notify.Type.MsgMmSetMapTag,     callback: this._onMsgMmSetMapTag },
+        ]);
+        this._setUiListenerArray([
+            { ui: this._btnSearch, callback: this._onTouchTapBtnSearch },
+            { ui: this._btnBack,   callback: this._onTouchTapBtnBack },
+        ]);
+        this._listMap.setItemRenderer(MapNameRenderer);
+
+        this._groupInfo.visible = false;
+        this._updateComponentsForLanguage();
+
+        this.setMapFilters(this._getOpenData() || this._mapFilters);
+    }
+    protected async _onClosed(): Promise<void> {
+        egret.Tween.removeTweens(this._groupInfo);
+    }
+
+    public async setSelectedMapFileName(newMapId: number): Promise<void> {
+        const dataList = this._dataForList;
+        if (dataList.length <= 0) {
+            this._selectedMapId = null;
+        } else {
+            const index         = dataList.findIndex(data => data.mapId === newMapId);
+            const newIndex      = index >= 0 ? index : Math.floor(Math.random() * dataList.length);
+            const oldIndex      = dataList.findIndex(data => data.mapId === this._selectedMapId);
+            this._selectedMapId = dataList[newIndex].mapId;
+            (dataList[oldIndex])    && (this._listMap.updateSingleData(oldIndex, dataList[oldIndex]));
+            (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
+
+            await this._showMap(dataList[newIndex].mapId);
         }
-        protected async _onClosed(): Promise<void> {
-            egret.Tween.removeTweens(this._groupInfo);
-        }
+    }
+    public getSelectedMapId(): number {
+        return this._selectedMapId;
+    }
 
-        public async setSelectedMapFileName(newMapId: number): Promise<void> {
-            const dataList = this._dataForList;
-            if (dataList.length <= 0) {
-                this._selectedMapId = null;
+    public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
+        this._mapFilters            = mapFilters;
+        this._dataForList           = await this._createDataForListMap();
+
+        const length                = this._dataForList.length;
+        this._labelNoMap.visible    = length <= 0;
+        this._listMap.bindData(this._dataForList);
+        this.setSelectedMapFileName(this._selectedMapId);
+        (length) && (this._listMap.scrollVerticalTo((this._dataForList.findIndex(data => data.mapId === this._selectedMapId) + 1) / length * 100));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // Callbacks.
+    ////////////////////////////////////////////////////////////////////////////////
+    private _onMsgMmSetMapTag(e: egret.Event): void {
+        FloatText.show(Lang.getText(Lang.Type.A0151));
+        this.setMapFilters(this._mapFilters);
+    }
+
+    private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
+        MmTagSearchPanel.show();
+    }
+
+    private _onTouchTapBtnBack(e: egret.TouchEvent): void {
+        this.close();
+        MmMainMenuPanel.show();
+    }
+
+    private _onNotifyLanguageChanged(e: egret.Event): void {
+        this._updateComponentsForLanguage();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // Private functions.
+    ////////////////////////////////////////////////////////////////////////////////
+    private _updateComponentsForLanguage(): void {
+        this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0227);
+        this._btnBack.label         = Lang.getText(Lang.Type.B0146);
+        this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
+    }
+
+    private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
+        const data                                      : DataForMapNameRenderer[] = [];
+        const mapFilters                                = this._mapFilters;
+        const { playersCount, playedTimes, minRating }  = mapFilters;
+        let { mapName: mapNameForFilter, mapDesigner }  = mapFilters;
+        (mapNameForFilter)  && (mapNameForFilter = mapNameForFilter.toLowerCase());
+        (mapDesigner)       && (mapDesigner = mapDesigner.toLowerCase());
+
+        for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
+            const mapName = Lang.getLanguageText({ textArray: mapBriefData.mapNameArray });
+            if ((!mapBriefData.mapExtraData.isEnabled)                                                                  ||
+                ((mapNameForFilter) && (mapName.toLowerCase().indexOf(mapNameForFilter) < 0))                           ||
+                ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))                   ||
+                ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                               ||
+                ((playedTimes != null) && ((await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)) < playedTimes))    ||
+                ((minRating != null) && ((await WarMapModel.getAverageRating(mapId)) < minRating))
+            ) {
+                continue;
             } else {
-                const index         = dataList.findIndex(data => data.mapId === newMapId);
-                const newIndex      = index >= 0 ? index : Math.floor(Math.random() * dataList.length);
-                const oldIndex      = dataList.findIndex(data => data.mapId === this._selectedMapId);
-                this._selectedMapId = dataList[newIndex].mapId;
-                (dataList[oldIndex])    && (this._listMap.updateSingleData(oldIndex, dataList[oldIndex]));
-                (oldIndex !== newIndex) && (this._listMap.updateSingleData(newIndex, dataList[newIndex]));
-
-                await this._showMap(dataList[newIndex].mapId);
+                data.push({
+                    mapId,
+                    mapName,
+                    panel   : this,
+                });
             }
         }
-        public getSelectedMapId(): number {
-            return this._selectedMapId;
-        }
-
-        public async setMapFilters(mapFilters: FiltersForMapList): Promise<void> {
-            this._mapFilters            = mapFilters;
-            this._dataForList           = await this._createDataForListMap();
-
-            const length                = this._dataForList.length;
-            this._labelNoMap.visible    = length <= 0;
-            this._listMap.bindData(this._dataForList);
-            this.setSelectedMapFileName(this._selectedMapId);
-            (length) && (this._listMap.scrollVerticalTo((this._dataForList.findIndex(data => data.mapId === this._selectedMapId) + 1) / length * 100));
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-        // Callbacks.
-        ////////////////////////////////////////////////////////////////////////////////
-        private _onMsgMmSetMapTag(e: egret.Event): void {
-            FloatText.show(Lang.getText(Lang.Type.A0151));
-            this.setMapFilters(this._mapFilters);
-        }
-
-        private _onTouchTapBtnSearch(e: egret.TouchEvent): void {
-            MmTagSearchPanel.show();
-        }
-
-        private _onTouchTapBtnBack(e: egret.TouchEvent): void {
-            this.close();
-            MmMainMenuPanel.show();
-        }
-
-        private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateComponentsForLanguage();
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-        // Private functions.
-        ////////////////////////////////////////////////////////////////////////////////
-        private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text   = Lang.getText(Lang.Type.B0227);
-            this._btnBack.label         = Lang.getText(Lang.Type.B0146);
-            this._btnSearch.label       = Lang.getText(Lang.Type.B0228);
-        }
-
-        private async _createDataForListMap(): Promise<DataForMapNameRenderer[]> {
-            const data: DataForMapNameRenderer[] = [];
-            let { mapName: mapNameForFilter, mapDesigner, playersCount, playedTimes, minRating } = this._mapFilters;
-            (mapNameForFilter)  && (mapNameForFilter = mapNameForFilter.toLowerCase());
-            (mapDesigner)       && (mapDesigner = mapDesigner.toLowerCase());
-
-            for (const [mapId, mapBriefData] of WarMapModel.getBriefDataDict()) {
-                const mapName = Lang.getLanguageText({ textArray: mapBriefData.mapNameArray });
-                if ((!mapBriefData.mapExtraData.isEnabled)                                                                  ||
-                    ((mapNameForFilter) && (mapName.toLowerCase().indexOf(mapNameForFilter) < 0))                           ||
-                    ((mapDesigner) && (mapBriefData.designerName.toLowerCase().indexOf(mapDesigner) < 0))                   ||
-                    ((playersCount) && (mapBriefData.playersCountUnneutral !== playersCount))                               ||
-                    ((playedTimes != null) && ((await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId)) < playedTimes))    ||
-                    ((minRating != null) && ((await WarMapModel.getAverageRating(mapId)) < minRating))
-                ) {
-                    continue;
-                } else {
-                    data.push({
-                        mapId,
-                        mapName,
-                        panel   : this,
-                    });
-                }
-            }
-            return data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
-        }
-
-        private async _showMap(mapId: number): Promise<void> {
-            const mapRawData                = await WarMapModel.getRawData(mapId);
-            const rating                    = await WarMapModel.getAverageRating(mapId);
-            this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
-            this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
-            this._labelPlayersCount.text    = Lang.getFormattedText(Lang.Type.F0002, mapRawData.playersCountUnneutral);
-            this._labelRating.text          = Lang.getFormattedText(Lang.Type.F0003, rating != null ? rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
-            this._labelPlayedTimes.text     = Lang.getFormattedText(Lang.Type.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
-            this._groupInfo.visible         = true;
-            this._groupInfo.alpha           = 1;
-            egret.Tween.removeTweens(this._groupInfo);
-            egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1});
-            this._zoomMap.showMapByMapData(mapRawData);
-        }
+        return data.sort((a, b) => a.mapName.localeCompare(b.mapName, "zh"));
     }
 
-    type DataForMapNameRenderer = {
-        mapId   : number;
-        mapName : string;
-        panel   : MmTagListPanel;
+    private async _showMap(mapId: number): Promise<void> {
+        const mapRawData                = await WarMapModel.getRawData(mapId);
+        const rating                    = await WarMapModel.getAverageRating(mapId);
+        this._labelMapName.text         = Lang.getFormattedText(Lang.Type.F0000, await WarMapModel.getMapNameInCurrentLanguage(mapId));
+        this._labelDesigner.text        = Lang.getFormattedText(Lang.Type.F0001, mapRawData.designerName);
+        this._labelPlayersCount.text    = Lang.getFormattedText(Lang.Type.F0002, mapRawData.playersCountUnneutral);
+        this._labelRating.text          = Lang.getFormattedText(Lang.Type.F0003, rating != null ? rating.toFixed(2) : Lang.getText(Lang.Type.B0001));
+        this._labelPlayedTimes.text     = Lang.getFormattedText(Lang.Type.F0004, await WarMapModel.getMultiPlayerTotalPlayedTimes(mapId));
+        this._groupInfo.visible         = true;
+        this._groupInfo.alpha           = 1;
+        egret.Tween.removeTweens(this._groupInfo);
+        egret.Tween.get(this._groupInfo).wait(5000).to({alpha: 0}, 1000).call(() => {this._groupInfo.visible = false; this._groupInfo.alpha = 1;});
+        this._zoomMap.showMapByMapData(mapRawData);
+    }
+}
+
+type DataForMapNameRenderer = {
+    mapId   : number;
+    mapName : string;
+    panel   : MmTagListPanel;
+};
+class MapNameRenderer extends UiListItemRenderer<DataForMapNameRenderer> {
+    private _btnChoose  : UiButton;
+    private _btnNext    : UiButton;
+    private _labelId    : UiLabel;
+    private _labelName  : UiLabel;
+
+    protected _onOpened(): void {
+        this._setUiListenerArray([
+            { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
+            { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
+        ]);
     }
 
-    class MapNameRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
-        private _btnChoose  : GameUi.UiButton;
-        private _btnNext    : GameUi.UiButton;
-        private _labelId    : GameUi.UiLabel;
-        private _labelName  : GameUi.UiLabel;
+    protected _onDataChanged(): void {
+        const data          = this.data;
+        const mapId         = data.mapId;
+        const labelName     = this._labelName;
+        this.currentState   = mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
+        this._labelId.text  = `ID: ${mapId}`;
+        labelName.text      = ``;
+        WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v);
+    }
 
-        protected _onOpened(): void {
-            this._setUiListenerArray([
-                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-                { ui: this._btnNext,    callback: this._onTouchTapBtnNext },
-            ]);
-        }
+    private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+        const data = this.data;
+        data.panel.setSelectedMapFileName(data.mapId);
+    }
 
-        protected _onDataChanged(): void {
-            const data          = this.data;
-            const mapId         = data.mapId;
-            const labelName     = this._labelName;
-            this.currentState   = mapId === data.panel.getSelectedMapId() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelId.text  = `ID: ${mapId}`;
-            labelName.text      = ``;
-            WarMapModel.getMapNameInCurrentLanguage(mapId).then(v => labelName.text = v);
-        }
-
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data;
-            data.panel.setSelectedMapFileName(data.mapId);
-        }
-
-        private _onTouchTapBtnNext(e: egret.TouchEvent): void {
-            MmTagChangePanel.show({ mapId: this.data.mapId });
-        }
+    private _onTouchTapBtnNext(e: egret.TouchEvent): void {
+        MmTagChangePanel.show({ mapId: this.data.mapId });
     }
 }

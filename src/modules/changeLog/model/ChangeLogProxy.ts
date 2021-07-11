@@ -1,58 +1,57 @@
 
-namespace TinyWars.ChangeLog.ChangeLogProxy {
-    import Notify           = Utility.Notify;
-    import ProtoTypes       = Utility.ProtoTypes;
-    import ILanguageText    = ProtoTypes.Structure.ILanguageText;
-    import NetMessage       = ProtoTypes.NetMessage;
-    import NetManager       = Network.NetManager;
-    import NetworkCodes     = Network.Codes;
+import { NetMessageCodes }      from "../../../network/NetMessageCodes";
+import * as NetManager          from "../../../network/NetManager";
+import * as Notify              from "../../../utility/Notify";
+import * as ProtoTypes          from "../../../utility/ProtoTypes";
+import * as ChangeLogModel      from "./ChangeLogModel";
+import NetMessage       = ProtoTypes.NetMessage;
+import ILanguageText    = ProtoTypes.Structure.ILanguageText;
 
-    export function init(): void {
-        NetManager.addListeners([
-            { msgCode: NetworkCodes.MsgChangeLogAddMessage,         callback: _onMsgChangeLogAddMessage },
-            { msgCode: NetworkCodes.MsgChangeLogModifyMessage,      callback: _onMsgChangeLogModifyMessage },
-            { msgCode: NetworkCodes.MsgChangeLogGetMessageList,     callback: _onMsgChangeLogGetMessageList, },
-        ], ChangeLogProxy);
-    }
+export function init(): void {
+    NetManager.addListeners([
+        { msgCode: NetMessageCodes.MsgChangeLogAddMessage,         callback: _onMsgChangeLogAddMessage },
+        { msgCode: NetMessageCodes.MsgChangeLogModifyMessage,      callback: _onMsgChangeLogModifyMessage },
+        { msgCode: NetMessageCodes.MsgChangeLogGetMessageList,     callback: _onMsgChangeLogGetMessageList, },
+    ], undefined);
+}
 
-    export function reqChangeLogAddMessage(textList: ILanguageText[]): void {
-        NetManager.send({
-            MsgChangeLogAddMessage: { c: {
-                textList,
-            } },
-        });
+export function reqChangeLogAddMessage(textList: ILanguageText[]): void {
+    NetManager.send({
+        MsgChangeLogAddMessage: { c: {
+            textList,
+        } },
+    });
+}
+function _onMsgChangeLogAddMessage(e: egret.Event): void {
+    const data = e.data as ProtoTypes.NetMessage.MsgChangeLogAddMessage.IS;
+    if (!data.errorCode) {
+        Notify.dispatch(Notify.Type.MsgChangeLogAddMessage, data);
     }
-    function _onMsgChangeLogAddMessage(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgChangeLogAddMessage.IS;
-        if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgChangeLogAddMessage, data);
-        }
-    }
+}
 
-    export function reqChangeLogModifyMessage(messageId: number, textList: ILanguageText[]): void {
-        NetManager.send({
-            MsgChangeLogModifyMessage: { c: {
-                messageId,
-                textList,
-            } },
-        })
+export function reqChangeLogModifyMessage(messageId: number, textList: ILanguageText[]): void {
+    NetManager.send({
+        MsgChangeLogModifyMessage: { c: {
+            messageId,
+            textList,
+        } },
+    });
+}
+function _onMsgChangeLogModifyMessage(e: egret.Event): void {
+    const data = e.data as ProtoTypes.NetMessage.MsgChangeLogModifyMessage.IS;
+    if (!data.errorCode) {
+        Notify.dispatch(Notify.Type.MsgChangeLogModifyMessage, data);
     }
-    function _onMsgChangeLogModifyMessage(e: egret.Event): void {
-        const data = e.data as ProtoTypes.NetMessage.MsgChangeLogModifyMessage.IS;
-        if (!data.errorCode) {
-            Notify.dispatch(Notify.Type.MsgChangeLogModifyMessage, data);
-        }
-    }
+}
 
-    export function reqChangeLogGetMessageList(): void {
-        NetManager.send({ MsgChangeLogGetMessageList: { c: {
-        } }, });
-    }
-    function _onMsgChangeLogGetMessageList(e: egret.Event): void {
-        const data = e.data as NetMessage.MsgChangeLogGetMessageList.IS;
-        if (!data.errorCode) {
-            ChangeLogModel.setAllMessageList(data.messageList);
-            Notify.dispatch(Notify.Type.MsgChangeLogGetMessageList, data);
-        }
+export function reqChangeLogGetMessageList(): void {
+    NetManager.send({ MsgChangeLogGetMessageList: { c: {
+    } }, });
+}
+function _onMsgChangeLogGetMessageList(e: egret.Event): void {
+    const data = e.data as NetMessage.MsgChangeLogGetMessageList.IS;
+    if (!data.errorCode) {
+        ChangeLogModel.setAllMessageList(data.messageList);
+        Notify.dispatch(Notify.Type.MsgChangeLogGetMessageList, data);
     }
 }

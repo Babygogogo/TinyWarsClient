@@ -1,32 +1,32 @@
 
-// namespace TinyWars.MapManagement {
-//     import Types        = Utility.Types;
-//     import Lang         = Utility.Lang;
-//     import Notify       = Utility.Notify;
-//     import FloatText    = Utility.FloatText;
-//     import Helpers      = Utility.Helpers;
+// namespace MapManagement {
+//     import Types        = Types;
+//     import Lang         = Lang;
+//     import Notify       = Notify;
+//     import FloatText    = FloatText;
+//     import Helpers      = Helpers;
 //     import WarMapModel  = WarMap.WarMapModel;
 
-//     export class MmMergeListPanel extends GameUi.UiPanel<void> {
-//         protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Scene;
+//     export class MmMergeListPanel extends UiPanel<void> {
+//         protected readonly _LAYER_TYPE   = Types.LayerType.Scene;
 //         protected readonly _IS_EXCLUSIVE = true;
 
 //         private static _instance: MmMergeListPanel;
 
-//         private _listMap        : GameUi.UiScrollList;
-//         private _zoomMap        : GameUi.UiZoomableComponent;
-//         private _labelMenuTitle : GameUi.UiLabel;
-//         private _btnBack        : GameUi.UiButton;
-//         private _labelNoMap     : GameUi.UiLabel;
+//         private _listMap        : UiScrollList;
+//         private _zoomMap        : UiZoomableComponent;
+//         private _labelMenuTitle : UiLabel;
+//         private _btnBack        : UiButton;
+//         private _labelNoMap     : UiLabel;
 
 //         private _groupInfo          : eui.Group;
-//         private _labelMapName       : GameUi.UiLabel;
-//         private _labelMapNameEnglish: GameUi.UiLabel;
-//         private _labelDesigner      : GameUi.UiLabel;
-//         private _labelRating        : GameUi.UiLabel;
-//         private _labelPlayedTimes   : GameUi.UiLabel;
-//         private _labelPlayersCount  : GameUi.UiLabel;
-//         private _labelModifyTime    : GameUi.UiLabel;
+//         private _labelMapName       : UiLabel;
+//         private _labelMapNameEnglish: UiLabel;
+//         private _labelDesigner      : UiLabel;
+//         private _labelRating        : UiLabel;
+//         private _labelPlayedTimes   : UiLabel;
+//         private _labelPlayersCount  : UiLabel;
+//         private _labelModifyTime    : UiLabel;
 
 //         private _dataForList        : DataForMapNameRenderer[] = [];
 //         private _selectedMapFileName: string;
@@ -194,7 +194,7 @@
 //             const unitMapView = new WarMap.WarMapUnitMapView();
 //             unitMapView.initWithMapRawData(mapRawData);
 
-//             const gridSize = Utility.ConfigManager.getGridSize();
+//             const gridSize = ConfigManager.getGridSize();
 //             this._zoomMap.removeAllContents();
 //             this._zoomMap.setContentWidth(mapRawData.mapWidth * gridSize.width);
 //             this._zoomMap.setContentHeight(mapRawData.mapHeight * gridSize.height);
@@ -207,17 +207,17 @@
 //     function getSignatureForMap(mapRawData: Types.MapRawData): string {
 //         const strList: string[] = [];
 //         for (const tileBaseViewId of mapRawData.tileBases) {
-//             strList.push("" + Utility.ConfigManager.getTileBaseType(tileBaseViewId));
+//             strList.push("" + ConfigManager.getTileBaseType(tileBaseViewId));
 //         }
 //         for (const tileObjectViewId of mapRawData.tileObjects) {
-//             const cfg = Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(tileObjectViewId);
+//             const cfg = ConfigManager.getTileObjectTypeAndPlayerIndex(tileObjectViewId);
 //             strList.push("" + cfg.playerIndex + cfg.tileObjectType);
 //         }
 //         for (const tileData of mapRawData.tileDataList || []) {
-//             const cfg = Utility.ConfigManager.getTileObjectTypeAndPlayerIndex(tileData.objectViewId);
+//             const cfg = ConfigManager.getTileObjectTypeAndPlayerIndex(tileData.objectViewId);
 //             strList.push(
 //                 `${tileData.gridX}${tileData.gridY}`                                                +
-//                 `${Utility.ConfigManager.getTileBaseType(tileData.baseViewId)}`                             +
+//                 `${ConfigManager.getTileBaseType(tileData.baseViewId)}`                             +
 //                 `${cfg.playerIndex}${cfg.tileObjectType}`                                           +
 //                 `${tileData.currentBuildPoint}${tileData.currentCapturePoint}${tileData.currentHp}`
 //             );
@@ -243,10 +243,10 @@
 //         panel       : MmMergeListPanel;
 //     }
 
-//     class MapNameRenderer extends GameUi.UiListItemRenderer<DataForMapNameRenderer> {
-//         private _btnChoose: GameUi.UiButton;
-//         private _btnNext  : GameUi.UiButton;
-//         private _labelName: GameUi.UiLabel;
+//     class MapNameRenderer extends UiListItemRenderer<DataForMapNameRenderer> {
+//         private _btnChoose: UiButton;
+//         private _btnNext  : UiButton;
+//         private _labelName: UiLabel;
 
 //         protected childrenCreated(): void {
 //             super.childrenCreated();
@@ -276,7 +276,7 @@
 //                 if (!srcData) {
 //                     FloatText.show(Lang.getText(Lang.Type.B0269));
 //                 } else {
-//                     Common.CommonConfirmPanel.show({
+//                     CommonConfirmPanel.show({
 //                         title   : Lang.getText(Lang.Type.B0088),
 //                         content : Lang.getText(Lang.Type.A0079),
 //                         callback: () => {

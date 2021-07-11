@@ -1,61 +1,63 @@
 
-namespace TinyWars.MapEditor {
-    import Logger                   = Utility.Logger;
-    import ProtoTypes               = Utility.ProtoTypes;
-    import WarSerialization         = ProtoTypes.WarSerialization;
-    import ISerialFogMap            = WarSerialization.ISerialFogMap;
-    import IDataForFogMapFromPath   = WarSerialization.IDataForFogMapFromPath;
+import { BwWar }                        from "../../baseWar/model/BwWar";
+import { BwFogMap }                     from "../../baseWar/model/BwFogMap";
+import { MeField }                      from "./MeField";
+import * as Logger                      from "../../../utility/Logger";
+import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import * as BwHelpers                   from "../../baseWar/model/BwHelpers";
+import WarSerialization                 = ProtoTypes.WarSerialization;
+import ISerialFogMap                    = WarSerialization.ISerialFogMap;
+import IDataForFogMapFromPath           = WarSerialization.IDataForFogMapFromPath;
 
-    export class MeFogMap extends BaseWar.BwFogMap {
-        public serializeForCreateSfw(): ISerialFogMap | undefined {
-            const mapSize = this.getMapSize();
-            if (mapSize == null) {
-                Logger.error(`MeFogMap.serializeForCreateSfw() empty mapSize.`);
-                return undefined;
-            }
-
-            const allMapsFromPath = this._getAllMapsFromPath();
-            if (allMapsFromPath == null) {
-                Logger.error(`MeFogMap.serializeForCreateSfw() empty allMapsFromPath.`);
-                return undefined;
-            }
-
-            const forceFogCode = this.getForceFogCode();
-            if (forceFogCode == null) {
-                Logger.error(`MeFogMap.serializeForCreateSfw() empty forceFogCode.`);
-                return undefined;
-            }
-
-            const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
-            const serialMapsFromPath: IDataForFogMapFromPath[] = [];
-            for (const [playerIndex, map] of allMapsFromPath) {
-                if (playerIndex > maxPlayerIndex) {
-                    continue;
-                }
-
-                const visibilityArray = BaseWar.BwHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
-                if (visibilityArray != null) {
-                    serialMapsFromPath.push({
-                        playerIndex,
-                        visibilityArray,
-                    });
-                }
-            }
-
-            return {
-                forceFogCode,
-                forceExpirePlayerIndex  : this.getForceExpirePlayerIndex(),
-                forceExpireTurnIndex    : this.getForceExpireTurnIndex(),
-                mapsFromPath            : serialMapsFromPath,
-            };
+export class MeFogMap extends BwFogMap {
+    public serializeForCreateSfw(): ISerialFogMap | undefined {
+        const mapSize = this.getMapSize();
+        if (mapSize == null) {
+            Logger.error(`MeFogMap.serializeForCreateSfw() empty mapSize.`);
+            return undefined;
         }
 
-        public startRunning(war: BaseWar.BwWar): void {
-            this._setWar(war);
+        const allMapsFromPath = this._getAllMapsFromPath();
+        if (allMapsFromPath == null) {
+            Logger.error(`MeFogMap.serializeForCreateSfw() empty allMapsFromPath.`);
+            return undefined;
+        }
 
-            for (const tile of war.getTileMap().getAllTiles()) {
-                tile.setHasFog(false);
+        const forceFogCode = this.getForceFogCode();
+        if (forceFogCode == null) {
+            Logger.error(`MeFogMap.serializeForCreateSfw() empty forceFogCode.`);
+            return undefined;
+        }
+
+        const maxPlayerIndex    = (this._getWar().getField() as MeField).getMaxPlayerIndex();
+        const serialMapsFromPath: IDataForFogMapFromPath[] = [];
+        for (const [playerIndex, map] of allMapsFromPath) {
+            if (playerIndex > maxPlayerIndex) {
+                continue;
             }
+
+            const visibilityArray = BwHelpers.getVisibilityArrayWithMapFromPath(map, mapSize);
+            if (visibilityArray != null) {
+                serialMapsFromPath.push({
+                    playerIndex,
+                    visibilityArray,
+                });
+            }
+        }
+
+        return {
+            forceFogCode,
+            forceExpirePlayerIndex  : this.getForceExpirePlayerIndex(),
+            forceExpireTurnIndex    : this.getForceExpireTurnIndex(),
+            mapsFromPath            : serialMapsFromPath,
+        };
+    }
+
+    public startRunning(war: BwWar): void {
+        this._setWar(war);
+
+        for (const tile of war.getTileMap().getAllTiles()) {
+            tile.setHasFog(false);
         }
     }
 }

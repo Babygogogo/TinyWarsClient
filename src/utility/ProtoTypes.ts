@@ -2,7 +2,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-interface */
-namespace TinyWars.Utility.ProtoTypes {
 
 /** Properties of a Config. */
 export declare interface IConfig {
@@ -54638,5 +54637,4 @@ export declare namespace NetMessage {
             public toJSON(): { [k: string]: any };
         }
     }
-}
 }

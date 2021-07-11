@@ -6,6 +6,7 @@ import { UglifyPlugin, IncrementCompilePlugin, CompilePlugin, ManifestPlugin, Ex
 import { WxgamePlugin } from './wxgame/wxgame';
 import { BricksPlugin } from './bricks/bricks';
 import { CustomPlugin } from './myplugin';
+import { WebpackBundlePlugin, WebpackDevServerPlugin } from './plugins/webpack-plugin';
 
 const config: ResourceManagerConfig = {
 
@@ -26,9 +27,14 @@ const config: ResourceManagerConfig = {
                     //     groupSelector: p => "preload"
                     // }),
                     new ExmlPlugin('debug'), // 非 EUI 项目关闭此设置
-                    new IncrementCompilePlugin(),
+                    // new IncrementCompilePlugin(),
+                    new WebpackDevServerPlugin({
+                        libraryType : "debug",
+                        defines     : { DEBUG: true, RELEASE: false },
+                        typescript  : { mode: "modern" },
+                    }),
                 ]
-            }
+            };
         }
         else if (command == 'publish') {
             const outputDir = `bin-release/web/${version}`;
@@ -36,7 +42,12 @@ const config: ResourceManagerConfig = {
                 outputDir,
                 commands: [
                     new CustomPlugin(),
-                    new CompilePlugin({ libraryType: "release", defines: { DEBUG: false, RELEASE: true } }),
+                    // new CompilePlugin({ libraryType: "release", defines: { DEBUG: false, RELEASE: true } }),
+                    new WebpackBundlePlugin({
+                        libraryType : "release",
+                        defines     : { DEBUG: false, RELEASE: true },
+                        typescript  : { mode: "modern" },
+                    }),
                     new ExmlPlugin('commonjs'), // 非 EUI 项目关闭此设置
                     new UglifyPlugin([{
                         sources: ["main.js"],
@@ -49,24 +60,24 @@ const config: ResourceManagerConfig = {
                     }),
                     new ManifestPlugin({ output: "manifest.json" })
                 ]
-            }
+            };
         }
         else {
-            throw `unknown command : ${params.command}`
+            throw `unknown command : ${params.command}`;
         }
     },
 
-    mergeSelector: (path) => {
-        if (path.indexOf("assets/bitmap/") >= 0) {
-            return "assets/bitmap/sheet.sheet"
+    mergeSelector: (p) => {
+        if (p.indexOf("assets/bitmap/") >= 0) {
+            return "assets/bitmap/sheet.sheet";
         }
-        else if (path.indexOf("armature") >= 0 && path.indexOf(".json") >= 0) {
+        else if (p.indexOf("armature") >= 0 && p.indexOf(".json") >= 0) {
             return "assets/armature/1.zip";
         }
     },
 
-    typeSelector: (path) => {
-        const ext = path.substr(path.lastIndexOf(".") + 1);
+    typeSelector: (p) => {
+        const ext = p.substr(p.lastIndexOf(".") + 1);
         const typeMap = {
             "jpg": "image",
             "png": "image",
@@ -78,18 +89,18 @@ const config: ResourceManagerConfig = {
             "zip": "zip",
             "sheet": "sheet",
             "exml": "text"
-        }
+        };
         let type = typeMap[ext];
         if (type == "json") {
-            if (path.indexOf("sheet") >= 0) {
+            if (p.indexOf("sheet") >= 0) {
                 type = "sheet";
-            } else if (path.indexOf("movieclip") >= 0) {
+            } else if (p.indexOf("movieclip") >= 0) {
                 type = "movieclip";
-            };
+            }
         }
         return type;
     }
-}
+};
 
 
 export = config;

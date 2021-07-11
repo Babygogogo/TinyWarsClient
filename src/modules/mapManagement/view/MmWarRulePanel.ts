@@ -1,435 +1,438 @@
 
-namespace TinyWars.MapManagement {
-    import Types                = Utility.Types;
-    import Lang                 = Utility.Lang;
-    import Notify               = Utility.Notify;
-    import ProtoTypes           = Utility.ProtoTypes;
-    import ConfigManager        = Utility.ConfigManager;
-    import CommonHelpPanel      = Common.CommonHelpPanel;
-    import IWarRule             = ProtoTypes.WarRule.IWarRule;
-    import IDataForPlayerRule   = ProtoTypes.WarRule.IDataForPlayerRule;
-    import CommonConstants      = Utility.CommonConstants;
+import { UiImage }                      from "../../../gameui/UiImage";
+import { UiListItemRenderer }           from "../../../gameui/UiListItemRenderer";
+import { UiPanel }                      from "../../../gameui/UiPanel";
+import { UiButton }                     from "../../../gameui/UiButton";
+import { UiLabel }                      from "../../../gameui/UiLabel";
+import { UiScrollList }                 from "../../../gameui/UiScrollList";
+import { CommonHelpPanel }              from "../../common/view/CommonHelpPanel";
+import { MmWarRuleAvailableCoPanel }    from "./MmWarRuleAvailableCoPanel";
+import * as CommonConstants             from "../../../utility/CommonConstants";
+import * as Lang                        from "../../../utility/Lang";
+import * as Notify                      from "../../../utility/Notify";
+import * as ProtoTypes                  from "../../../utility/ProtoTypes";
+import * as Types                       from "../../../utility/Types";
+import IWarRule                         = ProtoTypes.WarRule.IWarRule;
+import IDataForPlayerRule               = ProtoTypes.WarRule.IDataForPlayerRule;
 
-    type OpenDataForMmWarRulePanel = ProtoTypes.Map.IMapRawData;
-    export class MmWarRulePanel extends GameUi.UiPanel<OpenDataForMmWarRulePanel> {
-        protected readonly _LAYER_TYPE   = Utility.Types.LayerType.Hud0;
-        protected readonly _IS_EXCLUSIVE = false;
+type OpenDataForMmWarRulePanel = ProtoTypes.Map.IMapRawData;
+export class MmWarRulePanel extends UiPanel<OpenDataForMmWarRulePanel> {
+    protected readonly _LAYER_TYPE   = Types.LayerType.Hud0;
+    protected readonly _IS_EXCLUSIVE = false;
 
-        private static _instance: MmWarRulePanel;
+    private static _instance: MmWarRulePanel;
 
-        private _labelMenuTitle     : TinyWars.GameUi.UiLabel;
-        private _listWarRule        : TinyWars.GameUi.UiScrollList<DataForWarRuleNameRenderer>;
-        private _btnBack            : TinyWars.GameUi.UiButton;
+    private _labelMenuTitle     : UiLabel;
+    private _listWarRule        : UiScrollList<DataForWarRuleNameRenderer>;
+    private _btnBack            : UiButton;
 
-        private _btnModifyRuleName  : TinyWars.GameUi.UiButton;
-        private _labelRuleName      : TinyWars.GameUi.UiLabel;
+    private _btnModifyRuleName  : UiButton;
+    private _labelRuleName      : UiLabel;
 
-        private _btnModifyHasFog    : TinyWars.GameUi.UiButton;
-        private _imgHasFog          : TinyWars.GameUi.UiImage;
-        private _btnHelpHasFog      : TinyWars.GameUi.UiButton;
+    private _btnModifyHasFog    : UiButton;
+    private _imgHasFog          : UiImage;
+    private _btnHelpHasFog      : UiButton;
 
-        private _labelAvailability  : TinyWars.GameUi.UiLabel;
-        private _btnAvailabilityMcw : TinyWars.GameUi.UiButton;
-        private _imgAvailabilityMcw : TinyWars.GameUi.UiImage;
-        private _btnAvailabilityScw : TinyWars.GameUi.UiButton;
-        private _imgAvailabilityScw : TinyWars.GameUi.UiImage;
-        private _btnAvailabilityMrw : TinyWars.GameUi.UiButton;
-        private _imgAvailabilityMrw : TinyWars.GameUi.UiImage;
+    private _labelAvailability  : UiLabel;
+    private _btnAvailabilityMcw : UiButton;
+    private _imgAvailabilityMcw : UiImage;
+    private _btnAvailabilityScw : UiButton;
+    private _imgAvailabilityScw : UiImage;
+    private _btnAvailabilityMrw : UiButton;
+    private _imgAvailabilityMrw : UiImage;
 
-        private _labelPlayerList    : TinyWars.GameUi.UiLabel;
-        private _listPlayer         : TinyWars.GameUi.UiScrollList<DataForPlayerRenderer>;
+    private _labelPlayerList    : UiLabel;
+    private _listPlayer         : UiScrollList<DataForPlayerRenderer>;
 
-        private _dataForListWarRule : DataForWarRuleNameRenderer[] = [];
-        private _selectedIndex      : number;
-        private _selectedRule       : IWarRule;
+    private _dataForListWarRule : DataForWarRuleNameRenderer[] = [];
+    private _selectedIndex      : number;
+    private _selectedRule       : IWarRule;
 
-        public static show(openData: OpenDataForMmWarRulePanel): void {
-            if (!MmWarRulePanel._instance) {
-                MmWarRulePanel._instance = new MmWarRulePanel();
-            }
-            MmWarRulePanel._instance.open(openData);
+    public static show(openData: OpenDataForMmWarRulePanel): void {
+        if (!MmWarRulePanel._instance) {
+            MmWarRulePanel._instance = new MmWarRulePanel();
         }
-        public static async hide(): Promise<void> {
-            if (MmWarRulePanel._instance) {
-                await MmWarRulePanel._instance.close();
-            }
+        MmWarRulePanel._instance.open(openData);
+    }
+    public static async hide(): Promise<void> {
+        if (MmWarRulePanel._instance) {
+            await MmWarRulePanel._instance.close();
         }
-        public static getIsOpening(): boolean {
-            const instance = MmWarRulePanel._instance;
-            return instance ? instance.getIsOpening() : false;
+    }
+    public static getIsOpening(): boolean {
+        const instance = MmWarRulePanel._instance;
+        return instance ? instance.getIsOpening() : false;
+    }
+
+    public constructor() {
+        super();
+
+        this._setIsTouchMaskEnabled();
+        this.skinName = "resource/skins/mapManagement/MmWarRulePanel.exml";
+    }
+
+    protected _onOpened(): void {
+        this._setNotifyListenerArray([
+            { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
+        ]);
+        this._setUiListenerArray([
+            { ui: this._btnBack,                callback: this._onTouchedBtnBack },
+            { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
+        ]);
+        this._listWarRule.setItemRenderer(WarRuleNameRenderer);
+        this._listPlayer.setItemRenderer(PlayerRenderer);
+
+        this._updateComponentsForLanguage();
+
+        this._resetView();
+    }
+
+    public setSelectedIndex(newIndex: number): void {
+        const dataList = this._dataForListWarRule;
+        if (!dataList[newIndex]) {
+            this._selectedIndex = null;
+            this._selectedRule  = null;
+            this._updateComponentsForRule();
+
+        } else {
+            const oldIndex      = this._selectedIndex;
+            this._selectedIndex = newIndex;
+            this._selectedRule  = dataList[newIndex].rule;
+            (dataList[oldIndex])    && (this._listWarRule.updateSingleData(oldIndex, dataList[oldIndex]));
+            (oldIndex !== newIndex) && (this._listWarRule.updateSingleData(newIndex, dataList[newIndex]));
+
+            this._updateComponentsForRule();
         }
+    }
+    public getSelectedIndex(): number {
+        return this._selectedIndex;
+    }
 
-        public constructor() {
-            super();
+    ////////////////////////////////////////////////////////////////////////////////
+    // Callbacks.
+    ////////////////////////////////////////////////////////////////////////////////
+    private _onNotifyLanguageChanged(e: egret.Event): void {
+        this._updateComponentsForLanguage();
+    }
 
-            this._setIsTouchMaskEnabled();
-            this.skinName = "resource/skins/mapManagement/MmWarRulePanel.exml";
-        }
+    private _onTouchedBtnBack(e: egret.TouchEvent): void {
+        this.close();
+    }
 
-        protected _onOpened(): void {
-            this._setNotifyListenerArray([
-                { type: Notify.Type.LanguageChanged,        callback: this._onNotifyLanguageChanged },
-            ]);
-            this._setUiListenerArray([
-                { ui: this._btnBack,                callback: this._onTouchedBtnBack },
-                { ui: this._btnHelpHasFog,          callback: this._onTouchedBtnHelpHasFog },
-            ]);
-            this._listWarRule.setItemRenderer(WarRuleNameRenderer);
-            this._listPlayer.setItemRenderer(PlayerRenderer);
+    private _onTouchedBtnHelpHasFog(e: egret.TouchEvent): void {
+        CommonHelpPanel.show({
+            title  : Lang.getText(Lang.Type.B0020),
+            content: Lang.getText(Lang.Type.R0002),
+        });
+    }
 
-            this._updateComponentsForLanguage();
+    ////////////////////////////////////////////////////////////////////////////////
+    // Private functions.
+    ////////////////////////////////////////////////////////////////////////////////
+    private _resetView(): void {
+        this._btnBack.setTextColor(0x00FF00);
 
-            this._resetView();
-        }
+        this._dataForListWarRule = this._createDataForListWarRule();
+        this._listWarRule.bindData(this._dataForListWarRule);
+        this.setSelectedIndex(0);
+    }
 
-        public setSelectedIndex(newIndex: number): void {
-            const dataList = this._dataForListWarRule;
-            if (!dataList[newIndex]) {
-                this._selectedIndex = null;
-                this._selectedRule  = null;
-                this._updateComponentsForRule();
+    private _updateComponentsForLanguage(): void {
+        this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0314);
+        this._labelAvailability.text    = Lang.getText(Lang.Type.B0406);
+        this._labelPlayerList.text      = Lang.getText(Lang.Type.B0407);
+        this._btnAvailabilityMcw.label  = Lang.getText(Lang.Type.B0137);
+        this._btnAvailabilityScw.label  = Lang.getText(Lang.Type.B0138);
+        this._btnAvailabilityMrw.label  = Lang.getText(Lang.Type.B0404);
+        this._btnBack.label             = Lang.getText(Lang.Type.B0146);
+        this._btnModifyRuleName.label   = Lang.getText(Lang.Type.B0315);
+        this._btnModifyHasFog.label     = Lang.getText(Lang.Type.B0020);
+    }
 
-            } else {
-                const oldIndex      = this._selectedIndex;
-                this._selectedIndex = newIndex;
-                this._selectedRule  = dataList[newIndex].rule;
-                (dataList[oldIndex])    && (this._listWarRule.updateSingleData(oldIndex, dataList[oldIndex]));
-                (oldIndex !== newIndex) && (this._listWarRule.updateSingleData(newIndex, dataList[newIndex]));
-
-                this._updateComponentsForRule();
-            }
-        }
-        public getSelectedIndex(): number {
-            return this._selectedIndex;
-        }
-
-        ////////////////////////////////////////////////////////////////////////////////
-        // Callbacks.
-        ////////////////////////////////////////////////////////////////////////////////
-        private _onNotifyLanguageChanged(e: egret.Event): void {
-            this._updateComponentsForLanguage();
-        }
-
-        private _onTouchedBtnBack(e: egret.TouchEvent): void {
-            this.close();
-        }
-
-        private _onTouchedBtnHelpHasFog(e: egret.TouchEvent): void {
-            CommonHelpPanel.show({
-                title  : Lang.getText(Lang.Type.B0020),
-                content: Lang.getText(Lang.Type.R0002),
+    private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
+        const data  : DataForWarRuleNameRenderer[] = [];
+        let index   = 0;
+        for (const rule of this._getOpenData().warRuleArray || []) {
+            data.push({
+                index,
+                rule,
+                panel   : this,
             });
+            ++index;
         }
 
-        ////////////////////////////////////////////////////////////////////////////////
-        // Private functions.
-        ////////////////////////////////////////////////////////////////////////////////
-        private _resetView(): void {
-            this._btnBack.setTextColor(0x00FF00);
+        return data;
+    }
 
-            this._dataForListWarRule = this._createDataForListWarRule();
-            this._listWarRule.bindData(this._dataForListWarRule);
-            this.setSelectedIndex(0);
-        }
+    private _updateComponentsForRule(): void {
+        const rule = this._selectedRule;
+        this._updateLabelRuleName(rule);
+        this._updateImgHasFog(rule);
+        this._updateImgAvailabilityMcw(rule);
+        this._updateImgAvailabilityScw(rule);
+        this._updateImgAvailabilityMrw(rule);
+        this.updateListPlayerRule(rule);
+    }
 
-        private _updateComponentsForLanguage(): void {
-            this._labelMenuTitle.text       = Lang.getText(Lang.Type.B0314);
-            this._labelAvailability.text    = Lang.getText(Lang.Type.B0406);
-            this._labelPlayerList.text      = Lang.getText(Lang.Type.B0407);
-            this._btnAvailabilityMcw.label  = Lang.getText(Lang.Type.B0137);
-            this._btnAvailabilityScw.label  = Lang.getText(Lang.Type.B0138);
-            this._btnAvailabilityMrw.label  = Lang.getText(Lang.Type.B0404);
-            this._btnBack.label             = Lang.getText(Lang.Type.B0146);
-            this._btnModifyRuleName.label   = Lang.getText(Lang.Type.B0315);
-            this._btnModifyHasFog.label     = Lang.getText(Lang.Type.B0020);
-        }
-
-        private _createDataForListWarRule(): DataForWarRuleNameRenderer[] {
-            const data  : DataForWarRuleNameRenderer[] = [];
-            let index   = 0;
-            for (const rule of this._getOpenData().warRuleArray || []) {
-                data.push({
+    private _updateLabelRuleName(rule: IWarRule): void {
+        this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameArray : undefined) || Lang.getText(Lang.Type.B0001);
+    }
+    private _updateImgHasFog(rule: IWarRule): void {
+        this._imgHasFog.visible = rule ? rule.ruleForGlobalParams.hasFogByDefault : false;
+    }
+    private _updateImgAvailabilityMcw(rule: IWarRule): void {
+        this._imgAvailabilityMcw.visible = rule ? rule.ruleAvailability.canMcw : false;
+    }
+    private _updateImgAvailabilityScw(rule: IWarRule): void {
+        this._imgAvailabilityScw.visible = rule ? rule.ruleAvailability.canScw : false;
+    }
+    private _updateImgAvailabilityMrw(rule: IWarRule): void {
+        this._imgAvailabilityMrw.visible = rule ? rule.ruleAvailability.canMrw : false;
+    }
+    public updateListPlayerRule(rule: IWarRule): void {
+        const playerRuleDataList    = rule ? rule.ruleForPlayers.playerRuleDataArray : null;
+        const listPlayer            = this._listPlayer;
+        if ((!playerRuleDataList) || (!playerRuleDataList.length)) {
+            listPlayer.clear();
+        } else {
+            const dataList  : DataForPlayerRenderer[] = [];
+            let index       = 0;
+            for (const playerRule of playerRuleDataList) {
+                dataList.push({
                     index,
-                    rule,
-                    panel   : this,
+                    playerRule,
+                    warRule     : rule,
+                    isReviewing : true,
+                    panel       : this,
                 });
                 ++index;
             }
-
-            return data;
-        }
-
-        private _updateComponentsForRule(): void {
-            const rule = this._selectedRule;
-            this._updateLabelRuleName(rule);
-            this._updateImgHasFog(rule);
-            this._updateImgAvailabilityMcw(rule);
-            this._updateImgAvailabilityScw(rule);
-            this._updateImgAvailabilityMrw(rule);
-            this.updateListPlayerRule(rule);
-        }
-
-        private _updateLabelRuleName(rule: IWarRule): void {
-            this._labelRuleName.text = Lang.concatLanguageTextList(rule ? rule.ruleNameArray : undefined) || Lang.getText(Lang.Type.B0001);
-        }
-        private _updateImgHasFog(rule: IWarRule): void {
-            this._imgHasFog.visible = rule ? rule.ruleForGlobalParams.hasFogByDefault : false;
-        }
-        private _updateImgAvailabilityMcw(rule: IWarRule): void {
-            this._imgAvailabilityMcw.visible = rule ? rule.ruleAvailability.canMcw : false;
-        }
-        private _updateImgAvailabilityScw(rule: IWarRule): void {
-            this._imgAvailabilityScw.visible = rule ? rule.ruleAvailability.canScw : false;
-        }
-        private _updateImgAvailabilityMrw(rule: IWarRule): void {
-            this._imgAvailabilityMrw.visible = rule ? rule.ruleAvailability.canMrw : false;
-        }
-        public updateListPlayerRule(rule: IWarRule): void {
-            const playerRuleDataList    = rule ? rule.ruleForPlayers.playerRuleDataArray : null;
-            const listPlayer            = this._listPlayer;
-            if ((!playerRuleDataList) || (!playerRuleDataList.length)) {
-                listPlayer.clear();
-            } else {
-                const dataList  : DataForPlayerRenderer[] = [];
-                let index       = 0;
-                for (const playerRule of playerRuleDataList) {
-                    dataList.push({
-                        index,
-                        playerRule,
-                        warRule     : rule,
-                        isReviewing : true,
-                        panel       : this,
-                    });
-                    ++index;
-                }
-                listPlayer.bindData(dataList);
-            }
+            listPlayer.bindData(dataList);
         }
     }
+}
 
-    type DataForWarRuleNameRenderer = {
-        index   : number;
-        rule    : IWarRule;
-        panel   : MmWarRulePanel;
+type DataForWarRuleNameRenderer = {
+    index   : number;
+    rule    : IWarRule;
+    panel   : MmWarRulePanel;
+};
+class WarRuleNameRenderer extends UiListItemRenderer<DataForWarRuleNameRenderer> {
+    private _btnChoose: UiButton;
+    private _labelName: UiLabel;
+
+    protected _onOpened(): void {
+        this._setUiListenerArray([
+            { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
+        ]);
     }
 
-    class WarRuleNameRenderer extends GameUi.UiListItemRenderer<DataForWarRuleNameRenderer> {
-        private _btnChoose: GameUi.UiButton;
-        private _labelName: GameUi.UiLabel;
-
-        protected _onOpened(): void {
-            this._setUiListenerArray([
-                { ui: this._btnChoose,  callback: this._onTouchTapBtnChoose },
-            ]);
-        }
-
-        protected _onDataChanged(): void {
-            const data              = this.data;
-            const index             = data.index;
-            this.currentState       = index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
-            this._labelName.text    = `${Lang.getText(Lang.Type.B0318)} ${index}`;
-        }
-
-        private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
-            const data = this.data;
-            data.panel.setSelectedIndex(data.index);
-        }
+    protected _onDataChanged(): void {
+        const data              = this.data;
+        const index             = data.index;
+        this.currentState       = index === data.panel.getSelectedIndex() ? Types.UiState.Down : Types.UiState.Up;
+        this._labelName.text    = `${Lang.getText(Lang.Type.B0318)} ${index}`;
     }
 
-    type DataForPlayerRenderer = {
-        index       : number;
-        warRule     : IWarRule;
-        playerRule  : IDataForPlayerRule;
-        isReviewing : boolean;
-        panel       : MmWarRulePanel;
+    private _onTouchTapBtnChoose(e: egret.TouchEvent): void {
+        const data = this.data;
+        data.panel.setSelectedIndex(data.index);
+    }
+}
+
+type DataForPlayerRenderer = {
+    index       : number;
+    warRule     : IWarRule;
+    playerRule  : IDataForPlayerRule;
+    isReviewing : boolean;
+    panel       : MmWarRulePanel;
+};
+
+class PlayerRenderer extends UiListItemRenderer<DataForPlayerRenderer> {
+    private _listInfo   : UiScrollList<DataForInfoRenderer>;
+
+    protected _onOpened(): void {
+        this._listInfo.setItemRenderer(InfoRenderer);
     }
 
-    class PlayerRenderer extends GameUi.UiListItemRenderer<DataForPlayerRenderer> {
-        private _listInfo   : GameUi.UiScrollList<DataForInfoRenderer>;
-
-        protected _onOpened(): void {
-            this._listInfo.setItemRenderer(InfoRenderer);
-        }
-
-        protected _onDataChanged(): void {
-            this._updateView();
-        }
-
-        private _updateView(): void {
-            this._listInfo.bindData(this._createDataForListInfo());
-        }
-
-        private _createDataForListInfo(): DataForInfoRenderer[] {
-            const data          = this.data;
-            const warRule       = data.warRule;
-            const playerRule    = data.playerRule;
-            const isReviewing   = data.isReviewing;
-            return [
-                this._createDataPlayerIndex(warRule, playerRule, isReviewing),
-                this._createDataTeamIndex(warRule, playerRule, isReviewing),
-                this._createDataAvailableCoIdList(warRule, playerRule, isReviewing),
-                this._createDataInitialFund(warRule, playerRule, isReviewing),
-                this._createDataIncomeMultiplier(warRule, playerRule, isReviewing),
-                this._createDataEnergyAddPctOnLoadCo(warRule, playerRule, isReviewing),
-                this._createDataEnergyGrowthMultiplier(warRule, playerRule, isReviewing),
-                this._createDataMoveRangeModifier(warRule, playerRule, isReviewing),
-                this._createDataAttackPowerModifier(warRule, playerRule, isReviewing),
-                this._createDataVisionRangeModifier(warRule, playerRule, isReviewing),
-                this._createDataLuckLowerLimit(warRule, playerRule, isReviewing),
-                this._createDataLuckUpperLimit(warRule, playerRule, isReviewing),
-            ];
-        }
-        private _createDataPlayerIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            return {
-                titleText               : Lang.getText(Lang.Type.B0018),
-                infoText                : Lang.getPlayerForceName(playerRule.playerIndex),
-                infoColor               : 0xFFFFFF,
-                callbackOnTouchedTitle  : null,
-            };
-        }
-        private _createDataTeamIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            return {
-                titleText               : Lang.getText(Lang.Type.B0019),
-                infoText                : Lang.getPlayerTeamName(playerRule.teamIndex),
-                infoColor               : 0xFFFFFF,
-                callbackOnTouchedTitle  : null,
-            };
-        }
-        private _createDataAvailableCoIdList(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            return {
-                titleText               : Lang.getText(Lang.Type.B0403),
-                infoText                : `${(playerRule.bannedCoIdArray || []).length}`,
-                infoColor               : 0xFFFFFF,
-                callbackOnTouchedTitle  : () => {
-                    MmWarRuleAvailableCoPanel.show({
-                        warRule,
-                        playerRule,
-                    });
-                },
-            };
-        }
-        private _createDataInitialFund(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.initialFund;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0178),
-                infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
-                callbackOnTouchedTitle  : null,
-            };
-        }
-        private _createDataIncomeMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.incomeMultiplier;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0179),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
-                callbackOnTouchedTitle  : null,
-            };
-        }
-        private _createDataEnergyAddPctOnLoadCo(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.energyAddPctOnLoadCo;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0180),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
-                callbackOnTouchedTitle  : null,
-            };
-        }
-        private _createDataEnergyGrowthMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.energyGrowthMultiplier;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0181),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
-                callbackOnTouchedTitle  : null,
-            };
-        }
-        private _createDataMoveRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.moveRangeModifier;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0182),
-                infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
-                callbackOnTouchedTitle  : null,
-            };
-        }
-        private _createDataAttackPowerModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.attackPowerModifier;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0183),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
-                callbackOnTouchedTitle  : null,
-            };
-        }
-        private _createDataVisionRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue = playerRule.visionRangeModifier;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0184),
-                infoText                : `${currValue}`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
-                callbackOnTouchedTitle  : null,
-            };
-        }
-        private _createDataLuckLowerLimit(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue     = playerRule.luckLowerLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0189),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
-                callbackOnTouchedTitle  : null,
-            };
-        }
-        private _createDataLuckUpperLimit(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
-            const currValue     = playerRule.luckUpperLimit;
-            return {
-                titleText               : Lang.getText(Lang.Type.B0190),
-                infoText                : `${currValue}%`,
-                infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
-                callbackOnTouchedTitle  : null,
-            };
-        }
+    protected _onDataChanged(): void {
+        this._updateView();
     }
 
-    type DataForInfoRenderer = {
-        titleText               : string;
-        infoText                : string;
-        infoColor               : number;
-        callbackOnTouchedTitle  : (() => void) | null;
+    private _updateView(): void {
+        this._listInfo.bindData(this._createDataForListInfo());
     }
 
-    class InfoRenderer extends GameUi.UiListItemRenderer<DataForInfoRenderer> {
-        private _btnTitle   : GameUi.UiButton;
-        private _labelValue : GameUi.UiLabel;
+    private _createDataForListInfo(): DataForInfoRenderer[] {
+        const data          = this.data;
+        const warRule       = data.warRule;
+        const playerRule    = data.playerRule;
+        const isReviewing   = data.isReviewing;
+        return [
+            this._createDataPlayerIndex(warRule, playerRule, isReviewing),
+            this._createDataTeamIndex(warRule, playerRule, isReviewing),
+            this._createDataAvailableCoIdList(warRule, playerRule, isReviewing),
+            this._createDataInitialFund(warRule, playerRule, isReviewing),
+            this._createDataIncomeMultiplier(warRule, playerRule, isReviewing),
+            this._createDataEnergyAddPctOnLoadCo(warRule, playerRule, isReviewing),
+            this._createDataEnergyGrowthMultiplier(warRule, playerRule, isReviewing),
+            this._createDataMoveRangeModifier(warRule, playerRule, isReviewing),
+            this._createDataAttackPowerModifier(warRule, playerRule, isReviewing),
+            this._createDataVisionRangeModifier(warRule, playerRule, isReviewing),
+            this._createDataLuckLowerLimit(warRule, playerRule, isReviewing),
+            this._createDataLuckUpperLimit(warRule, playerRule, isReviewing),
+        ];
+    }
+    private _createDataPlayerIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        return {
+            titleText               : Lang.getText(Lang.Type.B0018),
+            infoText                : Lang.getPlayerForceName(playerRule.playerIndex),
+            infoColor               : 0xFFFFFF,
+            callbackOnTouchedTitle  : null,
+        };
+    }
+    private _createDataTeamIndex(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        return {
+            titleText               : Lang.getText(Lang.Type.B0019),
+            infoText                : Lang.getPlayerTeamName(playerRule.teamIndex),
+            infoColor               : 0xFFFFFF,
+            callbackOnTouchedTitle  : null,
+        };
+    }
+    private _createDataAvailableCoIdList(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        return {
+            titleText               : Lang.getText(Lang.Type.B0403),
+            infoText                : `${(playerRule.bannedCoIdArray || []).length}`,
+            infoColor               : 0xFFFFFF,
+            callbackOnTouchedTitle  : () => {
+                MmWarRuleAvailableCoPanel.show({
+                    warRule,
+                    playerRule,
+                });
+            },
+        };
+    }
+    private _createDataInitialFund(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        const currValue = playerRule.initialFund;
+        return {
+            titleText               : Lang.getText(Lang.Type.B0178),
+            infoText                : `${currValue}`,
+            infoColor               : getTextColor(currValue, CommonConstants.WarRuleInitialFundDefault),
+            callbackOnTouchedTitle  : null,
+        };
+    }
+    private _createDataIncomeMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        const currValue = playerRule.incomeMultiplier;
+        return {
+            titleText               : Lang.getText(Lang.Type.B0179),
+            infoText                : `${currValue}%`,
+            infoColor               : getTextColor(currValue, CommonConstants.WarRuleIncomeMultiplierDefault),
+            callbackOnTouchedTitle  : null,
+        };
+    }
+    private _createDataEnergyAddPctOnLoadCo(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        const currValue = playerRule.energyAddPctOnLoadCo;
+        return {
+            titleText               : Lang.getText(Lang.Type.B0180),
+            infoText                : `${currValue}%`,
+            infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyAddPctOnLoadCoDefault),
+            callbackOnTouchedTitle  : null,
+        };
+    }
+    private _createDataEnergyGrowthMultiplier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        const currValue = playerRule.energyGrowthMultiplier;
+        return {
+            titleText               : Lang.getText(Lang.Type.B0181),
+            infoText                : `${currValue}%`,
+            infoColor               : getTextColor(currValue, CommonConstants.WarRuleEnergyGrowthMultiplierDefault),
+            callbackOnTouchedTitle  : null,
+        };
+    }
+    private _createDataMoveRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        const currValue = playerRule.moveRangeModifier;
+        return {
+            titleText               : Lang.getText(Lang.Type.B0182),
+            infoText                : `${currValue}`,
+            infoColor               : getTextColor(currValue, CommonConstants.WarRuleMoveRangeModifierDefault),
+            callbackOnTouchedTitle  : null,
+        };
+    }
+    private _createDataAttackPowerModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        const currValue = playerRule.attackPowerModifier;
+        return {
+            titleText               : Lang.getText(Lang.Type.B0183),
+            infoText                : `${currValue}%`,
+            infoColor               : getTextColor(currValue, CommonConstants.WarRuleOffenseBonusDefault),
+            callbackOnTouchedTitle  : null,
+        };
+    }
+    private _createDataVisionRangeModifier(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        const currValue = playerRule.visionRangeModifier;
+        return {
+            titleText               : Lang.getText(Lang.Type.B0184),
+            infoText                : `${currValue}`,
+            infoColor               : getTextColor(currValue, CommonConstants.WarRuleVisionRangeModifierDefault),
+            callbackOnTouchedTitle  : null,
+        };
+    }
+    private _createDataLuckLowerLimit(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        const currValue     = playerRule.luckLowerLimit;
+        return {
+            titleText               : Lang.getText(Lang.Type.B0189),
+            infoText                : `${currValue}%`,
+            infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultLowerLimit),
+            callbackOnTouchedTitle  : null,
+        };
+    }
+    private _createDataLuckUpperLimit(warRule: IWarRule, playerRule: IDataForPlayerRule, isReviewing: boolean): DataForInfoRenderer {
+        const currValue     = playerRule.luckUpperLimit;
+        return {
+            titleText               : Lang.getText(Lang.Type.B0190),
+            infoText                : `${currValue}%`,
+            infoColor               : getTextColor(currValue, CommonConstants.WarRuleLuckDefaultUpperLimit),
+            callbackOnTouchedTitle  : null,
+        };
+    }
+}
 
-        protected _onOpened(): void {
-            this._setUiListenerArray([
-                { ui: this._btnTitle, callback: this._onTouchedBtnTitle },
-            ]);
-        }
+type DataForInfoRenderer = {
+    titleText               : string;
+    infoText                : string;
+    infoColor               : number;
+    callbackOnTouchedTitle  : (() => void) | null;
+};
 
-        protected _onDataChanged(): void {
-            const data                  = this.data;
-            this._labelValue.text       = data.infoText;
-            this._labelValue.textColor  = data.infoColor;
-            this._btnTitle.label        = data.titleText;
-            this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
-        }
+class InfoRenderer extends UiListItemRenderer<DataForInfoRenderer> {
+    private _btnTitle   : UiButton;
+    private _labelValue : UiLabel;
 
-        private _onTouchedBtnTitle(e: egret.TouchEvent): void {
-            const data      = this.data;
-            const callback  = data ? data.callbackOnTouchedTitle : null;
-            (callback) && (callback());
-        }
+    protected _onOpened(): void {
+        this._setUiListenerArray([
+            { ui: this._btnTitle, callback: this._onTouchedBtnTitle },
+        ]);
     }
 
-    function getTextColor(value: number, defaultValue: number): number {
-        if (value > defaultValue) {
-            return 0x00FF00;
-        } else if (value < defaultValue) {
-            return 0xFF0000;
-        } else {
-            return 0xFFFFFF;
-        }
+    protected _onDataChanged(): void {
+        const data                  = this.data;
+        this._labelValue.text       = data.infoText;
+        this._labelValue.textColor  = data.infoColor;
+        this._btnTitle.label        = data.titleText;
+        this._btnTitle.setTextColor(data.callbackOnTouchedTitle ? 0x00FF00 : 0xFFFFFF);
+    }
+
+    private _onTouchedBtnTitle(e: egret.TouchEvent): void {
+        const data      = this.data;
+        const callback  = data ? data.callbackOnTouchedTitle : null;
+        (callback) && (callback());
+    }
+}
+
+function getTextColor(value: number, defaultValue: number): number {
+    if (value > defaultValue) {
+        return 0x00FF00;
+    } else if (value < defaultValue) {
+        return 0xFF0000;
+    } else {
+        return 0xFFFFFF;
     }
 }
